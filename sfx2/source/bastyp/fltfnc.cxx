@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,6 @@
 #endif
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
-#endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -230,9 +225,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 using namespace ::vos;
 
-#ifndef _SV_SOUND_HXX
-#include <vcl/sound.hxx>
-#endif
 #ifndef _SV_SYSTEM_HXX
 #include <vcl/system.hxx>
 #endif
@@ -246,9 +238,6 @@ using namespace ::vos;
 #include <unotools/charclass.hxx>
 #endif
 
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "app.hxx"
 #include "fltdlg.hxx"
 #include "sfxhelp.hxx"
@@ -287,111 +276,6 @@ using namespace ::vos;
 #ifndef ERRCODE_SFX_RESTART
 #define ERRCODE_SFX_RESTART 0
 #endif
-
-#define EXPLORER_URL_FILTER         "explorer"
-#define SFX_FILTERNAME_COMPONENT    "component"
-#define SFX_FILTERNAME_HELPENTRY    "helpentry"
-
-class SfxSound_Impl
-{
-    Sound*      pSound;
-    String      aSoundFile;
-    sal_Bool        bDeleteFile;
-    DECL_LINK(  Done, void* );
-    DECL_LINK(  Start, void* );
-
-public:
-                SfxSound_Impl( const String& rSound, sal_Bool bTemp );
-                ~SfxSound_Impl()
-                { delete pSound; }
-};
-
-SfxSound_Impl::SfxSound_Impl( const String& rSound, sal_Bool bTemp )
-    : aSoundFile( rSound )
-    , pSound( new Sound )
-    , bDeleteFile( bTemp )
-{
-    Application::PostUserEvent( LINK( this, SfxSound_Impl, Start ) );
-}
-
-IMPL_LINK( SfxSound_Impl, Start, void*, pVoid )
-{
-    INetURLObject aObj;
-    aObj.SetSmartProtocol( INET_PROT_FILE );
-    aObj.SetSmartURL( aSoundFile );
-    if ( pSound->SetSoundName( aObj.PathToFileName() ) )
-    {
-        pSound->SetNotifyHdl( LINK( this, SfxSound_Impl, Done ) );
-        pSound->Play();
-    }
-    else
-        delete this;
-    if ( bDeleteFile )
-        SfxContentHelper::Kill( aObj.GetMainURL() );
-    return 0L;
-}
-
-IMPL_LINK( SfxSound_Impl, Done, void*, pVoid )
-{
-    if ( !pSound->IsPlaying() || pSound->GetLastError() )
-        delete this;
-    return 0L;
-}
-
-class SfxAsyncChaosFactory_Impl : public SfxListener
-{
-//(dv)  CntAnchorRef    xAnchor;
-    SfxItemSet*     pArgs;
-
-public:
-                    SfxAsyncChaosFactory_Impl( /*(dv)CntAnchorRef& rAnchor,*/ SfxItemSet* pSet );
-                    ~SfxAsyncChaosFactory_Impl();
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-};
-
-
-SfxAsyncChaosFactory_Impl::SfxAsyncChaosFactory_Impl( /*(dv)CntAnchorRef& rAnchor, */SfxItemSet* pSet )
-    : /*(dv)xAnchor( &rAnchor )
-    , */ pArgs( pSet )
-{
-    if (!pArgs)
-        pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
-//(dv)  StartListening( *xAnchor );
-}
-
-SfxAsyncChaosFactory_Impl::~SfxAsyncChaosFactory_Impl()
-{
-//(dv)  EndListening( *xAnchor );
-    delete pArgs;
-}
-
-void SfxAsyncChaosFactory_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-#if 0   //(dv)
-    if( rHint.ISA(CntStatusHint) )
-    {
-        const CntStatusHint& rStatusHint = (const CntStatusHint&)rHint;
-        CntStatus eStatus = rStatusHint.GetStatus();
-        sal_uInt16 nWhich = rStatusHint.GetRequest() ? rStatusHint.GetRequest()->Which() : 0;
-        if ( nWhich == WID_INSERT )
-        {
-            if( eStatus == CNT_STATUS_DONE )
-            {
-                pArgs->Put( SfxStringItem ( SID_FILE_NAME, xAnchor->GetViewURL() ), SID_FILE_NAME );
-                SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, *pArgs );
-                delete this;
-            }
-            else if( eStatus == CNT_STATUS_ERROR )
-            {
-                ErrCode nErr = rStatusHint.GetError();
-                nErr &= ~(ERRCODE_DYNAMIC_MASK);
-                if( nErr == ERRCODE_ABORT )
-                    delete this;
-            }
-        }
-    }
-#endif  //(dv)
-}
 
 struct FlagMapping_Impl
 {
@@ -572,26 +456,6 @@ const SfxFilter* SfxFilterContainer::GetFilter4Protocol( const String& rName, Sf
 
 //----------------------------------------------------------------
 
-sal_Bool SfxFilterContainer::IsUsableForRedirects() const
-/*   [Beschreibung]
-
-     Alle FilterContainer, die hier stehen, werden fuer den InternetFileTypen
-     Dialog benutzt (koennen dort MIME Types usw. zugeordnet werden).
- */
-{
-    String aName = pImpl->aName;
-    // Bloed, aber erstmal notwendig. Spaeter ueber MussAenderung beim
-    // Impl Makro
-    return  aName.EqualsAscii("swriter") || aName.EqualsAscii("simpress") || aName.EqualsAscii("scalc") ||
-        aName.EqualsAscii("simage") || aName.EqualsAscii("schart") || aName.EqualsAscii("smath") ||
-        aName.EqualsAscii("PlugIn") || aName.EqualsAscii("swriter/web") || aName.EqualsAscii("sdraw") ||
-        aName.EqualsAscii(SFX_FCONTNR_EXTAPP) ||
-//        aName == String( SfxResId( STR_FILTER_OTHERS ) );
-        aName.EqualsAscii("soffice");
-}
-
-//----------------------------------------------------------------
-
 sal_uInt32 SfxFilterContainer::Execute( SfxMedium& rMedium, SfxFrame*& pFrame) const
 {
     return ERRCODE_ABORT;
@@ -664,24 +528,8 @@ void SfxFilterContainer::RealLoad_Impl()
             aString += String::CreateFromAscii(ResMgr::GetLang());
         }
     }
+
     Config* pConfig = SFX_APP()->GetFilterIni();
-#if SUPD<613//MUSTINI
-    SfxIniManager *pMgr = SFX_INIMANAGER();
-    SfxIniManager *pSubMgr = pMgr->GetSubManager();
-    if( pSubMgr )
-        pMgr = pSubMgr;
-
-    if( pArg->bInstallIni )
-        pConfig->SetGroup( U2S(aString) );
-
-    sal_uInt16 nCount = pArg->bInstallIni ? pConfig->GetKeyCount() : pMgr->GetKeyCount( aString );
-    String aOver( DEFINE_CONST_UNICODE(SFX_STR_OVERRIDE) );
-    String aName, aLine, aUIType, aMimeType, aClipFormat, aMacType, aTypeName, aWild, aFlags, aDefaultTemplate, aUserData;
-    for( sal_uInt16 n = 0; n < nCount; n++ )
-    {
-        aName = pArg->bInstallIni ? String(S2U(pConfig->GetKeyName( n ))) : pMgr->GetKeyName( aString, n );
-        aLine = pArg->bInstallIni ? String(S2U(pConfig->ReadKey( n ))) : pMgr->ReadKey( aString, aName );
-#else
     if( pArg->bInstallIni )
         pConfig->SetGroup( U2S(aString) );
 
@@ -692,7 +540,6 @@ void SfxFilterContainer::RealLoad_Impl()
     {
         aName = pArg->bInstallIni ? String(S2U(pConfig->GetKeyName( n ))) : String();
         aLine = pArg->bInstallIni ? String(S2U(pConfig->ReadKey( n ))) : String();
-#endif
         sal_uInt16 nTokCount = aLine.GetTokenCount( ',' );
         if( nTokCount < 8 )
         {
@@ -946,102 +793,6 @@ void SfxFilterContainer::SaveFilters( const String& rGroup, SfxFilterFlags nMask
      Speichert die Filter des Containers in der soffice3.ini.
  */
 {
-    String aString( rGroup);
-    aString+=DEFINE_CONST_UNICODE("-Filters");
-#if SUPD<613//MUSTINI
-    SfxIniManager *pMgr = SFX_INIMANAGER();
-    SfxIniManager *pSubMgr = pMgr->GetSubManager();
-    if( pSubMgr )
-        pMgr = pSubMgr;
-
-    pMgr->DeleteGroup( aString );
-
-    SfxFilterMatcher aMatcher( ( SfxFilterContainer* ) this );
-    SfxFilterMatcherIter aIter( &aMatcher, nMask );
-    sal_uInt16 n = 1;
-    String aLine, aKey;
-    for( const SfxFilter* pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
-    {
-        if ( pFilter->GetURLPattern().Len() )
-            // Filter mit URLPattern k"onnen wir nicht einlesen, also auch nicht speichern!
-            continue;
-
-        aLine = pFilter->GetUIName();
-        aLine += ',';
-        aLine += pFilter->GetMimeType();
-        aLine+=',';
-        sal_uInt32 nFormat = pFilter->GetFormat();
-        if( nFormat )
-            aLine += Exchange::GetFormatName( pFilter->GetFormat() );
-        aLine += ',';
-        aLine += pFilter->GetMacType();
-        aLine+=',';
-        aLine += pFilter->GetRealTypeName();
-        aLine+=',';
-        aLine += pFilter->GetWildcard()();
-        aLine+=',';
-        aLine += String::CreateFromInt32( pFilter->GetDocIconId() );
-        aLine+=',';
-        aLine += pFilter->GetUserData();
-        aLine+=',';
-        if( pFilter->GetVersion() != SOFFICE_FILEFORMAT_NOW )
-            aLine += String::CreateFromInt32( pFilter->GetVersion() );
-        aLine += ',';
-        aLine += FlagsToName_Impl( pFilter->GetFilterFlags() );
-        aLine += ',';
-        aLine += pFilter->GetDefaultTemplate();
-        aKey = pFilter->GetFilterName();
-        if ( !aKey.Len() )
-            aKey = DEFINE_CONST_UNICODE( SFX_STR_OVERRIDE );
-        aKey += String::CreateFromInt32( n++ );
-        pMgr->WriteKey( aString, aKey, aLine );
-    }
-#else
-    Config* pMgr = SFX_APP()->GetFilterIni();
-    pMgr->DeleteGroup( U2S(aString) );
-
-    SfxFilterMatcher aMatcher( ( SfxFilterContainer* ) this );
-    SfxFilterMatcherIter aIter( &aMatcher, nMask );
-    sal_uInt16 n = 1;
-    String aLine, aKey;
-    for( const SfxFilter* pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
-    {
-        if ( pFilter->GetURLPattern().Len() )
-            // Filter mit URLPattern k"onnen wir nicht einlesen, also auch nicht speichern!
-            continue;
-
-        aLine = pFilter->GetUIName();
-        aLine += ',';
-        aLine += pFilter->GetMimeType();
-        aLine+=',';
-        sal_uInt32 nFormat = pFilter->GetFormat();
-        if( nFormat )
-            aLine += Exchange::GetFormatName( pFilter->GetFormat() );
-        aLine += ',';
-        aLine += pFilter->GetMacType();
-        aLine+=',';
-        aLine += pFilter->GetRealTypeName();
-        aLine+=',';
-        aLine += pFilter->GetWildcard()();
-        aLine+=',';
-        aLine += String::CreateFromInt32( pFilter->GetDocIconId() );
-        aLine+=',';
-        aLine += pFilter->GetUserData();
-        aLine+=',';
-        if( pFilter->GetVersion() != SOFFICE_FILEFORMAT_NOW )
-            aLine += String::CreateFromInt32( pFilter->GetVersion() );
-        aLine += ',';
-        aLine += FlagsToName_Impl( pFilter->GetFilterFlags() );
-        aLine += ',';
-        aLine += pFilter->GetDefaultTemplate();
-        aKey = pFilter->GetFilterName();
-        if ( !aKey.Len() )
-            aKey = DEFINE_CONST_UNICODE( SFX_STR_OVERRIDE );
-        aKey += String::CreateFromInt32( n++ );
-        pMgr->SetGroup( U2S(aString) );
-        pMgr->WriteKey( U2S(aKey), U2S(aLine) );
-    }
-#endif
 }
 
 //-------------------------------------------------------------------------
@@ -1054,23 +805,7 @@ sal_uInt32 SfxFilterContainer::GetFilter4Content(
 }
 
 //-------------------------------------------------------------------------
-
-const SfxFilter* SfxExternalAppFilterContainer::GetFilter4Protocol(
-    SfxMedium& rMed, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
-/*   [Beschreibung]
-
-     Diese Methode ist ueberladen, um zu verhindern, dass fuer jedes Protokoll
-     ein Filter erzeugt wird (denn in dem SfxExternalAppFilterContainer ist
-     jeder Filter vorhanden, so wie nach ihm gefragt wird und
-     GetFilter4Protocol forwarded in der Basisimplementierung an
-     GetFilter4FilterName ).
- */
-{
-    return 0;
-}
-
-//----------------------------------------------------------------
-
+#if 0
 sal_uInt32 SfxExecutableFilterContainer::Choose_Impl( SfxMedium& rMedium ) const
 {
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
@@ -1090,176 +825,6 @@ sal_uInt32 SfxExecutableFilterContainer::Choose_Impl( SfxMedium& rMedium ) const
     return ERRCODE_ABORT;
 }
 
-SV_DECL_VARARR( SfxExecutableFilterTypes_Impl, SfxExecutableFilterType_Impl,
-                5, 5 )
-SV_IMPL_VARARR( SfxExecutableFilterTypes_Impl, SfxExecutableFilterType_Impl )
-
-
-void SfxExecutableFilterContainer::AddExeFilter(
-    SfxFilter* pFilter, SfxExecutableFilterType_Impl eType,
-    const String& rPattern )
-{
-    AddFilter( pFilter, GetFilterCount() );
-    pTypes->Insert( eType, pTypes->Count() );
-    if( rPattern.Len() )
-        pFilter->SetURLPattern( rPattern );
-}
-
-
-#define SFX_EXE_FILTERFLAGS (SFX_FILTER_IMPORT | SFX_FILTER_NOTINFILEDLG |\
-        SFX_FILTER_EXECUTABLE|SFX_FILTER_NOTINCHOOSER|SFX_FILTER_INTERNAL)
-
-//----------------------------------------------------------------
-
-SfxExecutableFilterContainer::SfxExecutableFilterContainer()
-//    : SfxFilterContainer( String( SfxResId( STR_FILTER_OTHERS ) ) )
-    : SfxFilterContainer( DEFINE_CONST_UNICODE("soffice") )
-/*   [Beschreibung]
-
-     Der SfxExecutableFilterContainer enthaelt alle Filter, die
-     nicht direkt zum Laden eines Dokumentes fuehren, sondern
-     statt dessen ausgefuehrt werden. Indirekt koennen durchaus
-     Docs geladen werden, wenn z.B. der bugdoc Filter ein
-     Dokument raussucht.
- */
-{
-    pTypes = new SfxExecutableFilterTypes_Impl;
-    String aEmpty;
-    sal_uInt16 nPos = 0;
-
-// Was ist denn hiermit ??
-#ifdef SOLAR_JAVA
-    AddExeFilter( new SfxFilter( "JavaApplication", DEFINE_CONST_UNICODE("*.class"), SFX_EXE_FILTERFLAGS | SFX_FILTER_ASYNC, this ),
-                    SFX_EXE_FILTER_COMPONENT, DEFINE_CONST_UNICODE("private:java/*") );
-#endif
-/*
-    AddExeFilter( new SfxFilter( DEFINE_CONST_UNICODE("ExternBrowser"), DEFINE_CONST_UNICODE("*.htm;*.html"), SFX_EXE_FILTERFLAGS | SFX_FILTER_ASYNC, 0,
-                        aEmpty, aEmpty, 0, DEFINE_CONST_UNICODE("text/html"),this, aEmpty ),
-                    SFX_EXE_FILTER_EXTERNBROWSER, aEmpty );
-*/
-    AddExeFilter( new SfxFilter( "bookmark", DEFINE_CONST_UNICODE("*.*"), SFX_EXE_FILTERFLAGS, this ),
-                    SFX_EXE_FILTER_BOOKMARK, aEmpty );
-    AddExeFilter( new SfxFilter( "link", DEFINE_CONST_UNICODE("*.lnk"), SFX_EXE_FILTERFLAGS, this ),
-                    SFX_EXE_FILTER_BOOKMARK, aEmpty );
-    AddExeFilter( new SfxFilter( SFX_FILTERNAME_HELPENTRY, DEFINE_CONST_UNICODE("*.svh"), SFX_EXE_FILTERFLAGS, this ),
-                    SFX_EXE_FILTER_HELPENTRY, aEmpty );
-    AddExeFilter( new SfxFilter( "helpid", aEmpty, SFX_EXE_FILTERFLAGS, this ),
-                      SFX_EXE_FILTER_HELPID, DEFINE_CONST_UNICODE("private:helpid/*") );
-    AddExeFilter( new SfxFilter( "bugid", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_BUGID, DEFINE_CONST_UNICODE("bugid:*") );
-    AddExeFilter( new SfxFilter( "mailto", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                     SFX_EXE_FILTER_MAILTO, DEFINE_CONST_UNICODE("mailto:*") );
-    AddExeFilter( new SfxFilter( "command", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                     SFX_EXE_FILTER_COMMAND, DEFINE_CONST_UNICODE("file:///{*}/*") );
-    AddExeFilter( new SfxFilter( "macro", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_MACRO,  DEFINE_CONST_UNICODE("macro:*") );
-    AddExeFilter( new SfxFilter( "uno", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_UNO, DEFINE_CONST_UNICODE(".uno:*") );
-    AddExeFilter( new SfxFilter( "slot", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_SLOT, DEFINE_CONST_UNICODE("slot:*") );
-    AddExeFilter( new SfxFilter( "factory", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_FACTORY, DEFINE_CONST_UNICODE("private:factory/*") );
-    AddExeFilter( new SfxFilter( "bugdoc", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_BUGDOC, DEFINE_CONST_UNICODE("bugdoc:*") );
-    AddExeFilter( new SfxFilter( "exe", aEmpty, SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_EXECUTE, DEFINE_CONST_UNICODE("internal") );
-    AddExeFilter( new SfxFilter( DEFINE_CONST_UNICODE(EXPLORER_URL_FILTER), aEmpty, SFX_EXE_FILTERFLAGS, 0, aEmpty, aEmpty, 0, aEmpty, this, aEmpty),
-                    SFX_EXE_FILTER_EXPLORER, aEmpty );
-    AddExeFilter( new SfxFilter( "sound", DEFINE_CONST_UNICODE("*.wav;*.au"), SFX_EXE_FILTERFLAGS, this),
-                      SFX_EXE_FILTER_SOUND, DEFINE_CONST_UNICODE("internal") );
-/*
-    AddExeFilter( new SfxFilter( SFX_FILTER_DOWNLOAD, DEFINE_CONST_UNICODE("*.*"), SFX_FILTER_IMPORT | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_EXECUTABLE | SFX_FILTER_ASYNC, this),
-                      SFX_EXE_FILTER_DOWNLOAD, aEmpty );
-*/
-    // Und nun die Filter, die auch im Dateitypendialog sichtbar sein sollen
-    SfxFilter *pFilter = new SfxFilter( DEFINE_CONST_UNICODE("choose"), DEFINE_CONST_UNICODE("*.*"),
-        SFX_FILTER_IMPORT | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_EXECUTABLE| SFX_FILTER_NOTINCHOOSER, 0, aEmpty, aEmpty, 0, aEmpty, this, aEmpty);
-    pFilter->SetUIName( SfxResId( STR_FILTER_CHOOSER ) );
-    AddExeFilter( pFilter, SFX_EXE_FILTER_CHOOSER, aEmpty);
-
-    pFilter = new SfxFilter( "extern", DEFINE_CONST_UNICODE("*.*"), SFX_FILTER_IMPORT | SFX_FILTER_EXECUTABLE, this );
-    pFilter->SetUIName( SfxResId( STR_FILTER_EXTERNAL ) );
-    AddExeFilter( pFilter, SFX_EXE_FILTER_EXECUTE, DEFINE_CONST_UNICODE("external") );
-
-    pFilter = new SfxFilter( "component", DEFINE_CONST_UNICODE("*.*"), SFX_FILTER_IMPORT | SFX_FILTER_EXECUTABLE | SFX_FILTER_ASYNC, this );
-    pFilter->SetUIName( SfxResId( STR_FILTER_COMPONENT ) );
-    AddExeFilter( pFilter, SFX_EXE_FILTER_COMPONENT, aEmpty );
-}
-
-SfxExecutableFilterContainer::~SfxExecutableFilterContainer()
-{
-    delete pTypes;
-}
-
-sal_Bool SfxIsHelpEntryURL( const String &rURL, const String &rExtMask )
-{
-    INetURLObject aURL( rURL );
-    if ( aURL.GetProtocol() == INET_PROT_FILE && aURL.GetMainURL().Len() > 8 )
-    {
-        String aExt = aURL.getExtension().ToLowerAscii();
-#if SUPD<613//MUSTINI
-        INetURLObject aHelpDir( SFX_INIMANAGER()->Get( SFX_KEY_HELP_DIR ), INET_PROT_FILE );
-#else
-        INetURLObject aHelpDir( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
-#endif
-        if ( WildCard( aHelpDir.GetMainURL() ).Matches( rURL ) && WildCard( rExtMask ).Matches( aExt ) )
-            return sal_True;
-    }
-    return sal_False;
-}
-
-const SfxFilter* SfxExecutableFilterContainer::GetFilter4Protocol(
-    SfxMedium& rMed, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
-/*   [Beschreibung]
- */
-{
-    INetProtocol eProt;
-    String aName;
-    const INetURLObject &rURL = rMed.GetURLObject();
-    aName = rURL.GetMainURL();
-    eProt = rURL.GetProtocol();
-
-    // ::com::sun::star::util::URL within Help-Directory?
-    if ( eProt == INET_PROT_FILE && SfxIsHelpEntryURL( aName, DEFINE_CONST_UNICODE("htm*") ) )
-        return SfxFilterContainer::GetFilter4FilterName( DEFINE_CONST_UNICODE(SFX_FILTERNAME_HELPENTRY), nMust, nDont );
-
-    return SfxFilterContainer::GetFilter4Protocol( rMed, nMust, nDont );
-}
-
-//----------------------------------------------------------------
-
-const SfxFilter* SfxExecutableFilterContainer::GetDownloadFilter()
-{
-    String aName( DEFINE_CONST_UNICODE(SFX_FILTER_DOWNLOAD) );
-    return SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aName );
-}
-
-const SfxFilter* SfxExecutableFilterContainer::GetComponentFilter()
-{
-    String aName( DEFINE_CONST_UNICODE(SFX_FILTERNAME_COMPONENT) );
-    return SFX_APP()->GetFilterMatcher().GetContainer( DEFINE_CONST_UNICODE("soffice") )->GetFilter4FilterName( aName );
-}
-
-//----------------------------------------------------------------
-
-const SfxFilter* SfxExecutableFilterContainer::GetChooserFilter()
-{
-//    String aName( SfxResId( STR_FILTER_OTHERS ) );
-    String aName( DEFINE_CONST_UNICODE("soffice") );
-    aName+=DEFINE_CONST_UNICODE(": ");
-    aName+=DEFINE_CONST_UNICODE("choose");
-//    aName+=String( SfxResId( STR_FILTER_CHOOSER ) );
-    return SFX_APP()->GetFilterMatcher().GetFilter( aName );
-}
-
-const SfxFilter* SfxExecutableFilterContainer::GetExplorerFilter()
-{
-    String aName( DEFINE_CONST_UNICODE(EXPLORER_URL_FILTER) );
-    return SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aName );
-}
-
-//----------------------------------------------------------------
-
 String SfxExecutableFilterContainer::GetBugdocName_Impl(
     const String& rName ) const
 /*   [Beschreibung]
@@ -1267,7 +832,6 @@ String SfxExecutableFilterContainer::GetBugdocName_Impl(
      Sucht ein Bugdoc in den ueblichen Verzeichnissen
  */
 {
-/*! (pb)
     static const char* pNames[] =
     {
         "q:\\sw\\bugdoc",
@@ -1303,490 +867,10 @@ String SfxExecutableFilterContainer::GetBugdocName_Impl(
         }
         pName = pNames[ n++ ];
     }
-*/
+
     return String();
 }
 
-//----------------------------------------------------------------
-
-sal_uInt32 SfxExecutableFilterContainer::Execute(
-    SfxMedium& rMedium, SfxFrame*& rpFrame ) const
-/*   [Beschreibung]
-
-     Fuehrt die Funktionalitaet eines mit SFX_FILTER_EXECUTABLE registrierten
-     Filters aus.
- */
-{
-    SfxApplication* pApp = SFX_APP();
-    const SfxFilter* pFilter = rMedium.GetFilter();
-    DBG_ASSERT( pFilter, "Medium braucht Filter" );
-
-    // Referer und TargetPath zum Speichern
-    SfxStringItem aReferer( SID_REFERER, String() );
-    SfxStringItem aPath( SID_TARGETPATH, String() );
-
-    // Wurden welche mitgeschickt ?
-    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False);
-    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pPath, SfxStringItem, SID_TARGETPATH, sal_False);
-    if ( !pReferer )
-        pReferer = &aReferer;
-    if ( !pPath )
-    {
-        // Wenn kein TargetPath, dann diesen mit dem Referer belegen
-        if ( pReferer )
-            aPath.SetValue( pReferer->GetValue() );
-        rMedium.GetItemSet()->Put( aPath, SID_TARGETPATH );
-        pPath = &aPath;
-    }
-
-    SfxFrameItem aFrameItem( SID_DOCFRAME, rpFrame );
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pTarget, SfxStringItem,
-                     SID_TARGETPATH, sal_False);
-
-    sal_Bool bPreview = rMedium.IsPreview_Impl();
-    const SfxPoolItem* ppInternalArgs[] =
-    {
-        &aFrameItem, pReferer, pTarget, 0
-    };
-
-    SfxExecutableFilterType_Impl eType;
-    for( sal_uInt16 nPos = GetFilterCount(); nPos--; )
-        if( GetFilter( nPos ) == pFilter )
-        {
-            eType = pTypes->GetObject( nPos );
-            break;
-        }
-    switch( eType )
-    {
-        case SFX_EXE_FILTER_SOUND:
-        {
-            // Achtung: GetPhysicalName nicht im ctor, IsTemporary() k"onnte vorher aufgerufen werden !!
-            String aName = rMedium.GetPhysicalName();
-            new SfxSound_Impl( aName, rMedium.IsTemporary() );
-            rMedium.SetTemporary( sal_False );
-            return ERRCODE_ABORT;
-            break;
-        }
-
-        case SFX_EXE_FILTER_COMMAND:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-#if 0   //(dv)
-            CntAnchorRef xAnchor = rMedium.GetAnchor(); // MI: ???
-            if ( !xAnchor.Is() )
-                return ERRCODE_IO_UNKNOWN; // MI: kann das ueberhaupt passieren?
-#ifndef TF_UCB
-            xAnchor->Put( CntCmpCommandItem( WID_COMPONENT_COMMAND, ::rtl::OUString("executeDefaultCommand") ) );
-#else
-            xAnchor->Put( CntCmpCommandItem( WID_COMPONENT_COMMAND, "executeDefaultCommand" ) );
-#endif
-#endif  //(dv)
-            return ERRCODE_ABORT;
-            break;
-        }
-
-        case SFX_EXE_FILTER_EXPLORER:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            // ansonsten als Komponente laden
-        }
-
-/*
-        case SFX_EXE_FILTER_COMPONENT:
-        {
-            rMedium.Close();
-
-            const INetURLObject& rURLObj = rMedium.GetURLObject();
-            String aName( rURLObj.GetMainURL() );
-            SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
-            ::rtl::OUString aTargetURL = aName;
-
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-
-            sal_uInt16 nRet = rpFrame->LoadComponent_Impl( aTargetURL, aArgs, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader > (), rMedium.GetItemSet() );
-            if ( nRet == RET_NEWTASK )
-                rMedium.GetItemSet()->Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-
-            if ( nRet == RET_OK || nRet == RET_CANCEL )
-                return ERRCODE_ABORT;
-            else if ( nRet == RET_NEWTASK )
-                return ERRCODE_SFX_RESTART;
-            else                        // nRet == RET_PENDING !
-                return ERRCODE_IO_PENDING;
-            break;
-        }
-
-        case SFX_EXE_FILTER_EXTERNBROWSER:
-        {
-            String aExtBrw( SfxIniManager::Get()->Get( SFX_KEY_EXTBRW_FILE ) );
-            if ( !rpFrame->IsTop() && aExtBrw.Len() )
-            {
-                // external Browser in subframes only possible if IExplorer
-                const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4Mime( DEFINE_CONST_UNICODE("text/html"), SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
-                rMedium.SetFilter(pFilter);
-
-                return pFilter ? ERRCODE_SFX_RESTART : ERRCODE_IO_NOTSUPPORTED;
-            }
-
-            rMedium.Close();
-
-            // put filter into itemset, otherwise mediums filter will become component filter!
-            rMedium.GetItemSet()->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-
-            const INetURLObject& rURLObj = rMedium.GetURLObject();
-            INetProtocol eProt = rURLObj.GetProtocol();
-            String aName;
-            if ( eProt != INET_PROT_FILE && eProt != INET_PROT_HTTP && eProt != INET_PROT_HTTPS && eProt != INET_PROT_FTP )
-            {
-                aName = rMedium.GetPhysicalName();
-                rMedium.SetTemporary( sal_False );
-            }
-            else
-                aName = rURLObj.GetMainURL();
-
-            if ( aExtBrw.Len() )
-            {
-                String aFile( '\"');
-                aFile += aExtBrw;
-                aFile += '\"';
-                aFile += ' ';
-                aFile += '\"';
-                aFile += aName;
-                aFile += '\"';
-                sal_Bool bOk = System::StartProcess( Application::GetAppWindow(), aFile );
-                return bOk ? ERRCODE_ABORT : ERRCODE_IO_NOTSUPPORTED;
-            }
-
-            SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
-            ::rtl::OUString aTargetURL = aName;
-
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xReg( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.FrameLoaderFactory") ), ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( xReg->createInstance( DEFINE_CONST_UNICODE("private:iexplorer") ), ::com::sun::star::uno::UNO_QUERY );
-
-            sal_uInt16 nRet = rpFrame->LoadComponent_Impl( aTargetURL, aArgs, xLoader, rMedium.GetItemSet() );
-            if ( nRet == RET_NEWTASK )
-                rMedium.GetItemSet()->Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-
-            if ( nRet == RET_OK || nRet == RET_CANCEL )
-                return ERRCODE_ABORT;
-            else if ( nRet == RET_NEWTASK )
-                return ERRCODE_SFX_RESTART;
-            else                        // nRet == RET_PENDING !
-                return ERRCODE_IO_PENDING;
-            break;
-        }
-*/
-/*
-        case SFX_EXE_FILTER_DOWNLOAD:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            rMedium.Close();
-
-            const INetURLObject& rURLObj = rMedium.GetURLObject();
-            String aName( rURLObj.GetMainURL() );
-            ::rtl::OUString aTargetURL = aName;
-
-
-            // Downloader always uses his own special task
-            SfxFrame *pFrame = SfxTopFrame::Create();
-            rMedium.GetItemSet()->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( 0, 0, 500, 250 ) ) );
-
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xFrameLoader ( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.comp.sfx2.DownloaderLoader") ), ::com::sun::star::uno::UNO_QUERY );
-            if ( xFrameLoader.is() )
-            {
-                USHORT nRet = pFrame->LoadComponent_Impl( aTargetURL, aArgs, xFrameLoader, rMedium.GetItemSet() );
-                if ( nRet == RET_OK )
-                    pFrame->GetCurrentDocument()->SetFlags( pFrame->GetCurrentDocument()->GetFlags() | SFXOBJECTSHELL_DONTREPLACE );
-            }
-
-            return ERRCODE_ABORT;
-            break;
-        }
- */
-        case SFX_EXE_FILTER_CHOOSER:
-            if ( bPreview )
-                return ERRCODE_ABORT;
-            return Choose_Impl( rMedium ); break;
-        case SFX_EXE_FILTER_MAILTO:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            // an SID_MAIL_SENDDOC forwarden
-            SfxAllItemSet aSet( pApp->GetPool() );
-            aSet.Put( SfxStringItem( SID_MAIL_RECIPIENT, rMedium.GetURLObject().GetMainURL() ) );
-            aSet.Put( SfxBoolItem( SID_MAIL_ATTACH, sal_False ) );
-
-            String aRefererStr = pReferer ? pReferer->GetValue() : String();
-            if ( aRefererStr.CompareToAscii("private:msgid/", 14 ) != COMPARE_EQUAL )
-                aSet.Put( aFrameItem );
-
-            // look for subject and body
-            SfxItemSet* pSet = rMedium.GetItemSet();
-            if( pSet )
-            {
-                SFX_ITEMSET_ARG( pSet, pSendDirect, SfxBoolItem, SID_MAIL_SEND, sal_False);
-                if ( pSendDirect )
-                    aSet.Put( *pSendDirect );
-
-                SFX_ITEMSET_ARG( pSet, pToPost, SfxStringItem, SID_POSTSTRING, sal_False);
-                if ( pToPost )
-                {
-                    aSet.Put( SfxStringItem( SID_MAIL_TEXT, pToPost->GetValue() ) );
-
-                    // Subject nur setzen, wenn nicht in mailto-::com::sun::star::util::URL
-                    String aParam = rMedium.GetURLObject().GetParam().ToLowerAscii();
-                    FASTBOOL bSubjectFound = sal_False;
-                    sal_uInt16 nIdx = 0;
-                    while ( nIdx != STRING_NOTFOUND )
-                    {
-                        String aParamTok = aParam.GetToken( 0, '&', nIdx );
-                        aParamTok.EraseLeadingChars();
-                        if ( aParamTok.SearchAscii( "subject=" ) == 0 )
-                        {
-                            bSubjectFound = sal_True;
-                            break;
-                        }
-                    }
-
-                    if ( !bSubjectFound )
-                        aSet.Put( SfxStringItem( SID_MAIL_SUBJECT, DEFINE_CONST_UNICODE("Mail Posted by StarOffice") ) );
-                }
-            }
-
-            if ( rpFrame->GetCurrentDocument() || !rpFrame->IsTop() )
-            {
-                SfxFrame *pFrame = SfxTopFrame::Create();
-                aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
-            }
-
-            pApp->GetDispatcher_Impl()->Execute( SID_MAIL_SENDDOC, SFX_CALLMODE_SYNCHRON, aSet );
-            return ERRCODE_ABORT;
-        }
-        case SFX_EXE_FILTER_HELPENTRY:
-        {
-            rMedium.Close();
-
-            // Redirection within Help-Directory
-            INetURLObject aObj( rMedium.GetName() );
-            if ( aObj.getExtension().CompareIgnoreCaseToAscii( "svh" ) == COMPARE_EQUAL )
-            {
-                SfxHelp::ShowHelp( HELP_INDEX, sal_False, U2S( aObj.PathToFileName() ).getStr() );
-                return ERRCODE_ABORT;
-            }
-            else
-            {
-#if SUPD<613//MUSTINI
-                INetURLObject aHelpDir( SFX_INIMANAGER()->Get(SFX_KEY_HELP_DIR ), INET_PROT_FILE );
-#else
-                INetURLObject aHelpDir( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
-#endif
-                aHelpDir.setFinalSlash();
-                String aNewURL = DEFINE_CONST_UNICODE(".component:Help/Content.Contents;\001");
-                aNewURL += aObj.getBase();
-                aNewURL += DEFINE_CONST_UNICODE("\001");
-                aNewURL += aHelpDir.GetMainURL();
-                aNewURL += String::CreateFromAscii( ResMgr::GetLang() );
-                aNewURL += DEFINE_CONST_UNICODE("/text/sbasic/starone/ref/");
-                aNewURL += aObj.getName();
-                aNewURL += DEFINE_CONST_UNICODE("\001.Content");
-                rMedium.SetName( aNewURL, sal_True );
-                rMedium.SetPhysicalName( String() );
-                rMedium.Init_Impl();
-                rMedium.SetFilter(0);
-                return ERRCODE_SFX_RESTART;
-            }
-        }
-/*
-        case SFX_EXE_FILTER_BOOKMARK:
-        {
-            rMedium.Close();
-            String aTitle, aFrame, aOpen, aWorkDir, aArguments, aURL;
-
-            Reference < XContent > xContent( rMedium.GetContent() );
-            Any aAny( UCB_Helper::GetProperty( xContent, WID_TARGET_URL ) );
-            OUString aTarget;
-            if ( !( aAny >>= aTarget ) || !aTarget.len() )
-                return ERRCODE_SFX_INVALIDLINK;
-            else
-                aURL = String(aTarget);
-
-            aAny = UCB_Helper::GetProperty( xContent, WID_DOCUMENT_HEADER );
-            Sequence < DocumentHeaderField > aSeq;
-            if ( aAny >>= aSeq )
-            {
-                USHORT nCount = aSeq.getLength();
-                for ( USHORT n = 0; n < nCount; ++n )
-                {
-                    String aName( aSeq.getArray()[ n ].Name );
-                    String aValue( aSeq.getArray()[ n ].Value );
-                    if ( aName.ToLowerAscii().EqualsAscii("title") )
-                        aTitle = aValue;
-
-                    if ( aName.ToLowerAscii().EqualsAscii( "workingdirectory" ) )
-                    {
-                        aWorkDir = aValue;
-                        if ( aWorkDir.Len() )
-                        {
-                            INetURLObject aObj( aWorkDir, INET_PROT_FILE );
-                            aWorkDir = aObj.PathToFileName();
-                        }
-                    }
-
-                    if ( aName.ToLowerAscii().EqualsAscii( "arguments" ) )
-                        aArguments = aValue;
-
-                    if ( aName.EqualsAscii( "frame" ) )
-                        aFrame = aValue;
-
-                    if ( aName.EqualsAscii( "openas" ) )
-                        aOpen = aValue;
-                }
-            }
-
-            INetURLObject aPresObj( rMedium.GetName() );
-            sal_Bool bIsURLFile = aPresObj.GetExtension().EqualsAscii( "url" );
-            if ( aArguments.Len() || aWorkDir.Len() )
-            {
-                if ( bPreview )
-                    return ERRCODE_ABORT;
-
-                String aName( aURL );
-                Any aAny( UCB_Helper::GetProperty( aName, WID_FLAG_IS_FOLDER ) );
-                BOOL bIsFolder = FALSE;
-                if ( !( aAny >>= bIsFolder ) || !bIsFolder )
-                {
-                    INetURLObject aFake( "macro:" );
-                    if ( pApp->IsSecureURL( aFake, &rMedium.GetReferer() ) )
-                    {
-                        String aName;
-                        if ( bIsURLFile )
-                        {
-                            INetURLObject aObj;
-                            aObj.SetSmartProtocol( INET_PROT_FILE );
-                            aObj.SetSmartURL( aURL );
-                            aName += '\"';
-                            aName += aObj.PathToFileName();
-                            aName += '\"';
-
-                            if ( aArguments.Len() )
-                            {
-                                aName += ' ';
-                                // Don't quote the arguments because StartProcess doesn't know which
-                                // quotes should be removed and which not. If the argument needs to
-                                // be quoted it has to be quoted in the URL file itself
-                                aName += aArguments;
-                            }
-                        }
-                        else if ( rMedium.GetPhysicalName().Len() )
-                        {
-                            // Bei propriet"aren Formaten lassen wir lieber das BS die Arbeit tun
-                            aName += '\"';
-                            aName += rMedium.GetPhysicalName();
-                            aName += '\"';
-                        }
-
-                        sal_Bool bOK = sal_False;
-                        if ( aWorkDir.Len() )
-                            bOK = System::StartProcess( NULL, aName, aWorkDir );
-                        else
-                            bOK = System::StartProcess( NULL, aName );
-                        return bOK ? ERRCODE_ABORT : ERRCODE_IO_NOTSUPPORTED;
-                    }
-                }
-            }
-
-            if ( aOpen.EqualsAscii(INTERNETSHORTCUT_TEMPLATE_TAG) )
-                rMedium.GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-
-            if ( aFrame.Len() )
-                rMedium.GetItemSet()->Put( SfxStringItem( SID_TARGETNAME, aFrame ) );
-            rMedium.GetItemSet()->Put( SfxStringItem( SID_REFERER, rMedium.GetName() ) );
-            rMedium.GetItemSet()->Put( aPath, SID_TARGETPATH );
-            rMedium.SetName( aURL, sal_True );
-            rMedium.SetOrigFilter_Impl( 0 );
-            rMedium.SetPhysicalName( String() );
-            rMedium.Init_Impl();
-            rMedium.SetFilter( 0 );
-
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
-            sal_Bool bReadOnly = pROItem ? pROItem->GetValue() : sal_False;
-            rMedium.SetOpenMode( bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE, sal_False );
-
-            return ERRCODE_SFX_RESTART;
-        }
-
-        case SFX_EXE_FILTER_HELPID:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            rMedium.Close();
-
-#ifdef WNT
-            String aName( rMedium.GetName() );
-            if ( aName.GetTokenCount( '/' ) == 2 )
-            {
-                String aHelpFile( aName.GetToken( 1, '/' ) );
-                if ( WildCard( DEFINE_CONST_UNICODE("*.chm") ).Matches( aHelpFile ) )
-                {
-                    String aHelp( DEFINE_CONST_UNICODE("hh.exe ") );
-                    aHelp += aHelpFile;
-                    System::StartProcess( NULL, aHelp );
-                }
-            }
-#endif
-
-            String aHID( rMedium.GetURLObject().GetMark() );
-            String aFileName;
-            sal_uInt32 nHID;
-            if ( aHID.Search( ':' ) != STRING_NOTFOUND )
-            {
-                aFileName = aHID.GetToken( 0, ':' );
-                nHID = aHID.GetToken( 1, ':' ).ToInt32();
-            }
-            else
-            {
-                nHID = aHID.ToInt32();
-            }
-            SfxHelp::ShowHelp( nHID, sal_False, aFileName.Len() ? U2S(aFileName).getStr() : NULL );
-            return ERRCODE_ABORT;
-        }
-
-        case SFX_EXE_FILTER_EXECUTE:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            rMedium.SetTemporary( sal_False );
-            INetURLObject aURL( "macro:" );
-            if ( pApp->IsSecureURL( aURL, &rMedium.GetReferer() ) && rMedium.GetPhysicalName().Len() )
-            {
-                String aName( '\"');
-                aName += rMedium.GetPhysicalName();
-                aName += '\"';
-                rMedium.SetTemporary( sal_False );
-                rMedium.CloseInStream();
-                sal_Bool bOk = System::StartProcess( NULL, aName );
-                return bOk ? ERRCODE_ABORT : ERRCODE_IO_NOTEXISTS;
-            }
-            return ERRCODE_IO_ACCESSDENIED;
-        }
- */
         case SFX_EXE_FILTER_BUGID:
         {
             String aPathName = DEFINE_CONST_UNICODE("http://webserver1.stardiv.de/Bugtracker/Source/Body_ReportDetail.asp?ID=");
@@ -1812,349 +896,8 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
             }
             else return ERRCODE_SFX_INVALIDLINK;
         }
-        case SFX_EXE_FILTER_MACRO:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
 
-            pApp->EnterBasicCall();
-
-            // macro:-::com::sun::star::util::URL analysiern
-            // 'macro://#lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-            // 'macro:#lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
-            // 'macro:obj.method(args)' => Object via App-BASIC-Mgr
-            String aMacro = rMedium.GetURLObject().GetMainURL();
-            sal_uInt16 nHashPos = aMacro.Search( '#' );
-            sal_uInt16 nArgsPos = aMacro.Search( '(' );
-            BasicManager *pBasMgr = 0;
-            ErrCode nErr;
-
-            // wird Macro angesprochen (also KEIN Object)?
-            if ( STRING_NOTFOUND != nHashPos && nHashPos < nArgsPos )
-            {
-                // BasManager ermitteln
-                String aBasMgrName( INetURLObject::decode(aMacro.Copy( 6, nHashPos-6 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-                if ( aBasMgrName.EqualsAscii("//") )
-                    pBasMgr = pApp->GetBasicManager();
-                else if ( !aBasMgrName.Len() )
-                    pBasMgr = SfxObjectShell::Current()->GetBasicManager();
-                else
-                    for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
-                          pObjSh && !pBasMgr;
-                          pObjSh = SfxObjectShell::GetNext(*pObjSh) )
-                        if ( aBasMgrName == pObjSh->GetTitle(SFX_TITLE_APINAME) )
-                            pBasMgr = pObjSh->GetBasicManager();
-                if ( pBasMgr )
-                {
-                    // Funktion suchen
-                    String aQualifiedMethod( INetURLObject::decode(aMacro.Copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-                    String aArgs;
-                    if ( STRING_NOTFOUND != nArgsPos )
-                    {
-                        aArgs = aQualifiedMethod.Copy( nArgsPos - nHashPos - 1 );
-                        aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
-                    }
-                    SbxMethod *pMethod = SfxQueryMacro( pBasMgr, aQualifiedMethod );
-
-                    // falls gefunden Funktion ueber ihren Parent ausfuehren
-                    if ( pMethod )
-                    {
-                        String aQuotedArgs;
-                        if ( aArgs.Len()<2 || aArgs.GetBuffer()[1] == '\"')
-                            aQuotedArgs = aArgs;
-                        else
-                        {
-                            // Klammern entfernen
-                            aArgs.Erase(0,1);
-                            aArgs.Erase( aArgs.Len()-1,1);
-
-                            aQuotedArgs = '(';
-
-                            // Alle Parameter mit T"uddelchen
-                            sal_uInt16 nCount = aArgs.GetTokenCount(',');
-                            for ( sal_uInt16 n=0; n<nCount; n++ )
-                            {
-                                aQuotedArgs += '\"';
-                                aQuotedArgs += aArgs.GetToken( n, ',' );
-                                aQuotedArgs += '\"';
-                                if ( n<nCount-1 )
-                                    aQuotedArgs += ',';
-                            }
-
-                            aQuotedArgs += ')';
-                        }
-
-                        String aCall( '[' );
-                        aCall += pMethod->GetName();
-                        aCall += aQuotedArgs;
-                        aCall += ']';
-                        pMethod->GetParent()->Execute( aCall );
-                        nErr = SbxBase::GetError();
-                    }
-                    else
-                        nErr = ERRCODE_BASIC_PROC_UNDEFINED;
-                }
-                else
-                    nErr = ERRCODE_IO_NOTEXISTS;
-            }
-            else
-            {
-                // (optional Objekt-qualifizierte) Basic-Funktion ausfuehren
-                String aCall( '[' );
-                aCall += INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET);
-                aCall += ']';
-                pApp->GetBasicManager()->GetLib(0)->Execute( aCall );
-                nErr = SbxBase::GetError();
-            }
-
-            pApp->LeaveBasicCall();
-            SbxBase::ResetError();
-            return nErr ? nErr : ERRCODE_ABORT;
-        }
-/*
-        case SFX_EXE_FILTER_FACTORY:
-        {
-            INetURLObject aObj( rMedium.GetURLObject() );
-            String aParam;
-            if ( aObj.HasParam() && (sal_uInt16) aObj.GetParam().ToInt32() )
-            {
-                aParam = aObj.GetParam();
-                aObj.SetParam("");
-            }
-
-            String aPathName( aObj.GetMainURL() );
-            const SfxObjectFactory* pFact = SfxObjectFactory::GetFactory( aPathName );
-            if ( pFact )
-            {
-                if ( aParam.Len() )
-                {
-                    sal_uInt16 nSlotId = aParam.ToInt32();
-                    SfxModule* pMod = pFact->GetModule()->Load();
-                    pMod->ExecuteSlot( SfxRequest( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() ) );
-                    return ERRCODE_ABORT;
-                }
-
-                SfxAllItemSet aSet( SFX_APP()->GetPool() );
-                sal_uInt16 nSlotId = SID_NEWDOCDIRECT;
-                if( pFact->GetStandardTemplate().Len() )
-                {
-                    aSet.Put( SfxStringItem ( SID_FILE_NAME, pFact->GetStandardTemplate() ) );
-                    aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                    nSlotId = SID_OPENDOC;
-                }
-                else
-                    aSet.Put( SfxStringItem ( SID_NEWDOCDIRECT, aPathName ) );
-
-                aSet.Put( aFrameItem );
-
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pViewId, SfxUInt16Item, SID_VIEW_ID, sal_False );
-                if ( pViewId )
-                    aSet.Put( *pViewId );
-
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pHidden, SfxBoolItem, SID_HIDDEN, sal_False );
-                if ( pHidden )
-                    aSet.Put( *pHidden );
-
-                if ( rMedium.IsPreview_Impl() )
-                    aSet.Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
-
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pReadonly, SfxBoolItem, SID_DOC_READONLY, sal_False );
-                if ( pReadonly )
-                    aSet.Put( *pReadonly );
-
-                if ( pTarget )
-                    aSet.Put( *pTarget );
-                if ( pReferer )
-                    aSet.Put( *pReferer );
-                if ( pPath )
-                    aSet.Put( *pPath );
-
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pAPI, SfxBoolItem, SID_SILENT, sal_False );
-                SfxCallMode eMode = SFX_CALLMODE_SYNCHRON;
-                if ( pAPI && pAPI->GetValue() )
-                    eMode |= SFX_CALLMODE_API;
-
-                const SfxPoolItem *pRet = pApp->GetAppDispatcher().Execute( nSlotId, eMode, aSet );
-                if ( pRet )
-                    rMedium.GetItemSet()->Put( *pRet, SID_OPENURL );
-
-                return ERRCODE_ABORT;
-            }
-            else
-            {
-                // Chaos-Factory ??
-                String aFact( aPathName );
-                String aPrefix( DEFINE_CONST_UNICODE("private:factory/") );
-                if ( aPrefix.Len() == aFact.Match( aPrefix ) )
-                    // Factory-Namen extrahieren
-                    aFact.Erase( 0, aPrefix.Len() );
-
-                // ContentType ermitteln
-                INetContentType eType = INetContentTypes::GetContentType( aFact );
-                if ( eType != CONTENT_TYPE_UNKNOWN )
-                {
-                    // ChaosObjekte werden immer in der Explorer-Root angelegt
-                    String aExplorerRoot( SFX_INIMANAGER()->Get( SFX_KEY_EXPLORER_DIR ) );
-                    INetURLObject aExp;
-                    aExp.SetSmartURL( aExplorerRoot );
-#if 0   //(dv)
-                    CntAnchorRef xRoot = new CntAnchor( NULL, aExp.GetMainURL() );
-
-                    // Chaos-Factory daf"ur besorgen
-                    sal_uInt16 nPos = CntHelperFunctions::GetFactoryPosByContentType( *xRoot, eType, sal_True, 0, 0, 0, CNT_CREATION_FLAG_HIDDEN );
-                    if ( nPos != CNTFACTORY_NOTFOUND )
-                    {
-                        SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
-                        if ( rpFrame && rpFrame->GetCurrentDocument() )
-                            pSet->Put( SfxFrameItem( SID_DOCFRAME, rpFrame ), SID_DOCFRAME );
-                        if ( pReferer )
-                            pSet->Put( *pReferer, SID_REFERER );
-                        CntAnchorRef xRef = CntHelperFunctions::CreateAnchor( *xRoot, nPos, 0, sal_False );
-                        if ( xRef.Is() && !xRef->GetError() )
-                        {
-                            new SfxAsyncChaosFactory_Impl( xRef, pSet );
-                            xRef->Put( SfxVoidItem(WID_INSERT) );
-                            return ERRCODE_ABORT;
-                        }
-                    }
-#endif  //(dv)
-                }
-            }
-
-            return ERRCODE_IO_NOTSUPPORTED;
-        }
-
-        case SFX_EXE_FILTER_UNO:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            SfxViewFrame *pView = SfxViewFrame::Current();
-            if ( pView )
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame;
-                SfxFrame *pFrame = pView->GetFrame();
-                while ( pFrame )
-                {
-                    // Falls es eine Mutter-Komponente gibt, diese ansprechen
-                    if ( pFrame->HasComponent() )
-                        xFrame = pFrame->GetFrameInterface();
-                    pFrame = pFrame->GetParentFrame();
-                }
-
-                if ( !xFrame.is() )
-                    xFrame = pView->GetFrame()->GetFrameInterface();
-
-                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
-                if ( xProv.is())
-                {
-                    ::com::sun::star::util::URL aURL;
-                    aURL.Complete = rMedium.GetName();
-                    SfxURLTransformer aTrans ( ::comphelper::getProcessServiceFactory() );
-                    aTrans.parseStrict( aURL );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
-                    if ( xDisp.is() )
-                        xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
-                }
-            }
-
-            return ERRCODE_ABORT;
-        }
-*/
-        case SFX_EXE_FILTER_SLOT:
-        {
-            if ( bPreview )
-                return ERRCODE_ABORT;
-
-            const INetURLObject &rURL = rMedium.GetURLObject();
-            SfxUInt16Item aTabPageNoItem( SID_TABPAGE, rURL.GetMark().ToInt32() );
-            const SfxPoolItem* pArgs[] =
-            {
-                &aTabPageNoItem, 0
-            };
-
-            String aSlots( rURL.GetURLPath() );
-            sal_uInt16 nCount = aSlots.GetTokenCount(',');
-            for ( sal_uInt16 nSlot=0; nSlot<nCount; nSlot++ )
-            {
-                sal_uInt16 nSlotId = (sal_uInt16) aSlots.GetToken( nSlot, ',' ).ToInt32();
-                pApp->GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_SYNCHRON, pArgs, 0, ppInternalArgs );
-            }
-
-            return ERRCODE_ABORT;
-        }
-
-        default:
-            return ERRCODE_IO_NOTSUPPORTED;
-    }
-}
-
-//----------------------------------------------------------------
-
-SfxExternalAppFilterContainer::SfxExternalAppFilterContainer( )
-    : SfxFilterContainer( DEFINE_CONST_UNICODE(SFX_FCONTNR_EXTAPP) )
-/*   [Beschreibung]
-
-     Der SfxExternalAppFilterContainer enthaellt jeden Filter, nach
-     dem er per GetFilter4FilterName gefragt wird. Er ist fuer
-     Redirects von Bedeutung. Im Execute oeffnet er die durch den
-     Filter bezeichnete Applikation.  */
-
-{
-}
-
-//----------------------------------------------------------------
-
-sal_uInt32 SfxExternalAppFilterContainer::Execute( SfxMedium& rMedium, SfxFrame*&  ) const
-{
-    const SfxFilter* pFilter = rMedium.GetFilter();
-    DBG_ASSERT( pFilter, "Medium braucht Filter" );
-    const UniString& rPhysicalName = rMedium.GetPhysicalName();
-    // GetPhysicalName() setzt das tmp-Flag zurueck auf sal_True
-    rMedium.SetTemporary( sal_False );
-
-    OProcess aApp( pFilter->GetFilterName(), rPhysicalName );
-    OProcess::TProcessOption eOption =
-        (OProcess::TProcessOption)( OProcess::TOption_SearchPath | OProcess::TOption_Detached );
-    sal_Bool bOk = ( aApp.execute( eOption ) == OProcess::E_None );
-    return bOk ? ERRCODE_ABORT : ERRCODE_IO_NOTEXISTS;
-}
-
-//----------------------------------------------------------------
-
-sal_uInt16 SfxExternalAppFilterContainer::GetFilterCount() const
-{
-    return SfxFilterContainer::GetFilterCount();
-}
-
-//----------------------------------------------------------------
-
-const SfxFilter* SfxExternalAppFilterContainer::GetFilter4FilterName(
-    const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
-/*   [Beschreibung]
-
-     Erzeugt einen entspr. Filter, falls er noch nicht existiert und gibt
-     diesen zurueck.
- */
-{
-    String aEmpty;
-    SfxFilterFlags nFlags = SFX_FILTER_IMPORT|SFX_FILTER_NOTINFILEDLG|
-        SFX_FILTER_EXECUTABLE;
-    if ( (nFlags & nMust) != nMust ||
-         (nFlags & nDont ) )
-        return 0;
-    const SfxFilter* pFilt =
-        SfxFilterContainer::GetFilter4FilterName( rName );
-    if( !pFilt )
-    {
-        SfxFilter* pFilter = new SfxFilter(
-            rName, DEFINE_CONST_UNICODE("none"), nFlags, 0, aEmpty, aEmpty, 0, aEmpty, this,
-            aEmpty );
-        pImpl->aList.Insert( pFilter, (sal_uInt32)0 );
-        pFilt = pFilter;
-    }
-    return pFilt;
-}
+#endif
 
 //----------------------------------------------------------------
 
@@ -2298,29 +1041,11 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     const SfxFilter* pFilter = *ppFilter;
     const INetURLObject& rObj = rMedium.GetURLObject();
 
-#if defined(WNT) || defined(WIN) || defined(OS2)
-    if( !pFilter )
-    {
-        // Hier kommen zunaechst fest eingehackte Regeln:
-        if( rObj.GetProtocol() == INET_PROT_FILE && rObj.GetExtension().CompareIgnoreCaseToAscii( "exe" ) == COMPARE_EQUAL )
-        {
-            String aStr( DEFINE_CONST_UNICODE("soffice") );
-//          String aStr( SfxResId( STR_FILTER_OTHERS ) );
-            aStr += DEFINE_CONST_UNICODE(": exe");
-            pFilter = GetFilter( aStr, nMust, nDont );
-        }
-    }
-#endif
-
     if( !pFilter )
         pFilter = SFX_APP()->GetFilterMatcher().GetFilter4Protocol( rMedium );
 
     sal_Bool bCheckExternBrowser = sal_False;
-    if( pFilter )
-    {
-        pFilter = ResolveRedirection( pFilter, rMedium );
-    }
-    else
+    if( !pFilter )
     {
         // Falls Medium Remote, Zunaechst ueber Mimetypen pruefen ( nicht bei ExternBrowser, sofern dabei angeladen wird )
         if( !pFilter && rMedium.SupportsMIME_Impl() && ( !bCheckExternBrowser || rObj.GetProtocol() != INET_PROT_HTTP && rObj.GetProtocol() != INET_PROT_HTTPS ) )
@@ -2345,17 +1070,9 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
                     // wir GetInStream rufen
                     const SfxFilter* pMimeFilter = pFilter;
                     pFilter = GetFilter4Extension( rMedium.GetURLObject().GetName(), nMust, nDont );
-                    pFilter = ResolveRedirection( pFilter, rMedium );
                     if( pFilter )
-                    {
                         nErr = ERRCODE_NONE;
-                        if ( ( pFilter == SfxExecutableFilterContainer::GetChooserFilter() ||
-                             pFilter->GetFilterName().EqualsAscii(SFX_FILTER_DOWNLOAD) ) && !rMedium.IsRemote() )
-                                // Chooser/Downloader bei MIME nur wenn remote
-                                pFilter = 0;
-                    }
-
-                    if ( !pFilter )
+                    else
                         pFilter = pMimeFilter;
                 }
 
@@ -2406,43 +1123,12 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
         }
 
         // Zu allerletzt ueber Extension mappen
-        pFilter = ResolveRedirection( pFilter, rMedium );
         if( !pFilter )
         {
             pFilter = GetFilter4Extension( rMedium.GetURLObject().GetName(), nMust, nDont );
             if( !pFilter || pFilter->GetWildcard()==DEFINE_CONST_UNICODE("*.*") || pFilter->GetWildcard() == '*' )
                 pFilter = 0;
-            pFilter = ResolveRedirection( pFilter, rMedium );
-            if( pFilter &&
-                ( pFilter == SfxExecutableFilterContainer::GetChooserFilter() ||
-                  pFilter->GetFilterName().EqualsAscii(SFX_FILTER_DOWNLOAD) ) &&
-                !rMedium.IsRemote() )
-                pFilter = 0;
         }
-    }
-
-    if ( bCheckExternBrowser &&
-        ( ( pFilter && pFilter->GetMimeType().EqualsAscii(CONTENT_TYPE_STR_TEXT_HTML) ) ||
-        (!pFilter && ( rObj.GetProtocol() == INET_PROT_HTTP || rObj.GetProtocol() == INET_PROT_HTTPS || rObj.GetProtocol() == INET_PROT_FTP && rMedium.SupportsMIME_Impl() ) ) ) )
-    {
-        const SfxFilter* pBrwFilter = GetFilter4FilterName( DEFINE_CONST_UNICODE("ExternBrowser"), nMust, nDont );
-        if ( pBrwFilter )
-        {
-            rMedium.GetItemSet()->Put( SfxBoolItem (SID_DOC_READONLY, sal_True ) );
-            rMedium.SetOpenMode( SFX_STREAM_READONLY, sal_True );
-            pFilter = pBrwFilter;
-            if ( rMedium.GetFilter() )
-                rMedium.SetFilter( 0 );
-/*(dv)          CntAnchorRef xAnchor( rMedium.GetAnchor() );
-            if ( xAnchor.Is() )
-                xAnchor->Put( CntContentTypeItem(WID_CONTENT_TYPE, CONTENT_TYPE_TEXT_HTML ) );
-*/      }
-    }
-
-    if ( !pFilter && rObj.GetProtocol() == INET_PROT_FTP )
-    {
-        pFilter = SfxExecutableFilterContainer::GetDownloadFilter();
-        nErr = ERRCODE_SFX_CONSULTUSER;
     }
 
     *ppFilter = pFilter;
@@ -2471,7 +1157,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
     SfxMedium& rMedium, const SfxFilter**ppFilter,
     SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    const SfxFilter* pOldFilter = ResolveRedirection( *ppFilter, rMedium );
+    const SfxFilter* pOldFilter = *ppFilter;
     const SfxFilter* pFilter = pOldFilter;
 
     sal_Bool bConsultUser = sal_False;
@@ -2544,59 +1230,13 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
         }
 
         if ( pFilter && nErr == ERRCODE_SFX_CONSULTUSER )
-        {
-            pFilter = ResolveRedirection( pFilter, rMedium );
             *ppFilter = pFilter;
-        }
-/*
-        // Erst jetzt auch das Betriebssystem einschalten
-        if ( !pFilter && 0 != GetContainer( DEFINE_CONST_UNICODE(SFX_FCONTNR_EXTAPP) ) )
-        {
-            sal_Bool bExternalAllowed = sal_True;
-            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, sal_False);
-            if ( pFlags )
-            {
-                // Werte auf einzelne Items verteilen
-                String aFileFlags = pFlags->GetValue();
-                aFileFlags.ToUpperAscii();
-                if ( STRING_NOTFOUND != aFileFlags.Search( 'B' ) )
-                    bExternalAllowed = sal_False;
-                else if ( STRING_NOTFOUND != aFileFlags.Search( 'H' ) )
-                    bExternalAllowed = sal_False;
-            }
 
-            INetURLObject aURL( "macro:" );
-            String aReferer( rMedium.GetReferer() );
-            if ( !SFX_APP()->IsSecureURL( aURL, &aReferer ) )
-                bExternalAllowed = sal_False;
-
-            if ( bExternalAllowed && rMedium.GetURLObject().GetProtocol() == INET_PROT_HTTP )
-                bExternalAllowed = sal_False;
-
-            if ( aReferer.EqualsAscii("private:OpenEvent") )
-                bExternalAllowed = sal_False;
-
-            if ( bExternalAllowed && rMedium.GetPhysicalName().Len() )
-            {
-                String aName( '\"');
-                aName += rMedium.GetPhysicalName();
-                aName += '\"';
-                rMedium.SetTemporary(sal_False);
-
-                // Wenn "uber das Betriebssystem geladen werden kann, wird der aktuelle Ladevorgang
-                // abgebrochen
-                if ( System::StartProcess( NULL, aName ) )
-                    return ERRCODE_ABORT;
-            }
-        }
-*/
         if( nErr && nErr != ERRCODE_ABORT && nErr != ERRCODE_SFX_FORCEQUIET && nErr != ERRCODE_SFX_NEVERCHECKCONTENT )
             return nErr;
 
         if( nErr == ERRCODE_ABORT )
             pFilter = 0;
-
-        pFilter = ResolveRedirection( pFilter, rMedium );
 
         // Jetzt wird geprueft, ob das Modul auch einverstanden ist; ist das nicht der Fall, wird auf
         // jeden Fall auf ConsultUser umgeschaltet
@@ -2676,11 +1316,6 @@ sal_uInt32  SfxFilterMatcher::GuessFilter(
         if( nErr == ERRCODE_ABORT && pFilter )
             bConsultUser = sal_True;
     }
-
-    if ( pFilter &&
-            ( pFilter == SfxExecutableFilterContainer::GetChooserFilter() && pFilter != pOldFilter ||
-            pFilter->GetFilterName().EqualsAscii(SFX_FILTER_DOWNLOAD) && !rMedium.IsRemote() ) )
-        pFilter = NULL;
 
     *ppFilter = pFilter;
 
@@ -2817,9 +1452,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
 
     if ( ( !pFilter || nErr == ERRCODE_SFX_CONSULTUSER ) && !bAPI && !bHidden )
     {
-        if ( !pFilter && rMedium.IsRemote() )
-            pFilter = SfxExecutableFilterContainer::GetDownloadFilter();
-        else if ( !pFilter )
+        if ( !pFilter )
             pFilter = pOldFilter;
 
         String aTmpName;
@@ -2845,8 +1478,6 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
             nErr = ERRCODE_ABORT;
         else
             nErr = ERRCODE_NONE;
-
-        pFilter = ResolveRedirection( pFilter, rMedium );
     }
 
     *ppFilter = pFilter;
@@ -2932,74 +1563,6 @@ sal_uInt32 SfxFilterMatcher::AppDetectFilter(
     SfxFilterFlags nClass = nMust & SFX_FILTER_TEMPLATE ?
         SFX_FILTER_TEMPLATE : USHRT_MAX;
     return SFX_APP()->DetectFilter( rMedium, ppFilter, (sal_uInt16)nMust );
-}
-
-//----------------------------------------------------------------
-
-const SfxFilter* SfxFilterMatcher::ResolveRedirection( const SfxFilter* pFilter, SfxMedium& rMedium ) const
-{
-    return ResolveRedirection( pFilter, rMedium.GetURLObject().GetURLPath() );
-}
-
-const SfxFilter* SfxFilterMatcher::ResolveRedirection( const SfxFilter* pFilter, const String& rURLPath ) const
-{
-    while( sal_True )
-    {
-        if( !pFilter || !(pFilter->GetFilterFlags() & SFX_FILTER_REDIRECT))
-            return pFilter;
-        {
-            if( !(pFilter->GetFilterFlags() & SFX_FILTER_ALIEN ) )
-            // Es ist der Officefilter
-            {
-                sal_Bool bFound = sal_False;
-                String aName = ToUpper_Impl( rURLPath );
-
-                // jetzt auch die Nicht-Own-Filter f"ur das MsgDoc
-                SfxFilterMatcherIter aIter( this, SFX_FILTER_IMPORT );
-                for( const SfxFilter* pAppFilter = aIter.First(); pAppFilter;
-                     pAppFilter = aIter.Next() )
-                {
-                    SfxFilterFlags nFlags = pAppFilter->GetFilterFlags();
-                    // aber nicht den OfficeFilter
-                    WildCard aCard( ToUpper_Impl( pAppFilter->GetWildcard()() ), ';' );
-                    if ( aCard() == DEFINE_CONST_UNICODE("*.*") || aCard() == '*' )
-                        continue;
-
-                    if( aCard.Matches( aName ) && pAppFilter != pFilter )
-                    {
-                        pFilter = pAppFilter;
-                        bFound = sal_True;
-                        break;
-                    }
-                }
-
-                if (!bFound)
-                {
-                    DBG_ERROR( "AppFilter nicht gefunden" );
-                    return 0;
-                }
-            }
-            else
-            {
-                String aData = pFilter->GetUserData();
-                if( aData.GetTokenCount( '|' )!=2 )
-                {
-                    DBG_ERROR( "Schlechtes Redirectionsformat" );
-                    return 0;
-                }
-                else
-                {
-                    String aContainer = aData.GetToken( 0, '|' );
-                    String aFilter = aData.GetToken( 1, '|' );
-                    SfxFilterContainer* pCont = GetContainer( aContainer );
-                    if( pCont )
-                        pFilter = pCont->GetFilter4FilterName( aFilter );
-                    else
-                        return 0;
-                }
-            }
-        }
-    }
 }
 
 //----------------------------------------------------------------
@@ -3097,105 +1660,17 @@ const SfxFilter* SfxFilterMatcherIter::Next()
     return pFilter;
 }
 
-//----------------------------------------------------------------
-
-SfxFrameWindowFactory::SfxFrameWindowFactory(
-    FactoryFunc pFuncP, String aNameP ) :
-    pFunc( pFuncP ), aName( aNameP.ToUpperAscii() )
+sal_Bool SfxFilterContainer::IsUsableForRedirects() const
 {
+    return FALSE;
 }
 
-SfxPluginFilterContainer::SfxPluginFilterContainer()
-    : SfxFilterContainer( DEFINE_CONST_UNICODE("plugin") )
-    , bInitialized( Application::IsRemoteServer() )
+const SfxFilter* SfxExecutableFilterContainer::GetDownloadFilter()
 {
-    SFX_APP()->InsertLateInitHdl( LINK( this, SfxPluginFilterContainer, LoadHdl_Impl ) );
+    return NULL;
 }
 
-sal_uInt32 SfxPluginFilterContainer::Execute( SfxMedium& rMedium, SfxFrame*& pFrame) const
+const SfxFilter* SfxExecutableFilterContainer::GetChooserFilter()
 {
-/*
-    rMedium.Close();
-    ::rtl::OUString aTargetURL = rMedium.GetURLObject().GetMainURL();
-    rMedium.GetItemSet()->Put( SfxStringItem( SID_CONTENTTYPE, rMedium.GetFilter()->GetMimeType() ) );
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-    TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), aArgs );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( (::cppu::OWeakObject*)new PluginLoader(::comphelper::getProcessServiceFactory()), ::com::sun::star::uno::UNO_QUERY );
-    rMedium.GetItemSet()->Put( SfxStringItem( SID_FILTER_NAME, rMedium.GetFilter()->GetName() ) );
-    USHORT nRet = pFrame->LoadComponent_Impl( aTargetURL, aArgs, xLoader, rMedium.GetItemSet() );
-
-    if ( nRet == RET_NEWTASK )
-        rMedium.GetItemSet()->Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-
-    if ( nRet == RET_OK || nRet == RET_CANCEL )
-        return ERRCODE_ABORT;
-    else if ( nRet == RET_NEWTASK )
-        return ERRCODE_SFX_RESTART;
-    else                        // nRet == RET_PENDING !
-        return ERRCODE_IO_PENDING;
- */
-    return ERRCODE_IO_NOTSUPPORTED;
+    return NULL;
 }
-
-sal_uInt16 SfxPluginFilterContainer::GetFilterCount() const
-{
-    if ( !bInitialized  )
-        SAL_CONST_CAST(SfxPluginFilterContainer*, this)->LoadHdl_Impl( 0 );
-    return SfxFilterContainer::GetFilterCount();
-}
-
-IMPL_LINK( SfxPluginFilterContainer, LoadHdl_Impl, void*, pVoid )
-{
-    if ( bInitialized )
-        return 0;
-
-    bInitialized = sal_True;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference< ::com::sun::star::plugin::XPluginManager >  xPlugMgr( xMan->createInstance( DEFINE_CONST_UNICODE("com.sun.star.plugin.PluginManager") ), ::com::sun::star::uno::UNO_QUERY );
-    if( xPlugMgr.is() )
-    {
-        // Alle MIME-Types, f"ur die Plugins registriert sind, werden als
-        // Filter registriert
-        ::com::sun::star::uno::Sequence< ::com::sun::star::plugin::PluginDescription > aDescr = xPlugMgr->getPluginDescriptions();
-        const ::com::sun::star::plugin::PluginDescription *pArr = aDescr.getConstArray();
-        for ( sal_uInt16 n=0; n<aDescr.getLength(); n++ )
-        {
-            ::rtl::OUString aExt = pArr[n].Extension;
-            if ( aExt.compareToAscii("*") != 0 )
-            {
-                // Den default-Filter wollen wir nicht, da die Filter dazu
-                // dienen sollen, registrierte PlugIns beim Laden als Dokument
-                // zu erkennen
-
-                String aExtension( aExt );
-
-                // Fix fuer 3.0 PlugIns mit mehreren FileExt.
-                sal_uInt16 nPos = 0;
-                while( (nPos = aExtension.SearchAndReplace(',', ';', nPos)) != STRING_NOTFOUND )
-                    ;
-//                  aExtension.Insert("*.", nPos+1);
-//              aExtension.Insert( "*.", 0 );
-                String aPlug = pArr[n].Description;
-                aPlug += DEFINE_CONST_UNICODE(" (PlugIn)");
-                String aEmpty;
-                SfxFilter *pFilter = new SfxFilter( aPlug, aExtension,
-                    SFX_FILTER_PLUGIN|SFX_FILTER_IMPORT|SFX_FILTER_EXECUTABLE,
-                    0, String(), aPlug, 0,  pArr[n].Mimetype, this, String() );
-                AddFilter( pFilter, GetFilterCount() );
-            }
-        }
-    }
-    else
-        new SfxAsyncServiceErrorHandler_Impl( DEFINE_CONST_UNICODE("PluginManager") );
-
-    return 0;
-}
-
-const SfxFilter* SfxPluginFilterContainer::GetFilter4Protocol( SfxMedium& rMed, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
-{
-    if ( !bInitialized )
-        SAL_CONST_CAST(SfxPluginFilterContainer*, this)->LoadHdl_Impl( 0 );
-    return SfxFilterContainer::GetFilter4Protocol( rMed, nMust, nDont );
-}
-
-

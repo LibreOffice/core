@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-14 11:52:18 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,11 @@ void AppendDateTime_Impl( const ::com::sun::star::util::DateTime rDT, String& rR
 sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData, sal_Int32 nNameClash )
 {
     sal_Bool bRet = sal_True, bKillSource = sal_False;
-    INetURLObject aSourceObj( rSource, INET_PROT_FILE );
-    INetURLObject aDestObj( rDest, INET_PROT_FILE );
+    INetURLObject aSourceObj( rSource );
+    DBG_ASSERT( aSourceObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
+    INetURLObject aDestObj( rDest );
+    DBG_ASSERT( aDestObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     if ( bMoveData && aSourceObj.GetProtocol() != aDestObj.GetProtocol() )
     {
         bMoveData = sal_False;
@@ -191,7 +194,9 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
 sal_Bool SfxContentHelper::IsDocument( const String& rContent )
 {
     sal_Bool bRet = sal_False;
-    INetURLObject aObj( rContent, INET_PROT_FILE );
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
     try
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -222,7 +227,8 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
 sal_Bool SfxContentHelper::IsFolder( const String& rContent )
 {
     sal_Bool bRet = sal_False;
-    INetURLObject aObj( rContent, INET_PROT_FILE );
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -253,7 +259,8 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
 sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
 {
     sal_Bool bRet = sal_False;
-    INetURLObject aObj( rContent, INET_PROT_FILE );
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -278,7 +285,9 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
 sal_Bool SfxContentHelper::Kill( const String& rContent )
 {
     sal_Bool bRet = sal_True;
-    INetURLObject aDeleteObj( rContent, INET_PROT_FILE );
+    INetURLObject aDeleteObj( rContent );
+    DBG_ASSERT( aDeleteObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+
     try
     {
         Content aCnt( aDeleteObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -303,7 +312,8 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
 Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder, sal_Bool bFolder )
 {
     StringList_Impl* pFiles = NULL;
-    INetURLObject aFolderObj( rFolder, INET_PROT_FILE );
+    INetURLObject aFolderObj( rFolder );
+    DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -381,7 +391,8 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
 Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String& rFolder, sal_Bool bFolder )
 {
     StringList_Impl* pProperties = NULL;
-    INetURLObject aFolderObj( rFolder, INET_PROT_FILE );
+    INetURLObject aFolderObj( rFolder );
+    DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
@@ -529,7 +540,8 @@ sal_Bool SfxContentHelper::MoveTo( const String& rSource, const String& rDest, s
 
 sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
 {
-    INetURLObject aURL( rFolder, INET_PROT_FILE );
+    INetURLObject aURL( rFolder );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     String aNewFolderURL = aURL.GetMainURL();
     String aTitle = aURL.getName();
     aURL.removeSegment();
@@ -568,7 +580,8 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
 {
     ErrCode nErr = 0;
     rFreeBytes = 0;
-    INetURLObject aObj( rPath, INET_PROT_FILE );
+    INetURLObject aObj( rPath );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -593,7 +606,8 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
 {
     ULONG nSize = 0;
     sal_Int64 nTemp = 0;
-    INetURLObject aObj( rContent, INET_PROT_FILE );
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -616,8 +630,10 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
 sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsOlder )
 {
     DateTime aYoungDate, aOlderDate;
-    INetURLObject aYoungObj( rIsYoung, INET_PROT_FILE );
-    INetURLObject aOlderObj( rIsOlder, INET_PROT_FILE );
+    INetURLObject aYoungObj( rIsYoung );
+    DBG_ASSERT( aYoungObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+    INetURLObject aOlderObj( rIsOlder );
+    DBG_ASSERT( aOlderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
@@ -646,7 +662,8 @@ sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
 // please don't use it (only used in appbas.cxx and appcfg.cxx)
 sal_Bool SfxContentHelper::Exists( const String& rContent )
 {
-    INetURLObject aObj( rContent, INET_PROT_FILE );
+    INetURLObject aObj( rContent );
+    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     rtl::OUString aTmp( aObj.GetMainURL() );
     rtl::OUString aResult;
     if ( FileBase::getNormalizedPathFromFileURL( aTmp, aResult )  == FileBase::E_None )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #include <svtools/useroptions.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -472,10 +473,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
         else if ( pSalvageItem )
         {
-            INetURLObject aObj;
-            aObj.SetSmartProtocol( INET_PROT_FILE );
-            aObj.SetSmartURL( pMed->GetPhysicalName() );
-            aBaseURL = aObj.GetMainURL();
+            String aName( pMed->GetPhysicalName() );
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
         }
         else
             aBaseURL = pMed->GetName();
@@ -489,10 +488,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         bHasStorage = pMed->TryStorage();
         if ( bHasStorage )
         {
-            INetURLObject aObj;
-            aObj.SetSmartProtocol( INET_PROT_FILE );
-            aObj.SetSmartURL( pMed->GetPhysicalName() );
-            aBaseURL = aObj.GetMainURL();
+            String aName( pMed->GetPhysicalName() );
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
         }
     }
 
@@ -749,11 +746,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             if ( pAuthorItem )
                 aAuthor = pAuthorItem->GetValue();
             else
-#if SUPD<613//MUSTINI
-                aAuthor = SFX_INIMANAGER()->GetUserFullName();
-#else
                 aAuthor = SvtUserOptions().GetFullName();
-#endif
 
             aInfo.aCreateStamp.SetName( aAuthor );
 
@@ -1056,14 +1049,6 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
                  SFX_CREATE_MODE_EMBEDDED != eCreateMode )
                 InvalidateName();
             SetModified(sal_False); // nur bei gesetztem Medium zur"ucksetzen
-        }
-
-        // ggf. Notify, dass im FileSystem was passiert ist
-        if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
-        {
-            SfxMedium *pMed = pNewMed ? pNewMed : pMedium;
-            if ( INET_PROT_FILE == pMed->GetURLObject().GetProtocol() && pMed->GetName().Len() )
-                SFX_APP()->Broadcast( SfxDirEntryHint( 0, pMed->GetURLObject().GetMainURL() ) );
         }
     }
 
@@ -1415,7 +1400,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 {
     // must we ask the user for the filename?
     INetURLObject aURL;
-    aURL.SetSmartProtocol( INET_PROT_FILE );
     sal_uInt16 nActFilt = 0;
     const SfxFilter* pFilt;
     for( pFilt = GetFactory().GetFilter( 0 );
@@ -1459,17 +1443,11 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                     if( aLastName.Len() )
                     {
                         String aPath( aLastName );
-
                         bool bWasAbsolute = FALSE;
-#if SUPD<613//MUSTINI
-                        INetURLObject aObj( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ) );
-#else
                         INetURLObject aObj( SvtPathOptions().GetWorkPath() );
-#endif
-                        aObj.smartRel2Abs( aPath, bWasAbsolute );
-
+                        aObj.RelToAbs( aPath, bWasAbsolute );
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
-                        pDlg->SetSmartPath( aObj.GetMainURL() );
+                        pDlg->SetPath( aObj.GetMainURL() );
                     }
 
                     pDlg->SetCurFilter( pFilt->GetName() );
@@ -1488,11 +1466,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
             else
             {
-#if SUPD<613//MUSTINI
-                pDlg->SetSmartPath( SFX_INIMANAGER()->Get(SFX_KEY_WORK_PATH) );
-#else
-                pDlg->SetSmartPath( SvtPathOptions().GetWorkPath() );
-#endif
+                pDlg->SetPath( SvtPathOptions().GetWorkPath() );
             }
 
             if ( pDlg->Execute() == RET_CANCEL )
@@ -1502,7 +1476,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 return sal_False;
             }
 
-            aURL.SetSmartURL( pDlg->GetPath() );
+            aURL.SetURL( pDlg->GetPath() );
 
             // gibt es schon ein Doc mit dem Namen?
             const String aName(aURL.GetMainURL());
@@ -1586,7 +1560,9 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     }
     else if ( pFileNameItem )
     {
-        aURL.SetSmartURL(((const SfxStringItem *)pFileNameItem)->GetValue() );
+        aURL.SetURL(((const SfxStringItem *)pFileNameItem)->GetValue() );
+        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
+
         const SfxPoolItem* pFilterNameItem=0;
         const SfxItemState eState = pRequest->GetArgs()->GetItemState(SID_FILTER_NAME, sal_True, &pFilterNameItem);
         if ( SFX_ITEM_SET == eState )
@@ -1641,13 +1617,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         SetError( ERRCODE_IO_INVALIDPARAMETER );
         return sal_False;
     }
-
-//      former code using fsys, must be handled in UCB
-//    if( aURL.GetProtocol() == INET_PROT_FILE && !aURL.GetPath().Exists() )
-//    {
-//        SetError( ERRCODE_IO_NOTEXISTSPATH );
-//        return sal_False;
-//    }
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL(),aFilterName,pParams))
     {
@@ -1740,7 +1709,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
         {
-            pFilt = rMatcher.ResolveRedirection( pFilt, *pMediumTmp );
             if ( pFilt->GetFilterContainer() != pMediumTmp->GetFilter()->GetFilterContainer() )
                 pMediumTmp->GetStorage()->SetClass( SvFactory::GetServerName( nFormat ), nFormat, pFilt->GetTypeName() );
         }

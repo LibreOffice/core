@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,11 +325,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, FALSE);
                 if ( pWarnItem && pWarnItem->GetValue() )
                 {
-#if SUPD<613//MUSTINI
-                    INetURLObject aObj( SFX_INIMANAGER()->Get(SFX_KEY_WORK_PATH), INET_PROT_FILE );
-#else
-                    INetURLObject aObj( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
-#endif
+                    INetURLObject aObj( SvtPathOptions().GetWorkPath() );
                     aObj.insertName( GetTitle(), false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
                     const SfxFilter* pFilter = GetFactory().GetFilter(0);
                     String aExtension( pFilter->GetDefaultExtension().Copy(2) );
@@ -471,8 +467,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( pOverwriteItem )
             {
                 // because there is no "exist" function, the overwrite handling is done in the SfxMedium
-                INetURLObject aURL;
-                aURL.SetSmartProtocol( INET_PROT_FILE );
                 SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_FILE_NAME, FALSE );
                 if ( !pItem )
                     // In diesem Falle mu\s ein Dateiname mitkommen
@@ -1050,15 +1044,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 
             case SID_DOCPATH:
             {
-                String aPath;
-                if ( GetMedium() )
-                {
-                    INetURLObject aURL( GetMedium()->GetName() );
-                    if ( INET_PROT_FILE == aURL.GetProtocol() )
-                        aURL.removeSegment();
-                    aPath = aURL.PathToFileName();
-                }
-                rSet.Put( SfxStringItem( SID_DOCPATH, aPath ) );
+                DBG_ERROR( "Not supported anymore!" );
                 break;
             }
 

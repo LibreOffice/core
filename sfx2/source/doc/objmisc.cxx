@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ using namespace ::com::sun::star::ucb;
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
+
+#include <svtools/pathoptions.hxx>
 
 #include "appdata.hxx"
 #include "request.hxx"
@@ -1402,11 +1404,11 @@ sal_Bool SfxObjectShell::IsSecure()
         // bei neuen Dokumenten das Template als Referer nehmen
         String aTempl( GetDocInfo().GetTemplateFileName() );
         if ( aTempl.Len() )
-            aReferer = INetURLObject( aTempl, INET_PROT_FILE ).GetMainURL();
+            aReferer = INetURLObject( aTempl ).GetMainURL();
         else
             // Da leider ein noch nicht gespeichertes Dokument zwar als "lokal"
-            // zu gelten hat, aber kein ::com::sun::star::util::URL hat: ( !!HACK!! )
-            aReferer = DEFINE_CONST_UNICODE( "file://" );
+            // zu gelten hat, aber kein ::com::sun::star::util::URL hat:
+            aReferer = SvtPathOptions().GetWorkPath();
     }
 
     INetURLObject aURL( "macro:" );

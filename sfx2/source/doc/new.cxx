@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:45:03 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #endif
 
 #include <tools/urlobj.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include "new.hrc"
 #include "doc.hrc"
@@ -338,8 +339,17 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
     {
 
         String aFileName = aTemplates.GetPath( aRegionLb.GetSelectEntryPos(), nEntry-1);
-        INetURLObject aObj( aFileName, INET_PROT_FILE );
+        INetURLObject aTestObj( aFileName );
+        if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
+        {
+            // temp. fix until Templates are managed by UCB compatible service
+            // does NOT work with locally cached components !
+            String aTemp;
+            utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aTemp );
+            aFileName = aTemp;
+        }
 
+        INetURLObject aObj( aFileName );
         for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
               pTmp;
               pTmp = SfxObjectShell::GetNext(*pTmp) )
@@ -347,7 +357,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
             //! fsys bug op==
             if ( pTmp->GetMedium())
                 // ??? HasName() MM
-                if( INetURLObject( pTmp->GetMedium()->GetName(), INET_PROT_FILE ) == aObj )
+                if( INetURLObject( pTmp->GetMedium()->GetName() ) == aObj )
                 {
                     xDocShell = pTmp;
                     break;

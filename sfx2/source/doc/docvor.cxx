@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,24 +205,20 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aLeftLb.SetHelpId( HID_CTL_ORGANIZER_LEFT );
     aRightLb.SetHelpId( HID_CTL_ORGANIZER_RIGHT );
 
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-    String aWorkPath = pIniMgr->Get( SFX_KEY_WORK_PATH );
-#else
     String aWorkPath = SvtPathOptions().GetWorkPath();
-#endif
     if ( aWorkPath.Len() )
     {
-        INetURLObject aObj( aWorkPath, INET_PROT_FILE );
+        INetURLObject aObj( aWorkPath );
+        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
         aObj.setFinalSlash();
         aLastDir = aObj.GetMainURL();
     }
     else
     {
         // fallback
-        INetURLObject aObj( Application::GetAppFileName(), INET_PROT_FILE );
-        aObj.removeSegment();
-        aObj.setFinalSlash();
+        String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
+        INetURLObject aObj( aProgURL );
+        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
         aLastDir = aObj.GetMainURL();
     }
 
@@ -1435,15 +1431,16 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
     if ( aLastDir.Len() || rFileName.Len() )
     {
         INetURLObject aObj;
-        aObj.SetSmartProtocol( INET_PROT_FILE );
         if ( aLastDir.Len() )
         {
-            aObj.SetSmartURL( aLastDir );
+            aObj.SetURL( aLastDir );
             if ( rFileName.Len() )
                 aObj.insertName( rFileName );
         }
         else
-            aObj.SetSmartURL( rFileName );
+            aObj.SetURL( rFileName );
+
+        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
         pFileDlg->SetPath( aObj.GetMainURL() );
     }
     if ( RET_OK == pFileDlg->Execute() )

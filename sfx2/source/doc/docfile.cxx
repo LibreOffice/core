@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-13 13:23:24 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
 //------------------------------------------------------------------
 const String& SfxMedium::GetPhysicalName() const
 {
-    if ( !aName.Len() )
+    if ( !aName.Len() && aLogicName.Len() )
         (( SfxMedium*)this)->CreateFileStream();
 
     // return the name then
@@ -1304,11 +1304,7 @@ void SfxMedium::DoBackup_Impl()
     INetURLObject   aSource = GetURLObject();
     String          aParentURL;
     String          aName;
-#if SUPD<613//MUSTINI
-    String          aBakDir = SFX_INIMANAGER()->Get(SFX_KEY_BACKUP_PATH);
-#else
     String          aBakDir = SvtPathOptions().GetBackupPath();
-#endif
     BOOL            bTryTransfer = FALSE;
     sal_Bool        bSuccess = sal_False;
     Reference < XContent > xContent;
@@ -1316,8 +1312,7 @@ void SfxMedium::DoBackup_Impl()
     // Backup Path gesetzt ? Dann diesen benutzen.
     if( aBakDir.Len() )
     {
-        aDest.SetSmartProtocol( INET_PROT_FILE );
-        aDest.SetSmartURL( aBakDir );
+        aDest.SetURL( aBakDir );
         aDest.insertName( aSource.getName() );
     }
     else
@@ -1636,25 +1631,12 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INET_PROT_NOT_VALID )
         {
-//            DBG_ERROR ( "Unknown protocol!" );
-            INetURLObject aUrl( aLogicName, INET_PROT_FILE );
-            if ( aUrl.GetProtocol() == INET_PROT_FILE )
-            {
-                aLogicName = aUrl.GetMainURL();
-                aName = aUrl.PathToFileName();
-            }
+            DBG_ERROR ( "Unknown protocol!" );
         }
         else
         {
             // try to convert the URL into a physical name
-            if ( !::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName ) && eProt == INET_PROT_FILE )
-            {
-                // no content provider found for this URL scheme; try if UCB is present
-                ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
-                if ( !pBroker )
-                    // no UCB present; all file-URLs are local file names
-                    aName = aUrl.PathToFileName();
-            }
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
         }
     }
 
@@ -1923,8 +1905,6 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
     }
     else
         pFilter = pApp->GetFilterMatcher().GetFilter4ClipBoardId( nFormat, 0, 0 );
-    if( pFilter )
-        pFilter = pApp->GetFilterMatcher().ResolveRedirection( pFilter, *this );
     if( !pFilter && nFormat )
     {
         DBG_ERROR( "No Filter for storage found!" );
@@ -1945,8 +1925,9 @@ SfxMedium::~SfxMedium()
 
     if( pImp->bIsTemp && GetPhysicalName().Len() )
     {
-        INetURLObject aObj( GetPhysicalName(), INET_PROT_FILE );
-        SfxContentHelper::Kill( aObj.GetMainURL() );
+        String aTemp;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
+        SfxContentHelper::Kill( aTemp );
     }
 
     pFilter = 0;
@@ -1970,36 +1951,17 @@ void SfxMedium::SetClassFilter( const SvGlobalName & rFilterClass )
 }
 //----------------------------------------------------------------
 
-#if defined SINIX && defined GCC && defined C272
-const INetURLObject& SfxMedium::GetURLObject()
-{
-    if( !pURLObj )
-    {
-        pURLObj = new INetURLObject();
-        if ( GetName().Len() )
-        {
-            pURLObj->SetSmartProtocol( INET_PROT_FILE );
-            pURLObj->SetSmartURL( GetName() );
-        }
-    }
-    return *pURLObj;
-}
-#else
 const INetURLObject& SfxMedium::GetURLObject() const
 {
     if( !pURLObj )
     {
-        SfxMedium* pThis = (SfxMedium*)this;
-        pThis->pURLObj = new INetURLObject();
-        if ( GetName().Len() )
-        {
-            pThis->pURLObj->SetSmartProtocol( INET_PROT_FILE );
-            pThis->pURLObj->SetSmartURL( GetName() );
-        }
+        SfxMedium* pThis = const_cast < SfxMedium* > (this);
+        pThis->pURLObj = new INetURLObject( aLogicName );
     }
+
     return *pURLObj;
 }
-#endif
+
 //----------------------------------------------------------------
 
 const String& SfxMedium::GetPreRedirectedURL() const

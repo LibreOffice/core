@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+#   last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SLOFILES =\
         $(SLO)$/bitset.obj				\
         $(SLO)$/minarray.obj			\
         $(SLO)$/fltfnc.obj				\
-        $(SLO)$/eacopier.obj			\
         $(SLO)$/mieclip.obj				\
         $(SLO)$/fltdlg.obj				\
         $(SLO)$/helper.obj

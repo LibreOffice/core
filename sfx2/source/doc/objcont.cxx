@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-14 09:31:44 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 
 #include <svtools/saveopt.hxx>
 #include <svtools/useroptions.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include "sfxresid.hxx"
 #include "stbmgr.hxx"
@@ -101,9 +102,6 @@
 #include "fltfnc.hxx"
 #include "docfac.hxx"
 #include "cfgmgr.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "viewsh.hxx"
 #include "objsh.hxx"
 #include "objshimp.hxx"
@@ -418,11 +416,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
     if ( IsModified() )
     {
         // Keine Unterschiede mehr zwischen Save, SaveAs
-#if SUPD<613//MUSTII
-        String aUserName = SFX_INIMANAGER()->GetUserFullName();
-#else
         String aUserName = SvtUserOptions().GetFullName();
-#endif
         if ( !rDocInfo.IsUseUserData() )
             aUserName.Erase();
 
@@ -535,7 +529,9 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                     const String aTemplFileName( rDocInfo.GetTemplateFileName() );
                     if ( aTemplFileName.Len() )
                     {
-                        INetURLObject aURL( aTemplFileName, INET_PROT_FILE );
+                        INetURLObject aURL( aTemplFileName );
+                        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
+
                         SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
                         if ( SVSTREAM_OK == aStor->GetError() )
                         {
@@ -600,7 +596,9 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                 const String aTemplFileName( rDocInfo.GetTemplateFileName() );
                 if ( aTemplFileName.Len() )
                 {
-                    INetURLObject aURL( aTemplFileName, INET_PROT_FILE );
+                    INetURLObject aURL( aTemplFileName );
+                    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
+
                     SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
                     if ( SVSTREAM_OK == aStor->GetError() )
                     {
@@ -1507,7 +1505,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         aTempl.Construct();
         if ( aTemplFileName.Len() )
         {
-            INetURLObject aURL( aTemplFileName, INET_PROT_FILE );
+            INetURLObject aURL( aTemplFileName );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
+
             aTemplStor = new SvStorage( aURL.GetMainURL(),
                                     STREAM_READ | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYWRITE, STORAGE_TRANSACTED );
@@ -1525,12 +1525,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 // template was found
                 // check if template filename differs from the specified one
                 // if comparing filenames is enabled ask user, otherwise accept the different file name
-#if SUPD<613//MUSTINI
-                if( aTemplFileName.Len() && aTemplFileName != aFoundName &&
-                        (USHORT)SFX_INIMANAGER()->Get( SFX_KEY_SEARCHTEMPLATE ).ToInt32() )
-#else
+/*
+                // Actually searching is not enabled -> ask AK/LHO
                 if( aTemplFileName.Len() && aTemplFileName != aFoundName )
-#endif
                 {
                     // template with given template name was found but with a different filename
                     SfxMedium aSfxMedium( aFoundName, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
@@ -1553,6 +1550,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     else
                         aFoundName.Erase();
                 }
+*/
             }
 
             if ( !aFoundName.Len() )
@@ -1577,7 +1575,17 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     {
         aTemplFileName = aFoundName;
         BOOL bLoad = FALSE;
-        INetURLObject aURL( aTemplFileName, INET_PROT_FILE );
+        INetURLObject aTestObj( aTemplFileName );
+        if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
+        {
+            // temp. fix until Templates are managed by UCB compatible service
+            // does NOT work with locally cached components !
+            String aTemp;
+            utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemplFileName, aTemp );
+            aTemplFileName = aTemp;
+        }
+
+        INetURLObject aURL( aTemplFileName );
         if ( !aTemplStor.Is() )
             aTemplStor = new SvStorage( aURL.GetMainURL(),
                                     STREAM_READ | STREAM_NOCREATE |
@@ -1621,7 +1629,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                             GetFactory().CreateObject(SFX_CREATE_MODE_ORGANIZER);
                 xTemplDoc->DoInitNew(0);
                 String aOldBaseURL = INetURLObject::GetBaseURL();
-                INetURLObject::SetBaseURL( INetURLObject( aTemplFileName, INET_PROT_FILE ).GetMainURL() );
+                INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL() );
                 if ( xTemplDoc->LoadFrom(aTemplStor) )
                 {
                     // StyleSheets ins eigene Doc laden
