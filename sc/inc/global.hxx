@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ extern "C" {
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 #endif
+#if 0
+// #107998# Don't ignore Width and Kana. The issue was mainly with AutoInput,
+// but affects also comparison of names in general.
 #define SC_TRANSLITERATION_IGNORECASE ( \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE | \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
@@ -113,6 +116,11 @@ extern "C" {
 #define SC_TRANSLITERATION_CASESENSE ( \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
+#else
+#define SC_TRANSLITERATION_IGNORECASE ( \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
+#define SC_TRANSLITERATION_CASESENSE 0
+#endif
 
 
 //------------------------------------------------------------------------
