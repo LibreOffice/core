@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:11:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -526,7 +525,12 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         SwDoc * pDoc = pSh->GetDoc();
 
         if (pDoc->DoesUndo())
+        {
+            if (pNewTOX != NULL)
+                pDoc->DelAllUndoObj();
+
             pDoc->StartUndo(UNDO_TOXCHANGE);
+        }
 
         if (pNewTOX != NULL) // => pTOX != NULL
             pDoc->ChgTOX(*pTOX, *pNewTOX);
@@ -534,8 +538,12 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
 
         if (pDoc->DoesUndo())
+        {
             pDoc->EndUndo(UNDO_TOXCHANGE);
 
+            if (pNewTOX == NULL)
+                pDoc->DelAllUndoObj();
+        }
     }
 
     return bRet;
