@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:12:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
     Text[ catalan ] = "AutoPiloto - Elemento de grupo";
+    Text[ finnish ] = "AutoPilot Gruppenelement";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -135,6 +136,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Ç¥ ¿ä¼Ò";
     Text [ turkish ] = "OtoPilot Tablo öðesi";
     Text[ catalan ] = "AutoPiloto - Elemento de tabla";
+    Text[ finnish ] = "AutoPilot Tabellenelement";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -162,6 +164,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸ñ·Ï ÇÊµå";
     Text[ turkish ] = "OtoPilot Liste alaný";
     Text[ catalan ] = "AutoPiloto - Listado";
+    Text[ finnish ] = "AutoPilot Listenfeld";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
@@ -189,6 +192,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ turkish ] = "OtoPilot Kombinasyon alaný";
     Text [ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto - Campo combinado";
+    Text[ finnish ] = "AutoPilot Kombinationsfeld";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -214,11 +218,15 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ turkish ] = "The connection to the data source could not be established.";
     Text[ arabic ] = "ÊÚÐÑ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ.";
     Text[ catalan ] = "No se pudo crear la tabla \"Conección a la fuente de datos\".";
+    Text[ finnish ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/04 20:12:13  kz
+ *  Merge SRC630: 05/04/01 - 22:12:15 (NoBranch)
+ *
  *  Revision 1.8  2001/04/03 19:25:52  kz
  *  Merge SRC627: 03.04.01 - 21:25:28
  *
