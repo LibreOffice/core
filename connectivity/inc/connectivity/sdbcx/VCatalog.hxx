@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:04:55 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
 #ifndef _CPPUHELPER_COMPBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
 #endif
@@ -95,6 +98,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"
+#endif
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
 #endif
 
 namespace connectivity
@@ -130,6 +136,24 @@ namespace connectivity
             OCollection*        m_pViews;
             OCollection*        m_pGroups;
             OCollection*        m_pUsers;
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
+
+            /** builds the name which should be used to access the object later on in the collection.
+                Will only be called in fillNames.
+                @param  _xRow
+                    The current row from the resultset given to fillNames.
+            */
+            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+
+            /** fills a vector with the nescessary names which can be used in combination with the collections.
+                For each row buildName will be called.
+                @param  _xResult
+                    The resultset which should be used to fill the names. Will be disposed after return and set to NULL.
+                @param  _rNames
+                    The vector who will be filled.
+            */
+            void fillNames(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResult,TStringVector& _rNames);
 
         public:
             OCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> &_xConnection);
