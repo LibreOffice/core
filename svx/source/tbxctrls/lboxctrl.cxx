@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 12:31:28 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,64 +155,6 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class PopupListBox : public ListBox
-{
-    SvxPopupWindowListBox &rPopupWin;
-
-    // disallow use of copy-constructor and assignment-operator
-    PopupListBox( const PopupListBox & );
-    PopupListBox & operator = ( const PopupListBox & );
-
-public:
-    PopupListBox( SvxPopupWindowListBox &rParent, const ResId &rResId );
-    virtual ~PopupListBox();
-
-//    virtual long        Notify( NotifyEvent &rEvt );
-};
-
-
-PopupListBox::PopupListBox( SvxPopupWindowListBox &rParent, const ResId &rResId ) :
-        ListBox( &rParent, rResId ),
-        rPopupWin   ( rParent )
-{
-}
-
-
-PopupListBox::~PopupListBox()
-{
-}
-
-#ifdef NEVER
-long PopupListBox::Notify( NotifyEvent &rEvt )
-{
-    long nHandled = 0;
-    rPopupWin.SetUserSelected( FALSE );
-
-    if (IsWindowOrChild( rEvt.GetWindow() ))
-    {
-        USHORT nEvtType = rEvt.GetType();
-        if (EVENT_MOUSEBUTTONUP == nEvtType )
-        {
-            nHandled = 1;
-        }
-        else if (EVENT_KEYINPUT == nEvtType)
-        {
-            const KeyEvent *pKeyEvt = rEvt.GetKeyEvent();
-            if (pKeyEvt  &&  pKeyEvt->GetCharCode() == (sal_Unicode) '\r')
-            {
-                nHandled = 1;
-                rPopupWin.SetUserSelected( TRUE );
-                rPopupWin.EndPopupMode( 0 );
-            }
-        }
-    }
-
-    return nHandled;
-}
-#endif
-
-/////////////////////////////////////////////////////////////////
-
 SvxPopupWindowListBox::SvxPopupWindowListBox(
             USHORT nSlotId,
             ToolBox& rTbx, USHORT nTbxItemId,
@@ -225,7 +167,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(
     bUserSel    ( FALSE )
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
-    pListBox = new PopupListBox( *this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
+    pListBox = new ListBox( this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
     FreeResource();
     pListBox->EnableMultiSelection( TRUE, TRUE );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
@@ -327,6 +269,15 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
 }
 
 
+void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
+{
+    DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
+    String aText( aActionStr );
+    aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
+    pPopupWin->GetInfo().SetText( aText );
+}
+
+
 IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 {
     if (pPopupWin)
@@ -335,12 +286,7 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 
         ListBox &rListBox = pPopupWin->GetListBox();
         if (rListBox.IsTravelSelect())
-        {
-            USHORT nCount = rListBox.GetSelectEntryCount();
-            String aText( aActionStr );
-            aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
-            pPopupWin->GetInfo().SetText( aText );
-        }
+            Impl_SetInfo( rListBox.GetSelectEntryCount() );
         else
         {
             pPopupWin->SetUserSelected( TRUE );
@@ -395,6 +341,7 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
         for (xub_StrLen i = 0;  i < nCount;  ++i)
             rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
         rListBox.SelectEntryPos( 0 );
+        Impl_SetInfo( 1 );
 
         //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
@@ -468,6 +415,7 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
         for (xub_StrLen i = 0;  i < nCount;  ++i)
             rListBox.InsertEntry( aStrList.GetToken( 0, '\n', nIdx ) );
         rListBox.SelectEntryPos( 0 );
+        Impl_SetInfo( 1 );
 
         //Point aPt( rBox.OutputToScreenPixel( rBox.GetPointerPosPixel() ) );
         Rectangle aItemRect( rBox.GetItemRect( nItemId ) );
