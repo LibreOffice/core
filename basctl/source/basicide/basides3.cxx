@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 16:15:26 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,28 +73,119 @@
 #include <baside3.hxx>
 #include <basobj.hxx>
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+
+
 DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName, SbxObject* pDlg )
 {
     bCreatingWindow = TRUE;
 
     ULONG nKey = 0;
     DialogWindow* pWin = 0;
+
+    BOOL bCreatedDialog = FALSE;
     if ( !pDlg )
     {
         pDlg = BasicIDE::FindDialog( pBasic, aDlgName );
         if ( !pDlg )
+        {
             pDlg = BasicIDE::CreateDialog( pBasic, aDlgName );
+            bCreatedDialog = TRUE;
+        }
         DBG_ASSERT( pDlg, "Es wurde kein Dialog erzeugt!" );
     }
     else    // Vielleicht gibt es ein suspendiertes?
         pWin = FindDlgWin( pBasic, aDlgName, FALSE, TRUE );
 
-
     VCSbxDialogRef xNewDlg = (VCSbxDialog*)pDlg;
 
     if ( !pWin )
     {
+#ifdef _DLGEDITOR_
+
+        // Document or application
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        if ( pBasMgr )
+        {
+            Reference< script::XLibraryContainer > xLibContainer;
+            String aLibName = pBasic->GetName();
+            String aDlgName = xNewDlg->GetName();
+
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            if( !pShell )
+            {
+                // Application
+                xLibContainer = uno::Reference< script::XLibraryContainer >
+                    ( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
+
+                uno::Reference< container::XNameAccess > xLib;
+
+                // Check if the lib/dialog already exists
+                rtl::OUString aOULibName( aLibName );
+                if( xLibContainer->hasByName( aOULibName ) )
+                {
+                    Any aElement = xLibContainer->getByName( aOULibName );
+                    aElement >>= xLib;
+                }
+
+                Reference< container::XNameContainer > xLibNC;
+                if( !xLib.is() )
+                {
+                    xLibNC = xLibContainer->createLibrary( aOULibName );
+                    xLib = Reference< container::XNameAccess >( xLibNC, uno::UNO_QUERY );
+                }
+
+                // Does the dialog exist?
+                rtl::OUString aOUDlgName( aDlgName );
+                BOOL bCreateWin = FALSE;
+                if( xLib->hasByName( aOUDlgName ) )
+                {
+                    bCreateWin = TRUE;
+                }
+                else
+                {
+                    if( !xLibNC.is() )
+                        xLibNC = Reference< container::XNameContainer >( xLib, uno::UNO_QUERY );
+                    if( xLibNC.is() )
+                    {
+                        bCreateWin = TRUE;
+                    }
+                    else
+                    {
+                        // TODO: ReadOnlyLib
+                    }
+                }
+                if( bCreateWin )
+                {
+                    // New dialog window
+                    pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic,
+                                             xLibContainer, aLibName, aDlgName );
+                }
+            }
+            /* TODO Docs
+            else
+            {
+
+            }
+            */
+        }
+
+        if( !pWin )
+        {
+            // Something went wrong: Return old stuff
+            pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic );
+        }
+#else
         pWin = new DialogWindow( &GetViewFrame()->GetWindow(), xNewDlg, pBasic );
+#endif
         nKey = InsertWindowInTable( pWin );
     }
     else
