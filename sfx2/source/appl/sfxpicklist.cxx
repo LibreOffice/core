@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 15:54:18 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
 
                     if ( aURL.GetProtocol() == INET_PROT_FILE )
-                        SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ) );
+                        SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
                 }
                 break;
             }
