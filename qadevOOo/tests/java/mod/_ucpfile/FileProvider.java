@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:46 $
+ *  last change:$Date: 2003-05-27 14:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ public class FileProvider extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.ucb.FileProvider" );
         } catch( com.sun.star.uno.Exception e ) {
@@ -100,7 +100,7 @@ public class FileProvider extends TestCase {
         //Adding ObjRelation for XContentProvider
         tEnv.addObjRelation("FACTORY",CIF);
         tEnv.addObjRelation("CONTENT1",
-            util.utils.getOfficeTemp(Param.getMSF()));
+            util.utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF()));
         tEnv.addObjRelation("CONTENT2",
             util.utils.getFullTestURL("SwXTextEmbeddedObject.sdw"));
 
