@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:41:47 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:11:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,15 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=proxyfac
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+TARGET = proxyfac.uno
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = proxyfac
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -82,7 +81,7 @@ SLOFILES= \
         $(SLO)$/proxyfac.obj
 
 SHL1TARGET=$(TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = proxyfac.map
 
 SHL1STDLIBS= \
     $(CPPULIB)		\
