@@ -55,7 +55,6 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\misc\cppuhelper*.pdb %_DEST%\misc%_EXT%\*
-..\version.mk %_DEST%\inc%_EXT%\cppuhelper\version.mk
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

@@ -11,4 +11,3 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\salhelper*.lib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\misc\salhelper*.pdb %_DEST%\misc%_EXT%\*
-..\version.mk %_DEST%\inc%_EXT%\salhelper\version.mk

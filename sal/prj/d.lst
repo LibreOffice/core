@@ -28,8 +28,6 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\%__SRC%\lib\isal.lib %_DEST%\lib%_EXT%\isal.lib
 ..\%__SRC%\bin\sal*.dll %_DEST%\bin%_EXT%\sal*.dll
 
-..\version.mk %_DEST%\inc%_EXT%\sal\version.mk
-
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib

@@ -2,7 +2,6 @@ mkdir: %_DEST%\inc%_EXT%\store
 ..\inc\store\*.h %_DEST%\inc%_EXT%\store\*.h
 ..\inc\store\store.hxx %_DEST%\inc%_EXT%\store\store.hxx
 ..\inc\store\store.inl %_DEST%\inc%_EXT%\store\store.inl
-..\version.mk %_DEST%\inc%_EXT%\store\version.mk
 ..\util\store.xml %_DEST%\xml%_EXT%\store.xml
 
 ..\%__SRC%\lib\istore.lib %_DEST%\lib%_EXT%\istore.lib
