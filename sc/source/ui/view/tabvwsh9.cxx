@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh9.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-12 18:40:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                             UpdateIMap( rMarkList.GetMark( 0 )->GetObj() );
                     }
@@ -229,7 +229,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
         case SID_IMAP_EXEC:
         {
             SdrView* pDrView = GetSdrView();
-            SdrMark* pMark = pDrView ? pDrView->GetMarkList().GetMark(0) : 0;
+            SdrMark* pMark = pDrView ? pDrView->GetMarkedObjectList().GetMark(0) : 0;
 
             if ( pMark )
             {
@@ -293,7 +293,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
                                         (void*) rMarkList.GetMark(0)->GetObj() )
