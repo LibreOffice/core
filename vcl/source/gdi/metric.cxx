@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 12:33:21 $
+ *  last change: $Author: hdu $ $Date: 2001-11-19 16:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,26 @@ FontCharMap::FontCharMap()
 FontCharMap::~FontCharMap()
 {
     ImplSetRanges( 0, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+FontCharMap& FontCharMap::operator=( const FontCharMap& rMap )
+{
+    if( rMap.mpRangeCodes == pDefaultRangeCodes )
+    {
+        ImplSetDefaultRanges();
+    }
+    else
+    {
+        ULONG nPairs = rMap.mnRangeCount;
+        sal_UCS4* pCodes = new sal_UCS4[ 2 * nPairs ];
+        for( ULONG i = 0; i < 2*nPairs; ++i )
+            pCodes[ i ] = rMap.mpRangeCodes[ i ];
+        ImplSetRanges( nPairs, pCodes );
+    }
+
+    return *this;
 }
 
 // -----------------------------------------------------------------------
