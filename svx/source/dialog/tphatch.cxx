@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "dialogs.hrc"
 #include "tabarea.hrc"
 #include "dlgname.hrc"
+#include "helpid.hrc"
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_HATCH_LIST       SID_HATCH_LIST
@@ -585,9 +586,12 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         }
 
         if( !pWarnBox )
+        {
             pWarnBox = new WarningBox( DLGWIN,
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, pMgr ) ) );
+            pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+        }
 
         if( pWarnBox->Execute() != RET_OK )
             break;
@@ -695,8 +699,9 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) ).Execute();
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                aBox.Execute();
             }
         }
         delete( pDlg );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:54 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "dialogs.hrc"
 #include "dlgname.hrc"
 #include "tabline.hrc"
+#include "helpid.hrc"
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
@@ -387,6 +388,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
@@ -530,8 +532,11 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 SelectLineEndHdl_Impl( this );
             }
             else
-                WarningBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) ).Execute();
+            {
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                aBox.Execute();
+            }
         }
         delete pDlg;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 16:08:50 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 16:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,8 @@
 #define HID_OPTIONS_ASIAN_LAYOUT                (HID_SVX_START + 395)
 #define HID_SVXTBX_FORM                         (HID_SVX_START + 396)
 
-#define HID_POPUP_COLOR_CTRL                    (HID_SVX_START + 397)
+#define HID_WARN_NAME_DUPLICATE                 (HID_SVX_START + 397)
+#define HID_POPUP_COLOR_CTRL                    (HID_SVX_START + 398)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     {
         WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
             String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+        aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
         SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
@@ -592,6 +593,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+            aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );

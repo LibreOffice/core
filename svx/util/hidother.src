@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 16:07:11 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 16:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,7 @@ hidspecial SID_DSBROWSER_EXPLORER               { HelpID =  SID_DSBROWSER_EXPLOR
 
 hidspecial UID_FORMPROPBROWSER_FRAME            { HelpID =  UID_FORMPROPBROWSER_FRAME       ;};
 
+hidspecial HID_WARN_NAME_DUPLICATE              { HelpID = HID_WARN_NAME_DUPLICATE ;};
 //HID_AUTOCORR_HELP_END
 
 

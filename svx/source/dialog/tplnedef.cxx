@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:55 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "dialogs.hrc"
 #include "tabline.hrc"
 #include "dlgname.hrc"
+#include "helpid.hrc"
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST
@@ -670,8 +671,11 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             aMtrDistance.SaveValue();
         }
         else
-            WarningBox( DLGWIN, WinBits( WB_OK ),
-                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) ).Execute();
+        {
+            WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+            aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+            aBox.Execute();
+        }
     }
     delete( pDlg );
 
@@ -745,8 +749,11 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 aMtrDistance.SaveValue();
             }
             else
-                WarningBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) ).Execute();
+            {
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                aBox.Execute();
+            }
         }
         delete( pDlg );
     }

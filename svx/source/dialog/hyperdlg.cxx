@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:56:12 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,11 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* pParent, USHORT nId,
         Size aDlgSize ( GetSizePixel () );
 
         if( aParentSize.Width() < pInfo->aPos.X() )
-            pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < 0.1*aParentSize.Width() ?
-                              0.1*aParentSize.Width() : aParentSize.Width()-aDlgSize.Width() );
+            pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < long(0.1*aParentSize.Width()) ?
+                              long(0.1*aParentSize.Width()) : aParentSize.Width()-aDlgSize.Width() );
         if( aParentSize.Height() < pInfo->aPos. Y() )
-            pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < 0.1*aParentSize.Height() ?
-                              0.1*aParentSize.Height() : aParentSize.Height()-aDlgSize.Height() );
+            pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
+                              long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
 
         pWindow->SetPosPixel( pInfo->aPos );
     }
@@ -275,20 +275,20 @@ void SvxHpLinkDlg::Move()
             if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
             {
                 // Pos Extrawindow anywhere
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, 1.1*aDlgPos.Y() ), TRUE );
+                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), TRUE );
             }
             else
             {
                 // Pos Extrawindow on the left side of Dialog
                 bDoInvalid = pCurrentPage->MoveToExtraWnd( aDlgPos -
-                                                           Point( 0.02*aDlgSize.Width(), 0 ) -
+                                                           Point( long(0.02*aDlgSize.Width()), 0 ) -
                                                            Point( aExtraWndSize.Width(), 0 ) );
             }
         }
         else
         {
             // Pos Extrawindow on the right side of Dialog
-            bDoInvalid = pCurrentPage->MoveToExtraWnd ( aDlgPos + Point( 1.02*aDlgSize.Width(), 0 ) );
+            bDoInvalid = pCurrentPage->MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.Width()), 0 ) );
         }
 
         if ( bDoInvalid )

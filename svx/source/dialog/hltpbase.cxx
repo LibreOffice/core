@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:54:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,19 +489,19 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
         if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
         {
             // Pos Extrawindow anywhere
-            MoveToExtraWnd( Point( 1, 1.1*aDlgPos.Y() ) );
+            MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ) );
             mpMarkWnd->ConnectToDialog( FALSE );
         }
         else
         {
             // Pos Extrawindow on the left side of Dialog
-            MoveToExtraWnd( aDlgPos - Point( 0.02*aDlgSize.Width(), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
+            MoveToExtraWnd( aDlgPos - Point( long(0.02*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
         }
     }
     else
     {
         // Pos Extrawindow on the right side of Dialog
-        MoveToExtraWnd ( aDlgPos + Point( 1.02*aDlgSize.getWidth(), 0 ) );
+        MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.getWidth()), 0 ) );
     }
 
     // Set size of Extra-Window

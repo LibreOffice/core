@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 #include "dialogs.hrc"
 
+#include "helpid.hrc"
 #include "xattr.hxx"
 #include "xpool.hxx"
 #include "xtable.hxx"
@@ -581,9 +582,12 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         }
 
         if( !pWarnBox )
+        {
             pWarnBox = new WarningBox( DLGWIN,
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, pMgr ) ) );
+            pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+        }
 
         if( pWarnBox->Execute() != RET_OK )
             break;
@@ -697,9 +701,13 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 }
 
                 if( !pWarnBox )
+                {
                     pWarnBox = new WarningBox( DLGWIN,
                                                WinBits( WB_OK_CANCEL ),
                                                String( ResId( nError, pMgr ) ) );
+                    pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
+                }
+
 
                 if( pWarnBox->Execute() != RET_OK )
                     break;
@@ -798,8 +806,11 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 bBmpChanged = FALSE;
             }
             else
-                WarningBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) ).Execute();
+            {
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
+                aBox.Execute();
+            }
         }
         delete pDlg;
     }
