@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:04:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,6 +792,14 @@ void TabControl::ImplShowFocus()
     if ( !GetPageCount() )
         return;
 
+    // make sure the focussed item rect is computed using a bold font
+    // the font may have changed meanwhile due to mouse over
+
+    Font aOldFont( GetFont() );
+    Font aFont( aOldFont );
+    aFont.SetWeight( WEIGHT_BOLD );
+    SetFont( aFont );
+
     USHORT          nCurPos     = GetPagePos( mnCurPageId );
     Rectangle       aRect       = ImplGetTabRect( nCurPos );
     ImplTabItem*    pItem       = mpItemList->GetObject( nCurPos );
@@ -810,6 +818,8 @@ void TabControl::ImplShowFocus()
     aRect.Right()  = aRect.Left()+nTextWidth+2;
     aRect.Bottom() = aRect.Top()+nTextHeight+2;
     ShowFocus( aRect );
+
+    SetFont( aOldFont );
 }
 
 // -----------------------------------------------------------------------
@@ -882,9 +892,12 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         ControlState        nState = 0;
 
         if( pItem->mnId == mnCurPageId )
+        {
             nState |= CTRL_STATE_SELECTED;
-        if ( HasFocus() )
-            nState |= CTRL_STATE_FOCUSED;
+            // only the selected item can be focussed
+            if ( HasFocus() )
+                nState |= CTRL_STATE_FOCUSED;
+        }
         if ( IsEnabled() )
             nState |= CTRL_STATE_ENABLED;
         if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
