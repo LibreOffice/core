@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:46:08 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 12:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
         Reference<XConnection> xConnection;
         Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
         ::cppu::extractInterface(xConnection,xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION));
-        OSL_ENSHURE(xConnection.is(),"A ActiveConnection should normaly exists!");
+        OSL_ENSURE(xConnection.is(),"A ActiveConnection should normaly exists!");
 
         Reference<XChild> xChild(xConnection,UNO_QUERY);
         Reference<XPropertySet> xDataSourceProp(xChild->getParent(),UNO_QUERY);
@@ -813,7 +813,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
 
                 sal_Bool bDefault = !evt.NewValue.hasValue();
                 if (bDefault)
@@ -830,7 +830,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
                 xProp->setPropertyValue(PROPERTY_FONT,evt.NewValue);
             }
         }
@@ -842,7 +842,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
                 xProp->setPropertyValue(PROPERTY_TEXTCOLOR,evt.NewValue);
             }
         }
@@ -854,7 +854,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
                 xProp->setPropertyValue(PROPERTY_FILTER,evt.NewValue);
             }
         }
@@ -866,7 +866,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
                 xProp->setPropertyValue(PROPERTY_ORDER,evt.NewValue);
             }
         }
@@ -877,7 +877,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSHURE(xProp.is(),"No table available!");
+                OSL_ENSURE(xProp.is(),"No table available!");
                 xProp->setPropertyValue(PROPERTY_APPLYFILTER,evt.NewValue);
             }
         }
@@ -1459,12 +1459,12 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
     ::osl::MutexGuard aGuard(m_aEntryMutex);
 
     SvLBoxEntry* pFirstParent = m_pTreeView->getListBox()->GetRootLevelParent(_pParent);
-    OSL_ENSHURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
+    OSL_ENSURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
 
     DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >(_pParent->GetUserData());
-    OSL_ENSHURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
+    OSL_ENSURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
     SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
-    OSL_ENSHURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
+    OSL_ENSURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
 
     if(pData->bTable)
     {
@@ -2023,7 +2023,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
 void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDisposeConnection)
 {
     DBG_ASSERT(_pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (NULL)!");
-    OSL_ENSHURE(m_pTreeView->getListBox()->GetRootLevelParent(_pDSEntry) == _pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
+    OSL_ENSURE(m_pTreeView->getListBox()->GetRootLevelParent(_pDSEntry) == _pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
 
     // if one of the entries of the given DS is displayed currently, unload the form
     if (m_pCurrentlyDisplayed && (m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyDisplayed) == _pDSEntry))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 12:17:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 12:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
                 case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
                 case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
                 default:
-                    OSL_ENSHURE(0,"Invalid TextAlign!");
+                    OSL_ENSURE(0,"Invalid TextAlign!");
             }
         pFormatDescriptor->Put(SvxHorJustifyItem(eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
         if (bHasFormat)
@@ -1549,7 +1549,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     }
     catch(Exception&)
     {
-        OSL_ENSHURE(0,"SbaGridControl::getField Exception occured!");
+        OSL_ENSURE(0,"SbaGridControl::getField Exception occured!");
     }
 
     return xEmptyReturn;
