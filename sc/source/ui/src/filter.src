@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:55:50 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,7 +2228,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ portuguese ] = "Nome de campo" ;
         Text [ finnish ] = "Kentän nimi" ;
         Text [ danish ] = "Feltnavn" ;
-        Text [ french ] = "Nom champ" ;
+        Text [ french ] = "Nom de champ" ;
         Text [ swedish ] = "Fältnamn" ;
         Text [ dutch ] = "Veldnaam" ;
         Text [ spanish ] = "Nombre del campo" ;
