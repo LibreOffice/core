@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:36:22 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 12:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,13 +169,26 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
 // convert a openoffice metafile picture to a windows metafile picture
 //------------------------------------------------------------------------
 
-HMETAFILE SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
+HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
 {
-    OSL_ASSERT( aOOMetaFilePict.getLength( ) > sizeof( METAFILEHEADER ) );
+    OSL_ASSERT( aOOMetaFilePict.getLength() > 22 );
 
-    return SetMetaFileBitsEx(
-        aOOMetaFilePict.getLength( ) - sizeof( METAFILEHEADER ),
-        reinterpret_cast< BYTE* >( aOOMetaFilePict.getArray( ) ) + sizeof( METAFILEHEADER ) );
+    HMETAFILEPICT   hPict = NULL;
+    HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength() - 22, (sal_uChar*) aOOMetaFilePict.getConstArray() + 22 );
+
+    if( hMtf )
+    {
+        METAFILEPICT* pPict = (METAFILEPICT*) GlobalLock( hPict = GlobalAlloc( GHND, sizeof( METAFILEPICT ) ) );
+
+        pPict->mm = 8;
+        pPict->xExt = 0;
+        pPict->yExt = 0;
+        pPict->hMF = hMtf;
+
+        GlobalUnlock( hPict );
+    }
+
+    return hPict;
 }
 
 //------------------------------------------------------------------------

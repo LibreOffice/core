@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 10:13:36 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 12:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,13 +382,18 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     // transfer data
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {
-        HMETAFILE hMfPict = OOMFPictToWinMFPict( clipDataStream );
+/*!!! KA => TRA: doesn't work !!!
+        HMETAFILEPICT hMfPict = OOMFPictToWinMFPict( clipDataStream );
         renderDataAndSetupStgMedium(
             reinterpret_cast< sal_Int8* >( &hMfPict ),
             fetc,
             0,
-            sizeof( HMETAFILE ),
+            sizeof( HMETAFILEPICT ),
             stgmedium );
+*/
+        stgmedium.tymed = TYMED_MFPICT;
+        stgmedium.hMetaFilePict = OOMFPictToWinMFPict( clipDataStream );
+        stgmedium.pUnkForRelease = NULL;
     }
     else
         renderDataAndSetupStgMedium(
