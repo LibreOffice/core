@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:40:24 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ENGLISH ] = " Points" ;
         CustomUnitText [ NORWEGIAN ] = " Punkter" ;
         CustomUnitText [ DANISH ] = "punkter" ;
-        CustomUnitText [ ENGLISH_US ] = "Points" ;
+        CustomUnitText [ ENGLISH_US ] = " points" ;
         CustomUnitText [ SPANISH ] = "Puntos" ;
         CustomUnitText [ FINNISH ] = " Pisteet" ;
         CustomUnitText [ FRENCH ] = " Points" ;
@@ -238,7 +238,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "~Resolution" ;
         Text [ NORWEGIAN ] = "~Resolution" ;
         Text [ DANISH ] = "Opløsning" ;
-        Text [ ENGLISH_US ] = "Resolution" ;
+        Text [ ENGLISH_US ] = "~Resolution" ;
         Text [ SPANISH ] = "R~esolución" ;
         Text [ FINNISH ] = "~Tarkkuus" ;
         Text [ FRENCH ] = "~Résolution" ;
@@ -266,7 +266,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH ] = "~Division" ;
         Text [ NORWEGIAN ] = "~Division" ;
         Text [ DANISH ] = "Inddeling" ;
-        Text [ ENGLISH_US ] = "~Subdivision" ;
+        Text [ ENGLISH_US ] = "S~ubdivision" ;
         Text [ SPANISH ] = "S~ubdivisión" ;
         Text [ FINNISH ] = "~Jako" ;
         Text [ FRENCH ] = "~Finesse" ;
@@ -302,7 +302,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ENGLISH ] = " Points" ;
         CustomUnitText [ NORWEGIAN ] = " Punkter" ;
         CustomUnitText [ DANISH ] = "punkter" ;
-        CustomUnitText [ ENGLISH_US ] = "Points" ;
+        CustomUnitText [ ENGLISH_US ] = " points" ;
         CustomUnitText [ SPANISH ] = "Puntos" ;
         CustomUnitText [ FINNISH ] = " Pisteet" ;
         CustomUnitText [ FRENCH ] = " Points" ;
