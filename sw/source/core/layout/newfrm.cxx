@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:35:17 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 08:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,77 @@ SwCache *SwFrm::pCache = 0;
 
 Bitmap* SwNoTxtFrm::pErrorBmp = 0;
 Bitmap* SwNoTxtFrm::pReplaceBmp = 0;
+
+#ifdef VERTICAL_LAYOUT
+
+static SwRectFnCollection aHorizontal = {
+    /* fnRectGet      */
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Width,
+    &SwRect::_Height,
+    /* fnRectSet      */
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Width,
+    &SwRect::_Height,
+
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::AddWidth,
+    &SwRect::AddHeight,
+
+    &SwRect::SetPosX,
+    &SwRect::SetPosY,
+
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin,
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin
+};
+
+static SwRectFnCollection aVertical = {
+    /* fnRectGet      */
+    &SwRect::_Right,
+    &SwRect::_Left,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+    /* fnRectSet      */
+    &SwRect::_Right,
+    &SwRect::_Left,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+
+    &SwRect::AddRight,
+    &SwRect::SubLeft,
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::AddHeight,
+    &SwRect::AddWidth,
+
+    &SwRect::SetPosY,
+    &SwRect::SetPosX,
+
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin
+};
+
+SwRectFn fnRectHori = &aHorizontal;
+SwRectFn fnRectVert = &aVertical;
+
+#endif
 
 #ifndef PRODUCT
 USHORT SwFrm::nLastFrmId=0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:36:32 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 08:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,19 @@
 #endif
 #ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
+#endif
+
+#ifdef VERTICAL_LAYOUT
+    // No inline cause we need the function pointers
+long SwFrm::GetTopMargin() const
+    { return Prt().Top(); }
+long SwFrm::GetBottomMargin() const
+    { return Frm().Height() -Prt().Height() -Prt().Top(); }
+long SwFrm::GetLeftMargin() const
+    { return Prt().Left(); }
+long SwFrm::GetRightMargin() const
+    { return Frm().Width() - Prt().Width() - Prt().Left(); }
+
 #endif
 
 /*************************************************************************

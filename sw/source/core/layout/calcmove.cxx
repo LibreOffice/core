@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-06 09:56:38 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 08:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,33 +856,18 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         bValidPrtArea = TRUE;
 
 #ifdef VERTICAL_LAYOUT
-        PtPtr pDir1Pt, pDir2Pt;
-        SzPtr pDir1Sz, pDir2Sz;
-        const FASTBOOL bVert = IsVertical();
-        if( bVert )
-        {
-            pDir1Pt = pY;
-            pDir2Pt = pX;
-            pDir1Sz = pHeight;
-            pDir2Sz = pWidth;
-        }
-        else
-        {
-            pDir1Pt = pX;
-            pDir2Pt = pY;
-            pDir1Sz = pWidth;
-            pDir2Sz = pHeight;
-        }
+        BOOL bVert = IsVertical();
+        SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
         const FASTBOOL bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
         {
-            if ( Prt().V_HEIGHT )
+            if( (Prt().*fnRect->fnGetHeight)() )
                 ((SwTxtFrm*)this)->HideHidden();
-            Prt().V_X = Prt().V_Y = 0;
-            Prt().V_WIDTH = Frm().V_WIDTH;
-            Prt().V_HEIGHT = 0;
-            nUpper = -(Frm().V_HEIGHT);
+            Prt().Pos().X() = Prt().Pos().Y() = 0;
+            (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)() );
+            (Prt().*fnRect->fnSetHeight)( 0 );
+            nUpper = -( (Frm().*fnRect->fnGetHeight)() );
         }
         else
         {
@@ -891,13 +876,15 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //An der FixSize gibt der umgebende Frame die Groesse vor, die
             //Raender werden einfach abgezogen.
             const long nLeft = rAttrs.CalcLeft( this );
-            Prt().V_WIDTH = Frm().V_WIDTH - ( nLeft + rAttrs.CalcRight() );
-            Prt().V_X = nLeft;
+            (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)()
+                                          - nLeft - rAttrs.CalcRight() );
+            (Prt().*fnRect->fnSetPosX)( nLeft );
 
             ViewShell *pSh = GetShell();
-            if ( pSh && pSh->VisArea().V_WIDTH &&
-                 GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
-                 pSh->GetDoc()->IsBrowseMode() )
+            SwTwips nWidthArea;
+            if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
+                GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
+                pSh->GetDoc()->IsBrowseMode() )
             {
                 //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
                 //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"
@@ -921,20 +908,25 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
-                long nWidth = pSh->VisArea().V_WIDTH - 2 * aBorder.*pDir1Sz;
-                nWidth -= Prt().V_X;
+                long nWidth = nWidthArea - 2 * ( IsVertical() ?
+                                           aBorder.Width() : aBorder.Height() );
+                nWidth -= (Prt().*fnRect->fnGetLeft)();
                 nWidth -= rAttrs.CalcRightLine();
                 nWidth = Max( nMinWidth, nWidth );
-                Prt().V_WIDTH = Min( nWidth, Prt().V_WIDTH );
+                (Prt().*fnRect->fnSetWidth)( Min( nWidth,
+                                            (Prt().*fnRect->fnGetWidth)() ) );
             }
 
-            if ( Prt().V_WIDTH <= MINLAY )
+            if ( (Prt().*fnRect->fnGetWidth)() <= MINLAY )
             {
                 //Die PrtArea sollte schon wenigstens MINLAY breit sein, passend
                 //zu den Minimalwerten des UI
-                Prt().V_WIDTH = Min( long(MINLAY), Frm().V_WIDTH );
-                if ( (Prt().V_X + Prt().V_WIDTH) > Frm().V_WIDTH )
-                    Prt().V_X = Frm().V_WIDTH - Prt().V_WIDTH;
+                (Prt().*fnRect->fnSetWidth)( Min( long(MINLAY),
+                                             (Frm().*fnRect->fnGetWidth)() ) );
+                SwTwips nTmp = (Frm().*fnRect->fnGetWidth)() -
+                               (Prt().*fnRect->fnGetWidth)();
+                if( (Prt().*fnRect->fnGetLeft)() > nTmp )
+                    (Prt().*fnRect->fnSetLeft)( nTmp );
             }
 
             //Fuer die VarSize gelten folgende Regeln:
@@ -950,22 +942,20 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
             SwTwips nLower = rAttrs.GetBottomLine( this );
-            if( bVert )
-                Prt().V_Y = nLower;
-            else
-                Prt().V_Y = nUpper;
+            (Prt().*fnRect->fnSetPosY)( bVert ? nLower : nUpper);
 
             nUpper += nLower;
-            nUpper -= Frm().V_HEIGHT - Prt().V_HEIGHT;
+            nUpper -= (Frm().*fnRect->fnGetHeight)() -
+                      (Prt().*fnRect->fnGetHeight)();
         }
         //Wenn Unterschiede zwischen Alter und neuer Groesse,
         //Grow() oder Shrink() rufen
         if ( nUpper )
         {
             if ( nUpper > 0 )
-                GrowFrm( nUpper, pDir2Sz );
+                GrowFrm( nUpper, bVert ? pWidth : pHeight );
             else
-                ShrinkFrm( -nUpper, pDir2Sz );
+                ShrinkFrm( -nUpper, bVert ? pWidth : pHeight );
             bSizeChgd = TRUE;
         }
 #else

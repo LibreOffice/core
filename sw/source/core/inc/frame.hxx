@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 10:20:55 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 08:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,44 @@ struct SwCrsrMoveState;
 #define V_HEIGHT SSize().*pDir2Sz
 #define V_X Pos().*pDir1Pt
 #define V_Y Pos().*pDir2Pt
+
+class SwFrm;
+typedef long (SwFrm:: *SwFrmGet)() const;
+
+struct SwRectFnCollection
+{
+    SwRectGet     fnGetTop;
+    SwRectGet     fnGetBottom;
+    SwRectGet     fnGetLeft;
+    SwRectGet     fnGetRight;
+    SwRectGet     fnGetWidth;
+    SwRectGet     fnGetHeight;
+
+    SwRectSet     fnSetTop;
+    SwRectSet     fnSetBottom;
+    SwRectSet     fnSetLeft;
+    SwRectSet     fnSetRight;
+    SwRectSet     fnSetWidth;
+    SwRectSet     fnSetHeight;
+
+    SwRectSet     fnSubTop;
+    SwRectSet     fnAddBottom;
+    SwRectSet     fnSubLeft;
+    SwRectSet     fnAddRight;
+    SwRectSet     fnAddWidth;
+    SwRectSet     fnAddHeight;
+
+    SwRectSet     fnSetPosX;
+    SwRectSet     fnSetPosY;
+
+    SwFrmGet      fnGetTopMargin;
+    SwFrmGet      fnGetBottomMargin;
+    SwFrmGet      fnGetLeftMargin;
+    SwFrmGet      fnGetRightMargin;
+};
+
+typedef SwRectFnCollection* SwRectFn;
+extern SwRectFn fnRectHori, fnRectVert;
 
 #else
 
@@ -698,6 +736,14 @@ public:
     BOOL IsColLocked()  const { return bColLocked; }
 
     virtual ~SwFrm();
+
+#ifdef VERTICAL_LAYOUT
+    // No inline cause we need the function pointers
+    long GetTopMargin() const;
+    long GetBottomMargin() const;
+    long GetLeftMargin() const;
+    long GetRightMargin() const;
+#endif
 
 #ifndef PRODUCT
     inline USHORT GetFrmId() const { return nFrmId; }
