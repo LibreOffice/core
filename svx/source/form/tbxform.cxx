@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:20:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _TOOLS_INTN_HXX //autogen
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 
 #ifndef _SV_SOUND_HXX //autogen
