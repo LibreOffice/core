@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-09 12:55:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 14:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,22 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
 
         // all our controls have to be repositioned
         Resize();
+    }
+    else if (STATE_CHANGE_ENABLE == nStateChange)
+    {
+        // do we have a handle column?
+        sal_Bool bHandleCol = pCols->Count() && (0 == pCols->GetObject(0)->GetId());
+        // do we have a header bar
+        sal_Bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
+
+        if  (   nTitleLines
+            &&  (   !bHeaderBar
+                ||  bHandleCol
+                )
+            )
+            // we draw the text in our header bar in a color dependent on the enabled state. So if this state changed
+            // -> redraw
+            Invalidate(Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetTitleHeight() - 1)));
     }
 }
 
@@ -623,8 +639,9 @@ void BrowseBox::Paint( const Rectangle& rRect )
                 ButtonFrame aButtonFrame( Point( nX, 0 ),
                     Size( pCol->Width()-1, GetTitleHeight()-1 ),
                     pCol->Title(), FALSE, FALSE,
-                    0 != (BROWSER_COLUMN_TITLEABBREVATION&pCol->Flags()) );
-                aButtonFrame .Draw( *this );
+                    0 != (BROWSER_COLUMN_TITLEABBREVATION&pCol->Flags()),
+                    !IsEnabled());
+                aButtonFrame.Draw( *this );
                 DrawLine( Point( nX + pCol->Width() - 1, 0 ),
                    Point( nX + pCol->Width() - 1, GetTitleHeight()-1 ) );
             }
@@ -757,7 +774,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         {
             ButtonFrame aButtonFrame( aRealPos,
                 Size( pFirstCol->Width()-1, nTitleHeight-1 ),
-                pFirstCol->Title(), FALSE, FALSE, FALSE);
+                pFirstCol->Title(), FALSE, FALSE, FALSE, !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
             Color aOldColor = pDev->GetLineColor();
