@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 15:28:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ FuSelection::FuSelection(SdViewShell*     pViewSh,
     bSuppressChangesOfSelection(FALSE),
     bMirrorSide0(FALSE),
     nEditMode(SID_BEZIER_MOVE),
-    pSound(NULL)
+    pSound(NULL),
+    pWaterCanCandidate(NULL)
 {
     // Objektbar auswaehlen
     SelectionHasChanged();
@@ -272,6 +273,12 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // Wechsel Rotationskoerper -> Selektion
                 pView->ShowMirrored();
                 pView->ResetCreationActive();
+            }
+            else if (bWaterCan)
+            {
+                // Remember the selected object for proper handling in
+                // MouseButtonUp().
+                pWaterCanCandidate = pickObject (aMDPos);
             }
             else
             {
@@ -382,62 +389,75 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (!bReturn)
             {
-                bReturn = TRUE;
-                BOOL bDeactivateOLE = FALSE;
-
-                if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
+                if (bWaterCan)
                 {
-                    SdClient* pIPClient = (SdClient*) pViewShell->GetIPClient();
-
-                    if (pIPClient && pIPClient->IsInPlaceActive())
+                    if ( ! (rMEvt.IsShift() || rMEvt.IsMod2()))
                     {
-                        // OLE-Objekt wird im nachfolgenden UnmarkAll() deaktiviert
-                        bDeactivateOLE = TRUE;
+                        // Find the object under the current mouse position
+                        // and store it for the MouseButtonUp() method to
+                        // evaluate.
+                        pWaterCanCandidate = pickObject (aMDPos);
                     }
-
-                    pView->UnmarkAll();
-                }
-
-                BOOL bMarked = FALSE;
-
-                if ( !rMEvt.IsMod1() && !bDeactivateOLE)
-                {
-                    if ( rMEvt.IsMod2() )
-                    {
-                        bMarked = pView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift() );
-                    }
-                    else
-                    {
-                        BOOL bToggle = FALSE;
-
-                        if (rMEvt.IsShift() && pView->GetMarkList().GetMarkCount() > 1)
-                        {
-                            // Bei Einfachselektion kein Toggle
-                            bToggle = TRUE;
-                        }
-
-                        bMarked = pView->MarkObj(aMDPos, nHitLog, bToggle, FALSE);
-                    }
-                }
-
-                if ( !bReadOnly &&
-                     bMarked                                                   &&
-                    (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)))
-                {
-                    /**********************************************************
-                    * Objekt verschieben
-                    **********************************************************/
-                    aDragTimer.Start();
-
-                    pHdl=pView->HitHandle(aMDPos, *pWindow);
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
                 }
                 else
                 {
-                    /**********************************************************
-                    * Objekt selektieren
-                    **********************************************************/
-                    pView->BegMarkObj(aMDPos);
+                    bReturn = TRUE;
+                    BOOL bDeactivateOLE = FALSE;
+
+                    if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
+                    {
+                        SdClient* pIPClient = (SdClient*) pViewShell->GetIPClient();
+
+                        if (pIPClient && pIPClient->IsInPlaceActive())
+                        {
+                            // OLE-Objekt wird im nachfolgenden UnmarkAll() deaktiviert
+                            bDeactivateOLE = TRUE;
+                        }
+
+                        pView->UnmarkAll();
+                    }
+
+                    BOOL bMarked = FALSE;
+
+                    if ( !rMEvt.IsMod1() && !bDeactivateOLE)
+                    {
+                        if ( rMEvt.IsMod2() )
+                        {
+                            bMarked = pView->MarkNextObj(aMDPos, nHitLog, rMEvt.IsShift() );
+                        }
+                        else
+                        {
+                            BOOL bToggle = FALSE;
+
+                            if (rMEvt.IsShift() && pView->GetMarkList().GetMarkCount() > 1)
+                            {
+                                // Bei Einfachselektion kein Toggle
+                                bToggle = TRUE;
+                            }
+
+                            bMarked = pView->MarkObj(aMDPos, nHitLog, bToggle, FALSE);
+                        }
+                    }
+
+                    if ( !bReadOnly &&
+                        bMarked                                                   &&
+                        (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)))
+                    {
+                        /**********************************************************
+                        * Objekt verschieben
+                        **********************************************************/
+                        aDragTimer.Start();
+
+                        pHdl=pView->HitHandle(aMDPos, *pWindow);
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                    }
+                    else
+                    {
+                        /**********************************************************
+                        * Objekt selektieren
+                        **********************************************************/
+                        pView->BegMarkObj(aMDPos);
+                    }
                 }
             }
         }
@@ -765,17 +785,27 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 // Bei rechter Maustaste wird im Giesskannenmodus ein Undo ausgefuehrt
                 pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SFX_CALLMODE_ASYNCHRON );
             }
-            else if( pView->HasMarkedObj() )
-            // Wenn wir im Giesskannenmodus sind und Objekte markiert sind
+            else if (pWaterCanCandidate != NULL)
             {
-                SfxStyleSheetBasePool* pSSPool = pDocSh->GetStyleSheetPool();
-                if( pSSPool )
+                // Is the candiate object still under the mouse?
+                if (pickObject (aPnt) == pWaterCanCandidate)
                 {
-                    SfxStyleSheetBase* pStyleSheet = ( (SdStyleSheetPool*) pSSPool )->GetActualStyleSheet();
-                    if( pStyleSheet )
-                        pView->SetStyleSheetToMarked( (SfxStyleSheet*) pStyleSheet, FALSE );
+                    SdStyleSheetPool* pPool = static_cast<SdStyleSheetPool*>(
+                        pDocSh->GetStyleSheetPool());
+                    if (pPool != NULL)
+                    {
+                        SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
+                            pPool->GetActualStyleSheet());
+                        if (pStyleSheet != NULL)
+                        {
+                            pWaterCanCandidate->SetStyleSheet (pStyleSheet, FALSE);
+                        }
+                    }
                 }
             }
+            // else when there has been no object under the mouse when the
+            // button was pressed then nothing happens even when there is
+            // one now.
         }
 
         USHORT nClicks = rMEvt.GetClicks();
@@ -1453,4 +1483,16 @@ bool FuSelection::cancel()
     {
         return false;
     }
+}
+
+
+
+
+SdrObject* FuSelection::pickObject (const Point& rTestPoint)
+{
+    SdrObject* pObject = NULL;
+    SdrPageView* pPageView;
+    USHORT nHitLog = USHORT (pWindow->PixelToLogic(Size(HITPIX,0)).Width());
+    pView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
+    return pObject;
 }
