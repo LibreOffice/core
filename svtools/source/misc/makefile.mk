@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-07 15:20:21 $
+#   last change: $Author: hjs $ $Date: 2001-05-22 12:06:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,24 +65,17 @@ PRJ=..$/..
 PRJNAME=			svtools
 TARGET=				misc
 LIBTARGET=			NO
-USE_LDUMP2=			TRUE
-USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(GUI)"=="MAC"
-CFLAGS += -nomapcr
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
+#use local "bmp" as it may not yet be delivered
+BMP=$(BIN)$/bmp
 IMGLST_SRS=$(SRS)$/misc.srs
-#BMP_IN=$(PRJ)$/win/res
 
 SRS1NAME=misc
 SRC1FILES=\
