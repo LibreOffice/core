@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-10 15:20:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ void OComponentHelper::release() throw()
                 catch (::com::sun::star::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
                     OSL_ENSURE( 0, msg.getStr() );
 #endif
