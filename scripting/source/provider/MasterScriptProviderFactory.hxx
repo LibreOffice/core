@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:07:27 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <rtl/ustring>
 #include <cppuhelper/implbase2.hxx>
 
@@ -69,6 +68,8 @@
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+
+#include "ActiveMSPList.hxx"
 
 namespace func_provider
 {
@@ -81,7 +82,17 @@ class MasterScriptProviderFactory :
         css::lang::XServiceInfo >
 {
 private:
+
+    ActiveMSPList* m_MSPList;
+
+    // need to not only hold a pointer to this object but also
+    // keep it aqcuired
+    css::uno::Reference< css::lang::XEventListener > m_MSPListHolder;
+
     css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
+
+    ActiveMSPList& getActiveMSPList();
+
 protected:
     virtual ~MasterScriptProviderFactory();
 
