@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-27 17:03:30 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 14:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,21 +558,18 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
     String sWizardName;
     Any aObj;
 
-    sal_Bool bIsUNOPilot = sal_False;
     switch (nClassId)
     {
         case FormComponentType::GRIDCONTROL:
-            sWizardName.AssignAscii("GridWizard.GridWizard.MainWithDefault");
+            sWizardName.AssignAscii("com.sun.star.sdb.GridControlAutoPilot");
             aObj <<= xChild;
             break;
         case FormComponentType::LISTBOX:
         case FormComponentType::COMBOBOX:
-            bIsUNOPilot = sal_True;
             sWizardName.AssignAscii("com.sun.star.sdb.ListComboBoxAutoPilot");
             aObj <<= xChild;
             break;
         case FormComponentType::GROUPBOX:
-            bIsUNOPilot = sal_True;
             sWizardName.AssignAscii("com.sun.star.sdb.GroupBoxAutoPilot");
             aObj <<= xChild;
             break;
@@ -580,87 +577,43 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 
     if (sWizardName.Len() != 0)
     {
-        if (bIsUNOPilot)
+        // build the argument list
+        Sequence< Any > aWizardArgs(1);
+        // the object affected
+        aWizardArgs[0] = makeAny(PropertyValue(
+            ::rtl::OUString::createFromAscii("ObjectModel"),
+            0,
+            makeAny(xChild),
+            PropertyState_DIRECT_VALUE
+        ));
+
+        // create the wizard object
+        Reference< XExecutableDialog > xWizard;
+        try
         {
-            // build the argument list
-            Sequence< Any > aWizardArgs(1);
-            // the object affected
-            aWizardArgs[0] = makeAny(PropertyValue(
-                ::rtl::OUString::createFromAscii("ObjectModel"),
-                0,
-                makeAny(xChild),
-                PropertyState_DIRECT_VALUE
-            ));
-
-            // create the wizard object
-            Reference< XExecutableDialog > xWizard;
-            try
-            {
-                Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                xWizard = Reference< XExecutableDialog >(
-                    ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(sWizardName, aWizardArgs),
-                    UNO_QUERY);
-            }
-            catch(Exception&)
-            {
-            }
-            if (!xWizard.is())
-            {
-                ShowServiceNotAvailableError(NULL, sWizardName, sal_True);
-                return;
-            }
-
-            // execute the wizard
-            try
-            {
-                xWizard->execute();
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("FmFormView::ObjectCreated: could not execute the AutoPilot!");
-                // TODO: real error handling
-            }
+            Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+            xWizard = Reference< XExecutableDialog >(
+                ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(sWizardName, aWizardArgs),
+                UNO_QUERY);
         }
-        else
+        catch(Exception&)
         {
-            // disabled for the moment
+        }
+        if (!xWizard.is())
+        {
+            ShowServiceNotAvailableError(NULL, sWizardName, sal_True);
             return;
+        }
 
-            SfxApplication* pApp = SFX_APP();
-            SbxArrayRef xArray   = new SbxArray();
-            SbxVariableRef xReturn  = new SbxVariable();
-            SbxVariableRef xParam= new SbxVariable();
-            xParam->PutBool(sal_True);
-
-            SbxObjectRef xObj    = ::GetSbUnoObject(String(), aObj);
-            xArray->Put(xObj,1);
-            xArray->Put(xParam,2);
-
-            pApp->EnterBasicCall();
-            ErrCode aResult = pApp->GetMacroConfig()->Call(NULL,sWizardName,pApp->GetBasicManager(),xArray,xReturn);
-            pApp->LeaveBasicCall();
-
-            if (ERRCODE_NONE != aResult)
-            {
-                sal_uInt16 nContextId(0);
-                switch (nClassId)
-                {
-                    case FormComponentType::GRIDCONTROL:
-                        nContextId = RID_SUB_GRIDCONTROL_WIZARD;
-                        break;
-                    case FormComponentType::LISTBOX:
-                        nContextId = RID_SUB_LISTBOX_WIZARD;
-                        break;
-                    case FormComponentType::COMBOBOX:
-                        nContextId = RID_SUB_COMBOBOX_WIZARD;
-                        break;
-                    case FormComponentType::GROUPBOX:
-                        nContextId = RID_SUB_GROUPBOX_WIZARD;
-                        break;
-                }
-                SfxErrorContext aContext(nContextId, NULL, RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS, DIALOG_MGR());
-                ErrorHandler::HandleError(aResult);
-            }
+        // execute the wizard
+        try
+        {
+            xWizard->execute();
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("FmFormView::ObjectCreated: could not execute the AutoPilot!");
+            // TODO: real error handling
         }
     }
 }
