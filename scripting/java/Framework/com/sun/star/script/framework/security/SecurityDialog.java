@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: npower $ $Date: 2003-03-07 13:25:03 $
+ *  last change: $Author: toconnor $ $Date: 2003-08-27 14:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.scripting.runtime.java.ScriptRuntimeForJava;
+import com.sun.star.scripting.runtime.java.LogUtils;
 
 public class SecurityDialog extends WeakBase implements XComponent, XServiceInfo, XDialog,
 XInitialization {
@@ -181,19 +181,19 @@ XInitialization {
 
     public SecurityDialog( XComponentContext xComponentContext )
     {
-        ScriptRuntimeForJava.DEBUG( "SecurityDialog ctor" );
+        LogUtils.DEBUG( "SecurityDialog ctor" );
         _xComponentContext = xComponentContext;
     }
 
     public void initialize( Object[] args ) throws RuntimeException
     {
-        ScriptRuntimeForJava.DEBUG( "SecurityDialog init" );
+        LogUtils.DEBUG( "SecurityDialog init" );
         // figure out if we need a checkbox
         if ( args.length == 1 && AnyConverter.isString( args[0] ) )
         {
             //check args is a path
             // set checkBoxPath with the arg
-            ScriptRuntimeForJava.DEBUG( "checkbox" );
+            LogUtils.DEBUG( "checkbox" );
             try
             {
                 checkBoxPath = AnyConverter.toString( args[0] );
@@ -202,7 +202,7 @@ XInitialization {
             {
                 throw new RuntimeException( "SecurityDialog::initialize: " + e.getMessage() );
             }
-            ScriptRuntimeForJava.DEBUG( "path: " + checkBoxPath );
+            LogUtils.DEBUG( "path: " + checkBoxPath );
             checkBoxDialog = true;
             if( checkBoxPath.length() > lineWrapLength )
             {
@@ -215,7 +215,7 @@ XInitialization {
         }
         else
         {
-            ScriptRuntimeForJava.DEBUG( "no checkbox: # of args=" +
+            LogUtils.DEBUG( "no checkbox: # of args=" +
                 args.length );
             cbIncrW = 0;
             cbIncrH = 0;
@@ -229,14 +229,14 @@ XInitialization {
         }
         catch ( com.sun.star.uno.Exception e )
         {
-            ScriptRuntimeForJava.DEBUG( "Couldn't create dialog" );
-            ScriptRuntimeForJava.DEBUG( "uno message: " + e.getMessage());
+            LogUtils.DEBUG( "Couldn't create dialog" );
+            LogUtils.DEBUG( "uno message: " + e.getMessage());
             throw new RuntimeException( e.getMessage() );
         }
         catch ( Exception e )
         {
-            ScriptRuntimeForJava.DEBUG( "Couldn't create dialog" );
-            ScriptRuntimeForJava.DEBUG( "message: " + e.getMessage());
+            LogUtils.DEBUG( "Couldn't create dialog" );
+            LogUtils.DEBUG( "message: " + e.getMessage());
             throw new RuntimeException( e.getMessage() );
         }
 
@@ -306,8 +306,8 @@ XInitialization {
             "com.sun.star.awt.UnoControlButtonModel" );
         XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, runButtonModel );
-        ScriptRuntimeForJava.DEBUG("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
-        ScriptRuntimeForJava.DEBUG("run: y="+(dialogH+cbIncrH-runButtonH-1));
+        LogUtils.DEBUG("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
+        LogUtils.DEBUG("run: y="+(dialogH+cbIncrH-runButtonH-1));
         xPSetButton.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrW)/2)-runButtonW -1) ));
         xPSetButton.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrH-runButtonH-1));
         xPSetButton.setPropertyValue( "Width", new Integer( runButtonW ));
@@ -321,8 +321,8 @@ XInitialization {
             "com.sun.star.awt.UnoControlButtonModel" );
         xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, doNotRunButtonModel );
-        ScriptRuntimeForJava.DEBUG("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
-        ScriptRuntimeForJava.DEBUG("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
+        LogUtils.DEBUG("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
+        LogUtils.DEBUG("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
         xPSetButton.setPropertyValue( "PositionX", new Integer(  (((dialogW+cbIncrW)/2) + 1) ));
         xPSetButton.setPropertyValue( "PositionY", new Integer(  (dialogH+cbIncrH-doNotRunButtonH-1 ) ));
         xPSetButton.setPropertyValue( "Width", new Integer( doNotRunButtonW ));
@@ -339,7 +339,7 @@ XInitialization {
 
         if ( checkBoxDialog )
         {
-            ScriptRuntimeForJava.DEBUG("creating label & checkbox");
+            LogUtils.DEBUG("creating label & checkbox");
             // create the label model and set the properties
             Object label2Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
@@ -489,9 +489,9 @@ XInitialization {
 
         short result = 0;
         _pushed = _doNotRunButtonName;
-        ScriptRuntimeForJava.DEBUG("*DF* Before execute " );
+        LogUtils.DEBUG("*DF* Before execute " );
         _xDialog.execute();
-        ScriptRuntimeForJava.DEBUG("*DF* After execute " );
+        LogUtils.DEBUG("*DF* After execute " );
 
         if ( _pushed.equals( _runButtonName ) )
         {
@@ -557,7 +557,7 @@ XInitialization {
         // XActionListener
         public void actionPerformed( ActionEvent actionEvent ) {
           _pushed = _buttonName;
-          ScriptRuntimeForJava.DEBUG("** Button pushed ->" + _pushed );
+          LogUtils.DEBUG("** Button pushed ->" + _pushed );
 
           _xDialog.endExecute();
         }
@@ -579,7 +579,7 @@ XInitialization {
         // XAdjustmentListener
         public void itemStateChanged( ItemEvent itemEvent ) {
           _checkBoxState = _xCheckBox.getState();
-          ScriptRuntimeForJava.DEBUG("** checkbox state ->" + _checkBoxState );
+          LogUtils.DEBUG("** checkbox state ->" + _checkBoxState );
         }
     }
 }

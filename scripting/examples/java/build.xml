@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-08-21 15:48:06 $
+#   last change: $Author: toconnor $ $Date: 2003-08-27 14:09:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,11 +97,11 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
-    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+    <pathelement location="${out}/class/ScriptProviderForJava.jar"/>
   </path>
 
   <path id="debuggerclasspath">
-    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+    <pathelement location="${out}/class/ScriptProviderForJava.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/unoil.jar"/>
     <pathelement location="${out}/class/js.jar"/>

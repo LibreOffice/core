@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: npower $ $Date: 2003-08-19 08:50:50 $
+#   last change: $Author: toconnor $ $Date: 2003-08-27 14:09:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,6 @@
   <property name="idesupport.dir" value="org/openoffice/idesupport"/>
   <property name="netbeans.dir" value="org/openoffice/netbeans/modules/office"/>
   <property name="framework.dir" value="Framework/com/sun/star/script/framework/security"/>
-  <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
@@ -150,7 +149,7 @@
 
   <!-- ===================== jar ========================= -->
   <target name="jar" depends="compile">
-    <jar jarfile="${jardir}/${scriptingjarname}"
+    <jar jarfile="${jardir}/ScriptProviderForJava.jar"
          basedir="${scriptingclasses}">
         <exclude name="${netbeans.dir}/**/.*/*"/>
         <exclude name="**/beanshell/*"/>
@@ -164,7 +163,7 @@
         </manifest>
     </jar>
 
-    <jar jarfile="${jardir}/ScriptRuntimeForBeanShell.jar"
+    <jar jarfile="${jardir}/ScriptProviderForBeanShell.jar"
          basedir="${scriptingclasses}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
@@ -172,11 +171,11 @@
                        value="BeanShellRuntimeComponentRegistration"/>
         </manifest>
         <include name="BeanShellRuntimeComponentRegistration.class"/>
-        <include name="**/ScriptRuntimeForBeanShell**.class"/>
+        <include name="**/ScriptProviderForBeanShell**.class"/>
         <include name="**/ScriptContext.class"/>
     </jar>
 
-    <jar jarfile="${jardir}/ScriptRuntimeForJavaScript.jar"
+    <jar jarfile="${jardir}/ScriptProviderForJavaScript.jar"
          basedir="${scriptingclasses}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
@@ -184,7 +183,7 @@
                        value="JavaScriptRuntimeComponentRegistration"/>
         </manifest>
         <include name="JavaScriptRuntimeComponentRegistration.class"/>
-        <include name="**/ScriptRuntimeForJavaScript**.class"/>
+        <include name="**/ScriptProviderForJavaScript**.class"/>
         <include name="**/ScriptContext.class"/>
     </jar>
 
@@ -256,7 +255,10 @@
   <!-- ====================== Clean Generated Files ===================== -->
   <target name="clean">
     <delete dir="${scriptingclasses}"/>
-    <delete dir="${jardir}/${scriptingjarname}"/>
+    <delete file="${jardir}/ScriptProviderForJava.jar"/>
+    <delete file="${jardir}/ScriptProviderForJavaScript.jar"/>
+    <delete file="${jardir}/ScriptProviderForBeanShell.jar"/>
+    <delete file="${jardir}/ScriptFramework.jar"/>
     <delete file="${jardir}/office.jar"/>
     <delete file="${jardir}/localoffice.jar"/>
     <delete file="${jardir}/OfficeScripting.jar"/>
