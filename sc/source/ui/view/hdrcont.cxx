@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,6 @@
 #define SC_HDRPAINT_BOTTOM      5
 #define SC_HDRPAINT_TEXT        6
 #define SC_HDRPAINT_COUNT       7
-
-#define SC_HDR_TRANSPARENCY     85
 
 //==================================================================
 
@@ -260,7 +258,8 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     //  Linien zusammengefasst
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    BOOL bDark = ( rStyleSettings.GetFaceColor().GetLuminance() <= 25 );
+    BOOL bDark = rStyleSettings.GetFaceColor().IsDark();
+    // Use the same distinction for bDark as in Window::DrawSelectionBackground
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
     SetTextColor( aTextColor );
@@ -415,18 +414,22 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
             case SC_HDRPAINT_TEXT:
                 if ( nTransEnd >= nTransStart && !bDark )
                 {
-                    //  transparent selection background is drawn after lines, before text
+                    //  Transparent selection background is drawn after lines, before text.
+                    //  #109814# Use DrawSelectionBackground to make sure there is a visible
+                    //  difference. The case of a dark face color, where DrawSelectionBackground
+                    //  would just paint over the lines, is handled separately (bDark).
+                    //  Otherwise, GetHighlightColor is used with 80% transparency.
+                    //  The window's background color (SetBackground) has to be the background
+                    //  of the cell area, for the contrast comparison in DrawSelectionBackground.
 
-                    SetLineColor();
-                    SetFillColor( rStyleSettings.GetActiveColor() );
                     Rectangle aTransRect;
                     if (bVertical)
                         aTransRect = Rectangle( 0, nTransStart, nBarSize-1, nTransEnd );
                     else
                         aTransRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
-                    Polygon aPoly( aTransRect );
-                    PolyPolygon aPolyPoly( aPoly );
-                    DrawTransparent( aPolyPoly, SC_HDR_TRANSPARENCY );
+                    SetBackground( Color( rStyleSettings.GetFaceColor() ) );
+                    DrawSelectionBackground( aTransRect, 0, TRUE, FALSE, FALSE );
+                    SetBackground();
                 }
                 break;
         }
