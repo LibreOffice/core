@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:17 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:34:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,7 @@ CFLAGSNOOPT=-O
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
 # Enable all warnings
-CFLAGSWALL=-Wall
+CFLAGSWALL=-Wall -Wfloat-equal -Weffc++ -Wold-style-cast -Woverloaded-virtual -Wshadow -Wpointer-arith -Wcast-align -Wsign-compare -Winline
 # Set default warn level
 CFLAGSDFLTWARN=-w
 
