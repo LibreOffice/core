@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionHandler.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:37:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // DocMerge from xml: interface com::sun::star::task::XInteractionHandler
 /** An interaction request handler.
  */
-interface XInteractionHandler: com::sun::star::uno::XInterface
+published interface XInteractionHandler: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
