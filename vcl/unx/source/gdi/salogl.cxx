@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:46:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALOGL_CXX
 
 #include <salunx.h>
 
