@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 15:52:26 $
+ *  last change: $Author: sab $ $Date: 2002-06-12 10:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
+#endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
 #endif
 
 class ScViewForwarder : public SvxViewForwarder
@@ -681,6 +684,8 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
         delete mpViewForwarder;
     if (mpEditViewForwarder)
         delete mpEditViewForwarder;
+    if (mpForwarder)
+        delete mpForwarder;
 }
 
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -693,6 +698,7 @@ void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint&
             mpWindow = NULL;
             mpEditView = NULL;
             mpEditEngine = NULL;
+            DELETEZ(mpForwarder);
         }
     }
     ScAccessibleTextData::Notify(rBC, rHint);
@@ -773,10 +779,18 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         pTxtWnd->SetAccessibleTextData(NULL);
 
     if (mbEditEngineCreated && mpEditEngine)
-    {
-        mpEditEngine->SetNotifyHdl(Link());
-        DELETEZ(mpEditEngine);
-    }
+        delete mpEditEngine;
+}
+
+void ScAccessibleEditLineTextData::Dispose()
+{
+    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+    if (pTxtWnd)
+        pTxtWnd->SetAccessibleTextData(NULL);
+
+    ResetEditMode();
+    mpWindow = NULL;
 }
 
 ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
@@ -794,17 +808,17 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
         if (mpEditView)
         {
             if (mbEditEngineCreated && mpEditEngine)
-            {
-                mpEditEngine->SetNotifyHdl(Link());
-                DELETEZ(mpEditEngine);
-            }
+                ResetEditMode();
             mbEditEngineCreated = sal_False;
 
             mpEditView = pTxtWnd->GetEditView();
             ScAccessibleEditObjectTextData::GetTextForwarder(); // fill the mpForwarder
+            mpEditEngine = NULL;
         }
         else
         {
+            if (mpEditEngine && !mbEditEngineCreated)
+                ResetEditMode();
             if (!mpEditEngine)
             {
                 SfxItemPool* pEnginePool = EditEngine::CreatePool();
@@ -847,6 +861,20 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bo
     return ScAccessibleEditObjectTextData::GetEditViewForwarder(bCreate);
 }
 
+void ScAccessibleEditLineTextData::ResetEditMode()
+{
+    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+    if (mbEditEngineCreated && mpEditEngine)
+        delete mpEditEngine;
+    else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link());
+    mpEditEngine = NULL;
+
+    DELETEZ(mpForwarder);
+    mbEditEngineCreated = sal_False;
+}
+
 void ScAccessibleEditLineTextData::TextChanged()
 {
     if (mbEditEngineCreated && mpEditEngine)
@@ -856,6 +884,26 @@ void ScAccessibleEditLineTextData::TextChanged()
         if (pTxtWnd)
             mpEditEngine->SetText(pTxtWnd->GetTextString());
     }
+}
+
+void ScAccessibleEditLineTextData::StartEdit()
+{
+    ResetEditMode();
+    mpEditView = NULL;
+
+    // send HINT_BEGEDIT
+    SdrHint aHint(HINT_BEGEDIT);
+    GetBroadcaster().Broadcast( aHint );
+}
+
+void ScAccessibleEditLineTextData::EndEdit()
+{
+    ResetEditMode();
+    mpEditView = NULL;
+
+    // send HINT_ENDEDIT
+    SdrHint aHint(HINT_ENDEDIT);
+    GetBroadcaster().Broadcast( aHint );
 }
 
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
