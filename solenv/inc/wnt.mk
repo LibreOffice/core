@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 18:33:42 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:40:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -423,6 +423,8 @@ REGCOMP=$(WRAPCMD_ENV) regcomp
 CPPUMAKER=$(WRAPCMD) cppumaker
 JAVAMAKER=$(WRAPCMD) javamaker
 CLIMAKER=$(WRAPCMD) climaker
+CSC=$(WRAPCMD) csc
+VBC=$(WRAPCMD) vbc
 RDBMAKER=$(WRAPCMD) rdbmaker
 STARDEP=$(WRAPCMD) javadep
 JAVAC=$(WRAPCMD) javac
