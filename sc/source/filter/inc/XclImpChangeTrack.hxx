@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:08:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,17 +234,15 @@ private:
 
 public:
     inline                      XclImpChTrFmlConverter(
-                                    RootData* pRootData,
                                     XclImpStream& rStrm,
                                     XclImpChangeTrack& rXclChTr );
     virtual                     ~XclImpChTrFmlConverter();
 };
 
 inline XclImpChTrFmlConverter::XclImpChTrFmlConverter(
-        RootData* pRootData,
         XclImpStream& rStrm,
         XclImpChangeTrack& rXclChTr ) :
-    ExcelToSc8( pRootData, rStrm ),
+    ExcelToSc8( rStrm ),
     rChangeTrack( rXclChTr )
 {
 }
