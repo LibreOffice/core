@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskbar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: th $ $Date: 2001-07-02 15:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,6 @@ public:
     virtual void        Resize();
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual BOOL        QueryDrop( DropEvent& rDEvt );
 
     void                StartUpdateTask();
     void                UpdateTask( const Image& rImage, const String& rText,
@@ -294,8 +293,6 @@ public:
     virtual BOOL        MouseButtonUp( USHORT nItemd, const MouseEvent& rMEvt );
     virtual BOOL        MouseMove( USHORT nItemd, const MouseEvent& rMEvt );
     virtual BOOL        Command( USHORT nItemd, const CommandEvent& rCEvt );
-    virtual BOOL        QueryDrop( USHORT nItemd, DropEvent& rDEvt, BOOL& bRet );
-    virtual BOOL        Drop( USHORT nItemd, const DropEvent& rDEvt, BOOL& bRet );
     virtual BOOL        UpdateHelp( USHORT nItemd );
 };
 
@@ -389,8 +386,6 @@ public:
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        Command( const CommandEvent& rCEvt );
-    virtual BOOL        QueryDrop( DropEvent& rDEvt );
-    virtual BOOL        Drop( const DropEvent& rDEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
