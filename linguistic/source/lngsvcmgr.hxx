@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 16:16:18 $
+ *  last change: $Author: tl $ $Date: 2000-11-30 14:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,13 @@ class LngSvcMgr :
     com::sun::star::uno::Reference<
         ::com::sun::star::lang::XEventListener >        xListenerHelper;
 
+    com::sun::star::uno::Sequence<
+        com::sun::star::lang::Locale >                  aAvailSpellLocales;
+    com::sun::star::uno::Sequence<
+        com::sun::star::lang::Locale >                  aAvailHyphLocales;
+    com::sun::star::uno::Sequence<
+        com::sun::star::lang::Locale >                  aAvailThesLocales;
+
     SpellCheckerDispatcher *                            pSpellDsp;
     HyphenatorDispatcher *                              pHyphDsp;
     ThesaurusDispatcher *                               pThesDsp;
@@ -139,6 +146,9 @@ class LngSvcMgr :
 
     BOOL bDisposing;
     BOOL bIsModified;
+    BOOL bHasAvailSpellLocales;
+    BOOL bHasAvailHyphLocales;
+    BOOL bHasAvailThesLocales;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
@@ -191,6 +201,11 @@ public:
         getAvailableServices(
                 const ::rtl::OUString& rServiceName,
                 const ::com::sun::star::lang::Locale& rLocale )
+            throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::lang::Locale > SAL_CALL
+        getAvailableLocales(
+                const ::rtl::OUString& rServiceName )
             throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         setConfiguredServices(

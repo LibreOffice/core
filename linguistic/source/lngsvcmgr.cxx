@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 16:19:41 $
+ *  last change: $Author: tl $ $Date: 2000-11-30 14:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,63 @@ SV_IMPL_VARARR_SORT( SortedINT16Array, INT16 );
 
 ///////////////////////////////////////////////////////////////////////////
 
+static Sequence< Locale > GetAvailLocales(
+        const Sequence< OUString > &rSvcImplNames )
+{
+    Sequence< Locale > aRes;
+
+    Reference< XMultiServiceFactory >  xFac( getProcessServiceFactory() );
+    INT32 nNames = rSvcImplNames.getLength();
+    if (nNames  &&  xFac.is())
+    {
+        SortedINT16Array aLanguages;
+
+        //! since we're going to create one-instance services we have to
+        //! supply their arguments even if we would not need them here...
+        Sequence< Any > aArgs(2);
+        aArgs.getArray()[0] <<= GetLinguProperties();
+
+        // check all services for the supported languages and new
+        // languages to the result
+        const OUString *pImplNames = rSvcImplNames.getConstArray();
+        for (INT32 i = 0;  i < nNames;  ++i)
+        {
+            Reference< XSupportedLocales > xSuppLoc(
+                    xFac->createInstanceWithArguments( pImplNames[i], aArgs ),
+                    UNO_QUERY );
+            if (xSuppLoc.is())
+            {
+                Sequence< Locale > aLoc( xSuppLoc->getLocales() );
+                INT32 nLoc = aLoc.getLength();
+                for (INT32 k = 0;  k < nLoc;  ++k)
+                {
+                    const Locale *pLoc = aLoc.getConstArray();
+                    INT16 nLang = LocaleToLanguage( pLoc[k] );
+
+                    // language not already added?
+                    if (!aLanguages.Seek_Entry( nLang ))
+                        aLanguages.Insert( nLang );
+                }
+            }
+            else
+                DBG_ERROR( "interface not supported by service" );
+        }
+
+        // build returnes sequence
+        INT16 nLanguages = aLanguages.Count();
+        aRes.realloc( nLanguages );
+        Locale *pRes = aRes.getArray();
+        for (i = 0;  i < nLanguages;  ++i)
+        {
+            INT16 nLang = aLanguages[i];
+            pRes[i] = CreateLocale( nLang );
+        }
+    }
+
+    return aRes;
+}
+
+///////////////////////////////////////////////////////////////////////////
 
 struct SvcInfo
 {
@@ -441,6 +498,9 @@ BOOL LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 LngSvcMgr::LngSvcMgr() :
     aEvtListeners   ( GetLinguMutex() )
 {
+    bHasAvailSpellLocales   =
+    bHasAvailHyphLocales    =
+    bHasAvailThesLocales    =
     bIsModified = bDisposing = FALSE;
 
     pSpellDsp   = 0;
@@ -716,6 +776,9 @@ Reference< XSpellChecker > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+#ifdef DEBUG
+    getAvailableLocales( A2OU( SN_SPELLCHECKER ));
+#endif
 
     Reference< XSpellChecker >  xRes;
     if (!bDisposing)
@@ -733,6 +796,9 @@ Reference< XHyphenator > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+#ifdef DEBUG
+    getAvailableLocales( A2OU( SN_HYPHENATOR ));
+#endif
 
     Reference< XHyphenator >    xRes;
     if (!bDisposing)
@@ -750,6 +816,9 @@ Reference< XThesaurus > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+#ifdef DEBUG
+    getAvailableLocales( A2OU( SN_THESAURUS ));
+#endif
 
     Reference< XThesaurus > xRes;
     if (!bDisposing)
@@ -857,6 +926,48 @@ Sequence< OUString > SAL_CALL
 }
 
 
+Sequence< Locale > SAL_CALL
+    LngSvcMgr::getAvailableLocales(
+            const OUString& rServiceName )
+        throw(RuntimeException)
+{
+    MutexGuard  aGuard( GetLinguMutex() );
+
+    Sequence< Locale > aRes;
+
+    Sequence< Locale >  *pAvailLocales      = NULL;
+    BOOL                *pHasAvailLocales   = NULL;
+    if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
+    {
+        pAvailLocales       = &aAvailSpellLocales;
+        pHasAvailLocales    = &bHasAvailSpellLocales;
+    }
+    else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
+    {
+        pAvailLocales       = &aAvailHyphLocales;
+        pHasAvailLocales    = &bHasAvailHyphLocales;
+    }
+    else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
+    {
+        pAvailLocales       = &aAvailThesLocales;
+        pHasAvailLocales    = &bHasAvailThesLocales;
+    }
+
+    if (pAvailLocales  &&  pHasAvailLocales)
+    {
+        if (*pHasAvailLocales)
+            aRes = *pAvailLocales;
+        {
+            *pAvailLocales = GetAvailLocales(
+                    getAvailableServices( rServiceName, Locale() ) );
+            *pHasAvailLocales = TRUE;
+        }
+    }
+
+    return aRes;
+}
+
+
 void SAL_CALL
     LngSvcMgr::setConfiguredServices(
             const OUString& rServiceName,
@@ -905,7 +1016,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
 {
     BOOL bRes = FALSE;
 
-    const LinguDispatcher *pDsp = 0;
+    LinguDispatcher *pDsp = 0;
     Sequence< Locale > aLocales;
 
     if (0 == rServiceName.CompareToAscii( SN_SPELLCHECKER ))
@@ -946,13 +1057,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         for (INT32 i = 0;  i < nLen;  ++i)
         {
             Sequence< OUString > aSvcImplNames;
-            //aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
-            if (pDsp == pSpellDsp)
-                aSvcImplNames = pSpellDsp->GetServiceList( pLocale[i] );
-            else if (pDsp == pHyphDsp)
-                aSvcImplNames = pHyphDsp->GetServiceList( pLocale[i] );
-            else if (pDsp == pThesDsp)
-                aSvcImplNames = pThesDsp->GetServiceList( pLocale[i] );
+            aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
 
 #ifdef DEBUG
             INT32 nSvcs = aSvcImplNames.getLength();
