@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:58:53 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,6 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pControlle
     SetSpinSize(1);
     SetSizePixel( Size(70,19) );
 
-    International rInt = GetInternational();
-    rInt.EnableNumThousandSep(FALSE);
-    SetInternational(rInt);
     SetDecimalDigits(0);
     SetStrictFormat(TRUE);
 }

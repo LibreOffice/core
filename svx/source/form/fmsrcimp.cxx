@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 13:11:01 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,19 +195,16 @@ using namespace ::svxform;
 // ***************************************************************************************************
 
 //------------------------------------------------------------------------
-void buildApplicationLocale(Locale& _rLocale)
+void buildUILocale(Locale& _rLocale)
 {
-    String sLanguage, sCountry;
-    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-    _rLocale.Language = sLanguage;
-    _rLocale.Country = sCountry;
+    _rLocale = Application::GetSettings().GetUILocale();
 }
 
 //------------------------------------------------------------------------
-Locale buildApplicationLocale()
+Locale buildUILocale()
 {
     Locale aReturn;
-    buildApplicationLocale(aReturn);
+    buildUILocale(aReturn);
     return aReturn;
 }
 
@@ -701,7 +698,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
         aParam.insertedChars = m_nLevLonger;
     }
     aParam.searchString = strExpression;
-    buildApplicationLocale(aParam.Locale);
+    buildUILocale(aParam.Locale);
     ::utl::TextSearch aLocalEngine(aParam);
 
     // --------------------------------------------------------------
@@ -807,7 +804,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
-    ,m_aCharacterClassficator(_rxORB, buildApplicationLocale())
+    ,m_aCharacterClassficator(_rxORB, buildUILocale())
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -836,7 +833,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
-    ,m_aCharacterClassficator(_rxORB, buildApplicationLocale())
+    ,m_aCharacterClassficator(_rxORB, buildUILocale())
 {
     DBG_CTOR(FmSearchEngine,NULL);
 

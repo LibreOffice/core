@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,7 +1345,7 @@ void DbNumericField::Init(Window* pParent, const ::com::sun::star::uno::Referenc
 
     // und dann ein Format generieren, dass die gewuenschten Nachkommastellen usw. hat
     XubString sFormatString;
-    LanguageType aAppLanguage = Application::GetAppInternational().GetLanguage();
+    LanguageType aAppLanguage = Application::GetSettings().GetUILanguage();
     pFormatterUsed->GenerateFormat(sFormatString, 0, aAppLanguage, bThousand, sal_False, nScale);
 
     pField->SetFormat(sFormatString, aAppLanguage);
@@ -1438,12 +1438,9 @@ void DbCurrencyField::Init(Window* pParent, const ::com::sun::star::uno::Referen
     sal_Bool    bThousand   = ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_SHOWTHOUSANDSEP));
     ::rtl::OUString aStr( ::comphelper::getString(xModel->getPropertyValue(FM_PROP_CURRENCYSYMBOL)));
 
-    International  aInternational( pField->GetInternational() );
-    aInternational.EnableNumThousandSep(bThousand);
-    aInternational.SetNumDigits(m_nScale);
-    aInternational.SetCurrSymbol(aStr);
-    pField->SetInternational(aInternational);
+    pField->SetUseThousandSep(bThousand);
     pField->SetDecimalDigits(m_nScale);
+    pField->SetCurrencySymbol(aStr);
 
     pField->SetFirst(nMin);
     pField->SetLast(nMax);
@@ -1454,13 +1451,14 @@ void DbCurrencyField::Init(Window* pParent, const ::com::sun::star::uno::Referen
     pField->SetReadOnly(m_rColumn.IsReadOnly() || bReadOnly);
     pField->Enable(bEnable);
 
-    ((LongCurrencyField*)m_pPainter)->SetInternational(aInternational);
-    ((LongCurrencyField*)m_pPainter)->SetFirst(nMin);
-    ((LongCurrencyField*)m_pPainter)->SetLast(nMax);
-    ((LongCurrencyField*)m_pPainter)->SetMin(nMin);
-    ((LongCurrencyField*)m_pPainter)->SetMax(nMax);
-    ((LongCurrencyField*)m_pPainter)->SetStrictFormat(bStrict);
-    ((LongCurrencyField*)m_pPainter)->SetDecimalDigits(m_nScale);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetUseThousandSep(bThousand);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetDecimalDigits(m_nScale);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetCurrencySymbol(aStr);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetFirst(nMin);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetLast(nMax);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetMin(nMin);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetMax(nMax);
+    static_cast<LongCurrencyField*>(m_pPainter)->SetStrictFormat(bStrict);
 
     DbCellControl::Init(pParent, xCursor);
 }
@@ -1560,11 +1558,10 @@ void DbDateField::Init(Window* pParent, const ::com::sun::star::uno::Reference< 
     ::com::sun::star::uno::Any  aCentury = xModel->getPropertyValue(FM_PROP_DATE_SHOW_CENTURY);
     if (aCentury.getValueType().getTypeClass() != ::com::sun::star::uno::TypeClass_VOID)
     {
-        International  aInternational( pField->GetInternational() );
-        aInternational.SetDateCentury(::comphelper::getBOOL(aCentury));
-        pField->SetInternational(aInternational);
+        sal_Bool bShowDateCentury = ::comphelper::getBOOL(aCentury);
+        pField->SetShowDateCentury(bShowDateCentury);
 
-        static_cast<DateField*>(m_pPainter)->SetInternational(aInternational);
+        static_cast<DateField*>(m_pPainter)->SetShowDateCentury(bShowDateCentury);
     }
 
     pField->SetExtFormat( (ExtDateFieldFormat)nFormat);
@@ -2183,9 +2180,7 @@ sal_Bool DbFilterField::Commit()
             {
                 ::rtl::OUString aPreparedText;
 
-                XubString sLanguage, sCountry;
-                ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-                ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
+                ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
 
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > xDataSourceRowSet(
                     (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)*m_rColumn.GetParent().getDataSource(), ::com::sun::star::uno::UNO_QUERY);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-22 13:37:21 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,9 +1262,8 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
     Reference< XPropertySet> xOldSet(xOldModel, UNO_QUERY);
     Reference< XPropertySet> xNewSet(xNewModel, UNO_QUERY);
 
-    String sLanguage, sCountry;
-    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-    Locale aNewLanguage(sLanguage, sCountry, ::rtl::OUString());
+
+    Locale aNewLanguage = Application::GetSettings().GetUILocale();
     ::dbtools::TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
 
     Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
@@ -2047,7 +2046,7 @@ void FmXFormShell::CloseExternalFormViewer()
     URL aCloseUrl;
         // tool windows (like the task local beamer used for the grid) are assumed to close when dispatching an empty URL
 
-    Reference< ::com::sun::star::frame::XDispatch> xCloser( xCommLink->queryDispatch(aCloseUrl, ::rtl::OUString::createFromAscii(""), ::com::sun::star::frame::FrameSearchFlag::SELF | ::com::sun::star::frame::FrameSearchFlag::CHILDREN));
+    Reference< ::com::sun::star::frame::XDispatch> xCloser(xCommLink->queryDispatch(aCloseUrl, ::rtl::OUString::createFromAscii("_self"), 0));
     DBG_ASSERT(xCloser.is(), "FmXFormShell::CloseExternalFormViewer : don't know how to close the tool frame !");
     if (xCloser.is())
         xCloser->dispatch(aCloseUrl, Sequence< PropertyValue>());

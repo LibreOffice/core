@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 13:49:33 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,9 +394,6 @@ DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits 
     SetFirst(1);
     SetSpinSize(1);
 
-    International rInt = GetInternational();
-    rInt.EnableNumThousandSep(sal_False);
-    SetInternational(rInt);
     SetDecimalDigits(0);
     SetStrictFormat(sal_True);
 }

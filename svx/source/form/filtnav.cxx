@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,9 +1023,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     if (pParseNode)
     {
         ::rtl::OUString aPreparedText;
-        XubString sLanguage, sCountry;
-        ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-        ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
+        ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
         pParseNode->parseNodeToPredicateStr(aPreparedText,
                                    xConnection->getMetaData(),
                                    xFormatter,
