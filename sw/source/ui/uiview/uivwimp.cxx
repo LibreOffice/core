@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:47:53 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( xScanMgr.is() )
             {
-//JP 26.06.00: the appwindow doen't exist
-//              Application::GetAppWindow()->EnableInput( FALSE );
-
                 try
                 {
                     const Sequence< ScannerContext >
@@ -225,8 +222,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                 {
                 }
 
-//JP 26.06.00: the appwindow doen't exist
-//              Application::GetAppWindow()->EnableInput( TRUE );
             }
             if( bDone )
                 rReq.Done();
@@ -247,8 +242,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             if( xScanMgr.is() )
             {
                 SwScannerEventListener& rListener = GetScannerEventListener();
-//JP 26.06.00: the appwindow doen't exist
-//              Application::GetAppWindow()->EnableInput( FALSE );
                 try
                 {
                     const Sequence< scanner::ScannerContext >aContexts( xScanMgr->getAvailableScanners() );
@@ -266,8 +259,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( !bDone )
             {
-//JP 26.06.00: the appwindow doen't exist
-//              Application::GetAppWindow()->EnableInput( TRUE );
                 InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
                 rReq.Ignore();
             }
