@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:52:17 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 19:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_NOGLOS1
     TEXT = "AutoText zum Kürzel '" ;
     TEXT [ English ] = "AutoText for Short Name '" ;
     TEXT [ norwegian ] = "AutoText for Short Name '" ;
-    TEXT [ italian ] = "Testo automatico per la sigla" ;
+    TEXT [ italian ] = "Testo automatico per la sigla '" ;
     TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
     TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
