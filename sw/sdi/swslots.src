@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:09:58 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2702,7 +2702,7 @@ SfxSlotInfo FN_GOTO_NEXT_REGION
     SlotName[ swedish ] = "Till nästa område";
     SlotName[ polish ] = "Do nastêpnego obszaru";
     SlotName[ portuguese_brazilian ] = "JumpToNextRegion";
-    SlotName[ japanese ] = "Ÿ‚Ì—Ìˆæ‚Ö";
+    SlotName[ japanese ] = "Ÿ‚Ì”ÍˆÍ‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»ÇøÓò";
     SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@°Ï°ì";
     SlotName[ arabic ] = "Åáì ÇáäØÇŞ ÇáÊÇáí";
@@ -2806,7 +2806,7 @@ SfxSlotInfo FN_GOTO_PREV_REGION
     SlotName[ swedish ] = "Till föregående område";
     SlotName[ polish ] = "Do nastêpnego obszaru";
     SlotName[ portuguese_brazilian ] = "JumpToPrevRegion";
-    SlotName[ japanese ] = "‘O‚Ì—Ìˆæ‚Ö";
+    SlotName[ japanese ] = "‘O‚Ì”ÍˆÍ‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»¸öÇøÓò";
     SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@­Ó°Ï°ì";
     SlotName[ arabic ] = "Åáì ÇáäØÇŞ ÇáÓÇÈŞ";
@@ -5322,7 +5322,7 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ swedish ] = "Sidformatmall: Kolumner";
     SlotName[ polish ] = "Styl strony: Kolumny";
     SlotName[ portuguese_brazilian ] = "SetPageStyleCols";
-    SlotName[ japanese ] = "Íß°¼Ş½À²Ù:—ñ";
+    SlotName[ japanese ] = "Íß°¼Ş½À²ÙF—ñ";
     SlotName[ chinese_simplified ] = "Ò³ÃæÑùÊ½£ºÁĞ";
     SlotName[ chinese_traditional ] = "­¶­±¼Ë¦¡¡G¦C";
     SlotName[ arabic ] = "ŞÇáÈ ÕİÍÉ: ÃÚãÏÉ";
@@ -5478,7 +5478,7 @@ SfxSlotInfo FN_POSTIT
     SlotName[ swedish ] = "Infoga anteckning";
     SlotName[ polish ] = "Wstaw notatkê";
     SlotName[ portuguese_brazilian ] = "InsertNote";
-    SlotName[ japanese ] = "ÒÓ‚Ì‘}“ü";
+    SlotName[ japanese ] = "ºÒİÄ‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈë±¸×¢";
     SlotName[ chinese_traditional ] = "´¡¤J³Æª`";
     SlotName[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
