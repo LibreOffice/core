@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:28:13 $
+ *  last change: $Author: kz $  $Date: 2005-03-01 17:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.Locale;
 import com.sun.star.util.XChangesBatch;
@@ -214,6 +215,17 @@ public abstract class Configuration {
         }
     }
 
+    public static String getOfficeLinguistic(XMultiServiceFactory xMSF) {
+        try {
+            Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Office.Linguistic/General/", false);
+            String sLinguistic = (String) Helper.getUnoObjectbyName(oMasterKey, "DefaultLocale");
+            return sLinguistic;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * This method creates a new configuration node and adds it
      * to the given view. Note that if a node with the given name
@@ -281,12 +293,8 @@ public abstract class Configuration {
 
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode){
     String[] snames = null;
-    try {
-        return getNodeChildNames(_xNameAccessNode, "Name");
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-        return snames;
-    }}
+    return getNodeChildNames(_xNameAccessNode, "Name");
+    }
 
 
     public static String[] getNodeChildNames(XNameAccess xNameAccessNode, String _schildname){
