@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:01:01 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1542,7 +1542,9 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
     do
     {
         USHORT nType = GetCompType( nCompIdx );
+#if OSL_DEBUG_LEVEL > 1
         ASSERT( nType == CompType( nIdx ), "Gimme the right type!" );
+#endif
         nCompLen += nIdx;
         if( nCompLen > nLen )
             nCompLen = nLen;
