@@ -29,7 +29,9 @@ $(BIN)$/python.sh : python.sh
 
 $(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
-    cd $(BIN) && find . -name '*.so' | xargs strip 
+.IF "$(OS)" != "MACOSX"
+    cd $(BIN) && find . -name '*$(DLLPOST)' | xargs $(STRIP) 
+.ENDIF
 .ENDIF
     -rm -f $@
     +cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
