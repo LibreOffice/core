@@ -21,14 +21,14 @@ import javax.swing.table.*;
 import javax.swing.SwingUtilities.*;
 
 public class Version extends javax.swing.JPanel implements ActionListener, TableModelListener {
-    
+
     /** Creates new form Welcome */
     public Version(InstallWizard wizard) {
         this.wizard=wizard;
     setBackground(Color.white);
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -39,7 +39,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         JPanel versionPanel = new JPanel();
         setLayout(new BorderLayout());
 
-            
+
         File fileVersions = null;
     try
     {
@@ -51,21 +51,21 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             JOptionPane.showMessageDialog(this, eFnF.getMessage(), "File not Found", JOptionPane.ERROR_MESSAGE);
             wizard.exitForm(null);
     }
-        
+
         try {
             props = InstUtil.getOfficeVersions(fileVersions);
         }
         catch (IOException eIO) {
             //Message about no installed versions found
             System.err.println("Failed to parse SVERSION");
-            JOptionPane.showMessageDialog(this, "There was a problem reading from the Office settings file.", "Parse Error", JOptionPane.ERROR_MESSAGE);            
+            JOptionPane.showMessageDialog(this, "There was a problem reading from the Office settings file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
             wizard.exitForm(null);
         }
-        
+
         tableModel = new MyTableModel(props, versions);
     if (tableModel.getRowCount() == 0)
     {
-            JOptionPane.showMessageDialog(this, "No compatible versions of Office were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);         
+            JOptionPane.showMessageDialog(this, "No compatible versions of Office were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
             wizard.exitForm(null);
     }
 
@@ -86,16 +86,16 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         //nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
     nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
         nav.setNextListener(this);
-        add(nav, BorderLayout.SOUTH);    
-        
+        add(nav, BorderLayout.SOUTH);
+
     }// initComponents
-    
-    
+
+
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(320, 280);
     }
-    
-    
+
+
     public void actionPerformed(ActionEvent ev) {
         wizard.clearLocations();
         int len = tableModel.data.size();
@@ -104,11 +104,11 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             if (((Boolean)list.get(0)).booleanValue() == true)
                 wizard.storeLocation((String)list.get(2));
         }
-        
+
         //System.out.println(wizard.getLocations());
     }
-    
-    
+
+
     public void tableChanged(TableModelEvent e) {
         if (tableModel.isAnySelected()) {
             nav.enableNext(true);
@@ -117,31 +117,32 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
             nav.enableNext(false);
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTextField2;
     private InstallWizard wizard;
     private MyTableModel tableModel;
     private NavPanel nav;
     //private static final String [] versions = {"StarOffice 6.0", "OpenOffice.org 1.0","OpenOffice.org 1.0.1","OpenOffice.org 642","OpenOffice.org 643","StarOffice 6.1"};
-    private static final String [] versions = {"OpenOffice.org 643"};
+    //private static final String [] versions = {"OpenOffice.org 643"};
+    private static final String [] versions = {"OpenOffice.org 643", "StarOffice 6.1"};
     // End of variables declaration//GEN-END:variables
-        
+
 }
 
 class MyTableModel extends AbstractTableModel {
     ArrayList data;
     String colNames[] = {"Install", "Name", "Location"};
-    
+
     MyTableModel(Properties properties, String [] validVersions) {
         data = new ArrayList();
         //System.out.println(properties);
-        
+
         int len = validVersions.length;
         for (int i = 0; i < len; i++) {
             String key = validVersions[i];
             String path = null;
-            
+
             if ((path = properties.getProperty(key)) != null) {
                 ArrayList row = new ArrayList();
                 row.add(0, new Boolean(false));
@@ -151,28 +152,28 @@ class MyTableModel extends AbstractTableModel {
             }
         }
     }// MyTableModel
-    
+
     public int getColumnCount() {
         return 3;
     }
-    
+
     public int getRowCount() {
         return data.size();
     }
-    
+
     public String getColumnName(int col) {
         return colNames[col];
     }
-    
+
     public Object getValueAt(int row, int col) {
         ArrayList aRow = (ArrayList)data.get(row);
         return aRow.get(col);
     }
-    
+
     public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
-    
+
     public boolean isCellEditable(int row, int col) {
         if (col == 0) {
             return true;
@@ -180,17 +181,17 @@ class MyTableModel extends AbstractTableModel {
             return false;
         }
     }
-    
+
     public void setValueAt(Object value, int row, int col) {
         ArrayList aRow = (ArrayList)data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
     }
-    
+
     String [] getSelected() {
         return null;
     }
-    
+
     public boolean isAnySelected() {
         Iterator iter = data.iterator();
         while (iter.hasNext()) {
@@ -201,5 +202,5 @@ class MyTableModel extends AbstractTableModel {
         }
         return false;
     }
-    
+
 }

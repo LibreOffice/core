@@ -14,9 +14,12 @@ public class ZipData
     public  ZipData(String file){
     zipfile=file;
     }
-    
+
     public static boolean extractEntry(String entry, String destination, javax.swing.JLabel statusLabel){
         boolean status = false;
+        System.err.println("Copying: "+entry);
+        System.err.println("in: "+zipfile);
+        System.err.println(" to: "+destination);
         if (statusLabel != null)
             statusLabel.setText("Copying " + entry);
     try{
@@ -30,21 +33,21 @@ public class ZipData
         else{
         destination = destination.concat(entry);
         }
-        
-        //System.out.println("\n Unzipping "+zentry.getName()+" to "+destination);
+
+        System.out.println("\n Unzipping "+zentry.getName()+" to "+destination);
         FileOutputStream fos = new FileOutputStream(destination);
         int bytesread=0,offset=0;
         byte[] bytearr = new byte[10000];
         bytesread= is.read(bytearr);
         while (bytesread!=-1){
         fos.write(bytearr, 0,bytesread);
-         bytesread= is.read(bytearr); 
+         bytesread= is.read(bytearr);
         offset=offset+bytesread;
         }
-        fos.close();      
+        fos.close();
         is.close();
         status = true;
-       
+
     }
     catch(Exception e){
        System.out.println("\nZip Error: File not found");
@@ -64,7 +67,7 @@ public class ZipData
             ZipFile zip = new ZipFile(zipfile);
 
             ZipEntry entry = null;
-            
+
             Object ObjArray[] =new Object[zip.size()];
             int i =0;
             for (Enumeration e = zip.entries(); e.hasMoreElements(); entry = (ZipEntry)e.nextElement())
@@ -74,9 +77,9 @@ public class ZipData
                 ObjArray[i]=entry.getName();
                 i++;
                 }
-                
+
             }
-            
+
         }
         catch (IOException e)
         {
@@ -100,8 +103,8 @@ public class ZipData
             System.err.println(e);
         }
     }
-    
-        
+
+
         public static void main(String args[])
     {
         getContents(args[0]);

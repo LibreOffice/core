@@ -5,7 +5,7 @@ import java.io.*;
 import javax.swing.*;
 
 public class Register{
-    
+
     private static JProgressBar progressBar;
 
     // not required
@@ -20,12 +20,12 @@ public class Register{
         String classpath="";
         int exitcode=0;
         boolean passed=true;
-        String env[] = new String[1]; 
+        String env[] = new String[1];
         Runtime rt= Runtime.getRuntime();
         String progpath=path.concat(File.separator+"program"+File.separator);
         BufferedReader stdInput;
         Process p;
-            
+
             statusLabel.setText("Registering Scripting Framework...");
             progressBar.setString("Registering Scripting Framework ");
             progressBar.setValue(7);
@@ -36,11 +36,12 @@ public class Register{
         if (opSys.indexOf("Windows")==-1){
                 //System.out.println( "Not Windows");
         env[0]="LD_LIBRARY_PATH="+progpath;
-        
+
         p=rt.exec("chmod a+x "+progpath+"pkgchk");
         exitcode=p.waitFor();
         if (exitcode ==0){
                     //scriptnm.zip is an old SF. Works with SO6.1 EA2
+                    System.err.println("About to run command: "+progpath+"./pkgchk "+progpath+"ooscriptframe.zip");
                     p=rt.exec(progpath+"./pkgchk "+progpath+"ooscriptframe.zip", env);
                     //p=rt.exec(progpath+"pkgchk "+progpath+"scriptnm.zip" );
                 }
@@ -52,7 +53,7 @@ public class Register{
         System.err.println("\""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
                 p=rt.exec("\""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
         }
-            exitcode=p.waitFor();   
+            exitcode=p.waitFor();
             if (exitcode !=0){
         System.out.println("\n PkgChk Failed!");
         passed=false;
@@ -63,7 +64,7 @@ public class Register{
         if (opSys.indexOf("Windows")==-1){
                 //System.out.println( "Not Windows");
         env[0]="LD_LIBRARY_PATH="+progpath;
-                
+
                 /*
                 p=rt.exec("mkdir /scriptdev/neil/DeleteThisVV");
         exitcode=p.waitFor();
@@ -71,7 +72,7 @@ public class Register{
                     System.out.println( "mkdir cmd succeeded" );
                 }else{ System.out.println( "mkdir cmd failed" ); }
                 */
-                
+
         p=rt.exec("chmod a+x "+progpath+"regsingleton");
         exitcode=p.waitFor();
         if (exitcode ==0)
@@ -84,19 +85,19 @@ public class Register{
         System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
         p=rt.exec("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
         }
-            exitcode=p.waitFor();   
+            exitcode=p.waitFor();
             if (exitcode !=0){
         //System.out.println("\n Regsingleton ScriptRuntimeForJava Failed!");
         passed=false;
-        }            
+        }
 
-            
+
             // regsingleton ScriptStorageManager
             statusLabel.setText("Registering Singleton ScriptStorageManager...");
         if (opSys.indexOf("Windows")==-1){
                 //System.out.println( "Not Windows");
         env[0]="LD_LIBRARY_PATH="+progpath;
-                
+
         p=rt.exec("chmod a+x "+progpath+"regsingleton");
         exitcode=p.waitFor();
         if (exitcode ==0)
@@ -107,23 +108,23 @@ public class Register{
         System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
                 p=rt.exec("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
         }
-            exitcode=p.waitFor();   
+            exitcode=p.waitFor();
             if (exitcode !=0){
         //System.out.println("\n Regsingleton ScriptStorageManager Failed!");
         passed=false;
-        }               
-        
+        }
+
         // Commands:
         //regsingleton <Office Installation>/user/uno_packages/cache/services.rdb drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava
         //regsingleton <Office Installation>/user/uno_packages/cache/services.rdb drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager
 
-            
+
             // updating ProtocolHandler
-            statusLabel.setText("Updating ProtocolHandler...");            
+            statusLabel.setText("Updating ProtocolHandler...");
             FileUpdater.updateProtocolHandler(path);
-            
+
             // updating StarBasic libraries
-            statusLabel.setText("Updating StarBasic libraries...");            
+            statusLabel.setText("Updating StarBasic libraries...");
             FileUpdater.updateScriptXLC(path);
             FileUpdater.updateDialogXLC(path);
     }
@@ -131,8 +132,8 @@ public class Register{
         System.out.println("Error:"+e);
     }
     }// windows
-    
- 
+
+
 
     public static void register(String path, javax.swing.JLabel statusLabel,JProgressBar pBar){
         progressBar=pBar;
@@ -149,17 +150,17 @@ public class Register{
     if (newString.indexOf(" ")>0){
             tmpStr1=tmpStr1.concat(newString.substring(i,newString.indexOf(" ")));
             tmpStr1=tmpStr1.concat("\\ ");
-        newString=newString.substring(newString.indexOf(" ")+1,newString.length()); 
+        newString=newString.substring(newString.indexOf(" ")+1,newString.length());
     }
     tmpStr1=tmpStr1.concat(newString);
     //System.out.println(""+tmpStr1);
     char url[]=path.toCharArray();
     char test[]=new char[path.length()*2];
     int j=0;
-    
+
     path = path.substring (0,path.length()-1);
     windows(tmpStr1,path, statusLabel);
-    
+
     }// register
 
 }//Register

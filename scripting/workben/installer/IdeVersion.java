@@ -21,14 +21,14 @@ import javax.swing.table.*;
 import javax.swing.SwingUtilities.*;
 
 public class IdeVersion extends javax.swing.JPanel implements ActionListener, TableModelListener {
-    
+
     /** Creates new form Welcome */
     public IdeVersion(InstallWizard wizard) {
         this.wizard=wizard;
     setBackground(Color.white);
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -42,7 +42,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
 
     try {
             //props = InstUtil.getNetbeansLocation();
-        
+
         Properties netbeansProps = InstUtil.getNetbeansLocation();
         Properties jeditProps = InstUtil.getJeditLocation();
         Properties ideProps = new Properties();
@@ -56,6 +56,8 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 }
             }
         }
+        if(jeditProps!=null)
+        {
         for( int j = 0; j < jeditProps.size(); j++ ) {
             for( int v = 0; v < versions.length; v++ ) {
                 String key = versions[v];
@@ -63,11 +65,12 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
                 if ((path = jeditProps.getProperty(key)) != null) {
                     //System.out.println( "j="+j+" v="+v + " jEdit " + " key=" + key + " path=" + path );
                     ideProps.put(key, path);
-                }           
-            }           
-        }       
+                }
+            }
+        }
+        }
         props = ideProps;
-        
+
         /*
         int len = versions.length;
         for (int i = 0; i < len; i++) {
@@ -89,14 +92,17 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         catch (IOException eIO) {
             //Message about no installed versions found
             System.err.println("Failed to parse .netbeans/ide.log");
-        //JOptionPane.showMessageDialog(this, "There was a problem reading from the NetBeans ide.log file.", "Parse Error", JOptionPane.ERROR_MESSAGE);         
+        //JOptionPane.showMessageDialog(this, "There was a problem reading from the NetBeans ide.log file.", "Parse Error", JOptionPane.ERROR_MESSAGE);
         //wizard.exitForm(null);
         }
-    
+        catch (Exception e) {
+            System.err.println("Exception thrown in initComponents");
+        }
+
         tableModel = new MyTableModelIDE (props, versions);
     if (tableModel.getRowCount() == 0)
     {
-            JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);           
+            JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
             //wizard.exitForm(null);
     }
 
@@ -116,16 +122,16 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         add(versionPanel, BorderLayout.CENTER);
         nav = new NavPanel(wizard, true, false, true, InstallWizard.IDEWELCOME, InstallWizard.IDEFINAL);
         nav.setNextListener(this);
-        add(nav, BorderLayout.SOUTH);    
-        
+        add(nav, BorderLayout.SOUTH);
+
     }// initComponents
-    
-    
+
+
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(320, 280);
     }
-    
-    
+
+
     public void actionPerformed(ActionEvent ev) {
         wizard.clearLocations();
         int len = tableModel.data.size();
@@ -134,11 +140,11 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             if (((Boolean)list.get(0)).booleanValue() == true)
                 wizard.storeLocation((String)list.get(2));
         }
-        
+
         //System.out.println(wizard.getLocations());
     }
-    
-    
+
+
     public void tableChanged(TableModelEvent e) {
         if (tableModel.isAnySelected()) {
             nav.enableNext(true);
@@ -147,7 +153,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
             nav.enableNext(false);
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTextField2;
     private InstallWizard wizard;
@@ -155,26 +161,26 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     private NavPanel nav;
     //private static final String [] versions = {"StarOffice 6.0", "OpenOffice.org 1.0","OpenOffice.org 1.0.1","OpenOffice.org 642","OpenOffice.org 643","StarOffice 6.1"};
     //private static final String [] versions = {"OpenOffice.org 643"};
-    
+
     private static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3"};
     // End of variables declaration//GEN-END:variables
-        
+
 }
 
 
 class MyTableModelIDE extends AbstractTableModel {
     ArrayList data;
     String colNames[] = {"Install", "Name", "Location"};
-    
+
     MyTableModelIDE (Properties properties, String [] validVersions) {
         data = new ArrayList();
         //System.out.println(properties);
-        
+
         int len = validVersions.length;
         for (int i = 0; i < len; i++) {
             String key = validVersions[i];
             String path = null;
-            
+
             if ((path = properties.getProperty(key)) != null) {
                 ArrayList row = new ArrayList();
                 row.add(0, new Boolean(false));
@@ -184,28 +190,28 @@ class MyTableModelIDE extends AbstractTableModel {
             }
         }
     }// MyTableModel
-    
+
     public int getColumnCount() {
         return 3;
     }
-    
+
     public int getRowCount() {
         return data.size();
     }
-    
+
     public String getColumnName(int col) {
         return colNames[col];
     }
-    
+
     public Object getValueAt(int row, int col) {
         ArrayList aRow = (ArrayList)data.get(row);
         return aRow.get(col);
     }
-    
+
     public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
-    
+
     public boolean isCellEditable(int row, int col) {
         if (col == 0) {
             return true;
@@ -213,17 +219,17 @@ class MyTableModelIDE extends AbstractTableModel {
             return false;
         }
     }
-    
+
     public void setValueAt(Object value, int row, int col) {
         ArrayList aRow = (ArrayList)data.get(row);
         aRow.set(col, value);
         fireTableCellUpdated(row, col);
     }
-    
+
     String [] getSelected() {
         return null;
     }
-    
+
     public boolean isAnySelected() {
         Iterator iter = data.iterator();
         while (iter.hasNext()) {
@@ -234,6 +240,6 @@ class MyTableModelIDE extends AbstractTableModel {
         }
         return false;
     }
-    
+
 }
 
