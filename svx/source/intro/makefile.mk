@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 09:44:11 $
+#   last change: $Author: obo $ $Date: 2004-11-17 16:19:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,9 @@ RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 # setting the compiled by $user$ using $license$ string in the about box
 
 .IF "$(BUILD_SPECIAL)"==""
-RSCUPDVERMAC+=-DOOO_VENDOR="$(USER)$(USERNAME)" -DOOO_LICENSE="LGPL"
+RSCDEFS+=-DOOO_VENDOR="$(USER)$(USERNAME)" -DOOO_LICENSE="LGPL"
 .ELSE
-RSCUPDVERMAC+=-DBUILD_SPECIAL=True
+RSCDEFS+=-DBUILD_SPECIAL=True
 .ENDIF
 
 .INCLUDE :  $(UPD)minor.mk
