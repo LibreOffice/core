@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:28:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,10 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     SfxViewShell* pViewShellBase = SfxViewShell::Current();
     if (pViewShellBase!=NULL && pViewShellBase->ISA(::sd::ViewShellBase))
     {
-        ::sd::ViewShell* pViewShell = ::sd::ViewShellBase::GetMainViewShell(
+        ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(
             pViewShellBase->GetViewFrame());
+        DBG_ASSERT(pBase!=NULL, "ViewShellBase not valid");
+        ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
         if (pViewShell != NULL && pViewShell->GetDoc() == pDoc)
         {
             SdPage* pPage =
