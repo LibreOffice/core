@@ -35,9 +35,17 @@ import com.sun.star.lang.XMultiComponentFactory;
  * to the client.
  */
 public class ConverterServlet extends HttpServlet {
-  /** Specifies the working directory on the web server.
+  /** Specifies the temporary directory on the web server.
    */
-  private String stringWorkingDirectory = "g:/trash/";
+  private String stringWorkingDirectory = System.getProperty( "java.io.tmpdir" );
+
+  /** Specifies the host for the office server.
+   */
+  private String stringHost = "localhost";
+
+  /** Specifies the port for the office server.
+   */
+  private String stringPort = "8200";
 
   /** Called by the server (via the service method) to allow a servlet to handle
    * a POST request. The file from the client will be uploaded to the web server
@@ -151,7 +159,7 @@ public class ConverterServlet extends HttpServlet {
       // Resolves an object that is specified as follow:
       // uno:<connection description>;<protocol description>;<initial object name>
       Object objectInitial = xurlresolver.resolve(
-      "uno:socket,host=localhost,port=8200;urp;StarOffice.ServiceManager" );
+      "uno:socket,host=" + stringHost + ",port=" + stringPort + ";urp;StarOffice.ServiceManager" );
 
       // Create a service manager from the initial object
       xmulticomponentfactory = ( XMultiComponentFactory )
