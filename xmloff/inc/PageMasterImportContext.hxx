@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-10-24 09:09:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 14:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@
 
 class PageStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString             sPageUsage;
-
+    ::rtl::OUString sPageUsage;
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
@@ -95,12 +94,9 @@ public:
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    void FillPropertySet(const ::com::sun::star::uno::Reference<
+    virtual void FillPropertySet(
+            const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
-
-    virtual void CreateAndInsert( sal_Bool bOverwrite );
-    virtual void CreateAndInsertLate( sal_Bool bOverwrite );
-    virtual void Finish( sal_Bool bOverwrite );
 };
 
 #endif
