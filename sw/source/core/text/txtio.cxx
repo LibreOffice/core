@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 12:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "portox.hxx"
 #include "portxt.hxx"
 #include "pordrop.hxx"
+#include "pormulti.hxx"
 #include "ndhints.hxx"
 #include "frmsh.hxx"
 
@@ -431,6 +432,7 @@ IMPL_OUTOP( SwHolePortion )
 IMPL_OUTOP( SwDropPortion )
 IMPL_OUTOP( SwKernPortion )
 IMPL_OUTOP( SwArrowPortion )
+IMPL_OUTOP( SwMultiPortion )
 
 const char *GetPortionName( const MSHORT nType )
 {
@@ -766,6 +768,15 @@ SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
 SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {ARROW:" );
+    rOs << pTxt;
+    SwLinePortion::operator<<( rOs );
+    rOs << pClose;
+    return rOs;
+}
+
+SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
+{
+    CONSTCHAR( pTxt, " {MULTI:" );
     rOs << pTxt;
     SwLinePortion::operator<<( rOs );
     rOs << pClose;
