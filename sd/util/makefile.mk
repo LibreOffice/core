@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 11:20:56 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:53:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SHL1STDLIBS+= \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
+    $(BASEGFXLIB) \
     $(GOODIESLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
@@ -113,6 +114,7 @@ SHL1STDLIBS+= \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(VOSLIB) \
+    $(CANVASLIB) \
     $(SALLIB)
 
 
