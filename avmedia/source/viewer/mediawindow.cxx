@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:07:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HPP_
 #include <com/sun/star/media/XManager.hpp>
 #endif
+
+#define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
 
 using namespace ::com::sun::star;
 
@@ -425,7 +427,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
 bool MediaWindow::executeMediaURLDialog( Window* pParent, ::rtl::OUString& rURL, bool bInsertDialog )
 {
-       ::sfx2::FileDialogHelper         aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper        aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
     static const ::rtl::OUString    aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     FilterNameVector                aFilters;
     const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
@@ -521,10 +523,6 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
                             {
                                 const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
 
-#ifdef DEBUG
-                                fprintf( stderr, "Media size: %d x %d\n", aAwtSize.Width, aAwtSize.Height );
-#endif
-
                                 pPreferredSizePixel->Width() = aAwtSize.Width;
                                 pPreferredSizePixel->Height() = aAwtSize.Height;
                             }
@@ -562,6 +560,55 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const ::rtl::OUString& rURL )
 {
     return priv::MediaWindowImpl::createPlayer( rURL );
+}
+
+// -------------------------------------------------------------------------
+
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const ::rtl::OUString& rURL,
+                                                            bool bAllowToCreateReplacementGraphic,
+                                                            double fMediaTime )
+{
+    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL ) );
+    uno::Reference< graphic::XGraphic > xRet;
+    ::std::auto_ptr< Graphic >          apGraphic;
+
+    if( xPlayer.is() )
+    {
+        uno::Reference< media::XFrameGrabber > xGrabber( xPlayer->createFrameGrabber() );
+
+        if( xGrabber.is() )
+        {
+            if( AVMEDIA_FRAMEGRABBER_DEFAULTFRAME == fMediaTime )
+                fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME;
+
+            if( fMediaTime >= xPlayer->getDuration() )
+                fMediaTime = ( xPlayer->getDuration() * 0.5 );
+
+            xRet = xGrabber->grabFrame( fMediaTime );
+        }
+
+        if( !xRet.is() && bAllowToCreateReplacementGraphic  )
+        {
+            awt::Size aPrefSize( xPlayer->getPreferredPlayerWindowSize() );
+
+            if( !aPrefSize.Width && !aPrefSize.Height )
+            {
+                const BitmapEx aBmpEx( AVMEDIA_RESID( AVMEDIA_BMP_AUDIOLOGO ) );
+                apGraphic.reset( new Graphic( aBmpEx ) );
+            }
+        }
+    }
+
+    if( !xRet.is() && !apGraphic.get() && bAllowToCreateReplacementGraphic )
+    {
+        const BitmapEx aBmpEx( AVMEDIA_RESID( AVMEDIA_BMP_EMPTYLOGO ) );
+        apGraphic.reset( new Graphic( aBmpEx ) );
+    }
+
+    if( apGraphic.get() )
+        xRet = apGraphic->GetXGraphic();
+
+    return xRet;
 }
 
 } // namespace avemdia
