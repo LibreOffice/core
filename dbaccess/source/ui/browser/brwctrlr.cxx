@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:45:49 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 14:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2513,11 +2513,14 @@ IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
 {
     SbaGridControl* pVclGrid = m_pContent ? m_pContent->getVclControl() : NULL;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this
-    if (!pVclGrid->IsEditing())
-        return 0L;
+    if(pVclGrid)
+    {
+        if (!pVclGrid->IsEditing())
+            return 0L;
 
-    if (pVclGrid->HasChildPathFocus())
-        pVclGrid->Controller()->GetWindow().GrabFocus();
+        if (pVclGrid->HasChildPathFocus())
+            pVclGrid->Controller()->GetWindow().GrabFocus();
+    }
 
     return 0L;
 }
