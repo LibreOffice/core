@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biginteger.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,10 @@
 using namespace ::com::sun::star::uno ;
 using ::rtl::OUString ;
 
-Sequence< sal_Int8 > numericStringToBigInteger (
-    OUString numeral
-) {
-    if( numeral.getStr() != NULL ) {
+Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
+{
+    if( numeral.getStr() != NULL )
+    {
         xmlChar* chNumeral ;
         const xmlSecByte* bnInteger ;
         xmlSecSize length ;
@@ -108,8 +108,9 @@ Sequence< sal_Int8 > numericStringToBigInteger (
 
         Sequence< sal_Int8 > integer( length ) ;
         for( unsigned int i = 0 ; i < length ; i ++ )
+        {
             integer[i] = *( bnInteger + i ) ;
-        //  integer[i] = *( bb + sizeof( bb ) - len + i ) ;
+        }
 
         xmlSecBnFinalize( &bn ) ;
         return integer ;
@@ -118,9 +119,8 @@ Sequence< sal_Int8 > numericStringToBigInteger (
     return NULL ;
 }
 
-OUString bigIntegerToNumericString (
-    Sequence< sal_Int8 > integer
-) {
+OUString bigIntegerToNumericString ( Sequence< sal_Int8 > integer )
+{
     OUString aRet ;
 
     if( integer.getLength() ) {
