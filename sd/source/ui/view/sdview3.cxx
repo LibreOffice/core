@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 10:54:50 $
+ *  last change: $Author: jl $ $Date: 2001-08-16 11:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,9 +554,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( !bLink &&
              ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ) &&
+               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) )  &&
                aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
     {
         SotStorageStreamRef             xStm;
@@ -564,9 +562,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
             ( aDataHelper.GetSotStorageStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
-              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ||
-              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ||
-              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ) )
+              aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ) )
         {
             SvStorageRef xStore( new SvStorage( *xStm ) );
 
@@ -654,6 +650,63 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                     bReturn = TRUE;
                 }
+            }
+        }
+    }
+    else if( !bLink &&
+             ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
+               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ) &&
+               aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) )
+    {
+        SotStorageStreamRef             xStm;
+        TransferableObjectDescriptor    aObjDesc;
+
+        if( aDataHelper.GetTransferableObjectDescriptor(
+            SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ))
+        {
+            UniString aEmptyStr;
+            SvStorage* xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+            SvInPlaceObjectRef xIPObj= &((SvFactory*)SvInPlaceObject::ClassFactory())
+                ->CreateAndInit( aDataHelper.GetTransferable(), xStore);
+
+            if( xIPObj.Is() )
+            {
+                String aName( pDocSh->InsertObject( xIPObj, String() )->GetObjName() );
+
+                if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+                    xIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, xIPObj->GetMapUnit() ) );
+
+                Size aSize( xIPObj->GetVisArea().GetSize() );
+
+                if( !aSize.Width() || !aSize.Height() )
+                {
+                    aSize.Width()  = 14100;
+                    aSize.Height() = 10000;
+                    xIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, xIPObj->GetMapUnit() ) );
+                    aSize = xIPObj->GetVisArea().GetSize();
+                }
+
+                aSize = OutputDevice::LogicToLogic( aSize, xIPObj->GetMapUnit(), MAP_100TH_MM );
+                Size aMaxSize( pDoc->GetMaxObjSize() );
+
+                aDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
+                aDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
+
+                Rectangle       aRect( aDropPos, aSize );
+                SdrOle2Obj*     pObj = new SdrOle2Obj( xIPObj, aName, aRect );
+                SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                ULONG           nOptions = SDRINSERT_SETDEFLAYER;
+
+                if( pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive() )
+                    nOptions |= SDRINSERT_DONTMARK;
+
+                InsertObject( pObj, *pPV, nOptions );
+
+                if( pImageMap )
+                    pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
+
+                bReturn = TRUE;
+
             }
         }
     }
