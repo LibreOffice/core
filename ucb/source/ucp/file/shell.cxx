@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-28 10:27:17 $
+ *  last change: $Author: obr $ $Date: 2001-06-01 08:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3104,7 +3104,11 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
     }
 
+#ifdef TF_FILEURL
+    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
+#else
     if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
+#endif
     {
         sal_Bool dummy = true;
 
@@ -3146,7 +3150,11 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
     }
 
+#ifdef TF_FILEURL
+    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
+#else
     if( m_bFaked && it->first.compareToAscii( "//./" ) == 0 )
+#endif
     {
         sal_Bool readonly = true;
         aAny <<= readonly;
@@ -3280,8 +3288,8 @@ shell::getParentName( const rtl::OUString& aFileName )
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
         aParent += rtl::OUString::createFromAscii( "/" );
 
-    if( 0 == aParent.compareToAscii( "//." ) )
-        aParent = rtl::OUString::createFromAscii( "//./" );
+    if( 0 == aParent.compareToAscii( "file://" ) )
+        aParent = rtl::OUString::createFromAscii( "file:///" );
 
     return aParent;
 }

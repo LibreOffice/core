@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-09 14:46:22 $
+ *  last change: $Author: obr $ $Date: 2001-06-01 08:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,11 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         return;
 
     // No write access to route
+#ifdef TF_FILEURL
+    if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
+#else
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
+#endif
         throw CommandAbortedException();
 
 
