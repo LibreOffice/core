@@ -12,6 +12,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\xrmex %_DEST%\bin%_EXT%\xrmex
 ..\%__SRC%\bin\gsicheck.exe %_DEST%\bin%_EXT%\gsicheck.exe
 ..\%__SRC%\bin\gsicheck %_DEST%\bin%_EXT%\gsicheck
+..\%__SRC%\bin\helpex.exe %_DEST%\bin%_EXT%\helpex.exe
+..\%__SRC%\bin\helpex %_DEST%\bin%_EXT%\helpex
 ..\%__SRC%\bin\ulfex.exe %_DEST%\bin%_EXT%\ulfex.exe
 ..\%__SRC%\bin\ulfex %_DEST%\bin%_EXT%\ulfex
 ..\%__SRC%\bin\txtconv.exe %_DEST%\bin%_EXT%\txtconv.exe
