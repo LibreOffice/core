@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-14 10:56:55 $
+ *  last change: $Author: mt $ $Date: 2001-11-22 18:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,66 +1630,72 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     DBG_ASSERT( pDragAndDropInfo, "Drop - No Drag&Drop info?!" );
+    DBG_ASSERT( pDragAndDropInfo->bDragAccepted, "Drop? Drag was not accepted!" );
 
-    BOOL bChanges = FALSE;
-
-    HideDDCursor();
-
-    if ( pDragAndDropInfo->bStarterOfDD )
+    if ( pDragAndDropInfo->bDragAccepted )
     {
-        pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
-        pDragAndDropInfo->bUndoAction = TRUE;
-    }
+        BOOL bChanges = FALSE;
 
-    if ( pDragAndDropInfo->bOutlinerMode )
-    {
-        bChanges = TRUE;
-        GetEditViewPtr()->MoveParagraphs( Range( pDragAndDropInfo->aBeginDragSel.nStartPara, pDragAndDropInfo->aBeginDragSel.nEndPara ), pDragAndDropInfo->nOutlinerDropDest );
-    }
-    else
-    {
-        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
-        if ( xDataObj.is() )
+        HideDDCursor();
+
+        if ( pDragAndDropInfo->bStarterOfDD )
+        {
+            pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
+            pDragAndDropInfo->bUndoAction = TRUE;
+        }
+
+        if ( pDragAndDropInfo->bOutlinerMode )
         {
             bChanges = TRUE;
-            // Selektion wegmalen...
-            DrawSelection();
-            EditPaM aPaM( pDragAndDropInfo->aDropDest );
-
-            PasteOrDropInfos aPasteOrDropInfos;
-            aPasteOrDropInfos.nAction = EE_ACTION_DROP;
-            aPasteOrDropInfos.nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-            pEditEngine->pImpEditEngine->aBeginPasteOrDropHdl.Call( &aPasteOrDropInfos );
-
-            EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
-
-            aPasteOrDropInfos.nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
-            pEditEngine->pImpEditEngine->aEndPasteOrDropHdl.Call( &aPasteOrDropInfos );
-
-            SetEditSelection( aNewSel );
-            pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
-            if ( pDragAndDropInfo->bStarterOfDD )
+            GetEditViewPtr()->MoveParagraphs( Range( pDragAndDropInfo->aBeginDragSel.nStartPara, pDragAndDropInfo->aBeginDragSel.nEndPara ), pDragAndDropInfo->nOutlinerDropDest );
+        }
+        else
+        {
+            uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+            if ( xDataObj.is() )
             {
-                // Nur dann setzen, wenn in gleicher Engine!
-                pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
-                pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
-                pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
-                pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
-                pDragAndDropInfo->bDroppedInMe = sal_True;
+                bChanges = TRUE;
+                // Selektion wegmalen...
+                DrawSelection();
+                EditPaM aPaM( pDragAndDropInfo->aDropDest );
+
+                PasteOrDropInfos aPasteOrDropInfos;
+                aPasteOrDropInfos.nAction = EE_ACTION_DROP;
+                aPasteOrDropInfos.nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+                pEditEngine->pImpEditEngine->aBeginPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
+                EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+
+                aPasteOrDropInfos.nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
+                pEditEngine->pImpEditEngine->aEndPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
+                SetEditSelection( aNewSel );
+                pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
+                if ( pDragAndDropInfo->bStarterOfDD )
+                {
+                    // Nur dann setzen, wenn in gleicher Engine!
+                    pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+                    pDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
+                    pDragAndDropInfo->aDropSel.nEndPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aNewSel.Max().GetNode() );
+                    pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
+                    pDragAndDropInfo->bDroppedInMe = sal_True;
+                }
             }
         }
+
+        if ( bChanges )
+        {
+            rDTDE.Context->acceptDrop( rDTDE.DropAction );
+        }
+
+        if ( !pDragAndDropInfo->bStarterOfDD )
+        {
+            delete pDragAndDropInfo;
+            pDragAndDropInfo = NULL;
+        }
+
+        rDTDE.Context->dropComplete( bChanges );
     }
-
-    if ( bChanges )
-        rDTDE.Context->acceptDrop( rDTDE.DropAction );
-
-    if ( !pDragAndDropInfo->bStarterOfDD )
-    {
-        delete pDragAndDropInfo;
-        pDragAndDropInfo = NULL;
-    }
-
-    rDTDE.Context->dropComplete( bChanges );
 }
 
 void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
@@ -1839,6 +1845,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     HideDDCursor();
                     ShowDDCursor(aEditCursor );
                 }
+                pDragAndDropInfo->bDragAccepted = TRUE;
                 rDTDE.Context->acceptDrag( rDTDE.DropAction );
             }
         }
@@ -1847,6 +1854,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     if ( !bAccept )
     {
         HideDDCursor();
+        pDragAndDropInfo->bDragAccepted = FALSE;
         rDTDE.Context->rejectDrag();
     }
 }
