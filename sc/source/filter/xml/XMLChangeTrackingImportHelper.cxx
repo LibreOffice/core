@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:24:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
             sal_Int32 nOffset(0);
             ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
             pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
-            static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
+            static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
 
         if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
@@ -782,9 +782,9 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                     (nRow >= 0) && (nRow <= MAXROW) &&
                     (nTab >= 0) && (nTab <= MAXTAB))
                 {
-                    ScAddress aAddress (static_cast<sal_uInt16>(nCol),
-                                        static_cast<sal_uInt16>(nRow),
-                                        static_cast<sal_uInt16>(nTab));
+                    ScAddress aAddress (static_cast<SCCOL>(nCol),
+                                        static_cast<SCROW>(nRow),
+                                        static_cast<SCTAB>(nTab));
                     ScBaseCell* pCell = pDoc->GetCell(aAddress);
                     if (pCell)
                     {
@@ -804,7 +804,8 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             {
                                 if (nMatrixFlag == MM_FORMULA)
                                 {
-                                    sal_uInt16 nCols, nRows;
+                                    SCCOL nCols;
+                                    SCROW nRows;
                                     static_cast<ScFormulaCell*>(pCell)->GetMatColsRows(nCols, nRows);
                                     static_cast<ScFormulaCell*>(pNewCell)->SetMatColsRows(nCols, nRows);
                                 }
