@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:51:40 $
+ *  last change: $Author: os $ $Date: 2002-09-17 14:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,8 +451,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     const SwPageDesc& rDesc = rSh.GetPageDesc( nDescId );
 
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
-    const BOOL bVerticalWriting = !bBrowse && (rFrameDir.GetValue() == FRMDIR_VERT_TOP_RIGHT ||
-                                    rFrameDir.GetValue() == FRMDIR_VERT_TOP_LEFT);
+    const BOOL bVerticalWriting = rSh.IsInVerticalText();
     const SwFmtHeader& rHeaderFmt = rDesc.GetMaster().GetHeader();
     SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
 
@@ -725,26 +724,24 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 SwPageDesc aDesc( rDesc );
                 aDesc.GetMaster().SetAttr( aCol );
                 rSh.ChgPageDesc( rSh.GetCurPageDesc(), aDesc );
-
-
-/*              aSet.Put( aCol );
-//              rSh.StartAction();
-//              rSh.Push();
-//              rSh.SetFlyFrmAttr( aSet );*/
             }
         }
         else if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
-            long nDeltaX = bVerticalWriting ?
-                rRect.Right() + aLongLR.GetRight() - nPageWidth -  DOCUMENTBORDER  :
+
+            BOOL bRTL;
+            BOOL bVerticalFrame = (bFrmSelection && rSh.IsFrmVertical(TRUE, bRTL))|| (!bFrmSelection && bVerticalWriting);
+            long nDeltaX = bVerticalFrame ?
+                rRect.Right() - nPageWidth - DOCUMENTBORDER + aLongLR.GetRight() :
                 DOCUMENTBORDER + aLongLR.GetLeft() - rRect.Left();
 
             SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                         RES_VERT_ORIENT, RES_HORI_ORIENT,
                                         RES_COL, RES_COL, 0 );
-            if(bVerticalWriting)
+
+            if(bVerticalFrame)
             {
                 SwFmtVertOrient aVertOrient(pFmt->GetVertOrient());
                 aVertOrient.SetVertOrient(VERT_NONE);
@@ -838,16 +835,18 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
-
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
-            const long nDeltaY = DOCUMENTBORDER + aLongULSpace.GetUpper() -
+            const long nDeltaY =
+                    DOCUMENTBORDER + aLongULSpace.GetUpper() -
                                     rRect.Top();
             const long nHeight = nPageHeight -
                             (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
             SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
                                         RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
-            if(bVerticalWriting)
+            //which of the orientation attributes is to be put depends on the frame's environment
+            BOOL bRTL;
+            if((bFrmSelection && rSh.IsFrmVertical(TRUE, bRTL))|| (!bFrmSelection && bVerticalWriting))
             {
                 SwFmtHoriOrient aHoriOrient(pFmt->GetHoriOrient());
                 aHoriOrient.SetHoriOrient(HORI_NONE);
@@ -1251,8 +1250,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
     const SwPageDesc& rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
-    const BOOL bVerticalWriting = !bBrowse && (rFrameDir.GetValue() == FRMDIR_VERT_TOP_RIGHT ||
-                                    rFrameDir.GetValue() == FRMDIR_VERT_TOP_LEFT);
+    const BOOL bVerticalWriting = rSh.IsInVerticalText();
 
     //enable tab stop display on the rulers depending on the writing direction
     WinBits nRulerStyle = pHRuler->GetStyle() & ~WB_EXTRAFIELD;
@@ -1503,13 +1501,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_BORDERS:
         {
             BOOL bRTL;
-            BOOL bFrameSelOrInFrame = (bFrmSelection ||  (nFrmType & ( FRMTYPE_COLUMN  )));
-            BOOL bFrameHasVerticalColumns =  bFrameSelOrInFrame &&
-                rSh.IsFrmVertical(FALSE, bRTL);
+            BOOL bFrameHasVerticalColumns =  bFrmSelection && rSh.IsFrmVertical(FALSE, bRTL);
 
             if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
-                    ((!bVerticalWriting && !bFrameSelOrInFrame) || (bFrameSelOrInFrame && !bFrameHasVerticalColumns)) ||
-                (SID_RULER_BORDERS) == nWhich && bVerticalWriting && (!bFrameSelOrInFrame || bFrameHasVerticalColumns))
+                    ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
+                ((SID_RULER_BORDERS == nWhich) &&
+                    ((bVerticalWriting && !bFrmSelection) || bFrameHasVerticalColumns)))
                 rSet.DisableItem(nWhich);
             else if ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
@@ -1642,15 +1639,16 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         SvxColumnItem aColItem(nNum);
                         const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED, pPt);
 
-                        const long lWidth = bFrameHasVerticalColumns ? rSizeRect.Height() : rSizeRect.Width();
+                        BOOL bUseVertical = bFrameHasVerticalColumns || (!bFrmSelection && bVerticalWriting);
+                        const long lWidth = bUseVertical ? rSizeRect.Height() : rSizeRect.Width();
                         const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
-                        long nDist2 = ((bFrameHasVerticalColumns ? rRect.Height() : rRect.Width()) - lWidth) /2;
+                        long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;
                         ::lcl_FillSvxColumn(rCol, USHORT(lWidth), aColItem, nDist2);
 
                         SfxItemSet aFrameSet(GetPool(), RES_LR_SPACE, RES_LR_SPACE);
                         rSh.GetFlyFrmAttr( aFrameSet );
 
-                        if(bFrameHasVerticalColumns)
+                        if(bUseVertical)
                         {
                             aColItem.SetLeft ((USHORT)(rRect.Top() - DOCUMENTBORDER ));
                             aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() +
