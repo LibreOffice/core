@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 07:42:00 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,7 +1695,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, USHORT nCol, USHOR
             }
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
-        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_EDITMODE));
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_ENTEREDITMODE));
 }
 
 void ScTabView::UpdateEditView()
@@ -1721,12 +1721,17 @@ void ScTabView::KillEditView( BOOL bNoPaint )
     USHORT nCol2 = aViewData.GetEditEndCol();
     USHORT nRow2 = aViewData.GetEditEndRow();
     BOOL bPaint[4];
+    BOOL bNotifyAcc(false);
 
     BOOL bExtended = nRow1 != nRow2;                    // Col wird sowieso bis zum Ende gezeichnet
     BOOL bAtCursor = nCol1 == aViewData.GetCurX() &&
                      nRow1 == aViewData.GetCurY();
     for (i=0; i<4; i++)
+    {
         bPaint[i] = aViewData.HasEditView( (ScSplitPos) i );
+        if (bPaint[i])
+            bNotifyAcc = true;
+    }
     aViewData.ResetEditView();
     for (i=0; i<4; i++)
         if (pGridWin[i] && bPaint[i])
@@ -1775,6 +1780,9 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             if (pCur && pCur->IsVisible())
                 pCur->Hide();
         }
+
+    if ((bNotifyAcc) && (aViewData.GetViewShell()->HasAccessibilityObjects()))
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_LEAVEEDITMODE));
 }
 
 void ScTabView::UpdateFormulas()
