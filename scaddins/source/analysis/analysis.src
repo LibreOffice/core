@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:52:09 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie la valeur VRAI si le nombre est pair.";
             Text[ spanish ] = "Devuelve el valor VERDADERO si el n�mero es par.";
             Text[ finnish ] = "Returns true if the number is even";
-            Text[ italian ] = "Restituisce il valore VERO se il numero � pari.";
+            Text[ italian ] = "Restituisce il valore VERO se il numero diviso per 2 da come risultato un numero intero.";
             Text[ danish ] = "Returns true if the number is even";
             Text[ swedish ] = "Returnerar v�rdet SANT om talet �r j�mnt.";
             Text[ polish ] = "Zwraca warto�� PRAWDA, je�li liczba jest parzysta.";
@@ -1145,7 +1145,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie la valeur VRAI si le nombre est impair.";
             Text[ spanish ] = "Devuelve el valor VERDADERO si el n�mero es impar.";
             Text[ finnish ] = "Returns true if the number is odd";
-            Text[ italian ] = "Restituisce il valore VERO se il numero � dispari.";
+            Text[ italian ] = "Restituisce il valore VERO se il numero diviso per 2 da come risultato un numero non intero.";
             Text[ danish ] = "Returns true if the number is odd";
             Text[ swedish ] = "Returnerar v�rdet SANT om talet �r udda.";
             Text[ polish ] = "Zwraca warto�� PRAWDA, je�li liczba jest nieparzysta.";
@@ -1234,7 +1234,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Returns the multinomial of a set of numbers";
             Text[ japanese ] = "指定された数値の多項係数を返します。";
             Text[ korean ] = "수들의 다항식을 반환합니다";
-            Text[ chinese_simplified ] = "计算某一数组的阶乘与各数组阶乘乘积的比值。";
+            Text[ chinese_simplified ] = "计算数组的阶乘和与各数组阶乘乘积的比值。";
             Text[ chinese_traditional ] = "傳回引數之總和的階乘除以各引數之階乘的乘積之比率。";
             Text[ turkish ] = "Returns the multinomial of a set of numbers";
             Text[ arabic ] = "Returns the multinomial of a set of numbers";
@@ -1288,7 +1288,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "numbers";
             Text[ japanese ] = "数値、または多項係数の計算の対象となる数値のﾘｽﾄ。";
             Text[ korean ] = "수들";
-            Text[ chinese_simplified ] = "要计算其阶乘乘积的比值的数值和各个数组。";
+            Text[ chinese_simplified ] = "要计算其阶乘的比值的数据或数据列单。";
             Text[ chinese_traditional ] = "為一組要求出函數 multinomial 的數值。";
             Text[ turkish ] = "numbers";
             Text[ arabic ] = "numbers";
@@ -4403,7 +4403,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ portuguese_brazilian ] = "Returns the error function";
             Text[ japanese ] = "Gauss 誤差関数の積分値を返します。";
             Text[ korean ] = "오류 함수를 반환합니다";
-            Text[ chinese_simplified ] = "返回一个误差函数的上下限之间的积分。";
+            Text[ chinese_simplified ] = "返回高斯误差积分值。";
             Text[ chinese_traditional ] = "傳回上下限之間整合的誤差函數。";
             Text[ turkish ] = "Returns the error function";
             Text[ arabic ] = "Returns the error function";
@@ -8686,7 +8686,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie le taux d'escompte d'un titre.";
             Text[ spanish ] = "Es la tasa de descuento de un valor.";
             Text[ finnish ] = "Returns the discount rate for a security";
-            Text[ italian ] = "Restituisce il tasso di sconto di un titolo.";
+            Text[ italian ] = "Restituisce la percentuale di riduzione (sconto) di un titolo.";
             Text[ danish ] = "Returns the discount rate for a security";
             Text[ swedish ] = "Returnerar diskonteringsr�ntan f�r ett v�rdepapper";
             Text[ polish ] = "Podaje warto�� stopy dyskontowej papieru warto�ciowego.";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
