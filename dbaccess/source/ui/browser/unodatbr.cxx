@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:54:03 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 18:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,8 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // kiss our listeners goodbye
-    m_aSelectionListeners.disposeAndClear();
+    EventObject aEvt(*this);
+    m_aSelectionListeners.disposeAndClear(aEvt);
 
     // reset the content's tree view: it holds a reference to our model which is to be deleted immediately,
     // and it will live longer than we do.
