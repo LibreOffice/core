@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 16:05:18 $
+ *  last change: $Author: mtg $ $Date: 2001-02-20 16:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
         case SWBLK_XML:
             pImp = new SwXMLTextBlocks( sFileName ); break;
         case SWBLK_NO_FILE:
-            pImp = new Sw3TextBlocks( sFileName ); break;
+            pImp = new SwXMLTextBlocks( sFileName ); break;
     }
     if( !pImp )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
