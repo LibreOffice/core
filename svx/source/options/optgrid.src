@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮רשת‬";
         Text[ hindi ] = "जाल";
         Text[ slovak ] = "Mriežka";
+        Text[ hungarian ] = "Rács";
+        Text[ slovenian ] = "Mreža";
     };
     CheckBox CBX_USE_GRIDSNAP
     {
@@ -139,6 +141,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮יישור לקודקודי רשת‬";
         Text[ hindi ] = "जाल को स्नॉ~प करो";
         Text[ slovak ] = "Prichytávať na ~mriežku";
+        Text[ hungarian ] = "~Rácshoz illesztés";
+        Text[ slovenian ] = "P~ripni na mrežo";
     };
     CheckBox CBX_GRID_VISIBLE
     {
@@ -174,6 +178,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮רשת נראית‬";
         Text[ hindi ] = "दृष्टि~गोचर जाल";
         Text[ slovak ] = "V~iditeľná mriežka";
+        Text[ hungarian ] = "~Látható rácsozat";
+        Text[ slovenian ] = "V~idna mreža";
     };
     FixedLine FL_RESOLUTION
     {
@@ -208,6 +214,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮רזולוציה‬";
         Text[ hindi ] = "Resolution";
         Text[ slovak ] = "Rozlíšenie";
+        Text[ hungarian ] = "Felbontás";
+        Text[ slovenian ] = "Ločljivost";
     };
     FixedText FT_DRAW_X
     {
@@ -241,6 +249,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "स~मतल";
         Text[ slovak ] = "V~odorovne";
+        Text[ hungarian ] = "Ví~zszintes";
+        Text[ slovenian ] = "V~odoravno";
     };
     FixedText FT_DRAW_Y
     {
@@ -274,6 +284,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "~लम्ब";
         Text[ slovak ] = "Z~visle";
+        Text[ hungarian ] = "~Függőleges";
+        Text[ slovenian ] = "~Navpično";
     };
     MetricField MTR_FLD_DRAW_X
     {
@@ -342,6 +354,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮תת חלוקה‬";
         Text[ hindi ] = "Subdivision";
         Text[ slovak ] = "Pododdiel";
+        Text[ hungarian ] = "Albeosztás";
+        Text[ slovenian ] = "Podrazdelki";
     };
     FixedText FT_DIVISION_X
     {
@@ -357,7 +371,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ french ] = "Horizontal";
         Text[ spanish ] = "~Horizontal";
         Text[ italian ] = "~Orizzontale";
-        Text[ danish ] = "X-akse";
+        Text[ danish ] = "Va~ndret";
         Text[ swedish ] = "H~orisontellt";
         Text[ polish ] = "Poziomo";
         Text[ portuguese_brazilian ] = "Eixo ~X";
@@ -375,6 +389,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "Horizont~al";
         Text[ slovak ] = "Vodorovn~e";
+        Text[ hungarian ] = "Vízszi~ntes";
+        Text[ slovenian ] = "Vodorav~no";
     };
     FixedText FT_DIVISION_Y
     {
@@ -390,7 +406,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ french ] = "Vertical";
         Text[ spanish ] = "~Vertical";
         Text[ italian ] = "~Verticale";
-        Text[ danish ] = "Y-akse";
+        Text[ danish ] = "~Lodret";
         Text[ swedish ] = "~Vertikalt";
         Text[ polish ] = "~Pionowo";
         Text[ portuguese_brazilian ] = "Eixo ~Y";
@@ -408,6 +424,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "V~ertical";
         Text[ slovak ] = "~Zvisle";
+        Text[ hungarian ] = "Függől~eges";
+        Text[ slovenian ] = "N~avpično";
     };
     NumericField NUM_FLD_DIVISION_X
     {
@@ -455,6 +473,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮נקודה\\ות‬";
         Text[ hindi ] = "point(s)";
         Text[ slovak ] = "bod(y)";
+        Text[ hungarian ] = "pont";
+        Text[ slovenian ] = "točk(e)";
     };
     NumericField NUM_FLD_DIVISION_Y
     {
@@ -509,6 +529,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮סינכרון צירים‬";
         Text[ hindi ] = "अक्षों को स~मय से सहमत करो";
         Text[ slovak ] = "Synchronizovať ~osi";
+        Text[ hungarian ] = "Tengelye~k szinkronizálása";
+        Text[ slovenian ] = "Sinhroniziraj o~si";
     };
     FixedLine GRP_SNAP
     {
@@ -518,7 +540,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "Fangen" ;
         Text [ ENGLISH ] = "Fangen" ;
         Text [ NORWEGIAN ] = "Fangen" ;
-        Text [ DANISH ] = "Indfang" ;
+        Text [ DANISH ] = "Fastg�r" ;
         Text [ ENGLISH_US ] = "Snap" ;
         Text [ SPANISH ] = "Capturar" ;
         Text [ FINNISH ] = "Kohdista" ;
@@ -544,6 +566,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮הקפצה‬";
         Text[ hindi ] = "स्नॉप";
         Text[ slovak ] = "Zachytiť";
+        Text[ hungarian ] = "Illesztés";
+        Text[ slovenian ] = "Pripni";
     };
 
     CheckBox CBX_SNAP_HELPLINES
@@ -555,7 +579,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "An Fan~glinien" ;
         Text [ ENGLISH ] = "An Fanglinien" ;
         Text [ NORWEGIAN ] = "An Fanglinien" ;
-        Text [ DANISH ] = "Ved fan~glinjer" ;
+        Text [ DANISH ] = "Til fanglinjer" ;
         Text [ ENGLISH_US ] = "To snap lines" ;
         Text [ SPANISH ] = "En ~l�neas de captura" ;
         Text [ FINNISH ] = "Kohdistusviivoihin" ;
@@ -581,6 +605,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮להקפיץ את הקוים‬";
         Text[ hindi ] = "स्नॉप् रेखाओं केलिए";
         Text[ slovak ] = "Na vodiace čiary";
+        Text[ hungarian ] = "Illesztővonalakhoz";
+        Text[ slovenian ] = "Na črte za pripenjanje";
     };
     CheckBox CBX_SNAP_BORDER
     {
@@ -596,7 +622,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ french ] = "Aux marges" ;
         Text [ dutch ] = "Aan ~marges" ;
         Text [ swedish ] = "Mot s~idmarginalerna" ;
-        Text [ danish ] = "Ved s~idemargenerne" ;
+        Text [ danish ] = "Til s~idemargenerne" ;
         Text [ portuguese ] = "Nas ~margens" ;
         Text [ portuguese_brazilian ] = "Nas ~margens da p�gina" ;
         Text[ chinese_simplified ] = "页面边距(~P)";
@@ -616,6 +642,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮לשולי הדף‬";
         Text[ hindi ] = "~पृष्ठ का अलिखित प्रान्तों केलिए";
         Text[ slovak ] = "Na ~okraje stránky";
+        Text[ hungarian ] = "~Az oldal margóihoz";
+        Text[ slovenian ] = "Na robove s~trani";
     };
     CheckBox CBX_SNAP_FRAME
     {
@@ -626,7 +654,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "Am Obje~ktrahmen" ;
         Text [ ENGLISH ] = "Am Objektrahmen" ;
         Text [ NORWEGIAN ] = "Am Objektrahmen" ;
-        Text [ DANISH ] = "Ved obje~ktramme" ;
+        Text [ DANISH ] = "Til objekt~ramme" ;
         Text [ ENGLISH_US ] = "To object ~frame" ;
         Text [ SPANISH ] = "Al marco del objeto" ;
         Text [ FINNISH ] = "Objektin kehykseen" ;
@@ -652,6 +680,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮למסגרת עצם‬";
         Text[ hindi ] = "वस्तु ~फ़्रेम केलिए";
         Text[ slovak ] = "Na ~rámec objektu";
+        Text[ hungarian ] = "Az ~objektum keretéhez";
+        Text[ slovenian ] = "Na ~okvir predmeta";
     };
     CheckBox CBX_SNAP_POINTS
     {
@@ -662,7 +692,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "~An Objektpunkten" ;
         Text [ ENGLISH ] = "An Objektpunkten" ;
         Text [ NORWEGIAN ] = "An Objektpunkten" ;
-        Text [ DANISH ] = "~Ved objektpunkter" ;
+        Text [ DANISH ] = "~Til objektpunkter" ;
         Text [ ENGLISH_US ] = "To obje~ct points" ;
         Text [ SPANISH ] = "En los ~puntos del objeto" ;
         Text [ FINNISH ] = "Objekt~ipisteisiin" ;
@@ -688,6 +718,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮לקודקודי עצמים‬";
         Text[ hindi ] = "~वस्तु बिन्दुओं केलिए";
         Text[ slovak ] = "Na ~body objektu";
+        Text[ hungarian ] = "Az objektu~m pontjaihoz";
+        Text[ slovenian ] = "Na točke predme~ta";
     };
     FixedText FT_SNAP_AREA
     {
@@ -723,6 +755,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮טווח הקפצה‬";
         Text[ hindi ] = "~स्नॉप का फ़ैलाव";
         Text[ slovak ] = "Roz~sah zachytávania";
+        Text[ hungarian ] = "~Illesztési tartomány";
+        Text[ slovenian ] = "Obseg ~pripenjanja";
     };
     MetricField MTR_FLD_SNAP_AREA
     {
@@ -768,6 +802,8 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ hebrew ] = "‮פיקסלים‬";
         CustomUnitText[ hindi ] = " पिक्सेल्स";
         CustomUnitText[ slovak ] = " Pixelov";
+        CustomUnitText[ hungarian ] = "képpont";
+        CustomUnitText[ slovenian ] = " slikovnih pik";
     };
     FixedLine FL_SEPARATOR
     {
@@ -784,7 +820,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "Einrasten" ;
         Text [ ENGLISH ] = "Einrasten" ;
         Text [ NORWEGIAN ] = "Einrasten" ;
-        Text [ DANISH ] = "Fastg�r" ;
+        Text [ DANISH ] = "Fastg�rings position" ;
         Text [ ENGLISH_US ] = "Snap position" ;
         Text [ SPANISH ] = "Encajar" ;
         Text [ FINNISH ] = "Kohdistuspaikka" ;
@@ -810,6 +846,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮מיקום הקפצה‬";
         Text[ hindi ] = "स्नॉप स्थान";
         Text[ slovak ] = "Zachytenie pozície";
+        Text[ hungarian ] = "Illesztés helye";
+        Text[ slovenian ] = "Položaj pripenjanja";
     };
     CheckBox CBX_ORTHO
     {
@@ -820,7 +858,7 @@ TabPage RID_SVXPAGE_GRID
         Text = "Beim ~Erzeugen und Bewegen" ;
         Text [ ENGLISH ] = "Beim Erzeugen und Bewegen" ;
         Text [ NORWEGIAN ] = "Beim Erzeugen und Bewegen" ;
-        Text [ DANISH ] = "Ved opr~ettelse og flytning" ;
+        Text [ DANISH ] = "Ved opr~ettelse eller flytning af objekter" ;
         Text [ ENGLISH_US ] = "~When creating or moving objects" ;
         Text [ SPANISH ] = "Al crear ~y desplazar" ;
         Text [ FINNISH ] = "O~bjekteja luotaessa tai siirrett�ess�" ;
@@ -846,6 +884,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮בעת יצירה או הזזה של עצמים‬";
         Text[ hindi ] = "~वस्तुओं को उत्पन्न अथवा स्थानान्तर करने के समय";
         Text[ slovak ] = "~Pri vytváraní alebo presúvaní objektov";
+        Text[ hungarian ] = "~Tárgy létrehozásakor vagy mozgatásakor";
+        Text[ slovenian ] = "~Med ustv. ali prem. predmetov";
     };
     CheckBox CBX_BIGORTHO
     {
@@ -882,6 +922,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮קצוות מאורכים‬";
         Text[ hindi ] = "किनारों को ~विस्तृत करो";
         Text[ slovak ] = "~Rozšíriť hrany";
+        Text[ hungarian ] = "Szélek kiter~jesztése";
+        Text[ slovenian ] = "~Razširi robove";
     };
     CheckBox CBX_ROTATE
     {
@@ -919,6 +961,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮בעת סיבוב‬";
         Text[ hindi ] = "घु~माने के समय";
         Text[ slovak ] = "Pri ro~tácii";
+        Text[ hungarian ] = "For~gatáskor";
+        Text[ slovenian ] = "Pri su~kanju";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -964,6 +1008,8 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ hebrew ] = "‮ מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
         CustomUnitText[ slovak ] = " stupňov";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
     };
     FixedText FT_BEZ_ANGLE
     {
@@ -998,6 +1044,8 @@ TabPage RID_SVXPAGE_GRID
         Text[ hebrew ] = "‮צמצום נקודתי‬";
         Text[ hindi ] = "बिन्दु न्यून~ता";
         Text[ slovak ] = "Redukcia b~odu";
+        Text[ hungarian ] = "~Pontkisebbítés";
+        Text[ slovenian ] = "Zmanjša~nje točk";
     };
     MetricField MTR_FLD_BEZ_ANGLE
     {
@@ -1042,8 +1090,15 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
         CustomUnitText[ slovak ] = " stupňov";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
     };
 };
+
+
+
+
+
 
 
 
