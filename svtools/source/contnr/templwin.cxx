@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:01:34 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
                             if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
                                 aValueStr = INetContentTypes::GetPresentation( eTypeID, m_aLocale );
                             else
-                                aValueStr = SvFileInformationManager::GetDescription( rURL );
+                                aValueStr = SvFileInformationManager::GetDescription( INetURLObject(rURL) );
                             if ( aValueStr.Len() == 0 )
                                 aValueStr = String( aStringValue );
                         }
