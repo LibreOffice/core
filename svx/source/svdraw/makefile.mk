@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:05:08 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:52:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ SLOFILES=\
          $(SLO)$/svdocirc.obj        \
          $(SLO)$/svdograf.obj        \
          $(SLO)$/svdogrp.obj         \
-         $(SLO)$/svdoole2.obj        \
          $(SLO)$/svdopage.obj        \
          $(SLO)$/svdouno.obj         \
          $(SLO)$/svdoutl.obj         \
@@ -112,6 +111,7 @@ SLOFILES=\
          $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdglev.obj         \
          $(SLO)$/svdglue.obj         \
+         $(SLO)$/svdoole2.obj        \
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdhlpln.obj        \
          $(SLO)$/svdibrow.obj        \
@@ -144,6 +144,7 @@ SLOFILES=\
          $(SLO)$/svdomedia.obj		 
 
 EXCEPTIONSFILES= \
+         $(SLO)$/svdoole2.obj        \
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdogrp.obj         \
