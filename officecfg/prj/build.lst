@@ -3,3 +3,6 @@ oc	officecfg								usr1	-	all	oc_mkout NULL
 oc	officecfg\org\openoffice\configuration			nmake	-	all	oc_config NULL
 oc	officecfg\org\openoffice\helper			nmake	-	all	oc_helper oc_config NULL
 oc	officecfg\data							nmake	-	all	oc_data oc_helper NULL
+oc	officecfg\data\org\openoffice\Office	get		-	all	oc_office NULL
+oc	officecfg\data\org\openoffice\ucb		get		-	all	oc_ucb NULL
+oc	officecfg\data\org\openoffice			get		-	all	oc_ooo NULL
