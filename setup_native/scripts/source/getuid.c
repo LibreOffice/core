@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 
+#ifdef SOLARIS
+
 int   chown  (const char *path, uid_t owner, gid_t group) {return 0;}
 int   lchown (const char *path, uid_t owner, gid_t group) {return 0;}
 int   fchown (int fildes, uid_t owner, gid_t group)       {return 0;}
@@ -21,6 +23,7 @@ gid_t getegid (void) {return 0;}
 int   setuid  (uid_t p)  {return 0;}
 int   setgid  (gid_t p)  {return 0;}
 
+/* This is to fool cpio and pkgmk */
 int fstat(int fildes, struct stat *buf)
 {
     int ret = 0;
@@ -37,6 +40,46 @@ int fstat(int fildes, struct stat *buf)
 
     return ret;
 }
+
+/* This is to fool tar */
+int fstatat64(int fildes, const char *path, struct stat64  *buf, int flag)
+{
+    int ret = 0;
+    static int (*p_fstatat) (int fildes, const char *path, struct stat64 *buf, int flag) = NULL;
+    if (p_fstatat == NULL)
+        p_fstatat = (int (*)(int fildes, const char *path, struct stat64 *buf, int flag))
+            dlsym (RTLD_NEXT, "fstatat64");
+    ret = (*p_fstatat)(fildes, path, buf, flag);
+    if (buf != NULL)
+    {
+        buf->st_uid = 0; /* root */
+        buf->st_gid = 2; /* bin */
+    }
+
+    return ret;
+}
+
+#elif defined LINUX
+
+/* This is to fool tar */
+int __lxstat64(int n, const char *path, struct stat64 *buf)
+{
+    int ret = 0;
+    static int (*p_lstat) (int n, const char *path, struct stat64 *buf) = NULL;
+    if (p_lstat == NULL)
+        p_lstat = (int (*)(int n, const char *path, struct stat64 *buf))
+            dlsym (RTLD_NEXT, "__lxstat64");
+    ret = (*p_lstat)(n, path, buf);
+    if (buf != NULL)
+    {
+        buf->st_uid = 0; /* root */
+        buf->st_gid = 0; /* root */
+    }
+
+    return ret;
+}
+
+#endif
 
 #ifdef _cplusplus
 }
