@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 15:09:53 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 16:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,6 @@ namespace connectivity
         public:
             ODbaseConnection(ODriver*   _pDriver);
             virtual ~ODbaseConnection();
-
-            virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
