@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:13:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,9 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     bPaint = bComplete = bWaitAllowed = bCheckPages = TRUE;
     bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
     bUpdateExpFlds = bBrowseActionStop = bActionInProgress = FALSE;
+    // OD 14.04.2003 #106346# - init new flag <mbFormatCntntOnInterrupt>.
+    mbFormatCntntOnInterrupt = sal_False;
+
     pImp->pLayAct = this;   //Anmelden
 }
 
@@ -1004,19 +1007,45 @@ void SwLayAction::InternalAction()
         if( pPg != pPage )
             pPg = pPg ? (SwPageFrm*)pPg->GetPrev() : pPage;
 
+        // OD 14.04.2003 #106346# - set flag for interrupt content formatting
+        mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
         long nBottom = rVis.Bottom();
         while ( pPg && pPg->Frm().Top() < nBottom )
         {
             XCHECKPAGE;
-            while ( pPg->IsInvalidLayout() )
+            // OD 14.04.2003 #106346# - special case: interrupt content formatting
+            while ( ( mbFormatCntntOnInterrupt &&
+                      pPg->IsInvalid() &&
+                      (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
+                    ) ||
+                    ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() )
+                  )
             {
-                pPg->ValidateLayout();
-                FormatLayout( pPg );
                 XCHECKPAGE;
+                while ( pPg->IsInvalidLayout() )
+                {
+                    pPg->ValidateLayout();
+                    FormatLayout( pPg );
+                    XCHECKPAGE;
+                }
+                if ( mbFormatCntntOnInterrupt &&
+                     pPg->IsInvalidCntnt() && (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
+                   )
+                {
+                    pPg->ValidateFlyInCnt();
+                    pPg->ValidateCntnt();
+                    if ( !FormatCntnt( pPg ) )
+                    {
+                        XCHECKPAGE;
+                        pPg->InvalidateCntnt();
+                        pPg->InvalidateFlyInCnt();
+                    }
+                }
             }
             pPg = (SwPageFrm*)pPg->GetNext();
         }
-
+        // OD 14.04.2003 #106346# - reset flag for special interrupt content formatting.
+        mbFormatCntntOnInterrupt = sal_False;
     }
     pOptTab = 0;
     if( bNoLoop )
@@ -2118,8 +2147,11 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             if ( (!pTab || (pTab && !bInValid)) )
             {
                 CheckIdleEnd();
-                if ( IsInterrupt() || (!bBrowse && pPage->IsInvalidLayout()) ||
-                     (IS_FLYS && IS_INVAFLY) )
+                // OD 14.04.2003 #106346# - consider interrupt formatting.
+                if ( ( IsInterrupt() && !mbFormatCntntOnInterrupt ) ||
+                     ( !bBrowse && pPage->IsInvalidLayout() ) ||
+                     ( IS_FLYS && IS_INVAFLY )
+                   )
                     return FALSE;
             }
             if ( pOldUpper != pCntnt->GetUpper() )
@@ -2168,7 +2200,11 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                               (!pPage->IsInvalidLayout() ||
                                !lcl_FindFirstInvaLay( pPage, nBottom )))
                             SetBrowseActionStop( TRUE );
-                        return FALSE;
+                        // OD 14.04.2003 #106346# - consider interrupt formatting.
+                        if ( !mbFormatCntntOnInterrupt )
+                        {
+                            return FALSE;
+                        }
                     }
                 }
                 pCntnt = bNxtCnt ? pCntntNext : pCntnt->GetNextCntntFrm();
@@ -2194,7 +2230,8 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             if ( IsIdle() )
             {
                 CheckIdleEnd();
-                if ( IsInterrupt() )
+                // OD 14.04.2003 #106346# - consider interrupt formatting.
+                if ( IsInterrupt() && !mbFormatCntntOnInterrupt )
                     return FALSE;
             }
             if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
@@ -2210,14 +2247,19 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                             (!pPage->IsInvalidLayout() ||
                             !lcl_FindFirstInvaLay( pPage, nBottom )))
                         SetBrowseActionStop( TRUE );
-                    return FALSE;
+                    // OD 14.04.2003 #106346# - consider interrupt formatting.
+                    if ( !mbFormatCntntOnInterrupt )
+                    {
+                        return FALSE;
+                    }
                 }
             }
             pCntnt = pCntnt->GetNextCntntFrm();
         }
     }
     CheckWaitCrsr();
-    return !IsInterrupt();
+    // OD 14.04.2003 #106346# - consider interrupt formatting.
+    return !IsInterrupt() || mbFormatCntntOnInterrupt;
 }
 /*************************************************************************
 |*
@@ -2230,7 +2272,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 |*
 |*************************************************************************/
 void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
-                                const SwPageFrm *pPage )
+                                const SwPageFrm  *pPage )
 {
     //wird sind hier evtl. nur angekommen, weil der Cntnt DrawObjekte haelt.
     const BOOL bDrawObjsOnly = pCntnt->IsValid() && !pCntnt->IsCompletePaint() &&
@@ -2415,13 +2457,15 @@ BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
         if ( bOneProcessed && !pFly->IsFlyInCntFrm() )
         {
             CheckIdleEnd();
-            if ( IsInterrupt() )
+            // OD 14.04.2003 #106346# - consider interrupt formatting.
+            if ( IsInterrupt() && !mbFormatCntntOnInterrupt )
                 return FALSE;
         }
         pCntnt = pCntnt->GetNextCntntFrm();
     }
     CheckWaitCrsr();
-    return !IsInterrupt();
+    // OD 14.04.2003 #106346# - consider interrupt formatting.
+    return !(IsInterrupt() && !mbFormatCntntOnInterrupt);
 }
 
 /*************************************************************************
