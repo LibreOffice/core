@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:25:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DOCINFO_REVISION           71
 #define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               72
 #define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        73
-#define SW_SERVICE_FIELDTYPE_DUMMY_3                    74
+#define SW_SERVICE_FIELDTYPE_DROPDOWN                   74
 #define SW_SERVICE_FIELDTYPE_DUMMY_4                    75
 #define SW_SERVICE_FIELDTYPE_DUMMY_5                    76
 #define SW_SERVICE_FIELDTYPE_DUMMY_6                    77
