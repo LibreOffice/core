@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:25:47 $
+ *  last change: $Author: kz $ $Date: 2002-08-17 20:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,6 +874,26 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
 {
     Text = "Text ausw�hlen";
     Text [english_us] = "Select Text";
+    Text[ portuguese ] = "Select Text";
+    Text[ russian ] = "Select Text";
+    Text[ greek ] = "Select Text";
+    Text[ dutch ] = "Select Text";
+    Text[ french ] = "Select Text";
+    Text[ spanish ] = "Select Text";
+    Text[ finnish ] = "Select Text";
+    Text[ italian ] = "Seleziona testo";
+    Text[ danish ] = "Select Text";
+    Text[ swedish ] = "Select Text";
+    Text[ polish ] = "Select Text";
+    Text[ portuguese_brazilian ] = "Select Text";
+    Text[ japanese ] = "テキストの選択";
+    Text[ korean ] = "텍스트 선택";
+    Text[ chinese_simplified ] = "Select Text";
+    Text[ chinese_traditional ] = "選取文字";
+    Text[ turkish ] = "Select Text";
+    Text[ arabic ] = "Select Text";
+    Text[ catalan ] = "Select Text";
+    Text[ thai ] = "Select Text";
 };
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
