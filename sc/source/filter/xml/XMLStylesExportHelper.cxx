@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ rtl::OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, con
 }
 
 void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
-    const rtl::OUString& sTitle, const rtl::OUString& sMessage,
+    const rtl::OUString& sTitle, const rtl::OUString& sOUMessage,
     const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage)
 {
     if (sTitle.getLength())
@@ -352,25 +352,30 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_help_message, sal_True, sal_True);
     else
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_error_message, sal_True, sal_True);
-    if (sMessage.getLength())
+    if (sOUMessage.getLength())
     {
         sal_Int32 i = 0;
         rtl::OUStringBuffer sTemp;
-        while(i < sMessage.getLength())
+        String sMessage(sOUMessage);
+        rtl::OUString sText (sMessage.ConvertLineEnd(LINEEND_LF));
+        sal_Bool bPrevCharWasSpace(sal_True);
+        while(i < sText.getLength())
         {
-            if (sMessage[i] == '\n')
+            if ((sText[i] == '\n'))
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-                rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
+                rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                //rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
             }
             else
-                sTemp.append(sMessage[i]);
+                sTemp.append(sText[i]);
             i++;
         }
         if (sTemp.getLength())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
-            rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
+            rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+            //rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
         }
     }
     if (pMessage)
