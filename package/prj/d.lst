@@ -1,0 +1,4 @@
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
