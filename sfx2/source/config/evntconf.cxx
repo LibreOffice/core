@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:35:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,27 +394,6 @@ void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, 
 
 //==========================================================================
 
-void SfxEventConfiguration::ExecuteEvent(
-    USHORT nId, SfxObjectShell *pDoc, FASTBOOL bSynchron, const String& rArgs )
-{
-    if ( pDoc && pDoc->IsPreview() )
-        return;
-
-    if ( pDoc && pDoc->GetEventConfig_Impl() && pDoc->GetEventConfig_Impl()->aMacroTable.Seek( nId ) )
-        return;
-
-    const SvxMacro* pMacro = GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
-    if ( pMacro )
-    {
-        if ( bSynchron )
-            SfxMacroConfig::GetOrCreate()->ExecuteMacro( pDoc, pMacro, rArgs );
-        else
-            new SfxAsyncEvent_Impl( pDoc, pMacro, rArgs );
-    }
-}
-
-//==========================================================================
-
 const SvxMacro* SfxEventConfiguration::GetMacroForEventId
 (
     USHORT          nId,
@@ -610,9 +589,6 @@ BOOL SfxEventConfigItem_Impl::StoreXML( SvStream& rOutStream )
             {
                 if ( aSequence[n] == aEventName )
                 {
-                    // create properties from macro
-                    //SvxMacro* pMacro = rTable.GetObject( i );
-                    //aData[n] = pEvConfig->CreateEventData_Impl( pMacro );
                     aData[n] = xEvents->getByName( aEventName );
                     break;
                 }
@@ -709,7 +685,8 @@ void SfxEventConfiguration::AddEvents( SfxMacroTabPage* pPage ) const
     DBG_ASSERT(pEventArr,"Keine Events angemeldet!");
     USHORT nCount = pEventArr->Count();
     for (USHORT n=1; n<nCount; n++)
-        pPage->AddEvent( (*pEventArr)[n]->aEventName, (*pEventArr)[n]->nEventId );
+        if ( (*pEventArr)[n]->aEventName.Len() )
+            pPage->AddEvent( (*pEventArr)[n]->aEventName, (*pEventArr)[n]->nEventId );
 }
 
 SvxMacroTableDtor* SfxEventConfiguration::GetAppEventTable()
