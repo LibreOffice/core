@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-22 09:33:46 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,11 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
                 if(!bPercent)
                     aSz.SetWidthPercent(0);
                 else
-                    DBG_ERROR("relative Breite kann nicht per sal_Bool eingeschaltet werden");
+                {
+                    IllegalArgumentException aExcept;
+                    aExcept.Message = C2U("relative width cannot be switched on with this property");
+                    throw aExcept;
+                }
             }
             pFmt->GetDoc()->SetAttr(aSz, *pFmt);
 
@@ -2830,9 +2834,6 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( IllegalArgumentExcep
         {
 
             String sAutoFmtName(aName);
-
-            DBG_ERROR("AutoFormat: Dafuer sollte es eine autom. Aktualisierung geben!");
-
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
             for( sal_uInt16 i = aAutoFmtTbl.Count(); i; )
