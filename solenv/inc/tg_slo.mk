@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-23 15:07:29 $
+#   last change: $Author: hjs $ $Date: 2001-10-25 13:57:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,9 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
     @echo Making: $@
 #	@+$(RM) $@
 .IF "$(GUI)"=="WNT"
+.IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
@@ -93,7 +95,9 @@ $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
+.IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
@@ -111,7 +115,9 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
+.IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"

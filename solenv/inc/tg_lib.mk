@@ -90,8 +90,12 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
+.IF "$(LIB$(TNR)OBJFILES)"!=""    
     @-+echo $(LIB$(TNR)OBJFILES) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB$(TNR)OBJFILES)"!=""    
+.IF "$(LIB$(TNR)FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB$(TNR)FILES)"!=""    
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
