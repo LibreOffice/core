@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 10:58:58 $
+ *  last change: $Author: os $ $Date: 2000-10-20 08:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,7 @@
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
-/*#ifndef _FMTHBSH_HXX //autogen
-#include <fmthbsh.hxx>
-#endif
-*/#ifndef _FMTPDSC_HXX //autogen
+#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
 #ifndef _PAGEDESC_HXX //autogen
@@ -270,6 +267,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
 #endif
@@ -306,6 +306,9 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
 
 //TODO: new Interface & new uno::Exception for protected content
 #define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
@@ -318,6 +321,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 
 using namespace ::rtl;
 
@@ -5136,23 +5140,22 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
 
     if(PARAFRAME_PORTION_PARAGRAPH == nParaFrameMode)
     {
+        const SwNodeIndex& rOwnNode = rUnoCrsr.GetPoint()->nNode;
         //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz gebunden sind
-        sal_uInt16 nCount = pDoc->GetFlyCount();
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+        USHORT nSize = rFmts.Count();
+        for ( USHORT i = 0; i < nSize; i++)
         {
-            SwFrmFmt* pFmt = pDoc->GetFlyNum(i);
-            //steht der Anker in diesem Node und ist er absatzgebunden?
-            const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
-            if( pFmt->GetAnchor().GetAnchorId() == FLY_AT_CNTNT )
+            const SwFrmFmt* pFmt = rFmts[ i ];
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+            const SwPosition* pAnchorPos;
+            if( rAnchor.GetAnchorId() == FLY_AT_CNTNT &&
+                0 != (pAnchorPos = rAnchor.GetCntntAnchor()) &&
+                    pAnchorPos->nNode == rOwnNode)
             {
-                const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-                const SwPosition* pAnchorPos = rAnchor.GetCntntAnchor();
-                if(pAnchorPos->nNode == nOwnNode)
-                {
-                    //jetzt einen SwDepend anlegen und in das Array einfuegen
-                    SwDepend* pNewDepend = new SwDepend(this, pFmt);
-                    aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
-                }
+                //jetzt einen SwDepend anlegen und in das Array einfuegen
+                SwDepend* pNewDepend = new SwDepend(this, (SwFrmFmt*)pFmt);
+                aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
             }
         }
     }
@@ -5257,21 +5260,45 @@ sal_Bool SwXParaFrameEnumeration::CreateNextObject()
     aFrameArr.Remove(0);
     SwFrmFmt* pFormat = (SwFrmFmt*)pDepend->GetRegisteredIn();
     delete pDepend;
-    // das Format sollte hier immer vorhanden sein, sonst waere
-    // der Client im Modify geloescht worden
-    const SwNodeIndex* pIdx = pFormat->GetCntnt().GetCntntIdx();
-    const SwNode* pNd = GetCrsr()->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
+    // the format should be valid her otherwise the client
+    // would have been removed in ::Modify
+    // check for a shape first
+    SwClientIter aIter(*pFormat);
+    SwDrawContact* pContact = (SwDrawContact*)
+                                            aIter.First(TYPE(SwDrawContact));
+    if(pContact)
+       {
+          SdrObject* pSdr = pContact->GetMaster();
+        if(pSdr)
+        {
+            Reference<frame::XModel> xModel =
+                            pFormat->GetDoc()->GetDocShell()->GetBaseModel();
+            Reference<drawing::XDrawPageSupplier> xPageSupp(
+                        xModel, UNO_QUERY);
 
-    FlyCntType eType;
-    if(!pNd->IsNoTxtNode())
-        eType = FLYCNTTYPE_FRM;
-    else if(pNd->IsGrfNode())
-        eType = FLYCNTTYPE_GRF;
+            Reference<drawing::XDrawPage> xPage = xPageSupp->getDrawPage();
+            XDrawPage* pImpPage = xPage.get();
+            Reference <XShape> xShape = ((SwXDrawPage*)pImpPage)->GetSvxPage()->_CreateShape( pSdr );
+            xNextObject = uno::Reference< XTextContent >(xShape, uno::UNO_QUERY);
+        }
+       }
     else
-        eType = FLYCNTTYPE_OLE;
+    {
+        const SwNodeIndex* pIdx = pFormat->GetCntnt().GetCntntIdx();
+        DBG_ASSERT(pIdx, "where is the index?");
+        const SwNode* pNd = GetCrsr()->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 
-    uno::Reference< container::XNamed >  xFrame = SwXFrames::GetObject(*pFormat, eType);
-    xNextObject = uno::Reference< XTextContent >(xFrame, uno::UNO_QUERY);
+        FlyCntType eType;
+        if(!pNd->IsNoTxtNode())
+            eType = FLYCNTTYPE_FRM;
+        else if(pNd->IsGrfNode())
+            eType = FLYCNTTYPE_GRF;
+        else
+            eType = FLYCNTTYPE_OLE;
+
+        uno::Reference< container::XNamed >  xFrame = SwXFrames::GetObject(*pFormat, eType);
+        xNextObject = uno::Reference< XTextContent >(xFrame, uno::UNO_QUERY);
+    }
 
     return xNextObject.is();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-20 08:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,6 @@ protected:
     // unterstuetzen (z.B. Controls)
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape );
 
-    // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
-    // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
-    // ein ein SvxShape aggregierendes Objekt anlegen.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const;
-
-
 public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage();
@@ -123,6 +117,11 @@ public:
     SdrPageView*        GetPageView();
     void                RemovePageView();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       GetInterface( SdrObject* pObj );
+
+    // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
+    // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
+    // ein ein SvxShape aggregierendes Objekt anlegen.
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const;
 };
 
 /* -----------------09.12.98 08:57-------------------
