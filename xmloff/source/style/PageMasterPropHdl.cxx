@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 using namespace ::rtl;
@@ -385,5 +388,91 @@ sal_Bool XMLPMPropHdl_Print::exportXML(
     }
 
     return sal_True;
+}
+
+//______________________________________________________________________________
+// property handler for style:table-centering
+
+XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
+{
+}
+
+sal_Bool XMLPMPropHdl_CenterHorizontal::importXML(
+        const OUString& rStrImpValue,
+        Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    if (rStrImpValue.getLength())
+        if ((rStrImpValue.compareToAscii(sXML_both) == 0) ||
+            (rStrImpValue.compareToAscii(sXML_horizontal) == 0))
+        {
+            rValue = ::cppu::bool2any(sal_True);
+            bRet = sal_True;
+        }
+
+
+    return bRet;
+}
+
+sal_Bool XMLPMPropHdl_CenterHorizontal::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool    bRet = sal_False;
+
+    if ( ::cppu::any2bool( rValue ) )
+    {
+        bRet = sal_True;
+        if (rStrExpValue.getLength())
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_both));
+        else
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal));
+    }
+
+    return bRet;
+}
+
+XMLPMPropHdl_CenterVertical::~XMLPMPropHdl_CenterVertical()
+{
+}
+
+sal_Bool XMLPMPropHdl_CenterVertical::importXML(
+        const OUString& rStrImpValue,
+        Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    if (rStrImpValue.getLength())
+        if ((rStrImpValue.compareToAscii(sXML_both) == 0) ||
+            (rStrImpValue.compareToAscii(sXML_vertical) == 0))
+        {
+            rValue = ::cppu::bool2any(sal_True);
+            bRet = sal_True;
+        }
+
+    return bRet;
+}
+
+sal_Bool XMLPMPropHdl_CenterVertical::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool    bRet = sal_False;
+
+    if ( ::cppu::any2bool( rValue ) )
+    {
+        bRet = sal_True;
+        if (rStrExpValue.getLength())
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_both));
+        else
+            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_vertical));
+    }
+
+    return bRet;
 }
 

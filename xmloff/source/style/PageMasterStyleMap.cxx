@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:54 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,11 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "FirstPageNumber",        XML_NAMESPACE_STYLE,    sXML_first_page_number,         XML_PM_TYPE_FIRSTPAGENUMBER,                            0 },
     { "PageScale",              XML_NAMESPACE_STYLE,    sXML_scale_to,                  XML_TYPE_NUMBER16,                                      CTF_PM_SCALETO },
     { "ScaleToPages",           XML_NAMESPACE_STYLE,    sXML_scale_to_pages,            XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOPAGES },
+    { "CenterHorizontally",     XML_NAMESPACE_STYLE,    sXML_table_centering,           XML_PM_TYPE_CENTER_HORIZONTAL | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 },
+    { "CenterVertically",       XML_NAMESPACE_STYLE,    sXML_table_centering,           XML_PM_TYPE_CENTER_VERTICAL | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "TextColumns",            XML_NAMESPACE_STYLE,    sXML_columns,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_PM_TEXTCOLUMNS },
     { "RegisterModeActive",     XML_NAMESPACE_STYLE,    sXML_register_true, XML_TYPE_BOOL, 0 },
     { "RegisterParagraphStyle", XML_NAMESPACE_STYLE,    sXML_register_truth_ref_style_name, XML_TYPE_STRING| MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_PM_REGISTER_STYLE },
-//  { "CenterHorizontally",     XML_NAMESPACE_STYLE,    sXML_center_horizontally,       XML_TYPE_BOOL,                                          0 },
-//  { "CenterVertically",       XML_NAMESPACE_STYLE,    sXML_center_vertically,         XML_TYPE_BOOL,                                          0 },
 // header
     { "HeaderHeight",               XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE,       CTF_PM_HEADERHEIGHT },
     { "HeaderHeight",               XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE,       CTF_PM_HEADERMINHEIGHT },

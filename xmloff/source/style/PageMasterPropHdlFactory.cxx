@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:35:06 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,12 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             break;
             case XML_PM_TYPE_FIRSTPAGENUMBER:
                 pHdl = new XMLNumberNonePropHdl( sXML_continue, 2 );
+            break;
+            case XML_PM_TYPE_CENTER_HORIZONTAL:
+                pHdl = new XMLPMPropHdl_CenterHorizontal();
+            break;
+            case XML_PM_TYPE_CENTER_VERTICAL:
+                pHdl = new XMLPMPropHdl_CenterVertical();
             break;
             case XML_TYPE_TEXT_COLUMNS:
                 pHdl = new XMLTextColumnsPropertyHandler;

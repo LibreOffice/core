@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,40 @@ public:
                                 ) const;
 };
 
+//______________________________________________________________________________
+// property handler for style:table-centering
+
+class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler
+{
+public:
+    virtual                 ~XMLPMPropHdl_CenterHorizontal();
+    virtual sal_Bool        importXML(
+                                const ::rtl::OUString& rStrImpValue,
+                                ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
+    virtual sal_Bool        exportXML(
+                                ::rtl::OUString& rStrExpValue,
+                                const ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
+};
+
+class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
+{
+public:
+    virtual                 ~XMLPMPropHdl_CenterVertical();
+    virtual sal_Bool        importXML(
+                                const ::rtl::OUString& rStrImpValue,
+                                ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
+    virtual sal_Bool        exportXML(
+                                ::rtl::OUString& rStrExpValue,
+                                const ::com::sun::star::uno::Any& rValue,
+                                const SvXMLUnitConverter& rUnitConverter
+                                ) const;
+};
 
 #endif
 
