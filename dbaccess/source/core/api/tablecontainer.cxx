@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,6 +879,12 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
 
         }
         // we don't need to call dropByName when we have xMasterTables
+        // now we have to delete the config entry
+        if ( m_aTablesConfig.isValid() )
+        {
+            if ( m_aTablesConfig.hasByName(_sElementName) )
+                m_aTablesConfig.removeNode(_sElementName);
+        }
     }
     catch(Exception&)
     {
