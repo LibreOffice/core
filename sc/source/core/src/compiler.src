@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:56:03 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,7 +1143,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "ABS" ;
         Text[ chinese_simplified ] = "ABS";
         Text[ russian ] = "ABS";
-        Text[ polish ] = "ABS";
+        Text[ polish ] = "MODU£.LICZBY";
         Text[ japanese ] = "ABS";
         Text[ chinese_traditional ] = "ABS";
         Text[ arabic ] = "ABS";
@@ -2585,7 +2585,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "DATUM";
         Text[ chinese_simplified ] = "DATE";
         Text[ greek ] = "DATE";
-        Text[ korean ] = "DATE";
+        Text[ korean ] = "³¯Â¥";
         Text[ turkish ] = "DATE";
         Text[ language_user1 ] = " ";
     };
