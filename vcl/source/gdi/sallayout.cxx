@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-01 13:29:41 $
+ *  last change: $Author: hdu $ $Date: 2002-08-02 17:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,33 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle )
         rRectangle.Union( aRectangle );
     }
 
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool SalLayout::IsNotdefGlyph( long nGlyph ) const
+{
+    bool bRet = false;
+    if( HasGlyphs() && nGlyph )
+        bRet = true;
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool SalLayout::IsSpacingGlyph( long nGlyph ) const
+{
+    bool bRet = false;
+    if( HasGlyphs() )
+        bRet = (nGlyph==3);
+    else
+    {
+        bRet = (nGlyph <= 0x0020)
+            //|| (nGlyph == 0x00A0)     // non breaking space
+            || (nGlyph >= 0x2000 && nGlyph <= 0x200F)
+            || (nGlyph == 0x3000);
+    }
     return bRet;
 }
 
