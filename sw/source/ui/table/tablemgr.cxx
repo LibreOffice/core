@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:47:43 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
 #endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
 #endif
@@ -78,6 +75,7 @@
 #include <sch/memchrt.hxx>
 #endif
 
+#include <sot/clsids.hxx>
 
 #include "errhdl.hxx"
 #include "wrtsh.hxx"
@@ -259,9 +257,7 @@ void SwTableFUNC::InsertChart( SchMemChart& rData, const SfxItemSet *pSet )
 
     //Jetzt das CharObject einfuegen.
     //Wer das nicht versteht ist selber schuld ;-)
-    SvStorageRef aStor = new SvStorage( aEmptyStr );
-    SvInPlaceObjectRef aIPObj( &((SvFactory*)SvInPlaceObject::ClassFactory())
-            ->CreateAndInit( *SCH_MOD()->pSchChartDocShellFactory, aStor ));
+    SvInPlaceObjectRef aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
     if ( aIPObj.Is() )
     {
         pSh->InsertOle( aIPObj );
