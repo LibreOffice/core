@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:28:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <xmlsecurity/biginteger.hxx>
 
 #include <osl/file.hxx>
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
 
 
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
@@ -159,6 +162,7 @@ MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroS
 MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
     ,maSecLevelFL       ( this, ResId( FL_SECLEVEL ) )
+    ,maSecReadonlyFI    ( this, ResId( FI_SEC_READONLY ))
     ,maVeryHighRB       ( this, ResId( RB_VERYHIGH ) )
     ,maHighRB           ( this, ResId( RB_HIGH ) )
     ,maMediumRB         ( this, ResId( RB_MEDIUM ) )
@@ -172,14 +176,39 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     maVeryHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
     mnCurLevel = (USHORT) mpDlg->maSecOptions.GetMacroSecurityLevel();
+    sal_Bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL );
 
+    RadioButton* pCheck = 0;
     switch( mnCurLevel )
     {
-        case 3: maVeryHighRB.Check();   break;
-        case 2: maHighRB.Check();       break;
-        case 1: maMediumRB.Check();     break;
-        case 0: maLowRB.Check();        break;
+        case 3: pCheck = &maVeryHighRB;   break;
+        case 2: pCheck = &maHighRB;       break;
+        case 1: pCheck = &maMediumRB;     break;
+        case 0: pCheck = &maLowRB;        break;
     }
+    if(pCheck)
+        pCheck->Check();
+    else
+    {
+        DBG_ERROR("illegal macro security level")
+    }
+    maSecReadonlyFI.Show(bReadonly);
+    if(bReadonly)
+    {
+        //move to the selected button
+        if( pCheck && pCheck != &maVeryHighRB)
+        {
+            long nDiff = pCheck->GetPosPixel().Y() - maVeryHighRB.GetPosPixel().Y();
+            Point aPos(maSecReadonlyFI.GetPosPixel());
+            aPos.Y() += nDiff;
+            maSecReadonlyFI.SetPosPixel(aPos);
+        }
+        maVeryHighRB.Enable(sal_False);
+        maHighRB.Enable(sal_False);
+        maMediumRB.Enable(sal_False);
+        maLowRB.Enable(sal_False);
+    }
+
 }
 
 IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMTYARG )
@@ -210,10 +239,10 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 {
     bool bCertSelected = maTrustCertLB.FirstSelected() != NULL;
     maViewCertPB.Enable( bCertSelected );
-    maRemoveCertPB.Enable( bCertSelected );
+    maRemoveCertPB.Enable( bCertSelected && !mbAuthorsReadonly);
 
     bool bLocationSelected = maTrustFileLocLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    maRemoveLocPB.Enable( bLocationSelected );
+    maRemoveLocPB.Enable( bLocationSelected && !mbURLsReadonly);
 }
 
 
@@ -352,11 +381,13 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_TRUSTSOURCES ), _pDlg )
     ,maTrustCertFL      ( this, ResId( FL_TRUSTCERT ) )
+    ,maTrustCertROFI    ( this, ResId( FI_TRUSTCERT_RO ) )
     ,maTrustCertLB      ( this, ResId( LB_TRUSTCERT ) )
     ,maAddCertPB        ( this, ResId( PB_ADD_TRUSTCERT ) )
     ,maViewCertPB       ( this, ResId( PB_VIEW_TRUSTCERT ) )
     ,maRemoveCertPB     ( this, ResId( PB_REMOVE_TRUSTCERT ) )
     ,maTrustFileLocFL   ( this, ResId( FL_TRUSTFILELOC ) )
+    ,maTrustFileROFI    ( this, ResId( FI_TRUSTFILE_RO ) )
     ,maTrustFileLocFI   ( this, ResId( FI_TRUSTFILELOC ) )
     ,maTrustFileLocLB   ( this, ResId( LB_TRUSTFILELOC ) )
     ,maAddLocPB         ( this, ResId( FL_ADD_TRUSTFILELOC ) )
@@ -381,10 +412,20 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     maRemoveLocPB.Disable();
 
     maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
+    mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
+    maTrustCertROFI.Show( mbAuthorsReadonly );
+    mbAuthorsReadonly ? maTrustCertLB.Disable() : maTrustCertLB.Enable();
+//  unused button
+//    maAddCertPB.Enable( !mbAuthorsReadonly );
 
     FillCertLB();
 
     cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
+    mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
+    maTrustFileROFI.Show( mbURLsReadonly );
+    maTrustFileLocLB.Enable( !mbURLsReadonly );
+    maAddLocPB      .Enable( !mbURLsReadonly );
+
     sal_Int32 nEntryCnt = aSecureURLs.getLength();
     for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
     {
@@ -422,5 +463,51 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
+}
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
+            FixedImage(pParent, rResId)
+{
+    sal_Bool bHighContrast = pParent->GetDisplayBackground().GetColor().IsDark();
+    SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
+}
+
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ReadOnlyImage::~ReadOnlyImage()
+{
+}
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
+{
+    if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
+    {
+        Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetOutputSize() ) ) );
+        Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
+                                     OutputToScreenPixel( aLogicPix.BottomRight() ) );
+
+        String aStr(ReadOnlyImage::GetHelpTip());
+        if ( Help::IsBalloonHelpEnabled() )
+            Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
+            aStr );
+        else if ( Help::IsQuickHelpEnabled() )
+            Help::ShowQuickHelp( this, aScreenRect, aStr );
+    }
+    else
+        Window::RequestHelp( rHEvt );
+}
+
+/*-- 26.02.2004 14:20:21---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+const String& ReadOnlyImage::GetHelpTip()
+{
+     static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
+     return aStr;
 }
 
