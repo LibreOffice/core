@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:24:47 $
+ *  last change: $Author: khong $ $Date: 2002-05-03 20:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@ static sal_Unicode DecimalChar[] = {
     0xFF0E, // Chinese Lower
     0x70B9, // S. Chinese Upper
     0x9EDE, // T. Chinese Upper
-    0xFF0E, // Japanese Modern
-    0xFF0E, // Japanese Trad.
+    0x30FB, // Japanese Modern
+    0x30FB, // Japanese Trad.
     0xFF0E, // Korean Lower
     0x9EDE, // Korean Upper
     0xC810, // Korean Hangul
-    0x002E, // Arabic Indic
+    0x066B, // Arabic Indic
     0x002E, // Est. Arabic Indic
     0x002E, // Indic
     0x002E  // Thai
@@ -99,8 +99,8 @@ static sal_Unicode MinusChar[] = {
     0xFF0D, // Chinese Lower
     0x8D1F, // S. Chinese Upper
     0x5069, // T. Chinese Upper
-    0xFF0D, // Japanese Modern
-    0xFF0D, // Japanese Trad.
+    0x2212, // Japanese Modern
+    0x2212, // Japanese Trad.
     0xFF0D, // Korean Lower
     0x5069, // Korean Upper
     0xFF0D, // Korean Hangul ???

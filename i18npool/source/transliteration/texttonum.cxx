@@ -71,21 +71,15 @@ OUString SAL_CALL TextToNum::transliterate( const OUString& inStr, sal_Int32 sta
 
         OUString numberChar, multiplierChar, decimalChar, minusChar;
         if (number == 0) {
-        OUStringBuffer aBuf(NumberChar_Count * 10 + 1);
-        for (i = 0; i < NumberChar_Count; i++)
-            aBuf.append(NumberChar[i], 10);
-        numberChar = aBuf.makeStringAndClear();
-        aBuf.ensureCapacity(Multiplier_Count * ExponentCount_CJK + 1);
-        for (i = 0; i < Multiplier_Count; i++)
-            aBuf.append(MultiplierChar_CJK[i], ExponentCount_CJK);
-        multiplierChar = aBuf.makeStringAndClear();
+        numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
+        multiplierChar = OUString((sal_Unicode*) MultiplierChar_CJK, ExponentCount_CJK*Multiplier_Count);
         decimalChar = OUString(DecimalChar);
         minusChar = OUString(MinusChar);
         } else {
         numberChar = OUString(NumberChar[number], 10);
+        multiplierChar = OUString(MultiplierChar_CJK[multiplier], ExponentCount_CJK);
         decimalChar = OUString::valueOf(DecimalChar[number]);
         minusChar = OUString::valueOf(MinusChar[number]);
-        multiplierChar = OUString(MultiplierChar_CJK[multiplier], ExponentCount_CJK); \
         }
 
         while (i < nCount) {
