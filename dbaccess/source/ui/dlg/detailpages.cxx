@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-15 09:52:21 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,8 +1066,9 @@ namespace dbaui
         ,m_aExtension               (this, ResId(CM_EXTENSION))
         ,m_aSeparator3              (this, ResId(FL_SEPARATOR3))
 
-        ,m_aFieldSeparatorList  (ResId(STR_FIELDSEPARATORLIST))
-        ,m_aTextSeparatorList   (ResId(STR_TEXTSEPARATORLIST))
+        ,m_aFieldSeparatorList      (ResId(STR_FIELDSEPARATORLIST))
+        ,m_aTextSeparatorList       (ResId(STR_TEXTSEPARATORLIST))
+        ,m_aTextNone                (ResId(STR_TEXT_FIELD_SEP_NONE))
     {
         xub_StrLen nCnt = m_aFieldSeparatorList.GetTokenCount( '\t' );
         for( xub_StrLen i=0 ; i<nCnt ; i+=2 )
@@ -1076,6 +1077,7 @@ namespace dbaui
         nCnt = m_aTextSeparatorList.GetTokenCount( '\t' );
         for( i=0 ; i<nCnt ; i+=2 )
             m_aTextSeparator.InsertEntry( m_aTextSeparatorList.GetToken( i, '\t' ) );
+        m_aTextSeparator.InsertEntry(m_aTextNone);
 
         // set the modify handlers
         m_aHeader.SetClickHdl(getControlModifiedLink());
@@ -1319,9 +1321,11 @@ namespace dbaui
 
         if( nPos == COMBOBOX_ENTRY_NOTFOUND )
             return rBox.GetText().Copy(0);
-        else
+
+        if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
             return String(rList.GetToken(((nPos*2)+1), nTok ).ToInt32());
-                // somewhat strange ... translates for instance an "32" into " "
+        // somewhat strange ... translates for instance an "32" into " "
+        return String();
     }
 
     //------------------------------------------------------------------------
@@ -1342,9 +1346,12 @@ namespace dbaui
             }
         }
 
-        if( i >= nCnt )
+        if ( i >= nCnt )
         {
-            rBox.SetText( rVal.Copy(0, 1) );
+            if ( &m_aTextSeparator == &rBox && !rVal.Len() )
+                rBox.SetText(m_aTextNone);
+            else
+                rBox.SetText( rVal.Copy(0, 1) );
         }
     }
 
@@ -1355,6 +1362,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2002/10/15 09:52:21  oj
+ *  #98982# disable thousand seperator
+ *
  *  Revision 1.18  2002/08/30 06:05:15  oj
  *  #102756# move checkbox inside invalid class
  *

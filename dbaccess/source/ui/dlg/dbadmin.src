@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 18:07:16 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,10 +2634,18 @@ TabPage PAGE_TEXT
         Text[ catalan ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{empty}\t32";
         Text[ thai ] = ";\t59\t,\t44\t:\t58\t{ระยะกั้น}\t9\t{ว่าง}\t32";
     };
+
     String STR_TEXTSEPARATORLIST
     {
         Text = "\"\t34\t'\t39" ;
     };
+
+    String STR_TEXT_FIELD_SEP_NONE
+    {
+        Text = "{Keiner}" ;
+        Text [ english ] = "{None}" ;
+    };
+
     String STR_DELIMITER_MISSING
     {
         Text = "#1 muss angegeben sein." ;
@@ -3956,6 +3964,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.112  2002/11/04 18:07:16  rt
+ *  Merge SRX644: 04.11.02 - 19:03:18
+ *
  *  Revision 1.111  2002/09/25 09:19:24  gh
  *  #103161#changes to fix confusion of the HID-generation
  *

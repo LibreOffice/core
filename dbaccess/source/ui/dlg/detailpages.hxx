@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:33:29 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ namespace dbaui
 
         String      m_aFieldSeparatorList;
         String      m_aTextSeparatorList;
+        String      m_aTextNone;
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         ~OTextDetailsPage();
@@ -331,6 +332,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/07/26 09:33:29  oj
+ *  #95146# new controls inserted for auto retrieving
+ *
  *  Revision 1.11  2002/07/09 12:39:07  oj
  *  #99921# check if datasource allows to check names
  *
