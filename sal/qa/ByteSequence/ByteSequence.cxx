@@ -78,9 +78,13 @@ class  ctor : public CppUnit::TestFixture
 
         void ctor_004()
         {
-            sal_Int8 * pElements = &kTestByte;
+            sal_Int8 * pElements = &kTestByte4;
         sal_Int32 len = kTestByteCount1;
         ::rtl::ByteSequence aByteSeq( pElements, len);
+    printf("the kTestByte4 is %d\n", kTestByte4);
+    printf("the aByteSeq[0] is %d\n", aByteSeq[0]);
+    printf("the aByteSeq[1] is %d\n", aByteSeq[1]);
+    printf("the aByteSeq[2] is %d\n", aByteSeq[2]);
 //printf("ctor004\n");
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -510,21 +514,26 @@ public:
     void getData_002()
     {
         ::rtl::ByteSequence aByteSeq( &kTestByteSeq2 );
+    sal_Int8 nValue = aByteSeq[0];
         CPPUNIT_ASSERT_MESSAGE
         (
             "Obtains a reference to byte indexed at given position: reference count > 1",
-            aByteSeq[1] == 0 //not sure what is right,hehe
+            nValue == kTestChar2 //not sure what is right,hehe
     );
     }
 
     void getData_003()
     {
-        ::rtl::ByteSequence aByteSeq( &kTestByteSeq1 );
-    printf("the 3th byte in aByteSeq is %d\n", aByteSeq[0]);
+        ::rtl::ByteSequence aByteSeq( &kTestByteSeq3 );
+    sal_Int8 nValue = aByteSeq[0];
+    printf("the kTestChar3 is %d\n", kTestChar3);
+    printf("the aByteSeq[0] is %d\n", aByteSeq[0]);
+    printf("the aByteSeq[1] is %d\n", aByteSeq[1]);
+    printf("the aByteSeq[2] is %d\n", aByteSeq[2]);
         CPPUNIT_ASSERT_MESSAGE
         (
             "Obtains a reference to byte indexed at given position: reference count = 1",
-            aByteSeq[1] == 0 //not sure what is right,hehe
+            nValue == kTestChar3 //not sure what is right,hehe
     );
     }
 
