@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:44:41 $
+ *  last change: $Author: cd $ $Date: 2002-05-31 05:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,7 @@ public:
 
                                 SfxStatusBarConfigListBox( Window* pParent,
                                         const ResId& );
+                                ~SfxStatusBarConfigListBox();
 
     virtual BOOL                NotifyAcceptDrop( SvLBoxEntry* pEntry );
     virtual BOOL                NotifyMoving(SvLBoxEntry*,
