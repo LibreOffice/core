@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:35:12 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,7 @@ String STR_DOCINFOFLD
     TEXT[ chinese_simplified ] = "ΞΔµµΠΕΟΆ";
     TEXT[ russian ] = "Ρβεδενθÿ ξ δξκσμενςε";
     TEXT[ polish ] = "Informacje o dokumencie";
-    TEXT[ japanese ] = "Δή·­ÒέΔ²έΜ«Ò°Ό®έ";
+    TEXT[ japanese ] = "Δή·­ÒέΔξ•ρ";
     TEXT[ chinese_traditional ] = "¤ε¥σΈκ°T";
     TEXT[ arabic ] = "γΪαζγΗΚ ΗαγΣΚδΟ";
     TEXT[ greek ] = "Πληροφορίες εγγράφου";
@@ -3308,7 +3308,7 @@ String STR_URLPROMPT
     Text[ chinese_traditional ] = "~URL";
     Text[ arabic ] = "URL~";
     Text[ greek ] = "URL";
-    Text[ korean ] = "~URL";
+    Text[ korean ] = "URL";
     Text[ turkish ] = "~URL";
     Text[ language_user1 ] = " ";
 };
