@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-11-02 11:11:18 $
+ *  last change: $Author: os $ $Date: 2002-04-19 12:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,15 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+namespace com{namespace sun{namespace star{
+    namespace view{
+        class XSelectionChangeListener;
+    }
+}}}
 
 
 class SvxRubyDialog;
@@ -164,6 +173,7 @@ class SvxRubyDialog : public SfxModelessDialog
     long                nCurrentEdit;
     BOOL                bModified;
 
+    com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
     SvxRubyData_Impl* pImpl;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
+ *  last change: $Author: os $ $Date: 2002-04-19 12:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,16 +219,6 @@ SvxRubyData_Impl::SvxRubyData_Impl() :
 //-----------------------------------------------------------------------------
 SvxRubyData_Impl::~SvxRubyData_Impl()
 {
-    m_refCount++;
-    try
-    {
-        Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
-        if(xSelSupp.is())
-            xSelSupp->removeSelectionChangeListener(this);
-    }
-    catch(Exception&)
-    {}
-    m_refCount--;
 }
 //-----------------------------------------------------------------------------
 void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
@@ -257,7 +247,7 @@ void SvxRubyData_Impl::selectionChanged( const EventObject& aEvent ) throw (Runt
     bHasSelectionChanged = sal_True;
 }
 //-----------------------------------------------------------------------------
-void SvxRubyData_Impl::disposing( const EventObject& Source ) throw (RuntimeException)
+void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException)
 {
     try
     {
@@ -318,9 +308,9 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aHelpPB(this,               ResId(PB_HELP           )),
     pBindings(pBind),
     nLastPos(0),
-    nCurrentEdit(0),
-    pImpl(new SvxRubyData_Impl)
+    nCurrentEdit(0)
 {
+    xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
     //#85638# automatic detection not yet available
     aAutoDetectionCB.Hide();
@@ -358,7 +348,8 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 SvxRubyDialog::~SvxRubyDialog()
 {
     ClearCharStyleList();
-    delete pImpl;
+    EventObject aEvent;
+    xImpl->disposing(aEvent);
 }
 /* -----------------------------01.02.01 10:29--------------------------------
 
