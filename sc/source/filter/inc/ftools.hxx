@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:30:26 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ inline void set_flag( Type& rnBitField, Type nMask, bool bSet = true )
 template< typename Type, typename InsertType >
 void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal_uInt8 nBitCount )
 {
-    sal_uInt32 nMask = ((1UL << nBitCount) - 1);
+    unsigned long nMask = ((1UL << nBitCount) - 1);
     Type nNewValue = static_cast< Type >( nValue & nMask );
     (rnBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
@@ -224,22 +224,13 @@ public:
     /** Mixes colors with given transparence (0x0000 == full rFore ... 0x8000 = full rBack). */
     static Color                GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans );
 
-// *** token handling ***
-
-    /** Adds the token rToken to rTokenList, using separator cSep. */
-    static void                 AddToken( String& rTokenList, const String& rToken, sal_Unicode cSep = ';' );
-    /** Inserts the character cQuote at beginning and end of rString. */
-    static void                 AddQuotes( String& rString, sal_Unicode cQuote = '"' );
-    /** Erases the character cQuote from rString, if it exists at beginning AND end. */
-    static void                 EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
-
 // *** conversion of names ***
 
-    /** Converts an external name to a valid Calc sheet name.
+    /** Converts a string to a valid Calc sheet name.
         @descr  Sheet names in Calc may contain letters, digits, underscores, and spaces
         (space characters are not allowed at first position). */
     static void                 ConvertToScSheetName( String& rName );
-    /** Converts an external name to a valid Calc defined name or database range name.
+    /** Converts a string to a valid Calc defined name or database range name.
         @descr  Defined names in Calc may contain letters, digits (*), underscores, periods (*),
         colons (*), question marks, and dollar signs.
         (*) = not allowed at first position. */
