@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-24 10:25:35 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 16:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@ struct hashFunc
 #include "ZipOutputStream.hxx"
 #endif
 
+#ifndef _MANIFEST_ENTRY_HXX
+#include "ManifestEntry.hxx"
+#endif
+
 #ifdef _DEBUG_RECURSION_
 #include "testzip.hxx"
 #endif
@@ -148,18 +152,16 @@ class ZipPackageFolder : public ZipPackageEntry,
                          public ::com::sun::star::lang::XUnoTunnel
 {
 private:
-    //std::hash_map < rtl::OUString, ZipPackageFolder, hashFunc, eqFunc > aFolders;
-    //StreamHash aStreams;
     ZipOutputStream &rZipOut;
     ::rtl::OUString sMediaType;
     TunnelHash aContents;
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
 public:
-    ZipPackageFolder (ZipOutputStream &rStream );//ZipPackage &rInPackage);
+    ZipPackageFolder (ZipOutputStream &rStream );
 #ifdef _DEBUG_RECURSION_
     void  saveContents(rtl::OUString &rPath, TestZip &rFoo);
 #else
-    void  saveContents(rtl::OUString &rPath);
+    void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList);
 #endif
     inline sal_Bool isFolder( void ) {return sal_True;}
     inline sal_Bool isStream( void ) {return sal_False;}

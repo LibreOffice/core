@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-24 10:25:35 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 16:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,14 @@
 
 #ifdef _DEBUG_RECURSION_
 #include "testzip.hxx"
+#endif
+
+#ifndef _MANIFEST_ENTRY_HXX
+#include "ManifestEntry.hxx"
+#endif
+
+#ifndef _MANIFEST_WRITER_HXX
+#include "ManifestWriter.hxx"
 #endif
 
 #include <vector>

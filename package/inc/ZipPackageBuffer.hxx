@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 16:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,11 @@ class ZipPackageBuffer :
                 public cppu::OWeakObject
 {
 private:
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     sal_Int64 nBufferSize;
     sal_Int64 nEnd;
     sal_Int64 nCurrent;
 public:
+    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
     ~ZipPackageBuffer(void);
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
