@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Driver.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:42:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,24 +82,13 @@ namespace connectivity
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        class java_sql_Driver : public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>,
-                            public java_lang_Object
+    class java_sql_Driver : public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>
     {
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
     protected:
-        // statische Daten fuer die Klasse
-        static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
-
-        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution,sal_Bool& _bIgnoreDriverPrivileges);
-
         virtual ~java_sql_Driver();
     public:
-        // only available to set the driver
-        static jclass getMyClass();
-
         java_sql_Driver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
-        java_sql_Driver( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         static rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -114,7 +103,9 @@ namespace connectivity
         virtual sal_Bool SAL_CALL acceptsURL( const ::rtl::OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
         virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(::com::sun::star::uno::RuntimeException) ;
-        virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException) ;
+        virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException);
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
     };
 
 }
