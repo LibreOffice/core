@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:45:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SFX_MISCCFG_HXX
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -144,15 +144,6 @@
 #endif
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
 #endif
 #ifndef _SOERR_HXX
 #include <so3/soerr.hxx>
@@ -273,6 +264,8 @@
 
 #include <cfgid.h>
 #include <svtools/moduleoptions.hxx>
+#include <svtools/fltrcfg.hxx>
+#include <svx/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 
 using namespace rtl;
@@ -313,6 +306,7 @@ public:
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
+    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
@@ -322,7 +316,6 @@ SFX_IMPL_OBJECTFACTORY(SwDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASM
 {
     SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
     rFactory.SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
-    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::DetectFilter );
     SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
     SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
 }
@@ -556,7 +549,7 @@ BOOL SwDocShell::Save()
                 {
                     SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
                     aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
-                    if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
+                    if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
                                         GetSaveWarningOfMSVBAStorage( *this );
                     pDoc->SetContainsMSVBasic( FALSE );
@@ -676,7 +669,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
         {
             SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
             aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
-                    if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
+                    if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
                                         GetSaveWarningOfMSVBAStorage( *this );
             pDoc->SetContainsMSVBasic( FALSE );
@@ -768,7 +761,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( pDoc->ContainsMSVBasic() )
     {
         BOOL bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
-             && OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage();
+             && SvtFilterOptions::Get()->IsLoadWordBasicStorage();
 
         SvStorage* pStg;
         if( xWriter->IsStgWriter() )
@@ -787,8 +780,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pFlt->GetUserData().EqualsAscii( "HTML") )
     {
-        OfficeApplication* pOffApp = OFF_APP();
-        OfaHtmlOptions* pHtmlOpt = pOffApp->GetHtmlOptions();
+        SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
         if( !pHtmlOpt->IsStarBasic() && pHtmlOpt->IsStarBasicWarning() && HasBasic() )
         {
             Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
