@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2001-05-08 09:34:17 $
+ * @version     $Revision: 1.9 $ $ $Date: 2001-05-17 12:24:37 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -603,8 +603,8 @@ public class TypeDescription implements ITypeDescription {
             Class interfaces[] = _class.getInterfaces();
             if(interfaces.length > 0)
                 _superType = getTypeDescription(interfaces[0]); // uno only supports single inheritance
-            else
-                _superType = getTypeDescription(com.sun.star.uno.XInterface.class);
+
+            _initMethodTypeInfos();
         }
         else if(zClass.isArray()) {
             _typeClass = TypeClass.SEQUENCE;
@@ -796,8 +796,6 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IMethodDescription []getMethodDescriptions() {
-        _initMethodTypeInfos();
-
         IMethodDescription iMethodDescriptions[] = null;
 
         if(_methodDescriptionsByIndex != null) {
@@ -810,8 +808,6 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IMethodDescription getMethodDescription(int methodId) {
-        _initMethodTypeInfos();
-
         IMethodDescription iMethodDescription = null;
 
         int relMethodId = methodId - (_offset - _methodDescriptionsByIndex.length);
@@ -826,8 +822,6 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IMethodDescription getMethodDescription(String name) {
-        _initMethodTypeInfos();
-
         IMethodDescription iMethodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
         if(iMethodDescription == null && _superType != null)
             iMethodDescription = _superType.getMethodDescription(name);
