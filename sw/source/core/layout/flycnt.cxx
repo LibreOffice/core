@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-04 11:37:19 $
+ *  last change: $Author: ama $ $Date: 2002-02-07 13:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2839,6 +2839,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
             if( bFlyVert )
                 aFrm.Pos().X() -= aFrm.Width();
             aFrm.Pos().Y() = GetAnchor()->Frm().Top() + aRelPos.Y();
+            AssertPage();
         }
         else
             aFrm.Pos( aRelPos + GetAnchor()->Frm().Pos() );

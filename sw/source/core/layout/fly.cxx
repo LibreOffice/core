@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-05 09:28:24 $
+ *  last change: $Author: ama $ $Date: 2002-02-07 13:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -187,9 +190,33 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
 #ifdef VERTICAL_LAYOUT
-    bDerivedVert = 0;
-    SwFrm* pTmp = bDerivedVert ? pAnch : this;
-    BOOL bVert = pTmp ? pTmp->IsVertical() : FALSE;
+    BOOL bVert = FALSE;
+    UINT16 nDir =
+        ((SvxFrameDirectionItem&)pFmt->GetAttr( RES_FRAMEDIR )).GetValue();
+    if( FRMDIR_ENVIRONMENT == nDir )
+    {
+        bDerivedVert = 1;
+        bDerivedR2L = 1;
+        if( pAnch && pAnch->IsVertical() )
+            bVert = TRUE;
+    }
+    else
+    {
+        bInvalidVert = 0;
+        bDerivedVert = 0;
+        bDerivedR2L = 0;
+        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
+                                         || pFmt->GetDoc()->IsBrowseMode() )
+            bVertical = 0;
+        else
+            bVertical = 1;
+        bVert = bVertical;
+        bInvalidR2L = 0;
+        if( FRMDIR_HORI_RIGHT_TOP == nDir )
+            bRightToLeft = 1;
+        else
+            bRightToLeft = 0;
+    }
     if( bVert )
     {
         Frm().Width( rFrmSize.GetHeight() );
