@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tv $ $Date: 2001-06-08 14:22:17 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 12:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String SAMPLES
     Text[English] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
     Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, terα que criar um novo documento com base neste modelo.";
-    Text[ greek ] = "Για να έχετε τη δυνατότητα χρήσης όλων των λειτουργιών αυτού του παραδείγματος Θα πρέπει να δημιουργήσετε ένα νέο έγγραφο με βάση αυτό το π";
+    Text[ greek ] = "Για να μπορέσετε να χρησιμοποιήσετε όλες τις λειτουργίες αυτού του παραδείγματος θα πρέπει να δημιουργήσετε ένα νέο έγγραφο βασισμένο σε αυτό το πρότυπο.";
     Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken maakt u een nieuw document op basis van deze sjabloon.";
     Text[ french ] = "Afin de pouvoir profiter de l'entiθre fonctionnalitι de cet exemple, il vous faut crιer un nouveau document basι sur ce modθle.";
     Text[ spanish ] = "Para que estι disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
@@ -89,7 +89,7 @@ String SAMPLES
     Text[ polish ] = "Aby dany przyk³ad moΏna by³o w pe³ni wykorzystaζ, naleΏy na podstawie danego szablonu utworzyζ nowy dokument.";
     Text[ portuguese_brazilian ] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ japanese ] = "‚±‚Μ»έΜίΩ‚ª‚¤‚ά‚­‹@”\\‚³‚Ή‚ι‚Ι‚ΝA‚±‚ΜΓέΜίΪ°Δ‚πθ–{‚ΙV‚µ‚ΆΔή·­ÒέΔ‚πμ¬‚µ‚Θ‚―‚κ‚Ξ‚Θ‚θ‚ά‚Ή‚ρB";
-    Text[ korean ] = "ΐΜ ΏΉΐΗ ±β΄ΙΌΊΐ» ΏΟΊ®ΗΟ°Τ΅΅ΐΜΏλΗÒ Όφ ΐΦµµ·Ο ΗΟ±βΐ§ΗΨΌ­΄Β ΐΜ Ό­½ΔΖΔΐΟΐ» ±βΓΚ·Ξ »υ Ή®Ό­Έ¦ ΐΫΌΊΗΨΎί ΗΥ΄Ο΄Ω.";
+    Text[ korean ] = "ΐΜ ΏΉΐΗ ±β΄ΙΌΊΐ» ΏΟΊ®ΗΟ°Τ΅΅ΐΜΏλΗÒ Όφ ΐΦµµ·Ο ΗΟ±βΐ§ΗΨΌ­΄Β ΐΜ Ό­½Δ ΖΔΐΟΐ» ±βΓΚ·Ξ »υ Ή®Ό­Έ¦ ΐΫΌΊΗΨΎί ΗΥ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "Φ»ΣΠΚΧΟΘ½θΦϊΥβΈφΡωΚ½ΠΒ½¨Ò»ΈφΞΔµµ£¬²ΕΔά³δ·ΦΚΉΣΓΚΎΐύΉ¦Δά΅£";
     Text[ chinese_traditional ] = "­n·Q¥R¤ΐ§Q¥Ξ³o­ΣΌΛ¦΅ªΊ¦UΊΨΙ¬¨q¥\\―ΰ΅A±z¥²¶·±Δ¥Ξ³o­ΣΌΛ¦΅¨Σ·s«Ψ¤@­Σ¤ε¥σ΅C";
     Text[ arabic ] = "αίν ΚΣΚΨνΪ ΗΣΚΞΟΗγ εΠΗ ΗαγΛΗα Ϊαμ ΗαδΝζ ΗαΓγΛα΅ Ϊανί ΕδΤΗΑ γΣΚδΟ ΜΟνΟ ΘΗΣΚΞΟΗγ εΠΗ ΗαήΗαΘ.";
@@ -433,7 +433,7 @@ String CorrespondenceDialog
 {
     Text = "Empfδnger";
     Text[English] = "Who will get this document?";
-    Text[ english_us ] = "Who will get this document?";
+    Text[ english_us ] = "What do you want to write?";
     Text[ portuguese ] = "Que deseja escrever?";
     Text[ dutch ] = "Wat wilt u schrijven?";
     Text[ french ] = "Que souhaitez-vous ιcrire ?";
@@ -459,7 +459,7 @@ String CorrespondenceDialog+1
 {
     Text = "Ein Empfδnger";
     Text[English] = "One Recipient";
-    Text[ english_us ] = "One Recipient";
+    Text[ english_us ] = "Single letter";
     Text[ portuguese ] = "Carta individual";
     Text[ dutch ] = "Een enkele brief";
     Text[ french ] = "Lettre individuelle";
@@ -486,7 +486,7 @@ String CorrespondenceDialog+2
 {
     Text = "Mehrere Empfδnger (Adressdatenbank)";
     Text[English] = "Multiple Recipients (Address Database)";
-    Text[ english_us ] = "Multiple Recipients (Address Database)";
+    Text[ english_us ] = "Form letter";
     Text[ portuguese ] = "Carta em sιrie";
     Text[ dutch ] = "Standaardbrief";
     Text[ french ] = "Mailing";
@@ -813,7 +813,7 @@ String TextField
     Text[ polish ] = "Nie zdefiniowano pola danych uΏytkownika!";
     Text[ portuguese_brazilian ] = "Textfield is not defined!";
     Text[ japanese ] = "Υ°»ή°Γή°ΐ‚ΜΜ¨°ΩΔή‚ª’θ‹`‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
-    Text[ korean ] = "ΕΨ½ΊΖ®ΗΚµε°΅ Α¤ΐΗµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω!";
+    Text[ korean ] = "»ηΏλΐΪµ¥ΐΜΕΝΗΚµε°΅ Α¤ΐΗµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω!";
     Text[ chinese_simplified ] = "»ΉΓ»ΣΠ¶¨ÒεΚΉΣΓΥίΧΦ¶Ξ£΅";
     Text[ chinese_traditional ] = "ΑΩ¨S¦³©wΈq¨Ο¥ΞªΜΈκ®ΖΔζ¦μ!";
     Text[ turkish ] = "Textfield is not defined!";
@@ -821,3 +821,4 @@ String TextField
     Text[ catalan ] = "΅El campo de datos de usuario no estα definido!";
     Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
 };
+
