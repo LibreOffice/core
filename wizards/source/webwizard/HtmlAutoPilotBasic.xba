@@ -35,7 +35,7 @@ Public ProgressValue As Long
 Public oBaseDocument as Object
 Public oViewCursor as Object
 Public oViewSettings as Object
-Public NoArgs as New com.sun.star.beans.PropertyValue
+Public NoArgs() as New com.sun.star.beans.PropertyValue
 
 Public oCursor as Object
 Public oBookmarks as Object
