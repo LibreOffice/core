@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:03:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@ private:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
                                         const USHORT* pPosY = NULL );
     void            UpdateVarZoom();
+
+    static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL );
+    static long     GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL );
 
 protected:
     void            HideTip();
