@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 20:19:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-30 10:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
 // -----------------------------------------------------------------------
 
-const ::com::sun::star::lang::Locale SvtPathOptions::GetLocale() const
+::com::sun::star::lang::Locale SvtPathOptions::GetLocale() const
 {
     return pImp->GetLocale();
 }
