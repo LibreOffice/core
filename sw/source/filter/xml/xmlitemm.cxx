@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:08:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ using namespace ::xmloff::token;
 #define M_E( p, l, w, m ) \
     { XML_NAMESPACE_##p, XML_##l, w, m }
 #define M_E_SI( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, MID_FLAG_SPECIAL_ITEM_IMPORT|m }
+    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_IMPORT|m }
 #define M_E_SE( p, l, w, m ) \
-    { XML_NAMESPACE_##p, XML_##l, w, MID_FLAG_SPECIAL_ITEM_EXPORT|m }
+    { XML_NAMESPACE_##p, XML_##l, w, MID_SW_FLAG_SPECIAL_ITEM_EXPORT|m }
 
 #define M_END { 0, XML_TOKEN_INVALID, 0, 0 }
 
@@ -135,7 +135,7 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     // not required
     // RES_BACKGROUND
     M_E( FO,    BACKGROUND_COLOR,       RES_BACKGROUND, MID_BACK_COLOR ),
-    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_FLAG_ELEMENT_ITEM ),
+    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_SW_FLAG_ELEMENT_ITEM ),
     // RES_BOX
     // not required
     // RES_SHADOW
@@ -218,7 +218,7 @@ SvXMLItemMapEntry aXMLTableRowItemMap[] =
     // not required
     // RES_BACKGROUND
     M_E( FO,    BACKGROUND_COLOR,       RES_BACKGROUND, MID_BACK_COLOR ),
-    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_FLAG_ELEMENT_ITEM ),
+    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_SW_FLAG_ELEMENT_ITEM ),
     // RES_BOX
     // not required
     // RES_ANCHOR
@@ -288,7 +288,7 @@ SvXMLItemMapEntry aXMLTableCellItemMap[] =
     // not required
     // RES_BACKGROUND
     M_E( FO,    BACKGROUND_COLOR,       RES_BACKGROUND, MID_BACK_COLOR ),
-    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_FLAG_ELEMENT_ITEM ),
+    M_E( STYLE, BACKGROUND_IMAGE,       RES_BACKGROUND, MID_SW_FLAG_ELEMENT_ITEM ),
     // RES_BOX
     M_E( STYLE, BORDER_LINE_WIDTH,        RES_BOX, ALL_BORDER_LINE_WIDTH ),
     M_E( STYLE, BORDER_LINE_WIDTH_LEFT,   RES_BOX, LEFT_BORDER_LINE_WIDTH ),
