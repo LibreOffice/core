@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-03 09:35:25 $
+ *  last change: $Author: sj $ $Date: 2000-11-23 16:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1525,6 +1525,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
     aP1.Y() += (INT16)SVBT16ToShort( pHd->dya );
 
     SdrTextObj* pObj = new SdrRectObj( OBJ_TEXT, Rectangle( aP0, aP1 ) );
+    pObj->SetModel( pDrawModel );
     Size aSize( (INT16)SVBT16ToShort( pHd->dxa ) ,
                                  (INT16)SVBT16ToShort( pHd->dya ) );
 
@@ -3025,11 +3026,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.4 2000-11-03 09:35:25 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.5 2000-11-23 16:18:18 sj Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/03 09:35:25  khz
+      fault tolerant Winword parameter reading
+
       Revision 1.3  2000/10/30 12:07:14  aw
       change SdrObjects to use SfxItemSet instead of SfxSetItems.
       Removed TakeAttributes() and SetAttributes(), new ItemSet
