@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:51:11 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:46:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,8 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/moduldl2.obj	\
                 $(SLO)$/basidectrlr.obj
 
-SRCFILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
+SRS1NAME=$(TARGET)
+SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
 
 LIB2TARGET =    $(SLB)$/ybctl.lib
 LIB2ARCHIV =    $(LB)$/libybctl.a
@@ -135,12 +136,7 @@ LIB2OBJFILES  =    $(SLO)$/basiclib.obj
 
 DEPOBJFILES = $(SLO)$/basiclib.obj
 
-
-.IF "$(depend)" == ""
-
-ALL:	\
-        $(INCCOM)$/dllname.hxx	\
-        ALLTAR
+.INCLUDE :  target.mk
 
 $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
@@ -154,12 +150,8 @@ $(INCCOM)$/dllname.hxx: makefile.mk
 .ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
-.ENDIF
-.INCLUDE :  target.mk
-
-.IF "$(depend)" == ""
+$(SLO)$/basiclib.obj : $(INCCOM)$/dllname.hxx
 
 $(INCCOM)$/basicide.hrc: basidesh.hrc
     @-+$(COPY) basidesh.hrc $@
 
-.ENDIF
