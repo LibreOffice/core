@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 14:55:15 $
+ *  last change: $Author: fme $ $Date: 2001-10-10 09:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
+
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
 #include "txtcfg.hxx"
@@ -656,8 +657,6 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         //
         // here starts the algorithm for calculating the underline font
         //
-        OutputDevice* pOut = GetInfo().GetDoc()->GetPrt();
-
         SwScriptInfo aScriptInfo;
         SwAttrIter aIter( *(SwTxtNode*)GetInfo().GetTxtFrm()->GetTxtNode(),
                         aScriptInfo );
@@ -666,7 +665,6 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         ULONG nSumWidth = 0;
         ULONG nSumHeight = 0;
         ULONG nBold = 0;
-        ULONG nNormal = 0;
         const ULONG nPorWidth = pPor->Width();
 
         while( nTmpIdx <= nUnderEnd && pPor )
@@ -676,7 +674,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
                 pPor->IsHolePortion() || pPor->IsMarginPortion() )
                 break;
 
-            aIter.SeekAndChg( nTmpIdx, pOut );
+            aIter.Seek( nTmpIdx );
 
             if ( aIter.GetFnt()->GetEscapement() < 0 || pFnt->IsWordLineMode() ||
                  SVX_CASEMAP_KAPITAELCHEN == pFnt->GetCaseMap() )
@@ -688,9 +686,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
                 nSumWidth += nSize;
                 // weighted sum of font heights
                 nSumHeight += nSize * aIter.GetFnt()->GetHeight();
-                if ( WEIGHT_NORMAL == aIter.GetFnt()->GetWeight() )
-                    nNormal += nSize;
-                else
+                if ( WEIGHT_NORMAL != aIter.GetFnt()->GetWeight() )
                     nBold += nSize;
             }
 
@@ -711,7 +707,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
                                           nAverageHeight ), nActual );
 
             // font weight
-            if ( nBold > nNormal )
+            if ( 2 * nBold > nSumWidth )
                 pUnderlineFnt->SetWeight( WEIGHT_BOLD, nActual );
             else
                 pUnderlineFnt->SetWeight( WEIGHT_NORMAL, nActual );
