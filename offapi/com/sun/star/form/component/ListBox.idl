@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:31:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 /** specifies a model for a control which allows to choose in a list of alternative values.
  */
-service ListBox
+published service ListBox
 {
     service com::sun::star::awt::UnoControlListBoxModel;
 
