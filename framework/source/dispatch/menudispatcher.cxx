@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:46:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,9 +681,18 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
                     // set new menu on our system window and create new menu manager
                     if ( bMenuFromResource )
-                        m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
+                    {
+                        // #110897#
+                        // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
+                        m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
+                    }
                     else
-                        m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
+                    {
+                        // #110897#
+                        // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
+                        m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
+                    }
+
                     pSysWindow->SetMenuBar( pMenuBar );
                 }
             }
