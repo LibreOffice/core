@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-09 14:58:58 $
+ *  last change: $Author: os $ $Date: 2001-04-10 11:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 
 #include <setup2/installer.hxx>
 #include <svtools/pathoptions.hxx>
+#include "svtools/cjkoptions.hxx"
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -213,6 +214,7 @@ void Desktop::Main()
     if( !bTerminate )
     {
         SvtPathOptions* pPathOptions = new SvtPathOptions;
+        SvtCJKOptions* pCJKOPptions = new SvtCJKOptions(sal_True);
         RegisterServices();
         OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
 //      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
@@ -225,6 +227,7 @@ void Desktop::Main()
             pWrapper=NULL;
         }
 
+        delete pCJKOPptions;
         delete pPathOptions;
     }
 
