@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olesh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:09:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 
 #pragma hdrstop
 
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
