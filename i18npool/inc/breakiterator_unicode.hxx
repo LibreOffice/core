@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-03 19:07:46 $
+ *  last change: $Author: khong $ $Date: 2002-08-02 15:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ protected:
     Boundary result; // for word break iterator
 
 private:
-    rtl::OUString cachedText;   // for script boundary
-    sal_Int32 scriptStart, scriptLength;
-    icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak, *sentenceBreak, *lineBreak;
-    sal_Int32 SAL_CALL setTextByScriptBoundary(const rtl::OUString& Text, sal_Int32 nPos);
+    icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak,
+                *countWordBreak, *sentenceBreak, *lineBreak;
+    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
 };
 
 } } } }
