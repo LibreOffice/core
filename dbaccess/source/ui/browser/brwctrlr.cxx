@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:36:44 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,7 +923,6 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     SQLExceptionInfo aInfo(aEvent.Reason);
     if (aInfo.isValid())
     {
