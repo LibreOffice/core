@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:54:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3926,7 +3926,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         }
 
         SwDoc* pCpyDoc = (SwDoc*)pSrcTblNd->GetDoc();
-        SvEmbeddedObjectRef* pRefForDocSh;
+        SfxObjectShellRef* pRefForDocSh;
         BOOL bDelCpyDoc = pCpyDoc == this;
 
         if( bDelCpyDoc )
@@ -3934,7 +3934,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             // kopiere die Tabelle erstmal in ein temp. Doc
             pCpyDoc = new SwDoc;
             pCpyDoc->AddLink();
-            pRefForDocSh = new SvEmbeddedObjectRef();
+            pRefForDocSh = new SfxObjectShellRef();
             pCpyDoc->SetRefForDocShell( pRefForDocSh );
 
             SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
