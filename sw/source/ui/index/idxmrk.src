@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:53:31 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,7 +643,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìí—Ş";
         Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ »öÀÎ";
         Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕßÄ¿Â¼";
-        Text[ chinese_traditional ] = "·s«Ø¦Û­q¥Ø¿ı";
+        Text[ chinese_traditional ] = "·s¼W¦Û­q¥Ø¿ı";
         Text[ arabic ] = "İåÑÓ ÌÏíÏ ááãÓÊÎÏã";
         Text[ turkish ] = "Yeni kullanıcı dizini";
         Text[ language_user1 ] = " ";
@@ -958,7 +958,7 @@ String STR_IDXMRK_INSERT
             Text[ japanese ] = "€–Ú";\
             Text[ korean ] = "Ç×¸ñ";\
             Text[ chinese_simplified ] = "ÌõÄ¿";\
-            Text[ chinese_traditional ] = "¶µ¥Ø";\
+            Text[ chinese_traditional ] = "±ø¥Ø";\
             Text[ arabic ] = "ÅÏÎÇá";\
             Text[ turkish ] = "Giriş";\
             Text[ language_user1 ] = " ";\
@@ -1293,5 +1293,6 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ catalan ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
     MESSAGE[ finnish ] = "The bibliography entry is already contained in the document with different data. ";
 };
+
 
 
