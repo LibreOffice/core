@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToDo.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:01:40 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -157,7 +157,7 @@ public class ToDo {
         static private final int INT_ROW_HOLIDAYS_START = 4;
         static private final int INT_COLUMN_HOLIDAYS_START = 7; // 10
 
-        static private final String STRING_SEPARATOR = ".";
+        static private final String STRING_SEPARATOR = "/";
 
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
@@ -589,8 +589,9 @@ public class ToDo {
          * @return string (converted gregorian calendar).
          */
         public String getStringFromGregorianCalendar( GregorianCalendar gregoriancalendar ) {
-            String stringDate = gregoriancalendar.get( Calendar.DATE )
-                + STRING_SEPARATOR + ( gregoriancalendar.get( Calendar.MONTH ) + 1 )
+            String stringDate = ( gregoriancalendar.get( Calendar.MONTH ) + 1 )
+                + STRING_SEPARATOR + gregoriancalendar.get( Calendar.DATE )
+//                + STRING_SEPARATOR + ( gregoriancalendar.get( Calendar.MONTH ) + 1 )
                 + STRING_SEPARATOR + gregoriancalendar.get( Calendar.YEAR );
 
             return( stringDate );
@@ -603,8 +604,8 @@ public class ToDo {
         public GregorianCalendar getGregorianCalendarFromString( String stringDate ) {
             int []intDateValue = this.getDateValuesFromString( stringDate );
 
-            return( new GregorianCalendar( intDateValue[ 2 ], intDateValue[ 1 ],
-                                           intDateValue[ 0 ] ) );
+            return( new GregorianCalendar( intDateValue[ 2 ], intDateValue[ 0 ],
+                                           intDateValue[ 1 ] ) );
         }
 
         /** Getting the day, month and year from a string.
@@ -618,18 +619,15 @@ public class ToDo {
             int intPositionSecondTag = stringDate.indexOf( STRING_SEPARATOR,
                                                            intPositionFirstTag + 1 );
 
-            // Getting the value of the year
-            intDateValues[ 0 ] = Integer.parseInt( stringDate.substring( 0,
-                                                                         intPositionFirstTag ) );
-
             // Getting the value of the month
-            intDateValues[ 1 ] = Integer.parseInt( stringDate.substring( intPositionFirstTag + 1,
-                                                                         intPositionSecondTag ) ) - 1;
-
+            intDateValues[ 0 ] = Integer.parseInt( stringDate.substring( 0,
+                                                                         intPositionFirstTag ) ) - 1;
             // Getting the value of the day
+            intDateValues[ 1 ] = Integer.parseInt( stringDate.substring( intPositionFirstTag + 1,
+                                                                         intPositionSecondTag ) );
+            // Getting the value of the year
             intDateValues[ 2 ] = Integer.parseInt(
-                stringDate.substring( intPositionSecondTag + 1, stringDate.length()
-                    ) );
+                stringDate.substring( intPositionSecondTag + 1, stringDate.length() ) );
 
             return( intDateValues );
         }
