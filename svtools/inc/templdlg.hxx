@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 07:50:37 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 10:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 struct SvtTmplDlg_Impl;
 
 // class SvtDocumentTemplateDialog ---------------------------------------
-
+class SvtTemplateWindow;
 class SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
