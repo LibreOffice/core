@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 15:18:14 $
+ *  last change: $Author: mav $ $Date: 2003-12-12 12:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     nEntryConnectionMode,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    lArguments,
                                     lObjArgs );
 
     }
