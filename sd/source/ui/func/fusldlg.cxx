@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:48:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,11 @@ FuSlideShowDlg::FuSlideShowDlg (
     SfxRequest& rReq)
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
+    PresentationSettings& rPresentationSettings = pDoc->getPresentationSettings();
+
     SfxItemSet      aDlgSet( pDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
     List            aPageNameList;
-    const String&   rPresPage = pDoc->GetPresPage();
+    const String&   rPresPage = rPresentationSettings.maPresPage;
     String          aFirstPage;
     String          aStandardName( SdResId( STR_PAGE ) );
     SdPage*         pPage = NULL;
@@ -150,21 +152,21 @@ FuSlideShowDlg::FuSlideShowDlg (
     if( !aFirstPage.Len() && pPage )
         aFirstPage = pPage->GetName();
 
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALL, pDoc->GetPresAll() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CUSTOMSHOW, pDoc->IsCustomShow() ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALL, rPresentationSettings.mbAll ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CUSTOMSHOW, rPresentationSettings.mbCustomShow ) );
     aDlgSet.Put( SfxStringItem( ATTR_PRESENT_DIANAME, aFirstPage ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ENDLESS, pDoc->GetPresEndless() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_MANUEL, pDoc->GetPresManual() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_MOUSE, pDoc->GetPresMouseVisible() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_PEN, pDoc->GetPresMouseAsPen() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_NAVIGATOR, pDoc->GetStartPresWithNavigator() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ANIMATION_ALLOWED, pDoc->IsAnimationAllowed() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CHANGE_PAGE, !pDoc->GetPresLockedPages() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALWAYS_ON_TOP, pDoc->GetPresAlwaysOnTop() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_FULLSCREEN, pDoc->GetPresFullScreen() ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ENDLESS, rPresentationSettings.mbEndless ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_MANUEL, rPresentationSettings.mbManual ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_MOUSE, rPresentationSettings.mbMouseVisible ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_PEN, rPresentationSettings.mbMouseAsPen ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_NAVIGATOR, rPresentationSettings.mbStartWithNavigator ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ANIMATION_ALLOWED, rPresentationSettings.mbAnimationAllowed ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_CHANGE_PAGE, !rPresentationSettings.mbLockedPages ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALWAYS_ON_TOP, rPresentationSettings.mbAlwaysOnTop ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_FULLSCREEN, rPresentationSettings.mbFullScreen ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_START_ACTUAL_PAGE, bStartWithActualPage ) );
-    aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, pDoc->GetPresPause() ) );
-    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, pDoc->IsPresShowLogo() ) );
+    aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, rPresentationSettings.mnPauseTimeout ) );
+    aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo ) );
 
     //CHINA001 SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
@@ -173,109 +175,109 @@ FuSlideShowDlg::FuSlideShowDlg (
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
     {
-        String  aPage;
-        ULONG   nValue32;
-        BOOL    bValue;
-        BOOL    bValuesChanged = FALSE;
+        rtl::OUString aPage;
+        long    nValue32;
+        sal_Bool bValue;
+        bool    bValuesChanged = FALSE;
 
         pDlg->GetAttr( aDlgSet ); //CHINA001 aDlg.GetAttr( aDlgSet );
 
         aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
-        if( aPage != pDoc->GetPresPage() )
+        if( aPage != rPresentationSettings.maPresPage )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresPage( aPage );
+            bValuesChanged = true;
+            rPresentationSettings.maPresPage = aPage;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALL, SfxBoolItem );
-        if ( bValue != pDoc->GetPresAll() )
+        if ( bValue != rPresentationSettings.mbAll )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresAll( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbAll = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_CUSTOMSHOW, SfxBoolItem );
-        if ( bValue != pDoc->IsCustomShow() )
+        if ( bValue != rPresentationSettings.mbCustomShow )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetCustomShow( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbCustomShow = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ENDLESS, SfxBoolItem );
-        if ( bValue != pDoc->GetPresEndless() )
+        if ( bValue != rPresentationSettings.mbEndless )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresEndless( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbEndless = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MANUEL, SfxBoolItem );
-        if ( bValue != pDoc->GetPresManual() )
+        if ( bValue != rPresentationSettings.mbManual )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresManual( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbManual = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_MOUSE, SfxBoolItem );
-        if ( bValue != pDoc->GetPresMouseVisible() )
+        if ( bValue != rPresentationSettings.mbMouseVisible )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresMouseVisible( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbMouseVisible = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_PEN, SfxBoolItem );
-        if ( bValue != pDoc->GetPresMouseAsPen() )
+        if ( bValue != rPresentationSettings.mbMouseAsPen )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresMouseAsPen( bValue );
-        }
-
-        bValue = !ITEMVALUE( aDlgSet, ATTR_PRESENT_CHANGE_PAGE, SfxBoolItem );
-        if ( bValue != pDoc->GetPresLockedPages() )
-        {
-            bValuesChanged = TRUE;
-            pDoc->SetPresLockedPages( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbMouseAsPen = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_NAVIGATOR, SfxBoolItem );
-        if ( bValue != pDoc->GetStartPresWithNavigator() )
+        if( bValue != rPresentationSettings.mbStartWithNavigator )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetStartPresWithNavigator( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbStartWithNavigator = bValue;
+        }
+
+        bValue = !ITEMVALUE( aDlgSet, ATTR_PRESENT_CHANGE_PAGE, SfxBoolItem );
+        if ( bValue != rPresentationSettings.mbLockedPages )
+        {
+            bValuesChanged = true;
+            rPresentationSettings.mbLockedPages = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ANIMATION_ALLOWED, SfxBoolItem );
-        if ( bValue != pDoc->IsAnimationAllowed() )
+        if ( bValue != rPresentationSettings.mbAnimationAllowed )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetAnimationAllowed( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbAnimationAllowed = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALWAYS_ON_TOP, SfxBoolItem );
-        if ( bValue != pDoc->GetPresAlwaysOnTop() )
+        if ( bValue != rPresentationSettings.mbAlwaysOnTop )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresAlwaysOnTop( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbAlwaysOnTop = bValue;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_FULLSCREEN, SfxBoolItem );
-        if ( bValue != pDoc->GetPresFullScreen() )
+        if ( bValue != rPresentationSettings.mbFullScreen )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresFullScreen( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbFullScreen = bValue;
         }
 
         nValue32 = ITEMVALUE( aDlgSet, ATTR_PRESENT_PAUSE_TIMEOUT, SfxUInt32Item );
-        if( nValue32 != pDoc->GetPresPause() )
+        if( nValue32 != rPresentationSettings.mnPauseTimeout )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresPause( nValue32 );
+            bValuesChanged = true;
+            rPresentationSettings.mnPauseTimeout = nValue32;
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_SHOW_PAUSELOGO, SfxBoolItem );
-        if ( bValue != pDoc->IsPresShowLogo() )
+        if ( bValue != rPresentationSettings.mbShowPauseLogo )
         {
-            bValuesChanged = TRUE;
-            pDoc->SetPresShowLogo( bValue );
+            bValuesChanged = true;
+            rPresentationSettings.mbShowPauseLogo = bValue;
         }
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
