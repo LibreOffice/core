@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:06:36 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,10 +693,12 @@ SfxItemSet SdrEditView::GetAttrFromMarked(BOOL bOnlyHardAttr) const
     MergeAttrFromMarked(aSet,bOnlyHardAttr);
     //the EE_FEATURE items should not be set with SetAttrToMarked (see error message there)
     //so we do not set them here
-    aSet.DisableItem(EE_FEATURE_TAB);
-    aSet.DisableItem(EE_FEATURE_LINEBR);
-    aSet.DisableItem(EE_FEATURE_NOTCONV);
-    aSet.DisableItem(EE_FEATURE_FIELD);
+    // #i32448#
+    // Do not disable, but clear the items.
+    aSet.ClearItem(EE_FEATURE_TAB);
+    aSet.ClearItem(EE_FEATURE_LINEBR);
+    aSet.ClearItem(EE_FEATURE_NOTCONV);
+    aSet.ClearItem(EE_FEATURE_FIELD);
     return aSet;
 }
 
