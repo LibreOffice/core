@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatter.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:46:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 
 /** represents a number formatter.
  */
-interface XNumberFormatter: com::sun::star::uno::XInterface
+published interface XNumberFormatter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
