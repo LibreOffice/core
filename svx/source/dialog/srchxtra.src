@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:23:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,6 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text = "Einzüge und Abstände" ;
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
@@ -248,8 +246,6 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             PageItem
             {
                 Identifier = RID_SVXPAGE_EXT_PARAGRAPH ;
-                /* ### ACHTUNG: Neuer Text in Resource? Textfluß : Textflu˜ */
-                /* ### ACHTUNG: Neuer Text in Resource? Textfluß : Textflu˜ */
                 Text = "Textfluss" ;
                 Text [ ENGLISH ] = "Paragraph Extensions" ;
                 Text [ norwegian ] = "Utvidelse av avsnitt" ;
@@ -349,7 +345,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     HelpId = HID_SEARCHATTR ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 176 , 128 ) ;
+    Size = MAP_APPFONT ( 178 , 128 ) ;
     Text = "Attribute" ;
     Text [ English ] = "Attributes" ;
     Text [ norwegian ] = "Attributes" ;
@@ -370,12 +366,12 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         ClipChildren = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 96 , 102 ) ;
+        Size = MAP_APPFONT ( 98 , 108 ) ;
     };
-    GroupBox GB_ATTR
+    FixedLine FL_ATTR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 108 , 119 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Auswahl" ;
         Text [ English ] = "Choice" ;
         Text [ norwegian ] = "Choice" ;
@@ -403,18 +399,18 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     };
     OKButton BTN_ATTR_OK
     {
-        Pos = MAP_APPFONT ( 120 , 6 ) ;
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_ATTR_CANCEL
     {
-        Pos = MAP_APPFONT ( 120 , 23 ) ;
+        Pos = MAP_APPFONT ( 122 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_ATTR_HELP
     {
-        Pos = MAP_APPFONT ( 120 , 40 ) ;
+        Pos = MAP_APPFONT ( 122 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ chinese_simplified ] = "ÊôÐÔ";
@@ -435,9 +431,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     HelpId = HID_SEARCHSIMILARITY ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 81 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Ähnlichkeitssuche : Žhnlichkeitssuche */
-    /* ### ACHTUNG: Neuer Text in Resource? Ähnlichkeitssuche : Žhnlichkeitssuche */
+    Size = MAP_APPFONT ( 178 , 76 ) ;
     Text = "Ähnlichkeitssuche" ;
     Text [ English ] = "Similarity search" ;
     Text [ english_us ] = "Similarity Search" ;
@@ -448,8 +442,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Moveable = TRUE ;
     FixedText FT_OTHER
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Zeichen tauschen" ;
         Text [ English ] = "~Exchange characters" ;
         Text [ english_us ] = "~Exchange characters" ;
@@ -476,7 +470,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_OTHER
     {
-        Pos = MAP_APPFONT ( 85 , 14 ) ;
+        Pos = MAP_APPFONT ( 86 , 14 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
         Left = TRUE ;
@@ -492,9 +486,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     FixedText FT_LONGER
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Z~eichen hinzufügen : Z~eichen hinzuf³gen */
-        /* ### ACHTUNG: Neuer Text in Resource? Z~eichen hinzufügen : Z~eichen hinzuf³gen */
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Z~eichen hinzufügen" ;
         Text [ English ] = "~Add characters" ;
         Text [ english_us ] = "~Add characters" ;
@@ -521,7 +513,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_LONGER
     {
-        Pos = MAP_APPFONT ( 85 , 29 ) ;
+        Pos = MAP_APPFONT ( 86 , 28 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
         Left = TRUE ;
@@ -536,8 +528,8 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     FixedText FT_SHORTER
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Ze~ichen entfernen" ;
         Text [ English ] = "~Remove characters" ;
         Text [ english_us ] = "~Remove characters" ;
@@ -564,7 +556,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     NumericField NF_SHORTER
     {
-        Pos = MAP_APPFONT ( 85 , 44 ) ;
+        Pos = MAP_APPFONT ( 86 , 44 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
         Left = TRUE ;
@@ -579,7 +571,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     };
     CheckBox CB_RELAX
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
         Text = "~Kombinieren" ;
         Text [ English ] = "~Combine" ;
@@ -606,10 +598,10 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ catalan ] = "Co~mbinar";
         Text[ finnish ] = "~Yhdistä";
     };
-    GroupBox GB_SIMILARITY
+    FixedLine FL_SIMILARITY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 72 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ English ] = "Options" ;
         Text [ english_us ] = "Settings" ;

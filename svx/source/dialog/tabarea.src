@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-12 15:40:48 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1632,7 +1632,7 @@ TabPage RID_SVXPAGE_SHADOW
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text = "Schatten anwenden" ;
+        Text = "~Schatten anwenden" ;
         Text [ ENGLISH ] = "~show" ;
         TabStop = TRUE ;
         Text[ english_us ] = "~On";
@@ -1660,9 +1660,9 @@ TabPage RID_SVXPAGE_SHADOW
     {
         Pos = MAP_APPFONT ( 12 , 33  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Ausrichtung" ;
-        Text [ ENGLISH ] = "Position" ;
-        Text[ english_us ] = "Position";
+        Text = "~Ausrichtung" ;
+        Text [ ENGLISH ] = "~Position" ;
+        Text[ english_us ] = "~Position";
         Text[ portuguese ] = "~Posição";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ greek ] = "ÈÝóç";
@@ -1689,13 +1689,13 @@ TabPage RID_SVXPAGE_SHADOW
         Pos = MAP_APPFONT ( 65 , 31  ) ;
         Size = MAP_APPFONT ( 57 , 29 ) ;
         Border = TRUE ;
-        TabStop = FALSE ;
+        TabStop = TRUE ;
     };
     FixedText FT_DISTANCE
     {
         Pos = MAP_APPFONT ( 12 , 69  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "Distanz" ;
+        Text = "~Distanz" ;
         Text [ ENGLISH ] = "~Distance" ;
         Text[ english_us ] = "Distance";
         Text[ portuguese ] = "~Distância";

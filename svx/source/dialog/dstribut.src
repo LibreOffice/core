@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:30:29 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     RadioButton BTN_HOR_NONE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 48 , 12 ) ;
-        Text = "Keine" ;
-        Text [ ENGLISH ] = "None" ;
-        Text [ ENGLISH_US ] = "None" ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text = "~Keine" ;
+        Text [ ENGLISH ] = "~None" ;
+        Text [ ENGLISH_US ] = "~None" ;
         Text[ portuguese ] = "Nenhuma";
         Text[ russian ] = "Áåç";
         Text[ greek ] = "ÊáíÝíá";
@@ -133,11 +133,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_LEFT
     {
-        Pos = MAP_APPFONT ( 56 , 24  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Links" ;
-        Text [ ENGLISH ] = "Left" ;
-        Text [ ENGLISH_US ] = "Left" ;
+        Pos = MAP_APPFONT ( 56 , 26  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Links" ;
+        Text [ ENGLISH ] = "~Left" ;
+        Text [ ENGLISH_US ] = "~Left" ;
         Text[ portuguese ] = "Esquerda";
         Text[ russian ] = "Ñëåâà";
         Text[ greek ] = "ÁñéóôåñÜ";
@@ -161,11 +161,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_CENTER
     {
-        Pos = MAP_APPFONT ( 105 , 24  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Mitte" ;
-        Text [ ENGLISH ] = "Center" ;
-        Text [ ENGLISH_US ] = "Center" ;
+        Pos = MAP_APPFONT ( 105 , 26  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Mitte" ;
+        Text [ ENGLISH ] = "~Center" ;
+        Text [ ENGLISH_US ] = "~Center" ;
         Text[ portuguese ] = "Centro";
         Text[ russian ] = "Â öåíòðå";
         Text[ greek ] = "ÊÝíôñï";
@@ -189,11 +189,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_DISTANCE
     {
-        Pos = MAP_APPFONT ( 154 , 24  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Abstand" ;
-        Text [ ENGLISH ] = "Distance" ;
-        Text [ ENGLISH_US ] = "Spacing" ;
+        Pos = MAP_APPFONT ( 154 , 26  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Abstand" ;
+        Text [ ENGLISH ] = "~Spacing" ;
+        Text [ ENGLISH_US ] = "~Spacing" ;
         Text[ portuguese ] = "Distância";
         Text[ russian ] = "Èíòåðâàë";
         Text[ greek ] = "Áðüóôáóç";
@@ -217,11 +217,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_RIGHT
     {
-        Pos = MAP_APPFONT ( 203 , 24  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Rechts" ;
-        Text [ ENGLISH ] = "Right" ;
-        Text [ ENGLISH_US ] = "Right" ;
+        Pos = MAP_APPFONT ( 203 , 26  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Rechts" ;
+        Text [ ENGLISH ] = "~Right" ;
+        Text [ ENGLISH_US ] = "~Right" ;
         Text[ portuguese ] = "Direita";
         Text[ russian ] = "Ñïðàâà";
         Text[ greek ] = "ÄåîéÜ";
@@ -314,10 +314,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     RadioButton BTN_VER_NONE
     {
         Pos = MAP_APPFONT ( 12 , 53  ) ;
-        Size = MAP_APPFONT ( 46 , 12 ) ;
-        Text = "Keine" ;
-        Text [ ENGLISH ] = "None" ;
-        Text [ ENGLISH_US ] = "None" ;
+        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Text = "K~eine" ;
+        Text [ ENGLISH ] = "N~one" ;
+        Text [ ENGLISH_US ] = "N~one" ;
         Text[ portuguese ] = "Nenhuma";
         Text[ russian ] = "Áåç";
         Text[ greek ] = "ÊáíÝíá";
@@ -341,11 +341,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_TOP
     {
-        Pos = MAP_APPFONT ( 56 , 63  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Oben" ;
-        Text [ ENGLISH ] = "Top" ;
-        Text [ ENGLISH_US ] = "Top" ;
+        Pos = MAP_APPFONT ( 56 , 65  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Oben" ;
+        Text [ ENGLISH ] = "~Top" ;
+        Text [ ENGLISH_US ] = "~Top" ;
         Text[ portuguese ] = "Em cima";
         Text[ russian ] = "Ñâåðõó";
         Text[ greek ] = "ÐÜíù";
@@ -369,11 +369,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_CENTER
     {
-        Pos = MAP_APPFONT ( 105 , 63  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Mitte" ;
-        Text [ ENGLISH ] = "Center" ;
-        Text [ ENGLISH_US ] = "Center" ;
+        Pos = MAP_APPFONT ( 105 , 65  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "M~itte" ;
+        Text [ ENGLISH ] = "C~enter" ;
+        Text [ ENGLISH_US ] = "C~enter" ;
         Text[ portuguese ] = "Centro";
         Text[ russian ] = "Â öåíòðå";
         Text[ greek ] = "ÊÝíôñï";
@@ -397,11 +397,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_DISTANCE
     {
-        Pos = MAP_APPFONT ( 154 , 63  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Abstand" ;
-        Text [ ENGLISH ] = "Distance" ;
-        Text [ ENGLISH_US ] = "Spacing" ;
+        Pos = MAP_APPFONT ( 154 , 65  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "A~bstand" ;
+        Text [ ENGLISH ] = "S~pacing" ;
+        Text [ ENGLISH_US ] = "S~pacing" ;
         Text[ portuguese ] = "Distância";
         Text[ russian ] = "Èíòåðâàë";
         Text[ greek ] = "Áðüóôáóç";
@@ -425,11 +425,11 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_BOTTOM
     {
-        Pos = MAP_APPFONT ( 203 , 63  ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
-        Text = "Unten" ;
-        Text [ ENGLISH ] = "Bottom" ;
-        Text [ ENGLISH_US ] = "Bottom" ;
+        Pos = MAP_APPFONT ( 203 , 65  ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "~Unten" ;
+        Text [ ENGLISH ] = "~Bottom" ;
+        Text [ ENGLISH_US ] = "~Bottom" ;
         Text[ portuguese ] = "Em baixo";
         Text[ russian ] = "Ñíèçó";
         Text[ greek ] = "ÊÜôù";
@@ -491,33 +491,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         };
     };
 
-    GroupBox GRP_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 10 , 10  ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
     Text[ portuguese ] = "Distribuição...";
     Text[ russian ] = "Ðàñïðåäåëåíèå";
     Text[ greek ] = "ÊáôáíïìÞ..";

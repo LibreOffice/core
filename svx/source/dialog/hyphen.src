@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:49:30 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 ModalDialog RID_SVXDLG_HYPHENATE
 {
     HelpId = HID_HYPHENATE ;
-    Size = MAP_APPFONT ( 245 , 63 ) ;
+    Size = MAP_APPFONT ( 188 , 100 ) ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Text = "Silbentrennung" ;
@@ -88,32 +88,31 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Edit ED_WORD
     {
         BORDER = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 109 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
         TABSTOP = TRUE ;
         LEFT = TRUE ;
     };
     ImageButton BTN_LEFT
     {
-        Pos = MAP_APPFONT ( 47 , 35 ) ;
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TABSTOP = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     ImageButton BTN_RIGHT
     {
-        Pos = MAP_APPFONT ( 72 , 35 ) ;
+        Pos = MAP_APPFONT ( 22 , 33 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TABSTOP = TRUE ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT ;
     };
-    GroupBox GB_WORD
+    FixedText FT_WORD
     {
-        SVLOOK = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 51 ) ;
-        TEXT = "Wort" ;
-        TEXT [ English ] = "Word" ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        TEXT = "W~ort" ;
+        TEXT [ English ] = "~Word" ;
         TEXT [ norwegian ] = "Word" ;
         TEXT [ italian ] = "Parola" ;
         TEXT [ portuguese_brazilian ] = "Palavra" ;
@@ -124,7 +123,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ swedish ] = "Ord" ;
         TEXT [ dutch ] = "Woord" ;
         TEXT [ spanish ] = "Palabra" ;
-        TEXT [ english_us ] = "Word" ;
+        TEXT [ english_us ] = "~Word" ;
         TEXT[ chinese_simplified ] = "×Ö";
         TEXT[ russian ] = "Ñëîâî";
         TEXT[ polish ] = "S³owo";
@@ -139,7 +138,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     };
     PushButton BTN_HYPH_CONTINUE
     {
-        Pos = MAP_APPFONT ( 133 , 6 ) ;
+        Pos = MAP_APPFONT ( 132 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TEXT = "~Weiter" ;
         TEXT [ English ] = "~Continue" ;
@@ -168,7 +167,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     };
     PushButton BTN_HYPH_DELETE
     {
-        Pos = MAP_APPFONT ( 133 , 23 ) ;
+        Pos = MAP_APPFONT ( 132 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TEXT = "~Entfernen" ;
         TEXT [ English ] = "~Erase" ;
@@ -198,7 +197,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     };
     OKButton BTN_HYPH_CUT
     {
-        Pos = MAP_APPFONT ( 189 , 6 ) ;
+        Pos = MAP_APPFONT ( 132 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TEXT = "~Trennen" ;
         TEXT [ English ] = "Hyphe~nate" ;
@@ -229,13 +228,13 @@ ModalDialog RID_SVXDLG_HYPHENATE
     };
     CancelButton BTN_HYPH_CANCEL
     {
-        Pos = MAP_APPFONT ( 189 , 23 ) ;
+        Pos = MAP_APPFONT ( 132 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
     HelpButton BTN_HYPH_HELP
     {
-        Pos = MAP_APPFONT ( 189 , 43 ) ;
+        Pos = MAP_APPFONT ( 132 , 80 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };

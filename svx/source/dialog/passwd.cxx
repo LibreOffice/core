@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,12 @@ SvxPasswordDialog::SvxPasswordDialog( Window* pParent,
 
     aOldPasswdFT    ( this, ResId( FT_OLD_PASSWD ) ),
     aOldPasswdED    ( this, ResId( ED_OLD_PASSWD ) ),
-    aOldGB          ( this, ResId( GB_OLD_PASSWD ) ),
+    aOldFL          ( this, ResId( FL_OLD_PASSWD ) ),
     aNewPasswdFT    ( this, ResId( FT_NEW_PASSWD ) ),
     aNewPasswdED    ( this, ResId( ED_NEW_PASSWD ) ),
     aRepeatPasswdFT ( this, ResId( FT_REPEAT_PASSWD ) ),
     aRepeatPasswdED ( this, ResId( ED_REPEAT_PASSWD ) ),
-    aNewGB          ( this, ResId( GB_NEW_PASSWD ) ),
+    aNewFL          ( this, ResId( FL_NEW_PASSWD ) ),
     aOKBtn          ( this, ResId( BTN_PASSWD_OK ) ),
     aEscBtn         ( this, ResId( BTN_PASSWD_ESC ) ),
     aHelpBtn        ( this, ResId( BTN_PASSWD_HELP ) ),

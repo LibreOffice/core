@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,7 @@ TabPage RID_SVXPAGE_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "H~öhe" ;
+        Text = "~Höhe" ;
         Text [ ENGLISH ] = "H~eight" ;
         Text [ norwegian ] = "H~eight" ;
         Text [ italian ] = "Al~tezza" ;
@@ -1130,7 +1130,7 @@ TabPage RID_SVXPAGE_SIZE
     TriStateBox TSB_AUTOGROW_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 90 + 11  ) ;
-        Size = MAP_APPFONT ( 220 , 12 ) ;
+        Size = MAP_APPFONT ( 220 , 10 ) ;
         Text = "Br~eite an Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~width to text" ;
         Text [ english_us ] = "~Fit width to text" ;
@@ -1158,9 +1158,9 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 106 + 11  ) ;
-        Size = MAP_APPFONT ( 220 , 12 ) ;
-        Text = "Höhe ~an Text anpassen" ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 220 , 10 ) ;
+        Text = "Höhe a~n Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~height to text" ;
         Text [ english_us ] = "Fit ~height to text" ;
         TabStop = TRUE ;

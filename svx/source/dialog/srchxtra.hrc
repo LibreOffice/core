@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,20 @@
 
 // defines ------------------------------------------------------------------
 
-#define BTN_ATTR_OK     10
-#define BTN_ATTR_CANCEL 11
-#define BTN_ATTR_HELP   12
-#define LB_ATTR         13
-#define GB_ATTR         14
+#define BTN_ATTR_OK         10
+#define BTN_ATTR_CANCEL     11
+#define BTN_ATTR_HELP       12
+#define LB_ATTR             13
+#define FL_ATTR             14
 
-#define CB_RELAX        15
+#define CB_RELAX            15
 #define FT_OTHER            16
 #define NF_OTHER            17
 #define FT_SHORTER          18
 #define NF_SHORTER          19
 #define FT_LONGER           20
 #define NF_LONGER           21
-#define GB_SIMILARITY           22
+#define FL_SIMILARITY       22
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,13 @@
 
 #define FT_OLD_PASSWD           10
 #define ED_OLD_PASSWD           11
-#define GB_OLD_PASSWD           12
+#define FL_OLD_PASSWD           12
 
 #define FT_NEW_PASSWD           20
 #define ED_NEW_PASSWD           21
 #define FT_REPEAT_PASSWD        22
 #define ED_REPEAT_PASSWD        23
-#define GB_NEW_PASSWD           24
+#define FL_NEW_PASSWD           24
 
 #define BTN_PASSWD_OK           30
 #define BTN_PASSWD_ESC          31

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 09:10:33 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,84 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
         Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
                                aPtNew + Point( nRadius, nRadius ) ) );
         eRP = GetRPFromPoint( aPtNew );
+
+        if( WINDOW_TABPAGE == GetParent()->GetType() )
+            ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
+{
+    RECT_POINT eNewRP = eRP;
+    BOOL bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
+
+    switch( rKeyEvt.GetKeyCode().GetCode() )
+    {
+        case KEY_DOWN:
+        {
+            if( !(m_nState & CS_NOVERT) )
+                switch( eNewRP )
+                {
+                    case RP_LT: eNewRP = RP_LM; break;
+                    case RP_MT: eNewRP = bUseMM ? RP_MM : RP_MB; break;
+                    case RP_RT: eNewRP = RP_RM; break;
+                    case RP_LM: eNewRP = RP_LB; break;
+                    case RP_MM: eNewRP = RP_MB; break;
+                    case RP_RM: eNewRP = RP_RB; break;
+                }
+        }
+        break;
+        case KEY_UP:
+        {
+            if( !(m_nState & CS_NOVERT) )
+                switch( eNewRP )
+                {
+                    case RP_LM: eNewRP = RP_LT; break;
+                    case RP_MM: eNewRP = RP_MT; break;
+                    case RP_RM: eNewRP = RP_RT; break;
+                    case RP_LB: eNewRP = RP_LM; break;
+                    case RP_MB: eNewRP = bUseMM ? RP_MM : RP_MT; break;
+                    case RP_RB: eNewRP = RP_RM; break;
+                }
+        }
+        break;
+        case KEY_LEFT:
+        {
+            if( !(m_nState & CS_NOHORZ) )
+                switch( eNewRP )
+                {
+                    case RP_MT: eNewRP = RP_LT; break;
+                    case RP_RT: eNewRP = RP_MT; break;
+                    case RP_MM: eNewRP = RP_LM; break;
+                    case RP_RM: eNewRP = bUseMM ? RP_MM : RP_LM; break;
+                    case RP_MB: eNewRP = RP_LB; break;
+                    case RP_RB: eNewRP = RP_MB; break;
+                }
+        }
+        break;
+        case KEY_RIGHT:
+        {
+            if( !(m_nState & CS_NOHORZ) )
+                switch( eNewRP )
+                {
+                    case RP_LT: eNewRP = RP_MT; break;
+                    case RP_MT: eNewRP = RP_RT; break;
+                    case RP_LM: eNewRP = bUseMM ? RP_MM : RP_RM; break;
+                    case RP_MM: eNewRP = RP_RM; break;
+                    case RP_LB: eNewRP = RP_MB; break;
+                    case RP_MB: eNewRP = RP_RB; break;
+                }
+        }
+        break;
+        default:
+            Control::KeyInput( rKeyEvt );
+            return;
+    }
+    if( eNewRP != eRP )
+    {
+        SetActualRP( eNewRP );
 
         if( WINDOW_TABPAGE == GetParent()->GetType() )
             ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );

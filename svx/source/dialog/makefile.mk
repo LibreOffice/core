@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pb $ $Date: 2001-05-07 11:07:19 $
+#   last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -182,7 +182,6 @@ CXXFILES = \
         textanim.cxx \
         textattr.cxx \
         thesdlg.cxx \
-        tp3dattr.cxx \
         tparea.cxx   \
         tpbitmap.cxx \
         tpcolor.cxx  \
@@ -242,7 +241,6 @@ SRC1FILES =  \
         textanim.src \
         textattr.src \
         thesdlg.src \
-        tp3dattr.src \
         txenctab.src \
         zoom.src	\
         dlgctrl.src \
@@ -335,7 +333,6 @@ SLOFILES=\
         $(SLO)$/textattr.obj \
         $(SLO)$/textanim.obj \
     $(SLO)$/thesdlg.obj  \
-        $(SLO)$/tp3dattr.obj \
         $(SLO)$/tparea.obj   \
         $(SLO)$/tpbitmap.obj \
         $(SLO)$/tpcolor.obj  \

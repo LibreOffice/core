@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 09:54:20 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog( const String &rWord, LanguageType nLan
     aWordEdit   ( this, ResId( ED_WORD ) ),
     aLeftBtn    ( this, ResId( BTN_LEFT ) ),
     aRightBtn   ( this, ResId( BTN_RIGHT ) ),
-    aWordBox    ( this, ResId( GB_WORD ) ),
+    aWordFT     ( this, ResId( FT_WORD ) ),
     aContBtn    ( this, ResId( BTN_HYPH_CONTINUE ) ),
     aDelBtn     ( this, ResId( BTN_HYPH_DELETE ) ),
     aOkBtn      ( this, ResId( BTN_HYPH_CUT ) ),

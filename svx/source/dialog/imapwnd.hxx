@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-15 17:21:24 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
@@ -170,15 +167,15 @@ public:
 
 class URLDlg : public ModalDialog
 {
-    GroupBox            aGrpURL;
-    Edit                aEdtURL;
-    Edit                aEdtURLDescription;
-    ComboBox            aCbbTargets;
-    Edit                aEdtName;
+    FixedLine           aFlURL;
     FixedText           aFtURL1;
+    Edit                aEdtURL;
     FixedText           aFtURLDescription;
+    Edit                aEdtURLDescription;
     FixedText           aFtTarget;
+    ComboBox            aCbbTargets;
     FixedText           aFtName;
+    Edit                aEdtName;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 09:55:13 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
@@ -115,14 +115,14 @@ public:
     void            SelRight();
 
 private:
+    FixedText           aWordFT;
     SvxHyphenEdit       aWordEdit;
     ImageButton         aLeftBtn;
     ImageButton         aRightBtn;
-    GroupBox            aWordBox;
-    PushButton          aContBtn;
-    PushButton          aDelBtn;
     OKButton            aOkBtn;
     CancelButton        aCancelBtn;
+    PushButton          aContBtn;
+    PushButton          aDelBtn;
     HelpButton          aHelpBtn;
     String              aLabel;
     SvxSpellWrapper*    pHyphWrapper;

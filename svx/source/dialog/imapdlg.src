@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:49:39 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,7 +1138,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     OutputSize = TRUE ;
     Closeable = TRUE ;
     Moveable = TRUE ;
-    Size = MAP_APPFONT ( 214 , 81 ) ;
+    Size = MAP_APPFONT ( 214 , 80 ) ;
     Text = "Beschreibung" ;
     Text [ English ] = "Description" ;
     Text [ english_us ] = "Description" ;
@@ -1150,13 +1150,11 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text [ danish ] = "Beskrivelse" ;
     FixedText FT_URLDESCRIPTION
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 47 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Alternativtext: : Text: */
-        /* ### ACHTUNG: Neuer Text in Resource? Alternativtext: : Text: */
-        Text = "Alternativtext:" ;
-        Text [ ENGLISH ] = "Alternative text:" ;
-        Text [ english_us ] = "Alternative Text:" ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "~Alternativtext" ;
+        Text [ ENGLISH ] = "~Alternative text" ;
+        Text [ english_us ] = "~Alternative Text" ;
         Text [ italian ] = "Testo alternativo:" ;
         Text [ spanish ] = "Texto alternativo:" ;
         Text [ french ] = "Texte (facultatif) :" ;
@@ -1183,19 +1181,17 @@ ModalDialog RID_SVXDLG_IMAPURL
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 27 ) ;
+        Pos = MAP_APPFONT ( 62 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
     };
     FixedText FT_URL1
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 47 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? URL: : Adresse: */
-        /* ### ACHTUNG: Neuer Text in Resource? URL: : Adresse: */
-        Text = "URL:" ;
-        Text [ English ] = "URL:" ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "~URL" ;
+        Text [ English ] = "~URL Text" ;
         Text [ dutch ] = "URL:" ;
-        Text [ english_us ] = "URL Text:" ;
+        Text [ english_us ] = "~URL Text" ;
         Text [ italian ] = "URL:" ;
         Text [ spanish ] = "URL:" ;
         Text [ french ] = "URL :" ;
@@ -1221,7 +1217,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 12 ) ;
+        Pos = MAP_APPFONT ( 62 , 14 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
     };
     OKButton BTN_OK
@@ -1237,12 +1233,10 @@ ModalDialog RID_SVXDLG_IMAPURL
         Pos = MAP_APPFONT ( 158 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    GroupBox GRP_URL
+    FixedLine FL_URL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 146 , 72 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hyperlink : URL */
-        /* ### ACHTUNG: Neuer Text in Resource? Hyperlink : URL */
+        Size = MAP_APPFONT ( 146 , 8 ) ;
         Text = "Hyperlink" ;
         Text [ ENGLISH ] = "Hyperlink" ;
         Text [ english_us ] = "Hyperlink" ;
@@ -1269,11 +1263,11 @@ ModalDialog RID_SVXDLG_IMAPURL
     };
     FixedText FT_TARGET
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 47 , 10 ) ;
-        Text = "Frame:" ;
-        Text [ ENGLISH ] = "Frame:" ;
-        Text [ english_us ] = "Frame:" ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "~Frame" ;
+        Text [ ENGLISH ] = "~Frame" ;
+        Text [ english_us ] = "~Frame" ;
         Text [ portuguese_brazilian ] = "Frame:" ;
         Text [ swedish ] = "Ram:" ;
         Text [ danish ] = "Frame:" ;
@@ -1299,7 +1293,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     {
         Border = TRUE ;
         Sort = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 42 ) ;
+        Pos = MAP_APPFONT ( 62 , 46 ) ;
         Size = MAP_APPFONT ( 84 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1307,11 +1301,11 @@ ModalDialog RID_SVXDLG_IMAPURL
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 47 , 10 ) ;
-        Text = "Name:" ;
-        Text [ English ] = "Name:" ;
-        Text [ english_us ] = "Name:" ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text = "~Name" ;
+        Text [ English ] = "~Name" ;
+        Text [ english_us ] = "~Name" ;
         Text [ portuguese ] = "Nome:" ;
         Text [ portuguese_brazilian ] = "Name:" ;
         Text [ swedish ] = "Namn:" ;
@@ -1338,7 +1332,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 57 ) ;
+        Pos = MAP_APPFONT ( 62 , 62 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
     };
     Text [ portuguese ] = "Descrição" ;

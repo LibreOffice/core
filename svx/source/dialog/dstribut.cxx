@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2001-05-17 15:04:17 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,12 +143,9 @@ SvxDistributePage::SvxDistributePage(
     maVerDistance       (this, ResId(IMG_VER_DISTANCE   )),
     maVerLow            (this, ResId(IMG_VER_LOW        )),
     maVerCenter         (this, ResId(IMG_VER_CENTER     )),
-    maVerHigh           (this, ResId(IMG_VER_HIGH       )),
-    maGrpPreview        (this, ResId(GRP_PREVIEW        ))
+    maVerHigh           (this, ResId(IMG_VER_HIGH       ))
 {
     FreeResource();
-
-    maGrpPreview.Hide();
 }
 
 /*************************************************************************

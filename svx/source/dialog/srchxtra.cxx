@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     aEscBtn ( this, ResId( BTN_ATTR_CANCEL ) ),
     aHelpBtn( this, ResId( BTN_ATTR_HELP ) ),
     aAttrLB ( this, ResId( LB_ATTR ) ),
-    aAttrBox( this, ResId( GB_ATTR ) ),
+    aAttrFL ( this, ResId( FL_ATTR ) ),
 
     rList( rLst )
 
@@ -308,7 +308,7 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
     aLongerTxt  ( this, ResId( FT_LONGER ) ),
     aLongerFld  ( this, ResId( NF_LONGER ) ),
     aRelaxBox   ( this, ResId( CB_RELAX ) ),
-    aGroup      ( this, ResId( GB_SIMILARITY ) ),
+    aFixedLine  ( this, ResId( FL_SIMILARITY ) ),
 
     aOKBtn      ( this, ResId( BTN_ATTR_OK ) ),
     aEscBtn     ( this, ResId( BTN_ATTR_CANCEL ) ),

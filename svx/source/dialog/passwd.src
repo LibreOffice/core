@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:11:09 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,21 +70,16 @@ ModalDialog RID_SVXDLG_PASSWORD
     HelpId = HID_PASSWORD ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 185 , 86 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Paßwort ändern : Pa˜wort õndern */
-    /* ### ACHTUNG: Neuer Text in Resource? Paßwort ändern : Pa˜wort õndern */
-    Text = "Passwort ändern" ;
+    Size = MAP_APPFONT ( 185 , 77 ) ;
+    Text = "Kennwort ändern" ;
     Text [ English ] = "Change password" ;
     Moveable = TRUE ;
     FixedText FT_OLD_PASSWD
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Paßwort : ~Pa˜wort */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Paßwort : ~Pa˜wort */
-        Text = "~Passwort" ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Text = "~Kennwort" ;
         Text [ English ] = "~Password" ;
-        Right = TRUE ;
         Text [ english_us ] = "~Password" ;
         Text [ italian ] = "Password" ;
         Text [ spanish ] = "~Contraseña" ;
@@ -110,16 +105,16 @@ ModalDialog RID_SVXDLG_PASSWORD
     Edit ED_OLD_PASSWD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 14 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
         PassWord = TRUE ;
     };
-    GroupBox GB_OLD_PASSWD
+    FixedLine FL_OLD_PASSWD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 117 , 29 ) ;
-        Text = "Alt" ;
-        Text [ English ] = "Old" ;
+        Size = MAP_APPFONT ( 117 , 8 ) ;
+        Text = "Altes Kennwort" ;
+        Text [ English ] = "Old password" ;
         Text [ english_us ] = "Old" ;
         Text [ italian ] = "Vecchia" ;
         Text [ spanish ] = "Anterior" ;
@@ -144,13 +139,10 @@ ModalDialog RID_SVXDLG_PASSWORD
     };
     FixedText FT_NEW_PASSWD
     {
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Pa~ßwort : Pa~˜wort */
-        /* ### ACHTUNG: Neuer Text in Resource? Pa~ßwort : Pa~˜wort */
-        Text = "Pa~ßwort" ;
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Text = "K~ennwort" ;
         Text [ English ] = "Pa~ssword" ;
-        Right = TRUE ;
         Text [ english_us ] = "Pa~ssword" ;
         Text [ italian ] = "Password" ;
         Text [ spanish ] = "Co~ntraseña" ;
@@ -176,52 +168,30 @@ ModalDialog RID_SVXDLG_PASSWORD
     Edit ED_NEW_PASSWD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 49 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 43 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
         PassWord = TRUE ;
     };
     FixedText FT_REPEAT_PASSWD
     {
-        Pos = MAP_APPFONT ( 12 , 65 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "~Wiederholen" ;
-        Text [ English ] = "~Repeat" ;
-        Right = TRUE ;
-        Text [ english_us ] = "~Repeat" ;
-        Text [ italian ] = "Ripeti" ;
-        Text [ spanish ] = "~Repetir" ;
-        Text [ french ] = "~Répéter" ;
-        Text [ dutch ] = "~Herhalen" ;
-        Text [ swedish ] = "Upprepa" ;
-        Text [ danish ] = "Gentag" ;
-        Text [ portuguese_brazilian ] = "~Wiederholen" ;
-        Text [ portuguese ] = "~Refazer" ;
-        Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî(~R)";
-        Text[ russian ] = "Ïîâòîðèòü";
-        Text[ polish ] = "Ponów";
-        Text[ japanese ] = "‚â‚è’¼‚µ(~R)";
-        Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O(~R)";
-        Text[ arabic ] = "ÅÚÇÏÉ";
-        Text[ greek ] = "ÅðáíÜëçøç";
-        Text[ korean ] = "½ÇÇà ¹Ýº¹(~R)";
-        Text[ turkish ] = "~Yinele";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Repetir";
-        Text[ finnish ] = "~Toista";
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Text = "~Bestätigen" ;
+        Text [ English ] = "~Confirm" ;
     };
     Edit ED_REPEAT_PASSWD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 64 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 56 , 59 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
         PassWord = TRUE ;
     };
-    GroupBox GB_NEW_PASSWD
+    FixedLine FL_NEW_PASSWD
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 117 , 44 ) ;
-        Text = "Neu" ;
-        Text [ English ] = "New" ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 117 , 8 ) ;
+        Text = "Neues Kennwort" ;
+        Text [ English ] = "New password" ;
         Text [ english_us ] = "New" ;
         Text [ italian ] = "Nuova" ;
         Text [ spanish ] = "Nueva" ;
@@ -263,9 +233,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     };
     String STR_ERR_OLD_PASSWD
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ungültiges Paßwort : Ung³ltiges Pa˜wort */
-        /* ### ACHTUNG: Neuer Text in Resource? Ungültiges Paßwort : Ung³ltiges Pa˜wort */
-        Text = "Ungültiges Passwort" ;
+        Text = "Ungültiges Kennwort" ;
         Text [ English ] = "Invalid password" ;
         Text [ dutch ] = "Ongeldig wachtwoord" ;
         Text [ english_us ] = "Invalid password" ;
@@ -291,9 +259,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     };
     String STR_ERR_REPEAT_PASSWD
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Paßwörter stimmen nicht überein : Pa˜w÷rter stimmen nicht ³berein */
-        /* ### ACHTUNG: Neuer Text in Resource? Paßwörter stimmen nicht überein : Pa˜w÷rter stimmen nicht ³berein */
-        Text = "Passwörter stimmen nicht überein" ;
+        Text = "Kennwörter stimmen nicht überein" ;
         Text [ English ] = "Passwords are unequal" ;
         Text [ dutch ] = "Wachtwoorden komen niet overeen" ;
         Text [ english_us ] = "Passwords do not match" ;

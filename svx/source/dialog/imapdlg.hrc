@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@
 #define EDT_NAME                3
 #define BTN_OK                  1
 #define BTN_CANCEL              2
-#define GRP_URL                 1
+#define FL_URL                  1
 #define CBB_TARGETS             1
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-15 17:21:24 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL,
 
     ModalDialog         ( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) ),
 
-    aGrpURL             ( this, ResId( GRP_URL ) ),
+    aFlURL              ( this, ResId( FL_URL ) ),
     aBtnOk              ( this, ResId( BTN_OK ) ),
     aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
     aFtURL1             ( this, ResId( FT_URL1 ) ),
