@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSupportedLocales.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:28 $
+ *  last change: $Author: arellano $ $Date: 2001-04-09 23:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ module com { module sun { module star { module linguistic2 {
     <type scope="com::sun::star::linguistic2">SpellChecker</type>,
     <type scope="com::sun::star::linguistic2">Hyphenator</type> and
     <type scope="com::sun::star::linguistic2">Thesaurus</type>
-    implementations in order to get queried for what languages they
-    can be used.
+    implementations in order to be queried for the languages they
+    can use.
     </P>
 
     @see    com::sun::star::lang::Locale
@@ -105,11 +105,11 @@ interface XSupportedLocales : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @param  aLocale
-            specifies the language to be checked for support
+            specifies the language bring checked for support
              by the object.
 
          @returns
-             <TRUE/> if the language is supported otherwise <FALSE/>.
+             <TRUE/> if the language is supported, otherwise <FALSE/>.
 
         @see com::sun::star::lang::Locale
     */
