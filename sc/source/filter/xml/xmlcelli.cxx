@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:42:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rtl::OUString sValue;
     rtl::OUString* pStyleName = NULL;
     rtl::OUString* pCurrencySymbol = NULL;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
         sal_uInt16 nPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
                                             xAttrList->getNameByIndex( i ), &aLocalName );
-        sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -474,19 +474,19 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTem
     com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
     if (CellExists(aCellPos))
     {
-        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if (xCellRange.is())
         {
-            xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+            xBaseCell.set(xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row));
             if (xBaseCell.is())
             {
-                xLockable = uno::Reference<document::XActionLockable>(xBaseCell, uno::UNO_QUERY);
+                xLockable.set(xBaseCell, uno::UNO_QUERY);
                 if (xLockable.is())
                     xLockable->addActionLock();
                 uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);
                 if (xText.is())
                 {
-                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                    uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
                     if (xTextCursor.is())
                     {
                         xTextCursor->setString(rOUTempText);
@@ -543,11 +543,14 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                             else
                                 SetCursorOnTextImport(rtl::OUString());
                             rXMLImport.SetRemoveLastChar(sal_True);
-                            uno::Reference<text::XTextCursor> xTextCursor = rXMLImport.GetTextImport()->GetCursor();
-                            uno::Reference < text::XText > xText (xTextCursor->getText());
-                            uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
-                            if (xText.is() && xTextRange.is())
-                                xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+                            uno::Reference < text::XTextCursor > xTextCursor(rXMLImport.GetTextImport()->GetCursor());
+                            if (xTextCursor.is())
+                            {
+                                uno::Reference < text::XText > xText (xTextCursor->getText());
+                                uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
+                                if (xText.is() && xTextRange.is())
+                                    xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+                            }
                         }
                         pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
                             rXMLImport, nPrefix, rLName, xAttrList);
@@ -646,26 +649,21 @@ sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellR
     aCell.Row = nRow;
     if (CellExists(aCell))
     {
-        uno::Reference <table::XCellRange> xMergeCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
-        uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
-        if (xMergeable.is())
+        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
+        uno::Reference<sheet::XSpreadsheet> xTable (xMergeSheetCellRange->getSpreadsheet());
+        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor (xTable->createCursorByRange(xMergeSheetCellRange));
+        if (xMergeSheetCursor.is())
         {
-            uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeCellRange, uno::UNO_QUERY);
-            uno::Reference<sheet::XSpreadsheet> xTable = xMergeSheetCellRange->getSpreadsheet();
-            uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor = xTable->createCursorByRange(xMergeSheetCellRange);
-            if (xMergeSheetCursor.is())
+            xMergeSheetCursor->collapseToMergedArea();
+            uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
+            if (xMergeCellAddress.is())
             {
-                xMergeSheetCursor->collapseToMergedArea();
-                uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
-                if (xMergeCellAddress.is())
-                {
-                    aCellAddress = xMergeCellAddress->getRangeAddress();
-                    if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
-                        aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
-                        return sal_False;
-                    else
-                        return sal_True;
-                }
+                aCellAddress = xMergeCellAddress->getRangeAddress();
+                if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
+                    aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
+                    return sal_False;
+                else
+                    return sal_True;
             }
         }
     }
@@ -677,26 +675,22 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
 {
     if (CellExists(aCellPos))
     {
-        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if ( xCellRange.is() )
         {
             table::CellRangeAddress aCellAddress;
             if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
             {
                 //unmerge
-                uno::Reference <table::XCellRange> xMergeCellRange =
-                    xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow);
-                uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
                     xMergeable->merge(sal_False);
             }
 
             //merge
-            uno::Reference <table::XCellRange> xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows);
-            uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
             if (xMergeable.is())
                 xMergeable->merge(sal_True);
         }
@@ -710,42 +704,23 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
         ScMyImportValidation aValidation;
         if (rXMLImport.GetValidation(*pContentValidationName, aValidation))
         {
-            uno::Any aAny = xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)));
-            uno::Reference<beans::XPropertySet> xPropertySet;
-            if (aAny >>= xPropertySet)
+            uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT))), uno::UNO_QUERY);
+            if (xPropertySet.is())
             {
                 if (aValidation.sErrorMessage.getLength())
-                {
-                    aAny <<= aValidation.sErrorMessage;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), aAny);
-                }
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), uno::makeAny(aValidation.sErrorMessage));
                 if (aValidation.sErrorTitle.getLength())
-                {
-                    aAny <<= aValidation.sErrorTitle;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), aAny);
-                }
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), uno::makeAny(aValidation.sErrorTitle));
                 if (aValidation.sImputMessage.getLength())
-                {
-                    aAny <<= aValidation.sImputMessage;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), aAny);
-                }
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), uno::makeAny(aValidation.sImputMessage));
                 if (aValidation.sImputTitle.getLength())
-                {
-                    aAny <<= aValidation.sImputTitle;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
-                }
-                aAny = ::cppu::bool2any(aValidation.bShowErrorMessage);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
-                aAny = ::cppu::bool2any(aValidation.bShowImputMessage);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
-                aAny <<= aValidation.aValidationType;
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
-                aAny = ::cppu::bool2any(aValidation.bIgnoreBlanks);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
-                aAny <<= aValidation.nShowList;
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)), aAny);
-                aAny <<= aValidation.aAlertStyle;
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), uno::makeAny(aValidation.sImputTitle));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), uno::makeAny(aValidation.bShowErrorMessage));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), uno::makeAny(aValidation.bShowImputMessage));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), uno::makeAny(aValidation.aValidationType));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), uno::makeAny(aValidation.bIgnoreBlanks));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)), uno::makeAny(aValidation.nShowList));
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), uno::makeAny(aValidation.aAlertStyle));
                 uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
                 if (xCondition.is())
                 {
@@ -754,12 +729,10 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     xCondition->setOperator(aValidation.aOperator);
                     // #b4974740# source position must be set as string, because it may
                     // refer to a sheet that hasn't been loaded yet.
-                    aAny <<= aValidation.sBaseCellAddress;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), aAny);
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
                 }
             }
-            aAny <<= xPropertySet;
-            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), aAny);
+            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), uno::makeAny(xPropertySet));
         }
     }
 }
@@ -775,14 +748,10 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             nBottom = MAXROW;
         if (nRight > MAXCOL)
             nRight = MAXCOL;
-        uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
-            nRight, nBottom);
-        if (xPropCellRange.is())
-        {
-            uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
-            if (xProperties.is())
-                SetContentValidation(xProperties);
-        }
+        uno::Reference <beans::XPropertySet> xProperties (xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
+                                                            nRight, nBottom), uno::UNO_QUERY);
+        if (xProperties.is())
+            SetContentValidation(xProperties);
     }
 }
 
@@ -801,7 +770,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
     /*uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(xCell, uno::UNO_QUERY);
     if (xSheetAnnotationAnchor.is())
     {
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xSheetAnnotationAnchor->getAnnotation();
+        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation (xSheetAnnotationAnchor->getAnnotation());
         uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
         if (xSheetAnnotation.is() && xSimpleText.is())
         {
@@ -833,6 +802,10 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                 aNote.SetDate(sDate);
                 aNote.SetAuthor(String(pMyAnnotation->sAuthor));
                 aNote.SetShown(pMyAnnotation->bDisplay);
+                if (pMyAnnotation->pRect)
+                    aNote.SetRectangle(*pMyAnnotation->pRect);
+                else
+                    aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
                 if (pMyAnnotation->pItemSet)
                     aNote.SetItemSet(*(pMyAnnotation->pItemSet));
                 else
@@ -867,10 +840,9 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                 pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
                 if (pMyAnnotation->bDisplay)
                 {
-                    uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
                     ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
                     aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
-                    uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
+                    uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
                     if (xShapesIndex.is())
                     {
                         sal_Int32 nShapes = xShapesIndex->getCount();
@@ -890,19 +862,21 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
     {
         LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Sheet );
-        uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
-        for( ScMyImpDetectiveObjVec::iterator aItr = pDetectiveObjVec->begin(); aItr != pDetectiveObjVec->end(); aItr++ )
+        uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
+        ScMyImpDetectiveObjVec::iterator aItr(pDetectiveObjVec->begin());
+        ScMyImpDetectiveObjVec::iterator aEndItr(pDetectiveObjVec->end());
+        while(aItr != aEndItr)
         {
             ScAddress aScAddress;
             ScUnoConversion::FillScAddress( aScAddress, rPosition );
             aDetFunc.InsertObject( aItr->eObjType, aScAddress, aItr->aSourceRange, aItr->bHasError );
-            uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
             if (xShapesIndex.is())
             {
                 sal_Int32 nShapes = xShapesIndex->getCount();
                 uno::Reference < drawing::XShape > xShape;
                 rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
             }
+            ++aItr;
         }
     }
 }
@@ -951,7 +925,7 @@ void ScXMLTableRowCellContext::EndElement()
         table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
-        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if (xCellRange.is())
         {
             if (bIsMerged)
@@ -969,7 +943,7 @@ void ScXMLTableRowCellContext::EndElement()
                         {
                             try
                             {
-                                xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                                xBaseCell.set(xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row));
                             }
                             catch (lang::IndexOutOfBoundsException&)
                             {
@@ -996,14 +970,14 @@ void ScXMLTableRowCellContext::EndElement()
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
-                for (sal_Int32 i = 0; i < nCellsRepeated; i++)
+                for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
                     if (i > 0)
                         rXMLImport.GetTables().AddColumn(sal_False);
                     if (!bIsEmpty)
                     {
-                        for (sal_Int32 j = 0; j < nRepeatedRows; j++)
+                        for (sal_Int32 j = 0; j < nRepeatedRows; ++j)
                         {
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
@@ -1014,12 +988,12 @@ void ScXMLTableRowCellContext::EndElement()
                             if (CellExists(aCurrentPos))
                             {
                                 if (xBaseCell.is() && (aCurrentPos == aCellPos))
-                                    xCell = xBaseCell;
+                                    xCell.set(xBaseCell);
                                 else
                                 {
                                     try
                                     {
-                                        xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
+                                        xCell.set(xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row));
                                     }
                                     catch (lang::IndexOutOfBoundsException&)
                                     {
@@ -1123,7 +1097,7 @@ void ScXMLTableRowCellContext::EndElement()
                         if (bHasTextImport)
                             rXMLImport.GetProgressBarHelper()->Increment();
                         if ((i == 0) && (aCellPos.Column == 0))
-                            for (sal_Int32 j = 1; j < nRepeatedRows; j++)
+                            for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
                                     rXMLImport.GetTables().AddRow();
                                     rXMLImport.GetTables().AddColumn(sal_False);
@@ -1158,7 +1132,7 @@ void ScXMLTableRowCellContext::EndElement()
                     uno::Reference <table::XCell> xCell;
                     try
                     {
-                        xCell = xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row);
+                        xCell.set(xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row));
                     }
                     catch (lang::IndexOutOfBoundsException&)
                     {
