@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 11:44:36 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,13 @@ class SvXMLAutoCorrectExport : public SvXMLExport
 private:
     const SvxAutocorrWordList   *pAutocorr_List;
 public:
-    SvXMLAutoCorrectExport( const SvxAutocorrWordList * pNewAutocorr_List, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+    // #110680#
+    SvXMLAutoCorrectExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const SvxAutocorrWordList * pNewAutocorr_List,
+        const rtl::OUString &rFileName,
+        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+
     virtual ~SvXMLAutoCorrectExport ( void ) {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
     void _ExportAutoStyles() {}
@@ -101,8 +106,13 @@ class SvXMLExceptionListExport : public SvXMLExport
 private:
     const SvStringsISortDtor & rList;
 public:
-    SvXMLExceptionListExport( const SvStringsISortDtor &rNewList, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+    // #110680#
+    SvXMLExceptionListExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const SvStringsISortDtor &rNewList,
+        const rtl::OUString &rFileName,
+        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+
     virtual ~SvXMLExceptionListExport ( void ) {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass);
     void _ExportAutoStyles() {}
