@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:26:36 $
+ *  last change: $Author: sab $ $Date: 2002-04-11 09:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,21 @@
 #include "viewdata.hxx"
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
 #include <svx/AccessibleShapeTreeInfo.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 class ScTabViewShell;
@@ -87,7 +100,9 @@ struct ScAccessibleShapeData
 {
     ScAccessibleShapeData() : pAccShape(NULL), nIndex(-1) {}
     ScAccessibleShapeData(sal_Int32 nTempIndex) : pAccShape(NULL), nIndex(nTempIndex) {}
+    ~ScAccessibleShapeData();
     accessibility::AccessibleShape* pAccShape;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
     sal_Int32           nIndex; // Index in drawpage.
 };
 
@@ -96,8 +111,12 @@ struct ScAccessibleShapeData
         <code>AccessibleContext</code> service.
 */
 
+typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleSelection >
+                    ScAccessibleDocumentImpl;
+
 class ScAccessibleDocument
-    :   public ScAccessibleDocumentBase
+    :   public ScAccessibleDocumentBase,
+        public ScAccessibleDocumentImpl
 {
 public:
     //=====  internal  ========================================================
@@ -115,6 +134,16 @@ public:
    ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    ///=====  XInterface  =====================================================
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -145,6 +174,41 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  XAccessibleSelection  ===========================================
+
+    virtual void SAL_CALL
+        selectAccessibleChild( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL
+        isAccessibleChildSelected( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        clearAccessibleSelection(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        selectAllAccessible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL
+        getSelectedAccessibleChildCount(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -160,6 +224,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XTypeProvider  ===================================================
+
+    /// returns the possible types
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a implementation id.
     */
@@ -190,10 +259,11 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos      meSplitPos;
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
-    std::vector<ScAccessibleShapeData> maShapes;
-    accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
+    mutable std::vector<ScAccessibleShapeData> maShapes;
+    mutable accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
+    mutable com::sun::star::uno::Reference<com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
 
-    sal_uInt16 getVisibleTable();
+    sal_uInt16 getVisibleTable() const;
 
     ::com::sun::star::uno::Reference
         < ::drafts::com::sun::star::accessibility::XAccessible >
@@ -201,10 +271,20 @@ private:
 
     void FreeAccessibleSpreadsheet();
 
-    SdrPage* GetDrawPage();
-    sal_Int32 GetShapesCount();
+    SdrPage* GetDrawPage() const;
+    sal_Int32 GetShapesCount() const;
     com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible >
-            GetShape(sal_Int32 nIndex);
+            GetShape(sal_Int32 nIndex) const;
+
+    // gets the index of the shape starting on 0 (without the index of the table)
+    // returns the selected shape
+    sal_Bool IsAccessibleShapeChildSelected(sal_Int32 nIndex,
+        com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape) const;
+    sal_Bool IsTableSelected() const;
+    void FillSelectionSupplier() const;
+
+    sal_Bool IsEqual(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape1,
+        const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape2) const;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
