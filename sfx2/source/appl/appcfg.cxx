@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gh $ $Date: 2000-12-07 13:51:51 $
+ *  last change: $Author: os $ $Date: 2001-01-08 13:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 DBG_ERROR( "Putting options failed!" );
 #endif
         }
+        pRanges++;
     }
 
     return bRet;
