@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 11:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
 
 
 
+#if SUPD>633
 BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
 {
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
@@ -431,6 +432,40 @@ BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
     }
     return 0;
 }
+#else
+BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxBindings& rBindings  )
+{
+    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
+    if ( aSlotType )
+    {
+        SfxApplication *pApp = SFX_APP();
+        SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
+        SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
+        if ( pMod )
+        {
+            SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
+            if ( pFactories )
+            {
+                SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
+                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
+                         ( ( rFactories[nFactory]->nSlotId == 0 ) ||
+                           ( rFactories[nFactory]->nSlotId == nId) ) )
+                        return TRUE;
+            }
+        }
+
+        SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
+
+        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+            if ( rFactories[nFactory]->nTypeId == aSlotType &&
+                 ( ( rFactories[nFactory]->nSlotId == 0 ) ||
+                   ( rFactories[nFactory]->nSlotId == nId) ) )
+                return TRUE;
+    }
+    return 0;
+}
+#endif
 
 //--------------------------------------------------------------------
 
