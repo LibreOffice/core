@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-13 15:29:06 $
+#   last change: $Author: jl $ $Date: 2001-12-06 14:46:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
 UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
             com.sun.star.lang.XMultiServiceFactory \
             com.sun.star.script.XInvocation			\
-            oletest.XCallback 
+            oletest.XCallback \
+            oletest.XSimple
 
 
 
@@ -100,8 +101,10 @@ UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
 .ENDIF # depend
 
 APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJ)$/clientTest.obj \
-            $(OBJ)$/axhost.obj
+APP1OBJS=
+
+#$(OBJ)$/clientTest.obj \
+#			$(OBJ)$/axhost.obj
 
 LIBCMT=msvcrtd.lib
             

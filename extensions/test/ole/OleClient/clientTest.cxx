@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clientTest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:36:42 $
+ *  last change: $Author: jl $ $Date: 2001-12-06 14:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+#include <atlbase.h>
+
+CComModule _Module;
+#include<atlcom.h>
+#include <comdef.h>
+
+#include "axhost.hxx"
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -68,24 +75,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
-#pragma hdrstop
 
-
-//#include <windows.h>
-#include <comdef.h>
-//#include <tchar.h>
-#include <windef.h>
-#include <atlbase.h>
-
-extern CComModule _Module;
-
-
-#include<atlcom.h>
-#include<atlimpl.cpp>
-
-#include "axhost.hxx"
-
-CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
@@ -109,7 +99,7 @@ void printSequence( Sequence<Any>& val);
 Reference< XMultiServiceFactory > objectFactory;// OleObjectFactory;
 
 
-int __cdecl _tmain( int argc, _TCHAR * argv[] )
+int __cdecl main( int argc, char * argv[] )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))

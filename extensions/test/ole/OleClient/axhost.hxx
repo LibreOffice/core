@@ -2,9 +2,9 @@
  *
  *  $RCSfile: axhost.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-13 15:35:00 $
+ *  last change: $Author: jl $ $Date: 2001-12-06 14:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include <atlbase.h>
 extern CComModule _Module;
-#include <atlwin.h>
+//#include <atlwin.h>
 #include <atlcom.h>
 #include <atlhost.h>
 
