@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:48:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ ImpEditEngine::~ImpEditEngine()
     delete pCTLOptions;
     if ( bOwnerOfRefDev )
         delete pRefDev;
+    delete pSpellInfo;
 }
 
 void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
@@ -1544,6 +1545,22 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
         }
     }
 
+    return aNewSel;
+}
+
+EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
+{
+    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+    const EditPaM& rPaM = rCurSel.Min();
+    const ContentNode* pNode = rPaM.GetNode();
+    //return Null if search starts at the beginning of the string
+    long nStart = rPaM.GetIndex() ? xBI->beginOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
+
+    long nEnd = xBI->endOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) );
+    EditSelection aNewSel( rCurSel );
+    DBG_ASSERT(nStart < pNode->Len() && nEnd <= pNode->Len(), "sentence indices out of range");
+    aNewSel.Min().SetIndex( (USHORT)nStart );
+    aNewSel.Max().SetIndex( (USHORT)nEnd );
     return aNewSel;
 }
 
