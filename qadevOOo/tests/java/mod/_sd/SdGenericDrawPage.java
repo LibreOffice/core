@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdGenericDrawPage.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:30 $
+ *  last change:$Date: 2003-02-06 09:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestParameters;
 import util.InstCreator;
 import util.SOfficeFactory;
 import util.ShapeDsc;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -161,8 +164,7 @@ public class SdGenericDrawPage extends TestCase {
     * @see com.sun.star.drawing.DrawPage
     * @see com.sun.star.drawing.XDrawPagesSupplier
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
         XShapes oShapes = null;
@@ -181,7 +183,8 @@ public class SdGenericDrawPage extends TestCase {
         XIndexAccess oDPi = (XIndexAccess) UnoRuntime.queryInterface
             (XIndexAccess.class,oDPn);
         try {
-            oObj = (XDrawPage) oDPi.getByIndex(0);
+            oObj = (XDrawPage) AnyConverter.toObject(
+                        new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get DrawPage", e);
