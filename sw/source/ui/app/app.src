@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:09:38 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2978,7 +2978,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ polish ] = "nieznany";
     Text[ portuguese_brazilian ] = "unknown";
     Text[ japanese ] = "•s–¾";
-    Text[ korean ] = "unknown";
+    Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö  ¾ÊÀº";
     Text[ chinese_simplified ] = "²»Ã÷";
     Text[ chinese_traditional ] = "¤£©ú";
     Text[ turkish ] = "unknown";
