@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:36:18 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,16 @@ String RID_EDITUNDO_DEL
     TEXT [ dutch ] = "Wissen" ;
     TEXT [ spanish ] = "Eliminar" ;
     TEXT [ english_us ] = "Delete" ;
-    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ chinese_simplified ] = "åˆ é™¤";
     TEXT[ russian ] = "Óäàëèòü";
     TEXT[ polish ] = "Usuñ";
-    TEXT[ japanese ] = "íœ";
-    TEXT[ chinese_traditional ] = "§R°£";
+    TEXT[ japanese ] = "å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤";
     TEXT[ arabic ] = "ÍĞİ";
     TEXT[ dutch ] = "Wissen";
-    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ chinese_simplified ] = "åˆ é™¤";
     TEXT[ greek ] = "ÄéáãñáöŞ";
-    TEXT[ korean ] = "»èÁ¦";
+    TEXT[ korean ] = "ì‚­ì œ";
     TEXT[ turkish ] = "Sil";
     TEXT[ catalan ] = "Eliminar";
 };
@@ -106,16 +106,16 @@ String RID_EDITUNDO_MOVE
     TEXT [ dutch ] = "Verplaatsen" ;
     TEXT [ spanish ] = "Desplazar" ;
     TEXT [ english_us ] = "Move" ;
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
     TEXT[ russian ] = "Ïåğåìåñòèòü";
     TEXT[ polish ] = "Przesuñ";
-    TEXT[ japanese ] = "ˆÚ“®";
-    TEXT[ chinese_traditional ] = "²¾°Ê";
+    TEXT[ japanese ] = "ç§»å‹•";
+    TEXT[ chinese_traditional ] = "ç§»å‹•";
     TEXT[ arabic ] = "ÅÒÇÍÉ";
     TEXT[ dutch ] = "Verplaatsen";
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
     TEXT[ greek ] = "Ìåôáêßíçóç";
-    TEXT[ korean ] = "ÀÌµ¿";
+    TEXT[ korean ] = "ì´ë™";
     TEXT[ turkish ] = "Taşı";
     TEXT[ catalan ] = "Desplazar";
 };
@@ -135,16 +135,16 @@ String RID_EDITUNDO_INSERT
     TEXT [ dutch ] = "Invoegen" ;
     TEXT [ spanish ] = "Insertar" ;
     TEXT [ english_us ] = "Insert" ;
-    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ chinese_simplified ] = "æ’å…¥";
     TEXT[ russian ] = "Âñòàâèòü";
     TEXT[ polish ] = "Wstaw";
-    TEXT[ japanese ] = "‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J";
+    TEXT[ japanese ] = "æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥";
     TEXT[ arabic ] = "ÅÏÑÇÌ";
     TEXT[ dutch ] = "Invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ chinese_simplified ] = "æ’å…¥";
     TEXT[ greek ] = "ÅéóáãùãŞ";
-    TEXT[ korean ] = "»ğÀÔ";
+    TEXT[ korean ] = "ì‚½ì…";
     TEXT[ turkish ] = "Ekle";
     TEXT[ catalan ] = "Insertar";
 };
@@ -164,16 +164,16 @@ String RID_EDITUNDO_REPLACE
     TEXT [ dutch ] = "Vervangen" ;
     TEXT [ spanish ] = "Reemplazar" ;
     TEXT [ english_us ] = "Replace" ;
-    TEXT[ chinese_simplified ] = "Ìæ»»";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ russian ] = "Çàìåíèòü";
     TEXT[ polish ] = "Zamieñ";
-    TEXT[ japanese ] = "’uŠ·";
-    TEXT[ chinese_traditional ] = "¥N´À";
+    TEXT[ japanese ] = "ç½®æ›";
+    TEXT[ chinese_traditional ] = "ä»£æ›¿";
     TEXT[ arabic ] = "ÇÓÊÈÏÇá";
     TEXT[ dutch ] = "Vervangen";
-    TEXT[ chinese_simplified ] = "Ìæ»»";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
-    TEXT[ korean ] = "¹Ù²Ù±â";
+    TEXT[ korean ] = "ë°”ê¾¸ê¸°";
     TEXT[ turkish ] = "Değiştir";
     TEXT[ catalan ] = "Reemplazar";
 };
@@ -193,16 +193,16 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT [ dutch ] = "Attributen toepassen" ;
     TEXT [ spanish ] = "Aplicar atributos" ;
     TEXT [ english_us ] = "Apply attributes" ;
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
     TEXT[ polish ] = "Zastosuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚ğ“K—p";
-    TEXT[ chinese_traditional ] = "¨Ï¥ÎÄİ©Ê";
+    TEXT[ japanese ] = "å±æ€§ã‚’é©ç”¨";
+    TEXT[ chinese_traditional ] = "ä½¿ç”¨å±¬æ€§";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
     TEXT[ dutch ] = "Attributen toepassen";
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
-    TEXT[ korean ] = "¼Ó¼º Àû¿ë";
+    TEXT[ korean ] = "ì†ì„± ì ìš©";
     TEXT[ turkish ] = "Öznitelikleri kullan";
     TEXT[ catalan ] = "Aplicar atributos";
 };
@@ -222,16 +222,16 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT [ dutch ] = "Attributen terugzetten" ;
     TEXT [ spanish ] = "Restablecer atributos" ;
     TEXT [ english_us ] = "Reset attributes" ;
-    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
     TEXT[ russian ] = "Âîññòàíîâèòü àòğèáóòû";
     TEXT[ polish ] = "Zresetuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚ğŒ³‚É–ß‚·";
-    TEXT[ chinese_traditional ] = "­«³]Äİ©Ê";
+    TEXT[ japanese ] = "å±æ€§ã‚’å…ƒã«æˆ»ã™";
+    TEXT[ chinese_traditional ] = "é‡è¨­å±¬æ€§";
     TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
     TEXT[ dutch ] = "Attributen terugzetten";
-    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
     TEXT[ greek ] = "ÅğáíáöïñÜ éäéïôŞôùí";
-    TEXT[ korean ] = "¼Ó¼º ¿ø·¡´ë·Î";
+    TEXT[ korean ] = "ì†ì„± ì›ë˜ëŒ€ë¡œ";
     TEXT[ turkish ] = "Öznitelikleri başa al";
     TEXT[ catalan ] = "Restablecer atributos";
 };
@@ -249,16 +249,16 @@ String RID_EDITUNDO_INDENT
     Text [ spanish ] = "Sangría" ;
     Text [ french ] = "Mettre en retrait" ;
     Text [ dutch ] = "Inspringen" ;
-    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ chinese_simplified ] = "ç¼©è¿›";
     Text[ russian ] = "Îòñòóï";
     Text[ polish ] = "Wciêcie";
-    Text[ japanese ] = "‘}“ü";
-    Text[ chinese_traditional ] = "ÁY±Æ";
+    Text[ japanese ] = "æŒ¿å…¥";
+    Text[ chinese_traditional ] = "ç¸®æ’";
     Text[ arabic ] = "ÅÒÇÍÉ";
     Text[ dutch ] = "Inspringen";
-    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ chinese_simplified ] = "ç¼©è¿›";
     Text[ greek ] = "Åóï÷Ş";
-    Text[ korean ] = "µé¿©¾²±â";
+    Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
     Text[ turkish ] = "Girinti";
     Text[ catalan ] = "Sangría";
     Text[ finnish ] = "Sisennä";
@@ -279,16 +279,16 @@ String RID_EDITUNDO_SETSTYLE
     TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
     TEXT [ spanish ] = "Aplicar estilos" ;
     TEXT [ english_us ] = "Apply Styles" ;
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
     TEXT[ russian ] = "Ïğèìåíèòü ñòèëè";
     TEXT[ polish ] = "Zastosuj style";
-    TEXT[ japanese ] = "½À²Ù‚ğ“K—p";
-    TEXT[ chinese_traditional ] = "¨Ï¥Î¼Ë¦¡";
+    TEXT[ japanese ] = "ï½½ï¾€ï½²ï¾™ã‚’é©ç”¨";
+    TEXT[ chinese_traditional ] = "ä½¿ç”¨æ¨£å¼";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã äãÇĞÌ";
     TEXT[ dutch ] = "Opmaakprofielen toepassen";
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
     TEXT[ greek ] = "ÅöáñìïãŞ ğñïôığùí";
-    TEXT[ korean ] = "À¯Çü Àû¿ë";
+    TEXT[ korean ] = "ìœ í˜• ì ìš©";
     TEXT[ turkish ] = "Şablonları kullan";
     TEXT[ catalan ] = "Aplicar estilos";
 };
@@ -309,10 +309,10 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ swedish ] = "Bokstäver/tecken";
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
-    TEXT[ japanese ] = "•¶ší‚Ì•ÏŠ·";
-    TEXT[ korean ] = "´ë/¼Ò¹®ÀÚ";
-    TEXT[ chinese_simplified ] = "±ä»¯×ÖÄ¸ºÍ×ÖÌå¸ñÊ½";
-    TEXT[ chinese_traditional ] = "ÅÜ¤Æ¦r¥À©M¦r«¬®æ¦¡";
+    TEXT[ japanese ] = "æ–‡å­—ç¨®ã®å¤‰æ›";
+    TEXT[ korean ] = "ëŒ€/ì†Œë¬¸ì";
+    TEXT[ chinese_simplified ] = "å˜åŒ–å­—æ¯å’Œå­—ä½“æ ¼å¼";
+    TEXT[ chinese_traditional ] = "è®ŠåŒ–å­—æ¯å’Œå­—å‹æ ¼å¼";
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
     TEXT[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
@@ -340,16 +340,16 @@ Menu RID_MENU_SPELL
             Text [ danish ] = "Stavekont~rol" ;
             Text [ portuguese ] = "Or~tografia" ;
             Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
-            Text [ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
+            Text [ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)";
             Text[ russian ] = "~Ïğàâîïèñàíèå";
             Text[ polish ] = "~Pisownia";
-            Text[ japanese ] = "•¶ÍZ³(~S)";
-            Text[ chinese_traditional ] = "«÷¼gÀË¬d(~S)";
+            Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)";
+            Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)";
             Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole";
-            Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
+            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)";
             Text[ greek ] = "Ï~ñèïãñáößá";
-            Text[ korean ] = "¸ÂÃã¹ı(~S)";
+            Text[ korean ] = "ë§ì¶¤ë²•(~S)";
             Text[ turkish ] = "~Yazım kılavuzu";
             Text[ catalan ] = "~Ortografía";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
@@ -372,16 +372,16 @@ Menu RID_MENU_SPELL
             Text [ danish ] = "Tilføj" ;
             Text [ portuguese ] = "~Adicionar" ;
             Text [ portuguese_brazilian ] = "~Aufnehmen" ;
-            Text [ chinese_simplified ] = "¼ÓÈë(~A)";
+            Text [ chinese_simplified ] = "åŠ å…¥(~A)";
             Text[ russian ] = "Äîáàâèòü";
             Text[ polish ] = "Dodaj";
-            Text[ japanese ] = "’Ç‰Á(~A)";
-            Text[ chinese_traditional ] = "¥[¤J(~A)";
+            Text[ japanese ] = "è¿½åŠ (~A)";
+            Text[ chinese_traditional ] = "åŠ å…¥(~A)";
             Text[ arabic ] = "ÅÖÇİÉ";
             Text[ dutch ] = "~Toevoegen";
-            Text[ chinese_simplified ] = "¼ÓÈë(~A)";
+            Text[ chinese_simplified ] = "åŠ å…¥(~A)";
             Text[ greek ] = "Ğñ~ïóèŞêç";
-            Text[ korean ] = "Ãß°¡(~A)";
+            Text[ korean ] = "ì¶”ê°€(~A)";
             Text[ turkish ] = "Ekle";
             Text[ catalan ] = "~Incluir";
             Text[ finnish ] = "~Lisää";
@@ -403,16 +403,16 @@ Menu RID_MENU_SPELL
             Text [ dutch ] = "Alle ~negeren" ;
             Text [ spanish ] = "I~gnorar todo" ;
             Text [ english_us ] = "Ignore All" ;
-            Text [ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text [ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥(~I)";
             Text[ russian ] = "Ïğîïóñòèòü âñå";
             Text[ polish ] = "Ignoruj wszystkie";
-            Text[ japanese ] = "‚·‚×‚Ä–³‹‚·‚é";
-            Text[ chinese_traditional ] = "¥ş³¡©¿²¤(~I)";
+            Text[ japanese ] = "ã™ã¹ã¦ç„¡è¦–ã™ã‚‹";
+            Text[ chinese_traditional ] = "å…¨éƒ¨å¿½ç•¥(~I)";
             Text[ arabic ] = "ÊÌÇåá Çáßá";
             Text[ dutch ] = "Alle ~negeren";
-            Text[ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥(~I)";
             Text[ greek ] = "ĞáñÜ~âëåøç üëùí";
-            Text[ korean ] = "¸ğµÎ ¹«½Ã";
+            Text[ korean ] = "ëª¨ë‘ ë¬´ì‹œ";
             Text[ turkish ] = "Tümünü yok say";
             Text[ catalan ] = "I~gnorar todo";
         };
@@ -434,22 +434,23 @@ Menu RID_MENU_SPELL
             Text [ french ] = "AutoCo~rrection" ;
             Text [ dutch ] = "~AutoCorrectie" ;
             Text [ portuguese ] = "Auto~Correcção" ;
-            Text [ chinese_simplified ] = "×Ô¶¯¸üÕı(~A)";
+            Text [ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£(~A)";
             Text[ russian ] = "Àâòîçàìåíà";
             Text[ polish ] = "Autokorekta";
-            Text[ japanese ] = "µ°ÄºÚ¸Ä";
-            Text[ chinese_traditional ] = "¦Û°Ê®Õ¥¿(~A)";
+            Text[ japanese ] = "ï½µï½°ï¾„ï½ºï¾šï½¸ï¾„";
+            Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£(~A)";
             Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
             Text[ dutch ] = "~AutoCorrectie";
-            Text[ chinese_simplified ] = "×Ô¶¯¸üÕı(~A)";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£(~A)";
             Text[ greek ] = "Áõôï~Äéüñèùóç";
-            Text[ korean ] = "ÀÚµ¿°íÄ§";
+            Text[ korean ] = "ìë™ê³ ì¹¨";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ catalan ] = "Auto~Corrección";
             Text[ finnish ] = "Automaattinen korjaus";
         };
     };
 };
+
 
 
 
