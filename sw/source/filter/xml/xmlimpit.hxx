@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public:
                     const SvXMLNamespaceMap& rNamespaceMap ) const;
 
     /** this method is called for every item that has the
-        MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
+        MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
     virtual BOOL handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
@@ -116,7 +116,7 @@ public:
                                     const SvXMLNamespaceMap& rNamespaceMap ) const;
 
     /** this method is called for every item that has the
-        MID_FLAG_NO_ITEM_IMPORT flag set */
+        MID_SW_FLAG_NO_ITEM_IMPORT flag set */
     virtual BOOL handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
                                const ::rtl::OUString& rValue,
