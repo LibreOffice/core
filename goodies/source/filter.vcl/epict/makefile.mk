@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:28:11 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:08:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,22 +67,12 @@ TARGET=epict
 TARGET2=ept
 DEPTARGET=vepict
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ----------------------------------------------------------
-
-.IF "$(COM)"=="WTC"
-CFLAGSOPT= -od -3r
-.ENDIF
 
 .IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
 CDEFS+= -DEDITDEBUG
@@ -94,86 +84,26 @@ SRCFILES =	dlgepct.src	\
 SLOFILES =  $(SLO)$/epict.obj \
             $(SLO)$/dlgepct.obj
 
-
 # ==========================================================================
 
 RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=\
-             $(SRS)$/$(TARGET).srs
+RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET=     ept$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     epict
 SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
 SHL1DEPN=       $(LB)$/epict.lib
-SHL1LIBS=       $(SLB)$/epict.lib # $(LB)$/rtftoken.lib
+SHL1LIBS=       $(SLB)$/epict.lib
 
 .IF "$(GUI)" != "UNX"
 SHL1OBJS=       $(SLO)$/epict.obj
 .ENDIF
+
+SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+DEF1NAME=$(SHL1TARGET)
 
-.IF "$(depend)" == ""
-
-all:    ALLTAR
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:\
-    makefile.mk \
-    $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE           >$@
-    @echo DESCRIPTION 'StarView Filter DLL'                         >>$@
-.IF "$(COM)" == "ZTC"
-    @echo STUB        'os2STUB.EXE'                                 >>$@
-.ENDIF
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL                                    >>$@
-    @echo DATA        PRELOAD MULTIPLE NONSHARED                    >>$@
-    @echo EXPORTS                                                   >>$@
-.IF "$(COM)"=="ICC"
-    @echo    GraphicExport                                          >>$@
-    @echo    DoExportDialog                                         >>$@
-.ELSE
-    @echo    _GraphicExport                                         >>$@
-    @echo    _DoExportDialog                                        >>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'StarView Filter DLL'                   >$@
-    @echo name $(BIN)$/$(SHL1TARGET)                          >>$@
-    @echo    GraphicExport_  >>temp.def
-    @echo    DoExportDialog_  >>temp.def
-    @gawk -f s:\util\exp.awk temp.def                               >>$@
-    @del temp.def
-.ENDIF
-.ENDIF
-
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-        @echo LIBRARY     $(DLLNAME)                   >$@
-        @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-        @echo DATA                READ WRITE NONSHARED >>$@
-        @echo EXPORTS                                  >>$@
-        @echo     GraphicExport                        >>$@
-        @echo     DoExportDialog                       >>$@
-
-.ENDIF
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-
-.ENDIF
+# ==========================================================================
 
 .INCLUDE :  target.mk
