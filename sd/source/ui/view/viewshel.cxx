@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-22 13:35:03 $
+ *  last change: $Author: af $ $Date: 2002-07-25 10:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,17 +858,28 @@ void SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
     }
 }
 
-/*************************************************************************
-|*
-|* View-Groesse (und Position bei OLE) aendern und
-|* Scrollbars/TabControl entsprechend anpassen
-|*
-\************************************************************************/
 
+/** After a simple consistency check the given values are stored so that
+    they can be accessed by the <member>ArrageGUIElements</member> method
+    which is finally called and performs the actual adjustment of sizes and
+    positions of the GUI elements.
+*/
 void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
 {
+    // Make sure that the new size is not degenerate.
     if ( !rNewSize.Width() || !rNewSize.Height() )
         return;
+
+    // Remember the new position and size.
+    aViewPos  = rNewPos;
+    aViewSize = rNewSize;
+
+    // Rearrange the UI elements to take care of the new position and size.
+    ArrangeGUIElements ();
+}
+
+void SdViewShell::ArrangeGUIElements (void)
+{
 
     // Rahmen fuer InPlace-Editing berechnen
     long nLeft = 0;
@@ -882,8 +893,8 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
             nTop  = pHRulerArray[0]->GetSizePixel().Height();
     }
 
-    long nRight = pVScrlArray[0]->GetSizePixel().Width();
-    long nBottom = pHScrlArray[0]->GetSizePixel().Height();
+    long nRight = aScrBarWH.Width();
+    long nBottom = aScrBarWH.Height();
     BOOL bSlideShowActive = pFuSlideShow != NULL &&
                             !pFuSlideShow->IsTerminated() &&
                             !pFuSlideShow->IsFullScreen() &&
@@ -909,15 +920,13 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
     Size    aVSplitSize = aVSplit.GetSizePixel();
     Size    aBtnSize(aScrBarWH);
     Point   aHSplitPos, aVSplitPos;
-    long    nPosX = rNewPos.X();
-    long    nPosY = rNewPos.Y();
-    long    nSizeX = rNewSize.Width();
-    long    nSizeY = rNewSize.Height();
+    long    nPosX = aViewPos.X();
+    long    nPosY = aViewPos.Y();
+    long    nSizeX = aViewSize.Width();
+    long    nSizeY = aViewSize.Height();
     long    nSplitSize = aScrBarWH.Width() / 4;
     // TabControl oder aehnliches vorhanden?
     long    aHCtrlWidth = GetHCtrlWidth();
-    aViewPos  = rNewPos;
-    aViewSize = rNewSize;
     nSizeX -= aScrBarWH.Width();
     nSizeY -= aScrBarWH.Height();
 
@@ -948,9 +957,8 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
 
     // Horizontale Scrollbars
     Point aHPos(nPosX + aHCtrlWidth, nPosY + nSizeY );
-
-    aHBarSize = pHScrlArray[0]->GetSizePixel();
     aHBarSize.Width() = aHSplitPos.X() - aHPos.X();
+    aHBarSize.Height() = aScrBarWH.Height();
     if ( aHBarSize.Width() < MIN_SCROLLBAR_SIZE )
     {
         aHPos.X() = aHSplitPos.X() - MIN_SCROLLBAR_SIZE;
@@ -1023,7 +1031,7 @@ void SdViewShell::AdjustPosSizePixel(const Point &rNewPos, const Size &rNewSize)
     aVSplit.SetSizePixel(aVSplitSize);
 
     // Vertikaler Scrollbar
-    aVBarSize = pVScrlArray[0]->GetSizePixel();
+    aVBarSize.Width() = aScrBarWH.Width();
     aVBarSize.Height() = aVSplitPos.Y() - aVPos.Y();
 /*
     if ( aVBarSize.Height() < MIN_SCROLLBAR_SIZE )
