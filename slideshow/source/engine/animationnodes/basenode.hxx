@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@ namespace presentation
 
         /** Context for every node.
 
-        Besides the global AnimationNodeFactory::Context data,
-        this struct also contains the current DocTree subset
-        for this node. If start and end index of the
-        DocTreeNode are equal, the node should use the
-        complete shape.
+            Besides the global AnimationNodeFactory::Context data,
+            this struct also contains the current DocTree subset
+            for this node. If start and end index of the
+            DocTreeNode are equal, the node should use the
+            complete shape.
         */
         struct NodeContext
         {
