@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 07:03:48 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 10:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,15 +426,9 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     m_pResultSet->clear();
     Reference<XResultSet> xRs(m_pResultSet);
 
-//  UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig für die Kriterien
-//  for (UINT16 j = 1; j < nCount; ++j)
-//  {
-//      UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
-//      if (nParameter != SQL_NO_PARAMETER)
-//          (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
-//  }
-
-    if ( m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size() )
+    // check if we got enough paramters
+    if ( (m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size()) ||
+         (m_xParamColumns.isValid() && !m_aParameterRow.isValid() && !m_aParameterRow->empty()) )
         throw SQLException(::rtl::OUString::createFromAscii("Invalid count of parameters supplied!")
                             ,*this
                             ,::rtl::OUString::createFromAscii("S1000")
