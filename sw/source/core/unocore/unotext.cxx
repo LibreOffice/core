@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:36:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
+#endif
+#ifndef _UNOCRSRHELPER_HXX
+#include <unocrsrhelper.hxx>
 #endif
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
@@ -336,25 +339,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
 
-                // scan for CR characters in order to insert paragraph breaks
-                // at those positions by calling SplitNode
-                OUString aTxt;
-                sal_Int32 nStartIdx = 0;
-                sal_Int32 nIdx = aString.indexOf( '\r', nStartIdx );
-                while (nIdx > 0)
-                {
-                    DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
-                    aTxt = aString.copy( nStartIdx, nIdx - nStartIdx );
-                    if (aTxt.getLength() && !GetDoc()->Insert( aInsertPam, aTxt ))
-                        DBG_ERROR( "insert string failed" );
-                    if (!GetDoc()->SplitNode( *aInsertPam.GetPoint() ))
-                        DBG_ERROR( "SplitNode failed" );
-                    nStartIdx = nIdx + 1;
-                    nIdx = aString.indexOf( '\r', nStartIdx );
-                }
-                aTxt = aString.copy( nStartIdx );
-                if (aTxt.getLength() && !GetDoc()->Insert( aInsertPam, aTxt ))
-                    DBG_ERROR( "insert string failed" );
+                SwUnoCursorHelper::DocInsertStringSplitCR( *GetDoc(), aInsertPam, aString );
 
                 GetDoc()->DoGroupUndo(bGroupUndo);
             }
