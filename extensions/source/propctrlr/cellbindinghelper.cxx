@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:04:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,16 @@ namespace pcr
     namespace
     {
         //....................................................................
+
+#if (_MSC_VER < 1300)
+        using ::com::sun::star::uno::Reference;
+        using ::com::sun::star::uno::XInterface;
+        using ::com::sun::star::uno::UNO_QUERY;
+        using ::com::sun::star::frame::XModel;
+        using ::com::sun::star::drawing::XDrawPage;
+        using ::com::sun::star::container::XChild;
+#endif // _MSC_VER < 1300
+
         template< class TYPE >
         Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
         {
