@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: mib $ $Date: 2000-10-06 06:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ public:
                                 pBasePool = pPool;
                                 StartListening(*pBasePool);
                             }
+    const SwDoc*                GetDoc() const { return m_pDoc; }
 };
 
 /* -----------------24.08.98 16:04-------------------
