@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:19:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,41 @@
 #define RID_STR_INVALID_VALIDATOR               ( RID_FRM_STRINGS_START + 18 )
 #define RID_STR_LABEL_RECORD                    ( RID_FRM_STRINGS_START + 19 )
 #define RID_STR_LABEL_OF                        ( RID_FRM_STRINGS_START + 20 )
+
+#define RID_STR_XFORMS_NO_BINDING_EXPRESSION    ( RID_FRM_STRINGS_START + 21 )
+#define RID_STR_XFORMS_INVALID_BINDING_EXPRESSION (RID_FRM_STRINGS_START + 22)
+#define RID_STR_XFORMS_INVALID_VALUE            ( RID_FRM_STRINGS_START + 23 )
+#define RID_STR_XFORMS_REQUIRED                 ( RID_FRM_STRINGS_START + 24 )
+#define RID_STR_XFORMS_INVALID_CONSTRAINT       ( RID_FRM_STRINGS_START + 25 )
+#define RID_STR_XFORMS_VALUE_IS_NOT_A           ( RID_FRM_STRINGS_START + 26 )
+#define RID_STR_XFORMS_VALUE_MAX_INCL           ( RID_FRM_STRINGS_START + 27 )
+#define RID_STR_XFORMS_VALUE_MAX_EXCL           ( RID_FRM_STRINGS_START + 28 )
+#define RID_STR_XFORMS_VALUE_MIN_INCL           ( RID_FRM_STRINGS_START + 29 )
+#define RID_STR_XFORMS_VALUE_MIN_EXCL           ( RID_FRM_STRINGS_START + 30 )
+#define RID_STR_XFORMS_VALUE_PATTERN            ( RID_FRM_STRINGS_START + 31 )
+#define RID_STR_XFORMS_VALUE_TOTAL_DIGITS       ( RID_FRM_STRINGS_START + 32 )
+#define RID_STR_XFORMS_VALUE_FRACTION_DIGITS    ( RID_FRM_STRINGS_START + 33 )
+#define RID_STR_XFORMS_VALUE_LENGTH             ( RID_FRM_STRINGS_START + 34 )
+#define RID_STR_XFORMS_VALUE_MIN_LENGTH         ( RID_FRM_STRINGS_START + 35 )
+#define RID_STR_XFORMS_VALUE_MAX_LENGTH         ( RID_FRM_STRINGS_START + 36 )
+
+#define RID_STR_DATATYPE_STRING                 ( RID_FRM_STRINGS_START + 37 )
+#define RID_STR_DATATYPE_URL                    ( RID_FRM_STRINGS_START + 38 )
+#define RID_STR_DATATYPE_BOOLEAN                ( RID_FRM_STRINGS_START + 39 )
+#define RID_STR_DATATYPE_DECIMAL                ( RID_FRM_STRINGS_START + 40 )
+#define RID_STR_DATATYPE_FLOAT                  ( RID_FRM_STRINGS_START + 41 )
+#define RID_STR_DATATYPE_DOUBLE                 ( RID_FRM_STRINGS_START + 42 )
+#define RID_STR_DATATYPE_DATE                   ( RID_FRM_STRINGS_START + 43 )
+#define RID_STR_DATATYPE_TIME                   ( RID_FRM_STRINGS_START + 44 )
+#define RID_STR_DATATYPE_DATETIME               ( RID_FRM_STRINGS_START + 45 )
+#define RID_STR_DATATYPE_YEARMONTH              ( RID_FRM_STRINGS_START + 46 )
+#define RID_STR_DATATYPE_YEAR                   ( RID_FRM_STRINGS_START + 47 )
+#define RID_STR_DATATYPE_MONTHDAY               ( RID_FRM_STRINGS_START + 48 )
+#define RID_STR_DATATYPE_MONTH                  ( RID_FRM_STRINGS_START + 49 )
+#define RID_STR_DATATYPE_DAY                    ( RID_FRM_STRINGS_START + 50 )
+
+#define RID_STR_XFORMS_CANT_EVALUATE            ( RID_FRM_STRINGS_START + 51 )
+#define RID_STR_XFORMS_PATTERN_DOESNT_MATCH     ( RID_FRM_STRINGS_START + 52 )
 
 #endif // _FRM_RESOURCE_HRC_
 
