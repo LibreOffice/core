@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-15 12:28:47 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 14:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
     DBG_CHKTHIS( EditEngine, 0 );
     // Mit 2 Punkten erzeugen, da bei Positivem Punkt, LONGMAX als Size
     // Bottom und Right im Bereich > LONGMAX landen.
-    Rectangle aBigRec( rStartPos, Point( 0x7FFFFFFF, 0x7FFFFFFF ) );
+    Rectangle aBigRec( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Push();
     pImpEditEngine->Paint( pOutDev, aBigRec, rStartPos, sal_False, nOrientation );
