@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:10:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,18 +70,56 @@
 
 const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrmFmt;
+// --> OD 2005-01-06 #i30669#
+class SwFmtHoriOrient;
+class SwFmtVertOrient;
+// <--
 
 class WinwordAnchoring : public EscherExClientRecord_Base
 {
 public:
     void WriteData(EscherEx& rEx) const;
     void SetAnchoring(const SwFrmFmt& rFmt);
+
+    /** method to perform conversion of positioning attributes with the help
+        of corresponding layout information
+
+        OD 2005-01-06 #i30669#
+        Because most of the Writer object positions doesn't correspond to the
+        object positions in WW8, this method converts the positioning
+        attributes. For this conversion the corresponding layout information
+        is needed. If no layout information exists - e.g. no layout exists - no
+        conversion is performed.
+        No conversion is performed for as-character anchored objects. Whose
+        object positions are already treated special in method <WriteData(..)>.
+        Usage of method: Used by method <SetAnchoring(..)>, nothing else
+
+        @author OD
+
+        @param _iorHoriOri
+        input/output parameter - containing the current horizontal position
+        attributes, which are converted by this method.
+
+        @param _iorVertOri
+        input/output parameter - containing the current vertical position
+        attributes, which are converted by this method.
+
+        @param _rFrmFmt
+        input parameter - frame format of the anchored object
+
+        @return boolean, indicating, if a conversion has been performed.
+    */
+    static bool ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
+                                 SwFmtVertOrient& _iorVertOri,
+                                 const SwFrmFmt& _rFrmFmt );
+
 private:
     bool mbInline;
     sal_uInt32 mnXAlign;
     sal_uInt32 mnYAlign;
     sal_uInt32 mnXRelTo;
     sal_uInt32 mnYRelTo;
+
 };
 
 class SwBasicEscherEx : public EscherEx
