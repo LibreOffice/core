@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFunction.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:05 $
+ *  last change:$Date: 2003-03-25 16:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.script.framework.provider;
 
 import drafts.com.sun.star.script.framework.provider.XFunction;
+import drafts.com.sun.star.script.framework.provider.XFunctionProvider;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -81,10 +82,18 @@ import java.util.Iterator;
 public class _XFunction extends MultiMethodTest {
 
     public XFunction oObj = null;
+    public XFunctionProvider oProvider = null;
+
     /**
     * Retrieves object relation.
     */
     public void before() throws StatusException {
+        log.println("getting provider");
+        oProvider = (XFunctionProvider) tEnv.getObjRelation("provider");
+        if (oProvider == null)
+            log.println("it's null");
+        else
+            log.println("it's not null");
     }
 
     public void _invoke() {
@@ -111,8 +120,18 @@ public class _XFunction extends MultiMethodTest {
 
     private boolean runInvokeTest(Parameters testdata) {
         String description = testdata.get("description");
+        String logicalname = testdata.get("logicalname");
+
+        String expreturntype = testdata.get("returntype");
+        String expreturnvalue = testdata.get("returnvalue");
+        String gotreturntype = "null";
+        String gotreturnvalue = "null";
+
+        String location = testdata.get("location");
+
         String expected = testdata.get("expected");
         String output = "";
+        boolean result = true;
 
         log.println(testdata.get("description"));
 
@@ -123,7 +142,19 @@ public class _XFunction extends MultiMethodTest {
             Object[][] aOutParam = new Object[1][];
             aOutParam[0] = new Object[0];
 
-            oObj.invoke( aParams, aOutParamIndex, aOutParam );
+            XFunction func = oProvider.getFunction(logicalname);
+            if (func == null) {
+                log.println("Couldn't get XFunction for:" + logicalname);
+                return false;
+            }
+
+            Object ret = func.invoke( aParams, aOutParamIndex, aOutParam );
+
+            if (ret != null) {
+                gotreturntype = ret.getClass().getName();
+                gotreturnvalue = ret.toString();
+            }
+
             output = "success";
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {
@@ -147,10 +178,26 @@ public class _XFunction extends MultiMethodTest {
             output = "java.lang.Exception";
         }
 
+        if (expreturntype != null) {
+            log.println("expected return type: " + expreturntype +
+                ", got return type: " + gotreturntype);
+
+            if (!gotreturntype.equals(expreturntype))
+                result = false;
+        }
+
+        if (expreturnvalue != null) {
+            log.println("expected return value: " + expreturnvalue +
+                ", got return value: " + gotreturnvalue);
+
+            if (!gotreturnvalue.equals(expreturnvalue))
+                result = false;
+        }
+
         log.println("expected: " + expected + ", output: " + output);
-        if (output.equals(expected))
-            return true;
-        else
-            return false;
+        if (!output.equals(expected))
+            result = false;
+
+        return result;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptSecurity.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-03-25 11:26:59 $
+ *  last change:$Date: 2003-03-25 16:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,14 +200,8 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         try {
             String uri = util.utils.getFullTestURL(location);
-            if ( oObj.checkPermission(uri, "execute" ) )
-            {
-                output = "true";
-            }
-            else
-            {
-                output = "false";
-            }
+            oObj.checkPermission(uri, "execute" );
+            output = "true";
         }
         catch (com.sun.star.security.AccessControlException ace) {
             log.println("Couldn't invoke script:" + ace);

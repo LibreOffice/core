@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Function.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-25 11:26:53 $
+ *  last change:$Date: 2003-03-25 16:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,27 +83,30 @@ import drafts.com.sun.star.script.framework.provider.XFunction;
 import drafts.com.sun.star.script.framework.provider.XFunctionProvider;
 
 public class Function extends TestCase {
-    //private String script = "script://MemoryUtils.MemUsage";
-    private String script = "script://HighlightText.showForm";
+    private String script = "script://returns-Integer";
+    private String doc = "doc_with_beanshell_scripts.sxw";
+
     public void initialize( TestParameters tParam, PrintWriter log ) {
     }
 
     public synchronized TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
-    log.println("creating test environment");
+    XFunctionProvider provider = null;
+
+        log.println("creating test environment");
         try {
 
             XMultiServiceFactory xMSF = tParam.getMSF();
             SOfficeFactory SOF = null;
             SOF = SOfficeFactory.getFactory( xMSF );
-            String docPath = util.utils.getFullTestURL( "ExampleSpreadSheetLatest.sxc" );
+            String docPath = util.utils.getFullTestURL(doc);
             XComponent doc = SOF.loadDocument( docPath );
             XModel model = ( XModel ) UnoRuntime.queryInterface( XModel.class,
                 doc );
             oObj  =
                 (XInterface)xMSF.createInstanceWithArguments( "drafts.com.sun.star.script.framework.provider.FunctionProvider", new Object[]{ model } );
-            XFunctionProvider provider = ( XFunctionProvider )UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
+            provider = ( XFunctionProvider )UnoRuntime.queryInterface( XFunctionProvider.class, oObj );
             oObj = provider.getFunction( script );
 
         } catch (com.sun.star.uno.Exception e) {
@@ -112,6 +115,7 @@ public class Function extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment(oObj) ;
+        tEnv.addObjRelation("provider", provider);
         TestDataLoader.setupData(tEnv, "Function");
 
         return tEnv ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:05 $
+ *  last change:$Date: 2003-03-25 16:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public class _XScriptInfoAccess extends MultiMethodTest {
 
         log.println(testdata.get("description"));
 
-        try {
+        // try {
             log.println("In _XScriptInfoAccess.getScriptLogicalNames()");
             String[] logicalNames = oObj.getScriptLogicalNames();
 
@@ -135,11 +135,11 @@ public class _XScriptInfoAccess extends MultiMethodTest {
                     }
                 }
             }
-        }
-        catch (com.sun.star.uno.Exception e) {
-            log.println("Caught UNO Exception :" + e);
-            output = "com.sun.star.uno.Exception";
-        }
+        // }
+        // catch (com.sun.star.uno.Exception e) {
+            // log.println("Caught UNO Exception :" + e);
+            // output = "com.sun.star.uno.Exception";
+        // }
 
         log.println("expected: " + expected + ", output: " + output);
         if (output.equals(expected))

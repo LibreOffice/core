@@ -1,1 +1,4 @@
-_invoke;description=Try to invoke a valid XFunction;expected=success
+_invoke;description=Try to find and invoke a valid user level XFunction;logicalname=script://HighlightText.showForm;expected=success
+_invoke;description=Try to invoke a valid beanshell XFunction that returns an Integer;logicalname=script://returns-Integer;returntype=java.lang.Integer;expected=success
+_invoke;description=Try to invoke a valid beanshell XFunction that returns a String;logicalname=script://returns-String;returntype=java.lang.String;returnvalue=testing;expected=success
+_invoke;description=Try to invoke a valid beanshell XFunction that returns a Frame;logicalname=script://returns-Frame;expected=com.sun.star.uno.RuntimeException
