@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:27:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,6 +2363,20 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_SINGLE_PRINT_JOBS),     WID_SINGLE_PRINT_JOBS,      CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_FILE_NAME_FROM_COLUMN), WID_FILE_NAME_FROM_COLUMN,  CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_FILE_NAME_PREFIX),      WID_FILE_NAME_PREFIX,       CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SUBJECT),               WID_MAIL_SUBJECT,           CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_ADDRESS_FROM_COLUMN),   WID_ADDRESS_FROM_COLUMN,    CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SEND_AS_HTML),          WID_SEND_AS_HTML,           CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SEND_AS_ATTACHMENT),    WID_SEND_AS_ATTACHMENT,     CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_MAIL_BODY),             WID_MAIL_BODY,              CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_ATTACHMENT_NAME),       WID_ATTACHMENT_NAME,        CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_ATTACHMENT_FILTER),     WID_ATTACHMENT_FILTER,      CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_PRINT_OPTIONS),         WID_PRINT_OPTIONS,          CPPU_E2T(CPPUTYPE_PROPERTYVALUES),  PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SAVE_AS_SINGLE_FILE),   WID_SAVE_AS_SINGLE_FILE,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SAVE_FILTER),           WID_SAVE_FILTER,            CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_COPIES_TO),             WID_COPIES_TO,              CPPU_E2T(CPPUTYPE_OUSTRINGS),       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_BLIND_COPIES_TO),       WID_BLIND_COPIES_TO,        CPPU_E2T(CPPUTYPE_OUSTRINGS),       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_IN_SERVER_PASSWORD),     WID_IN_SERVER_PASSWORD,     CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_OUT_SERVER_PASSWORD),    WID_OUT_SERVER_PASSWORD,    CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aMailMergeMap;
