@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-20 15:16:57 $
+ *  last change: $Author: vg $ $Date: 2002-02-22 15:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,9 +232,11 @@ class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
     Reference< XStream > mStream;
 public:
 
-    virtual Reference< XStream > SAL_CALL getStream() { return mStream; }
+    virtual Reference< XStream > SAL_CALL getStream() throw (com::sun::star::uno::RuntimeException)
+        { return mStream; }
 
-    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) { mStream = stream; }
+    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) throw (com::sun::star::uno::RuntimeException)
+        { mStream = stream; }
 };
 
 //===========================================================================
