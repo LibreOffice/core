@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:58 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 12:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ uno::Any SAL_CALL
     throw (uno::RuntimeException)
 {
     uno::Any aAny;
-    aAny <<= DBL_MIN;
+    aAny <<= -DBL_MAX;
 
     return aAny;
 }
