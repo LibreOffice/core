@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 14:28:21 $
+ *  last change: $Author: obo $ $Date: 2001-11-08 15:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@ namespace sfx2
     //=====================================================================
     struct TemplateContent;
     typedef ::std::vector< ::vos::ORef< TemplateContent > > TemplateFolderContent;
-    typedef TemplateFolderContent::const_iterator           FolderIterator;
+        typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
+        typedef TemplateFolderContent::iterator                 FolderIterator;
 
     /** a struct describing one content in one of the template dirs (or at least it's relevant aspects)
     */
@@ -204,8 +205,8 @@ namespace sfx2
         inline TemplateFolderContent&   getSubContents()            { return m_aSubContents; }
         inline const TemplateFolderContent& getSubContents() const  { return m_aSubContents; }
 
-        inline FolderIterator           begin() const   { return m_aSubContents.begin(); }
-        inline FolderIterator           end() const     { return m_aSubContents.end(); }
+                inline ConstFolderIterator              begin() const   { return m_aSubContents.begin(); }
+                inline ConstFolderIterator              end() const             { return m_aSubContents.end(); }
         inline TemplateFolderContent::size_type
                                         size() const    { return m_aSubContents.size(); }
 
@@ -307,7 +308,7 @@ namespace sfx2
                                         >
     {
         //.................................................................
-        bool operator() ( const ::vos::ORef< TemplateContent >& _rLHS, const ::vos::ORef< TemplateContent >& _rRHS )
+                bool operator() (const ::vos::ORef< TemplateContent >& _rLHS, const ::vos::ORef< TemplateContent >& _rRHS )
         {
             if ( !_rLHS.isValid() || !_rRHS.isValid() )
             {
@@ -328,12 +329,12 @@ namespace sfx2
             if ( _rLHS->getSubContents().size() )
             {   // there are children
                 // -> compare them
-                std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
+                                std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
                     _rLHS->getSubContents().begin(),
                     _rLHS->getSubContents().end(),
                     _rRHS->getSubContents().begin(),
                     *this
-                );
+                                );
                 if ( aFirstDifferent.first != _rLHS->getSubContents().end() )
                     return false;// the sub contents differ
             }
@@ -578,7 +579,7 @@ namespace sfx2
         // as both arrays are sorted (by definition - this is a precondition of this method)
         // we can simply go from the front to the back and compare the single elements
 
-        std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
+                std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = ::std::mismatch(
             _rLHS.begin(),
             _rLHS.end(),
             _rRHS.begin(),
@@ -691,7 +692,7 @@ namespace sfx2
                     // is it a folder?
                     if ( xRow->getBoolean( 4 ) && !xRow->wasNull() )
                     {   // yes -> step down
-                        FolderIterator aNextLevelRoot = _rxRoot->end();
+                                                ConstFolderIterator aNextLevelRoot = _rxRoot->end();
                         --aNextLevelRoot;
                         implReadFolder( *aNextLevelRoot );
                     }
@@ -879,6 +880,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/11/07 14:28:21  fs
+ *  initial checkin - helper class for caching the state of OOo's template folders
+ *
  *
  *  Revision 1.0 07.11.01 12:40:25  fs
  ************************************************************************/
