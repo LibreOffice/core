@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:01:29 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #include <math.h>
 #endif
 
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include <filter.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
