@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:03 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 15:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@ void PrinterInfoManager::initialize()
     m_aPrinters.clear();
     m_aWatchFiles.clear();
     OUString aPrinterPath( getPrinterPath() );
-    int nPaths = aPrinterPath.getTokenCount( ':' );
     OUString aDefaultPrinter;
 
     // first initialize the global defaults
@@ -157,9 +156,10 @@ void PrinterInfoManager::initialize()
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
 
-    for( int nCur = 0; m_aGlobalDefaults.m_pParser && nCur < nPaths; nCur++ )
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 && m_aGlobalDefaults.m_pParser )
     {
-        INetURLObject aFile( aPrinterPath.getToken( nCur, ':' ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aFile( aPrinterPath.getToken( 0, ':', nIndex ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
@@ -230,9 +230,10 @@ void PrinterInfoManager::initialize()
     }
 
     // now collect all available printers
-    for( int i = 0; i < nPaths; i++ )
+    nIndex = 0;
+    while( nIndex != -1 )
     {
-        INetURLObject aDir( aPrinterPath.getToken( i, ':' ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        INetURLObject aDir( aPrinterPath.getToken( 0, ':', nIndex ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
 
@@ -742,20 +743,20 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
     ::std::list< FastPrintFontInfo >::const_iterator it;
     for( it = aFonts.begin(); it != aFonts.end(); ++it )
         if( it->m_eType == fonttype::Builtin )
-            aPrinterFonts[ it->m_aFamilyName.toLowerCase() ].push_back( *it );
+            aPrinterFonts[ it->m_aFamilyName.toAsciiLowerCase() ].push_back( *it );
 
     // map lower case, so build a local copy of the font substitutions
     ::std::hash_map< OUString, OUString, OUStringHash > aSubstitutions;
     ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst;
     for( subst = rInfo.m_aFontSubstitutes.begin(); subst != rInfo.m_aFontSubstitutes.end(); ++subst )
     {
-        OUString aFamily( subst->first.toLowerCase() );
+        OUString aFamily( subst->first.toAsciiLowerCase() );
         // first look if there is a builtin of this family
         // in this case override the substitution table
         if( aPrinterFonts.find( aFamily ) != aPrinterFonts.end() )
             aSubstitutions[ aFamily ] = aFamily;
         else
-            aSubstitutions[ aFamily ] = subst->second.toLowerCase();
+            aSubstitutions[ aFamily ] = subst->second.toAsciiLowerCase();
     }
 
 
@@ -764,7 +765,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
     {
         if( it->m_eType != fonttype::Builtin )
         {
-            OUString aFamily( it->m_aFamilyName.toLowerCase() );
+            OUString aFamily( it->m_aFamilyName.toAsciiLowerCase() );
             subst = aSubstitutions.find( aFamily );
             if( subst != aSubstitutions.end() )
             {

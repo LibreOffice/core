@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 14:17:41 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 15:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,10 +505,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     // encoding - only set if unknown
     // try to parse the font name and decide wether it might be a
     // japanese font. Who invented this PITA ?
-    int nTokens = aPSName.getTokenCount( '-' );
-    if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW && nTokens > 2 &&
-        ( ! aPSName.getToken( nTokens-1, '-' ).compareToAscii( "H" )    ||
-          ! aPSName.getToken( nTokens-1, '-' ).compareToAscii( "V" ) )
+    OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
+    if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW &&
+        ( ! aPSNameLastToken.compareToAscii( "H" )    ||
+          ! aPSNameLastToken.compareToAscii( "V" ) )
         )
     {
         static const char* pEncs[] =
@@ -525,12 +525,18 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
             };
 
         for( int enc = 0; enc < sizeof( aEncs )/sizeof(aEncs[0]) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
-            for( int i = 1; i < nTokens-1 && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; i++ )
+        {
+            sal_Int32 nIndex = 0, nOffset = 1;
+            do
             {
-                OUString aEncoding( aPSName.getToken( i, '-' ) );
-                if( ! aEncoding.compareToAscii( pEncs[enc] ) )
+                OUString aToken( aPSName.getToken( nOffset, '-', nIndex ) );
+                if( nIndex == -1 )
+                    break;
+                nOffset = 0;
+                if( ! aToken.compareToAscii( pEncs[enc] ) )
                     m_aEncoding = aEncs[ enc ];
-            }
+            } while( nIndex != -1 );
+        }
 
         // default is jis
         if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
@@ -854,7 +860,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
 
     OString aDir( getDirectory( nDirID ) );
 
-    ByteString aExt( rFontFile.getToken( rFontFile.getTokenCount( '.' )-1, '.' ) );
+    ByteString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
     if( aExt.EqualsIgnoreCaseAscii( "pfb" ) || aExt.EqualsIgnoreCaseAscii( "pfa" ) )
     {
         // check for corresponding afm metric
@@ -1445,11 +1451,11 @@ void PrintFontManager::initialize( void* pInitDisplay )
 #endif
 
     // part two - look for metrics for builtin printer fonts
-    OUString aPath( getPrinterPath() );
-    nPaths = aPath.getTokenCount( ':' );
-    for(  i = 0; i < nPaths; i++ )
+    OString aPath( OUStringToOString( getPrinterPath(), aEncoding ) );
+    sal_Int32 nIndex = 0;
+    do
     {
-        OString aDir( OUStringToOString( aPath.getToken( i, ':' ), aEncoding ) );
+        OString aDir( aPath.getToken( 0, ':', nIndex ) );
         aDir += "/"PRINTER_METRICDIR;
         DIR* pDIR = opendir( aDir.getStr() );
         if( pDIR )
@@ -1476,8 +1482,8 @@ void PrintFontManager::initialize( void* pInitDisplay )
                     )
                 {
                     OString aFileName( pDirEntry->d_name, strlen( pDirEntry->d_name ) );
-                    OString aExt( aFileName.getToken( aFileName.getTokenCount( '.' )-1, '.' ) );
-                    if( aExt.equalsIgnoreCase( "afm" ) )
+                    OString aExt( aFileName.copy( aFileName.lastIndexOf( '.' )+1 ) );
+                    if( aExt.equalsIgnoreAsciiCase( "afm" ) )
                     {
                         BuiltinFont* pFont = new BuiltinFont;
                         pFont->m_nDirectory     = nDirAtom;
@@ -1553,7 +1559,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
             }
             closedir( pDIR );
         }
-    }
+    } while( nIndex != -1 );
 
 #ifdef DEBUG
     aStep2 = times( &tms );
@@ -1663,7 +1669,7 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
                     if( ! equalEncoding(pFont->m_aEncoding, (*bit)->m_aEncoding) )
                         continue;
                     const OUString& rBuiltinFamily( m_pAtoms->getString( ATOM_FAMILYNAME, (*bit)->m_nFamilyName ) );
-                    if( rFontFamily.equalsIgnoreCase( rBuiltinFamily ) )
+                    if( rFontFamily.equalsIgnoreAsciiCase( rBuiltinFamily ) )
                     {
                         // remove double
                         rFontIDs.erase( font_it );
@@ -1823,8 +1829,12 @@ family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily )
     {
         sal_uInt32 nCurrent = (nLower + nUpper) / 2;
         const family_t* pHaystack = pFamilyMatch + nCurrent;
-        sal_Int32  nComparison = rtl_str_compareIgnoreCase_WithLength(
-                                                                      aFamily.getStr(), pHaystack->mpName, pHaystack->mnLength );
+        sal_Int32  nComparison =
+            rtl_str_compareIgnoreAsciiCase_WithLength
+            (
+             aFamily.getStr(), aFamily.getLength(),
+             pHaystack->mpName, pHaystack->mnLength
+             );
 
         if( nComparison < 0 )
             nUpper = nCurrent;
