@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 17:03:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
     CheckBox CBX_INTERLACED
     {
@@ -153,6 +154,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "ÀÎÅÍ·¹ÀÌ½º(~I)";
         Text[ turkish ] = "~Interlaced";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Entrelazado";
     };
     GroupBox GRP_DRAW
     {
@@ -185,6 +187,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "±×¸®±â °³Ã¼";
         Text[ turkish ] = "Çizim nesneleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objetos de dibujo";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -214,6 +217,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ korean ] = "Åõ¸í ¸ðµå ÀúÀå(~T)";
         Text[ turkish ] = "Saydam biçimde kaydet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Guardar en modo ~transparente";
     };
     Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
     Text[ russian ] = "Ïàðàìåòðû GIF";
@@ -227,4 +231,5 @@ ModalDialog DLG_EXPORT_GIF
     Text[ korean ] = "GIF ¿É¼Ç";
     Text[ turkish ] = "GIF seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones GIF";
 };
