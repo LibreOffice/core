@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: os $ $Date: 2002-06-25 15:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,7 @@ void ViewResizePixel( const Window &rRef,
     long nVBSzWidth = pVScrollbar && (pVScrollbar->IsVisible() || !pVScrollbar->IsAuto()) ? rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
     // Lineale anordnen
-    if ( bVLineal )
+    if ( pVLineal )
     {
         WinBits nStyle = pVLineal->GetStyle()&~WB_RIGHT_ALIGNED;
         Point aPos( rOfst.X(), rOfst.Y()+nHLinSzHeight );
@@ -997,12 +997,15 @@ void ViewResizePixel( const Window &rRef,
             nStyle |= WB_RIGHT_ALIGNED;
         }
         Size  aSize( nVLinSzWidth, rEditSz.Height() );
+        if(!aSize.Width())
+            aSize.Width() = pVLineal->GetSizePixel().Width();
         pVLineal->SetStyle(nStyle);
         pVLineal->SetPosSizePixel( aPos, aSize );
+        if(!pVLineal->IsVisible())
+            pVLineal->Resize();
     }
 //  Lineal braucht ein Resize, sonst funktioniert es nicht im unischtbaren Zustand
-//  if ( bHLineal )
-    if ( bHLineal )     //MA: In der Seitenansicht gibt es das Lineal nicht!
+    if ( pHLineal )
     {
         Size aSize( rSize.Width(), nHLinSzHeight );
         if ( nVBSzWidth && !bVRulerRight)
