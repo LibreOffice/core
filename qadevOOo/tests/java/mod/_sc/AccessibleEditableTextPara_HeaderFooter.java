@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara_HeaderFooter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-01-05 18:43:13 $
+ *  last change:$Date: 2004-11-02 12:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,12 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         DiagThread psDiag = new DiagThread(xCalcDoc, msf);
         psDiag.start();
 
-        shortWait();
-
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();
 
@@ -125,9 +124,9 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        shortWait();
+        util.utils.shortWait(Param.getInt("ShortWait"));
 
-        //at.printAccessibleTree(log, xRoot);
+        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         XAccessibleContext ok_button = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                      AccessibleRole.PUSH_BUTTON,
                                                                      "Cancel");
@@ -204,17 +203,6 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         }
     }
 
-    /**
-    * Sleeps for 1.0 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
-    }
 
     /**
      * Thread for opening modal dialog 'Print Settings'.
