@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:04:08 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
@@ -672,7 +671,10 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
 
     SwTxtNode * pTxtNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
 
-    if (pTxtNd && pTxtNd->GetNum())
+    if (pTxtNd && pTxtNd->GetNum() &&
+        // --> FME 2004-11-25 #i37515# No bInFrontOfLabel during selection
+        !pCrsr->HasMark() )
+        // <--
         aTmpState.bInFrontOfLabel = TRUE; // #i27615#
     else
         aTmpState.bInFrontOfLabel = FALSE;
