@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 10:35:40 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,26 @@ TabPage TP_CONTENT_OPT
         Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Rechts ausgerichtet" ;
         Text [ ENGLISH ] = "Right aligned" ;
+        Text[ english_us ] = "Right-aligned";
+        Text[ portuguese ] = "Right aligned";
+        Text[ russian ] = "Right aligned";
+        Text[ greek ] = "Right aligned";
+        Text[ dutch ] = "Right aligned";
+        Text[ french ] = "Align� � droite";
+        Text[ spanish ] = "Alineado a la derecha";
+        Text[ finnish ] = "Right aligned";
+        Text[ italian ] = "Allineato a destra";
+        Text[ danish ] = "Right aligned";
+        Text[ swedish ] = "H�gerjusterat";
+        Text[ polish ] = "Right aligned";
+        Text[ portuguese_brazilian ] = "Right aligned";
+        Text[ japanese ] = "右に配置";
+        Text[ korean ] = "오른쪽 맞춤";
+        Text[ chinese_simplified ] = "向右对齐";
+        Text[ chinese_traditional ] = "向右對齊";
+        Text[ turkish ] = "Right aligned";
+        Text[ arabic ] = "Right aligned";
+        Text[ catalan ] = "Right aligned";
     };
     ListBox LB_VMETRIC
     {
