@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 16:43:04 $
+ *  last change: $Author: abi $ $Date: 2002-10-25 08:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,30 @@ Any SAL_CALL FTPContent::execute(
                             new FTPInputStream(m_aFTPURL.open()));
                     }
                     else if(xOutputStream.is()) {
+                        Reference<XInputStream> xStream(
+                            new FTPInputStream(m_aFTPURL.open()));
+                        Sequence<sal_Int8> seq(4096);
+                        sal_Int32 n = 1000; // value does not matter here
+                        while(n = xStream->readBytes(seq,4096))
+                            try {
+                                if(seq.getLength() != n)
+                                    seq.realloc(n);
+                                xOutputStream->writeBytes(seq);
+                            } catch(const NotConnectedException&) {
+
+                            } catch(const BufferSizeExceededException&) {
+
+                            } catch(const IOException&) {
+
+                            }
+                        if(n) {
+                            Sequence<Any> seq(1);
+                            seq[0] <<= m_aFTPURL.ident(false,false);
+                            ucbhelper::cancelCommandExecution(
+                                IOErrorCode_UNKNOWN,
+                                seq,
+                                Environment);
+                        }
                     }
                     else {
                         aRet <<= UnsupportedDataSinkException();
