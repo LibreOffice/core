@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-12 15:54:00 $
+ *  last change: $Author: bc $ $Date: 2002-08-16 16:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ import java.util.*;
  * @author Bertram Nolte
  */
 public class CallReportWizard {
+    static boolean bWizardstartedalready;
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -188,8 +189,11 @@ public class CallReportWizard {
     try{
         XComponentLoader xcomponentloader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
         if (sEvent.compareTo("start") == 0) {
-        ReportWizard CurReportWizard = new ReportWizard();
-        CurReportWizard.startReportWizard(xmultiservicefactory, null);
+        if (bWizardstartedalready != true){
+            ReportWizard CurReportWizard = new ReportWizard();
+            CurReportWizard.startReportWizard(xmultiservicefactory, null);
+        }
+        bWizardstartedalready = false;
         }
         else if (sEvent.compareTo("fill") == 0){
         Dataimport CurDataimport = new Dataimport();
@@ -220,6 +224,7 @@ public class CallReportWizard {
         {
         ReportWizard CurReportWizard = new ReportWizard();
         CurReportWizard.startReportWizard(xmultiservicefactory,object);
+        bWizardstartedalready = true;
 
     //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }
