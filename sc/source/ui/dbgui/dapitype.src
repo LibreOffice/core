@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:17:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ arabic ] = "«· ÕœÌœ «·Õ«·Ì";
         Text[ turkish ] = "~Y¸r¸rl¸kteki seÁim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SelecciÛn a~ctual";
     };
     RadioButton BTN_DATABASE
     {
@@ -145,6 +146,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ arabic ] = "„’œ— «·»Ì«‰«  «·„”Ã· ›Ì %PRODUCTNAME";
         Text[ turkish ] = "%PRODUCTNAME'de kay˝tl˝ veri kayna˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~uente de datos registrada en %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
@@ -172,6 +174,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ arabic ] = "„’œ— Œ«—ÃÌ/Ê«ÃÂ… Œ«—ÃÌ…";
         Text[ turkish ] = "~D˝˛ kaynak/arabirim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fuente externa/Interfaz";
     };
     GroupBox GB_FRAME
     {
@@ -198,6 +201,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ arabic ] = " ÕœÌœ";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SelecciÛn";
     };
     Text[ english_us ] = "Select Source";
     Text[ portuguese ] = "Seleccionar fonte";
@@ -218,6 +222,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ arabic ] = " ÕœÌœ „’œ—";
     Text[ turkish ] = "Kaynak seÁ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar fuente";
 };
 
 
@@ -278,6 +283,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = "Œœ„…";
         Text[ turkish ] = "~Hizmet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Servicio";
     };
     ListBox LB_SERVICE
     {
@@ -312,6 +318,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = "«·„’œ—";
         Text[ turkish ] = "~Kaynak";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fuente";
     };
     Edit ED_SOURCE
     {
@@ -345,6 +352,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = "«·«”„";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -378,6 +386,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = "«·„” Œœ„";
         Text[ turkish ] = "~Kullan˝c˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Usuar~io";
     };
     Edit ED_USER
     {
@@ -411,6 +420,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = "ﬂ·„… «·”—";
         Text[ turkish ] = "~ﬁifre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~ContraseÒa";
     };
     Edit ED_PASSWD
     {
@@ -445,6 +455,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ arabic ] = " ÕœÌœ";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SelecciÛn";
     };
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
@@ -465,6 +476,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ arabic ] = "„’œ— »Ì«‰«  Œ«—ÃÌ";
     Text[ turkish ] = "D˝˛ veri kayna˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fuente de datos externa";
 };
 
 
@@ -526,6 +538,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ arabic ] = "ﬁ«⁄œ… »Ì«‰« ";
         Text[ turkish ] = "~Veritaban˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Base de datos";
     };
     ListBox LB_DATABASE
     {
@@ -561,6 +574,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ arabic ] = "„’œ— «·»Ì«‰« ";
         Text[ turkish ] = "Veri ka~yna˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fuente de d~atos";
     };
     ComboBox CB_OBJECT
     {
@@ -596,6 +610,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ arabic ] = "«·‰Ê⁄";
         Text[ turkish ] = "~T¸r";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     ListBox LB_OBJTYPE
     {
@@ -751,6 +766,13 @@ ModalDialog RID_SCDLG_DAPIDATA
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Tabla" ; Default ; > ;
+        < "Consulta" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
     };
 
     GroupBox GB_FRAME
@@ -778,6 +800,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ arabic ] = " ÕœÌœ";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SelecciÛn";
     };
     Text[ english_us ] = "Select Data Source";
     Text[ portuguese ] = "Seleccionar fonte de dados";
@@ -798,6 +821,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ arabic ] = " ÕœÌœ „’œ— «·»Ì«‰« ";
     Text[ turkish ] = "Veri kayna˝ seÁ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar fuente de datos";
 };
 
 
