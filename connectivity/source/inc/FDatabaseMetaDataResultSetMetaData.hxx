@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 14:14:03 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,15 +96,13 @@ namespace connectivity
 
         sal_Int32                                   m_nColCount;
     protected:
-        ~ODatabaseMetaDataResultSetMetaData();
+        virtual ~ODatabaseMetaDataResultSetMetaData();
     public:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSetMetaData( )
                 :   m_nColCount(0)
         {
         }
-
-
         /// Avoid ambigous cast error from the compiler.
         inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
         { return this; }

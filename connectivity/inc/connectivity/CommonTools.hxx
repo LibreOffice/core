@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:58:19 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 06:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,20 +126,35 @@ namespace connectivity
     template< class VectorVal > class ORefVector : public ::std::vector< VectorVal >
     {
         oslInterlockedCount         m_refCount;
+        //  ORefVector(const ORefVector&);
+        //  ORefVector& operator=(const ORefVector&);
+
+        typedef ::std::vector< VectorVal > BaseClass;
     protected:
         virtual ~ORefVector(){}
     public:
         ORefVector() : m_refCount(0) {}
         ORefVector(size_t _st) : ::std::vector< VectorVal > (_st) , m_refCount(0) {}
+        ORefVector(const ORefVector& _rRH) : ::std::vector< VectorVal > (_rRH),m_refCount(0)
+        {
+        }
+        ORefVector& operator=(const ORefVector& _rRH)
+        {
+            if ( &_rRH != this )
+            {
+                BaseClass::operator=(_rRH);
+            }
+            return *this;
+        }
 
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
-        inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-            { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
-        inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-            {  }
+        inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
+            { return pMem; }
+        inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
+            {}
 
         void acquire()
         {

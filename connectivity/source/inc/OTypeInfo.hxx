@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTypeInfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:34:29 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,16 @@ namespace connectivity
                 ,nPrecision(0)
                 ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
         {}
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
+
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
     };

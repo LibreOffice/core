@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:59:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,15 @@ namespace connectivity
                     const ::std::vector<sal_Int16>& _aAscending);
 
         ~OSortIndex();
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
 
 
         /**

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:57:55 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,15 @@ namespace connectivity
                                 const OSQLParser* _pParser = NULL);
         ~OSQLParseTreeIterator();
 
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
+
         void dispose();
         sal_Bool isCaseSensitive() const { return m_aCaseEqual.isCaseSensitive(); }
         // Der zu analysierende/zu traversierende Parse Tree:
@@ -320,7 +329,7 @@ namespace connectivity
         void traverseAll();
 
         // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
-        const OSQLTables& getTables() const { return m_aTables;};
+        const OSQLTables& getTables() const { return m_aTables;}
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
         ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }

@@ -2,9 +2,9 @@
  *
  *  $RCS: $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:36:40 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:02 $
  *
  *  The Contents of this  are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,15 @@ namespace connectivity
     public:
 
         ~OKeyValue();
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
 
         static OKeyValue* createKeyValue(sal_Int32 nVal);
         //  static OKeyValue* createEmptyKeyValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,15 @@ namespace connectivity
         {
             free();
         }
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
 
         ORowSetValue& operator=(const ORowSetValue& _rRH);
 

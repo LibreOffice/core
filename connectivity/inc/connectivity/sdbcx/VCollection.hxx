@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:30:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 06:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,17 +204,8 @@ namespace connectivity
 
         public:
             virtual ~OCollection();
-
             DECLARE_SERVICE_INFO();
 
-            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-                { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-                { return const_cast<void*>(_pHint); }
-            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-                { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-                {  }
 
             void reFill(const TStringVector &_rVector);
             sal_Bool isCaseSensitive() const { return m_aNameMap.key_comp().isCaseSensitive(); }

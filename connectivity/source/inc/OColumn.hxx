@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OColumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,15 @@ namespace connectivity
             if(!m_ColumnLabel.getLength())
                 m_ColumnLabel = _aColumnName;
         }
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
 
         sal_Bool isAutoIncrement()              const { return m_AutoIncrement; }
         sal_Bool isCaseSensitive()              const { return m_CaseSensitive; }

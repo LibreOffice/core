@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlscan.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 13:37:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,16 @@ namespace connectivity
 
     public:
         OSQLScanner();
-        ~OSQLScanner();
+        virtual ~OSQLScanner();
+
+        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+            { return ::rtl_allocateMemory( nSize ); }
+        inline static void * SAL_CALL operator new( size_t nSize,void* _pHint ) SAL_THROW( () )
+            { return _pHint; }
+        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+            { ::rtl_freeMemory( pMem ); }
+        inline static void SAL_CALL operator delete( void * pMem,void* _pHint ) SAL_THROW( () )
+            {  }
 
         virtual sal_Int32 SQLyygetc(void);
         virtual void SQLyyerror(char *fmt);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:54:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ namespace connectivity
             ,m_pDerivedImplementation(_pDerivedImplementation)
         {
         }
-
 
     protected:
         void dispose_ChildImpl()

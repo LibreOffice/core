@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TDatabaseMetaDataBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:03:17 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,12 @@ namespace connectivity
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>   m_xListenerHelper; // forward the calls from the connection to me
+
+            virtual ~ODatabaseMetaDataBase();
         public:
 
             ODatabaseMetaDataBase(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection);
-            virtual ~ODatabaseMetaDataBase();
+
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
         };

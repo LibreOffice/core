@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:30:08 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,15 +98,6 @@ namespace connectivity
                     sal_Bool        _IsAutoIncrement,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase);
-
-            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-                { return ::rtl_allocateMemory( nSize ); }
-            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-                { return const_cast<void*>(_pHint); }
-            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-                { ::rtl_freeMemory( pMem ); }
-            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-                {  }
 
             virtual void construct();
 
