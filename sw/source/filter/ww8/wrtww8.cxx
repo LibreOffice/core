@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 13:47:02 $
+ *  last change: $Author: cmc $ $Date: 2001-08-08 10:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
 // SwWW8Writer::Out_SfxItemSet() benutzt wird.
 const SfxPoolItem* SwWW8Writer::HasItem( USHORT nWhich ) const
 {
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem=0;
     if( pISet )
     {
         // if write a EditEngine text, then the WhichIds are greater as
@@ -2304,11 +2304,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.16 2001-07-23 13:47:02 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.17 2001-08-08 10:26:17 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/07/23 13:47:02  cmc
+      #90095# If initial node is a section don't loose section settings by using page default
+
       Revision 1.15  2001/06/02 16:06:13  cmc
       #68662# ##989## parent frame of a fly in fly exported as a table
 
