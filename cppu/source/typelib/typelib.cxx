@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:19:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ struct AlignSize_Impl
 #endif
 
 // the value of the maximal alignment
-static sal_Int32 nMaxAlignment = (sal_Int32)&((AlignSize_Impl *) 16)->dDouble - 16;
+static sal_Int32 nMaxAlignment = (sal_Int32)( (sal_Size)(&((AlignSize_Impl *) 16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
     SAL_THROW( () )
@@ -1861,17 +1861,17 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
         {
             case typelib_TypeClass_INTERFACE:
                 // FEATURE_INTERFACE
-                nSize = rMaxIntegralTypeSize = sizeof( void * );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
                 break;
             case typelib_TypeClass_UNION:
                 {
-                nSize = rMaxIntegralTypeSize = sizeof(sal_Int64);
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof(sal_Int64));
                 for ( sal_Int32 nPos = ((typelib_UnionTypeDescription *)pTypeDescription)->nMembers; nPos--; )
                 {
                     typelib_TypeDescription * pTD = 0;
                     TYPELIB_DANGER_GET( &pTD, ((typelib_UnionTypeDescription *)pTypeDescription)->ppTypeRefs[nPos] );
                     sal_Int32 nMaxIntegralTypeSize;
-                    sal_Int32 nMemberSize = typelib_typedescription_getAlignedUnoSize( pTD, sizeof(sal_Int64), nMaxIntegralTypeSize );
+                    sal_Int32 nMemberSize = typelib_typedescription_getAlignedUnoSize( pTD, (sal_Int32)(sizeof(sal_Int64)), nMaxIntegralTypeSize );
                     TYPELIB_DANGER_RELEASE( pTD );
                     if (nSize < nMemberSize)
                         nSize = nMemberSize;
@@ -1882,7 +1882,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 }
                 break;
             case typelib_TypeClass_ENUM:
-                nSize = rMaxIntegralTypeSize = sizeof( typelib_TypeClass );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( typelib_TypeClass ));
                 break;
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
@@ -1905,7 +1905,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                     if (pMemberRef->eTypeClass == typelib_TypeClass_INTERFACE
                         || pMemberRef->eTypeClass == typelib_TypeClass_SEQUENCE)
                     {
-                        nMaxIntegral = sizeof(void *);
+                        nMaxIntegral = (sal_Int32)(sizeof(void *));
                         nStructSize = newAlignedSize( nStructSize, nMaxIntegral, nMaxIntegral );
                     }
                     else
@@ -1936,46 +1936,46 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 }
                 break;
             case typelib_TypeClass_SEQUENCE:
-                nSize = rMaxIntegralTypeSize = sizeof( void * );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
                 break;
             case typelib_TypeClass_ANY:
                 // FEATURE_ANY
-                nSize = sizeof( uno_Any );
-                rMaxIntegralTypeSize = sizeof( void * );
+                nSize = (sal_Int32)(sizeof( uno_Any ));
+                rMaxIntegralTypeSize = (sal_Int32)(sizeof( void * ));
                 break;
             case typelib_TypeClass_TYPE:
-                nSize = rMaxIntegralTypeSize = sizeof( typelib_TypeDescriptionReference * );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( typelib_TypeDescriptionReference * ));
                 break;
             case typelib_TypeClass_BOOLEAN:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Bool );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Bool ));
                 break;
             case typelib_TypeClass_CHAR:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Unicode );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Unicode ));
                 break;
             case typelib_TypeClass_STRING:
                 // FEATURE_STRING
-                nSize = rMaxIntegralTypeSize = sizeof( rtl_uString * );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( rtl_uString * ));
                 break;
             case typelib_TypeClass_FLOAT:
-                nSize = rMaxIntegralTypeSize = sizeof( float );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( float ));
                 break;
             case typelib_TypeClass_DOUBLE:
-                nSize = rMaxIntegralTypeSize = sizeof( double );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( double ));
                 break;
             case typelib_TypeClass_BYTE:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Int8 );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int8 ));
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Int16 );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int16 ));
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Int32 );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int32 ));
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-                nSize = rMaxIntegralTypeSize = sizeof( sal_Int64 );
+                nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int64 ));
                 break;
             case typelib_TypeClass_UNKNOWN:
             case typelib_TypeClass_SERVICE:
