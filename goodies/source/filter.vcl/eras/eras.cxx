@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:41:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ public:
 //=================== Methoden von RASWriter ==============================
 
 RASWriter::RASWriter() :
-    mpAcc       ( NULL ),
     mbStatus    ( TRUE ),
+    mpAcc       ( NULL ),
     mnRepCount  ( 0xffffffff )
 {
 }
@@ -247,7 +247,7 @@ void RASWriter::ImplWriteBody()
     }
     else if ( mnDepth == 1 )
     {
-        BYTE nDat;
+        BYTE nDat = 0;
 
         for ( y = 0; y < mnHeight; y++ )
         {
@@ -314,8 +314,9 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
 
     return aRASWriter.WriteRAS( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // ---------------
 // - Win16 trash -
