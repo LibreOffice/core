@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,61 +128,45 @@ void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexes::createEmptyObject()
 {
-    ODbaseIndex* pRet = new ODbaseIndex(m_pTable);
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    return new ODbaseIndex(m_pTable);
 }
 typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL ODbaseIndexes::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void ODbaseIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
         ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-        if(pIndex && pIndex->CreateImpl())
-            ODbaseIndexes_BASE::appendByDescriptor(Reference< XPropertySet >(createObject(aName),UNO_QUERY));
+        if(!pIndex || !pIndex->CreateImpl())
+            throw SQLException();
     }
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL ODbaseIndexes::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
+    ObjectIter aIter = m_aElements[_nPos];
     if(!aIter->second.is())
-        aIter->second = createObject(elementName);
+        aIter->second = createObject(_sElementName);
 
     Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     if(xTunnel.is())
     {
         ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-        if(pIndex && pIndex->DropImpl())
-            ODbaseIndexes_BASE::dropByName(elementName);
+        if(pIndex)
+            pIndex->DropImpl();
     }
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ODbaseIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+Reference< XNamed > ODbaseIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 

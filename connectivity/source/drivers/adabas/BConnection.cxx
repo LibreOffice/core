@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:20:00 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ SQLRETURN OAdabasConnection::OpenConnection(const ::rtl::OUString& aConnectStr,s
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
         return nSQLRETURN;
 
+    m_bClosed = sal_False;
 #ifndef MAC
     // autocoomit ist immer default
 

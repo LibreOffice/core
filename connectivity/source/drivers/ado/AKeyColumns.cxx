@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeyColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,17 +83,17 @@
 
 using namespace connectivity::adabas;
 // -------------------------------------------------------------------------
-staruno::Reference< starcontainer::XNamed > OKeyColumns::createObject(const ::rtl::OUString& _rName)
+Reference< XNamed > OKeyColumns::createObject(const ::rtl::OUString& _rName)
 {
 
-    staruno::Reference< starsdbc::XResultSet >
-        xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(staruno::Any(),
+    Reference< starsdbc::XResultSet >
+        xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),
                     m_pTable->getSchema(),m_pTable->getName());
 
     ::rtl::OUString aRefColumnName;
     if(xResult.is())
     {
-        staruno::Reference< starsdbc::XRow > xRow(xResult,staruno::UNO_QUERY);
+        Reference< starsdbc::XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
         {
             if(xRow->getString(8) == _rName)
@@ -104,13 +104,13 @@ staruno::Reference< starcontainer::XNamed > OKeyColumns::createObject(const ::rt
         }
     }
 
-     xResult = m_pTable->getConnection()->getMetaData()->getColumns(staruno::Any(),
+     xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
         m_pTable->getSchema(),m_pTable->getName(),_rName);
 
-    staruno::Reference< starcontainer::XNamed > xRet = NULL;
+    Reference< XNamed > xRet = NULL;
     if(xResult.is())
     {
-        staruno::Reference< starsdbc::XRow > xRow(xResult,staruno::UNO_QUERY);
+        Reference< starsdbc::XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next())
         {
             if(xRow->getString(4) == _rName)
@@ -132,7 +132,7 @@ staruno::Reference< starcontainer::XNamed > OKeyColumns::createObject(const ::rt
     return xRet;
 }
 // -------------------------------------------------------------------------
-staruno::Reference< starbeans::XPropertySet > OKeyColumns::createEmptyObject()
+Reference< XPropertySet > OKeyColumns::createEmptyObject()
 {
     OKeyColumn* pNew = new OKeyColumn();
     return pNew;

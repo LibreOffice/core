@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
 {
     ADOTable* pTable = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pTable);
-
-    Reference< XNamed > xRet = new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable);
-
-    return xRet;
+    return new OAdoTable(this,isCaseSensitive(),m_pCatalog,pTable);
 }
 // -------------------------------------------------------------------------
 void OTables::impl_refresh(  ) throw(RuntimeException)
@@ -121,15 +118,12 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdoTable* pNew = new OAdoTable(this,isCaseSensitive(),m_pCatalog);
-    return pNew;
+    return new OAdoTable(this,isCaseSensitive(),m_pCatalog);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -142,32 +136,21 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    m_pCollection->Delete(OLEVariant(elementName));
+    m_pCollection->Delete(OLEVariant(_sElementName));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-
-    OCollection_TYPE::dropByName(elementName);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    m_pCollection->Delete(OLEVariant(index));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-
-    OCollection_TYPE::dropByIndex(index);
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 

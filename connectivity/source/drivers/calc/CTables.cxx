@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,11 @@
 #ifndef _CONNECTIVITY_CALC_TABLE_HXX_
 #include "calc/CTable.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
 #ifndef _CONNECTIVITY_FILE_CATALOG_HXX_
 #include "file/FCatalog.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _CONNECTIVITY_CALC_CATALOG_HXX_
 #include "calc/CCatalog.hxx"
@@ -110,86 +92,8 @@ namespace starutil      = ::com::sun::star::util;
 
 Reference< XNamed > OCalcTables::createObject(const ::rtl::OUString& _rName)
 {
-    ::rtl::OUString aName,aSchema;
-    OCalcTable* pRet = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    return new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
-
-    Reference< XNamed > xRet = pRet;
-//  if(!pRet->isValid())
-//  {
-//      ::comphelper::disposeComponent(xRet);
-//      throw SQLException(::rtl::OUString::createFromAscii("Invalid DBase file found!"),m_rParent,_rName,1000,Any());
-//  }
-
-    return xRet;
 }
 // -------------------------------------------------------------------------
-void OCalcTables::impl_refresh(  ) throw(RuntimeException)
-{
-    static_cast<OCalcCatalog*>(&m_rParent)->refreshTables();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OCalcTables::createEmptyObject()
-{
-    OCalcTable* pRet = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
-}
-typedef connectivity::sdbcx::OCollection OCalcTables_BASE_BASE;
-// -------------------------------------------------------------------------
-// XAppend
-void SAL_CALL OCalcTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
-    Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OCalcTable* pTable = (OCalcTable*)xTunnel->getSomething(OCalcTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->CreateImpl())
-        {
-            OCalcTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(createObject(aName),UNO_QUERY));
-        }
-    }
-}
-// -------------------------------------------------------------------------
-// XDrop
-void SAL_CALL OCalcTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
-    Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OCalcTable* pTable = (OCalcTable*)xTunnel->getSomething(OCalcTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->DropImpl())
-            OCalcTables_BASE_BASE::dropByName(elementName);
-    }
-
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OCalcTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
-}
-// -------------------------------------------------------------------------
-//------------------------------------------------------------------
-Any SAL_CALL OCalcTables::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    typedef sdbcx::OCollection OTables_BASE;
-    return OTables_BASE::queryInterface(rType);
-}
 

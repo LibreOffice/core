@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,8 @@ Reference< XPropertySet > OViews::createEmptyObject()
 
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OViews::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -146,32 +144,22 @@ void SAL_CALL OViews::appendByDescriptor( const Reference< XPropertySet >& descr
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append view!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OViews::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    m_pCollection->Delete(OLEVariant(elementName));
+    m_pCollection->Delete(OLEVariant(_sElementName));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-
-    OCollection_TYPE::dropByName(elementName);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OViews::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+Reference< XNamed > OViews::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    m_pCollection->Delete(OLEVariant(index));
-    ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
-
-    OCollection_TYPE::dropByIndex(index);
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection)
-    : OTable_TYPEDEF(_pTables, sal_True),m_pConnection(_pConnection)
+    : OTable_TYPEDEF(_pTables, sal_True)
+    ,m_pConnection(_pConnection)
 {
     construct();
 }
@@ -161,41 +162,6 @@ void OTable::refreshColumns()
     else
         m_pColumns  = new OColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
-void OTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
-{
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getPrimaryKeys(Any(),m_SchemaName,m_Name);
-
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one primary key
-        {
-            ::rtl::OUString aPkName = xRow->getString(6);
-            _rKeys.push_back(aPkName);
-        }
-    }
-}
-// -------------------------------------------------------------------------
-void OTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
-{
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getImportedKeys(Any(),m_SchemaName,m_Name);
-
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            _rKeys.push_back(xRow->getString(12));
-    }
-}
-// -------------------------------------------------------------------------
-void OTable::refreshKeys()
-{
-}
-// -------------------------------------------------------------------------
-void OTable::refreshIndexes()
-{
-}
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTable::getUnoTunnelImplementationId()
 {
@@ -222,26 +188,6 @@ sal_Int64 OTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runtim
                 :
             OTable_TYPEDEF::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-// XRename
-void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
-// XAlterTable
-void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
-{
-}
-
-// -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeException)
-{
-    return m_Name;
-}
 #ifdef DARREN_WORK
 // -----------------------------------------------------------------------------
 void SAL_CALL OTable::acquire() throw(::com::sun::star::uno::RuntimeException)
@@ -254,44 +200,6 @@ void SAL_CALL OTable::release() throw(::com::sun::star::uno::RuntimeException)
     OTable_TYPEDEF::release();
 }
 #endif /* DARREN_WORK */
-// -----------------------------------------------------------------------------
-void OTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUString& _rColName)
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::dropDefaultValue(const ::rtl::OUString& _rColName)
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::addDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::beginTransAction()
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::endTransAction()
-{
-}
-// -----------------------------------------------------------------------------
-void OTable::rollbackTransAction()
-{
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString OTable::getAlterTableColumnPart(const ::rtl::OUString& _rsColumnName )
-{
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("");
-    return sSql;
-}
 // -----------------------------------------------------------------------------
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ using namespace ::com::sun::star::lang;
 
 ::rtl::OUString SAL_CALL OAdabasDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
+
     ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:adabas:");
     aValue += OAdabasDatabaseMetaData_BASE::getURLImpl();
     return aValue;
@@ -88,7 +89,6 @@ sal_Bool SAL_CALL OAdabasDatabaseMetaData::supportsIntegrityEnhancementFacility(
 // -----------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xNewRes = pResult;
     pResult->setTypeInfoMap();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace ::comphelper;
 
@@ -156,9 +159,19 @@ Reference< XPropertySet > OColumns::createEmptyObject()
 {
     return new OColumn(sal_True);
 }
+// -----------------------------------------------------------------------------
+Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    OColumn* pColumn = new OColumn(sal_True);
+    Reference<XPropertySet> xProp = pColumn;
+    ::comphelper::copyProperties(_xDescriptor,xProp);
+    Reference< XNamed > xName(xProp,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName;
+}
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(m_pTable,"OColumns::appendByDescriptor: Table is null!");
@@ -195,13 +208,11 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         }
         m_pTable->endTransAction();
     }
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(m_pTable,"OColumns::dropByName: Table is null!");
     if(!m_pTable->isNew())
     {
@@ -211,38 +222,12 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += ::dbtools::quoteName(sQuote,elementName);
+        aSql += ::dbtools::quoteName(sQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-
-    OCollection_TYPE::dropByName(elementName);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    OSL_ENSURE(m_pTable,"OColumns::dropByIndex: Table is null!");
-    if(!m_pTable->isNew())
-    {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-
-        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
-        aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += ::dbtools::quoteName(sQuote,getElementName(index));
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-    }
-    OCollection_TYPE::dropByIndex(index);
 }
 // -----------------------------------------------------------------------------
 

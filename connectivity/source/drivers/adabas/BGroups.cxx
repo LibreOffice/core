@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 // -------------------------------------------------------------------------
 Reference< XNamed > OGroups::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet = NULL;
-    OAdabasGroup* pRet = new OAdabasGroup(m_pConnection,_rName);
-    xRet = pRet;
-    return xRet;
+    return new OAdabasGroup(m_pConnection,_rName);
 }
 // -------------------------------------------------------------------------
 void OGroups::impl_refresh() throw(RuntimeException)
@@ -107,20 +104,20 @@ void OGroups::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OGroups::createEmptyObject()
 {
-    OAdabasGroup* pNew = new OAdabasGroup(m_pConnection);
-    return pNew;
+    //  OAdabasGroup* pNew =
+    return new OAdabasGroup(m_pConnection);
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OGroups::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OGroups::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OGroups::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
-
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USERGROUP ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
@@ -129,37 +126,20 @@ void SAL_CALL OGroups::appendByDescriptor( const Reference< XPropertySet >& desc
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OGroups::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OGroups::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USERGROUP ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
-    aSql = aSql + aQuote + elementName + aQuote;
+    aSql = aSql + aQuote + _sElementName + aQuote;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
-
-    OCollection_TYPE::dropByName(elementName);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OGroups::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
-}
 
 

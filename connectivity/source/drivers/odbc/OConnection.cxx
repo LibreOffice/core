@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:17:46 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_pDriverHandleCopy(_pDriverHandle),
                          m_pDriver(_pDriver),
-                         m_bClosed(sal_False),
+                         m_bClosed(sal_True),
                          m_xMetaData(NULL),
                          m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False),
@@ -192,6 +192,8 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
         return nSQLRETURN;
 
+    m_bClosed = sal_False;
+
 #endif //LINUX
 
     try
@@ -217,7 +219,6 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 //-----------------------------------------------------------------------------
 SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    osl_incrementInterlockedCount( &m_refCount );
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     m_aURL  = url;
     m_aInfo = info;
@@ -296,7 +297,6 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
     {
     }
-    osl_decrementInterlockedCount( &m_refCount );
     return nSQLRETURN;
 }
 // XServiceInfo
@@ -588,7 +588,8 @@ void OConnection::disposing()
 
     ::std::map< SQLHANDLE,OConnection*>().swap(m_aConnections);
 
-    OTools::ThrowException(this,N3SQLDisconnect(m_aConnectionHandle),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    if(!m_bClosed)
+        N3SQLDisconnect(m_aConnectionHandle);
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
@@ -634,9 +635,14 @@ SQLHANDLE OConnection::createStatementHandle()
 void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
 {
     ::std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
+
+    N3SQLFreeStmt(_pHandle,SQL_RESET_PARAMS);
+    N3SQLFreeStmt(_pHandle,SQL_UNBIND);
     N3SQLFreeStmt(_pHandle,SQL_CLOSE);
     N3SQLFreeHandle(SQL_HANDLE_STMT,_pHandle);
+
     _pHandle = SQL_NULL_HANDLE;
+
     if(aFind != m_aConnections.end())
     {
         aFind->second->dispose();

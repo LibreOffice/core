@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ namespace connectivity
                 return m_pConnection->getOdbcFunction(_nIndex);
             }
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing(void);
             // XInterface
             virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);

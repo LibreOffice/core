@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTables.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,33 +102,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
 {
-//  ::rtl::OUString aName,aSchema;
-//  sal_Int32 nLen = _rName.indexOf('.');
-//  aSchema = _rName.copy(0,nLen);
-//  aName   = _rName.copy(nLen+1);
-//
-//  Sequence< ::rtl::OUString > aTypes(1);
-//  aTypes[0] = ::rtl::OUString::createFromAscii("%");
-//  //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
-//  //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
-//
-//  Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-//      aSchema,aName,aTypes);
-
-    Reference< XNamed > xRet = NULL;
-//  if(xResult.is())
-//  {
-//      Reference< XRow > xRow(xResult,UNO_QUERY);
-//      if(xResult->next()) // there can be only one table with this name
-//      {
-//          OFileTable* pRet = new OFileTable(static_cast<OFileCatalog&>(m_rParent).getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers(),
-//                                      static_cast<OFileCatalog&>(m_rParent).getConnection(),
-//                                      aName,xRow->getString(4),xRow->getString(5),aSchema);
-//          xRet = pRet;
-//      }
-//  }
-//
-    return xRet;
+    return Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 void OTables::impl_refresh(  ) throw(RuntimeException)
@@ -140,11 +114,6 @@ void OTables::disposing(void)
 {
     m_xMetaData = NULL;
     OCollection::disposing();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OTables::createEmptyObject()
-{
-    return Reference< XPropertySet >();
 }
 //------------------------------------------------------------------
 Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeException)
@@ -158,4 +127,4 @@ Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeExceptio
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
 }
-
+// -----------------------------------------------------------------------------

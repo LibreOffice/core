@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CColumns.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,14 @@ using namespace ::com::sun::star::container;
 
 Reference< XNamed > OCalcColumns::createObject(const ::rtl::OUString& _rName)
 {
-
     OCalcTable* pTable = (OCalcTable*)m_pTable;
-
-    //  Reference< XFastPropertySet> xCol(pTable->getColumns()[_rName],UNO_QUERY);
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
 
-    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
+    OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
+    Reference< XNamed > xRet;
+    if(aIter != aCols->end())
+        xRet = Reference< XNamed >(*aIter,UNO_QUERY);
     return xRet;
 }
-
 // -------------------------------------------------------------------------
-void OCalcColumns::impl_refresh() throw(RuntimeException)
-{
-    m_pTable->refreshColumns();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OCalcColumns::createEmptyObject()
-{
-    sdbcx::OColumn* pRet = new sdbcx::OColumn(isCaseSensitive());
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
-}
 

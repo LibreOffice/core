@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1721,13 +1721,16 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         if(DropImpl())
         {
             // rename the new one to the old one
-            pNewTable->rename(m_Name);
+            pNewTable->renameImpl(m_Name);
             // release the temp file
             pNewTable = NULL;
             ::comphelper::disposeComponent(xHoldTable);
         }
         else
+        {
             delete pNewTable;
+            pNewTable = NULL;
+        }
         FileClose();
         construct();
         if(m_pColumns)
@@ -1754,6 +1757,13 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
     if(m_pTables && m_pTables->hasByName(newName))
         throw ElementExistException(newName,*this);
 
+
+    renameImpl(newName);
+}
+// -------------------------------------------------------------------------
+void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
 
     FileClose();
     String aName = getEntry(m_pConnection,m_Name);
@@ -1851,7 +1861,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         if(DropImpl())
         {
             bAlreadyDroped = TRUE;
-            pNewTable->rename(m_Name);
+            pNewTable->renameImpl(m_Name);
             // release the temp file
             pNewTable->release();
         }
@@ -1916,7 +1926,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     // drop the old table
     if(DropImpl())
     {
-        pNewTable->rename(m_Name);
+        pNewTable->renameImpl(m_Name);
         // release the temp file
         pNewTable->release();
     }

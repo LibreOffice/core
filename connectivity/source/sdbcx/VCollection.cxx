@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::M
 {
     m_aElements.reserve(_rVector.size());
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< ::com::sun::star::container::XNamed >())));
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< XNamed >())));
 }
 // -------------------------------------------------------------------------
 OCollection::~OCollection()
@@ -127,17 +127,10 @@ void OCollection::disposing(void)
     m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XWeak*>(this)));
 
     ::osl::MutexGuard aGuard(m_rMutex);
-    for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
-    {
-        if(aIter->second.is())
-        {
-            ::comphelper::disposeComponent(aIter->second);
-            (*aIter).second = NULL;
-        }
-    }
-//  m_aElements.clear();
-//  m_aNameMap.clear();
-//
+
+
+    disposeElements();
+
     ::std::vector< ObjectIter >().swap(m_aElements);
     ObjectMap().swap(m_aNameMap);
 }
@@ -145,25 +138,11 @@ void OCollection::disposing(void)
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    if (Index < 0 || Index >= m_aNameMap.size())
+    if (Index < 0 || Index >= static_cast<sal_Int32>(m_aNameMap.size()))
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(Index),*this);
 
     ObjectIter aIter = m_aElements[Index];
-    Reference< XNamed > xName = (*aIter).second;
-    if(!(*aIter).second.is())
-    {
-        try
-        {
-            xName = createObject((*aIter).first);
-        }
-        catch(const SQLException& e)
-        {
-            throw WrappedTargetException(e.Message,*this,makeAny(e));
-        }
-        (*aIter).second = xName;
-    }
-
-    return makeAny(xName);
+    return makeAny(getObject(aIter));
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
@@ -173,21 +152,7 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
     ObjectIter aIter = m_aNameMap.find(aName);
     if(aIter == m_aNameMap.end())
         throw NoSuchElementException(aName,*this);
-    Reference< XNamed > xName = (*aIter).second;
-    if(!(*aIter).second.is())
-    {
-        try
-        {
-            xName = createObject(aIter->first);
-        }
-        catch(const SQLException& e)
-        {
-            throw WrappedTargetException(e.Message,*this,makeAny(e));
-        }
-        (*aIter).second = xName;
-    }
-
-    return makeAny(xName);
+    return makeAny(getObject(aIter));
 }
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(RuntimeException)
@@ -196,11 +161,9 @@ Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(Runt
     sal_Int32 nLen = m_aElements.size();
     Sequence< ::rtl::OUString > aNameList(nLen);
 
-    sal_Int32 i=0;
     ::rtl::OUString* pStringArray = aNameList.getArray();
-    //  for( ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringLess> ::const_iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
-    for(::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter)
-        pStringArray[i++] = (*aIter)->first;
+    for(::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != m_aElements.end();++aIter,++pStringArray)
+        *pStringArray = (*aIter)->first;
 
     return aNameList;
 }
@@ -208,16 +171,8 @@ Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(Runt
 void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    for( ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringLess>::iterator aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
-    {
-        if((*aIter).second.is())
-        {
-            ::comphelper::disposeComponent(aIter->second);
-            (*aIter).second = Reference< XNamed >();
-        }
-    }
-    m_aNameMap.clear();
-    m_aElements.clear();
+
+    disposeElements();
 
     impl_refresh();
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -230,7 +185,7 @@ void OCollection::reFill(const TStringVector &_rVector)
     m_aElements.reserve(_rVector.size());
 
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< ::com::sun::star::container::XNamed >())));
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< XNamed >())));
 }
 // -------------------------------------------------------------------------
 // XDataDescriptorFactory
@@ -249,19 +204,23 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
     Reference< XNamed > xName(descriptor,UNO_QUERY);
     if(xName.is())
     {
-        if(m_aNameMap.find(xName->getName()) != m_aNameMap.end())
-            throw ElementExistException(xName->getName(),*this);
+        ::rtl::OUString sName = xName->getName();
+        if(m_aNameMap.find(sName) != m_aNameMap.end())
+            throw ElementExistException(sName,*this);
 
-        Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+        appendObject(descriptor);
+        Reference< XNamed > xNewName = cloneObject(descriptor);
+        Reference<XUnoTunnel> xTunnel(xNewName,UNO_QUERY);
         if(xTunnel.is())
         {
             ODescriptor* pDescriptor = (ODescriptor*)xTunnel->getSomething(ODescriptor::getUnoTunnelImplementationId());
             if(pDescriptor)
                 pDescriptor->setNew(sal_False);
         }
-        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(xName->getName(),WeakReference< XNamed >(xName))));
+
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(sName,WeakReference< XNamed >(xNewName))));
         // notify our container listeners
-        ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(xName->getName()), makeAny(xName), Any());
+        ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewName), Any());
         OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
         while (aListenerLoop.hasMoreElements())
             static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
@@ -281,19 +240,10 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
     {
         if(m_aElements[i] == aIter)
         {
-            ::comphelper::disposeComponent(aIter->second);
-
-            m_aElements.erase(m_aElements.begin()+i);
-            m_aNameMap.erase(aIter);
+            dropImpl(i);
             break; // no duplicates possible
         }
     }
-    // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
-        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
-    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-    while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
@@ -302,13 +252,27 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     if(index <0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    ::comphelper::disposeComponent(m_aElements[index]->second);
-    ::rtl::OUString elementName = m_aElements[index]->first;
-    m_aNameMap.erase(m_aElements[index]);
-    m_aElements.erase(m_aElements.begin()+index);
+    dropImpl(index);
+}
+// -----------------------------------------------------------------------------
+void OCollection::dropImpl(sal_Int32 _nIndex)
+{
+    ::rtl::OUString elementName = m_aElements[_nIndex]->first;
+
+    dropObject(_nIndex,elementName);
+
+    ::comphelper::disposeComponent(m_aElements[_nIndex]->second);
+
+    m_aNameMap.erase(m_aElements[_nIndex]);
+    m_aElements.erase(m_aElements.begin()+_nIndex);
 
     // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
+    notifyElementRemoved(elementName);
+}
+// -----------------------------------------------------------------------------
+void OCollection::notifyElementRemoved(const ::rtl::OUString& _sName)
+{
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sName), Any(), Any());
     // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
@@ -415,5 +379,57 @@ void OCollection::renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUSt
                 static_cast<XContainerListener*>(aListenerLoop.next())->elementReplaced(aEvent);
         }
     }
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OCollection::getObject(ObjectIter& _rCurrentObject)
+{
+    Reference< XNamed > xName = (*_rCurrentObject).second;
+    if(!(*_rCurrentObject).second.is())
+    {
+        try
+        {
+            xName = createObject((*_rCurrentObject).first);
+        }
+        catch(const SQLException& e)
+        {
+            throw WrappedTargetException(e.Message,*this,makeAny(e));
+        }
+        (*_rCurrentObject).second = xName;
+    }
+    return xName;
+}
+// -----------------------------------------------------------------------------
+void OCollection::disposeElements()
+{
+    for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
+    {
+        if(aIter->second.is())
+        {
+            ::comphelper::disposeComponent(aIter->second);
+            (*aIter).second = NULL;
+        }
+    }
+    m_aNameMap.clear();
+    m_aElements.clear();
+}
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OCollection::createEmptyObject()
+{
+    OSL_ASSERT(!"Need to be overloaded when used!");
+    throw SQLException();
+}
+// -----------------------------------------------------------------------------
+void OCollection::appendObject( const Reference< XPropertySet >& descriptor )
+{
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OCollection::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    OSL_ASSERT(!"Need to be overloaded when used!");
+    throw SQLException();
+}
+// -----------------------------------------------------------------------------
+void OCollection::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+{
 }
 // -----------------------------------------------------------------------------

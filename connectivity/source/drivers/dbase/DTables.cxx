@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,22 +125,13 @@ void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseTables::createEmptyObject()
 {
-    ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
 }
 typedef connectivity::sdbcx::OCollection ODbaseTables_BASE_BASE;
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL ODbaseTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void ODbaseTables::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -150,12 +141,8 @@ void SAL_CALL ODbaseTables::appendByDescriptor( const Reference< XPropertySet >&
             pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
             try
             {
-                if(pTable->CreateImpl())
-                {
-                    pTable->setNew(sal_False);
-                    pTable->construct();
-                    ODbaseTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(*pTable,UNO_QUERY));
-                }
+                if(!pTable->CreateImpl())
+                    throw SQLException();
             }
             catch(SQLException&)
             {
@@ -170,27 +157,19 @@ void SAL_CALL ODbaseTables::appendByDescriptor( const Reference< XPropertySet >&
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL ODbaseTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
+    ObjectIter aIter = m_aElements[_nPos];
     if(!aIter->second.is())
     {// we want to drop a object which isn't loaded yet so we must load it
         try
         {
-            aIter->second = createObject(elementName);
+            aIter->second = createObject(_sElementName);
         }
         catch(const Exception&)
         {
-            if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),elementName),sal_False,NULL))
-            {
-                ODbaseTables_BASE_BASE::dropByName(elementName);
+            if(ODbaseTable::Drop_Static(ODbaseTable::getEntry(static_cast<OFileCatalog&>(m_rParent).getConnection(),_sElementName),sal_False,NULL))
                 return;
-            }
         }
     }
 
@@ -198,27 +177,26 @@ void SAL_CALL ODbaseTables::dropByName( const ::rtl::OUString& elementName ) thr
     if(xTunnel.is())
     {
         ODbaseTable* pTable = (ODbaseTable*)xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->DropImpl())
-            ODbaseTables_BASE_BASE::dropByName(elementName);
+        if(pTable)
+            pTable->DropImpl();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + elementName,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Can't drop table ") + _sElementName,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ODbaseTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
-}
-// -------------------------------------------------------------------------
-//------------------------------------------------------------------
 Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
 }
+// -----------------------------------------------------------------------------
+Reference< XNamed > ODbaseTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+}
+// -----------------------------------------------------------------------------
+
 

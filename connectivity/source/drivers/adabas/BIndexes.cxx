@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
 #include "adabas/BCatalog.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 
 using namespace ::comphelper;
@@ -148,16 +151,25 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
     return new OAdabasIndex(m_pTable);
 }
 // -------------------------------------------------------------------------
-// XAppend
-void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
+    Reference< XNamed > xName;
+    if(!m_pTable->isNew())
+    {
+        xName = Reference< XNamed >(_xDescriptor,UNO_QUERY);
+        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+        xName = xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    }
+    else
+    {
+    }
+    return xName;
+}
+// -------------------------------------------------------------------------
+// XAppend
+void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
+{
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
@@ -213,23 +225,20 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    OCollection_TYPE::appendByDescriptor(descriptor);
+    else
+        ::dbtools::throwFunctionSequenceException(*this);
+
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aName,aSchema;
-        sal_Int32 nLen = elementName.indexOf('.');
-        aSchema = elementName.copy(0,nLen);
-        aName   = elementName.copy(nLen+1);
+        sal_Int32 nLen = _sElementName.indexOf('.');
+        aSchema = _sElementName.copy(0,nLen);
+        aName   = _sElementName.copy(nLen+1);
 
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
@@ -247,16 +256,6 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    OCollection_TYPE::dropByName(elementName);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
 }
 // -------------------------------------------------------------------------
 

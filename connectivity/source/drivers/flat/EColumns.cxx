@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:46:43 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,21 +83,12 @@ Reference< XNamed > OFlatColumns::createObject(const ::rtl::OUString& _rName)
 
     OFlatTable* pTable = (OFlatTable*)m_pTable;
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
-
-    Reference< XNamed > xRet(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())),UNO_QUERY);
+    OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
+    Reference< XNamed > xRet;
+    if(aIter != aCols->end())
+        xRet = Reference< XNamed >(*aIter,UNO_QUERY);
     return xRet;
 }
+// -------------------------------------------------------------------------
 
-// -------------------------------------------------------------------------
-void OFlatColumns::impl_refresh() throw(RuntimeException)
-{
-    m_pTable->refreshColumns();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OFlatColumns::createEmptyObject()
-{
-    //  sdbcx::OColumn* pRet = new sdbcx::OColumn(isCaseSensitive());
-    Reference< XPropertySet > xRet;
-    return xRet;
-}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:31 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
 {
+    OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
@@ -168,23 +169,30 @@ void OStatement_Base::disposeResultSet()
         xComp->dispose();
     m_xResultSet = Reference< XResultSet>();
 }
-//------------------------------------------------------------------------------
-void OStatement_BASE2::disposing()
+// -----------------------------------------------------------------------------
+void SAL_CALL OStatement_Base::disposing(void)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     disposeResultSet();
 
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
-    N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS);
-    N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
-
     if (m_pConnection)
     {
         m_pConnection->freeStatementHandle(m_aStatementHandle);
         m_pConnection->release();
         m_pConnection = NULL;
     }
+    OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
+
+    OStatement_BASE::disposing();
+}
+//------------------------------------------------------------------------------
+void OStatement_BASE2::disposing()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+
 
     dispose_ChildImpl();
     OStatement_Base::disposing();

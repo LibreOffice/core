@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,24 +161,24 @@ void OTables::disposing(void)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdabasTable* pNew = new OAdabasTable(this,static_cast<OAdabasCatalog&>(m_rParent).getConnection());
-    return pNew;
+    return new OAdabasTable(this,static_cast<OAdabasCatalog&>(m_rParent).getConnection());
+}
+// -----------------------------------------------------------------------------
+Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
     if(!aName.getLength())
         ::dbtools::throwFunctionSequenceException(*this);
 
     createTable(descriptor);
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
@@ -228,16 +228,12 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
 
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
+    ObjectIter aIter = m_aElements[_nPos];
     if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(elementName);
+        aIter->second = createObject(_sElementName);
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
     sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
@@ -252,9 +248,9 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         Reference< XStatement > xStmt = pConnection->createStatement(  );
 
         ::rtl::OUString aName,aSchema;
-        sal_Int32 nLen = elementName.indexOf('.');
-        aSchema = elementName.copy(0,nLen);
-        aName   = elementName.copy(nLen+1);
+        sal_Int32 nLen = _sElementName.indexOf('.');
+        aSchema = _sElementName.copy(0,nLen);
+        aName   = _sElementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -274,21 +270,10 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         if(bIsView)
         {
             OViews* pViews = static_cast<OViews*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateViews());
-            if(pViews && pViews->hasByName(elementName))
-                pViews->dropByNameImpl(elementName);
+            if(pViews && pViews->hasByName(_sElementName))
+                pViews->dropByNameImpl(_sElementName);
         }
     }
-
-    OCollection_TYPE::dropByName(elementName);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
 }
 // -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )

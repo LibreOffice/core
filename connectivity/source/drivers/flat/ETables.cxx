@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,72 +103,8 @@ namespace starutil      = ::com::sun::star::util;
 
 Reference< XNamed > OFlatTables::createObject(const ::rtl::OUString& _rName)
 {
-    ::rtl::OUString aName,aSchema;
-    OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    return new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
-
-    Reference< XNamed > xRet = pRet;
-
-    return xRet;
-}
-// -------------------------------------------------------------------------
-void OFlatTables::impl_refresh(  ) throw(RuntimeException)
-{
-    //  static_cast<OFileCatalog&>(m_rParent).refreshTables();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OFlatTables::createEmptyObject()
-{
-    Reference< XPropertySet > xRet;
-    return xRet;
-}
-typedef connectivity::sdbcx::OCollection OFlatTables_BASE_BASE;
-// -------------------------------------------------------------------------
-// XAppend
-void SAL_CALL OFlatTables::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
-    Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OFlatTable* pTable = (OFlatTable*)xTunnel->getSomething(OFlatTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->CreateImpl())
-            OFlatTables_BASE_BASE::appendByDescriptor(descriptor);
-    }
-}
-// -------------------------------------------------------------------------
-// XDrop
-void SAL_CALL OFlatTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
-    Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
-    if(xTunnel.is())
-    {
-        OFlatTable* pTable = (OFlatTable*)xTunnel->getSomething(OFlatTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->DropImpl())
-            OFlatTables_BASE_BASE::dropByName(elementName);
-    }
-
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OFlatTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
 }
 // -------------------------------------------------------------------------
 

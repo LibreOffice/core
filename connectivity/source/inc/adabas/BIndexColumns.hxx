@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,9 @@ namespace connectivity
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException)
-            {
-                m_pIndex->refreshColumns();
-            }
+            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > cloneObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
+            virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         public:
             OIndexColumns(  OAdabasIndex* _pIndex,
                             ::osl::Mutex& _rMutex,

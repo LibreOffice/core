@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,3 +276,4 @@ void OFileTable::refreshHeader()
 {
 }
 // -----------------------------------------------------------------------------
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace ::comphelper;
 
@@ -120,9 +123,22 @@ void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexColumns::createEmptyObject()
 {
-    sdbcx::OIndexColumn* pRet = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+Reference< XNamed > ODbaseIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    sdbcx::OIndexColumn* pColumn = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference<XPropertySet> xProp = pColumn;
+    ::comphelper::copyProperties(_xDescriptor,xProp);
+    Reference< XNamed > xName(xProp,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName;
+}
+// -------------------------------------------------------------------------
+void ODbaseIndexColumns::appendObject( const Reference< XPropertySet >& descriptor )
+{
 }
 // -----------------------------------------------------------------------------
 

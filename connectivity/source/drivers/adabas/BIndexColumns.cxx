@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
@@ -152,8 +155,29 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexColumns::createEmptyObject()
 {
-    OIndexColumn* pNew = new OIndexColumn(sal_True);
-    return pNew;
+    return new OIndexColumn(sal_True);
 }
 // -------------------------------------------------------------------------
+Reference< XNamed > OIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    OIndexColumn* pColumn = new OIndexColumn(sal_True);
+    Reference<XPropertySet> xProp = pColumn;
+    ::comphelper::copyProperties(_xDescriptor,xProp);
+    Reference< XNamed > xName(xProp,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName;
+}
+// -----------------------------------------------------------------------------
+void OIndexColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_pIndex->refreshColumns();
+}
+// -----------------------------------------------------------------------------
+void OIndexColumns::appendObject( const Reference< XPropertySet >& descriptor )
+{
+    // nothing to do here
+}
+// -----------------------------------------------------------------------------
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-17 14:09:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HDL_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hdl>
+#endif
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -94,6 +100,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
@@ -102,10 +109,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
 {
     ADOKey* pKey = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pKey);
-
-    Reference< XNamed > xRet = new OAdoKey(isCaseSensitive(),m_pConnection,pKey);
-
-    return xRet;
+    return new OAdoKey(isCaseSensitive(),m_pConnection,pKey);
 }
 // -------------------------------------------------------------------------
 void OKeys::impl_refresh() throw(RuntimeException)
@@ -115,15 +119,12 @@ void OKeys::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
 {
-    OAdoKey* pNew = new OAdoKey(isCaseSensitive(),m_pConnection);
-    return pNew;
+    return new OAdoKey(isCaseSensitive(),m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -141,31 +142,34 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append key!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    m_pCollection->Delete(OLEVariant(elementName));
+    m_pCollection->Delete(OLEVariant(_sElementName));
     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-
-    OCollection_TYPE::dropByName(elementName);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OKeys::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    m_pCollection->Delete(OLEVariant(index));
-    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-
-    OCollection_TYPE::dropByIndex(index);
 }
 // -----------------------------------------------------------------------------
+Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+{
+    OAdoKey* pKey = new OAdoKey(isCaseSensitive(),m_pConnection);
+    Reference<XPropertySet> xProp = pKey;
+    Reference< XNamed > xName = pKey;
+    ::comphelper::copyProperties(_xDescriptor,xProp);
+    Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
+    Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
+    Reference<XAppend> xAppend(pKey->getColumns(),UNO_QUERY);
+    sal_Int32 nCount = xIndex->getCount();
+    for(sal_Int32 i=0;i< nCount;++i)
+    {
+        Reference<XPropertySet> xProp;
+        xIndex->getByIndex(i) >>= xProp;
+        xAppend->appendByDescriptor(xProp);
+    }
+
+    return xName;
+}
+// -----------------------------------------------------------------------------
+
 

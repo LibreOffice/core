@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _CONNECTIVITY_FILE_TABLE_HXX_
 #include "file/FTable.hxx"
 #endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace connectivity::file;
 using namespace connectivity;
@@ -125,16 +128,14 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 
     return xRet;
 }
-
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void OColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();
 }
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OColumns::createEmptyObject()
-{
-    return new sdbcx::OColumn(m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-}
+// -----------------------------------------------------------------------------
+
+
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,4 +143,6 @@ void OAdabasIndex::refreshColumns()
     else
         m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
+// -----------------------------------------------------------------------------
+
 

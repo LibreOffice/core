@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
 #include "adabas/BCatalog.hxx"
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 
@@ -179,21 +182,12 @@ void OKeys::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
 {
-    OAdabasKey* pNew = new OAdabasKey(m_pTable);
-    return pNew;
+    return new OAdabasKey(m_pTable);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-    {
-        if(aName.getLength() || getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == KeyType::PRIMARY) // check if this isn't a primary key
-            throw ElementExistException(aName,*this);
-    }
     if(!m_pTable->isNew())
     {
         sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
@@ -290,23 +284,20 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
             }
         }
     }
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
+        ObjectIter aIter = m_aElements[_nPos];
+        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+            aIter->second = createObject(_sElementName);
         Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
         sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
@@ -316,22 +307,42 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
         else
         {
             aSql += ::rtl::OUString::createFromAscii(" DROP FOREIGN KEY ");
-            aSql += aQuote + elementName + aQuote;
+            aSql += aQuote + _sElementName + aQuote;
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-    OCollection_TYPE::dropByName(elementName);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OKeys::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+// -----------------------------------------------------------------------------
+Reference< XNamed > OKeys::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    dropByName(getElementName(index));
+    Reference< XNamed > xName;
+    if(!m_pTable->isNew())
+    {
+        xName = Reference< XNamed >(_xDescriptor,UNO_QUERY);
+        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+        xName = xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    }
+    else
+    {
+        OAdabasKey* pKey = new OAdabasKey(m_pTable);
+        xName = pKey;
+        Reference<XPropertySet> xProp = pKey;
+        ::comphelper::copyProperties(_xDescriptor,xProp);
+        Reference<XColumnsSupplier> xSup(_xDescriptor,UNO_QUERY);
+        Reference<XIndexAccess> xIndex(xSup->getColumns(),UNO_QUERY);
+        Reference<XAppend> xAppend(pKey->getColumns(),UNO_QUERY);
+        sal_Int32 nCount = xIndex->getCount();
+        for(sal_Int32 i=0;i< nCount;++i)
+        {
+            Reference<XPropertySet> xProp;
+            xIndex->getByIndex(i) >>= xProp;
+            xAppend->appendByDescriptor(xProp);
+        }
+    }
+    return xName;
 }
+// -----------------------------------------------------------------------------
 

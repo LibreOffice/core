@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumns.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,26 +148,6 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 void OColumns::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshColumns();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OColumns::createEmptyObject()
-{
-    return new OColumn(sal_True);
-}
-// -------------------------------------------------------------------------
-// XAppend
-void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
-{
-}
-
-// -------------------------------------------------------------------------
-// XDrop
-void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
-{
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
 }
 // -----------------------------------------------------------------------------
 

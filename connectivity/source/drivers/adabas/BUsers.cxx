@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,15 +114,16 @@ Reference< XPropertySet > OUsers::createEmptyObject()
     return pNew;
 }
 // -------------------------------------------------------------------------
-// XAppend
-void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+Reference< XNamed > OUsers::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
-
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+}
+// -------------------------------------------------------------------------
+// XAppend
+void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
+{
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USER ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
@@ -139,23 +140,16 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     if(xStmt.is())
         xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
     {
         // first we have to check if this user is live relevaant for the database
         // which means with out these users the database will miss more than one important system table
         ::rtl::OUString sUsers = ::rtl::OUString::createFromAscii("SELECT USERMODE,USERNAME FROM DOMAIN.USERS WHERE USERNAME = '");
-        sUsers += elementName + ::rtl::OUString::createFromAscii("'");
+        sUsers += _sElementName + ::rtl::OUString::createFromAscii("'");
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
@@ -170,7 +164,6 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
                     ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),*this);
                 }
             }
-            ::comphelper::disposeComponent(xRes);
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -178,26 +171,13 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USER ");
         ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-        aSql += ::dbtools::quoteName(aQuote,elementName);
+        aSql += ::dbtools::quoteName(aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
         ::comphelper::disposeComponent(xStmt);
     }
-
-    OCollection_TYPE::dropByName(elementName);
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL OUsers::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        ::dbtools::throwInvalidIndexException(*this);
-
-    dropByName(getElementName(index));
-}
-// -----------------------------------------------------------------------------
-
-

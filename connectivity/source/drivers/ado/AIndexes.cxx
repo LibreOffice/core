@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-12 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
     ADOIndex* pIndex = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pIndex);
 
-    Reference< XNamed > xRet = new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex);
-
-    return xRet;
+    return new OAdoIndex(isCaseSensitive(),m_pConnection,pIndex);
 }
 // -------------------------------------------------------------------------
 void OIndexes::impl_refresh() throw(RuntimeException)
@@ -110,15 +108,12 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    OAdoIndex* pNew = new OAdoIndex(isCaseSensitive(),m_pConnection);
-    return pNew;
+    return new OAdoIndex(isCaseSensitive(),m_pConnection);
 }
 // -------------------------------------------------------------------------
 // XAppend
-void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
+void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
@@ -129,30 +124,20 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not append index!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     }
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop
-void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    m_pCollection->Delete(OLEVariant(elementName));
-
-    OCollection_TYPE::dropByName(elementName);
+    m_pCollection->Delete(OLEVariant(_sElementName));
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
-
-    m_pCollection->Delete(OLEVariant(index));
-
-    OCollection_TYPE::dropByIndex(index);
+    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
+    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 
