@@ -8375,31 +8375,6 @@ SfxVoidItem NewPresentation SID_NEWSD
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem AutoPilotSDBImport SID_SDB52_IMPORT_WIZARD
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
 ()
 [
@@ -8447,31 +8422,6 @@ SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_SPECIAL;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DatasourceAdministration SID_DATASOURCE_ADMINISTRATION
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------
