@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,8 +276,8 @@ void ControlDef::Write( SvStream &aStream )
         aStream.WriteByteString( String('*').Append( pData->Kurzname ), RTL_TEXTENCODING_UTF8 );
     else
         aStream.WriteByteString( pData->Kurzname, RTL_TEXTENCODING_UTF8 );
-    aStream << ((USHORT)pData->aUId.IsNumeric());
-    if ( !pData->aUId.IsNumeric() )
+    aStream << ((USHORT)pData->aUId.HasNumeric());
+    if ( pData->aUId.HasString() )
         aStream.WriteByteString( pData->aUId.GetStr(), RTL_TEXTENCODING_UTF8 );
     else
         aStream << pData->aUId.GetNum();
@@ -364,7 +364,7 @@ String CRevNames::GetName( SmartId aUId )
         return GetObject(nPos)->pData->Kurzname;
     else
     {
-        if ( aUId.Equals( UID_ACTIVE ) )
+        if ( aUId.Matches( UID_ACTIVE ) )
             return CUniString("Active");
         else
             return GEN_RES_STR1( S_NAME_NOT_THERE, aUId.GetText() );
@@ -1477,7 +1477,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
 
         USHORT nType;
          aStream >> nType;
-        if ( !nType /* IsNumeric() */)
+        if ( !nType /* HasNumeric() */)
         {
             String aStrId;
             aStream.ReadByteString( aStrId, RTL_TEXTENCODING_UTF8 );
@@ -2750,7 +2750,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
             pImpl->pControlsObj = pImpl->pControlsObjs[nControlsObj++];
             pImpl->pControlsObj->SetName(pWhatName->pData->Kurzname);
 
-            if ( pWhatName->pData->aUId.IsNumeric() )
+            if ( pWhatName->pData->aUId.HasNumeric() )
                 pImpl->pControlsObj->PutULong(pWhatName->pData->aUId.GetNum());
             else
                 pImpl->pControlsObj->PutString(pWhatName->pData->aUId.GetStr());
@@ -2763,7 +2763,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
                 pMember = new SbxProperty(CUniString("ID"),SbxULONG);
                 pImpl->pControlsObj->Insert(pMember);
             }
-            if ( pWhatName->pData->aUId.IsNumeric() )
+            if ( pWhatName->pData->aUId.HasNumeric() )
                 pMember->PutULong(pWhatName->pData->aUId.GetNum());
             else
                 pMember->PutString(pWhatName->pData->aUId.GetStr());
@@ -2789,7 +2789,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
             pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
             pMyVar->SetName( pWhatName->pData->Kurzname );
 
-            if ( pWhatName->pData->aUId.IsNumeric() )
+            if ( pWhatName->pData->aUId.HasNumeric() )
             {
                 pMyVar->SetUserData( ID_Dispatch );
                 pMyVar->nValue = pWhatName->pData->aUId.GetNum();
@@ -2815,7 +2815,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
                 pWhatName = ( (ControlDef*)pSIds->GetObject( nElement ) );
                 pReturn->SetName( pWhatName->pData->Kurzname );
 
-                if ( pWhatName->pData->aUId.IsNumeric() )
+                if ( pWhatName->pData->aUId.HasNumeric() )
                     pReturn->PutULong(pWhatName->pData->aUId.GetNum());
                 else
                     pReturn->PutString(pWhatName->pData->aUId.GetStr());
@@ -2838,7 +2838,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.12 $
+    // search $Revision: 1.13 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3315,7 +3315,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 //                                              ULONG nUserData = pImpl->pNextReturn->GetParent()->GetUserData();
 //                                              pImpl->pNextReturn->GetParent()->SetUserData(0);
 //                                              if ( nUId == pImpl->pNextReturn->GetParent()->GetULong() )
-                        if ( aNextReturnId.Equals( aUId ) )
+                        if ( aNextReturnId.Matches( aUId ) )
                         {
                             if( nParams & PARAM_ULONG_1 )       pImpl->pNextReturn->PutULong( nLNr1 );
                             if( nParams & PARAM_USHORT_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
@@ -3415,7 +3415,11 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
 
                         // Langname feststellen
-                        if ( aUId.IsNumeric() )
+                        if ( aUId.HasString() )
+                        {   // use the String ID since there is no LongName in hid.lst
+                            pWinInfo->aLangname = aUId.GetStr();
+                        }
+                        else
                         {
                             if ( pReverseUIds )
                             {
@@ -3425,10 +3429,6 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                     pWinInfo->aLangname = pReverseUIds->GetObject(nNr)->pData->Kurzname;
                                 delete pNewItem;
                             }
-                        }
-                        else
-                        {   // use the String ID since there is no LongName in hid.lst
-                            pWinInfo->aLangname = aUId.GetStr();
                         }
 
                         aWinInfoHdl.Call( pWinInfo );
@@ -3912,7 +3912,7 @@ String TestToolObj::GetMethodName( ULONG nMethodId )
     if ( Controls::pClasses )
     {
         for ( nElement = 0 ; nElement < Controls::pClasses->Count() ; nElement++ )
-            if ( Controls::pClasses->GetObject(nElement)->pData->aUId.Equals( nMethodId ) )
+            if ( Controls::pClasses->GetObject(nElement)->pData->aUId.Matches( nMethodId ) )
                 return Controls::pClasses->GetObject(nElement)->pData->Kurzname;
     }
     return String();
@@ -3926,7 +3926,7 @@ String TestToolObj::GetKeyName( USHORT nKeyCode )
     if ( CmdStream::pKeyCodes )
     {
         for ( nElement = 0 ; nElement < CmdStream::pKeyCodes->Count() ; nElement++ )
-            if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.Equals( nKeyCode ) )
+            if ( CmdStream::pKeyCodes->GetObject(nElement)->pData->aUId.Matches( nKeyCode ) )
                 return CmdStream::pKeyCodes->GetObject(nElement)->pData->Kurzname;
     }
     return CUniString( "UnknownKeyCode" );
@@ -3974,7 +3974,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             if ( pRCommands )
             {
                 for ( nElement = 0 ; nElement < pRCommands->Count() ; nElement++ )
-                    if ( pRCommands->GetObject(nElement)->pData->aUId.Equals( nNumber ) )
+                    if ( pRCommands->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRCommands->GetObject(nElement)->pData->Kurzname;
                         nElement = pRCommands->Count();
@@ -3991,7 +3991,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             if ( pRTypes )
             {
                 for ( nElement = 0 ; nElement < pRTypes->Count() ; nElement++ )
-                    if ( pRTypes->GetObject(nElement)->pData->aUId.Equals( nNumber ) )
+                    if ( pRTypes->GetObject(nElement)->pData->aUId.Matches( nNumber ) )
                     {
                         aResult = pRTypes->GetObject(nElement)->pData->Kurzname;
                         nElement = pRTypes->Count();
