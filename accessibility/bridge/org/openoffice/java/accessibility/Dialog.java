@@ -215,9 +215,11 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.ACTIVE:
-                    postWindowEvent(enable ?
-                        java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS :
-                        java.awt.event.WindowEvent.WINDOW_LOST_FOCUS);
+                    if (enable) {
+                        AccessibleObjectFactory.postWindowActivated(Dialog.this);
+                    } else {
+                        AccessibleObjectFactory.postWindowLostFocus(Dialog.this);
+                    }
                     break;
                 case AccessibleStateType.ICONIFIED:
                     postWindowEvent(enable ?
@@ -238,9 +240,16 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         /** Updates the accessible name and fires the appropriate PropertyChangedEvent */
         protected void handleNameChangedEvent(Object any) {
             try {
-                Dialog.this.setTitle(AnyConverter.toString(any));
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e) {
+                String title = AnyConverter.toString(any);
+                setTitle(title);
+                // This causes the property change event to be fired in the VCL thread
+                // context. If this causes problems, it has to be deligated to the java
+                // dispatch thread ..
+                javax.accessibility.AccessibleContext ac = accessibleContext;
+                if (ac!= null) {
+                    ac.setAccessibleDescription(title);
+                }
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
         }
 
@@ -250,8 +259,9 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 // This causes the property change event to be fired in the VCL thread
                 // context. If this causes problems, it has to be deligated to the java
                 // dispatch thread ..
-                if (accessibleContext != null) {
-                    accessibleContext.setAccessibleDescription(AnyConverter.toString(any));
+                javax.accessibility.AccessibleContext ac = accessibleContext;
+                if (ac!= null) {
+                    ac.setAccessibleDescription(AnyConverter.toString(any));
                 }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
             }
@@ -268,39 +278,6 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                     setComponentState(AnyConverter.toShort(any2), true);
                 }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-            }
-        }
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildRemovedEvent(Object any) {
-            try {
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
-                if (c != null) {
-                    Dialog.this.remove(c);
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
-            }
-        }
-
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildAddedEvent(Object any) {
-            try {
-                XAccessible xAccessible = (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any);
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(xAccessible);
-                if (c != null) {
-                    // Seems to be already in child list
-                    if (this.equals(c.getParent()))
-                        return;
-                } else {
-                    c = AccessibleObjectFactory.createAccessibleComponent(xAccessible);
-                }
-                if (c != null) {
-                    Dialog.this.add(c, xAccessible.getAccessibleContext().
-                        getAccessibleIndexInParent());
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
             }
         }
 
@@ -331,9 +308,9 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                     break;
                 case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
                     if (AnyConverter.isObject(event.OldValue)) {
-                        handleChildRemovedEvent(event.OldValue);
+                        AccessibleObjectFactory.removeChild(Dialog.this, event.OldValue);
                     } else if (AnyConverter.isObject(event.NewValue)) {
-                        handleChildAddedEvent(event.NewValue);
+                        AccessibleObjectFactory.addChild(Dialog.this, event.NewValue);
                     }
                     break;
                 case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
@@ -395,30 +372,69 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
             }
         } // inner class AccessibleComponentHandler
 
-        protected java.awt.event.WindowFocusListener accessibleWindowFocusHandler = null;
+        protected java.awt.event.WindowListener accessibleWindowHandler = null;
 
         /**
         * Fire PropertyChange listener, if one is registered,
-        * when focus events happen
+        * when window events happen
         */
-        protected class AccessibleWindowFocusHandler implements java.awt.event.WindowFocusListener {
-            public void windowGainedFocus(java.awt.event.WindowEvent e) {
+        protected class AccessibleWindowHandler implements java.awt.event.WindowListener {
+            /** Invoked when the Window is set to be the active Window. */
+            public void windowActivated(java.awt.event.WindowEvent e) {
                 AccessibleDialog.this.firePropertyChange(
                     javax.accessibility.AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     null, javax.accessibility.AccessibleState.ACTIVE);
                 if (Build.DEBUG) {
-                    System.err.println("[dialog] " + getTitle() + " is now active");
+                    System.err.println("[Dialog] " + getTitle() + " is now active");
                 }
             }
-            public void windowLostFocus(java.awt.event.WindowEvent e) {
+
+            /** Invoked when a window has been closed as the result of calling dispose on the window. */
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                if (Build.DEBUG) {
+                    System.err.println("[Dialog] " + getTitle() + " has been closed");
+                }
+            }
+
+            /** Invoked when the user attempts to close the window from the window's system menu. */
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                if (Build.DEBUG) {
+                    System.err.println("[Dialog] " + getTitle() + " is closing");
+                }
+            }
+
+            /** Invoked when a Window is no longer the active Window. */
+            public void windowDeactivated(java.awt.event.WindowEvent e) {
                 AccessibleDialog.this.firePropertyChange(
                     javax.accessibility.AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     javax.accessibility.AccessibleState.ACTIVE, null);
                 if (Build.DEBUG) {
-                    System.err.println("[dialog] " + getTitle() + " is no longer active");
+                    System.err.println("[Dialog] " + getTitle() + " is no longer active");
                 }
             }
-        } // inner class AccessibleFocusHandler
+
+              /** Invoked when a window is changed from a minimized to a normal state. */
+            public void windowDeiconified(java.awt.event.WindowEvent e) {
+                if (Build.DEBUG) {
+                    System.err.println("[Dialog] " + getTitle() + " has been deiconified");
+                }
+            }
+
+            /** Invoked when a window is changed from a normal to a minimized state. */
+            public void windowIconified(java.awt.event.WindowEvent e) {
+                if (Build.DEBUG) {
+                    System.err.println("[Dialog] " + getTitle() + " has been iconified");
+                }
+            }
+
+            /** Invoked the first time a window is made visible. */
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                if (Build.DEBUG) {
+                    System.err.println("[Dialog] " + getTitle() + " has been opened");
+                }
+            }
+
+        } // inner class AccessibleWindowHandler
 
         protected java.awt.event.ContainerListener accessibleContainerHandler = null;
 
@@ -455,8 +471,8 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         */
         public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (propertyChangeListenerCount++ == 0) {
-                accessibleWindowFocusHandler = new AccessibleWindowFocusHandler();
-                Dialog.this.addWindowFocusListener(accessibleWindowFocusHandler);
+                accessibleWindowHandler = new AccessibleWindowHandler();
+                Dialog.this.addWindowListener(accessibleWindowHandler);
 
                 accessibleContainerHandler = new AccessibleContainerHandler();
                 Dialog.this.addContainerListener(accessibleContainerHandler);
@@ -482,8 +498,8 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
                 Dialog.this.removeContainerListener(accessibleContainerHandler);
                 accessibleContainerHandler = null;
 
-                Dialog.this.removeWindowFocusListener(accessibleWindowFocusHandler);
-                accessibleWindowFocusHandler = null;
+                Dialog.this.removeWindowListener(accessibleWindowHandler);
+                accessibleWindowHandler = null;
             }
             super.removePropertyChangeListener(listener);
         }
