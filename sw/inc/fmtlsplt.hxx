@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtlsplt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,14 @@ public:
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
 };
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtLayoutSplit &SwAttrSet::GetLayoutSplit(BOOL bInP) const
     { return (const SwFmtLayoutSplit&)Get( RES_LAYOUT_SPLIT,bInP); }
 
 inline const SwFmtLayoutSplit &SwFmt::GetLayoutSplit(BOOL bInP) const
     { return aSet.GetLayoutSplit(bInP); }
+#endif
 
 #endif
 

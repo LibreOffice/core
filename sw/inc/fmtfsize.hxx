@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfsize.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,14 @@ public:
                                       const SvxULSpaceItem *pULSpace ) const;
 };
 
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const
     { return (const SwFmtFrmSize&)Get( RES_FRM_SIZE,bInP); }
 
 inline const SwFmtFrmSize &SwFmt::GetFrmSize(BOOL bInP) const
     { return aSet.GetFrmSize(bInP); }
+#endif
 
 #endif
 
