@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ class ObjNode : public IdNode{
 public:
                 ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey );
     ObjNode *   DelObjNode( RscTop * pClass, ULONG lFileKey );
-    USHORT      GetId() const;
+    sal_uInt32      GetId() const;
     RscId       GetRscId(){ return( aRscId ); }
     ULONG       GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const{
@@ -115,12 +115,12 @@ public:
 
 /******************* R e f N o d e ***************************************/
 class RefNode : public IdNode{
-    HASHID      nTypNameId; // index of a Name in a hashtabel
+    Atom        nTypNameId; // index of a Name in a hashtabel
 public:
     ObjNode*    pObjBiTree; // Zeiger auf Objektbaum
-                RefNode( HASHID nTyp );
-    USHORT      GetId() const;
-    RefNode*    Search( HASHID typ ) const{
+                RefNode( Atom nTyp );
+    sal_uInt32      GetId() const;
+    RefNode*    Search( Atom typ ) const{
                     // search the index in the b-tree
                     return( (RefNode *)IdNode::Search( typ ) );
                 };
