@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:24:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,7 +1602,7 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
             case TOX_USER:
             case TOX_CONTENT:
                 if(USHRT_MAX != nLevel)
-                    aMark.SetLevel(nLevel);
+                    aMark.SetLevel(nLevel+1);
             break;
         }
         UnoActionContext aAction(pDoc);
@@ -1761,8 +1761,8 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                     aMark.SetAlternativeText(lcl_AnyToString(aValue));
                 break;
                 case WID_LEVEL:
-                    aMark.SetLevel(Min( (sal_Int8) MAXLEVEL,
-                                        (sal_Int8)lcl_AnyToInt16(aValue)));
+                    aMark.SetLevel(Min( (sal_Int8) ( MAXLEVEL ),
+                                        (sal_Int8)(lcl_AnyToInt16(aValue)+1)));
                 break;
                 case WID_PRIMARY_KEY  :
                     aMark.SetPrimaryKey(lcl_AnyToString(aValue));
@@ -1900,7 +1900,7 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(pCurMark->GetAlternativeText());
                 break;
                 case WID_LEVEL:
-                    aRet <<= (sal_Int16)pCurMark->GetLevel();
+                    aRet <<= (sal_Int16)(pCurMark->GetLevel() - 1);
                 break;
                 case WID_PRIMARY_KEY  :
                     aRet <<= OUString(pCurMark->GetPrimaryKey());
