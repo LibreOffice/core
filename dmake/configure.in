@@ -1,8 +1,13 @@
+
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(acconfig.h)
 
 dnl set the DMAKEROOT
 #AC_FUNC_SET_DMAKEROOT
+PACKAGE=dmake
+VERSION=4.2
+
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 dnl Checks for programs.
 AC_PROG_CXX
@@ -32,7 +37,6 @@ AC_HEADER_TIME
 
 dnl Checks for library functions.
 AC_FUNC_MEMCMP
-AC_FUNC_SETVBUF_REVERSED
 AC_TYPE_SIGNAL
 AC_FUNC_UTIME_NULL
 AC_FUNC_VPRINTF
