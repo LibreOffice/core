@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:06:27 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,141 +135,164 @@
 #include <fldtdlg.hrc>
 #endif
 
-
-SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
-        SfxChildWindow(pParentWindow, nId),
-        pDocSh(0)
-{
-    // Flackern der Buttons vermeiden:
-    aUpdateTimer.SetTimeout(200);
-    aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
-{
-    GetWindow()->Activate();    // Dialog aktualisieren
-
-    return 0;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
- --------------------------------------------------------------------*/
-
-BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
-{
-    BOOL bRet = FALSE;
-
-    if (pDocSh != GetOldDocShell())
-    {
-        aUpdateTimer.Stop();
-        bRet = TRUE;            // Sofortiges Update
-    }
-    else
-        aUpdateTimer.Start();
-
-    return bRet;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
-{
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-    aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
-    return aInfo;
-}
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
-                                    SfxBindings* pB,
-                                    SfxChildWinInfo* pInfo )
-    : SwChildWinWrapper( pParent, nId )
-{
-    SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-    pWindow = pDlg;
-    pDlg->Start();
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
- --------------------------------------------------------------------*/
-
-BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-{
-    BOOL bRet;
-
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
-        ((SwFldDlg*)GetWindow())->ReInitDlg();
-
-    return bRet;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void SwFldDlgWrapper::ShowPage(USHORT nPage)
-{
-    ((SwFldDlg*)GetWindow())->ShowPage(nPage ? nPage : TP_FLD_REF);
-}
-
-SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
-
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
-SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
-{
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-// prevent instatiation of dialog other than by calling
-// the mail merge dialog
-    aInfo.bVisible = FALSE;
-    return aInfo;
-}
-/* -----------------04.02.2003 14:17-----------------
- *
- * --------------------------------------------------*/
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
-                                    SfxBindings* pB,
-                                    SfxChildWinInfo* pInfo )
-    : SwChildWinWrapper( pParent, nId )
-{
-    SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-    pWindow = pDlg;
-    pDlg->ActivateDatabasePage();
-    pDlg->Start();
-    pDlg->Initialize( pInfo );
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-}
-/* -----------------04.02.2003 14:17-----------------
- * re-init after doc activation
- * --------------------------------------------------*/
-BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-{
-    BOOL bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
-        ((SwFldDlg*)GetWindow())->ReInitDlg();
-
-    return bRet;
-}
+//CHINA001 #include "swabstdlg.hxx" //CHINA001
+//CHINA001
+//CHINA001 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung:
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
+//CHINA001 SfxChildWindow(pParentWindow, nId),
+//CHINA001 pDocSh(0)
+//CHINA001 {
+//CHINA001 // Flackern der Buttons vermeiden:
+//CHINA001 aUpdateTimer.SetTimeout(200);
+//CHINA001 aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
+//CHINA001 }
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung:
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
+//CHINA001 {
+//CHINA001 GetWindow()->Activate(); // Dialog aktualisieren
+//CHINA001
+//CHINA001 return 0;
+//CHINA001 }
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
+//CHINA001 {
+//CHINA001 BOOL bRet = FALSE;
+//CHINA001
+//CHINA001 if (pDocSh != GetOldDocShell())
+//CHINA001  {
+//CHINA001 aUpdateTimer.Stop();
+//CHINA001 bRet = TRUE;         // Sofortiges Update
+//CHINA001  }
+//CHINA001  else
+//CHINA001 aUpdateTimer.Start();
+//CHINA001
+//CHINA001 return bRet;
+//CHINA001 }
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung:
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
+//CHINA001 {
+//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+//CHINA001 aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
+//CHINA001 return aInfo;
+//CHINA001 }
+//CHINA001
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung:
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
+//CHINA001 SfxBindings* pB,
+//CHINA001 SfxChildWinInfo* pInfo )
+//CHINA001 : SwChildWinWrapper( pParent, nId )
+//CHINA001 {
+//CHINA001 //CHINA001   SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
+//CHINA001 //CHINA001   pWindow = pDlg;
+//CHINA001 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+//CHINA001 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+//CHINA001
+//CHINA001 AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
+//CHINA001 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+//CHINA001 pDlgInterface = pDlg;
+//CHINA001 pWindow = pDlg->GetWindow();
+//CHINA001 pDlg->Start();
+//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+//CHINA001 }
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+//CHINA001 {
+//CHINA001 BOOL bRet;
+//CHINA001
+//CHINA001 if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)   // Sofort aktualisieren, Dok-Wechsel
+//CHINA001  {
+//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
+//CHINA001 pDlgInterface->ReInitDlg(); //CHINA001
+//CHINA001  }
+//CHINA001
+//CHINA001 return bRet;
+//CHINA001 }
+//CHINA001
+//CHINA001 /*--------------------------------------------------------------------
+//CHINA001 Beschreibung:
+//CHINA001 --------------------------------------------------------------------*/
+//CHINA001
+//CHINA001 void SwFldDlgWrapper::ShowPage(USHORT nPage)
+//CHINA001 {
+//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ShowPage(nPage ? nPage : TP_FLD_REF);
+//CHINA001 pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF); //CHINA001
+//CHINA001 }
+//CHINA001
+//CHINA001 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
+//CHINA001
+//CHINA001 /* -----------------04.02.2003 14:17-----------------
+//CHINA001 *
+//CHINA001 * --------------------------------------------------*/
+//CHINA001 SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
+//CHINA001 {
+//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+//CHINA001 // prevent instatiation of dialog other than by calling
+//CHINA001 // the mail merge dialog
+//CHINA001 aInfo.bVisible = FALSE;
+//CHINA001 return aInfo;
+//CHINA001 }
+//CHINA001 /* -----------------04.02.2003 14:17-----------------
+//CHINA001 *
+//CHINA001 * --------------------------------------------------*/
+//CHINA001 SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
+//CHINA001 SfxBindings* pB,
+//CHINA001 SfxChildWinInfo* pInfo )
+//CHINA001 : SwChildWinWrapper( pParent, nId )
+//CHINA001 {
+//CHINA001 //CHINA001     SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
+//CHINA001 //CHINA001   pWindow = pDlg;
+//CHINA001 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+//CHINA001 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+//CHINA001
+//CHINA001 AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
+//CHINA001 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+//CHINA001 pDlgInterface = pDlg; //CHINA001
+//CHINA001
+//CHINA001 pWindow = pDlg->GetWindow();//CHINA001
+//CHINA001 pDlg->ActivateDatabasePage();
+//CHINA001 pDlg->Start();
+//CHINA001 pDlg->Initialize( pInfo );
+//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+//CHINA001 }
+//CHINA001 /* -----------------04.02.2003 14:17-----------------
+//CHINA001 * re-init after doc activation
+//CHINA001 * --------------------------------------------------*/
+//CHINA001 BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+//CHINA001 {
+//CHINA001 BOOL bRet;
+//CHINA001 if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
+//CHINA001  {
+//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
+//CHINA001 pDlgInterface->ReInitDlg(); //CHINA001
+//CHINA001  }
+//CHINA001
+//CHINA001 return bRet;
+//CHINA001 }
 
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
