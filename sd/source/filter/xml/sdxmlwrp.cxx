@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:02:23 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 09:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ using namespace rtl;
 #define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
 
 XML_STRING( sXML_metaStreamName, "meta.xml");
-XML_STRING( sXML_styleStreamName, "style.xml" );
+XML_STRING( sXML_styleStreamName, "styles.xml" );
 XML_STRING( sXML_contentStreamName, "content.xml" );
 XML_STRING( sXML_oldContentStreamName, "Content.xml" );
 
