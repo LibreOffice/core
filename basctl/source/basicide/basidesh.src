@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:25:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 14:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ String RID_STR_WRONGPASSWORD
     Text[ turkish ] = "Hatal� Parola";
     Text[ catalan ] = "Contrasenya incorrecta.";
     Text[ thai ] = "รหัสผ่านไม่ถูกต้อง";
-    Text[ czech ] = "Neplatné heslo.";
+    Text[ czech ] = "Neplatné heslo";
     Text[ hebrew ] = "Fehlerhaftes Kennwort.";
     Text[ hindi ] = "गलत कूटशब्द ।";
     Text[ slovak ] = "Neplatné heslo.";
@@ -456,7 +456,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ arabic ] = "Macros from other documents are not accessible.";
     Text[ catalan ] = "Les macros d'altres documents no s�n accessibles.";
     Text[ thai ] = "ไม่สามารถเข้าถึงมาโครจากเอกสารอื่นได้";
-    Text[ czech ] = "Makra z jiných dokumentů jsou nedostupná.";
+    Text[ czech ] = "Makra z jiných dokumentů nejsou dostupná.";
     Text[ hebrew ] = "Auf Makros anderer Dokumente kann nicht zugegriffen werden.";
     Text[ hindi ] = "Macros from other documents are not accessible.";
     Text[ slovak ] = "Makrá z iného dokumentu nie sú prístupné.";
@@ -2647,7 +2647,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ greek ] = "Manage Breakpoints";
             Text[ dutch ] = "Manage Breakpoints";
             Text[ finnish ] = "Manage Breakpoints";
-            Text[ czech ] = "Manage Breakpoints";
+            Text[ czech ] = "Správa bodů přerušení";
             Text[ danish ] = "Manage Breakpoints";
             Text[ polish ] = "Manage Breakpoints";
             Text[ portuguese_brazilian ] = "Gerenciar pontos de interrup��o";
@@ -2657,6 +2657,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ catalan ] = "Manage Breakpoints";
             Text[ thai ] = "Manage Breakpoints";
             Text[ slovak ] = "Body prerušenia";
+            Text[ hindi ] = "Manage Breakpoints";
         };
         ToolBoxItem
         {
@@ -3120,7 +3121,7 @@ Menu RID_POPUP_BRKDLG
             Text[ turkish ] = "Kesmenoktalar�...";
             Text[ catalan ] = "Punts de ruptura...";
             Text[ thai ] = "จุดแบ่ง...";
-            Text[ czech ] = "Body přerušení...";
+            Text[ czech ] = "Správa bodů přerušení...";
             Text[ hebrew ] = "Haltepunkte...";
             Text[ hindi ] = "खण्डन बिन्दु...";
             Text[ slovak ] = "Body prerušenia...";
@@ -3139,7 +3140,7 @@ Menu RID_POPUP_BRKDLG
     Text[ turkish ] = "Kesmenoktalar�";
     Text[ catalan ] = "Punts de ruptura";
     Text[ thai ] = "จุดแบ่ง";
-    Text[ czech ] = "Body přerušení";
+    Text[ czech ] = "Správa bodů přerušení";
     Text[ hebrew ] = "Haltepunkte";
     Text[ hindi ] = "खण्डन बिन्दु";
     Text[ slovak ] = "Body prerušenia";
@@ -4353,6 +4354,8 @@ Menu RID_BASICPLUGINMENU
         ITEM_HELP_MENU
     };
 };
+
+
 
 
 
