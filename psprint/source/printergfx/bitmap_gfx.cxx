@@ -1,0 +1,759 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bitmap_gfx.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: pl $ $Date: 2001-05-08 11:46:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _PSPRINT_PRINTERGFX_HXX_
+#include <psprint/printergfx.hxx>
+#endif
+#ifndef _PSPRINT_STRHELPER_HXX_
+#include <psprint/strhelper.hxx>
+#endif
+#ifndef _PSPRINT_PRINTERUTIL_HXX_
+#include <psputil.hxx>
+#endif
+
+namespace psp {
+
+const sal_Int32 nLineLength = 80;
+const sal_Int32 nBufferSize = 16384;
+
+/*
+ * Bitmap compression / Hex encoding / Ascii85 Encoding
+ */
+
+PrinterBmp::~PrinterBmp ()
+{ /* dont need this, but C50 does */ }
+
+/* virtual base class */
+
+class ByteEncoder
+{
+private:
+
+public:
+
+    virtual void    EncodeByte (sal_uInt8 nByte) = 0;
+    virtual         ~ByteEncoder () = 0;
+};
+
+ByteEncoder::~ByteEncoder ()
+{ /* dont need this, but the C50 does */ }
+
+/* HexEncoder */
+
+class HexEncoder : public ByteEncoder
+{
+private:
+
+    osl::File*      mpFile;
+    sal_uInt32      mnColumn;
+    sal_uInt32      mnOffset;
+    sal_Char        mpFileBuffer[nBufferSize + 16];
+
+    HexEncoder (); /* dont use */
+
+public:
+
+    HexEncoder (osl::File* pFile);
+    virtual         ~HexEncoder ();
+    void            WriteAscii (sal_uInt8 nByte);
+    virtual void    EncodeByte (sal_uInt8 nByte);
+    void            FlushLine ();
+};
+
+HexEncoder::HexEncoder (osl::File* pFile) :
+        mpFile (pFile),
+        mnColumn (0),
+        mnOffset (0)
+{}
+
+HexEncoder::~HexEncoder ()
+{
+    FlushLine ();
+    if (mnColumn > 0)
+        WritePS (mpFile, "\n");
+}
+
+void
+HexEncoder::WriteAscii (sal_uInt8 nByte)
+{
+    sal_uInt32 nOff = psp::getHexValueOf (nByte, mpFileBuffer + mnOffset);
+    mnColumn += nOff;
+    mnOffset += nOff;
+
+    if (mnColumn >= nLineLength)
+    {
+        mnOffset += psp::appendStr ("\n", mpFileBuffer + mnOffset);
+        mnColumn = 0;
+    }
+    if (mnOffset >= nBufferSize)
+        FlushLine ();
+}
+
+void
+HexEncoder::EncodeByte (sal_uInt8 nByte)
+{
+    WriteAscii (nByte);
+}
+
+void
+HexEncoder::FlushLine ()
+{
+    if (mnOffset > 0)
+    {
+        WritePS (mpFile, mpFileBuffer, mnOffset);
+        mnOffset = 0;
+    }
+}
+
+/* Ascii85 encoder, is abi compatible with HexEncoder but writes a ~> to
+   indicate end of data EOD */
+
+class Ascii85Encoder : public ByteEncoder
+{
+private:
+
+    osl::File*      mpFile;
+    sal_uInt32      mnByte;
+    sal_uInt8       mpByteBuffer[4];
+
+    sal_uInt32      mnColumn;
+    sal_uInt32      mnOffset;
+    sal_Char        mpFileBuffer[nBufferSize + 16];
+
+    Ascii85Encoder (); /* dont use */
+
+    inline void     PutByte (sal_uInt8 nByte);
+    inline void     PutEOD ();
+    void            ConvertToAscii85 ();
+    void            FlushLine ();
+
+public:
+
+    Ascii85Encoder (osl::File* pFile);
+    virtual         ~Ascii85Encoder ();
+    virtual void    EncodeByte (sal_uInt8 nByte);
+    void            WriteAscii (sal_uInt8 nByte);
+};
+
+Ascii85Encoder::Ascii85Encoder (osl::File* pFile) :
+        mpFile (pFile),
+        mnOffset (0),
+        mnColumn (0),
+        mnByte (0)
+{}
+
+inline void
+Ascii85Encoder::PutByte (sal_uInt8 nByte)
+{
+    mpByteBuffer [mnByte++] = nByte;
+}
+
+inline void
+Ascii85Encoder::PutEOD ()
+{
+    WritePS (mpFile, "~>\n");
+}
+
+void
+Ascii85Encoder::ConvertToAscii85 ()
+{
+    if (mnByte < 4)
+        memset (mpByteBuffer + mnByte, 0, (4 - mnByte) * sizeof(sal_uInt8));
+
+    sal_uInt32 nByteValue =   mpByteBuffer[0] * 256 * 256 * 256
+        + mpByteBuffer[1] * 256 * 256
+        + mpByteBuffer[2] * 256
+        + mpByteBuffer[3];
+
+    if (nByteValue == 0 && mnByte == 4)
+    {
+        /* special case of 4 Bytes in row */
+        mpFileBuffer [mnOffset] = 'z';
+
+        mnOffset += 1;
+        mnColumn += 1;
+    }
+    else
+    {
+        /* real ascii85 encoding */
+        mpFileBuffer [mnOffset + 4] = (nByteValue % 85) + 33;
+        nByteValue /= 85;
+        mpFileBuffer [mnOffset + 3] = (nByteValue % 85) + 33;
+        nByteValue /= 85;
+        mpFileBuffer [mnOffset + 2] = (nByteValue % 85) + 33;
+        nByteValue /= 85;
+        mpFileBuffer [mnOffset + 1] = (nByteValue % 85) + 33;
+        nByteValue /= 85;
+        mpFileBuffer [mnOffset + 0] = (nByteValue % 85) + 33;
+
+        mnColumn += (mnByte + 1);
+        mnOffset += (mnByte + 1);
+
+        /* insert a newline if necessary */
+        if (mnColumn > nLineLength)
+        {
+            sal_uInt32 nEolOff = mnColumn - nLineLength;
+            sal_uInt32 nBufOff = mnOffset - nEolOff;
+
+            memmove (mpFileBuffer + nBufOff + 1, mpFileBuffer + nBufOff, nEolOff);
+            mpFileBuffer[ nBufOff ] = '\n';
+
+            mnOffset++;
+            mnColumn = nEolOff;
+        }
+    }
+
+    mnByte = 0;
+}
+
+void
+Ascii85Encoder::WriteAscii (sal_uInt8 nByte)
+{
+    PutByte (nByte);
+    if (mnByte == 4)
+        ConvertToAscii85 ();
+
+    if (mnColumn >= nLineLength)
+    {
+        mnOffset += psp::appendStr ("\n", mpFileBuffer + mnOffset);
+        mnColumn = 0;
+    }
+    if (mnOffset >= nBufferSize)
+        FlushLine ();
+}
+
+void
+Ascii85Encoder::EncodeByte (sal_uInt8 nByte)
+{
+    WriteAscii (nByte);
+}
+
+void
+Ascii85Encoder::FlushLine ()
+{
+    if (mnOffset > 0)
+    {
+        WritePS (mpFile, mpFileBuffer, mnOffset);
+        mnOffset = 0;
+    }
+}
+
+Ascii85Encoder::~Ascii85Encoder ()
+{
+    if (mnByte > 0)
+        ConvertToAscii85 ();
+    if (mnOffset > 0)
+        FlushLine ();
+    PutEOD ();
+}
+
+/* LZW encoder */
+
+class LZWEncoder : public Ascii85Encoder
+{
+private:
+
+    struct LZWCTreeNode
+    {
+        LZWCTreeNode*   mpBrother;      // next node with same parent
+        LZWCTreeNode*   mpFirstChild;   // first son
+        sal_uInt16      mnCode;         // code for the string
+        sal_uInt16      mnValue;        // pixelvalue
+    };
+
+    LZWCTreeNode*   mpTable;    // LZW compression data
+    LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
+    sal_uInt16      mnDataSize;
+    sal_uInt16      mnClearCode;
+    sal_uInt16      mnEOICode;
+    sal_uInt16      mnTableSize;
+    sal_uInt16      mnCodeSize;
+    sal_uInt32      mnOffset;
+    sal_uInt32      mdwShift;
+
+    LZWEncoder ();
+    void            WriteBits (sal_uInt16 nCode, sal_uInt16 nCodeLen);
+
+public:
+
+    LZWEncoder (osl::File* pOutputFile);
+    ~LZWEncoder ();
+
+    virtual void    EncodeByte (sal_uInt8 nByte);
+};
+
+LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
+        Ascii85Encoder (pOutputFile)
+{
+    mnDataSize  = 8;
+
+    mnClearCode = 1 << mnDataSize;
+    mnEOICode   = mnClearCode + 1;
+    mnTableSize = mnEOICode   + 1;
+    mnCodeSize  = mnDataSize  + 1;
+
+    mnOffset    = 32;   // free bits in dwShift
+    mdwShift    = 0;
+
+    mpTable = new LZWCTreeNode[ 4096 ];
+
+    for (sal_uInt32 i = 0; i < 4096; i++)
+    {
+        mpTable[i].mpBrother    = NULL;
+        mpTable[i].mpFirstChild = NULL;
+        mpTable[i].mnCode       = i;
+        mpTable[i].mnValue      = (sal_uInt8)mpTable[i].mnCode;
+    }
+
+    mpPrefix = NULL;
+
+    WriteBits( mnClearCode, mnCodeSize );
+}
+
+LZWEncoder::~LZWEncoder()
+{
+    if (mpPrefix)
+        WriteBits (mpPrefix->mnCode, mnCodeSize);
+
+    WriteBits (mnEOICode, mnCodeSize);
+
+    delete[] mpTable;
+}
+
+void
+LZWEncoder::WriteBits (sal_uInt16 nCode, sal_uInt16 nCodeLen)
+{
+    mdwShift |= (nCode << (mnOffset - nCodeLen));
+    mnOffset -= nCodeLen;
+    while (mnOffset < 24)
+    {
+        WriteAscii ((sal_uInt8)(mdwShift >> 24));
+        mdwShift <<= 8;
+        mnOffset += 8;
+    }
+    if (nCode == 257 && mnOffset != 32)
+        WriteAscii ((sal_uInt8)(mdwShift >> 24));
+}
+
+void
+LZWEncoder::EncodeByte (sal_uInt8 nByte )
+{
+    LZWCTreeNode*   p;
+    sal_uInt16      i;
+    sal_uInt8       nV;
+
+    if (!mpPrefix)
+    {
+        mpPrefix = mpTable + nByte;
+    }
+    else
+    {
+        nV = nByte;
+        for (p = mpPrefix->mpFirstChild; p != NULL; p = p->mpBrother)
+        {
+            if (p->mnValue == nV)
+                break;
+        }
+
+        if (p != NULL)
+        {
+            mpPrefix = p;
+        }
+        else
+        {
+            WriteBits (mpPrefix->mnCode, mnCodeSize);
+
+            if (mnTableSize == 409)
+            {
+                WriteBits (mnClearCode, mnCodeSize);
+
+                for (i = 0; i < mnClearCode; i++)
+                    mpTable[i].mpFirstChild = NULL;
+
+                mnCodeSize = mnDataSize + 1;
+                mnTableSize = mnEOICode + 1;
+            }
+            else
+            {
+                if(mnTableSize == (sal_uInt16)((1 << mnCodeSize) - 1))
+                    mnCodeSize++;
+
+                p = mpTable + (mnTableSize++);
+                p->mpBrother = mpPrefix->mpFirstChild;
+                mpPrefix->mpFirstChild = p;
+                p->mnValue = nV;
+                p->mpFirstChild = NULL;
+            }
+
+            mpPrefix = mpTable + nV;
+        }
+    }
+}
+
+/* convenience routine */
+
+static sal_Int32
+getImageMatrix (sal_uInt32 nHeight, sal_Char* pImage)
+{
+    sal_Int32 nChar;
+
+    nChar  = psp::appendStr  ("[ 1 0 0 1 0 ",   pImage);
+    nChar += psp::getValueOf (nHeight,          pImage + nChar);
+    nChar += psp::appendStr  ("]",              pImage + nChar);
+
+    return nChar;
+}
+
+/*
+ * bitmap handling routines
+ */
+
+void
+PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
+                        const PrinterBmp& rBitmap)
+{
+    double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
+    double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
+
+    PSGSave ();
+    PSTranslate (rDest.BottomLeft());
+    PSScale (fScaleX, fScaleY);
+
+    if (mnPSLevel >= 2)
+    {
+        if (rBitmap.GetDepth() ==  8 && mbColor)
+            DrawPS2PaletteImage (rBitmap, rSrc);
+        else
+            if (rBitmap.GetDepth() == 24 && mbColor)
+                DrawPS2TrueColorImage (rBitmap, rSrc);
+            else
+                DrawPS2GrayImage (rBitmap, rSrc);
+    }
+    else
+    {
+        DrawPS1GrayImage (rBitmap, rSrc);
+    }
+
+    PSGRestore ();
+}
+
+/* XXX does not work XXX */
+void
+PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
+                        const PrinterBmp& rBitmap, const PrinterBmp& rTransBitmap)
+{
+    double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
+    double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
+
+    PSGSave ();
+    PSTranslate (rDest.BottomLeft());
+    PSScale (fScaleX, fScaleY);
+    PSGRestore ();
+}
+
+/* XXX does not work XXX */
+void
+PrinterGfx::DrawMask   (const Rectangle& rDest, const Rectangle& rSrc,
+                        const PrinterBmp &rBitmap, PrinterColor& rMaskColor)
+{
+    double fScaleX = (double)rDest.GetWidth() / (double)rSrc.GetWidth();
+    double fScaleY = (double)rDest.GetHeight() / (double)rSrc.GetHeight();
+
+    PSGSave ();
+    PSTranslate (rDest.BottomLeft());
+    PSScale (fScaleX, fScaleY);
+    PSGRestore ();
+}
+
+/*
+ * Implementation
+ */
+
+void
+PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+{
+    sal_uInt32 nWidth  = rArea.GetWidth();
+    sal_uInt32 nHeight = rArea.GetHeight();
+
+    sal_Char  pGrayImage [512];
+    sal_Int32 nChar = 0;
+
+    // first chunk: image header
+
+    nChar += psp::getValueOf (nWidth,                           pGrayImage + nChar);
+    nChar += psp::appendStr  (" ",                              pGrayImage + nChar);
+    nChar += psp::getValueOf (nHeight,                          pGrayImage + nChar);
+    nChar += psp::appendStr  (" 8 ",                            pGrayImage + nChar);
+    nChar += psp::getImageMatrix (nHeight,                      pGrayImage + nChar);
+    nChar += psp::appendStr  (" {currentfile ",                 pGrayImage + nChar);
+    nChar += psp::getValueOf (nWidth,                           pGrayImage + nChar);
+    nChar += psp::appendStr  (" string readhexstring pop}\n",   pGrayImage + nChar);
+    nChar += psp::appendStr  ("image\n",                        pGrayImage + nChar);
+
+    WritePS (mpPageBody, pGrayImage);
+
+    // second chunk: image body
+
+    HexEncoder* pEncoder = new HexEncoder (mpPageBody);
+
+    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    {
+        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        {
+            sal_uChar nByte = rBitmap.GetPixelGray (nRow, nColumn);
+            pEncoder->EncodeByte (nByte);
+        }
+    }
+
+    delete pEncoder;
+
+    WritePS (mpPageBody, "\n");
+}
+
+void
+PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+{
+    sal_uInt32 nWidth  = rArea.GetWidth();
+    sal_uInt32 nHeight = rArea.GetHeight();
+
+    sal_Char  pGrayImage [512];
+    sal_Int32 nChar = 0;
+
+    // first chunk: image header
+
+    nChar  = psp::appendStr  ("/DeviceGray setcolorspace\n",pGrayImage);
+    nChar += psp::appendStr  ("<<\n",                       pGrayImage + nChar);
+    nChar += psp::appendStr  ("/ImageType 1\n",             pGrayImage + nChar);
+    nChar += psp::appendStr  ("/Width ",                    pGrayImage + nChar);
+    nChar += psp::getValueOf (nWidth,                       pGrayImage + nChar);
+    nChar += psp::appendStr  ("\n/Height ",                 pGrayImage + nChar);
+    nChar += psp::getValueOf (nHeight,                      pGrayImage + nChar);
+    nChar += psp::appendStr  ("\n/BitsPerComponent 8\n",    pGrayImage + nChar);
+    nChar += psp::appendStr  ("/Decode[0 1]\n",             pGrayImage + nChar);
+    nChar += psp::appendStr  ("/ImageMatrix ",              pGrayImage + nChar);
+    nChar += psp::getImageMatrix (nHeight,                  pGrayImage + nChar);
+    nChar += psp::appendStr  ("\n/DataSource currentfile\n",    pGrayImage + nChar);
+    nChar += psp::appendStr  ("/ASCII85Decode filter\n",    pGrayImage + nChar);
+    if (mbCompressBmp)
+        nChar += psp::appendStr ("/LZWDecode filter\n",     pGrayImage + nChar);
+    nChar += psp::appendStr  (">>\n",                       pGrayImage + nChar);
+    nChar += psp::appendStr  ("image\n",                    pGrayImage + nChar);
+
+    WritePS (mpPageBody, pGrayImage);
+
+    // second chunk: image body
+
+    ByteEncoder* pEncoder;
+    pEncoder = mbCompressBmp ? new LZWEncoder     (mpPageBody)
+        : new Ascii85Encoder (mpPageBody);
+
+    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    {
+        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        {
+            sal_uChar nByte = rBitmap.GetPixelGray (nRow, nColumn);
+            pEncoder->EncodeByte (nByte);
+        }
+    }
+
+    delete pEncoder;
+}
+
+void
+PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+{
+    sal_uInt32 nWidth  = rArea.GetWidth();
+    sal_uInt32 nHeight = rArea.GetHeight();
+
+    sal_Char  pPaletteImage [512];
+    sal_Int32 nChar = 0;
+
+    // first chunk: palette header
+
+    nChar += psp::appendStr  ("[/Indexed /DeviceRGB ",      pPaletteImage + nChar);
+    nChar += psp::getValueOf (rBitmap.GetPaletteEntryCount() - 1,
+                              pPaletteImage + nChar);
+    nChar += psp::appendStr  ( "\n<",                       pPaletteImage + nChar );
+
+    WritePS (mpPageBody, pPaletteImage);
+
+    // second chunk: palette
+
+    nChar = 0;
+    sal_Char pPalette [16];
+    sal_Int32 nColumn = 0;
+    for (sal_Int32 i = 0; i < rBitmap.GetPaletteEntryCount(); i++)
+    {
+        PrinterColor aColor = rBitmap.GetPaletteColor(i);
+
+        nChar  = psp::getHexValueOf (aColor.GetRed(),   pPalette);
+        nChar += psp::getHexValueOf (aColor.GetGreen(), pPalette + nChar);
+        nChar += psp::getHexValueOf (aColor.GetBlue(),  pPalette + nChar);
+
+        if (++nColumn > (nLineLength / 7)) // each palette entrie accounts for 7 Bytes
+        {
+            nChar += psp::appendStr ("\n", pPalette + nChar);
+            nColumn = 0;
+        }
+        else
+        {
+            nChar += psp::appendStr (" ", pPalette + nChar);
+        }
+
+        WritePS (mpPageBody, pPalette);
+        nChar = 0;
+    }
+
+    // third chunk: image header
+
+    nChar  = psp::appendStr  (">\n",                        pPaletteImage + nChar);
+
+    nChar += psp::appendStr  ("] setcolorspace\n",          pPaletteImage + nChar);
+    nChar += psp::appendStr  ("<<\n",                       pPaletteImage + nChar);
+    nChar += psp::appendStr  ("/ImageType 1\n",             pPaletteImage + nChar);
+    nChar += psp::appendStr  ("/Width ",                    pPaletteImage + nChar);
+    nChar += psp::getValueOf (nWidth,                       pPaletteImage + nChar);
+    nChar += psp::appendStr  ("\n/Height ",                 pPaletteImage + nChar);
+    nChar += psp::getValueOf (nHeight,                      pPaletteImage + nChar);
+    nChar += psp::appendStr  ("\n/BitsPerComponent 8\n",    pPaletteImage + nChar);
+    nChar += psp::appendStr  ("/Decode[0 255]\n",           pPaletteImage + nChar);
+    nChar += psp::appendStr  ("/ImageMatrix ",              pPaletteImage + nChar);
+    nChar += psp::getImageMatrix (nHeight,                  pPaletteImage + nChar);
+    nChar += psp::appendStr  ("\n/DataSource currentfile\n",pPaletteImage + nChar);
+    nChar += psp::appendStr  ("/ASCII85Decode filter\n",    pPaletteImage + nChar);
+    if ( mbCompressBmp )
+        nChar += psp::appendStr ("/LZWDecode filter\n",     pPaletteImage + nChar);
+    nChar += psp::appendStr  (">>\n",                       pPaletteImage + nChar);
+    nChar += psp::appendStr  ("image\n",                    pPaletteImage + nChar);
+
+    WritePS (mpPageBody, pPaletteImage);
+
+    // fourth chunk: image body
+
+    ByteEncoder* pEncoder;
+    pEncoder = mbCompressBmp ? new LZWEncoder     (mpPageBody)
+        : new Ascii85Encoder (mpPageBody);
+
+    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    {
+        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        {
+            sal_uChar nByte = rBitmap.GetPixelIdx (nRow, nColumn);
+            pEncoder->EncodeByte (nByte);
+        }
+    }
+
+    delete pEncoder;
+}
+
+void
+PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
+{
+    sal_uInt32 nWidth  = rArea.GetWidth();
+    sal_uInt32 nHeight = rArea.GetHeight();
+
+    sal_Char  pTrueColorImage [512];
+    sal_Int32 nChar = 0;
+
+    // first chunk: image header
+
+    nChar  = psp::appendStr  ("/DeviceRGB setcolorspace\n", pTrueColorImage);
+    nChar += psp::appendStr  ("<<\n",                       pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("/ImageType 1\n",             pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("/Width ",                    pTrueColorImage + nChar);
+    nChar += psp::getValueOf (nWidth,                       pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("\n/Height ",                 pTrueColorImage + nChar);
+    nChar += psp::getValueOf (nHeight,                      pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("\n/BitsPerComponent 8\n",    pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("/Decode[0 1 0 1 0 1]\n",     pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("/ImageMatrix ",              pTrueColorImage + nChar);
+    nChar += psp::getImageMatrix (nHeight,                  pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("\n/DataSource currentfile\n",    pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("/ASCII85Decode filter\n",    pTrueColorImage + nChar);
+    if (mbCompressBmp)
+        nChar += psp::appendStr ("/LZWDecode filter\n",     pTrueColorImage + nChar);
+    nChar += psp::appendStr  (">>\n",                       pTrueColorImage + nChar);
+    nChar += psp::appendStr  ("image\n",                    pTrueColorImage + nChar);
+
+    WritePS (mpPageBody, pTrueColorImage);
+
+    // second chunk: image body
+
+    ByteEncoder* pEncoder;
+    pEncoder = mbCompressBmp ? new LZWEncoder     (mpPageBody)
+        : new Ascii85Encoder (mpPageBody);
+
+    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    {
+        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        {
+            PrinterColor aColor = rBitmap.GetPixelRGB (nRow, nColumn);
+            pEncoder->EncodeByte (aColor.GetRed());
+            pEncoder->EncodeByte (aColor.GetGreen());
+            pEncoder->EncodeByte (aColor.GetBlue());
+        }
+    }
+
+    delete pEncoder;
+}
+
+
+} /* namespace psp */

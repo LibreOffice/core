@@ -1,0 +1,513 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fontmanager.hxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _PSPRINT_FONTMANAGER_HXX_
+#define _PSPRINT_FONTMANAGER_HXX_
+
+#ifndef __SGI_STL_HASH_MAP
+#include <hash_map>
+#endif
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
+#ifndef _PSPRINT_HELPER_HXX_
+#include <psprint/helper.hxx>
+#endif
+
+#define ATOM_FAMILYNAME                     2
+#define ATOM_PSNAME                         3
+
+/*
+ *  some words on metrics: every length returned by PrintFontManager and
+ *  friends are PostScript afm style, that is they are 1/1000 font height
+ */
+
+// forward declarations
+
+namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
+
+namespace psp {
+class PPDParser; // see ppdparser.hxx
+
+namespace italic
+{
+enum type {
+    Upright = 0,
+    Oblique = 1,
+    Italic = 2,
+    Unknown = 3
+};
+}
+
+namespace width
+{
+enum type {
+    Unknown = 0,
+    UltraCondensed = 1,
+    ExtraCondensed = 2,
+    Condensed = 3,
+    SemiCondensed = 4,
+    Normal = 5,
+    SemiExpanded = 6,
+    Expanded = 7,
+    ExtraExpanded = 8,
+    UltraExpanded = 9
+};
+}
+
+namespace pitch
+{
+enum type {
+    Unknown = 0,
+    Fixed = 1,
+    Variable = 2
+};
+}
+
+namespace weight
+{
+enum type {
+    Unknown = 0,
+    Thin = 1,
+    UltraLight = 2,
+    Light = 3,
+    SemiLight = 4,
+    Normal = 5,
+    Medium = 6,
+    SemiBold = 7,
+    Bold = 8,
+    UltraBold = 9,
+    Black = 10
+};
+}
+
+namespace family
+{
+enum type {
+    Unknown = 0,
+    Decorative = 1,
+    Modern = 2,
+    Roman = 3,
+    Script = 4,
+    Swiss = 5,
+    System = 6
+};
+}
+
+namespace fonttype
+{
+enum type {
+    Unknown = 0,
+    Type1 = 1,
+    TrueType = 2,
+    Builtin = 3
+};
+}
+
+/*
+ *  the difference between FastPrintFontInfo and PrintFontInfo
+ *  is that the information in FastPrintFontInfo can usually
+ *  be gathered without openening either the font file or
+ *  an afm metric file. they are gathered from fonts.dir alone.
+ *  if only FastPrintFontInfo is gathered and PrintFontInfo
+ *  on demand and for less fonts, then performance in startup
+ *  increases considerably
+ */
+
+struct FastPrintFontInfo
+{
+    fontID                  m_nID; // FontID
+    fonttype::type          m_eType;
+
+    // font attributes
+    ::rtl::OUString         m_aFamilyName;
+    family::type            m_eFamilyStyle;
+    italic::type            m_eItalic;
+    width::type             m_eWidth;
+    weight::type            m_eWeight;
+    pitch::type             m_ePitch;
+    rtl_TextEncoding        m_aEncoding;
+};
+
+struct PrintFontInfo : public FastPrintFontInfo
+{
+    int                     m_nAscend;
+    int                     m_nDescend;
+    int                     m_nLeading;
+    int                     m_nWidth;
+};
+
+// the values are per thousand of the font size
+// note: width, height contain advances, not bounding box
+struct CharacterMetric
+{
+    short int width, height;
+
+    CharacterMetric() : width( 0 ), height( 0 ) {}
+};
+
+struct KernPair
+{
+    sal_Unicode first, second;
+    short int kern_x, kern_y;
+
+    KernPair() : first( 0 ), second( 0 ), kern_x( 0 ), kern_y( 0 ) {}
+};
+
+// a class to manage printable fonts
+// aims are type1 and truetype fonts
+
+class PrintFontManager
+{
+    struct PrintFont;
+    struct TrueTypeFontFile;
+    struct Type1FontFile;
+    struct BuiltinFont;
+    friend class PrintFont;
+    friend class TrueTypeFontFile;
+    friend class Type1FontFile;
+    friend class BuiltinFont;
+
+    struct PrintFontMetrics
+    {
+        // character metrics are stored by the following keys:
+        // lower two bytes contain a sal_Unicode (a UCS2 character)
+        // upper byte contains: 0 for horizontal metric
+        //                      1 for vertical metric
+        // highest byte: 0 for now
+        ::std::hash_map< int, CharacterMetric >     m_aMetrics;
+        // contains the unicode blocks for which metrics were queried
+        // this implies that metrics should be queried in terms of
+        // unicode blocks. here a unicode block is identified
+        // by the upper byte of the UCS2 encoding.
+        // note that the corresponding bit should be set even
+        // if the font does not support a single character of that page
+        // this map shows, which pages were queried already
+        // if (like in AFM metrics) all metrics are queried in
+        // a single pass, then all bits should be set
+        char                                        m_aPages[32];
+
+        bool                                        m_bKernPairsQueried;
+        ::std::list< KernPair >                     m_aXKernPairs;
+        ::std::list< KernPair >                     m_aYKernPairs;
+
+        PrintFontMetrics() : m_bKernPairsQueried( false ) {}
+    };
+
+    struct PrintFont
+    {
+        fonttype::type                              m_eType;
+
+        // font attributes
+        int                                         m_nFamilyName;  // atom
+        int                                         m_nPSName;      // atom
+        italic::type                                m_eItalic;
+        width::type                                 m_eWidth;
+        weight::type                                m_eWeight;
+        pitch::type                                 m_ePitch;
+        rtl_TextEncoding                            m_aEncoding;
+        CharacterMetric                             m_aGlobalMetricX;
+        CharacterMetric                             m_aGlobalMetricY;
+        PrintFontMetrics*                           m_pMetrics;
+        int                                         m_nAscend;
+        int                                         m_nDescend;
+        int                                         m_nLeading;
+
+        PrintFont( fonttype::type eType );
+        virtual ~PrintFont();
+        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider ) = 0;
+
+        bool readAfmMetrics( const ::rtl::OString& rFileName, ::utl::MultiAtomProvider* pProvider );
+    };
+
+    struct Type1FontFile : public PrintFont
+    {
+        int                 m_nDirectory;       // atom containing system dependent path
+        ::rtl::OString      m_aFontFile;        // relative to directory
+        ::rtl::OString      m_aMetricFile;      // dito
+        ::rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+
+        /* note: m_aFontFile and Metric file are not atoms
+           because they should be fairly unique */
+
+        Type1FontFile() : PrintFont( fonttype::Type1 ) {}
+        virtual ~Type1FontFile();
+        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+    };
+
+    struct TrueTypeFontFile : public PrintFont
+    {
+        int                 m_nDirectory;       // atom containing system dependent path
+        ::rtl::OString      m_aFontFile;        // relative to directory
+        ::rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+        int                 m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
+
+        TrueTypeFontFile() : PrintFont( fonttype::TrueType ) {}
+        virtual ~TrueTypeFontFile();
+        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+    };
+
+    struct BuiltinFont : public PrintFont
+    {
+        int                 m_nDirectory;       // atom containing system dependent path
+        ::rtl::OString      m_aMetricFile;
+
+        BuiltinFont() : PrintFont( fonttype::Builtin ) {}
+        virtual ~BuiltinFont();
+        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+    };
+
+    fontID                                      m_nNextFontID;
+    ::std::hash_map< fontID, PrintFont* >       m_aFonts;
+    ::std::hash_map< int, family::type >        m_aFamilyTypes;
+    ::std::list< ::rtl::OUString >              m_aPrinterDrivers;
+    ::std::list< ::rtl::OString >               m_aFontDirectories;
+    ::utl::MultiAtomProvider*                   m_pAtoms;
+
+    ::std::hash_map< ::rtl::OString, int, ::rtl::OStringHash >
+    m_aDirToAtom;
+    ::std::hash_map< int, ::rtl::OString >      m_aAtomToDir;
+    int                                         m_nNextDirAtom;
+
+
+    ::rtl::OString getAfmFile( PrintFont* pFont ) const;
+    ::rtl::OString getFontFile( PrintFont* pFont ) const;
+
+    void getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const;
+
+    bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::rtl::OString& rXLFD, ::std::list< PrintFont* >& rNewFonts ) const;
+    bool analyzeTrueTypeFile( PrintFont* pFont ) const;
+    // finds the FIRST id for this font file; there may be more
+    // for TrueType collections
+    fontID findFontFileID( int nDirID, const ::rtl::OString& rFile ) const;
+    fontID findFontBuiltinID( int nPSNameAtom ) const;
+
+    family::type matchFamilyName( const ::rtl::OUString& rFamily ) const;
+
+    PrintFont* getFont( fontID nID ) const
+    {
+        ::std::hash_map< int, PrintFont* >::const_iterator it;
+        it = m_aFonts.find( nID );
+        return it == m_aFonts.end() ? NULL : it->second;
+    }
+    ByteString getXLFD( PrintFont* pFont ) const;
+    void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
+    void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
+
+    const ::rtl::OString& getDirectory( int nAtom ) const;
+    int getDirectoryAtom( const ::rtl::OString& rDirectory, bool bCreate = false );
+
+    PrintFontManager();
+    ~PrintFontManager();
+public:
+    static PrintFontManager& get(); // one instance only
+
+    int addFontFile( const ::rtl::OString& rFileName, int nFaceNum );
+
+    // initialize takes an X Display*
+    // if NULL then an XOpendDisplay( NULL ) is performed
+    // the Display connection is used to get the font path
+    void initialize( void* pDisplay = NULL );
+
+    // returns the number of managed fonts
+    int getFontCount() const { return m_aFonts.size(); }
+    // returns the ids of all managed fonts. on pParser != NULL
+    // all fonttype::Builtin type fonts are not listed
+    // which do not occur in the PPD of pParser
+    void getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL ) const;
+    // get the font list and detailed font info. see getFontList for pParser
+    void getFontListWithInfo( ::std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+    // get the font list and fast font info. see getFontList for pParser
+    void getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+
+    // get font info for a specific font
+    bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
+    // get fast font info for a specific font
+    bool getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const;
+
+    // routines to get font info in small pieces
+
+    // get a specific fonts family name
+    const ::rtl::OUString& getFontFamily( fontID nFontID ) const;
+    // get a specific fonts PSName name
+    const ::rtl::OUString& getPSName( fontID nFontID ) const;
+
+    // get a specific fonts style family
+    family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const;
+
+    // get a specific fonts type
+    fonttype::type getFontType( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_eType : fonttype::Unknown;
+    }
+
+    // get a specific fonts italic type
+    italic::type getFontItalic( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_eItalic : italic::Unknown;
+    }
+
+    // get a specific fonts width type
+    width::type getFontWidth( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_eWidth : width::Unknown;
+    }
+
+    // get a specific fonts weight type
+    weight::type getFontWeight( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_eWeight : weight::Unknown;
+    }
+
+    // get a specific fonts pitch type
+    pitch::type getFontPitch( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_ePitch : pitch::Unknown;
+    }
+
+    // get a specific fonts encoding
+    rtl_TextEncoding getFontEncoding( fontID nFontID ) const
+    {
+        PrintFont* pFont = getFont( nFontID );
+        return pFont ? pFont->m_aEncoding : RTL_TEXTENCODING_DONTKNOW;
+    }
+
+    // get a specific fonts system dependent filename
+    ::rtl::OString getFontFileSysPath( fontID nFontID ) const
+    {
+        return getFontFile( getFont( nFontID ) );
+    }
+
+    // get the ttc face number
+    int getFontFaceNumber( fontID nFontID ) const
+    {
+        int nRet = -1;
+        PrintFont* pFont = getFont( nFontID );
+        if( pFont->m_eType == fonttype::TrueType )
+            nRet = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
+        return nRet;
+    }
+
+    // get a specific fonts global metrics
+    const CharacterMetric& getGlobalFontMetric( fontID nFontID, bool bHorizontal ) const;
+
+    // get a specific fonts ascend
+    int getFontAscend( fontID nFontID ) const;
+
+    // get a specific fonts descent
+    int getFontDescend( fontID nFontID ) const;
+
+    // get a specific fonts leading
+    int getFontLeading( fontID nFontID ) const;
+
+    // get the XLFD for a font that originated from the X fontpath
+    // note: this may not be the original line that was in the fonts.dir
+    // returns a string for every font, but only TrueType and Type1
+    // fonts originated from the X font path, so check for the font type
+    ::rtl::OUString getFontXLFD( fontID nFontID ) const;
+
+    // get a specific fonts metrics
+
+    // get metrics for a sal_Unicode range
+    // the user is responsible to allocate pArray large enough
+    bool getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical = false ) const;
+    // get metrics for an array of sal_Unicode characters
+    // the user is responsible to allocate pArray large enough
+    bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical = false ) const;
+
+    // to get font substitution transparently use the
+    // getKernPairs method of PrinterGfx
+    const ::std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
+
+    // font administration functions
+
+    // for importFonts to provide the user feedback
+    class ImportFontCallback
+    {
+    public:
+        enum FailCondition { NoWritableDirectory, NoAfmMetric, AfmCopyFailed, FontCopyFailed };
+        virtual void importFontsFailed( FailCondition eReason ) = 0;
+        virtual void progress( const ::rtl::OUString& rFile ) = 0;
+        virtual bool queryOverwriteFile( const ::rtl::OUString& rFile ) = 0;
+        virtual void importFontFailed( const ::rtl::OUString& rFile, FailCondition ) = 0;
+        virtual bool isCanceled() = 0;
+    };
+
+    // checks wether font import would fail due to no writeable directory
+    bool checkImportPossible() const;
+    // expects system paths not UNC paths
+    // returns the number of fonts successfully imported
+    int importFonts( const ::std::list< ::rtl::OUString >& rFiles, ImportFontCallback* pCallback = NULL );
+
+    // check wether changeFontProperties would fail due to not writable fonts.dir
+    bool checkChangeFontPropertiesPossible( fontID nFont ) const;
+    // change fonts.dir entry for font
+    bool changeFontProperties( fontID nFont, const ::rtl::OUString& rXLFD );
+};
+
+} // namespace
+
+#endif // _PSPRINT_FONTMANAGER_HXX_
