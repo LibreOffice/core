@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-14 12:19:59 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,11 +1558,11 @@
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
 #ifndef STD_MASKCOLOR
-#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
+#define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 #endif
 
 // mask color for high contrast
-#define SC_HC_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
+#define SC_HC_MASKCOLOR STD_MASKCOLOR
 
 #define MID_1   1
 #define MID_2   2

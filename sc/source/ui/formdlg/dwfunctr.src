@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:37:58 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Tutte" ; Default ; > ;
             < "Database" ; Default ; > ;
             < "Data&Orario" ; Default ; > ;
-            < "Finanziaria" ; Default ; > ;
+            < "Finanza" ; Default ; > ;
             < "Informazione" ; Default ; > ;
             < "Logica" ; Default ; > ;
             < "Matematica" ; Default ; > ;
@@ -215,7 +215,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Tiedot" ; Default ; > ;
             < "Looginen" ; Default ; > ;
             < "Matemaattinen" ; Default ; > ;
-            < "Matriisitaulukko" ; Default ; > ;
+            < "Matriisi" ; Default ; > ;
             < "Tilastolliset" ; Default ; > ;
             < "Laskentataulukko" ; Default ; > ;
             < "Teksti" ; Default ; > ;
@@ -270,7 +270,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Statistik" ; Default ; > ;
             < "Tabell" ; Default ; > ;
             < "Text" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
              //         < "Anv�ndardefinierad"; Default; >;
         };
         StringList [ dutch ] =
@@ -337,7 +337,7 @@ DockingWindow FID_FUNCTION_BOX
         < "��������������" ; Default ; > ;
         < "�������" ; Default ; > ;
         < "�����" ; Default ; > ;
-        < "������������� (Add-in" ; Default ; > ;
+        < "������������� (Add-in)" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -359,17 +359,17 @@ DockingWindow FID_FUNCTION_BOX
     {
             < "最近使用した関数" ; Default ; > ;
         < "すべて" ; Default ; > ;
-        < "ﾃﾞｰﾀﾍﾞｰｽ" ; Default ; > ;
+        < "データベース" ; Default ; > ;
         < "日付と時刻" ; Default ; > ;
         < "財務" ; Default ; > ;
         < "情報" ; Default ; > ;
         < "論理" ; Default ; > ;
         < "数学" ; Default ; > ;
-        < "ﾏﾄﾘｸｽ" ; Default ; > ;
+        < "行列" ; Default ; > ;
         < "統計" ; Default ; > ;
         < "表計算" ; Default ; > ;
         < "文字" ; Default ; > ;
-        < "ｱﾄﾞｲﾝ" ; Default ; > ;
+        < "アドイン" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -463,7 +463,7 @@ DockingWindow FID_FUNCTION_BOX
         < "수학" ; Default ; > ;
         < "행렬" ; Default ; > ;
         < "통계" ; Default ; > ;
-        < "표" ; Default ; > ;
+        < "스프레드시트" ; Default ; > ;
         < "텍스트" ; Default ; > ;
         < "추가" ; Default ; > ;
     };
@@ -501,19 +501,35 @@ DockingWindow FID_FUNCTION_BOX
     };
     StringList [ catalan ] =
     {
-            < "�ltima utilizaci�n" ; Default ; > ;
-        < "Todas" ; Default ; > ;
-        < "Base de datos" ; Default ; > ;
-        < "Fecha&Hora" ; Default ; > ;
-        < "Finanzas" ; Default ; > ;
-        < "Informaci�n" ; Default ; > ;
-        < "L�gico" ; Default ; > ;
-        < "Matem�ticas" ; Default ; > ;
-        < "Matriz" ; Default ; > ;
-        < "Estad�stica" ; Default ; > ;
-        < "Hoja de c�lculo" ; Default ; > ;
-        < "Texto" ; Default ; > ;
-        < "Add In" ; Default ; > ;
+            < "Utilitzat per darrer cop" ; Default ; > ;
+        < "Tot" ; Default ; > ;
+        < "Base de dades" ; Default ; > ;
+        < "Data i hora" ; Default ; > ;
+        < "Financer" ; Default ; > ;
+        < "Informaci�" ; Default ; > ;
+        < "L�gic" ; Default ; > ;
+        < "Matem�tic" ; Default ; > ;
+        < "Matriu" ; Default ; > ;
+        < "Estad�stic" ; Default ; > ;
+        < "Full de c�lcul" ; Default ; > ;
+        < "Text" ; Default ; > ;
+        < "Complement" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "ใช้ครั้งสุดท้าย" ; Default ; > ;
+        < "ทั้งหมด" ; Default ; > ;
+        < "ฐานข้อมูล" ; Default ; > ;
+        < "วันที่และเวลา" ; Default ; > ;
+        < "การเงิน" ; Default ; > ;
+        < "ข้อมูล" ; Default ; > ;
+        < "ตรรกะ" ; Default ; > ;
+        < "คณิตศาสตร์" ; Default ; > ;
+        < "แถวลำดับ" ; Default ; > ;
+        < "สถิติ" ; Default ; > ;
+        < "กระดาษคำนวณ" ; Default ; > ;
+        < "ข้อความ" ; Default ; > ;
+        < "เพิ่มใน" ; Default ; > ;
     };
     };
     ListBox DDLB_FUNC
@@ -558,14 +574,7 @@ DockingWindow FID_FUNCTION_BOX
             {
                 File = "fx.bmp" ;
             };
-
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
-
+            MaskColor = STD_MASKCOLOR;
         };
         DefButton = TRUE ;
         QuickHelpText = "Funktion in Rechenblatt einf�gen" ;
@@ -588,11 +597,12 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ dutch ] = "Functie invoegen in werkblad";
         QuickHelpText[ chinese_simplified ] = "插入函数";
         QuickHelpText[ greek ] = "�������� ���������� �� ������������ �����";
-        QuickHelpText[ korean ] = "계산　시트에　함수　삽입";
+        QuickHelpText[ korean ] = "계산 시트에 함수 삽입";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Funktion in Rechenblatt einf�gen";
-        QuickHelpText[ catalan ] = "Insertar la funci�n en la hoja de c�lculo";
-        QuickHelpText[ finnish ] = "Lis�� funktio laskentalomakkeeseen";
+        QuickHelpText[ catalan ] = "Insereix la funci� en el full de c�lcul";
+        QuickHelpText[ finnish ] = "Lis�� funktio laskentataulukkoon";
+        QuickHelpText[ thai ] = "Insert Function into calculation sheet";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
@@ -615,14 +625,11 @@ DockingWindow FID_FUNCTION_BOX
     Text[ korean ] = "함수";
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funciones";
+    Text[ catalan ] = "Funcions";
     Text[ finnish ] = "Toiminnot";
+    Text[ thai ] = "ฟังก์ชั่น";
 };
  // ********************************************************************** EOF
-
-
-
-
 
 
 
