@@ -2,9 +2,9 @@
  *
  *  $RCSfile: networkdomain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-21 10:06:04 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 13:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ static rtl_uString *getDomainName()
 //_________________________________________________________________________________________________________________
 
 #include <unistd.h>
+#include <string.h>
 
 static rtl_uString *getDomainName()
 {
