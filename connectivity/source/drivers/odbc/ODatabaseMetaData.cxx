@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 10:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,14 +465,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(S
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
-    return nValue == SQL_AT_ADD_COLUMN;
+    return (nValue & SQL_AT_ADD_COLUMN) == SQL_AT_ADD_COLUMN;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
-    return nValue == SQL_AT_DROP_COLUMN;
+    return (nValue & SQL_AT_DROP_COLUMN) == SQL_AT_DROP_COLUMN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
@@ -600,7 +600,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TXN_ISOLATION_OPTION,nValue,*this);
-    return (nValue & level) == level;
+    return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
@@ -1531,7 +1531,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) 
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CURSOR_SENSITIVITY,nValue,*this);
-    return (nValue & setType) == setType;
+    return (nValue & static_cast<SQLUINTEGER>(setType)) == static_cast<SQLUINTEGER>(setType);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
