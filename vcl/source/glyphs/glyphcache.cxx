@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:33:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,10 @@ inline
 #endif
 size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
 {
-    // TODO: does it pay much to improve this hash function?
+    // TODO: is it worth to improve this hash function?
     if( !rFontSelData.mpFontData )
         return 0;
+
     size_t nHash = rFontSelData.mpFontData->GetFontId() << 8;
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
@@ -169,7 +170,7 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 
 // -----------------------------------------------------------------------
 
-// this gets called when the upper layers want to remove the related ImplFontData
+// this gets called when someone deletes the related ImplFontData
 void GlyphCache::RemoveFont( int nFontId )
 {
     FontList::iterator it_next = maFontList.begin();
@@ -182,13 +183,14 @@ void GlyphCache::RemoveFont( int nFontId )
 
         // found matching pFontData => remove entry if not referenced
         ServerFont* pSF = it->second;
+        maFontList.erase( it );
+        it_next = maFontList.begin();
         if( pSF && (pSF->GetRefCount() <= 0) )
         {
             if( pSF == mpCurrentGCFont )
                 mpCurrentGCFont = NULL;
             delete pSF;
         }
-        maFontList.erase( it );
     }
 
     // when current GC font has been destroyed get another one
@@ -340,25 +342,6 @@ void GlyphCache::GarbageCollect()
     {
         // try to save at least a few bytes
         pServerFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
-
-        // when there is a lot of memory pressure also tighten maFontList
-        if( maFontList.size() >= 100 )
-        {
-            // remove unreferenced fonts
-            FontList::iterator it_next = maFontList.begin();
-            while( it_next != maFontList.end() )
-            {
-                FontList::iterator it = it_next++;
-                ServerFont* pSF = it->second;
-                if( (pSF != NULL)
-                &&  (pSF->GetRefCount() <= 0)
-                &&  (pSF != mpCurrentGCFont) )
-                {
-                    maFontList.erase( it );
-                    delete pSF;
-                }
-            }
-        }
     }
     else // current GC font is unreferenced
     {
@@ -477,16 +460,17 @@ GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
 
 void ServerFont::GarbageCollect( long nMinLruIndex )
 {
-    GlyphList::iterator it_next = maGlyphList.begin(), it;
+    GlyphList::iterator it_next = maGlyphList.begin();
     while( it_next != maGlyphList.end() )
     {
-        it = it_next++;
+        GlyphList::iterator it = it_next++;
         GlyphData& rGD = it->second;
         if( (nMinLruIndex - rGD.GetLruValue()) > 0 )
         {
             mnBytesUsed -= sizeof( GlyphData );
             GlyphCache::GetInstance().RemovingGlyph( *this, rGD, it->first );
             maGlyphList.erase( it );
+            it_next = maGlyphList.begin();
         }
     }
 
