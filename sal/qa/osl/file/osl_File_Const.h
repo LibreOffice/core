@@ -2,9 +2,9 @@
 *
  *  $RCSfile: osl_File_Const.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:40:31 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_SEPERATOR       "/"
 #else                                   // Windows
 #   include <windows.h>
+#   include <io.h>
+#   include <stdio.h>
+#   include <stdlib.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"
@@ -199,6 +202,8 @@ OSLTEST_DECLARE( TmpName6, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpnam
 OSLTEST_DECLARE( TmpName7, FILE_PREFIX TEST_PLATFORM "tmpname" );
 OSLTEST_DECLARE( TmpName8, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname/tmpdir" );
 OSLTEST_DECLARE( TmpName9, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./" );
+OSLTEST_DECLARE( TmpName10, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
+
 OSLTEST_DECLARE( RelURL1,  "relative/file1" );
 OSLTEST_DECLARE( RelURL2,  "relative/./file2" );
 OSLTEST_DECLARE( RelURL3,  "relative/../file3" );
@@ -215,6 +220,7 @@ OSLTEST_DECLARE( SysPath1, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" 
 OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
 OSLTEST_DECLARE( SysPath3, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
 OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
+OSLTEST_DECLARE( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
 OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
 //------------------------------------------------------------------------
