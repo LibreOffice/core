@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:20:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,124 +668,8 @@ static SvxExtNumType GetNumberPara(String& rStr, bool bAllowPageDesc = false)
     return aType;
 }
 
-inline bool IsNotAM(String& rParams, xub_StrLen nPos)
-{
-    return (
-             (nPos == rParams.Len() - 1) ||
-             (
-               (rParams.GetChar(nPos+1) != 'M') &&
-               (rParams.GetChar(nPos+1) != 'm')
-             )
-           );
-}
 
-static ULONG MSDateTimeFormatToSwFormat(String& rParams,
-    SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri)
-{
-    // tell the Formatter about the new entry
-    UINT16 nCheckPos = 0;
-    INT16  nType = NUMBERFORMAT_DEFINED;
-    ULONG  nKey = 0;
 
-    SwapQuotesInField(rParams);
-
-    //#102782#, #102815#, #108341# & #111944# have to work at the same time :-)
-    bool bForceJapanese(false);
-    bool bForceNatNum(false);
-    xub_StrLen nLen = rParams.Len();
-    xub_StrLen nI = 0;
-    while (nI < nLen)
-    {
-        if (rParams.GetChar(nI) == '\\')
-            nI+=2;
-        else if (rParams.GetChar(nI) == '\"')
-        {
-            ++nI;
-            //While not at the end and not at an unescaped end quote
-            while ((nI < nLen) && (!(rParams.GetChar(nI) == '\"') && (rParams.GetChar(nI-1) != '\\')))
-                ++nI;
-        }
-        else //normal unquoted section
-        {
-            sal_Unicode nChar = rParams.GetChar(nI);
-            if (nChar == 'O')
-            {
-                rParams.SetChar(nI, 'M');
-                bForceNatNum = true;
-            }
-            else if (nChar == 'o')
-            {
-                rParams.SetChar(nI, 'm');
-                bForceNatNum = true;
-            }
-            else if ((nChar == 'A') && IsNotAM(rParams, nI))
-            {
-                rParams.SetChar(nI, 'D');
-                bForceNatNum = true;
-            }
-            else if ((nChar == 'g') || (nChar == 'G'))
-                bForceJapanese = true;
-            else if ((nChar == 'a') && IsNotAM(rParams, nI))
-                bForceJapanese = true;
-            else if (nChar == 'E')
-            {
-                if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'E'))
-                {
-                    rParams.Replace(nI, 2, CREATE_CONST_ASC("YYYY"));
-                    nLen+=2;
-                    nI+=3;
-                }
-                bForceJapanese = true;
-            }
-            else if (nChar == 'e')
-            {
-                if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'e'))
-                {
-                    rParams.Replace(nI, 2, CREATE_CONST_ASC("yyyy"));
-                    nLen+=2;
-                    nI+=3;
-                }
-                bForceJapanese = true;
-            }
-            else if (nChar == '/')
-            {
-                // MM We have to escape '/' in case it's used as a char
-                rParams.Replace(nI, 1, CREATE_CONST_ASC("\\/"));
-                // rParams.Insert( nI, '\\' );
-                nI++;
-                nLen++;
-            }
-
-            if(rLang == LANGUAGE_GERMAN)
-            {
-                // MM German word documents understand yy and dd.
-                // We do not, we use jj and tt instead.
-                if(nChar == 'y' || nChar == 'Y')
-                    rParams.SetChar(nI, 'J');
-                else if(nChar == 'd' || nChar == 'D')
-                    rParams.SetChar(nI, 'T');
-            }
-
-            ++nI;
-        }
-    }
-
-    if (bForceNatNum)
-        bForceJapanese = true;
-
-    if (bForceJapanese)
-        rLang = LANGUAGE_JAPANESE;
-
-    if (bForceNatNum)
-        rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
-
-    if (bHijri)
-        rParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
-
-    pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, rLang);
-
-    return nKey;
-}
 
 bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
 {
@@ -874,7 +758,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
     }
 
     ULONG nFmtIdx =
-        MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
+        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
