@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:57:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
 
 USHORT ScGetFontWorkId();       // in drtxtob
 
@@ -128,11 +131,28 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     rSet.Put(SfxBoolItem(SID_FONTWORK, pViewFrm->HasChildWindow(nFWId)));
 
-    switch( pView->GetAnchor() )
+        // Notes always default to Page anchor.
+    bool bDisableAnchor = false;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    ULONG nMarkCount = rMarkList.GetMarkCount();
+    if ( nMarkCount == 1 )
     {
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+            if( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION && pObj->GetLayer() == SC_LAYER_INTERN)
+        {
+                bDisableAnchor = true;
+                rSet.DisableItem( SID_ANCHOR_PAGE );
+                rSet.DisableItem( SID_ANCHOR_CELL );
+        }
+    }
+
+    if ( !bDisableAnchor )
+    {
+        switch( pView->GetAnchor() )
+        {
         case SCA_PAGE:
-        rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, TRUE ) );
-        rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, FALSE ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, TRUE ) );
+            rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, FALSE ) );
         break;
 
         case SCA_CELL:
@@ -144,6 +164,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
         rSet.Put( SfxBoolItem( SID_ANCHOR_PAGE, FALSE ) );
         rSet.Put( SfxBoolItem( SID_ANCHOR_CELL, FALSE ) );
         break;
+        }
     }
 }
 
@@ -221,6 +242,19 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
             SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetObj());
             if (pOleObj->GetObjRef().Is() && ((pOleObj->GetObjRef()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE) == SVOBJ_MISCSTATUS_SERVERRESIZE))
                 rSet.DisableItem(SID_ORIGINALSIZE);
+        }
+        else if ( nObjType == OBJ_CAPTION )
+        {
+            SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+            if( pObj && pObj->GetLayer() == SC_LAYER_INTERN)
+            {
+                // SdrCaptionObj() Notes cannot be cut/copy in isolation from
+                // their cells.
+                rSet.DisableItem( SID_CUT );
+                rSet.DisableItem( SID_COPY );
+                // Notes always default to Page anchor.
+                rSet.DisableItem( SID_ANCHOR_TOGGLE );
+            }
         }
     }
     if ( !bCanRename )
