@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 11:52:13 $
+ *  last change: $Author: dg $ $Date: 2000-12-03 17:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 
 #ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
 #include "providerfactory.hxx"

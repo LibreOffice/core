@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 11:52:13 $
+ *  last change: $Author: dg $ $Date: 2000-12-03 17:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 #ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
 #include "providerfactory.hxx"
 #endif
@@ -269,6 +269,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/03 11:52:13  dg
+ *  #81164# invalid provider instantiation
+ *
  *  Revision 1.1  2000/12/01 13:53:17  fs
  *  initial checkin - afctory for configuration provider(s)
  *
