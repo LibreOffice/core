@@ -32,6 +32,7 @@ extern SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetXrmFile();
 extern int isQuiet();
+extern void removeTempFile();
 
 /* forwards */
 void YYWarning();
@@ -203,7 +204,7 @@ main( int argc, char* argv[])
 	EndXrmExport();
 
 	if( !isQuiet() ) fprintf( stdout, "\n===================================\n\n" );
-
+    removeTempFile();
 	/* return error level */
 	return nRetValue;
 }
