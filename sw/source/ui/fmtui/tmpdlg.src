@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:26:59 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ TabDialog DLG_TEMPLATE_1
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
                 Text[ english_us ] = "Asian Layout";
-                Text[ portuguese ] = "Asian layout";
+                Text[ portuguese ] = "Configuraηγo asiαtica";
                 Text[ russian ] = "ΐηθΰςρκΰÿ πΰημεςκΰ";
                 Text[ greek ] = "Ασιατική διάταξη";
                 Text[ dutch ] = "Asiatisch lay-out";
@@ -348,7 +348,7 @@ TabDialog DLG_TEMPLATE_2
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
-                Text[ portuguese ] = "Asian typography";
+                Text[ portuguese ] = "Tipografia asiαtica";
                 Text[ russian ] = "ΐηθΰςρκθε ψπθτςϋ";
                 Text[ greek ] = "Ασιάτικη τυπογραφία";
                 Text[ dutch ] = "Asiatische typografie";
@@ -454,7 +454,7 @@ TabDialog DLG_TEMPLATE_2
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
                 Text[ english_us ] = "Asian Layout";
-                Text[ portuguese ] = "Asian layout";
+                Text[ portuguese ] = "Configuraηγo asiαtica";
                 Text[ russian ] = "ΐηθΰςρκΰÿ πΰημεςκΰ";
                 Text[ greek ] = "Ασιατική διάταξη";
                 Text[ dutch ] = "Asiatisch lay-out";
