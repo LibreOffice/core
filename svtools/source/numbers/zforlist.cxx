@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: er $ $Date: 2001-08-07 16:07:19 $
+ *  last change: $Author: er $ $Date: 2001-08-21 11:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,31 +1141,38 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
         pFormatTable = new SvNumberFormatTable;
     ChangeIntl(eLnge);
     ULONG CLOffset = ImpGetCLOffset(ActLnge);
+
+    // Might generate and insert a default format for the given type
+    // (e.g. currency) => has to be done before collecting formats.
+    ULONG nDefaultIndex = GetStandardFormat( eType, ActLnge );
+
     SvNumberformat* pEntry;
     pEntry = (SvNumberformat*) aFTable.Seek(CLOffset);
 
     if (eType == NUMBERFORMAT_ALL)
     {
         while (pEntry && pEntry->GetLanguage() == ActLnge)
-        {
-            pFormatTable->Insert(aFTable.GetCurKey(),pEntry);   // einhaengen
+        {   // copy all entries to output table
+            pFormatTable->Insert( aFTable.GetCurKey(), pEntry );
             pEntry = (SvNumberformat*) aFTable.Next();
         }
     }
     else
     {
         while (pEntry && pEntry->GetLanguage() == ActLnge)
-        {
-            if ((pEntry->GetType()) & eType)                // von diesem Typ
-                pFormatTable->Insert(aFTable.GetCurKey(),pEntry);// einhaengen
+        {   // copy entries of queried type to output table
+            if ((pEntry->GetType()) & eType)
+                pFormatTable->Insert(aFTable.GetCurKey(),pEntry);
             pEntry = (SvNumberformat*) aFTable.Next();
         }
     }
-    pEntry = aFTable.Get(FIndex);
-    if (!pEntry || !(pEntry->GetType() & eType)             // irgendeine Veraenderung
-                || pEntry->GetLanguage() != ActLnge )           // => StandardForm.
-        if (pFormatTable->Count() > 0)                      // aber nicht leer
-            FIndex = GetStandardFormat(eType, ActLnge);
+    if ( pFormatTable->Count() > 0 )
+    {   // select default if queried format doesn't exist or queried type or
+        // language differ from existing format
+        pEntry = aFTable.Get(FIndex);
+        if ( !pEntry || !(pEntry->GetType() & eType) || pEntry->GetLanguage() != ActLnge )
+            FIndex = nDefaultIndex;
+    }
     return *pFormatTable;
 }
 
@@ -2215,8 +2222,13 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
 
 
-    // Currency (no default standard option => no TRUE at ImpInsertFormat)
+    // Currency. NO default standard option! Default is determined of locale
+    // data default currency and format is generated if needed.
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
+#ifndef PRODUCT
+    // though no default desired here, test for correctness of locale data
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
+#endif
 
     // #,##0
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
@@ -2232,7 +2244,6 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
     aFormatSeq[nIdx].Default = sal_False;
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2, ZF_STANDARD_CURRENCY+1 ));
-        //! MUST be ZF_STANDARD_CURRENCY+1 for Calc currency function, e.g. DM()
     aFormatSeq[nIdx].Default = bDefault;
 
     // #,##0 negative red
@@ -2552,11 +2563,15 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
             // above so ImpInsertFormat can distinguish it.
             sal_Int16 nOrgIndex = pFormatArr[j].Index;
             pFormatArr[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
+            //! no default on currency
+            sal_Bool bDefault = aFormatSeq[j].Default;
+            aFormatSeq[j].Default = sal_False;
             if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                     SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
                     bAfterLoadingSO5, nOrgIndex ) )
                 nPos++;
             pFormatArr[j].Index = nOrgIndex;
+            aFormatSeq[j].Default = bDefault;
         }
     }
 
