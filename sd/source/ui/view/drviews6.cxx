@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:31:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@
 #ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
 #include "NavigatorChildWindow.hxx"
 #endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
 #endif
@@ -156,9 +153,6 @@
 #endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
 #endif
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
@@ -448,11 +442,6 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         USHORT nId = SvxIMapDlgChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_IMAP, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LAYER_DIALOG_WIN ) )
     {
         USHORT nId = LayerDialogChildWindow::GetChildWindowId();
@@ -740,33 +729,6 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
                     AnimationChildWindow::GetChildWindowId() );
 
             GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
-            Cancel();
-            rReq.Ignore ();
-        }
-        break;
-
-
-        case SID_PREVIEW_WIN:
-        {
-            bool bPreview = FALSE;
-
-            if ( rReq.GetArgs() )
-            {
-                bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
-            }
-            else
-            {
-                USHORT nId = PreviewChildWindow::GetChildWindowId();
-                bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
-            }
-
-            SetPreview( bPreview );
-
-            if (eEditMode == EM_PAGE)
-                pFrameView->SetShowPreviewInPageMode(bPreview);
-            else
-                pFrameView->SetShowPreviewInMasterPageMode(bPreview);
-
             Cancel();
             rReq.Ignore ();
         }
