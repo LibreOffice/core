@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:07:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,12 @@ namespace ole_adapter
 {
 
 const VARTYPE getVarType( const Any& val);
-Type getType( BSTR type);
+/* creates a Type object for a given type name.
+
+    The function returns false if the name does not represent
+    a valid type.
+*/
+bool getType( BSTR name, Type & type);
 void o2u_attachCurrentThread();
 
 struct equalOUString_Impl
