@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:18:00 $
+ *  last change: $Author: obo $ $Date: 2004-02-25 10:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,15 @@ void DeInitVCL()
     ImplFreeOutDevFontData();
 
     ResMgr::DestroyAllResMgr();
+
+    // destroy all Sal interfaces before destorying the instance
+    // and thereby unloading the plugin
+    delete pSVData->mpImeStatus;
+    pSVData->mpImeStatus = NULL;
+    delete pSVData->mpSalSystem;
+    pSVData->mpSalSystem = NULL;
+    delete pSVData->mpSalTimer;
+    pSVData->mpSalTimer = NULL;
 
     // Sal deinitialisieren
     DestroySalInstance( pSVData->mpDefInst );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:17:41 $
+ *  last change: $Author: obo $ $Date: 2004-02-25 10:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,6 @@ void ImplDeInitSVData()
         delete pSVData->maGDIData.mpDefFontConfig;
     if( pSVData->maGDIData.mpFontSubstConfig )
         delete pSVData->maGDIData.mpFontSubstConfig;
-    if( pSVData->mpImeStatus )
-        delete pSVData->mpImeStatus;
-    if( pSVData->mpSalSystem )
-        delete pSVData->mpSalSystem;
 
     if ( pSVData->maAppData.mpMSFTempFileName )
     {
