@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-06 12:38:39 $
+ *  last change: $Author: mt $ $Date: 2001-11-26 12:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow )
     mpCursor = new Cursor;
     mpCursor->Show();
     pWindow->SetCursor( mpCursor );
+    pWindow->SetInputContext( InputContext( pEng->GetFont(), INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT ) );
 
     if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_INVERT )
         mbHighlightSelection = TRUE;
@@ -1173,6 +1174,8 @@ void TextView::SetReadOnly( BOOL bReadOnly )
             ShowCursor( mbAutoScroll, FALSE );
         else
             HideCursor();
+
+        GetWindow()->SetInputContext( InputContext( mpTextEngine->GetFont(), bReadOnly ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
     }
 }
 

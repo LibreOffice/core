@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-08 14:28:55 $
+ *  last change: $Author: mt $ $Date: 2001-11-26 12:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,12 @@ void TextEngine::SetFont( const Font& rFont )
         mnFixCharWidth100 = 0;
 
         FormatFullDoc();
+
+        for ( USHORT nView = mpViews->Count(); nView; )
+        {
+            TextView* pView = mpViews->GetObject( --nView );
+            pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
+        }
     }
 }
 
