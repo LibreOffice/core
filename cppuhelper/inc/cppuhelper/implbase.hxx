@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2000-10-06 15:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ struct ClassData : public ClassDataBase
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId();
 };
 
+//==================================================================================================
+::osl::Mutex & SAL_CALL getImplHelperInitMutex(void);
 }
 
 //
@@ -136,7 +138,7 @@ protected: \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
         if (! rCD.bOffsetsInit) \
         { \
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
+            ::osl::MutexGuard aGuard( getImplHelperInitMutex() ); \
             if (! rCD.bOffsetsInit) \
             { \
                 char * pBase = (char *)this;

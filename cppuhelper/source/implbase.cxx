@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2000-10-06 15:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,21 @@ using namespace com::sun::star::lang;
 
 namespace cppu
 {
+//==================================================================================================
+Mutex & SAL_CALL getImplHelperInitMutex(void)
+{
+    static Mutex * s_pMutex = 0;
+    if (! s_pMutex)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! s_pMutex)
+        {
+            static Mutex s_aMutex;
+            s_pMutex = & s_aMutex;
+        }
+    }
+    return * s_pMutex;
+}
 
 // ClassDataBase
 //__________________________________________________________________________________________________
