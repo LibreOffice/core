@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:48:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,22 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ japanese ] = "検索(~F)";
         Text[ korean ] = "시작(~F)";
         Text[ chinese_simplified ] = "搜寻(~F)";
-        Text[ chinese_traditional ] = "搜尋(~F)";
+        Text[ chinese_traditional ] = "尋找(~F)";
+        Text[ portuguese ] = "~Localizar";
+        Text[ russian ] = "�����";
+        Text[ greek ] = "A������~��";
+        Text[ dutch ] = "~Zoeken";
+        Text[ finnish ] = "~Etsi";
+        Text[ czech ] = "Najít";
+        Text[ danish ] = "S�g";
+        Text[ polish ] = "Szukaj";
+        Text[ portuguese_brazilian ] = "~Localizar";
+        Text[ turkish ] = "~Ara";
+        Text[ arabic ] = "���";
+        Text[ hebrew ] = "‮חיפוש‬";
+        Text[ catalan ] = "~Cerca";
+        Text[ thai ] = "~หา";
+        Text[ slovak ] = "~Nájsť";
     };
 
     ListBox LB_SUGGESTIONS
@@ -117,6 +132,17 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "입력 형식";
         Text[ chinese_simplified ] = "格式";
         Text[ chinese_traditional ] = "格式";
+        Text[ portuguese ] = "F~ormato";
+        Text[ russian ] = "������";
+        Text[ greek ] = "�~����";
+        Text[ dutch ] = "~Formaat";
+        Text[ finnish ] = "Muoto";
+        Text[ portuguese_brazilian ] = "~Formatar";
+        Text[ turkish ] = "F~ormat";
+        Text[ arabic ] = "�������";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ thai ] = "รูปแบบ";
+        Text[ slovak ] = "Formát";
     };
 
     RadioButton RB_SIMPLE_CONVERSION
@@ -136,6 +162,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글/한자";
         Text[ chinese_simplified ] = "韩文/汉字";
         Text[ chinese_traditional ] = "韓文/漢字";
+        Text[ slovak ] = "~Hangul/Hanja";
     };
 
     RadioButton RB_HANJA_HANGUL_BRACKETED
@@ -153,6 +180,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "漢字(한글)";
         Text[ chinese_simplified ] = "汉字(韩文)";
         Text[ chinese_traditional ] = "漢字(韓文)";
+        Text[ slovak ] = "Hanja (Han~gul)";
     };
 
     RadioButton RB_HANGUL_HANJA_BRACKETED
@@ -170,6 +198,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글(漢字)";
         Text[ chinese_simplified ] = "韩文(汉字)";
         Text[ chinese_traditional ] = "韓文(漢字)";
+        Text[ slovak ] = "Hang~ul (Hanja)";
     };
 
     RadioButton RB_HANGUL_HANJA_ABOVE
@@ -188,6 +217,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글";
         Text[ chinese_simplified ] = "韩文";
         Text[ chinese_traditional ] = "韓文";
+        Text[ slovak ] = "Hangu~l";
     };
 
     RadioButton RB_HANGUL_HANJA_BELOW
@@ -206,6 +236,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글";
         Text[ chinese_simplified ] = "韩文";
         Text[ chinese_traditional ] = "韓文";
+        Text[ slovak ] = "Hang~ul";
     };
 
     RadioButton RB_HANJA_HANGUL_ABOVE
@@ -224,6 +255,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "漢字";
         Text[ chinese_simplified ] = "汉字";
         Text[ chinese_traditional ] = "漢字";
+        Text[ slovak ] = "Han~ja";
     };
 
     RadioButton RB_HANJA_HANGUL_BELOW
@@ -242,6 +274,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "漢字";
         Text[ chinese_simplified ] = "汉字";
         Text[ chinese_traditional ] = "漢字";
+        Text[ slovak ] = "Ha~nja";
     };
 
     FixedText FT_CONVERSION
@@ -259,6 +292,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "변환";
         Text[ chinese_simplified ] = "转换";
         Text[ chinese_traditional ] = "轉換";
+        Text[ slovak ] = "Konverzia";
     };
 
     CheckBox CB_HANGUL_ONLY
@@ -276,6 +310,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글만";
         Text[ chinese_simplified ] = "仅汉字";
         Text[ chinese_traditional ] = "僅漢字";
+        Text[ slovak ] = "~Len Hangul";
     };
 
     CheckBox CB_HANJA_ONLY
@@ -293,6 +328,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한자만";
         Text[ chinese_simplified ] = "仅汉字";
         Text[ chinese_traditional ] = "僅漢字";
+        Text[ slovak ] = "Len ~Hanja";
     };
 
     // this element is only for determining where our radio button group ends (in both directions)
@@ -311,13 +347,14 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text = "Einzelne Zeichen ersetzen";
         Text [ english_us ] = "Replace b~y character";
         Text[ french ] = "Remplacement caract�re par caract�re";
-        Text[ spanish ] = "Sustituir caracteres uno por uno";
+        Text[ spanish ] = "~Sustituir caracteres uno por uno";
         Text[ italian ] = "Sostituisci singoli caratteri";
-        Text[ swedish ] = "Ers�tt enstaka tecken";
+        Text[ swedish ] = "Ers�tt ~enstaka tecken";
         Text[ japanese ] = "１文字ずつ置換";
         Text[ korean ] = "한 글자씩 변환";
         Text[ chinese_simplified ] = "替换单个字";
         Text[ chinese_traditional ] = "替換單個字";
+        Text[ slovak ] = "Nah~radiť po znakoch";
     };
 
     String STR_HANGUL
@@ -332,6 +369,10 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "한글";
         Text[ chinese_simplified ] = "韩文";
         Text[ chinese_traditional ] = "韓文";
+        Text[ russian ] = "������";
+        Text[ hebrew ] = "‮הנגול‬";
+        Text[ thai ] = "ภาษาฮังกุล";
+        Text[ slovak ] = "Hangul";
     };
 
     String STR_HANJA
@@ -346,6 +387,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Text[ korean ] = "漢字";
         Text[ chinese_simplified ] = "汉字";
         Text[ chinese_traditional ] = "漢字";
+        Text[ slovak ] = "Hanja";
     };
     Text[ french ] = "Conversion Hangul/Hanja";
     Text[ spanish ] = "Conversi�n de Hangul/Hanja";
@@ -355,5 +397,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     Text[ korean ] = "한글/한자 변환";
     Text[ chinese_simplified ] = "韩文/汉字 转换";
     Text[ chinese_traditional ] = "韓文/漢字 轉換";
+    Text[ slovak ] = "Hangul/Hanja Konverzia";
 };
+
+
 
