@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
+ *  last change: $Author: obr $ $Date: 2001-02-07 14:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,6 +1295,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             else
                 aEvent.DropAction = DNDConstants::ACTION_NONE;
             m_nLastDropAction = aEvent.DropAction;
+            m_bLazyListener = true;
             if( ! m_bDropEnterSent )
             {
                 m_bDropEnterSent = true;
@@ -1302,6 +1303,8 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             }
             else
                 it->second->dragOver( aEvent );
+            if( m_bLazyListener )
+                accept( aEvent.DropAction );
         }
         else if(
             rMessage.message_type == m_nXdndLeave  &&
@@ -1401,6 +1404,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
 {
     MutexGuard aGuard(m_aMutex);
 
+    m_bLazyListener = false;
     if( m_xDragSourceListener.is() )
     {
         DragSourceDragEvent dsde;
@@ -2405,7 +2409,7 @@ void SelectionManager::dispatchEvent( int millisec )
     else
     {
         MutexGuard aGuard(m_aMutex);
-        XSync( m_pDisplay, False );
+        XFlush( m_pDisplay );
     }
 }
 
