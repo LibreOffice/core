@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:53:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -90,9 +93,6 @@
 #include "tabvwsh.hxx"
 
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
@@ -101,6 +101,8 @@
 #endif
 
 USHORT ScGetFontWorkId();       // in drtxtob
+
+using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
@@ -240,7 +242,9 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         if ( nObjType == OBJ_OLE2 )
         {
             SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetObj());
-            if (pOleObj->GetObjRef().Is() && ((pOleObj->GetObjRef()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE) == SVOBJ_MISCSTATUS_SERVERRESIZE))
+            if (pOleObj->GetObjRef().is() &&
+                ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
+                //TODO/LATER: why different slots in Draw and Calc?
                 rSet.DisableItem(SID_ORIGINALSIZE);
         }
         else if ( nObjType == OBJ_CAPTION )
