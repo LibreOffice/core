@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAreaLinks.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:58:06 $
+ *  last change:$Date: 2003-11-18 16:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,9 @@
 
 package ifc.sheet;
 
-import lib.MultiMethodTest;
-
 import com.sun.star.sheet.XAreaLinks;
 import com.sun.star.table.CellAddress;
+import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XAreaLinks</code>
@@ -92,7 +91,8 @@ public class _XAreaLinks extends MultiMethodTest {
 
           cnt = oObj.getCount() ;
           CellAddress addr = new CellAddress ((short) 1,2,3) ;
-          oObj.insertAtPosition (addr, "", "a2:b5", "", "") ;
+          String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+          oObj.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
 
           if (bResult) {
             int new_cnt = oObj.getCount() ;
