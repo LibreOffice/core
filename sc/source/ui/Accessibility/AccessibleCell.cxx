@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:40 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 11:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
         }
 
     }
+    if (aCellRect.IsEmpty())
+        aCellRect.SetPos(Point(-1, -1));
     return aCellRect;
 }
 
