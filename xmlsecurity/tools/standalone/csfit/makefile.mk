@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-12 13:15:25 $
+#   last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,10 @@ LIBTARGET=NO
 
 .IF "$(CRYPTO_ENGINE)" == "nss"
 
+MOZ_INC = $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
+NSS_INC = $(MOZ_INC)$/nss
+NSPR_INC = $(MOZ_INC)$/nspr
+
 CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 SOLARINC += \
     -I$(MOZ_INC) \
@@ -92,6 +96,7 @@ SOLARINC += \
 SHARE_LIBS =	\
         $(CPPULIB)	\
         $(CPPUHELPERLIB) \
+        $(SALHELPERLIB)	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"

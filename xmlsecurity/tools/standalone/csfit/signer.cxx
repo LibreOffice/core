@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:25 $
+ *  last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "libxslt/xslt.h"
 #endif
 
-#include "SecurityEnvironment_NssImpl.hxx"
-#include "XMLElementWrapper_XmlSecImpl.hxx"
+#include "securityenvironment_nssimpl.hxx"
+#include "xmlelementwrapper_xmlsecimpl.hxx"
 
 #include "nspr.h"
 #include "prtypes.h"
