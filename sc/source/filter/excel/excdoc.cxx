@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:28:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,25 +608,17 @@ void ExcTable::FillAsTable( void )
     if ( eDateiTyp < Biff8 && rR.pExtSheetCntAndRecs )
         Add( new ExcExternDup( *rR.pExtSheetCntAndRecs ) );
 
-    // Defcolwidth (Breite aus Excel-Dokument)
-    ExcDefcolwidth*             pExcDefColWidth = new ExcDefcolwidth( 0x000a );
-    Add( pExcDefColWidth );
+    Add( new XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, (eDateiTyp < Biff8) ? 10 : 8 ) );
 
-    // COLINFO records
-    sal_uInt32 nColDefXFId = rXFBuffer.Insert( rDoc.GetPattern( 0, MAXROW, nScTab ) );
-    ExcColinfo* pLastColInfo = new ExcColinfo( 0, nScTab, nColDefXFId, rR, aExcOLCol );
-    ExcColinfo* pNewColInfo;
-
-    Add( pLastColInfo );
-    for( UINT16 iCol = 1; iCol <= MAXCOL; iCol++ )
+    // COLINFO records for all columns
+    XclExpColinfo* pColinfo = NULL;
+    for( sal_uInt16 nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
-        nColDefXFId = rXFBuffer.Insert( rDoc.GetPattern( iCol, MAXROW, nScTab ) );
-        pNewColInfo = new ExcColinfo( iCol, nScTab, nColDefXFId, rR, aExcOLCol );
-        pLastColInfo->Expand( pNewColInfo );
-        if( pNewColInfo )
+        sal_uInt32 nColXFId = rXFBuffer.Insert( rDoc.GetPattern( nScCol, MAXROW, nScTab ) );
+        if( !pColinfo || !pColinfo->Expand( nScCol, nScTab, nColXFId, aExcOLCol ) )
         {
-            pLastColInfo = pNewColInfo;
-            Add( pLastColInfo );
+            pColinfo = new XclExpColinfo( rRoot, nScCol, nScTab, nColXFId, aExcOLCol );
+            Add( pColinfo );
         }
     }
 
@@ -1016,7 +1008,7 @@ void ExcTable::FillAsTable( void )
                     else
                         pRangeList = new ScRangeList;
 
-                    rDoc.FindConditionalFormat( rCF.GetKey(), *pRangeList );
+                    rDoc.FindConditionalFormat( rCF.GetKey(), *pRangeList, nScTab);
 
                     if( pRangeList->Count() )
                     {
