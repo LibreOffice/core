@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 14:41:23 $
+ *  last change: $Author: obr $ $Date: 2000-11-06 07:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,8 @@
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
 #endif
-#ifndef _OSL_UTIL_H
-#include <osl/util.h>
-#endif
 #ifndef _VOS_SIGNAL_HXX
 #include <vos/signal.hxx>
-#endif
-#ifndef _VOS_CHANNEL_HXX
-#include <vos/channel.hxx>
 #endif
 #ifndef _VOS_SOCKET_HXX
 #include <vos/socket.hxx>
@@ -253,8 +247,6 @@ public:
 
 BOOL SVMain()
 {
-    osl_setSUPD( SUPD );
-
     ImplSVData* pSVData = ImplGetSVData();
 
 
