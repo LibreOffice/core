@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:55:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   simpref.src  $
  //   $Author: kz $
- //     $Date: 2001-05-10 06:55:35 $
- // $Revision: 1.5 $
+ //     $Date: 2001-05-17 08:33:13 $
+ // $Revision: 1.6 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
