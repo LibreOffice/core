@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 11:58:13 $
+ *  last change: $Author: mt $ $Date: 2000-10-11 12:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,8 +813,17 @@ void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara )
         aNewStyleSheetName += String::CreateFromInt32( GetDepth( nPara ) );
         SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pCurrentStyle->GetFamily() );
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
-        if ( pNewStyle )
+        if ( pNewStyle && ( pNewStyle != pCurrentStyle ) )
+        {
+             SfxItemSet aOldAttrs( pEditEngine->GetParaAttribs( nPara ) );
             SetStyleSheet( nPara, pNewStyle );
+            if ( aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+            {
+                SfxItemSet aAttrs( pEditEngine->GetParaAttribs( nPara ) );
+                aAttrs.Put( aOldAttrs.Get( EE_PARA_NUMBULLET ) );
+                pEditEngine->SetParaAttribs( nPara, aAttrs );
+            }
+        }
     }
 }
 
