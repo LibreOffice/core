@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 20:18:09 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 17:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( uno::RuntimeExcepti
 }
 
 // XServiceInfo
-const char* pSvxUnoNumberingRulesService = "com.sun.star.text.NumberingRules";
+sal_Char pSvxUnoNumberingRulesService[sizeof("com.sun.star.text.NumberingRules")] = "com.sun.star.text.NumberingRules";
 
 OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(uno::RuntimeException)
 {
