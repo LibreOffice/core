@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-03-21 10:47:23 $
+ *  last change: $Author: er $ $Date: 2001-03-21 12:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,13 +1636,13 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            String aStr( GetString() );
+                            ByteString aStr( GetString(), osl_getThreadTextEncoding() );
                             if ( aStr.Len() >= MAXSTRLEN )
                                 SetError( errStringOverflow );
                             else
                             {
                                 pStr[i-1] = new sal_Char[MAXSTRLEN];
-                                strcpy( pStr[i-1], ByteString( aStr, osl_getThreadTextEncoding() ).GetBuffer() );
+                                strcpy( pStr[i-1], aStr.GetBuffer() );
                                 ppParam[i] = pStr[i-1];
                             }
                         }
