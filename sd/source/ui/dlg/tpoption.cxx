@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 07:22:02 $
+ *  last change: $Author: thb $ $Date: 2001-09-25 12:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,41 +605,17 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     aCbScale.SetText( GetScale( nX, nY ) );
 
-    if( nWidth == 0 || nHeight == 0 )
-    {
-        aFtOriginal.Hide();
-        aFtEquivalent.Hide();
-        aMtrFldOriginalWidth.Hide();
-        aMtrFldOriginalWidth.SetText( aInfo1 ); // leer
-        aMtrFldOriginalHeight.Hide();
-        aMtrFldOriginalHeight.SetText( aInfo2 ); //leer
-        aFtPageWidth.Hide();
-        aFtPageHeight.Hide();
-        aFiInfo1.Hide();
-        aFiInfo2.Hide();
-    }
-    else
-    {
-        // Links setzen
-        aCbScale.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyScaleHdl ) );
-        aCbScale.SetSelectHdl( LINK( this, SdTpOptionsMisc, ModifyScaleHdl ) );
-        aMtrFldOriginalWidth.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyOriginalScaleHdl ) );
-        aMtrFldOriginalHeight.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyOriginalScaleHdl ) );
-
-        // Hier werden die MetricFields zur Hilfe genommen, um
-        // die Seiteninformation richtig auszugeben.
-        // Die MetricFields werden erst im ModifyScaleHdl() richtig gesetzt.
-        SetMetricValue( aMtrFldInfo1, nWidth, ePoolUnit );
-        aInfo1 = aMtrFldInfo1.GetText();
-        SetMetricValue( aMtrFldInfo2, nHeight, ePoolUnit );
-        aInfo2 = aMtrFldInfo2.GetText();
-
-        aFiInfo1.SetText( aInfo1 );
-        aFiInfo2.SetText( aInfo2 );
-
-        ModifyScaleHdl( NULL );
-    }
-
+    // #92067# broken feature disabled for 6.0
+    aFtOriginal.Hide();
+    aFtEquivalent.Hide();
+    aMtrFldOriginalWidth.Hide();
+    aMtrFldOriginalWidth.SetText( aInfo1 ); // leer
+    aMtrFldOriginalHeight.Hide();
+    aMtrFldOriginalHeight.SetText( aInfo2 ); //leer
+    aFtPageWidth.Hide();
+    aFtPageHeight.Hide();
+    aFiInfo1.Hide();
+    aFiInfo2.Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -754,7 +730,9 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, p )
         aFract1 = aFract;
         aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
         nValue = aFract;
-        aCbScale.SetText( GetScale( 1, nValue ) );
+
+        // #92067# Swap nominator and denominator
+        aCbScale.SetText( GetScale( nValue, 1 ) );
     }
     else
     {
@@ -762,7 +740,9 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, p )
         nValue = aFract;
         if( fValue > (double)nValue )
             nValue++;
-        aCbScale.SetText( GetScale( nValue, 1 ) );
+
+        // #92067# Swap nominator and denominator
+        aCbScale.SetText( GetScale( 1, nValue ) );
     }
     return( 0L );
 }
