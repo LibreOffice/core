@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:44:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
-    ,OEntryListHelper( m_aMutex )
+    ,OEntryListHelper( *_pOriginal, m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nKeyType(NumberFormat::UNDEFINED)
