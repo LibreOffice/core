@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-05 14:06:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,7 @@
 #include <tools/cachestr.hxx>
 #endif
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
