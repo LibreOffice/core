@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:17:03 $
+ *  last change: $Author: th $ $Date: 2001-03-19 11:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,16 +113,14 @@ inline OUString OStringToOUString( const OString & rStr,
                                    rtl_TextEncoding encoding,
                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
 {
-    OUString newStr( rStr.getStr(), rStr.getLength(), encoding, convertFlags );
-    return newStr;
+    return OUString( rStr.getStr(), rStr.getLength(), encoding, convertFlags );
 }
 
 inline OString OUStringToOString( const OUString & rUnicode,
                                   rtl_TextEncoding encoding,
                                   sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )
 {
-    OString newStr( rUnicode.getStr(), rUnicode.getLength(), encoding, convertFlags );
-    return newStr;
+    return OString( rUnicode.getStr(), rUnicode.getLength(), encoding, convertFlags );
 }
 
 }
