@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:29:43 $
+#   last change: $Author: obo $ $Date: 2004-11-16 14:53:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/dispatchprovider.obj				\
+                    $(SLO)$/dispatchinformationprovider.obj	    \
                     $(SLO)$/loaddispatcher.obj                  \
                     $(SLO)$/menudispatcher.obj					\
                     $(SLO)$/helpagentdispatcher.obj				\
