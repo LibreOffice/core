@@ -1,4 +1,3 @@
-+++ /tmp/default	2004-12-21 14:56:22.717766328 +0000
 +lc_absoluterecord.png
 +lc_actionmode.png
 +lc_addons.png
@@ -69,7 +68,6 @@
 +lc_behindobject.png
 +lc_bezierappend.png
 +lc_bighandles.png
-+lc_bulletsandnumberingdialog.png
 +lc_calloutshapes.cloud-callout.png
 +lc_calloutshapes.line-callout-1.png
 +lc_calloutshapes.line-callout-2.png
@@ -92,7 +90,6 @@
 +lc_colorsettings.png
 +lc_colorview.png
 +lc_commontaskbarvisible.png
-+lc_controlcodes.png
 +lc_countall.png
 +lc_crookrotate.png
 +lc_crookslant.png
@@ -162,10 +159,7 @@
 +lc_dsbformletter.png
 +lc_dsbinsertcolumns.png
 +lc_dsbinsertcontent.png
-+lc_duplicatepage.png
 +lc_editframeset.png
-+lc_editglossary.png
-+lc_editheaderandfooter.png
 +lc_editprintarea.png
 +lc_extrusion3dcolor.png
 +lc_extrusiondepthfloater.png
@@ -253,7 +247,6 @@
 +lc_formelcursor.png
 +lc_framedialog.png
 +lc_getactivetask.png
-+lc_glueeditmode.png
 +lc_glueescapedirectionbottom.png
 +lc_glueescapedirectionleft.png
 +lc_glueescapedirectionright.png
@@ -266,7 +259,6 @@
 +lc_gluevertalignbottom.png
 +lc_gluevertaligncenter.png
 +lc_gluevertaligntop.png
-+lc_goalseekdialog.png
 +lc_gotoendofdoc.png
 +lc_gotoend.png
 +lc_gotostartofdoc.png
@@ -282,18 +274,14 @@
 +lc_helpmenu.png
 +lc_hyphenate.png
 +lc_hyphenation.png
-+lc_importfromfile.png
 +lc_incrementlevel.png
 +lc_incrementsublevels.png
 +lc_inscellsctrl.png
-+lc_insertannotation.png
 +lc_insertauthorfield.png
 +lc_insertavmedia.png
-+lc_insertbookmark.png
 +lc_insertcaptiondialog.png
 +lc_insertctrl.png
 +lc_insertdatefield.png
-+lc_insertformula.png
 +lc_insertframeinteractnocolumns.png
 +lc_insertframeinteract.png
 +lc_insertframe.png
@@ -303,8 +291,6 @@
 +lc_insertneutralparagraph.png
 +lc_insertobjctrl.png
 +lc_insertobjectdialog.png
-+lc_insertpage.png
-+lc_insertreferencefield.png
 +lc_insertsection.png
 +lc_inserttitlefield.png
 +lc_inserttoolbox.png
@@ -330,8 +316,6 @@
 +lc_moveupsubitems.png
 +lc_navigationbar.png
 +lc_newarrangement.png
-+lc_numberformatdecdecimals.png
-+lc_numberformatincdecimals.png
 +lc_numberingstart.png
 +lc_objectposition.png
 +lc_objects3dtoolbox.png
@@ -342,7 +326,6 @@
 +lc_paraspaceincrease.png
 +lc_pickthrough.png
 +lc_playmacro.png
-+lc_presentationlayout.png
 +lc_preview.png
 +lc_previewprintoptions.png
 +lc_previewzoom.png
@@ -374,8 +357,6 @@
 +lc_snapframe.png
 +lc_snappoints.png
 +lc_solidcreate.png
-+lc_sortascending.png
-+lc_sortdescending.png
 +lc_spinbutton.png
 +lc_splitcell.png
 +lc_splithorizontal.png
