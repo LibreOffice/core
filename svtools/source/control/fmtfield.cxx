@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:11:58 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,8 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     if (!s_cFormatter)
     {
         // get the Office's UI locale
-        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+        SvtSysLocale aSysLocale;
+        const Locale& rSysLocale = aSysLocale.GetLocaleData().getLocale();
         // translate
         LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
         s_cFormatter = new SvNumberFormatter(
@@ -697,7 +698,8 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetForm
         if ( m_pFormatter )
         {
             // get the Office's UI locale
-            const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+            SvtSysLocale aSysLocale;
+            const Locale& rSysLocale = aSysLocale.GetLocaleData().getLocale();
             // translate
             LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
             // get the standard numeric format for this language
