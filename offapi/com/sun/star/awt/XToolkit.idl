@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XToolkit.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,45 +96,35 @@
 
 //=============================================================================
 
-// DocMerge from idl: interface com::sun::star::awt::XToolkit
-/** specifies a factory interface for the windowing toolkit.
+/** specifies a factory interface for the window toolkit.
 
-        <p> This is similar to the abstract window toolkit (AWT) in Java.
+    <p>This is similar to the abstract window toolkit (AWT) in Java.</p>
  */
 interface XToolkit: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XToolkit::getDesktopWindow
-    /** @returns
-                the desktop window.
+    /** returns the desktop window.
      */
     com::sun::star::awt::XWindowPeer getDesktopWindow();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XToolkit::getWorkArea
-    /** @returns
-                    the complete work area for this toolkit.
+    /** returns the complete work area for this toolkit.
      */
     com::sun::star::awt::Rectangle getWorkArea();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XToolkit::createWindow
     /** creates a new window using the given descriptor.
-
-        @see XToolkit::createComponents
      */
     com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XToolkit::createWindows
-    /** @returns
-                    a sequence of windows which are newly created using the
-                    given descriptors.
+    /** returns a sequence of windows which are newly created using the
+        given descriptors.
      */
     sequence<com::sun::star::awt::XWindowPeer> createWindows(
             [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors )
@@ -142,7 +132,6 @@ interface XToolkit: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XToolkit::createScreenCompatibleDevice
     /** creates a virtual device that is compatible with the screen.
      */
     com::sun::star::awt::XDevice createScreenCompatibleDevice( [in] long Width,
@@ -150,7 +139,6 @@ interface XToolkit: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XToolkit::createRegion
     /** creates a region.
      */
     com::sun::star::awt::XRegion createRegion();
