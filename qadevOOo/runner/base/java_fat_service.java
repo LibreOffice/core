@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat_service.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-05-27 12:00:56 $
+ *  last change:$Date: 2003-11-18 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ import lib.TestCase;
 import lib.Status;
 import lib.MultiMethodTest;
 import lib.TestEnvironment;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -98,8 +98,8 @@ import util.SOfficeFactory;
  */
 public class java_fat_service implements TestBase {
 
-    public static boolean debug = false;
-    LogWriter log = null;
+    static protected boolean debug = false;
+    protected LogWriter log = null;
 
     public boolean executeTest(lib.TestParameters param) {
         DynamicClassLoader dcl = new DynamicClassLoader();
@@ -242,6 +242,7 @@ public class java_fat_service implements TestBase {
             try {
                 tCase.cleanupTestCase(param);
             } catch (Exception e) {
+                e.printStackTrace((PrintWriter)log);
             }
             sumIt.summarizeUp(entry);
             LogWriter sumObj = (LogWriter)dcl.getInstance(
