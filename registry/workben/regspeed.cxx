@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regspeed.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -76,6 +76,7 @@
 #include    <rtl/alloc.h>
 #endif
 
+using namespace std;
 
 /*****************************************************************
     MyTimer
