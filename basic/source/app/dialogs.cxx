@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,13 +215,12 @@ void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
 }
 
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN )
+ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
 : PushButton( pParent, ResId(nResButton) )
 , aText( pParent, ResId(nResText) )
 , aEdit( pParent, ResId(nResEdit) )
 , aKeyName(aKN)
 {
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Misc");
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
@@ -261,7 +260,9 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 , aTabCtrl( this, ResId( RES_TC_OPTIONS ) )
 , aOK( this, ResId( RID_OK ) )
 , aCancel( this, ResId( RID_CANCEL ) )
+, aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 {
+    aConfig.EnablePersistence( FALSE );
     aTabCtrl.FreeResource();
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OptionsDialog, ActivatePageHdl ) );
@@ -299,16 +300,16 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         switch ( nId )
         {
             case RID_TP_GEN:
-                pNewTabPage = new GenericOptions( pTabCtrl );
+                pNewTabPage = new GenericOptions( pTabCtrl, aConfig );
                 break;
             case RID_TP_PRO:
-                pNewTabPage = new ProfileOptions( pTabCtrl );
+                pNewTabPage = new ProfileOptions( pTabCtrl, aConfig );
                 break;
             case RID_TP_MIS:
-                pNewTabPage = new MiscOptions( pTabCtrl );
+                pNewTabPage = new MiscOptions( pTabCtrl, aConfig );
                 break;
             case RID_TP_FON:
-                pNewTabPage = new FontOptions( pTabCtrl );
+                pNewTabPage = new FontOptions( pTabCtrl, aConfig );
                 break;
             default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
         }
@@ -323,25 +324,28 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 {
+    aConfig.EnablePersistence();
     GenericOptions *pGeneric;
     pGeneric = (GenericOptions*)aTabCtrl.GetTabPage( RID_TP_GEN );
     if ( pGeneric )
-        pGeneric->Save();
+        pGeneric->Save( aConfig );
 
     ProfileOptions *pProfile;
     pProfile = (ProfileOptions*)aTabCtrl.GetTabPage( RID_TP_PRO );
     if ( pProfile )
-        pProfile->Save();
+        pProfile->Save( aConfig );
 
     MiscOptions *pMisc;
     pMisc = (MiscOptions*)aTabCtrl.GetTabPage( RID_TP_MIS );
     if ( pMisc )
-        pMisc->Save();
+        pMisc->Save( aConfig );
 
     FontOptions *pFonts;
     pFonts = (FontOptions*)aTabCtrl.GetTabPage( RID_TP_FON );
     if ( pFonts )
-        pFonts->Save();
+        pFonts->Save( aConfig );
+
+    aConfig.Flush();
 
     ((BasicApp*)GetpApp())->LoadIniFile();
     Close();
@@ -349,9 +353,9 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 }
 
 
-ProfileOptions::ProfileOptions( Window* pParent )
+ProfileOptions::ProfileOptions( Window* pParent, Config &aConfig )
 : TabPage( pParent, ResId( RID_TP_PROFILE ) )
-, aConf( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
+, aConf( aConfig )
 
 , aFlProfile( this, ResId( RID_FL_PROFILE ) )
 , aCbProfile( this, ResId( RID_CB_PROFILE ) )
@@ -359,9 +363,9 @@ ProfileOptions::ProfileOptions( Window* pParent )
 , aPbDelProfile( this, ResId( RID_PD_DEL_PROFILE ) )
 
 , aDirs( this, ResId(FL_DIRECTORIES) )
-, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir" )
-, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir" )
-, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir" )
+, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir", aConfig )
+, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir", aConfig )
+, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir", aConfig )
 
 , aAutoReload( this, ResId(CB_AUTORELOAD) )
 , aAutoSave( this, ResId(CB_AUTOSAVE) )
@@ -468,21 +472,24 @@ IMPL_LINK( ProfileOptions, CheckButtonsHdl, ComboBox*, pCB )
 
 void ProfileOptions::Save()
 {
-    aLog.Save( aConf );
-    aBasis.Save( aConf );
-    aHID.Save( aConf );
-
-    aConf.SetGroup( "Misc" );
-    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
-    aConf.SetGroup( aCurrentProfile );
-    aConf.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
-    aConf.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
-    aConf.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
-
-    aConf.Flush();
+    Save(aConf);
 }
 
-MiscOptions::MiscOptions( Window* pParent )
+void ProfileOptions::Save( Config &aConfig )
+{
+    aLog.Save( aConfig );
+    aBasis.Save( aConfig );
+    aHID.Save( aConfig );
+
+    aConfig.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConfig.ReadKey( "CurrentProfile", "Misc" );
+    aConfig.SetGroup( aCurrentProfile );
+    aConfig.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
+    aConfig.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
+    aConfig.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
+}
+
+MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
 : TabPage( pParent, ResId( RID_TP_MISC ) )
 , aFLCommunication( this, ResId(FL_COMMUNICATION) )
 , aFTHost( this, ResId(FT_HOST) )
@@ -504,50 +511,47 @@ MiscOptions::MiscOptions( Window* pParent )
     aNFUNOPort.SetUseThousandSep( FALSE );
     aTFMaxLRU.SetUseThousandSep( FALSE );
 
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     ByteString aTemp;
 
-    aConf.SetGroup("Communication");
-    aTemp = aConf.ReadKey( "Host", DEFAULT_HOST );
+    aConfig.SetGroup("Communication");
+    aTemp = aConfig.ReadKey( "Host", DEFAULT_HOST );
     aEDHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
-    aTemp = aConf.ReadKey( "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
+    aTemp = aConfig.ReadKey( "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
     aNFTTPort.SetValue( aTemp.ToInt32() );
-    aTemp = aConf.ReadKey( "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
+    aTemp = aConfig.ReadKey( "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
     aNFUNOPort.SetValue( aTemp.ToInt32() );
 
-    aConf.SetGroup("Misc");
-    aTemp = aConf.ReadKey( "ServerTimeout", "10000" );  // Vorgabe 1 Minute
+    aConfig.SetGroup("Misc");
+    aTemp = aConfig.ReadKey( "ServerTimeout", "10000" );    // Vorgabe 1 Minute
     aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
 
-    aConf.SetGroup("LRU");
-    aTemp = aConf.ReadKey( "MaxLRU", "4" );
+    aConfig.SetGroup("LRU");
+    aTemp = aConfig.ReadKey( "MaxLRU", "4" );
     aTFMaxLRU.SetValue( aTemp.ToInt32() );
 }
 
 
-void MiscOptions::Save()
+void MiscOptions::Save( Config &aConfig )
 {
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConfig.SetGroup("Communication");
+    aConfig.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConfig.WriteKey( "TTPort", ByteString::CreateFromInt32( aNFTTPort.GetValue() ) );
+    aConfig.WriteKey( "UnoPort", ByteString::CreateFromInt32( aNFUNOPort.GetValue() ) );
 
-    aConf.SetGroup("Communication");
-    aConf.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
-    aConf.WriteKey( "TTPort", ByteString::CreateFromInt32( aNFTTPort.GetValue() ) );
-    aConf.WriteKey( "UnoPort", ByteString::CreateFromInt32( aNFUNOPort.GetValue() ) );
+    aConfig.SetGroup("Misc");
+    aConfig.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
 
-    aConf.SetGroup("Misc");
-    aConf.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
-
-    aConf.SetGroup("LRU");
-    ByteString aTemp = aConf.ReadKey( "MaxLRU", "4" );
-    USHORT nOldMaxLRU = aTemp.ToInt32();
+    aConfig.SetGroup("LRU");
+    ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
+    USHORT nOldMaxLRU = (USHORT)aTemp.ToInt32();
     USHORT n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
-        aConf.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
-    aConf.WriteKey( "MaxLRU", ByteString::CreateFromInt32( aTFMaxLRU.GetValue() ) );
+        aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
+    aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt32( aTFMaxLRU.GetValue() ) );
 }
 
 
-FontOptions::FontOptions( Window* pParent )
+FontOptions::FontOptions( Window* pParent, Config &aConfig )
 : TabPage( pParent, ResId( RID_TP_FONT ) )
 , aFTFontName( this, ResId(FT_FONTNAME) )
 , aFontName( this, ResId(CB_FONTNAME) )
@@ -573,15 +577,14 @@ FontOptions::FontOptions( Window* pParent )
     aFontSize.SetModifyHdl( LINK( this, FontOptions, FontSizeChanged ) );
 
     ByteString aTemp;
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Misc");
-    aTemp = aConf.ReadKey( "ScriptFontName", "Courier" );
+    aConfig.SetGroup("Misc");
+    aTemp = aConfig.ReadKey( "ScriptFontName", "Courier" );
        aFontName.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
     aFontName.Modify();
-    aTemp = aConf.ReadKey( "ScriptFontStyle", "normal" );
+    aTemp = aConfig.ReadKey( "ScriptFontStyle", "normal" );
        aFontStyle.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
     aFontStyle.Modify();
-    aTemp = aConf.ReadKey( "ScriptFontSize", "12" );
+    aTemp = aConfig.ReadKey( "ScriptFontSize", "12" );
        aFontSize.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
     aFontSize.Modify();
 }
@@ -618,19 +621,18 @@ void FontOptions::UpdatePreview()
 }
 
 
-void FontOptions::Save()
+void FontOptions::Save( Config &aConfig )
 {
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Misc");
-    aConf.WriteKey( "ScriptFontName", aFontName.GetText(), RTL_TEXTENCODING_UTF8 );
-    aConf.WriteKey( "ScriptFontStyle", aFontStyle.GetText(), RTL_TEXTENCODING_UTF8 );
-    aConf.WriteKey( "ScriptFontSize", aFontSize.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConfig.SetGroup("Misc");
+    aConfig.WriteKey( "ScriptFontName", aFontName.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConfig.WriteKey( "ScriptFontStyle", aFontStyle.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConfig.WriteKey( "ScriptFontSize", aFontSize.GetText(), RTL_TEXTENCODING_UTF8 );
 }
 
 
-GenericOptions::GenericOptions( Window* pParent )
+GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
 : TabPage( pParent, ResId( RID_TP_GENERIC ) )
-, aConf( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
+, aConf( aConfig )
 
 , aFlArea( this, ResId( RID_FL_AREA ) )
 , aCbArea( this, ResId( RID_CB_AREA ) )
@@ -643,11 +645,6 @@ GenericOptions::GenericOptions( Window* pParent )
 , aPbDelValue( this, ResId( RID_PB_DEL_VALUE ) )
 {
     FreeResource();
-    DirEntry aDE;
-    aTempConfName = aDE.TempName().GetFull();
-    pTempConf = new Config( aTempConfName );
-    pTempConf->SetGroup("Main");
-
     LoadData();
 
     aCbArea.EnableAutocomplete( TRUE );
@@ -670,8 +667,6 @@ GenericOptions::GenericOptions( Window* pParent )
 
 GenericOptions::~GenericOptions()
 {
-    pTempConf->DeleteGroup("Main");
-    delete pTempConf;
 }
 
 StringList* GenericOptions::GetAllGroups()
@@ -693,7 +688,7 @@ void GenericOptions::LoadData()
     {
         pGroups->Remove( pGroup );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
-        if ( HasKey( aConf, C_KEY_AKTUELL ) )
+        if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
         {
             aCbArea.InsertEntry( *pGroup );
         }
@@ -709,20 +704,8 @@ void GenericOptions::LoadData()
 
 String GenericOptions::ReadKey( const ByteString &aGroup, const ByteString &aKey )
 {
-    ByteString aGroupKey( aGroup );
-    aGroupKey.Append( aKey );
-    if ( HasKey( *pTempConf, aGroupKey ) )
-        return UniString( pTempConf->ReadKey( aGroupKey ), RTL_TEXTENCODING_UTF8 );
-    else
-    {
-        aConf.SetGroup( aGroup );
-        return UniString( aConf.ReadKey( aKey ), RTL_TEXTENCODING_UTF8 );
-    }
-}
-
-BOOL GenericOptions::HasKey( Config &aConfig, const ByteString &aKey )
-{
-    return ! ( aConfig.ReadKey( aKey ).Len() == 0 && aConfig.ReadKey( aKey, "Default" ).Len() != 0 );
+    aConf.SetGroup( aGroup );
+    return UniString( aConf.ReadKey( aKey ), RTL_TEXTENCODING_UTF8 );
 }
 
 IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
@@ -738,7 +721,8 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
             LINK( this, GenericOptions, NewValue ).Call( NULL );
         }
 
-        pTempConf->WriteKey( ByteString( aLastGroupName ).Append( C_KEY_AKTUELL ), ByteString( aCurrentValue, RTL_TEXTENCODING_UTF8 ) );
+        aConf.SetGroup( aLastGroupName );
+        aConf.WriteKey( C_KEY_AKTUELL, ByteString( aCurrentValue, RTL_TEXTENCODING_UTF8 ) );
         USHORT i;
         for ( i=0 ; i < aCbValue.GetEntryCount() ; i++ )
         {
@@ -746,7 +730,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
                 aAllValues += ';';
             aAllValues += aCbValue.GetEntry( i );
         }
-        pTempConf->WriteKey( ByteString( aLastGroupName ).Append( C_KEY_ALLE ), ByteString( aAllValues, RTL_TEXTENCODING_UTF8 ) );
+        aConf.WriteKey( C_KEY_ALLE, ByteString( aAllValues, RTL_TEXTENCODING_UTF8 ) );
     }
 
     aCbValue.Clear();
@@ -775,9 +759,7 @@ IMPL_LINK( GenericOptions, DelGroup, Button*, EMPTYARG )
     {
         aCbArea.RemoveEntry( aGroup );
         ByteString aByteGroup( aGroup, RTL_TEXTENCODING_UTF8 );
-        pTempConf->WriteKey( C_KEY_DELETE, pTempConf->ReadKey( C_KEY_DELETE ).Append( aByteGroup ) );
-        pTempConf->DeleteKey( ByteString( aByteGroup ).Append( C_KEY_AKTUELL ) );
-        pTempConf->DeleteKey( ByteString( aByteGroup ).Append( C_KEY_ALLE ) );
+        aConf.DeleteGroup( aByteGroup );
     }
 
     aCbArea.SetText( aCbArea.GetEntry( 0 ) );
@@ -824,35 +806,12 @@ IMPL_LINK( GenericOptions, CheckButtonsHdl, ComboBox*, pCB )
     return 0;
 }
 
-void GenericOptions::Save()
+void GenericOptions::Save( Config &aConfig )
 {
-    xub_StrLen i;
+    DBG_ASSERT( &aConfig == &aConf, "Saving to different Configuration" )
 
-    // Erstmal eventuelle Änderungen Speichern
+    // eventuelle Änderungen Speichern
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
-
-    // Zuerst alles was wir Gelöscht haben raushauen
-    ByteString aDelete = pTempConf->ReadKey( C_KEY_DELETE );
-    for ( i=0 ; i < aDelete.GetTokenCount() ; i++ )
-    {
-        aConf.DeleteGroup( aDelete.GetToken( i ) );
-    }
-
-    // Dann alles aus der Temporären in die Echte ini kopieren.
-    for ( i=0 ; i < aCbArea.GetEntryCount() ; i++ )
-    {
-        ByteString aGroup = ByteString( aCbArea.GetEntry( i ), RTL_TEXTENCODING_UTF8 );
-        ByteString aGroupKeyAktuell( aGroup );
-        aGroupKeyAktuell.Append( C_KEY_AKTUELL );
-        if ( HasKey( *pTempConf, aGroupKeyAktuell ) )
-        {
-            ByteString aCurrentValue = pTempConf->ReadKey( aGroupKeyAktuell );
-            aConf.SetGroup( ByteString( aCbArea.GetEntry( i ), RTL_TEXTENCODING_UTF8 ) );
-            aConf.WriteKey( C_KEY_AKTUELL, aCurrentValue );
-            aConf.WriteKey( C_KEY_ALLE, pTempConf->ReadKey( ByteString( aGroup ).Append( C_KEY_ALLE ) ) );
-        }
-    }
-    aConf.Flush();
 }
 
 
@@ -1295,7 +1254,7 @@ SvNumberformat::
 //          pVar->PutDate( aContent );
             break;
         case SbxINTEGER:
-            pVar->PutInteger( aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
+            pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
         case SbxLONG:
             pVar->PutLong( aNumericFieldRID_NF_NEW_LONG.GetValue() );
