@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:07:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,8 +784,11 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             break;
             case FN_NUMBER_NEWSTART :
             {
-                sal_Bool bVal = *(sal_Bool*)aValue.getValue();
-                rPam.GetDoc()->SetNumRuleStart(*rPam.GetPoint(), bVal);
+                sal_Bool bVal;
+                if (aValue >>= bVal)
+                    rPam.GetDoc()->SetNumRuleStart(*rPam.GetPoint(), bVal);
+                else
+                    throw lang::IllegalArgumentException();
             }
             break;
             case FN_UNO_NUM_RULES:
