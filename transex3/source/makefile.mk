@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
-#   last change: $Author: hr $ $Date: 2004-10-11 13:56:09 $
+#   $Revision: 1.34 $
+#   last change: $Author: rt $ $Date: 2005-01-11 11:25:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,11 +109,21 @@ APP1VERSIONMAP=exports.map
 # extractor and merger for *.src and *.hrc
 APP1TARGET=     $(TARGET)
 APP1OBJS=   $(OBJ)$/src_yy.obj
+
+.IF "$(OS)"!="MACOSX"
+APP1STDLIBS+= $(BTSTRPLIB)
+.ENDIF
+
 APP1STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP1STDLIBS+= $(BTSTRPLIB)   
+.ENDIF
+
 APP1LIBS+=	$(LB)$/$(PRJNAME).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
 
@@ -204,11 +214,20 @@ APP9TARGET= localize_sl
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
+
+.IF "$(OS)"!="MACOSX"
+APP9STDLIBS+= $(BTSTRPLIB)
+.ENDIF
+
 APP9STDLIBS+= \
-            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libs at end for OS X
+APP9STDLIBS+= $(BTSTRPLIB)   
+.ENDIF
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
