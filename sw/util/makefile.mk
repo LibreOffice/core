@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 03:48:28 $
+#   last change: $Author: obo $ $Date: 2004-08-12 10:19:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,7 +162,8 @@ SHL1STDLIBS+= \
     $(VOSLIB) \
     $(SALLIB) \
         $(ICUUCLIB) \
-    $(I18NUTILLIB)
+    $(I18NUTILLIB)	\
+    $(AVMEDIALIB)	
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
@@ -251,7 +252,8 @@ SHL3STDLIBS= \
             $(VOSLIB) \
             $(SALLIB) \
             $(ICUUCLIB)	\
-            $(BASICLIB)
+            $(BASICLIB)	\
+            $(AVMEDIALIB)	
             
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
