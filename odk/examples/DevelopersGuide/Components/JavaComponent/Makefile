@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:37:41 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:21:31 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -89,11 +89,7 @@ $(COMPONENT_NAME)_CLASSFILES = JavaComp/TestServiceProvider.class\
 
 $(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -110,33 +106,33 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	idlc -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
+	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
 $(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javamaker -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
+	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
 
 $(CLASSFILES) : $(GENJAVAFILES) $(JAVAFILES) $(JAVAFILES2) 
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) $(JAVAFILES2) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) $(JAVAFILES2) 
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(OUT_BIN)/%.zip : $(OUT_COMP_GEN)/%.rdb $(OUT_CLASS)/%.jar
+$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(<F)))
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
@@ -162,15 +158,15 @@ JavaComponentExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 %.local: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) local
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) local
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_JAR))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
