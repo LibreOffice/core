@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 16:43:30 $
+ *  last change: $Author: nn $ $Date: 2002-09-13 16:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,19 +221,8 @@ __EXPORT ScPreviewShell::~ScPreviewShell()
 
     DELETEZ(pAccessibilityBroadcaster);
 
-    //  #47435# wie im Writer (SwPagePreView::~SwPagePreView):
-    //  Wenn die Preview zugemacht wird, eine andere View des Dokuments suchen und aktivieren
-
-    TypeId aType = TYPE( SfxTopViewFrame );
-    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocShell, aType );
-        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, aType ) )
-        if( pFrame != GetViewFrame() )
-        {
-            // es gibt noch eine weitere Sicht auf unser Dokument, also
-            // aktiviere dieses
-            pFrame->GetFrame()->Appear();
-            break;
-        }
+    //  #97612# normal mode of operation is switching back to default view in the same frame,
+    //  so there's no need to activate any other window here anymore
 }
 
 void ScPreviewShell::InitStartTable(USHORT nTab)
