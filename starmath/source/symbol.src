@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:21:18 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,15 +1573,15 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "요소" ; > ;
-        < "요소 없음" ; > ;
-        < "에 비해 작음" ; > ;
-        < "에 비해 큼" ; > ;
-        < "같지 않음" ; > ;
+        < "요소없음" ; > ;
+        < "에비해작음" ; > ;
+        < "에비해큼" ; > ;
+        < "같지않음" ; > ;
         < "일치" ; > ;
         < "경향" ; > ;
         < "무한" ; > ;
         < "각" ; > ;
-        < "1000분의 1" ; > ;
+        < "천분의일" ; > ;
         < "그리고" ; > ;
         < "또는" ; > ;
     };
@@ -2001,6 +2001,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
