@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:55:31 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,24 +477,24 @@ SalXLib::SalXLib()
         int flags;
 
         // set close-on-exec descriptor flag.
-        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFD)) != 1)
+        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
             fcntl (pTimeoutFDS_[0], F_SETFD, flags);
         }
-        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFD)) != 1)
+        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
             fcntl (pTimeoutFDS_[1], F_SETFD, flags);
         }
 
         // set non-blocking I/O flag.
-        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFL)) != 1)
+        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
             fcntl (pTimeoutFDS_[0], F_SETFL, flags);
         }
-        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFL)) != 1)
+        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
             fcntl (pTimeoutFDS_[1], F_SETFL, flags);
