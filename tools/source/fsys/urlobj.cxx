@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:45:50 $
+ *  last change: $Author: hr $ $Date: 2004-12-14 11:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1757,7 +1757,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                     aSynAbsURIRef.setLength(i + 1);
                     DBG_ASSERT(
                         aSynAbsURIRef.getLength() > nPathBegin
-                        && aSynAbsURIRef.charAt(aSynAbsURIRef.Len() - 1)
+                        && aSynAbsURIRef.charAt(aSynAbsURIRef.getLength() - 1)
                                == '/',
                         "INetURLObject::convertRelToAbs(): Bad base path");
                     continue;
