@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:28:03 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ ENGLISH ] = "Column t~ype" ;
         Text[ english_us ] = "Column t~ype";
         Text[ portuguese ] = "Tipo";
-        Text[ russian ] = "Тип колонок";
+        Text[ russian ] = "Тип столбцов";
         Text[ greek ] = "Фэрпт уф~хлюн";
         Text[ dutch ] = "Kolomt~ype";
         Text[ french ] = "Type";
@@ -192,7 +192,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ PORTUGUESE ] = "Largura fixa" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "е›єе®љзљ„е®Ѕеє¦(~F)";
-        Text[ russian ] = "Фикс.  ширина";
+        Text[ russian ] = "Фиксированная ширина";
         Text[ polish ] = "Staіa szerokoњж";
         Text[ japanese ] = "е›єе®ље№…(~F)";
         Text[ chinese_traditional ] = "е›єе®љзљ„еЇ¬еє¦(~F)";
@@ -225,7 +225,7 @@ ModalDialog RID_SCDLG_ASCII
         TabStop = TRUE ;
         Check = TRUE ;
         Text[ chinese_simplified ] = "е€†йљ”(~S)";
-        Text[ russian ] = "Раздельно";
+        Text[ russian ] = "Разделено";
         Text[ polish ] = "Rozdzielony";
         Text[ japanese ] = "еЊєе€‡г‚‹(~S)";
         Text[ chinese_traditional ] = "е€†йљ”(~S)";
@@ -256,7 +256,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ SWEDISH ] = "~Teckenuppsдttning" ;
         Text [ PORTUGUESE ] = "Conjunto de caracteres" ;
         Text[ chinese_simplified ] = "е­—з¬¦й›†(~A)";
-        Text[ russian ] = "Набор знаков";
+        Text[ russian ] = "Кодировка";
         Text[ polish ] = "Zbiуr znakуw";
         Text[ japanese ] = "ж–‡е­—е€—(~A)";
         Text[ chinese_traditional ] = "е­—ећ‹(~A)";
@@ -384,7 +384,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ dutch ] = "~Tabulator" ;
         Text [ portuguese ] = "~Tabulaзгo" ;
         Text[ chinese_simplified ] = "е€¶иЎЁз¬¦(~T)";
-        Text[ russian ] = "Табулятор";
+        Text[ russian ] = "Табуляция";
         Text[ polish ] = "Tabulator";
         Text[ japanese ] = "г‚їгѓ–(~T)";
         Text[ chinese_traditional ] = "е®љдЅЌйЌµ(~T)";
@@ -548,7 +548,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ italian ] = "Dalla ~riga" ;
         Text [ spanish ] = "A partir de ~lнnea" ;
         Text [ french ] = "A partir de la ~ligne" ;
-        Text [ dutch ] = "Vanaf  ~rij" ;
+        Text [ dutch ] = "Vanaf~rij" ;
         Text [ portuguese ] = "A partir da ~linha" ;
         Text[ chinese_simplified ] = "ејЂе§‹зљ„иЎЊж•°(~W)";
         Text[ russian ] = "Со строки";
@@ -556,14 +556,14 @@ ModalDialog RID_SCDLG_ASCII
         Text[ japanese ] = "е§‹г‚ЃгЃ®иЎЊ(~W)";
         Text[ chinese_traditional ] = "й–‹е§‹зљ„е€—ж•ё(~W)";
         Text[ arabic ] = "ИПЗнЙ гд ЗбХЭ";
-        Text[ dutch ] = "Vanaf  ~rij";
+        Text[ dutch ] = "Vanaf~rij";
         Text[ chinese_simplified ] = "ејЂе§‹зљ„иЎЊж•°(~W)";
         Text[ greek ] = "Брь гсбммЮ";
         Text[ korean ] = "н–‰л¶Ђн„°(~W)";
         Text[ turkish ] = "Эlk sa~tэr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Des de la f~ila";
-        Text[ finnish ] = "Riviltд";
+        Text[ finnish ] = "Rivilt~д";
         Text[ thai ] = "аё€аёІаёЃа№Ѓаё–~аё§";
     };
     NumericField NF_AT_ROW
@@ -603,7 +603,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ dutch ] = "Vel~dscheidingstekens samenvatten" ;
         Text [ portuguese ] = "Agrupar ~separadores de campos" ;
         Text[ chinese_simplified ] = "еЋ‹зј©жѕз¤є(~D)";
-        Text[ russian ] = "Объединить разделители поля";
+        Text[ russian ] = "Объединить разделители";
         Text[ polish ] = "Kompresuj separatory pola";
         Text[ japanese ] = "гѓ•г‚Јгѓјгѓ«гѓ‰еЊєе€‡г‚ЉгЃ®зµђеђ€(~D)";
         Text[ chinese_traditional ] = "еЈ“зё®йЎЇз¤є(~D)";
