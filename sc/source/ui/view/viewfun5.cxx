@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:28:09 $
+ *  last change: $Author: fs $ $Date: 2001-08-09 09:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@ SO2_DECL_REF(SvStorage)
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include <svx/dbaexchange.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -289,12 +292,11 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     {
         //  insert database field control
 
-        String aString;
-        if ( aDataHelper.GetString( nFormatId, aString ) )
+        if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR ) )
         {
             MakeDrawLayer();
             ScDrawView* pDrawView = GetScDrawView();
-            SdrObject* pObj = pDrawView->CreateFieldControl(aString);
+            SdrObject* pObj = pDrawView->CreateFieldControl( ::svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
             if (pObj)
             {
                 Point aInsPos = aPos;
