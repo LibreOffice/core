@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:57:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,10 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     // which is called from <SwDocShell::ConvertFrom(..)> in order to restore
     // the static pool default.
     pDoc->SetDefault( SwFmtFollowTextFlow( FALSE ) );
+
+// --> collapsing borders FME 2005-05-27 #i29550#
+    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, TRUE ) );
+// <-- collapsing
 
     return bRet;
 }
