@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:15:24 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "½Π±z¨Ο¥Ξ·ΖΉ«Αδ±NΔζ¦μ©μ©Τ¨μ¥k­¶ªΊ¥τ·N¤@­Σ°Ο°μ΅C";
         Text[ arabic ] = "ΗΣΝΘ ΗαΝήζα γδ ΗαΥέΝΙ Ηανγδμ ΘζΗΣΨΙ ΗαγΗζΣ Εαμ ΗαγδΗΨή ΗαΚν ΚΡΫΘ ένεΗ.";
         Text[ greek ] = "Σύρετε με το ποντίκι τα πεδία της δεξιάς σελίδας στις περιοχές που επιθυμείτε.";
-        Text[ korean ] = "ΏΐΈ¥ΒΚΏ΅Ό­ΊΞΕΝ ΏψΗΟ΄Β ΐ§Δ΅·Ξ ΗΚµε ²ψΎξ΄η±β½Κ½ΓΏΐ";
+        Text[ korean ] = "ΏΐΈ¥ΒΚΏ΅Ό­ΊΞΕΝ ΏψΗΟ΄Β ΐ§Δ΅·Ξ ΗΚµεΈ¦ ²ψΎξ΄η±β½Κ½ΓΏΐ";
         Text[ turkish ] = "Saπdaki alanlarύ fare ile istenen konuma sόrόkleyin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Arrastre los campos de la pαgina derecha hacia el αrea deseada.";
