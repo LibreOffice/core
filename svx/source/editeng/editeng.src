@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:25:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String RID_EDITUNDO_DEL
     TEXT[ hebrew ] = "‮מחיקה‬";
     TEXT[ hindi ] = "मिटाओ";
     TEXT[ slovak ] = "Zmazať";
+    TEXT[ hungarian ] = "Törlés";
+    TEXT[ slovenian ] = "Izbriši";
 };
 
 String RID_EDITUNDO_MOVE
@@ -128,6 +130,8 @@ String RID_EDITUNDO_MOVE
     TEXT[ hebrew ] = "‮הזזה‬";
     TEXT[ hindi ] = "स्थानान्तर";
     TEXT[ slovak ] = "Presunúť";
+    TEXT[ hungarian ] = "Áthelyezés";
+    TEXT[ slovenian ] = "Premakni";
 };
 
 String RID_EDITUNDO_INSERT
@@ -162,6 +166,8 @@ String RID_EDITUNDO_INSERT
     TEXT[ hebrew ] = "‮הוספה‬";
     TEXT[ hindi ] = "जोड़ो";
     TEXT[ slovak ] = "Vložiť";
+    TEXT[ hungarian ] = "Beszúrás";
+    TEXT[ slovenian ] = "Vstavi";
 };
 
 String RID_EDITUNDO_REPLACE
@@ -196,6 +202,8 @@ String RID_EDITUNDO_REPLACE
     TEXT[ hebrew ] = "‮החלפה‬";
     TEXT[ hindi ] = "प्रतिस्थापन";
     TEXT[ slovak ] = "Nahradiť";
+    TEXT[ hungarian ] = "Csere";
+    TEXT[ slovenian ] = "Zamenjaj";
 };
 
 String RID_EDITUNDO_SETATTRIBS
@@ -230,6 +238,8 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT[ hebrew ] = "‮ישום תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
     TEXT[ slovak ] = "Použiť atribúty";
+    TEXT[ hungarian ] = "Jellemzők alkalmazása";
+    TEXT[ slovenian ] = "Uporabi atribute";
 };
 
 String RID_EDITUNDO_RESETATTRIBS
@@ -241,7 +251,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT [ portuguese_brazilian ] = "Redefinir atributos" ;
     TEXT [ portuguese ] = "Repor atributos" ;
     TEXT [ finnish ] = "Palauta m��ritteet" ;
-    TEXT [ danish ] = "Nulstil attributer" ;
+    TEXT [ danish ] = "Nulstil attributter" ;
     TEXT [ french ] = "Restaurer les attributs" ;
     TEXT [ swedish ] = "�terst�ll attribut" ;
     TEXT [ dutch ] = "Attributen herstellen" ;
@@ -264,6 +274,8 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ hebrew ] = "‮איפוס תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
     TEXT[ slovak ] = "Obnoviť atribúty";
+    TEXT[ hungarian ] = "Jellemzők visszaállítása";
+    TEXT[ slovenian ] = "Ponastavi atribute";
 };
 
 String RID_EDITUNDO_INDENT
@@ -297,6 +309,8 @@ String RID_EDITUNDO_INDENT
     Text[ hebrew ] = "‮כניסה‬";
     Text[ hindi ] = "इन्डेन्ट";
     Text[ slovak ] = "Odsadenie";
+    Text[ hungarian ] = "Behúzás";
+    Text[ slovenian ] = "Zamik";
 };
 
 String RID_EDITUNDO_SETSTYLE
@@ -331,6 +345,8 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ hebrew ] = "‮ישום סגנונות‬";
     TEXT[ hindi ] = "शैलियों को लागू करो";
     TEXT[ slovak ] = "Použiť štýly";
+    TEXT[ hungarian ] = "Stílusok alkalmazása";
+    TEXT[ slovenian ] = "Uporabi sloge";
 };
 
 String RID_EDITUNDO_TRANSLITERATE
@@ -345,7 +361,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ french ] = "Casse/Caract�res";
     TEXT[ spanish ] = "May�sculas/min�sculas";
     TEXT[ italian ] = "Maiuscole/minuscole";
-    TEXT[ danish ] = "Store og sm� bogstaver";
+    TEXT[ danish ] = "STORE/sm� og tegn";
     TEXT[ swedish ] = "Bokst�ver/tecken";
     TEXT[ polish ] = "Wielkie i ma�e litery";
     TEXT[ portuguese_brazilian ] = "Caixa/Caracteres";
@@ -363,6 +379,8 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ hebrew ] = "‮סיווג אותיות‬";
     TEXT[ hindi ] = "केस/अक्षरें";
     TEXT[ slovak ] = "Veľkosť/znaky";
+    TEXT[ hungarian ] = "Kis- és nagybetűk";
+    TEXT[ slovenian ] = "Črke/znaki";
 };
 
 
@@ -386,7 +404,7 @@ Menu RID_MENU_SPELL
             Text[ spanish ] = "~Revisi�n ortogr�fica...";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
             Text[ italian ] = "Controllo ~ortografico...";
-            Text[ danish ] = "~Stavekontrol";
+            Text[ danish ] = "~Stavekontrol...";
             Text[ swedish ] = "~R�ttstavning...";
             Text[ polish ] = "~Pisownia";
             Text[ portuguese_brazilian ] = "Verifica��o ~Ortogr�fica";
@@ -402,6 +420,8 @@ Menu RID_MENU_SPELL
             Text[ hebrew ] = "‮בדיקת איות‬";
             Text[ hindi ] = "~अक्षर की जाँच";
             Text[ slovak ] = "~Kontrola pravopisu";
+            Text[ hungarian ] = "~Helyesírás-ellenőrzés...";
+            Text[ slovenian ] = "~Preverjanje črkovanja...";
         };
         MenuItem
         {
@@ -418,7 +438,7 @@ Menu RID_MENU_SPELL
             Text [ french ] = "~Ajouter" ;
             Text [ dutch ] = "~Toevoegen" ;
             Text [ swedish ] = "~L�gg till" ;
-            Text [ danish ] = "Ti~lf�j" ;
+            Text [ danish ] = "~Tilf�j" ;
             Text [ portuguese ] = "~Adicionar" ;
             Text [ portuguese_brazilian ] = "~Adicionar" ;
             Text [ chinese_simplified ] = "加入(~A)";
@@ -439,6 +459,8 @@ Menu RID_MENU_SPELL
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
             Text[ slovak ] = "Prid~ať";
+            Text[ hungarian ] = "~Hozzáadás";
+            Text[ slovenian ] = "~Dodaj";
         };
         MenuItem
         {
@@ -451,7 +473,7 @@ Menu RID_MENU_SPELL
             Text [ portuguese_brazilian ] = "Ignorar Tudo" ;
             Text [ portuguese ] = "I~gnorar tudo" ;
             Text [ finnish ] = "Ohita kaikki" ;
-            Text [ danish ] = "I~gnorer alle" ;
+            Text [ danish ] = "Ignorer alle" ;
             Text [ french ] = "Tout ~ignorer" ;
             Text [ swedish ] = "~Ignorera alla" ;
             Text [ dutch ] = "Alle ~negeren" ;
@@ -474,6 +496,8 @@ Menu RID_MENU_SPELL
             Text[ hebrew ] = "‮התעלמות מהכל‬";
             Text[ hindi ] = "सब उपेक्षा करो";
             Text[ slovak ] = "Ignorovať všetko";
+            Text[ hungarian ] = "Mindent mellőz";
+            Text[ slovenian ] = "Prezri vse";
         };
         MenuItem
         {
@@ -487,7 +511,7 @@ Menu RID_MENU_SPELL
             Text [ english_us ] = "AutoCorrect" ;
             Text [ portuguese_brazilian ] = "AutoCorre��o" ;
             Text [ swedish ] = "Auto~Korrigering" ;
-            Text [ danish ] = "Auto~Korrektur" ;
+            Text [ danish ] = "AutoKorrektur" ;
             Text [ italian ] = "~Correzione automatica" ;
             Text [ spanish ] = "~Correcci�n autom�tica" ;
             Text [ french ] = "AutoCo~rrection" ;
@@ -511,6 +535,8 @@ Menu RID_MENU_SPELL
             Text[ hebrew ] = "‮תיקון אוטומטי‬";
             Text[ hindi ] = "स्वयं ठीक करो";
             Text[ slovak ] = "Automatické opravy";
+            Text[ hungarian ] = "Automatikus javítás";
+            Text[ slovenian ] = "Samopopravki";
         };
     };
 };
@@ -529,7 +555,7 @@ String RID_STR_WORD
     Text[ spanish ] = "La palabra es %x";
     Text[ finnish ] = "Word is %x";
     Text[ italian ] = "Il termine � %x";
-    Text[ danish ] = "Word is %x";
+    Text[ danish ] = "Ord er %x";
     Text[ swedish ] = "Ordet �r %x";
     Text[ polish ] = "Word is %x";
     Text[ portuguese_brazilian ] = "Palavra %x";
@@ -545,6 +571,8 @@ String RID_STR_WORD
     Text[ hebrew ] = "‮מילה היא %x‬";
     Text[ hindi ] = "Word is %x";
     Text[ slovak ] = "Slovo je %x";
+    Text[ hungarian ] = "A szó %x";
+    Text[ slovenian ] = "Jezik besede je %x";
 };
 
 String RID_STR_PARAGRAPH
@@ -560,7 +588,7 @@ String RID_STR_PARAGRAPH
     Text[ spanish ] = "El p�rrafo es %x";
     Text[ finnish ] = "Paragraph is %x";
     Text[ italian ] = "Il paragrafo � %x";
-    Text[ danish ] = "Paragraph is %x";
+    Text[ danish ] = "Afsnit er %x";
     Text[ swedish ] = "Stycket �r %x";
     Text[ polish ] = "Paragraph is %x";
     Text[ portuguese_brazilian ] = "Par�grafo %x";
@@ -576,7 +604,14 @@ String RID_STR_PARAGRAPH
     Text[ hebrew ] = "‮פסקה היא %x‬";
     Text[ hindi ] = "Paragraph is %x";
     Text[ slovak ] = "Odstavec je %x";
+    Text[ hungarian ] = "A bekezdés %x";
+    Text[ slovenian ] = "Jezik odstavka je %x";
 };
+
+
+
+
+
 
 
 
