@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_bridge.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2001-03-20 13:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ exception TestBridgeException : com::sun::star::uno::Exception
 
 };
 
-[ uik(FE9FF5C0-95B4-11d3-9F330010-5A677293), ident("XCallMe", 1.0) ]
 interface XCallMe : com::sun::star::uno::XInterface
 {
     void call( [in] string s , [in] long nToDo ) raises( TestBridgeException );
@@ -99,7 +98,6 @@ interface XCallMe : com::sun::star::uno::XInterface
     [oneway] void drawLine( [in] long x1 , [in] long y1, [in] long x2, [in] long y2 );
 };
 
-[uik(FE9FF5C1-95B4-11d3-9F330010-5A677293), ident("XInterfaceTest", 1.0)]
 interface XInterfaceTest : com::sun::star::uno::XInterface
 {
     void setIn( [in] XCallMe callback );
@@ -108,7 +106,6 @@ interface XInterfaceTest : com::sun::star::uno::XInterface
     XCallMe get();
 };
 
-[ uik(FE9FF5C1-95B4-11d3-9F330010-5A677293), ident("XTestFactory", 1.0) ]
 interface XTestFactory : com::sun::star::uno::XInterface
 {
     XCallMe createCallMe();
