@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:12:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
+        Text[ korean ] = "ÇÊµåÀ¯Çü";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipo de campo";
@@ -134,7 +134,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "¿ï¨ú(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se~lección";
@@ -169,7 +169,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "®æ¦¡(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
@@ -220,7 +220,7 @@ TabPage TP_FLD_DOK
         TEXT[ chinese_traditional ] = "­×§ï(~F)";
         TEXT[ arabic ] = "ÇáÊÕÍíÍ";
         TEXT[ greek ] = "Äéüñèùóç";
-        TEXT[ korean ] = "¼öÁ¤(~F)";
+        TEXT[ korean ] = "¼öÁ¤";
         TEXT[ turkish ] = "Düzeltme";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Corrección";
@@ -286,7 +286,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "©T©w¤º®e(~F)";
         Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğáãßùóç ğåñ~éå÷ïìİíùí";
-        Text[ korean ] = "³»¿ë °íÁ¤(~F)";
+        Text[ korean ] = "³»¿ë °íÁ¤";
         Text[ turkish ] = "İçeriği sabitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fijar contenido";
@@ -320,7 +320,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "­×§ï¤é´Áªº¤Ñ¼Æ(~E)";
         Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÃíÇã";
         Text[ greek ] = "Äéüñèùóç óå çìİñåò";
-        Text[ korean ] = "¸çÄ¥ ¾È¿¡ ¼öÁ¤(~E)";
+        Text[ korean ] = "¸çÄ¥ ¾È¿¡ ¼öÁ¤";
         Text[ turkish ] = "Düzeltme (gün)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Corrección en días";
@@ -346,7 +346,7 @@ TabPage TP_FLD_DOK
         Text[ chinese_traditional ] = "­×§ï¤ÀÄÁ³]©w(~E)";
         Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÏŞÇÆŞ";
         Text[ greek ] = "Äéüñèùóç óå ëåğôÜ";
-        Text[ korean ] = "¸î ºĞ³» ¼öÁ¤(~E)";
+        Text[ korean ] = "¸î ºĞ ¾È¿¡ ¼öÁ¤";
         Text[ turkish ] = "Düzeltme (dakika)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Corrección en minutos";
@@ -374,5 +374,6 @@ TabPage TP_FLD_DOK
     Text[ catalan ] = "Documento";
     Text[ finnish ] = "Asiakirja";
 };
+
 
 
