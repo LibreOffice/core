@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:09:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,6 +766,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 switch(nType)
                 {
                     case DataType::BIT:
+                    case DataType::BOOLEAN:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
                         sPropertyName = PROPERTY_DEFAULTSTATE;
                         break;
@@ -810,7 +811,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     aDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
                 // default value
-                if (nType == DataType::BIT)
+                if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
                 {
                     if(bDefault && aDefault.hasValue())
                         aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
