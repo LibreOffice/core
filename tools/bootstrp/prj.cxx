@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-13 15:37:48 $
+ *  last change: $Author: nf $ $Date: 2001-02-14 12:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,9 +517,9 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
 {
     ByteString sPath( rVersion );
 #ifdef UNX
-    sPath += "/settings/SOLARLIST";
-#else
     sPath += "/settings/UNXSOLARLIST";
+#else
+    sPath += "/settings/SOLARLIST";
 #endif
     GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
 
@@ -529,7 +529,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
         Read( sFileName );
     }
     else {
-        SolarFileList aFileList;
+        SolarFileList *pFileList = new SolarFileList();
 
         sPath = rVersion;
         sPath += "/drives";
@@ -586,7 +586,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
 
-                                    aFileList.Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                     fprintf( stdout, "%s\n", sFile.GetBuffer());
@@ -597,9 +597,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                 }
             }
         }
-//      Read( &aFileList );
-        for ( ULONG i = 0; i < aFileList.Count(); i++ )
-            delete aFileList.GetObject( i );
+        Read( pFileList );
     }
 }
 
@@ -617,7 +615,8 @@ BOOL Star::NeedsUpdate()
         DirEntry aEntry( *aLoadedFilesList.GetObject( i ));
         FileStat aStat( aEntry );
 
-        if (( aStat.DateModified() > aDate ) || ( aStat.TimeModified() > aTime ))
+        if (( aStat.DateModified() > aDate ) ||
+            (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
             return TRUE;
     }
     return FALSE;
@@ -636,12 +635,14 @@ void Star::Read( String &rFileName )
     sSourceRoot = aEntry.GetFull();
 
     while( aFileList.Count()) {
-        SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+        DirEntry aEntry( *aFileList.GetObject(( ULONG ) 0 ));
+        if ( aEntry.Exists()) {
+            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            while (( aString = aSolarConfig.GetNext()) != "" )
+                InsertToken (( char * ) aString.GetBuffer());
+        }
         aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
         aFileList.Remove(( ULONG ) 0 );
-
-        while (( aString = aSolarConfig.GetNext()) != "" )
-            InsertToken (( char * ) aString.GetBuffer());
     }
     // resolve all dependencies recursive
     Expand_Impl();
@@ -654,13 +655,18 @@ void Star::Read( SolarFileList *pSolarFiles )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
-        while (( aString = aSolarConfig.GetNext()) != "" )
-            InsertToken (( char * ) aString.GetBuffer());
+        DirEntry aEntry( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        if ( aEntry.Exists()) {
+            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            while (( aString = aSolarConfig.GetNext()) != "" )
+                InsertToken (( char * ) aString.GetBuffer());
+        }
 
-        aLoadedFilesList.Insert( new String( *pSolarFiles->GetObject(( ULONG ) 0 )),
+        aLoadedFilesList.Insert( pSolarFiles->GetObject(( ULONG ) 0 ),
             LIST_APPEND );
+        pSolarFiles->Remove(( ULONG ) 0 );
     }
+    delete pSolarFiles;
 
     Expand_Impl();
 }
@@ -1014,6 +1020,96 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 }
 
 /*****************************************************************************/
+StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion )
+/*****************************************************************************/
+{
+    ByteString sPath( rVersion );
+#ifdef UNX
+    sPath += "/settings/UNXSOLARLIST";
+#else
+    sPath += "/settings/SOLARLIST";
+#endif
+    GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+
+    if( pInfo && pInfo->GetValue().Len()) {
+        String sFileName( pInfo->GetValue(), RTL_TEXTENCODING_ASCII_US );
+        nStarMode = STAR_MODE_SINGLE_PARSE;
+        Read( sFileName );
+    }
+    else {
+        SolarFileList *pFileList = new SolarFileList();
+
+        sPath = rVersion;
+        sPath += "/drives";
+
+        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo && pInfo->GetSubList())  {
+            GenericInformationList *pDrives = pInfo->GetSubList();
+            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
+                GenericInformation *pDrive = pDrives->GetObject( i );
+                if ( pDrive ) {
+                    DirEntry aEntry;
+                    BOOL bOk = FALSE;
+#ifdef UNX
+                    sPath = "UnixVolume";
+                    GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
+                    if ( pUnixVolume ) {
+                        String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
+                        aEntry = DirEntry( sRoot );
+                        bOk = TRUE;
+                     }
+#else
+                    bOk = TRUE;
+                    String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
+                    sRoot += String::CreateFromAscii( "\\" );
+                    aEntry = DirEntry( sRoot );
+#endif
+                    if ( bOk ) {
+                        sPath = "projects";
+                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
+                        if ( pProjectsKey ) {
+                            sPath = rVersion;
+                            sPath += "/settings/PATH";
+                            GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                            if( pPath ) {
+                                ByteString sAddPath( pPath->GetValue());
+#ifdef UNX
+                                sAddPath.SearchAndReplaceAll( "\\", "/" );
+#else
+                                sAddPath.SearchAndReplaceAll( "/", "\\" );
+#endif
+                                String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
+                                aEntry += DirEntry( ssAddPath );
+                            }
+                            GenericInformationList *pProjects = pProjectsKey->GetSubList();
+                            if ( pProjects ) {
+                                String sPrjDir( String::CreateFromAscii( "prj" ));
+                                String sSolarFile( String::CreateFromAscii( "build.lst" ));
+
+                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
+                                    ByteString sProject( *pProjects->GetObject( i ));
+                                    String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
+                                    DirEntry aPrjEntry( aEntry );
+                                    aPrjEntry += DirEntry( ssProject );
+                                    aPrjEntry += DirEntry( sPrjDir );
+                                    aPrjEntry += DirEntry( sSolarFile );
+
+                                    pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+
+                                    ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                                    fprintf( stdout, "%s\n", sFile.GetBuffer());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Read( pFileList );
+    }
+}
+
+/*****************************************************************************/
 void StarWriter::CleanUp()
 /*****************************************************************************/
 {
@@ -1035,12 +1131,16 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
     sSourceRoot = aEntry.GetFull();
 
     while( aFileList.Count()) {
-        SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+
+        DirEntry aEntry( *aFileList.GetObject(( ULONG ) 0 ));
+        if ( aEntry.Exists()) {
+            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+                InsertTokenLine ( aString );
+        }
+
         aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
         aFileList.Remove(( ULONG ) 0 );
-
-        while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-            InsertTokenLine ( aString );
     }
     // resolve all dependencies recursive
     Expand_Impl();
@@ -1060,13 +1160,18 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
-        while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-            InsertTokenLine ( aString );
+        DirEntry aEntry(  *pSolarFiles->GetObject(( ULONG ) 0 ));
+        if ( aEntry.Exists()) {
+            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+                InsertTokenLine ( aString );
+        }
 
-        aLoadedFilesList.Insert( new String( *pSolarFiles->GetObject(( ULONG ) 0 )),
+        aLoadedFilesList.Insert( pSolarFiles->GetObject(( ULONG ) 0 ),
             LIST_APPEND );
+        pSolarFiles->Remove(( ULONG ) 0 );
     }
+    delete pSolarFiles;
 
     Expand_Impl();
     return 0;
@@ -1180,6 +1285,10 @@ USHORT StarWriter::Write( String aFileName )
     }
 
     aFileStream.Close();
+
+    aDate = Date();
+    aTime = Time();
+
     return 0;
 }
 
@@ -1212,6 +1321,10 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
             pPrj = Next();
         } while ( pPrj );
     }
+
+    aDate = Date();
+    aTime = Time();
+
     return 0;
 }
 
