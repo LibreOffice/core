@@ -21,5 +21,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:helpid="helpid:5401" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:text="Extended Help" toolbar:visible="false" toolbar:helpid="5402"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:text="" toolbar:visible="false" toolbar:helpid="5402"/>
+
 </toolbar:toolbar>
