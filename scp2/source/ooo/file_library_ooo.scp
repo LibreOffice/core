@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.19 $
+*  $Revision: 1.20 $
 *
-*  last change: $Author: obo $ $Date: 2004-06-01 09:05:43 $
+*  last change: $Author: kz $ $Date: 2004-06-11 09:47:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -655,7 +655,7 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Go , go)
+STD_UNO_LIB_FILE( gid_File_Lib_Go , go)
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
