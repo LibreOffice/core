@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Summarizer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:04:16 $
+ *  last change:$Date: 2003-11-18 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,17 @@ public class Summarizer {
     public void summarizeUp(DescEntry entry) {
         if ( ( entry.State != null ) && entry.State != "UNKNOWN") return;
         int count = entry.SubEntryCount;
+        int knownIssues = 0;
         Vector failures = new Vector();
         Vector states = new Vector();
         for (int i=0; i<count; i++) {
-            if (entry.SubEntries[i].State == null)
+            if (entry.SubEntries[i].State == null) {
                 entry.SubEntries[i].State = "PASSED.FAILED";
+            }
+            if (entry.SubEntries[i].State == "known issue") {
+                entry.SubEntries[i].State = "PASSED.OK";
+                knownIssues++;
+            }
             if (!entry.SubEntries[i].State.endsWith("OK")) {
                 failures.add(entry.SubEntries[i].entryName);
                 states.add(entry.SubEntries[i].State);
@@ -100,6 +106,8 @@ public class Summarizer {
             entry.hasErrorMsg=true;
             entry.ErrorMsg = errMsg;
             entry.State = state;
+        } else if (entry.EntryType.equals("component") && knownIssues > 0) {
+            entry.State = "PASSED(with known issues).OK";
         } else {
             entry.State = "PASSED.OK";
         }
