@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 16:54:11 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include "PropertyMapper.hxx"
 #include "ChartModelHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
-#include <drafts/com/sun/star/chart2/AxisOrientation.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitSubIncrement.hpp>
 #endif
