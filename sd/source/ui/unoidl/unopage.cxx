@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:17:22 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,12 +159,20 @@
 
 #include <svx/svdview.hxx>
 #include "misc.hxx"
-#include "sdview.hxx"
-#ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
 #endif
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
+#ifndef SVX_LIGHT
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "unoobj.hxx"
 #include "res_bmp.hrc"
 #include "unokywds.hxx"
@@ -725,7 +733,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
             if ( pDoc )
             {
-                SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+                ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
                 if ( pDocShell )
                 {
                     sal_uInt16 nPgNum = 0;
@@ -1214,15 +1222,15 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
 static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 {
 #ifndef SVX_LIGHT
-    SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     if ( pDocShell )
     {
-        SdViewShell* pViewSh = pDocShell->GetViewShell();
+        ::sd::ViewShell* pViewSh = pDocShell->GetViewShell();
 
         if( pViewSh )
         {
-            if( pViewSh->ISA( SdDrawViewShell ) )
-                ((SdDrawViewShell*) pViewSh)->ResetActualPage();
+            if( pViewSh->ISA(::sd::DrawViewShell ) )
+                static_cast< ::sd::DrawViewShell*>(pViewSh)->ResetActualPage();
 
             Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
             const long nWidth = aPageSize.Width();
@@ -1812,11 +1820,12 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
 #ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar
-        SdDrawDocShell* pDocSh = mpModel->GetDocShell();
-        SdViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
-        if( pViewSh && pViewSh->ISA( SdDrawViewShell ) )
+        ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        if( pViewSh && pViewSh->ISA(::sd::DrawViewShell))
         {
-            SdDrawViewShell* pDrawViewSh = (SdDrawViewShell*)pViewSh;
+            ::sd::DrawViewShell* pDrawViewSh = static_cast<
+                  ::sd::DrawViewShell*>(pViewSh);
 
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_PAGE )
@@ -2471,11 +2480,12 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
 
 #ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar
-        SdDrawDocShell* pDocSh = mpModel->GetDocShell();
-        SdViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
-        if( pViewSh && pViewSh->ISA( SdDrawViewShell ) )
+        ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        if( pViewSh && pViewSh->ISA(::sd::DrawViewShell ) )
         {
-            SdDrawViewShell* pDrawViewSh = (SdDrawViewShell*)pViewSh;
+            ::sd::DrawViewShell* pDrawViewSh =
+                  static_cast< ::sd::DrawViewShell*>(pViewSh);
 
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_MASTERPAGE )
