@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ namespace configmgr
         public:
             NodeData(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
 
-            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
         // COMMON: information
             Name                getName()       const { return m_aName_; }
             NodeOffset          getParent()     const { return m_nParent; }
@@ -212,7 +212,7 @@ namespace configmgr
 
         // access helper
         public:
-            data::NodeAccess getOriginalNodeAccess(data::Accessor const& _aAccessor) const;
+            data::NodeAccessRef getOriginalNodeAccessRef(data::Accessor const * _pAccessor) const;
 
         private:
             NodeImpl&       implGetNodeImpl() const;
@@ -253,9 +253,9 @@ namespace configmgr
             TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode);
 
             /// fills this TreeImpl starting from _aRootNode, using the given factory and the tree's template provider
-            void build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
+            void build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccessRef const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
 
-            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
 
         public:
             data::Accessor      getDataAccessor(data::Accessor const& _aExternalAccessor) const;
@@ -402,7 +402,7 @@ namespace configmgr
 
             void implCommitDirectFrom(NodeOffset nNode);
 */
-            void implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
+            void implRebuild(NodeOffset nNode, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
 
         protected:
             /// set a new parent context for this tree
