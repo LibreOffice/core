@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:55:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -44,7 +44,7 @@
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
@@ -96,6 +96,8 @@
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
 #endif
+#include <svx/unoshcol.hxx>
+#include <svx/unopage.hxx>
 
 using namespace ::std;
 using namespace ::rtl;
@@ -269,7 +271,48 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
 Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    SdXImpressDocument* pModel = GetModel();
+
+    Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+
+    DBG_ASSERT (&mrView != NULL,
+        "view is NULL in SdUnoDrawView::getSelection()");
+
+    const SdrMarkList& rMarkList = mrView.GetMarkList();
+    sal_uInt32 nCount = rMarkList.GetMarkCount();
+    for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+    {
+        SdrMark *pMark = rMarkList.GetMark(nNum);
+        if(pMark==NULL)
+            continue;
+
+        SdrObject *pObj = pMark->GetObj();
+        if(pObj==NULL || pObj->GetPage() == NULL)
+            continue;
+
+        Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+
+        if(!xPage.is())
+            continue;
+
+        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+
+        if(pDrawPage==NULL)
+            continue;
+
+        Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+
+        if(xShape.is())
+            xShapes->add(xShape);
+    }
+
     Any aAny;
+    if( 0 != xShapes->getCount() )
+        aAny <<= xShapes;
+
     return aAny;
 }
 
