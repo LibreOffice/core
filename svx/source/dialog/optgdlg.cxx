@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:27:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,24 +230,22 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, ResId( OFA_TP_MISC, DIALOG_MGR() ), rSet ),
 
-    aGbTwoFigure            ( this, ResId( GB_TWOFIGURE ) ),
-    aFtInterpret            ( this, ResId( FT_INTERPRET ) ),
-    aNfYearValue            ( this, ResId( NF_YEARVALUE ) ),
-    aFtTo                   ( this, ResId( FT_TO) ),
-    aHelpAgentFL            ( this, ResId( FL_HELPAGENT ) ),
-    aHelpAgentCB            ( this, ResId( CB_HELPAGENT ) ),
-    aHelpAgentResetFT       ( this, ResId( FT_HELPAGENT_RESET ) ),
-    aHelpAgentResetBtn      ( this, ResId( PB_HELPAGENT_RESET ) ),
-    aHelpAgentTimeFT        ( this, ResId( FT_HELPAGENT_TIME ) ),
-    aHelpAgentTimeED        ( this, ResId( ED_HELPAGENT_TIME ) ),
-    aHelpAgentTimeUnitFT    ( this, ResId( FT_HELPAGENT_TIME_UNIT ) ),
-    aHelpFormattingFL       ( this, ResId( FL_HELPFORMATTING ) ),
-    aStyleSheetFT           ( this, ResId( FT_STYLESHEET     ) ),
-    aStyleSheetLB           ( this, ResId( LB_STYLESHEET     ) ),
-    aFileDlgFL(               this, ResId( FL_FILEDLG )),
-    aFileDlgCB(               this, ResId( CB_FILEDLG )),
-    aDocStatusFL(             this, ResId( FL_DOCSTATUS )),
-    aDocStatusCB(             this, ResId( CB_DOCSTATUS ))
+    aHelpFL             ( this, ResId( FL_HELP ) ),
+    aToolTipsCB         ( this, ResId( CB_TOOLTIP ) ),
+    aExtHelpCB          ( this, ResId( CB_EXTHELP ) ),
+    aHelpAgentCB        ( this, ResId( CB_HELPAGENT ) ),
+    aHelpAgentResetBtn  ( this, ResId( PB_HELPAGENT_RESET ) ),
+    aHelpFormatFT       ( this, ResId( FT_HELPFORMAT ) ),
+    aHelpFormatLB       ( this, ResId( LB_HELPFORMAT ) ),
+    aFileDlgFL          ( this, ResId( FL_FILEDLG ) ),
+    aFileDlgCB          ( this, ResId( CB_FILEDLG ) ),
+    aDocStatusFL        ( this, ResId( FL_DOCSTATUS ) ),
+    aDocStatusCB        ( this, ResId( CB_DOCSTATUS ) ),
+    aTwoFigureFL        ( this, ResId( FL_TWOFIGURE ) ),
+    aInterpretFT        ( this, ResId( FT_INTERPRET ) ),
+    aYearValueField     ( this, ResId( NF_YEARVALUE ) ),
+    aToYearFT           ( this, ResId( FT_TOYEAR ) )
+
 {
     FreeResource();
 
@@ -257,23 +255,33 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFileDlgCB.Hide();
 #endif
 
-    aStrDateInfo = aFtTo.GetText();
-    aNfYearValue.SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
+    // at least the button is as wide as its text
+    long nTxtWidth = aHelpAgentResetBtn.GetTextWidth( aHelpAgentResetBtn.GetText() );
+    Size aBtnSz = aHelpAgentResetBtn.GetSizePixel();
+    if ( aBtnSz.Width() < nTxtWidth )
+    {
+        aBtnSz.Width() = nTxtWidth;
+        aHelpAgentResetBtn.SetSizePixel( aBtnSz );
+    }
+
+    aStrDateInfo = aToYearFT.GetText();
+    aYearValueField.SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
     Link aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
-    aNfYearValue.SetDownHdl( aLink );
-    aNfYearValue.SetUpHdl( aLink );
-    aNfYearValue.SetLoseFocusHdl( aLink );
-    aNfYearValue.SetFirstHdl( aLink );
-    TwoFigureConfigHdl( &aNfYearValue );
+    aYearValueField.SetDownHdl( aLink );
+    aYearValueField.SetUpHdl( aLink );
+    aYearValueField.SetLoseFocusHdl( aLink );
+    aYearValueField.SetFirstHdl( aLink );
+    TwoFigureConfigHdl( &aYearValueField );
 
     SetExchangeSupport();
 
-    aHelpAgentCB.SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentHdl_Impl ) );
+    aLink = LINK( this, OfaMiscTabPage, HelpCheckHdl_Impl );
+    aToolTipsCB.SetClickHdl( aLink );
+    aHelpAgentCB.SetClickHdl( aLink );
     aHelpAgentResetBtn.SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
 
-
     //fill default names as user data
-    static const char* aStyleSheetNames[] =
+    static const char* aHelpFormatNames[] =
     {
         "Default",
         "HighContrast1",
@@ -282,10 +290,10 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         "HighContrastWhite"
     };
 
-    for(USHORT i = 0; i < aStyleSheetLB.GetEntryCount(); i++)
+    for ( USHORT i = 0; i < aHelpFormatLB.GetEntryCount(); i++ )
     {
-        String* pData = new String(String::CreateFromAscii(aStyleSheetNames[i]));
-        aStyleSheetLB.SetEntryData( i, pData );
+        String* pData = new String( String::CreateFromAscii( aHelpFormatNames[i] ) );
+        aHelpFormatLB.SetEntryData( i, pData );
     }
 }
 
@@ -293,9 +301,9 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 OfaMiscTabPage::~OfaMiscTabPage()
 {
-    for(USHORT i = 0; i < aStyleSheetLB.GetEntryCount(); i++)
+    for(USHORT i = 0; i < aHelpFormatLB.GetEntryCount(); i++)
     {
-        delete (String*)aStyleSheetLB.GetEntryData( i );
+        delete static_cast< String* >( aHelpFormatLB.GetEntryData(i) );
     }
 }
 
@@ -312,33 +320,21 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bModified = FALSE;
 
-    SvtCacheOptions aCacheOptions;
-    const SfxUInt16Item* pUInt16Item = PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
-    USHORT nNum = (USHORT)aNfYearValue.GetText().ToInt32();
-    if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
-    {
-        bModified = TRUE;
-        rSet.Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
-    }
-
-    // help agent
     SvtHelpOptions aHelpOptions;
-    BOOL bChecked = aHelpAgentCB.IsChecked();
+    BOOL bChecked = aToolTipsCB.IsChecked();
+    if ( bChecked != aToolTipsCB.GetSavedValue() )
+        aHelpOptions.SetHelpTips( bChecked );
+    bChecked = ( aExtHelpCB.IsChecked() && aToolTipsCB.IsChecked() );
+    if ( bChecked != aExtHelpCB.GetSavedValue() )
+        aHelpOptions.SetExtendedHelp( bChecked );
+    bChecked = aHelpAgentCB.IsChecked();
     if ( bChecked != aHelpAgentCB.GetSavedValue() )
+        aHelpOptions.SetHelpAgentAutoStartMode( bChecked );
+    USHORT nHelpFormatPos = aHelpFormatLB.GetSelectEntryPos();
+    if ( nHelpFormatPos != LISTBOX_ENTRY_NOTFOUND &&
+         nHelpFormatPos != aHelpFormatLB.GetSavedValue() )
     {
-        aHelpOptions.SetHelpAgentAutoStartMode(aHelpAgentCB.IsChecked() );
-    }
-
-    if ( bChecked && aHelpAgentTimeED.GetText() != aHelpAgentTimeED.GetSavedValue() )
-    {
-        sal_Int32 nNewTime = aHelpAgentTimeED.GetValue();
-        aHelpOptions.SetHelpAgentTimeoutPeriod(nNewTime );
-    }
-    USHORT nStyleSheetPos = aStyleSheetLB.GetSelectEntryPos();
-    if( nStyleSheetPos != LISTBOX_ENTRY_NOTFOUND &&
-        nStyleSheetPos != aStyleSheetLB.GetSavedValue())
-    {
-        aHelpOptions.SetHelpStyleSheet(*(String*)aStyleSheetLB.GetEntryData( nStyleSheetPos ));
+        aHelpOptions.SetHelpStyleSheet( *static_cast< String* >( aHelpFormatLB.GetEntryData( nHelpFormatPos ) ) );
     }
 
     if ( aFileDlgCB.IsChecked() != aFileDlgCB.GetSavedValue() )
@@ -347,12 +343,23 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
         aMiscOpt.SetUseSystemFileDialog( !aFileDlgCB.IsChecked() );
         bModified = TRUE;
     }
-    if(aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue())
+
+    if ( aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue() )
     {
         SvtPrintWarningOptions aPrintOptions;
-        aPrintOptions.SetModifyDocumentOnPrintingAllowed(aDocStatusCB.IsChecked());
+        aPrintOptions.SetModifyDocumentOnPrintingAllowed( aDocStatusCB.IsChecked() );
         bModified = TRUE;
     }
+
+    const SfxUInt16Item* pUInt16Item =
+        PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
+    USHORT nNum = (USHORT)aYearValueField.GetText().ToInt32();
+    if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
+    {
+        bModified = TRUE;
+        rSet.Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
+    }
+
     return bModified;
 }
 
@@ -360,40 +367,25 @@ BOOL OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 
 void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 {
-    SvtCacheOptions     aCacheOptions;
-    const SfxPoolItem*  pItem;
-
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, FALSE, &pItem ) )
-    {
-        aNfYearValue.SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
-        TwoFigureConfigHdl( &aNfYearValue );
-    }
-    else
-    {
-        aNfYearValue.Enable(FALSE);
-        aGbTwoFigure.Enable(FALSE);
-        aFtInterpret.Enable(FALSE);
-        aFtTo.Enable(FALSE);
-    }
-
     SvtHelpOptions aHelpOptions;
+    aToolTipsCB.Check( aHelpOptions.IsHelpTips() );
+    aExtHelpCB.Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
     aHelpAgentCB.Check( aHelpOptions.IsHelpAgentAutoStartMode() );
-
-    aHelpAgentTimeED.SetValue( aHelpOptions.GetHelpAgentTimeoutPeriod() );
     String sStyleSheet = aHelpOptions.GetHelpStyleSheet();
-    for(USHORT i = 0; i < aStyleSheetLB.GetEntryCount(); i++)
+    for ( USHORT i = 0; i < aHelpFormatLB.GetEntryCount(); ++i )
     {
-        if(*(String*)aStyleSheetLB.GetEntryData( i ) == sStyleSheet)
+        if ( *static_cast< String* >( aHelpFormatLB.GetEntryData(i) ) == sStyleSheet )
         {
-            aStyleSheetLB.SelectEntryPos(i);
+            aHelpFormatLB.SelectEntryPos(i);
             break;
         }
     }
 
-    aStyleSheetLB.SaveValue();
-    HelpAgentHdl_Impl( &aHelpAgentCB );
+    aToolTipsCB.SaveValue();
+    aExtHelpCB.SaveValue();
     aHelpAgentCB.SaveValue();
-    aHelpAgentTimeED.SaveValue();
+    aHelpFormatLB.SaveValue();
+    HelpCheckHdl_Impl( &aHelpAgentCB );
 
     SvtMiscOptions aMiscOpt;
     aFileDlgCB.Check( !aMiscOpt.UseSystemFileDialog() );
@@ -402,6 +394,20 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     SvtPrintWarningOptions aPrintOptions;
     aDocStatusCB.Check(aPrintOptions.IsModifyDocumentOnPrintingAllowed());
     aDocStatusCB.SaveValue();
+
+    const SfxPoolItem* pItem = NULL;
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, FALSE, &pItem ) )
+    {
+        aYearValueField.SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
+        TwoFigureConfigHdl( &aYearValueField );
+    }
+    else
+    {
+        aYearValueField.Enable(FALSE);
+        aTwoFigureFL.Enable(FALSE);
+        aInterpretFT.Enable(FALSE);
+        aToYearFT.Enable(FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -409,18 +415,18 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
     String aOutput( aStrDateInfo );
-    String aStr( aNfYearValue.GetText() );
+    String aStr( aYearValueField.GetText() );
     International aInt;
     aStr.EraseAllChars( aInt.GetNumThousandSep() );
     long nNum = aStr.ToInt32();
-    if ( aStr.Len() != 4 || nNum < aNfYearValue.GetMin() || nNum > aNfYearValue.GetMax() )
+    if ( aStr.Len() != 4 || nNum < aYearValueField.GetMin() || nNum > aYearValueField.GetMax() )
         aOutput.AppendAscii("????");
     else
     {
         nNum += 99;
         aOutput += String::CreateFromInt32( nNum );
     }
-    aFtTo.SetText( aOutput );
+    aToYearFT.SetText( aOutput );
     return 0;
 }
 
@@ -428,24 +434,20 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
-    long nNum = aNfYearValue.GetValue();
+    long nNum = aYearValueField.GetValue();
     String aOutput( String::CreateFromInt32( nNum ) );
-    aNfYearValue.SetText( aOutput );
-    aNfYearValue.SetSelection( Selection( 0, aOutput.Len() ) );
+    aYearValueField.SetText( aOutput );
+    aYearValueField.SetSelection( Selection( 0, aOutput.Len() ) );
     TwoFigureHdl( pEd );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMiscTabPage, HelpAgentHdl_Impl, CheckBox*, pBox )
+IMPL_LINK( OfaMiscTabPage, HelpCheckHdl_Impl, CheckBox*, EMPTYARG )
 {
-    BOOL bEnable = pBox->IsChecked();
-    aHelpAgentResetFT.Enable( bEnable );
-    aHelpAgentResetBtn.Enable( bEnable );
-    aHelpAgentTimeFT.Enable( bEnable );
-    aHelpAgentTimeED.Enable( bEnable );
-    aHelpAgentTimeUnitFT.Enable( bEnable );
+    aExtHelpCB.Enable( aToolTipsCB.IsChecked() );
+    aHelpAgentResetBtn.Enable( aHelpAgentCB.IsChecked() );
     return 0;
 }
 
@@ -494,12 +496,12 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aMousePosLB         ( this, ResId( LB_MOUSEPOS ) ),
     aMouseMiddleFT      ( this, ResId( FT_MOUSEMIDDLE ) ),
     aMouseMiddleLB      ( this, ResId( LB_MOUSEMIDDLE ) ),
-    a3DGB               ( this, ResId( GB_3D ) ),
+    a3DGB               ( this, ResId( FL_3D ) ),
     a3DOpenGLCB         ( this, ResId( CB_3D_OPENGL ) ),
     a3DOpenGLFasterCB   ( this, ResId( CB_3D_OPENGL_FASTER ) ),
     a3DDitheringCB      ( this, ResId( CB_3D_DITHERING ) ),
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
-    aWorkingSetBox      ( this, ResId( GB_WORKINGSET ) ),
+    aWorkingSetBox      ( this, ResId( FL_WORKINGSET ) ),
     aDocViewBtn         ( this, ResId( BTN_DOCVIEW ) ),
     aOpenWinBtn         ( this, ResId( BTN_OPENWIN ) ),
     pAppearanceCfg(new SvtTabAppearanceCfg)
@@ -904,7 +906,7 @@ struct LanguageConfig_Impl
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, ResId( OFA_TP_LANGUAGES, DIALOG_MGR() ), rSet ),
-    aUILanguageGB(this,         ResId(GB_UI_LANG        )),
+    aUILanguageGB(this,         ResId(FL_UI_LANG        )),
     aLocaleSettingFI(this,      ResId(FI_LOCALESETTING)),
     aLocaleSettingFT(this,      ResId(FT_LOCALESETTING)),
     aLocaleSettingLB(this,      ResId(LB_LOCALESETTING)),
@@ -913,7 +915,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aDecimalSeparatorCB(this,   ResId(CB_DECIMALSEPARATOR)),
     aCurrencyFT( this,          ResId(FT_CURRENCY       )),
     aCurrencyLB( this,          ResId(LB_CURRENCY       )),
-    aLinguLanguageGB(this,      ResId(GB_LINGU_LANG     )),
+    aLinguLanguageGB(this,      ResId(FL_LINGU_LANG     )),
     aWesternLanguageFI(this,    ResId(FI_WEST_LANG      )),
     aWesternLanguageFT(this,    ResId(FT_WEST_LANG      )),
     aWesternLanguageLB(this,    ResId(LB_WEST_LANG      )),
