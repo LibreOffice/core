@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:08:21 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,13 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     // OD 25.03.2003 #108339# - direct initialization of section
                     // after insertion in the layout
                     static_cast<SwSectionFrm*>(pFrm)->Init();
-                    if( pPrv && pPrv->IsInFtn() )
+
+                    // --> FME 2004-09-08 #i33963#
+                    // Do not trust the IsInFtn flag. If we are currently
+                    // building up a table, the upper of pPrv may be a cell
+                    // frame, but the cell frame does not have an upper yet.
+                    if( pPrv && 0 != pPrv->ImplFindFtnFrm() )
+                    // <--
                     {
                         if( pPrv->IsSctFrm() )
                             pPrv = ((SwSectionFrm*)pPrv)->ContainsCntnt();
