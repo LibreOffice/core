@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:18:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     if ( xPropSet.is() )
     {
         try
-           {
+        {
         Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
         aValue >>= xLayoutManager;
         }
@@ -654,23 +654,23 @@ void SfxWorkWindow::DeleteControllers_Impl()
     if ( xLayoutManager.is() )
     {
         rtl::OUString aStatusBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
-    xLayoutManager->destroyElement( aStatusBarResStr );
-    ResetStatusBar_Impl();
+     xLayoutManager->destroyElement( aStatusBarResStr );
+        ResetStatusBar_Impl();
 
-    // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
-    rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
-    for ( USHORT i = 0; i < aObjBarList.size(); i++ )
-    {
-        // Nicht jede Position mu\s belegt sein
-        USHORT nId = aObjBarList[i].nId;
-        if ( nId )
+        // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
+        rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+        for ( USHORT i = 0; i < aObjBarList.size(); i++ )
         {
-            rtl::OUString aTbxId( aTbxType );
-        aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
-        xLayoutManager->destroyElement( aTbxId );
-        aObjBarList[i].nId = 0;
+            // Nicht jede Position mu\s belegt sein
+            USHORT nId = aObjBarList[i].nId;
+            if ( nId )
+            {
+                rtl::OUString aTbxId( aTbxType );
+                aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
+                xLayoutManager->destroyElement( aTbxId );
+                aObjBarList[i].nId = 0;
+            }
         }
-    }
     }
 
     // ObjectBars werden alle auf einmal released, da sie einen
