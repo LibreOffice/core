@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 10:09:40 $
+ *  last change: $Author: os $ $Date: 2001-03-12 16:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4338,9 +4338,12 @@ sal_Bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
     {
     case MID_RELIEF:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = -1;
             rVal >>= nVal;
-            SetValue( (FontRelief)nVal );
+            if(nVal >= 0 && nVal <= RELIEF_ENGRAVED)
+                SetValue( (FontRelief)nVal );
+            else
+                bRet = sal_False;
         }
         break;
     default:
