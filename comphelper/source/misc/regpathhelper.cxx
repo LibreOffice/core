@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-06-29 15:34:32 $
+ *  last change: $Author: jsc $ $Date: 2001-07-23 10:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _OSL_SECURITY_HXX_
 #include <osl/security.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -211,7 +214,7 @@ OUString getPathToUserRegistry()
         if (f != NULL)
         {
             fclose(f);
-            userRegistryName = OStringToOUString( sBuffer, RTL_TEXTENCODING_ASCII_US);
+            userRegistryName = OStringToOUString( sBuffer, osl_getThreadTextEncoding() );
         }
     }
 
@@ -243,7 +246,7 @@ OUString getPathToSystemRegistry()
 
         if (!FileBase::getSystemPathFromFileURL(uBuffer, systemRegistryName))
         {
-            OString tmpStr( OUStringToOString(systemRegistryName, RTL_TEXTENCODING_ASCII_US) );
+            OString tmpStr( OUStringToOString(systemRegistryName, osl_getThreadTextEncoding()) );
             f = fopen( tmpStr.getStr(), "r" );
         }
     }
@@ -259,7 +262,7 @@ OUString getPathToSystemRegistry()
             if (f != NULL)
             {
                 fclose(f);
-                systemRegistryName = OStringToOUString( tmpStr, RTL_TEXTENCODING_ASCII_US);
+                systemRegistryName = OStringToOUString( tmpStr, osl_getThreadTextEncoding() );
             } else
             {
                 systemRegistryName = OUString();
