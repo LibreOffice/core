@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:20:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,6 +602,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
         switch (nDataType)
         {
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 aPossibleTypes.Insert(SID_FM_CHECKBOX, aPossibleTypes.Count());
                 break;
             case DataType::TINYINT:
