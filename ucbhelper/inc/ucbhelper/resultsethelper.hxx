@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:12:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
 #include <ucbhelper/contenthelper.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace cppu {
     class OInterfaceContainerHelper;
@@ -114,7 +117,7 @@ namespace ucb {
   * - standard interfaces ( XInterface, XTypeProvider, XServiceInfo )
   * - all required interfaces for service com::sun::star::ucb::DynamicResultSet
   */
-class ResultSetImplHelper :
+class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::lang::XServiceInfo,
@@ -140,7 +143,7 @@ protected:
         com::sun::star::ucb::XDynamicResultSetListener > m_xListener;
 
 private:
-    void init( sal_Bool bStatic );
+    UCBHELPER_DLLPRIVATE void init( sal_Bool bStatic );
 
     /**
       * Your implementation of this method has to fill the protected member
@@ -156,7 +159,7 @@ private:
       * Note that you may use the class ucb::ResultSet to implement the
       * static resultset, that is required here.
       */
-    virtual void initStatic() = 0;
+    UCBHELPER_DLLPRIVATE virtual void initStatic() = 0;
 
     /**
       * Your implementation of this method has to fill the protected members
@@ -176,7 +179,7 @@ private:
       * implementation object. This normally will be the same instance you put
       * into m_xResultSet1 when initStatic() is called.
       */
-    virtual void initDynamic() = 0;
+    UCBHELPER_DLLPRIVATE virtual void initDynamic() = 0;
 
 public:
     /**
