@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-20 10:01:22 $
+ *  last change: $Author: cmc $ $Date: 2002-08-28 14:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,48 +366,60 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
         {
         case '\\':
             {
-                switch( nNextCh = GetNextChar() )
+                switch (nNextCh = GetNextChar())
                 {
                 case '\'':
                     {
-                    rtl_TextEncodingInfo aEncInfo;
-                    if( rtl_getTextEncodingInfo( GetSrcEncoding(), &aEncInfo )
-                        && 2 == aEncInfo.MaximumCharSize )
-                    {
-                        rtl_TextEncoding eSvSet = GetSrcEncoding();
-                        SetSrcEncoding( RTL_TEXTENCODING_ASCII_US );
-
-                        sal_Char aDblChr[ 2 ];
-                        aDblChr[0] = (sal_Char)GetHexValue();
-                        nNextCh = GetNextChar();
-                        while( 0xD == nNextCh )
-                            nNextCh = GetNextChar();
-                        while( 0xA == nNextCh )
-                            nNextCh = GetNextChar();
-
-                        if( '\\' == nNextCh &&
-                            '\'' == ( nNextCh = GetNextChar()) )
-                            aDblChr[1] = (sal_Char)GetHexValue();
-                        else if ((nNextCh != '{') && (nNextCh != '}'))
-                            aDblChr[1] = (sal_Char)nNextCh;
-                        else
+                        ByteString aByteString;
+                        while (1)
                         {
-                            aDblChr[1] = ' ';
-                            bWeiter = FALSE;
+                            aByteString.Append((char)GetHexValue());
+
+                            bool bBreak = false;
+                            sal_Char nSlash;
+                            while (!bBreak)
+                            {
+                                nSlash = (sal_Char)GetNextChar();
+                                while (nSlash == ' ' || nSlash == 0xD ||
+                                        nSlash == 0xA)
+                                {
+                                    nSlash = (sal_Char)GetNextChar();
+                                }
+
+                                switch (nSlash)
+                                {
+                                    case '{':
+                                    case '}':
+                                    case '\\':
+                                        bBreak = true;
+                                        break;
+                                    default:
+                                        aByteString.Append(nSlash);
+                                        break;
+                                }
+                            }
+
+                            nNextCh = GetNextChar();
+
+                            if (nSlash != '\\' || nNextCh != '\'')
+                            {
+                                rInput.SeekRel(-1);
+                                nNextCh = nSlash;
+                                break;
+                            }
                         }
 
-                        SetSrcEncoding( eSvSet );
+                        bNextCh = FALSE;
 
-                        sal_Size nL = sizeof( aDblChr );
-                        *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
-                                            aDblChr, &nL, GetSrcEncoding() );
-                    }
-                    else
-                        *(pStr + nStrLen++) = ByteString::ConvertToUnicode(
-                                (sal_Char)GetHexValue(), GetSrcEncoding() );
+                        if (aByteString.Len())
+                        {
+                            String aUniString(aByteString, GetSrcEncoding());
+                            xub_StrLen nLen = aUniString.Len();
+                            for (int i = 0; i < nLen; ++i)
+                                *(pStr + nStrLen++) = aUniString.GetChar(i);
+                        }
                     }
                     break;
-
                 case '\\':
                 case '}':
                 case '{':
