@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:28:52 $
+ *  last change: $Author: fs $ $Date: 2001-09-06 15:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,12 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
 //------------------------------------------------------------------------------
@@ -196,13 +202,13 @@ struct PropertySetInfo
                                             // sal_False -> the set has _no_ such property or it's value isn't empty
 };
 
-BOOL operator < (const Reference< ::com::sun::star::beans::XPropertySet >& lhs,
-                 const Reference< ::com::sun::star::beans::XPropertySet >& rhs)
+BOOL operator < (const Reference< XPropertySet >& lhs,
+                 const Reference< XPropertySet >& rhs)
 {
     return lhs.get() < rhs.get();
 }
 
-DECLARE_STL_STDKEY_MAP(Reference< ::com::sun::star::beans::XPropertySet >, PropertySetInfo, PropertySetInfoCache);
+DECLARE_STL_STDKEY_MAP(Reference< XPropertySet >, PropertySetInfo, PropertySetInfoCache);
 
 //------------------------------------------------------------------------------
 
@@ -352,32 +358,32 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
-    // ist das Control noch einer ::com::sun::star::form::Form zugeordnet
+    // ist das Control noch einer Form zugeordnet
     Reference< XInterface >  xModel = pObj->GetUnoControlModel();
-    Reference< ::com::sun::star::form::XFormComponent >  xContent(xModel, UNO_QUERY);
+    Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->GetPage())
     {
-        // Komponente gehoert noch keiner ::com::sun::star::form::Form an
+        // Komponente gehoert noch keiner Form an
         if (!xContent->getParent().is())
         {
             // Einfuegen in den Parent falls noetig
-            Reference< ::com::sun::star::container::XIndexContainer >  xParent = pObj->GetParent();
-            // Suchen des ::com::sun::star::form::Form in der aktuellen Page
-            Reference< ::com::sun::star::container::XIndexContainer >  xForm;
+            Reference< XIndexContainer >  xParent = pObj->GetParent();
+            // Suchen des Form in der aktuellen Page
+            Reference< XIndexContainer >  xForm;
             Reference< XInterface >  xIface(xParent, UNO_QUERY);
-            Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pObj->GetPage())->GetForms(), UNO_QUERY);;
+            Reference< XIndexAccess >  xForms(((FmFormPage*)pObj->GetPage())->GetForms(), UNO_QUERY);;
 
             if (searchElement(xForms, xIface))
                 xForm = xParent;
             else
             {
-                Reference< ::com::sun::star::form::XForm >  xTemp = ((FmFormPage*)pObj->GetPage())->GetImpl()->SetDefaults(xContent);
-                xForm = Reference< ::com::sun::star::container::XIndexContainer > (xTemp, UNO_QUERY);
+                Reference< XForm >  xTemp = ((FmFormPage*)pObj->GetPage())->GetImpl()->SetDefaults(xContent);
+                xForm = Reference< XIndexContainer > (xTemp, UNO_QUERY);
             }
 
             // Position des Elements
             sal_Int32 nPos = xForm->getCount();
-            if ((::com::sun::star::container::XIndexContainer*)xForm.get() == (::com::sun::star::container::XIndexContainer*)xParent.get())
+            if ((XIndexContainer*)xForm.get() == (XIndexContainer*)xParent.get())
             {
                 if (nPos > pObj->GetPos())
                     nPos = xForm->getCount();
@@ -385,13 +391,13 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 
             xForm->insertByIndex(nPos, makeAny(xContent));
 
-            Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xForm, UNO_QUERY);
+            Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
             if (xManager.is())
                 xManager->registerScriptEvents(nPos, pObj->GetEvents());
         }
 
         // FormObject zuruecksetzen
-        pObj->SetObjEnv(Reference< ::com::sun::star::container::XIndexContainer > ());
+        pObj->SetObjEnv(Reference< XIndexContainer > ());
     }
 }
 
@@ -420,9 +426,9 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 {
-    // ist das Control noch einer ::com::sun::star::form::Form zugeordnet
+    // ist das Control noch einer Form zugeordnet
     Reference< XInterface >  xModel = pObj->GetUnoControlModel();
-    Reference< ::com::sun::star::form::XFormComponent >  xContent(xModel, UNO_QUERY);
+    Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is())
     {
         // das Object wird aus einer Liste herausgenommen
@@ -431,16 +437,16 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 
         // wird das Object wieder eingefuegt und ein Parent existiert, so wird dieser
         // Parent wiederum gesetzt
-        Reference< ::com::sun::star::container::XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
+        Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
         if (xForm.is())
         {
-            Reference< ::com::sun::star::container::XIndexAccess >  xIndexAccess((::com::sun::star::container::XIndexContainer*)xForm.get());
+            Reference< XIndexAccess >  xIndexAccess((XIndexContainer*)xForm.get());
             // Feststellen an welcher Position sich das Kind befunden hat
             sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
             if (nPos >= 0)
             {
-                Sequence< ::com::sun::star::script::ScriptEventDescriptor > aEvts;
-                Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xForm, UNO_QUERY);
+                Sequence< ScriptEventDescriptor > aEvts;
+                Reference< XEventAttacherManager >  xManager(xForm, UNO_QUERY);
                 if (xManager.is())
                     aEvts = xManager->getScriptEvents(nPos);
 
@@ -458,14 +464,14 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     }
 }
 
-//  ::com::sun::star::lang::XEventListener
+//  XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::disposing(const ::com::sun::star::lang::EventObject& e) throw( RuntimeException )
+void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
     // check if it's an object we have cached informations about
     if (m_pPropertySetCache)
     {
-        Reference< ::com::sun::star::beans::XPropertySet > xSourceSet(e.Source, UNO_QUERY);
+        Reference< XPropertySet > xSourceSet(e.Source, UNO_QUERY);
         if (xSourceSet.is())
         {
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
@@ -476,13 +482,13 @@ void SAL_CALL FmXUndoEnvironment::disposing(const ::com::sun::star::lang::EventO
     }
 }
 
-// ::com::sun::star::beans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
+void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 {
     if (!IsLocked())
     {
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(evt.Source, UNO_QUERY);
+        Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
         if (!xSet.is())
             return;
 
@@ -564,7 +570,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
 
             // the attributes
             INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
-            aNewEntry.bIsTransientOrReadOnly = ((nAttributes & ::com::sun::star::beans::PropertyAttribute::READONLY) != 0) || ((nAttributes & ::com::sun::star::beans::PropertyAttribute::TRANSIENT) != 0);
+            aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
             // check if it is the special "DataFieldProperty"
             aNewEntry.bIsControlSourceProperty = sal_False;
@@ -605,7 +611,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
         // if it's the DataField property we may have to adjust our cache
         if (m_pPropertySetCache && evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
         {
-            Reference< ::com::sun::star::beans::XPropertySet >  xSet(evt.Source, UNO_QUERY);
+            Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
             PropertySetInfo& rSetInfo = (*pCache)[xSet];
             rSetInfo.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
@@ -613,9 +619,9 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
     }
 }
 
-// ::com::sun::star::beans::XVetoableChangeListener
+// XVetoableChangeListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::vetoableChange(const ::com::sun::star::beans::PropertyChangeEvent& aEvent) throw( ::com::sun::star::beans::PropertyVetoException, RuntimeException )
+void SAL_CALL FmXUndoEnvironment::vetoableChange(const PropertyChangeEvent& aEvent) throw( PropertyVetoException, RuntimeException )
 {
     if (aEvent.PropertyName == FM_PROP_DATASOURCE)
     {
@@ -624,14 +630,14 @@ void SAL_CALL FmXUndoEnvironment::vetoableChange(const ::com::sun::star::beans::
         if (findConnection(aEvent.Source).is())
         {
             ::rtl::OUString aMessage = ::rtl::OUString(SVX_RES(RID_STR_VETO_DATASOURCE));
-            throw(::com::sun::star::beans::PropertyVetoException(aMessage, (::com::sun::star::beans::XVetoableChangeListener*)this));
+            throw(PropertyVetoException(aMessage, (XVetoableChangeListener*)this));
         }
     }
 }
 
-// ::com::sun::star::container::XContainerListener
+// XContainerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementInserted(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
 {
     // neues Object zum lauschen
     Reference< XInterface >  xIface;
@@ -646,7 +652,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ::com::sun::star::contai
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
 {
     Reference< XInterface >  xIface;
     evt.ReplacedElement >>= xIface;
@@ -663,7 +669,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::contai
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
 {
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
@@ -677,7 +683,7 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ::com::sun::star::contain
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::AddForms(const Reference< ::com::sun::star::container::XNameContainer > & rForms)
+void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
     Reference< XInterface >  xInt = rForms;
@@ -686,7 +692,7 @@ void FmXUndoEnvironment::AddForms(const Reference< ::com::sun::star::container::
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::RemoveForms(const Reference< ::com::sun::star::container::XNameContainer > & rForms)
+void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     Lock();
     Reference< XInterface >  xInt = rForms;
@@ -697,8 +703,8 @@ void FmXUndoEnvironment::RemoveForms(const Reference< ::com::sun::star::containe
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & Element)
 {
-    // am ::com::sun::star::sdbcx::Container horchen
-    Reference< ::com::sun::star::container::XIndexContainer >  xContainer(Element, UNO_QUERY);
+    // am Container horchen
+    Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
         sal_uInt32 nCount = xContainer->getCount();
@@ -710,13 +716,13 @@ void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & 
         }
     }
 
-    Reference< ::com::sun::star::beans::XPropertySet >  xSet(Element, UNO_QUERY);
+    Reference< XPropertySet >  xSet(Element, UNO_QUERY);
     if (xSet.is())
     {
         if (!bReadOnly)
-            xSet->addPropertyChangeListener(::rtl::OUString(), (::com::sun::star::beans::XPropertyChangeListener*)this);
+            xSet->addPropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
         else
-            xSet->removePropertyChangeListener(::rtl::OUString(), (::com::sun::star::beans::XPropertyChangeListener*)this);
+            xSet->removePropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
     }
 }
 
@@ -724,15 +730,15 @@ void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & 
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::AddElement(const Reference< XInterface > & Element)
 {
-    // am ::com::sun::star::sdbcx::Container horchen
-    Reference< ::com::sun::star::container::XIndexContainer >  xContainer(Element, UNO_QUERY);
+    // am Container horchen
+    Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
-        // Wenn der ::com::sun::star::sdbcx::Container ein EventAttachManager ist, mussen wir uns
+        // Wenn der Container ein EventAttachManager ist, mussen wir uns
         // auch noch als ScriptListener anmelden.
-        Reference< ::com::sun::star::script::XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
+        Reference< XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
         if( xEAManager.is() )
-            xEAManager->addScriptListener( (::com::sun::star::script::XScriptListener*)this );
+            xEAManager->addScriptListener( (XScriptListener*)this );
 
         sal_uInt32 nCount = xContainer->getCount();
         Reference< XInterface >  xIface;
@@ -742,21 +748,21 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface > & Element)
             AddElement(xIface);
         }
 
-        Reference< ::com::sun::star::container::XContainer >  xCont(Element, UNO_QUERY);
+        Reference< XContainer >  xCont(Element, UNO_QUERY);
         if (xCont.is())
-            xCont->addContainerListener((::com::sun::star::container::XContainerListener*)this);
+            xCont->addContainerListener((XContainerListener*)this);
     }
 
     if (!bReadOnly)
     {
         // auf Properties horchen
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(Element, UNO_QUERY);
+        Reference< XPropertySet >  xSet(Element, UNO_QUERY);
         if (xSet.is())
         {
-            xSet->addPropertyChangeListener(::rtl::OUString(), (::com::sun::star::beans::XPropertyChangeListener*)this);
-            Reference< ::com::sun::star::form::XForm >  xForm(xSet, UNO_QUERY);
+            xSet->addPropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
+            Reference< XForm >  xForm(xSet, UNO_QUERY);
             if (xForm.is())
-                xSet->addVetoableChangeListener(FM_PROP_DATASOURCE, (::com::sun::star::beans::XVetoableChangeListener*)this);
+                xSet->addVetoableChangeListener(FM_PROP_DATASOURCE, (XVetoableChangeListener*)this);
         }
     }
 }
@@ -767,15 +773,15 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
     if (!bReadOnly)
     {
         // Verbindung zu PropertySet aufheben
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(Element, UNO_QUERY);
+        Reference< XPropertySet >  xSet(Element, UNO_QUERY);
         if (xSet.is())
         {
-            xSet->removePropertyChangeListener(::rtl::OUString(), (::com::sun::star::beans::XPropertyChangeListener*)this);
+            xSet->removePropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
 
-            Reference< ::com::sun::star::form::XForm >  xForm(xSet, UNO_QUERY);
+            Reference< XForm >  xForm(xSet, UNO_QUERY);
             if (xForm.is())
             {
-                xSet->removeVetoableChangeListener(FM_PROP_DATASOURCE, (::com::sun::star::beans::XVetoableChangeListener*)this);
+                xSet->removeVetoableChangeListener(FM_PROP_DATASOURCE, (XVetoableChangeListener*)this);
 
                 // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
                 // associated with this connection
@@ -786,18 +792,18 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
     }
 
     // Verbindung zu Kindern aufheben
-    Reference< ::com::sun::star::container::XIndexContainer >  xContainer(Element, UNO_QUERY);
+    Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
-        Reference< ::com::sun::star::container::XContainer >  xCont(Element, UNO_QUERY);
+        Reference< XContainer >  xCont(Element, UNO_QUERY);
         if (xCont.is())
-            xCont->removeContainerListener((::com::sun::star::container::XContainerListener*)this);
+            xCont->removeContainerListener((XContainerListener*)this);
 
-        // Wenn der ::com::sun::star::sdbcx::Container ein EventAttachManager ist, mussen wir uns
+        // Wenn der Container ein EventAttachManager ist, mussen wir uns
         // auch noch als ScriptListener anmelden.
-        Reference< ::com::sun::star::script::XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
+        Reference< XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
         if( xEAManager.is() )
-            xEAManager->removeScriptListener( (::com::sun::star::script::XScriptListener*)this );
+            xEAManager->removeScriptListener( (XScriptListener*)this );
 
         sal_uInt32 nCount = xContainer->getCount();
         Reference< XInterface >  xIface;
@@ -810,8 +816,8 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
 }
 
 
-// ::com::sun::star::script::XScriptListener
-void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEvent& evt, Any *pSyncRet )
+// XScriptListener
+void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 {
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -896,13 +902,13 @@ void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEven
     }
 }
 
-void SAL_CALL FmXUndoEnvironment::firing(const ::com::sun::star::script::ScriptEvent& evt)
+void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt)
 {
     firing_Impl( evt );
 }
 
 //------------------------------------------------------------------------------
-Any SAL_CALL FmXUndoEnvironment::approveFiring(const ::com::sun::star::script::ScriptEvent& evt)
+Any SAL_CALL FmXUndoEnvironment::approveFiring(const ScriptEvent& evt)
 {
     Any aRet;
     firing_Impl( evt, &aRet );
@@ -910,7 +916,7 @@ Any SAL_CALL FmXUndoEnvironment::approveFiring(const ::com::sun::star::script::S
 }
 
 //------------------------------------------------------------------------------
-FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const ::com::sun::star::beans::PropertyChangeEvent& evt)
+FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyChangeEvent& evt)
                      :SdrUndoAction(rNewMod)
                      ,aPropertyName(evt.PropertyName)
                      ,aNewValue(evt.NewValue)
@@ -968,7 +974,7 @@ DBG_NAME(FmUndoContainerAction);
 //------------------------------------------------------------------------------
 FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
                                              Action _eAction,
-                                             const Reference< ::com::sun::star::container::XIndexContainer > & xCont,
+                                             const Reference< XIndexContainer > & xCont,
                                              const Reference< XInterface > & xElem,
                                              sal_Int32 nIdx)
                       :SdrUndoAction(rMod)
@@ -986,13 +992,13 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
             if (nIndex < 0)
             {
                 // Feststellen an welcher Position sich das Kind befunden hat
-                Reference< ::com::sun::star::container::XIndexAccess >  xInd(xContainer,UNO_QUERY);
+                Reference< XIndexAccess >  xInd(xContainer,UNO_QUERY);
                 nIndex = getElementPos(xInd, xElement);
             }
 
             if (nIndex >= 0)
             {
-                Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xCont, UNO_QUERY);
+                Reference< XEventAttacherManager >  xManager(xCont, UNO_QUERY);
                 if (xManager.is())
                     aEvts = xManager->getScriptEvents(nIndex);
             }
@@ -1012,10 +1018,10 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
 //------------------------------------------------------------------------------
 FmUndoContainerAction::~FmUndoContainerAction()
 {
-    Reference< ::com::sun::star::lang::XComponent >  xComp(xOwnElement, UNO_QUERY);
+    Reference< XComponent >  xComp(xOwnElement, UNO_QUERY);
     if (xComp.is())
     {
-        Reference< ::com::sun::star::container::XChild >  xChild(xOwnElement, UNO_QUERY);
+        Reference< XChild >  xChild(xOwnElement, UNO_QUERY);
         // nur wenn das Objekt frei schwebt
         if (xChild.is() && !xChild->getParent().is())
             xComp->dispose();
@@ -1041,7 +1047,7 @@ void FmUndoContainerAction::Undo()
                 ::comphelper::query_interface(xObj, xIface);
                 if ((XInterface *)xElement.get() == (XInterface *)xIface.get())
                 {
-                    Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
+                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
                     if (xManager.is())
                         aEvts = xManager->getScriptEvents(nIndex);
                     xContainer->removeByIndex(nIndex);
@@ -1052,20 +1058,20 @@ void FmUndoContainerAction::Undo()
                 if (xContainer->getCount() >= nIndex)
                 {
                     Any aVal;
-                    if (xContainer->getElementType() == ::getCppuType((const Reference< ::com::sun::star::form::XFormComponent>*)0))
+                    if (xContainer->getElementType() == ::getCppuType((const Reference< XFormComponent>*)0))
 
                     {
-                        Reference< ::com::sun::star::form::XFormComponent >  xFmcomp(xElement, UNO_QUERY);
+                        Reference< XFormComponent >  xFmcomp(xElement, UNO_QUERY);
                         aVal <<= xFmcomp;
                     }
                     else
                     {
-                        Reference< ::com::sun::star::form::XForm >  xForm(xElement, UNO_QUERY);
+                        Reference< XForm >  xForm(xElement, UNO_QUERY);
                         aVal <<= xForm;
                     }
 
                     xContainer->insertByIndex(nIndex, aVal);
-                    Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
+                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
                     if (xManager.is())
                         xManager->registerScriptEvents(nIndex, aEvts);
                     xOwnElement = NULL;
@@ -1090,21 +1096,21 @@ void FmUndoContainerAction::Redo()
                 {
                     Any aVal;
                     if (xContainer->getElementType() ==
-                        ::getCppuType((const Reference< ::com::sun::star::form::XFormComponent>*)0))
+                        ::getCppuType((const Reference< XFormComponent>*)0))
 
                     {
-                        Reference< ::com::sun::star::form::XFormComponent >  xFmcomp(xElement, UNO_QUERY);
+                        Reference< XFormComponent >  xFmcomp(xElement, UNO_QUERY);
                         aVal <<= xFmcomp;
                     }
                     else
                     {
-                        Reference< ::com::sun::star::form::XForm >  xForm(xElement, UNO_QUERY);
+                        Reference< XForm >  xForm(xElement, UNO_QUERY);
                         aVal <<= xForm;
                     }
 
                     xContainer->insertByIndex(nIndex, aVal);
 
-                    Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
+                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
                     if (xManager.is())
                         xManager->registerScriptEvents(nIndex, aEvts);
                     xOwnElement = NULL;
@@ -1116,7 +1122,7 @@ void FmUndoContainerAction::Redo()
                 xContainer->getByIndex(nIndex) >>= xObj;
                 if ((XInterface *)xElement.get() == (XInterface *)xObj.get())
                 {
-                    Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
+                    Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
                     if (xManager.is())
                         aEvts = xManager->getScriptEvents(nIndex);
                     xContainer->removeByIndex(nIndex);
@@ -1129,7 +1135,7 @@ void FmUndoContainerAction::Redo()
 }
 
 //------------------------------------------------------------------------------
-FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj* _pObject, const Reference< ::com::sun::star::awt::XControlModel > & _xReplaced)
+FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj* _pObject, const Reference< XControlModel > & _xReplaced)
     :SdrUndoAction(_rMod)
     ,m_xReplaced(_xReplaced)
     ,m_pObject(_pObject)
@@ -1140,10 +1146,10 @@ FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj
 FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 {
     // dispose our element if nobody else is responsible for
-    Reference< ::com::sun::star::lang::XComponent >  xComp(m_xReplaced, UNO_QUERY);
+    Reference< XComponent >  xComp(m_xReplaced, UNO_QUERY);
     if (xComp.is())
     {
-        Reference< ::com::sun::star::container::XChild >  xChild(m_xReplaced, UNO_QUERY);
+        Reference< XChild >  xChild(m_xReplaced, UNO_QUERY);
         if (!xChild.is() || !xChild->getParent().is())
             xComp->dispose();
     }
@@ -1152,37 +1158,40 @@ FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 //------------------------------------------------------------------------------
 void FmUndoModelReplaceAction::Undo()
 {
-    Reference< ::com::sun::star::awt::XControlModel >  xCurrentModel(m_pObject->GetUnoControlModel());
-
-    // replace the model within the parent
-    Reference< ::com::sun::star::container::XChild >  xOldChild(m_xReplaced, UNO_QUERY);
-    if (xOldChild.is())
+    try
     {
-        Reference< ::com::sun::star::container::XNameContainer >  xParent(xOldChild->getParent(), UNO_QUERY);
-        if (xParent.is())
-        {
-            // the form container works with ::com::sun::star::form::FormComponents
-            Reference< ::com::sun::star::form::XFormComponent >  xComponent(m_xReplaced, UNO_QUERY);
-            DBG_ASSERT(xComponent.is(), "FmUndoModelReplaceAction::Undo : the new model is no form component !");
-            try
-            {
-                Reference< ::com::sun::star::beans::XPropertySet >  xCurrentSet(xCurrentModel, UNO_QUERY);
-                DBG_ASSERT(::comphelper::hasProperty(FM_PROP_NAME, xCurrentSet),
-                    "FmUndoModelReplaceAction::Undo : one of the models is invalid !");
-                xParent->replaceByName(::comphelper::getString(xCurrentSet->getPropertyValue(FM_PROP_NAME)), makeAny(xComponent));
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("FmUndoModelReplaceAction::Undo : could not replace the model !");
-            }
+        Reference< XControlModel > xCurrentModel( m_pObject->GetUnoControlModel() );
 
+        // replace the model within the parent
+        Reference< XChild > xCurrentAsChild( xCurrentModel, UNO_QUERY );
+        Reference< XNameContainer > xCurrentsParent;
+        if ( xCurrentAsChild.is() )
+            xCurrentsParent = xCurrentsParent.query( xCurrentAsChild->getParent() );
+        DBG_ASSERT( xCurrentsParent.is(), "FmUndoModelReplaceAction::Undo: invalid current model!" );
+
+        if ( xCurrentsParent.is() )
+        {
+            // the form container works with FormComponents
+            Reference< XFormComponent > xComponent( m_xReplaced, UNO_QUERY );
+            DBG_ASSERT( xComponent.is(), "FmUndoModelReplaceAction::Undo: the new model is no form component !" );
+
+            Reference< XPropertySet > xCurrentAsSet( xCurrentModel, UNO_QUERY );
+            DBG_ASSERT( ::comphelper::hasProperty(FM_PROP_NAME, xCurrentAsSet ), "FmUndoModelReplaceAction::Undo : one of the models is invalid !");
+
+            ::rtl::OUString sName;
+            xCurrentAsSet->getPropertyValue( FM_PROP_NAME ) >>= sName;
+            xCurrentsParent->replaceByName( sName, makeAny( xComponent ) );
+
+            m_pObject->SetUnoControlModel(m_xReplaced);
+            m_pObject->SetChanged();
+
+            m_xReplaced = xCurrentModel;
         }
     }
-
-    m_pObject->SetUnoControlModel(m_xReplaced);
-    m_pObject->SetChanged();
-
-    m_xReplaced = xCurrentModel;
+    catch(Exception&)
+    {
+        DBG_ERROR("FmUndoModelReplaceAction::Undo : could not replace the model !");
+    }
 }
 
 //------------------------------------------------------------------------------
