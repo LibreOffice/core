@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 11:08:59 $
+ *  last change: $Author: sab $ $Date: 2001-10-11 10:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,12 +835,10 @@ void ScXMLTableRowCellContext::EndElement()
                     }
                     if (!pOUTextContent && !pOUText && !pOUTextValue)
                         bIsEmpty = sal_True;
-                    else if ( pOUTextContent && !pOUTextContent->getLength())
-                        bIsEmpty = sal_True;
-                    else if (pOUText && !pOUText->getLength())
-                        bIsEmpty = sal_True;
-                    else if (pOUTextValue && !pOUTextValue->getLength())
-                        bIsEmpty = sal_True;
+                    else if ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
+                        if ( (pOUText && !pOUText->getLength()) || !pOUText )
+                            if ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue )
+                                bIsEmpty = sal_True;
                 }
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
@@ -880,7 +878,6 @@ void ScXMLTableRowCellContext::EndElement()
                                             else if ( i > 0 && pOUText && pOUText->getLength() )
                                             {
                                                 xText->setString(*pOUText);
-                                                delete pOUText;
                                             }
                                             else
                                                 bDoIncrement = sal_False;
@@ -940,6 +937,8 @@ void ScXMLTableRowCellContext::EndElement()
                     SetCellProperties(xCell); // set now only the validation
                     //SetType(xTempCell);
                 }
+                if (pOUText)
+                    delete pOUText;
             }
             else
             {
