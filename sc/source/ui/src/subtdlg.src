@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 13:00:57 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,26 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Gruppen" ;
         Text [ ENGLISH ] = "Groups" ;
+        Text[ english_us ] = "Groups";
+        Text[ portuguese ] = "Groups";
+        Text[ russian ] = "Groups";
+        Text[ greek ] = "Groups";
+        Text[ dutch ] = "Groups";
+        Text[ french ] = "Groups";
+        Text[ spanish ] = "Grupos";
+        Text[ finnish ] = "Groups";
+        Text[ italian ] = "Groups";
+        Text[ danish ] = "Groups";
+        Text[ swedish ] = "Grupper";
+        Text[ polish ] = "Grupy";
+        Text[ portuguese_brazilian ] = "Groups";
+        Text[ japanese ] = "Groups";
+        Text[ korean ] = "Groups";
+        Text[ chinese_simplified ] = "Ğ¡×é";
+        Text[ chinese_traditional ] = "¸s²Õ";
+        Text[ turkish ] = "Groups";
+        Text[ arabic ] = "Groups";
+        Text[ catalan ] = "Groups";
     };
     CheckBox BTN_PAGEBREAK
     {
@@ -155,7 +175,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÇøÓòÏÈ°´ÕÕĞ¡×éÅÅĞò(~S)";
         Text[ russian ] = "Ñîğòèğîâàòü îáëàñòü ñíà÷àëà ïî ãğóïïàì";
-        Text[ polish ] = "Przesortuj wcze?niej o~bszar wed³ug grup";
+        Text[ polish ] = "Przesortuj wczeœniej o~bszar wed³ug grup";
         Text[ japanese ] = "”ÍˆÍ‚ğ‚ ‚ç‚©‚¶‚ß¸ŞÙ°Ìß•Ê‚É•À‚×‚é(~S)";
         Text[ chinese_traditional ] = "°Ï°ì¥ı«ö·Ó¸s²Õ±Æ§Ç(~S)";
         Text[ arabic ] = "İÑÒ ÇáäØÇŞ ŞÈá Ğáß ÍÓÈ ÇáãÌãæÚÇÊ";
@@ -216,7 +236,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~U)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "~Kolejno?æ sortowania okre?l. przez u¿ytkownika";
+        Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
         Text[ japanese ] = "‡˜‚Ìw’è(~U)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
@@ -392,7 +412,7 @@ TabPage RID_SUBTBASE
         Text [ english_us ] = "~Calculate subtotals for" ;
         Text[ chinese_simplified ] = "·ÖÀà»ã×Ü¼ÆËã(~C)";
         Text[ russian ] = "Âû÷èñëèòü ïğîìåæóòî÷íûå èòîãè äëÿ";
-        Text[ polish ] = "Oblicz sumy po?rednie dla";
+        Text[ polish ] = "Oblicz sumy poœrednie dla";
         Text[ japanese ] = "¬Œv‚ğo‚·€–Ú(~C)";
         Text[ chinese_traditional ] = "¤p­p¥Î©ó(~C)";
         Text[ arabic ] = "ÍÓÇÈ ÇáãÌÇãíÚ ÇáİÑÚíÉ áÜ";
@@ -661,11 +681,11 @@ TabPage RID_SUBTBASE
     {
             < "Suma" ; Default ; > ;
         < "Liczba" ; Default ; > ;
-        < "?rednia warto?æ" ; Default ; > ;
+        < "Œrednia wartoœæ" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Produkt" ; Default ; > ;
-        < "Ilo?æ (tylko cyfry)" ; Default ; > ;
+        < "Iloœæ (tylko cyfry)" ; Default ; > ;
         < "Odchylenie standardowe (Próbka)" ; Default ; > ;
         < "OdchStdc (Populacja)" ; Default ; > ;
         < "Wariancja (Próbka)" ; Default ; > ;
@@ -976,7 +996,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     };
     Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
     Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
-    Text[ polish ] = "Sumy po?rednie";
+    Text[ polish ] = "Sumy poœrednie";
     Text[ japanese ] = "¬Œv";
     Text[ chinese_traditional ] = "¤p­p";
     Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
