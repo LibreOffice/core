@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Table.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:40 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 12:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
     protected void setActiveDescendant(javax.accessibility.Accessible descendant) {
         javax.accessibility.Accessible oldAD = activeDescendant;
         activeDescendant = descendant;
-        if (Build.DEBUG) {
-            System.err.println("Firing ACTIVE_DESCENDANT property change");
-        }
         firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY,
             oldAD, descendant);
     }

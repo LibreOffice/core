@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:31:37 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 12:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,19 +131,11 @@ public class AccessBridge {
                 switch (e.getID()) {
                     case java.awt.event.WindowEvent.WINDOW_OPENED:
                         if (Build.DEBUG) {
-                            System.err.println("retrieved WINDOW_OPENED");
+//                          System.err.println("retrieved WINDOW_OPENED");
                         }
                         break;
                     case java.awt.event.WindowEvent.WINDOW_CLOSED:
                         break;
-                    case java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS:
-                        if (Build.DEBUG) {
-                            System.err.println("retrieved WINDOW_GAINED_FOCUS");
-                        }
-                    case java.awt.event.FocusEvent.FOCUS_GAINED:
-                        if (Build.DEBUG) {
-                            System.err.println("retrieved FOCUS_GAINED");
-                        }
                     default:
                         break;
                 }
