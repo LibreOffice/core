@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
+ *  last change: $Author: nn $ $Date: 2002-11-29 13:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,10 @@ service SpreadsheetDocument
     //-------------------------------------------------------------------------
 
     /** contributes spreadsheet document specific properties.
+
+    @deprecated
      */
-    service com::sun::star::sheet::SpreadsheetDocumentSettings;
+    [optional] service com::sun::star::sheet::SpreadsheetDocumentSettings;
 
     //=========================================================================
 
