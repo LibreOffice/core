@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-29 11:02:23 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 06:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,8 +533,18 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     }
 
     Point aPos( rPos );
+
     if ( nEsc )
-        aPos.Y() -= nEsc * GetSize().Height() / 100L ;
+    {
+        long nDiff = GetSize().Height();
+        nDiff *= nEsc;
+        nDiff /= 100;
+
+        if ( !IsVertical() )
+            aPos.Y() -= nDiff;
+        else
+            aPos.X() += nDiff;
+    }
 
     if( IsCapital() )
     {

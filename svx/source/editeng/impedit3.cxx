@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-02 11:47:28 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 06:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2536,19 +2536,21 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     short nEsc = aTmpFont.GetEscapement();
                                     if ( nOrientation )
                                     {
-                                        aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
-                                        // aTmpFont.SetCharOrientation( nOrientation );
-
                                         // Bei Hoch/Tief selbst Hand anlegen:
                                         if ( aTmpFont.GetEscapement() )
                                         {
-                                            aOutPos.Y() -= aTmpFont.GetEscapement() * aTmpFont.GetSize().Height() / 100L ;
+                                            long nDiff = aTmpFont.GetSize().Height() * aTmpFont.GetEscapement() / 100L;
+                                            if ( !IsVertical() )
+                                                aOutPos.Y() -= nDiff;
+                                            else
+                                                aOutPos.X() += nDiff;
                                             aTmpFont.SetEscapement( 0 );
                                         }
 
+                                        aOutPos = lcl_ImplCalcRotatedPos( aOutPos, aOrigin, nSin, nCos );
+                                        aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
                                         aTmpFont.SetPhysFont( pOutDev );
 
-                                        aOutPos = lcl_ImplCalcRotatedPos( aOutPos, aOrigin, nSin, nCos );
                                     }
                                     // nur ausgeben, was im sichtbaren Bereich beginnt:
                                     // Wichtig, weil Bug bei einigen Grafikkarten bei transparentem Font, Ausgabe bei neg.
