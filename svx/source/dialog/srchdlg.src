@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:05:21 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ spanish ] = "Considerar todas las hojas" ;
         Text [ french ] = "Classeur à plusieurs feuilles" ;
         Text [ dutch ] = "Extra" ;
-        Text [ portuguese ] = "Ferramentas" ;
+        Text [ portuguese ] = "Extras" ;
         Text[ chinese_simplified ] = "¹¤¾ß";
         Text[ russian ] = "Ñåðâèñ";
         Text[ polish ] = "Narzêdzia";
