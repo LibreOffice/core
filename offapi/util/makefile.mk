@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-27 09:07:21 $
+#   last change: $Author: hr $ $Date: 2003-06-30 16:23:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -178,6 +178,7 @@ $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
         -x /UCR/com/sun/star/awt/UnoControlDialogModel -x /UCR/com/sun/star/awt/UnoControlEdit \
         -x /UCR/com/sun/star/awt/UnoControlFormattedFieldModel -x /UCR/com/sun/star/awt/UnoControlListBox \
         -x /UCR/com/sun/star/awt/UnoControlNumericFieldModel -x /UCR/com/sun/star/awt/UnoControlPatternFieldModel \
+        -x /UCR/com/sun/star/configuration/SimpleSetUpdate \
         && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
