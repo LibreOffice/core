@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:45:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 81, 117 ) ;
-        Size = MAP_APPFONT ( 40, 100 ) ;
+        Size = MAP_APPFONT ( 60, 100 ) ;
         DropDown = TRUE;
 
         StringList [ de ] =
