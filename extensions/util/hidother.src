@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:24:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,6 @@ hidspecial HID_EVT_ROWCHANGE                    { HelpId = HID_EVT_ROWCHANGE; }
 hidspecial HID_EVT_RELOADING                    { HelpId = HID_EVT_RELOADING; }
 hidspecial HID_EVT_UNLOADING                    { HelpId = HID_EVT_UNLOADING; }
 hidspecial HID_EVT_ADJUSTMENTVALUECHANGED       { HelpId = HID_EVT_ADJUSTMENTVALUECHANGED; }
-
 hidspecial HID_PROP_TOGGLE                      { HelpId = HID_PROP_TOGGLE; }
 hidspecial HID_PROP_FOCUSONCLICK                { HelpId = HID_PROP_FOCUSONCLICK; }
 hidspecial HID_PROP_HIDEINACTIVESELECTION       { HelpId = HID_PROP_HIDEINACTIVESELECTION; }
@@ -295,3 +294,33 @@ hidspecial HID_PROP_VISUALEFFECT                { HelpId = HID_PROP_VISUALEFFECT
 hidspecial HID_PROP_BORDERCOLOR                 { HelpId = HID_PROP_BORDERCOLOR; }
 hidspecial UID_PROP_DLG_BORDERCOLOR             { HelpId = UID_PROP_DLG_BORDERCOLOR; }
 hidspecial HID_PROP_IMAGEPOSITION               { HelpId = HID_PROP_IMAGEPOSITION; }
+hidspecial HID_PROP_XML_DATA_MODEL              { HelpId = HID_PROP_XML_DATA_MODEL; }
+hidspecial HID_PROP_BIND_EXPRESSION             { HelpId = HID_PROP_BIND_EXPRESSION; }
+hidspecial HID_PROP_XSD_REQUIRED                { HelpId = HID_PROP_XSD_REQUIRED; }
+hidspecial HID_PROP_XSD_RELEVANT                { HelpId = HID_PROP_XSD_RELEVANT; }
+hidspecial HID_PROP_XSD_READONLY                { HelpId = HID_PROP_XSD_READONLY; }
+hidspecial HID_PROP_XSD_CONSTRAINT              { HelpId = HID_PROP_XSD_CONSTRAINT; }
+hidspecial HID_PROP_XSD_CALCULATION             { HelpId = HID_PROP_XSD_CALCULATION; }
+hidspecial HID_PROP_XSD_DATA_TYPE               { HelpId = HID_PROP_XSD_DATA_TYPE; }
+hidspecial HID_PROP_XSD_WHITESPACES             { HelpId = HID_PROP_XSD_WHITESPACES; }
+hidspecial HID_PROP_XSD_PATTERN                 { HelpId = HID_PROP_XSD_PATTERN; }
+hidspecial HID_PROP_XSD_LENGTH                  { HelpId = HID_PROP_XSD_LENGTH; }
+hidspecial HID_PROP_XSD_MIN_LENGTH              { HelpId = HID_PROP_XSD_MIN_LENGTH; }
+hidspecial HID_PROP_XSD_MAX_LENGTH              { HelpId = HID_PROP_XSD_MAX_LENGTH; }
+hidspecial UID_PROP_DLG_BIND_EXPRESSION         { HelpId = UID_PROP_DLG_BIND_EXPRESSION; }
+hidspecial UID_PROP_DLG_XSD_REQUIRED            { HelpId = UID_PROP_DLG_XSD_REQUIRED; }
+hidspecial UID_PROP_DLG_XSD_RELEVANT            { HelpId = UID_PROP_DLG_XSD_RELEVANT; }
+hidspecial UID_PROP_DLG_XSD_READONLY            { HelpId = UID_PROP_DLG_XSD_READONLY; }
+hidspecial UID_PROP_DLG_XSD_CONSTRAINT          { HelpId = UID_PROP_DLG_XSD_CONSTRAINT; }
+hidspecial UID_PROP_DLG_XSD_CALCULATION         { HelpId = UID_PROP_DLG_XSD_CALCULATION; }
+hidspecial UID_PROP_ADD_DATA_TYPE               { HelpId = UID_PROP_ADD_DATA_TYPE; }
+hidspecial UID_PROP_REMOVE_DATA_TYPE            { HelpId = UID_PROP_REMOVE_DATA_TYPE; }
+hidspecial HID_PROP_XSD_TOTAL_DIGITS            { HelpId = HID_PROP_XSD_TOTAL_DIGITS; }
+hidspecial HID_PROP_XSD_FRACTION_DIGITS         { HelpId = HID_PROP_XSD_FRACTION_DIGITS; }
+hidspecial HID_PROP_XSD_MAX_INCLUSIVE           { HelpId = HID_PROP_XSD_MAX_INCLUSIVE; }
+hidspecial HID_PROP_XSD_MAX_EXCLUSIVE           { HelpId = HID_PROP_XSD_MAX_EXCLUSIVE; }
+hidspecial HID_PROP_XSD_MIN_INCLUSIVE           { HelpId = HID_PROP_XSD_MIN_INCLUSIVE; }
+hidspecial HID_PROP_XSD_MIN_EXCLUSIVE           { HelpId = HID_PROP_XSD_MIN_EXCLUSIVE; }
+hidspecial HID_PROP_UNCHECKEDREFVALUE           { HelpId = HID_PROP_UNCHECKEDREFVALUE; }
+hidspecial HID_PROP_SUBMISSION_ID               { HelpId = HID_PROP_SUBMISSION_ID; }
+hidspecial HID_PROP_LIST_BINDING                { HelpId = HID_PROP_LIST_BINDING; }
