@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-30 18:04:46 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 10:48:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
-    +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xsvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
+    +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 #untar
