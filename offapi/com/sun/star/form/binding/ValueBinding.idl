@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueBinding.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:08:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,15 +95,31 @@ service ValueBinding
         as long as the spreadsheet is locked.</p>
 
         <p>As long as this property is <TRUE/>, the value binding should throw
-        a <type scope="com::sun::star::lang">NoSupportException</type> when its
+        a <type>InvalidBindingStateException</type> when its
         <member>XValueBinding::setValue</member> method is invoked.</p>
     */
-    [property, bound, readonly]  boolean  ReadOnly;
+    [optional, property, bound, readonly]  boolean  ReadOnly;
+
+    /** determines the relevance of the value represented by the binding
+
+        <p>In a more complex scenario, where different form controls are bound to different
+        values, which all are part of a larger data structure, some of the items in this
+        data structure may not be relevant currently. This is indicated by the
+        <member>Relevant</member> property being <FALSE/>.</p>
+
+        <p><type>XBindableValue</type>s which are bound to this binding may or may not
+        react in certain ways on the (ir)relevance of their bound value.</p>
+
+        <p>One possible reaction could be that user interface elements which are associated
+        with the <type>XBindableValue</type> are disabled as long as <member>Relevant</member>
+        is <FALSE/>.</p>
+    */
+    [optional, property, bound, readonly]  boolean  Relevant;
 
     //-------------------------------------------------------------------------
     /** allows access to the properties of the binding
     */
-    interface   com::sun::star::beans::XPropertySet;
+    [optional] interface   com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
     /** allows read and write access to the value represented by this binding
