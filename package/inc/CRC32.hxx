@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,10 @@
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
 
+namespace com { namespace sun { namespace star {
+    namespace io { class XInputStream; }
+} } }
 class CRC32
 {
 protected:
