@@ -141,10 +141,12 @@
             <include name="${package}/PluginFactory.java"/>
             <include name="${package}/Document.java"/>
             <include name="${package}/DocumentDeserializer.java"/>
+            <include name="${package}/DocumentDeserializer2.java"/>
             <include name="${package}/DocumentDeserializerFactory.java"/>
             <include name="${package}/DocumentMerger.java"/>
             <include name="${package}/DocumentMergerFactory.java"/>
             <include name="${package}/DocumentSerializer.java"/>
+            <include name="${package}/DocumentSerializer2.java"/>
             <include name="${package}/DocumentSerializerFactory.java"/>
             <include name="${package}/Version.java"/>
         <include name="${package}/ConvertException.java"/>
