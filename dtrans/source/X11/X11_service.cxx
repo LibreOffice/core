@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 10:40:53 $
+ *  last change: $Author: pl $ $Date: 2001-02-16 11:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ extern "C" {
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( aImplName.equals( getClipboardImplementationName() ) )
             {
-                xFactory = ::cppu::createSingleFactory(
+                xFactory = ::cppu::createOneInstanceFactory(
                     xMgr, aImplName, X11Clipboard_createInstance,
                     X11Clipboard_getSupportedServiceNames() );
             }
