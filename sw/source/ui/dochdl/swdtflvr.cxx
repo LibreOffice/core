@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 09:59:23 $
+ *  last change: $Author: cd $ $Date: 2002-11-26 15:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,8 +946,11 @@ int SwTransferable::Copy( BOOL bIsCut )
         if( nSelection & ( SwWrtShell::SEL_DRW | SwWrtShell::SEL_DRW_FORM ))
         {
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( FORMAT_GDIMETAFILE );
-            AddFormat( FORMAT_BITMAP );
+            if ( nSelection & SwWrtShell::SEL_DRW )
+            {
+                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( FORMAT_BITMAP );
+            }
             eBufferType = (TransferBufferType)( TRNSFR_GRAPHIC | eBufferType );
 
             pClpGraphic = new Graphic;
@@ -2915,8 +2918,11 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         if( nSelection & ( SwWrtShell::SEL_DRW | SwWrtShell::SEL_DRW_FORM ))
         {
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( FORMAT_GDIMETAFILE );
-            AddFormat( FORMAT_BITMAP );
+            if ( nSelection & SwWrtShell::SEL_DRW )
+            {
+                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( FORMAT_BITMAP );
+            }
             eBufferType = (TransferBufferType)( TRNSFR_GRAPHIC | eBufferType );
 
             pClpGraphic = new Graphic;
