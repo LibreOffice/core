@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:03:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <com/sun/star/task/XAbortChannel.idl>
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 #include <com/sun/star/deployment/XPackage.idl>
+#include <com/sun/star/deployment/XPackageTypeInfo.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
@@ -114,6 +115,13 @@ interface XPackageManager
                 underlying deployment context
     */
     string getContext();
+
+    /** gets the supported <type>XPackageTypeInfo</type>s.
+
+        @return
+                supported <type>XPackageTypeInfo</type>s.
+    */
+    sequence<XPackageTypeInfo> getSupportedPackageTypes();
 
     /** creates a command channel to be used to asynchronously abort a command.
 
