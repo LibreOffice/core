@@ -1,0 +1,76 @@
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.frame.XModel;
+import com.sun.star.view.XSelectionSupplier;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextRange;
+import com.sun.star.text.XWordCursor;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+
+String getNewString( theString ) {
+    String newString;
+    if(theString==null || theString.length()==0) {
+        return newString;
+    }
+    // should we tokenize on "."?
+    if(Character.isUpperCase(theString.charAt(0)) && theString.length()>=2 && Character.isUpperCase(theString.charAt(1))) { // first two chars are UC => first UC, rest LC
+        newString=theString.substring(0,1).toUpperCase()+theString.substring(1).toLowerCase();
+    } else if (Character.isUpperCase(theString.charAt(0))) { // first char UC => all to LC
+        newString=theString.toLowerCase();
+    } else { // all to UC.
+        newString=theString.toUpperCase();
+    }
+    return newString;
+}
+
+void capitalise() {
+
+    count = xIndexAccess.getCount();
+    if(count>=1) { //ie we have a selection
+        for(i=0;i<count;i++) {
+            xTextRange = (XTextRange)
+                UnoRuntime.queryInterface(XTextRange.class, xIndexAccess.getByIndex(i));
+            System.out.println("string: "+xTextRange.getString());
+            theString = xTextRange.getString();
+            if(theString.length()==0) {
+                // sadly we can have a selection where nothing is selected
+                // in this case we get the XWordCursor and make a selection!
+                xText = (XText)
+                    UnoRuntime.queryInterface(XText.class, xTextRange.getText());
+                xWordCursor = (XWordCursor)
+                    UnoRuntime.queryInterface(XWordCursor.class, xText.createTextCursorByRange(xTextRange));
+                if(!xWordCursor.isStartOfWord()) {
+                    xWordCursor.gotoStartOfWord(false);
+                }
+                xWordCursor.gotoNextWord(true);
+                theString = xWordCursor.getString();
+                newString = getNewString(theString);
+                if(newString!=null) {
+                    xWordCursor.setString(newString);
+                    xSelectionSupplier.select(xWordCursor);
+                }
+            } else {
+                newString = getNewString( theString );
+                if(newString!=null) {
+                    xTextRange.setString(newString);
+                    xSelectionSupplier.select(xTextRange);
+                }
+            }
+            
+        }
+    }
+}
+
+// The context variable is of type XScriptContext and is available to
+// all BeanShell scripts executed by the Script Framework
+xModel = (XModel)
+    UnoRuntime.queryInterface(XModel.class, context.getDocument());
+//the writer controller impl supports the css.view.XSelectionSupplier interface
+xSelectionSupplier = (XSelectionSupplier)
+    UnoRuntime.queryInterface(XSelectionSupplier.class, xModel.getCurrentController());
+//see section 7.5.1 of developers' guide
+xIndexAccess = (XIndexAccess)
+    UnoRuntime.queryInterface(XIndexAccess.class, xSelectionSupplier.getSelection());
+
+capitalise();
+return 0;
