@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:33:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,14 @@ InfoBox RID_DOCALREADYLOADED_DLG
 {
     Message [ de ] = "Das Dokument war bereits geladen und wurde aktiviert." ;
     Message [ en-US ] = "Document already open." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox RID_CANTLOADDOC_DLG
 {
     Message [ de ] = "Das Dokument kann nicht geladen werden." ;
     Message [ en-US ] = "Cannot open document." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_READ_CFG
@@ -85,7 +85,7 @@ ErrorBox MSG_ERR_READ_CFG
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Fehler beim Lesen der Konfiguration." ;
     Message [ en-US ] = "Error reading configuration file." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_WRITE_CFG
@@ -94,7 +94,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Fehler beim Schreiben der Konfiguration." ;
     Message [ en-US ] = "Error writing configuration file." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_OPEN_CFG
@@ -103,7 +103,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Fehler beim Öffnen der Konfiguration." ;
     Message [ en-US ] = "Error opening configuration file." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_FILETYPE_CFG
@@ -112,7 +112,7 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Datei ist keine Konfigurationsdatei." ;
     Message [ en-US ] = "File is not a configuration file." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_VERSION_CFG
@@ -121,7 +121,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Konfigurationsdatei hat falsche Version." ;
     Message [ en-US ] = "Configuration file contains the wrong version." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_WRITE_SBL
@@ -130,7 +130,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Fehler beim Schreiben der BASIC-Bibliothek in\n'@'." ;
     Message [ en-US ] = "Error recording BASIC library in\n'@'." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_SIGNAL
@@ -139,7 +139,7 @@ ErrorBox MSG_SIGNAL
     DEFBUTTON = WB_DEF_YES ;
     Message [ de ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
     Message [ en-US ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
@@ -227,203 +227,203 @@ WarningBox RID_WARN_POST_MAILTO
     DEFBUTTON = WB_DEF_OK ;
     Message [ de ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
     Message [ en-US ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 String STR_RECOVER_TITLE
 {
     Text [ de ] = "Datei-Wiederherstellung" ;
     Text [ en-US ] = "File Recovery" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_RECOVER_QUERY
 {
     Text [ de ] = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
     Text [ en-US ] = "Should the file \"$1\" be restored?" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_INTERN
 {
     Text [ de ] = "Intern" ;
     Text [ en-US ] = "Internal" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_APPLICATION
 {
     Text [ de ] = "Applikation" ;
     Text [ en-US ] = "Application" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_VIEW
 {
     Text [ de ] = "Ansicht" ;
     Text [ en-US ] = "View" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_DOCUMENT
 {
     Text [ de ] = "Dokumente" ;
     Text [ en-US ] = "Documents" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_EDIT
 {
     Text [ de ] = "Bearbeiten" ;
     Text [ en-US ] = "Edit" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_MACRO
 {
     Text [ de ] = "BASIC" ;
     Text [ en-US ] = "BASIC" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_OPTIONS
 {
     Text [ de ] = "Extras" ;
     Text [ en-US ] = "Options" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_MATH
 {
     Text [ de ] = "Math" ;
     Text [ en-US ] = "Math" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_NAVIGATOR
 {
     Text [ de ] = "Navigieren" ;
     Text [ en-US ] = "Navigate" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_INSERT
 {
     Text [ de ] = "Einfügen" ;
     Text [ en-US ] = "Insert" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_FORMAT
 {
     Text [ de ] = "Format" ;
     Text [ en-US ] = "Format" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_TEMPLATE
 {
     Text [ de ] = "Vorlagen" ;
     Text [ en-US ] = "Templates" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_TEXT
 {
     Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_FRAME
 {
     Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_GRAPHIC
 {
     Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphic" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_TABLE
 {
     Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_ENUMERATION
 {
     Text [ de ] = "Nummerierung" ;
     Text [ en-US ] = "Numbering" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_DATA
 {
     Text [ de ] = "Daten" ;
     Text [ en-US ] = "Data" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_SPECIAL
 {
     Text [ de ] = "Sonderfunktionen" ;
     Text [ en-US ] = "Special Functions" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_IMAGE
 {
     Text [ de ] = "Image" ;
     Text [ en-US ] = "Image" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_CHART
 {
     Text [ de ] = "Chart" ;
     Text [ en-US ] = "Chart" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_EXPLORER
 {
     Text [ de ] = "Explorer" ;
     Text [ en-US ] = "Explorer" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_CONNECTOR
 {
     Text [ de ] = "Verbinder" ;
     Text [ en-US ] = "Connector" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_MODIFY
 {
     Text [ de ] = "Ändern" ;
     Text [ en-US ] = "Modify" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_DRAWING
 {
     Text [ de ] = "Zeichnen" ;
     Text [ en-US ] = "Drawing" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String GID_CONTROLS
 {
     Text [ de ] = "Kontrollelemente" ;
     Text [ en-US ] = "Controls" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 TabDialog SID_OPTIONS
@@ -448,7 +448,7 @@ TabDialog SID_OPTIONS
                 Text [ de ] = "Allgemeines" ;
                 Text [ en-US ] = "General" ;
                 PageResID = 256 ;
-                Text [ x-comment ] = " ";
+                Text [ x-comment ] = " " ;
             };
             PageItem
             {
@@ -456,7 +456,7 @@ TabDialog SID_OPTIONS
                 Text [ de ] = "Speichern" ;
                 Text [ en-US ] = "Save" ;
                 PageResID = 257 ;
-                Text [ x-comment ] = " ";
+                Text [ x-comment ] = " " ;
             };
             PageItem
             {
@@ -464,7 +464,7 @@ TabDialog SID_OPTIONS
                 Text [ de ] = "Pfade" ;
                 Text [ en-US ] = "Paths" ;
                 PageResID = 258 ;
-                Text [ x-comment ] = " ";
+                Text [ x-comment ] = " " ;
             };
             PageItem
             {
@@ -472,18 +472,18 @@ TabDialog SID_OPTIONS
                 Text [ de ] = "Rechtschreibprüfung" ;
                 Text [ en-US ] = "Spellcheck" ;
                 PageResID = 259 ;
-                Text [ x-comment ] = " ";
+                Text [ x-comment ] = " " ;
             };
         };
     };
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 InfoBox MSG_CANT_QUIT
 {
     Message [ de ] = "Die Anwendung kann zur Zeit nicht beendet werden.\nBitte warten Sie das Ende aller Druckaufträge und/oder\nOLE-Aktivierungen ab und schließen Sie alle Dialoge." ;
     Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 QueryBox MSG_IS_SERVER
@@ -492,26 +492,26 @@ QueryBox MSG_IS_SERVER
     DefButton = WB_DEF_NO ;
     Message [ de ] = "Die Applikation ist noch als Objekt- oder Druck-Server aktiv.\nSoll sie trotzdem geschlossen werden?" ;
     Message [ en-US ] = "This application is as object or print server active.\nDo you want to terminate anyway?" ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 String STR_NODOUBLE
 {
     Text [ de ] = "%PRODUCTNAME kann nicht mehrfach gestartet werden." ;
     Text [ en-US ] = "%PRODUCTNAME cannot be started more than once." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_NOPRINTER
 {
     Text [ de ] = "Einige %PRODUCTNAME-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
     Text [ en-US ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_ISMODIFIED
 {
-    Text [ x-comment ] = "; PB: ; PB: waren frueher zwei String";
+    Text [ x-comment ] = " ; PB: ; PB: waren frueher zwei String" ;
     Text [ de ] = "Sollen Änderungen in %1 gespeichert werden?" ;
     Text [ en-US ] = "Do you want to save the changes to %1?" ;
 };
@@ -520,97 +520,97 @@ String STR_AUTOSAVE
 {
     Text [ de ] = "Automatisch speichern" ;
     Text [ en-US ] = "AutoSave" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_RESWARNING
 {
     Text [ de ] = "Die Systemresourcen werden knapp. Bitte beenden Sie andere Applikationen oder schließen Sie einige Fenster, bevor Sie weiterarbeiten." ;
     Text [ en-US ] = "Limited system resources. Please quit other applications or close some windows before continuing." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_RESEXCEPTION
 {
     Text [ de ] = "Wichtige Programmteile nicht gefunden. Bitte überprüfen Sie Ihre Installation." ;
     Text [ en-US ] = "There are files missing. Please check application setup." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_DOUBLEEXCEPTION
 {
-    Text [ de ] = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert.";
-    Text [ en-US ] = "Another error occurred during the save recovery.\nPossibly, the data could not be entirely saved.";
-    Text [ x-comment ] = " ";
+    Text [ de ] = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert." ;
+    Text [ en-US ] = "Another error occurred during the save recovery.\nPossibly, the data could not be entirely saved." ;
+    Text [ x-comment ] = " " ;
 };
 
 String STR_SYSRESEXCEPTION
 {
     Text [ de ] = "Die Systemresourcen sind verbraucht. Bitte starten Sie die Anwendung neu." ;
     Text [ en-US ] = "System resources exhausted. Please restart the application." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 ErrorBox MSG_ERR_SOINIT
 {
     Message [ de ] = "Fehler beim Initialisieren des Objekt-Systems." ;
     Message [ en-US ] = "Error initializing object-system." ;
-    Message [ x-comment ] = " ";
+    Message [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_FILE_NOT_FOUND
 {
     Text [ de ] = "Die Datei $(FILE) existiert nicht." ;
     Text [ en-US ] = "The file $(FILE) doesn't exist." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_PATH_NOT_FOUND
 {
     Text [ de ] = "Der Pfad zu der Datei $(FILE) existiert nicht." ;
     Text [ en-US ] = "The path to file $(FILE) doesn't exist." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_TOO_MANY_OPEN_FILES
 {
     Text [ de ] = "Die Datei $(FILE) konnte nicht geöffnet werden,\nda zur Zeit zu viele Dateien offen sind.\nSchließen Sie einige Dateien und versuchen Sie es erneut." ;
     Text [ en-US ] = "The file $(FILE) could not be opened,\nbecause too many files are open.\nPlease close some files and try again." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_ACCESS_DENIED
 {
     Text [ de ] = "Auf die Datei $(FILE) konnte wegen fehlender Zugriffsrechte nicht zugegriffen werden." ;
     Text [ en-US ] = "The file $(FILE) could not be opened due to missing access rights." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_INVALID_ACCESS
 {
     Text [ de ] = "Auf Datei $(FILE) konnte nicht zugegriffen werden." ;
     Text [ en-US ] = "The file $(FILE) could not be accessed." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_INVALID_HANDLE
 {
     Text [ de ] = "Die Datei $(FILE) konnte wegen einer ungültiger Dateidescriptors nicht geöffnet werden." ;
     Text [ en-US ] = "The file $(FILE) could not be opened due to an invalid file handle." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_CANNOT_MAKE
 {
     Text [ de ] = "Die Datei $(FILE) konnte nicht angelegt werden." ;
     Text [ en-US ] = "The file $(FILE) could not be created." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_SHARING
 {
     Text [ de ] = "Fehler beim gemeinsamen Zugriff auf die Datei $(FILE)." ;
     Text [ en-US ] = "Error by shared access to $(FILE)." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String MSG_IOERR_INVALID_PARAMETER
@@ -623,7 +623,7 @@ String MSG_IOERR_GENERAL
 {
     Text [ de ] = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(FILE)." ;
     Text [ en-US ] = "General I/O error accessing $(FILE)." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_FULLSCREENTOOLBOX
@@ -665,91 +665,91 @@ String STR_EVENT_STARTAPP
 {
     Text [ de ] = "Programmstart" ;
     Text [ en-US ] = "Start Application" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_CLOSEAPP
 {
     Text [ de ] = "Programmende" ;
     Text [ en-US ] = "Close Application" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_CREATEDOC
 {
     Text [ de ] = "Dokument erzeugen" ;
     Text [ en-US ] = "Create Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_CLOSEDOC
 {
     Text [ de ] = "Dokument wird geschlossen" ;
     Text [ en-US ] = "Document is closing" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_PREPARECLOSEDOC
 {
     Text [ de ] = "Dokument schließen" ;
     Text [ en-US ] = "Close Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_OPENDOC
 {
     Text [ de ] = "Dokument öffnen" ;
     Text [ en-US ] = "Open Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_SAVEDOC
 {
     Text [ de ] = "Dokument sichern" ;
     Text [ en-US ] = "Save Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_SAVEASDOC
 {
     Text [ de ] = "Dokument sichern als" ;
     Text [ en-US ] = "Save Document As" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_SAVEDOCDONE
 {
     Text [ de ] = "Dokument wurde gesichert" ;
     Text [ en-US ] = "Document has been saved" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_SAVEASDOCDONE
 {
     Text [ de ] = "Dokument wurde gesichert als" ;
     Text [ en-US ] = "Document has been saved as" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_ACTIVATEDOC
 {
     Text [ de ] = "Dokument aktivieren" ;
     Text [ en-US ] = "Activate Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_DEACTIVATEDOC
 {
     Text [ de ] = "Dokument deaktivieren" ;
     Text [ en-US ] = "Deactivate Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_PRINTDOC
 {
     Text [ de ] = "Dokument drucken" ;
     Text [ en-US ] = "Print Document" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_MODIFYCHANGED
@@ -762,14 +762,14 @@ String STR_ERR_NOTEMPLATE
 {
     Text [ de ] = "Die Vorlage hat ein falsches Format" ;
     Text [ en-US ] = "The selected template has an incorrect format" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_ERR_NOFILE
 {
     Text [ de ] = "Die Datei $ kann nicht geöffnet werden." ;
     Text [ en-US ] = "Can't open file $." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 
@@ -777,63 +777,63 @@ String STR_QUITAPP
 {
     Text [ de ] = "~Beenden" ;
     Text [ en-US ] = "E~xit" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EXITANDRETURN
 {
     Text [ de ] = "~Beenden & zurück zu " ;
     Text [ en-US ] = "E~xit & return to " ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_EXTHELPSTATUS
 {
     Text [ de ] = "Wählen Sie einen Befehl oder klicken Sie, um ein Thema auszuwählen." ;
     Text [ en-US ] = "Select a command or click to select a theme." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_MAIL
 {
     Text [ de ] = "Post" ;
     Text [ en-US ] = "Mail" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_ADDRESS_NAME
 {
     Text [ de ] = "Adressen" ;
     Text [ en-US ] = "Addresses" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_STR_HELP
 {
     Text [ de ] = "Hilfe" ;
     Text [ en-US ] = "Help" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_STR_NOAUTOSTARTHELPAGENT
 {
     Text [ de ] = "Bei 'XX' nicht automatisch starten" ;
     Text [ en-US ] = "No automatic start at 'XX'" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_STR_NOWELCOMESCREEN
 {
     Text [ de ] = "Tipps nicht mehr anzeigen" ;
     Text [ en-US ] = "Don't display tips" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_HELPBAR
 {
     Text [ de ] = "Hilfe-Leiste" ;
     Text [ en-US ] = "Help Bar" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 ToolBox RID_HELPBAR
@@ -895,14 +895,14 @@ String RID_STR_HLPFILENOTEXIST
 {
     Text [ de ] = "Es ist zu diesem Thema keine Hilfe installiert." ;
     Text [ en-US ] = "The help file for this topic is not installed." ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String RID_STR_HLPAPPNOTSTARTED
 {
     Text [ de ] = "Die Hilfeapplikation konnte nicht gestartet werden" ;
     Text [ en-US ] = "The help system could not be started" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
  //----------------------------------------------------------------------------
@@ -911,7 +911,7 @@ String RID_ENVTOOLBOX
 {
     Text [ de ] = "Funktionsleiste" ;
     Text [ en-US ] = "Function Bar" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 ToolBox RID_ENVTOOLBOX
@@ -1137,21 +1137,21 @@ ToolBox RID_ENVTOOLBOX
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    Prefix = "sc";
+    Prefix = "sc" ;
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    Prefix = "lc";
+    Prefix = "lc" ;
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
 };
 
 String RID_SPECIALCONFIG_ERROR
 {
-    Text [ x-comment ] = " "; \
+    Text [ x-comment ] = " " ;
     Text [ de ] = "In der Spezialkonfiguration wurde ein Fehler festgestellt.\nBitte wenden Sie sich an Ihren Administrator!" ;
     Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
 };
@@ -1159,7 +1159,7 @@ String RID_SPECIALCONFIG_ERROR
 
 String STR_MEMINFO_HEADER
 {
-    Text = "In der Applikation existieren derzeit $(TOTAL) Dokumente. Davon sind $(VISIBLE) Dokumente sichtbar. Im Memory Cache befinden sich $(CACHE) Dokumente.<BR><BR><b>Dokumente:</b><BR><table width=100%><tr><td >Sicht.</td><td>Cached</td><td>Exp.</td><td>Dirty</td><td>Exec</td><td>Forb</td><td>Dokumenttyp</td><td>URL</td><td>PreRedirect URL</td><td>Poststring</td></tr>" ;
+    Text [ de ] = "In der Applikation existieren derzeit $(TOTAL) Dokumente. Davon sind $(VISIBLE) Dokumente sichtbar. Im Memory Cache befinden sich $(CACHE) Dokumente.<BR><BR><b>Dokumente:</b><BR><table width=100%><tr><td >Sicht.</td><td>Cached</td><td>Exp.</td><td>Dirty</td><td>Exec</td><td>Forb</td><td>Dokumenttyp</td><td>URL</td><td>PreRedirect URL</td><td>Poststring</td></tr>" ;
 };
 
 String STR_MEMINFO_FOOTER
@@ -1176,45 +1176,45 @@ String RID_PLUGIN
 {
     Text [ de ] = "PlugIn Aktivierung" ;
     Text [ en-US ] = "Enable plug-ins" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_CORRUPT_INSTALLATION
 {
-    Text [ de ] = "Wichtige Programmteile konnten nicht korrekt initialisiert werden.\nBitte starten sie Setup mit der Option /repair.";
-    Text [ en-US ] = "Important program components could not be initialized correctly.\nPlease start the setup program with the option /Repair.";
+    Text [ de ] = "Wichtige Programmteile konnten nicht korrekt initialisiert werden.\nBitte starten sie Setup mit der Option /repair." ;
+    Text [ en-US ] = "Important program components could not be initialized correctly.\nPlease start the setup program with the option /Repair." ;
 };
 
 String IDS_SBERR_STOREREF
 {
-    Text [ de ] = "Referenz wird nicht gespeichert: ";
-    Text [ en-US ] = "Reference will not be saved: ";
-    Text [ x-comment ] = " ";
+    Text [ de ] = "Referenz wird nicht gespeichert: " ;
+    Text [ en-US ] = "Reference will not be saved: " ;
+    Text [ x-comment ] = " " ;
 };
 
 String STR_KEY_CONFIG_DIR
 {
     Text [ de ] = "Konfiguration" ;
     Text [ en-US ] = "Configuration" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_WORK_PATH
 {
     Text [ de ] = "Arbeitsverzeichnis" ;
     Text [ en-US ] = "My Documents" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_GRAPHICS_PATH
 {
     Text [ de ] = "Grafiken" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_BITMAP_PATH
 {
     Text [ de ] = "Symbole" ;
     Text [ en-US ] = "Icons" ;
-    Text [ x-comment ] = "; BLG ; BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
+    Text [ x-comment ] = " ; BLG ; BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"" ;
 };
 String STR_KEY_BASIC_PATH
 {
@@ -1225,136 +1225,160 @@ String STR_KEY_PALETTE_PATH
 {
     Text [ de ] = "Paletten" ;
     Text [ en-US ] = "Palettes" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_BACKUP_PATH
 {
     Text [ de ] = "Sicherungskopien" ;
     Text [ en-US ] = "Backups" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_MODULES_PATH
 {
     Text [ de ] = "Module" ;
     Text [ en-US ] = "Modules" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_TEMPLATE_PATH
 {
     Text [ de ] = "Dokumentvorlagen" ;
     Text [ en-US ] = "Templates" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_GLOSSARY_PATH
 {
     Text [ de ] = "AutoText" ;
-    Text [ en-US ] = "AutoText";
+    Text [ en-US ] = "AutoText" ;
 };
 String STR_KEY_DICTIONARY_PATH
 {
     Text [ de ] = "Wörterbücher" ;
     Text [ en-US ] = "Dictionaries" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_HELP_DIR
 {
     Text [ de ] = "Hilfedateien" ;
     Text [ en-US ] = "Help" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_GALLERY_DIR
 {
     Text [ de ] = "Gallery" ;
     Text [ en-US ] = "Gallery" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 
 String STR_KEY_STORAGE_DIR
 {
     Text [ de ] = "Nachrichtenspeicher" ;
     Text [ en-US ] = "Message Storage" ;
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_TEMP_PATH
 {
     Text [ de ] = "Temporäre Dateien" ;
-    Text [ en-US ] = "Temporary files";
+    Text [ en-US ] = "Temporary files" ;
 };
 String STR_KEY_PLUGINS_PATH
 {
     Text [ de ] = "Plugins-Verzeichnis" ;
-    Text [ en-US ] = "Plug-ins";
+    Text [ en-US ] = "Plug-ins" ;
 };
 String STR_KEY_FAVORITES_DIR
 {
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " " ;
     Text [ de ] = "Ordner-Bookmarks" ;
-    Text [ en-US ] = "Folder Bookmarks";
+    Text [ en-US ] = "Folder Bookmarks" ;
 };
 String STR_KEY_FILTER_PATH
 {
     Text [ de ] = "Filter" ;
-    Text [ en-US ] = "Filters";
-    Text [ x-comment ] = " ";
+    Text [ en-US ] = "Filters" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_ADDINS_PATH
 {
     Text [ de ] = "AddIns" ;
-    Text [ en-US ] = "Add-ins";
+    Text [ en-US ] = "Add-ins" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_USERCONFIG_PATH
 {
     Text [ de ] = "Benutzer Konfiguration" ;
-    Text [ en-US ] = "User Configuration";
-    Text [ x-comment ] = " ";
+    Text [ en-US ] = "User Configuration" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_USERDICTIONARY_DIR
 {
     Text [ de ] = "Benutzerwörterbücher" ;
-    Text [ en-US ] = "User-defined dictionaries";
+    Text [ en-US ] = "User-defined dictionaries" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_KEY_AUTOCORRECT_DIR
 {
     Text [ de ] = "AutoKorrektur" ;
-    Text [ en-US ] = "AutoCorrect";
+    Text [ en-US ] = "AutoCorrect" ;
+    Text [ x-comment ] = " " ;
 };
 #if defined STR_KEY_LINGUISTIC_DIR
 String STR_KEY_LINGUISTIC_DIR
 {
     Text [ de ] = "Linguistik" ;
-    Text [ en-US ] = "Writing aids";
+    Text [ en-US ] = "Writing aids" ;
+    Text [ x-comment ] = " " ;
 };
 #endif // STR_KEY_LINGUISTIC_DIR
 
 String STR_QUICKSTART_EXIT
 {
     Text [ de ] = "Schnellstarter beenden" ;
-    Text [ en-US ] = "Exit Quickstarter";
+    Text [ en-US ] = "Exit Quickstarter" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_TIP
 {
     Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Schnellstarter" ;
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_FILEOPEN
 {
     Text [ de ] = "Dokument öffnen" ;
-    Text [ en-US ] = "Open Document";
+    Text [ en-US ] = "Open Document" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_FROMTEMPLATE
 {
     Text [ de ] = "Aus Vorlage" ;
-    Text [ en-US ] = "From Template";
+    Text [ en-US ] = "From Template" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_PRELAUNCH
 {
     Text [ de ] = "%PRODUCTNAME beim Systemstart laden" ;
-    Text [ en-US ] = "Load %PRODUCTNAME During System Start-Up";
+    Text [ en-US ] = "Load %PRODUCTNAME During System Start-Up" ;
+    Text [ x-comment ] = " " ;
 };
 String STR_QUICKSTART_LNKNAME
 {
     Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION" ;
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text [ x-comment ] = " " ;
+};
+
+String STR_QUERY_UPDATE_LINKS
+{
+    Text [ de ] = "Sollen alle Verknüpfungen aktualisiert werden?" ;
+    Text [ en-US ] = "Update all links?" ;
+    Text [ x-comment ] = " " ;
+};
+
+String STR_DDE_ERROR
+{
+    Text [ de ] = "DDE Verknüpfung zu % für % Bereich % kann nicht erzeugt werden." ;
+    Text [ en-US ] = "DDE link to % for % area % are not available." ;
+    Text [ x-comment ] = " " ;
 };
 
 WarningBox RID_SECURITY_WARNING_HYPERLINK
@@ -1370,6 +1394,7 @@ String RID_SECURITY_WARNING_TITLE
 {
     Text [ de ] = "Sicherheitswarnung" ;
     Text [ en-US ] = "Security Warning" ;
+    Text [ x-comment ] = " " ;
 };
 
 ErrorBox RID_INVALID_URL_MSG
@@ -1377,12 +1402,12 @@ ErrorBox RID_INVALID_URL_MSG
     Buttons = WB_OK ;
     Message [ de ] = "Der URL ist ungültig." ;
     Message [ en-US ] = "The URL is not valid." ;
+    Message [ x-comment ] = " " ;
 };
 
 String RID_INVALID_URL_TITLE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION" ;
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text = "%PRODUCTNAME %PRODUCTVERSION" ;
 };
 
 String RID_DESKTOP
