@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-06-04 09:34:21 $
+ *  last change: $Author: os $ $Date: 2002-06-05 14:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,29 +485,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
             ListBox LB_DRAWFILL             {Pos = MAP_APPFONT ( _LB_XPOS , 34 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window WN_DRAWFILL              {Pos = MAP_APPFONT ( _WN_XPOS , 34 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText FT_BASIC               {Pos = MAP_APPFONT ( 14 ,       35 * _LINE_HEIGHT ) ; Size = MAP_APPFONT ( _FT_WIDTH , 8 ) ;Text = "" ;Text [ ENGLISH ] = "" ; };
+            FixedText FT_BASIC               {Pos = MAP_APPFONT ( 14 ,       35 * _LINE_HEIGHT ) ; Size = MAP_APPFONT ( _FT_WIDTH , 8 ) ;Text = "Basic Syntaxhervorhebung" ;Text [ ENGLISH ] = "Basic Syntax Highlighting" ; };
 
-            FixedText  FT_BASICIDENTIFIER    {Pos = MAP_APPFONT ( _FT_XPOS , 36 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICIDENTIFIER    {Pos = MAP_APPFONT ( _FT_XPOS , 36 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Bezeichner" ;Text [ ENGLISH ] = "Identifier" ;};
             ListBox    LB_BASICIDENTIFIER    {Pos = MAP_APPFONT ( _LB_XPOS , 36 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICIDENTIFIER    {Pos = MAP_APPFONT ( _WN_XPOS , 36 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICCOMMENT       {Pos = MAP_APPFONT ( _FT_XPOS , 37 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICCOMMENT       {Pos = MAP_APPFONT ( _FT_XPOS , 37 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Kommentar" ;Text [ ENGLISH ] = "Comment" ;};
             ListBox    LB_BASICCOMMENT       {Pos = MAP_APPFONT ( _LB_XPOS , 37 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICCOMMENT       {Pos = MAP_APPFONT ( _WN_XPOS , 37 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICNUMBER        {Pos = MAP_APPFONT ( _FT_XPOS , 38 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICNUMBER        {Pos = MAP_APPFONT ( _FT_XPOS , 38 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Zahl" ;Text [ ENGLISH ] = "Number" ;};
             ListBox    LB_BASICNUMBER        {Pos = MAP_APPFONT ( _LB_XPOS , 38 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICNUMBER        {Pos = MAP_APPFONT ( _WN_XPOS , 38 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICSTRING        {Pos = MAP_APPFONT ( _FT_XPOS , 39 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICSTRING        {Pos = MAP_APPFONT ( _FT_XPOS , 39 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Zeichenkette" ;Text [ ENGLISH ] = "String" ;};
             ListBox    LB_BASICSTRING        {Pos = MAP_APPFONT ( _LB_XPOS , 39 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICSTRING        {Pos = MAP_APPFONT ( _WN_XPOS , 39 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICOPERATOR      {Pos = MAP_APPFONT ( _FT_XPOS , 40 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICOPERATOR      {Pos = MAP_APPFONT ( _FT_XPOS , 40 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Operator" ;Text [ ENGLISH ] = "Operator" ;};
             ListBox    LB_BASICOPERATOR      {Pos = MAP_APPFONT ( _LB_XPOS , 40 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICOPERATOR      {Pos = MAP_APPFONT ( _WN_XPOS , 40 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText  FT_BASICKEYWORD       {Pos = MAP_APPFONT ( _FT_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "" ;Text [ ENGLISH ] = "" ;};
+            FixedText  FT_BASICKEYWORD       {Pos = MAP_APPFONT ( _FT_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Reservierter Ausdruck" ;Text [ ENGLISH ] = "Reserved expression" ;};
             ListBox    LB_BASICKEYWORD       {Pos = MAP_APPFONT ( _LB_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window     WN_BASICKEYWORD       {Pos = MAP_APPFONT ( _WN_XPOS , 41 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
