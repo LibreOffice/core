@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:30:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _SVTOOLS_SCRIPTEDTEXT_HXX
 #include <svtools/scriptedtext.hxx>
 #endif
+#ifndef SVX_FRAMELINKARRAY_HXX
+#include <svx/framelinkarray.hxx>
+#endif
 
 
 //------------------------------------------------------------------------
@@ -90,7 +93,7 @@
 class ScAutoFormat;
 class ScAutoFormatData;
 class SvxBoxItem;
-class SvxBorderLine;
+class SvxLineItem;
 class AutoFmtPreview; // s.u.
 class SvNumberFormatter;
 class ScDocument;
@@ -177,14 +180,12 @@ private:
     SvtScriptedTextHelper   aScriptedText;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
     BOOL                    bFitWidth;
-    static USHORT           aFmtMap[25];        // Zuordnung: Zelle->Format
-    Rectangle               aCellArray[25];     // Position und Groesse der Zellen
-    SvxBoxItem*             aLinePtrArray[49];  // LinienAttribute
+    svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     Size                    aPrvSize;
-    const USHORT            nLabelColWidth;
-    const USHORT            nDataColWidth1;
-    const USHORT            nDataColWidth2;
-    const USHORT            nRowHeight;
+    long                    mnLabelColWidth;
+    long                    mnDataColWidth1;
+    long                    mnDataColWidth2;
+    long                    mnRowHeight;
     const String            aStrJan;
     const String            aStrFeb;
     const String            aStrMar;
@@ -199,35 +200,24 @@ private:
     void    CalcCellArray   ( BOOL bFitWidth );
     void    CalcLineMap     ();
     void    PaintCells      ();
-    void    DrawBackground  ( USHORT nIndex );
-    void    DrawFrame       ( USHORT nIndex );
-    void    DrawString      ( USHORT nIndex );
+
+/*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
+    conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
+    expects size_t coordinates. */
+
+    USHORT              GetFormatIndex( size_t nCol, size_t nRow ) const;
+    const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
+    const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
+
+    void                DrawString( size_t nCol, size_t nRow );
+    void                DrawStrings();
+    void                DrawBackground();
+
     void    MakeFonts       ( USHORT nIndex,
                               Font& rFont,
                               Font& rCJKFont,
                               Font& rCTLFont );
     String  MakeNumberString( String cellString, BOOL bAddDec );
-    void    DrawFrameLine   ( const SvxBorderLine&  rLineD,
-                              Point                 from,
-                              Point                 to,
-                              BOOL                  bHorizontal,
-                              const SvxBorderLine&  rLineLT,
-                              const SvxBorderLine&  rLineL,
-                              const SvxBorderLine&  rLineLB,
-                              const SvxBorderLine&  rLineRT,
-                              const SvxBorderLine&  rLineR,
-                              const SvxBorderLine&  rLineRB );
-    void    CheckPriority   ( USHORT            nCurLine,
-                              AutoFmtLine       eLine,
-                              SvxBorderLine&    rLine );
-    void    GetLines        ( USHORT nIndex, AutoFmtLine eLine,
-                              SvxBorderLine&    rLineD,
-                              SvxBorderLine&    rLineLT,
-                              SvxBorderLine&    rLineL,
-                              SvxBorderLine&    rLineLB,
-                              SvxBorderLine&    rLineRT,
-                              SvxBorderLine&    rLineR,
-                              SvxBorderLine&    rLineRB );
 };
 
 #endif // SC_AUTOFMT_HXX
