@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Substitution.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:56:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,329 +62,59 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Substitution" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined path variable must be substituted with a real path.</desc>
+		<desc >Stores rules for user-defined path variables called SharePoint. These rules are evaluated when a user-defined path variable must be substituted with a real path.</desc>
 	</info>
 	<templates>
 		<group oor:name="SharePointMapping">
 			<info>
-				<desc xml:lang="en-US">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="el">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="nl">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="fr">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="fi">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="cs">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="da">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="zh-CN">将共享点映射到现有路径，或者映射到“目录”属性中定义的其他共享点中。</desc>
-				<desc xml:lang="zh-TW">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="ar">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="he">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="ca">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="pt">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="ru">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="es">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="it">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="sv">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="pl">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="pt-BR">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="ja">共通点を、既存のパス、またはディレクトリの属性で指定したほかの共有点にマップします。</desc>
-				<desc xml:lang="ko">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="tr">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="th">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="hi-IN">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="x-comment">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="hu">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="sk">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
-				<desc xml:lang="sl">Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
+				<desc>Maps a share point to an existing path or to another share point defined in the Directory property.</desc>
 			</info>
 			<prop oor:name="Directory" oor:type="xs:string" oor:nillable="false">
 				<info>
-					<desc xml:lang="en-US">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="el">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="nl">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="fr">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="fi">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="cs">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="da">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="zh-CN">指定以有效编码文件 URL 或使用其他路径变量存储的物理目录位置。</desc>
-					<desc xml:lang="zh-TW">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="ar">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="he">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="ca">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="pt">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="ru">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="es">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="it">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="sv">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="pl">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="pt-BR">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="ja">コード化ファイルの有効な URL、またはほかのパス変数で保存されたディレクトリの物理的な場所を指定します。</desc>
-					<desc xml:lang="ko">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="tr">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="th">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="hi-IN">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="x-comment">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="hu">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="sk">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
-					<desc xml:lang="sl">Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
+					<desc>Specifies a physical directory location that is stored as a valid encoded file URL or with other path variables.</desc>
 				</info>
 			</prop>
 			<group oor:name="Environment">
 				<info>
-					<desc xml:lang="en-US">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="el">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="nl">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="fr">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="fi">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="cs">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="da">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="zh-CN">指定此共享点映射所需的操作系统。这样就可以定义系统相关设定。</desc>
-					<desc xml:lang="zh-TW">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="ar">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="he">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="ca">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="pt">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="ru">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="es">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="it">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="sv">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="pl">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="pt-BR">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="ja">この共有点のマッピングに必要な OS を指定します。結果的に、システム依存の設定を指定できます。</desc>
-					<desc xml:lang="ko">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="tr">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="th">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="hi-IN">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="x-comment">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="hu">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="sk">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
-					<desc xml:lang="sl">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
+					<desc>Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
 				</info>
 				<prop oor:name="OS" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="el">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="nl">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="fr">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="fi">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="cs">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="da">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="zh-CN">指定此共享点映射所需的操作系统。这样就可以定义系统相关设定。</desc>
-						<desc xml:lang="zh-TW">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="ar">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="he">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="ca">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="pt">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="ru">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="es">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="it">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="sv">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="pl">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="pt-BR">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="ja">この共有点のマッピングに必要な OS を指定します。結果的に、システム依存の設定を指定できます。</desc>
-						<desc xml:lang="ko">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="tr">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="th">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="hi-IN">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="x-comment">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="hu">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="sk">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
-						<desc xml:lang="sl">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
+						<desc>Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Host" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="el">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="nl">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="fr">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="fi">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="cs">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="da">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="zh-CN">指定对“目录”属性设定有效的主机名。可以在名称中使用“*”通配符。</desc>
-						<desc xml:lang="zh-TW">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ar">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="he">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ca">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pt">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ru">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="es">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="it">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sv">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pl">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pt-BR">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ja">ディレクトリの属性設定が有効なホストの名前を指定します。名前にワイルドカード「*」を使用できます。</desc>
-						<desc xml:lang="ko">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="tr">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="th">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="hi-IN">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="x-comment">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="hu">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sk">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sl">Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
+						<desc>Specifies the name of the host for which the Directory property setting is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
 					</info>
 				</prop>
 				<prop oor:name="DNSDomain" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="el">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="nl">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fr">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fi">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="cs">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="da">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="zh-CN">指定对“目录”属性变量有效的 dns 域。可以在域中使用“*”通配符。</desc>
-						<desc xml:lang="zh-TW">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ar">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="he">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ca">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ru">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="es">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="it">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sv">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pl">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt-BR">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ja">Directory 属性の変数が有効な dns ドメインを指定します。ドメインにワイルドカード「*」を使用できます。</desc>
-						<desc xml:lang="ko">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="tr">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="th">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="hi-IN">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="x-comment">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="hu">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sk">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sl">Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc>Specifies the dns domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
 					</info>
 				</prop>
 				<prop oor:name="YPDomain" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="el">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="nl">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="fr">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="fi">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="cs">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="da">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="zh-CN">指定对“目录”属性变量有效的黄页或 NIS 域。可以在名称中使用“*”通配符。</desc>
-						<desc xml:lang="zh-TW">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ar">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="he">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ca">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pt">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ru">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="es">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="it">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sv">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pl">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="pt-BR">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="ja">Directory 属性の変数が有効なイエローページ、または NIS ドメインを指定します。名前にワイルドカード「*」を使用できます。</desc>
-						<desc xml:lang="ko">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="tr">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="th">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="hi-IN">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="x-comment">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="hu">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sk">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
-						<desc xml:lang="sl">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
+						<desc>Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the name.</desc>
 					</info>
 				</prop>
 				<prop oor:name="NTDomain" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="el">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="nl">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fr">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="fi">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="cs">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="da">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="zh-CN">指定对“目录”属性变量有效的 NT 域。可以在域中使用“*”通配符。</desc>
-						<desc xml:lang="zh-TW">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ar">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="he">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ca">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ru">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="es">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="it">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sv">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pl">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="pt-BR">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="ja">Directory 属性の変数が有効な NT ドメインを指定します。ドメインにワイルドカード「*」を使用できます。</desc>
-						<desc xml:lang="ko">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="tr">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="th">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="hi-IN">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="x-comment">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="hu">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sk">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
-						<desc xml:lang="sl">Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
+						<desc>Specifies the NT domain for which the Directory property variable is valid. You can use the &apos;*&apos; wildcard for the domain.</desc>
 					</info>
 				</prop>
 			</group>
 		</group>
 		<set oor:name="SharePoint" oor:node-type="SharePointMapping">
 			<info>
-				<desc xml:lang="en-US">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="el">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="nl">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="fr">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="fi">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="cs">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="da">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="zh-CN">指定路径变量名称。该名称区分大小写且必须以 ASCII 字符定义。该名称在路径设定中用作通配符，并且在运行时可以用一个已定义映射中的路径替拀￠。</desc>
-				<desc xml:lang="zh-TW">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="ar">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="he">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="ca">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="pt">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="ru">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="es">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="it">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="sv">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="pl">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="pt-BR">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="ja">パス変数名を指定します。名前は大文字、小文字を区別し、ASCII 文字で指定する必要があります。名前は、パス設定内のプレースホルダとして使用され、ランタイム時に、指定したマッピングの 1 つで定義したパスに置き換えることができます。</desc>
-				<desc xml:lang="ko">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="tr">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="th">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="hi-IN">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="x-comment">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="hu">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="sk">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
-				<desc xml:lang="sl">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
+				<desc>Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
 			</info>
 		</set>
 	</templates>
 	<component>
 		<set oor:name="SharePoints" oor:node-type="SharePoint">
 			<info>
-				<desc xml:lang="en-US">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="el">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="nl">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="fr">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="fi">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="cs">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="da">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="zh-CN">指定在路径设定中用作路径变量 (通配符) 的 SharePoints 表格。</desc>
-				<desc xml:lang="zh-TW">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="ar">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="he">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="ca">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="pt">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="ru">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="es">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="it">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="sv">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="pl">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="pt-BR">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="ja">パス設定内でパス変数 (プレースホルダ) として使用する SharePoints の表を指定します。</desc>
-				<desc xml:lang="ko">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="tr">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="th">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="hi-IN">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="x-comment">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="hu">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="sk">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
-				<desc xml:lang="sl">Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
+				<desc>Specifies a table of SharePoints that are used as path variables (placeholder) within path settings.</desc>
 			</info>
 		</set>
 	</component>
