@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:27:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <eeng_pch.hxx>
 
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
+#endif
 #ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
 #endif
@@ -2831,6 +2834,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         nSin = sin( nRealOrientation );
     }
 
+    // #110496# Added some more optional metafile comments. This
+    // change: factored out some duplicated code.
+    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+    const bool bMetafileValid( pMtf != NULL );
+
     // Fuer OnlineSpelling:
 //  EditPaM aCursorPos;
 //  if( GetStatus().DoOnlineSpelling() && pActiveView )
@@ -3024,8 +3032,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         GetRefDevice()->SetFont( aOldFont );
 
                                     // add a meta file comment if we record to a metafile
-                                    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-                                    if( pMtf )
+                                    if( bMetafileValid )
                                     {
                                         SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
                                         if( pFieldItem )
@@ -3154,7 +3161,25 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
 
-                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        if( bMetafileValid &&
+                                            bVerboseTextComments )
+                                        {
+                                            // mimicking the behaviour
+                                            // of other places:
+                                            // arbitrarily select next
+                                            // character's locale as
+                                            // this portion's.
+                                            const lang::Locale aLocale( GetLocale( EditPaM( pPortion->GetNode(), nIndex+1 ) ) );
+
+                                            // #110496# Output character, word and sentence comments
+                                            ImplDrawWithComments( aTmpFont, aLocale, *pOutDev, *pMtf, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        }
+                                        else
+                                        {
+                                            // output directly
+                                            aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        }
+
                                         if ( bDrawFrame )
                                         {
                                             Point aTopLeft( aTmpPos );
@@ -3247,8 +3272,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Feld vom falschen Typ!" );
 
                                     // add a meta file comment if we record to a metafile
-                                    GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-                                    if( pMtf )
+                                    if( bMetafileValid )
                                     {
                                         SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
 
@@ -3312,6 +3336,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     break;
                 else if ( IsVertical() && ( aStartPos.X() <= aClipRec.Left() ) )
                     break;
+
+                // #110496# Add End-of-line comment
+                if( bMetafileValid &&
+                    bVerboseTextComments &&
+                    nLine+1 < nLines )
+                {
+                    pMtf->AddAction( new MetaCommentAction( "XTEXT_EOL" ) );
+                }
             }
 
             if ( !aStatus.IsOutliner() )
@@ -3340,6 +3372,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             break;
         if ( IsVertical() && ( aStartPos.X() < aClipRec.Left() ) )
             break;
+
+        // #110496# Add End-of-paragraph comment
+        if( bMetafileValid &&
+            bVerboseTextComments &&
+            n+1 < GetParaPortions().Count() )
+        {
+            pMtf->AddAction( new MetaCommentAction( "XTEXT_EOP" ) );
+        }
     }
     if ( aStatus.DoRestoreFont() )
         pOutDev->SetFont( aOldFont );
@@ -4037,7 +4077,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
 
 }
 
-Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
+Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
 {
     if ( !xBI.is() )
     {
@@ -4248,4 +4288,49 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     }
 
     aCompressedPortions.Remove( 0, aCompressedPortions.Count() );
+}
+
+
+void ImpEditEngine::ImplDrawWithComments( SvxFont&              rFont,
+                                          const lang::Locale&   rLocale,
+                                          OutputDevice&         rOutDev,
+                                          GDIMetaFile&          rMtf,
+                                          const Point&          rPos,
+                                          const String&         rTxt,
+                                          const USHORT          nIdx,
+                                          const USHORT          nLen,
+                                          const long*           pDXArray ) const
+{
+    Reference< i18n::XBreakIterator > xBI( ImplGetBreakIterator() );
+
+    sal_Int32 nDone;
+    sal_Int32 nNextCellBreak( xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone) );
+    i18n::Boundary nNextWordBoundary( xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True) );
+    sal_Int32 nNextSentenceBreak( xBI->endOfSentence(rTxt, nIdx, rLocale) );
+
+    const sal_Int32 nEndPos( nIdx + nLen );
+    sal_Int32 i, currOffset(0);
+    for( i=nIdx; i<nEndPos; ++i )
+    {
+        // TODO: Check whether position update is valid for CTL/BiDi
+        rOutDev.DrawText( rPos + Point(currOffset,0), rTxt, i, 1 );
+        currOffset = *pDXArray++;
+
+        // issue the comments at the respective break positions
+        if( i == nNextCellBreak )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
+            nNextCellBreak = xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+        }
+        if( i == nNextWordBoundary.endPos )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW" ) );
+            nNextWordBoundary = xBI->getWordBoundary(rTxt, i+1, rLocale, i18n::WordType::ANY_WORD, sal_True);
+        }
+        if( i == nNextSentenceBreak )
+        {
+            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS" ) );
+            nNextSentenceBreak = xBI->endOfSentence(rTxt, i+1, rLocale);
+        }
+    }
 }
