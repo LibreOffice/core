@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:40:22 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,12 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
             nCondPos     = (USHORT)rEntry.eOp;
             nFieldSelPos = GetFieldSelPos( rEntry.nField );
 
-            if ( rEntry.nVal == SC_EMPTYFIELDS )
+            if ( rEntry.nVal == SC_EMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
             {
                 aValStr = aStrEmpty;
                 aCondLbArr[i]->Disable();
             }
-            else if ( rEntry.nVal == SC_NONEMPTYFIELDS )
+            else if ( rEntry.nVal == SC_NONEMPTYFIELDS && !rEntry.bQueryByString && *rEntry.pStr == EMPTY_STRING )
             {
                 aValStr = aStrNotEmpty;
                 aCondLbArr[i]->Disable();
