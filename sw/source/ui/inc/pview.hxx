@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:15:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ public:
 
 #ifdef ACCESSIBLE_LAYOUT
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>
+        ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible();
 #endif
 };
