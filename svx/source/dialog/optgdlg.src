@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:08:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,20 +499,20 @@ TabPage OFA_TP_LANGUAGES
         Text [ de ] = "Sprache für" ;
         Text [ en-US ] = "Language of";
     };
-    FixedImage FI_LOCALESETTING
+    FixedImage FI_USERINTERFACE
     {
         Pos = MAP_APPFONT ( 5 , 17 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
-    FixedText FT_LOCALESETTING
+    FixedText FT_USERINTERFACE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "~Gebietsschema" ;
-        Text [ en-US ] = "Locale setting";
+        Text [ de ] = "Benutzeroberfläche" ;
+        Text [ en-US ] = "~User interface";
     };
-    ListBox LB_LOCALESETTING
+    ListBox LB_USERINTERFACE
     {
         Pos = MAP_APPFONT ( 135 , 14 ) ;
         Size = MAP_APPFONT ( 113 , 60 ) ;
@@ -521,36 +521,58 @@ TabPage OFA_TP_LANGUAGES
         TabStop = TRUE ;
         Sort = TRUE;
     };
-    FixedText FT_DECIMALSEPARATOR
+    FixedImage FI_LOCALESETTING
+    {
+        Pos = MAP_APPFONT ( 5 , 32 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
+    FixedText FT_LOCALESETTING
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ de ] = "~Gebietsschema" ;
+        Text [ en-US ] = "Locale setting";
+    };
+    ListBox LB_LOCALESETTING
+    {
+        Pos = MAP_APPFONT ( 135 , 30 ) ;
+        Size = MAP_APPFONT ( 113 , 60 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Sort = TRUE;
+    };
+    FixedText FT_DECIMALSEPARATOR
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Dezimaltrennertaste" ;
         Text [ en-US ] = "Decimal separator key";
     };
     CheckBox CB_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 135 , 31) ;
+        Pos = MAP_APPFONT ( 135 , 46) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Dem Gebietsschema entsprechend ( %1 )" ;
         Text [ en-US ] = "~Same as locale setting ( %1 )";
     };
     FixedImage FI_CURRENCY
     {
-        Pos = MAP_APPFONT ( 5 , 48 ) ;
+        Pos = MAP_APPFONT ( 5 , 63 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_CURRENCY
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~Standardwährung" ;
         Text [ en-US ] = "~Default currency";
     };
     ListBox LB_CURRENCY
     {
-        Pos = MAP_APPFONT ( 135 , 44 ) ;
+        Pos = MAP_APPFONT ( 135 , 59 ) ;
         Size = MAP_APPFONT ( 113 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -559,20 +581,20 @@ TabPage OFA_TP_LANGUAGES
     };
     FixedLine FL_LINGU_LANG
     {
-        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Standardsprachen der Dokumente" ;
         Text [ en-US ] = "Default languages for documents";
     };
     FixedImage FI_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 77 ) ;
+        Pos = MAP_APPFONT ( 5 , 92 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~Westlich" ;
         Text [ en-US ] = "Western";
@@ -580,7 +602,7 @@ TabPage OFA_TP_LANGUAGES
 
     ListBox LB_WEST_LANG
     {
-        Pos = MAP_APPFONT ( 135 ,  73 ) ;
+        Pos = MAP_APPFONT ( 135 ,  88 ) ;
         Size = MAP_APPFONT ( 113 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -589,20 +611,20 @@ TabPage OFA_TP_LANGUAGES
     };
     FixedImage FI_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 93 ) ;
+        Pos = MAP_APPFONT ( 5 , 108 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 91 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~Asiatisch" ;
         Text [ en-US ] = "Asian";
     };
     ListBox LB_ASIAN_LANG
     {
-        Pos = MAP_APPFONT ( 135 , 89 ) ;
+        Pos = MAP_APPFONT ( 135 , 104 ) ;
         Size = MAP_APPFONT ( 113 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -611,20 +633,20 @@ TabPage OFA_TP_LANGUAGES
     };
     FixedImage FI_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 5 , 109 ) ;
+        Pos = MAP_APPFONT ( 5 , 124 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     FixedText FT_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~CTL" ;
         Text [ en-US ] = "C~TL";
     };
     ListBox LB_COMPLEX_LANG
     {
-        Pos = MAP_APPFONT ( 135 , 105 ) ;
+        Pos = MAP_APPFONT ( 135 , 120 ) ;
         Size = MAP_APPFONT ( 113 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
@@ -633,37 +655,30 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_CURRENT_DOC
     {
-        Pos = MAP_APPFONT ( 135 , 120 ) ;
+        Pos = MAP_APPFONT ( 135 , 135 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Nur für das aktuelle Dokument" ;
         Text [ en-US ] = "For the current document only";
     };
-    FixedLine FL_ASIANSUPPORT
+    FixedLine FL_ENHANCED
     {
-        Pos = MAP_APPFONT ( 6 , 136 ) ;
+        Pos = MAP_APPFONT ( 6 , 145 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Unterstützung asiatischer Sprachen" ;
-        Text [ en-US ] = "Asian languages support";
+        Text [ de ] = "Erweiterte Sprachunterstützung";
+        Text [ en-US ] = "Enhanced language support";
     };
     FixedImage FI_ASIANSUPPORT
     {
-        Pos = MAP_APPFONT ( 5 , 149 ) ;
+        Pos = MAP_APPFONT ( 5 , 160 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     CheckBox CB_ASIANSUPPORT
     {
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Akti~viert" ;
-        Text [ en-US ] = "Enabled";
-    };
-    FixedLine FL_CTLSUPPORT
-    {
-        Pos = MAP_APPFONT ( 6 , 162 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Unterstützung von 'Complex Text Layout' (CTL)" ;
-        Text [ en-US ] = "Complex text layout (CTL) support" ;
+        Text [ de ] = "Unterstützung von asiatischen Sprachen aktiviert" ;
+        Text [ en-US ] = "E~nabled for Asian languages";
     };
     FixedImage FI_CTLSUPPORT
     {
@@ -675,8 +690,15 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "A~ktiviert" ;
-        Text [ en-US ] = "Enabled";
+        Text [ de ] = "Unterstützung von 'Complex Text Layout' (CTL) aktiviert" ;
+        Text [ en-US ] = "Ena~bled for complex text layout (CTL)";
     };
 };
+
+InfoBox RID_SVX_MSGBOX_LANGUAGE_RESTART
+{
+    Message [ de ] = "Die Spracheinstellung der benutzeroberfläche wurde geändert und wird beim nächsten Start von %PRODUCTNAME %PRODUCTVERSION wirksam";
+    Message [ en-US ] = "The language setting of the userinterface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
+};
+
 
