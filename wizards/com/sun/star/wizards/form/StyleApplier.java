@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleApplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:34:54 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.UIConsts;
-
 
 public class StyleApplier{
 
@@ -192,8 +191,6 @@ public class StyleApplier{
              Object oStyleNode = xNameAccess.getByName(StyleNodeNames[i]);
              StyleNames[i] =  (String) Helper.getUnoPropertyValue(oStyleNode, "Name");
              FileNames[i] =  (String) Helper.getUnoPropertyValue(oStyleNode, "CssHref");
-//           XNamed xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, oStyleNode);
-//           StyleNames[i] = xNamed.getName();
         }
     } catch (Exception e) {
         e.printStackTrace(System.out);
