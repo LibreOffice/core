@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 15:38:36 $
+ *  last change: $Author: sab $ $Date: 2001-04-12 11:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include "unonames.hxx"
 #include "docoptio.hxx"
 
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
@@ -109,6 +113,10 @@ const SfxItemPropertyMap* lcl_GetDocDefaultsMap()
     };
     return aDocDefaultsMap_Impl;
 }
+
+inline long TwipsToHMM(long nTwips) { return (nTwips * 127 + 36) / 72; }
+inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
+inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
 
 //------------------------------------------------------------------------
 
@@ -200,7 +208,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
                 sal_Int32 nValue;
                 if (aValue >>= nValue)
                 {
-                    aDocOpt.SetTabDistance(static_cast<sal_uInt8> (nValue));
+                    aDocOpt.SetTabDistance(static_cast<sal_uInt16>(HMMToTwips(nValue)));
                     pDoc->SetDocOptions(aDocOpt);
                 }
             }
@@ -259,7 +267,8 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
             if (pDoc)
             {
                 const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
-                aRet <<= static_cast<sal_Int32> (aDocOpt.GetTabDistance());
+                sal_Int32 nValue (TwipsToEvenHMM(aDocOpt.GetTabDistance()));
+                aRet <<= nValue;
             }
             else
                 throw uno::RuntimeException();
