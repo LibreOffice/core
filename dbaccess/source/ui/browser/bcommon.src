@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:05:02 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,5 +119,6 @@ String RID_STR_TBL_TITLE
     Text[ catalan ] = "Tabla #";
     Text[ finnish ] = "Taulukko ";
 };
+
 
 
