@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 16:00:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,7 +1283,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
                 }
 
                 if( bDisable )
-                    rSet.DisableItem( SID_ATTR_GRAF_CROP );
+                    rSet.DisableItem( nSlotId );
             }
             break;
 
