@@ -1202,7 +1202,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
                     if ( pElement->m_xStorage.Is() )
                     {
-                        if ( !pElement->m_bIsInserted || pElement->m_xStorage->Insert( m_pContent ) )
+                        if ( !pElement->m_bIsInserted || m_bIsLinked || pElement->m_xStorage->Insert( m_pContent ) )
                         {
                             nLocalRet = pElement->m_xStorage->Commit();
                             pContent = pElement->GetContent();
