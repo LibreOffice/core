@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.1 2001-02-28 10:03:25 oj Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.2 2001-03-07 16:43:45 fs Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: oj $ $Date: 2001-02-28 10:03:25 $ $Revision: 1.1 $
+ //  $Author: fs $ $Date: 2001-03-07 16:43:45 $ $Revision: 1.2 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -25,7 +25,8 @@ ModalDialog DLG_REL_PROPERTIES
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 186 , 235 ) ;
     Text = "Relationen" ;
-    Text [ English ] = "Relationships" ;
+    Text [ english ] = "Relations" ;
+    Text [ english_us ] = "Relations" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
