@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:46:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ class XclExpPalette : public XclExpRecordBase
 {
 public:
     explicit            XclExpPalette( const XclExpRoot& rRoot );
+    virtual             ~XclExpPalette();
 
     /** Inserts the color into the list and updates weighting.
         @param nAutoDefault  The Excel palette index for automatic color.
@@ -328,7 +329,6 @@ class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpNumFmtBuffer( const XclExpRoot& rRoot );
-
     virtual             ~XclExpNumFmtBuffer();
 
     /** Returns the core index of the current standard number format. */
@@ -650,7 +650,7 @@ public:
     explicit            XclExpXFBuffer( const XclExpRoot& rRoot );
 
     /** Inserts predefined built-in styles and user-defined styles. */
-    void                InitDefaults();
+    void                Initialize();
 
     /** Finds or creates a cell XF record for the passed item set.
         @return  A unique XF record ID. */
@@ -694,7 +694,6 @@ private:
     typedef XclExpRecordList< XclExpXF >    XclExpXFList;
     typedef XclExpXFList::RecordRefType     XclExpXFRef;
     typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
-    typedef XclExpStyleList::RecordRefType  XclExpStyleRef;
 
 private:
     /** Returns the XF ID of the cell XF containing the passed format. */
