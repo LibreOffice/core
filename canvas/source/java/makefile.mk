@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: rt $ $Date: 2004-07-23 14:31:15 $
+#  last change: $Author: rt $ $Date: 2004-11-26 17:07:21 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -45,11 +45,18 @@ PRJ		= ..$/..
 TARGET	= javacanvas
 PACKAGE = canvas
 
+USE_JAVAVER:=TRUE 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: settings.mk
 
 .IF "$(SOLAR_JAVA)"=="TRUE"
+
+# Since Canvas needs newer features like
+# e.g. java.awt.image.BufferStrategy,
+# disabled for now for everything <1.4
+.IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 JAVAFILES  = \
     SpriteBase.java \
@@ -61,6 +68,7 @@ JAVAFILES  = \
     CanvasSprite.java \
     CanvasCustomSprite.java \
     CanvasClonedSprite.java \
+    TextLayout.java \
     BackBuffer.java \
     LinePolyPolygon.java \
     BezierPolyPolygon.java \
@@ -76,7 +84,7 @@ JAVAFILES += x11/WindowAdapter.java
 
 .ENDIF		# "$(GUIBASE)"!="unx" 
 
-JARFILES 		= jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar 
+JARFILES 		= jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARTARGET               = $(TARGET).uno.jar
@@ -84,6 +92,7 @@ JARCOMPRESS             = TRUE
 #JARCLASSDIRS            = $(PACKAGE) 
 CUSTOMMANIFESTFILE      = manifest
 
+.ENDIF # "$(JAVANUMVER:s/.//)" >= "000100040000" 
 .ENDIF # "$(SOLAR_JAVA)"=="TRUE"
 
 # --- Targets ------------------------------------------------------
