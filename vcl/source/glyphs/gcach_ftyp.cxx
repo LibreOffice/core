@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.60 $
- *  last change: $Author: hdu $ $Date: 2001-11-07 12:26:05 $
+ *  $Revision: 1.61 $
+ *  last change: $Author: hdu $ $Date: 2001-11-07 15:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,7 @@
 #include <osl/thread.hxx>
 
 // VERSION_MINOR in freetype.h is too coarse, we need to fine-tune ourselves:
-#if (SUPD <= 632)
-    #define FTVERSION 198
-#elif (SUPD <= 641)
-    #define FTVERSION 202
-#else
-    #define FTVERSION 205
-#endif
+#define FTVERSION 205
 
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
