@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 12:57:46 $
+ *  last change: $Author: pl $ $Date: 2001-09-03 16:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,8 +647,11 @@ inline SalFrameData::~SalFrameData()
         delete pFreeGraphics_;
     }
 
-    if( hShell_ != pDisplay_->GetWidget() )
+    if( hShell_ != pDisplay_->GetShellWidget() )
+    {
+        XtDestroyWidget( hComposite_ );
         XtDestroyWidget( hShell_ );
+    }
 
     SalData* pSalData = GetSalData();
 

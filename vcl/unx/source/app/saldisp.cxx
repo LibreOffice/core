@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 09:54:19 $
+ *  last change: $Author: pl $ $Date: 2001-09-03 16:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,9 @@ SalDisplay::SalDisplay( Widget w ) :
 SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
         pDisp_( display ),
         mpFallbackFactory ( NULL ),
-        m_pWMAdaptor( NULL )
+        m_pWMAdaptor( NULL ),
+        hComposite_( NULL ),
+        hShell_( NULL )
 {
     SalData *pSalData  = GetSalData();
     XVisualInfo aXVI;
@@ -791,10 +793,8 @@ SalDisplay::~SalDisplay( )
 
         for( size_t i = 0; i < POINTER_COUNT; i++ )
         {
-            XFreeCursor( pDisp_, aPointerCache_[i] );
-#ifdef DBG_UTIL
-            aPointerCache_[i] = None;
-#endif
+            if( aPointerCache_[i] )
+                XFreeCursor( pDisp_, aPointerCache_[i] );
         }
 
         if( hComposite_ )
@@ -804,6 +804,14 @@ SalDisplay::~SalDisplay( )
 
         pXLib_->Remove( ConnectionNumber( pDisp_ ) );
 
+        // free colormap before modifying pVisual_
+        xColor_.Clear();
+
+        delete pVisual_;
+
+        if( pRootVisual_ != pVisual_ )
+            delete pRootVisual_;
+
         delete mpInputMethod;
         delete mpKbdExtension;
         XtCloseDisplay( pDisp_ );
@@ -812,14 +820,6 @@ SalDisplay::~SalDisplay( )
     pDisp_  = (Display*)ILLEGAL_POINTER;
 
     pSalData->Remove( this );
-
-    // free colormap before modifying pVisual_
-    xColor_.Clear();
-
-    delete pVisual_;
-
-    if( pRootVisual_ != pVisual_ )
-        delete pRootVisual_;
 
     pVisual_        = (SalVisual*)ILLEGAL_POINTER;
     pRootVisual_    = (SalVisual*)ILLEGAL_POINTER;
