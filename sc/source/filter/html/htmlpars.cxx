@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:08:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,7 @@ void ScHTMLLayoutParser::SetWidths()
     if ( !nTableWidth )
         nTableWidth = (USHORT) aPageSize.Width();
     SCCOL nColsPerRow = nMaxCol - nColCntStart;
-    if ( !nColsPerRow )
+    if ( nColsPerRow <= 0 )
         nColsPerRow = 1;
     if ( pLocalColOffset->Count() <= 2 )
     {   // nur PageSize, es gab keine Width-Angabe
