@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hro $ $Date: 2001-03-16 11:21:05 $
+ *  last change: $Author: hro $ $Date: 2001-03-28 11:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2670,9 +2670,25 @@ shell::ensuredir( const rtl::OUString& rUnqPath )
 
 sal_Bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath )
+              const rtl::OUString& rUnqPath )
 {
-    return ensuredir( aUnqPath );
+    rtl::OUString aUnqPath;
+    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+        aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
+    else
+        aUnqPath = rUnqPath;
+
+    osl::FileBase::RC nError = osl::Directory::create( aUnqPath );
+
+    switch ( nError )
+    {
+    case osl::FileBase::E_EXIST:
+        return sal_False;
+    case osl::FileBase::E_None:
+        return sal_True;
+    default:
+        return ensuredir( aUnqPath );
+    }
 }
 
 
