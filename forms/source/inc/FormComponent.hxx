@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,15 +247,52 @@ protected:
                                                 m_xControl;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
                                                 m_xAggregate;
-    ::rtl::OUString                             m_aService;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                                 m_xServiceFactory;
 
 public:
-    OControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory, const ::rtl::OUString& _sService);
+    /** constructs a control
+
+        @param _rFactory
+            the service factory for this control
+        @param _rAggregateService
+            the service name of the component to aggregate
+        @param _bSetDelegator
+            set this to <FALSE/> if you don't want the constructor to set the delegator at
+            the aggregate. In this case, you <em>have</em> to call doSetDelegator within your
+            own constructor.
+
+            This is helpfull, if your derived class wants to cache an interface of the aggregate.
+            In this case, the aggregate needs to be queried for this interface <b>before</b> the
+            <member scope="com::sun::star::uno">XAggregation::setDelegator</member> call.
+
+            In such a case, pass <FALSE/> to this parameter. Then, cache the aggregate's interface(s)
+            as needed. Afterwards, call <member>doSetDelegator</member>.
+
+            In your destructor, you need to call <member>doResetDelegator</member> before
+            resetting the cached interfaces. This will reset the aggregates delegator to <NULL/>,
+            which will ensure that the <member scope="com::sun::star::uno">XInterface::release</member>
+            calls on the cached interfaces are really applied to the aggregate, instead of
+            the <type>OControl</type> itself.
+    */
+    OControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory,
+        const ::rtl::OUString& _rAggregateService,
+        const sal_Bool _bSetDelegator = sal_True
+    );
 
     virtual ~OControl();
+
+protected:
+    /** sets the control as delegator at the aggregate
+
+        This has to be called from within your derived class' constructor, if and only
+        if you passed <FALSE/> to the <arg>_bSetDelegator</arg> parameter of the
+        <type>OControl</type> constructor.
+    */
+    void    doSetDelegator();
+    void    doResetDelegator();
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
@@ -328,7 +365,12 @@ protected:
     sal_Int32       m_nOriginalTextLineColor;           // (we add red underlining)
 
 public:
-    OBoundControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sService);
+    OBoundControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        const ::rtl::OUString& _rAggregateService,
+        const sal_Bool _bSetDelegator = sal_True
+    );
+
     virtual ~OBoundControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl);
