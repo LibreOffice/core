@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: csaba $ $Date: 2000-12-07 18:52:38 $
+ *  last change: $Author: as $ $Date: 2000-12-18 14:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ void SfxApplication::OpenClients()
     if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
     {
         // Crash-Recovery
+/*
 #if SUPD<613//MUSTINI
         SfxIniManager *pIni = GetIniManager();
         sal_Bool bSendMail = (sal_uInt16) pIni->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("SendCrashMail") ).ToInt32();
@@ -350,82 +351,95 @@ void SfxApplication::OpenClients()
         DBG_ASSERT(!(bSendMail==sal_True),"SfxApplication::OpenClients()\nSendCrashMail not full supported yet!\n");
 #endif
 #endif
+*/
+        SvtInternalOptions  aInternalOptions        ;
+        sal_Bool            bUserCancel = sal_False ;
+        ::rtl::OUString     sURL                    ;
+        ::rtl::OUString     sFilter                 ;
+        ::rtl::OUString     sTempName               ;
 
-
-        sal_Bool bCancel = sal_False;
-        for ( sal_uInt16 n = 0; sal_True; ++n )
+        while   (
+                    ( aInternalOptions.IsRecoveryListEmpty()    ==  sal_False   )   &&
+                    ( bUserCancel                               ==  sal_False   )
+                )
         {
-#if SUPD<613//MUSTINI
-            String aEntry( pIni->Get( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n ) );
-#else
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-            DBG_ASSERT(sal_False, "SfxApplication::OpenClients()\nsoffice.ini key \"WorkingSet\\Recover\" no longer supported ...\n");
-#endif
-            String aEntry;
-#endif
-            if ( !aEntry.GetTokenCount() )
-                break;
+            // Read and delete(!) top recovery item from list.
+            aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
 
-            sal_Bool bIsURL = ( aEntry.GetToken( 2 ).CompareToAscii("url") == COMPARE_EQUAL );
-            String aRealFileName( aEntry.GetToken( 3 ) );
-            String aTempFileName( aEntry.GetToken( 0 ) );
-            sal_uInt16 nRet;
-            if ( bCancel )
-                nRet = RET_NO;
-            else
-            {
-                String aMsg( SfxResId( STR_RECOVER_QUERY ) );
-                aMsg.SearchAndReplaceAscii( "$1", aRealFileName );
-                MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK,
-                                String( SfxResId( STR_RECOVER_TITLE ) ), aMsg );
-                nRet = aBox.Execute();
-            }
+            sal_Bool    bIsURL          = ( sURL.getLength() > 0 );
+            String      sRealFileName   ( sURL      );
+            String      sTempFileName   ( sTempName );
 
-            switch ( nRet )
+            String aMsg( SfxResId( STR_RECOVER_QUERY ) );
+            aMsg.SearchAndReplaceAscii( "$1", sRealFileName );
+            MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK, String( SfxResId( STR_RECOVER_TITLE ) ), aMsg );
+
+            switch( aBox.Execute() )
             {
                 case RET_YES: // recover a file
                 {
-                    SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-                    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-                    SfxStringItem aTempFileItem( SID_FILE_NAME, aTempFileName );
-                    SfxStringItem aFilterItem( SID_FILTER_NAME, aEntry.GetToken( 1 ) );
-                    SfxBoolItem aReadOnlyItem( SID_DOC_READONLY, sal_False );
-                    if ( !bIsURL )
-                        aRealFileName.Erase();
-                    SfxStringItem aSalvageItem( SID_DOC_SALVAGE, aRealFileName );
-                    if ( bIsURL )
+                    SfxStringItem   aTargetName     ( SID_TARGETNAME    , DEFINE_CONST_UNICODE("_blank")        );
+                    SfxStringItem   aReferer        ( SID_REFERER       , DEFINE_CONST_UNICODE("private:user")  );
+                    SfxStringItem   aTempFileItem   ( SID_FILE_NAME     , sTempFileName                         );
+                    SfxStringItem   aFilterItem     ( SID_FILTER_NAME   , sFilter                               );
+                    SfxBoolItem     aReadOnlyItem   ( SID_DOC_READONLY  , sal_False                             );
+
+                    if( bIsURL == sal_False )
                     {
-                        SfxStringItem aRealURLItem( SID_ORIGURL, aRealFileName );
-                        pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                                &aTempFileItem, &aFilterItem, &aSalvageItem, &aTargetName,
-                                &aRealURLItem, &aReadOnlyItem, &aReferer, 0L );
+                        sRealFileName.Erase();
+                    }
+
+                    SfxStringItem aSalvageItem( SID_DOC_SALVAGE, sRealFileName );
+                    if( bIsURL == sal_True )
+                    {
+                        SfxStringItem aRealURLItem( SID_ORIGURL, sRealFileName );
+                        pAppDispat->Execute(    SID_OPENDOC             ,
+                                                SFX_CALLMODE_SYNCHRON   ,
+                                                &aTempFileItem          ,
+                                                &aFilterItem            ,
+                                                &aSalvageItem           ,
+                                                &aTargetName            ,
+                                                &aRealURLItem           ,
+                                                &aReadOnlyItem          ,
+                                                &aReferer               ,
+                                                0L                      );
                     }
                     else
                     {
                         SfxBoolItem aAsTemplateItem( SID_TEMPLATE, !bIsURL );
-                        pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                                &aTempFileItem, &aFilterItem, &aSalvageItem, &aTargetName,
-                                &aAsTemplateItem, &aReadOnlyItem, &aReferer, 0L );
+                        pAppDispat->Execute(    SID_OPENDOC             ,
+                                                SFX_CALLMODE_SYNCHRON   ,
+                                                &aTempFileItem          ,
+                                                &aFilterItem            ,
+                                                &aSalvageItem           ,
+                                                &aTargetName            ,
+                                                &aAsTemplateItem        ,
+                                                &aReadOnlyItem          ,
+                                                &aReferer               ,
+                                                0L                      );
                     }
+                    SfxContentHelper::Kill( sTempFileName );
                 }
+                break;
 
                 case RET_NO: // skip this file
-                    // remove ini-entry
-#if SUPD<613//MUSTINI
-                    pIni->Delete( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n );
-#endif
-                    if ( nRet == RET_NO )
-                        SfxContentHelper::Kill( aTempFileName );
-                    break;
+                {
+                    SfxContentHelper::Kill( sTempFileName );
+                }
+                break;
 
                 case RET_CANCEL: // cancel recovering
-                    // remove ini-entry
-#if SUPD<613//MUSTINI
-                    pIni->Delete( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n );
-#endif
-                    SfxContentHelper::Kill( aTempFileName );
-                    bCancel = sal_True; // and all following
-                    break;
+                {
+                    SfxContentHelper::Kill( sTempFileName );
+                    bUserCancel = sal_True; // and all following!
+                    // Don't forget to delete recovery list!
+                    while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
+                    {
+                        aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
+                        SfxContentHelper::Kill( sTempName );
+                    }
+                }
+                break;
             }
         }
     }
@@ -463,14 +477,10 @@ void SfxApplication::OpenClients()
         SfxAllItemSet aSet( GetPool() );
 
         // Dateiname
-#if SUPD<613//MUSTINI
-        String aName = pAppIniMgr->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("StartDocument") );
-#else
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::OpenClients()\nsoffice.ini key \"Common\\StartDocument\" no longer supported ...\n");
-#endif
+        /*TODO:
+            (as) If feature of "StartDocument" should be reactivated - add code to read document name here!
+         */
         String aName;
-#endif
         if ( !aName.Len() )
             aName = String( DEFINE_CONST_UNICODE("private:factory/swriter" ) );
         SfxStringItem aNameItem( SID_FILE_NAME, aName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-15 15:50:57 $
+ *  last change: $Author: as $ $Date: 2000-12-18 14:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,8 +1352,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
     if( Application::IsInExecute() )
     {
         SfxObjectShell *pIter, *pNext;
-        sal_uInt16 n = 0;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > seqWindowList;
+
         for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
         {
             pNext = SfxObjectShell::GetNext(*pIter);
@@ -1365,9 +1364,9 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     SFX_ITEMSET_ARG( pIter->GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, sal_False );
                     SfxRequest aReq(SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pIter->GetPool());
 
-                    sal_Bool bHadName = pIter->HasName();
-                    INetURLObject aOldURL = pIter->GetMedium()->GetURLObject();
-                    String aOldName = pIter->GetTitle();
+                    sal_Bool        bHadName    = pIter->HasName()                  ;
+                    INetURLObject   aOldURL     = pIter->GetMedium()->GetURLObject();
+                    String          aOldName    = pIter->GetTitle()                 ;
 
                     const SfxFilter *pFilter = pIter->GetMedium()->GetFilter();
                     const SfxFilter *pOrigFilter = pFilter;
@@ -1397,29 +1396,15 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 
                     pIter->ExecuteSlot(aReq);
 
-                    String aEntry( n );
-                    aEntry += aSaveName;
-                    aEntry += DEFINE_CONST_UNICODE(";");
-                    aEntry += pOrigFilter ? pOrigFilter->GetName() : aFilterName;
-                    aEntry += DEFINE_CONST_UNICODE(";");
-
-                    if ( bHadName )
-                    {
-                        aEntry += DEFINE_CONST_UNICODE("url;"),
-                        aEntry += aOldURL.GetMainURL();
-                    }
-
-                    seqWindowList.realloc(n+1);
-                    seqWindowList[n] = aEntry;
-                    ++n;
+                    pInternalOptions->PushRecoveryItem( bHadName ? aOldURL.GetMainURL() : aOldName              ,
+                                                          pOrigFilter ? pOrigFilter->GetName() : aFilterName        ,
+                                                        aSaveName                                               );
                 }
                 /*catch ( ::Exception & )
                 {
                 }*/
             }
         }
-
-        SvtWorkingSetOptions().SetWindowList( seqWindowList );
 
         if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
         {
@@ -1430,7 +1415,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 
 #if SUPD<613//MUSTINI
 /*TODO: We need a new key to save informations for SenCrashMail feature.*/
-    sal_Bool bSendMail = (sal_uInt16) pAppIniMgr->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("SendCrashMail") ).ToInt32();
+    sal_Bool bSendMail = pInternalOptions->CrashMailEnabled();
     if ( !pAppData_Impl->bBean && bSendMail )
     {
         String aInfo = System::GetSummarySystemInfos();
@@ -1486,6 +1471,9 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
         }
     }
 #endif//MUSTINI
+
+    ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+
     switch( nError & EXC_MAJORTYPE )
     {
         case EXC_USER:
