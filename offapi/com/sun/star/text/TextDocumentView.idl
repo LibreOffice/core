@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocumentView.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:17:20 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
 
 //=============================================================================
 
@@ -80,27 +83,68 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextDocumentView
 /** specifies the view of a <type>TextDocument</type>.
  */
 published service TextDocumentView
 {
-    // DocMerge: empty anyway
     service com::sun::star::view::OfficeDocumentView;
 
 
-    // DocMerge from xml: service com::sun::star::text::TextDocumentView: interface com::sun::star::view::XViewSettingsSupplier
     /** This interface permits access to the properties of the view.
      */
     interface com::sun::star::view::XViewSettingsSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::text::TextDocumentView: interface com::sun::star::text::XTextViewCursorSupplier
     /** This interface makes it possible to access the cursor which belongs
                 to the view and can be visible for the user.
      */
     interface com::sun::star::text::XTextViewCursorSupplier;
 
+
+    /** Gives access to the objects properties.
+
+        @since OOo 2.0
+     */
+    [optional] interface com::sun::star::beans::XPropertySet;
+
+
+    //-------------------------------------------------------------------------
+    /** returns the number of pages in the document
+
+        <p>Since the document needs to be formatted to get the result
+        obtaining this value may take some time.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property, readonly] long PageCount;
+
+    //-------------------------------------------------------------------------
+    /** returns the number of lines in the document
+
+        <p>Since the document needs to be formatted to get the result
+        obtaining this value may take some time.</p>
+
+        <p>Empty paragraphs are not counted.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property, readonly] long LineCount;
+
+    //-------------------------------------------------------------------------
+    /** specifies if spellchecking should be done while typing.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean IsConstantSpellcheck;
+
+    //-------------------------------------------------------------------------
+    /** specifies if the marks for misspelled text should be displayed.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean IsHideSpellMarks;
+
+    //-------------------------------------------------------------------------
 };
 
 //=============================================================================
