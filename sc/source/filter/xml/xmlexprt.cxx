@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:58:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2840,7 +2840,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
     if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
     {
-        rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
+/*      rtl::OUString sAuthor(rMyCell.xAnnotation->getAuthor());
         if (sAuthor.getLength())
         {
             SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
@@ -2879,7 +2879,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
                                             XML_DATE_STRING, sal_True,
                                             sal_False );
             Characters(rtl::OUString(aDate));
-        }
+        }*/
 
         if (rMyCell.xAnnotation->getIsVisible())
             AddAttribute(XML_NAMESPACE_OFFICE, XML_DISPLAY, XML_TRUE);
