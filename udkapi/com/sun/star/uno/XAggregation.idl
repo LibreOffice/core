@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAggregation.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:58:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,6 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-
-#ifndef __com_sun_star_uno_Uik_idl__
-#include <com/sun/star/uno/Uik.idl>
-#endif
-
 
 //=============================================================================
 
@@ -133,30 +128,6 @@ interface XAggregation: com::sun::star::uno::XInterface
         <member>XInterface::queryInterface()</member>
         itself.
 
-        @example:Java
-
-        <listing>
-
-        void setDelegator( com.sun.star.uno.XInterface aDelegator )
-        {
-        pDelegator =aDelegator;
-        }
-
-
-        com.sun.star.uno.XInterface queryInterface( com.sun.star.uno.Uik aUik )
-        {
-        com.sun.star.uno.XInterface pRet = null;
-
-        // pDelegator may be already set
-        if( pDelegator == null )
-        pRet = queryAggregation( aIFace );
-        else
-        pRet = pDelegator->queryInterface( aIFace );
-        return pRet;
-        }
-
-        </listing>
-
         @see XAggregation::queryAggregation
     */
     void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
@@ -174,28 +145,9 @@ interface XAggregation: com::sun::star::uno::XInterface
         on getting its own interface when it calls the method
         <member>XInterface::queryInterface()</member>.
 
-        @example:Java
-
-        <listing>
-
-        Class queryAggregation( Class aIFace )
-        {
-        // The Uno-System provides information about their own interfaces
-        Class pRet = Uno.getInterface( this, aIFace );
-
-        if( pRet == null )
-        // not an own interface, thus forward to the aggregated object
-        pRet = aMyAggObj->queryAggregation( aIface );
-        return pRet;
-        }
-
-        </listing>
-
         @see XAggregation::setDelegator
     */
     any queryAggregation( [in] type aType );
-//  boolean queryAggregation( [in] com::sun::star::uno::Uik aUik,
-//           [out] any ifc );
 
 };
 
