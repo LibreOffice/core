@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:28:04 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 14:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,42 +139,18 @@ namespace xmloff
         ::rtl::OUString sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
 
-        // the tokens in the attribute value describing different aspects of the border
-        enum BorderTokens
-        {
-            btWidth = 0,
-            btStyle = 1,
-            btColor = 2
-        };
-
         sal_uInt16 nConvertedStyle = (sal_uInt16)-1;
 
-        BorderTokens eToken = btWidth;
-        sal_Bool bConversionSuccess = sal_True;
-        while   (   bConversionSuccess              // could convert the previous token
+        sal_Bool bConversionSuccess = sal_False;
+        while   (   !bConversionSuccess             // could not interpret the previous token (ignored it)
                 &&  aTokens.getNextToken(sToken)    // have a new token
                 &&  (0 != sToken.getLength())       // really have a new token
-                &&  (eToken <= btColor)             // did not exceed the maximum border token count
                 )
         {
-            switch (eToken)
-            {
-                case btWidth:
-                    // does not really matter for us. Though we write different widths for 3D and flat borders,
-                    // it's just for convenience.
-                    break;
-                case btStyle:
-                    bConversionSuccess = _rUnitConverter.convertEnum(nConvertedStyle, sToken, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
-                    break;
-                case btColor:
-                    // ignore this. Our borders do not have a color
-                    break;
-            }
-
-            eToken = static_cast<BorderTokens>(1 + static_cast<sal_Int32>(eToken));
+            bConversionSuccess = _rUnitConverter.convertEnum(nConvertedStyle, sToken, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
         }
 
-        if ((sal_uInt16)-1 == nConvertedStyle)
+        if (!bConversionSuccess)
             return sal_False;
 
         // if we're here, the string could have had more or less than the requested 3 tokens, but we ignore this.
@@ -190,38 +166,11 @@ namespace xmloff
         sal_Int16 nBorder = 0;
 
         ::rtl::OUStringBuffer aOut;
-        if (bSuccess = (_rValue >>= nBorder))
-        {
-            switch (nBorder)
-            {
-                case 0: // none
-                    return sal_False;
-                case 1: // 3D
-                {
-                    aOut.appendAscii(sXML_middle);                  // width
-                    aOut.append(sal_Unicode(' '));                  // separator
-                    aOut.appendAscii(sXML_groove);                  // style
-                    aOut.append(sal_Unicode(' '));                  // separator
-                    _rUnitConverter.convertColor( aOut, (Color)0 ); // color
-                }
-                break;
-                case 2: // flat
-                {
-                    aOut.appendAscii(sXML_thin);                    // width
-                    aOut.append(sal_Unicode(' '));                  // separator
-                    aOut.appendAscii(sXML_solid);                   // style (carved in)
-                    aOut.append(sal_Unicode(' '));                  // separator
-                    _rUnitConverter.convertColor( aOut, (Color)0 ); // color
-                }
-                break;
-                default:
-                    // unknown
-                    return sal_False;
-            }
-        }
+        bSuccess =  (_rValue >>= nBorder)
+                &&  _rUnitConverter.convertEnum(aOut, nBorder, OEnumMapper::getEnumMap(OEnumMapper::epBorderWidth));
 
         _rStrExpValue = aOut.makeStringAndClear();
-        return sal_True;
+        return bSuccess;
     }
 
     //=====================================================================
@@ -343,6 +292,10 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/26 10:28:04  aw
+ *  Changed double import/export to use it's own conversion routines
+ *  so iots more clear what type is used
+ *
  *  Revision 1.3  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *
