@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 09:31:46 $
+ *  last change: $Author: rt $ $Date: 2002-01-03 11:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include <algorithm>
 #endif
 #ifndef _SFX_OBJFAC_HXX
-#include <sfx2/docfac.hxx>
+#include <docfac.hxx>
 #endif
 
 //........................................................................
@@ -1023,6 +1023,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/12/07 09:31:46  fs
+ *  #95509# sort the groups in the same order as the global classes
+ *
  *  Revision 1.8  2001/11/28 17:00:48  mba
  *  #78650#: filter names without module prefixes
  *
