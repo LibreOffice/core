@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:53 $
+ *  last change: $Author: tra $ $Date: 2001-03-20 14:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,10 +329,8 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
     }
 
     if ( SUCCEEDED( hr ) )
-    {
         hr = UnmarshalIDataObjectAndReleaseStream( lpStream, ppIDataObject );
-        lpStream->Release( );
-    }
+
     return hr;
 }
 
