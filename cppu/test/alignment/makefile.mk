@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2001-10-17 12:40:31 $
+#   last change: $Author: dbo $ $Date: 2001-11-08 16:21:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,14 +61,13 @@
 #*************************************************************************
 
 #
-# build /test first, then /test/alignment_tests
+# build /test first, then /test/alignment
 #
 
 PRJ=..$/..
 PRJNAME=cppu
 TARGET=alignment
 LIBTARGET=NO
-TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -85,6 +84,12 @@ UNOUCRRDB=$(BIN)$/testcppu.rdb
 UNOUCROUT=$(INCCOM)$/test$/alignment
 INCPRE+=$(INCCOM)$/test -I$(INCCOM)$/test$/alignment -I$(PRJ)$/test$/alignment
 
+.IF "$(src_env)" == ""
+merge_rdb=$(SOLARBINDIR)$/udkapi.rdb
+.ELSE
+merge_rdb=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF
+
 DEPOBJFILES= \
     $(OBJ)$/pass1.obj	\
     $(OBJ)$/pass2.obj
@@ -100,14 +105,15 @@ APP2TARGET = pass2
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
-ALLTAR:	execute_pass2
+ALLTAR: execute_pass2
 .ELSE
-ALL:	ALLDEP
+ALL: ALLDEP
 .ENDIF
 
 .INCLUDE :  target.mk
 
 $(MISC)$/pass2.cxx: $(APP1TARGETN)
+    +regmerge $(UNOUCRRDB) / $(merge_rdb)
     +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(foreach,c,$(shell $(APP1TARGETN) -env:UNO_TYPES={$(subst,\,\\ $(UNOUCRRDB))} $(subst,\,\\ $(MISC)$/pass2.cxx) dump_types) -T$c) $(UNOUCRRDB))
 
 execute_pass2: $(APP2TARGETN)

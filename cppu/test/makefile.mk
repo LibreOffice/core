@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: dbo $ $Date: 2001-10-17 14:04:26 $
+#   last change: $Author: dbo $ $Date: 2001-11-08 16:21:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,12 +61,11 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=	testcppu
-TARGET=		testcppu
-LIBTARGET=	NO
-TARGETTYPE=	CUI
+PRJNAME=testcppu
+TARGET=	testcppu
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=	TRUE
+NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -76,10 +75,12 @@ NO_BSYMBOLIC=	TRUE
 
 # --- Files --------------------------------------------------------
 
-UNOUCROUT=	$(OUT)$/inc$/test
-INCPRE+=	$(OUT)$/inc$/test
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCROUT=$(OUT)$/inc$/test
+INCPRE+=$(OUT)$/inc$/test
 
-OBJFILES=	\
+OBJFILES= \
         $(OBJ)$/testcppu.obj	\
         $(OBJ)$/test_di.obj	\
         $(OBJ)$/test_Cincludes.obj
@@ -99,9 +100,10 @@ APP1STDLIBS+=	\
         $(SALHELPERLIB)		\
         $(SALLIB)
 
-APP1DEF=	$(MISC)$/$(APP1TARGET).def
+APP1DEF=$(MISC)$/$(APP1TARGET).def
 
-ALLIDLFILES:=	cpputest.idl 		\
+ALLIDLFILES:= \
+        cpputest.idl 		\
         language_binding.idl	\
         alignment.idl
 
