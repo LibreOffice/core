@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-01 12:10:24 $
+ *  last change: $Author: gt $ $Date: 2001-08-13 10:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,10 +278,14 @@ double SAL_CALL AnalysisAddIn::getPricemat( constREFXPS& xOpt,
     sal_Int32   nBase = GetOptBase( rOB );
 
     sal_Int32   nDaysPerYear;
+    //GetYearFrac( xOpt, nSettle, nMat, GetOptBase( rOB ) );
     double      fDSM = GetDiffDate( nNullDate, nSettle, nMat, nBase, &nDaysPerYear );
+    /*double*/  fDSM = GetYearFrac( xOpt, nSettle, nMat, nBase );
     double      fB = nDaysPerYear;
     double      fDIM = GetDiffDate( nNullDate, nIssue, nMat, nBase );
+//  double      fDIM = GetYearFrac( xOpt, nIssue, nMat, nBase );
     double      fA = GetDiffDate( nNullDate, nIssue, nSettle, nBase );
+//  double      fA = GetYearFrac( xOpt, nIssue, nSettle, nBase );
     double      fRet = fDIM / fB * fRate;
     fRet++;
     fRet /= 1.0 + fDSM / fB * fYield;
@@ -303,7 +307,9 @@ double SAL_CALL AnalysisAddIn::getMduration( constREFXPS& xOpt,
 
     sal_Int32   nBase = GetOptBase( rOB );
 
-    return 0.0;
+    double      fRet = GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, GetOptBase( rOB ) );
+    fRet /= 1.0 + ( fYield / double( nFreq ) );
+    return fRet;
 }
 
 

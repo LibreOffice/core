@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-01 09:14:22 $
+ *  last change: $Author: gt $ $Date: 2001-08-13 10:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,9 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
             else
                 nDayDiff = nDate2 - nDate1;
 
+            if( nDayDiff < 0 )
+                nDayDiff += nDaysInYear;
+
             break;
         case 2:         // 2=exact/360
             nDaysInYear = 360;
@@ -643,7 +646,7 @@ void AddDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY, sal_Int32 nDD, sal
         if( nM <= 0 )
         {
             nY--;
-            nM = 12 - nM;
+            nM += 12;
         }
         else if( nM > 12 )
         {
@@ -671,6 +674,26 @@ void AddDate( sal_Int32 nND, sal_Int32& rD, sal_Int32 nDD, sal_Int32 nDM, sal_In
     AddDate( nD, nM, nY, nDD, nDM, nDY );
 
     rD = DateToDays( nD, nM, nY ) - nND;
+}
+
+
+// if nRefDate is last day in month and day of nDate is >= day of nRefDate,
+// adjust nDate to last day in month and return
+sal_Int32 AdjustLastDayInMonth( sal_Int32 nNullDate, sal_Int32 nRefDate, sal_Int32 nDate )
+{
+    sal_uInt16 nRefDay, nRefMonth, nRefYear;
+    DaysToDate( nNullDate + nRefDate, nRefDay, nRefMonth, nRefYear );
+    if( nRefDay == DaysInMonth( nRefMonth, nRefYear ) )
+    {
+        sal_uInt16 nDay, nMonth, nYear;
+        DaysToDate( nNullDate + nDate, nDay, nMonth, nYear );
+        if( nDay >= nRefDay )
+        {
+            nDate += DaysInMonth( nMonth, nYear );
+            nDate -= nDay;
+        }
+    }
+    return nDate;
 }
 
 
@@ -1412,21 +1435,103 @@ double GetOpt( const ANY& rAny, double fDefault ) THROWDEF_RTE_IAE
 double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
     double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    if( nBase == 2 )
+        THROW_IAE;
+
+    sal_uInt32  nPer = sal_uInt32( fPer );
+    double      fUsePer = 1.0 / fRate;
+    double      fAmorCoeff;
+
+    if( fUsePer < 3.0 )
+        fAmorCoeff = 1.0;
+    else if( fUsePer < 5.0 )
+        fAmorCoeff = 1.5;
+    else if( fUsePer <= 6.0 )
+        fAmorCoeff = 2.0;
+    else
+        fAmorCoeff = 2.5;
+
+    fRate *= fAmorCoeff;
+    double      fNRate = Round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
+    fCost -= fNRate;
+    double      fRest = fCost - fRestVal;   // Anschaffungskosten - Restwert - Summe aller Abschreibungen
+
+    for( sal_uInt32 n = 0 ; n < nPer ; n++ )
+    {
+        fNRate = Round( fRate * fCost, 0 );
+        fRest -= fNRate;
+
+        if( fRest < 0.0 )
+        {
+            switch( nPer - n )
+            {
+                case 0:
+                case 1:
+                    return Round( fCost * 0.5, 0 );
+                    break;
+                default:
+                    return 0.0;
+            }
+        }
+
+        fCost -= fNRate;
+    }
+
+    return fNRate;
 }
 
 
 double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
     double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    if( nBase == 2 )
+        THROW_IAE;
+
+    sal_uInt32  nPer = sal_uInt32( fPer );
+    double      fOneRate = fCost * fRate;
+    double      fCostDelta = fCost - fRestVal;
+    double      f0Rate = GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost;
+    sal_uInt32  nNumOfFullPeriods = sal_uInt32( ( fCost - fRestVal - f0Rate) / fOneRate );
+
+    if( nPer == 0 )
+        return f0Rate;
+    else if( nPer <= nNumOfFullPeriods )
+        return fOneRate;
+    else if( nPer == nNumOfFullPeriods + 1 )
+        return fCostDelta - fOneRate * nNumOfFullPeriods - f0Rate;
+    else
+        return 0.0;
 }
 
 
 double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
     double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    double          fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );
+    double          fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
+    double          fDur = 0.0;
+    const double    f100 = 100.0;
+    fCoup *= f100 / double( nFreq );    // fCoup is used as cash flow
+    fYield /= nFreq;
+    fYield += 1.0;
+
+    double          t;
+
+    for( t = 1.0 ; t < fNumOfCoups ; t++ )
+        fDur += t * ( fCoup ) / pow( fYield, t );
+
+    fDur += fNumOfCoups * ( fCoup + f100 ) / pow( fYield, fNumOfCoups );
+
+    double          p = 0.0;
+    for( t = 1.0 ; t < fNumOfCoups ; t++ )
+        p += fCoup / pow( fYield, t );
+
+    p += ( fCoup + f100 ) / pow( fYield, fNumOfCoups );
+
+    fDur /= p;
+    fDur /= double( nFreq );
+
+    return fDur;
 }
 
 
@@ -1448,14 +1553,52 @@ double GetOddfyield( sal_Int32 nNullDate,  sal_Int32 nSettle, sal_Int32 nMat, sa
 double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    THROW_IAE;
+    return 0.0;
 }
 
 
 double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    THROW_IAE;
+    return 0.0;
+/*  double      f100ZH = 100.0 * fRate / double( nFreq );
+    double      s;
+    sal_uInt32  i;
+    sal_uInt32  nc = 42;
+
+#define _DC( i )        1
+#define _NL( i )        1
+#define _A( i )         1
+#define _DSC( i )       1
+
+    double      fZ1 = fRedemp;
+    s = 0.0;
+    for( i = 1 ; i <= nc ; i++ )
+        s += _DC( i ) / _NL( i );
+    s*= f100ZH;
+    fZ1 += s;
+
+    double      fN1 = fPrice;
+    s = 0.0;
+    for( i = 1 ; i <= nc ; i++ )
+        s += _A( i ) / _NL( i );
+    s*= f100ZH;
+    fN1 += s;
+
+    s = 0.0;
+    for( i = 1 ; i <= nc ; i++ )
+        s += _DSC( i ) / _NL( i );
+    double      fN2 = s;
+
+    return ( fZ1 / fN1 - 1.0 ) * double( nFreq ) / fN2;
+
+#undef _DC
+#undef _NL
+#undef _A
+#undef _DSC
+*/
 }
 
 
@@ -1512,21 +1655,33 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 }*/
 
 
-/*double GetCoupnum( sal_Int32 nND, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+double GetCoupnum( sal_Int32 nND, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    return ceil( GetYearFrac( nND, nSettle, nMat, nBase ) * nFreq );
-}*/
+//    return ceil( GetYearFrac( nND, nSettle, nMat, nBase ) * nFreq );
 
+    sal_Int32 nRet = 0;
+    sal_uInt16 nSetDay, nSetMonth, nSetYear;
+    nSettle += nND;
+    DaysToDate( nSettle, nSetDay, nSetMonth, nSetYear );
+    sal_Bool bSetLastDay = (DaysInMonth( nSetMonth, nSetYear ) == nSetDay);
 
-double GetCoupnum( sal_Int32 nND, sal_Int32 nS, sal_Int32 nM, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
-{
-    if( nS >= nM || CHK_Freq )
-        THROW_IAE;
+    sal_uInt16 nMatDay, nMatMonth, nMatYear;
+    nMat += nND;
+    DaysToDate( nMat, nMatDay, nMatMonth, nMatYear );
+    sal_Bool bMatLastDay = (DaysInMonth( nMatMonth, nMatYear ) == nMatDay);
 
-    return ceil( GetYearFrac( nND, nS, nM, nBase ) * nFreq );
+    sal_uInt16 nFreqMonths = 12 / nFreq;
+    nRet = (nMatYear - nSetYear) * nFreq;
+    nRet += (nMatMonth - nSetMonth + nFreqMonths + 11) / nFreqMonths - nFreq;
+    nSetMonth %= nFreqMonths;
+    nMatMonth %= nFreqMonths;
+    if( (nSetMonth == nMatMonth) && !bSetLastDay && (bMatLastDay || (nMatDay > nSetDay)) )
+        nRet += 1;
+
+    return (double) nRet;
 }
 
 
@@ -1536,11 +1691,13 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) );
+    sal_Int32   nRet = nMat;
+    sal_Int32   nPeriodsDelta = sal_Int32( GetCoupnum( nNullDate, nSettle, nRet, nFreq, nBase ) );
 
-    AddDate( nNullDate, nMat, 0, -( nPeriodsDelta * 12 / nFreq ), 0 );
+    AddDate( nNullDate, nRet, 0, -( nPeriodsDelta * 12 / nFreq ), 0 );
+    nRet = AdjustLastDayInMonth( nNullDate, nMat, nRet );
 
-    return nMat;
+    return nRet;
 }
 
 
@@ -1550,11 +1707,22 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    sal_Int32   nStart = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
-    sal_Int32   nEnd = nStart;
-    AddDate( 0, nEnd, 0, 12 / nFreq, 0 );   // no Null-date, 'cause nStart contains it!
-
-    return nEnd - nStart;
+    double nRet;
+    if( nBase == 1 )
+    {
+        sal_Int32   nStart = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
+        sal_Int32   nEnd = nStart;
+        AddDate( nNullDate, nEnd, 0, 12 / nFreq, 0 );
+        nStart = AdjustLastDayInMonth( nNullDate, nEnd, nStart );
+        nRet = nEnd - nStart;
+    }
+    else
+    {
+        // get constant default day count for bases 0, 2, 3, 4
+        nRet = GetDaysInYear( 0, 0, nBase );
+        nRet /= nFreq;
+    }
+    return nRet;
 }
 
 
@@ -1565,7 +1733,7 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
         THROW_IAE;
 
     sal_Int32   nDate = sal_Int32( GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase ) );
-    AddDate( 0, nDate, 0, 12 / nFreq, 0 );  // no Null-date, 'cause nStart contains it!
+    AddDate( nNullDate, nDate, 0, 12 / nFreq, 0 );
 
     return nDate - nSettle;
 }
@@ -2287,8 +2455,17 @@ void Complex::Sqrt( void )
 }
 
 
+inline BOOL SinOverflow( double f )
+{
+    return fabs( f ) >= 134217728;
+}
+
+
 void Complex::Sin( void ) THROWDEF_RTE_IAE
 {
+    if( SinOverflow( r ) )
+        THROW_IAE;
+
     if( i )
     {
         double  r_;
@@ -2304,6 +2481,9 @@ void Complex::Sin( void ) THROWDEF_RTE_IAE
 
 void Complex::Cos( void ) THROWDEF_RTE_IAE
 {
+    if( SinOverflow( r ) )
+        THROW_IAE;
+
     if( i )
     {
         double      r_;
