@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-05 15:58:34 $
+ *  last change: $Author: sj $ $Date: 2002-11-06 12:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,8 +1116,18 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 //                  case mso_txflHorzA :                    // Horizontal @-font, normal
                 }
             }
-            nTextRotationAngle -= GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) * 9000;
-
+            sal_Int32 nFontDirection = GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 );
+            nTextRotationAngle -= nFontDirection * 9000;
+            if ( ( nFontDirection == 1 ) || ( nFontDirection == 3 ) )       // #104546#
+            {
+                sal_Int32 nHalfWidth = ( rTextRect.GetWidth() + 1 ) >> 1;
+                sal_Int32 nHalfHeight = ( rTextRect.GetHeight() + 1 ) >> 1;
+                Point aTopLeft( rTextRect.Left() + nHalfWidth - nHalfHeight,
+                                rTextRect.Top() + nHalfHeight - nHalfWidth );
+                Size aNewSize( rTextRect.GetHeight(), rTextRect.GetWidth() );
+                Rectangle aNewRect( aTopLeft, aNewSize );
+                rTextRect = aNewRect;
+            }
             if ( pRet )
             {
                 BOOL bDeleteSource = FALSE;
