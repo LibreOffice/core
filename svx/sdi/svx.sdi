@@ -5466,7 +5466,9 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertApplet SID_INSERT_APPLET
-()
+(SfxStringItem Class FN_PARAM_1,
+ SfxStringItem ClassLocation FN_PARAM_2,
+ SfxStringItem Commands FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5698,7 +5700,8 @@ SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertPlugin SID_INSERT_PLUGIN
-()
+(SfxStringItem ClassLocation FN_PARAM_2,
+ SfxStringItem Commands FN_PARAM_3)
 [
     /* flags: */
     AutoUpdate = FALSE,
