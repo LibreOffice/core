@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:43:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,6 +1096,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                                 pNd->GetAttr(RES_LR_SPACE);
 
                         SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
+
                         const SwNumFmt *pNum = 0;
                         pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
                             *pTxtNode);
@@ -4608,6 +4609,8 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
     if (!nErrRet)
         nErrRet = LoadThroughDecryption(rPaM ,pGloss);
+
+    rDoc.PropagateOutlineRule();
 
     return nErrRet;
 }
