@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:30 $
+ *  last change: $Author: oj $ $Date: 2002-10-16 13:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,10 +445,12 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
     m_aSqlIterator.traverseAll();
-    if( m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT && m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
+    if ((   m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT
+        &&  m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
+        ||  SQL_ISRULE(m_pSqlParseNode,union_statement) ) // #i4229# OJ
     {
         SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,
+        throw SQLException(::rtl::OUString::createFromAscii("No single select statement!"),*this,
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
     }
 
