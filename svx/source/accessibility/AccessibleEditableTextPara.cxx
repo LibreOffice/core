@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-23 14:11:00 $
+ *  last change: $Author: thb $ $Date: 2002-10-24 17:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,11 @@ namespace accessibility
     ESelection AccessibleEditableTextPara::MakeSelection( sal_Int32 nEEIndex )
     {
         return MakeSelection( nEEIndex, nEEIndex+1 );
+    }
+
+    ESelection AccessibleEditableTextPara::MakeCursor( sal_Int32 nEEIndex )
+    {
+        return MakeSelection( nEEIndex, nEEIndex );
     }
 
     void AccessibleEditableTextPara::CheckIndex( sal_Int32 nIndex ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
@@ -1513,8 +1518,8 @@ namespace accessibility
             if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
                 return sal_False; // non-editable area selected
 
-            // set empty selection (=> cursor) to given index
-            rCacheVF.SetSelection( MakeSelection(nIndex) );
+            // #104400# set empty selection (=> cursor) to given index
+            rCacheVF.SetSelection( MakeCursor(nIndex) );
 
             return rCacheVF.Paste();
         }
@@ -1572,8 +1577,8 @@ namespace accessibility
             if( !rCacheTF.IsEditable( MakeSelection(nIndex) ) )
                 return sal_False; // non-editable area selected
 
-            // insert given text at empty selection (=> cursor)
-            sal_Bool bRet = rCacheTF.InsertText( sText, MakeSelection(nIndex) );
+            // #104400# insert given text at empty selection (=> cursor)
+            sal_Bool bRet = rCacheTF.InsertText( sText, MakeCursor(nIndex) );
 
             rCacheTF.QuickFormatDoc();
             GetEditSource().UpdateData();

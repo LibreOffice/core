@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-23 14:11:00 $
+ *  last change: $Author: thb $ $Date: 2002-10-24 17:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ namespace accessibility
         */
         ESelection  MakeSelection( sal_Int32 nStartEEIndex, sal_Int32 nEndEEIndex );
         ESelection  MakeSelection( sal_Int32 nEEIndex );
+        ESelection  MakeCursor( sal_Int32 nEEIndex );
 
         // check whether index value is within permitted range
 
