@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-30 08:17:56 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 08:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
+#include <com/sun/star/container/XIdentifierContainer.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -66,7 +70,7 @@
 #include <com/sun/star/drawing/GluePoint2.hpp>
 #endif
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include "svdmodel.hxx"
 #include "svdobj.hxx"
@@ -76,7 +80,9 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-class SvxUnoGluePointAccess : public WeakImplHelper1< container::XIndexContainer >,
+const USHORT NON_USER_DEFINED_GLUE_POINTS = 4;
+
+class SvxUnoGluePointAccess : public WeakImplHelper2< container::XIndexContainer, container::XIdentifierContainer >,
                                 public SfxListener
 {
 private:
@@ -89,13 +95,27 @@ public:
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
+    // XIdentifierContainer
+    virtual sal_Int32 SAL_CALL insert( const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual void SAL_CALL removeByIdentifier( sal_Int32 Identifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
+
+    // XIdentifierReplace
+    virtual void SAL_CALL replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
+
+    // XIdentifierReplace
+    virtual uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual uno::Sequence< sal_Int32 > SAL_CALL getIdentifiers(  ) throw (uno::RuntimeException);
+
+    /* deprecated */
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 Index, const uno::Any& Element ) throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
     virtual void SAL_CALL removeByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
 
+    /* deprecated */
     // XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const uno::Any& Element ) throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
 
+    /* deprecated */
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
@@ -263,6 +283,145 @@ void SvxUnoGluePointAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) 
         }
     }
 }
+
+// XIdentifierContainer
+sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpObject )
+    {
+        SdrGluePointList* pList = mpObject->ForceGluePointList();
+        if( pList )
+        {
+            // second, insert the new glue point
+            drawing::GluePoint2 aUnoGlue;
+
+            if( aElement >>= aUnoGlue )
+            {
+                SdrGluePoint aSdrGlue;
+                convert( aUnoGlue, aSdrGlue );
+                USHORT nId = pList->Insert( aSdrGlue );
+                mpObject->SendRepaintBroadcast();
+
+                return (sal_Int32)(nId + NON_USER_DEFINED_GLUE_POINTS);
+            }
+
+            throw lang::IllegalArgumentException();
+        }
+    }
+
+    return -1;
+}
+
+void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpObject && ( Identifier >= NON_USER_DEFINED_GLUE_POINTS ))
+    {
+        const USHORT nId = (USHORT)(Identifier - NON_USER_DEFINED_GLUE_POINTS);
+
+        SdrGluePointList* pList = mpObject->GetGluePointList();
+        const USHORT nCount = pList ? pList->GetCount() : 0;
+        USHORT i;
+
+        for( i = 0; i < nCount; i++ )
+        {
+            if( (*pList)[i].GetId() == nId )
+            {
+                pList->Delete( i );
+                mpObject->SendRepaintBroadcast();
+                return;
+            }
+        }
+    }
+
+    throw container::NoSuchElementException();
+}
+
+// XIdentifierReplace
+void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpObject && mpObject->IsNode() )
+    {
+        struct drawing::GluePoint2 aGluePoint;
+        if( (Identifier < NON_USER_DEFINED_GLUE_POINTS) || !(aElement >>= aGluePoint))
+            throw lang::IllegalArgumentException();
+
+        const USHORT nId = (USHORT)Identifier - NON_USER_DEFINED_GLUE_POINTS;
+
+        SdrGluePointList* pList = mpObject->GetGluePointList();
+        const USHORT nCount = pList ? pList->GetCount() : 0;
+        USHORT i;
+        for( i = 0; i < nCount; i++ )
+        {
+            if( (*pList)[i].GetId() == nId )
+            {
+                // change the glue point
+                SdrGluePoint& rTempPoint = (*pList)[i];
+                convert( aGluePoint, rTempPoint );
+                mpObject->SendRepaintBroadcast();
+                return;
+            }
+        }
+
+        throw container::NoSuchElementException();
+    }
+}
+
+// XIdentifierAccess
+uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( mpObject && mpObject->IsNode() )
+    {
+        struct drawing::GluePoint2 aGluePoint;
+
+        if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default glue point?
+        {
+            SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( (USHORT)Identifier );
+            aGluePoint.IsUserDefined = sal_False;
+            convert( aTempPoint, aGluePoint );
+            return uno::makeAny( aGluePoint );
+        }
+        else
+        {
+            const USHORT nId = (USHORT)Identifier - NON_USER_DEFINED_GLUE_POINTS;
+
+            const SdrGluePointList* pList = mpObject->GetGluePointList();
+            const USHORT nCount = pList ? pList->GetCount() : 0;
+            for( USHORT i = 0; i < nCount; i++ )
+            {
+                const SdrGluePoint& rTempPoint = (*pList)[i];
+                if( rTempPoint.GetId() == nId )
+                {
+                    aGluePoint.IsUserDefined = sal_True;
+                    convert( rTempPoint, aGluePoint );
+                    return uno::makeAny( aGluePoint );
+                }
+            }
+        }
+    }
+
+    throw lang::IndexOutOfBoundsException();
+}
+
+uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() throw (uno::RuntimeException)
+{
+    const SdrGluePointList* pList = mpObject->GetGluePointList();
+    const USHORT nCount = pList ? pList->GetCount() : 0;
+
+    USHORT i;
+
+    uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
+    sal_Int32 *pIdentifier = aIdSequence.getArray();
+
+    for( i = 0; i < NON_USER_DEFINED_GLUE_POINTS; i++ )
+        *pIdentifier++ = (sal_Int32)i;
+
+    for( i = 0; i < nCount; i++ )
+        *pIdentifier++ = (sal_Int32) (*pList)[i].GetId();
+
+    return aIdSequence;
+}
+
+/* deprecated */
 
 // XIndexContainer
 void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32 Index, const uno::Any& Element )
