@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:32:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ String RID_ERR_CONTEXT_ADDFORM
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅäÔÇÁ ÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form oluşturma sırasında hata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error en la creación de un formulario";
 };
 String RID_ERR_FIELDREQUIRED
 {
@@ -108,6 +109,7 @@ String RID_ERR_FIELDREQUIRED
     Text[ arabic ] = "ãØáæÈ ÅÏÎÇá İí ÇáÍŞá '#'. ÇáÑÌÇÁ ßÊÇÈÉ ŞíãÉ ãÇ åäÇß.";
     Text[ turkish ] = "Alan '#' için bir giriş yapılması gerekiyor.\nLütfen bir değer girin!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El campo '#' requiere una entrada.\nPor favor escriba un valor.";
 };
 String RID_ERR_DUPLICATE_NAME
 {
@@ -132,6 +134,7 @@ String RID_ERR_DUPLICATE_NAME
     Text[ arabic ] = "åĞÇ ÇáÅÏÎÇá ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
     Text[ turkish ] = "Bu giriş mevcut durumda.\nLütfen başka bir ad seçin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El registro ya existe.\nPor favor elija otro nombre.";
 };
 String RID_STR_NEW_FORM
 {
@@ -156,6 +159,7 @@ String RID_STR_NEW_FORM
     Text[ arabic ] = "ÇÓÊãÇÑÉ ÌÏíÏÉ";
     Text[ turkish ] = "Yeni form";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo formulario";
 };
 String RID_STR_ALIGNMENT
 {
@@ -180,6 +184,7 @@ String RID_STR_ALIGNMENT
     Text[ arabic ] = "ÇáíÓÇÑ;ÊæÓíØ;Çáíãíä";
     Text[ turkish ] = "Sol;Orta;Sağ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Izquierda;Centrado;Derecha";
 };
 String RID_STR_LABEL
 {
@@ -204,6 +209,7 @@ String RID_STR_LABEL
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Título";
 };
 String RID_STR_CURSORTYPE
 {
@@ -228,6 +234,7 @@ String RID_STR_CURSORTYPE
     Text[ arabic ] = "äæÚ ÇáãÄÔÑ";
     Text[ turkish ] = "İmleç tipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de cursor";
 };
 String RID_STR_ALIGN
 {
@@ -252,6 +259,7 @@ String RID_STR_ALIGN
     Text[ arabic ] = "ÇáãÍÇĞÇÉ";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alineación";
 };
 String RID_STR_FONT
 {
@@ -276,6 +284,7 @@ String RID_STR_FONT
     Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
     Text[ turkish ] = "Karakter kümesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Juego de caracteres";
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -300,6 +309,7 @@ String RID_STR_BACKGROUNDCOLOR
     Text[ arabic ] = "áæä ÇáÎáİíÉ";
     Text[ turkish ] = "Artalan rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de fondo";
 };
 String RID_STR_BORDER
 {
@@ -324,6 +334,7 @@ String RID_STR_BORDER
     Text[ arabic ] = "ßÇÏÑ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco";
 };
 String RID_STR_BORDER_TYPE
 {
@@ -348,6 +359,7 @@ String RID_STR_BORDER_TYPE
     Text[ arabic ] = "ÈÏæä ßÇÏÑ;ãÙåÑ ËáÇËí ÇáÃÈÚÇÏ; ãõÓØøÍ";
     Text[ turkish ] = "Çerçevesiz;3B görünüm;Düz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sin marco;3D-Look;Plano";
 };
 String RID_STR_DEFAULT_CONTROL
 {
@@ -372,6 +384,7 @@ String RID_STR_DEFAULT_CONTROL
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ÇİÊÑÇÖí";
     Text[ turkish ] = "Standart komut öğesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento de control estándar";
 };
 String RID_STR_HSCROLL
 {
@@ -396,6 +409,7 @@ String RID_STR_HSCROLL
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
     Text[ turkish ] = "Yatay kaydırma çubuğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de deplazamiento horizontal";
 };
 String RID_STR_VSCROLL
 {
@@ -420,6 +434,7 @@ String RID_STR_VSCROLL
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
     Text[ turkish ] = "Dikey kaydırma çubuğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de desplazamiento vertical";
 };
 String RID_STR_MULTILINE
 {
@@ -445,6 +460,7 @@ String RID_STR_MULTILINE
     Text[ arabic ] = "ãÊÚÏÏ ÇáÃÓØÑ";
     Text[ turkish ] = "Çok satırlı giriş";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Varias líneas";
 };
 String RID_STR_MULTISELECTION
 {
@@ -469,6 +485,7 @@ String RID_STR_MULTISELECTION
     Text[ arabic ] = "ÊÍÏíÏ ãÊÚÏÏ";
     Text[ turkish ] = "Çoklu seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección múltiple";
 };
 String RID_STR_NAME
 {
@@ -493,6 +510,7 @@ String RID_STR_NAME
     Text[ arabic ] = "ÇáÇÓã";
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre";
 };
 String RID_STR_TABSTOP
 {
@@ -517,6 +535,7 @@ String RID_STR_TABSTOP
     Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
     Text[ turkish ] = "Sekme durağı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabstop";
 };
 String RID_STR_TEXT
 {
@@ -541,6 +560,7 @@ String RID_STR_TEXT
     Text[ arabic ] = "ÇáäÕ";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 String RID_STR_CONTROLSOURCE
 {
@@ -565,6 +585,7 @@ String RID_STR_CONTROLSOURCE
     Text[ arabic ] = "ÍŞá ÈíÇäÇÊ";
     Text[ turkish ] = "Veri alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de datos";
 };
 String RID_STR_DROPDOWN
 {
@@ -589,6 +610,7 @@ String RID_STR_DROPDOWN
     Text[ arabic ] = "ãäÓÏá";
     Text[ turkish ] = "Açılabilir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplegable";
 };
 String RID_STR_BOUNDCOLUMN
 {
@@ -613,6 +635,7 @@ String RID_STR_BOUNDCOLUMN
     Text[ arabic ] = "ÍŞá ãÑÈæØ";
     Text[ turkish ] = "Bağlı alan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo ligado";
 };
 String RID_STR_LISTSOURCE
 {
@@ -637,6 +660,7 @@ String RID_STR_LISTSOURCE
     Text[ arabic ] = "ãÍÊæíÇÊ ÇáŞÇÆãÉ";
     Text[ turkish ] = "Liste içeriği";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Contenido de lista";
 };
 String RID_STR_LISTSOURCETYPE
 {
@@ -661,6 +685,7 @@ String RID_STR_LISTSOURCETYPE
     Text[ arabic ] = "äæÚ ãÍÊæíÇÊ ÇáŞÇÆãÉ";
     Text[ turkish ] = "Liste içeriği türü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo del contenido de lista";
 };
 String RID_STR_CURSORSOURCE
 {
@@ -684,6 +709,7 @@ String RID_STR_CURSORSOURCE
     Text[ chinese_traditional ] = "¤º®e";
     Text[ turkish ] = "Veri kaynağı";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+    Text[ catalan ] = "Contenido";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -707,6 +733,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ chinese_traditional ] = "¤º®eÃş«¬";
     Text[ turkish ] = "Veri kaynağı türü";
     Text[ arabic ] = "äæÚ ÇáãÍÊæíÇÊ";
+    Text[ catalan ] = "Tipo de contenido";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -731,6 +758,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text[ arabic ] = "ÅÖÇİÉ ÈíÇäÇÊ";
     Text[ turkish ] = "Veri ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir datos";
 };
 String RID_STR_ALLOW_DELETIONS
 {
@@ -755,6 +783,7 @@ String RID_STR_ALLOW_DELETIONS
     Text[ arabic ] = "ÍĞİ ÈíÇäÇÊ";
     Text[ turkish ] = "Verileri sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar datos";
 };
 String RID_STR_ALLOW_EDITS
 {
@@ -779,6 +808,7 @@ String RID_STR_ALLOW_EDITS
     Text[ arabic ] = "ÊÛííÑ ÈíÇäÇÊ";
     Text[ turkish ] = "Verileri değiştir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar datos";
 };
 String RID_STR_DATAENTRY
 {
@@ -803,6 +833,7 @@ String RID_STR_DATAENTRY
     Text[ arabic ] = "ÅÖÇİÉ ÈíÇäÇÊ İŞØ";
     Text[ turkish ] = "Yalnızca veri ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir solo datos";
 };
 String RID_STR_DATASOURCE
 {
@@ -826,6 +857,7 @@ String RID_STR_DATASOURCE
     Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½";
     Text[ turkish ] = "Veritabanı";
     Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
+    Text[ catalan ] = "Fuente de datos";
 };
 String RID_STR_LOCKED
 {
@@ -850,6 +882,7 @@ String RID_STR_LOCKED
     Text[ arabic ] = "ãÄãä";
     Text[ turkish ] = "Kilitli";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Protegido";
 };
 String RID_STR_MASTERFIELDS
 {
@@ -874,6 +907,7 @@ String RID_STR_MASTERFIELDS
     Text[ arabic ] = "ÑÈØ";
     Text[ turkish ] = "Bağlantı öğeleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vinculación de";
 };
 String RID_STR_SLAVEFIELDS
 {
@@ -898,6 +932,7 @@ String RID_STR_SLAVEFIELDS
     Text[ arabic ] = "ÇÑÊÈÇØ ãÚ";
     Text[ turkish ] = "Alt alanlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vincular con";
 };
 String RID_STR_CURSOR_TYPE
 {
@@ -922,6 +957,7 @@ String RID_STR_CURSOR_TYPE
     Text[ arabic ] = "ÓÇßä;ÏíäÇãíßí";
     Text[ turkish ] = "Statik;Dinamik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estático;Dinámico";
 };
 String RID_STR_EVENTS
 {
@@ -946,6 +982,7 @@ String RID_STR_EVENTS
     Text[ arabic ] = "ÇáÃÍÏÇË";
     Text[ turkish ] = "Olaylar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Acontecimientos";
 };
 String RID_STR_FORMS
 {
@@ -970,6 +1007,7 @@ String RID_STR_FORMS
     Text[ arabic ] = "ÇÓÊãÇÑÇÊ";
     Text[ turkish ] = "Formlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formularios";
 };
 String RID_STR_NO_PROPERTIES
 {
@@ -994,6 +1032,7 @@ String RID_STR_NO_PROPERTIES
     Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÚäÕÑ ÊÍßã Ãæ Êã Úãá ÊÍÏíÏ ãÎÊáØ";
     Text[ turkish ] = "Komut öğesi seçilmedi ya da karma seçim yapıldı.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ningún elemento de control seleccionado o selección mixta";
 };
 String RID_STR_PROPERTIES_CONTROL
 {
@@ -1019,6 +1058,7 @@ String RID_STR_PROPERTIES_CONTROL
     Text[ arabic ] = "ÇáÎÕÇÆÕ: ";
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades: ";
 };
 String RID_STR_PROPERTIES_COLUMN
 {
@@ -1043,6 +1083,7 @@ String RID_STR_PROPERTIES_COLUMN
     Text[ arabic ] = "ÎÕÇÆÕ ÇáÃÚãÏÉ: ";
     Text[ turkish ] = "Sütun öğeleri: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades de las columnas: ";
 };
 String RID_STR_PROPERTIES_FORM
 {
@@ -1067,6 +1108,7 @@ String RID_STR_PROPERTIES_FORM
     Text[ arabic ] = "ÎÕÇÆÕ ÇáÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form özellikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades del formulario";
 };
 String RID_STR_FMEXPLORER
 {
@@ -1091,6 +1133,7 @@ String RID_STR_FMEXPLORER
     Text[ arabic ] = "äÇİíÌíÊæÑ ÇáÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form navigatörü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegador de formulario";
 };
 String RID_STR_LISTSOURCE_TYPE
 {
@@ -1114,6 +1157,7 @@ String RID_STR_LISTSOURCE_TYPE
     Text[ chinese_traditional ] = "¼Æ­È²M³æ;ªí®æ;¬d¸ß;Sql;Sql [Native];ªí®æÄæ¦ì";
     Text[ arabic ] = "ŞÇÆãÉ Şíã;ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]ÍŞæá ÌÏæá";
     Text[ turkish ] = "Değer listesi;Tablo;Sorgu;Sql;Sql [Native];Tablo alanları";
+    Text[ catalan ] = "Lista de valores;Tabla;Consulta;Sql;Sql [Native];Campos de tablas";
 };
 String RID_STR_CURSORSOURCE_TYPE
 {
@@ -1137,6 +1181,7 @@ String RID_STR_CURSORSOURCE_TYPE
     Text[ korean ] = "Ç¥;ÁúÀÇ;SQL ¸í·É";
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;ÃãÑ SQL";
     Text[ turkish ] = "Tablo;Sorgu;SQL komutu";
+    Text[ catalan ] = "Tabla;Consulta;Comando SQL";
 };
 String RID_STR_COMMAND_TYPE
 {
@@ -1160,6 +1205,7 @@ String RID_STR_COMMAND_TYPE
     Text[ chinese_traditional ] = "¬d¸ß;ªí³æ;SQL «ü¥O";
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;ÃãÑ SQL";
     Text[ turkish ] = "Tablo;Sorgu;SQL komutu";
+    Text[ catalan ] = "Tabla;consulta;comando SQL";
 };
 String RID_STR_SEARCHING
 {
@@ -1184,6 +1230,7 @@ String RID_STR_SEARCHING
     Text[ arabic ] = "ÍŞá ÇáÈÍË";
     Text[ turkish ] = "Arama alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de búsqueda";
 };
 String RID_STR_SEARCH_TYPE
 {
@@ -1208,6 +1255,7 @@ String RID_STR_SEARCH_TYPE
     Text[ arabic ] = "áÇºİÚøÇáºÓáÈí";
     Text[ turkish ] = "Hayır;Etkin;Etkin değil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No;Activo;Pasivo";
 };
 String RID_STR_BOOL
 {
@@ -1232,6 +1280,7 @@ String RID_STR_BOOL
     Text[ arabic ] = "áÇ;äÚã";
     Text[ turkish ] = "Hayır;Evet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No;Sí";
 };
 String RID_STR_PROPPAGE_DEFAULT_TITLE
 {
@@ -1256,6 +1305,7 @@ String RID_STR_PROPPAGE_DEFAULT_TITLE
     Text[ arabic ] = "ÚÇã";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "General";
 };
 String RID_STR_FORM
 {
@@ -1280,6 +1330,7 @@ String RID_STR_FORM
     Text[ arabic ] = "ÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formulario";
 };
 String RID_STR_PROPPAGE_FORMCTL_TITLE
 {
@@ -1304,6 +1355,7 @@ String RID_STR_PROPPAGE_FORMCTL_TITLE
     Text[ arabic ] = "ÈíÇäÇÊ";
     Text[ turkish ] = "Veriler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Datos";
 };
 String RID_STR_PROPPAGE_UNOCTL_TITLE
 {
@@ -1328,6 +1380,7 @@ String RID_STR_PROPPAGE_UNOCTL_TITLE
     Text[ arabic ] = "ÚäÕÑ ÊÍßã";
     Text[ turkish ] = "Komut öğesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento de control";
 };
 String RID_STR_TABWIN_PREFIX
 {
@@ -1351,6 +1404,7 @@ String RID_STR_TABWIN_PREFIX
     Text[ korean ] = "Ç¥;ÁúÀÇ;Sql;Sql [Native]";
     Text[ arabic ] = "ÌÏæá;ÇÓÊİÓÇÑ;Sql;Sql [Native]";
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
+    Text[ catalan ] = "Tabla;Consulta;Sql;Sql [Native]";
 };
 String RID_STR_FORMSHELL
 {
@@ -1375,6 +1429,7 @@ String RID_STR_FORMSHELL
     Text[ arabic ] = "ÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formulario";
 };
 String RID_STR_STDFORMNAME
 {
@@ -1403,6 +1458,7 @@ String RID_STR_STANDARD
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Predeterminado";
 };
 String RID_STR_URLBUTTON_CLASSNAME
 {
@@ -1507,6 +1563,7 @@ String RID_STR_CONTROL
     Text[ arabic ] = "ÚäÕÑ ÊÍßã";
     Text[ turkish ] = "Komut alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento de control";
 };
 String RID_STR_REC_TEXT
 {
@@ -1531,6 +1588,7 @@ String RID_STR_REC_TEXT
     Text[ arabic ] = "ÓÌá";
     Text[ turkish ] = "Veri kümesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Registro";
 };
 String RID_STR_REC_FROM_TEXT
 {
@@ -1555,6 +1613,7 @@ String RID_STR_REC_FROM_TEXT
     Text[ arabic ] = "ãä";
     Text[ turkish ] = "İlk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "de";
 };
 String RID_STR_FORM_FILTERED
 {
@@ -1579,6 +1638,7 @@ String RID_STR_FORM_FILTERED
     Text[ arabic ] = "(Êã ÊÕİíÊå)";
     Text[ turkish ] = "(filtrelenmiş)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "(filtrado)";
 };
 String RID_STR_FIELDSELECTION
 {
@@ -1603,6 +1663,7 @@ String RID_STR_FIELDSELECTION
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
     Text[ turkish ] = "Alan seçimi:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección de campo:";
 };
 String RID_STR_FIELDNULL
 {
@@ -1627,6 +1688,7 @@ String RID_STR_FIELDNULL
     Text[ arabic ] = "<İÇÑÛ>";
     Text[ turkish ] = "<Boş>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<vacío>";
 };
 String RID_STR_READERROR
 {
@@ -1653,6 +1715,7 @@ String RID_STR_READERROR
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÈíÇäÇÊ ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veritabanından veri okuma sırasında hata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al leer los datos de la base de datos";
 };
 String RID_STR_WRITEERROR
 {
@@ -1677,6 +1740,7 @@ String RID_STR_WRITEERROR
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÈíÇäÇÊ İí ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veritabanına veri yazma sırasında hata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al registrar datos en la base de datos";
 };
 String RID_STR_DELETEERROR
 {
@@ -1701,6 +1765,7 @@ String RID_STR_DELETEERROR
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÍĞİ ÈíÇäÇÊ. ";
     Text[ turkish ] = "Veri silme sırasında hata. ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al eliminar datos. ";
 };
 String RID_STR_ERR_CONNECTLOST
 {
@@ -1725,6 +1790,7 @@ String RID_STR_ERR_CONNECTLOST
     Text[ arabic ] = "Êã ŞØÚ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ.";
     Text[ turkish ] = "Veritabanı bağlantısı kesildi.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Interrumpida la conexión con la base de datos.";
 };
 String RID_STR_CONNECTERROR
 {
@@ -1751,6 +1817,7 @@ String RID_STR_CONNECTERROR
     Text[ arabic ] = "ÚãáíÉ ÇáÇÊÕÇá İÔáÊ";
     Text[ turkish ] = "Bağlantı kurulamadı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La conexión ha fallado.";
 };
 
 String RID_STR_SYNTAXERROR
@@ -1775,6 +1842,7 @@ String RID_STR_SYNTAXERROR
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜëõóç ôïõ ïñßóìáôïò ôïõ åñùôŞìáôïò";
     Text[ korean ] = "ÁúÀÇ Ç¥Çö½ÄÀ» ºĞ¼®ÇÒ ¶§ ¿À·ù";
     Text[ turkish ] = "Sorgu ifadesinde sözdizim hatası";
+    Text[ catalan ] = "Ha ocurrido un error al analizar la expresión de la consulta";
 };
 
 String RID_STR_INSERTING_ALLOWED_ERROR
@@ -1793,12 +1861,13 @@ String RID_STR_INSERTING_ALLOWED_ERROR
     Text[ swedish ] = "Det är inte tillåtet att infoga dataposter!";
     Text[ polish ] = "Wstawianie rekordów jest niedozwolone!";
     Text[ portuguese_brazilian ] = "Inserting records isn't allowed!";
-    Text[ japanese ] = "Úº°ÄŞ‚Ì‘}“ü‚Í‹–‰Â‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ!";
+    Text[ japanese ] = "Úº°ÄŞ‚Ì‘}“ü‚Í‹–‰Â‚³‚ê‚Ü‚¹‚ñB";
     Text[ korean ] = "·¹ÄÚµå »ğÀÔÀÌ Çã¿ëµÇÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "²»ÔÊĞí²åÈëÊı¾İÌõÄ¿£¡";
     Text[ chinese_traditional ] = "¤£¤¹³\\´¡¤J¸ê®Æ±ø¥Ø¡I";
     Text[ arabic ] = "áÇ íõÓãÍ ÈÅÏÎÇá ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri eklenemez!";
+    Text[ catalan ] = "¡No se permite insertar registros de datos!";
 };
 
 String RID_STR_UPDATING_ALLOWED_ERROR
@@ -1823,6 +1892,7 @@ String RID_STR_UPDATING_ALLOWED_ERROR
     Text[ chinese_traditional ] = "¤£¤¹³\\ÅÜ§ó¸ê®Æ±ø¥Ø¡I";
     Text[ arabic ] = "áÇ íõÓãÍ ÈÊÚÏíá ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri değiştirilemez!";
+    Text[ catalan ] = "¡No se permite modificar registros de datos!";
 };
 
 String RID_STR_DELETING_ALLOWED_ERROR
@@ -1841,12 +1911,13 @@ String RID_STR_DELETING_ALLOWED_ERROR
     Text[ swedish ] = "Det är inte tillåtet att radera dataposter!";
     Text[ polish ] = "Usuwanie rekordów jest niedozwolone!";
     Text[ portuguese_brazilian ] = "Deleting records isn't allowed!";
-    Text[ japanese ] = "Úº°ÄŞ‚Ìíœ‚Í‹–‰Â‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ!";
+    Text[ japanese ] = "Úº°ÄŞ‚Ìíœ‚Í‹–‰Â‚³‚ê‚Ü‚¹‚ñB";
     Text[ korean ] = "·¹ÄÚµå »èÁ¦°¡ Çã¿ëµÇÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "²»ÔÊĞíÉ¾³ıÊı¾İÌõÄ¿£¡";
     Text[ chinese_traditional ] = "¤£¤¹³\\§R°£¸ê®Æ±ø¥Ø¡I";
     Text[ arabic ] = "áÇ íõÓãÍ ÈÍĞİ ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri silinemez!";
+    Text[ catalan ] = "¡No se permite eliminar registros de datos!";
 };
 
 String RID_STR_DELETECONFIRM_RECORD
@@ -1872,6 +1943,7 @@ String RID_STR_DELETECONFIRM_RECORD
     Text[ arabic ] = "ÃäÊ Êäæí ÍĞİ ÓÌá.";
     Text[ turkish ] = "# kaydı silmek istiyorsunuz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usted desea eliminar 1 registro de datos.";
 };
 String RID_STR_DELETECONFIRM_RECORDS
 {
@@ -1896,6 +1968,7 @@ String RID_STR_DELETECONFIRM_RECORDS
     Text[ arabic ] = "ÃäÊ Êäæí ÍĞİ # ÓÌáÇÊ ÈíÇäÇÊ.";
     Text[ turkish ] = "# kaydı silmek istiyorsunuz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usted pretende eliminar # registros de datos.";
 };
 String RID_STR_DELETECONFIRM
 {
@@ -1920,6 +1993,7 @@ String RID_STR_DELETECONFIRM
     Text[ arabic ] = "ÅĞÇ ŞãÊ ÈÇÎÊíÇÑ \"äÚã\"¡ İáä íãßäß ÇáÊÑÇÌÚ Úä ÇáÚãáíÉ ÈÚÏ Ğáß!\nåá ÊÑíÏ ÇáãÊÇÈÚÉ ÈÇáÑÛã ãä Ğáß¿";
     Text[ turkish ] = "\"Evet\" seçildiğinde, işlem artık geri alınamaz!\nYinde de devam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡Si ha pulsado Sí, la operación no se podrá deshacer!\n¿Desea continuar de todas formas?";
 };
 String RID_STR_WARNING
 {
@@ -1944,6 +2018,7 @@ String RID_STR_WARNING
     Text[ arabic ] = "ÊÍĞíÑ!";
     Text[ turkish ] = "Uyarı!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡Advertencia!";
 };
 
 String RID_STR_NO_FORM_CONNECT
@@ -1969,6 +2044,7 @@ String RID_STR_NO_FORM_CONNECT
     Text[ arabic ] = "ÊÚĞÑ Úãá ÇÑÊÈÇØ ãä ÇáÇÓÊãÇÑÉ '#' Åáì ÇáÇÓÊãÇÑÉ '#'.";
     Text[ turkish ] = "Form '#' ile form '#' arasında bağlantı oluşturulamaz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo realizar el vínculo entre el formulario '#' y el formulario '#'.";
 };
 
 String RID_STR_FIELD_NOT_FOUND
@@ -1994,6 +2070,7 @@ String RID_STR_FIELD_NOT_FOUND
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÍŞá '#'.";
     Text[ turkish ] = "Alan '#' bulunamadı.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El campo '#' no pudo ser encontrado.";
 };
 
 String RID_STR_TABLE_NOT_FOUND
@@ -2019,6 +2096,7 @@ String RID_STR_TABLE_NOT_FOUND
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÌÏæá '#'.";
     Text[ turkish ] = "Tablo '#' bulunamadı.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo encontrar la tabla '#'.";
 };
 
 String RID_STR_QUERY_NOT_FOUND
@@ -2044,6 +2122,7 @@ String RID_STR_QUERY_NOT_FOUND
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÇÓÊİÓÇÑ '#'.";
     Text[ turkish ] = "Sorgu '#' bulunamadı.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se pudo encontrar la consulta '#'.";
 };
 
 String RID_ERR_NO_ELEMENT_TITLE
@@ -2069,6 +2148,7 @@ String RID_ERR_NO_ELEMENT_TITLE
     Text[ arabic ] = "áÇ ÊÔÊãá ÇáŞÇÆãÉ Úáì ÇáäÕ ÇáĞí Êã ÅÏÎÇáå.";
     Text[ turkish ] = "Girilen metin, listede yer alan öğelerden değil.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El texto indicado no es ningún elemento de la lista.";
 };
 
 String RID_ERR_NO_ELEMENT
@@ -2094,6 +2174,7 @@ String RID_ERR_NO_ELEMENT
     Text[ arabic ] = "ÇÎÊÑ ÃÍÏ ÚäÇÕÑ ÇáŞÇÆãÉ Ãæ Şã ÈÅÏÎÇá äÕ íãÇËá ÃÍÏ ÚäÇÕÑ ÇáŞÇÆãÉ.";
     Text[ turkish ] = "Listeden bir öğe seçin ya da listedeki öğelerden biriyle örtüşen bir metin girin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccione un elemento de la lista o introduzca un texto que concuerde con uno de los elementos de la lista.";
 };
 
 String RID_STR_READONLY
@@ -2119,6 +2200,7 @@ String RID_STR_READONLY
     Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Solo lectura";
 };
 String RID_STR_GROUPBOX
 {
@@ -2143,6 +2225,7 @@ String RID_STR_GROUPBOX
     Text[ arabic ] = "ÚäÕÑ ßÇÏÑ";
     Text[ turkish ] = "Çerçeve öğesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento del marco";
 };
 String RID_STR_TABINDEX
 {
@@ -2167,6 +2250,7 @@ String RID_STR_TABINDEX
     Text[ arabic ] = "ÇáÊÑÊíÈ";
     Text[ turkish ] = "Sıra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Orden";
 };
 String RID_STR_NAVIGATION
 {
@@ -2191,6 +2275,7 @@ String RID_STR_NAVIGATION
     Text[ arabic ] = "ÇáãáÇÍÉ";
     Text[ turkish ] = "Dolaşma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegación";
 };
 String RID_STR_FILTER_CRITERIA
 {
@@ -2215,6 +2300,7 @@ String RID_STR_FILTER_CRITERIA
     Text[ arabic ] = "İáÊÑ";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtro";
 };
 String RID_STR_SORT_CRITERIA
 {
@@ -2239,6 +2325,7 @@ String RID_STR_SORT_CRITERIA
     Text[ arabic ] = "ÇáİÑÒ";
     Text[ turkish ] = "Sıralama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ordenar";
 };
 String RID_STR_NAVIGATIONBAR
 {
@@ -2263,6 +2350,7 @@ String RID_STR_NAVIGATIONBAR
     Text[ arabic ] = "ÔÑíØ ÇáãáÇÍÉ";
     Text[ turkish ] = "Dolaşma çubuğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de navegación";
 };
 String RID_STR_CYCLE
 {
@@ -2287,6 +2375,7 @@ String RID_STR_CYCLE
     Text[ arabic ] = "ÏÇÆÑÉ";
     Text[ turkish ] = "Devre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ciclo";
 };
 String RID_STR_ENUM_CYCLE
 {
@@ -2311,6 +2400,7 @@ String RID_STR_ENUM_CYCLE
     Text[ arabic ] = "ßá ÇáÓÌáÇÊ;ÇáÓÌá ÇáÍÇáí;ÇáÕİÍÉ ÇáÍÇáíÉ";
     Text[ turkish ] = "Tüm veri kümeleri;Yürürlükteki veri kümesi;Yürürlükteki sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Todos los registros de datos;Registro actual;Página actual";
 };
 String RID_STR_ENUM_NAVIGATION
 {
@@ -2335,6 +2425,7 @@ String RID_STR_ENUM_NAVIGATION
     Text[ arabic ] = "áÇºäÚãºÇáÇÓÊãÇÑÉ ÇáÃÕá";
     Text[ turkish ] = "Hayır;Evet;Üst düzey form";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No;Sí;Formulario superior";
 };
 String RID_STR_DIRTY
 {
@@ -2359,6 +2450,7 @@ String RID_STR_DIRTY
     Text[ arabic ] = "ãÚÏá";
     Text[ turkish ] = "Değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificado";
 };
 String RID_STR_OLDVALUE
 {
@@ -2383,6 +2475,7 @@ String RID_STR_OLDVALUE
     Text[ arabic ] = "ÇáŞíãÉ ÇáŞÏíãÉ";
     Text[ turkish ] = "Eski değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor antiguo";
 };
 String RID_STR_VALUE
 {
@@ -2407,6 +2500,7 @@ String RID_STR_VALUE
     Text[ arabic ] = "ÇáŞíãÉ";
     Text[ turkish ] = "Değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor";
 };
 String RID_STR_FORMATKEY
 {
@@ -2431,6 +2525,7 @@ String RID_STR_FORMATKEY
     Text[ arabic ] = "ÇáÊäÓíŞ";
     Text[ turkish ] = "Formatlama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato";
 };
 String RID_STR_REQUIRED
 {
@@ -2455,6 +2550,7 @@ String RID_STR_REQUIRED
     Text[ arabic ] = "ãØáæÈ ÅÏÎÇá";
     Text[ turkish ] = "Giriş gerekli";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Entrada requerida";
 };
 String RID_STR_SCALE
 {
@@ -2479,6 +2575,7 @@ String RID_STR_SCALE
     Text[ arabic ] = "ÇáãŞíÇÓ";
     Text[ turkish ] = "Ölçeklendirme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escala";
 };
 String RID_STR_SIZE
 {
@@ -2503,6 +2600,7 @@ String RID_STR_SIZE
     Text[ arabic ] = "ÇáÍÌã";
     Text[ turkish ] = "Boyut";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño";
 };
 String RID_STR_UNIQUE
 {
@@ -2527,6 +2625,7 @@ String RID_STR_UNIQUE
     Text[ arabic ] = "æÇÖÍ";
     Text[ turkish ] = "Benzersiz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Único";
 };
 String RID_STR_CLASSID
 {
@@ -2551,6 +2650,7 @@ String RID_STR_CLASSID
     Text[ arabic ] = "İåÑÓ ÇáØÈŞÇÊ";
     Text[ turkish ] = "Sınıf dizini";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Índice de clase";
 };
 String RID_STR_LEFT
 {
@@ -2575,6 +2675,7 @@ String RID_STR_LEFT
     Text[ arabic ] = "íÓÇÑ";
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Izquierda";
 };
 String RID_STR_RIGHT
 {
@@ -2599,6 +2700,7 @@ String RID_STR_RIGHT
     Text[ arabic ] = "íãíä";
     Text[ turkish ] = "Sağ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Derecha";
 };
 String RID_STR_HEIGHT
 {
@@ -2623,6 +2725,7 @@ String RID_STR_HEIGHT
     Text[ arabic ] = "ÇáÇÑÊİÇÚ";
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura";
 };
 String RID_STR_WIDTH
 {
@@ -2647,6 +2750,7 @@ String RID_STR_WIDTH
     Text[ arabic ] = "ÇáÚÑÖ";
     Text[ turkish ] = "Genişlik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho";
 };
 String RID_STR_LISTINDEX
 {
@@ -2671,6 +2775,7 @@ String RID_STR_LISTINDEX
     Text[ arabic ] = "İåÑÓ ÇáŞÇÆãÉ";
     Text[ turkish ] = "Liste dizini";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Indice de listas";
 };
 String RID_STR_ROWHEIGHT
 {
@@ -2695,6 +2800,7 @@ String RID_STR_ROWHEIGHT
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
     Text[ turkish ] = "Satır yüksekliği";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura de fila";
 };
 String RID_STR_FILLCOLOR
 {
@@ -2719,6 +2825,7 @@ String RID_STR_FILLCOLOR
     Text[ arabic ] = "áæä ÊÚÈÆÉ";
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de relleno";
 };
 String RID_STR_TEXTCOLOR
 {
@@ -2743,6 +2850,7 @@ String RID_STR_TEXTCOLOR
     Text[ arabic ] = "áæä ÇáäÕ";
     Text[ turkish ] = "Metin rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de texto";
 };
 String RID_STR_LINECOLOR
 {
@@ -2767,6 +2875,7 @@ String RID_STR_LINECOLOR
     Text[ arabic ] = "áæä ÇáÎØ";
     Text[ turkish ] = "Çizgi rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de línea";
 };
 String RID_STR_REFVALUE
 {
@@ -2791,6 +2900,7 @@ String RID_STR_REFVALUE
     Text[ arabic ] = "ŞíãÉ ãÑÌÚíÉ";
     Text[ turkish ] = "Referans değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor referencial";
 };
 String RID_STR_STRINGITEMLIST
 {
@@ -2815,6 +2925,7 @@ String RID_STR_STRINGITEMLIST
     Text[ arabic ] = "ÅÏÎÇáÇÊ ÇáŞÇÆãÉ";
     Text[ turkish ] = "Liste girişleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Entradas de listas";
 };
 String RID_STR_COLUMN
 {
@@ -2839,6 +2950,7 @@ String RID_STR_COLUMN
     Text[ arabic ] = "ÚãæÏ";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Columna";
 };
 String RID_STR_BUTTONTYPE
 {
@@ -2864,6 +2976,7 @@ String RID_STR_BUTTONTYPE
     Text[ arabic ] = "äæÚ ÇáãİÊÇÍ";
     Text[ turkish ] = "Düğme türü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de botón";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -2888,6 +3001,7 @@ String RID_STR_SUBMIT_ACTION
     Text[ arabic ] = "URL";
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "URL";
 };
 String RID_STR_SUBMIT_METHOD
 {
@@ -2912,6 +3026,7 @@ String RID_STR_SUBMIT_METHOD
     Text[ arabic ] = "äæÚ ÇáÅÑÓÇá";
     Text[ turkish ] = "Gönderme türü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de submit";
 };
 String RID_STR_SUBMIT_ENCODING
 {
@@ -2936,6 +3051,7 @@ String RID_STR_SUBMIT_ENCODING
     Text[ arabic ] = "ÊÑãíÒ ÇáÅÑÓÇá";
     Text[ turkish ] = "Gönderme sırasında kodlama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Codificar submit";
 };
 String RID_STR_DEFAULTVALUE
 {
@@ -2960,6 +3076,7 @@ String RID_STR_DEFAULTVALUE
     Text[ arabic ] = "ŞíãÉ ÇİÊÑÇÖíÉ";
     Text[ turkish ] = "Standart değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor predeterminado";
 };
 String RID_STR_SUBMIT_TARGET
 {
@@ -2984,6 +3101,7 @@ String RID_STR_SUBMIT_TARGET
     Text[ arabic ] = "ÅØÇÑ";
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Frame";
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
@@ -3008,6 +3126,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text[ arabic ] = "Push;Submit;Reset;Url";
     Text[ turkish ] = "Push;Submit;Reset;Url";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Push;Submit;Reset;Url";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
@@ -3032,6 +3151,7 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text[ arabic ] = "Get;Post";
     Text[ turkish ] = "Get;Post";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Get;Post";
 };
 String RID_STR_ENUM_SUBMIT_ENCODING
 {
@@ -3056,6 +3176,7 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text[ arabic ] = "URL;Multipart;Text" ;
     Text[ turkish ] = "URL;Multipart;Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "URL;Multipart;Texto";
 };
 String RID_STR_DEFAULT_CHECKED
 {
@@ -3080,6 +3201,7 @@ String RID_STR_DEFAULT_CHECKED
     Text[ arabic ] = "ÍÇáÉ ÇİÊÑÇÖíÉ";
     Text[ turkish ] = "Standart durum";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estado predeterminado";
 };
 String RID_STR_ENUM_CHECKED
 {
@@ -3104,6 +3226,7 @@ String RID_STR_ENUM_CHECKED
     Text[ arabic ] = "ÛíÑ ãÍÏÏºãÍÏÏºÛíÑ ãÚÑİ";
     Text[ turkish ] = "Seçilmedi;Seçildi;Belirsiz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No seleccionado;Seleccionado;Indeterminado";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
 {
@@ -3132,6 +3255,7 @@ String RID_STR_IMAGE_URL
     Text[ arabic ] = "ÕæÑÉ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen";
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
@@ -3156,6 +3280,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text[ arabic ] = "ÊÍÏíÏ ÇİÊÑÇÖí";
     Text[ turkish ] = "Standart seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección predeterminada";
 };
 String RID_STR_UNDO_PROPERTY
 {
@@ -3180,6 +3305,7 @@ String RID_STR_UNDO_PROPERTY
     Text[ arabic ] = "ÊÚíä ÇáÎÇÕíÉ '#'";
     Text[ turkish ] = "'#' özelliğini belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Establecer propiedad '#'";
 };
 String RID_STR_UNDO_CONTAINER_INSERT
 {
@@ -3204,6 +3330,7 @@ String RID_STR_UNDO_CONTAINER_INSERT
     TEXT[ arabic ] = "ÅÏÑÇÌ İí ÍÇæíÉ";
     TEXT[ turkish ] = "Tabloya ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Insertar en el contenedor";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE
 {
@@ -3228,6 +3355,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE
     TEXT[ arabic ] = "ÍĞİ #";
     TEXT[ turkish ] = "Sil: #";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Eliminar #";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
 {
@@ -3252,6 +3380,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
     TEXT[ arabic ] = "ÍĞİ # ßÇÆäÇÊ";
     TEXT[ turkish ] = "# nesnelerini sil";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Eliminar # objetos";
 };
 String RID_STR_UNDO_CONTAINER_REPLACE
 {
@@ -3276,6 +3405,7 @@ String RID_STR_UNDO_CONTAINER_REPLACE
     TEXT[ arabic ] = "ÇÓÊÈÏÇá ÃÍÏ ÚäÇÕÑ ÇáÍÇæíÉ";
     TEXT[ turkish ] = "Tablo öğesini değiştir";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Reemplazar un elemento del contenedor.";
 };
 String RID_STR_UNDO_DELETE_LOGICAL
 {
@@ -3300,6 +3430,7 @@ String RID_STR_UNDO_DELETE_LOGICAL
     TEXT[ arabic ] = "ÍĞİ ÇáÈäíÉ";
     TEXT[ turkish ] = "Yapıyı sil";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Eliminar estructura";
 };
 String RID_STR_UNDO_TABORDER
 {
@@ -3324,6 +3455,7 @@ String RID_STR_UNDO_TABORDER
     Text[ arabic ] = "ÊÚííä ÊÑÊíÈ ÇáÊäÔíØ";
     Text[ turkish ] = "Etkinleştirme sırasını belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Establecer el orden de activación";
 };
 String RID_STR_UNDO_MODEL_REPLACE
 {
@@ -3347,6 +3479,7 @@ String RID_STR_UNDO_MODEL_REPLACE
     Text[ chinese_traditional ] = "´À¥N±±¨î¶µ";
     Text[ arabic ] = "ÇÓÊÈÏÇá ÚäÕÑ ÊÍßã";
     Text[ turkish ] = "Komut öğelerini değiştir";
+    Text[ catalan ] = "Reemplazar campo de control";
 };
 String RID_STR_DATE
 {
@@ -3371,6 +3504,7 @@ String RID_STR_DATE
     Text[ arabic ] = "ÇáÊÇÑíÎ";
     Text[ turkish ] = "Tarih";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fecha";
 };
 String RID_STR_DATEMIN
 {
@@ -3395,6 +3529,7 @@ String RID_STR_DATEMIN
     Text[ arabic ] = "ÃÏäì ÊÇÑíÎ";
     Text[ turkish ] = "Tarih (asgari)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fecha mín.";
 };
 String RID_STR_DATEMAX
 {
@@ -3419,6 +3554,7 @@ String RID_STR_DATEMAX
     Text[ arabic ] = "ÃŞÕì ÊÇÑíÎ";
     Text[ turkish ] = "Tarih (azami)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fecha máx.";
 };
 String RID_STR_DATEFORMAT
 {
@@ -3443,6 +3579,7 @@ String RID_STR_DATEFORMAT
     Text[ arabic ] = "ÊäÓíŞ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Tarih formatı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato de fecha";
 };
 String RID_STR_DATEFORMAT_LIST
 {
@@ -3467,6 +3604,7 @@ String RID_STR_DATEFORMAT_LIST
     Text[ arabic ] = "ŞíÇÓí (ŞÕíÑ)ºŞíÇÓí (ŞÕíÑ YY)ºŞíÇÓí (ŞÕíÑ YYY)ºŞíÇÓí (Øæíá)ºDD.MM.YYºMM.DD.YYºYY.MM.DDºDD.MM.YYYYºMM.DD.YYYYºYYYY.MM.DDºYY-MM-DD (DIN5008)ºYYYY-MM-DD (DIN5008)";
     Text[ turkish ] = "Standart (kısa);Standart (kısa YY);Standart (kısa YYYY);Standart (uzun);GG.AA.YY;AA.GG.YY;YY.AA.GG;GG.AA.YYYY;AA.GG.YYYY;YYYY.AA.GG;YY-AA-GG (DIN5008);YYYY-AA-GG (DIN5008)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estándar (breve);Estándar (breve JJ);Estándar (breve JJJJ);Estándar (largo);DD.MM.AA;MM.DD.AA;AA.MM.DD;DD.MM.AAAA;MM.DD.AAAA;AAAA.MM.DD;AA-MM-DD (DIN5008);JJJJ-MM-TT (DIN5008)";
 };
 String RID_STR_TIME
 {
@@ -3491,6 +3629,7 @@ String RID_STR_TIME
     Text[ arabic ] = "ÇáæŞÊ";
     Text[ turkish ] = "Zaman";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Hora";
 };
 String RID_STR_TIMEMIN
 {
@@ -3515,6 +3654,7 @@ String RID_STR_TIMEMIN
     Text[ arabic ] = "ÃÏäì æŞÊ";
     Text[ turkish ] = "Zaman (asgari)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tiempo mín.";
 };
 String RID_STR_TIMEMAX
 {
@@ -3539,6 +3679,7 @@ String RID_STR_TIMEMAX
     Text[ arabic ] = "ÃŞÕì æŞÊ";
     Text[ turkish ] = "Saat (azami)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tiempo máx.";
 };
 String RID_STR_TIMEFORMAT
 {
@@ -3563,6 +3704,7 @@ String RID_STR_TIMEFORMAT
     Text[ arabic ] = "ÊäÓíŞ æŞÊ";
     Text[ turkish ] = "Zaman formatı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato de hora";
 };
 String RID_STR_TIMEFORMAT_LIST
 {
@@ -3587,6 +3729,7 @@ String RID_STR_TIMEFORMAT_LIST
     Text[ arabic ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
     Text[ turkish ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
 };
 String RID_STR_VALUEMIN
 {
@@ -3611,6 +3754,7 @@ String RID_STR_VALUEMIN
     Text[ arabic ] = "ÃÏäì ŞíãÉ";
     Text[ turkish ] = "Asgari değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor mín.";
 };
 String RID_STR_VALUEMAX
 {
@@ -3635,6 +3779,7 @@ String RID_STR_VALUEMAX
     Text[ arabic ] = "ÃŞÕì ŞíãÉ";
     Text[ turkish ] = "Azami değer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Valor máx.";
 };
 String RID_STR_VALUESTEP
 {
@@ -3659,6 +3804,7 @@ String RID_STR_VALUESTEP
     Text[ arabic ] = "ÒíÇÏÉ/ÅäŞÇÕ ÇáŞíãÉ";
     Text[ turkish ] = "Aralık";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Intervalo";
 };
 String RID_STR_CURRENCYSYMBOL
 {
@@ -3683,6 +3829,7 @@ String RID_STR_CURRENCYSYMBOL
     Text[ arabic ] = "ÑãÒ ÇáÚãáÉ";
     Text[ turkish ] = "Para birimi simgesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Símbolo de moneda";
 };
 String RID_STR_CURRSYM_POSITION
 {
@@ -3707,6 +3854,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ arabic ] = "æÖÚ ÇáÑãÒ İí ÇáãŞÏãÉ";
     Text[ turkish ] = "Simge öne ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Situar símbolo delante";
 };
 String RID_STR_LIST_N_COMBO_FILLLIST
 {
@@ -3730,6 +3878,7 @@ String RID_STR_LIST_N_COMBO_FILLLIST
     Text[ chinese_traditional ] = "µLªk±q¸ê®Æ®w¤º´ú©w²Õ¦X¤è¶ô©Î²M³æ¤è¶ôªº¤º®e";
     Text[ arabic ] = "ÊÚĞÑ ÇáÊÚÑİ Úáì ãÍÊæíÇÊ ãÑÈÚ ÊÍÑíÑ æÓÑÏ Ãæ ãÑÈÚ ŞÇÆãÉ.";
     Text[ turkish ] = "Kombinasyon alanının ya da liste alanının içeriği belirlenemedi.";
+    Text[ catalan ] = "No se pudo determinar el contenido de un campo combinado o un listado.";
 };
 String RID_STR_EDITMASK
 {
@@ -3754,6 +3903,7 @@ String RID_STR_EDITMASK
     Text[ arabic ] = "ŞäÇÚ ÇáÅÏÎÇá";
     Text[ turkish ] = "Giriş ekranı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Máscara de entrada";
 };
 String RID_STR_LITERALMASK
 {
@@ -3778,6 +3928,7 @@ String RID_STR_LITERALMASK
     Text[ arabic ] = "ŞäÇÚ ÇáÃÍÑİ";
     Text[ turkish ] = "Karakter ekranı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Máscara de caracteres";
 };
 String RID_STR_ENABLED
 {
@@ -3802,6 +3953,7 @@ String RID_STR_ENABLED
     Text[ arabic ] = "äÔØ";
     Text[ turkish ] = "Etkinleştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Activado";
 };
 String RID_STR_AUTOCOMPLETE
 {
@@ -3826,6 +3978,7 @@ String RID_STR_AUTOCOMPLETE
     Text[ arabic ] = "ÊÚÈÆÉ ÊáŞÇÆíÉ";
     Text[ turkish ] = "Otomatik olarak tamamla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rellenar automáticamente";
 };
 String RID_STR_LINECOUNT
 {
@@ -3850,6 +4003,7 @@ String RID_STR_LINECOUNT
     Text[ arabic ] = "ÚÏÏ ÇáÃÓØÑ";
     Text[ turkish ] = "Satır sayısı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número de líneas";
 };
 String RID_STR_MAXTEXTLEN
 {
@@ -3874,6 +4028,7 @@ String RID_STR_MAXTEXTLEN
     Text[ arabic ] = "ÇáØæá ÇáÃŞÕì ááäÕ";
     Text[ turkish ] = "Azami metin uzunluğu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Longitud máx. del texto";
 };
 String RID_STR_SPIN
 {
@@ -3898,6 +4053,7 @@ String RID_STR_SPIN
     Text[ korean ] = "È¸Àü ÇÊµå";
     Text[ arabic ] = "ÒÑ ÒíÇÏÉ æäŞÕÇä";
     Text[ turkish ] = "Değer kutusu";
+    Text[ catalan ] = "Campo giratorio";
 };
 String RID_STR_STRICTFORMAT
 {
@@ -3922,6 +4078,7 @@ String RID_STR_STRICTFORMAT
     Text[ arabic ] = "İÍÕ ÇáÊäÓíŞ";
     Text[ turkish ] = "Format denetimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Control de formato";
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
@@ -3946,6 +4103,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ arabic ] = "ÚáÇãÉ İÕá ÇáÃáæİ";
     Text[ turkish ] = "Binlik ayırma işareti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Delimitador decimal";
 };
 String RID_STR_HARDLINEBREAKS
 {
@@ -3970,6 +4128,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ arabic ] = "İÇÕá ÃÓØÑ íÏæí";
     Text[ turkish ] = "Kullanıcı tanımlı satır sonu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Salto de línea manual";
 };
 String RID_STR_PRINTABLE
 {
@@ -3994,6 +4153,7 @@ String RID_STR_PRINTABLE
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ turkish ] = "Yazdır";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir";
 };
 String RID_STR_TARGET_URL
 {
@@ -4018,6 +4178,7 @@ String RID_STR_TARGET_URL
     Text[ arabic ] = "URL";
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "URL";
 };
 String RID_STR_TARGET_FRAME
 {
@@ -4042,6 +4203,7 @@ String RID_STR_TARGET_FRAME
     Text[ arabic ] = "ÅØÇÑ";
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Frame";
 };
 String RID_STR_IMPORT_GRAPHIC
 {
@@ -4066,6 +4228,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ arabic ] = "ÅÏÑÇÌ ÑÓãÉ";
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar imagen";
 };
 String RID_STR_TAG
 {
@@ -4090,6 +4253,7 @@ String RID_STR_TAG
     Text[ arabic ] = "ãÚáæãÇÊ ÅÖÇİíÉ";
     Text[ turkish ] = "Ek bilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Información adicional";
 };
 String RID_STR_ECHO_CHAR
 {
@@ -4114,6 +4278,7 @@ String RID_STR_ECHO_CHAR
     Text[ arabic ] = "ÃÍÑİ ßáãÇÊ ÇáÓÑ";
     Text[ turkish ] = "Şifre karakterleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Caracteres para contraseñas";
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -4138,6 +4303,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ arabic ] = "ÓáÓáÉ ÇáÃÍÑİ ÇáİÇÑÛÉ ÊÚÊÈÑ NULL";
     Text[ turkish ] = "Boş karakter dizilimi SIFIR";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Serie de caracteres vacía es NULL";
 };
 String RID_STR_DECIMAL_ACCURACY
 {
@@ -4162,6 +4328,7 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ arabic ] = "ÇáãäÇÒá ÇáÚÔÑíÉ";
     Text[ turkish ] = "Virgül sonrası haneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Decimales";
 };
 String RID_STR_DATE_SHOW_CENTURY
 {
@@ -4186,6 +4353,7 @@ String RID_STR_DATE_SHOW_CENTURY
     Text[ arabic ] = "ÅÙåÇÑ ÇáŞÑä";
     Text[ turkish ] = "Yüzyılı görüntüle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar siglo";
 };
 String RID_STR_DEFAULT_BUTTON
 {
@@ -4210,6 +4378,7 @@ String RID_STR_DEFAULT_BUTTON
     Text[ arabic ] = "ãİÊÇÍ ÇİÊÑÇÖí";
     Text[ turkish ] = "Standart düğme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Botón predeterminado";
 };
  // Events
 String RID_STR_EVT_APPROVEPARAMETER
@@ -4235,6 +4404,7 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ arabic ] = "ÊÚÈÆÉ ÇáãÚáãÇÊ";
     Text[ turkish ] = "Parametreleri doldur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rellenar parámetros";
 };
 
 String RID_STR_EVT_ACTIONPERFORMED
@@ -4260,6 +4430,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text[ arabic ] = "ÚäÏ ÇáÊäİíĞ";
     Text[ turkish ] = "Başlatma sırasında";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Al ejecutar";
 };
 String RID_STR_EVT_AFTERDELETE
 {
@@ -4284,6 +4455,7 @@ String RID_STR_EVT_AFTERDELETE
     Text[ arabic ] = "ÈÚÏ ÇáÍĞİ";
     Text[ turkish ] = "Silmeden sonra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Después de eliminar";
 };
 String RID_STR_EVT_AFTERINSERT
 {
@@ -4308,6 +4480,7 @@ String RID_STR_EVT_AFTERINSERT
     Text[ arabic ] = "ÈÚÏ ÇáÅÏÑÇÌ";
     Text[ turkish ] = "Eklemeden sonra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Después de insertar";
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -4332,6 +4505,7 @@ String RID_STR_EVT_AFTERUPDATE
     Text[ arabic ] = "ÈÚÏ ÇáÊÍÏíË";
     Text[ turkish ] = "Güncellemeden sonra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Después de actualizar";
 };
 String RID_STR_EVT_BEFOREDELETE
 {
@@ -4356,6 +4530,7 @@ String RID_STR_EVT_BEFOREDELETE
     Text[ arabic ] = "ŞÈá ÇáÍĞİ";
     Text[ turkish ] = "Silmeden önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Antes de eliminar";
 };
 String RID_STR_EVT_BEFOREINSERT
 {
@@ -4380,6 +4555,7 @@ String RID_STR_EVT_BEFOREINSERT
     Text[ arabic ] = "ŞÈá ÇáÅÏÑÇÌ";
     Text[ turkish ] = "Eklemeden önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Antes de insertar";
 };
 String RID_STR_EVT_BEFOREUPDATE
 {
@@ -4404,6 +4580,7 @@ String RID_STR_EVT_BEFOREUPDATE
     Text[ arabic ] = "ŞÈá ÇáÊÍÏíË";
     Text[ turkish ] = "Güncellemeden önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Antes de actualizar";
 };
 
 String RID_STR_EVT_APPROVEROWCHANGE
@@ -4428,6 +4605,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ chinese_traditional ] = "¸ê®Æ±ø¥ØÅÜ§ó¤§«e";
     Text[ arabic ] = "ŞÈá ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi değişikliğinden önce";
+    Text[ catalan ] = "Antes de la modificación del registro de datos";
 };
 
 String RID_STR_EVT_ROWCHANGE
@@ -4452,6 +4630,7 @@ String RID_STR_EVT_ROWCHANGE
     Text[ chinese_traditional ] = "¸ê®Æ±ø¥ØÅÜ§ó¤§«á";
     Text[ arabic ] = "ÈÚÏ ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi değişikliğinden sonra";
+    Text[ catalan ] = "Después de la modificación del registro de datos";
 };
 
 String RID_STR_EVT_COMPONENTHIDDEN
@@ -4477,6 +4656,7 @@ String RID_STR_EVT_COMPONENTHIDDEN
     Text[ arabic ] = "ÅÎİÇÁ";
     Text[ turkish ] = "Gizle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ocultar";
 };
 String RID_STR_EVT_COMPONENTMOVED
 {
@@ -4501,6 +4681,7 @@ String RID_STR_EVT_COMPONENTMOVED
     Text[ arabic ] = "ÊÍÑíß";
     Text[ turkish ] = "Taşı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mover";
 };
 String RID_STR_EVT_COMPONENTPAINT
 {
@@ -4525,6 +4706,7 @@ String RID_STR_EVT_COMPONENTPAINT
     Text[ arabic ] = "ÅÚÇÏÉ ÇáÑÓã";
     Text[ turkish ] = "Yenile";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Volver a dibujar";
 };
 String RID_STR_EVT_COMPONENTRESIZED
 {
@@ -4549,6 +4731,7 @@ String RID_STR_EVT_COMPONENTRESIZED
     Text[ arabic ] = "Êã ÊÛííÑ ÇáÍÌã";
     Text[ turkish ] = "Boyutu değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño modificado";
 };
 String RID_STR_EVT_COMPONENTSHOWN
 {
@@ -4573,6 +4756,7 @@ String RID_STR_EVT_COMPONENTSHOWN
     Text[ arabic ] = "ÅÙåÇÑ";
     Text[ turkish ] = "Görüntüle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar";
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -4597,6 +4781,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text[ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
     Text[ turkish ] = "Silme işlemini onayla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Confirmar eliminación";
 };
 String RID_STR_EVT_ELEMENTINSERTED
 {
@@ -4621,6 +4806,7 @@ String RID_STR_EVT_ELEMENTINSERTED
     Text[ arabic ] = "Êã ÅÏÑÇÌ ÚäÕÑ";
     Text[ turkish ] = "Öğe eklendi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento insertado";
 };
 String RID_STR_EVT_ELEMENTREMOVED
 {
@@ -4645,6 +4831,7 @@ String RID_STR_EVT_ELEMENTREMOVED
     Text[ arabic ] = "Êã ÅÒÇáÉ ÚäÕÑ";
     Text[ turkish ] = "Öğe kaldırıldı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento eliminado";
 };
 String RID_STR_EVT_ELEMENTREPLACED
 {
@@ -4669,6 +4856,7 @@ String RID_STR_EVT_ELEMENTREPLACED
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÚäÕÑ";
     Text[ turkish ] = "Öğe başkasıyla değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elemento sustituido";
 };
 String RID_STR_EVT_ERROROCCURED
 {
@@ -4693,6 +4881,7 @@ String RID_STR_EVT_ERROROCCURED
     Text[ arabic ] = "ÍÏË ÎØÃ";
     Text[ turkish ] = "Hata oluştu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ha ocurrido un error";
 };
 String RID_STR_EVT_FIRING
 {
@@ -4717,6 +4906,7 @@ String RID_STR_EVT_FIRING
     Text[ arabic ] = "ÅØáÇŞ";
     Text[ turkish ] = "Firing";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Disparo";
 };
 String RID_STR_EVT_FOCUSGAINED
 {
@@ -4741,6 +4931,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text[ arabic ] = "ÚäÏ ÇáÍÕæá Úáì ÇáÊÑßíÒ";
     Text[ turkish ] = "Odaklandı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Recepción de foco";
 };
 String RID_STR_EVT_FOCUSLOST
 {
@@ -4765,6 +4956,7 @@ String RID_STR_EVT_FOCUSLOST
     Text[ arabic ] = "İŞÏÇä ÇáÊÑßíÒ";
     Text[ turkish ] = "Odak kayboldu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pérdida de foco";
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
@@ -4789,6 +4981,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text[ arabic ] = "Êã ÊÛííÑ ÇáÍÇáÉ";
     Text[ turkish ] = "Durum değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estado modificado";
 };
 String RID_STR_EVT_KEYTYPED
 {
@@ -4813,6 +5006,7 @@ String RID_STR_EVT_KEYTYPED
     Text[ arabic ] = "ÇáÖÛØ Úáì ÒÑ";
     Text[ turkish ] = "Tuş basılı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tecla pulsada";
 };
 
 String RID_STR_EVT_KEYUP
@@ -4838,6 +5032,7 @@ String RID_STR_EVT_KEYUP
     Text[ arabic ] = "æŞİ ÇáÖÛØ Úáì ÒÑ";
     Text[ turkish ] = "Tuş bıralkıldığında";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tecla soltada";
 };
 
 String RID_STR_EVT_LOADED
@@ -4863,6 +5058,7 @@ String RID_STR_EVT_LOADED
     Text[ arabic ] = "ÚäÏ ÇáÊÍãíá";
     Text[ turkish ] = "Yükleme sırasında";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Al cargar";
 };
 
 String RID_STR_EVT_RELOADING
@@ -4887,6 +5083,7 @@ String RID_STR_EVT_RELOADING
     Text[ chinese_traditional ] = "¦b­«·s¸ü¤J¤§«e";
     Text[ turkish ] = "Before reloading";
     Text[ arabic ] = "ŞÈá ÅÚÇÏÉ ÇáÊÍãíá";
+    Text[ catalan ] = "Antes de recargar";
 };
 
 String RID_STR_EVT_RELOADED
@@ -4911,6 +5108,7 @@ String RID_STR_EVT_RELOADED
     Text[ chinese_traditional ] = "¦b­«·s¸ü¤J®É";
     Text[ arabic ] = "ÚäÏ ÅÚÇÏÉ ÇáÊÍãíá";
     Text[ turkish ] = "Yeniden yükleme sırasında";
+    Text[ catalan ] = "Al recargar";
 };
 
 String RID_STR_EVT_MOUSEDRAGGED
@@ -4936,6 +5134,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text[ arabic ] = "ÊÍÑíß ÇáãÇæÓ ÃËäÇÁ ÇáÖÛØ Úáì ÇáÒÑ";
     Text[ turkish ] = "Tuşa basarak fare hareketi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mover ratón por medio del teclado";
 };
 String RID_STR_EVT_MOUSEENTERED
 {
@@ -4960,6 +5159,7 @@ String RID_STR_EVT_MOUSEENTERED
     Text[ arabic ] = "ÇáãÇæÓ ÈÇáÏÇÎá";
     Text[ turkish ] = "Fare içerde";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ratón dentro";
 };
 String RID_STR_EVT_MOUSEEXITED
 {
@@ -4984,6 +5184,7 @@ String RID_STR_EVT_MOUSEEXITED
     Text[ arabic ] = "ÇáãÇæÓ ÈÇáÎÇÑÌ";
     Text[ turkish ] = "Fare dışarda";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ratón fuera";
 };
 String RID_STR_EVT_MOUSEMOVED
 {
@@ -5008,6 +5209,7 @@ String RID_STR_EVT_MOUSEMOVED
     Text[ arabic ] = "ÊÍÑíß ÇáãÇæÓ";
     Text[ turkish ] = "Fare hareketi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Movimiento de ratón";
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
@@ -5032,6 +5234,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text[ arabic ] = "ÇáÖÛØ Úáì ÒÑ ÇáãÇæÓ";
     Text[ turkish ] = "Fare tuşu basılı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pulsar botón del ratón";
 };
 String RID_STR_EVT_MOUSERELEASED
 {
@@ -5056,6 +5259,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text[ arabic ] = "æŞİ ÇáÖÛØ Úáì ÒÑ ÇáãÇæÓ";
     Text[ turkish ] = "Fare tuşu bırakılmış";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Botón del ratón soltado";
 };
 String RID_STR_EVT_POSITIONING
 {
@@ -5079,6 +5283,7 @@ String RID_STR_EVT_POSITIONING
     Text[ chinese_traditional ] = "¦bÅÜ´«¸ê®Æ±ø¥Ø¤§«e";
     Text[ arabic ] = "ŞÈá ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi değişikliğinden önce";
+    Text[ catalan ] = "Antes del cambio de registro de datos";
 };
 String RID_STR_EVT_POSITIONED
 {
@@ -5103,6 +5308,7 @@ String RID_STR_EVT_POSITIONED
     Text[ portuguese ] = "Após alteração do registo";
     Text[ turkish ] = "Veri kümesi değişikliğinden sonra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tras el cambio de registro de datos";
 };
 String RID_STR_EVT_PROPERTIESCHANGE
 {
@@ -5127,6 +5333,7 @@ String RID_STR_EVT_PROPERTIESCHANGE
     Text[ arabic ] = "Êã ÊÛííÑ ÇáÎÕÇÆÕ";
     Text[ turkish ] = "Özellikler değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedades modificadas";
 };
 String RID_STR_EVT_PROPERTYCHANGE
 {
@@ -5151,6 +5358,7 @@ String RID_STR_EVT_PROPERTYCHANGE
     Text[ arabic ] = "Êã ÊÛííÑ ÇáÎÇÕíÉ";
     Text[ turkish ] = "Özellik değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedad modificada";
 };
 String RID_STR_EVT_PROPERTYSTATECHANGE
 {
@@ -5175,6 +5383,7 @@ String RID_STR_EVT_PROPERTYSTATECHANGE
     Text[ arabic ] = "Êã ÊÛííÑ ÎÇÕíÉ ÇáÍÇáÉ";
     Text[ turkish ] = "Durum özellikleri değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propiedad de estado modificada";
 };
 String RID_STR_EVT_RESETTED
 {
@@ -5199,6 +5408,7 @@ String RID_STR_EVT_RESETTED
     Text[ arabic ] = "ÈÚÏ ÅÚÇÏÉ ÇáÊÚííä";
     Text[ turkish ] = "Geri almadan sonra";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Después de restaurar";
 };
 
 String RID_STR_EVT_APPROVERESETTED
@@ -5224,6 +5434,7 @@ String RID_STR_EVT_APPROVERESETTED
     Text[ arabic ] = "ŞÈá ÅÚÇÏÉ ÇáÊÚííä";
     Text[ turkish ] = "Geri almadan önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Antes de restablecer";
 };
 
 String RID_STR_EVT_APPROVEACTIONPERFORMED
@@ -5249,6 +5460,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text[ arabic ] = "ŞÈá ÈÏÁ ÇáÅÌÑÇÁ";
     Text[ turkish ] = "Başlatmadan önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "antes de ejecutar";
 };
 
 String RID_STR_EVT_SUBMITTED
@@ -5274,6 +5486,7 @@ String RID_STR_EVT_SUBMITTED
     Text[ arabic ] = "ŞÈá ÇáÅÑÓÇá";
     Text[ turkish ] = "Göndermeden önce";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Antes del envío";
 };
 
 String RID_STR_EVT_TEXTCHANGED
@@ -5299,6 +5512,7 @@ String RID_STR_EVT_TEXTCHANGED
     Text[ arabic ] = "ÚäÏ ÊÚÏíá ÇáäÕ";
     Text[ turkish ] = "Metin değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto modificado";
 };
 
 String RID_STR_EVT_UNLOADING
@@ -5323,6 +5537,7 @@ String RID_STR_EVT_UNLOADING
     Text[ chinese_traditional ] = "¦b°h¨ø¤§«e";
     Text[ turkish ] = "Before unloading";
     Text[ arabic ] = "ŞÈá ÅáÛÇÁ ÇáÊÍãíá";
+    Text[ catalan ] = "Antes de descargar";
 };
 
 String RID_STR_EVT_UNLOADED
@@ -5348,6 +5563,7 @@ String RID_STR_EVT_UNLOADED
     Text[ arabic ] = "ÚäÏ ÅáÛÇÁ ÇáÊÍãíá";
     Text[ turkish ] = "Kapatma sırasında";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Al descargar";
 };
 String RID_STR_EVT_UPDATECANCELED
 {
@@ -5372,6 +5588,7 @@ String RID_STR_EVT_UPDATECANCELED
     Text[ arabic ] = "Êã ŞØÚ ÚãáíÉ ÇáÊÍÏíË";
     Text[ turkish ] = "Güncelleme iptal edildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Actualización interrumpida";
 };
 String RID_STR_EVT_VETOABLECHANGE
 {
@@ -5396,6 +5613,7 @@ String RID_STR_EVT_VETOABLECHANGE
     Text[ arabic ] = "ÊÛííÑÇÊ ããßä ÑİÖåÇ";
     Text[ turkish ] = "Reddedilebilir değişiklik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificación rechazable";
 };
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
@@ -5420,6 +5638,7 @@ String RID_STR_PROPTITLE_PUSHBUTTON
     Text[ arabic ] = "ãİÊÇÍ";
     Text[ turkish ] = "Düğme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Botón";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -5444,6 +5663,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text[ arabic ] = "ÒÑ ÎíÇÑ";
     Text[ turkish ] = "Seçim alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de opción";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
@@ -5468,6 +5688,7 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
     Text[ turkish ] = "Seçme kutusu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Casilla de verificación";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
@@ -5492,6 +5713,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ arabic ] = "ÍŞá ÚäæäÉ";
     Text[ turkish ] = "Etiket alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de etiqueta";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
@@ -5516,6 +5738,7 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text[ arabic ] = "ßÇÏÑ ÊÌãíÚ";
     Text[ turkish ] = "Grup çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de grupo";
 };
 String RID_STR_PROPTITLE_EDIT
 {
@@ -5540,6 +5763,7 @@ String RID_STR_PROPTITLE_EDIT
     Text[ arabic ] = "ÍŞá ÇáäÕ";
     Text[ turkish ] = "Metin alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de texto";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -5564,6 +5788,7 @@ String RID_STR_PROPTITLE_FORMATTED
     Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
     Text[ turkish ] = "Formatlı alan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo formateado";
 };
 String RID_STR_MOVING_CURSOR
 {
@@ -5588,6 +5813,7 @@ String RID_STR_MOVING_CURSOR
     Text[ arabic ] = "ãÍÇĞÇÉ ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veri kaynağını hizala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear fuente de datos";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
@@ -5612,6 +5838,7 @@ String RID_STR_PROPTITLE_LISTBOX
     Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
     Text[ turkish ] = "Liste alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Listado";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
@@ -5636,6 +5863,7 @@ String RID_STR_PROPTITLE_COMBOBOX
     Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
     Text[ turkish ] = "Kombinasyon alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo combinado";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
@@ -5660,6 +5888,7 @@ String RID_STR_PROPTITLE_IMAGEBUTTON
     Text[ arabic ] = "ãİÊÇÍ ãÕæøÑ";
     Text[ turkish ] = "Grafiksel düğme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Botón gráfico";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
@@ -5684,6 +5913,7 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÑÓæã";
     Text[ turkish ] = "Grafiksel komut öğesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Control de imagen";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
@@ -5708,6 +5938,7 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text[ arabic ] = "ÇÎÊíÇÑ Çáãáİ";
     Text[ turkish ] = "Dosya seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección de archivo";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
@@ -5732,6 +5963,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ arabic ] = "ÍŞá ÇáÊÇÑíÎ";
     Text[ turkish ] = "Tarih alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de fecha";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
@@ -5756,6 +5988,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ arabic ] = "ÍŞá ÇáæŞÊ";
     Text[ turkish ] = "Zaman alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo horario";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
@@ -5780,6 +6013,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ arabic ] = "ÍŞá ÑŞãí";
     Text[ turkish ] = "Sayısal alan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo numérico";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
@@ -5804,6 +6038,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ arabic ] = "ÍŞá ÇáÚãáÉ";
     Text[ turkish ] = "Para birimi alanı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de moneda";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
@@ -5828,6 +6063,7 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text[ arabic ] = "ÍŞá ãõŞäøÚ";
     Text[ turkish ] = "Maskelenmiş alan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo enmascarado";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
@@ -5852,6 +6088,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ÎÇÕ ÈÇáÌÏÇæá";
     Text[ turkish ] = "Tablo komut öğesi ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Control de tablas ";
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
@@ -5876,6 +6113,7 @@ String RID_STR_PROPTITLE_MULTISELECT
     Text[ arabic ] = "ÊÍÏíÏ ãÊÚÏÏ";
     Text[ turkish ] = "Çoklu seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección múltiple";
 };
 String RID_STR_TRISTATE
 {
@@ -5900,6 +6138,7 @@ String RID_STR_TRISTATE
     Text[ arabic ] = "ÍÇáÉ ËáÇËíÉ";
     Text[ turkish ] = "Üçlü durum";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estado triple";
 };
 String RID_STR_EVT_CHANGED
 {
@@ -5924,6 +6163,7 @@ String RID_STR_EVT_CHANGED
     Text[ arabic ] = "ãÚÏá";
     Text[ turkish ] = "Değiştirildi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificado";
 };
 String RID_STR_NODATACONTROLS
 {
@@ -5948,6 +6188,7 @@ String RID_STR_NODATACONTROLS
     Text[ arabic ] = "áÇ íæÌÏ ÚäÇÕÑ ÊÍßã ãÑÊÈØÉ ÈÍŞá ÌÏæá ÕÇáÍ İí ÇáÇÓÊãÇÑÉ ÇáÍÇáíÉ!";
     Text[ turkish ] = "Yürürlükteki formda, geçerli bir tablo alanına bağlı komut öğeleri yok!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡En el formulario actual no existen controles unidos a un campo de tabla válido!";
 };
 
 String RID_STR_HELPTEXT
@@ -5973,6 +6214,7 @@ String RID_STR_HELPTEXT
     Text[ arabic ] = "äÕ ÇáãÓÇÚÏÉ";
     Text[ turkish ] = "Yardım metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto de ayuda";
 };
 
 String RID_STR_HELPURL
@@ -5998,6 +6240,7 @@ String RID_STR_HELPURL
     Text[ arabic ] = "URL ÇáãÓÇÚÏÉ";
     Text[ turkish ] = "URL yardımı";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ayuda URL";
 };
 
 String RID_STR_RECORDMARKER
@@ -6022,6 +6265,7 @@ String RID_STR_RECORDMARKER
     Text[ arabic ] = "ãõÍÏÏ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi işareti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcador de registros";
 };
 
 
@@ -6048,6 +6292,7 @@ String RID_STR_DATETIME_LABELPOSTFIX
     Text[ arabic ] = "(ÇáÊÇÑíÎ); (ÇáæŞÊ)";
     Text[ turkish ] = "(Tarih); (Saat)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "(Fecha); (Hora)";
 };
 
 String RID_STR_FILTERPROPOSAL
@@ -6073,6 +6318,7 @@ String RID_STR_FILTERPROPOSAL
     Text[ arabic ] = "ÇŞÊÑÇÍ İáÊÑ";
     Text[ turkish ] = "Filtre önerisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Propuesta de filtro";
 };
 
 String RID_STR_FILTER_NAVIGATOR
@@ -6098,6 +6344,7 @@ String RID_STR_FILTER_NAVIGATOR
     Text[ arabic ] = "ãáÇÍ ÇáİáÊÑ";
     Text[ turkish ] = "Filtre navigatörü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegador de filtros";
 };
 
 String RID_STR_FILTER_FILTER_FOR
@@ -6123,6 +6370,7 @@ String RID_STR_FILTER_FILTER_FOR
     Text[ arabic ] = "ÇáİáÊÑ Åáì";
     Text[ turkish ] = "Filtrelenecek öğe";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Filtrar por";
 };
 
 String RID_STR_FILTER_FILTER_OR
@@ -6147,6 +6395,7 @@ String RID_STR_FILTER_FILTER_OR
     Text[ chinese_traditional ] = "©ÎªÌ";
     Text[ arabic ] = "Ãæ";
     Text[ turkish ] = "Veya";
+    Text[ catalan ] = "O";
 };
 
 String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
@@ -6172,6 +6421,7 @@ String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
     Text[ arabic ] = "İí ÇáÇÓÊãÇÑÉ ÇáÍÇáíÉ¡ áÇ ÊæÌÏ ÚäÇÕÑ ÊÍßã ãÑÊÈØÉ ÈÔßá ÕÇáÍ íãßä ÇÓÊÎÏÇãåÇ İí ØÑíŞÉ ÚÑÖ ÇáÌÏæá!";
     Text[ turkish ] = "Yürürlükteki formda, tablo görünümünde kullanılabilecek geçerli bir biçimde bağlanmış komut öğeleri yok!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡El formulario actual no contiene controles unidos válidos que se puedan usar para la visualización de una tabla!";
 };
 
 String RID_STR_LABELCONTROL
@@ -6196,6 +6446,7 @@ String RID_STR_LABELCONTROL
     Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì";
     Text[ arabic ] = "ÍŞá ÚäæäÉ";
     Text[ turkish ] = "Etiket alanı";
+    Text[ catalan ] = "Campo de etiqueta";
 };
 
 String RID_STR_VETO_DATASOURCE
@@ -6220,6 +6471,7 @@ String RID_STR_VETO_DATASOURCE
     Text[ chinese_traditional ] = "¸ê®Æ®wÄİ©Ê¤£¥i¥HÅÜ§ó¡A¦]¬°ªí³æ¬O¸ê®Æ®wªº²Õ¦¨³¡¤À¡I";
     Text[ arabic ] = "áÇ íõÓãÍ ÈÊÛííÑ ÇáÎÇÕíÉ 'ŞÇÚÏÉ ÈíÇäÇÊ'¡ áÃä ÇáÇÓÊãÇÑÉ åí ÈÇáİÚá ÌÒÁ ãä ŞÇÚÏÉ ÈíÇäÇÊ!";
     Text[ turkish ] = "Form bir veritabanının öğesi olduğundan, 'veritabanı' özelliği değiştirilemez!";
+    Text[ catalan ] = "¡La propiedad 'Base de datos' no se puede modificar porque el formulario ya forma parte de una base de datos!";
 };
 
 String RID_STR_AUTOFIELD
@@ -6244,6 +6496,7 @@ String RID_STR_AUTOFIELD
     Text[ chinese_traditional ] = "<¦Û°ÊÄæ¦ì>";
     Text[ arabic ] = "<ÍŞá ÊáŞÇÆí>";
     Text[ turkish ] = "<Otomatik alan>";
+    Text[ catalan ] = "<AutoCampo>";
 };
 
 QueryBox RID_QRY_SAVEMODIFIED
@@ -6271,6 +6524,7 @@ QueryBox RID_QRY_SAVEMODIFIED
     Message[ arabic ] = "Êã ÊÛííÑ ãÍÊæíÇÊ ÇáÇÓÊãÇÑÉ ÇáÍÇáíÉ.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Message[ turkish ] = "Yürürlükteki formun içeriği değiştirildi.\nDeğişiklikleri kaydetmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El contenido del formulario actual ha sido modificado.\n¿Desea guardar los cambios?";
 };
 String RID_STR_ESCAPE_PROCESSING
 {
@@ -6294,6 +6548,7 @@ String RID_STR_ESCAPE_PROCESSING
     Text[ chinese_traditional ] = "¤ÀªR SQL «ü¥O";
     Text[ arabic ] = "ÊÍáíá ÃãÑ SQL";
     Text[ turkish ] = "SQL komutunu çözümle";
+    Text[ catalan ] = "Analizar comando SQL";
 };
 String RID_STR_COULDNOTSETORDER
 {
@@ -6317,6 +6572,7 @@ String RID_STR_COULDNOTSETORDER
     Text[ chinese_traditional ] = "¦b³]©w±Æ¦C©w¸q®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
     Text[ turkish ] = "Sıralama ölçütünü belirlemede hata";
+    Text[ catalan ] = "Error al definir los criterios de ordenación";
 };
 String RID_STR_COULDNOTSETFILTER
 {
@@ -6340,6 +6596,7 @@ String RID_STR_COULDNOTSETFILTER
     Text[ chinese_traditional ] = "¦b³]©w¿z¿ï©w¸q®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
     Text[ turkish ] = "Filtreleme ölçütünü belirlemede hata";
+    Text[ catalan ] = "Error al definir los criterios de filtro";
 };
 String RID_STR_SQLEXCEPTIONTYPES
 {
@@ -6363,6 +6620,7 @@ String RID_STR_SQLEXCEPTIONTYPES
     Text[ chinese_traditional ] = "¿ù»~;Äµ§i;¸ê°T;²Ó¸`;SQL ª¬ºA; ¿ù»~½X";
     Text[ arabic ] = "ÎØÃ;ÊÍĞíÑ;ãÚáæãÉ;ÊİÇÕíá;ÍÇáÉ SQL;ÑãÒ ÇáÎØÃ";
     Text[ turkish ] = "Hata;Uyarı;Bilgi;Ayrıntılar;SQL durumu;Hata kodu";
+    Text[ catalan ] = "Error;Aviso;Información;Detalles;Estado SQL;Código de error";
 };
 String RID_ERR_REFRESHING_SUB_FORM
 {
@@ -6386,6 +6644,7 @@ String RID_ERR_REFRESHING_SUB_FORM
     Text[ chinese_traditional ] = "µLªk§ó·s¤lªí®æªº¸ê®Æ¤º®e";
     Text[ arabic ] = "ÊÚĞÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ ááÇÓÊãÇÑÉ ÇáİÑÚíÉ.";
     Text[ turkish ] = "Alt düzey formun veri içeriği güncellenemedi.";
+    Text[ catalan ] = "No se pudieron actualizar los contenidos de los datos del subformulario.";
 };
 String RID_ERR_LOADING_FORM
 {
@@ -6409,6 +6668,7 @@ String RID_ERR_LOADING_FORM
     Text[ chinese_traditional ] = "µLªk¸ü¤J¸ê®Æ¤º®e¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
     Text[ turkish ] = "Veri içeriği yüklenemedi.";
+    Text[ catalan ] = "No se pudieron cargar los contenidos de los datos.";
 };
 String RID_ERR_REFRESHING_FORM
 {
@@ -6432,6 +6692,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ chinese_traditional ] = "µLªk§ó·s¸ê®Æ¤º®e¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
     Text[ turkish ] = "Veri içeriği güncellenemedi.";
+    Text[ catalan ] = "No se pudieron actualizar los contenidos de los datos.";
 };
 String RID_STR_ERR_INSERTRECORD
 {
@@ -6455,6 +6716,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ chinese_traditional ] = "¦b´¡¤J·s¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÏÑÇÌ ÇáÓÌá ÇáÌÏíÏ";
     Text[ turkish ] = "Yeni veri kümesini ekleme sırasında hata";
+    Text[ catalan ] = "Error al insertar un nuevo registro de datos";
 };
 String RID_STR_ERR_UPDATERECORD
 {
@@ -6478,6 +6740,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ chinese_traditional ] = "¦b¼g¤J¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáÓÌá ÇáÍÇáí";
     Text[ turkish ] = "Yürürlükteki veri kümesini güncelleme sırasında hata";
+    Text[ catalan ] = "Error al escribir el registro actual de datos";
 };
 String RID_STR_ERR_DELETERECORD
 {
@@ -6501,6 +6764,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ chinese_traditional ] = "¦b§R°£¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌá ÇáÍÇáí";
     Text[ turkish ] = "Yürürlükteki veri kümesini silme sırasında hata";
+    Text[ catalan ] = "Error al eliminar el registro actual de datos";
 };
 String RID_STR_ERR_DELETERECORDS
 {
@@ -6524,6 +6788,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ chinese_traditional ] = "¦b§R°£«ü©w¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍĞİ ÇáÓÌáÇÊ ÇáãÏÑÌÉ";
     Text[ turkish ] = "Belirtilen veri kümelerini silme sırasında hata";
+    Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
 };
 String RID_STR_CONTROL_SUBSTITUTED_NAME
 {
@@ -6547,6 +6812,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ chinese_traditional ] = "´À¥N";
     Text[ arabic ] = "ãÓÊÈÏá";
     Text[ turkish ] = "değiştirildi";
+    Text[ catalan ] = "reemplazado";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
@@ -6571,6 +6837,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ chinese_traditional ] = "¦b¸ü¤J³o­Ó±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¦ı¤w¸g¥Î¤@­Ó³q°t²Å´À¥N¥¦¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÚäÕÑ ÇáÊÍßã åĞÇ. áåĞÇ Êã ÇÓÊÈÏÇáå ÈÚäÕÑ äÇÆÈ.";
     Text[ turkish ] = "Komut öğesi yüklenirken bir hata oluştu. Bu nedenle komut öğesi yerine yer tutucu görüntüleniyor.";
+    Text[ catalan ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
 };
 String RID_STR_CREATECONTROLS_INVALIDSOURCE
 {
@@ -6601,6 +6868,7 @@ String RID_STR_CREATECONTROLS_INVALIDSOURCE
     Text[ arabic ] = "áÇ íãßäß ÅäÔÇÁ ÍŞæá ÊÍßã ÎÇÕÉ ÈÇÓÊãÇÑÉ İí åĞÇ ÇáãÓÊäÏ áåĞå ÇáÃÚãÏÉ:\níäÊãí åĞÇ ÇáãÓÊäÏ Åáì ŞÇÚÏÉ ÈíÇäÇÊ ËÇÈÊÉ ($docname$) íÊã ÇÓÊÎÏÇãåÇ ãä ŞÈá ßÇİÉ ÚäÇÕÑ ÇáÇÓÊãÇÑÉ ßãÕÏÑ ááÈíÇäÇÊ. \nÃãÇ ÇáÃÚãÏÉ ÇáÊí ÊÓÊÎÏãåÇ İåí ÊäÊãí Åáì ÌÏæá Ãæ ÇÓÊİÓÇÑ İí ŞÇÚÏÉ ÈíÇäÇÊ ÃÎÑì ($dropname$).";
     Text[ portuguese_brazilian ] = "For this columns you can't create form controls within this document:\nThe document belongs to a fixed database ($docname$) which has to be used as data source for all form elements.\nBut the columns You dropped are part of a table or query within another database ($dropname$).";
     Text[ turkish ] = "Bu sütun için form komut öğeleri oluşturamazsınız:\nBelge, tüm form öğeleri tarafından veri kaynağı olarak kullanılan, sabit bir veritabanı ($docname$).\nAncak sizin kullandığınız sütunlar, başka bir veritabanındaki ($dropname$) tablo ya da sorguya ait.";
+    Text[ catalan ] = "Para estas columnas en este documento no puede crear campos de control:\nEl documento pertenece a una base de datos fija ($docname$), que es usada por todos los elementos del formulario como fuente de datos.\nLas columnas que usted usa pertenecen a una tabla o consulta en otra base de datos ($dropname$).";
 };
 
 Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
@@ -6627,6 +6895,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ chinese_traditional ] = "µLªk±Ò°Êªí®æ±±¨î¶µªº¦Û°ÊÀÉ®×§U²zµ{¦¡¡C";
         Text[ arabic ] = "ÊÚĞÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áÚäÇÕÑ ÇáÊÍßã İí ÇáÌÏæá";
         Text[ turkish ] = "Tablo komut öğesi OtoPilotu başlatılamadı";
+        Text[ catalan ] = "No se pudo iniciar el AutoPiloto de campos de control de tablas";
     };
     String RID_SUB_LISTBOX_WIZARD
     {
@@ -6650,6 +6919,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ chinese_traditional ] = "µLªk±Ò°Ê²M³æ¤è¶ô¦Û°ÊÀÉ®×§U²zµ{¦¡¡C";
         Text[ arabic ] = "ÊÚĞÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áãÑÈÚ ÇáŞÇÆãÉ";
         Text[ turkish ] = "Liste alanı OtoPilotu başlatılamadı";
+        Text[ catalan ] = "No se pudo iniciar el AutoPiloto de listado";
     };
     String RID_SUB_COMBOBOX_WIZARD
     {
@@ -6673,6 +6943,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ chinese_traditional ] = "µLªk±Ò°Ê²Õ¦X¤è¶ô¦Û°ÊÀÉ®×§U²zµ{¦¡";
         Text[ arabic ] = "ÊÚĞÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ";
         Text[ turkish ] = "Kombinasyon alanı OtoPilotu başlatılamadı";
+        Text[ catalan ] = "No se pudo iniciar el AutoPiloto de campo combinado";
     };
     String RID_SUB_GROUPBOX_WIZARD
     {
@@ -6696,6 +6967,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ chinese_traditional ] = "µLªk±Ò°Ê¸s²Õ¤è¶ô¦Û°ÊÀÉ®×§U²zµ{¦¡";
         Text[ arabic ] = "ÊÚĞÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áßÇÏÑ ÇáÊÌãíÚ";
         Text[ turkish ] = "Grup çerçevesi OtoPilotu başlatılamadı";
+        Text[ catalan ] = "No se pudo iniciar el AutoPiloto de marcos de grupo";
     };
 };
 
