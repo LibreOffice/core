@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,13 +155,24 @@ String GetImportFormatName( GraphicFilter& rFlt,
 
 // -----------------------------------------------------------------------
 
-String GetImportFormatWildcard( GraphicFilter& rFlt,
-                                USHORT nFormat, String pFmtStrs[] )
+void GetImportFormatWildcard( GraphicFilter& rFlt,
+                                sal_uInt16 nFormat, String& aDest )
 {
-    if ( rFlt.GetImportFormatCount() )
-        return rFlt.GetImportWildcard( nFormat );
-    else
-        return pFmtStrs[STR_FLT_BMP + nFormat].GetToken( 1, ',' );
+    String aWildcard;
+    sal_Int32 i = 0;
+
+    while( TRUE )
+    {
+        aWildcard = rFlt.GetImportWildcard( nFormat, i++ );
+        if ( !aWildcard.Len() )
+            break;
+        if ( aDest.Search( aWildcard ) == STRING_NOTFOUND )
+        {
+            if ( aDest.Len() )
+                aDest += sal_Unicode(';');
+            aDest += aWildcard;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -694,17 +705,8 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
     String aExtensions;
 
     for ( i = 0; i < nCount; i++ )
-    {
-        String aWildcard =
-            ::GetImportFormatWildcard( *pGraphicFilter, i, pResImpl->pStrings );
+        GetImportFormatWildcard( *pGraphicFilter, i, aExtensions );
 
-        if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
-        {
-            if ( aExtensions.Len() )
-                aExtensions += sal_Unicode(';');
-            aExtensions += aWildcard;
-        }
-    }
 #if defined(WIN) || defined(WNT)
     if ( aExtensions.Len() < 240 )
         AddFilter( pResImpl->pStrings[STR_IMPORT_ALL], aExtensions );
@@ -719,10 +721,10 @@ void SvxImportGraphicDialog::Construct_Impl( const String &rTitle, USHORT nEnabl
 
     for ( i = 0; i < nCount; i++ )
     {
+        String aWildcard;
+        GetImportFormatWildcard( *pGraphicFilter, i, aWildcard );
         String aName =
             ::GetImportFormatName( *pGraphicFilter, i, pResImpl->pStrings );
-        String aWildcard =
-            ::GetImportFormatWildcard( *pGraphicFilter, i, pResImpl->pStrings );
         String aOSType =
             ::GetImportFormatOSType( *pGraphicFilter, i, pResImpl->pStrings );
         AddFilter( aName, aWildcard, aOSType );
