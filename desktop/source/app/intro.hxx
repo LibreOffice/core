@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:24:30 $
+ *  last change: $Author: ghiggins $ $Date: 2002-10-07 10:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ private:
     Bitmap          m_aIntroBmp;
 
     void            Init();
+    DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
 
 public:
     IntroWindow_Impl( const Bitmap& aInfoBitmap );

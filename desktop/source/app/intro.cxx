@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
+ *  last change: $Author: ghiggins $ $Date: 2002-10-07 10:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfx.hrc>
 #include <rtl/logfile.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 
 // -----------------------------------------------------------------------
@@ -94,6 +97,25 @@ void IntroWindow_Impl::Init()
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( IntroWindow_Impl, AppEventListenerHdl, VclWindowEvent *, inEvent )
+{
+    if ( inEvent != 0 )
+    {
+        switch ( inEvent->GetId() )
+        {
+            case VCLEVENT_WINDOW_HIDE:
+                Paint( Rectangle() );
+                break;
+
+            default:
+                break;
+        }
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 IntroWindow_Impl::IntroWindow_Impl( const Bitmap& aIntroBitmap ) :
     WorkWindow( NULL, (WinBits)0 ),
     m_aIntroBmp( aIntroBitmap )
@@ -103,12 +125,16 @@ IntroWindow_Impl::IntroWindow_Impl( const Bitmap& aIntroBitmap ) :
     Hide();
 
     Init();
+    Application::AddEventListener(
+        LINK( this, IntroWindow_Impl, AppEventListenerHdl ) );
 }
 
 // -----------------------------------------------------------------------
 
 IntroWindow_Impl::~IntroWindow_Impl()
 {
+    Application::RemoveEventListener(
+        LINK( this, IntroWindow_Impl, AppEventListenerHdl ) );
     Hide();
 }
 
