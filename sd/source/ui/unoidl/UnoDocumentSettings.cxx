@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:08:56 $
+ *  last change: $Author: af $ $Date: 2001-04-19 09:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@
 #endif
 
 #include "drawdoc.hxx"
+#ifndef SVX_LIGHT
 #include "docshell.hxx"
+#endif
 #include "unomodel.hxx"
 
 #define MAP_LEN(x) x, sizeof(x)-1
@@ -432,12 +434,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     sal_Bool bApplyUserData;
                     if( *pValues >>= bApplyUserData )
                     {
+#ifndef SVX_LIGHT
                         SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
                         if( rInfo.IsUseUserData() != bApplyUserData )
                         {
                             rInfo.SetUseUserData( bApplyUserData );
                             bChanged = sal_True;
                         }
+#endif
                         bOk = sal_True;
                     }
                 }
@@ -565,7 +569,11 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
 
             case HANDLE_APPLYUSERDATA:
+#ifndef SVX_LIGHT
                 *pValue <<= (sal_Bool)pDocSh->GetDocInfo().IsUseUserData();
+#else
+                *pValue <<= (sal_Bool)sal_False;
+#endif
                 break;
 
             case HANDLE_PRINTDRAWING:
