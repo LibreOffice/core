@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-26 21:44:16 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,8 @@
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
-#ifndef _RTL_RANDOM_H_
-#include <rtl/random.h>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -90,14 +87,16 @@ class ZipFile;
 class ZipPackage;
 class ZipOutputStream;
 struct ZipEntry;
+typedef void* rtlRandomPool;
 
-class ZipPackageFolder : public cppu::OWeakObject,
-                         public ::com::sun::star::container::XNameContainer,
-                         public ::com::sun::star::container::XEnumerationAccess,
-                         public ::com::sun::star::lang::XTypeProvider,
-                         public ZipPackageEntry
+class ZipPackageFolder : public cppu::ImplInheritanceHelper2
+<
+    ZipPackageEntry,
+    ::com::sun::star::container::XNameContainer,
+    ::com::sun::star::container::XEnumerationAccess
+>
 {
-    static cppu::class_data6 s_cd;
+    static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
     ContentHash maContents;
 public:
@@ -109,39 +108,16 @@ public:
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ContentInfo & doGetByName( const ::rtl::OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
     static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
+    static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId()
+    {
+        return aImplementationId;
+    }
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-        throw (::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::WeakImplHelper_getTypes( ( cppu::class_data *)&s_cd );
-    }
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
-        throw (::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
-    }
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::WeakImplHelper_query ( rType, (cppu::class_data *) &s_cd, this, (cppu::OWeakObject *)this );
-    }
-    virtual void SAL_CALL acquire() throw ()
-    {
-        OWeakObject::acquire();
-    }
-    virtual void SAL_CALL release() throw ()
-    {
-        OWeakObject::release();
-    }
     // XNameContainer
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -177,13 +153,15 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
-    static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
-        throw(::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
-    }
-
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 #endif
