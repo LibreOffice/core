@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:46:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue) {
 
     }
-
 
     public void drawNaviBar() {
 
