@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String EXPORT_DIALOG_TITLE
     Text [ dutch ] = "Opties" ;
     Text [ swedish ] = " -alternativ" ;
     Text [ danish ] = " Alternativer" ;
-    Text [ portuguese_brazilian ] = " Optionen" ;
+    Text [ portuguese_brazilian ] = " Op��es" ;
     Text [ portuguese ] = " Op��es" ;
     Text[ chinese_simplified ] = " 选项";
     Text[ russian ] = "  ���������";
@@ -87,6 +87,9 @@ String EXPORT_DIALOG_TITLE
     Text[ catalan ] = "Opcions";
     Text[ finnish ] = " Asetukset";
     Text[ thai ] = " ตัวเลือก";
+    Text[ czech ] = " Volby";
+    Text[ hebrew ] = "‮אפשרויות‬";
+    Text[ hindi ] = " विकल्प";
 };
 
 String KEY_MODE
@@ -113,6 +116,15 @@ String KEY_RLE_CODING
 {
     Text = "RLE_Coding" ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
