@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:33:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ class Unmarshal implements IUnmarshal {
 
             Constructor constructor = iTypeDescription.getZClass().getConstructor(new Class[]{String.class});
             Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
-
+            throwable.fillInStackTrace();
             readStruct(iTypeDescription, throwable);
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
