@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:24 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,12 +125,6 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper4
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxFrameStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxPageStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxNumberingStyles;
-
-    sal_Bool                bLoadStyleText      : 1;
-    sal_Bool                bLoadStyleFrame     : 1;
-    sal_Bool                bLoadStylePage      : 1;
-    sal_Bool                bLoadStyleOverwrite : 1;
-    sal_Bool                bLoadStyleNumbering : 1;
 
 public:
     SwXStyleFamilies(SwDocShell& rDocShell);

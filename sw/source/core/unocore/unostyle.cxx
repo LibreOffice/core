@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:04:57 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,12 +460,7 @@ SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
     pxFrameStyles(0),
     pxPageStyles(0),
     pxNumberingStyles(0),
-    pDocShell(&rDocShell),
-    bLoadStyleText(sal_True),
-    bLoadStyleFrame(sal_True),
-    bLoadStylePage(sal_True),
-    bLoadStyleOverwrite(sal_False),
-    bLoadStyleNumbering(sal_True)
+    pDocShell(&rDocShell)
 {
 
 }
@@ -640,6 +635,12 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
     throw( io::IOException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    sal_Bool    bLoadStyleText = sal_True;
+    sal_Bool    LoadStyleFrame = sal_True;
+    sal_Bool    bLoadStylePage = sal_True;
+    sal_Bool    bLoadStyleOverwrite = sal_True;
+    sal_Bool    bLoadStyleNumbering = sal_True;
+    sal_Bool    bLoadStyleFrame = sal_True;
     if(IsValid() && rURL.len())
     {
         const Any* pVal;
@@ -687,19 +688,15 @@ Sequence< PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
     Sequence< PropertyValue > aSeq(5);
     PropertyValue* pArray = aSeq.getArray();
     Any aVal;
-    sal_Bool bTemp = bLoadStyleText;
+    sal_Bool bTemp = sal_True;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[0] = PropertyValue(C2U(UNO_NAME_LOAD_TEXT_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
-    bTemp = bLoadStyleFrame;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[1] = PropertyValue(C2U(UNO_NAME_LOAD_FRAME_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
-    bTemp = bLoadStylePage;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[2] = PropertyValue(C2U(UNO_NAME_LOAD_PAGE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
-    bTemp = bLoadStyleNumbering;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[3] = PropertyValue(C2U(UNO_NAME_LOAD_NUMBERING_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
-    bTemp = bLoadStyleOverwrite;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[4] = PropertyValue(C2U(UNO_NAME_OVERWRITE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     return aSeq;
