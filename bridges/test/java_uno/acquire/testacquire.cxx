@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testacquire.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:21:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -390,14 +391,9 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
     throw (css::uno::RuntimeException)
 {
     // - arguments[0] must be the UNO URL to connect to:
-    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
-        m_context->getServiceManager()->createInstanceWithContext(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.bridge.UnoUrlResolver"),
-            m_context),
-        css::uno::UNO_QUERY_THROW);
     css::uno::Reference< XTest > test(
-        resolver->resolve(arguments[0]), css::uno::UNO_QUERY_THROW);
+        css::bridge::UnoUrlResolver::create(m_context)->resolve(arguments[0]),
+        css::uno::UNO_QUERY_THROW);
 
     {
         WaitCondition c;
