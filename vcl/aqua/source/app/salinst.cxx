@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:14:32 $
+ *  last change: $Author: pluby $ $Date: 2001-02-01 19:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,8 @@ void SalInstance::DestroySystem( SalSystem* pSystem )
 
 // -----------------------------------------------------------------------
 
+#if UPD > 618
+
 void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
 {
 }
@@ -431,3 +433,5 @@ void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedT
     rReturnedType   = AsciiCString;
     return "";
 }
+
+#endif // UPD > 618
