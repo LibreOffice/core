@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,6 @@ void ORowSet::freeResources()
         m_bModified     = sal_False;
         m_nRowCount     = 0;
         m_aOldRow       = NULL;
-        m_aParameterRow.clear();
     }
 }
 // -------------------------------------------------------------------------
@@ -1844,6 +1843,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             }
                         }
                     }
+                    m_aParameterRow.clear();
                     Reference< XResultSet> xRs = m_xStatement->executeQuery();
                     // create the composed table name
                     ::rtl::OUString aComposedTableName;
