@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:53:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,8 @@ static bool ImpIsEmptyURL( const ::rtl::OUString& rURL )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXMLShapeContext, SvXMLImportContext );
+TYPEINIT1( SvXMLShapeContext, SvXMLImportContext );
+TYPEINIT1( SdXMLShapeContext, SvXMLShapeContext );
 
 SdXMLShapeContext::SdXMLShapeContext(
     SvXMLImport& rImport,
@@ -255,7 +256,7 @@ SdXMLShapeContext::SdXMLShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
+:   SvXMLShapeContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes ),
     mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
     mbIsPlaceholder(FALSE),
@@ -272,30 +273,6 @@ SdXMLShapeContext::SdXMLShapeContext(
 
 SdXMLShapeContext::~SdXMLShapeContext()
 {
-    if(mxCursor.is())
-    {
-        // delete addition newline
-        const OUString aEmpty;
-        mxCursor->gotoEnd( sal_False );
-        mxCursor->goLeft( 1, sal_True );
-        mxCursor->setString( aEmpty );
-
-        // reset cursor
-        GetImport().GetTextImport()->ResetCursor();
-    }
-
-    if(mxOldCursor.is())
-        GetImport().GetTextImport()->SetCursor( mxOldCursor );
-
-    // reinstall old list item (if necessary) #91964#
-    if ( mxOldListBlock.Is() )
-    {
-        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
-        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
-    }
-
-    if( mxLockable.is() )
-        mxLockable->removeActionLock();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -464,6 +441,34 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
 void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
+}
+
+void SdXMLShapeContext::EndElement()
+{
+    if(mxCursor.is())
+    {
+        // delete addition newline
+        const OUString aEmpty;
+        mxCursor->gotoEnd( sal_False );
+        mxCursor->goLeft( 1, sal_True );
+        mxCursor->setString( aEmpty );
+
+        // reset cursor
+        GetImport().GetTextImport()->ResetCursor();
+    }
+
+    if(mxOldCursor.is())
+        GetImport().GetTextImport()->SetCursor( mxOldCursor );
+
+    // reinstall old list item (if necessary) #91964#
+    if ( mxOldListBlock.Is() )
+    {
+        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
+        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
+    }
+
+    if( mxLockable.is() )
+        mxLockable->removeActionLock();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1924,8 +1929,6 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
 void SdXMLMeasureShapeContext::EndElement()
 {
-    SdXMLShapeContext::EndElement();
-
     do
     {
         // delete pre created fields
@@ -1943,6 +1946,8 @@ void SdXMLMeasureShapeContext::EndElement()
         xCursor->setString( aEmpty );
     }
     while(0);
+
+    SdXMLShapeContext::EndElement();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2250,6 +2255,7 @@ void SdXMLGraphicObjectShapeContext::EndElement()
         }
     }
 
+    SdXMLShapeContext::EndElement();
 }
 
 
@@ -2392,6 +2398,8 @@ void SdXMLChartShapeContext::EndElement()
 {
     if( mpChartContext )
         mpChartContext->EndElement();
+
+    SdXMLShapeContext::EndElement();
 }
 
 void SdXMLChartShapeContext::Characters( const ::rtl::OUString& rChars )
@@ -2523,6 +2531,8 @@ void SdXMLObjectShapeContext::EndElement()
         if( xProps.is() )
             xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), uno::makeAny( aPersistName ) );
     }
+
+    SdXMLShapeContext::EndElement();
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list
@@ -2701,6 +2711,8 @@ void SdXMLAppletShapeContext::EndElement()
 
         SetThumbnail();
     }
+
+    SdXMLShapeContext::EndElement();
 }
 
 SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -2830,6 +2842,8 @@ void SdXMLPluginShapeContext::EndElement()
 
         SetThumbnail();
     }
+
+    SdXMLShapeContext::EndElement();
 }
 
 SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -2956,6 +2970,7 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
 void SdXMLFrameShapeContext::EndElement()
 {
     SetThumbnail();
+    SdXMLShapeContext::EndElement();
 }
 
 TYPEINIT1( SdXMLCustomShapeContext, SdXMLShapeContext );
@@ -3068,6 +3083,8 @@ void SdXMLCustomShapeContext::EndElement()
             DBG_ERROR( "could not set enhanced customshape geometry" );
         }
     }
+
+    SdXMLShapeContext::EndElement();
 }
 
 //////////////////////////////////////////////////////////////////////////////
