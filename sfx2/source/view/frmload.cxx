@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 10:14:37 $
+ *  last change: $Author: as $ $Date: 2001-11-08 12:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,15 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
 
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
@@ -107,6 +116,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
@@ -421,6 +431,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::detect" );
 
     Reference < XInputStream > xStream;
+    Reference < XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
     rtl::OUString aTypeName;            // a name describing the type ( from MediaDescriptor )
@@ -471,6 +482,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             lDescriptor[nProperty].Value >>= bOpenAsTemplate;
             nIndexOfTemplateFlag = nProperty;
         }
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
+            lDescriptor[nProperty].Value >>= xInteraction;
     }
 
     // detect using SfxFilter names
@@ -570,7 +583,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         bWasReadOnly = pItem && pItem->GetValue();
 
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        aMedium.UseInteractionHandler( TRUE         );
+        aMedium.SetInteractionHandler( xInteraction );
 
         BOOL bIsStorage = aMedium.IsStorage();
         if ( bIsStorage )
@@ -678,7 +692,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         {
             // when access to medium gives an error, the filter can't be valid
             pFilter = NULL;
-            ErrorHandler::HandleError( aMedium.GetError() );
+            ::com::sun::star::lang::WrappedTargetRuntimeException exPacked;
+            ::com::sun::star::ucb::CommandAbortedException        exAbort ;
+            exPacked.TargetException <<= exAbort;
+            throw exPacked;
         }
     }
 
