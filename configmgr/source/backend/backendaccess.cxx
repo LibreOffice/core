@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.17 $
- *  last change: $Author: rt $ $Date: 2004-03-30 14:53:26 $
+ *  $Revision: 1.18 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,41 @@
 #include "updatedispatch.hxx"
 #endif // CONFIGMGR_BACKEND_UPDATEDISPATCHER_HXX
 
+#ifndef CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
+#include "backendnotifier.hxx"
+#endif
+
+#ifndef CONFIGMGR_BACKEND_EMPTYLAYER_HXX
+#include "emptylayer.hxx"
+#endif
+
+#ifndef _CONFIGMGR_FILEHELPER_HXX_
+#include "filehelper.hxx"
+#endif
+
+#ifndef CONFIGMGR_SIMPLEINTERACTIONREQUEST_HXX
+#include "simpleinteractionrequest.hxx"
+#endif
+
+#ifndef CONFIGMGR_CONFIGINTERACTIONHANDLER_HXX
+#include "configinteractionhandler.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMASUPPLIER_HPP_
 #include <com/sun/star/configuration/backend/XSchemaSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
 #include <com/sun/star/configuration/backend/XCompositeLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
+#include <com/sun/star/configuration/backend/XUpdatableLayer.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDENTITIES_HPP_
+#include <com/sun/star/configuration/backend/XBackendEntities.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
+#include <com/sun/star/configuration/backend/MergeRecoveryRequest.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MALFORMEDDATAEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/MalformedDataException.hpp>
@@ -94,37 +123,36 @@
 #ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
 #include <com/sun/star/lang/NullPointerException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDENTITIES_HPP_
-#include <com/sun/star/configuration/backend/XBackendEntities.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
-
-#ifndef CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
-#include "backendnotifier.hxx"
-#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif // _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
 
-#define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
-
-#define OUSTR(txt)  OUString( RTL_CONSTASCII_USTRINGPARAM(txt) )
-
+#include <cppuhelper/exc_hlp.hxx>
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
 #endif //INCLUDED_VECTOR
 
-#ifndef _CONFIGMGR_FILEHELPER_HXX_
-#include "filehelper.hxx"
-#endif
+#define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
+#define RTL_LOGFILE_OU2A(rtlOUString)   OU2A(rtlOUString)
+
+#define OUSTR(txt)  OUString( RTL_CONSTASCII_USTRINGPARAM(txt) )
 
 namespace configmgr { namespace backend {
 //------------------------------------------------------------------------------
+    namespace task = com::sun::star::task;
+    typedef uno::Reference< backenduno::XUpdatableLayer > LayerDataRemover;
 
 BackendAccess::BackendAccess(
         const uno::Reference<backenduno::XBackend>& xBackend,
@@ -184,7 +212,8 @@ void BackendAccess::merge(
         const uno::Reference<backenduno::XLayer> * pLayers,
         sal_Int32 aNumLayers,
         RequestOptions const & aOptions,
-        ITemplateDataProvider *aTemplateProvider)
+        ITemplateDataProvider *aTemplateProvider,
+        sal_Int32 * pLayersMerged)
     CFG_UNO_THROW_ALL()
 {
     LayerMergeHandler * pMerger = new LayerMergeHandler(mFactory, aData, aTemplateProvider );
@@ -195,6 +224,8 @@ void BackendAccess::merge(
 
     OUString const aLocale = aOptions.getLocale();
     bool const needLocalizedData = aLocale.getLength() && !localehelper::isDefaultLanguage(aLocale);
+
+    if (pLayersMerged) *pLayersMerged = 0;
 
     for (sal_Int32 i = 0 ; i < aNumLayers ; ++ i)
     {
@@ -231,6 +262,7 @@ void BackendAccess::merge(
                 }
             }
         }
+        if (pLayersMerged) ++*pLayersMerged;
     }
 }
 //------------------------------------------------------------------------------
@@ -241,7 +273,8 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
                                         bool bIncludeTemplates,
                                         const uno::Reference<backenduno::XLayer> * pLayers,
                                         sal_Int32 nNumLayers,
-                                        ITemplateDataProvider *aTemplateProvider)
+                                        ITemplateDataProvider *aTemplateProvider,
+                                        sal_Int32 * pLayersMerged)
     CFG_UNO_THROW_ALL()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog1, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::readDefaultData()");
@@ -262,7 +295,7 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
             schema->readSchema(schemaHandler) ;
         }
 
-        this->merge(aComponentData, pLayers, nNumLayers, aOptions, aTemplateProvider );
+        this->merge(aComponentData, pLayers, nNumLayers, aOptions, aTemplateProvider, pLayersMerged );
         promoteToDefault(aComponentData);
 
         if (mBinaryCache.isCacheEnabled(aOptions.getEntity()))
@@ -278,8 +311,123 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
             }
         }
     }
+    else if (pLayersMerged)
+        *pLayersMerged = nNumLayers;
 
     return aComponentData.hasSchema();
+}
+//------------------------------------------------------------------------------
+
+static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
+{
+    try
+    {
+        namespace beans = com::sun::star::beans;
+        uno::Reference< beans::XPropertySet > xLayerProps( aLayer, uno::UNO_QUERY );
+        if (xLayerProps.is())
+        {
+            uno::Any aPropVal = xLayerProps->getPropertyValue( OUSTR("URL") );
+            OUString aResult;
+            if (aPropVal >>= aResult)
+                return aResult;
+        }
+        OSL_TRACE("Warning - Cannot get location of layer data\n");
+    }
+    catch (uno::Exception & e)
+    {
+        OSL_TRACE("Warning - Configuration: Retrieving error (interaction) handler failed: [%s]\n", OU2A(e.Message));
+    }
+    // TODO: use fallback, e.g. ServiceName
+    return OUString();
+}
+//------------------------------------------------------------------------------
+static inline
+OUString getLayerIdentifier(const uno::Reference<backenduno::XLayer> & aLayer)
+{
+    return getLayerURL(aLayer);
+}
+
+//------------------------------------------------------------------------------
+static void removeLayerData(uno::Reference< backenduno::XLayer > const & xLayer)
+{
+    OSL_ASSERT(xLayer.is());
+
+    LayerDataRemover xLayerRemover(xLayer,uno::UNO_QUERY);
+    if (xLayerRemover.is())
+    try
+    {
+        xLayerRemover->replaceWith(createEmptyLayer());
+    }
+    catch (uno::Exception & e)
+    {
+        OSL_TRACE("Warning - Configuration: Could not clear Layer data. Error: [%s]\n", OU2A(e.Message));
+    }
+    else
+    {
+        if (! FileHelper::tryToRemoveFile(getLayerURL(xLayer),true))
+            OSL_TRACE("Warning - Configuration: Could not remove broken user Layer data: [-Not Updatable-]\n");
+    }
+}
+//------------------------------------------------------------------------------
+
+static void discardLayer(uno::Sequence<uno::Reference<backenduno::XLayer> >& layers, sal_Int32 nLayer)
+{
+    OSL_ASSERT(0 <= nLayer && nLayer < layers.getLength());
+    sal_Int32 nNewSize = layers.getLength() - 1;
+
+    for (sal_Int32 i = nLayer; i<nNewSize; ++i)
+        layers[i] = layers[i+1];
+
+    layers.realloc(nNewSize);
+}
+//------------------------------------------------------------------------------
+
+bool BackendAccess::approveRecovery(const uno::Any & aMergeException,
+                                    const uno::Reference<backenduno::XLayer> & aBrokenLayer,
+                                    bool bUserLayerData)
+    CFG_UNO_THROW_ALL()
+{
+    using namespace apihelper;
+    typedef SimpleInteractionRequest::Continuation Choice;
+    Choice const k_supported_choices = CONTINUATION_APPROVE | CONTINUATION_DISAPPROVE;
+
+    Choice chosen = CONTINUATION_UNKNOWN;
+
+    ConfigurationInteractionHandler aHandler;
+    if (aHandler.is())
+    try
+    {
+        const char * const message = "Recover from configuration merge failure";
+        const OUString aLayerId = getLayerIdentifier(aBrokenLayer);
+        const bool bRemoveLayerData = bUserLayerData &&
+                                        (LayerDataRemover::query(aBrokenLayer).is() ||
+                                         FileHelper::fileExists(getLayerURL(aBrokenLayer)) );
+
+        rtl::Reference< SimpleInteractionRequest > xRequest(
+            new SimpleInteractionRequest(
+                uno::makeAny(
+                    backenduno::MergeRecoveryRequest(OUString::createFromAscii(message), aBrokenLayer,
+                                                        aMergeException, aLayerId, bRemoveLayerData) ),
+                k_supported_choices
+            ) );
+        aHandler.handle(xRequest.get());
+        chosen = xRequest->getResponse();
+    }
+    catch (uno::Exception & e)
+    {
+        OSL_TRACE("Warning - Configuration: Interaction handler failed: [%s]\n", OU2A(e.Message));
+    }
+
+    switch (chosen)
+    {
+    case CONTINUATION_APPROVE:      return true;
+    case CONTINUATION_DISAPPROVE:   return false;
+    case CONTINUATION_UNKNOWN:      break;
+
+    default: OSL_ENSURE(false,"Unsolicited continuation chosen"); break;
+    }
+    // no choice available - default: approve, if user data
+    return bUserLayerData;
 }
 //------------------------------------------------------------------------------
 
@@ -294,42 +442,88 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getNodeData()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(component) );
 
-    uno::Sequence<uno::Reference<backenduno::XLayer> > const layers =
+    uno::Sequence<uno::Reference<backenduno::XLayer> > layers =
         this->getLayers(component, aRequest.getOptions()) ;
 
-    sal_Int32 const nNumUserLayers = 1;
-    sal_Int32 const nNumDefaultLayers = layers.getLength() - nNumUserLayers;
+    sal_Int32 const k_NumUserLayers = 1;
 
-    MergedComponentData aComponentData;
+    sal_Int32 nNumDefaultLayers = layers.getLength() - k_NumUserLayers;
+    sal_Int32 nCurrentLayer;
+    bool bDefaultRecoveryApproved = false;
 
-    if (!this->readDefaultData(aComponentData, component, aRequest.getOptions(), true,
-                                layers.getConstArray(),nNumDefaultLayers,
-                                aTemplateProvider))
+    do try // loop to allow recovery from merge failures
     {
-        rtl::OUStringBuffer sMessage;
-        sMessage.appendAscii("Configuration: No data for request. Component \"");
-        sMessage.append(component);
-        sMessage.appendAscii("\" contains no data. ");
+        MergedComponentData aComponentData;
+        nCurrentLayer = -1;
 
-        throw com::sun::star::container::NoSuchElementException(sMessage.makeStringAndClear(),mBackend);
+        if (!this->readDefaultData(aComponentData, component, aRequest.getOptions(), true,
+                                    layers.getConstArray(),nNumDefaultLayers,
+                                    aTemplateProvider, &nCurrentLayer))
+        {
+            rtl::OUStringBuffer sMessage;
+            sMessage.appendAscii("Configuration: No data for request. Component \"");
+            sMessage.append(component);
+            sMessage.appendAscii("\" contains no data. ");
+
+            throw com::sun::star::container::NoSuchElementException(sMessage.makeStringAndClear(),mBackend);
+        }
+        OSL_ASSERT(nCurrentLayer == nNumDefaultLayers);
+
+        sal_Int32 const nNumUserLayers = layers.getLength() - nNumDefaultLayers;
+        if (nNumUserLayers > 0)
+        {
+            //Merge User layer
+            merge(aComponentData,
+                    layers.getConstArray()+nNumDefaultLayers, nNumUserLayers,
+                    aRequest.getOptions(), aTemplateProvider );
+
+            // mark this one as done
+            ++nCurrentLayer;
+        }
+
+        ComponentInstance retCode(aComponentData.extractSchemaTree(),
+                                aComponentData.extractTemplatesTree(),
+                                aRequest.getComponentName()) ;
+
+        //Register listener with notifier
+        if(aListener)
+        {
+            mNotifier->addListener(aListener, aRequest);
+        }
+        return ComponentResult(retCode) ;
     }
-
-    //Merge User layer
-    merge(aComponentData,
-            layers.getConstArray()+nNumDefaultLayers, nNumUserLayers,
-            aRequest.getOptions(), aTemplateProvider );
-
-
-    ComponentInstance retCode(aComponentData.extractSchemaTree(),
-                              aComponentData.extractTemplatesTree(),
-                              aRequest.getComponentName()) ;
-
-    //Register listener with notifier
-    if(aListener)
+    catch (com::sun::star::container::NoSuchElementException &) { throw; }
+    catch (com::sun::star::uno::RuntimeException &) { throw; }
+    catch (uno::Exception & )
     {
-        mNotifier->addListener(aListener, aRequest);
+        // can only recover if layer merging broke
+        if (nCurrentLayer < 0 || layers.getLength() <= nCurrentLayer)
+            throw;
+
+        uno::Reference< backenduno::XLayer > xBrokenLayer = layers[nCurrentLayer];
+
+        bool bUserLayerBroken = (nCurrentLayer == nNumDefaultLayers);
+
+        if (!bDefaultRecoveryApproved || bUserLayerBroken)
+        {
+            uno::Any theError = cppu::getCaughtException();
+            if (!approveRecovery(theError,xBrokenLayer,bUserLayerBroken))
+                cppu::throwException( theError );
+        }
+        // now do the recovery
+        discardLayer(layers,nCurrentLayer);
+        if (bUserLayerBroken)
+        {
+            removeLayerData(xBrokenLayer);
+        }
+        else
+        {
+            bDefaultRecoveryApproved = true;
+            --nNumDefaultLayers;
+        }
+
     }
-    return ComponentResult(retCode) ;
+    while (true);
 }
 //------------------------------------------------------------------------------
 
