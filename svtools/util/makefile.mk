@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.35 $
+#*  $Revision: 1.36 $
 #*
-#*  last change: $Author: hjs $ $Date: 2002-04-05 14:36:29 $
+#*  last change: $Author: pb $ $Date: 2002-04-23 07:59:15 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -173,7 +173,8 @@ RESLIB1SRSFILES=$(SRS)$/filter.srs  \
         $(SRS)$/svcontnr.srs    \
         $(SRS)$/filepicker.srs  \
         $(SRS)$/uno.srs         \
-        $(SRS)$/browse.srs
+        $(SRS)$/browse.srs		\
+        $(SRS)$/accessibility.srs
 
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
