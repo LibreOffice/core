@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
+ *  last change: $Author: mib $ $Date: 2001-01-29 11:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     }
     catch( xml::sax::SAXParseException& r )
     {
-        nRet = ERR_SWG_READ_ERROR;
+        String sErr( String::CreateFromInt32( r.LineNumber ));
+        sErr += ',';
+        sErr += String::CreateFromInt32( r.ColumnNumber );
+
+        nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
     }
     catch( xml::sax::SAXException& r )
     {
