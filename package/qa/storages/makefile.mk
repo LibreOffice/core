@@ -3,9 +3,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-02-03 17:55:40 $
+#   last change: $Date: 2004-07-23 15:15:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ PACKAGE = complex$/storages
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
 
 JAVAFILES       =\
                 StorageUnitTest.java\
