@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:29:39 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include "javainteractionhandler.hxx"
 #include "../migration/wizard.hxx"
 
+#ifndef _COM_SUN_STAR_FRAME_XSESSIONMANAGERLISTENER_HPP_
+#include <com/sun/star/frame/XSessionManagerListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSDISPATCH_HPP_
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #endif
@@ -188,6 +191,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
 #include <com/sun/star/task/XJob.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
 #endif
 
 #include <com/sun/star/java/XJavaVM.hpp>
@@ -1473,7 +1479,7 @@ void Desktop::Main()
         Resource::SetResManager( pOffResMgr );
 
         // create service for loadin SFX (still needed in startup)
-        Reference < XInterface >( xSMgr->createInstance(
+        Reference < css::document::XEventListener > xGlobalBroadcaster( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
         // initialize test-tool library (if available)
@@ -1486,6 +1492,13 @@ void Desktop::Main()
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"))),UNO_QUERY);
             xDesktop.is() && xDesktop->terminate();
             return;
+        }
+
+        if (xGlobalBroadcaster.is())
+        {
+            css::document::EventObject aEvent;
+            aEvent.EventName = ::rtl::OUString::createFromAscii("OnStartApp");
+            xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
         SetSplashScreenProgress(50);
@@ -2023,6 +2036,30 @@ void Desktop::OpenClients()
             if ( xList->hasElements() )
                 bLoaded = sal_True;
         }
+
+        // session management
+#if 0
+        // disabled
+        try
+        {
+            Reference< XInitialization > aListener(::comphelper::getProcessServiceFactory()->createInstance(
+                    OUString::createFromAscii("com.sun.star.frame.SessionListener")), UNO_QUERY);
+            if (aListener.is())
+            {
+                aListener->initialize(Sequence< Any >(0));
+                Reference< XSessionManagerListener > r(aListener, UNO_QUERY);
+                if (r.is() && !bLoaded)
+                    bLoaded = r->doRestore();
+            }
+        }
+        catch (com::sun::star::uno::Exception& e)
+        {
+            OUString aMessage = OUString::createFromAscii("Error in session management\n")
+                + e.Message;
+            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+        }
+#endif
+
     }
 
     if ( !pArgs->IsServer() )
