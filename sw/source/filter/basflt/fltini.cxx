@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-24 12:56:30 $
+ *  last change: $Author: cmc $ $Date: 2002-06-24 17:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,565 +916,395 @@ void CalculateFlySize( SfxItemSet& rFlySet, SwNodeIndex& rAnchor,
 
 /*  */
 
-
-static BOOL lcl_FindCharSet( BOOL bSearchId, String& rChrSetStr,
-                                            rtl_TextEncoding& rChrSet )
+struct CharSetNameMap
 {
-    static const sal_Char
-        sToken001[] = "ANSI",
-        sToken002[] = "MAC",
-        sToken003[] = "DOS",
-        sToken004[] = "IBM_437",
-        sToken005[] = "IBM_860",
-        sToken006[] = "IBM_861",
-        sToken007[] = "IBM_863",
-        sToken008[] = "IBM_865",
-        sToken009[] = "ASCII_US",
-        sToken010[] = "ISO_8859_1",
-        sToken011[] = "ISO_8859_2",
-        sToken012[] = "ISO_8859_3",
-        sToken013[] = "ISO_8859_4",
-        sToken014[] = "ISO_8859_5",
-        sToken015[] = "ISO_8859_6",
-        sToken016[] = "ISO_8859_7",
-        sToken017[] = "ISO_8859_8",
-        sToken018[] = "ISO_8859_9",
-        sToken019[] = "ISO_8859_14",
-        sToken020[] = "ISO_8859_15",
-        sToken021[] = "IBM_737",
-        sToken022[] = "IBM_775",
-        sToken023[] = "IBM_852",
-        sToken024[] = "IBM_855",
-        sToken025[] = "IBM_857",
-        sToken026[] = "IBM_862",
-        sToken027[] = "IBM_864",
-        sToken028[] = "IBM_866",
-        sToken029[] = "IBM_869",
-        sToken030[] = "MS_874",
-        sToken031[] = "MS_1250",
-        sToken032[] = "MS_1251",
-        sToken033[] = "MS_1253",
-        sToken034[] = "MS_1254",
-        sToken035[] = "MS_1255",
-        sToken036[] = "MS_1256",
-        sToken037[] = "MS_1257",
-        sToken038[] = "MS_1258",
-        sToken039[] = "APPLE_ARABIC",
-        sToken040[] = "APPLE_CENTEURO",
-        sToken041[] = "APPLE_CROATIAN",
-        sToken042[] = "APPLE_CYRILLIC",
-        sToken043[] = "APPLE_DEVANAGARI",
-        sToken044[] = "APPLE_FARSI",
-        sToken045[] = "APPLE_GREEK",
-        sToken046[] = "APPLE_GUJARATI",
-        sToken047[] = "APPLE_GURMUKHI",
-        sToken048[] = "APPLE_HEBREW",
-        sToken049[] = "APPLE_ICELAND",
-        sToken050[] = "APPLE_ROMANIAN",
-        sToken051[] = "APPLE_THAI",
-        sToken052[] = "APPLE_TURKISH",
-        sToken053[] = "APPLE_UKRAINIAN",
-        sToken054[] = "APPLE_CHINSIMP",
-        sToken055[] = "APPLE_CHINTRAD",
-        sToken056[] = "APPLE_JAPANESE",
-        sToken057[] = "APPLE_KOREAN",
-        sToken058[] = "MS_932",
-        sToken059[] = "MS_936",
-        sToken060[] = "MS_949",
-        sToken061[] = "MS_950",
-        sToken062[] = "SHIFT_JIS",
-        sToken063[] = "GB_2312",
-        sToken064[] = "GBT_12345",
-        sToken065[] = "GBK",
-        sToken066[] = "BIG5",
-        sToken067[] = "EUC_JP",
-        sToken068[] = "EUC_CN",
-        sToken069[] = "EUC_TW",
-        sToken070[] = "ISO_2022_JP",
-        sToken071[] = "ISO_2022_CN",
-        sToken072[] = "KOI8_R",
-        sToken073[] = "UTF7",
-        sToken074[] = "UTF8",
-        sToken075[] = "ISO_8859_10",
-        sToken076[] = "ISO_8859_13",
-        sToken077[] = "EUC_KR",
-        sToken078[] = "ISO_2022_KR",
-        sToken079[] = "JIS_X_201",
-        sToken080[] = "JIS_X_208",
-        sToken081[] = "JIS_X_212",
-        sToken082[] = "MS_1361",
-        sToken083[] = "GB_18030",
-        sToken084[] = "BIG5_HKSCS",
-        sToken085[] = "TIS_620",
-        sToken086[] = "UNICODE_2"
-            ;
-    struct _Dummy_MAP
-    {
-        rtl_TextEncoding eCode;
-        const sal_Char* pChrSetNm;
-    };
-    static const _Dummy_MAP aMapArr[] = {
+    rtl_TextEncoding eCode;
+    const sal_Char* pName;
+};
 
-        RTL_TEXTENCODING_MS_1252,               sToken001,
-        RTL_TEXTENCODING_APPLE_ROMAN,           sToken002,
-        RTL_TEXTENCODING_IBM_850,               sToken003,
-        RTL_TEXTENCODING_IBM_437,               sToken004,
-        RTL_TEXTENCODING_IBM_860,               sToken005,
-        RTL_TEXTENCODING_IBM_861,               sToken006,
-        RTL_TEXTENCODING_IBM_863,               sToken007,
-        RTL_TEXTENCODING_IBM_865,               sToken008,
-        RTL_TEXTENCODING_ASCII_US,              sToken009,
-        RTL_TEXTENCODING_ISO_8859_1,            sToken010,
-        RTL_TEXTENCODING_ISO_8859_2,            sToken011,
-        RTL_TEXTENCODING_ISO_8859_3,            sToken012,
-        RTL_TEXTENCODING_ISO_8859_4,            sToken013,
-        RTL_TEXTENCODING_ISO_8859_5,            sToken014,
-        RTL_TEXTENCODING_ISO_8859_6,            sToken015,
-        RTL_TEXTENCODING_ISO_8859_7,            sToken016,
-        RTL_TEXTENCODING_ISO_8859_8,            sToken017,
-        RTL_TEXTENCODING_ISO_8859_9,            sToken018,
-        RTL_TEXTENCODING_ISO_8859_14,           sToken019,
-        RTL_TEXTENCODING_ISO_8859_15,           sToken020,
-        RTL_TEXTENCODING_IBM_737,               sToken021,
-        RTL_TEXTENCODING_IBM_775,               sToken022,
-        RTL_TEXTENCODING_IBM_852,               sToken023,
-        RTL_TEXTENCODING_IBM_855,               sToken024,
-        RTL_TEXTENCODING_IBM_857,               sToken025,
-        RTL_TEXTENCODING_IBM_862,               sToken026,
-        RTL_TEXTENCODING_IBM_864,               sToken027,
-        RTL_TEXTENCODING_IBM_866,               sToken028,
-        RTL_TEXTENCODING_IBM_869,               sToken029,
-        RTL_TEXTENCODING_MS_874,                sToken030,
-        RTL_TEXTENCODING_MS_1250,               sToken031,
-        RTL_TEXTENCODING_MS_1251,               sToken032,
-        RTL_TEXTENCODING_MS_1253,               sToken033,
-        RTL_TEXTENCODING_MS_1254,               sToken034,
-        RTL_TEXTENCODING_MS_1255,               sToken035,
-        RTL_TEXTENCODING_MS_1256,               sToken036,
-        RTL_TEXTENCODING_MS_1257,               sToken037,
-        RTL_TEXTENCODING_MS_1258,               sToken038,
-        RTL_TEXTENCODING_APPLE_ARABIC,          sToken039,
-        RTL_TEXTENCODING_APPLE_CENTEURO,        sToken040,
-        RTL_TEXTENCODING_APPLE_CROATIAN,        sToken041,
-        RTL_TEXTENCODING_APPLE_CYRILLIC,        sToken042,
-        RTL_TEXTENCODING_APPLE_DEVANAGARI,      sToken043,
-        RTL_TEXTENCODING_APPLE_FARSI,           sToken044,
-        RTL_TEXTENCODING_APPLE_GREEK,           sToken045,
-        RTL_TEXTENCODING_APPLE_GUJARATI,        sToken046,
-        RTL_TEXTENCODING_APPLE_GURMUKHI,        sToken047,
-        RTL_TEXTENCODING_APPLE_HEBREW,          sToken048,
-        RTL_TEXTENCODING_APPLE_ICELAND,         sToken049,
-        RTL_TEXTENCODING_APPLE_ROMANIAN,        sToken050,
-        RTL_TEXTENCODING_APPLE_THAI,            sToken051,
-        RTL_TEXTENCODING_APPLE_TURKISH,         sToken052,
-        RTL_TEXTENCODING_APPLE_UKRAINIAN,       sToken053,
-        RTL_TEXTENCODING_APPLE_CHINSIMP,        sToken054,
-        RTL_TEXTENCODING_APPLE_CHINTRAD,        sToken055,
-        RTL_TEXTENCODING_APPLE_JAPANESE,        sToken056,
-        RTL_TEXTENCODING_APPLE_KOREAN,          sToken057,
-        RTL_TEXTENCODING_MS_932,                sToken058,
-        RTL_TEXTENCODING_MS_936,                sToken059,
-        RTL_TEXTENCODING_MS_949,                sToken060,
-        RTL_TEXTENCODING_MS_950,                sToken061,
-        RTL_TEXTENCODING_SHIFT_JIS,             sToken062,
-        RTL_TEXTENCODING_GB_2312,               sToken063,
-        RTL_TEXTENCODING_GBT_12345,             sToken064,
-        RTL_TEXTENCODING_GBK,                   sToken065,
-        RTL_TEXTENCODING_BIG5,                  sToken066,
-        RTL_TEXTENCODING_EUC_JP,                sToken067,
-        RTL_TEXTENCODING_EUC_CN,                sToken068,
-        RTL_TEXTENCODING_EUC_TW,                sToken069,
-        RTL_TEXTENCODING_ISO_2022_JP,           sToken070,
-        RTL_TEXTENCODING_ISO_2022_CN,           sToken071,
-        RTL_TEXTENCODING_KOI8_R,                sToken072,
-        RTL_TEXTENCODING_UTF7,                  sToken073,
-        RTL_TEXTENCODING_UTF8,                  sToken074,
-        RTL_TEXTENCODING_ISO_8859_10,           sToken075,
-        RTL_TEXTENCODING_ISO_8859_13,           sToken076,
-        RTL_TEXTENCODING_EUC_KR,                sToken077,
-        RTL_TEXTENCODING_ISO_2022_KR,           sToken078,
-        RTL_TEXTENCODING_JIS_X_0201,            sToken079,
-        RTL_TEXTENCODING_JIS_X_0208,            sToken080,
-        RTL_TEXTENCODING_JIS_X_0212,            sToken081,
-        RTL_TEXTENCODING_MS_1361,               sToken082,
-        RTL_TEXTENCODING_GB_18030,              sToken083,
-        RTL_TEXTENCODING_BIG5_HKSCS,            sToken084,
-        RTL_TEXTENCODING_TIS_620,               sToken085,
-        RTL_TEXTENCODING_UCS2,                  sToken086
+const CharSetNameMap *GetCharSetNameMap()
+{
+    static const CharSetNameMap aMapArr[] =
+    {
+#   define IMPLENTRY(X) { RTL_TEXTENCODING_##X, "" #X "" }
+        IMPLENTRY(DONTKNOW),
+        IMPLENTRY(MS_1252),
+        IMPLENTRY(APPLE_ROMAN),
+        IMPLENTRY(IBM_437),
+        IMPLENTRY(IBM_850),
+        IMPLENTRY(IBM_860),
+        IMPLENTRY(IBM_861),
+        IMPLENTRY(IBM_863),
+        IMPLENTRY(IBM_865),
+        IMPLENTRY(SYMBOL),
+        IMPLENTRY(ASCII_US),
+        IMPLENTRY(ISO_8859_1),
+        IMPLENTRY(ISO_8859_2),
+        IMPLENTRY(ISO_8859_3),
+        IMPLENTRY(ISO_8859_4),
+        IMPLENTRY(ISO_8859_5),
+        IMPLENTRY(ISO_8859_6),
+        IMPLENTRY(ISO_8859_7),
+        IMPLENTRY(ISO_8859_8),
+        IMPLENTRY(ISO_8859_9),
+        IMPLENTRY(ISO_8859_14),
+        IMPLENTRY(ISO_8859_15),
+        IMPLENTRY(IBM_737),
+        IMPLENTRY(IBM_775),
+        IMPLENTRY(IBM_852),
+        IMPLENTRY(IBM_855),
+        IMPLENTRY(IBM_857),
+        IMPLENTRY(IBM_862),
+        IMPLENTRY(IBM_864),
+        IMPLENTRY(IBM_866),
+        IMPLENTRY(IBM_869),
+        IMPLENTRY(MS_874),
+        IMPLENTRY(MS_1250),
+        IMPLENTRY(MS_1251),
+        IMPLENTRY(MS_1253),
+        IMPLENTRY(MS_1254),
+        IMPLENTRY(MS_1255),
+        IMPLENTRY(MS_1256),
+        IMPLENTRY(MS_1257),
+        IMPLENTRY(MS_1258),
+        IMPLENTRY(APPLE_ARABIC),
+        IMPLENTRY(APPLE_CENTEURO),
+        IMPLENTRY(APPLE_CROATIAN),
+        IMPLENTRY(APPLE_CYRILLIC),
+        IMPLENTRY(APPLE_DEVANAGARI),
+        IMPLENTRY(APPLE_FARSI),
+        IMPLENTRY(APPLE_GREEK),
+        IMPLENTRY(APPLE_GUJARATI),
+        IMPLENTRY(APPLE_GURMUKHI),
+        IMPLENTRY(APPLE_HEBREW),
+        IMPLENTRY(APPLE_ICELAND),
+        IMPLENTRY(APPLE_ROMANIAN),
+        IMPLENTRY(APPLE_THAI),
+        IMPLENTRY(APPLE_TURKISH),
+        IMPLENTRY(APPLE_UKRAINIAN),
+        IMPLENTRY(APPLE_CHINSIMP),
+        IMPLENTRY(APPLE_CHINTRAD),
+        IMPLENTRY(APPLE_JAPANESE),
+        IMPLENTRY(APPLE_KOREAN),
+        IMPLENTRY(MS_932),
+        IMPLENTRY(MS_936),
+        IMPLENTRY(MS_949),
+        IMPLENTRY(MS_950),
+        IMPLENTRY(SHIFT_JIS),
+        IMPLENTRY(GB_2312),
+        IMPLENTRY(GBT_12345),
+        IMPLENTRY(GBK),
+        IMPLENTRY(BIG5),
+        IMPLENTRY(EUC_JP),
+        IMPLENTRY(EUC_CN),
+        IMPLENTRY(EUC_TW),
+        IMPLENTRY(ISO_2022_JP),
+        IMPLENTRY(ISO_2022_CN),
+        IMPLENTRY(KOI8_R),
+        IMPLENTRY(UTF7),
+        IMPLENTRY(UTF8),
+        IMPLENTRY(ISO_8859_10),
+        IMPLENTRY(ISO_8859_13),
+        IMPLENTRY(EUC_KR),
+        IMPLENTRY(ISO_2022_KR),
+        IMPLENTRY(JIS_X_0201),
+        IMPLENTRY(JIS_X_0208),
+        IMPLENTRY(JIS_X_0212),
+        IMPLENTRY(MS_1361),
+        IMPLENTRY(GB_18030),
+        IMPLENTRY(BIG5_HKSCS),
+        IMPLENTRY(TIS_620),
+        IMPLENTRY(UCS4),
+        IMPLENTRY(UCS2),
+        IMPLENTRY(UNICODE),
+        {0,0}       //Last
     };
+    return &aMapArr[0];
+}
+/*
+ Get a rtl_TextEncoding from its name
+ */
+rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
+{
+    const CharSetNameMap *pStart = GetCharSetNameMap();
+    rtl_TextEncoding nRet = pStart->eCode;
 
-    BOOL bFnd = FALSE;
-    USHORT nLen = sizeof( aMapArr ) / sizeof( aMapArr[0] );
-    if( bSearchId )
+    for(const CharSetNameMap *pMap = pStart; pMap->pName; ++pMap)
     {
-        for( USHORT n = 0; n < nLen; ++n )
-            if( rChrSetStr.EqualsIgnoreCaseAscii( aMapArr[ n ].pChrSetNm ))
-            {
-                rChrSet = aMapArr[ n ].eCode;
-                bFnd = TRUE;
-                break;
-            }
+        if(rChrSetStr.EqualsIgnoreCaseAscii(pMap->pName))
+        {
+            nRet = pMap->eCode;
+            break;
+        }
     }
-    else
-    {
-        for( USHORT n = 0; n < nLen; ++n )
-            if( rChrSet == aMapArr[ n ].eCode )
-            {
-                rChrSetStr.AssignAscii( aMapArr[ n ].pChrSetNm  );
-                bFnd = TRUE;
-                break;
-            }
-    }
-    return bFnd;
+
+    ASSERT(nRet != pStart->eCode, "TXT: That was an unknown language!");
+
+    return nRet;
 }
 
-static BOOL lcl_FindLanguage( BOOL bSearchId, String& rLngStr, USHORT& rId )
+
+/*
+ Get the String name of an rtl_TextEncoding
+ */
+String NameFromCharSet(rtl_TextEncoding nChrSet)
 {
-    static const sal_Char
-        sToken001[] = "UNKNOWN",
-        sToken002[] = "SYSTEM",
-        sToken003[] = "AFRIKAANS",
-        sToken004[] = "ALBANIAN",
-        sToken005[] = "ARABIC",
-        sToken006[] = "ARABIC (IRAQ)",
-        sToken007[] = "ARABIC (EGYT)",
-        sToken008[] = "ARABIC (LIBYA)",
-        sToken009[] = "ARABIC (ALGERIA)",
-        sToken010[] = "ARABIC (MOROCCO)",
-        sToken011[] = "ARABIC (TUNESIA)",
-        sToken012[] = "ARABIC (OMAN)",
-        sToken013[] = "ARABIC (YEMEN)",
-        sToken014[] = "ARABIC (SYRIA)",
-        sToken015[] = "ARABIC (JORDAN)",
-        sToken016[] = "ARABIC (LEBANON)",
-        sToken017[] = "ARABIC (KUWAIT)",
-        sToken018[] = "ARABIC (VAE)",
-        sToken019[] = "ARABIC (BAHREIN)",
-        sToken020[] = "ARABIC (QATAR)",
-        sToken021[] = "BASQUE",
-        sToken022[] = "BULGARIAN",
-        sToken023[] = "BELORUSSIAN",
-        sToken024[] = "CATALAN",
-        sToken025[] = "CHINESE",
-        sToken026[] = "CHINESE (TRAD.)",
-        sToken027[] = "CHINESE (SIMPLE)",
-        sToken028[] = "CHINESE (HONGKONG)",
-        sToken029[] = "CHINESE (SINGAPORE)",
-        sToken030[] = "CROATIAN",
-        sToken031[] = "CHECH",
-        sToken032[] = "DANISH",
-        sToken033[] = "DUTCH",
-        sToken034[] = "DUTCH (BELGIUM)",
-        sToken035[] = "ENGLISH",
-        sToken036[] = "ENGLISH (US)",
-        sToken037[] = "ENGLISH (UK)",
-        sToken038[] = "ENGLISH (AUS)",
-        sToken039[] = "ENGLISH (CAN)",
-        sToken040[] = "ENGLISH (NZ)",
-        sToken041[] = "ENGLISH (EIRE)",
-        sToken042[] = "ENGLISH (SA)",
-        sToken043[] = "ENGLISH (JAMAICA)",
-        sToken044[] = "ENGLISH (CARIBBEAN)",
-        sToken045[] = "ENGLISH (BELIZE)",
-        sToken046[] = "ENGLISH (TRINIDAD)",
-        sToken047[] = "ENGLISH (ZIMBABWE)",
-        sToken048[] = "ENGLISH (PHILIPPINES)",
-        sToken049[] = "ESTONIAN",
-        sToken050[] = "FINNISH",
-        sToken051[] = "FAROAN",
-        sToken052[] = "FARSI",
-        sToken053[] = "FRENCH",
-        sToken054[] = "FRENCH (BELGIUM)",
-        sToken055[] = "FRENCH (CAN)",
-        sToken056[] = "FRENCH (CH)",
-        sToken057[] = "FRENCH (LUX)",
-        sToken058[] = "FRENCH (MONACO)",
-        sToken059[] = "GERMAN",
-        sToken060[] = "GERMAN (CH)",
-        sToken061[] = "GERMAN (A)",
-        sToken062[] = "GERMAN (LUX)",
-        sToken063[] = "GERMAN (LIE)",
-        sToken064[] = "GREEK",
-        sToken065[] = "HEBREW",
-        sToken066[] = "HUNGARIAN",
-        sToken067[] = "ICELANDIC",
-        sToken068[] = "INDONESIAN",
-        sToken069[] = "ITALIAN",
-        sToken070[] = "ITALIAN (CH)",
-        sToken071[] = "JAPANESE",
-        sToken072[] = "KOREAN",
-        sToken073[] = "KOREAN (JOHAB)",
-        sToken074[] = "LATVIAN",
-        sToken075[] = "LITHUANIAN",
-        sToken076[] = "MACEDONIAN",
-        sToken077[] = "MALAYSIAN",
-        sToken078[] = "NORWEGIAN",
-        sToken079[] = "NORWEGIAN BOKMAL",
-        sToken080[] = "NORWEGIAN NYNORSK",
-        sToken081[] = "POLISH",
-        sToken082[] = "PORTUGUESE",
-        sToken083[] = "PORTUGUESE (BRAZIL)",
-        sToken084[] = "ROMANSCH",
-        sToken085[] = "RUMANIAN",
-        sToken086[] = "RUSSIAN",
-        sToken087[] = "SLOVAK",
-        sToken088[] = "SLOVENIAN",
-        sToken089[] = "SERBIAN",
-        sToken090[] = "SPANISH",
-        sToken091[] = "SPANISH (MEXICO)",
-        sToken092[] = "SPANISH (MODERN)",
-        sToken093[] = "SPANISH (GUATEMALA)",
-        sToken094[] = "SPANISH (COSTA RICA)",
-        sToken095[] = "SPANISH (PANAMA)",
-//  sToken096[] = "SPANISH (DOMINICAN REP.)",
-        sToken097[] = "SPANISH (VENEZUELA)",
-        sToken098[] = "SPANISH (COLUMBIA)",
-        sToken099[] = "SPANISH (PERU)",
-        sToken100[] = "SPANISH (ARGENTINA)",
-        sToken101[] = "SPANISH (EQUADOR)",
-        sToken102[] = "SPANISH (CHILE)",
-        sToken103[] = "SPANISH (URUGUAY)",
-        sToken104[] = "SPANISH (PARAGUAY)",
-        sToken105[] = "SPANISH (BOLIVIA)",
-        sToken106[] = "SPANISH (EL SALVADOR)",
-        sToken107[] = "SPANISH (HONDURAS)",
-        sToken108[] = "SPANISH (NICARAGUA)",
-        sToken109[] = "SPANISH (PUERTO RICO)",
-        sToken110[] = "SWEDISH",
-        sToken111[] = "SWEDISH (FINLAND)",
-        sToken112[] = "THAI",
-        sToken113[] = "TURKISH",
-        sToken114[] = "URDU",
-        sToken115[] = "UKRAINIAN",
+    const CharSetNameMap *pStart = GetCharSetNameMap();
+    const char *pRet = pStart->pName;
 
-        sToken116[] = "ARABIC (SAUDI ARABIA)",
-        sToken117[] = "ARMENIAN",
-        sToken118[] = "ASSAMESE",
-        sToken119[] = "AZERI",
-        sToken120[] = "AZERI (LATIN)",
-        sToken121[] = "AZERI (CYRILLIC)",
-        sToken122[] = "BENGALI",
-        sToken123[] = "CHINESE (MACAU)",
-        sToken124[] = "GUJARATI",
-        sToken125[] = "HINDI",
-        sToken126[] = "KANNADA",
-        sToken127[] = "KASHMIRI",
-        sToken128[] = "KASHMIRI (INDIA)",
-        sToken129[] = "KAZAK",
-        sToken130[] = "KONKANI",
-        sToken131[] = "LITHUANIAN (CLASSIC)",
-        sToken132[] = "MALAY (MALAYSIA)",
-        sToken133[] = "MALAY (BRUNEI DARUSSALAM)",
-        sToken134[] = "MALAYALAM",
-        sToken135[] = "MANIPURI",
-        sToken136[] = "MARATHI",
-        sToken137[] = "NEPALI",
-        sToken138[] = "NEPALI (INDIA)",
-        sToken139[] = "ORIYA",
-        sToken140[] = "PUNJABI",
-        sToken141[] = "SANSKRIT",
-        sToken142[] = "SERBIAN",
-        sToken143[] = "SERBIAN (LATIN)",
-        sToken144[] = "SERBIAN (CYRILLIC)",
-        sToken145[] = "SINDHI",
-        sToken146[] = "SWAHILI",
-        sToken147[] = "TAMIL",
-        sToken148[] = "TATAR",
-        sToken149[] = "TELUGU",
-        sToken150[] = "URDU (PAKISTAN)",
-        sToken151[] = "URDU (INDIA)",
-        sToken152[] = "UZBEK",
-        sToken153[] = "UZBEK (LATIN)",
-        sToken154[] = "UZBEK (CYRILLIC)"
-            ;
-    struct _Dummy_MAP
+    for(const CharSetNameMap *pMap = pStart; pMap->pName; ++pMap)
     {
-        USHORT nId;
-        const sal_Char* pLanguageNm;
-    };
-    static const _Dummy_MAP aMapArr[] = {
-
-         LANGUAGE_DONTKNOW,                 sToken001,
-         LANGUAGE_SYSTEM,                   sToken002,
-         LANGUAGE_AFRIKAANS,                sToken003,
-         LANGUAGE_ALBANIAN,                 sToken004,
-         LANGUAGE_ARABIC,                   sToken005,
-         LANGUAGE_ARABIC_IRAQ,              sToken006,
-         LANGUAGE_ARABIC_EGYPT,             sToken007,
-         LANGUAGE_ARABIC_LIBYA,             sToken008,
-         LANGUAGE_ARABIC_ALGERIA,           sToken009,
-         LANGUAGE_ARABIC_MOROCCO,           sToken010,
-         LANGUAGE_ARABIC_TUNISIA,           sToken011,
-         LANGUAGE_ARABIC_OMAN,              sToken012,
-         LANGUAGE_ARABIC_YEMEN,             sToken013,
-         LANGUAGE_ARABIC_SYRIA,             sToken014,
-         LANGUAGE_ARABIC_JORDAN,            sToken015,
-         LANGUAGE_ARABIC_LEBANON,           sToken016,
-         LANGUAGE_ARABIC_KUWAIT,            sToken017,
-         LANGUAGE_ARABIC_UAE,               sToken018,
-         LANGUAGE_ARABIC_BAHRAIN,           sToken019,
-         LANGUAGE_ARABIC_QATAR,             sToken020,
-         LANGUAGE_BASQUE,                   sToken021,
-         LANGUAGE_BULGARIAN,                sToken022,
-         LANGUAGE_BELARUSIAN,               sToken023,
-         LANGUAGE_CATALAN,                  sToken024,
-         LANGUAGE_CHINESE,                  sToken025,
-         LANGUAGE_CHINESE_TRADITIONAL,      sToken026,
-         LANGUAGE_CHINESE_SIMPLIFIED,       sToken027,
-         LANGUAGE_CHINESE_HONGKONG,         sToken028,
-         LANGUAGE_CHINESE_SINGAPORE,        sToken029,
-         LANGUAGE_CROATIAN,                 sToken030,
-         LANGUAGE_CZECH,                    sToken031,
-         LANGUAGE_DANISH,                   sToken032,
-         LANGUAGE_DUTCH,                    sToken033,
-         LANGUAGE_DUTCH_BELGIAN,            sToken034,
-         LANGUAGE_ENGLISH,                  sToken035,
-         LANGUAGE_ENGLISH_US,               sToken036,
-         LANGUAGE_ENGLISH_UK,               sToken037,
-         LANGUAGE_ENGLISH_AUS,              sToken038,
-         LANGUAGE_ENGLISH_CAN,              sToken039,
-         LANGUAGE_ENGLISH_NZ,               sToken040,
-         LANGUAGE_ENGLISH_EIRE,             sToken041,
-         LANGUAGE_ENGLISH_SAFRICA,          sToken042,
-         LANGUAGE_ENGLISH_JAMAICA,          sToken043,
-         LANGUAGE_ENGLISH_CARRIBEAN,        sToken044,
-         LANGUAGE_ENGLISH_BELIZE,           sToken045,
-         LANGUAGE_ENGLISH_TRINIDAD,         sToken046,
-         LANGUAGE_ENGLISH_ZIMBABWE,         sToken047,
-         LANGUAGE_ENGLISH_PHILIPPINES,      sToken048,
-         LANGUAGE_ESTONIAN,                 sToken049,
-         LANGUAGE_FINNISH,                  sToken050,
-         LANGUAGE_FAEROESE,                 sToken051,
-         LANGUAGE_FARSI,                    sToken052,
-         LANGUAGE_FRENCH,                   sToken053,
-         LANGUAGE_FRENCH_BELGIAN,           sToken054,
-         LANGUAGE_FRENCH_CANADIAN,          sToken055,
-         LANGUAGE_FRENCH_SWISS,             sToken056,
-         LANGUAGE_FRENCH_LUXEMBOURG,        sToken057,
-         LANGUAGE_FRENCH_MONACO,            sToken058,
-         LANGUAGE_GERMAN,                   sToken059,
-         LANGUAGE_GERMAN_SWISS,             sToken060,
-         LANGUAGE_GERMAN_AUSTRIAN,          sToken061,
-         LANGUAGE_GERMAN_LUXEMBOURG,        sToken062,
-         LANGUAGE_GERMAN_LIECHTENSTEIN,     sToken063,
-         LANGUAGE_GREEK,                    sToken064,
-         LANGUAGE_HEBREW,                   sToken065,
-         LANGUAGE_HUNGARIAN,                sToken066,
-         LANGUAGE_ICELANDIC,                sToken067,
-         LANGUAGE_INDONESIAN,               sToken068,
-         LANGUAGE_ITALIAN,                  sToken069,
-         LANGUAGE_ITALIAN_SWISS,            sToken070,
-         LANGUAGE_JAPANESE,                 sToken071,
-         LANGUAGE_KOREAN,                   sToken072,
-         LANGUAGE_KOREAN_JOHAB,             sToken073,
-         LANGUAGE_LATVIAN,                  sToken074,
-         LANGUAGE_LITHUANIAN,               sToken075,
-         LANGUAGE_MACEDONIAN,               sToken076,
-         LANGUAGE_MALAY,                    sToken077,
-         LANGUAGE_NORWEGIAN,                sToken078,
-         LANGUAGE_NORWEGIAN_BOKMAL,         sToken079,
-         LANGUAGE_NORWEGIAN_NYNORSK,        sToken080,
-         LANGUAGE_POLISH,                   sToken081,
-         LANGUAGE_PORTUGUESE,               sToken082,
-         LANGUAGE_PORTUGUESE_BRAZILIAN,     sToken083,
-         LANGUAGE_RHAETO_ROMAN,             sToken084,
-         LANGUAGE_ROMANIAN,                 sToken085,
-         LANGUAGE_RUSSIAN,                  sToken086,
-         LANGUAGE_SLOVAK,                   sToken087,
-         LANGUAGE_SLOVENIAN,                sToken088,
-         LANGUAGE_SORBIAN,                  sToken089,
-         LANGUAGE_SPANISH,                  sToken090,
-         LANGUAGE_SPANISH_MEXICAN,          sToken091,
-         LANGUAGE_SPANISH_MODERN,           sToken092,
-         LANGUAGE_SPANISH_GUATEMALA,        sToken093,
-         LANGUAGE_SPANISH_COSTARICA,        sToken094,
-         LANGUAGE_SPANISH_PANAMA,           sToken095,
-//       LANGUAGE_SPANISH_DOMINICAN,        sToken096,
-         LANGUAGE_SPANISH_VENEZUELA,        sToken097,
-         LANGUAGE_SPANISH_COLOMBIA,         sToken098,
-         LANGUAGE_SPANISH_PERU,             sToken099,
-         LANGUAGE_SPANISH_ARGENTINA,        sToken100,
-         LANGUAGE_SPANISH_ECUADOR,          sToken101,
-         LANGUAGE_SPANISH_CHILE,            sToken102,
-         LANGUAGE_SPANISH_URUGUAY,          sToken103,
-         LANGUAGE_SPANISH_PARAGUAY,         sToken104,
-         LANGUAGE_SPANISH_BOLIVIA,          sToken105,
-         LANGUAGE_SPANISH_EL_SALVADOR,      sToken106,
-         LANGUAGE_SPANISH_HONDURAS,         sToken107,
-         LANGUAGE_SPANISH_NICARAGUA,        sToken108,
-         LANGUAGE_SPANISH_PUERTO_RICO,      sToken109,
-         LANGUAGE_SWEDISH,                  sToken110,
-         LANGUAGE_SWEDISH_FINLAND,          sToken111,
-         LANGUAGE_THAI,                     sToken112,
-         LANGUAGE_TURKISH,                  sToken113,
-         LANGUAGE_URDU,                     sToken114,
-         LANGUAGE_UKRAINIAN,                sToken115,
-         LANGUAGE_ARABIC_SAUDI_ARABIA,      sToken116,
-         LANGUAGE_ARMENIAN,                 sToken117,
-         LANGUAGE_ASSAMESE,                 sToken118,
-         LANGUAGE_AZERI,                    sToken119,
-         LANGUAGE_AZERI_LATIN,              sToken120,
-         LANGUAGE_AZERI_CYRILLIC,           sToken121,
-         LANGUAGE_BENGALI,                  sToken122,
-         LANGUAGE_CHINESE_MACAU,            sToken123,
-         LANGUAGE_GUJARATI,                 sToken124,
-         LANGUAGE_HINDI,                    sToken125,
-         LANGUAGE_KANNADA,                  sToken126,
-         LANGUAGE_KASHMIRI,                 sToken127,
-         LANGUAGE_KASHMIRI_INDIA,           sToken128,
-         LANGUAGE_KAZAK,                    sToken129,
-         LANGUAGE_KONKANI,                  sToken130,
-         LANGUAGE_LITHUANIAN_CLASSIC,       sToken131,
-         LANGUAGE_MALAY_MALAYSIA,           sToken132,
-         LANGUAGE_MALAY_BRUNEI_DARUSSALAM,  sToken133,
-         LANGUAGE_MALAYALAM,                sToken134,
-         LANGUAGE_MANIPURI,                 sToken135,
-         LANGUAGE_MARATHI,                  sToken136,
-         LANGUAGE_NEPALI,                   sToken137,
-         LANGUAGE_NEPALI_INDIA,             sToken138,
-         LANGUAGE_ORIYA,                    sToken139,
-         LANGUAGE_PUNJABI,                  sToken140,
-         LANGUAGE_SANSKRIT,                 sToken141,
-         LANGUAGE_SERBIAN,                  sToken142,
-         LANGUAGE_SERBIAN_LATIN,            sToken143,
-         LANGUAGE_SERBIAN_CYRILLIC,         sToken144,
-         LANGUAGE_SINDHI,                   sToken145,
-         LANGUAGE_SWAHILI,                  sToken146,
-         LANGUAGE_TAMIL,                    sToken147,
-         LANGUAGE_TATAR,                    sToken148,
-         LANGUAGE_TELUGU,                   sToken149,
-         LANGUAGE_URDU_PAKISTAN,            sToken150,
-         LANGUAGE_URDU_INDIA,               sToken151,
-         LANGUAGE_UZBEK,                    sToken152,
-         LANGUAGE_UZBEK_LATIN,              sToken153,
-         LANGUAGE_UZBEK_CYRILLIC,           sToken154
-    };
-
-    BOOL bFnd = FALSE;
-    USHORT nLen = sizeof( aMapArr ) / sizeof( aMapArr[0] );
-    if( bSearchId )
-    {
-        for( USHORT n = 0; n < nLen; ++n )
-            if( rLngStr.EqualsIgnoreCaseAscii( aMapArr[ n ].pLanguageNm ))
-            {
-                rId = aMapArr[ n ].nId;
-                bFnd = TRUE;
-                break;
-            }
+        if (nChrSet == pMap->eCode)
+        {
+            pRet = pMap->pName;
+            break;
+        }
     }
-    else
-    {
-        for( USHORT n = 0; n < nLen; ++n )
-            if( rId == aMapArr[ n ].nId )
-            {
-                rLngStr.AssignAscii( aMapArr[ n ].pLanguageNm );
-                bFnd = TRUE;
-                break;
-            }
-    }
-    return bFnd;
+
+    ASSERT(pRet != pStart->pName, "TXT: That was an unknown language!");
+
+    return String::CreateFromAscii(pRet);
 }
 
+struct LangNameMap
+{
+    LanguageType nId;
+    const sal_Char* pLanguageNm;
+};
+
+const LangNameMap *GetLangNameMap()
+{
+    static const LangNameMap aMapArr[] =
+    {
+        {LANGUAGE_DONTKNOW,                 "DONTKNOW"              },
+        {LANGUAGE_NONE,                     "NONE"                  },
+        {LANGUAGE_SYSTEM,                   "SYSTEM"                },
+        {LANGUAGE_AFRIKAANS,                "AFRIKAANS"             },
+        {LANGUAGE_ALBANIAN,                 "ALBANIAN"              },
+        {LANGUAGE_ARABIC,                   "ARABIC"                },
+        {LANGUAGE_ARABIC_SAUDI_ARABIA,      "ARABIC (SAUDI ARABIA)" },
+        {LANGUAGE_ARABIC_IRAQ,              "ARABIC (IRAQ)"         },
+        {LANGUAGE_ARABIC_EGYPT,             "ARABIC (EGYPT)"        },
+        {LANGUAGE_ARABIC_LIBYA,             "ARABIC (LIBYA)"        },
+        {LANGUAGE_ARABIC_ALGERIA,           "ARABIC (ALGERIA)"      },
+        {LANGUAGE_ARABIC_MOROCCO,           "ARABIC (MOROCCO)"      },
+        {LANGUAGE_ARABIC_TUNISIA,           "ARABIC (TUNISIA)"      },
+        {LANGUAGE_ARABIC_OMAN,              "ARABIC (OMAN)"         },
+        {LANGUAGE_ARABIC_YEMEN,             "ARABIC (YEMEN)"        },
+        {LANGUAGE_ARABIC_SYRIA,             "ARABIC (SYRIA)"        },
+        {LANGUAGE_ARABIC_JORDAN,            "ARABIC (JORDAN)"       },
+        {LANGUAGE_ARABIC_LEBANON,           "ARABIC (LEBANON)"      },
+        {LANGUAGE_ARABIC_KUWAIT,            "ARABIC (KUWAIT)"       },
+        {LANGUAGE_ARABIC_UAE,               "ARABIC (UAE)"          },
+        {LANGUAGE_ARABIC_BAHRAIN,           "ARABIC (BAHRAIN)"      },
+        {LANGUAGE_ARABIC_QATAR,             "ARABIC (QATAR)"        },
+        {LANGUAGE_ARMENIAN,                 "ARMENIAN"              },
+        {LANGUAGE_ASSAMESE,                 "ASSAMESE"              },
+        {LANGUAGE_AZERI,                    "AZERI"                 },
+        {LANGUAGE_AZERI_LATIN,              "AZERI (LATIN)"         },
+        {LANGUAGE_AZERI_CYRILLIC,           "AZERI (CYRILLIC)"      },
+        {LANGUAGE_BASQUE,                   "BASQUE"                },
+        {LANGUAGE_BELARUSIAN,               "BELARUSIAN"            },
+        {LANGUAGE_BENGALI,                  "BENGALI"               },
+        {LANGUAGE_BULGARIAN,                "BULGARIAN"             },
+        {LANGUAGE_BURMESE,                  "BURMESE"               },
+        {LANGUAGE_CATALAN,                  "CATALAN"               },
+        {LANGUAGE_CHINESE,                  "CHINESE"               },
+        {LANGUAGE_CHINESE_TRADITIONAL,      "CHINESE (TRADITIONAL)" },
+        {LANGUAGE_CHINESE_SIMPLIFIED,       "CHINESE (SIMPLIFIED)"  },
+        {LANGUAGE_CHINESE_HONGKONG,         "CHINESE (HONGKONG)"    },
+        {LANGUAGE_CHINESE_SINGAPORE,        "CHINESE (SINGAPORE)"   },
+        {LANGUAGE_CHINESE_MACAU,            "CHINESE (MACAU)"       },
+        {LANGUAGE_CZECH,                    "CZECH"                 },
+        {LANGUAGE_DANISH,                   "DANISH"                },
+        {LANGUAGE_DUTCH,                    "DUTCH"                 },
+        {LANGUAGE_DUTCH_BELGIAN,            "DUTCH_BELGIAN"         },
+        {LANGUAGE_ENGLISH,                  "ENGLISH"               },
+        {LANGUAGE_ENGLISH_US,               "ENGLISH (US)"          },
+        {LANGUAGE_ENGLISH_UK,               "ENGLISH (UK)"          },
+        {LANGUAGE_ENGLISH_AUS,              "ENGLISH (AUS)"         },
+        {LANGUAGE_ENGLISH_CAN,              "ENGLISH (CAN)"         },
+        {LANGUAGE_ENGLISH_NZ,               "ENGLISH (NZ)"          },
+        {LANGUAGE_ENGLISH_EIRE,             "ENGLISH (EIRE)"        },
+        {LANGUAGE_ENGLISH_SAFRICA,          "ENGLISH (SAFRICA)"     },
+        {LANGUAGE_ENGLISH_JAMAICA,          "ENGLISH (JAMAICA)"     },
+        {LANGUAGE_ENGLISH_CARRIBEAN,        "ENGLISH (CARRIBEAN)"   },
+        {LANGUAGE_ENGLISH_BELIZE,           "ENGLISH (BELIZE)"      },
+        {LANGUAGE_ENGLISH_TRINIDAD,         "ENGLISH (TRINIDAD)"    },
+        {LANGUAGE_ENGLISH_ZIMBABWE,         "ENGLISH (ZIMBABWE)"    },
+        {LANGUAGE_ENGLISH_PHILIPPINES,      "ENGLISH (PHILIPPINES)" },
+        {LANGUAGE_ESTONIAN,                 "ESTONIAN"              },
+        {LANGUAGE_FAEROESE,                 "FAEROESE"              },
+        {LANGUAGE_FARSI,                    "FARSI"                 },
+        {LANGUAGE_FINNISH,                  "FINNISH"               },
+        {LANGUAGE_FRENCH,                   "FRENCH"                },
+        {LANGUAGE_FRENCH_BELGIAN,           "FRENCH (BELGIAN)"      },
+        {LANGUAGE_FRENCH_CANADIAN,          "FRENCH (CANADIAN)"     },
+        {LANGUAGE_FRENCH_SWISS,             "FRENCH (SWISS)"        },
+        {LANGUAGE_FRENCH_LUXEMBOURG,        "FRENCH (LUXEMBOURG)"   },
+        {LANGUAGE_FRENCH_MONACO,            "FRENCH (MONACO)"       },
+        {LANGUAGE_FRENCH_WEST_INDIES,       "FRENCH (WEST INDIES)"  },
+        {LANGUAGE_FRENCH_REUNION,           "FRENCH (REUNION)"      },
+        {LANGUAGE_FRENCH_ZAIRE,             "FRENCH (ZAIRE)"        },
+        {LANGUAGE_FRENCH_SENEGAL,           "FRENCH (SENEGAL)"      },
+        {LANGUAGE_FRENCH_CAMEROON,          "FRENCH (CAMEROON)"     },
+        {LANGUAGE_FRENCH_COTE_D_IVOIRE,     "FRENCH (COTE D IVOIRE)"},
+        {LANGUAGE_FRENCH_MALI,              "FRENCH (MALI)"         },
+        {LANGUAGE_FRISIAN_NETHERLANDS,      "FRISIAN (NETHERLANDS)" },
+        {LANGUAGE_GAELIC_SCOTLAND,          "GAELIC (SCOTLAND)"     },
+        {LANGUAGE_GAELIC_IRELAND,           "GAELIC (IRELAND)"      },
+        {LANGUAGE_GALICIAN,                 "GALICIAN"              },
+        {LANGUAGE_GEORGIAN,                 "GEORGIAN"              },
+        {LANGUAGE_GERMAN,                   "GERMAN"                },
+        {LANGUAGE_GERMAN_SWISS,             "GERMAN (SWISS)"        },
+        {LANGUAGE_GERMAN_AUSTRIAN,          "GERMAN (AUSTRIAN)"     },
+        {LANGUAGE_GERMAN_LUXEMBOURG,        "GERMAN (LUXEMBOURG)"   },
+        {LANGUAGE_GERMAN_LIECHTENSTEIN,     "GERMAN (LIECHTENSTEIN)"},
+        {LANGUAGE_GREEK,                    "GREEK"                 },
+        {LANGUAGE_GUJARATI,                 "GUJARATI"              },
+        {LANGUAGE_HEBREW,                   "HEBREW"                },
+        {LANGUAGE_HINDI,                    "HINDI"                 },
+        {LANGUAGE_HUNGARIAN,                "HUNGARIAN"             },
+        {LANGUAGE_ICELANDIC,                "ICELANDIC"             },
+        {LANGUAGE_INDONESIAN,               "INDONESIAN"            },
+        {LANGUAGE_ITALIAN,                  "ITALIAN"               },
+        {LANGUAGE_ITALIAN_SWISS,            "ITALIAN (SWISS)"       },
+        {LANGUAGE_JAPANESE,                 "JAPANESE"              },
+        {LANGUAGE_KANNADA,                  "KANNADA"               },
+        {LANGUAGE_KASHMIRI,                 "KASHMIRI"              },
+        {LANGUAGE_KASHMIRI_INDIA,           "KASHMIRI (INDIA)"      },
+        {LANGUAGE_KAZAK,                    "KAZAK"                 },
+        {LANGUAGE_KHMER,                    "KHMER"                 },
+        {LANGUAGE_KIRGHIZ,                  "KIRGHIZ"               },
+        {LANGUAGE_KONKANI,                  "KONKANI"               },
+        {LANGUAGE_KOREAN,                   "KOREAN"                },
+        {LANGUAGE_KOREAN_JOHAB,             "KOREAN (JOHAB)"        },
+        {LANGUAGE_LAO,                      "LAO"                   },
+        {LANGUAGE_LATVIAN,                  "LATVIAN"               },
+        {LANGUAGE_LITHUANIAN,               "LITHUANIAN"            },
+        {LANGUAGE_LITHUANIAN_CLASSIC,       "LITHUANIAN (CLASSIC)"  },
+        {LANGUAGE_MACEDONIAN,               "MACEDONIAN"            },
+        {LANGUAGE_MALAY,                    "MALAY"                 },
+        {LANGUAGE_MALAY_MALAYSIA,           "MALAY (MALAYSIA)"      },
+        {LANGUAGE_MALAY_BRUNEI_DARUSSALAM,  "MALAY (BRUNEI DARUSSALAM)"},
+        {LANGUAGE_MALAYALAM,                "MALAYALAM"             },
+        {LANGUAGE_MALTESE,                  "MALTESE"               },
+        {LANGUAGE_MANIPURI,                 "MANIPURI"              },
+        {LANGUAGE_MARATHI,                  "MARATHI"               },
+        {LANGUAGE_MONGOLIAN,                "MONGOLIAN"             },
+        {LANGUAGE_NEPALI,                   "NEPALI"                },
+        {LANGUAGE_NEPALI_INDIA,             "NEPALI (INDIA)"        },
+        {LANGUAGE_NORWEGIAN,                "NORWEGIAN"             },
+        {LANGUAGE_NORWEGIAN_BOKMAL,         "NORWEGIAN (BOKMAL)"    },
+        {LANGUAGE_NORWEGIAN_NYNORSK,        "NORWEGIAN (NYNORSK)"   },
+        {LANGUAGE_ORIYA,                    "ORIYA"                 },
+        {LANGUAGE_POLISH,                   "POLISH"                },
+        {LANGUAGE_PORTUGUESE,               "PORTUGUESE"            },
+        {LANGUAGE_PORTUGUESE_BRAZILIAN,     "PORTUGUESE (BRAZILIAN)"},
+        {LANGUAGE_PUNJABI,                  "PUNJABI"               },
+        {LANGUAGE_RHAETO_ROMAN,             "RHAETO (ROMAN)"        },
+        {LANGUAGE_ROMANIAN,                 "ROMANIAN"              },
+        {LANGUAGE_ROMANIAN_MOLDOVA,         "ROMANIAN (MOLDOVA)"    },
+        {LANGUAGE_RUSSIAN,                  "RUSSIAN"               },
+        {LANGUAGE_RUSSIAN_MOLDOVA,          "RUSSIAN (MOLDOVA)"     },
+        {LANGUAGE_SAMI_LAPPISH,             "SAMI (LAPPISH)"        },
+        {LANGUAGE_SANSKRIT,                 "SANSKRIT"              },
+        {LANGUAGE_SERBIAN,                  "SERBIAN"               },
+        {LANGUAGE_CROATIAN,                 "CROATIAN"              },
+        {LANGUAGE_SERBIAN_LATIN,            "SERBIAN (LATIN)"       },
+        {LANGUAGE_SERBIAN_CYRILLIC,         "SERBIAN (CYRILLIC)"    },
+        {LANGUAGE_SESOTHO,                  "SESOTHO"               },
+        {LANGUAGE_SINDHI,                   "SINDHI"                },
+        {LANGUAGE_SLOVAK,                   "SLOVAK"                },
+        {LANGUAGE_SLOVENIAN,                "SLOVENIAN"             },
+        {LANGUAGE_SORBIAN,                  "SORBIAN"               },
+        {LANGUAGE_SPANISH,                  "SPANISH"               },
+        {LANGUAGE_SPANISH_MEXICAN,          "SPANISH (MEXICAN)"     },
+        {LANGUAGE_SPANISH_MODERN,           "SPANISH (MODERN)"      },
+        {LANGUAGE_SPANISH_GUATEMALA,        "SPANISH (GUATEMALA)"   },
+        {LANGUAGE_SPANISH_COSTARICA,        "SPANISH (COSTARICA)"   },
+        {LANGUAGE_SPANISH_PANAMA,           "SPANISH (PANAMA)"      },
+        {LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,"SPANISH (DOMINICAN REPUBLIC)"},
+        {LANGUAGE_SPANISH_VENEZUELA,        "SPANISH (VENEZUELA)"   },
+        {LANGUAGE_SPANISH_COLOMBIA,         "SPANISH (COLOMBIA)"    },
+        {LANGUAGE_SPANISH_PERU,             "SPANISH (PERU)"        },
+        {LANGUAGE_SPANISH_ARGENTINA,        "SPANISH (ARGENTINA)"   },
+        {LANGUAGE_SPANISH_ECUADOR,          "SPANISH (ECUADOR)"     },
+        {LANGUAGE_SPANISH_CHILE,            "SPANISH (CHILE)"       },
+        {LANGUAGE_SPANISH_URUGUAY,          "SPANISH (URUGUAY)"     },
+        {LANGUAGE_SPANISH_PARAGUAY,         "SPANISH (PARAGUAY)"    },
+        {LANGUAGE_SPANISH_BOLIVIA,          "SPANISH (BOLIVIA)"     },
+        {LANGUAGE_SPANISH_EL_SALVADOR,      "SPANISH (EL SALVADOR)" },
+        {LANGUAGE_SPANISH_HONDURAS,         "SPANISH (HONDURAS)"    },
+        {LANGUAGE_SPANISH_NICARAGUA,        "SPANISH (NICARAGUA)"   },
+        {LANGUAGE_SPANISH_PUERTO_RICO,      "SPANISH (PUERTO RICO)" },
+        {LANGUAGE_SWAHILI,                  "SWAHILI"               },
+        {LANGUAGE_SWEDISH,                  "SWEDISH"               },
+        {LANGUAGE_SWEDISH_FINLAND,          "SWEDISH (FINLAND)"     },
+        {LANGUAGE_TAJIK,                    "TAJIK"                 },
+        {LANGUAGE_TAMIL,                    "TAMIL"                 },
+        {LANGUAGE_TATAR,                    "TATAR"                 },
+        {LANGUAGE_TELUGU,                   "TELUGU"                },
+        {LANGUAGE_THAI,                     "THAI"                  },
+        {LANGUAGE_TIBETAN,                  "TIBETAN"               },
+        {LANGUAGE_TSONGA,                   "TSONGA"                },
+        {LANGUAGE_TSWANA,                   "TSWANA"                },
+        {LANGUAGE_TURKISH,                  "TURKISH"               },
+        {LANGUAGE_TURKMEN,                  "TURKMEN"               },
+        {LANGUAGE_UKRAINIAN,                "UKRAINIAN"             },
+        {LANGUAGE_URDU,                     "URDU"                  },
+        {LANGUAGE_URDU_PAKISTAN,            "URDU (PAKISTAN)"       },
+        {LANGUAGE_URDU_INDIA,               "URDU (INDIA)"          },
+        {LANGUAGE_UZBEK,                    "UZBEK"                 },
+        {LANGUAGE_UZBEK_LATIN,              "UZBEK (LATIN)"         },
+        {LANGUAGE_UZBEK_CYRILLIC,           "UZBEK (CYRILLIC)"      },
+        {LANGUAGE_VENDA,                    "VENDA"                 },
+        {LANGUAGE_VIETNAMESE,               "VIETNAMESE"            },
+        {LANGUAGE_WELSH,                    "WELSH"                 },
+        {LANGUAGE_XHOSA,                    "XHOSA"                 },
+        {LANGUAGE_ZULU,                     "ZULU"                  },
+        {0,0}       //Last
+    };
+    return &aMapArr[0];
+}
+
+static LanguageType LanguageFromName(const String& rLngStr)
+{
+    const LangNameMap *pStart = GetLangNameMap();
+    LanguageType nRet = pStart->nId;
+
+    for (const LangNameMap *pMap = pStart; pMap->pLanguageNm; ++pMap)
+    {
+        if (rLngStr.EqualsIgnoreCaseAscii(pMap->pLanguageNm))
+        {
+            nRet = pMap->nId;
+            break;
+        }
+    }
+
+    ASSERT(nRet != pStart->nId, "TXT: That was an unknown language!");
+
+    return nRet;
+}
+
+static String NameFromLanguage(LanguageType nLang)
+{
+    const LangNameMap *pStart = GetLangNameMap();
+    const sal_Char *pRet = pStart->pLanguageNm;
+
+    for (const LangNameMap *pMap = pStart; pMap->pLanguageNm; ++pMap)
+    {
+        if (nLang == pMap->nId)
+        {
+            pRet = pMap->pLanguageNm;
+            break;
+        }
+    }
+
+    ASSERT(pRet != pStart->pLanguageNm, "TXT: That was an unknown language!");
+
+    return String::CreateFromAscii(pRet);
+}
 
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.
@@ -1497,9 +1327,8 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
             switch( nCnt )
             {
             case 0:     // CharSet
-                ::lcl_FindCharSet( TRUE, sToken, eCharSet );
+                eCharSet = CharSetFromName(sToken);
                 break;
-
             case 1:     // LineEnd
                 if( sToken.EqualsIgnoreCaseAscii( "CRLF" ))
                     eCRLF_Flag = LINEEND_CRLF;
@@ -1508,13 +1337,11 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                 else
                     eCRLF_Flag = LINEEND_CR;
                 break;
-
             case 2:     // fontname
                 sFont = sToken;
                 break;
-
             case 3:     // Language
-                ::lcl_FindLanguage( TRUE, sToken, nLanguage );
+                nLanguage = LanguageFromName(sToken);
                 break;
             }
         }
@@ -1524,18 +1351,22 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
 
 void SwAsciiOptions::WriteUserData( String& rStr )
 {
-    rStr.Erase();
-
     // 1. charset
-    ::lcl_FindCharSet( FALSE, rStr, eCharSet );
+    rStr = NameFromCharSet(eCharSet);
     rStr += ',';
 
     // 2. LineEnd
-    switch( eCRLF_Flag )
+    switch(eCRLF_Flag)
     {
-    case LINEEND_CRLF:  rStr.AppendAscii( "CRLF" );     break;
-    case LINEEND_CR:    rStr.AppendAscii(  "CR" );      break;
-    case LINEEND_LF:    rStr.AppendAscii(  "LF" );      break;
+        case LINEEND_CRLF:
+            rStr.AppendAscii( "CRLF" );
+            break;
+        case LINEEND_CR:
+            rStr.AppendAscii(  "CR" );
+            break;
+        case LINEEND_LF:
+            rStr.AppendAscii(  "LF" );
+            break;
     }
     rStr += ',';
 
@@ -1544,10 +1375,9 @@ void SwAsciiOptions::WriteUserData( String& rStr )
     rStr += ',';
 
     // 4. Language
-    if( nLanguage )
+    if (nLanguage)
     {
-        String sTmp;
-        ::lcl_FindLanguage( FALSE, sTmp, nLanguage );
+        String sTmp = NameFromLanguage(nLanguage);
         rStr += sTmp;
     }
     rStr += ',';
