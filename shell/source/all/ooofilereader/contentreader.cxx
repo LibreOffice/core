@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentreader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:28:49 $
+ *  last change: $Author: obo $ $Date: 2004-09-14 09:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ void CContentReader::start_element(
 {
     //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
-    assert( m_pTagBuilder != NULL );
+    assert( pTagBuilder != NULL );
     pTagBuilder->startTag( );
     m_TagBuilderStack.push( pTagBuilder );
 
