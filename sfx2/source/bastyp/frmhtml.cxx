@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:06:48 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 14:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,14 +779,8 @@ SfxFrameHTMLParser::SfxFrameHTMLParser( SfxMedium& rMedium,
 
     if ( pDoc )
     {
-        SfxItemSet* pSet = rMedium.GetItemSet();
-        SFX_ITEMSET_ARG(
-            pSet, pLoadRef, SfxRefItem, SID_LOADENVIRONMENT, FALSE);
-        if( pLoadRef )
-        {
-            ((SfxLoadEnvironment*)&pLoadRef->GetValue())->
-                DocumentDetected( _pDoc, ERRCODE_NONE );
-        }
+        if( rMedium.GetLoadEnvironment() )
+            rMedium.GetLoadEnvironment()->DocumentDetected( _pDoc, ERRCODE_NONE );
         pDocFrameSet = pDoc->pDescriptor;
     }
 }
@@ -817,14 +811,14 @@ SfxFrameHTMLParser::~SfxFrameHTMLParser()
 {
     if ( pDoc && GetMedium() )
     {
-        SfxItemSet* pSet = GetMedium()->GetItemSet();
-        const SfxPoolItem *pItem;
-        SfxItemState eItemState = pSet->GetItemState( SID_LOADENVIRONMENT, FALSE, &pItem );
-        SfxLoadEnvironment* pEnv = (SfxLoadEnvironment*)
-            &((const SfxRefItem*)pItem)->GetValue();
-        pEnv->SetDataAvailableLink( Link() );
-        pEnv->DocumentDetected( pDoc, 0 );
-        pSet->ClearItem( SID_LOADENVIRONMENT );
+        if( GetMedium()->GetLoadEnvironment() )
+        {
+            SfxLoadEnvironment* pEnv = GetMedium()->GetLoadEnvironment();
+            pEnv->SetDataAvailableLink( Link() );
+            pEnv->DocumentDetected( pDoc, 0 );
+            GetMedium()->SetLoadEnvironment( NULL );
+        }
+
         pDoc->SetTitle( pDoc->GetDocInfo().GetTitle() );
         pDoc->ReleaseRef();
         // FinishedLoading ruft die ViewShell!
@@ -838,12 +832,7 @@ SvParserState SfxFrameHTMLParser::CallParser()
     if ( pDoc && GetMedium() )
     {
         pDoc->AddRef();
-        SfxItemSet* pSet = GetMedium()->GetItemSet();
-        const SfxPoolItem *pItem;
-        SfxItemState eItemState = pSet->GetItemState( SID_LOADENVIRONMENT, FALSE, &pItem );
-        SfxLoadEnvironment* pEnv = (SfxLoadEnvironment*)
-            &((const SfxRefItem*)pItem)->GetValue();
-        pEnv->SetDataAvailableLink( GetAsynchCallLink() );
+        GetMedium()->GetLoadEnvironment()->SetDataAvailableLink( GetAsynchCallLink() );
     }
 
     SvParserState eState = HTMLParser::CallParser();
@@ -851,12 +840,7 @@ SvParserState SfxFrameHTMLParser::CallParser()
     if ( eState == SVPAR_ACCEPTED && pDoc && GetMedium() )
     {
         // DataAvailableLink zur"ucksetzen, damit den keiner mehr aufruft
-        SfxItemSet* pSet = GetMedium()->GetItemSet();
-        const SfxPoolItem *pItem;
-        SfxItemState eItemState = pSet->GetItemState( SID_LOADENVIRONMENT, FALSE, &pItem );
-        SfxLoadEnvironment* pEnv = (SfxLoadEnvironment*)
-            &((const SfxRefItem*)pItem)->GetValue();
-        pEnv->SetDataAvailableLink( Link() );
+        GetMedium()->GetLoadEnvironment()->SetDataAvailableLink( Link() );
     }
 
 //  INetURLObject::SetBaseURL( aBaseURL );

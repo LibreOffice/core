@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-07 07:36:01 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 14:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,219 +343,6 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
         m_xInter->handle( xRequest );
 }
 
-class FileSource_Impl   :   public ::com::sun::star::lang::XTypeProvider    ,
-                            public ::com::sun::star::io::XActiveDataSource  ,
-                            public ::com::sun::star::io::XActiveDataControl ,
-                            public ::com::sun::star::lang::XInitialization  ,
-                            public ::cppu::OWeakObject
-{
-private:
-    SvStream*           pStream;
-    SfxMedium*          pMedium;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener >   m_xListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >     m_xSink;
-
-public:
-
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
-
-                    FileSource_Impl();
-                    FileSource_Impl( SfxMedium* );
-    virtual         ~FileSource_Impl();
-
-    void            ResetMedium()
-                    { pMedium = NULL; pStream = NULL;}
-    DECL_LINK(      DataAvailableHdl, void* );
-
-                    // ::com::sun::star::io::XActiveDataControl
-    virtual void SAL_CALL   addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL   removeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL   start(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL   terminate(void) throw( ::com::sun::star::uno::RuntimeException );
-
-                    // ::com::sun::star::io::XActiveDataSource
-    virtual void SAL_CALL   setOutputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > & aStream) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL    getOutputStream(void) throw( ::com::sun::star::uno::RuntimeException );
-
-                    // ::com::sun::star::lang::XInitialization
-    virtual void SAL_CALL   initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException );
-
-};
-
-class FileSink_Impl :   public ::com::sun::star::lang::XTypeProvider    ,
-                        public ::com::sun::star::io::XOutputStream      ,
-                        public ::cppu::OWeakObject
-{
-private:
-    SvStream*       pStream;
-    SfxMedium*      pMedium;
-
-public:
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
-
-                    FileSink_Impl( SfxMedium* );
-    virtual         ~FileSink_Impl();
-
-    void            ResetMedium()
-                    { pMedium = NULL; pStream = NULL;}
-
-                    // ::com::sun::star::io::XOutputStream
-    virtual void  SAL_CALL  writeBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& aData) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
-    virtual void  SAL_CALL  flush(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
-    virtual void  SAL_CALL  closeOutput(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
-};
-
-SFX_IMPL_XINTERFACE_1( FileSink_Impl, OWeakObject, ::com::sun::star::io::XOutputStream )
-SFX_IMPL_XTYPEPROVIDER_1( FileSink_Impl, ::com::sun::star::io::XOutputStream )
-
-FileSink_Impl::FileSink_Impl( SfxMedium* pMed )
-    : pMedium( pMed )
-    , pStream( NULL )
-{
-}
-
-FileSink_Impl::~FileSink_Impl()
-{
-    if ( pMedium )
-        pMedium->ReleaseRef();
-}
-
-void SAL_CALL FileSink_Impl::writeBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& Buffer) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
-{
-    if ( !pStream && pMedium )
-        pStream = pMedium->GetOutStream();
-
-    if ( pStream )
-        pStream->Write( Buffer.getConstArray(), (sal_uInt32) Buffer.getLength() );
-}
-
-void SAL_CALL  FileSink_Impl::flush(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
-{
-    if ( pMedium )
-        pMedium->GetOutStream()->Flush();
-}
-
-void SAL_CALL  FileSink_Impl::closeOutput(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
-{
-    if ( pMedium )
-        pMedium->Close();
-}
-
-SFX_IMPL_XINTERFACE_3( FileSource_Impl, OWeakObject, ::com::sun::star::io::XActiveDataSource, ::com::sun::star::io::XActiveDataControl, ::com::sun::star::lang::XInitialization )
-SFX_IMPL_XTYPEPROVIDER_3( FileSource_Impl, ::com::sun::star::io::XActiveDataSource, ::com::sun::star::io::XActiveDataControl, ::com::sun::star::lang::XInitialization )
-
-FileSource_Impl::FileSource_Impl()
-    : pMedium( NULL )
-    , pStream( NULL )
-{
-}
-
-void SAL_CALL  FileSource_Impl::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    const ::com::sun::star::uno::Any *pArr = Arguments.getConstArray();
-    ::rtl::OUString aName ;
-    pArr[0] >>= aName ;
-    if ( aName.getLength() )
-    {
-        pMedium = new SfxMedium( aName, STREAM_STD_READ, sal_True );
-        pMedium->SetTransferPriority( SFX_TFPRIO_SYNCHRON );
-        pMedium->SetDataAvailableLink( LINK( this, FileSource_Impl, DataAvailableHdl ) );
-        pMedium->SetDoneLink( LINK( this, FileSource_Impl, DataAvailableHdl ) );
-        pMedium->AddRef();
-    }
-}
-
-FileSource_Impl::FileSource_Impl( SfxMedium* pMed )
-    : pMedium( pMed )
-    , pStream( NULL )
-{
-}
-
-FileSource_Impl::~FileSource_Impl()
-{
-    if ( pMedium )
-        pMedium->ReleaseRef();
-}
-
-void SAL_CALL  FileSource_Impl::addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
-{
-    if( m_xListener.is() )
-    {
-        DBG_ERROR( "addSourceControllerListener called when already having a listener!" );
-    }
-    m_xListener = aListener;
-}
-
-void SAL_CALL  FileSource_Impl::removeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
-{
-    m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
-}
-
-void SAL_CALL  FileSource_Impl::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > & Listener )throw( ::com::sun::star::uno::RuntimeException )
-{
-    m_xSink = Listener;
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  SAL_CALL  FileSource_Impl::getOutputStream(void) throw( ::com::sun::star::uno::RuntimeException )
-{
-    return m_xSink;
-}
-
-IMPL_LINK( FileSource_Impl, DataAvailableHdl, void*, pVoid )
-{
-    if ( !pStream )
-        pStream = pMedium->GetInStream();
-
-    if ( pStream && m_xSink.is() )
-    {
-        sal_Int8 buf[ 65536 ];
-        sal_uInt32 nBytes = 1;
-        while( nBytes && pStream->GetError() != ERRCODE_IO_PENDING )
-        {
-            nBytes = pStream->Read( buf, (sal_uInt32) sizeof( buf ) );
-            if ( nBytes )
-                m_xSink->writeBytes( ::com::sun::star::uno::Sequence<sal_Int8>( buf, nBytes ) );
-        }
-
-        if ( pStream->GetError() == ERRCODE_IO_PENDING )
-            pStream->ResetError();
-        else
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xRef( this );
-            m_xSink->closeOutput();
-            m_xSink = ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > ();
-            if( m_xListener.is() )
-                m_xListener->closed();
-            m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
-            pMedium->GetItemSet()->ClearItem( SID_LOADENVIRONMENT );
-        }
-    }
-
-    return 0;
-}
-
-void SAL_CALL  FileSource_Impl::start() throw( ::com::sun::star::uno::RuntimeException )
-{
-    pStream = pMedium->GetInStream();
-    if ( pStream && m_xSink.is() )
-        DataAvailableHdl( 0 );
-}
-
-void SAL_CALL  FileSource_Impl::terminate() throw( ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xRef( this );
-    if ( m_xSink.is() )
-        m_xSink->closeOutput();
-
-    m_xSink = ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > ();
-    if( m_xListener.is() )
-        m_xListener->closed();
-    m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
-    pMedium->CancelTransfers();
-    pMedium->GetItemSet()->ClearItem( SID_LOADENVIRONMENT );
-    pMedium->Close();
-}
-
 String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper);
 
 //----------------------------------------------------------------
@@ -644,6 +431,7 @@ public:
     SfxFrameWeak     wLoadTargetFrame;
     LoadEnvironment_Impl* pLoadEnv;
     SvKeyValueIteratorRef xAttributes;
+    SvRefBaseRef    xLoadRef;
 
     svtools::AsynchronLink  aDoneLink;
     svtools::AsynchronLink  aAvailableLink;
@@ -654,8 +442,6 @@ public:
     ::utl::TempFile*           pTempFile;
 
     Reference < XInputStream > xInputStream;
-    WeakReference < XActiveDataSource > wSource;
-    WeakReference < XOutputStream > wSink;
     ::utl::UcbLockBytesRef     xLockBytes;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
@@ -2541,37 +2327,12 @@ void SfxMedium::SetDontCreateCancellable( )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  SfxMedium::GetDataSource()
 {
-    Reference < XActiveDataSource > xRet( pImp->wSource.get(), UNO_QUERY );
-    if ( !xRet.is() )
-    {
-        SfxLoadEnvironment *pEnv = NULL;
-        if ( pImp->pLoadEnv )
-        {
-            pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
-            SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
-            GetItemSet()->Put( aItem );
-        }
-
-        FileSource_Impl* pSource = new FileSource_Impl( this );
-        xRet = pSource;
-        pImp->wSource = xRet;
-        if ( pEnv )
-            pEnv->SetDataAvailableLink( LINK( pSource, FileSource_Impl, DataAvailableHdl ) );
-    }
-
-    return xRet;
+    return ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  SfxMedium::GetDataSink()
 {
-    Reference < XOutputStream > xRet( pImp->wSink.get(), UNO_QUERY );
-    if ( !xRet.is() )
-    {
-        xRet = new FileSink_Impl( this );
-        pImp->wSink = xRet;
-    }
-
-    return xRet;
+    return ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()
@@ -2817,6 +2578,16 @@ void SfxMedium::CreateTempFileNoCopy()
 
     CloseOutStream_Impl();
     CloseStorage();
+}
+
+void SfxMedium::SetLoadEnvironment( SfxLoadEnvironment* pEnv )
+{
+    pImp->xLoadRef = pEnv;
+}
+
+SfxLoadEnvironment* SfxMedium::GetLoadEnvironment() const
+{
+    return (SfxLoadEnvironment*) &pImp->xLoadRef;
 }
 
 //----------------------------------------------------------------
