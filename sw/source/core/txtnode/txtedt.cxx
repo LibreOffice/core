@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 16:49:10 $
+ *  last change: $Author: ama $ $Date: 2001-03-14 10:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,6 +709,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 
     BOOL bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
                         GetShell()->GetViewOptions()->IsAutoCompleteWords();
+    BOOL bIncInsertPos = FALSE;
 
     if( pNode->GetWrong() )
     {
@@ -722,6 +723,10 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         else
             nEnd = nInsertPos;
         nInsertPos = pNode->GetWrong()->GetPos( nBegin );
+        if( nInsertPos < pNode->GetWrong()->Count() &&
+            nBegin == pNode->GetWrong()->Pos( nInsertPos ) +
+                      pNode->GetWrong()->Len( nInsertPos ) )
+            bIncInsertPos = TRUE;
     }
     else
     {
@@ -741,6 +746,12 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE );
         while( aScanner.NextWord( eActLang ) )
         {
+            if( bIncInsertPos )
+            {
+                bIncInsertPos = FALSE;
+                if( aScanner.GetBegin() >= nBegin )
+                    ++nInsertPos;
+            }
             const XubString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
             nLen = aScanner.GetLen();
