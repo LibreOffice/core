@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemShellExecute.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 09:33:22 $
+ *  last change: $Author: tra $ $Date: 2001-04-27 14:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ interface XSystemShellExecute: com::sun::star::uno::XInterface
         @param aCommand
         specifies the command to execute, this may be an executable file or a
         document which is registered with an application etc.
+        if the command specifies a path to an executable etc, this has to be
+        a system specific path
 
         @param aParameter
         specifies a list of space separated parameters, the method doesn't
