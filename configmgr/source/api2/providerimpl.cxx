@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:28:12 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,11 +184,12 @@ namespace configmgr
     //=============================================================================
     //-----------------------------------------------------------------------------
     OProviderImpl::OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext)
-                  :m_pNewProviders(0)
-                  ,m_pProvider(_pProvider)
+                  :m_pProvider(_pProvider)
+                  ,m_xTypeConverter()
+                  ,m_aDefaultOptions()
+                  ,m_pNewProviders(NULL)
                   ,m_aTreeManagerMutex()
                   ,m_pTreeManager(NULL)
-                  ,m_aDefaultOptions()
     {
         OSL_ENSURE(_xContext.is(), "OProviderImpl : NULL context !");
 
@@ -906,9 +907,7 @@ namespace configmgr
     {
         _nLevels = treeop::ALL_LEVELS; // setting a fallback
 
-        // the args have to be a sequence of property values
-        bool bLegacyFormat = false;
-
+        // the args have to be a sequence of property or named values
         beans::NamedValue    aNV;
         beans::PropertyValue aPV;
         for (sal_Int32 i=0; i<_rArgs.getLength(); ++i)
