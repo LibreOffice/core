@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace drafts {
 
 class SwDoc;
 class SfxPrinter;
+class VirtualDevice;
 class SfxProgress;
 class SwRootFrm;
 class SwNodes;
@@ -151,11 +152,9 @@ class ViewShell : public Ring
     SwViewImp    *pImp;             //Core-Interna der ViewShell.
                                     //Der Pointer ist niemals 0.
 
-    Window       *pWin;              //Ist 0, wenn gedruckt wird.
-    OutputDevice *pOut;              //Fuer alle Ausgaben. Kann sein:
-                                     //Window, Printer, VirtDev, ...
-    OutputDevice *pRef;              //Formatierreferenzdevice, soll zum
-    // Formatieren benutzt werden, wenn gesetzt (Prospekt+Seitenvorschaudruck)
+    Window       *pWin;              // = 0 during printing or pdf export
+    OutputDevice *pOut;              // Window, Printer, VirtDev, ...
+
 
     SwViewOption *pOpt;
     SwAccessibilityOptions* pAccOptions;
@@ -218,8 +217,6 @@ public:
     const SwViewImp *Imp() const { return pImp; }
 
     const SwNodes& GetNodes() const;
-
-    SfxPrinter*     GetPrt( sal_Bool bCreate = sal_False ) const;
 
     //Nach Druckerwechsel, vom Doc
     //pPDFOut != NULL is used for PDF export.
@@ -293,21 +290,21 @@ public:
 
     inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
 
-    //'Drei' OutputDevices sind relevant:
-    //Der Drucker (am Dokument). Er bestimmt immer die FontMetriken.
-    //Das Window, gibt es nur wenn nicht gerade gedruckt wird.
-    //Das OutputDevice. Auf diesem Device finden grunds„tzlich alle
-    //Ausgaben statt. Der Pointer zeigt auf das Window, den Drucker oder
-    //auch mal ein VirtualDevice (z.B. Refresh der Scrollrects).
-    inline OutputDevice *GetOut()    const { return pOut; }
-    inline Window       *GetWin()    const { return pWin; }
+    // 1. GetPrt:      The printer at the document
+    // 3. GetRefDev:   Either the printer or the virtual device from the doc
+    // 2. GetWin:      Available if we not printing
+    // 4. GetOut:      Printer, Window or Virtual device
+    SfxPrinter* GetPrt( sal_Bool bCreate = sal_False ) const;
+    VirtualDevice* GetVirDev( sal_Bool bCreate = sal_False ) const;
+    OutputDevice& GetRefDev() const;
+    inline Window* GetWin()    const { return pWin; }
+    inline OutputDevice* GetOut()     const { return pOut; }
 
-    inline OutputDevice *GetReferenzDevice() const { return pRef; }
-    inline void SetReferenzDevice( OutputDevice* pNew ) { pRef = pNew; }
     static inline sal_Bool IsLstEndAction() { return ViewShell::bLstAct; }
 
     // Setzt Drucker fuer ALLE Sichten im Ring; einschl. Invalidierungen
-    void SetPrt(SfxPrinter *);
+    void SetPrt( SfxPrinter* );
+    void SetVirDev( VirtualDevice* );
 
     //Andern alle PageDescriptoren
     void   ChgAllPageOrientation( sal_uInt16 eOri );
@@ -344,6 +341,10 @@ public:
     // compatible behaviour of tabs
     sal_Bool IsTabCompat() const;
     void SetTabCompat( sal_Bool bNew );
+
+    //formatting by virtual device or printer
+    sal_Bool IsUseVirtualDevice()const;
+    void SetUseVirtualDevice(sal_Bool bSet);
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();
