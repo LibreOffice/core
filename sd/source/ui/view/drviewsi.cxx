@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-11 08:28:31 $
+ *  last change: $Author: ka $ $Date: 2001-09-06 15:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,27 +1152,26 @@ void SdDrawViewShell::AssignFromEffectWindow()
                 /*******************************************************
                 |* ggfs. in Preview anzeigen
                 \******************************************************/
-                SfxChildWindow* pPreviewChildWindow =
-                    GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-                if ( pPreviewChildWindow && ePageKind != PK_HANDOUT )
-                {
-                    SdPreviewWin* pPreviewWin =
-                        (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-                    if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
-                    {
-                        for (nObject = 0; nObject < nCount; nObject++)
-                        {
-                            SdrObject* pObject = rMarkList.GetMark(nObject)->
-                                                                    GetObj();
+                SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
 
-                            pInfo = pDoc->GetAnimationInfo(pObject);
-                            if (pInfo)
+                if( pPreviewChildWindow && ePageKind != PK_HANDOUT )
+                {
+                    SdPreviewWin* pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow();
+
+                    if( pPreviewWin && pPreviewWin->GetDoc() == pDoc )
+                    {
+                        for( nObject = 0; nObject < nCount; nObject++ )
+                        {
+                            if( rMarkList.GetMark( nObject ) )
                             {
-                                // das Pfadobjekt fuer 'an Kurve entlang'?
-                                if (!(eEffect == presentation::AnimationEffect_PATH &&
-                                     pObject == pPath))
+                                SdrObject* pObject = rMarkList.GetMark( nObject )->GetObj();
+
+                                if( pObject )
                                 {
-                                    pPreviewWin->HideAndAnimateObject(pObject);
+                                    pInfo = pDoc->GetAnimationInfo( pObject );
+
+                                    if( pInfo && !( eEffect == presentation::AnimationEffect_PATH && pObject == pPath ) )
+                                        pPreviewWin->HideAndAnimateObject( pObject );
                                 }
                             }
                         }
