@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:19 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:47:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,9 @@ JAVA_RUNTIME=-ljava_g
 CXX*=g++
 CC*=gcc
 .IF "$(GLIBC)"=="2"
-CFLAGS=-w -c -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
+CFLAGS=-c -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
 .ELSE
-CFLAGS=-w -c -I. -I/usr/solar/inc/pthread_provenzano -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
+CFLAGS=-c -I. -I/usr/solar/inc/pthread_provenzano -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC)
 .ENDIF
 CFLAGSCC=-pipe -mpentium -fguiding-decls
 CFLAGSCXX=-pipe -mpentium -fguiding-decls
