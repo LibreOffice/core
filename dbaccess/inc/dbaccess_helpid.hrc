@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:48:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 13:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #define UID_CTL_CONTENT                             (HID_DBACCESS_START + 21)
 #define HID_TLB_TABBROWSER                          (HID_DBACCESS_START + 22)
 #define HID_TLB_TREELISTBOX                         (HID_DBACCESS_START + 23)
+#define HID_DSADMIN_DATASOURCE_SELECTOR_NEWDS       (HID_DBACCESS_START + 24)
+#define HID_DSADMIN_DATASOURCE_SELECTOR_DSLIST      (HID_DBACCESS_START + 25)
 
 
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -102,6 +104,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/01 11:48:33  oj
+ *  #81036# some new help ids
+ *
  *  Revision 1.3  2000/11/30 16:54:31  oj
  *  #81036# new helpids
  *
