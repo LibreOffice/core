@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_selem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,13 @@
 #include <s2_luidl/pe_selem.hxx>
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_structelem.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
-#include <csi/l_uidl/struelem.hxx>
 
 
 namespace csi
@@ -77,20 +79,22 @@ namespace uidl
 
 
 PE_StructElement::PE_StructElement( RStructElement &    o_rResult,
-                                    const RStruct &     i_rCurStruct )
+                                    const RStruct &     i_rCurStruct,
+                                    bool                i_IsExceptionElement )
     :   eState(e_none),
         pResult(&o_rResult),
         pCurStruct(&i_rCurStruct),
         pPE_Type(0),
-        pType(0)
-        // sName
+        nType(0),
+        sName(),
+        bIsExceptionElement(i_IsExceptionElement)
 {
-    pPE_Type = new PE_Type(pType);
+    pPE_Type = new PE_Type(nType);
 }
 
 void
 PE_StructElement::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                     ary::Repository &          io_rRepository,
+                                     ary::n22::Repository &     io_rRepository,
                                      TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -154,20 +158,33 @@ PE_StructElement::InitData()
 {
     eState = expect_type;
 
-    pType = 0;
+    nType = 0;
     sName = "";
 }
 
 void
 PE_StructElement::TransferData()
 {
-    DYN StructElement * pNew = new StructElement;
-    pNew->Data().pType = pType;
-    pNew->Data().sName = sName;
-
     csv_assert(pResult != 0 AND pCurStruct != 0);
-    *pResult = Gate().Store_StructElement( pCurStruct->Id(), *pNew );
-    PassDocuAt(pResult->Id());
+
+    ary::idl::StructElement *
+        pCe = 0;
+    if (bIsExceptionElement)
+    {
+        pCe = & Gate().Ces().Store_ExceptionMember(
+                                            *pCurStruct,
+                                            sName,
+                                            nType );
+    }
+    else
+    {
+        pCe = & Gate().Ces().Store_StructMember(
+                                            *pCurStruct,
+                                            sName,
+                                            nType );
+    }
+    *pResult = pCe->CeId();
+    PassDocuAt(*pCe);
 
     eState = e_none;
 }

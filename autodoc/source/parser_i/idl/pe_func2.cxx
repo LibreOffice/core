@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_func2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,16 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/idl/i_function.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_vari2.hxx>
 #include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
-#include <csi/l_uidl/function.hxx>
+#include <x_parse2.hxx>
 
 
 namespace csi
@@ -83,25 +86,29 @@ namespace uidl
 PE_Function::PE_Function( RFunction &           o_rResult,
                           const RInterface &    i_rCurInterface )
     :   eState(e_none),
-        pData(0),
+        sData_Name(),
+        nData_ReturnType(0),
+        bData_Const(false),
+        bData_Oneway(false),
+        pCurFunction(0),
         pResult(&o_rResult),
         pCurInterface(&i_rCurInterface),
         pPE_Type(0),
-        aCurParsedType(0),
-        // sName,
+        nCurParsedType(0),
+        sName(),
         pPE_Variable(0),
-        eCurParsedParam_Direction(param_in),
-        aCurParsedParam_Type(0)
-        // sCurParsedParam_Name
+        eCurParsedParam_Direction(ary::idl::param_in),
+        nCurParsedParam_Type(0),
+        sCurParsedParam_Name()
 {
-    pPE_Type        = new PE_Type(aCurParsedType);
-    pPE_Variable    = new PE_Variable(aCurParsedParam_Type, sCurParsedParam_Name);
+    pPE_Type        = new PE_Type(nCurParsedType);
+    pPE_Variable    = new PE_Variable(nCurParsedParam_Type, sCurParsedParam_Name);
 }
 
 
 void
 PE_Function::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                                ary::Repository &        io_rRepository,
+                                ary::n22::Repository &       io_rRepository,
                                 TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -127,11 +134,11 @@ PE_Function::Process_Stereotype( const TokStereotype & i_rToken )
         switch (i_rToken.Id())
         {
             case TokStereotype::ste_const:
-                        pData->Data().bConst = true;
+                        bData_Const = true;
                         SetResult(done, stay);
                         break;
             case TokStereotype::ste_oneway:
-                        pData->Data().bOneway = true;
+                        bData_Oneway = true;
                         SetResult(done, stay);
                         break;
             default:
@@ -151,9 +158,19 @@ PE_Function::Process_Identifier( const TokIdentifier & i_rToken )
                     GoIntoReturnType();
                     break;
         case expect_name:
-                    pData->Data().sName = i_rToken.Text();
+                    sData_Name = i_rToken.Text();
                     SetResult(done,stay);
                     eState = expect_params_list;
+                    pCurFunction = &Gate().Ces().Store_Function(
+                                                    *pCurInterface,
+                                                    sData_Name,
+                                                    nData_ReturnType,
+                                                    bData_Oneway,
+                                                    bData_Const );
+                    *pResult = pCurFunction->CeId();
+                    PassDocuAt(*pCurFunction);
+
+
                     break;
         case expect_parameter_variable:
                     GoIntoParameterVariable();
@@ -265,13 +282,13 @@ PE_Function::Process_ParameterHandling( const TokParameterHandling & i_rToken )
     switch (i_rToken.Id())
     {
         case TokParameterHandling::ph_in:
-                    eCurParsedParam_Direction = param_in;
+                    eCurParsedParam_Direction = ary::idl::param_in;
                     break;
         case TokParameterHandling::ph_out:
-                    eCurParsedParam_Direction = param_out;
+                    eCurParsedParam_Direction = ary::idl::param_out;
                     break;
         case TokParameterHandling::ph_inout:
-                    eCurParsedParam_Direction = param_inout;
+                    eCurParsedParam_Direction = ary::idl::param_inout;
                     break;
         default:
                     csv_assert(false);
@@ -335,19 +352,25 @@ PE_Function::GoIntoException()
 void
 PE_Function::OnDefault()
 {
-    csv_assert(1==2);
+    throw X_AutodocParser(X_AutodocParser::x_Any);
 }
 
 void
 PE_Function::InitData()
 {
     eState = e_start;
-    pData = new Function;
+
+    sData_Name.clear();
+    nData_ReturnType = 0;
+    bData_Const = false;
+    bData_Oneway = false;
+    pCurFunction = 0;
+
     *pResult = 0;
-    aCurParsedType = 0;
-    eCurParsedParam_Direction = param_in;
-    aCurParsedParam_Type = 0;
-    sCurParsedParam_Name = "";
+    nCurParsedType = 0;
+    eCurParsedParam_Direction = ary::idl::param_in;
+    nCurParsedParam_Type = 0;
+    sCurParsedParam_Name.clear();
 }
 
 void
@@ -356,22 +379,24 @@ PE_Function::ReceiveData()
     switch (eState)
     {
         case in_return_type:
-                pData->Data().pReturnType = aCurParsedType;
-                aCurParsedType = 0;
+                nData_ReturnType = nCurParsedType;
+                nCurParsedType = 0;
                 eState = expect_name;
                 break;
         case in_parameter_variable:
-                pData->Data().aParameters.push_back(
-                        Parameter(  aCurParsedParam_Type,
+                csv_assert(pCurFunction != 0);
+                pCurFunction->Add_Parameter(
                                     sCurParsedParam_Name,
-                                    eCurParsedParam_Direction ) );
+                                    nCurParsedParam_Type,
+                                    eCurParsedParam_Direction );
                 sCurParsedParam_Name = "";
-                aCurParsedParam_Type = 0;
-                eCurParsedParam_Direction = param_in;
+                nCurParsedParam_Type = 0;
+                eCurParsedParam_Direction = ary::idl::param_in;
                 eState = expect_parameter_separator;
                 break;
         case in_exception:
-                pData->Data().aRaisedExceptions.push_back(aCurParsedType);
+                csv_assert(pCurFunction != 0);
+                pCurFunction->Add_Exception(nCurParsedType);
                 eState = expect_exception_separator;
                 break;
         default:
@@ -382,11 +407,7 @@ PE_Function::ReceiveData()
 void
 PE_Function::TransferData()
 {
-    *pResult = Gate().Store_Function( pCurInterface->Id(), *pData );
-    PassDocuAt(pResult->Id());
-
-    pData = 0;
-
+    pCurFunction = 0;
     eState = e_none;
 }
 

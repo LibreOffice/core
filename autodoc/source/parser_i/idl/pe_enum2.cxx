@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_enum2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,15 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_enum.hxx>
+#include <ary/idl/i_enumvalue.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_evalu.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_keyw.hxx>
-#include <csi/l_uidl/enum.hxx>
-#include <csi/l_uidl/enumvalu.hxx>
-#include <ary_i/uidl/gate.hxx>
 
 
 namespace csi
@@ -109,18 +110,19 @@ PE_Enum::CallHandler( const char *      i_sTokenText,
 
 PE_Enum::PE_Enum()
     :   eState(e_none),
-        pData(0),
-        pPE_Value(0)
-        // sName
-        // sAssignment
+        sData_Name(),
+        nDataId(0),
+        pPE_Value(0),
+        sName(),
+        sAssignment()
 {
     pPE_Value = new PE_Value(sName, sAssignment, false);
 }
 
 void
 PE_Enum::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                                ary::Repository &           io_rRepository,
-                                TokenProcessing_Result &    o_rResult )
+                            ary::n22::Repository &      io_rRepository,
+                            TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Value->EstablishContacts(this,io_rRepository,o_rResult);
@@ -162,10 +164,11 @@ PE_Enum::On_expect_curl_bracket_open_Punctuation(const char * i_sText)
 {
     if ( i_sText[0] == '{')
     {
-        pData = new Enum;
-        pData->Data().sName = sName;
-        nDataId = Gate().Store_Enum(CurNamespace().Id(),*pData).Id();
-        PassDocuAt(nDataId);
+        sData_Name = sName;
+        ary::idl::Enum &
+            rCe = Gate().Ces().Store_Enum(CurNamespace().CeId(), sData_Name);
+        PassDocuAt(rCe);
+        nDataId = rCe.CeId();
 
         SetResult(done,stay);
         eState = expect_value;
@@ -227,15 +230,9 @@ PE_Enum::EmptySingleValueData()
 void
 PE_Enum::CreateSingleValue()
 {
-    DYN EnumValue * dpValue = new EnumValue;
-
-    dpValue->Data().sName = sName;
-    dpValue->Data().sValue = sAssignment;
-
-    ary::Cei nId = Gate().Store_EnumValue( nDataId, *dpValue ).Id();
-    pPE_Value->PassDocuAt(nId);
-
-    pData->Data().aValues.push_back(nId);
+    ary::idl::EnumValue &
+        rCe = Gate().Ces().Store_EnumValue( nDataId, sName, sAssignment );
+    pPE_Value->PassDocuAt(rCe);
 }
 
 void
@@ -243,7 +240,7 @@ PE_Enum::InitData()
 {
     eState = expect_name;
 
-    pData = 0;
+    sData_Name.clear();
     nDataId = 0;
 
     EmptySingleValueData();
@@ -274,7 +271,7 @@ PE_Enum::ReceiveData()
 void
 PE_Enum::TransferData()
 {
-    csv_assert(pData != 0);
+    csv_assert(sData_Name.length() > 0);
     eState = e_none;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_selem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,7 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
-#include <ary_i/uidl/gate.hxx>
+#include <ary/idl/i_gate.hxx>
 
 
 namespace udm {
@@ -92,15 +91,16 @@ class PE_StructElement : public UnoIDL_PE,
                          public ParseEnvState
 {
   public:
-    typedef ary::uidl::Gate::RStructElement RStructElement;
-    typedef ary::uidl::Gate::RStruct        RStruct;
+    typedef ary::idl::Ce_id       RStructElement;
+    typedef ary::idl::Ce_id       RStruct;
 
                         PE_StructElement(
                             RStructElement &    o_rResult,
-                            const RStruct &     i_rCurStruct );
+                            const RStruct &     i_rCurStruct,
+                            bool                i_IsExceptionElement );
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_StructElement();
@@ -129,12 +129,14 @@ class PE_StructElement : public UnoIDL_PE,
     virtual void        TransferData();
     virtual UnoIDL_PE & MyPE();
 
+    // DATA
     E_State             eState;
     RStructElement *    pResult;
     const RStruct *     pCurStruct;
+    bool                bIsExceptionElement;
 
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   pType;
+    ary::idl::Type_id   nType;
     udmstri             sName;
 };
 

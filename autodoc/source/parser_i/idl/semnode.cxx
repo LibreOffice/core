@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semnode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/ary.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_module.hxx>
 #include <ary_i/codeinf2.hxx>
-#include <ary_i/uidl/gate.hxx>
-#include <ary_i/uidl/cenamesp.hxx>
 #include <s2_luidl/parsenv2.hxx>
 
 
@@ -86,11 +86,11 @@ SemanticNode::SemanticNode()
 
 void
 SemanticNode::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                 ary::Repository &          io_rRepository,
+                                 ary::n22::Repository &     io_rRepository,
                                  TokenProcessing_Result &   o_rResult )
 {
     pParentPE       =  io_pParentPE;
-    pAryGate        = &io_rRepository.RwGate_Idl();
+    pAryGate        = &io_rRepository.Gate_Idl();
     pTokenResult    = &o_rResult;
 }
 

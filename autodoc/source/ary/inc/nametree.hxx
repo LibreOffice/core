@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nametree.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:18 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
     // COMPONENTS
 #include <ary/ids.hxx>
 #include "instlist.hxx"
+#include "namesort.hxx"
     // PARAMETERS
 
 
@@ -79,15 +80,17 @@ namespace ary
 class NameTree
 {
   public:
+#if 0 // Test new comparison
     struct Less_Name
     {
         bool                operator()(
                                 const udmstri &     i_r1,
                                 const udmstri &     i_r2 ) const;
     };
+#endif // 0
     typedef std::map<  udmstri,
                        InstanceList,
-                       Less_Name >              Map_Name2Inst;
+                       CompareCeNames >         Map_Name2Inst;
 
     typedef Map_Name2Inst::const_iterator       const_iterator;
     typedef Map_Name2Inst::iterator             iterator;

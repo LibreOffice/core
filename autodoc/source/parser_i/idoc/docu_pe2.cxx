@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,12 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary_i/codeinf2.hxx>
+#include <ary_i/d_token.hxx>
 #include <s2_dsapi/dsapitok.hxx>
 #include <s2_dsapi/tk_atag2.hxx>
 #include <s2_dsapi/tk_html.hxx>
 #include <s2_dsapi/tk_docw2.hxx>
 #include <s2_dsapi/tk_xml.hxx>
-#include <csi/d_sapi/d_token.hxx>
 
 
 #ifdef UNX

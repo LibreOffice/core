@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@
 
 namespace ary
 {
-namespace uidl
+namespace idl
 {
-class CeNamespace;
-}   // namespace uidl
+class Module;
+}   // namespace idl
 }   // namespace ary
 
 
@@ -88,6 +88,7 @@ namespace uidl
 
 class TokenDistributor;
 class PE_Service;
+class PE_Singleton;
 class PE_Interface;
 class PE_Struct;
 class PE_Exception;
@@ -104,7 +105,7 @@ class PE_File : public UnoIDL_PE,
                             TokenDistributor &  i_rTokenAdmin );
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_File();
@@ -138,13 +139,12 @@ class PE_File : public UnoIDL_PE,
     virtual void        TransferData();
     virtual void        ReceiveData();
     virtual UnoIDL_PE & MyPE();
-    virtual ary::uidl::CeNamespace &
+    virtual const ary::idl::Module &
                         CurNamespace() const;
-
-
     // DATA
     TokenDistributor *  pTokenAdmin;
     Dyn<PE_Service>     pPE_Service;
+    Dyn<PE_Singleton>   pPE_Singleton;
     Dyn<PE_Interface>   pPE_Interface;
     Dyn<PE_Struct>      pPE_Struct;
     Dyn<PE_Exception>   pPE_Exception;
@@ -152,7 +152,7 @@ class PE_File : public UnoIDL_PE,
     Dyn<PE_Enum>        pPE_Enum;
     Dyn<PE_Typedef>     pPE_Typedef;
 
-    ary::uidl::CeNamespace *
+    const ary::idl::Module *
                         pCurNamespace;
 
     E_State             eState;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:26 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,20 +163,47 @@ Parse::Options()
      if ( aOptions_.size() > 0 )
         return aOptions_;
 
-    aOptions_[udmstri(C_opt_Parse)] = &Parse::FI_Start_ParseOptions;
-    aOptions_[udmstri(C_opt_Name)] = &Parse::FI_SetName;
-    aOptions_[udmstri(C_opt_Update)] = &Parse::FI_SetUpdate;
-    aOptions_[udmstri(C_opt_LangAll)] = &Parse::FI_SetLanguage4All;
-    aOptions_[udmstri(C_opt_ExtensionsAll)] = &Parse::FI_SetExtensions4All;
-    aOptions_[udmstri(C_opt_DocAll)] = &Parse::FI_SetDocAttrs4All;
+    // Workaround for MacOSX, gcc3 compiler bug with
+    //   assigning temporaries of member function ptrs
+    //   to const references of them:
+    F_Init fTemp = &Parse::FI_Start_ParseOptions;
+    aOptions_[udmstri(C_opt_Parse)] = fTemp;
 
-    aOptions_[udmstri(C_opt_Project)] = &Parse::FI_Start_ProjectOptions;
-    aOptions_[udmstri(C_opt_Lang)] = &Parse::FI_SetLanguage;
-    aOptions_[udmstri(C_opt_Extensions)] = &Parse::FI_SetExtensions;
-    aOptions_[udmstri(C_opt_Doc)] = &Parse::FI_SetDocAttrs;
-    aOptions_[udmstri(C_opt_SourceDir)] = &Parse::FI_SetSourceDirs;
-    aOptions_[udmstri(C_opt_SourceTree)] = &Parse::FI_SetSourceTrees;
-    aOptions_[udmstri(C_opt_SourceFile)] = &Parse::FI_SetSourceFiles;
+    fTemp = &Parse::FI_SetName;
+    aOptions_[udmstri(C_opt_Name)] = fTemp;
+
+    fTemp = &Parse::FI_SetUpdate;
+    aOptions_[udmstri(C_opt_Update)] = fTemp;
+
+    fTemp = &Parse::FI_SetLanguage4All;
+    aOptions_[udmstri(C_opt_LangAll)] = fTemp;
+
+    fTemp = &Parse::FI_SetExtensions4All;
+    aOptions_[udmstri(C_opt_ExtensionsAll)] = fTemp;
+
+    fTemp = &Parse::FI_SetDocAttrs4All;
+    aOptions_[udmstri(C_opt_DocAll)] = fTemp;
+
+    fTemp = &Parse::FI_Start_ProjectOptions;
+    aOptions_[udmstri(C_opt_Project)] = fTemp;
+
+    fTemp = &Parse::FI_SetLanguage;
+    aOptions_[udmstri(C_opt_Lang)] = fTemp;
+
+    fTemp = &Parse::FI_SetExtensions;
+    aOptions_[udmstri(C_opt_Extensions)] = fTemp;
+
+    fTemp = &Parse::FI_SetDocAttrs;
+    aOptions_[udmstri(C_opt_Doc)] = fTemp;
+
+    fTemp = &Parse::FI_SetSourceDirs;
+    aOptions_[udmstri(C_opt_SourceDir)] = fTemp;
+
+    fTemp = &Parse::FI_SetSourceTrees;
+    aOptions_[udmstri(C_opt_SourceTree)] = fTemp;
+
+    fTemp = &Parse::FI_SetSourceFiles;
+    aOptions_[udmstri(C_opt_SourceFile)] = fTemp;
 
     return aOptions_;
 }

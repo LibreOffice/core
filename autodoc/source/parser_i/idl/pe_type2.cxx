@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,13 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_type.hxx>
+#include <ary/idl/ip_type.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/uidl_tok.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_keyw.hxx>
-// #include <ary/uidl/cestorg.hxx>
-#include <ary_i/uidl/gate.hxx>
 
 
 
@@ -80,14 +81,13 @@ namespace uidl
 {
 
 
-PE_Type::PE_Type( csi::prl::RefType & o_rResult )
+PE_Type::PE_Type( ary::idl::Type_id & o_rResult )
     :   pResult(&o_rResult),
         nIsSequenceCounter(0),
         bIsUnsigned(false),
-        // sFullType,
-        // sName,
-        eState(e_none)
-        // sLastPart
+        sFullType(),
+        eState(e_none),
+        sLastPart()
 {
 }
 
@@ -162,7 +162,7 @@ PE_Type::Process_BuiltInType( const TokBuiltInType & i_rToken )
     }
     else if (eState == expect_quname_separator)
     {
-        sFullType.SetName(sLastPart);
+        sFullType.SetLocalName(sLastPart);
         SetResult(not_done, pop_success);
     }
 }
@@ -187,7 +187,7 @@ PE_Type::Process_TypeModifier( const TokTypeModifier & i_rToken )
     }
     else if (eState == expect_quname_separator)
     {
-        sFullType.SetName(sLastPart);
+        sFullType.SetLocalName(sLastPart);
         SetResult(not_done, pop_success);
     }
 }
@@ -201,7 +201,7 @@ PE_Type::Process_Default()
 void
 PE_Type::Finish()
 {
-    sFullType.SetName(sLastPart);
+    sFullType.SetLocalName(sLastPart);
     SetResult(not_done, pop_success);
 }
 
@@ -213,30 +213,23 @@ PE_Type::InitData()
     nIsSequenceCounter = 0;
     bIsUnsigned = false;
     sFullType.Empty();
-    sLastPart = "";
+    sLastPart.clear();
 }
 
 void
 PE_Type::TransferData()
 {
-    csi::prl::RefType result = 0;
-    if (NOT bIsUnsigned)
+    if (bIsUnsigned)
     {
-        result = Gate().CheckInType(MatchingNamespace(sFullType), sFullType.Name());
-    }
-    else
-    {
-        udmstri sName( StreamLock(40)() << "unsigned " << sFullType.Name() << c_str );
-        result = Gate().CheckInType(MatchingNamespace(sFullType), sName);
+        String sName( StreamLock(40)() << "unsigned " << sFullType.LocalName() << c_str );
+        sFullType.SetLocalName(sName);
     }
 
-    while (nIsSequenceCounter)
-    {
-        result = Gate().CheckInSequence(result.Id());
-        nIsSequenceCounter--;
-    }
-
-    *pResult = result;
+    const ary::idl::Type &
+        result = Gate().Types().CheckIn_Type( sFullType,
+                                              nIsSequenceCounter,
+                                              CurNamespace().CeId() );
+    *pResult = result.TypeId();
     eState = e_none;
 }
 

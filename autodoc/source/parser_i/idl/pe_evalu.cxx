@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_evalu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <s2_luidl/pe_evalu.hxx>
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_enumvalue.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
@@ -112,7 +115,7 @@ PE_Value::PE_Value( udmstri &   o_rName,
 
 void
 PE_Value::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                             ary::Repository &          io_rRepository,
+                             ary::n22::Repository &         io_rRepository,
                              TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_excp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,16 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_exception.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_structelem.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_selem.hxx>
-#include <csi/l_uidl/except.hxx>
-#include <csi/l_uidl/struelem.hxx>
-#include <ary_i/uidl/gate.hxx>
 
 
 
@@ -91,7 +92,7 @@ PE_Exception::PE_Exception()
 
 void
 PE_Exception::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                              ary::Repository &         io_rRepository,
+                              ary::n22::Repository &            io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -122,8 +123,8 @@ PE_Exception::TransferData()
 {
     if (NOT Work().bIsPreDeclaration)
     {
-        csv_assert(Work().pData != 0);
-        csv_assert(Work().pCurStruct);
+        csv_assert(Work().sData_Name.size() > 0);
+        csv_assert(Work().nCurStruct.IsValid());
     }
     Stati().pCurStatus = &Stati().aNone;
 }
@@ -134,52 +135,50 @@ PE_Exception::ReceiveData()
     Stati().pCurStatus->On_SubPE_Left();
 }
 
+const bool C_bIsExceptionElement = true; // Means:Yes, is an ExceptionElement.
+
 PE_Exception::S_Work::S_Work()
-    :   // pData
+    :   sData_Name(),
         bIsPreDeclaration(false),
-        pCurStruct(0),
+        nCurStruct(0),
         pPE_Element(0),
-        aCurParsed_ElementRef(0),
-        pPE_Type(0)
-        // aCurParsed_Base
+        nCurParsed_ElementRef(0),
+        pPE_Type(0),
+        nCurParsed_Base(0)
 
 {
-    pPE_Element = new PE_StructElement(aCurParsed_ElementRef,pCurStruct);
-    pPE_Type = new PE_Type(aCurParsed_Base);
+    pPE_Element = new PE_StructElement(nCurParsed_ElementRef,nCurStruct,C_bIsExceptionElement);
+    pPE_Type = new PE_Type(nCurParsed_Base);
 }
 
 void
 PE_Exception::S_Work::InitData()
 {
-    pData = new Exception;
+    sData_Name.clear();
     bIsPreDeclaration = false;
-    pCurStruct = 0;
+    nCurStruct = 0;
+
+    nCurParsed_ElementRef = 0;
+    nCurParsed_Base = 0;
 }
 
 void
 PE_Exception::S_Work::Prepare_PE_QualifiedName()
 {
-    aCurParsed_ElementRef = 0;
+    nCurParsed_ElementRef = 0;
 }
 
 void
 PE_Exception::S_Work::Prepare_PE_Element()
 {
-    aCurParsed_Base = 0;
+    nCurParsed_Base = 0;
 }
 
 void
 PE_Exception::S_Work::Data_Set_Name( const char * i_sName )
 {
-    pData->Data().sName = i_sName;
+    sData_Name = i_sName;
 }
-
-void
-PE_Exception::S_Work::Data_Add_CurParsed_ElementRef()
-{
-    pData->Data().aElements.push_back(aCurParsed_ElementRef);
-}
-
 
 PE_Exception::S_Stati::S_Stati(PE_Exception & io_rStruct)
     :   aNone(io_rStruct),
@@ -218,13 +217,6 @@ PE_Exception::State_GotName::Process_Punctuation( const TokPunctuation & i_rToke
 {
     if ( i_rToken.Id() != TokPunctuation::Semicolon )
     {
-        Work().pCurStruct =
-                PE().Gate().Store_Exception(
-                        PE().CurNamespace().Id(),
-                        *Work().pData );
-        PE().PassDocuAt(Work().pCurStruct.Id());
-
-
         switch (i_rToken.Id())
         {
             case TokPunctuation::Colon:
@@ -233,6 +225,7 @@ PE_Exception::State_GotName::Process_Punctuation( const TokPunctuation & i_rToke
                 Work().Prepare_PE_QualifiedName();
                 break;
             case TokPunctuation::CurledBracketOpen:
+                PE().store_Exception();
                 MoveState( Stati().aWaitForElement );
                 SetResult(done,stay);
                 break;
@@ -242,7 +235,7 @@ PE_Exception::State_GotName::Process_Punctuation( const TokPunctuation & i_rToke
     }
     else
     {
-        Delete_dyn(Work().pData);
+        Work().sData_Name.clear();
         SetResult(done,pop_success);
     }
 }
@@ -250,7 +243,6 @@ PE_Exception::State_GotName::Process_Punctuation( const TokPunctuation & i_rToke
 void
 PE_Exception::State_WaitForBase::On_SubPE_Left()
 {
-    Work().pData->Data().pBaseException = Work().aCurParsed_Base;
     MoveState(Stati().aGotBase);
 }
 
@@ -259,6 +251,7 @@ PE_Exception::State_GotBase::Process_Punctuation( const TokPunctuation & i_rToke
 {
     if ( i_rToken.Id() == TokPunctuation::CurledBracketOpen )
     {
+        PE().store_Exception();
         MoveState( Stati().aWaitForElement );
         SetResult(done,stay);
     }
@@ -311,12 +304,6 @@ PE_Exception::State_WaitForElement::Process_Punctuation( const TokPunctuation & 
 }
 
 void
-PE_Exception::State_WaitForElement::On_SubPE_Left()
-{
-    Work().Data_Add_CurParsed_ElementRef();
-}
-
-void
 PE_Exception::State_WaitForFinish::Process_Punctuation( const TokPunctuation & i_rToken )
 {
     if (i_rToken.Id() == TokPunctuation::Semicolon)
@@ -330,7 +317,18 @@ PE_Exception::State_WaitForFinish::Process_Punctuation( const TokPunctuation & i
     }
 }
 
+void
+PE_Exception::store_Exception()
+{
+    ary::idl::Exception &
+        rCe = Gate().Ces().Store_Exception(
+                            CurNamespace().CeId(),
+                            Work().sData_Name,
+                            Work().nCurParsed_Base );
+    PassDocuAt(rCe);
+    Work().nCurStruct = rCe.Id();
+}
+
 
 }   // namespace uidl
 }   // namespace csi
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
 
 namespace csi
@@ -87,11 +86,12 @@ class PE_Variable : public UnoIDL_PE,
 {
   public:
                         PE_Variable(
-                            csi::prl::RefType & i_rResult_Type,
-                            udmstri &           i_rResult_Name );
+                            ary::idl::Type_id & i_rResult_Type,
+                            String &            i_rResult_Name );
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &
+                                                io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual             ~PE_Variable();
@@ -121,9 +121,10 @@ class PE_Variable : public UnoIDL_PE,
     virtual void        TransferData();
     virtual UnoIDL_PE & MyPE();
 
+    // DATA
     E_State             eState;
-    csi::prl::RefType * pResult_Type;
-    udmstri *           pResult_Name;
+    ary::idl::Type_id * pResult_Type;
+    String *            pResult_Name;
 
     Dyn<PE_Type>        pPE_Type;
 };

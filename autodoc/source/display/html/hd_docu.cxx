@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:23 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,8 +459,8 @@ Docu_Display::Write_QualifiedName( const ary::QualifiedName & i_sQuName )
 {
     if ( i_sQuName.IsAbsolute() )
         CurOut() << "::";
-    for ( ary::QualifiedName::namespace_iterator it = i_sQuName.begin();
-          it != i_sQuName.end();
+    for ( ary::QualifiedName::namespace_iterator it = i_sQuName.first_namespace();
+          it != i_sQuName.end_namespace();
           ++it )
     {
         CurOut() <<  (*it) << "::";

@@ -4,18 +4,12 @@ ar	autodoc								usr1	-	all	ar_mkout NULL
 ar	autodoc\inc							get		-	all	ar_i NULL
 ar	autodoc\inc\ary			  			get		-	all	ar_ir NULL
 ar	autodoc\inc\ary\cpp		  			get		-	all	ar_ir_cpp NULL
+ar	autodoc\inc\ary\idl		  			get		-	all	ar_ir_idl NULL
 ar	autodoc\inc\ary\info	  			get		-	all	ar_ir_info NULL
 ar	autodoc\inc\ary\loc	  			    get		-	all	ar_ir_loc NULL
 ar	autodoc\inc\ary\task	  			get		-	all	ar_ir_task NULL
-ar	autodoc\inc\ary_i		  			get		-	all	ar_ir2 NULL
-ar	autodoc\inc\ary_i\uidl	  			get		-	all	ar_ir2_uidl NULL
+ar	autodoc\inc\ary_i		  			get		-	all	ar_ir_cinfo NULL
 ar	autodoc\inc\autodoc		  			get		-	all	ar_iau NULL
-ar	autodoc\inc\csi 		  			get		-	all	ar_ic NULL
-ar	autodoc\inc\csi\d_sapi	  			get		-	all	ar_ic_idoc2 NULL
-ar	autodoc\inc\csi\dis_html  			get		-	all	ar_ic_html2 NULL
-ar	autodoc\inc\csi\html	  			get		-	all	ar_ic_html NULL
-ar	autodoc\inc\csi\l_uidl	  			get		-	all	ar_ic_idl2 NULL
-ar	autodoc\inc\csi\prl 	  			get		-	all	ar_ic_prl2 NULL
 ar	autodoc\inc\display 	  			get		-	all	ar_idispl2 NULL
 ar	autodoc\inc\parser 		  			get		-	all	ar_iparse2 NULL
 ar	autodoc\source						get		-	all	ar_s NULL
@@ -27,33 +21,25 @@ ar	autodoc\source\inc\utility     		get		-	all	ar_si_util2 NULL
 ar	autodoc\source\ary					get		-	all	ar_sr NULL
 ar	autodoc\source\ary\inc				get		-	all	ar_sri NULL
 ar	autodoc\source\ary\inc\cpp			get		-	all	ar_sri_cpp NULL
+ar	autodoc\source\ary\inc\idl			get		-	all	ar_sri_idl NULL
 ar	autodoc\source\ary\inc\loc			get		-	all	ar_sri_loc NULL
 ar	autodoc\source\ary\inc\store		get		-	all	ar_sri_store NULL
 ar	autodoc\source\ary\cpp	 			nmake	-	all	ar_sr_cpp NULL
+ar	autodoc\source\ary\idl	 			nmake	-	all	ar_sr_idl NULL
 ar	autodoc\source\ary\info	 			nmake	-	all	ar_sr_info NULL
 ar	autodoc\source\ary\kernel			nmake	-	all	ar_sr_kernel NULL
 ar	autodoc\source\ary\loc	 			nmake 	-	all	ar_sr_loc NULL
 ar	autodoc\source\ary\store 			nmake	-	all	ar_sr_store NULL
-ar	autodoc\source\ary_i				get		-	all	ar_sr2 NULL
-ar	autodoc\source\ary_i\inc	   		get		-	all	ar_sr2i_inc NULL
-ar	autodoc\source\ary_i\inc\uidl		get		-	all	ar_sr2i_uidl NULL
-ar	autodoc\source\ary_i\idl	 		nmake	-	all	ar_sr2_idl NULL
-ar	autodoc\source\ary_i\kernel	 		nmake	-	all	ar_sr2_krnl NULL
-ar	autodoc\source\csi					get		-	all	ar_sc NULL
-ar	autodoc\source\csi\html			    nmake	-	all	ar_sc_html NULL
-ar	autodoc\source\csi_i				get		-	all	ar_sc2 NULL
-ar	autodoc\source\csi_i\d_sapi			nmake	-	all	ar_sc2_idoc NULL
-ar	autodoc\source\csi_i\dis_html		nmake	-	all	ar_sc2_html NULL
-ar	autodoc\source\csi_i\l_uidl			nmake	-	all	ar_sc2_idl NULL
-ar	autodoc\source\displa_i			    get		-	all	ar_sd2 NULL
-ar	autodoc\source\displa_i\idoc		nmake	-	all	ar_sd2_idoc NULL
+ar	autodoc\source\ary_i			    get		-	all	ar_sr_i NULL
+ar	autodoc\source\ary_i\kernel			nmake	-	all	ar_sr_cinfo NULL
 ar	autodoc\source\display				get		-	all	ar_sd NULL
 ar	autodoc\source\display\inc			get		-	all	ar_sdi NULL
 ar	autodoc\source\display\inc\funclist	get		-	all	ar_sdi_flist NULL
 ar	autodoc\source\display\inc\html 	get		-	all	ar_sdi_html NULL
 ar	autodoc\source\display\html	        nmake	-	all	ar_sd_html NULL
 ar	autodoc\source\display\kernel	    nmake	-	all	ar_sd_kernel NULL
-ar	autodoc\source\display\udm2html     nmake	-	all	ar_sd_u2h NULL
+ar	autodoc\source\display\idl          nmake	-	all	ar_sd_idl NULL
+ar	autodoc\source\display\toolkit      nmake	-	all	ar_sd_tkit NULL
 ar	autodoc\source\parser				get		-	all	ar_sp NULL
 ar	autodoc\source\parser\inc			get		-	all	ar_spi NULL
 ar	autodoc\source\parser\inc\adoc		get		-	all	ar_spi_adoc NULL
@@ -79,7 +65,5 @@ ar	autodoc\prj							get		-	all	ar_prj NULL
 ar	autodoc\source\mkinc				get		-	all	ar_smk NULL
 ar	autodoc\util						get		-	all	ar_util NULL
 ar	autodoc\source\exes					get		-	all	ar_se NULL
-ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_cpp ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_store ar_sr2_idl ar_sr2_krnl ar_sc_html ar_sc2_idoc ar_sc2_html ar_sc2_idl ar_sd2_idoc ar_sd_html ar_sd_kernel ar_sd_u2h ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sp2_idoc ar_sp2_tok ar_st NULL
-#====================================================================================
-# ar	autodoc\source\exes\comphelp		nmake	-	all	ar_se_chelp NULL
+ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_cpp ar_sr_idl ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_store ar_sr_cinfo ar_sd_html ar_sd_kernel ar_sd_idl ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sd_tkit ar_sp2_idoc ar_sp2_tok ar_st NULL
 

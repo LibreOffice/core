@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+#   last change: $Author: np $ $Date: 2002-11-01 17:15:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ OBJFILES= \
     $(OBJ)$/pe_iface.obj	    \
     $(OBJ)$/pe_selem.obj	    \
     $(OBJ)$/pe_servi.obj	    \
+    $(OBJ)$/pe_singl.obj	    \
     $(OBJ)$/pe_struc.obj 	    \
     $(OBJ)$/pe_tydf2.obj 	    \
     $(OBJ)$/pe_type2.obj 	    \

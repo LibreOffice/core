@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:45:19 $
+#   last change: $Author: np $ $Date: 2002-11-01 17:14:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,17 +81,21 @@ PRJINC=$(PRJ)$/source
 
 
 OBJFILES= \
-    $(OBJ)$/ary_disp.obj 	\
-    $(OBJ)$/ce_null.obj 	\
-    $(OBJ)$/cessentl.obj 	\
-    $(OBJ)$/id_gener.obj 	\
-    $(OBJ)$/instlist.obj 	\
-    $(OBJ)$/nametree.obj	\
-    $(OBJ)$/opertype.obj	\
-    $(OBJ)$/project.obj	    \
-    $(OBJ)$/quname.obj	    \
-    $(OBJ)$/reposy.obj	    \
-    $(OBJ)$/slots.obj
+    $(OBJ)$/ary_disp.obj        \
+    $(OBJ)$/ce_null.obj         \
+    $(OBJ)$/cessentl.obj        \
+    $(OBJ)$/id_gener.obj        \
+    $(OBJ)$/inheritgraph.obj    \
+    $(OBJ)$/inheritnode.obj     \
+    $(OBJ)$/instlist.obj        \
+    $(OBJ)$/namesort.obj        \
+    $(OBJ)$/nametree.obj        \
+    $(OBJ)$/opertype.obj        \
+    $(OBJ)$/project.obj         \
+    $(OBJ)$/qualiname.obj       \
+    $(OBJ)$/reposy.obj          \
+    $(OBJ)$/slots.obj           \
+    $(OBJ)$/x_ary.obj
 
 
 

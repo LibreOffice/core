@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:18 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,98 @@
 #ifndef ARY_REPOSY_HXX
 #define ARY_REPOSY_HXX
 
+//  VERSION:            Autodoc 2.2
 
 
 // USED SERVICES
     // BASE CLASSES
 #include <ary/ary.hxx>
     // COMPONENTS
+#include <cosv/ploc_dir.hxx>
     // PARAMETERS
+
+
 
 namespace ary
 {
+
+namespace cpp
+{
+class RepositoryPartition;
+}
+
+namespace idl
+{
+class RepositoryPartition;
+}
+
+namespace phyloc
+{
+class RepositoryLocation;
+}
+
+namespace action
+{
+class Statistic;
+}
+
+
+namespace n22
+{
+
+/** Implements ::ary::Repository.
+
+    @see Repository
+*/
+
+class RepositoryCenter : public ::ary::n22::Repository
+{
+  public:
+    //  LIFECYCLE
+                        RepositoryCenter(
+                            const String &      i_sDisplayedName );
+    virtual             ~RepositoryCenter();
+
+    //  OPERATIONS
+    void                RunCommand_ProduceAllSecondaries();
+    void                RunCommand_Statistic(
+                            action::Statistic &     io_rCommand );
+  private:
+    // Interface Repository:
+    virtual void                 do_Perform( ::ary::Command & io_rCommand);
+    virtual const String &       inq_Name() const;
+    virtual const idl::Gate &    inq_Gate_Idl() const;
+    virtual idl::Gate &          access_Gate_Idl();
+
+#if 0   // Version 2.2
+    virtual const cpp::Gate &   inq_Gate_Cpp() const;
+    virtual cpp::Gate &         access_Gate_Cpp();
+#endif  // Version 2.2
+
+    // Local
+
+    // DATA
+    String              sDisplayedName;     /// Name to be displayed for human users.
+    csv::ploc::Directory
+                        aLocation;
+    Dyn< idl::RepositoryPartition >
+                        pIdlPartition;
+
+#if 0   // Version 2.2
+    Dyn<cpp::RepositoryPartition>
+                        pCppPartition;
+#endif  // Version 2.2
+};
+
+
+}   // namespace n22
+
+
+
+
+
+
+
 
 
 /** @task
@@ -95,9 +177,6 @@ class RepositoryCenter : public Repository
                         inq_Name() const;
     virtual cpp::RwGate &
                         access_RwGate_Cpp();
-    virtual uidl::Gate &
-                        access_RwGate_Idl();
-
     struct CheshireCat;
 
     // DATA

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: distrib.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,10 @@
 
 namespace ary
 {
-    class Repository;
-
+    namespace n22
+    {
+        class Repository;
+    }
     namespace info
     {
         class CodeInformation;
@@ -88,14 +90,12 @@ namespace csi
 {
 namespace dsapi
 {
-class Token;
-class SapiDocu_PE;
-}   // namespace dsapi
-}   // namespace csi
+    class Token_Receiver;
+    class SapiDocu_PE;
+}
 
 
-namespace csi
-{
+
 namespace uidl
 {
 
@@ -113,7 +113,7 @@ class TokenDistributor : private TokenProcessing_Types
 {
   public:
                         TokenDistributor(
-                            ary::Repository &   io_rRepository  );
+                            ary::n22::Repository &  io_rRepository  );
     void                SetTokenProvider(
                             TokenParser_Uidl &  io_rTokenSource );
     void                SetTopParseEnvironment(
@@ -151,7 +151,7 @@ class TokenDistributor : private TokenProcessing_Types
     {
       public:
                             ProcessingData(
-                                ary::Repository &   io_rRepository,
+                                ary::n22::Repository &  io_rRepository,
                                 Documentation &     i_rDocuProcessor );
                             ~ProcessingData();
         void                SetTopParseEnvironment(
@@ -190,7 +190,8 @@ class TokenDistributor : private TokenProcessing_Types
                             aCurResult;
         uintt               nTryCount;
         bool                bFinished;
-        ary::Repository &   rRepository;
+        ary::n22::Repository &
+                            rRepository;
         Documentation *     pDocuProcessor;
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: distrib.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace csi
 namespace uidl
 {
 
-TokenDistributor::TokenDistributor( ary::Repository & io_rRepository )
+TokenDistributor::TokenDistributor( ary::n22::Repository & io_rRepository )
     :   pTokenSource(0),
         aProcessingData( io_rRepository, aDocumentation )
         // aDocumentation
@@ -105,7 +105,7 @@ TokenDistributor::TradeToken()
         aProcessingData.ProcessCurToken();
 }
 
-TokenDistributor::ProcessingData::ProcessingData( ary::Repository &     io_rRepository,
+TokenDistributor::ProcessingData::ProcessingData( ary::n22::Repository &    io_rRepository,
                                                   Documentation &       i_rDocuProcessor )
     :   // aEnvironments
         // aTokenQueue

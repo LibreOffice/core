@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 14:46:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,6 @@
 #ifndef LUIDL_PARSENV2_HXX
 #define LUIDL_PARSENV2_HXX
 
-// [ed] 6/15/02 The OS X compilers require full class definitions at the time
-// of template instantiation
-#ifdef MACOSX
-#include <ary_i/codeinf2.hxx>
-#endif
 
 // USED SERVICES
     // BASE CLASSES
@@ -74,23 +69,36 @@
     // COMPONENTS
 #include <s2_luidl/semnode.hxx>
     // PARAMETERS
-#include <ary_i/uidl/cenamesp.hxx>
-#include <ary_i/ce2.hxx>
+#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_module.hxx>
+
+// [ed] 6/15/02 The OS X compilers require full class definitions at the time
+// of template instantiation
+// np:  Is this really so?
+#ifdef MACOSX
+#include <ary_i/codeinf2.hxx>
+#endif
+
 
 namespace ary
 {
-namespace uidl
-{
-    class CeStorage;
-}   // namespace uidl
-}   // namespace ary
+    class QualifiedName;
 
-namespace ary
-{
-namespace info
-{
-    class CodeInformation;
-}
+    namespace n22
+    {
+        class Repository;
+    }
+
+
+    namespace idl
+    {
+        class CodeEntity;
+    }
+
+    namespace info
+    {
+        class CodeInformation;
+    }
 }
 
 
@@ -112,7 +120,8 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &
+                                                io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual void        Enter(
@@ -128,7 +137,8 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                                                 { pDocu = let_dpDocu; }
     void                SetOptional();
     void                PassDocuAt(
-                            ary::Cei            i_nCeId );
+                            ary::idl::CodeEntity &
+                                                io_rCe );
 
 /*
     const SemanticNode &
@@ -142,11 +152,9 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                             E_EnvStackAction    i_eWhat2DoWithEnvStack,
                             UnoIDL_PE *         i_pParseEnv2Push = 0 )
                                                 { aMyNode.SetTokenResult( i_eDone, i_eWhat2DoWithEnvStack, i_pParseEnv2Push ); }
-    virtual ary::uidl::CeNamespace &
+    virtual const ary::idl::Module &
                         CurNamespace() const;
-    ary::Cei            MatchingNamespace(
-                            const QuName &      i_rQualification );
-    ary::uidl::Gate &   Gate() const            { return aMyNode.AryGate(); }
+    ary::idl::Gate &    Gate() const            { return aMyNode.AryGate(); }
 
     DYN ary::info::CodeInformation *
                         ReleaseDocu()           { return pDocu.Release(); }

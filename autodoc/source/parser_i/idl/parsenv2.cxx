@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 14:49:28 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,17 @@
 
 
 #include <precomp.h>
-
-// [ed] 6/15/02 The OS X compilers require full class definitions at the time
-// of template instantiation
-#ifdef MACOSX
-#include <ary_i/codeinf2.hxx>
-#endif
-
 #include <s2_luidl/parsenv2.hxx>
-#include <s2_luidl/uidl_tok.hxx>
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary_i/uidl/gate.hxx>
+#include <ary/qualiname.hxx>
 #include <ary_i/codeinf2.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_ce.hxx>
+#include <ary/idl/ip_ce.hxx>
+#include <s2_luidl/uidl_tok.hxx>
+#include <x_parse2.hxx>
 
 
 
@@ -91,7 +88,7 @@ UnoIDL_PE::~UnoIDL_PE()
 
 void
 UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
-                              ary::Repository &         io_rRepository,
+                              ary::n22::Repository &    io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
     aMyNode.EstablishContacts(io_pParentPE, io_rRepository, o_rResult);
@@ -112,7 +109,7 @@ UnoIDL_PE::Enter( E_EnvStackAction  i_eWayOfEntering )
                 ReceiveData();
                 break;
         case pop_failure:
-                csv_assert(false);
+                throw X_AutodocParser(X_AutodocParser::x_Any);
                 break;
         default:
             csv_assert(false);
@@ -133,7 +130,7 @@ UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
                 TransferData();
                 break;
         case pop_failure:
-                csv_assert(false);
+                throw X_AutodocParser(X_AutodocParser::x_Any);
                 break;
         default:
             csv_assert(false);
@@ -153,13 +150,18 @@ UnoIDL_PE::SetOptional()
 }
 
 void
-UnoIDL_PE::PassDocuAt( ary::Cei i_nCeId )
+UnoIDL_PE::PassDocuAt( ary::idl::CodeEntity & io_rCe )
 {
     if (pDocu)
     {
-        ary::CodeEntity2 * pCe = Gate().FindCe(i_nCeId);
-        csv_assert(pCe != 0);
-        pCe->SetDocu(*pDocu.Release());
+        io_rCe.Set_Docu(pDocu.Release());
+    }
+    else if (io_rCe.ClassId() != ary::idl::Module::class_id)
+    {
+         Cout() << "Warning: "
+               << io_rCe.LocalName()
+               << " has no documentation."
+               << Endl();
     }
 }
 
@@ -175,7 +177,7 @@ UnoIDL_PE::ReceiveData()
     // Needs not anything to do.
 }
 
-ary::uidl::CeNamespace &
+const ary::idl::Module &
 UnoIDL_PE::CurNamespace() const
 {
     if ( Parent() != 0 )
@@ -183,17 +185,8 @@ UnoIDL_PE::CurNamespace() const
     else
     {
         csv_assert(false);
-        return *(ary::uidl::CeNamespace*)0;
+        return *(const ary::idl::Module*)0;
     }
-}
-
-ary::Cei
-UnoIDL_PE::MatchingNamespace( const QuName & i_rQualification )
-{
-    if (i_rQualification.IsQualified())
-        return Gate().CheckInModule(i_rQualification).Id();
-    else
-        return CurNamespace().Id();
 }
 
 

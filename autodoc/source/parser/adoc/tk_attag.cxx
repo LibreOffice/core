@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_attag.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 // NOT FULLY DEFINED SERVICES
 #include <adoc/tokintpr.hxx>
 
-INSTANCIATE_ENUM(adoc::E_AtTagId);
 
 
 namespace adoc {

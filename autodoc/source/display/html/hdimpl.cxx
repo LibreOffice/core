@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ary/ceslot.hxx>
-#include <ary/quname.hxx>
+#include <ary/qualiname.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_disply.hxx>
 #include <ary/cpp/c_enum.hxx>

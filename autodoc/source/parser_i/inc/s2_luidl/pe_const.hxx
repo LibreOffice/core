@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_const.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 14:46:37 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,21 +63,12 @@
 #define LUIDL_PE_CONST_HXX
 
 
-
-// [ed] 6/15/02 The OS X compilers require full class definitions at the time
-// of template instantiation
-#ifdef MACOSX
-#include <ary_i/codeinf2.hxx>
-#endif
-
 // USED SERVICES
     // BASE CLASSES
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
-#include <ary_i/cei.hxx>
 
 
 namespace udm {
@@ -102,7 +93,8 @@ class PE_Constant : public UnoIDL_PE,
                         PE_Constant();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &
+                                                io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Constant();
@@ -166,15 +158,15 @@ class PE_Constant : public UnoIDL_PE,
 
     E_State             eState;
 
-    ConstantsGroup *    pData;
-    ary::Cei            nDataId;
+    String              sData_Name;
+    ary::idl::Ce_id     nDataId;
 
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   pType;
+    ary::idl::Type_id   nType;
 
     Dyn<PE_Value>       pPE_Value;
-    udmstri             sName;
-    udmstri             sAssignment;
+    String              sName;
+    String              sAssignment;
 };
 
 

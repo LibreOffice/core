@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,10 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary_i/ce2.hxx>
+#include <ary/idl/i_interface.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
-#include <csi/l_uidl/intrface.hxx>
 #include <s2_luidl/pe_func2.hxx>
 #include <s2_luidl/pe_attri.hxx>
 #include <s2_luidl/pe_type2.hxx>
@@ -110,7 +111,7 @@ PE_Interface::aDispatcher[PE_Interface::e_STATES_MAX][PE_Interface::tt_MAX] =
             { DF, DF, DF, DF, DF },  // in_base
             { DF, DF, &PE_Interface::On_need_curlbr_open_Punctuation,
                           DF, DF },  // need_curlbr_open
-            { &PE_Interface::On_std_GotoAttribute,
+            { &PE_Interface::On_std_Metatype,
                   &PE_Interface::On_std_GotoFunction,
                       &PE_Interface::On_std_Punctuation,
                           &PE_Interface::On_std_GotoFunction,
@@ -132,34 +133,30 @@ PE_Interface::CallHandler( const char *     i_sTokenText,
 
 PE_Interface::PE_Interface()
     :   eState(e_none),
-        pData(0),
+        sData_Name(),
         bIsPreDeclaration(false),
+        nCurInterface(0),
         pPE_Function(0),
-        pCurInterface(0),
-        aCurParsed_Function(0),
-        pPE_Attribute(0),
-        aCurParsed_Attribute(0),
         pPE_Type(0),
-        aCurParsed_Base(0),
-        // cUik,
-        nUikCharCounter(0)
+        nCurParsed_Base(0),
+        pPE_Attribute(0)
 {
-    pPE_Function    = new PE_Function(aCurParsed_Function, pCurInterface);
-    pPE_Attribute   = new PE_Attribute(aCurParsed_Attribute, pCurInterface);
-    pPE_Type        = new PE_Type(aCurParsed_Base);
-
-    memset( cUik, 0, 37 );
+    static ary::idl::Ce_id
+        nDummy;
+    pPE_Function    = new PE_Function(nDummy, nCurInterface);
+    pPE_Type        = new PE_Type(nCurParsed_Base);
+    pPE_Attribute   = new PE_Attribute(nCurInterface, PE_Attribute::parse_attribute);
 }
 
 void
 PE_Interface::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                 ary::Repository &          io_rRepository,
+                                 ary::n22::Repository &     io_rRepository,
                                  TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Function->EstablishContacts(this,io_rRepository,o_rResult);
-    pPE_Attribute->EstablishContacts(this,io_rRepository,o_rResult);
     pPE_Type->EstablishContacts(this,io_rRepository,o_rResult);
+    pPE_Attribute->EstablishContacts(this,io_rRepository,o_rResult);
 }
 
 PE_Interface::~PE_Interface()
@@ -228,6 +225,7 @@ PE_Interface::Process_Default()
 void
 PE_Interface::On_need_uik_MetaType(const char * i_sText)
 {
+    // Deprecated, data will be ignored
     SetResult(done, stay);
     eState = uik;
 }
@@ -235,24 +233,17 @@ PE_Interface::On_need_uik_MetaType(const char * i_sText)
 void
 PE_Interface::On_uik_Identifier(const char * i_sText)
 {
-    unsigned sLen = strlen(i_sText);
-    csv_assert( (sLen == 4 OR sLen == 8) AND nUikCharCounter < 36 );
-    if (nUikCharCounter > 0)
-        cUik[nUikCharCounter++] = '-';
-    strncpy( cUik + nUikCharCounter, i_sText, sLen );
-    nUikCharCounter += sLen;
-
+    // Deprecated, data will be ignored
     SetResult(done, stay);
 }
 
 void
 PE_Interface::On_uik_Punctuation(const char * i_sText)
 {
+    // Deprecated, data will be ignored
     SetResult(done, stay);
     if (strcmp(",",i_sText) == 0)
     {
-        csv_assert(nUikCharCounter == 36);
-        pData->Data().sUik = cUik;
         eState = need_ident;
     }
 }
@@ -291,7 +282,7 @@ void
 PE_Interface::On_need_name_Identifer(const char * i_sText)
 {
     SetResult(done, stay);
-    pData->Data().sName = i_sText;
+    sData_Name = i_sText;
     eState = wait_for_base;
 }
 
@@ -300,9 +291,6 @@ PE_Interface::On_wait_for_base_Punctuation(const char * i_sText)
 {
     if (i_sText[0] != ';')
     {
-        pCurInterface = Gate().Store_Interface(CurNamespace().Id(), *pData);
-        PassDocuAt(pCurInterface.Id());
-
         switch (i_sText[0])
         {
             case ':':
@@ -310,6 +298,8 @@ PE_Interface::On_wait_for_base_Punctuation(const char * i_sText)
                 eState = in_base;
                 break;
             case '{':
+                store_Interface();
+
                 SetResult(done,stay);
                 eState = e_std;
                 break;
@@ -331,11 +321,23 @@ PE_Interface::On_need_curlbr_open_Punctuation(const char * i_sText)
 {
     if (i_sText[0] == '{')
     {
+        store_Interface();
+
         SetResult(done, stay);
         eState = e_std;
     }
     else
         csv_assert(false);
+}
+
+
+void
+PE_Interface::On_std_Metatype(const char * i_sText)
+{
+    if (strcmp(i_sText,"attribute") ==  0)
+        On_std_GotoAttribute(i_sText);
+    else
+        On_std_GotoFunction(i_sText);
 }
 
 void
@@ -356,28 +358,24 @@ PE_Interface::On_std_Punctuation(const char * i_sText)
 void
 PE_Interface::On_std_Stereotype(const char * i_sText)
 {
-    if (strcmp(i_sText,"readonly") == 0)
-    {
-        On_std_GotoAttribute(i_sText);
-    }
-    else
-    {
+    if (strcmp(i_sText,"oneway") ==  0)
         On_std_GotoFunction(i_sText);
-    }
+    else
+        On_std_GotoAttribute(i_sText);
 }
 
 void
-PE_Interface::On_std_GotoFunction(const char * i_sText)
+PE_Interface::On_std_GotoFunction(const char * )
 {
     SetResult(not_done, push_sure, pPE_Function.Ptr());
     eState = in_function;
 }
 
 void
-PE_Interface::On_std_GotoAttribute(const char * i_sText)
+PE_Interface::On_std_GotoAttribute(const char * )
 {
-    SetResult(not_done, push_sure, pPE_Attribute.Ptr());
-    eState = in_attribute;
+        SetResult(not_done, push_sure, pPE_Attribute.Ptr());
+        eState = in_attribute;
 }
 
 void
@@ -406,14 +404,10 @@ PE_Interface::InitData()
 {
     eState = need_interface;
 
-    pData = new Interface;
+    sData_Name.clear();
     bIsPreDeclaration = false;
-    pCurInterface = 0;
-    aCurParsed_Function = 0;
-    aCurParsed_Attribute = 0;
-    aCurParsed_Base = 0;
-    memset( cUik, 0, 33 );
-    nUikCharCounter = 0;
+    nCurInterface = 0;
+    nCurParsed_Base = 0;
 }
 
 void
@@ -421,11 +415,14 @@ PE_Interface::TransferData()
 {
     if (NOT bIsPreDeclaration)
     {
-        csv_assert(pData != 0);
-        csv_assert(pCurInterface);
+        csv_assert(sData_Name.size() > 0);
+        csv_assert(nCurInterface.IsValid());
     }
     else
-        Delete_dyn(pData);
+    {
+         sData_Name.clear();
+        nCurInterface = 0;
+    }
 
     eState = e_none;
 }
@@ -436,18 +433,12 @@ PE_Interface::ReceiveData()
     switch (eState)
     {
         case in_base:
-                pData->Data().pBase = aCurParsed_Base;
-                aCurParsed_Base = 0;
                 eState = need_curlbr_open;
                 break;
         case in_function:
-                pData->Data().aFunctions.push_back(aCurParsed_Function);
-                aCurParsed_Function = 0;
                 eState = e_std;
                 break;
         case in_attribute:
-                pData->Data().aAttributes.push_back(aCurParsed_Attribute);
-                aCurParsed_Attribute = 0;
                 eState = e_std;
                 break;
         default:
@@ -455,11 +446,22 @@ PE_Interface::ReceiveData()
     }
 }
 
-
 UnoIDL_PE &
 PE_Interface::MyPE()
 {
      return *this;
+}
+
+void
+PE_Interface::store_Interface()
+{
+    ary::idl::Interface &
+        rCe = Gate().Ces().Store_Interface(
+                                CurNamespace().CeId(),
+                                sData_Name,
+                                nCurParsed_Base );
+    nCurInterface = rCe.CeId();
+    PassDocuAt(rCe);
 }
 
 

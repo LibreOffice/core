@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_struc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
 #include <s2_luidl/semnode.hxx>
-#include <csi/prl/quname2.hxx>
+#include <ary/qualiname.hxx>
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
 
 
@@ -104,7 +103,7 @@ class PE_Struct : public UnoIDL_PE
                         PE_Struct();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Struct();
@@ -121,18 +120,16 @@ class PE_Struct : public UnoIDL_PE
         void                Prepare_PE_Element();
         void                Data_Set_Name(
                                 const char *        i_sName );
-        void                Data_Add_CurParsed_ElementRef();
 
-        Struct *            pData;
+        String              sData_Name;
         bool                bIsPreDeclaration;
-        udm::IRef< Struct > pCurStruct;
+        ary::idl::Ce_id     nCurStruct;
 
         Dyn<PE_StructElement>
                             pPE_Element;
-        udm::IRef< StructElement >
-                            aCurParsed_ElementRef;
+        ary::idl::Ce_id     nCurParsed_ElementRef;
         Dyn<PE_Type>        pPE_Type;
-        csi::prl::RefType   aCurParsed_Base;
+        ary::idl::Type_id   nCurParsed_Base;
     };
 
     struct S_Stati;
@@ -231,7 +228,6 @@ class PE_Struct : public UnoIDL_PE
         virtual void        Process_Punctuation(
                                 const TokPunctuation &
                                                     i_rToken );
-        virtual void        On_SubPE_Left();
     };
     class State_WaitForFinish : public PE_StructState
     { // -> ;
@@ -267,6 +263,8 @@ class PE_Struct : public UnoIDL_PE
     virtual void        InitData();
     virtual void        TransferData();
     virtual void        ReceiveData();
+
+    public: void        store_Struct(); private:
 
     friend class PE_StructState;
 

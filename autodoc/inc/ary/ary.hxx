@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ary.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:13 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,123 @@
 #ifndef ARY_ARY_HXX
 #define ARY_ARY_HXX
 
+//  VERSION:            Autodoc 2.2
+
 
 // USED SERVICES
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
 
-
 namespace ary
 {
+    class Command;
+
+#if 0   // Version 2.2
+//  namespace cpp
+//  {
+//      class Gate;
+//  }
+#endif  // Version 2.2
+    namespace idl
+    {
+        class Gate;
+    }
+
+namespace n22
+{
+
+/** Starting point for all work with the
+    Autodoc Sourcecode Repository.
+
+    @resp
+    Create and destroy the repository and
+    give access to the "Gates" for different tasks.
+
+    @collab ::ary::cpp::Gate
+    @collab ::ary::idl::Gate
+*/
+
+class Repository
+{
+  public:
+    //  LIFECYCLE
+    virtual             ~Repository() { }
+    static Repository & Create_(
+                            const String &      i_sName );    /// May be 0. Then a default is used.
+    static Repository & The_();
+    static void         Destroy_();      /// Destroys the Repository.
+
+    // OPERATIONS
+    void                Perform(
+                            ::ary::Command &    io_rCommand );
+
+    // INQUIRY
+    const String &      Name() const;
+    const ::ary::idl::Gate &
+                        Gate_Idl() const;
+
+    // ACCESS
+    ::ary::idl::Gate &  Gate_Idl();
+
+#if 0   // Version 2.2
+//  const cpp::Gate &   Gate_Cpp() const;
+//  cpp::Gate &         Gate_Cpp();
+#endif  // Version 2.2
+
+  private:
+    // Locals
+    virtual void                        do_Perform(::ary::Command & io_rCommand) = 0;
+    virtual const String &              inq_Name() const = 0;
+    virtual const ::ary::idl::Gate &    inq_Gate_Idl() const = 0;
+    virtual ::ary::idl::Gate &          access_Gate_Idl() = 0;
+
+#if 0   // Version 2.2
+//  virtual const cpp::Gate &   inq_Gate_Cpp() const = 0;
+//  virtual cpp::Gate &         access_Gate_Cpp() = 0;
+#endif  // Version 2.2
+};
+
+
+
+
+// IMPLEMENTATION
+inline void
+Repository::Perform( ::ary::Command & io_rCommand )
+    { do_Perform(io_rCommand); }
+
+inline const String &
+Repository::Name() const
+    { return inq_Name(); }
+
+inline const ::ary::idl::Gate &
+Repository::Gate_Idl() const
+    { return inq_Gate_Idl(); }
+
+inline ::ary::idl::Gate &
+Repository::Gate_Idl()
+    { return access_Gate_Idl(); }
+
+#if 0   // Version 2.2
+/*
+inline const cpp::Gate &
+Repository::Gate_Cpp() const
+    { return inq_Gate_Cpp(); }
+inline cpp::Gate &
+Repository::Gate_Cpp()
+    { return access_Gate_Cpp(); }
+*/
+#endif  // Version 2.2
+
+
+} // namespace n22
+
+
     namespace cpp
     {
         class RwGate;
         class DisplayGate;
     }
-    namespace uidl
-    {
-      class Gate;
-    }
-//  namespace java
-//  {
-//      class RwGate;
-//  }
 
     class IdGenerator;
 
@@ -118,7 +213,6 @@ class Repository
 
     // ACCESS
     cpp::RwGate &       RwGate_Cpp();
-    uidl::Gate &        RwGate_Idl();
 
 
   private:
@@ -128,8 +222,6 @@ class Repository
                         inq_Name() const = 0;
     virtual cpp::RwGate &
                         access_RwGate_Cpp() = 0;
-    virtual uidl::Gate &
-                        access_RwGate_Idl() = 0;
 };
 
 
@@ -144,9 +236,6 @@ Repository::Name() const
 inline cpp::RwGate &
 Repository::RwGate_Cpp()
     { return access_RwGate_Cpp(); }
-inline uidl::Gate &
-Repository::RwGate_Idl()
-    { return access_RwGate_Idl(); }
 
 
 } // namespace ary

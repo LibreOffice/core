@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,252 @@
  *
  ************************************************************************/
 
+//  VERSION:            Autodoc 2.2
+
+
 #include <precomp.h>
 #include <reposy.hxx>
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/x_ary.hxx>
+#include <ary/actions.hxx>
+#include <idl/i_reposypart.hxx>
+
+    // S P L I T //
+
 #include <store/storage.hxx>
 #include <store/strg_ifc.hxx>
 #include <id_gener.hxx>
 #include <cpp/c_gate.hxx>
 #include <loc/l_gate.hxx>
-#include <store/storage.hxx>
-#include "../../ary_i/inc/uidl/gate_i.hxx"
 
 
 
 namespace ary
 {
+
+
+namespace n22
+{
+
+using ::ary::Command;
+using ::ary::X_Ary;
+
+//*****************     Repository          ************//
+
+namespace
+{
+    static Dyn<RepositoryCenter> pTheInstance_(0);
+}
+
+Repository &
+Repository::Create_( const String &     i_sName )
+{
+    if ( pTheInstance_ )
+        throw X_Ary(X_Ary::x_MultipleRepository);
+
+    pTheInstance_ = new RepositoryCenter( i_sName );
+    return *pTheInstance_;
+}
+
+Repository &
+Repository::The_()
+{
+    if ( pTheInstance_ )
+        throw X_Ary(X_Ary::x_MissingRepository);
+
+    return *pTheInstance_;
+}
+
+void
+Repository::Destroy_()
+{
+    pTheInstance_ = 0;
+}
+
+
+//*****************     RepositoryCenter          ************//
+
+
+RepositoryCenter::RepositoryCenter( const String & i_sName )
+    :   sDisplayedName(i_sName),
+        aLocation(),
+#if 0       // Version 2.2
+        pCppPartition(),
+#endif // Version 2.2
+        pIdlPartition()
+{
+}
+
+RepositoryCenter::~RepositoryCenter()
+{
+}
+
+void
+RepositoryCenter::RunCommand_ProduceAllSecondaries()
+{
+    // KORR_FUTURE
+}
+
+void
+RepositoryCenter::RunCommand_Statistic( ::ary::action::Statistic & io_rCommand )
+{
+    // KORR_FUTURE
+}
+
+void
+RepositoryCenter::do_Perform( Command & io_rCommand )
+{
+    io_rCommand.Run(*this);
+}
+
+const String &
+RepositoryCenter::inq_Name() const
+{
+    return sDisplayedName;
+}
+
+const ::ary::idl::Gate &
+RepositoryCenter::inq_Gate_Idl() const
+{
+    return const_cast< RepositoryCenter& >(*this).access_Gate_Idl();
+}
+
+
+::ary::idl::Gate &
+RepositoryCenter::access_Gate_Idl()
+{
+    if (NOT pIdlPartition)
+        pIdlPartition = new idl::RepositoryPartition(*this);
+
+    return pIdlPartition->TheGate();
+}
+
+
+#if 0       // Version 2.2
+/*
+cpp::Gate &
+RepositoryCenter::access_Gate_Cpp()
+{
+    csv_assert( pCppPartition );
+    return pCppPartition->TheGate();
+}
+const cpp::Gate &
+RepositoryCenter::inq_Gate_Cpp() const
+{
+    csv_assert( pCppPartition );
+    return pCppPartition->TheGate();
+}
+*/
+#endif    // Version 2.2
+
+
+}   // namespace n22
+
+
+
+/*  ClassType-Ids
+    -------------
+
+
+    cpp                 1000
+    idl                 2000
+    corba               3000
+    java                4000
+    information         5000
+    logic location      6000
+    phys location       7000
+    sec. prod.          8000
+
+
+    cpp
+    ---
+    Namespace           1000
+    Class               1001
+    Enum                1002
+    Typedef             1003
+    Function            1004
+    Variable            1005
+    EnumValue           1006
+    NamespaceAlias      1007
+
+    BuiltInType         1200
+    CeType_Final        1201
+    CeType_Extern       1202
+    PtrType             1211
+    RefType             1212
+    ConstType           1221
+    VolatileType        1222
+    ArrayType           1230
+    TemplateInstance    1235
+    FunctionPtr         1240
+    DataMemberPtr       1250
+    OperationMemberPtr  1260
+
+    TplParam_Type       1301
+    TplParam_Value      1302
+
+    OpSignature         1400
+
+    Define              1601
+    Macro               1602
+
+
+    idl
+    ---
+
+    Module              2000
+    Interface           2001
+    Function            2002
+    Service             2003
+    Property            2004
+    Enum                2005
+    EnumValue           2006
+    Typedef             2007
+    Struct              2008
+    StructElement       2009
+    Exception           2010
+    ConstantGroup       2011
+    Constant            2012
+    Singleton           2013
+    Attribute           2014
+
+    BuiltInType         2200
+    CeType              2201
+    Sequence            2202
+    ExplicitType        2203
+    ExplicitNameRoom    2204
+
+    java
+    ----
+    Package             4000
+    Interface           4001
+    Class               4002
+
+
+
+
+    info
+    ----
+    CodeInformation
+        (IDL)          11002
+*/
+
+
+
+
+
+
+
+
+
+
+
+                        //      S P L I T           //
+
+
+
 
 namespace
 {
@@ -91,8 +320,6 @@ struct RepositoryCenter::CheshireCat
     Dyn<IdGenerator>    pIdGenerator;
 
     Dyn<cpp::Gate>      pGate_Cpp;
-    Dyn<uidl::Gate_Impl>
-                        pGate_Idl;
     Dyn<loc::Gate>      pGate_Locations;
 
                         CheshireCat(
@@ -148,19 +375,13 @@ RepositoryCenter::inq_DisplayGate_Cpp() const
 const udmstri &
 RepositoryCenter::inq_Name() const
 {
-     return pi->sName;
+    return pi->sName;
 }
 
 cpp::RwGate &
 RepositoryCenter::access_RwGate_Cpp()
 {
     return *pi->pGate_Cpp;
-}
-
-uidl::Gate &
-RepositoryCenter::access_RwGate_Idl()
-{
-    return *pi->pGate_Idl;
 }
 
 
@@ -172,7 +393,6 @@ CheshireCat::CheshireCat( const udmstri &     i_sName,
         pStorage_Ifc(0),
         pIdGenerator( &let_drIds ),
         pGate_Cpp(0),
-        pGate_Idl(0),
         pGate_Locations(0)
 {
     pStorage                = new store::Storage;
@@ -184,7 +404,6 @@ CheshireCat::CheshireCat( const udmstri &     i_sName,
                                         *pStorage_Ifc,
                                         *pIdGenerator,
                                         *pGate_Locations );
-    pGate_Idl               = new uidl::Gate_Impl;
 }
 
 RepositoryCenter::

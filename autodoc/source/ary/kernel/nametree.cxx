@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nametree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,27 +88,40 @@ int cCompareValues[128] =
 };
 
 
+#if 0
+#ifdef WNT
+#define strcmp_nocase   stricmp
+#elif (UNX)
+#define strcmp_nocase   strcasecmp
+#else
+#error  For running Autodoc, 'WNT' or 'UNX' must be defined.
+#endif
+
 bool
 NameTree::
 Less_Name::operator()( const udmstri &     i_r1,
                        const udmstri &     i_r2 ) const
 {
-         const unsigned char *
-                p1 = reinterpret_cast< const unsigned char* >( i_r1.c_str() );
-         const unsigned char *
-                p2 = reinterpret_cast< const unsigned char* >( i_r2.c_str() );
-        int     cp = 0;
+    int result = strcmp_nocase(i_r1.c_str(),i_r2.c_str());
+    if (result != 0)
+        return result < 0;
 
-        do {
-            cp = cCompareValues[*p1] - cCompareValues[*p2++];
-            if ( cp < 0 )
-                return true;
-            if ( cp > 0 )
-                return false;
-        } while (*p1++ != 0);
+    const unsigned char *
+        p1 = reinterpret_cast< const unsigned char* >( i_r1.c_str() );
+    const unsigned char *
+        p2 = reinterpret_cast< const unsigned char* >( i_r2.c_str() );
 
-        return false;
+    int cp = 0;
+    do {
+        cp = cCompareValues[*p1] - cCompareValues[*p2++];
+        if ( cp < 0 )
+            return true;
+        if ( cp > 0 )
+            return false;
+    } while (*p1++ != 0);
+    return false;
 }
+#endif // 0
 
 
 NameTree::NameTree()

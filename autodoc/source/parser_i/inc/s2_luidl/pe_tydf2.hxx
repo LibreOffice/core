@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tydf2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
 
 
@@ -90,7 +89,7 @@ class PE_Typedef : public UnoIDL_PE,
                         PE_Typedef();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Typedef();
@@ -139,12 +138,13 @@ class PE_Typedef : public UnoIDL_PE,
     virtual void        TransferData();
     virtual UnoIDL_PE & MyPE();
 
+    // DATA
     static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
     E_State             eState;
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   pType;
-    udmstri             sName;
+    ary::idl::Type_id   nType;
+    String              sName;
 };
 
 

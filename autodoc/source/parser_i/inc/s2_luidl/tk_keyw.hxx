@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ class TokMetaType : public TokKeyword
         mt_module,
         mt_property,
         mt_service,
+        mt_singleton,
         mt_struct,
         mt_typedef,
         mt_uik
@@ -183,12 +184,20 @@ class TokStereotype : public TokKeyword
     enum E_TokenId
     {
         e_none = 0,
-        ste_const = 1,
+        ste_bound = 1,
+        ste_const,
+        ste_constrained,
+        ste_maybeambiguous,
+        ste_maybedefault,
+        ste_maybevoid,
         ste_oneway,
         ste_optional,
         ste_readonly,
-        ste_virtual
+        ste_removable,
+        ste_virtual,
+        ste_transient
     };
+
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokStereotype(

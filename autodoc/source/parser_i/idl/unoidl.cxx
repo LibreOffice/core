@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,29 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <stdlib.h>
 #include <cosv/file.hxx>
 #include <ary/ary.hxx>
+#include <ary/idl/i_gate.hxx>
 #include <ary_i/codeinf2.hxx>
-#include <ary_i/uidl/gate.hxx>
 #include <tools/filecoll.hxx>
 #include <tools/tkpchars.hxx>
 #include <s2_luidl/tkp_uidl.hxx>
 #include <s2_luidl/distrib.hxx>
 #include <s2_luidl/pe_file2.hxx>
 #include <s2_dsapi/cx_dsapi.hxx>
+#include <x_parse2.hxx>
 
 
 
-namespace csi
-{
-namespace uidl
+namespace autodoc
 {
 
 
 class FileParsePerformers
 {
   public:
-                        FileParsePerformers( ary::Repository & io_rRepository );
+                        FileParsePerformers( ary::n22::Repository & io_rRepository );
 
     void                ParseFile(
                             const char *        i_sFullPath );
@@ -96,15 +96,18 @@ class FileParsePerformers
 
   private:
     CharacterSource     aFileLoader;
-    Dyn<TokenParser_Uidl>
+    Dyn<csi::uidl::TokenParser_Uidl>
                         pTokens;
-    TokenDistributor    aDistributor;
-    Dyn<PE_File>        pFileParseEnvironment;
-    ary::Repository &   rRepository;
+    csi::uidl::TokenDistributor
+                        aDistributor;
+    Dyn<csi::uidl::PE_File>
+                        pFileParseEnvironment;
+    ary::n22::Repository &
+                        rRepository;
 };
 
 
-Uidl_Parser::Uidl_Parser( ary::Repository & io_rRepository )
+Uidl_Parser::Uidl_Parser( ary::n22::Repository & io_rRepository )
     :   pRepository(&io_rRepository)
 {
 }
@@ -112,7 +115,8 @@ Uidl_Parser::Uidl_Parser( ary::Repository & io_rRepository )
 void
 Uidl_Parser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
 {
-    FileParsePerformers aFileParsePerformers( *pRepository );
+    Dyn<FileParsePerformers>
+        pFileParsePerformers( new FileParsePerformers(*pRepository) );
 
     FileCollector::const_iterator iEnd = i_rFiles.End();
     for ( FileCollector::const_iterator iter = i_rFiles.Begin();
@@ -120,21 +124,38 @@ Uidl_Parser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
           ++iter )
     {
         Cout() << (*iter) << " ..."<< Endl();
-        aFileParsePerformers.ParseFile(*iter);
+
+        try
+        {
+            pFileParsePerformers->ParseFile(*iter);
+        }
+        catch (X_AutodocParser &)
+        {
+            /// Ignore and goon
+            Cout() << "Parse error in file " << *iter << Endl();
+            pFileParsePerformers = new FileParsePerformers( *pRepository );
+        }
+        catch (...)
+        {
+            /// Ignore and goon
+            Cout() << "Unknown error." << Endl();
+            exit(0);
+//          pFileParsePerformers = new FileParsePerformers( *pRepository );
+        }
     }
 
-    aFileParsePerformers.ConnectLinks();
+    pFileParsePerformers->ConnectLinks();
 }
 
-FileParsePerformers::FileParsePerformers( ary::Repository & io_rRepository )
+FileParsePerformers::FileParsePerformers( ary::n22::Repository & io_rRepository )
     :   aDistributor(io_rRepository),
         rRepository( io_rRepository )
 {
     DYN csi::dsapi::Context_Docu * dpDocuContext
             = new csi::dsapi::Context_Docu( aDistributor.DocuTokens_Receiver() );
-    pTokens = new TokenParser_Uidl( aDistributor.CodeTokens_Receiver(), *dpDocuContext );
+    pTokens = new csi::uidl::TokenParser_Uidl( aDistributor.CodeTokens_Receiver(), *dpDocuContext );
     pFileParseEnvironment
-            = new PE_File(aDistributor);
+            = new csi::uidl::PE_File(aDistributor);
 
     aDistributor.SetTokenProvider(*pTokens);
     aDistributor.SetTopParseEnvironment(*pFileParseEnvironment);
@@ -161,10 +182,10 @@ FileParsePerformers::ParseFile( const char * i_sFullPath )
 void
 FileParsePerformers::ConnectLinks()
 {
-    rRepository.RwGate_Idl().ConnectAdditionalLinks();
+    // KORR
+//  rRepository.RwGate_Idl().ConnectAdditionalLinks();
 }
 
-}   // namespace uidl
-}   // namespace csi
+}   // namespace autodoc
 
 

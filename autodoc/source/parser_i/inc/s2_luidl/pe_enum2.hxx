@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_enum2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
 
 
@@ -79,7 +78,7 @@ namespace csi
 namespace uidl
 {
 
-class Enum;
+// class Enum;
 
 class PE_Value;
 
@@ -90,7 +89,7 @@ class PE_Enum : public UnoIDL_PE,
                         PE_Enum();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Enum();
@@ -148,12 +147,12 @@ class PE_Enum : public UnoIDL_PE,
 
     E_State             eState;
 
-    Enum *              pData;
-    ary::Cei            nDataId;
+    String              sData_Name;
+    ary::idl::Ce_id     nDataId;
 
     Dyn<PE_Value>       pPE_Value;
-    udmstri             sName;
-    udmstri             sAssignment;
+    String              sName;
+    String              sAssignment;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tydf2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,11 @@
 #include <s2_luidl/pe_tydf2.hxx>
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_typedef.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
-#include <csi/l_uidl/typedef.hxx>
 #include <s2_luidl/pe_type2.hxx>
-#include <ary_i/uidl/gate.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_const.hxx>
@@ -108,16 +109,16 @@ PE_Typedef::CallHandler( const char *       i_sTokenText,
 PE_Typedef::PE_Typedef()
     :   eState(e_none),
         pPE_Type(0),
-        pType(0)
-        // sName
+        nType(0),
+        sName()
 {
-    pPE_Type = new PE_Type(pType);
+    pPE_Type = new PE_Type(nType);
 }
 
 void
 PE_Typedef::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                             ary::Repository &          io_rRepository,
-                             TokenProcessing_Result &   o_rResult )
+                               ary::n22::Repository &   io_rRepository,
+                               TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Type->EstablishContacts(this,io_rRepository,o_rResult);
@@ -187,7 +188,7 @@ void
 PE_Typedef::InitData()
 {
     eState = expect_description;
-    pType = 0;
+    nType = 0;
     sName = "";
 }
 
@@ -200,11 +201,9 @@ PE_Typedef::ReceiveData()
 void
 PE_Typedef::TransferData()
 {
-    Typedef * pData = new Typedef;
-    pData->Data().sName         = sName;
-    pData->Data().pDefiningType = pType;
-    ary::Cei nId = Gate().Store_Typedef( CurNamespace().Id(), *pData ).Id();
-    PassDocuAt(nId);
+    ary::idl::Typedef &
+        rCe = Gate().Ces().Store_Typedef(CurNamespace().CeId(), sName, nType);
+    PassDocuAt(rCe);
     eState = e_none;
 }
 

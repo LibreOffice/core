@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
 
 
@@ -80,9 +79,9 @@ namespace uidl
 {
 
 
-class Interface;
-class Function;
-class Attribute;
+//class Interface;
+//class Function;
+//class Attribute;
 
 class PE_Function;
 class PE_Attribute;
@@ -97,7 +96,7 @@ class PE_Interface : public UnoIDL_PE,
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual void        ProcessToken(
@@ -164,6 +163,7 @@ class PE_Interface : public UnoIDL_PE,
     void                On_need_name_Identifer(const char * i_sText);
     void                On_wait_for_base_Punctuation(const char * i_sText);
     void                On_need_curlbr_open_Punctuation(const char * i_sText);
+    void                On_std_Metatype(const char * i_sText);
     void                On_std_Punctuation(const char * i_sText);
     void                On_std_Stereotype(const char * i_sText);
     void                On_std_GotoFunction(const char * i_sText);
@@ -180,25 +180,20 @@ class PE_Interface : public UnoIDL_PE,
     virtual void        ReceiveData();
     virtual UnoIDL_PE & MyPE();
 
+    void                store_Interface();
+
     // DATA
     static F_TOK        aDispatcher[e_STATES_MAX][tt_MAX];
 
     E_State             eState;
-    Interface *         pData;
+    String              sData_Name;
     bool                bIsPreDeclaration;
-    udm::IRef< Interface >
-                        pCurInterface;
+    ary::idl::Ce_id     nCurInterface;
 
     Dyn<PE_Function>    pPE_Function;
-    udm::IRef< Function >
-                        aCurParsed_Function;
-    Dyn<PE_Attribute>   pPE_Attribute;
-    udm::IRef< Attribute >
-                        aCurParsed_Attribute;
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   aCurParsed_Base;
-    char                cUik[37];
-    unsigned            nUikCharCounter;
+    ary::idl::Type_id   nCurParsed_Base;
+    Dyn<PE_Attribute>   pPE_Attribute;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_func2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,27 @@
 
 // USED SERVICES
     // BASE CLASSES
+// #include <ary/idl/i_gate.hxx>
+// #include <ary/idl/ip_ce.hxx>
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
-#include <csi/l_uidl/param.hxx>
+#include <ary/idl/i_param.hxx>
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
-#include <ary_i/uidl/gate.hxx>
+
+namespace ary
+{
+     namespace idl
+    {
+         class Function;
+    }
+}
 
 
 namespace csi
 {
 namespace uidl
 {
-
-class Interface;
 
 class PE_Type;
 class PE_Variable;
@@ -89,8 +95,8 @@ class PE_Function : public UnoIDL_PE,
                     public ParseEnvState
 {
   public:
-    typedef ary::uidl::Gate::RInterface     RInterface;
-    typedef ary::uidl::Gate::RFunction      RFunction;
+    typedef ary::idl::Ce_id     RInterface;
+    typedef ary::idl::Ce_id     RFunction;
 
                         PE_Function(
                             RFunction &         o_rResult,
@@ -98,7 +104,7 @@ class PE_Function : public UnoIDL_PE,
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual             ~PE_Function();
@@ -151,21 +157,29 @@ class PE_Function : public UnoIDL_PE,
     virtual void        TransferData();
     virtual UnoIDL_PE & MyPE();
 
+    // DATA
     E_State             eState;
-    Function *          pData;
+
+    String              sData_Name;
+    ary::idl::Type_id   nData_ReturnType;
+    bool                bData_Const;
+    bool                bData_Oneway;
+    ary::idl::Function *
+                        pCurFunction;
+
     RFunction *         pResult;
     const RInterface *  pCurInterface;
 
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   aCurParsedType;     // ReturnType or Exception
+    ary::idl::Type_id   nCurParsedType;     // ReturnType or Exception
 
-    udmstri             sName;
+    String              sName;
 
     Dyn<PE_Variable>    pPE_Variable;
-    E_ParameterDirection
+    ary::idl::E_ParameterDirection
                         eCurParsedParam_Direction;
-    csi::prl::RefType   aCurParsedParam_Type;
-    udmstri             sCurParsedParam_Name;
+    ary::idl::Type_id   nCurParsedParam_Type;
+    String              sCurParsedParam_Name;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ Adoc_PE::Hdl_at_obsolete( const Tok_at_obsolete & i_rTok )
 void
 Adoc_PE::Hdl_at_module( const Tok_at_module & i_rTok )
 {
-    // KORR
+    // KORR_FUTURE
 
 //  pCurAtTag = CurDocu().Assign2_ModuleTag();
 //  nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
@@ -188,7 +188,7 @@ Adoc_PE::Hdl_at_module( const Tok_at_module & i_rTok )
 void
 Adoc_PE::Hdl_at_file( const Tok_at_file & i_rTok )
 {
-        // KORR
+    // KORR_FUTURE
 
 //  pCurAtTag = CurDocu().Assign2_FileTag();
 //  nCurSpecialMeaningTokens = pCurAtTag->NrOfSpecialMeaningTokens();
@@ -197,7 +197,7 @@ Adoc_PE::Hdl_at_file( const Tok_at_file & i_rTok )
 void
 Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & i_rTok )
 {
-        // KORR
+    // KORR_FUTURE
 
 //  Create_GlossaryEntry();
 }
@@ -205,14 +205,14 @@ Adoc_PE::Hdl_at_gloss( const Tok_at_gloss & i_rTok )
 void
 Adoc_PE::Hdl_at_global( const Tok_at_global & i_rTok )
 {
-        // KORR
+    // KORR_FUTURE
 //  Create_GlobalTextComponent();
 }
 
 void
 Adoc_PE::Hdl_at_include( const Tok_at_include & i_rTok )
 {
-        // KORR
+    // KORR_FUTURE
 }
 
 void

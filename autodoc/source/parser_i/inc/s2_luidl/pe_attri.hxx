@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_attri.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 14:46:37 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,21 @@
 // USED SERVICES
     // BASE CLASSES
 
-// [ed] 6/15/02 The OS X compilers require full class definitions at the time
-// of template instantiation
-#ifdef MACOSX
-#include <ary_i/codeinf2.hxx>
-#endif
-
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
-#include <ary_i/uidl/gate.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_property.hxx>
 
+
+namespace ary
+{
+     namespace idl
+    {
+         class Service;
+    }
+}
 
 namespace csi
 {
@@ -93,16 +95,25 @@ class PE_Attribute : public UnoIDL_PE,
                      public ParseEnvState
 {
   public:
-    typedef ary::uidl::Gate::RInterface     RInterface;
-    typedef ary::uidl::Gate::RAttribute     RAttribute;
+    typedef ary::idl::Ce_id                     Ce_id;
+    typedef ary::idl::Type_id                   Type_id;
+    typedef ary::idl::Property::Stereotypes     Stereotypes;
+
+    enum E_ParsedType
+    {
+        parse_attribute,
+        parse_property
+    };
+
 
                         PE_Attribute(
-                            RAttribute &        o_rResult,
-                            const RInterface &  i_rCurInterface );
+                            Ce_id &             i_rCurOwner,
+                            E_ParsedType        i_eCeType );
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &
+                                                io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual             ~PE_Attribute();
@@ -121,8 +132,10 @@ class PE_Attribute : public UnoIDL_PE,
     virtual void        Process_Default();
 
     void                PresetOptional()        { bIsOptional = true; }
-    void                PresetReadonly()        { bIsReadonly = true; }
-
+    void                PresetStereotypes(
+                            Stereotypes::E_Flags
+                                                i_eFlag )
+                                                { aStereotypes.Set_Flag(i_eFlag); }
   private:
     enum E_State
     {
@@ -137,16 +150,18 @@ class PE_Attribute : public UnoIDL_PE,
     virtual void        TransferData();
     virtual UnoIDL_PE & MyPE();
 
+    // DATA
     E_State             eState;
-    Attribute *         pData;
-    RAttribute *        pResult;
-    const RInterface *  pCurInterface;
+    Ce_id *             pCurOwner;
 
     Dyn<PE_Variable>    pPE_Variable;
-    csi::prl::RefType   aCurParsedType;
-    udmstri             sCurParsedName;
+
+        // object-data
+    Type_id             nCurParsedType;
+    String              sCurParsedName;
     bool                bIsOptional;
-    bool                bIsReadonly;
+    Stereotypes         aStereotypes;
+    E_ParsedType        eCeType;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TokMetaType::EV_TokenId     ev_mt_interface(TokMetaType::mt_interface,"interface
 TokMetaType::EV_TokenId     ev_mt_module(TokMetaType::mt_module,"module");
 TokMetaType::EV_TokenId     ev_mt_property(TokMetaType::mt_property,"property");
 TokMetaType::EV_TokenId     ev_mt_service(TokMetaType::mt_service,"service");
+TokMetaType::EV_TokenId     ev_mt_singleton(TokMetaType::mt_singleton,"singleton");
 TokMetaType::EV_TokenId     ev_mt_struct(TokMetaType::mt_struct,"struct");
 TokMetaType::EV_TokenId     ev_mt_typedef(TokMetaType::mt_typedef,"typedef");
 TokMetaType::EV_TokenId     ev_mt_uik(TokMetaType::mt_uik,"uik");
@@ -112,11 +113,18 @@ TokMetaType::EV_TokenId     ev_mt_uik(TokMetaType::mt_uik,"uik");
 
 lux::EnumValueMap           G_aTokStereotype_EV_TokenId_Values;
 TokStereotype::EV_TokenId   ev_ste_none(TokStereotype::e_none,"");
+TokStereotype::EV_TokenId   ev_ste_bound(TokStereotype::ste_bound,"bound");
 TokStereotype::EV_TokenId   ev_ste_const(TokStereotype::ste_const,"const");
+TokStereotype::EV_TokenId   ev_ste_constrained(TokStereotype::ste_constrained,"constrained");
+TokStereotype::EV_TokenId   ev_ste_maybeambiguous(TokStereotype::ste_maybeambiguous,"maybeambiguous");
+TokStereotype::EV_TokenId   ev_ste_maybedefault(TokStereotype::ste_maybedefault,"maybedefault");
+TokStereotype::EV_TokenId   ev_ste_maybevoid(TokStereotype::ste_maybevoid,"maybevoid");
 TokStereotype::EV_TokenId   ev_ste_oneway(TokStereotype::ste_oneway,"oneway");
 TokStereotype::EV_TokenId   ev_ste_optional(TokStereotype::ste_optional,"optional");
 TokStereotype::EV_TokenId   ev_ste_readonly(TokStereotype::ste_readonly,"readonly");
+TokStereotype::EV_TokenId   ev_ste_removable(TokStereotype::ste_removable,"removable");
 TokStereotype::EV_TokenId   ev_ste_virtual(TokStereotype::ste_virtual,"virtual");
+TokStereotype::EV_TokenId   ev_ste_transient(TokStereotype::ste_transient,"transient");
 
 
 lux::EnumValueMap                   G_aTokParameterHandling_EV_TokenId_Values;

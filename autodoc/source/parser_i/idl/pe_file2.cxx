@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,14 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_module.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/distrib.hxx>
 #include <s2_luidl/pe_servi.hxx>
 #include <s2_luidl/pe_iface.hxx>
+#include <s2_luidl/pe_singl.hxx>
 #include <s2_luidl/pe_struc.hxx>
 #include <s2_luidl/pe_excp.hxx>
 #include <s2_luidl/pe_const.hxx>
@@ -76,8 +80,6 @@
 #include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
-#include <ary_i/uidl/gate.hxx>
-#include <ary_i/uidl/cenamesp.hxx>
 
 
 
@@ -91,6 +93,7 @@ namespace uidl
 PE_File::PE_File( TokenDistributor & i_rTokenAdmin )
     :   pTokenAdmin(&i_rTokenAdmin),
         pPE_Service(new PE_Service),
+        pPE_Singleton(new PE_Singleton),
         pPE_Interface(new PE_Interface),
         pPE_Struct(new PE_Struct),
         pPE_Exception(new PE_Exception),
@@ -105,11 +108,12 @@ PE_File::PE_File( TokenDistributor & i_rTokenAdmin )
 
 void
 PE_File::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                            ary::Repository &           io_rRepository,
+                            ary::n22::Repository &      io_rRepository,
                             TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Service->EstablishContacts(this,io_rRepository,o_rResult);
+    pPE_Singleton->EstablishContacts(this,io_rRepository,o_rResult);
     pPE_Interface->EstablishContacts(this,io_rRepository,o_rResult);
     pPE_Struct->EstablishContacts(this,io_rRepository,o_rResult);
     pPE_Exception->EstablishContacts(this,io_rRepository,o_rResult);
@@ -117,7 +121,7 @@ PE_File::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
     pPE_Enum->EstablishContacts(this,io_rRepository,o_rResult);
     pPE_Typedef->EstablishContacts(this,io_rRepository,o_rResult);
 
-    pCurNamespace = &Gate().GlobalNamespace();
+    pCurNamespace = &Gate().Ces().GlobalNamespace();
 }
 
 PE_File::~PE_File()
@@ -139,12 +143,12 @@ PE_File::Process_Identifier( const TokIdentifier & i_rToken )
         {
                 csv_assert(pCurNamespace != 0);
 
-                ary::Cei nNspId = Gate().CheckInModule(pCurNamespace->Id(), i_rToken.Text()).Id();
-                pCurNamespace = Gate().FindNamespace(nNspId);
+                ary::idl::Module & rCe = Gate().Ces().CheckIn_Module(pCurNamespace->CeId(), i_rToken.Text());
+                pCurNamespace = &rCe;
 
                 // Get docu out of normal:
                 SetDocu(pTokenAdmin->ReleaseLastParsedDocu());
-                PassDocuAt(nNspId);
+                PassDocuAt(rCe);
 
                 csv_assert(pCurNamespace != 0);
 
@@ -169,7 +173,7 @@ PE_File::Process_Punctuation( const TokPunctuation & i_rToken )
                 {
                     csv_assert(pCurNamespace != 0);
 
-                    pCurNamespace = pCurNamespace->Parent();
+                    pCurNamespace = &Gate().Ces().Find_Module(pCurNamespace->Owner());
 
                     SetResult(done, stay);
                     eState = wait_for_module_semicolon;
@@ -233,6 +237,10 @@ PE_File::Process_MetaType( const TokMetaType &  i_rToken )
                 eState = in_sub_pe;
                 SetResult( not_done, push_sure, pPE_Service.Ptr());
                 break;
+        case TokMetaType::mt_singleton:
+                eState = in_sub_pe;
+                SetResult( not_done, push_sure, pPE_Singleton.Ptr());
+                break;
         case TokMetaType::mt_uik:
                 Cerr() << "Syntax error: [uik ....] is obsolete now." << Endl();
                 SetResult( not_done, pop_failure);
@@ -282,7 +290,7 @@ PE_File::Process_Default()
     SetResult(done, stay);
 }
 
-ary::uidl::CeNamespace &
+const ary::idl::Module &
 PE_File::CurNamespace() const
 {
     csv_assert(pCurNamespace);

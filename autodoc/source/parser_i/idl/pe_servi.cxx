@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_servi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,15 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_service.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_attri.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
-#include <csi/l_uidl/service.hxx>
-#include <ary_i/ce2.hxx>
 
 
 
@@ -85,22 +86,23 @@ namespace uidl
 
 PE_Service::PE_Service()
     :   eState(e_none),
-        pData(0),
+        sData_Name(),
         bIsPreDeclaration(false),
         pCurService(0),
+        nCurService(0),
         pPE_Property(0),
-        aCurParsed_Property(0),
+        nCurParsed_Property(0),
         pPE_Type(0),
-        aCurParsed_Type(0),
+        nCurParsed_Type(0),
         bOptionalMember(false)
 {
-    pPE_Property    = new PE_Attribute(aCurParsed_Property, pCurService);
-    pPE_Type        = new PE_Type(aCurParsed_Type);
+    pPE_Property    = new PE_Attribute(nCurService, PE_Attribute::parse_property);
+    pPE_Type        = new PE_Type(nCurParsed_Type);
 }
 
 void
 PE_Service::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                               ary::Repository &        io_rRepository,
+                               ary::n22::Repository &       io_rRepository,
                                TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -160,7 +162,7 @@ PE_Service::Process_Identifier( const TokIdentifier & i_rToken )
 {
     if (eState == need_name)
     {
-        pData->Data().sName = i_rToken.Text();
+        sData_Name = i_rToken.Text();
         SetResult(done, stay);
         eState = need_curlbr_open;
     }
@@ -176,9 +178,11 @@ PE_Service::Process_Punctuation( const TokPunctuation & i_rToken )
         case TokPunctuation::CurledBracketOpen:
                     if (eState == need_curlbr_open)
                     {
-                        pCurService = Gate().Store_Service(CurNamespace().Id(), *pData);
-                        PassDocuAt(pCurService.Id());
-
+                        pCurService = &Gate().Ces().Store_Service(
+                                                        CurNamespace().CeId(),
+                                                        sData_Name );
+                        nCurService = pCurService->CeId();
+                        PassDocuAt(*pCurService);
                         SetResult(done, stay);
                         eState = e_std;
                     }
@@ -216,7 +220,7 @@ PE_Service::Process_Punctuation( const TokPunctuation & i_rToken )
                     switch (eState)
                     {
                        case need_curlbr_open:
-                                    Delete_dyn(pData);
+                                    sData_Name.clear();
                                     bIsPreDeclaration = true;
                                     SetResult(done, pop_success);
                                     eState = e_none;
@@ -246,14 +250,14 @@ PE_Service::Process_Punctuation( const TokPunctuation & i_rToken )
 void
 PE_Service::Process_Stereotype( const TokStereotype & i_rToken )
 {
-    if ( eState == e_std AND i_rToken.Id() == TokStereotype::ste_readonly )
-    {
-        StartProperty();
-    }
-    else if (i_rToken.Id() == TokStereotype::ste_optional)
+    if (i_rToken.Id() == TokStereotype::ste_optional)
     {
         bOptionalMember = true;
         SetResult(done, stay);
+    }
+    else if ( eState == e_std )
+    {
+        StartProperty();
     }
     else
         On_Default();
@@ -293,11 +297,12 @@ void
 PE_Service::InitData()
 {
     eState = need_name;
-    pData = new Service;
+    sData_Name.clear();
     bIsPreDeclaration = false;
     pCurService = 0;
-    aCurParsed_Property = 0;
-    aCurParsed_Type = 0;
+    nCurService = 0;
+    nCurParsed_Property = 0;
+    nCurParsed_Type = 0;
     bOptionalMember = false;
 }
 
@@ -306,8 +311,8 @@ PE_Service::TransferData()
 {
     if (NOT bIsPreDeclaration)
     {
-        csv_assert(pData != 0);
-        csv_assert(pCurService);
+        csv_assert(sData_Name.size() > 0);
+        csv_assert(pCurService != 0);
     }
 
     eState = e_none;
@@ -319,8 +324,6 @@ PE_Service::ReceiveData()
     switch (eState)
     {
         case in_property:
-                pData->Data().aProperties.push_back(aCurParsed_Property.Id());
-                aCurParsed_Property = 0;
                 eState = e_std;
                 break;
         case in_ifc_type:
@@ -328,9 +331,10 @@ PE_Service::ReceiveData()
                 {
                     pPE_Type->SetOptional();
                 }
-                pData->Data().aServedInterfaces.push_back(
-                        CommentedLink(aCurParsed_Type.Id(),pPE_Type->ReleaseDocu()) );
-                aCurParsed_Type = 0;
+                pCurService->AddRef_SupportedInterface(
+                                    nCurParsed_Type,
+                                    pPE_Type->ReleaseDocu());
+                nCurParsed_Type = 0;
                 eState = expect_ifc_separator;
                 break;
         case in_service_type:
@@ -338,9 +342,10 @@ PE_Service::ReceiveData()
                 {
                     pPE_Type->SetOptional();
                 }
-                pData->Data().aIncludedServices.push_back(
-                        CommentedLink(aCurParsed_Type.Id(),pPE_Type->ReleaseDocu()) );
-                aCurParsed_Type = 0;
+                pCurService->AddRef_IncludedService(
+                                    nCurParsed_Type,
+                                    pPE_Type->ReleaseDocu());
+                nCurParsed_Type = 0;
                 eState = expect_service_separator;
                 break;
         default:

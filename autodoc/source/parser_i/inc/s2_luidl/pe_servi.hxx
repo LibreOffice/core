@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_servi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,18 +70,19 @@
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/tsk_type.hxx>
 
-
+namespace ary
+{
+     namespace idl
+    {
+         class Service;
+    }
+}
 
 namespace csi
 {
 namespace uidl
 {
-
-class Service;
-class Interface;
-class Attribute;
 
 class PE_Attribute;
 class PE_Type;
@@ -95,7 +96,7 @@ class PE_Service : public UnoIDL_PE,
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &  io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
     virtual void        ProcessToken(
@@ -145,17 +146,16 @@ class PE_Service : public UnoIDL_PE,
 
     // DATA
     E_State             eState;
-    Service *           pData;
+    String              sData_Name;
     bool                bIsPreDeclaration;
-    udm::IRef< Service >
-                        pCurService;
+    ary::idl::Service * pCurService;
+    ary::idl::Ce_id     nCurService;  // Needed for PE_Attribute.
 
     Dyn<PE_Attribute>   pPE_Property;
-    udm::IRef< Attribute >
-                        aCurParsed_Property;
+    ary::idl::Ce_id     nCurParsed_Property;
 
     Dyn<PE_Type>        pPE_Type;
-    csi::prl::RefType   aCurParsed_Type;
+    ary::idl::Type_id   nCurParsed_Type;
     bool                bOptionalMember;
 };
 

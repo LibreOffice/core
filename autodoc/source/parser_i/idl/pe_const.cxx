@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_const.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,16 @@
 #include <s2_luidl/pe_const.hxx>
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_constant.hxx>
+#include <ary/idl/i_constgroup.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_evalu.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_keyw.hxx>
-#include <csi/l_uidl/constant.hxx>
-#include <ary_i/uidl/gate.hxx>
 
 
 namespace csi
@@ -109,20 +111,21 @@ PE_Constant::CallHandler( const char *      i_sTokenText,
 
 PE_Constant::PE_Constant()
     :   eState(e_none),
-        pData(0),
+        sData_Name(),
+        nDataId(0),
         pPE_Type(0),
-        pType(0),
-        pPE_Value(0)
-        // sName
-        // sAssignment
+        nType(0),
+        pPE_Value(0),
+        sName(),
+        sAssignment()
 {
-    pPE_Type = new PE_Type(pType);
-    pPE_Value = new PE_Value(sName, sAssignment,true);
+    pPE_Type = new PE_Type(nType);
+    pPE_Value = new PE_Value(sName, sAssignment, true);
 }
 
 void
 PE_Constant::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                                ary::Repository &           io_rRepository,
+                                ary::n22::Repository &      io_rRepository,
                                 TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -172,10 +175,13 @@ PE_Constant::On_expect_curl_bracket_open_Punctuation(const char * i_sText)
 {
     if ( i_sText[0] == '{')
     {
-        pData = new ConstantsGroup;
-        pData->sName = sName;
-        nDataId = Gate().Store_ConstantsGroup(CurNamespace().Id(),*pData).Id();
-        PassDocuAt(nDataId);
+        sData_Name = sName;
+
+        ary::idl::ConstantsGroup &
+        rCe = Gate().Ces().
+                    Store_ConstantsGroup(CurNamespace().CeId(),sData_Name);
+        PassDocuAt(rCe);
+        nDataId = rCe.CeId();
 
         SetResult(done,stay);
         eState = expect_const;
@@ -236,7 +242,7 @@ PE_Constant::On_Default(const char * )
 void
 PE_Constant::EmptySingleConstData()
 {
-    pType = 0;
+    nType = 0;
     sName = "";
     sAssignment = "";
 }
@@ -244,16 +250,12 @@ PE_Constant::EmptySingleConstData()
 void
 PE_Constant::CreateSingleConstant()
 {
-    Constant * dpConst = new Constant;
-
-    dpConst->Data().sName = sName;
-    dpConst->Data().sValue = sAssignment;
-    dpConst->Data().pType = pType;
-
-    ary::Cei nId = Gate().Store_Constant( nDataId, *dpConst ).Id();
-    pPE_Type->PassDocuAt(nId);
-
-    pData->aConstants.push_back(nId);
+    ary::idl::Constant &
+        rCe = Gate().Ces().Store_Constant( nDataId,
+                                           sName,
+                                           nType,
+                                           sAssignment );
+    pPE_Type->PassDocuAt(rCe);
 }
 
 void
@@ -261,7 +263,7 @@ PE_Constant::InitData()
 {
     eState = expect_name;
 
-    pData = 0;
+    sData_Name.clear();
     nDataId = 0;
 
     EmptySingleConstData();
@@ -277,7 +279,7 @@ PE_Constant::ReceiveData()
                     break;
         case expect_value:
         {
-                    if (sName.length() == 0 OR sAssignment.length() == 0 OR NOT pType)
+                    if (sName.length() == 0 OR sAssignment.length() == 0 OR NOT nType.IsValid())
                     {
                         Cerr() << "Constant without value found." << Endl();
                         eState = expect_const;
@@ -297,7 +299,7 @@ PE_Constant::ReceiveData()
 void
 PE_Constant::TransferData()
 {
-    csv_assert(pData != 0);
+    csv_assert(nDataId.IsValid());
     eState = e_none;
 }
 

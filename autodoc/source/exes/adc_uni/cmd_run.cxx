@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:17 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,16 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/file.hxx>
 #include <cosv/x.hxx>
-#include <ary/ary.hxx>
+#include <ary/action/act_all.hxx>
 #include <ary/ary.hxx>
 #include <ary/cpp/c_rwgate.hxx>
-#include <ary_i/ce2.hxx>
-#include <ary_i/uidl/cenamesp.hxx>
-#include <ary_i/uidl/gate.hxx>
+#include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_module.hxx>
+#include <ary/idl/ip_ce.hxx>
+#include <ary/idl/ip_2s.hxx>
 #include <autodoc/displaying.hxx>
 #include <autodoc/dsp_html_std.hxx>
 #include <autodoc/filecoli.hxx>
@@ -84,27 +87,26 @@
 #include "adc_cmds.hxx"
 
 
-ary::uidl::Gate * G_pGate = 0;
+ary::idl::Gate * G_pGate = 0;
 
-ary::uidl::Gate &
+ary::idl::Gate &
 GetAryGate()
 {
     csv_assert(G_pGate != 0);
     return *G_pGate;
 }
 
-
+#if 0
 namespace
 {
 
 void                Recursive_PutOutNamespace(
                         csi::uidl::Display &        o_rDisplay,
-                        const ary::uidl::CeNamespace &
-                                                    i_rNamespace,
-                        const ary::uidl::Gate &     i_rGate );
+                        const ary::idl::Module &    i_rNamespace,
+                        const ary::idl::Gate &      i_rGate );
 
 }   // anonymous namespace
-
+#endif // 0
 
 namespace autodoc
 {
@@ -138,9 +140,10 @@ CommandRunner::HasParsedIdl() const
 CommandRunner::CommandRunner()
     :   pCommandLine(0),
         pReposy(0),
+        pNewReposy(0),
         nResultCode(0)
 {
-    Cout() << "\nAutodoc version 2.1"
+    Cout() << "\nAutodoc version 2.2"
            << "\n-------------------"
            << "\n" << Endl();
 }
@@ -193,10 +196,15 @@ CommandRunner::Parse()
               << Endl();
 
     if ( pReposy == 0 )
-            pReposy = & ary::Repository::Create_( rCmd.ReposyName(), 0 );
+        pReposy = & ary::Repository::Create_( rCmd.ReposyName(), 0 );
+    if ( pNewReposy == 0 )
+        pNewReposy = & ary::n22::Repository::Create_( rCmd.ReposyName() );
 
     Dyn< FileCollector_Ifc > pFiles;
     pFiles      = ParseToolsFactory().Create_FileCollector(6000);
+
+    bool bCpp = false;
+    bool bIDL = false;
 
     command::Parse::ProjectIterator itEnd = rCmd.ProjectsEnd();
     for ( command::Parse::ProjectIterator it = rCmd.ProjectsBegin();
@@ -219,19 +227,26 @@ CommandRunner::Parse()
                 Get_CppParser().Run( (*it)->sName,
                                      (*it)->aRootDirectory,
                                      *pFiles );
-//              pReposy->RwGate_Cpp().Connect_AllTypes_2_TheirRelated_CodeEntites();
+                bCpp = true;
             }   break;
             case command::S_LanguageInfo::idl:
             {
                 Get_IdlParser().Run(*pFiles);
+                bIDL = true;
             }   break;
             default:
-                                Cerr() << "Project in yet unimplemented language skipped."
-                                     << Endl();
+                Cerr() << "Project in yet unimplemented language skipped."
+                       << Endl();
         }
-    }
+    }   // end for
 
-    pReposy->RwGate_Cpp().Connect_AllTypes_2_TheirRelated_CodeEntites();
+    if (bCpp)
+        pReposy->RwGate_Cpp().Connect_AllTypes_2_TheirRelated_CodeEntites();
+    if (bIDL)
+    {
+        pNewReposy->Gate_Idl().Secondaries().Connect_Types2Ces();
+        pNewReposy->Gate_Idl().Secondaries().Gather_CrossReferences();
+    }
 
     }   // end try
     catch (csv::Exception & xx)
@@ -321,7 +336,7 @@ CommandRunner::Create_CppParser()
 void
 CommandRunner::Create_IdlParser()
 {
-    pIdlParser = new IdlParser(*pReposy);
+    pIdlParser = new IdlParser(*pNewReposy);
 }
 
 uintt
@@ -418,24 +433,18 @@ CommandRunner::CreateHtml_NewStyle()
 void
 CommandRunner::CreateHtml_OldIdlStyle()
 {
-    ary::uidl::Gate &
-        rAryGate            = pReposy->RwGate_Idl();
-#if 0   // Should become obsolete
-    G_pGate                 = &rAryGate;
+    ary::idl::Gate &
+        rAryGate            = pNewReposy->Gate_Idl();
 
-    ary::uidl::CeNamespace &
-        rGlobalNamespace    = rAryGate.GlobalNamespace();
-
-    Dyn<csi::uidl::Display> pDisplay;
-        pDisplay            = csi::uidl::Create_HtmlDisplay_(
-                                    pCommandLine->Cmd_CreateHtml()->OutputDir(),
-                                    DisplayToolsFactory_Ifc::GetIt_()
-                                        .Create_StdFrame() );
-    Recursive_PutOutNamespace( *pDisplay,
-                               rGlobalNamespace,
-                               rAryGate );
-    pDisplay->WriteGlobalIndices();
-#endif // 0
+    // Read DevManualLinkFile:
+    // KORR
+    csv::File
+        aFile("devmanref.txt", csv::CFM_READ);
+    if ( aFile.open() )
+    {
+        rAryGate.Secondaries().Read_Links2DevManual(aFile);
+         aFile.close();
+    }
 
     // New Style Output
     Dyn<autodoc::HtmlDisplay_Idl_Ifc> pNewDisplay;
@@ -449,25 +458,25 @@ CommandRunner::CreateHtml_OldIdlStyle()
 
 }   // namespace autodoc
 
+#if 0
 namespace
 {
 
-typedef std::vector< ary::uidl::CeNamespace * > LocalSNList;
+typedef std::vector< ary::idl::Module * > LocalSNList;
 
 inline void
 DisplayCe( csi::uidl::Display &     o_rDisplay,
-           ary::Cei                 i_nID,
-           const ary::uidl::Gate &  i_rGate )
+           ary::idl::Ce_id          i_nID,
+           const ary::idl::Gate &   i_rGate )
 {
-    ary::CodeEntity2 * pEntity = i_rGate.FindCe(i_nID);
-    if (pEntity != 0)
-        pEntity->DisplayAt(o_rDisplay);
+    const ary::idl::CodeEntity & rEntity = i_rGate.Ces().Find_Ce(i_nID);
+    rEntity.Visit(o_rDisplay);
 }
 
 void
-Recursive_PutOutNamespace( csi::uidl::Display &             o_rDisplay,
-                           const ary::uidl::CeNamespace &   i_rNamespace,
-                           const ary::uidl::Gate &          i_rGate  )
+Recursive_PutOutNamespace( csi::uidl::Display &         o_rDisplay,
+                           const ary::idl::Module &     i_rNamespace,
+                           const ary::idl::Gate &       i_rGate  )
 {
     static StreamStr  sPath(512);
     sPath.seekp(0);
@@ -478,9 +487,9 @@ Recursive_PutOutNamespace( csi::uidl::Display &             o_rDisplay,
 
     DisplayCe(o_rDisplay, i_rNamespace.Id(), i_rGate);
 
-    const ary::uidl::CeNamespace::NameMap & rMap = i_rNamespace.LocalNames();
+    const ary::idl::Module::NameMap & rMap = i_rNamespace.LocalNames();
 
-    for ( ary::uidl::CeNamespace::NameMap::const_iterator iter = rMap.begin();
+    for ( ary::idl::Module::NameMap::const_iterator iter = rMap.begin();
           iter != rMap.end();
           ++iter )
     {
@@ -501,6 +510,8 @@ Recursive_PutOutNamespace( csi::uidl::Display &             o_rDisplay,
 }
 
 }   // anonymous namespace
+
+#endif // 0
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:27 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,16 @@
 namespace ary
 {
      class Repository;
+
+    namespace n22
+    {
+         class Repository;
+    }
 }
 
-namespace csi
+namespace autodoc
 {
-    namespace uidl
-    {
-         class Uidl_Parser;
-    }
+    class Uidl_Parser;
 }
 
 namespace autodoc
@@ -97,7 +99,7 @@ namespace autodoc
     class ParseToolsFactory_Ifc;
     class CodeParser_Ifc;
     class DocumentationParser_Ifc;
-    typedef csi::uidl::Uidl_Parser IdlParser;
+    typedef autodoc::Uidl_Parser IdlParser;
 
 
 class CommandRunner
@@ -145,6 +147,8 @@ class CommandRunner
     // DATA
     const CommandLine * pCommandLine;
     ary::Repository *   pReposy;
+    ary::n22::Repository *
+                        pNewReposy;
     int                 nResultCode;
 
     Dyn<CodeParser_Ifc> pCppParser;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,109 @@
 
 
 #include <precomp.h>
-#include <html/cfrstd.hxx>
+#include <cfrstd.hxx>
 
 
 // NOT FULLY DEFINED SERVICES
+
+
+/*                      CSS Styles
+                        ----------
+
+
+Colors:
+-   light background color              #eeeeff
+-   dark background color               #ccccff
+-   self in navibar background color    #2222ad
+
+
+Fonts:
+-   page title              20, bold, Arial
+-   navibar main            12, bold, Arial
+-   navibar sub              8, Arial, kapitälchen
+-   attrtable title line     8, bold, Arial, kapitälchen
+-   attrtable value line     8, Arial kapitälchen
+
+-   namespace chain         13, bold
+-   table title             13, bold
+-   template line           13
+
+-   member paragraph title  12, bold
+
+-   docu paragraph title    11, bold
+-   standard text           11
+
+-   hierarchy               11, monospace
+
+
+classes:
+
+    td.title                page title
+    h3                      table title
+    h4                      member paragraph title
+
+    td.nmain                navigation main bar
+    td.nsub                 navigation sub bar
+    a.nmain                 links in navigation main bar
+    a.nsub                  links in navigation sub bar
+
+    td.attr1                attribute table head line
+    td.attr2                attribute table value line
+
+    p.namechain             namespace chain in head of pages
+    p.tpl                   template line in head of pages
+
+    pre.doc                 preformatted docu
+    pre.hierarchy           class bases hierarchy graphic
+
+    dl.syntax               function- or variable-declaration field
+    a.syntax                link in function- or variable-declaration field
+
+    p.dt                    docu paragraph title
+    dl.dt                   docu paragraph title
+
+    p                       standard text
+    dl                      standard text
+    dd                      standard text
+*/
+
+
+#define CRLF "\n"
+
+namespace
+{
+const char * const C_sStdStyle =
+    "h3 { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "p, dt, dd, pre  { font-size:11pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
+
+    "table.lightbg { background-color:#eeeeff; }"CRLF
+    "table.subtitle { margin-top:6pt; margin-bottom:6pt; }"CRLF
+
+    "td { font-size:11pt; }"CRLF
+    "td.title { font-family: Arial; font-size:19pt; font-weight:bold; text-align:center; background-color:#ccccff; line-height:30pt; }"CRLF
+    "td.subtitle { font-family: Arial; font-size:13pt; background-color:#ccccff; line-height:20pt; }"CRLF
+    "td.imdetail { width:100%; background-color:#eeeeff; }"CRLF
+    "a.membertitle { font-size:12pt; font-weight:bold; line-height:18pt; }"CRLF
+
+    "td.imsum_left { width:30%;  }"CRLF
+    "td.imsum_right { width:70%;  }"CRLF
+
+    "td.navimain, a.navimain { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "td.navimainself { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; color:#ffffff; background-color:#2222ad; }"CRLF
+    "td.navimainnone { text-align:center; font-family: Arial; font-size:12pt; }"CRLF
+    "td.attrtitle { font-weight:bold; background-color:#eeeeff; }"CRLF
+    "td.navisub, a.navisub, td.attrtitle, td.attrvalue { text-align:center; font-family: Arial; font-size:9pt; font-variant:small-caps; }"CRLF
+    "td.navimain, td.navisub { padding-left:7pt; padding-right:7pt; }"CRLF
+
+    "p.raise  { font-size:11pt; margin-top:0pt; text-align:right; padding-right:5pt; }"CRLF
+
+    "a.navimain, a.navisub  { color:#000000; }"CRLF
+    ".dt     { font-weight:bold; }"CRLF
+    ".namechain  { font-size:13pt; font-weight:bold; margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ".tpl        { font-size:13pt; margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ;
+}   // anonymous namespace
+
 
 
 
@@ -93,8 +192,14 @@ StdFrame::LogoLink() const
 const char *
 StdFrame::CopyrightText() const
 {
-    return "Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
+    return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
 //  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 
+}
+
+const char *
+StdFrame::CssStyle() const
+{
+    return C_sStdStyle;
 }
 

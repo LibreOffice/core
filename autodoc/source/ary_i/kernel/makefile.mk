@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:45:21 $
+#   last change: $Author: np $ $Date: 2002-11-01 17:14:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=autodoc
-TARGET=ary2_kernel
+TARGET=ary2_cinfo
 
 
 
@@ -83,7 +83,8 @@ PRJINC=$(PRJ)$/source
 OBJFILES= \
     $(OBJ)$/ci_atag2.obj	\
     $(OBJ)$/ci_text2.obj	\
-    $(OBJ)$/codeinf2.obj	
+    $(OBJ)$/codeinf2.obj	\
+    $(OBJ)$/d_token.obj	
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,13 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/i_property.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
-#include <csi/l_uidl/struelem.hxx>
 
 
 namespace csi
@@ -78,8 +80,8 @@ namespace uidl
 {
 
 
-PE_Variable::PE_Variable( csi::prl::RefType &   i_rResult_Type,
-                          udmstri &             i_rResult_Name )
+PE_Variable::PE_Variable( ary::idl::Type_id &   i_rResult_Type,
+                          String &              i_rResult_Name )
     :   eState(),
         pResult_Type(&i_rResult_Type),
         pResult_Name(&i_rResult_Name),
@@ -90,7 +92,7 @@ PE_Variable::PE_Variable( csi::prl::RefType &   i_rResult_Type,
 
 void
 PE_Variable::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                                ary::Repository &           io_rRepository,
+                                ary::n22::Repository &          io_rRepository,
                                 TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
@@ -99,7 +101,6 @@ PE_Variable::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
 
 PE_Variable::~PE_Variable()
 {
-
 }
 
 void

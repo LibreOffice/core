@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,8 @@
 #include<s2_luidl/parsenv2.hxx>
 #include<s2_luidl/pestate.hxx>
     // COMPONENTS
-#include<csi/prl/quname2.hxx>
+#include<ary/qualiname.hxx>
     // PARAMETERS
-#include<csi/prl/tsk_type.hxx>
 
 
 namespace csi
@@ -85,7 +84,7 @@ class PE_Type : public UnoIDL_PE,
 {
   public:
                          PE_Type(
-                            csi::prl::RefType & o_rResult );
+                            ary::idl::Type_id & o_rResult );
                         ~PE_Type();
 
     virtual void        ProcessToken(
@@ -122,14 +121,14 @@ class PE_Type : public UnoIDL_PE,
     virtual UnoIDL_PE & MyPE();
 
     // DATA
-    csi::prl::RefType * pResult;
+    ary::idl::Type_id * pResult;
 
     uintt               nIsSequenceCounter;
     bool                bIsUnsigned;
-    QuName              sFullType;
+    ary::QualifiedName  sFullType;
 
     E_State             eState;
-    udmstri             sLastPart;
+    String              sLastPart;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_sub.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 14:46:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,7 @@
     // COMPONENTS
     // PARAMETERS
 
-// [ed] 6/15/02 On OS X we need to have full definitions of classes in order
-// to have template instantiation
-#ifdef MACOSX
 #include "uidl_tok.hxx"
-#endif
 
 namespace csi
 {

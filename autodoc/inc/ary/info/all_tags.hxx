@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_tags.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:15 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
     // COMPONENTS
 #include <ary/info/inftypes.hxx>
 #include <ary/info/ci_text.hxx>
-#include <ary/quname.hxx>
+#include <ary/qualiname.hxx>
     // PARAMETERS
 #include <ary/ids.hxx>
 

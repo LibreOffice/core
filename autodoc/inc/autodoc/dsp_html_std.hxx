@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsp_html_std.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:10 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace ary
     {
         class DisplayGate;
     }
-    namespace uidl
+    namespace idl
     {
         class Gate;
     }
@@ -220,14 +220,14 @@ class HtmlDisplay_Idl_Ifc
 
     void                Run(
                             const char *        i_sOutputDirectory,
-                            const ary::uidl::Gate &
+                            const ary::idl::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
                                                 i_rLayout );
   private:
     virtual void        do_Run(
                             const char *        i_sOutputDirectory,
-                            const ary::uidl::Gate &
+                            const ary::idl::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
                                                 i_rLayout ) = 0;
@@ -237,7 +237,7 @@ class HtmlDisplay_Idl_Ifc
 
 inline void
 HtmlDisplay_Idl_Ifc::Run( const char *                    i_sOutputDirectory,
-                          const ary::uidl::Gate &         i_rAryGate,
+                          const ary::idl::Gate &          i_rAryGate,
                           const display::CorporateFrame & i_rLayout )
 {
     do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout );

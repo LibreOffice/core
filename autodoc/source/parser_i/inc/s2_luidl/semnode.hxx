@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semnode.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-11-01 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,23 @@
 #include <s2_luidl/tokproct.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <csi/prl/quname2.hxx>
-#include <udm/ref.hxx>
+#include <ary/qualiname.hxx>
+// #include <udm/ref.hxx>
+
 
 namespace ary
 {
+class QualifiedName;
+
+namespace n22
+{
 class Repository;
-namespace uidl
+}
+namespace idl
 {
 class Gate;
-class CeNamespace;
-}   // namespace uidl
+class Module;
+}   // namespace idl
 }   // namespace ary
 
 
@@ -90,7 +96,6 @@ namespace uidl
 
 
 class Struct;
-class QualifiedName;
 class Token;
 
 
@@ -102,26 +107,29 @@ class SemanticNode : private TokenProcessing_Types
                         SemanticNode();
     void                EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+                            ary::n22::Repository &
+                                                io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~SemanticNode();
 
+/*
     udm::IRef< Struct > GetStructRef(
                             const QuName &      i_rText,
                             ary::uidl::CeNamespace &
                                                 i_rCurNamespace );
+*/
     void                SetTokenResult(
                             E_TokenDone         i_eDone,
                             E_EnvStackAction    i_eWhat2DoWithEnvStack,
                             UnoIDL_PE *         i_pParseEnv2Push = 0 );
     UnoIDL_PE *         Parent() const          { return pParentPE; }
-    ary::uidl::Gate &   AryGate() const         { return *pAryGate; }
+    ary::idl::Gate &    AryGate() const         { return *pAryGate; }
 
   private:
     // DATA
     UnoIDL_PE *         pParentPE;
-    ary::uidl::Gate *   pAryGate;
+    ary::idl::Gate *    pAryGate;
     TokenProcessing_Result *
                         pTokenResult;
 };
