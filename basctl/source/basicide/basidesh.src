@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:57:08 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 15:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ String RID_STR_SOURCETOBIG
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλια ή μεταφέρετε μερικές μεθόδους σε μια άλλη λειτουργική μονάδα.";
-    Text[ korean ] = "ΌÒ½Ί ΕΨ½ΊΖ®°΅ ³ΚΉ« ΔΏΌ­ ΐϊΐε ¶Η΄Β ΔΔΖΔΐΟΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω. \n ΐΟΊΞ ΑΦΌ®ΐ» »θΑ¦ΗΟ°Ε³ª ΈξΈξ ΈήΌÒµεΈ¦ ΄ΩΈ¥ Έπµβ·Ξ ΏΕ±β½Κ½ΓΏΐ.";
+    Text[ korean ] = "ΌÒ½Ί ΕΨ½ΊΖ®°΅ ³ΚΉ« ΔΏΌ­ ΐϊΐε ¶Η΄Β ΔΔΖΔΐΟΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω. \n ΐΟΊΞ ΑΦΌ®ΐ» »θΑ¦ΗΟ°Ε³ª, ΈξΈξ ΈήΌÒµεΈ¦ ΄ΩΈ¥ Έπµβ·Ξ ΏΕ±β½Κ½ΓΏΐ.";
     Text[ turkish ] = "Kaynak metin uzunluπu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazύ aηύklamalarύ silin ya da bazύ yφntemleri baώka bir modόle aktarύn.";
 };
 String RID_STR_ERROROPENSTORAGE
@@ -565,7 +565,7 @@ String RID_STR_SEARCHREPLACES
     Text[ dutch ] = "Zoekbegrip XX keer vervangen";
     Text[ chinese_simplified ] = "ΈόΜζΛΡΡ°ΔΪΘέ XX ΄Ξ";
     Text[ greek ] = "Ο ζητούμενος όρος αντικαταστάθηκε XX φορές";
-    Text[ korean ] = "°Λ»φ΄λ»σΐ» XXΉψ ΉΩ²ΩΎϊ½ΐ΄Ο΄Ω";
+    Text[ korean ] = "°Λ»φ ΏλΎξΈ¦  XXΉψ ΄λΓΌΗί½ΐ΄Ο΄Ω";
     Text[ turkish ] = "Aranan terim XX kez deπiώtirildi";
 };
 String RID_STR_COULDNTREAD
