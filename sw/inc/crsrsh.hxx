@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:02:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,8 @@ public:
     // Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
     // aufgespannt oder nicht der einzigste ist.
     CRSR_INLINE FASTBOOL IsSelection() const;
+    // returns if multiple cursors are available
+    CRSR_INLINE FASTBOOL IsMultiSelection() const;
 
     // Abfrage, ob ein kompletter Absatz selektiert wurde
     FASTBOOL IsSelFullPara() const;
@@ -898,6 +900,10 @@ inline FASTBOOL SwCrsrShell::IsSelection() const
 {
     return IsTableMode() || pCurCrsr->HasMark() ||
             pCurCrsr->GetNext() != pCurCrsr;
+}
+inline FASTBOOL SwCrsrShell::IsMultiSelection() const
+{
+    return pCurCrsr->GetNext() != pCurCrsr;
 }
 
 inline FASTBOOL SwCrsrShell::IsSelOnePara() const
