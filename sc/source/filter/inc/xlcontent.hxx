@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:48:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 // (0x00E5) MERGEDCELLS -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_MERGEDCELLS         = 0x00E5;
+const sal_uInt16 EXC_MERGEDCELLS_MAXCOUNT   = 1027;
 
 // (0x002F) FILEPASS ----------------------------------------------------------
 
