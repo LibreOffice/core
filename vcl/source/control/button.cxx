@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:53:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include <rc.h>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
