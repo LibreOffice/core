@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:44:25 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,10 +164,6 @@ namespace sdr
                 && rDisplayInfo.GetOutputDevice()
                 && GetPaintObjectCount())
             {
-                // Always save original DrawMode, it's used by the renderers
-                // when they need to paint into a bitmap.
-                rDisplayInfo.SaveOriginalDrawMode();
-
                 // This class is normally used for producing a single output. Thus,
                 // buffering makes no sense and is switched off here.
                 rDisplayInfo.SetBufferingAllowed(mbBufferingAllowed);
