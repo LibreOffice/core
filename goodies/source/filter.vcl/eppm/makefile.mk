@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:08:56 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:00:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ DEPTARGET=veppm
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES=	dlgeppm.src \
+SRS1NAME=$(TARGET)
+SRC1FILES=	dlgeppm.src \
             eppmstr.src
 
 SLOFILES =	$(SLO)$/eppm.obj \
