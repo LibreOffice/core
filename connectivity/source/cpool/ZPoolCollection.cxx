@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:01:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,5 +574,6 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
     }
 }
 // -----------------------------------------------------------------------------
+
 
 

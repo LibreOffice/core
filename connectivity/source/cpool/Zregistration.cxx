@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Zregistration.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
-#include "ZConnectionPool.hxx"
+#ifndef CONNECTIVITY_POOLCOLLECTION_HXX
+#include "ZPoolCollection.hxx"
 #endif
 
 
@@ -89,7 +89,7 @@ extern "C"
 sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, com::sun::star::registry::XRegistryKey* _pRegistryKey)
 {
     ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
-    sMainKeyName += OConnectionPool::getImplementationName_Static();
+    sMainKeyName += OPoolCollection::getImplementationName_Static();
     sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
 
     try
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL component_writeInfo(void* _pServiceManager, com::sun::star::re
         if (!xMainKey.is())
             return sal_False;
 
-        Sequence< ::rtl::OUString > sServices = OConnectionPool::getSupportedServiceNames_Static();
+        Sequence< ::rtl::OUString > sServices = OPoolCollection::getSupportedServiceNames_Static();
         const ::rtl::OUString* pServices = sServices.getConstArray();
         for (sal_Int32 i=0; i<sServices.getLength(); ++i, ++pServices)
             xMainKey->createKey(*pServices);
@@ -119,14 +119,14 @@ void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star
 {
     void* pRet = NULL;
 
-    if (OConnectionPool::getImplementationName_Static().compareToAscii(_pImplName) == 0)
+    if (OPoolCollection::getImplementationName_Static().compareToAscii(_pImplName) == 0)
     {
         Reference< XSingleServiceFactory > xFactory(
             ::cppu::createOneInstanceFactory(
                 _pServiceManager,
-                OConnectionPool::getImplementationName_Static(),
-                OConnectionPool::CreateInstance,
-                OConnectionPool::getSupportedServiceNames_Static()
+                OPoolCollection::getImplementationName_Static(),
+                OPoolCollection::CreateInstance,
+                OPoolCollection::getSupportedServiceNames_Static()
             )
         );
         if (xFactory.is())

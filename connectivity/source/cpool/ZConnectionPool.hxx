@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 10:59:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,41 +61,26 @@
 #ifndef _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 #define _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
-#include <com/sun/star/sdbc/XDriverManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
-#include <com/sun/star/sdbc/XDriver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XPOOLEDCONNECTION_HPP_
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
+#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
+#include <com/sun/star/sdbc/XDriver.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
-#include <com/sun/star/reflection/XProxyFactory.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -135,11 +120,7 @@ namespace connectivity
     //= OConnectionPool - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef ::cppu::ImplHelper4<    ::com::sun::star::sdbc::XDriverManager,
-                                    ::com::sun::star::sdbc::XDriverAccess,
-                                    ::com::sun::star::lang::XServiceInfo,
-                                    ::com::sun::star::lang::XEventListener
-                                    >   OConnectionPool_Base;
+    typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;
@@ -171,25 +152,13 @@ namespace connectivity
 
         ::osl::Mutex            m_aMutex;
         ::vos::ORef<OPoolTimer> m_xTimer;
-        oslInterlockedCount     m_refCount;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >          m_xManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
-
-        DECLARE_STL_MAP(
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,
-                ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDriver >,
-                ODriverCompare,
-                MapDriver2DriverRef );
-
-        MapDriver2DriverRef     m_aDriverProxies;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >     m_xDriver;      // the one and only driver for this connectionpool
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDriverNode;  // config node entry
+        sal_Int32 m_nTimeOut;
+        sal_Int32 m_nALiveCount;
 
     private:
-        OConnectionPool(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
-
         // check two maps
         sal_Bool checkSequences(const PropertyMap& _rLh,const PropertyMap& _rRh);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createNewConnection(const ::rtl::OUString& _rURL,
@@ -197,32 +166,21 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator& _rIter);
         // creates a map from a sequence of propertyValue
         void createPropertyMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo,PropertyMap& _rMap);
-    public:
+
+    protected:
+        // the dtor will be called from the last instance  (last release call)
         ~OConnectionPool();
-    // XInterface
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+    public:
+        OConnectionPool(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xDriverNode);
 
-    // XDriverManager
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    //XDriverAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > SAL_CALL getDriverByURL( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException);
-    // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo - static methods
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL CreateInstance(const::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-
+        // delete all refs
+        void clear();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         void invalidatePooledConnections();
     };
