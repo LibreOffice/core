@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:33:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+#include "swuiidxmrk.hxx"
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -123,6 +126,9 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
+#endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -180,11 +186,6 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-#ifndef _BREAKIT_HXX
-#include <breakit.hxx>
-#endif
-
-#include "swuiidxmrk.hxx"
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -511,9 +512,8 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     /*
     //enable phonetic reading dependent on the current language
     {
-        SwBreakIt aBreakIt = SwBreakIt();
-        lang::Locale& rLocale = aBreakIt.GetLocale( LanguageType( nLangForPhoneticReading ) );
-        bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( rLocale );
+        lang::Locale aLocale( SvxCreateLocale( LanguageType( nLangForPhoneticReading ) ) );
+        bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( aLocale );
     }
     */
 }
@@ -523,9 +523,8 @@ String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
     if( !bIsPhoneticReadingEnabled )
         return aEmptyStr;
 
-    SwBreakIt aBreakIt = SwBreakIt();
-    lang::Locale& rLocale = aBreakIt.GetLocale( LanguageType( nLangForPhoneticReading ) );
-    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, rLocale);
+    lang::Locale aLocale( SvxCreateLocale( LanguageType( nLangForPhoneticReading ) ) );
+    return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, aLocale);
 }
 
 /* -----------------07.09.99 10:43-------------------
@@ -601,7 +600,7 @@ void SwIndexMarkDlg::InsertUpdate()
 /*--------------------------------------------------------------------
      Beschreibung:  Marke einfuegen
  --------------------------------------------------------------------*/
-void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
+static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
 {
     rSh.Push();
 
@@ -609,7 +608,7 @@ void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelTxt(), OUString(),
-                        CreateLocale( GetAppLanguage() ),
+                        SvxCreateLocale( GetAppLanguage() ),
                         0, 0, 0,
                         (bCaseSensitive
                             ? 0
@@ -1457,7 +1456,7 @@ IMPL_LINK( SwAuthMarkDlg, CloseHdl, PushButton *, EMPTYARG )
 /* -----------------06.12.99 13:54-------------------
 
  --------------------------------------------------*/
-String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const String& rColumnTitle)
+static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const String& rColumnTitle)
 {
     String sRet;
     OUString uColumnTitle = rColumnTitle;
