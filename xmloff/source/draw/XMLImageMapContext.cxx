@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:27 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 08:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ void XMLImageMapObjectContext::ProcessAttribute(
     switch (eToken)
     {
         case XML_TOK_IMAP_URL:
-            sUrl = rValue;
+            sUrl = GetImport().GetAbsoluteReference(rValue);
             break;
 
         case XML_TOK_IMAP_TARGET:

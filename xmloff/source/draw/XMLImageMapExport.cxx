@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-03 13:13:29 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 08:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void XMLImageMapExport::ExportMapEntry(
         aAny >>= sHref;
         if (sHref.getLength() > 0)
         {
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sHref);
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExport.GetRelativeReference(sHref));
         }
         rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                                    sXML_simple );
