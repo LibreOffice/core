@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:13:55 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -97,8 +100,10 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
+#if SUPD<638
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
+#endif
 #endif
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
@@ -122,7 +127,9 @@ struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                   entry;
     Reference< XHierarchicalNameAccess > dir;
+#if SUPD<638
     Reference< XStringEscape >           esc;
+#endif
     Sequence< OUString>                  names;
     sal_Int32                            pos;
 
@@ -166,7 +173,7 @@ HierarchyEntry::HierarchyEntry(
 
     // Note: do not init m_aPath in init list. createPathFromHierarchyURL
     //       needs m_xSMgr and m_aMutex.
-    m_aPath = createPathFromHierarchyURL( rURL );
+    m_aPath = createPathFromHierarchyURL( aUri );
 
     // Extract language independent name from URL.
     sal_Int32 nPos = rURL.lastIndexOf( '/' );
@@ -957,14 +964,13 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 OSL_ENSURE( xHierNameAccess.is(),
                             "HierarchyEntry::first - No hier. name access!" );
 
+                it.m_pImpl->dir = xHierNameAccess;
+
+#if SUPD<638
                 Reference< XStringEscape > xEscaper(
                                             xRootHierNameAccess, UNO_QUERY );
-
-//                OSL_ENSURE( xEscaper.is(),
-//                            "HierarchyEntry::first - No string escaper!" );
-
-                it.m_pImpl->dir = xHierNameAccess;
                 it.m_pImpl->esc = xEscaper;
+#endif
             }
         }
         catch ( RuntimeException& )
@@ -1006,8 +1012,51 @@ sal_Bool HierarchyEntry::next( iterator& it )
 }
 
 //=========================================================================
-OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
+OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
 {
+#if SUPD>637
+    // Transform path....
+    // folder/subfolder/subsubfolder
+    //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
+
+    const rtl::OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
+    sal_Int32 nLen = aPath.getLength();
+
+    if ( nLen )
+    {
+        rtl::OUStringBuffer aNewPath;
+        aNewPath.appendAscii( "['" );
+
+        sal_Int32 nStart = 0;
+        sal_Int32 nEnd   = aPath.indexOf( '/' );
+
+        do
+        {
+            if ( nEnd == -1 )
+                nEnd = nLen;
+
+            aNewPath.append( aPath.copy( nStart, nEnd - nStart ) );
+
+            if ( nEnd != nLen )
+            {
+                aNewPath.appendAscii( "']/Children/['" );
+                nStart = nEnd + 1;
+                nEnd   = aPath.indexOf( '/', nStart );
+            }
+            else
+                aNewPath.appendAscii( "']" );
+        }
+        while ( nEnd != nLen );
+
+        return aNewPath.makeStringAndClear();
+    }
+
+    OSL_ENSURE( false,
+                "HierarchyEntry::createPathFromHierarchyURL - Invalid URL!" );
+
+    return rtl::OUString();
+
+#else
     Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
 
 //    OSL_ENSURE( xEscaper.is(),
@@ -1017,8 +1066,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
     // folder/subfolder/subsubfolder
     //      --> folder/Children/subfolder/Children/subsubfolder
 
-    HierarchyUri aUri( rURL );
-    OUString aPath = aUri.getPath().copy( 1 ); // skip leading slash.
+    OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
     sal_Int32 nLen = aPath.getLength();
 
     OUString aNewPath;
@@ -1062,6 +1110,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
     }
 
     return aNewPath;
+#endif
 }
 
 //=========================================================================
@@ -1154,6 +1203,26 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
     {
         try
         {
+#if SUPD>637
+            rtl::OUStringBuffer aKey;
+            aKey.appendAscii( "['" );
+            aKey.append( m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
+            aKey.appendAscii( "']" );
+
+            rtl::OUString aTitle     = aKey.makeStringAndClear();
+            rtl::OUString aTargetURL = aTitle;
+
+            aTitle     += OUString::createFromAscii( "/Title" );
+            aTargetURL += OUString::createFromAscii( "/TargetURL" );
+
+            m_pImpl->dir->getByHierarchicalName( aTitle )
+                >>= m_pImpl->entry.aTitle;
+            m_pImpl->dir->getByHierarchicalName( aTargetURL )
+                >>= m_pImpl->entry.aTargetURL;
+
+            m_pImpl->entry.aName
+                = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
+#else
             OUString aKey = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
             OUString aTitle     = aKey;
             OUString aTargetURL = aKey;
@@ -1181,6 +1250,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             }
 
             m_pImpl->entry.aName = aKey;
+#endif
         }
         catch ( NoSuchElementException& )
         {

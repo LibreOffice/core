@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ struct HierarchyEntryData
 {
     ::rtl::OUString aName;      // language independent name of the entry
 
-    ::rtl::OUString aTitle;     // Title
+    ::rtl::OUString aTitle;     // Title (language dependent)
     ::rtl::OUString aTargetURL; // Target URL ( links only )
 
     HierarchyEntryData() {}
@@ -97,6 +97,7 @@ struct HierarchyEntryData
 //=========================================================================
 
 class HierarchyContentProvider;
+class HierarchyUri;
 
 class HierarchyEntry
 {
@@ -114,7 +115,7 @@ class HierarchyEntry
     sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
-    ::rtl::OUString createPathFromHierarchyURL( const ::rtl::OUString& rURL );
+    ::rtl::OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
     getRootReadAccess();

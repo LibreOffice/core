@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasource.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:15:56 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,10 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #endif
+#if SUPD<638
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
+#endif
 #endif
 
 using namespace com::sun::star;
@@ -138,8 +140,10 @@ class HierarchyDataAccess : public cppu::OWeakObject,
                             public container::XHierarchicalNameAccess,
                             public container::XNameContainer,
                             public util::XChangesNotifier,
-                            public util::XChangesBatch,
-                            public util::XStringEscape
+#if SUPD<638
+                            public util::XStringEscape,
+#endif
+                            public util::XChangesBatch
 {
     osl::Mutex m_aMutex;
     uno::Reference< uno::XInterface > m_xConfigAccess;
@@ -152,7 +156,9 @@ class HierarchyDataAccess : public cppu::OWeakObject,
     uno::Reference< container::XElementAccess >          m_xCfgEA;
     uno::Reference< util::XChangesNotifier >             m_xCfgCN;
     uno::Reference< util::XChangesBatch >                m_xCfgCB;
+#if SUPD<638
     uno::Reference< util::XStringEscape >                m_xCfgSE;
+#endif
     bool m_bReadOnly;
 
 public:
@@ -261,6 +267,7 @@ public:
     getPendingChanges()
         throw ( uno::RuntimeException );
 
+#if SUPD<638
     // XStringEscape
     virtual rtl::OUString SAL_CALL
     escapeString( const rtl::OUString & aString )
@@ -268,6 +275,7 @@ public:
     virtual rtl::OUString SAL_CALL
     unescapeString( const rtl::OUString & aEscapedString )
         throw ( lang::IllegalArgumentException, uno::RuntimeException );
+#endif
 };
 
 }; // namespace hcp_impl
@@ -732,8 +740,10 @@ uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
                 static_cast< container::XHierarchicalNameAccess * >( this ),
                 static_cast< container::XNameAccess * >( this ),
                 static_cast< container::XElementAccess * >( this ),
-                static_cast< util::XChangesNotifier * >( this ),
-                static_cast< util::XStringEscape * >( this ) );
+#if SUPD<638
+                static_cast< util::XStringEscape * >( this ),
+#endif
+                static_cast< util::XChangesNotifier * >( this ) );
 
     // Interfaces supported only in read-write mode.
     if ( !aRet.hasValue() && !m_bReadOnly )
@@ -776,8 +786,10 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                     CPPU_TYPE_REF( lang::XComponent ),
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameAccess ),
-                    CPPU_TYPE_REF( util::XChangesNotifier ),
-                    CPPU_TYPE_REF( util::XStringEscape ) );
+#if SUPD<638
+                    CPPU_TYPE_REF( util::XStringEscape ),
+#endif
+                    CPPU_TYPE_REF( util::XChangesNotifier ) );
                   pCollection = &aCollection;
             }
             else
@@ -790,8 +802,10 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameContainer ),
                     CPPU_TYPE_REF( util::XChangesBatch ),
-                    CPPU_TYPE_REF( util::XChangesNotifier ),
-                    CPPU_TYPE_REF( util::XStringEscape ) );
+#if SUPD<638
+                    CPPU_TYPE_REF( util::XStringEscape ),
+#endif
+                    CPPU_TYPE_REF( util::XChangesNotifier ) );
                   pCollection = &aCollection;
             }
         }
@@ -1010,6 +1024,8 @@ void SAL_CALL HierarchyDataAccess::removeChangesListener(
     xOrig->removeChangesListener( aListener );
 }
 
+#if SUPD<638
+
 //=========================================================================
 //
 // XStringEscape methods.
@@ -1052,6 +1068,8 @@ HierarchyDataAccess::unescapeString( const rtl::OUString & aEscapedString )
     }
     return rtl::OUString();
 }
+
+#endif /* SUPD<638 */
 
 //=========================================================================
 //
