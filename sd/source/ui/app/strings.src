@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-24 21:10:34 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4031,7 +4031,7 @@ String STR_EXPORT_STANDARD
     Text = "~Standard" ;
     Text [ English ] = "H~ome" ;
     Text [ norwegian ] = "H~ome" ;
-    Text [ italian ] = "~Standard" ;
+    Text [ italian ] = "Standard" ;
     Text [ portuguese_brazilian ] = "C~asa" ;
     Text [ portuguese ] = "~Padrão" ;
     Text [ finnish ] = "Oletusarvo" ;
