@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:08:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,4 +811,6 @@ public:
     ~SwXDocumentPropertyHelper();
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetDrawTable(short nWhich);
     void Invalidate();
+
+    virtual void onChange();
 };
