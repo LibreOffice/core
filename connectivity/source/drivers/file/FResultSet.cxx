@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:03:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,6 +789,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
+    if(m_pTable->isReadOnly())
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
 
@@ -805,6 +807,8 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
+    if(m_pTable->isReadOnly())
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
     sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
     if(m_bRowDeleted && m_pFileSet)
@@ -846,6 +850,8 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
+    if(m_pTable->isReadOnly())
+        throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,SQLSTATE_GENERAL,1000,Any());
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
@@ -1909,6 +1915,8 @@ BOOL OResultSet::OpenImpl()
         if(m_pTable)
             m_pTable->acquire();
     }
+    OSL_ENSURE(m_pTable,"We need a table object!");
+    m_nResultSetConcurrency = (m_pTable->isReadOnly() || isCount()) ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
 
     GetAssignValues(); // assign values and describe parameter columns
     m_aSQLAnalyzer.setParameterColumns(m_xParamColumns);
