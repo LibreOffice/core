@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vector3d.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:09 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 08:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ class Vector3D
     void CalcMiddle(const Vector3D& rOld1, const Vector3D& rOld2, Vector3D& rOld3);
 
     Vector3D GetPerpendicular2D() const;
+    Vector3D GetPerpendicular(const Vector3D& rNormalizedVec) const;
+    Vector3D GetProjectionOnPlane(const Vector3D& rNormalizedPlane) const;
 
     Vector3D&   operator+=  (const Vector3D&);
     Vector3D&   operator-=  (const Vector3D&);
