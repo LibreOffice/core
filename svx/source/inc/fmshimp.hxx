@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,11 +184,11 @@
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
-#ifndef _UTL_STLTYPES_HXX_
-#include "unotools/stl_types.hxx"
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include "unotools/container.hxx"
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
 #ifndef _FM_IMPLEMENTATION_IDS_HXX_
 #include "fmimplids.hxx"
@@ -246,10 +246,10 @@ protected:
 //==============================================================================
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
-class FmXBoundFormFieldIterator : public ::utl::IndexAccessIterator
+class FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
 {
 public:
-    FmXBoundFormFieldIterator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rStartingPoint) : ::utl::IndexAccessIterator(_rStartingPoint) { }
+    FmXBoundFormFieldIterator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
 
 protected:
     virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rElement);
@@ -638,7 +638,7 @@ inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 // = der Teil mit dem Container-Test fuer dieses Objekt.
 // =
 
-class SearchableControlIterator : public ::utl::IndexAccessIterator
+class SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
     ::rtl::OUString         m_sCurrentValue;
         // der aktuelle Wert der ControlSource-::com::sun::star::beans::Property

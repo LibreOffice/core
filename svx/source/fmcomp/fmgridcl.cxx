@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:49:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,14 +228,14 @@
 #include <cppuhelper/extract.hxx>
 #endif
 
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -484,18 +484,18 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         if (xFields.is() && xFields->hasByName(aFieldName))
             ::cppu::extractInterface(xField, xFields->getByName(aFieldName));
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::utl::getNumberFormats(xConnection, sal_True);
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
 
         if (!xSupplier.is())
         {
-            ::utl::disposeComponent(xStatement);
+            ::comphelper::disposeComponent(xStatement);
             return sal_False;
         }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
         if (!xNumberFormats.is())
         {
-            ::utl::disposeComponent(xStatement);
+            ::comphelper::disposeComponent(xStatement);
             return sal_False;
         }
 
@@ -511,7 +511,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
             case ::com::sun::star::sdbc::DataType::BINARY:
             case ::com::sun::star::sdbc::DataType::VARBINARY:
             case ::com::sun::star::sdbc::DataType::OTHER:
-                ::utl::disposeComponent(xStatement);
+                ::comphelper::disposeComponent(xStatement);
                 return sal_False;
         }
 
@@ -573,8 +573,8 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         // if it's a currency field, a a "currency field" option
         try
         {
-            if  (   ::utl::hasProperty(FM_PROP_ISCURRENCY, xField)
-                &&  ::utl::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
+            if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
+                &&  ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
                 aPossibleTypes.Insert(SID_FM_CURRENCYFIELD, 0);
         }
         catch(...)
@@ -611,7 +611,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
                 if (sFieldService.len())
                 {
                     xThisRoundCol = xFactory->createColumn(sFieldService);
-                    if (xThisRoundCol.is() && ::utl::hasProperty(FM_PROP_STRICTFORMAT, xThisRoundCol))
+                    if (xThisRoundCol.is() && ::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xThisRoundCol))
                         xThisRoundCol->setPropertyValue(FM_PROP_STRICTFORMAT, ::com::sun::star::uno::makeAny(sal_Bool(sal_False)));
                 }
                 if (nColCount)
@@ -623,8 +623,8 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
 
         if (!xCol.is() || (bDateNTimeCol && !xSecondCol.is()))
         {
-            ::utl::disposeComponent(xCol);  // in case only teh creation of the second column failed
-            ::utl::disposeComponent(xStatement);
+            ::comphelper::disposeComponent(xCol);   // in case only teh creation of the second column failed
+            ::comphelper::disposeComponent(xStatement);
             return sal_False;
         }
 
@@ -640,7 +640,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         if (nPreferedType == SID_FM_NUMERICFIELD)
         {
             {
-                ::com::sun::star::uno::Any aScaleVal(::utl::getNumberFormatDecimals(xNumberFormats, nFormatKey));
+                ::com::sun::star::uno::Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
                 xCol->setPropertyValue(FM_PROP_DECIMAL_ACCURACY,aScaleVal);
             }
 
@@ -707,10 +707,10 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xForm(xFormCp->getParent(), ::com::sun::star::uno::UNO_QUERY);
         if (xForm.is())
         {
-            if (!::utl::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).getLength())
+            if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).getLength())
                 xForm->setPropertyValue(FM_PROP_DATASOURCE, XUB2ANY(aDatabaseName));
 
-            if (!::utl::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).getLength())
+            if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).getLength())
             {
                 xForm->setPropertyValue(FM_PROP_COMMAND, XUB2ANY(aObjectName));
                 ::com::sun::star::uno::Any aCommandType;
@@ -735,7 +735,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
     catch(...)
     {
         DBG_ERROR("FmGridHeader::Drop : catched an exception while creatin' the column !");
-        ::utl::disposeComponent(xStatement);
+        ::comphelper::disposeComponent(xStatement);
         return sal_False;
     }
     return sal_True;
@@ -827,13 +827,13 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
                 aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
                 DBG_ASSERT(aHidden.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN,
                     "FmGridHeader::PreExecuteColumnContextMenu : the property 'hidden' should be boolean !");
-                if (::utl::getBOOL(aHidden))
+                if (::comphelper::getBOOL(aHidden))
                 {
                     // put the column name into the 'show col' menu
                     if (nHiddenCols < 16)
                     {   // (only the first 16 items to keep the menu rather small)
                         aName = xCurCol->getPropertyValue(FM_PROP_LABEL);
-                        pShowColsMenu->InsertItem(nHiddenCols + 1, ::utl::getString(aName), 0, nHiddenCols);
+                        pShowColsMenu->InsertItem(nHiddenCols + 1, ::comphelper::getString(aName), 0, nHiddenCols);
                             // the ID is arbitrary, but should be unique within the whole menu
                     }
                     ++nHiddenCols;
@@ -895,7 +895,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCol;
             ::cppu::extractInterface(xCol, xCols->getByIndex(nPos));
             xCols->removeByIndex(nPos);
-            ::utl::disposeComponent(xCol);
+            ::comphelper::disposeComponent(xCol);
         }   break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
         {
@@ -998,7 +998,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 {
                     ::cppu::extractInterface(xCurCol, xCols->getByIndex(i));
                     ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
-                    if (::utl::getBOOL(aHidden))
+                    if (::comphelper::getBOOL(aHidden))
                         if (!--nExecutionResult)
                         {
                             xCurCol->setPropertyValue(FM_PROP_HIDDEN, ::com::sun::star::uno::makeAny((sal_Bool)sal_False));
@@ -1028,10 +1028,10 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
                 ::com::sun::star::lang::Locale aAppLocale(sLanguage, sCountry, ::rtl::OUString());
 
-                ::utl::TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
+                ::dbtools::TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
 
                 xCols->replaceByIndex(nPos, aNew);
-                ::utl::disposeComponent(xReplaced);
+                ::comphelper::disposeComponent(xReplaced);
             }
             else
             {
@@ -1101,7 +1101,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
     if (evt.PropertyName == FM_PROP_ISMODIFIED)
     {
         // modified or clean ?
-        GridRowStatus eStatus = ::utl::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN;
+        GridRowStatus eStatus = ::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN;
         if (eStatus != xRow->GetStatus())
         {
             xRow->SetStatus(eStatus);
@@ -1564,7 +1564,7 @@ void FmGridControl::InitColumnsByModels(const ::com::sun::star::uno::Reference< 
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
-        aName  = (const sal_Unicode*)::utl::getString(xCol->getPropertyValue(FM_PROP_LABEL));
+        aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
         sal_Int32 nWidth = 0;
@@ -1586,7 +1586,7 @@ void FmGridControl::InitColumnsByModels(const ::com::sun::star::uno::Reference< 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
         aHidden = xCol->getPropertyValue(FM_PROP_HIDDEN);
-        if (::utl::getBOOL(aHidden))
+        if (::comphelper::getBOOL(aHidden))
             HideColumn(GetColumnIdFromModelPos(i));
     }
 
@@ -1661,19 +1661,19 @@ void FmGridControl::InitColumnsByFields(const ::com::sun::star::uno::Reference< 
             else
             {
                 // Feststellen ob ReadOnly
-                sal_Bool bReadOnly = ::utl::getBOOL(xField->getPropertyValue(FM_PROP_ISREADONLY));
+                sal_Bool bReadOnly = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISREADONLY));
                 pCol->SetReadOnly(bReadOnly);
             }
         }
 
         // anhand des ServiceNamens wird das Control bestimmt
         ::rtl::OUString sPropColumnServiceName = ::rtl::OUString::createFromAscii("ColumnServiceName");
-        if (!::utl::hasProperty(sPropColumnServiceName, xCol))
+        if (!::comphelper::hasProperty(sPropColumnServiceName, xCol))
             return;
 
         pCol->setModel(xCol);
 
-        sal_Int32 nTypeId = getColumnTypeByModelName(::utl::getString(xCol->getPropertyValue(sPropColumnServiceName)));
+        sal_Int32 nTypeId = getColumnTypeByModelName(::comphelper::getString(xCol->getPropertyValue(sPropColumnServiceName)));
         pCol->CreateControl(nFieldPos, xField, nTypeId);
     }
 }
@@ -1741,7 +1741,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
 
     for (i=0; i<nSelectedRows; ++i)
     {
-        nIdx = ::utl::getINT32(pBookmarks[i]);
+        nIdx = ::comphelper::getINT32(pBookmarks[i]);
         if (IsEmptyRow(nIdx))
         {
             // leerzeile nicht loeschen

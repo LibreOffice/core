@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-11 12:32:27 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,20 +122,20 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#ifndef _UNOTOOLS_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _FM_IMPLEMENTATION_IDS_HXX_
@@ -409,7 +409,7 @@ FmXGridControl::~FmXGridControl()
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& ServiceName) throw()
 {
-    ::utl::StringSequence aSupported = getSupportedServiceNames();
+    ::comphelper::StringSequence aSupported = getSupportedServiceNames();
     const ::rtl::OUString * pArray = aSupported.getConstArray();
     for( sal_Int32 i = 0; i < aSupported.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -424,11 +424,11 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 }
 
 //------------------------------------------------------------------------------
-::utl::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw()
+::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw()
 {
     static ::rtl::OUString aServName = FM_SUN_CONTROL_GRIDCONTROL;
 //  static ::rtl::OUString aServName(FM_SUN_CONTROL_GRIDCONTROL);
-    return ::utl::StringSequence(&aServName, 1);
+    return ::comphelper::StringSequence(&aServName, 1);
 }
 
 //------------------------------------------------------------------------------
@@ -477,7 +477,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
     {
         try
         {
-            if (::utl::getINT16(xModelSet->getPropertyValue(FM_PROP_BORDER)))
+            if (::comphelper::getINT16(xModelSet->getPropertyValue(FM_PROP_BORDER)))
                 nStyle |= WB_BORDER;
         }
         catch(...)
@@ -586,7 +586,7 @@ void SAL_CALL FmXGridControl::createPeer(const ::com::sun::star::uno::Reference<
                     if (::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xColumnsSupplier->getColumns(),::com::sun::star::uno::UNO_QUERY)->getCount())
                     {
                         // we get only a new bookmark if the resultset is not forwardonly
-                        if (::utl::getINT32(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xForm, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY)
+                        if (::comphelper::getINT32(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xForm, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY)
                         {
                             // as the FmGridControl touches the data source it is connected to we have to remember the current
                             // cursor position (and restore afterwards)
@@ -826,7 +826,7 @@ sal_Bool SAL_CALL FmXGridControl::hasElements() throw( ::com::sun::star::uno::Ru
     if (xPeer.is())
         return xPeer->createEnumeration();
     else
-        return new ::utl::OEnumerationByIndex(this);
+        return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // ::com::sun::star::container::XIndexAccess
@@ -866,10 +866,10 @@ void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( ::com:
 }
 
 //------------------------------------------------------------------------------
-::utl::StringSequence SAL_CALL FmXGridControl::getSupportedModes() throw( ::com::sun::star::uno::RuntimeException )
+::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedModes() throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeSelector >  xPeer(mxPeer, ::com::sun::star::uno::UNO_QUERY);
-    return xPeer.is() ? xPeer->getSupportedModes() : ::utl::StringSequence();
+    return xPeer.is() ? xPeer->getSupportedModes() : ::comphelper::StringSequence();
 }
 
 //------------------------------------------------------------------------------
@@ -1181,7 +1181,7 @@ void FmXGridPeer::removeModifyListener(const ::com::sun::star::uno::Reference< :
 
         xCurrentColumn;
         ::cppu::extractInterface(xCurrentColumn, xColumns->getByIndex(nModelPos));
-        if (!::utl::hasProperty(FM_PROP_CLASSID, xCurrentColumn))
+        if (!::comphelper::hasProperty(FM_PROP_CLASSID, xCurrentColumn))
             continue;
 
         sal_Int16 nClassId;
@@ -1264,7 +1264,7 @@ void FmXGridPeer::removeModifyListener(const ::com::sun::star::uno::Reference< :
                     case ::com::sun::star::uno::TypeClass_LONG          : pReturnArray[i] <<= (sal_Int32)xFieldContent->getLong(); break;
                     case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT: pReturnArray[i] <<= (sal_uInt16)xFieldContent->getShort(); break;
                     case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG : pReturnArray[i] <<= (sal_uInt32)xFieldContent->getLong(); break;
-                    case ::com::sun::star::uno::TypeClass_BOOLEAN       : ::utl::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
+                    case ::com::sun::star::uno::TypeClass_BOOLEAN       : ::comphelper::setBOOL(pReturnArray[i],xFieldContent->getBoolean()); break;
                     default:
                     {
                         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -1299,7 +1299,7 @@ void FmXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEv
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())
     {
         // zunaechst raussuchen welche Column sich geaendert hat
-        ::utl::InterfaceRef xCurrent;
+        ::comphelper::InterfaceRef xCurrent;
         for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
         {
             ::cppu::extractInterface(xCurrent, m_xColumns->getByIndex(i));
@@ -1316,7 +1316,7 @@ void FmXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEv
 
         if (evt.PropertyName == FM_PROP_LABEL)
         {
-            String aName = ::utl::getString(evt.NewValue);
+            String aName = ::comphelper::getString(evt.NewValue);
             if (aName != pGrid->GetColumnTitle(nId))
                 pGrid->SetColumnTitle(nId, aName);
         }
@@ -1350,7 +1350,7 @@ void FmXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEv
         {
             DBG_ASSERT(evt.NewValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN,
                 "FmXGridPeer::propertyChange : the property 'hidden' should be of type boolean !");
-            if (::utl::getBOOL(evt.NewValue))
+            if (::comphelper::getBOOL(evt.NewValue))
                 pGrid->HideColumn(nId);
             else
                 pGrid->ShowColumn(nId);
@@ -1437,7 +1437,7 @@ void FmXGridPeer::cursorMoved(const ::com::sun::star::lang::EventObject& _rEvent
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     // we are not interested in move to insert row only in the resetted event
     // which is fired after positioning an the insert row
-    if (pGrid && pGrid->IsOpen() && !::utl::getBOOL(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (_rEvent.Source, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
+    if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (_rEvent.Source, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
         pGrid->positioned(_rEvent);
 }
 
@@ -1627,20 +1627,20 @@ void FmXGridPeer::elementInserted(const ::com::sun::star::container::ContainerEv
     addColumnListeners(xSet);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xNewColumn(xSet);
-    String aName = ::utl::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
+    String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     ::com::sun::star::uno::Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
 
-    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::utl::getINT32(evt.Accessor));
+    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
     // jetzt die Spalte setzen
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(::utl::getINT32(evt.Accessor));
+    DbGridColumn* pCol = pGrid->GetColumns().GetObject(::comphelper::getINT32(evt.Accessor));
     pCol->setModel(xNewColumn);
 
     ::com::sun::star::uno::Any aHidden = xNewColumn->getPropertyValue(FM_PROP_HIDDEN);
-    if (::utl::getBOOL(aHidden))
+    if (::comphelper::getBOOL(aHidden))
         pGrid->HideColumn(pCol->GetId());
 }
 
@@ -1658,15 +1658,15 @@ void FmXGridPeer::elementReplaced(const ::com::sun::star::container::ContainerEv
     ::cppu::extractInterface(xNewColumn, evt.Element);
     ::cppu::extractInterface(xOldColumn, evt.ReplacedElement);
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::utl::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::comphelper::getINT32(evt.Accessor)));
     removeColumnListeners(xOldColumn);
 
-    String aName = ::utl::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
+    String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     ::com::sun::star::uno::Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
-    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::utl::getINT32(evt.Accessor));
+    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
     addColumnListeners(xNewColumn);
 }
@@ -1680,7 +1680,7 @@ void FmXGridPeer::elementRemoved(const ::com::sun::star::container::ContainerEve
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::utl::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::comphelper::getINT32(evt.Accessor)));
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xOldColumn;
     ::cppu::extractInterface(xOldColumn, evt.Element);
@@ -1697,7 +1697,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
     {
         case FM_ATTR_HELPURL:
         {
-            String sHelpURL(::utl::getString(Value));
+            String sHelpURL(::comphelper::getString(Value));
             String sPattern;
             sPattern.AssignAscii("HID:");
             if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
@@ -1708,18 +1708,18 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         }
         break;
         case FM_ATTR_DISPLAYSYNCHRON:
-            pGrid->setDisplaySynchron(::utl::getBOOL(Value));
+            pGrid->setDisplaySynchron(::comphelper::getBOOL(Value));
             break;
         case FM_ATTR_CURSORCOLOR:
             if (bVoid)
                 pGrid->SetCursorColor(COL_TRANSPARENT);
             else
-                pGrid->SetCursorColor(Color(::utl::getINT32(Value)));
+                pGrid->SetCursorColor(Color(::comphelper::getINT32(Value)));
             if (isDesignMode())
                 pGrid->Invalidate();
             break;
         case FM_ATTR_ALWAYSSHOWCURSOR:
-            pGrid->EnablePermanentCursor(::utl::getBOOL(Value));
+            pGrid->EnablePermanentCursor(::comphelper::getBOOL(Value));
             if (isDesignMode())
                 pGrid->Invalidate();
             break;
@@ -1732,7 +1732,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                 ::com::sun::star::awt::FontDescriptor aFont;
                 if (Value >>= aFont)
                 {
-                    if (::utl::operator==(aFont, ::utl::getDefaultFont()))  // ist das der Default
+                    if (::comphelper::operator==(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
                         pGrid->SetControlFont( Font() );
                     else
                         pGrid->SetControlFont( ImplCreateFont( aFont ) );
@@ -1740,7 +1740,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                     // if our row-height property is void (which means "calculate it font-dependent") we have
                     // to adjust the control's row height
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(getColumns(), ::com::sun::star::uno::UNO_QUERY);
-                    if (xModelSet.is() && ::utl::hasProperty(FM_PROP_ROWHEIGHT, xModelSet))
+                    if (xModelSet.is() && ::comphelper::hasProperty(FM_PROP_ROWHEIGHT, xModelSet))
                     {
                         ::com::sun::star::uno::Any aHeight = xModelSet->getPropertyValue(FM_PROP_ROWHEIGHT);
                         if (!aHeight.hasValue())
@@ -1758,7 +1758,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             }
             else
             {
-                Color aColor( ::utl::getINT32(Value) );
+                Color aColor( ::comphelper::getINT32(Value) );
                 pGrid->SetBackground( aColor );
                 pGrid->SetControlBackground( aColor );
             }
@@ -1770,7 +1770,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             }
             else
             {
-                Color aColor( ::utl::getINT32(Value) );
+                Color aColor( ::comphelper::getINT32(Value) );
                 pGrid->SetTextColor( aColor );
                 pGrid->SetControlForeground( aColor );
             }
@@ -2050,7 +2050,7 @@ sal_Bool FmXGridPeer::hasElements() throw( ::com::sun::star::uno::RuntimeExcepti
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  FmXGridPeer::createEnumeration() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return new ::utl::OEnumerationByIndex(this);
+    return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // ::com::sun::star::container::XIndexAccess
@@ -2115,9 +2115,9 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::
 }
 
 //------------------------------------------------------------------------------
-::utl::StringSequence FmXGridPeer::getSupportedModes() throw( ::com::sun::star::uno::RuntimeException )
+::comphelper::StringSequence FmXGridPeer::getSupportedModes() throw( ::com::sun::star::uno::RuntimeException )
 {
-    static ::utl::StringSequence aModes;
+    static ::comphelper::StringSequence aModes;
     if (!aModes.getLength())
     {
         aModes.realloc(2);
@@ -2131,7 +2131,7 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::
 //------------------------------------------------------------------------------
 sal_Bool FmXGridPeer::supportsMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::utl::StringSequence aModes(getSupportedModes());
+    ::comphelper::StringSequence aModes(getSupportedModes());
     const ::rtl::OUString* pModes = aModes.getConstArray();
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {
@@ -2392,7 +2392,7 @@ void FmXGridPeer::resetted(const ::com::sun::star::lang::EventObject& rEvent) th
 
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
-            ::utl::getProcessServiceFactory()->createInstance(
+            ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
             ::com::sun::star::uno::UNO_QUERY);
         pSupported = aSupported.getArray();

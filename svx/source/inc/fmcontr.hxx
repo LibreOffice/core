@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmcontr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #ifndef _SVX_FMCONTR_HXX
 #define _SVX_FMCONTR_HXX
 
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -103,7 +105,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #endif
 
-typedef ::std::hash_multimap< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > , ::utl::UStringHash, ::utl::UStringEqual> OInterfaceMap;
+typedef ::std::hash_multimap< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > , ::comphelper::UStringHash, ::comphelper::UStringEqual> OInterfaceMap;
 
 DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > ,InterfaceArray);
 

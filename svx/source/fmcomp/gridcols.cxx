@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcols.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
@@ -91,9 +91,9 @@ IMPLEMENT_CONSTASCII_USTRING(FM_COL_LISTBOX, "ListBox");
 IMPLEMENT_CONSTASCII_USTRING(FM_COL_FORMATTEDFIELD, "FormattedField");
 
 //------------------------------------------------------------------------------
-const ::utl::StringSequence& getColumnTypes()
+const ::comphelper::StringSequence& getColumnTypes()
 {
-    static ::utl::StringSequence aColumnTypes(10);
+    static ::comphelper::StringSequence aColumnTypes(10);
     if (!aColumnTypes.getConstArray()[0].getLength())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
@@ -144,7 +144,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
             ? aModelName.copy(aModelPrefix.len())
             : aModelName.copy(aCompatibleModelPrefix.len());
 
-        const ::utl::StringSequence& rColumnTypes = getColumnTypes();
+        const ::comphelper::StringSequence& rColumnTypes = getColumnTypes();
 #if SUPD>583
         nTypeId = findPos(aColumnType, rColumnTypes);
 #else

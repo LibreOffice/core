@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@
 //#include "fmtools.hxx"
 //#endif
 
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
+#endif
 
 //==================================================================
 class FmFieldWin;
@@ -123,7 +125,7 @@ public:
 //========================================================================
 class FmFieldWin :  public SfxFloatingWindow,
                     public SfxControllerItem,
-                    public ::utl::OPropertyChangeListener
+                    public ::comphelper::OPropertyChangeListener
 {
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;
@@ -132,7 +134,7 @@ class FmFieldWin :  public SfxFloatingWindow,
                        m_aObjectName;
     sal_Int32          m_nObjectType;
 
-    ::utl::OPropertyChangeMultiplexer*  m_pChangeListener;
+    ::comphelper::OPropertyChangeMultiplexer*   m_pChangeListener;
 
 public:
     FmFieldWin(SfxBindings *pBindings,

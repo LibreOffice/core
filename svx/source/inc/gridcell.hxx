@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROPERTY_MULTIPLEX_HXX_
-#include <unotools/propmultiplex.hxx>
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
 #endif
 
 class DbCellControl;
@@ -296,10 +296,10 @@ protected:
 };
 
 //==================================================================
-class DbFormattedField : public DbCellControl, public ::utl::OPropertyChangeListener
+class DbFormattedField : public DbCellControl, public ::comphelper::OPropertyChangeListener
 {
 protected:
-    ::utl::OPropertyChangeMultiplexer*      m_pFormatListener;
+    ::comphelper::OPropertyChangeMultiplexer*       m_pFormatListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     sal_Int16                       m_nKeyType;
 
@@ -350,7 +350,7 @@ public:
 
 //==================================================================
 class DbComboBox    :public DbCellControl
-                    ,public ::utl::OPropertyChangeListener
+                    ,public ::comphelper::OPropertyChangeListener
 {
     sal_Int16         m_nKeyType;
     ::osl::Mutex    m_aDummy;
@@ -373,7 +373,7 @@ public:
 
 //==================================================================
 class DbListBox : public DbCellControl,
-                  public ::utl::OPropertyChangeListener
+                  public ::comphelper::OPropertyChangeListener
 {
     sal_Bool              m_bBound  : 1;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;

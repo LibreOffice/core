@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _SVX_FMCTRLER_HXX
 #define _SVX_FMCTRLER_HXX
 
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
@@ -230,8 +230,8 @@
 #ifndef _FM_IMPLEMENTATION_IDS_HXX_
 #include <fmimplids.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -286,7 +286,7 @@ class FmXFormController     :public ::cppu::OComponentHelper
                             ,public ::com::sun::star::form::XResetListener
                             ,public ::com::sun::star::lang::XUnoTunnel
                             ,public FmDispatchInterceptor
-                            ,public ::utl::OAggregationArrayUsageHelper< FmXFormController>
+                            ,public ::comphelper::OAggregationArrayUsageHelper< FmXFormController>
 {
     friend class FmXPageViewWinRec;
 
@@ -510,7 +510,7 @@ public:
 // method for registration
     static  ::com::sun::star::uno::Sequence< ::rtl::OUString >  static_getSupportedServiceNames(void);
 
-    // utl::OPropertyArrayUsageHelper
+    // comphelper::OPropertyArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
