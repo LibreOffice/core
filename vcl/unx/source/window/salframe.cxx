@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-27 18:13:49 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 19:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1873,13 +1873,6 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
         if( pIntegrator )
             bHaveInfo = pIntegrator->GetSystemLook( aInfo );
     }
-
-    /*
-     *  fill in mouse settings to paste on middle mouse click
-     */
-    MouseSettings aMouseSettings = rSettings.GetMouseSettings();
-    aMouseSettings.SetMiddleButtonAction( MOUSE_MIDDLE_PASTESELECTION );
-    rSettings.SetMouseSettings( aMouseSettings );
 
     if( bHaveInfo )
     {
