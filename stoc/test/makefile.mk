@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:21:01 $
+#   last change: $Author: dbo $ $Date: 2001-09-11 09:30:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,12 +82,6 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-# --- Files --------------------------------------------------------
-
-CXXFILES= 	testloader.cxx		\
-        testregistry.cxx  	\
-        testsmgr.cxx 
-
 # --- Application 1 ------------------------------------------------
 APP1TARGET= $(TARGET1)
 APP1OBJS=   $(OBJ)$/testloader.obj 
@@ -105,7 +99,7 @@ APP1STDLIBS+=
 
 # --- Application 2 ------------------------------------------------
 APP2TARGET= $(TARGET2)
-APP2OBJS=   $(OBJ)$/testregistry.obj 
+APP2OBJS=   $(OBJ)$/testregistry.obj $(OBJ)$/mergekeys.obj
 
 APP2STDLIBS= \
         $(CPPULIB)	\

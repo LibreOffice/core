@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-04 13:12:13 $
+ *  last change: $Author: dbo $ $Date: 2001-09-11 09:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#include <cppuhelper/bootstrap.hxx>
 
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
@@ -98,6 +99,7 @@
 #define _MAX_PATH PATH_MAX
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
@@ -110,6 +112,40 @@ using namespace osl;
 #else
 #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
+
+namespace stoc_impreg
+{
+void SAL_CALL mergeKeys(
+    Reference< registry::XRegistryKey > const & xDest,
+    Reference< registry::XRegistryKey > const & xSource )
+    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
+}
+static void mergeKeys(
+    Reference< registry::XSimpleRegistry > const & xDest,
+    OUString const & rBaseNode,
+    OUString const & rURL )
+    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
+{
+    Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
+    Reference< registry::XRegistryKey > xDestKey;
+    if (rBaseNode.getLength())
+    {
+        xDestKey = xDestRoot->createKey( rBaseNode );
+        xDestRoot->closeKey();
+    }
+    else
+    {
+        xDestKey = xDestRoot;
+    }
+    Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
+    xSimReg->open( rURL, sal_True, sal_False );
+    OSL_ASSERT( xSimReg->isValid() );
+    Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
+    ::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
+    xSourceKey->closeKey();
+    xSimReg->close();
+    xDestKey->closeKey();
+}
 
 OString userRegEnv("STAR_USER_REGISTRY=");
 
@@ -184,7 +220,10 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
 }
 
 
-void test_SimpleRegistry()
+void test_SimpleRegistry(
+    OUString const & testreg,
+    OUString const & testreg2,
+    bool bMergeDifferently = false )
 {
     Reference<XInterface> xIFace;
     Module module;
@@ -245,7 +284,7 @@ void test_SimpleRegistry()
 
     try
     {
-        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), sal_False, sal_True);
+        xReg->open(testreg, sal_False, sal_True);
 
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 7" );
         TEST_ENSHURE( xReg->isReadOnly() == sal_False, "test_SimpleRegistry error 8" );
@@ -353,20 +392,46 @@ void test_SimpleRegistry()
         TEST_ENSHURE( seqUnicode2.getArray()[2] == OUString( RTL_CONSTASCII_USTRINGPARAM("ich als unicode") ), "test_SimpleRegistry error 25");
 
 
-        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ), sal_False, sal_True);
+        xReg->open(testreg2, sal_False, sal_True);
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 25" );
         xRootKey = xReg->getRootKey();
         xKey = xRootKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM("ThirdKey/FirstSubKey/WithSubSubKey") ));
         xKey->closeKey();
+        TEST_ENSHURE(
+            xRootKey->createLink(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/ThirdKey/FirstSubKey/WithSubSubKey") )),
+            "test_SimpleRegistry error 1212" );
         xRootKey->closeKey();
         xReg->close();
 
-        xReg->open(OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), sal_False, sal_False);
+        xReg->open(testreg, sal_False, sal_False);
         TEST_ENSHURE( xReg->isValid() != sal_False, "test_SimpleRegistry error 26" );
 
-        xReg->mergeKey(OUString(), OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ));
+        if (bMergeDifferently)
+        {
+            mergeKeys(
+                xReg,
+                OUString(),
+                testreg2 );
+        }
+        else
+        {
+            xReg->mergeKey(OUString(), testreg2);
+        }
 
         xRootKey = xReg->getRootKey();
+        xKey = xRootKey->openKey( OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ) );
+        TEST_ENSHURE(
+            xKey.is() && xKey->isValid() &&
+            xKey->getKeyName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("/ThirdKey/FirstSubKey/WithSubSubKey") ),
+            "test_SimpleRegistry error 1213" );
+        xKey->closeKey();
+        TEST_ENSHURE(
+            xRootKey->getKeyType( OUString( RTL_CONSTASCII_USTRINGPARAM("LinkTest") ) ) ==
+            registry::RegistryKeyType_LINK,
+            "test_SimpleRegistry error 1214" );
+
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("FirstKey/SecondSubKey") ));
         TEST_ENSHURE( !xKey.is(), "test_SimpleRegistry error 27" );
 
@@ -433,11 +498,7 @@ void test_SimpleRegistry()
                       "test_SimpleRegistry error 35" );
 
         xRootKey->deleteLink(OUString( RTL_CONSTASCII_USTRINGPARAM("/FourthKey/MySecondLink") ));
-
-//      xRootKey->closeKey();
-
-//      xReg->open(L"testreg2.rdb", sal_False, sal_True);
-//      xReg->destroy();
+        xRootKey->closeKey();
     }
     catch(InvalidRegistryException&)
     {
@@ -454,7 +515,10 @@ void test_SimpleRegistry()
 }
 
 
-void test_DefaultRegistry()
+void test_DefaultRegistry(
+    OUString const & testreg,
+    OUString const & testreg2,
+    bool bMergeDifferently = false )
 {
     // Test NestedRegistry
     OUString exePath( getExePath() );
@@ -497,8 +561,17 @@ void test_DefaultRegistry()
         TEST_ENSHURE( xKey->getKeyName() == OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR/com/sun/star/registry/XSimpleRegistry") ),
                      "test_DefaultRegistry error 7" );
 
-        xReg->mergeKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ),
-                       OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ));
+        if (bMergeDifferently)
+        {
+            mergeKeys(
+                xReg,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ),
+                testreg );
+        }
+        else
+        {
+            xReg->mergeKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ), testreg );
+        }
 
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test/ThirdKey/FirstSubKey/WithSubSubKey") ));
         if (xKey.is())
@@ -610,8 +683,18 @@ void test_DefaultRegistry()
 
         xRootKey->deleteKey(OUString( RTL_CONSTASCII_USTRINGPARAM("Test") ));
 
-        xReg->mergeKey(OUString( RTL_CONSTASCII_USTRINGPARAM("AllFromTestreg2") ),
-                       OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ));
+        if (bMergeDifferently)
+        {
+            mergeKeys(
+                xReg,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("AllFromTestreg2") ),
+                testreg2);
+        }
+        else
+        {
+            xReg->mergeKey(OUString( RTL_CONSTASCII_USTRINGPARAM("AllFromTestreg2") ),
+                           testreg2);
+        }
 
         xKey = xRootKey->openKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/AllFromTestreg2/ThirdKey/FirstSubKey") ));
         if (xKey.is())
@@ -619,15 +702,6 @@ void test_DefaultRegistry()
             xRootKey->deleteKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/AllFromTestreg2") ));
         }
 
-        Reference< XSimpleRegistry > xSimplReg(
-            rSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") ) ), UNO_QUERY );
-
-        xSimplReg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ), sal_False, sal_True);
-        xSimplReg->destroy();
-
-        xSimplReg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), sal_False, sal_True);
-        xSimplReg->destroy();
     }
     catch(InvalidRegistryException&)
     {
@@ -670,9 +744,25 @@ int _cdecl main( int argc, char * argv[] )
     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
                              OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
 
-      test_SimpleRegistry();
-      test_DefaultRegistry();
+    OUString reg1( RTL_CONSTASCII_USTRINGPARAM("testreg1.rdb") );
+    OUString reg2( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") );
+    OUString areg1( RTL_CONSTASCII_USTRINGPARAM("atestreg1.rdb") );
+    OUString areg2( RTL_CONSTASCII_USTRINGPARAM("atestreg2.rdb") );
 
+      test_SimpleRegistry( reg1, reg2 );
+      test_DefaultRegistry( reg1, reg2 );
+      test_SimpleRegistry( areg1, areg2, true ); // use different merge
+      test_DefaultRegistry( areg1, areg2, true );
+
+    Reference< XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
+    xSimReg->open( reg1, sal_False, sal_True );
+    xSimReg->destroy();
+    xSimReg->open( reg2, sal_False, sal_True );
+    xSimReg->destroy();
+    xSimReg->open( areg1, sal_False, sal_True );
+    xSimReg->destroy();
+    xSimReg->open( areg2, sal_False, sal_True );
+    xSimReg->destroy();
     return(0);
 }
 
