@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 15:14:25 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:39:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -289,9 +289,26 @@ SHL2STDLIBS=\
             $(VOSLIB)           \
             $(SALLIB)
 
+# prepare linking of Xinerama
+.IF "$(USE_XINERAMA)" != "no"
+
 .IF "$(OS)"=="MACOSX"
-SHL2STDLIBS += -lXinerama
-.ENDIF
+XINERAMALIBS=-lXinerama
+.ELSE
+.IF "$(OS)" != "SOLARIS"
+.IF "$(CPU)" == "I"
+.IF "$(XINERAMA_LINK)" == "dynamic"
+XINERAMALIBS= -lXinerama
+.ELSE
+XINERAMALIBS= -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
+.ENDIF # XINERAMA_LINK == dynamic
+.ENDIF # CPU == I
+.ENDIF # OS == SOLARIS
+.ENDIF # OS == MACOSX
+
+SHL2STDLIBS += $(XINERAMALIBS)
+
+.ENDIF # USE_XINERAMA != no
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL2STDLIBS += -laudio
@@ -309,16 +326,7 @@ SHL2STDLIBS += -ldl -lnsl -lsocket
 SHL2STDLIBS+=$(LIBSN_LIBS)
 .ENDIF
 
-# Solaris
-.IF "$(OS)"=="SOLARIS"
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
-# Others
-.ELSE           # "$(OS)"=="SOLARIS"
-.IF "$(CPU)" == "I"
-SHL2STDLIBS += -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
-.ENDIF 			# "$(CPU)=="I"
-SHL2STDLIBS += -lXext -lSM -lICE -lX11
-.ENDIF          # "$(OS)"=="SOLARIS"
 
 .ENDIF          # "$(GUIBASE)"=="unx"
 
