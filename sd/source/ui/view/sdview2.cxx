@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:20:32 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                         SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
                         if( pPage && pPage->IsMasterPage() )
-                            bIsPresTarget = pPage->GetPresObjList()->GetPos( pPickObj ) != LIST_ENTRY_NOTFOUND;
+                            bIsPresTarget = pPage->IsPresObj( pPickObj );
                     }
 
                     if( bHasPickObj && !bIsPresTarget &&
