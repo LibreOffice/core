@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:13:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,9 +775,9 @@ void FilterCache::impl_validateAndOptimize()
     ::rtl::OUStringBuffer sLog(256);
     #endif
 
-    for (CacheItemList::iterator pIt  = m_lTypes.begin();
-                                 pIt != m_lTypes.end()  ;
-                               ++pIt                    )
+    CacheItemList::iterator pIt;
+
+    for (pIt = m_lTypes.begin(); pIt != m_lTypes.end(); ++pIt)
     {
         ::rtl::OUString sType = pIt->first;
         CacheItem       aType = pIt->second;
