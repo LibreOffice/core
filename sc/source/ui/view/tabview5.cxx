@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:49 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,14 @@ void ScTabView::UpdateDrawTextOutliner()
         if (pOL)
             aViewData.UpdateOutlinerFlags( *pOL );
     }
+}
+
+void ScTabView::DigitLanguageChanged()
+{
+    LanguageType eNewLang = SC_MOD()->GetOptDigitLanguage();
+    for (USHORT i=0; i<4; i++)
+        if ( pGridWin[i] )
+            pGridWin[i]->SetDigitLanguage( eNewLang );
 }
 
 //---------------------------------------------------------------
