@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-12 12:07:00 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 14:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2325,30 +2325,61 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     sal_Bool bInsertRow = sal_False;
     if (m_xAggregateSet.is())
         bInsertRow = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW));
-    if (bInsertRow && m_bSubForm)
+    if (bInsertRow)
     {
         // Iterate through all columns and set the default value
-        Reference<XColumnsSupplier>  xColsSuppl(m_xAggregateSet, UNO_QUERY);
-
-        // now set the values on which a subform depends
-        Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
-        Reference<XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
-        sal_Int32 nMasterLen = m_aMasterFields.getLength();
-        if (xParentCols->hasElements() && (nMasterLen > 0))
+        Reference< XColumnsSupplier > xColsSuppl(m_xAggregateSet, UNO_QUERY);
+        Reference< XIndexAccess > xIndexCols(xColsSuppl->getColumns(), UNO_QUERY);
+        for (sal_Int32 i = 0; i < xIndexCols->getCount(); i++)
         {
-            Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
-            const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-            const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+            Reference< XPropertySet > xColProps;
+            xIndexCols->getByIndex(i) >>= xColProps;
 
-            for (sal_Int32 i = 0; i < nMasterLen; ++i)
+            ::rtl::OUString sDefault;
+//          xColProps->getPropertyValue(PROPERTY_DEFAULT_VALUE) >>= sDefault;
+            // TODO: the rowset needs columns which have a default value ....
+
+            if (!::cppu::any2bool(xColProps->getPropertyValue(PROPERTY_ISREADONLY)))
             {
-                Reference<XPropertySet>  xMasterField, xField;
-                if (xParentCols->hasByName(pMasterFields[i]) &&
-                    xCols->hasByName(pDetailFields[i]))
+                try
                 {
-                    ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
-                    ::cppu::extractInterface(xField, xCols->getByName(pDetailFields[i]));
-                    xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                    Reference< XColumnUpdate > xColUpdate(xColProps, UNO_QUERY);
+                    if (sDefault.getLength())
+                        xColUpdate->updateString(sDefault);
+                    else
+                        xColUpdate->updateNull();
+                }
+                catch(Exception&)
+                {
+                }
+            }
+        }
+
+        if (m_bSubForm)
+        {
+            // Iterate through all columns and set the default value
+            Reference<XColumnsSupplier>  xColsSuppl(m_xAggregateSet, UNO_QUERY);
+
+            // now set the values on which a subform depends
+            Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
+            Reference<XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
+            sal_Int32 nMasterLen = m_aMasterFields.getLength();
+            if (xParentCols->hasElements() && (nMasterLen > 0))
+            {
+                Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
+                const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
+                const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+
+                for (sal_Int32 i = 0; i < nMasterLen; ++i)
+                {
+                    Reference<XPropertySet>  xMasterField, xField;
+                    if (xParentCols->hasByName(pMasterFields[i]) &&
+                        xCols->hasByName(pDetailFields[i]))
+                    {
+                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
+                        ::cppu::extractInterface(xField, xCols->getByName(pDetailFields[i]));
+                        xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                    }
                 }
             }
         }
