@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:03:06 $
+#   last change: $Author: rt $ $Date: 2004-09-20 14:28:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,43 +132,44 @@ ALLTAR : $(DESTDIR)$/cli_bridgetest_inprocess.exe
 
 CLI_URE = $(SOLARBINDIR)$/cli_ure.dll
 CLI_TYPES = $(SOLARBINDIR)$/cli_types.dll
+CLI_BASETYPES = $(SOLARBINDIR)$/cli_basetypes.dll
 CLI_CPPUHELPER = $(SOLARBINDIR)$/cli_cppuhelper.dll
 CLI_TYPES_BRIDGETEST = $(BIN)$/cli_types_bridgetest.dll
 
 CSCFLAGS = -warnaserror+ -incremental-
 VBC_FLAGS = -warnaserror+
-.IF "$(debug)" == ""
-.IF "$(product)" == ""
-CSCFLAGS += -checked+ -define:DEBUG -define:TRACE
-VBC_FLAGS += -define:DEBUG=1 -define:TRACE=1
+.IF "$(debug)" != ""
+CSCFLAGS += -debug+ -checked+ -define:DEBUG -define:TRACE
+VBC_FLAGS += -debug+ -define:DEBUG=TRUE -define:TRACE=TRUE
 .ELSE
 CSCFLAGS += -o
 VBC_FLAGS += -o
 .ENDIF
-.ELSE # DEBUG
-CSCFLAGS += -debug+ -checked+ -define:DEBUG -define:TRACE
-VBC_FLAGS += -debug+ -define:DEBUG=1 -define:TRACE=1
-.ENDIF
+
 
 # C# ----------------------------------------------
 $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         cli_cs_testobj.cs \
         cli_cs_multi.cs \
+        $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
     +csc $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
+        -reference:$(CLI_BASETYPES) \
          -reference:$(CLI_TYPES) \
         cli_cs_testobj.cs cli_cs_multi.cs
 
 $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         cli_cs_bridgetest.cs \
+        $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
     +csc $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
+        -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_URE) \
         -reference:System.dll \
         cli_cs_bridgetest.cs
@@ -176,12 +177,14 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
 # Visual Basic ------------------------------------------
 $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         cli_vb_bridgetest.vb \
+        $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
     +vbc $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_TYPES) \
+        -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:System.dll \
@@ -191,11 +194,13 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
 
 $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         cli_vb_testobj.vb \
+        $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
     +vbc $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
+        -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_TYPES_BRIDGETEST) \
@@ -212,11 +217,13 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(DESTDIR)$/cli_vb_bridgetest.uno.dll \
         $(DESTDIR)$/cli_vb_testobj.uno.dll \
         $(DESTDIR)$/cli_cpp_bridgetest.uno.dll \
+        $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
     +csc $(CSCFLAGS) -target:exe -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
+        -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_CPPUHELPER) \
@@ -228,6 +235,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         cli_bridgetest_inprocess.cs
     $(GNUCOPY) -p cli_bridgetest_inprocess.ini $(DESTDIR)
     $(GNUCOPY) -p $(CLI_CPPUHELPER) $(DESTDIR)$/$(CLI_CPPUHELPER:f)
+    $(GNUCOPY) -p $(CLI_BASETYPES) $(DESTDIR)$/$(CLI_BASETYPES:f)
     $(GNUCOPY) -p $(CLI_TYPES) $(DESTDIR)$/$(CLI_TYPES:f)
     $(GNUCOPY) -p $(CLI_URE) $(DESTDIR)$/$(CLI_URE:f)
 
