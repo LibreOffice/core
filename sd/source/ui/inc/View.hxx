@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:16:16 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ struct SdNavigatorDropEvent;
 class ViewShell;
 class Window;
 class ViewClipboard;
+class FuPoor;
 
 // -------------------
 // - SdViewRedrawRec -
@@ -174,7 +175,9 @@ public:
     BOOL                    BegTextEdit( SdrObject* pObj, SdrPageView* pPV=NULL, Window* pWin=NULL, BOOL bIsNewObj=FALSE,
                                          SdrOutliner* pGivenOutliner=NULL, OutlinerView* pGivenOutlinerView=NULL,
                                          BOOL bDontDeleteOutliner=FALSE, BOOL bOnlyOneView=FALSE );
-    SdrEndTextEditKind      EndTextEdit(BOOL bDontDeleteReally=FALSE);
+    virtual SdrEndTextEditKind EndTextEdit(BOOL bDontDeleteReally=FALSE);
+
+    SdrEndTextEditKind          EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc);
 
     BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
