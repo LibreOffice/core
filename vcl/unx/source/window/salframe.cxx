@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:34:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Juergen Keil
  *
  *
  ************************************************************************/
@@ -894,12 +894,28 @@ void SalFrame::SetIcon( USHORT nIcon )
 #if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
 #endif
+
+            const int ourLargestIconSize = 48;
+            bool bFoundIconSize = false;
+
             int i;
             for( i=0; i<nSizes; i++)
             {
-                // select largest supported icon
-                if( pIconSize[i].max_width > iconSize )
+               // select largest supported icon
+
+               // Note: olwm/olvwm reports a huge max icon size of
+               // 160x160 pixels; always choosing the max as the
+               // preferred icon size is apparently wrong under olvwm
+               // - so we keep the safe default |iconSize| when we see
+               // unreasonable large max icon sizes (> twice of our
+               // largest available icon) reported by XGetIconSizes.
+                if( pIconSize[i].max_width > iconSize
+                    && pIconSize[i].max_width <= 2*ourLargestIconSize )
+                {
                     iconSize = pIconSize[i].max_width;
+                    bFoundIconSize = true;
+                }
+                iconSize = pIconSize[i].max_width;
 
 #if OSL_DEBUG_LEVEL > 1
                 fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
@@ -908,6 +924,19 @@ void SalFrame::SetIcon( USHORT nIcon )
                         pIconSize[i].width_inc, pIconSize[i].height_inc);
 #endif
             }
+
+            if ( !bFoundIconSize )
+            {
+               // Unless someone has fixed olwm/olvwm, we have rejected
+               // the max icon size from |XGetIconSizes()|.  Provide a
+               // better icon size default value, in case our window manager
+               // is olwm/olvwm.
+               const String& rWM( maFrameData.pDisplay_->getWMAdaptor()->getWindowManagerName() );
+
+               if ( rWM.EqualsAscii( "Olwm" ) )
+                   iconSize = 48;
+            }
+
             XFree( pIconSize );
         }
         else
