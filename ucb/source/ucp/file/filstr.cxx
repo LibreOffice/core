@@ -75,7 +75,7 @@ rtl::OUString SAL_CALL
 XStream_impl::getImplementationName()
     throw( uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("bla");
+    return rtl::OUString::createFromAscii("com.sun.star.io.comp.XStream");
 }
 
 
@@ -281,18 +281,13 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
            uno::RuntimeException)
 {
     sal_Int32 length = aData.getLength();
-    sal_uInt64 nWrittenBytes;
-    if( length )
+    if(length)
     {
+        sal_uInt64 nWrittenBytes(0);
         const sal_Int8* p = aData.getConstArray();
-        m_aFile.write( ((void*)(p)),
-                       sal_uInt64( length ),
-                       nWrittenBytes );
-        if( nWrittenBytes != length )
-        {
-            // DBG_ASSERT( "Write Operation not successful" );
+        if(osl::FileBase::E_None != m_aFile.write(((void*)(p)),sal_uInt64(length),nWrittenBytes) ||
+           nWrittenBytes != length )
             throw io::IOException();
-        }
     }
 }
 
