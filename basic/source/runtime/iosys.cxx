@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 15:14:50 $
+ *  last change: $Author: ab $ $Date: 2001-05-23 08:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,8 @@ OUString findUserInDescription( const OUString& aDescription )
 #endif
 
 
+// Hack for #83750
+BOOL runsInSetup( void );
 
 BOOL needSecurityRestrictions( void )
 {
@@ -281,6 +283,15 @@ BOOL needSecurityRestrictions( void )
 
     if( bNeedInit )
     {
+        // Hack for #83750, use internal flag until
+        // setup provides own service manager
+        if( runsInSetup() )
+        {
+            // Setup is not critical
+            bRetVal = FALSE;
+            return bRetVal;
+        }
+
         bNeedInit = FALSE;
 
         // Get system user to compare to portal user
