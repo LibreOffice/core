@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:39:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,29 @@ void  SwTbxAnchor::Click()
 {
     PopupMenu aPopMenu(SW_RES(MN_ANCHOR_POPUP));
 
-    SwView* pView = ::GetActiveView();
-    SwWrtShell* pWrtShell = pView->GetWrtShellPtr();
+    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
+    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
+    SwView* pActiveView = 0;
+    if(pViewFrame)
+    {
+        const TypeId aTypeId = TYPE(SwView);
+        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        while( pView )
+        {
+            if(pView->GetViewFrame() == pViewFrame)
+            {
+                pActiveView = pView;
+                break;
+            }
+            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+        }
+    }
+    if(!pActiveView)
+    {
+        DBG_ERROR("No active view could be found")
+        return;
+    }
+    SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
     aPopMenu.EnableItem( FN_TOOL_ANKER_FRAME, 0 != pWrtShell->IsFlyInFly() );
 
     Rectangle aRect(GetToolBox().GetItemRect(FN_TOOL_ANKER));
@@ -168,7 +189,7 @@ void  SwTbxAnchor::Click()
     GetToolBox().EndSelection();
 
     if (nSlotId)
-        pView->GetViewFrame()->GetDispatcher()->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+        pDispatch->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
 }
 
 
