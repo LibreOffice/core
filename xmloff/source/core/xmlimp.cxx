@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:32:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,6 +1772,10 @@ void SvXMLImport::DisposingModel()
 {
     // #110680#
     return mxServiceFactory;
+}
+String SvXMLImport::GetBaseURL() const
+{
+    return pImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
 
