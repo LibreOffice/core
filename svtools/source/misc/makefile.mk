@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 12:27:47 $
+#   last change: $Author: rt $ $Date: 2004-05-21 11:40:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,6 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Files --------------------------------------------------------
 
 #use local "bmp" as it may not yet be delivered
-BMP=$(BIN)$/bmp
-IMGLST_SRS=$(SRS)$/misc.srs
 
 SRS1NAME=misc
 SRC1FILES=\
