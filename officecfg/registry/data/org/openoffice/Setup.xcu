@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-08 13:10:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
                     <value >CalcCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Calc)</value>
+                    <value >calc8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/scalc</value>
@@ -114,7 +114,7 @@
                     <value >DrawImpressCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Draw)</value>
+                    <value >draw8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/sdraw</value>
@@ -140,7 +140,7 @@
                     <value >DrawImpressCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Impress)</value>
+                    <value >impress8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/simpress?slot=6686</value>
@@ -166,7 +166,7 @@
                     <value >MathCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Math)</value>
+                    <value >math8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/smath</value>
@@ -192,7 +192,7 @@
                     <value >WriterCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value>
+                    <value >writerglobal8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/swriter/GlobalDocument</value>
@@ -218,7 +218,7 @@
                     <value >WriterCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Writer)</value>
+                    <value >writer8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/swriter</value>
@@ -336,7 +336,7 @@
                     <value >ChartCommands</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value >StarOffice XML (Chart)</value>
+                    <value >chart8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
                     <value >private:factory/schart</value>
