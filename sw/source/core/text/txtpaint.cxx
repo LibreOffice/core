@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:18:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,11 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
         {
             const Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             Rectangle aDbgRect = pOut->GetClipRegion().GetBoundRect();
 #endif
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef PRODUCT
         static sal_Bool bDbg = sal_False;
         if( bDbg )
