@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:29:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,8 @@
 #ifndef _SD_OPTSITEM_HXX
 #include <../ui/inc/optsitem.hxx>
 #endif
-#include <offmgr/app.hxx>
 #ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
+#include <svtools/fltrcfg.hxx>
 #endif
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
@@ -313,22 +312,20 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
             rStCtrl.Seek( nPosMerk );
         }
         sal_uInt32 nSvxMSDffOLEConvFlags = 0;
-        OfficeApplication* pApplication = OFF_APP();
-        if ( pApplication )
+
+        SvtFilterOptions* pBasOpt = SvtFilterOptions::Get();
+        if ( pBasOpt )
         {
-            OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
-            if ( pBasOpt )
-            {
-                if ( pBasOpt->IsLoadPPointBasicCode() )
-                    nFilterOptions |= 1;
-                if ( pBasOpt->IsMathType2Math() )
-                    nSvxMSDffOLEConvFlags |= OLE_MATHTYPE_2_STARMATH;
-                if ( pBasOpt->IsWinWord2Writer() )
-                    nSvxMSDffOLEConvFlags |= OLE_WINWORD_2_STARWRITER;
-                if ( pBasOpt->IsExcel2Calc() )
-                    nSvxMSDffOLEConvFlags |= OLE_EXCEL_2_STARCALC;
-            }
+            if ( pBasOpt->IsLoadPPointBasicCode() )
+                nFilterOptions |= 1;
+            if ( pBasOpt->IsMathType2Math() )
+                nSvxMSDffOLEConvFlags |= OLE_MATHTYPE_2_STARMATH;
+            if ( pBasOpt->IsWinWord2Writer() )
+                nSvxMSDffOLEConvFlags |= OLE_WINWORD_2_STARWRITER;
+            if ( pBasOpt->IsExcel2Calc() )
+                nSvxMSDffOLEConvFlags |= OLE_EXCEL_2_STARCALC;
         }
+
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | 2 );              // SVXMSDFF_SETTINGS_IMPORT_PPT
         SetModel( pDoc, 576 );
