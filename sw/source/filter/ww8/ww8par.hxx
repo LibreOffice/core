@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:12:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,7 +1440,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_KeepLines(        USHORT, const BYTE* pData, short nLen );
     void Read_KeepParas(        USHORT, const BYTE* pData, short nLen );
     void Read_BreakBefore(      USHORT, const BYTE* pData, short nLen );
-    void Read_ApoPPC(           USHORT, const BYTE* pData, short nLen );
+    void Read_Apo(USHORT nId, const BYTE* pData, short nLen);
+    void Read_ApoPPC(USHORT, const BYTE* pData, short);
 
     void Read_BoolItem(         USHORT nId, const BYTE*, short nLen );
 
