@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSelectionSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:07 $
+ *  last change:$Date: 2003-02-27 12:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,25 +156,22 @@ public class _XSelectionSupplier extends MultiMethodTest {
     public void _select() {
         boolean res  = true;
         boolean locRes = true;
-        int compRes = 0;
+        boolean compRes = true;
         Object oldSelection = null;
         try {
             for(int i = 0; i < selections.length; i++) {
                 oldSelection = oObj.getSelection();
-                log.print("select #" + i + ": ");
                 locRes = oObj.select(selections[i]);
-                log.println(locRes);
+                log.println("select #" + i + ": " + locRes);
                 Object curSelection = oObj.getSelection();
                 if (locRes) {
-                    log.print("compare selected object and current selection: ");
-                    compRes = comparer.compare(selections[i], curSelection);
-                    log.println(compRes);
-                    res &= compRes == 0;
+                    compRes = util.ValueComparer.equalValue(selections[i], curSelection);
+                    log.println("selected object and current selection are equal: "+compRes);
+                    res &= compRes;
                 } else {
-                    log.print("compare previouse selection and current selection: ");
-                    compRes = comparer.compare(curSelection, oldSelection);
-                    log.println(compRes);
-                    res &= compRes == 0;
+                    compRes = util.ValueComparer.equalValue(curSelection, oldSelection);
+                    log.println("previous selection and current selection are equal: "+compRes);
+                    res &= compRes;
                 }
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
