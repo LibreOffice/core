@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 08:04:14 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@
 #include "dcontact.hxx"
 #include "dview.hxx"
 #include "flyfrm.hxx"
-#include "frmtool.hxx"
 
 
 /*************************************************************************
@@ -326,7 +325,6 @@ IMPL_LINK( SwViewImp, PaintDispatcher, SdrPaintProcRec *, pRec )
     else
     {
         SwRect aTmp( pRec->rInfoRec.aDirtyRect );
-        ::InvertSizeBorderRect( aTmp, GetShell() );
 
         OutputDevice *pOut = pRec->rOut.GetOutDev();
         pOut->Push( PUSH_CLIPREGION );
