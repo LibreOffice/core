@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 13:43:38 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 18:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2454,7 +2454,7 @@ class EventsNameReplace_Impl:
                 ::std::vector< sal_Int32 >::const_iterator aProperty = aActuatingProperties.begin();
                 ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
                 for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
-                    updateDependentProperties( *aProperty, *aPropertyValue, *aPropertyValue );
+                    updateDependentProperties( *aProperty, *aPropertyValue, *aPropertyValue, false );
             }
 
             SetCursorSource( sal_True, sal_True );
@@ -2816,7 +2816,7 @@ class EventsNameReplace_Impl:
 
             // care for any inter-property dependencies
             if ( bIsActuatingProperty )
-                updateDependentProperties( nPropId, aValue, aOldValue );
+                updateDependentProperties( nPropId, aValue, aOldValue, true );
 
             // and display it again. This ensures proper formatting
             getPropertyBox()->SetPropertyValue( rName, sNewStrVal );
@@ -3221,7 +3221,7 @@ class EventsNameReplace_Impl:
     array + sizeof( array ) / sizeof( array[0] )
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::updateDependentProperties( sal_Int32 _nPropId, const Any& _rNewValue, const Any& _rOldValue )
+    void OPropertyBrowserController::updateDependentProperties( sal_Int32 _nPropId, const Any& _rNewValue, const Any& _rOldValue, bool _bIsRealPropertyChange )
     {
         DBG_ASSERT( getPropertyBox(), "OPropertyBrowserController::updateDependentProperties: no view!" );
         if ( !getPropertyBox() )
@@ -3301,14 +3301,17 @@ class EventsNameReplace_Impl:
 
             // also reset the list entries if the cell range is reset
             // #i28319# - 2004-04-27 - fs@openoffice.org
-            try
+            if ( _bIsRealPropertyChange )
             {
-                if ( !xSource.is() )
-                    m_xPropValueAccess->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< ::rtl::OUString >() ) );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::updateDependentProperties( ListCellRange ): caught an exception while resetting the string items!" );
+                try
+                {
+                    if ( !xSource.is() )
+                        m_xPropValueAccess->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< ::rtl::OUString >() ) );
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "OPropertyBrowserController::updateDependentProperties( ListCellRange ): caught an exception while resetting the string items!" );
+                }
             }
         }
         break;
