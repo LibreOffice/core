@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:56:52 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 
 #include <app.hxx>
