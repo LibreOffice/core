@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-08 12:32:07 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #endif
 #ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
-#endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _CONTDLG_HXX_ //autogen
 #include <svx/contdlg.hxx>
@@ -317,18 +314,6 @@ static BYTE nTableCellPos;
 static BYTE nPagePos;
 static BYTE nHeaderPos;
 static BYTE nFooterPos;
-
-//!!OS: das muss ein if/else bleiben, weil BLC das nicht anders versteht
-#define SVDATAOBJ                                                       \
-    SvDataObjectRef xObj;                                               \
-    if ( Clipboard::GetFormatCount() )                                  \
-    {                                                                   \
-        SwModule* pMod = SW_MOD();                                      \
-        if ( pMod->pClipboard )                                         \
-            xObj = pMod->pClipboard ;                                   \
-        else                                                            \
-            xObj = SvDataObject::PasteClipboard();                      \
-    }
 
 #define Interior
 #include <svx/svxslots.hxx>
