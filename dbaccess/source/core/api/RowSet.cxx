@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 10:39:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 09:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,10 +1009,23 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
 
     ::osl::MutexGuard aGuard( m_rMutex );
     checkUpdateIterator();
-    m_pCache->updateBinaryStream(columnIndex,x,length);
+    Any aOldValue;
+    if((*(*m_aCurrentRow))[columnIndex].getTypeKind() == DataType::BLOB)
+    {
+        m_pCache->updateBinaryStream(columnIndex,x,length);
+        aOldValue = (*(*m_aCurrentRow))[columnIndex].makeAny();
+        (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
+    }
+    else
+    {
+        Sequence<sal_Int8> aSeq;
+        if(x.is())
+            x->readSomeBytes(aSeq,length);
+        m_pCache->updateBytes(columnIndex,aSeq);
+        aOldValue = (*(*m_aCurrentRow))[columnIndex].makeAny();
+        (*(*m_aCurrentRow))[columnIndex] = aSeq;
+    }
 
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
-    (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
