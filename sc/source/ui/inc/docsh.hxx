@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 08:33:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     SfxUndoManager*     pUndoManager;
     ScDocFunc*          pDocFunc;
 
-    SfxObjectCreateMode eShellMode;
+    //SfxObjectCreateMode   eShellMode;
 
     BOOL                bIsInplace;         // wird von der View gesetzt
     BOOL                bHeaderOn;
