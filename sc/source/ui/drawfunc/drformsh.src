@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:25:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@
                     Text[ polish ] = "~Na stronie";\
                     Text[ japanese ] = "Íß°¼Ş‚É(~A)";\
                     Text[ greek ] = "~Óôç óåëßäá";\
-                    Text[ korean ] = "ÆäÀÌÁö¿¡¼­";\
+                    Text[ korean ] = "ÆäÀÌÁö¿¡¼­(~A)";\
                     Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
                     Text[ arabic ] = "Úáì ÇáÕİÍÉ";\
                     Text[ turkish ] = "Sayfa";\
@@ -361,14 +361,14 @@ String RID_OBJECTBAR_DRAWFORM
     Text [ spanish ] = "Barra de campos de control" ;
     Text [ french ] = "Barre de contrôles" ;
     Text [ dutch ] = "Controlebalk" ;
-    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶ÎÀ¸";
+    Text[ chinese_simplified ] = "¿ØÖÆÀ¸";
     Text[ russian ] = "Ïàíåëü ıëåìåíòîâ óïğàâëåíèÿ";
     Text[ polish ] = "Pasek formantów";
     Text[ japanese ] = "ºİÄÛ°ÙÂ°ÙÊŞ°";
     Text[ chinese_traditional ] = "±±¨î¶µ¦C";
     Text[ arabic ] = "ÔÑíØ ÚäÇÕÑ ÇáÊÍßã";
     Text[ dutch ] = "Controlebalk";
-    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶ÎÀ¸";
+    Text[ chinese_simplified ] = "¿ØÖÆÀ¸";
     Text[ greek ] = "ÃñáììŞ ğåäßùí åëİã÷ïõ";
     Text[ korean ] = "ÄÁÆ®·Ñ µµ±¸¸ğÀ½";
     Text[ turkish ] = "Komut alanı çubuğu";
@@ -575,6 +575,7 @@ Menu RID_POPUP_DRAWFORM
         ITEM_GROUP_MENU
     };
 };
+
 
 
 
