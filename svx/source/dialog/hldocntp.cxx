@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:32:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,8 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
