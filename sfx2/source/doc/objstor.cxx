@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:38:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,6 @@
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
 
-// xmlsec05, check with SFX team
 #include "../appl/app.hrc"
 
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
@@ -820,6 +819,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             SetError( nError );
     }
 
+    bool bShowBrokenSignatureWarningAlready = false;
     if ( GetError() == ERRCODE_NONE && bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage = pMed->GetStorage();
@@ -856,7 +856,25 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                                     && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
 
                         if ( bHasMacros )
+                        {
+                            // --> PB 2004-11-09 #i35190#
+                            if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+                            {
+                                // if the signature is broken, show here the warning before
+                                // the macro warning
+                                WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+                                aBox.Execute();
+                                bShowBrokenSignatureWarningAlready = true;
+                            }
+                            // <--
                             AdjustMacroMode( String() );
+                            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+                            {
+                                WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                                aBox.Execute();
+                            }
+                        }
                         else
                         {
                             // if macros will be added by the user later, the security check is obsolete
@@ -1038,9 +1056,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     // xmlsec05, check with SFX team
     // Check if there is a broken signature...
     // After EA change to interaction handler...
-    if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+    if ( !bShowBrokenSignatureWarningAlready
+        && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
-        WarningBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+        WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+        aBox.Execute();
     }
 
     return bOk;
