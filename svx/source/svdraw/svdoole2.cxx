@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:06:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,3 +1320,31 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 // -----------------------------------------------------------------------------
 
+/// #110015# sets the visible area at the SvInPlaceObject and SvEmbeddedInfoObject
+void SdrOle2Obj::SetVisibleArea( const Rectangle& rVisArea )
+{
+    const SvInPlaceObjectRef& xInplace = GetObjRef();
+    if( xInplace.Is() )
+    {
+        xInplace->SetVisArea( rVisArea );
+
+        if( pModel && (!pModel->GetPersist()->IsEnableSetModified()) )
+            xInplace->SetModified(FALSE);
+    }
+
+    if(pModel && mpImpl->aPersistName.Len() )
+    {
+        SvPersist* pPers = pModel->GetPersist();
+
+        if (pPers)
+        {
+            SvInfoObject* pInfo = pPers->Find(mpImpl->aPersistName);
+            SvEmbeddedInfoObject * pEmbed = PTR_CAST(SvEmbeddedInfoObject, pInfo );
+
+            if( pEmbed )
+                pEmbed->SetInfoVisArea( rVisArea );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
