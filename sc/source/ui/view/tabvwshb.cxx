@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:08:14 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
@@ -130,7 +134,18 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
-        awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+        awt::Size aSz;
+        try
+        {
+            aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+        }
+        catch ( embed::NoVisualAreaSizeException& )
+        {
+            DBG_ERROR( "Can't get visual area size from the object!\n" );
+            aSz.Width = 5000;
+            aSz.Height = 5000;
+        }
+
         Size aOleSize( aSz.Width, aSz.Height );
 
         // sichtbarer Ausschnitt wird nur inplace veraendert!
@@ -171,7 +186,18 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
 
-            awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+            awt::Size aSz;
+            try
+            {
+                aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+            }
+            catch ( embed::NoVisualAreaSizeException& )
+            {
+                DBG_ERROR( "Can't get visual area size from the object!\n" );
+                aSz.Width = 5000;
+                aSz.Height = 5000;
+            }
+
             Size aOleSize( aSz.Width, aSz.Height );
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pClient->GetAspect() ) );
 
