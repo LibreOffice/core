@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:27 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5341,7 +5341,9 @@ SprmReadInfo aSprmReadTab[] = {
     0x8460, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft1"
     0x845D, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaRight"
     0x3615, (FNReadRecord)0, //undocumented
-    0x360D, (FNReadRecord)0  //undocumented
+    0x360D, (FNReadRecord)0, //undocumented
+    0x703A, (FNReadRecord)0, //undocumented
+    0x303B, (FNReadRecord)0  //undocumented
 };
 
 //-----------------------------------------

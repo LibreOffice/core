@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-28 16:07:55 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ class WW8_WrFkp
     BYTE nItemSize;
     BYTE nIMax;         // Anzahl der Eintrags-Paare
     BYTE nOldVarLen;
+    BYTE nMark;
     BOOL bCombined;     // TRUE : Einfuegen verboten
 
     BYTE SearchSameSprm( USHORT nVarLen, const BYTE* pSprms );
@@ -231,6 +232,12 @@ public:
     {   return !bCombined && nIMax && !nOldVarLen;  }
     void SetNewEnd( WW8_FC nEnd )
     {   ((INT32*)pFkp)[nIMax] = nEnd; }
+
+    void SetMark()
+    {
+        nMark = nIMax ? pOfs[(nIMax-1) * nItemSize] : 0;
+    }
+    void AppendMark(WW8_FC nEndFc);
 
 #ifdef __WW8_NEEDS_COPY
     WW8_FC GetStartFc() const;
@@ -769,7 +776,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 /*  */
 
 WW8_WrPlcPn::WW8_WrPlcPn( SwWW8Writer& rWr, ePLCFT ePl, WW8_FC nStartFc )
-    : rWrt( rWr ), ePlc( ePl ), nFkpStartPage( 0 )
+    : rWrt( rWr ), ePlc( ePl ), nFkpStartPage( 0 ), nMark(0)
 {
     WW8_FkpPtr pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
     aFkps.Insert( pF, aFkps.Count() );
@@ -778,6 +785,20 @@ WW8_WrPlcPn::WW8_WrPlcPn( SwWW8Writer& rWr, ePLCFT ePl, WW8_FC nStartFc )
 WW8_WrPlcPn::~WW8_WrPlcPn()
 {
     aFkps.DeleteAndDestroy( 0, aFkps.Count() );
+}
+
+void WW8_WrPlcPn::SetMark()
+{
+    nMark = aFkps.Count()-1;
+    WW8_FkpPtr pF = aFkps.GetObject(nMark);
+    pF->SetMark();
+}
+
+void WW8_WrPlcPn::AppendMark(WW8_FC nEndFc)
+{
+    WW8_FkpPtr pF = aFkps.GetObject(nMark);
+    pF->AppendMark(nEndFc);
+    nMark = 0;
 }
 
 void WW8_WrPlcPn::AppendFkpEntry( WW8_FC nEndFc, short nVarLen,
@@ -889,7 +910,7 @@ void WW8_WrPlcPn::WritePlc()
 WW8_WrFkp::WW8_WrFkp( ePLCFT ePl, WW8_FC nStartFc, BOOL bWrtWW8 )
     : nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
          nIMax( 0 ), ePlc( ePl ), bCombined( FALSE ), nStartGrp( 511 ),
-    nOldStartGrp( 511 ), nOldVarLen( 0 )
+    nOldStartGrp( 511 ), nOldVarLen( 0 ), nMark(0)
 {
     pFkp = (BYTE*)new INT32[128];           // 512 Byte
     pOfs = (BYTE*)new INT32[128];           // 512 Byte
@@ -999,6 +1020,15 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
     }
     nIMax++;
     return TRUE;
+}
+
+void WW8_WrFkp::AppendMark(WW8_FC nEndFc)
+{
+    ASSERT( nMark && ePlc == PAP, "No pap mark set" );
+    ((INT32*)pFkp)[nIMax + 1] = nEndFc;     // FC eintragen
+    pOfs[nIMax * nItemSize] = nMark;
+    nMark=0;
+    nIMax++;
 }
 
 BOOL WW8_WrFkp::Combine()
@@ -1996,23 +2026,30 @@ void SwWW8Writer::WriteFkpPlcUsw()
 
 void SwWW8Writer::StoreDoc1()
 {
+    BOOL bNeedsFinalPara=FALSE;
     // Start of Text ( Mangel ueber )
     SwWW8Writer::FillUntil( Strm(), pFib->fcMin );
 
     WriteMainText();                    // HauptText
-    pFtn->WriteTxt( *this );            // Footnote-Text
-    pSepx->WriteKFTxt( *this );         // K/F-Text
-    pAtn->WriteTxt( *this );            // Annotation-Text
-    pEdn->WriteTxt( *this );            // EndNote-Text
+    pPapPlc->SetMark();
+
+    bNeedsFinalPara |= pFtn->WriteTxt( *this );         // Footnote-Text
+    bNeedsFinalPara |= pSepx->WriteKFTxt( *this );          // K/F-Text
+    bNeedsFinalPara |= pAtn->WriteTxt( *this );         // Annotation-Text
+    bNeedsFinalPara |= pEdn->WriteTxt( *this );         // EndNote-Text
 
     // create the escher streams
     if( bWrtWW8 )
         CreateEscher();
 
-    pTxtBxs->WriteTxt( *this );         // Textbox Text Plc
-    pHFTxtBxs->WriteTxt( *this );       // Head/Foot-Textbox Text Plc
+    bNeedsFinalPara |= pTxtBxs->WriteTxt( *this );  //Textbox Text Plc
+    bNeedsFinalPara |= pHFTxtBxs->WriteTxt( *this );//Head/Foot-Textbox Text Plc
 
-    WriteStringAsPara( aEmptyStr, nLastFmtId ); // CR ans Ende ( sonst mault WW )
+    if (bNeedsFinalPara)
+    {
+        WriteCR();
+        pPapPlc->AppendMark(Strm().Tell());
+    }
 
     pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Ftn + HdFt als Section-Ende
     pMagicTable->Finish( Fc2Cp( Strm().Tell() ),0);

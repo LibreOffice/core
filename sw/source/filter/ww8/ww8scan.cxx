@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:27 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6189,7 +6189,8 @@ static SprmInfo aWwSprmTab[] = {
     0x8460, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft1"
     0x3615, 1, L_FIX, // undocumented
     0x360D, 0, L_VAR, // undocumented
-    0x703A, 4, L_FIX  // undocumented, sep, perhaps related to textgrids ?
+    0x703A, 4, L_FIX, // undocumented, sep, perhaps related to textgrids ?
+    0x303B, 1, L_FIX  // undocumented sep
 };
 
 extern "C"

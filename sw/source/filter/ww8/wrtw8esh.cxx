@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 13:58:52 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,12 +414,13 @@ void WW8_WrPlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
 
 /*  */
 
-void WW8_WrPlcTxtBoxes::WriteTxt( SwWW8Writer& rWrt )
+BOOL WW8_WrPlcTxtBoxes::WriteTxt( SwWW8Writer& rWrt )
 {
+    BOOL bRet=FALSE;
     rWrt.bInWriteEscher = TRUE;
     long& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
 
-    WriteGenericTxt( rWrt, nTyp, rccp );
+    bRet = WriteGenericTxt( rWrt, nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     WW8Fib& rFib = *rWrt.pFib;
@@ -430,6 +431,7 @@ void WW8_WrPlcTxtBoxes::WriteTxt( SwWW8Writer& rWrt )
     else
         rWrt.pFldHFTxtBxs->Finish( nCP, nMyOffset + rFib.ccpTxbx );
     rWrt.bInWriteEscher = FALSE;
+    return bRet;
 }
 
 void WW8_WrPlcTxtBoxes::Append( const SdrObject& rObj, UINT32 nShapeId )

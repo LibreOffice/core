@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ public:
                     ULONG nLnNumRestartNo );
     void Finish( WW8_CP nEndCp ) { aCps.Insert( nEndCp, aCps.Count() ); }
     void SetNum( const SwTxtNode* pNumNd );
-    void WriteKFTxt( SwWW8Writer& rWrt );
+    BOOL WriteKFTxt( SwWW8Writer& rWrt );
     void WriteSepx( SvStream& rStrm ) const;
     void WritePlcSed( SwWW8Writer& rWrt ) const;
     void WritePlcHdd( SwWW8Writer& rWrt ) const;
@@ -292,7 +292,7 @@ public:
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
-friend void WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
+friend BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
 friend void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i );
 friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
@@ -567,7 +567,7 @@ protected:
     WW8_WrPlcSubDoc();
     ~WW8_WrPlcSubDoc();
 
-    void WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp, long& rCount );
+    BOOL WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp, long& rCount );
     void WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp, long& rTxtStt,
         long& rTxtCnt, long& rRefStt, long& rRefCnt ) const;
 
@@ -586,7 +586,7 @@ private:
 public:
     WW8_WrPlcFtnEdn( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
-    inline void WriteTxt( SwWW8Writer& rWrt );
+    inline BOOL WriteTxt( SwWW8Writer& rWrt );
     inline void WritePlc( SwWW8Writer& rWrt ) const;
 
     void Append( WW8_CP nCp, const SwFmtFtn& rFtn );
@@ -602,7 +602,7 @@ public:
     WW8_WrPlcPostIt() {}
 
     void Append( WW8_CP nCp, const SwPostItField& rPostIt );
-    inline void WriteTxt( SwWW8Writer& rWrt );
+    inline BOOL WriteTxt( SwWW8Writer& rWrt );
     inline void WritePlc( SwWW8Writer& rWrt ) const;
 };
 
@@ -620,7 +620,7 @@ private:
 public:
     WW8_WrPlcTxtBoxes( BYTE nTTyp ) : nTyp( nTTyp ) {}
 
-    void WriteTxt( SwWW8Writer& rWrt );
+    BOOL WriteTxt( SwWW8Writer& rWrt );
     inline void WritePlc( SwWW8Writer& rWrt ) const;
     void Append( const SdrObject& rObj, UINT32 nShapeId );
     USHORT Count() const { return aCntnt.Count(); }
@@ -667,6 +667,7 @@ private:
     USHORT nFkpStartPage;
     ePLCFT ePlc;
     BOOL bWrtWW8;                   // Fuer Writererkennung
+    USHORT nMark;
 
     //No copying
     WW8_WrPlcPn(const WW8_WrPlcPn&);
@@ -677,6 +678,8 @@ public:
     void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const BYTE* pSprms = 0);
     void WriteFkps();
     void WritePlc();
+    void SetMark();
+    void AppendMark(WW8_FC nEndFc);
 };
 
 // class WW8_WrPlc1 ist erstmal nur fuer Felder
@@ -853,21 +856,23 @@ Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
 // --------------------------- inlines ---------------------------------
 
-inline void WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
+inline BOOL WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
 {
+    BOOL bRet=FALSE;
     if( TXT_FTN == nTyp )
     {
-        WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
+        bRet = WriteGenericTxt( rWrt, TXT_FTN, rWrt.pFib->ccpFtn );
         rWrt.pFldFtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
                             rWrt.pFib->ccpText );
     }
     else
     {
-        WriteGenericTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
+        bRet = WriteGenericTxt( rWrt, TXT_EDN, rWrt.pFib->ccpEdn );
         rWrt.pFldEdn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
                             rWrt.pFib->ccpText + rWrt.pFib->ccpFtn
                             + rWrt.pFib->ccpHdr + rWrt.pFib->ccpAtn );
     }
+    return bRet;
 }
 
 inline void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
@@ -887,9 +892,9 @@ inline void WW8_WrPlcFtnEdn::WritePlc( SwWW8Writer& rWrt ) const
 }
 
 
-void WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
+BOOL WW8_WrPlcPostIt::WriteTxt( SwWW8Writer& rWrt )
 {
-    WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
+    return WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
 }
 
 void WW8_WrPlcPostIt::WritePlc( SwWW8Writer& rWrt ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-28 16:07:55 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,13 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
 
             if( pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd )
                         : nSwPos == *pHt->GetStart() )
-                Out( aWW8AttrFnTab, pHt->GetAttr(), rWrt );
+            {
+                if (SwWW8Writer::CollapseScriptsforWordOk(nScript,
+                    pHt->GetAttr().Which()))
+                {
+                    Out(aWW8AttrFnTab, pHt->GetAttr(), rWrt);
+                }
+            }
             else if( nSwPos < *pHt->GetStart() )
                 break;
         }
@@ -1253,17 +1259,17 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 if( pTmpSet == pNd->GetpSwAttrSet() )
                     pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
 
-                SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pTmpSet->Get( RES_LR_SPACE ) );
+                SvxLRSpaceItem aLR((SvxLRSpaceItem&)pTmpSet->Get(RES_LR_SPACE));
                 aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
 
                 if( MAXLEVEL > pNum->GetLevel() )
                 {
                     aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
                     if( pNum == pNd->GetNum() && SFX_ITEM_SET !=
-                        pTmpSet->GetItemState( RES_PARATR_NUMRULE ) )
+                       pTmpSet->GetItemState(RES_PARATR_NUMRULE,FALSE) )
                     {
-                        // NumRule from a template - then put it into the itemset
-                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                       // NumRule from a template - then put it into the itemset
+                       pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
                     }
                 }
                 else

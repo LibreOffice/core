@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,8 +1138,9 @@ int WW8_WrPlcSepx::HasBorderItem( const SwFmt& rFmt )
                 ((SvxBoxItem*)pItem)->GetRight() );
 }
 
-void WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
+BOOL WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
 {
+    BOOL bRet=FALSE;
     pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
     WW8Bytes* pO = rWrt.pO;
     ULONG nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
@@ -1510,6 +1511,7 @@ void WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
         delete pTxtPos, pTxtPos = 0;
 
     rWrt.bOutPageDescs = bOldPg;
+    return rWrt.pFib->ccpHdr != 0;
 }
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
@@ -1634,9 +1636,10 @@ void WW8_WrPlcPostIt::Append( WW8_CP nCp, const SwPostItField& rPostIt )
     aCntnt.Insert( p, aCntnt.Count() );
 }
 
-void WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
+BOOL WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
     long& rCount )
 {
+    BOOL bRet=FALSE;
     USHORT nLen = aCntnt.Count();
     if( nLen )
     {
@@ -1724,7 +1727,10 @@ void WW8_WrPlcSubDoc::WriteGenericTxt( SwWW8Writer& rWrt, BYTE nTTyp,
         ULONG nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         pTxtPos->Append( nCpEnd );
         rCount = nCpEnd - nCpStart;
+        if (rCount)
+            bRet=TRUE;
     }
+    return bRet;
 }
 
 void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
