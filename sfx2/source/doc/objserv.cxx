@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:24:03 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,16 +283,9 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         // in case no filter defined use default one
         if( !aFilterName.Len() )
         {
-            sal_uInt16 nActFilt = 0;
-            const SfxFilter* pFilt = GetFactory().GetFilter( 0 );
-
-            while( pFilt && ( !pFilt->CanExport()
-                  || !bSaveTo && !pFilt->CanImport() // SaveAs case
-                  || pFilt->IsInternal() ) )
-                  pFilt = GetFactory().GetFilter( ++nActFilt );
+            const SfxFilter* pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT | SFX_FILTER_IMPORT, SFX_FILTER_INTERNAL );
 
             DBG_ASSERT( pFilt, "No default filter!\n" );
-
             if( pFilt )
                 aFilterName = pFilt->GetFilterName();
 
@@ -350,17 +343,19 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
          pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF )
     {
         // Preselect PDF-Filter for EXPORT
-        pFilt = GetFactory().GetFilterContainer()->GetFilter4Extension( String::CreateFromAscii( ".pdf" ), SFX_FILTER_EXPORT );
+        SfxFilterMatcher aMatcher( String::CreateFromAscii( GetFactory().GetShortName()) );
+        pFilt = aMatcher.GetFilter4Extension( String::CreateFromAscii( "pdf" ), SFX_FILTER_EXPORT );
     }
     else
     {
-        sal_uInt16 nActFilt = 0;
-        for( pFilt = GetFactory().GetFilter( 0 );
-            pFilt && ( !pFilt->CanExport()
-                    || bIsExport && pFilt->CanImport() // Export case ( only for GUI )
-                    || !bSaveTo && !pFilt->CanImport() // SaveAs case
-                    || pFilt->IsInternal() );
-            pFilt = GetFactory().GetFilter( ++nActFilt ) );
+        SfxFilterFlags nMust = SFX_FILTER_EXPORT;
+        SfxFilterFlags nDont = SFX_FILTER_INTERNAL;
+        if ( !bSaveTo )
+            nMust |= SFX_FILTER_IMPORT;
+        if ( bIsExport )
+            nDont |= SFX_FILTER_IMPORT;
+
+        pFilt = GetFactory().GetFilterContainer()->GetAnyFilter( nMust, nDont );
     }
 
     DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
@@ -897,7 +892,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     SFX_REQUEST_ARG( rReq, pFilterItem, SfxStringItem, SID_FILTER_NAME, FALSE);
 
     const SfxFilter *pCurFilter = GetMedium()->GetFilter();
-    const SfxFilter *pDefFilter = GetFactory().GetFilter(0);
+    const SfxFilter *pDefFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT );
 
     if ( nId == SID_SAVEDOC && pCurFilter && !pCurFilter->CanExport() && pDefFilter && pDefFilter->IsInternal() )
         nId = SID_SAVEASDOC;
@@ -937,7 +932,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                         GetMedium()->GetFilter()->GetUIName() );
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                        GetFactory().GetFilter(0)->GetUIName() );
+                        GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL )->GetUIName() );
             QueryBox aWarnBox(0,WB_OK_CANCEL|WB_DEF_OK,aWarn);
             if ( aWarnBox.Execute() == RET_OK )
             {
@@ -967,7 +962,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                                 GetMedium()->GetFilter()->GetUIName());
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                                GetFactory().GetFilter(0)->GetUIName());
+                                GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL )->GetUIName() );
 
                     SfxViewFrame *pFrame = SfxObjectShell::Current() == this ?
                         SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
@@ -1023,21 +1018,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             // in SaveAs umwandlen
             rReq.SetSlot(nId = SID_SAVEASDOC);
-            if ( SFX_APP()->IsPlugin() && !HasName() )
-            {
-                SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, FALSE);
-                if ( pWarnItem && pWarnItem->GetValue() == TRUE )
-                {
-                    // saving done from PrepareClose without UI
-                    INetURLObject aObj( SvtPathOptions().GetWorkPath() );
-                    aObj.insertName( GetTitle(), false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-                    const SfxFilter* pFilter = GetFactory().GetFilter(0);
-                    String aExtension( pFilter->GetDefaultExtension().Copy(2) );
-                    aObj.setExtension( aExtension, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-                    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
-                    rReq.AppendItem( SfxBoolItem( SID_RENAME, TRUE ) );
-                }
-            }
         }
     }
 
@@ -1372,26 +1352,14 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
 
             // Find the template filter with the highest version number
-            const SfxFilter* pFilter=NULL;
             const SfxObjectFactory& rFactory = GetFactory();
-            USHORT  nFilterCount = rFactory.GetFilterCount();
-            ULONG   nVersion = 0;
-            int n;
-            for( n=0; n<nFilterCount; n++)
-            {
-                const SfxFilter* pTemp = rFactory.GetFilter( n );
-                if( pTemp && pTemp->IsOwnFormat() &&
-                    pTemp->IsOwnTemplateFormat() &&
-                    ( pTemp->GetVersion() > nVersion ) )
-                {
-                    pFilter = pTemp;
-                    nVersion = pTemp->GetVersion();
-                }
-            }
-
+            const SfxFilter* pFilter = rFactory.GetTemplateFilter();
             DBG_ASSERT( pFilter, "Template Filter nicht gefunden" );
-            if( !pFilter )
-                pFilter = rFactory.GetFilter(0);
+            if ( !pFilter )
+            {
+                ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+                return;
+            }
 
             if ( !rReq.GetArgs() )
             {
@@ -1661,23 +1629,21 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                     break;
                 }
-
+/*
                 const SfxFilter* pCombinedFilters = NULL;
                 SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
 
                 if ( pFilterContainer )
                 {
                     SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
-                    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
+                    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED | SFX_FILTER_INTERNAL;
 
                     pCombinedFilters = pFilterContainer->GetAnyFilter( nMust, nDont );
                 }
-
-                if ( !pCombinedFilters || !GetMedium() )
+*/
+                if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
-                else if ( pObj && (
-                    pObj->GetProtocol().IsEmbed() ||
-                    GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
+                else if ( pObj && ( pObj->GetProtocol().IsEmbed() || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVECOPYDOC ) ) ) );
                 else
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVEASDOC ) ) ) );
@@ -1691,7 +1657,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
                 if ( pFilterContainer )
                 {
-                    String aPDFExtension = String::CreateFromAscii( ".pdf" );
+                    String aPDFExtension = String::CreateFromAscii( "pdf" );
                     const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
                     if ( pFilter != NULL )
                         break;
