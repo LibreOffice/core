@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:46:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <vcl/gdimtf.hxx>
 #endif
 
+#ifndef _SVDPAGV_HXX
+#include <svdpagv.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -103,10 +107,12 @@ namespace sdr
             }
         }
 
-        DisplayInfo::DisplayInfo(const SdrPageView* pPageView)
+        DisplayInfo::DisplayInfo(SdrPageView* pPageView)
         :   mpPageView(pPageView),
+            mpProcessedPage(0L),
             // init layer info with all bits set to draw everything on default
             maProcessLayers(sal_True),
+            mpLastDisplayInfo(0L),
             mpOutputDevice(0L),
             mpExtOutputDevice(0L),
             mpPaintInfoRec(0L),
@@ -123,6 +129,44 @@ namespace sdr
 
         DisplayInfo::~DisplayInfo()
         {
+            SetProcessedPage( 0L );
+        }
+
+        // access to ProcessedPage, write for internal use only.
+        void DisplayInfo::SetProcessedPage(SdrPage* pNew)
+        {
+            if(pNew != mpProcessedPage)
+            {
+                mpProcessedPage = pNew;
+
+                if(mpPageView)
+                {
+                    if( pNew == NULL )
+                    {
+                        // DisplayInfo needs to be reset at PageView if set since DisplayInfo is no longer valid
+                        if(mpPageView && mpPageView->GetCurrentPaintingDisplayInfo())
+                        {
+                            DBG_ASSERT( mpPageView->GetCurrentPaintingDisplayInfo() == this, "DisplayInfo::~DisplayInfo() : stack error!" );
+
+                            // restore remembered DisplayInfo to build a stack, or delete
+                            mpPageView->SetCurrentPaintingDisplayInfo(mpLastDisplayInfo);
+                        }
+                    }
+                    else
+                    {
+                        // rescue current
+                        mpLastDisplayInfo = mpPageView->GetCurrentPaintingDisplayInfo();
+
+                        // set at PageView when a page is set
+                        mpPageView->SetCurrentPaintingDisplayInfo(this);
+                    }
+                }
+            }
+        }
+
+        const SdrPage* DisplayInfo::GetProcessedPage() const
+        {
+            return mpProcessedPage;
         }
 
         // Access to LayerInfos (which layers to proccess)
