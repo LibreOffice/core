@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:59 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,8 +709,8 @@ sal_Bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nSta
 
     if( !pDescr->IsCaseSensitive() )
     {
-        aText.toLowerCase();
-        aSearchStr.toLowerCase();
+        aText.toAsciiLowerCase();
+        aSearchStr.toAsciiLowerCase();
     }
 
     sal_Int16 nFound = aText.indexOf( aSearchStr, nStartPos );
