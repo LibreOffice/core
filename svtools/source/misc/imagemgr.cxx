@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-11 15:07:15 $
+ *  last change: $Author: pb $ $Date: 2001-12-11 15:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 
     if ( nImage == IMG_FILE )
     {
-        if ( bDetectFolder && ::utl::UCBContentHelper::IsFolder( sURL ) )
+        if ( bDetectFolder && CONTENT_HELPER::IsFolder( sURL ) )
             nImage = GetFolderImageId_Impl( sURL );
         else if ( aExt.Len() > 0 )
             nImage = GetImageId_Impl( aExt );
@@ -586,7 +586,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
     String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     USHORT nResId = 0;
     sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
-    sal_Bool bFolder = bDetectFolder ? ::utl::UCBContentHelper::IsFolder( sURL ) : sal_False;
+    sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
     if ( !bFolder )
     {
 #if defined( OS2 ) || defined( MAC )
