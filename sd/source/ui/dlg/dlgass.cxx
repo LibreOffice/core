@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
+ *  last change: $Author: aw $ $Date: 2001-07-12 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,16 +637,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 {
     DeletePassords();
 
-    //  Delete the template file infos.
-    std::vector<TemplateDir*>::iterator I;
-    std::vector<TemplateEntry*>::iterator   J;
-    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
-    {
-        for (J=(*I)->m_aEntries.begin(); J!=(*I)->m_aEntries.end(); J++)
-            delete (*J);
-        delete (*I);
-    }
-
+    // #89432#
     //  Terminate or join the thread for scanning the template files.
     if (m_aThread != NULL)
     {
@@ -657,6 +648,16 @@ AssistentDlgImpl::~AssistentDlgImpl()
         //  Tell the thread that is now on its own and may delete itself
         //  at will.
         m_aThread->detach ();
+    }
+
+    //  Delete the template file infos.
+    std::vector<TemplateDir*>::iterator I;
+    std::vector<TemplateEntry*>::iterator   J;
+    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+    {
+        for (J=(*I)->m_aEntries.begin(); J!=(*I)->m_aEntries.end(); J++)
+            delete (*J);
+        delete (*I);
     }
 
     // Seite 1
