@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:07:38 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <hash_map>
 #include <deque>
+#include <list>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
@@ -280,7 +281,7 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
             Structure info: NamedValue.Name  = <internal type name>
                             NamedValue.Value = [boolean]bMatchByURLPattern
  */
-typedef ::std::vector< css::beans::NamedValue > FlatDetection;
+typedef ::std::list< css::beans::NamedValue > FlatDetection;
 
     } // namespace config
 } // namespace filter
