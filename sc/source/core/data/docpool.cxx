@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:17:45 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 20:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
-    { SID_ATTR_PARA_SCRIPTSPACE,    SFX_ITEM_POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
-    { SID_ATTR_PARA_HANGPUNCTUATION,SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
     { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
     { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
