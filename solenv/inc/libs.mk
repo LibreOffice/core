@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:57:34 $
+#   last change: $Author: obo $ $Date: 2004-11-15 14:10:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.80 $$"
+LIBSMKREV!:="$$Revision: 1.81 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -124,7 +124,11 @@ SOTLIB=-lsot$(OFFICEUPD)$(DLLPOSTFIX)
 ONELIB=-lone$(OFFICEUPD)$(DLLPOSTFIX)
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
+.IF "$(WITH_OPENLDAP)" == "YES"
+LDAPSDKLIB=-lldap
+.ELSE
 LDAPSDKLIB=-lldap50
+.ENDIF
 ONELIB=
 UNOLIB=
 SVLIBDEPEND=$(L)$/libvcl$(OFFICEUPD)$(DLLPOSTFIX)$(DLLPOST)
