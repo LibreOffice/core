@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:12:26 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 07:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,9 +771,11 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
             PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
                             makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
 
-    // TODO: all the other stuff (charset etc.)
-
     _rDriverParam = Sequence< PropertyValue >(aReturn.begin(), aReturn.size());
+
+    // append all the other stuff (charset etc.)
+    fillDatasourceInfo(*GetExampleSet(), _rDriverParam);
+
     return sal_True;
 }
 
@@ -1346,6 +1348,35 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
     // -------------------------------
     // now for the indirect properties
 
+    Sequence< PropertyValue > aInfo;
+    // the original properties
+    try
+    {
+        _rxDest->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+    }
+    catch(Exception&) { }
+
+    // overwrite and extend them
+    fillDatasourceInfo(_rSource, aInfo);
+
+    // and propagate the (newly composed) sequence to the set
+    try
+    {
+        _rxDest->setPropertyValue(PROPERTY_INFO, makeAny(aInfo));
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("ODbAdminDialog::translateProperties: could not propagate the composed info sequence to the property set!");
+    }
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
+{
+    // within the current "Info" sequence, replace the ones we can examine from the item set
+    // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
+    // us)
+
     // first determine which of all the items are relevant for the data source (depends on the connection url)
     sal_Int32* pRelevantItems = NULL;
 
@@ -1366,7 +1397,7 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
     }
     DBG_ASSERT(pRelevantItems, "ODbAdminDialog::translateProperties: invalid item ids got from the page!");
 
-    // collect the translated property values
+    // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
     ConstMapInt2StringIterator aTranslation;
     while (*pRelevantItems)
@@ -1379,18 +1410,11 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
         ++pRelevantItems;
     }
 
-    // within the current "Info" sequence, replace the ones we
-    // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
-    // us)
-    Sequence< PropertyValue > aInfo;
-    try
-    {
-        _rxDest->getPropertyValue(PROPERTY_INFO) >>= aInfo;
-    }
-    catch(Exception&) { }
-    PropertyValue* pInfo = aInfo.getArray();
+    // now aRelevantSettings contains all the property values relevant for the current data source type,
+    // check the original sequence if it already contains any of these values (which have to be overwritten, then)
+    PropertyValue* pInfo = _rInfo.getArray();
     PropertyValue aSearchFor;
-    for (sal_Int32 i=0; i<aInfo.getLength(); ++i, ++pInfo)
+    for (sal_Int32 i=0; i<_rInfo.getLength(); ++i, ++pInfo)
     {
         aSearchFor.Name = pInfo->Name;
         PropertyValueSetIterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
@@ -1400,26 +1424,17 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
             aRelevantSettings.erase(aOverwrittenSetting);
         }
     }
-    // check which settings are still left ('cause they were not present in the original sequence, but are to be set)
-    sal_Int32 nOldLength = aInfo.getLength();
-    aInfo.realloc(nOldLength + aRelevantSettings.size());
-    PropertyValue* pAppendValues = aInfo.getArray() + nOldLength;
+
+    // check which values are still left ('cause they were not present in the original sequence, but are to be set)
+    sal_Int32 nOldLength = _rInfo.getLength();
+    _rInfo.realloc(nOldLength + aRelevantSettings.size());
+    PropertyValue* pAppendValues = _rInfo.getArray() + nOldLength;
     for (   ConstPropertyValueSetIterator aLoop = aRelevantSettings.begin();
             aLoop != aRelevantSettings.end();
             ++aLoop, ++pAppendValues
         )
     {
         *pAppendValues = *aLoop;
-    }
-
-    // and propagate the (newly composed) sequence to the set
-    try
-    {
-        _rxDest->setPropertyValue(PROPERTY_INFO, makeAny(aInfo));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("ODbAdminDialog::translateProperties: could not propagate the composed info sequence to the property set!");
     }
 }
 
@@ -2127,6 +2142,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/10/24 12:12:26  fs
+ *  ODatasourceMap::update takes a non-constant set (to reset the ORIGINALNAME item)
+ *
  *  Revision 1.7  2000/10/23 12:56:50  fs
  *  added apply functionality
  *
