@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:55:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,26 +349,44 @@ Reference< XContentProviderManager > InitializeUCB( void )
         {
             {
                 Reference< XMultiServiceFactory > interimSmgr =
-                    createRegistryServiceFactory( services, types, sal_False );
+                    createRegistryServiceFactory( types, sal_True );
                 Reference< XImplementationRegistration > xIR(
                     interimSmgr->createInstance(
                         OUString::createFromAscii(
                             "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
 
-                OUString loader( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" ));
-                for( sal_Int32 i = 0; components[i] ; i ++ )
+                Reference< XSimpleRegistry > xReg(
+                    interimSmgr->createInstance(
+                        OUString::createFromAscii(
+                            "com.sun.star.registry.SimpleRegistry" ) ), UNO_QUERY );
+                if ( xReg.is() )
                 {
-                    printf("Registering %s ... ", components[i]);
-                    xIR->registerImplementation(
-                        loader, OUString::createFromAscii(components[i]),Reference< XSimpleRegistry >());
-                    printf("done\n");
+                    xReg->open(services, sal_False, sal_True);
+                    if ( xReg->isValid() )
+                    {
+                        OUString loader( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" ));
+                        for( sal_Int32 i = 0; components[i] ; i ++ )
+                        {
+                            printf("Registering %s ... ", components[i]);
+                            xIR->registerImplementation(
+                                loader, OUString::createFromAscii(components[i]),xReg);
+                            printf("done\n");
+                        }
+                        xReg->close();
+                    } else
+                    {
+                        printf("Cannot open Registry. Terminating Program\n");
+                        exit (1);
+                    }
                 }
+
                 Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
                 if( xComp.is() )
                     xComp->dispose();
             }
 
             // now try it again readonly
+            printf("Opening Registry readonly\n");
             xSMgr = createRegistryServiceFactory( types, services, sal_True );
         }
         catch( com::sun::star::uno::Exception & exc )
