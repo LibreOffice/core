@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-08 13:18:11 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1564,7 +1564,8 @@ uno::Any Content::open(
                 const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-      if ( isFolder() )
+    if ( rArg.Mode == star::ucb::OpenMode::ALL || rArg.Mode == star::ucb::OpenMode::FOLDERS || rArg.Mode == star::ucb::OpenMode::DOCUMENTS )
+    //if ( IsFolder() )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
