@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:39:39 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,16 @@ void BreakPointList::AdjustBreakPoints( ULONG nLine, BOOL bInserted )
         {
             pBrk = Next();
         }
+    }
+}
+
+void BreakPointList::ResetHitCount()
+{
+    BreakPoint* pBrk = First();
+    while ( pBrk )
+    {
+        pBrk->nHitCount = 0;
+        pBrk = Next();
     }
 }
 
