@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
+ *  last change: $Author: cmc $ $Date: 2001-08-23 12:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,7 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
     *xVBAProject >> nIdLen;
 
     if (nIdLen < 6) //Error recovery
-    {
         xVBAProject->SeekRel(-2);
-    }
     else
         for(UINT16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
         {
@@ -254,12 +252,19 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     }
 
     /*
-    There appears to be a number of strings, the total of nLenB and nLenC,
-    most begin with *G , but sometimes with *C. If a string begins with C, it
-    is really two (counts as one for the nI index), one right after the other.
+    A sequence of string that are prepended with a len and then begin with G or H,
+    there are also those that begin with C or D. If a string begins with C or D,
+    it is really two strings, one right after the other.
     Each string then has a 12 bytes suffix
+
+    Recognizing the end of the sequence is done by finding a str len of < 6 which
+    does not appear to be the beginning of an object id. Admittedly this isn't
+    a great test, but nothing in the header appears to count the number of strings,
+    and nothing else seems to match. So it'll have to do, its protected by a number
+    of secondry tests to prove its a valid string, and everything gives up if this
+    isn't proven.
     */
-    for (UINT16 nI = 0; nI < nLenB + nLenC; nI++)
+    while (1)
     {
         BYTE nType;
         nType = ReadPString(xVBAProject,bIsUnicode);
@@ -271,9 +276,9 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             if (nType != 'C' && nType != 'D')
                 return 0;
         }
-        DBG_ASSERT( nType, "VBA: Bad String in VBA Project, panic!!" );
+//      DBG_ASSERT( nType, "VBA: Bad String in VBA Project, panic!!" );
         if (!nType)
-            return 0;
+            break;
         xVBAProject->SeekRel(12);
     }
 
