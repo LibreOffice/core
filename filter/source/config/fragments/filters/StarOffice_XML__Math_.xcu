@@ -11,5 +11,5 @@
             <value xml:lang="en-US">%productname% %formatversion% Formula</value>
             <value xml:lang="x-translate">%productname% %formatversion% Formula</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN</value></prop>
     </node>
