@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,12 @@ Attribute::TagFeature( unsigned short nFeature )
         && (strcmp(mpName, "open look glyph") == 0) )
     {
         mnFeature |= XLFD_FEATURE_OL_GLYPH;
+    }
+    if (   (nFeature & XLFD_FEATURE_APPLICATION_FONT)
+        && (   (strcmp(mpName, "interface user")   == 0)
+            || (strcmp(mpName, "interface system") == 0)))
+    {
+        mnFeature |= XLFD_FEATURE_APPLICATION_FONT;
     }
 
     if ( nFeature & XLFD_FEATURE_REDUNDANTSTYLE )
@@ -644,7 +650,8 @@ AttributeProvider::TagFeature()
     mpField[ eXLFDFamilyName   ]->TagFeature(
                                       XLFD_FEATURE_OL_GLYPH
                                     | XLFD_FEATURE_OL_CURSOR
-                                    | XLFD_FEATURE_NARROW );
+                                    | XLFD_FEATURE_NARROW
+                                    | XLFD_FEATURE_APPLICATION_FONT);
 
     mpField[ eXLFDSetwidthName ]->TagFeature(
                                       XLFD_FEATURE_NARROW );

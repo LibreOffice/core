@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-04 14:41:19 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,9 +276,17 @@ SalDisplay::GetXlfdList()
             // flush the old merged font list if the name doesn't match any more
             if ( !bSameOutline )
             {
-                mpFontList->Add( pScalableFont ); pScalableFont = NULL;
-                mpFontList->Add( pPrinterFont );  pPrinterFont  = NULL;
-                mpFontList->Add( &aBitmapList );  aBitmapList.Reset();
+                mpFontList->Add( pScalableFont );
+                mpFontList->Add( pPrinterFont );
+
+                if (pAttr->HasFeature( XLFD_FEATURE_APPLICATION_FONT ) )
+                    aBitmapList.AddScalableFont( pScalableFont );
+
+                mpFontList->Add( &aBitmapList );
+
+                pScalableFont = NULL;
+                 pPrinterFont  = NULL;
+                aBitmapList.Reset();
             }
 
             // merge the font or generate a new one

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-02 16:01:00 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,18 @@ ExtendedXlfd::EncodingInfo::operator= ( const Xlfd *pXlfd )
     return *this;
 }
 
+ExtendedXlfd::EncodingInfo&
+ExtendedXlfd::EncodingInfo::operator= ( const ExtendedXlfd::EncodingInfo& rInfo )
+{
+    mcSpacing     = rInfo.mcSpacing;
+    mnResolutionX = rInfo.mnResolutionX;
+    mnResolutionY = rInfo.mnResolutionY;
+    mnAddstyle    = rInfo.mnAddstyle;
+    mnCharset     = rInfo.mnCharset;
+    mnEncoding    = rInfo.mnEncoding;
+
+    return *this;
+}
 // ------ base class --------------------------------------------------------
 
 ExtendedXlfd::ExtendedXlfd()
@@ -508,6 +520,27 @@ BitmapXlfd::AddEncoding( const Xlfd *pXlfd )
     return ExtendedXlfd::AddEncoding( pXlfd );
 }
 
+Bool
+BitmapXlfd::AddEncoding( const ScalableXlfd *pXlfd )
+{
+    if ( mnEncodings == 0 )
+        return False;
+
+    for (int i = 0; i < pXlfd->NumEncodings(); i++)
+    {
+        rtl_TextEncoding nEncoding = pXlfd->GetEncoding(i);
+        if ( HasEncoding(nEncoding) )
+            continue;
+
+        mpEncodingInfo = (EncodingInfo*)Realloc( mpEncodingInfo,
+                (mnEncodings + 1) * sizeof(EncodingInfo) );
+        mpEncodingInfo[mnEncodings] = pXlfd->mpEncodingInfo[i];
+        mnEncodings += 1;
+    }
+
+    return True;
+}
+
 void
 BitmapXlfd::ToString( ByteString &rString,
         unsigned short nPixelSize, rtl_TextEncoding nEncoding ) const
@@ -779,5 +812,15 @@ BitmapXlfdStorage::AddBitmapFont( const Xlfd *pXlfd )
     mpList[ mnCount ] = new BitmapXlfd();
     const_cast<ExtendedXlfd*>(mpList[ mnCount ])->AddEncoding( pXlfd );
     ++mnCount;
+}
+
+void
+BitmapXlfdStorage::AddScalableFont( const ScalableXlfd *pScaleFnt )
+{
+    if ( pScaleFnt == NULL )
+        return;
+
+    for ( int i = 0; i < mnCount; i++ )
+        ((BitmapXlfd*)(mpList[i]))->AddEncoding( pScaleFnt );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:38:03 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ class ExtendedXlfd {
                                        rtl_TextEncoding nEncoding ) const ;
         virtual void        ToString( ByteString &rString,
                                       unsigned short nPixelSize,
-                                                              char* pMatricsString,
-                                                              rtl_TextEncoding nEncoding  ) const;
+                                     char* pMatricsString,
+                                       rtl_TextEncoding nEncoding  ) const;
 
         virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
         virtual FontType    GetFontType() const
@@ -144,6 +144,7 @@ class ExtendedXlfd {
             rtl_TextEncoding    mnEncoding;
 
             EncodingInfo&       operator= ( const Xlfd *pXlfd );
+            EncodingInfo&       operator= ( const EncodingInfo& rInfo );
         } *mpEncodingInfo;
 };
 
@@ -169,12 +170,15 @@ class ScalableBitmapXlfd : public ExtendedXlfd {
 
 // class to handle true bitmap fonts
 
+class ScalableXlfd;
+
 class BitmapXlfd : public ExtendedXlfd {
 
     public:
                             BitmapXlfd();
                             ~BitmapXlfd();
         Bool                AddEncoding( const Xlfd *pXlfd );
+        Bool                AddEncoding( const ScalableXlfd *pXlfd );
         unsigned short      GetPixelSize() const
                                     { return mnPixelSize; }
         virtual void        ToString( ByteString &rString,
@@ -197,6 +201,8 @@ class BitmapXlfd : public ExtendedXlfd {
 // class to handle true scalable fonts
 
 class ScalableXlfd : public ExtendedXlfd {
+
+    friend class BitmapXlfd;
 
     public:
                             ScalableXlfd();
@@ -263,6 +269,7 @@ class BitmapXlfdStorage : public XlfdStorage {
     public:
 
         void                AddBitmapFont( const Xlfd *pXlfd );
+        void                AddScalableFont( const ScalableXlfd *pScaleFnt );
 };
 
 #endif /* XLFD_EXTENDED_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,23 +106,29 @@ XlfdCompare( const void *vFrom, const void *vTo )
 
     // Addstyle name is futile tricky. it may contain encoding information
     // (like "ansi_1251") which Compares equal, or it may contain style
-    // information (like "serif") which Compares unequal
+    // information (like "serif") which Compares unequal, anyway if the font
+    // is "interface user" or "interface system" then compare equal anyway to
+    // build fontsets as large as possible
     if ( pFrom->mnAddstyle == pTo->mnAddstyle )
         return 0;
 
     AttributeProvider *pFactory = pFrom->mpFactory;
-    Attribute *pFromAttr = pFactory->RetrieveAddstyle( pFrom->mnAddstyle );
-    Attribute *pToAttr   = pFactory->RetrieveAddstyle( pTo->mnAddstyle );
+    Attribute *pFamily = pFactory->RetrieveFamily( pFrom->mnFamily );
+    if ( pFamily->HasFeature(XLFD_FEATURE_APPLICATION_FONT) )
+        return 0;
+
+    Attribute *pFromAddStyle = pFactory->RetrieveAddstyle( pFrom->mnAddstyle );
+    Attribute *pToAddStyle   = pFactory->RetrieveAddstyle( pTo->mnAddstyle );
 
     // if both addstyles denote encodings or if one denotes an
     // encoding and the other denotes a style which really
     // duplicates weight and slant information
 
-    int nFromCompare =     (pFromAttr->GetValue() != RTL_TEXTENCODING_DONTKNOW)
-                        || (pFromAttr->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE)) ?
+    int nFromCompare =     (pFromAddStyle->GetValue() != RTL_TEXTENCODING_DONTKNOW)
+                        || (pFromAddStyle->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE)) ?
                          -1 : pFrom->mnAddstyle;
-    int nToCompare   =     (pToAttr->GetValue()   != RTL_TEXTENCODING_DONTKNOW)
-                        || (pToAttr->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE))   ?
+    int nToCompare   =     (pToAddStyle->GetValue()   != RTL_TEXTENCODING_DONTKNOW)
+                        || (pToAddStyle->HasFeature(XLFD_FEATURE_REDUNDANTSTYLE))   ?
                         -1 : pTo->mnAddstyle;
 
     return nFromCompare - nToCompare;
