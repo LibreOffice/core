@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,8 @@ enum ScXMLTableRowCellTokens
 {
     XML_TOK_TABLE_ROW_CELL_P,
     XML_TOK_TABLE_ROW_CELL_SUBTABLE,
-    XML_TOK_TABLE_ROW_CELL_ANNOTATION
+    XML_TOK_TABLE_ROW_CELL_ANNOTATION,
+    XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE
 };
 
 enum ScXMLTableRowCellAttrTokens
@@ -296,6 +297,16 @@ enum ScXMLAnnotationAttrTokens
     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING,
     XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY
+};
+
+enum ScXMLCellRangeSourceAttrTokens
+{
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN,
+    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW
 };
 
 enum ScXMLNamedExpressionsTokens
@@ -622,6 +633,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pTableRowCellElemTokenMap;
     SvXMLTokenMap           *pTableRowCellAttrTokenMap;
     SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
+    SvXMLTokenMap           *pTableCellRangeSourceAttrTokenMap;
     SvXMLTokenMap           *pNamedExpressionsElemTokenMap;
     SvXMLTokenMap           *pNamedRangeAttrTokenMap;
     SvXMLTokenMap           *pNamedExpressionAttrTokenMap;
@@ -747,6 +759,7 @@ public:
     const SvXMLTokenMap& GetTableRowCellElemTokenMap();
     const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
     const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
+    const SvXMLTokenMap& GetTableCellRangeSourceAttrTokenMap();
     const SvXMLTokenMap& GetNamedExpressionsElemTokenMap();
     const SvXMLTokenMap& GetNamedRangeAttrTokenMap();
     const SvXMLTokenMap& GetNamedExpressionAttrTokenMap();

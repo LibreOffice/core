@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 14:00:24 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,15 @@
 #include "docuno.hxx"
 #include "unonames.hxx"
 
+// core implementation
+#ifndef SC_AREALINK_HXX
+#include "arealink.hxx"
+#endif
+// core implementation
+#ifndef _SVXLINKMGR_HXX
+#include <svx/linkmgr.hxx>
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlkywd.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -91,7 +100,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -167,7 +175,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nRepeatedRows(nTempRepeatedRows),
     bIsEmpty(sal_True),
     bHasTextImport(sal_False),
-    bIsFirstTextImport(sal_True)
+    bIsFirstTextImport(sal_True),
+    aCellRangeSource()
 {
     GetScImport().GetTables().AddColumn(bTempIsCovered);
     nMergedCols = 1;
@@ -386,6 +395,13 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             bIsEmpty = sal_False;
             pContext = new ScXMLAnnotationContext( GetScImport(), nPrefix, rLName,
                                                     xAttrList, this);
+        }
+        break;
+    case XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE:
+        {
+            bIsEmpty = sal_False;
+            pContext = new ScXMLCellRangeSourceContext(
+                GetScImport(), nPrefix, rLName, xAttrList, aCellRangeSource );
         }
         break;
     }
@@ -931,6 +947,43 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
     }
 }
 
+// core implementation
+void ScXMLTableRowCellContext::SetCellRangeSource( sal_Int16 nSheet, sal_Int32 nColumnPos, sal_Int32 nRowPos )
+{
+    ScXMLImport& rXMLImport = GetScImport();
+    ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
+    if ( pDocObj )
+    {
+        ScDocument* pDoc = pDocObj->GetDocument();
+        if( pDoc )
+        {
+            ScRange aDestRange( nColumnPos, nRowPos, nSheet, nColumnPos + aCellRangeSource.nColumns - 1,
+                nRowPos + aCellRangeSource.nRows - 1, nSheet );
+            String sFilterName( aCellRangeSource.sFilterName );
+            String sSourceStr( aCellRangeSource.sSourceStr );
+            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
+                sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange );
+            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
+        }
+    }
+
+
+//  uno::Reference< beans::XPropertySet > xDocProp( xSpreadDoc, uno::UNO_QUERY );
+//  if( xDocProp.is() )
+//  {
+//      uno::Reference< sheet::XAreaLinks > xAreaLinks;
+//      uno::Any aAny( xDocProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) ) );
+//      if( aAny >>= xAreaLinks )
+//      {
+//          table::CellRangeAddress aRange( nSheet, nColumnPos, nRowPos,
+//              nColumnPos + aCellRangeSource.nColumns - 1, nRowPos + aCellRangeSource.nRows - 1 );
+//          xAreaLinks->insertAtPosition( aRange, aCellRangeSource.sURL, aCellRangeSource.sSourceStr,
+//              aCellRangeSource.sFilterName, aCellRangeSource.sFilterOptions );
+//      }
+//  }
+}
+
 void ScXMLTableRowCellContext::EndElement()
 {
     if (bHasTextImport)
@@ -1052,6 +1105,8 @@ void ScXMLTableRowCellContext::EndElement()
                                 }
                                 if (bHasAnnotation)
                                     SetAnnotation(xCell);
+                                if( aCellRangeSource.bHas )
+                                    SetCellRangeSource( aCellPos.Sheet, aCellPos.Column + i, aCellPos.Row + j );
                             }
                         }
                         else
@@ -1101,6 +1156,8 @@ void ScXMLTableRowCellContext::EndElement()
                     }
                     if (bHasAnnotation)
                         SetAnnotation(xCell);
+                    if( aCellRangeSource.bHas )
+                        SetCellRangeSource( aCellPos.Sheet, aCellPos.Column, aCellPos.Row );
 //2do: results of formula cells should be stored in XML and set upon reading
                     // No API implemented because this is the only place where needed ever, isn't it?
                     //! QAD HACK! be sure that getCellByPosition() really returned a ScCellObj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,9 +305,10 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT,   sXML_p,             XML_TOK_TABLE_ROW_CELL_P            },
-    { XML_NAMESPACE_TABLE,  sXML_sub_table,     XML_TOK_TABLE_ROW_CELL_SUBTABLE     },
-    { XML_NAMESPACE_OFFICE, sXML_annotation,    XML_TOK_TABLE_ROW_CELL_ANNOTATION   },
+    { XML_NAMESPACE_TEXT,   sXML_p,                 XML_TOK_TABLE_ROW_CELL_P                    },
+    { XML_NAMESPACE_TABLE,  sXML_sub_table,         XML_TOK_TABLE_ROW_CELL_SUBTABLE             },
+    { XML_NAMESPACE_OFFICE, sXML_annotation,        XML_TOK_TABLE_ROW_CELL_ANNOTATION           },
+    { XML_NAMESPACE_TABLE,  sXML_cell_range_source, XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE    },
     XML_TOKEN_MAP_END
 };
 
@@ -340,6 +341,16 @@ static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aTableCellRangeSourceAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE,  sXML_name,                  XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME           },
+    { XML_NAMESPACE_XLINK,  sXML_href,                  XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF           },
+    { XML_NAMESPACE_TABLE,  sXML_filter_name,           XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME    },
+    { XML_NAMESPACE_TABLE,  sXML_filter_options,        XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS },
+    { XML_NAMESPACE_TABLE,  sXML_last_column_spanned,   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN    },
+    { XML_NAMESPACE_TABLE,  sXML_last_row_spanned,      XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW       },
+    XML_TOKEN_MAP_END
+};
 
 static __FAR_DATA SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
 {
@@ -860,6 +871,13 @@ const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
     return *pTableAnnotationAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetTableCellRangeSourceAttrTokenMap()
+{
+    if( !pTableCellRangeSourceAttrTokenMap )
+        pTableCellRangeSourceAttrTokenMap = new SvXMLTokenMap( aTableCellRangeSourceAttrTokenMap );
+    return *pTableCellRangeSourceAttrTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetNamedExpressionsElemTokenMap()
 {
     if( !pNamedExpressionsElemTokenMap )
@@ -1152,6 +1170,7 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pTableRowCellElemTokenMap( 0 ),
     pTableRowCellAttrTokenMap( 0 ),
     pTableAnnotationAttrTokenMap( 0 ),
+    pTableCellRangeSourceAttrTokenMap( 0 ),
     pNamedExpressionsElemTokenMap( 0 ),
     pNamedRangeAttrTokenMap( 0 ),
     pNamedExpressionAttrTokenMap( 0 ),
@@ -1281,6 +1300,7 @@ ScXMLImport::~ScXMLImport()
     delete pTableRowCellElemTokenMap;
     delete pTableRowCellAttrTokenMap;
     delete pTableAnnotationAttrTokenMap;
+    delete pTableCellRangeSourceAttrTokenMap;
     delete pNamedExpressionsElemTokenMap;
     delete pNamedRangeAttrTokenMap;
     delete pNamedExpressionAttrTokenMap;

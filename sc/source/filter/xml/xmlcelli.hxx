@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef SC_XMLCELLI_HXX
 #define SC_XMLCELLI_HXX
 
+#ifndef SC_XMLCELLRANGESOURCECONTEXT_HXX
+#include "XMLCellRangeSourceContext.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
@@ -84,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
 
 class ScXMLImport;
@@ -123,6 +130,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nRepeatedRows;
     double  fValue;
     ScMyAnnotation  aMyAnnotation;
+    ScMyImpCellRangeSource aCellRangeSource;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -166,6 +174,8 @@ public:
 
     static void ParseFormula(rtl::OUString& sFormula, sal_Bool bIsFormula = sal_True);
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+
+    void SetCellRangeSource( sal_Int16 nSheet, sal_Int32 nColumnPos, sal_Int32 nRowPos );
 
     virtual void EndElement();
 
