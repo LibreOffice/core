@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.24 $
+*  $Revision: 1.25 $
 *
-*  last change: $Author: hjs $ $Date: 2004-06-28 17:03:23 $
+*  last change: $Author: rt $ $Date: 2004-07-12 13:07:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -197,8 +197,7 @@ STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
 STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
 
-/*
-#if defined WNT && defined M1300 // currently the only cli platform
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Cppuhelper
     TXT_FILE_BODY;
@@ -208,10 +207,8 @@ File gid_File_Lib_Cli_Cppuhelper
 End
 
 #endif
-*/
 
-/*
-#if defined WNT && defined M1300 // currently the only cli platform
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Types
     TXT_FILE_BODY;
@@ -221,9 +218,8 @@ File gid_File_Lib_Cli_Types
 End
 
 #endif
-*/
-/*
-#if defined WNT && defined M1300 // currently the only cli platform
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Uno
     TXT_FILE_BODY;
@@ -233,9 +229,8 @@ File gid_File_Lib_Cli_Uno
 End
 
 #endif
-*/
-/*
-#if defined WNT && defined M1300 // currently the only cli platform
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
 File gid_File_Lib_Cli_Ure
     TXT_FILE_BODY;
@@ -245,11 +240,11 @@ File gid_File_Lib_Cli_Ure
 End
 
 #endif
-*/
 
 #if ! defined WNT // no longer supported on Windows
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
 #endif
+
 
 STD_UNO_LIB_FILE( gid_File_Lib_Cnt, cnt )
 
