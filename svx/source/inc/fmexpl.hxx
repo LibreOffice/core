@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 06:49:47 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,55 +348,63 @@ public:
 
 
 //========================================================================
-namespace svxform { class NavigatorTreeModel; };
-class FmXNavPropertyObserver : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener,
-                                  ::com::sun::star::container::XContainerListener>
-{
-    ::svxform::NavigatorTreeModel*  m_pNavModel;
-    sal_uInt32 m_nLocks;
-    sal_Bool   m_bCanUndo;
-
-public:
-    FmXNavPropertyObserver( ::svxform::NavigatorTreeModel* pModel );
-
-// XEventListenerListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::container::XContainerListener
-
-    virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
-
-    void Lock() { m_nLocks++; }
-    void UnLock() { m_nLocks--; }
-    sal_Bool IsLocked() const { return m_nLocks != 0; }
-    sal_Bool CanUndo() const { return m_bCanUndo; }
-    void ReleaseModel() { m_pNavModel = NULL; }
-protected:
-    void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
-};
-
 //............................................................................
 namespace svxform
 {
 //............................................................................
 
+    class NavigatorTreeModel;
+    //========================================================================
+    // class OFormComponentObserver
+    //========================================================================
+    class OFormComponentObserver
+        :public ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::container::XContainerListener
+                                        >
+    {
+        ::svxform::NavigatorTreeModel*  m_pNavModel;
+        sal_uInt32 m_nLocks;
+        sal_Bool   m_bCanUndo;
+
+    public:
+        OFormComponentObserver( ::svxform::NavigatorTreeModel* pModel );
+
+    // XEventListenerListener
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::beans::XPropertyChangeListener
+        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XContainerListener
+
+        virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
+
+        void Lock() { m_nLocks++; }
+        void UnLock() { m_nLocks--; }
+        sal_Bool IsLocked() const { return m_nLocks != 0; }
+        sal_Bool CanUndo() const { return m_bCanUndo; }
+        void ReleaseModel() { m_pNavModel = NULL; }
+    protected:
+        void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
+        void Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
+    };
+
+    //========================================================================
+    //= NavigatorTreeModel
     //========================================================================
     class NavigatorTreeModel : public SfxBroadcaster
                            ,public SfxListener
     {
         friend class NavigatorTree;
-        friend class FmXNavPropertyObserver;
+        friend class OFormComponentObserver;
 
         FmEntryDataList*            m_pRootList;
         FmFormShell*                m_pFormShell;
         FmFormPage*                 m_pFormPage;
         FmFormModel*                m_pFormModel;
-        FmXNavPropertyObserver*  m_pPropChangeList;
+        OFormComponentObserver*  m_pPropChangeList;
 
         const ImageList             m_ilNavigatorImages;
 
@@ -491,12 +499,12 @@ namespace svxform
 
         unsigned short      m_aTimerCounter;
 
-        sal_Bool                m_bShellOrPageChanged:1;    // wird in jedem Update(FmFormShell*) auf sal_True gesetzt
-        sal_Bool                m_bDragDataDirty:1;     // dito
-        sal_Bool                m_bPrevSelectionMixed:1;
-        sal_Bool                m_bMarkingObjects:1;  // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
-        sal_Bool                m_bRootSelected:1;
-        sal_Bool                m_bInitialUpdate:1;   // bin ich das erste Mal im Update ?
+        sal_Bool                m_bDragDataDirty        : 1;        // dito
+        sal_Bool                m_bPrevSelectionMixed   : 1;
+        sal_Bool                m_bMarkingObjects       : 1;  // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        sal_Bool                m_bRootSelected         : 1;
+        sal_Bool                m_bInitialUpdate        : 1;   // bin ich das erste Mal im Update ?
+        sal_Bool                m_bKeyboardCut          : 1;
 
 
         void            Update();
@@ -544,6 +552,8 @@ namespace svxform
         DECL_LINK(OnEntrySelDesel, NavigatorTree*);
         DECL_LINK(OnSynchronizeTimer, void*);
 
+        DECL_LINK( OnClipboardAction, void* );
+
     protected:
         virtual void    Command( const CommandEvent& rEvt );
 
@@ -572,14 +582,29 @@ namespace svxform
         virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
         virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
         virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
-        virtual void MouseButtonUp( const MouseEvent& rMEvt );
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
         virtual void KeyInput( const KeyEvent& rKEvt );
 
     private:
-        sal_Int8    implAcceptDrop( sal_Int8 _nAction, const Point& _rDropPos );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+
+        // check if a cut, copy, or drag operation can be started in the current situation
+        sal_Bool    implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden = NULL );
+        // check if a paste with the current clipboard content can be accepted
+        sal_Bool    implAcceptPaste( );
+
         // fills m_aControlExchange in preparation of a DnD or clipboard operation
-        sal_Bool    implPrepareExchange( );
+        sal_Bool    implPrepareExchange( sal_Int8 _nAction );
+
+        void        doPaste();
+        void        doCopy();
+        void        doCut();
+
+        sal_Bool    doingKeyboardCut( ) const { return m_bKeyboardCut; }
     };
 
     //========================================================================
