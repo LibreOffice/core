@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 16:54:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <alloca.h>
 #endif
 #include <cstdlib>
-#include <cmath> // for isnan
+#include <math.h> // for isnan
 #include <cstring>
 
 // isnan needs special support on MACOSX
