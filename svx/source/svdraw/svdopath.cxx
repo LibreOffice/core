@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:34:45 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,22 +364,30 @@ sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
+    // #b4899532# if not filled but fill draft, avoid object being invisible in using
+    // a hair linestyle and COL_LIGHTGRAY
+    SfxItemSet aItemSet(rSet);
+    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+    {
+        ImpPrepareLocalItemSetForDraftLine(aItemSet);
+    }
+
     // #103692# prepare ItemSet for shadow fill attributes
-    SfxItemSet aShadowSet(rSet);
+    SfxItemSet aShadowSet(aItemSet);
 
     // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
 
     // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
+    if (!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
     {
         if( !IsClosed() || bIsFillDraft )
             rXOut.SetFillAttr(aEmptySet);
         else
             rXOut.SetFillAttr(aShadowSet);
 
-        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+        UINT32 nXDist=((SdrShadowXDistItem&)(aItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(aItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolyPolygon aTmpXPoly(aPathPolygon);
         aTmpXPoly.Move(nXDist,nYDist);
 
@@ -402,7 +410,7 @@ sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
         if( pLineGeometry.get() )
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
         }
     }
 
@@ -410,14 +418,14 @@ sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
     // avoid line drawing in XOut
     rXOut.SetLineAttr(aEmptySet);
 
-    rXOut.SetFillAttr( bIsFillDraft || !IsClosed() ? aEmptySet : rSet );
+    rXOut.SetFillAttr( bIsFillDraft || !IsClosed() ? aEmptySet : aItemSet );
 
     if( !bHideContour )
     {
         if( IsClosed() )
         {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft || !IsClosed() ? aEmptySet : rSet );
+            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft || !IsClosed() ? aEmptySet : aItemSet );
 
             rXOut.DrawXPolyPolygon(aPathPolygon);
         }
@@ -426,7 +434,7 @@ sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
         if( pLineGeometry.get() )
         {
             // draw the line geometry
-            ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+            ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
         }
     }
 
@@ -3423,7 +3431,7 @@ void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     {
         // if anchor is used, make position relative to it
         if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
     }
 
     // set PathPoly and get type
