@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:44:30 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:10:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,6 @@ SLOFILES = \
     $(SLO)$/fmctrler.obj    \
     $(SLO)$/fmpgeimp.obj	\
     $(SLO)$/fmvwimp.obj     \
-    $(SLO)$/taborder.obj    \
     $(SLO)$/fmdpage.obj		\
     $(SLO)$/fmitems.obj  	\
     $(SLO)$/tbxform.obj     \
