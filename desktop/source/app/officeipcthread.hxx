@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:31:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 // that was given by command line or by IPC pipe communication.
 struct ProcessDocumentsRequest
 {
+    ::rtl::OUString aModule;
     ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
     ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
     ::rtl::OUString aStartList;     // Documents/Presentations that should be started
