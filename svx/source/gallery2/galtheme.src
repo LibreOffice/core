@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 18:44:10 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "My theme";
     Text[ japanese ] = "プレゼンテーション";
-    Text[ korean ] = "프리젠테이션";
+    Text[ korean ] = "프레젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報";
     Text[ turkish ] = "Kullan�c� konusu";
