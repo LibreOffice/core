@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-18 11:23:35 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,9 +263,6 @@
 #ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
 #endif
-#ifndef _SRCVCFG_HXX //autogen
-#include <srcvcfg.hxx>
-#endif
 #ifndef _CHARTINS_HXX //autogen
 #include <chartins.hxx>
 #endif
@@ -381,7 +378,6 @@ SwModule::SwModule( SvFactory* pFact,
                     SvFactory* pGlobalFact )
     : SwModuleDummy( SFX_APP()->CreateResManager( "sw" ), sal_False, pFact,
                      pWebFact, pGlobalFact ),
-    pSrcViewConfig(0),
     pModuleConfig(0),
     pView(0),
     pChapterNumRules(0),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:13:32 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,9 +202,6 @@
 #endif
 #ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
-#endif
-#ifndef _SRCVCFG_HXX
-#include <srcvcfg.hxx>
 #endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
@@ -1048,13 +1045,6 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
         {
-            if(pSrcViewConfig)
-            {
-                if(pSrcViewConfig->IsModified())
-                    pSrcViewConfig->Commit();
-                DELETEZ( pSrcViewConfig );
-            }
-
             DELETEZ(pWebUsrPref);
             DELETEZ(pUsrPref)   ;
             DELETEZ(pModuleConfig);
@@ -1124,17 +1114,6 @@ void SwModule::FillStatusBar( StatusBar& rStatusBar )
     rStatusBar.SetHelpId(SID_ATTR_SIZE, SID_ATTR_SIZE);
 }
 
-/*-----------------18.11.96 10.42-------------------
-
---------------------------------------------------*/
-SwSrcViewConfig* SwModule::GetSourceViewConfig()
-{
-    if(!pSrcViewConfig)
-    {
-        pSrcViewConfig = new SwSrcViewConfig();
-    }
-    return pSrcViewConfig;
-}
 /* -----------------------------20.02.01 12:43--------------------------------
 
  ---------------------------------------------------------------------------*/

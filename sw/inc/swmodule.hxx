@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:45:44 $
+ *  last change: $Author: os $ $Date: 2002-08-30 10:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class AuthorCharAttr;
 class SfxItemSet;
 class SfxRequest;
 class SfxErrorHandler;
-class SwSrcViewConfig;
 class SwDBConfig;
 class SwModuleOptions;
 class SwMasterUsrPref;
@@ -125,7 +124,6 @@ class SwModule: public SwModuleDummy , public SfxListener
     String              sActAuthor;
 
     // ConfigItems
-    SwSrcViewConfig*    pSrcViewConfig;
     SwModuleOptions*    pModuleConfig;
     SwMasterUsrPref*    pUsrPref;
     SwMasterUsrPref*    pWebUsrPref;
@@ -218,7 +216,6 @@ public:
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // ConfigItems erzeugen
-    SwSrcViewConfig*    GetSourceViewConfig();
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
     SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);
     SwChapterNumRules*  GetChapterNumRules();

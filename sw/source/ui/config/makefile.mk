@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-03-22 09:30:49 $
+#   last change: $Author: os $ $Date: 2002-08-30 10:23:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ CXXFILES = \
         optpage.cxx \
         prtopt.cxx \
         uinums.cxx \
-        srcvcfg.cxx \
         usrpref.cxx \
         viewopt.cxx
 
@@ -110,7 +109,6 @@ SLOFILES =	\
         $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
-        $(SLO)$/srcvcfg.obj \
         $(SLO)$/usrpref.obj \
         $(SLO)$/viewopt.obj
 
