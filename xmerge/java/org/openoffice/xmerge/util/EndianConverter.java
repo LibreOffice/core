@@ -153,4 +153,30 @@ public class EndianConverter {
 
         return number;
     }
+
+    /**
+     * <p>Convert a Little Endian representation of a float in IEEE-754 Little
+     * Endian to a Java <code>double</code> (Network Byte Order).</p>
+     *
+     * <p>An array with more than eight elements can be used, but only the first
+     * eight elements will be read.</p>
+     *
+     * @param   value   <code>byte</code> array containing the LE representation
+     *                  of a IEEE-754 float.
+     *
+     * @return  <code>double</code> containing the converted value.
+     */
+    public static double readDouble(byte[] value) {
+
+        long lvalue = ( ((long)(value[7]) << 56) +
+                        ((long)(value[6]) << 48) +
+                        ((long)(value[5]) << 40) +
+                        ((long)(value[4]) << 32) +
+                        ((long)(value[3]) << 24) +
+                        ((long)(value[2]) << 16) +
+                        ((long)(value[1]) << 8) +
+                         (long)(value[0]));
+
+        return Double.longBitsToDouble(lvalue);
+    }
 }
