@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:55:01 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABCONTROL_HXX_
 #include <toolkit/awt/vclxaccessibletabcontrol.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABPAGEWINDOW_HXX_
+#include <toolkit/awt/vclxaccessibletabpagewindow.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
@@ -580,6 +583,10 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         else if ( nType == WINDOW_TABCONTROL )
         {
             xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+        }
+        else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
+        {
+            xContext = (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabPageWindow( this );
         }
         else
         {
