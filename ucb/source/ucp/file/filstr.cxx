@@ -305,8 +305,22 @@ XStream_impl::closeStream(
 {
     if( m_nIsOpen )
     {
-        if( osl::FileBase::E_None != m_aFile.close() )
-            throw io::IOException();
+        osl::FileBase::RC err = m_aFile.sync();
+        if( err != osl::FileBase::E_None ) {
+            io::IOException ex;
+            ex.Message = rtl::OUString::createFromAscii(
+                "could not synchronize file to disc");
+            throw ex;
+        }
+
+        err = m_aFile.close();
+
+        if( err != osl::FileBase::E_None ) {
+            io::IOException ex;
+            ex.Message = rtl::OUString::createFromAscii(
+                "could not close file");
+            throw ex;
+        }
 
         m_nIsOpen = false;
     }
