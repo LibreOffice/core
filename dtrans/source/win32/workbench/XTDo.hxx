@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:23 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <ole2.h>
 #include <objidl.h>
 
-#include <stl/vector>
+#include <vector>
 
 // forward declaration
 //class CWinClipbImpl;

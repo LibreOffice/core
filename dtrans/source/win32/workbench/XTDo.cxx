@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:23 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 #include <windows.h>
 #include <ole2.h>
-#include <stl/memory>
+#include <memory>
 #include <tchar.h>
 
 //------------------------------------------------------------------------

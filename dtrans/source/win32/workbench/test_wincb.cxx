@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_wincb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:22 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #include <windows.h>
 #include <objbase.h>
 
-#include <stl/memory>
+#include <memory>
 
 #include <process.h>
 

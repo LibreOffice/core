@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transferable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 15:10:41 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 12:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@
 #include <windows.h>
 #include <objbase.h>
 
-#include <stl/memory>
+#include <memory>
 
 #include <process.h>
 
