@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:54:30 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data più recente per la differenza settimanale";
         Text[ danish ] = "Yngre dato for ugedifferensen";
         Text[ swedish ] = "Yngre datum för veckodifferensen";
-        Text[ polish ] = "Wcze?niejsza data w obliczaniu ró¿nicy tygodni";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy tygodni";
         Text[ portuguese_brazilian ] = "the older date for the week difference";
         Text[ japanese ] = "T”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
@@ -297,7 +297,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data meno recente per la differenza settimanale";
         Text[ danish ] = "Ældre dato for ugedifferensen";
         Text[ swedish ] = "Äldre datum för veckodifferensen";
-        Text[ polish ] = "Pó?niejsza data w obliczaniu ró¿nicy tygodni";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy tygodni";
         Text[ portuguese_brazilian ] = "the younger date for the week difference";
         Text[ japanese ] = "T”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
@@ -408,7 +408,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data più recente per la differenza mensile";
         Text[ danish ] = "Yngre dato for månedsdifferensen";
         Text[ swedish ] = "Yngre datum för månadsdifferensen";
-        Text[ polish ] = "Wcze?niejsza data w obliczaniu ró¿nicy miesiêcy";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy miesiêcy";
         Text[ portuguese_brazilian ] = "the older date for the month difference";
         Text[ japanese ] = "Œ”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
@@ -435,7 +435,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data meno recente per la differenza mensile";
         Text[ danish ] = "Ældre dato for månedsdifferensen";
         Text[ swedish ] = "Äldre datum för månadsdifferensen";
-        Text[ polish ] = "Pó?niejsza data w obliczaniu ró¿nicy miesiêcy";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy miesiêcy";
         Text[ portuguese_brazilian ] = "the younger date for the month difference";
         Text[ japanese ] = "Œ”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
@@ -546,7 +546,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data meno recente per la differenza annuale";
         Text[ danish ] = "Yngre dato for årsdifferensen";
         Text[ swedish ] = "Yngre datum för årsdifferensen";
-        Text[ polish ] = "Wcze?niejsza data w obliczaniu ró¿nicy lat";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy lat";
         Text[ portuguese_brazilian ] = "the older date for the year difference";
         Text[ japanese ] = "”N”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
@@ -573,7 +573,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "La data meno recente per la differenza annuale";
         Text[ danish ] = "Ældre dato for årsdifferensen";
         Text[ swedish ] = "Äldre datum för årsdifferensen";
-        Text[ polish ] = "Pó?niejsza data w obliczaniu ró¿nicy lat";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy lat";
         Text[ portuguese_brazilian ] = "the younger date for the year difference";
         Text[ japanese ] = "”N”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
         Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
@@ -657,7 +657,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Restituisce 1(VERO) se l'anno è bisestile, altrimenti 0(FALSO)";
         Text[ danish ] = "Returnerer 1(SAND) hvis året er et skudår ellers 0(FALSK)";
         Text[ swedish ] = "Returnerar 1(SANT) om året är ett skottår annars 0(FALSKT)";
-        Text[ polish ] = "Podaje 1 (PRAWDA), je?li rok jest rokiem przestêpnym, w innym wypadku 0 (FA£SZ).";
+        Text[ polish ] = "Podaje 1 (PRAWDA), jeœli rok jest rokiem przestêpnym, w innym wypadku 0 (FA£SZ).";
         Text[ portuguese_brazilian ] = "returns 1 if the date is in a LeapYear, 0 otherwise";
         Text[ japanese ] = "‚»‚Ì”N‚ª‰[”N‚Å‚ ‚ê‚Î 1(TRUE)A‚»‚¤‚Å‚È‚¯‚ê‚Î 0(FALSE)‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "Èç¹ûÊÇÈòÄê¾Í·´À¡ 1(TRUE) £¬·ñÔò¾Í·´À¡ 0 (FALSE)";
@@ -844,5 +844,6 @@ Resource RID_SC_ADDIN_DFA
     };
 
 };
+
 
 
