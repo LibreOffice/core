@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:59:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ namespace dbp
         try
         {
             // for quoting identifiers, we need the connection meta data
-            Reference< XConnection > xConn(getContext().xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))),UNO_QUERY);
+            Reference< XConnection > xConn = getFormConnection();
             DBG_ASSERT(xConn.is(), "OListComboWizard::implApplySettings: no connection, unable to quote!");
             Reference< XDatabaseMetaData > xMetaData;
             if (xConn.is())
@@ -302,8 +302,7 @@ namespace dbp
     //---------------------------------------------------------------------
     Reference< XNameAccess > OLCPage::getTables(sal_Bool _bNeedIt)
     {
-        Reference< XConnection > xConn;
-        getContext().xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+        Reference< XConnection > xConn = getFormConnection();
         DBG_ASSERT(!_bNeedIt || xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");
 
         Reference< XTablesSupplier > xSuppTables(xConn, UNO_QUERY);
