@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 07:00:29 $
+ *  last change: $Author: fme $ $Date: 2002-05-16 10:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,18 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     pArgs->xSpellAlt = NULL;
 
+    // 4 cases:
+    //
+    // 1. IsWrongDirty = 0 and GetWrong = 0
+    //      Everything is checked and correct
+    // 2. IsWrongDirty = 0 and GetWrong = 1
+    //      Everything is checked and errors are identified in the wrong list
+    // 3. IsWrongDirty = 1 and GetWrong = 0
+    //      Nothing has been checked
+    // 4. IsWrongDirty = 1 and GetWrong = 1
+    //      Text has been checked but there is an invalid range in the wrong list
+    //
+    // Nothing has to be done for case 1.
     if( ( IsWrongDirty() || GetWrong() ) && aText.Len() )
     {
         if( nBegin > aText.Len() )
@@ -671,7 +683,10 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
         LanguageType eActLang = GetLang( nBegin );
 
-        SwScanner aScanner( this, GetWrong(), nBegin, nEnd, bReverse, FALSE );
+        // In case 2. we pass the wrong list to the scanned, because only
+        // the words in the wrong list have to be checked
+        SwScanner aScanner( this, IsWrongDirty() ? NULL : GetWrong(),
+                            nBegin, nEnd, bReverse, FALSE );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord( eActLang ) )
         {
             const XubString& rWord = aScanner.GetWord();
