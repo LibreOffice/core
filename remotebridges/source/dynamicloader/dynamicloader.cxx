@@ -123,7 +123,7 @@ namespace dynamic_loader {
 
     protected:
         DynamicLoader(const Reference<XMultiServiceFactory> & rXSMgr) throw(RuntimeException);
-        ~DynamicLoader();
+        ~DynamicLoader() throw();
 
     public:
         static const OUString implname;
