@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:17:48 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 15:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef _XMLOFF_PAGEPHEADERFOOTERCONTEXT_HXX
 #include "PageHeaderFooterContext.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
+#include "PageMasterPropMapper.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERIMPORTPROPMAPPER_HXX
+#include "PageMasterImportPropMapper.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -125,11 +131,16 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         ((rLocalName.compareToAscii( sXML_header_style ) == 0) ||
         (rLocalName.compareToAscii( sXML_footer_style ) == 0) ) )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        sal_Bool bHeader = (rLocalName.compareToAscii( sXML_header_style ) == 0);
+        XMLPropertySetMapper *pPropMapper = new XMLPageMasterPropSetMapper( bHeader );
+        UniReference < SvXMLImportPropertyMapper > xImpPrMap = NULL;
+        if (bHeader)
+            xImpPrMap = new PageMasterHeaderImportPropertyMapper( pPropMapper );
+        else
+            xImpPrMap = new PageMasterFooterImportPropertyMapper( pPropMapper );
+
         if( xImpPrMap.is() )
         {
-            sal_Bool bHeader = (rLocalName.compareToAscii( sXML_header_style ) == 0);
             pContext = new PageHeaderFooterContext(GetImport(), nPrefix, rLocalName,
                             xAttrList, GetProperties(), xImpPrMap, bHeader);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:17:48 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 15:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,6 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pAllBorderProperty = NULL;
     XMLPropertyState* pAllBorderWidthProperty = NULL;
-    XMLPropertyState* pAllHeaderPaddingProperty = NULL;
-    XMLPropertyState* pAllHeaderBorderProperty = NULL;
-    XMLPropertyState* pAllHeaderBorderWidthProperty = NULL;
-    XMLPropertyState* pAllFooterPaddingProperty = NULL;
-    XMLPropertyState* pAllFooterBorderProperty = NULL;
-    XMLPropertyState* pAllFooterBorderWidthProperty = NULL;
     ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
     for (i; i != rProperties.end(); i++)
     {
@@ -138,36 +132,6 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             case CTF_PM_BORDERWIDTHALL :
             {
                 pAllBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_HEADERPADDINGALL :
-            {
-                pAllHeaderPaddingProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_HEADERBORDERALL :
-            {
-                pAllHeaderBorderProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_HEADERBORDERWIDTHALL :
-            {
-                pAllHeaderBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_FOOTERPADDINGALL :
-            {
-                pAllFooterPaddingProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_FOOTERBORDERALL :
-            {
-                pAllFooterBorderProperty = new XMLPropertyState(i->mnIndex, i->maValue);
-            }
-            break;
-            case CTF_PM_FOOTERBORDERWIDTHALL :
-            {
-                pAllFooterBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
             }
             break;
         }
@@ -202,6 +166,67 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             rProperties.push_back(aNewProperty);
         }
     }
+}
+
+PageMasterHeaderImportPropertyMapper::PageMasterHeaderImportPropertyMapper(
+        const UniReference< XMLPropertySetMapper >& rMapper ) :
+    SvXMLImportPropertyMapper( rMapper )
+{
+}
+
+PageMasterHeaderImportPropertyMapper::~PageMasterHeaderImportPropertyMapper()
+{
+}
+
+/*sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
+        XMLPropertyState& rProperty,
+        ::std::vector< XMLPropertyState >& rProperties,
+        const ::rtl::OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap ) const
+{
+    return sal_True;
+}*/
+
+/*sal_Bool PageMasterImportPropertyMapper::handleNoItem(
+        sal_Int32 nIndex,
+        ::std::vector< XMLPropertyState >& rProperties,
+        const ::rtl::OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap ) const
+{
+    return sal_True;
+}*/
+
+void PageMasterHeaderImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties ) const
+{
+    SvXMLImportPropertyMapper::finished(rProperties);
+    XMLPropertyState* pAllHeaderPaddingProperty = NULL;
+    XMLPropertyState* pAllHeaderBorderProperty = NULL;
+    XMLPropertyState* pAllHeaderBorderWidthProperty = NULL;
+    ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
+    for (i; i != rProperties.end(); i++)
+    {
+        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(i->mnIndex);
+        switch (nContextID)
+        {
+            case CTF_PM_HEADERPADDINGALL :
+            {
+                pAllHeaderPaddingProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_HEADERBORDERALL :
+            {
+                pAllHeaderBorderProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_HEADERBORDERWIDTHALL :
+            {
+                pAllHeaderBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+        }
+    }
     if (pAllHeaderPaddingProperty)
     {
         sal_Int32 nIndex = pAllHeaderPaddingProperty->mnIndex + 2;
@@ -230,6 +255,67 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
         {
             aNewProperty.mnIndex = nIndex++;
             rProperties.push_back(aNewProperty);
+        }
+    }
+}
+
+PageMasterFooterImportPropertyMapper::PageMasterFooterImportPropertyMapper(
+        const UniReference< XMLPropertySetMapper >& rMapper ) :
+    SvXMLImportPropertyMapper( rMapper )
+{
+}
+
+PageMasterFooterImportPropertyMapper::~PageMasterFooterImportPropertyMapper()
+{
+}
+
+/*sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
+        XMLPropertyState& rProperty,
+        ::std::vector< XMLPropertyState >& rProperties,
+        const ::rtl::OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap ) const
+{
+    return sal_True;
+}*/
+
+/*sal_Bool PageMasterImportPropertyMapper::handleNoItem(
+        sal_Int32 nIndex,
+        ::std::vector< XMLPropertyState >& rProperties,
+        const ::rtl::OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap ) const
+{
+    return sal_True;
+}*/
+
+void PageMasterFooterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties ) const
+{
+    SvXMLImportPropertyMapper::finished(rProperties);
+    XMLPropertyState* pAllFooterPaddingProperty = NULL;
+    XMLPropertyState* pAllFooterBorderProperty = NULL;
+    XMLPropertyState* pAllFooterBorderWidthProperty = NULL;
+    ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
+    for (i; i != rProperties.end(); i++)
+    {
+        sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(i->mnIndex);
+        switch (nContextID)
+        {
+            case CTF_PM_FOOTERPADDINGALL :
+            {
+                pAllFooterPaddingProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_FOOTERBORDERALL :
+            {
+                pAllFooterBorderProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
+            case CTF_PM_FOOTERBORDERWIDTHALL :
+            {
+                pAllFooterBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
+            }
+            break;
         }
     }
     if (pAllFooterPaddingProperty)
