@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:45:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@
 #define STR_NOREGISTEREDDRIVER              RID_STR_GEN_START + 19
 #define STR_DATASOURCE_DELETED              RID_STR_GEN_START + 20
 #define STR_QUERY_UNDO_MODIFYSQLEDIT        RID_STR_GEN_START + 21
-#define STR_QUERY_DELETE_QUERY              RID_STR_GEN_START + 22
+    // FREE
 #define STR_QRY_TITLE                       RID_STR_GEN_START + 23
 #define STR_VIEW_TITLE                      RID_STR_GEN_START + 24
 #define STR_GENERAL_SDB_ERROR               RID_STR_GEN_START + 25
@@ -388,8 +388,6 @@
 #define STR_FRM_LABEL                       RID_STR_GEN_START + 34
 #define STR_RPT_LABEL                       RID_STR_GEN_START + 35
 #define STR_FOLDER_LABEL                    RID_STR_GEN_START + 36
-#define STR_QUERY_DELETE_FORM               RID_STR_GEN_START + 37
-#define STR_QUERY_DELETE_REPORT             RID_STR_GEN_START + 38
 
 
 //========================================================================
