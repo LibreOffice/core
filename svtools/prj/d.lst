@@ -215,6 +215,8 @@ hedabu: ..\inc\urlcontrol.hxx %_DEST%\inc%_EXT%\svtools\urlcontrol.hxx
 hedabu: ..\inc\fileurlbox.hxx %_DEST%\inc%_EXT%\svtools\fileurlbox.hxx
 hedabu: ..\inc\toolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\toolboxcontroller.hxx
 hedabu: ..\inc\framestatuslistener.hxx %_DEST%\inc%_EXT%\svtools\framestatuslistener.hxx
+hedabu: ..\inc\statusbarcontroller.hxx %_DEST%\inc%_EXT%\svtools\statusbarcontroller.hxx
+hedabu: ..\inc\generictoolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\generictoolboxcontroller.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
