@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-06-15 12:36:56 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,26 +138,37 @@ namespace framework{
 //  exported const
 //_________________________________________________________________________________________________________________
 
-#define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )
+#define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
-#define PATHSEPERATOR                               DECLARE_ASCII("/"                                               )
-#define PROPERTY_SEPERATOR                          sal_Unicode(',')
-#define LIST_SEPERATOR                              sal_Unicode(';')
-#define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )
-#define DEFAULT_FILTERCACHE_VERSION                 3
+#define PATHSEPERATOR                               DECLARE_ASCII("/"                                               )   /// seperator for configuration pathes
+#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formated property strings of types and filters
+#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formated lists as part of our own formated type- or filter-string
+#define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
+#define DEFAULT_FILTERCACHE_VERSION                 5                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
+//*****************************************************************************************************************
+// We know some default values ...
+//*****************************************************************************************************************
 #define NAME_DEFAULTDETECTOR                        DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"           )
 #define NAME_GENERICLOADER                          DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"            )
 #define UINAME_GENERICLOADER                        DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"            )
 #define TYPELIST_DEFAULTDETECTOR                    DECLARE_ASCII("*"                                               )
 #define TYPELIST_GENERICLOADER                      DECLARE_ASCII("*"                                               )
 
+//*****************************************************************************************************************
+// This are all supported set-names of our filter configuration.
+//*****************************************************************************************************************
 #define SUBLIST_TYPES                               DECLARE_ASCII("Types"                                           )
 #define SUBLIST_FILTERS                             DECLARE_ASCII("Filters"                                         )
 #define SUBLIST_DETECTSERVICES                      DECLARE_ASCII("DetectServices"                                  )
 #define SUBLIST_FRAMELOADERS                        DECLARE_ASCII("FrameLoaders"                                    )
+#define SUBLIST_CONTENTHANDLERS                     DECLARE_ASCII("ContentHandlers"                                 )
 #define SUBLIST_DEFAULTS                            DECLARE_ASCII("Defaults"                                        )
 
+//*****************************************************************************************************************
+// These defines declare all supported names of configuration key names.
+// They are not sorted and could be shared by different base configuration items.
+//*****************************************************************************************************************
 #define SUBKEY_PREFERRED                            DECLARE_ASCII("Preferred"                                       )
 #define SUBKEY_INSTALLED                            DECLARE_ASCII("Installed"                                       )
 #define SUBKEY_NAME                                 DECLARE_ASCII("Name"                                            )
@@ -180,6 +191,10 @@ namespace framework{
 #define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
 #define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
 
+//*****************************************************************************************************************
+// These defines declare all supported property names for our name container interface.
+// They are not sorted by using ... and could be shared by different methods and access operations.
+//*****************************************************************************************************************
 #define PROPERTY_PREFERRED                          DECLARE_ASCII("Preferred"                                       )
 #define PROPERTY_INSTALLED                          DECLARE_ASCII("Installed"                                       )
 #define PROPERTY_UINAME                             DECLARE_ASCII("UIName"                                          )
@@ -199,19 +214,35 @@ namespace framework{
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 #define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
 
+//*****************************************************************************************************************
+// These values specify count of supported properties at our NameContainer interface!
+// Attention: It's not the count of properties of a type, filter ... written in configuration.
+//            That value is named as SUBKEYCOUNT_...! See there for further informations.
+//*****************************************************************************************************************
 #define PROPCOUNT_TYPE                              8
 #define PROPCOUNT_FILTER                            10
 #define PROPCOUNT_DETECTOR                          1
 #define PROPCOUNT_LOADER                            3
+#define PROPCOUNT_CONTENTHANDLER                    1
 
+//*****************************************************************************************************************
+// These values specify count of properties of every configuration item.
+// We support different versions and so we must handle different counts of type- and filter-properties.
+// Attention: Look for different values on PROPCOUNT_... and SUBKEYCOUNT_...!
+//*****************************************************************************************************************
 #define SUBKEYCOUNT_TYPE_VERSION_1                  7
-#define SUBKEYCOUNT_TYPE_VERSION_2                  7
+#define SUBKEYCOUNT_TYPE_VERSION_2                  SUBKEYCOUNT_TYPE_VERSION_1
 #define SUBKEYCOUNT_TYPE_VERSION_3                  2
+#define SUBKEYCOUNT_TYPE_VERSION_4                  SUBKEYCOUNT_TYPE_VERSION_3
+#define SUBKEYCOUNT_TYPE_VERSION_5                  SUBKEYCOUNT_TYPE_VERSION_3
 #define SUBKEYCOUNT_FILTER_VERSION_1                9
 #define SUBKEYCOUNT_FILTER_VERSION_2                10
 #define SUBKEYCOUNT_FILTER_VERSION_3                3
+#define SUBKEYCOUNT_FILTER_VERSION_4                SUBKEYCOUNT_FILTER_VERSION_3
+#define SUBKEYCOUNT_FILTER_VERSION_5                SUBKEYCOUNT_FILTER_VERSION_3
 #define SUBKEYCOUNT_DETECTOR                        1
 #define SUBKEYCOUNT_LOADER                          2
+#define SUBKEYCOUNT_CONTENTHANDLER                  1
 
 #define CFGPROPERTY_NODEPATH                        DECLARE_ASCII("nodepath"                                        )   // describe path of cfg entry
 #define CFGPROPERTY_LAZYWRITE                       DECLARE_ASCII("lazywrite"                                       )   // true->async. update; false->sync. update
@@ -508,6 +539,50 @@ struct Loader
 };
 
 //*****************************************************************************************************************
+// Programmer can register his own services to handle a FileType.
+// Don't forget: It's not a FrameLoader - it's a ContentHandler! (normaly without any UI)
+//*****************************************************************************************************************
+struct ContentHandler
+{
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        inline                   ContentHandler(                              ) { impl_clear();               }
+        inline                   ContentHandler( const ContentHandler& rCopy  ) { impl_copy( rCopy );         }
+        inline                  ~ContentHandler(                              ) { impl_clear();               }
+        inline ContentHandler&   operator=     ( const ContentHandler& rCopy  ) { return impl_copy( rCopy );  }
+        inline void              free          (                              ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
+        {
+            sName = ::rtl::OUString();
+            lTypes.free();
+        }
+
+        inline ContentHandler& impl_copy( const ContentHandler& rCopy )
+        {
+            sName  = rCopy.sName ;
+            lTypes = rCopy.lTypes;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        ::rtl::OUString     sName   ;
+        StringList          lTypes  ;
+};
+
+//*****************************************************************************************************************
 // This struct is used to collect informations about added, changed or removed cache entries.
 //*****************************************************************************************************************
 class ModifiedList
@@ -613,6 +688,23 @@ class LoaderHash    :   public  ::std::hash_map<    ::rtl::OUString             
 };
 
 //*****************************************************************************************************************
+class ContentHandlerHash    :   public  ::std::hash_map<   ::rtl::OUString                      ,
+                                                            ContentHandler                      ,
+                                                            StringHashFunction                  ,
+                                                            ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        inline void free()
+        {
+            ContentHandlerHash().swap( *this );
+            lModifiedHandlers.free();
+        }
+
+    public:
+        ModifiedList    lModifiedHandlers;
+};
+
+//*****************************************************************************************************************
 // Use these hashes to implement different tables which assign types to frame loader or detect services.
 // It's an optimism to find registered services faster!
 // The preferred hash maps file extensions to preferred types to find these ones faster.
@@ -643,6 +735,7 @@ typedef FileTypeHash::const_iterator                                ConstTypeIte
 typedef FilterHash::const_iterator                                  ConstFilterIterator         ;
 typedef DetectorHash::const_iterator                                ConstDetectorIterator       ;
 typedef LoaderHash::const_iterator                                  ConstLoaderIterator         ;
+typedef ContentHandlerHash::const_iterator                          ConstContentHandlerIterator ;
 typedef PerformanceHash::const_iterator                             ConstPerformanceIterator    ;
 typedef PreferredHash::const_iterator                               ConstPreferredIterator      ;
 typedef CheckedIterator< StringList >                               CheckedStringListIterator   ;
@@ -661,46 +754,73 @@ class DataContainer
         void addFilter              (   const   Filter&             aFilter     , sal_Bool bSetModified );
         void addDetector            (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void addLoader              (   const   Loader&             aLoader     , sal_Bool bSetModified );
+        void addContentHandler      (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
 
         void replaceType            (   const   FileType&           aType       , sal_Bool bSetModified );
         void replaceFilter          (   const   Filter&             aFilter     , sal_Bool bSetModified );
         void replaceDetector        (   const   Detector&           aDetector   , sal_Bool bSetModified );
         void replaceLoader          (   const   Loader&             aLoader     , sal_Bool bSetModified );
+        void replaceContentHandler  (   const   ContentHandler&     aHandler    , sal_Bool bSetModified );
 
         void removeType             (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeFilter           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeDetector         (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
         void removeLoader           (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
+        void removeContentHandler   (   const   ::rtl::OUString&    sName       , sal_Bool bSetModified );
 
-        static void             convertStringSequenceToVector      ( const css::uno::Sequence< ::rtl::OUString >&              lSource,    StringList&                                         lDestination    );
-        static void             convertStringVectorToSequence      ( const StringList&                                         lSource,    css::uno::Sequence< ::rtl::OUString >&              lDestination    );
-        static void             convertFileTypeToPropertySequence  ( const FileType&                                           aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination, const ::rtl::OUString& sCurrentLocale );
-        static void             convertFilterToPropertySequence    ( const Filter&                                             aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination, const ::rtl::OUString& sCurrentLocale );
-        static void             convertLoaderToPropertySequence    ( const Loader&                                             aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination, const ::rtl::OUString& sCurrentLocale );
-        static void             convertDetectorToPropertySequence  ( const Detector&                                           aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
-        static void             convertPropertySequenceToFilter    ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource,    Filter&                                             aDestination, const ::rtl::OUString& sCurrentLocale );
-        static void             convertStringHashToSequence        ( const StringHash&                                         lSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
-        static void             convertSequenceToStringHash        ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource,    StringHash&                                         lDestination    );
-        static void             extractLocalizedStrings            ( const ::rtl::OUString& sCurrentLocale, const css::uno::Any&   aCFGValue,       StringHash&      lLocales );
-        static void             packLocalizedStrings               ( const ::rtl::OUString& sCurrentLocale,       css::uno::Any&   aCFGValue, const StringHash&      lLocales );
-        static ::rtl::OUString  getLocalelizedString               ( const StringHash&      lLocales      , const ::rtl::OUString& sLocale                                    );
-        static void             setLocalelizedString               (       StringHash&      lLocales      , const ::rtl::OUString& sLocale  , const ::rtl::OUString& sValue   );
-        static void             correctExtensions                  (       StringList&      lExtensions                                                                       );
+        static void             convertStringSequenceToVector              ( const css::uno::Sequence< ::rtl::OUString >&              lSource         ,
+                                                                                   StringList&                                         lDestination    );
+        static void             convertStringVectorToSequence              ( const StringList&                                         lSource         ,
+                                                                                   css::uno::Sequence< ::rtl::OUString >&              lDestination    );
+        static void             convertFileTypeToPropertySequence          ( const FileType&                                           aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
+                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+        static void             convertFilterToPropertySequence            ( const Filter&                                             aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
+                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+        static void             convertDetectorToPropertySequence          ( const Detector&                                           aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void             convertLoaderToPropertySequence            ( const Loader&                                             aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
+                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+        static void             convertContentHandlerToPropertySequence    ( const ContentHandler&                                     aSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void             convertPropertySequenceToFilter            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
+                                                                                   Filter&                                             aDestination    ,
+                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+        static void             convertStringHashToSequence                ( const StringHash&                                         lSource         ,
+                                                                                   css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void             convertSequenceToStringHash                ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
+                                                                                   StringHash&                                         lDestination    );
+        static void             extractLocalizedStrings                    ( const ::rtl::OUString&                                    sCurrentLocale  ,
+                                                                             const css::uno::Any&                                      aCFGValue       ,
+                                                                                   StringHash&                                         lLocales        );
+        static void             packLocalizedStrings                       ( const ::rtl::OUString&                                    sCurrentLocale  ,
+                                                                                   css::uno::Any&                                      aCFGValue       ,
+                                                                             const StringHash&                                         lLocales        );
+        static ::rtl::OUString  getLocalelizedString                       ( const StringHash&                                         lLocales        ,
+                                                                             const ::rtl::OUString&                                    sLocale         );
+        static void             setLocalelizedString                       (       StringHash&                                         lLocales        ,
+                                                                             const ::rtl::OUString&                                    sLocale         ,
+                                                                             const ::rtl::OUString&                                    sValue          );
+        static void             correctExtensions                          (       StringList&                                         lExtensions     );
 
     public:
 
-        FileTypeHash            aTypeCache            ;
-        FilterHash              aFilterCache          ;
-        DetectorHash            aDetectorCache        ;
-        LoaderHash              aLoaderCache          ;
-        PerformanceHash         aFastFilterCache      ;
-        PerformanceHash         aFastDetectorCache    ;
-        PerformanceHash         aFastLoaderCache      ;
-        PreferredHash           aPreferredTypesCache  ;
-        Detector                aDefaultDetector      ;
-        Loader                  aGenericLoader        ;
-        ::rtl::OUString         sLocale               ;
-        sal_Bool                bIsModified           ;
+        FileTypeHash            m_aTypeCache                ;     /// hold all informations about registered file types
+        FilterHash              m_aFilterCache              ;     /// hold all informations about registered filters
+        DetectorHash            m_aDetectorCache            ;     /// hold all informations about registered detect services
+        LoaderHash              m_aLoaderCache              ;     /// hold all informations about registered loader services
+        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all informations about registered handler services
+        PerformanceHash         m_aFastFilterCache          ;     /// hold all registered filter for a special file type
+        PerformanceHash         m_aFastDetectorCache        ;     /// hold all registered detect services for a special file type
+        PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
+        PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
+        PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for this ~
+        Detector                m_aDefaultDetector          ;     /// informations about our default deep detection service
+        Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
+        ::rtl::OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
+        sal_Bool                m_bIsModified               ;     /// Was cache modified since last flush()?
 };
 
 //*****************************************************************************************************************
@@ -737,19 +857,23 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
         static   StringList         decodeStringList( const ::rtl::OUString& sValue                                 );
 
     private:
-        void     impl_loadTypes     ( DataContainer& rData );
-        void     impl_loadFilters   ( DataContainer& rData );
-        void     impl_loadDetectors ( DataContainer& rData );
-        void     impl_loadLoaders   ( DataContainer& rData );
-        void     impl_loadDefaults  ( DataContainer& rData );
-        void     impl_saveTypes     ( DataContainer& rData );
-        void     impl_saveFilters   ( DataContainer& rData );
-        void     impl_saveDetectors ( DataContainer& rData );
-        void     impl_saveLoaders   ( DataContainer& rData );
+        void     impl_loadTypes             ( DataContainer& rData );
+        void     impl_loadFilters           ( DataContainer& rData );
+        void     impl_loadDetectors         ( DataContainer& rData );
+        void     impl_loadLoaders           ( DataContainer& rData );
+        void     impl_loadContentHandlers   ( DataContainer& rData );
+        void     impl_loadDefaults          ( DataContainer& rData );
+        void     impl_saveTypes             ( DataContainer& rData );
+        void     impl_saveFilters           ( DataContainer& rData );
+        void     impl_saveDetectors         ( DataContainer& rData );
+        void     impl_saveLoaders           ( DataContainer& rData );
+        void     impl_saveContentHandlers   ( DataContainer& rData );
 
     private:
-        EFilterPackage  m_ePackage  ; // obsolete? ...
-        sal_Int32       m_nVersion  ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        EFilterPackage   m_ePackage         ; // obsolete? ...
+        sal_Int32        m_nVersion         ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        sal_uInt32       m_nKeyCountTypes   ;
+        sal_uInt32       m_nKeyCountFilters ;
 };
 
 }       //  namespace framework
