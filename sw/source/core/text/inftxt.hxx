@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 10:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ public:
     };
     inline USHORT GetMaxWidthDiff( ULONG nKey )
     {
-        return aMaxWidth.Get( nKey );
+        return (USHORT)aMaxWidth.Get( nKey );
     };
     inline void ResetMaxWidthDiff()
     {
