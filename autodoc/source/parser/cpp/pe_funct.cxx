@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_funct.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:39:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ PE_Function::Setup_StatusFunctions()
                                               &PE_Function::On_afterOperator_Cast_Type,
                                               &PE_Function::On_afterOperator_Cast_Type,
                                               &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
                                               &PE_Function::On_afterOperator_Cast_Type };
     static INT16 stateT_afterCastOperator[] =
                                             { Tid_Identifier,
@@ -246,7 +247,8 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_volatile,
                                               Tid_DoubleColon,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer };
+                                              Tid_TypeSpecializer,
+                                              Tid_typename };
 
     static F_Tok stateF_afterName[] =       { &PE_Function::On_afterName_Bracket_Left };
     static INT16 stateT_afterName[] =       { Tid_Bracket_Left };
