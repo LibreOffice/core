@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-29 08:45:46 $
+ *  last change: $Author: jl $ $Date: 2002-05-02 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ import com.sun.star.lang.DisposedException;
  *  property values are stored.
  *  When using the supplied implementations of this class then the member variables which
  *  hold property values have to be declared in the class which inherits last in the inheriting
- *  chain and they have to be of public, protected or package access.<p>
+ *  chain and they have to be public<p>
  *  Properties have to be registered by one of the registerProperty methods. They take among other
  *  arguments an Object named <em>id</em> which has to be a String that represents the name of
  *  the member variable. The registering has to occur in the constructor of the inheriting class.
@@ -584,8 +584,7 @@ XMultiPropertySet
      *  the values are stored in member variables of the furthest inheriting class. For example,
      *  class A inherits this class then members of class A
      *  can hold property values. If there is a class B which inherits A then only members of B can hold
-     *  property values. The variables can have
-     *  public, protected or package level access. A property must have been registered (e.g. by
+     *  property values. The variables must be public. A property must have been registered (e.g. by
      *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifyer Object argument
      *  used in the registerProperty methods must
      *  be a java.lang.String that is the name of the member variable that holds the property value.
@@ -850,7 +849,7 @@ XMultiPropertySet
     }
     /** Retrieves the value of a property. This implementation presumes that the values are stored in member variables
      *  of the furthest inheriting class (see {@link #convertPropertyValue convertPropertyValue}) and that the
-     *  variables have public, protected or package level access. The property must have
+     *  variables are public. The property must have
      *  been registered, for example by {@link #registerProperty(Property, Object)}. The identifyer Object argument
      *  must have been a java.lang.String which was the name of the member variable holding the property value.
      *  When properties are to be stored differently one has to override this method as well as
