@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 10:34:25 $
+ *  last change: $Author: nn $ $Date: 2001-01-22 10:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 /*------------------------------------------------------------------------
 
-    $Author: nn $ $Date: 2000-11-06 10:34:25 $ $Revision: 1.3 $
+    $Author: nn $ $Date: 2001-01-22 10:42:29 $ $Revision: 1.4 $
     $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
     (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
 
@@ -1030,7 +1030,7 @@ short ScAutoFormat::Compare(DataObject* pKey1, DataObject* pKey2) const
         return -1;
     if ( ScGlobal::pScInternational->CompareEqual( aStr2, aStrStandard, INTN_COMPARE_IGNORECASE ) )
         return 1;
-    eComp = ScGlobal::pScInternational->Compare( aStr2, aStr1, INTN_COMPARE_IGNORECASE );
+    eComp = ScGlobal::pScInternational->Compare( aStr1, aStr2, INTN_COMPARE_IGNORECASE );
     if (eComp == COMPARE_EQUAL)
         return 0;
     else if (eComp == COMPARE_LESS)
