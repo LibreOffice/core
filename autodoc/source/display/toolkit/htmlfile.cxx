@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:41:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@ DocuFile_Html::DocuFile_Html()
         sTitle(),
         sLocation(),
         sStyle(),
+        sCssFile(),
         sCopyright(),
         aBodyData()
 {
-    SetBodyAttr( "bgcolor", "#ffffff" );
 }
 
 void
@@ -97,16 +97,15 @@ DocuFile_Html::SetTitle( const char * i_sTitle )
 }
 
 void
-DocuFile_Html::SetStyle( const char * i_sStyle )
+DocuFile_Html::SetInlineStyle( const char * i_sStyle )
 {
     sStyle = i_sStyle;
 }
 
 void
-DocuFile_Html::SetBodyAttr( const char *        i_sAttrName,
-                            const char *        i_sAttrValue )
+DocuFile_Html::SetRelativeCssPath( const char * i_sCssFile_relativePath )
 {
-    aBodyData << new AnAttribute( i_sAttrName, i_sAttrValue );
+    sCssFile = i_sCssFile_relativePath;
 }
 
 void
@@ -122,7 +121,6 @@ DocuFile_Html::EmptyBody()
     aBodyData
         >> *new html::Label( "_top_" )
         << " ";
-
 }
 
 bool
@@ -155,16 +153,40 @@ DocuFile_Html::WriteHeader( csv::File & io_aFile )
         "<html>\n<head>\n<title>";
     static const char s2[] =
         "</title>\n"
-        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
-        "<style>";
-    static const char s3[] =
-        "</style>\n</head>\n";
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
 
     io_aFile.write( s1 );
     io_aFile.write( sTitle );
     io_aFile.write( s2 );
-    io_aFile.write( sStyle );
-    io_aFile.write( s3 );
+
+
+    if (NOT sCssFile.empty())
+    {
+        static const char s3[] =
+            "<link rel=\"stylesheet\" type=\"text/css\" href=\"";
+        static const char s4[] =
+            "\">\n";
+
+        io_aFile.write(s3);
+        io_aFile.write(sCssFile);
+        io_aFile.write(s4);
+    }
+
+    if (NOT sStyle.empty())
+    {
+        static const char s5[] =
+            "<style>";
+        static const char s6[] =
+            "</style>\n";
+
+        io_aFile.write(s5);
+        io_aFile.write(sStyle);
+        io_aFile.write(s6);
+    }
+
+    static const char s7[] =
+        "</head>\n";
+    io_aFile.write(s7);
 }
 
 void
