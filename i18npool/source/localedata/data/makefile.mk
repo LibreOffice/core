@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-15 20:09:33 $
+#*  last change: $Author: er $ $Date: 2002-03-18 21:37:39 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..$/..$/..
 
 PRJNAME=i18npool
 TARGET=localedata
+LIBTARGET=NO
 
 # Disable debugging on MSC compilers, due linker bug
 .IF "$(COM)"=="MSC"
@@ -208,11 +209,10 @@ LIB4OBJFILES=$(SHL4OBJS)
 
 .INCLUDE :  target.mk
 
-$(BIN)$/applicat.rdb : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb
-    +$(GNUCOPY) $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb $(BIN)$/applicat.rdb
+$(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
-    +$(BIN)$/saxparser $* $< $@ $(BIN)$/applicat.rdb
+    +$(BIN)$/saxparser $* $< $@ $(BIN)$/$(TARGET).rdb
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
