@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:47:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2110,17 +2110,17 @@ void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetGlueReallyAbsolute(TRUE);
     aOutRect.Move(-rRef.X(),-rRef.Y());
     Rectangle R(aOutRect);
-    if (sn==1.0 && cs==0.0) { // 90ø
+    if (sn==1.0 && cs==0.0) { // 90deg
         aOutRect.Left()  =-R.Bottom();
         aOutRect.Right() =-R.Top();
         aOutRect.Top()   =R.Left();
         aOutRect.Bottom()=R.Right();
-    } else if (sn==0.0 && cs==-1.0) { // 180ø
+    } else if (sn==0.0 && cs==-1.0) { // 180deg
         aOutRect.Left()  =-R.Right();
         aOutRect.Right() =-R.Left();
         aOutRect.Top()   =-R.Bottom();
         aOutRect.Bottom()=-R.Top();
-    } else if (sn==-1.0 && cs==0.0) { // 270ø
+    } else if (sn==-1.0 && cs==0.0) { // 270deg
         aOutRect.Left()  =R.Top();
         aOutRect.Right() =R.Bottom();
         aOutRect.Top()   =-R.Right();
@@ -3459,7 +3459,7 @@ SdrObject* SdrObject::DoConvertToPolyObj(BOOL bBezier) const
 //BFS01             } else {
 //BFS01                 // Wenn UserDataFactory nicht gesetzt ist, kann auch keiner
 //BFS01                 // etwas mit diesen Daten anfangen; durch Compat werden sie
-//BFS01                 // eh ueberlesen, daher ist diese Assertion überflüssig (KA)
+//BFS01                 // eh ueberlesen, daher ist diese Assertion ueberfluessig (KA)
 //BFS01                 // DBG_ERROR("SdrObject::ReadData(): ObjFactory kann UserData nicht erzeugen");
 //BFS01             }
 //BFS01             if (pUserDataCompat!=NULL) { // Aha, UserData war eingepackt. Record nun schliessen
