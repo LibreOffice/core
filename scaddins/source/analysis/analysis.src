@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-06 21:09:40 $
+ *  last change: $Author: rt $ $Date: 2002-02-26 14:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje, jak� cz�� roku stanowi pe�na liczba dni pomi�dzy dat� pocz�tkow� a ko�cow�.";
             Text[ portuguese_brazilian ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
             Text[ japanese ] = "開始日と終了日の間の日数が１年間に対して占める割合を返します。";
-            Text[ korean ] = "시작_날짜와 끝_날짜 사이에 속하는 전체 날짜의 수를 나타내는 연도 분수를 반환합니다.";
+            Text[ korean ] = "시작 날짜와 끝 날짜 사이에 속하는 전체 날짜의 수를 나타내는 연도 분수를 반환합니다.";
             Text[ chinese_simplified ] = "计算某一开始日期和结束日期之间的天数和全年天数的百分比。";
             Text[ chinese_traditional ] = "計算起始日期與結束日期之間的天數於一年中的比例。";
             Text[ turkish ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
