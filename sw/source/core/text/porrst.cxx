@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 12:16:07 $
+ *  last change: $Author: fme $ $Date: 2002-02-08 15:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
+#endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -483,7 +488,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
 
 #ifdef VERTICAL_LAYOUT
             GETGRID( FindPageFrm() )
-            if ( pGrid )
+            if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                 nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
 
             SWRECTFN( this )
