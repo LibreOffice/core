@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:58:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,24 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLExport::exportXForms() const
+    {
+        m_pImpl->exportXForms();
+    }
+
+    //---------------------------------------------------------------------
+    bool OFormLayerXMLExport::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
+    {
+        return m_pImpl->pageContainsForms( _rxDrawPage );
+    }
+
+    //---------------------------------------------------------------------
+    bool OFormLayerXMLExport::documentContainsXForms() const
+    {
+        return m_pImpl->documentContainsXForms();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportControlNumberStyles()
     {
         m_pImpl->exportControlNumberStyles();
@@ -226,6 +244,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13.430.1  2004/12/13 17:27:32  fs
+ *  #i36597# +exportXForms/pageContainsForms/documentContainsXForms
+ *
+ *  Revision 1.13  2002/10/25 07:58:00  fs
+ *  #104402# re-introduced exportAutoStyles
+ *
  *  Revision 1.12  2002/09/25 12:02:38  fs
  *  #103597# +excludeFromExport
  *
