@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:32:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1973,6 +1973,9 @@ void SdXMLExport::_ExportMeta()
 
 void SdXMLExport::_ExportContent()
 {
+    // export <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl> elements
+    ImpWriteHeaderFooterDecls();
+
     // page export
     for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
     {
@@ -2090,7 +2093,7 @@ void SdXMLExport::_ExportContent()
                     if(xNotesPage.is())
                     {
                         Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
+                        if(xShapes.is())
                         {
                             if( maDrawNotesPagesStyleNames[nPageInd].getLength() )
                                 AddAttribute(XML_NAMESPACE_DRAW, XML_STYLE_NAME, maDrawNotesPagesStyleNames[nPageInd]);
@@ -2532,9 +2535,6 @@ void SdXMLExport::_ExportAutoStyles()
 
     // ...for text
     GetTextParagraphExport()->exportTextAutoStyles();
-
-    // export <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl> elements
-    ImpWriteHeaderFooterDecls();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2639,7 +2639,7 @@ void SdXMLExport::_ExportMasterStyles()
                     if(xNotesPage.is())
                     {
                         Reference< drawing::XShapes > xShapes(xNotesPage, UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
+                        if(xShapes.is())
                         {
                             ImpXMLEXPPageMasterInfo* pInfo = mpNotesPageMasterUsageList->GetObject(nMPageId);
                             if(pInfo)
