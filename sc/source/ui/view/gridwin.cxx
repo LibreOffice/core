@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-12 12:41:22 $
+ *  last change: $Author: nn $ $Date: 2001-10-15 17:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,7 +1804,10 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             //      Gridwin - SelectionEngine
             //
 
-    if ( pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
+    //  SelMouseButtonDown is called only for left button, but SelMouseButtonUp would return
+    //  TRUE for any call, so IsLeft must be checked here, too.
+
+    if ( rMEvt.IsLeft() && pViewData->GetView()->GetSelEngine()->SelMouseButtonUp( rMEvt ) )
     {
 //      rMark.MarkToSimple();
         pViewData->GetView()->UpdateAutoFillMark();
@@ -3028,10 +3031,13 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, USHORT nDestPo
             //! HasSelectedBlockMatrixFragment without selected sheet?
             //! or don't start dragging on a part of a matrix
 
+            pView->Unmark();    // before SetCursor, so CheckSelectionTransfer isn't called with a selection
             pView->SetCursor( nDestPosX, nDestPosY );
             pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );      // clip-doc
-            pViewData->GetMarkData().ResetMark();
-            pView->CursorPosChanged();
+
+            //  no longer call ResetMark here - the inserted block has been selected
+            //  and may have been copied to primary selection
+
             bDone = TRUE;
         }
     }
