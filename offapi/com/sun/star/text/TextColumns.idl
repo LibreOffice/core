@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextColumns.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:45:07 $
+ *  last change: $Author: mtg $ $Date: 2001-07-05 19:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,27 +93,27 @@ service TextColumns
      The half of this distance is set to the left and right margins of all columns except for the left margin
      of the first and the right margin of the last column.
      */
-    [property]  long AutoDistance;
+    [property]  long AutomaticDistance;
     //------------------------------------------------------------------------
     /** determins the width of the separator lines between the columns.
      */
-    [property]  long LineWidth;
+    [property]  long SeparatorLineWidth;
     //------------------------------------------------------------------------
     /** determins the color of the separator lines between the columns.
      */
-    [property]  long LineColor;
+    [property]  long SeparatorLineColor;
     //------------------------------------------------------------------------
     /** determins the relative height of the separator lines between the columns.
      */
-    [property]  long LineRelativeHeight;
+    [property]  long SeparatorLineRelativeHeight;
     //------------------------------------------------------------------------
     /** determins the vertical alignment of the separator lines between the columns.
      */
-    [property]  com::sun::star::style::VerticalAlignment LineVerticalAlignment;
+    [property]  com::sun::star::style::VerticalAlignment SeparatorLineVerticalAlignment;
     //------------------------------------------------------------------------
     /** determins whether separator lines are on.
      */
-    [property]  boolean LineIsOn;
+    [property]  boolean SeparatorLineIsOn;
     //------------------------------------------------------------------------
 };
 
