@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:59:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include "editbrowsebox.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #include "editbrowseboxcell.hxx"
@@ -81,9 +81,9 @@
 #endif
 namespace svt
 {
-    using namespace drafts::com::sun::star::accessibility;
+    using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
-    using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
+    using namespace com::sun::star::accessibility::AccessibleEventId;
 
 // -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
@@ -109,7 +109,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
             {
                 if ( m_aImpl->m_xActiveCell.is() )
                 {
-                    commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
+                    commitBrowseBoxEvent(CHILD,Any(),makeAny(m_aImpl->m_xActiveCell));
                     m_aImpl->disposeCell();
                 }
 
@@ -121,7 +121,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
                                                                     xCont->getAccessibleContext());
                 m_aImpl->m_xActiveCell = m_aImpl->m_pFocusCell;
 
-                commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,makeAny(m_aImpl->m_xActiveCell),Any());
+                commitBrowseBoxEvent(CHILD,makeAny(m_aImpl->m_xActiveCell),Any());
             }
         }
     }
@@ -167,7 +167,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
             CreateAccessibleControl(0);
         else
         {
-            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,Any(),makeAny(m_aImpl->m_xActiveCell));
+            commitBrowseBoxEvent(CHILD,Any(),makeAny(m_aImpl->m_xActiveCell));
             m_aImpl->disposeCell();
 
             m_aImpl->m_pFocusCell  = NULL;
