@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:31:53 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE[ chinese_simplified ] = "ΤΪΈ΄ΦΖΚύΎέµ½ΌτΜω°εΚ±·ΆΙϊ΄νΞσ΅£";
     MESSAGE[ russian ] = "Ξψθακΰ οπθ κξοθπξβΰνθθ β αστεπ ξαμενΰ.";
     MESSAGE[ polish ] = "B³Ήd podczas kopiowania do schowka.";
-    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚ΙΊΛί°’†‚Ι΄Χ°”­¶";
+    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚ΙΊΛί°‚µ‚Δ‚Ά‚ι‚Μ΄Χ°B";
     MESSAGE[ chinese_traditional ] = "½Ζ»sΈκ®Ζ¨μ°Ε¶KΓ―®Ιµo¥ΝΏω»~΅C";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΗαδΣΞ Εαμ ΗαΝΗέΩΙ.";
     MESSAGE[ greek ] = "Σφάλμα κατά την αντιγραφή στο πρόχειρο.";
@@ -171,7 +171,7 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE[ chinese_simplified ] = "ΤΪ¶ΑΘ΅ΌτΜω°εΚ±·ΆΙϊ΄νΞσ΅£";
     MESSAGE[ russian ] = "Ξψθακΰ οπθ χςενθθ θη αστεπΰ ξαμενΰ.";
     MESSAGE[ polish ] = "B³Ήd odczytu ze schowka.";
-    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚©‚η‚Μ“Η‚έζ‚θ΄Χ°";
+    MESSAGE[ japanese ] = "ΈΨ―ΜίΞή°Δή‚©‚η“Η‚έζ‚θ‚Μ΄Χ°B";
     MESSAGE[ chinese_traditional ] = "¦bΕª¨ϊ°Ε¶KΓ―®Ιµo¥ΝΏω»~΅C";
     MESSAGE[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΗαήΡΗΑΙ γδ ΗαΝΗέΩΙ.";
     MESSAGE[ language_user1 ] = " ";
@@ -283,7 +283,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_simplified ] = "Υβ²»ΚΗÒ»Έφ %PRODUCTNAME Writer ΞΔΌώ";
         TEXT[ russian ] = "έςξς τΰιλ νε ÿβλÿεςρÿ τΰιλξμ %PRODUCTNAME Writer";
         TEXT[ polish ] = "Ten plik nie jest plikiem %PRODUCTNAME Writer";
-        TEXT[ japanese ] = "‚±‚κ‚Ν%PRODUCTNAME Writer‚ΜΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρB";
+        TEXT[ japanese ] = "‚±‚κ‚Ν %PRODUCTNAME Writer ‚ΜΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρB";
         TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Σ %PRODUCTNAME Writer ΐΙ®Χ";
         TEXT[ arabic ] = "εΠΗ Ηαγαέ ανΣ γαέ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Το αρχείο αυτό δεν είναι αρχείο του %PRODUCTNAME Writer";
@@ -362,7 +362,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_simplified ] = "Υβ²»ΚΗÒ»Έφ WinWord6 ΞΔΌώ";
         TEXT[ russian ] = "έςξς τΰιλ νε ÿβλÿεςρÿ τΰιλξμ WinWord6";
         TEXT[ polish ] = "Ten plik nie jest plikiem WinWord6";
-        TEXT[ japanese ] = "‚±‚κ‚Ν WinWord6‚ΜΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρ";
+        TEXT[ japanese ] = "‚±‚κ‚Ν WinWord6 ‚ΜΜ§²Ω‚Ε‚Ν‚ ‚θ‚ά‚Ή‚ρB";
         TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Σ WinWord6 ΐΙ®Χ";
         TEXT[ arabic ] = "εΠΗ Ηαγαέ ανΣ γαέ WinWord6";
         TEXT[ greek ] = "Το αρχείο αυτό δεν είναι αρχείο του WinWord6";
@@ -392,7 +392,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_simplified ] = "ΥβΈφΞΔΌώ΄ζΕΜ²ΙΣΓµΔΚΗ WinWord Ρ΅Οξ 'ΏμΛΩ±£΄ζ'·½Κ½΅£ΗλΔϊΚ§»ξΥβΈφΡ΅Οξ£¬Θ»ΊσΤΪΦΨΠΒ΄ζΕΜΥβΈφΞΔΌώ΅£";
         TEXT[ russian ] = "έςξς τΰιλ ρξυπΰνεν οπθ οξμξωθ οΰπΰμεςπΰ WinWord 'Αϋρςπξε ρξυπΰνενθε'. Οξζΰλσιρςΰ, ξςκλώχθςε οΰπΰμεςπ 'Πΰηπεψθςό αϋρςπξε ρξυπΰνενθε' θ ηΰνξβξ ρξυπΰνθςε ύςξς τΰιλ ρ οξμξωόώ WinWord";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomocΉ opcji WinWord 'Szybkie zapisywanie'. Proszκ w³³Ήcz w WinWord opcjκ 'Dopuζ szybkie zapisywanie' i zapisz plik ponownie w WinWord";
-        TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚ΝAWinWordµΜίΌ®έ‚Μ'‚‘¬•Ϋ‘¶'‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord‚ΜµΜίΌ®έ'‚‘¬•Ϋ‘¶‚Μ'‚πΑ‹‚µ‚Δ@Μ§²Ω‚πV‚½‚ΙWinWord‚Ε•Ϋ‘¶‚µ‚Δ‰Ί‚³‚ΆB";
+        TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚Ν WinWord µΜίΌ®έ‚Μu‚‘¬•Ϋ‘¶v‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord ‚ΜµΜίΌ®έu‚‘¬•Ϋ‘¶‚·‚ιv‚πµΜ‚Ι‚µ‚Δ WinWord ‚ΕΜ§²Ω‚π•Ϋ‘¶‚µ‚Θ‚¨‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ '§Φ³tΐx¦s'¤θ¦΅΅C½Π±z¥Ά¬΅³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­Σ¤ε¥σ΅C";
         TEXT[ arabic ] = "Κγ ΝέΩ εΠΗ Ηαγαέ Ϊδ ΨΡνή ΞνΗΡ 'ΗαΝέΩ ΗαΣΡνΪ' έν WinWord. ΗαΡΜΗΑ ΕνήΗέ ΞΗΥνΙ 'ΗαΣγΗΝ ΘΗαΝέΩ ΗαΣΡνΪ' έν WinWord΅ Λγ ήγ ΘΝέΩ Ηαγαέ γδ ΜΟνΟ ΘζΗΣΨΙ WinWord.";
         TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύστε το αρχείο ξανά στο WinWord.";
@@ -418,7 +418,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_simplified ] = "ΤΪΠ΄ΘλΤέΚ±ΞΔΌώΚ±·ΆΙϊ΄νΞσ";
         TEXT[ russian ] = "Ξψθακΰ οπθ ηΰοθρθ βπεμεννξγξ τΰιλΰ";
         TEXT[ polish ] = "B³Ήd zapisu pliku tymczasowego";
-        TEXT[ japanese ] = "ΓέΞίΧΨ Μ§²Ω“ό—Ν’†‚Μ΄Χ°";
+        TEXT[ japanese ] = "ΓέΞίΧΨΜ§²Ω‚Μ‘‚«‚έ’†‚Μ΄Χ°";
         TEXT[ chinese_traditional ] = "¦bΌg¤JΌΘ®ΙΐΙ®Χ®Ιµo¥ΝΏω»~";
         TEXT[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ίΚΗΘΙ Ηαγαέ ΗαγΔήΚ";
         TEXT[ greek ] = "Σφάλμα κατά την εγγραφή προσωρινού αρχείου";
@@ -444,7 +444,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_simplified ] = "Ini ΞΔΌώ²εΘλΗψΣςΜ«΄σ";
         TEXT[ russian ] = "Ξαλΰρςό βρςΰβκθ β τΰιλ Ini ρλθψκξμ αξλόψΰÿ";
         TEXT[ polish ] = "Obszar wstawiania do pliku Ini jest za duΏy";
-        TEXT[ japanese ] = "IniΜ§²Ω‚Μ‘}“ό”ΝΝ‚ª’·‚·‚¬‚ά‚·B";
+        TEXT[ japanese ] = "Ini Μ§²Ω‚Μ‘}“ό”ΝΝ‚ª‘ε‚«‚·‚¬‚ά‚·B";
         TEXT[ chinese_traditional ] = "Ini ΐΙ®Χ΄΅¤J°Ο°μ¤Σ¤j";
         TEXT[ arabic ] = "δΨΗή ΗαΕΟΞΗα έν Ηαγαέ Ini ίΘνΡ ΜΟΗπ";
         TEXT[ greek ] = "Η περιοχή εισαγωγής στο αρχείο ini είναι πολύ μεγάλη";
