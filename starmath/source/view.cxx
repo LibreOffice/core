@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 12:04:18 $
+ *  last change: $Author: tl $ $Date: 2002-05-13 13:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,10 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
 {
     pWindow = new SmCmdBoxWindow(pBindings, this, pParentWindow);
 
+    if (pInfo->aPos.X()  &&  pInfo->aPos.Y())
+        pWindow->SetPosPixel(pInfo->aPos);
+    ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
+/*
     if ( !pInfo->aPos.X() || !pInfo->aPos.Y() )
     {
         ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
@@ -691,6 +695,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
         pWindow->SetPosPixel(pInfo->aPos);
         ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
     }
+*/
 }
 
 
