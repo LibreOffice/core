@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:37:12 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,16 +882,18 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     ::drafts::com::sun::star::accessibility::XAccessible>
     SdWindow::CreateAccessible (void)
 {
-    SdDrawDocument* pDocument = pViewShell->GetDoc();
-    ::com::sun::star::uno::Reference<
-          ::com::sun::star::frame::XController> xController (pViewShell->GetController());
-    if (xController.is())
-        return new accessibility::AccessibleDocumentView (this,
-            xController,
-            ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>()
-            );
-    else
-        return NULL;
+    if (pViewShell != NULL)
+    {
+        SdDrawDocument* pDocument = pViewShell->GetDoc();
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::frame::XController> xController (pViewShell->GetController());
+        if (xController.is())
+            return new accessibility::AccessibleDocumentView (this,
+                xController,
+                GetAccessibleParentWindow()->GetAccessible()
+                );
+    }
+    OSL_TRACE ("no view shell or no controller");
+    return Window::CreateAccessible ();
 }
 
