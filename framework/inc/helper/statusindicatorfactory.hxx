@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:06:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,14 @@
 #include <macros/xinterface.hxx>
 #endif
 
+#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
+#include <macros/xtypeprovider.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
+#include <macros/xserviceinfo.hxx>
+#endif
+
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
@@ -98,6 +106,18 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -221,95 +241,118 @@ struct IndicatorInfo
 typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
 /*-************************************************************************************************************//**
-    @short          implement a factory to create new status indicator objects
-    @descr          We use it as helper for our frame implementation.
-                    The factory create different indicators and control his access to shared output device!
+    @short          implement a factory service to create new status indicator objects
+
+    @descr          Internaly it uses:
+                    - a vcl based progress
+                    - or an uno based and by the frame layouted
+                    progress implementation.
+                    This factory create different indicators and control his access to shared output device!
                     Only the last activated component can write his state to this device.
-
-    @implements     XInterface
-                    XStatusIndicatorFactory
-                    XWindowListener
-                    XEventListener
-
-    @base           ThreadHelpBase
-                    TransactionBase
-                    OWeakObject
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
-                                   private ThreadHelpBase                      ,
-                                   private TransactionBase                     ,
-                                   public  ::cppu::OWeakObject                   // => XInterface
+class StatusIndicatorFactory : public  css::lang::XTypeProvider
+                             , public  css::lang::XServiceInfo
+                             , public  css::lang::XInitialization
+                             , public  css::task::XStatusIndicatorFactory
+                             , private ThreadHelpBase
+                             , public  ::cppu::OWeakObject                   // => XInterface
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------
+    // member
+
+    private:
+
+        /** stack with all current indicator childs. */
+        IndicatorStack m_aStack;
+
+        /** uno service manager to create own needed uno resources. */
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+        /** most active indicator child, which could work with our shared indicator window only. */
+        css::uno::Reference< css::task::XStatusIndicator > m_xActiveChild;
+
+        /** used to show the progress on the frame (layouted!) or
+            as a plugged vcl window. */
+        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+
+        /** points to the frame, where we show the progress (in case
+            m_xProgress points to a frame progress. */
+        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+
+        /** points to an outside window, where we show the progress (in case
+            we are plugged into such window). */
+        css::uno::WeakReference< css::awt::XWindow > m_xPluggWindow;
+
+        /** static counter for rescheduling ... */
+        static sal_Int32 m_nInReschedule;
+
+        /** time where there last start call was made. */
+        sal_Int32 m_nStartTime;
+
+    //-------------------------------------------
+    // interface
+
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-        StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
-                                const css::uno::Reference< css::frame::XFrame >&              xFrame        ,
-                                      sal_Bool                                                bShowStatusBar);
+        //---------------------------------------
+        // ctor
+        StatusIndicatorFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
+        //---------------------------------------
+        // XInterface, XTypeProvider, XServiceInfo
         DECLARE_XINTERFACE
+        DECLARE_XTYPEPROVIDER
+        DECLARE_XSERVICEINFO
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XStatusIndicatorFactory
-        //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() throw( css::uno::RuntimeException );
+        //---------------------------------------
+        // XInitialization
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+            throw(css::uno::Exception       ,
+                  css::uno::RuntimeException);
 
-        //---------------------------------------------------------------------------------------------------------
-        //  public shared method!
-        //---------------------------------------------------------------------------------------------------------
-        void start      (   const   css::uno::Reference< css::task::XStatusIndicator >& xChild ,
-                            const   ::rtl::OUString&                                    sText  ,
-                                    sal_Int32                                           nRange );
-        void end        (   const   css::uno::Reference< css::task::XStatusIndicator >& xChild );
-        void reset      (   const   css::uno::Reference< css::task::XStatusIndicator >& xChild );
-        void setText    (   const   css::uno::Reference< css::task::XStatusIndicator >& xChild ,
-                            const   ::rtl::OUString&                                    sText  );
-        void setValue   (   const   css::uno::Reference< css::task::XStatusIndicator >& xChild ,
-                                    sal_Int32                                           nValue );
+        //---------------------------------------
+        // XStatusIndicatorFactory
+        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
+            throw(css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+        //---------------------------------------
+        // similar (XStatusIndicator)
+        virtual void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+                           const ::rtl::OUString&                                    sText ,
+                                 sal_Int32                                           nRange);
+
+        virtual void SAL_CALL reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+
+        virtual void SAL_CALL end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+
+        virtual void SAL_CALL setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+                                      const ::rtl::OUString&                                    sText );
+
+        virtual void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+                                             sal_Int32                                           nValue);
+
+    //-------------------------------------------
+    // specials
+
     protected:
+
         virtual ~StatusIndicatorFactory();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------
+    // helper
     private:
+
+        void impl_createProgress();
+
         void impl_reschedule();
+
         sal_uInt32 impl_get10ThSec();
-        void impl_createStatusBar();
-        css::uno::Reference< css::awt::XWindow > implts_getParentWindow();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-        static sal_Int32                                        m_nInReschedule             ;   /// static counter for rescheduling
-        IndicatorStack                                          m_aStack                    ;   /// stack with all current indicator childs
-        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory                  ;   /// uno service manager to create new services
-        sal_Bool                                                m_bProgressMode             ;
+}; // class StatusIndicatorFactory
 
-        css::uno::Reference< css::task::XStatusIndicator >      m_xActiveIndicator          ;   /// most active indicator child, which could work with our shared indicator window only
-        css::uno::Reference< css::task::XStatusIndicator >      m_xProgress                 ;   /// status indicator from layout manager
-        css::uno::WeakReference< css::frame::XFrame >           m_xFrame                    ;
-        long                                                    m_nStartTime                ;   /// time where there last start call was made
+} // namespace framework
 
-};      //  class StatusIndicatorFactory
-
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
+#endif // #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
