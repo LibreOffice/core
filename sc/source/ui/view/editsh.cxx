@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:52:24 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 15:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <svx/clipfmtitem.hxx>
 #include <svx/cntritem.hxx>
 #include <svx/chardlg.hxx>
 #include <svx/crsditem.hxx>
@@ -218,39 +219,61 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 pTopView->RemoveAttribs(TRUE);
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-                if (pClipObj.Is())
+                ULONG nFormat = 0;
+                const SfxPoolItem* pItem;
+                if ( pReqArgs &&
+                     pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                     pItem->ISA(SfxUInt32Item) )
                 {
-                    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-                    pDlg->Insert( FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
-                    pDlg->Insert( FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
+                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                }
 
-                    ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), pClipObj );
-                    DELETEZ(pDlg);
-
-                    // while the dialog was open, edit mode may have been stopped
-                    if (!SC_MOD()->IsInputMode())
-                    {
-                        Sound::Beep();
-                        return;
-                    }
-
-                    if (nFormat > 0)
-                    {
-                        if (FORMAT_STRING == nFormat)
-                            pTableView->Paste();
-                        else
-                            pTableView->PasteSpecial();
-
-                        if (pTopView)
-                            pTopView->Paste();
-                    }
+                if ( nFormat )
+                {
+                    if (SOT_FORMAT_STRING == nFormat)
+                        pTableView->Paste();
+                    else
+                        pTableView->PasteSpecial();
 
                     if (pTopView)
-                        pTopView->GetWindow()->GrabFocus();
+                        pTopView->Paste();
                 }
+            }
+            break;
+
+        case FID_PASTE_CONTENTS:
+            {
+                SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
+                pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
+                pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
+
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
+                ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
+                DELETEZ(pDlg);
+
+                // while the dialog was open, edit mode may have been stopped
+                if (!SC_MOD()->IsInputMode())
+                {
+                    Sound::Beep();
+                    return;
+                }
+
+                if (nFormat > 0)
+                {
+                    if (SOT_FORMAT_STRING == nFormat)
+                        pTableView->Paste();
+                    else
+                        pTableView->PasteSpecial();
+
+                    if (pTopView)
+                        pTopView->Paste();
+                }
+
+                if (pTopView)
+                    pTopView->GetWindow()->GrabFocus();
             }
             break;
 
@@ -527,15 +550,8 @@ const SvxURLField* ScEditShell::GetURLField()
 
 void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
 {
-    BOOL bPaste = FALSE;
-    SvDataObjectRef pClipObj = SvDataObject::PasteClipboard();
-    if (pClipObj.Is())
-    {
-        const SvDataTypeList& rTypeLst = pClipObj->GetTypeList();
-
-        if( rTypeLst.Get( FORMAT_STRING ) || rTypeLst.Get( FORMAT_RTF ) )
-            bPaste = TRUE;
-    }
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -546,6 +562,21 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
             case SID_PASTE:
             case FID_PASTE_CONTENTS:
                 if( !bPaste )
+                    rSet.DisableItem( nWhich );
+                break;
+            case SID_CLIPBOARD_FORMAT_ITEMS:
+                if( bPaste )
+                {
+                    SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+
+                    if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING, String( ScResId( SCSTR_CLIP_STRING ) ) );
+                    if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF, String( ScResId( SCSTR_CLIP_RTF ) ) );
+
+                    rSet.Put( aFormats );
+                }
+                else
                     rSet.DisableItem( nWhich );
                 break;
         }
