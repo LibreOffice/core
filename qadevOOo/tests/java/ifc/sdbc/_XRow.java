@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:48 $
+ *  last change:$Date: 2003-09-08 10:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.sdbc;
 
+import java.util.Vector;
+
+import lib.MultiMethodTest;
+
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
@@ -73,8 +77,6 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
-import java.util.Vector;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sdbc.XRow</code>

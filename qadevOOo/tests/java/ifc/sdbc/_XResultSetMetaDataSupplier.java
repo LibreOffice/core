@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XResultSetMetaDataSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:50 $
+ *  last change:$Date: 2003-09-08 10:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sdbc;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sdbc.XResultSetMetaData;
 import com.sun.star.sdbc.XResultSetMetaDataSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sdbc.XResultSetMetaDataSupplier</code>
