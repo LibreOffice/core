@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_sec.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:41:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 10:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #include <stdio.h>
 
-#include <vos/conditn.hxx>
-#include <vos/thread.hxx>
 
 #include <uno/current_context.hxx>
 
@@ -74,7 +72,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace rtl;
-using namespace vos;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::security;
