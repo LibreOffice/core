@@ -38,12 +38,12 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         setLayout(new java.awt.BorderLayout());
         
         welcomePanel.setLayout(new java.awt.BorderLayout());
-        //area.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         area.setEditable(false);
         area.setLineWrap(true);
-        //area.setText("\n \t Please ensure that you have exited from Office");
     
-    String message = "\n \t Please ensure that you have exited from Office";
+        String message = "\n\tOffice Scripting Framework Version 0.2" +
+            "\n\n\n\tPlease ensure that you have exited from Office";
+
     /* String userDir = (String) System.getProperty( "user.dir" );
     boolean isValid = validateCurrentUserDir(userDir);
     if( !isValid ) {
