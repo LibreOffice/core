@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:54:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ class ScHTMLExport : public ScExportBase
 
     ScHTMLGraphList     aGraphList;
     ScHTMLStyle         aHTMLStyle;
+    String              aBaseURL;
     String              aStreamPath;
     String              aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
@@ -209,7 +210,7 @@ class ScHTMLExport : public ScExportBase
     const sal_Char*         GetIndentStr() { return sIndent; }
 
 public:
-                        ScHTMLExport( SvStream&, ScDocument*, const ScRange&,
+                        ScHTMLExport( SvStream&, const String&, ScDocument*, const ScRange&,
                                         BOOL bAll, const String& aStreamPath );
     virtual             ~ScHTMLExport();
     ULONG               Write();
