@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 10:24:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ void Outliner::StartSpelling (void)
         }
         else
         {
-            if (mpView->HasMarkedObj())
+            if (mpView->AreObjectsMarked())
             {
                 InfoBox aInfoBox (NULL, String(SdResId(STR_END_SPELLING_OBJ)));
                 ShowModalMessageBox (aInfoBox);
@@ -864,7 +864,7 @@ void Outliner::DetectChange (void)
 bool Outliner::DetectSelectionChange (void)
 {
     bool bSelectionHasChanged = false;
-    ULONG nMarkCount = mpView->GetMarkList().GetMarkCount();
+    ULONG nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
     // If mpObj is NULL then we have not yet found our first match.
     // Detecting a change makes no sense.
@@ -881,7 +881,7 @@ bool Outliner::DetectSelectionChange (void)
                 // had selected.
                 if (mpView != NULL)
                 {
-                    SdrMark* pMark = mpView->GetMarkList().GetMark(0);
+                    SdrMark* pMark = mpView->GetMarkedObjectList().GetMark(0);
                     if (pMark != NULL)
                         bSelectionHasChanged = (mpObj != pMark->GetObj ());
                 }
@@ -1536,11 +1536,11 @@ void Outliner::SetViewShell (ViewShell* pViewShell)
 void Outliner::HandleChangedSelection (void)
 {
     maMarkListCopy.clear();
-    mbRestrictSearchToSelection = (mpView->HasMarkedObj()==TRUE);
+    mbRestrictSearchToSelection = (mpView->AreObjectsMarked()==TRUE);
     if (mbRestrictSearchToSelection)
     {
         // Make a copy of the current mark list.
-        const SdrMarkList& rMarkList = mpView->GetMarkList();
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
         ULONG nCount = rMarkList.GetMarkCount();
         if (nCount > 0)
         {
