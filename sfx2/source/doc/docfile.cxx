@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:22:05 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,7 @@ public:
     sal_Bool bDontCallDoneLinkOnSharingError : 1;
     sal_Bool bStreamReady: 1;
     sal_Bool bIsStorage: 1;
+    sal_Bool bUseInteractionHandler: 1;
 
     sal_uInt16       nPrio;
 
@@ -646,7 +647,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
     bUsesCache(sal_True), pCancellable( 0 ),
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
-    bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
+    bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ), bUseInteractionHandler( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
@@ -1521,8 +1522,9 @@ void SfxMedium::GetMedium_Impl()
         pImp->bStreamReady = sal_False;
 
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler =
-                Reference< ::com::sun::star::task::XInteractionHandler > (
+        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
+        if ( pImp->bUseInteractionHandler )
+            xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler > (
                 xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
 //        ::utl::UcbLockBytesRef xLockBytes;
@@ -1837,6 +1839,12 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
     if ( rMedium.pImp->pEaMgr )
         GetEaMgr();
 }
+
+void SfxMedium::UseInteractionHandler( BOOL bUse )
+{
+    pImp->bUseInteractionHandler = bUse;
+}
+
 //------------------------------------------------------------------
 
 void SfxMedium::SetFilter( const SfxObjectFactory& rFact, const String & rFilter )
@@ -2003,6 +2011,8 @@ sal_Bool SfxMedium::Exists( sal_Bool bForceSession )
 
 void SfxMedium::ReOpen()
 {
+    BOOL bUseInteractionHandler = pImp->bUseInteractionHandler;
+    pImp->bUseInteractionHandler = FALSE;
     DBG_ASSERT( pFilter, "Kein Filter, aber ReOpen!" );
     if( pFilter )
     {
@@ -2011,6 +2021,8 @@ void SfxMedium::ReOpen()
         else
             GetInStream();
     }
+
+    pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
 //------------------------------------------------------------------
 SfxMedium::SfxMedium
