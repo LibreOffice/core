@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:33:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@ protected:
 
 public:
     virtual USHORT          GetValueCount() const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer ) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
 
