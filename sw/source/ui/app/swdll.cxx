@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:25:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void SwDLL::Init()
     FmFormObjFactory();
 
     // factory for dummy import of old si-controls in 3.1 documents
-    SiImportFactory();
+//BFS02    SiImportFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
