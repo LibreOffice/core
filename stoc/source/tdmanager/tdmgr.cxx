@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:37:48 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <com/sun/star/reflection/XArrayTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -602,6 +603,8 @@ TypeClass SequenceTypeDescriptionImpl::getTypeClass()
 OUString SequenceTypeDescriptionImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
+
+
     return (OUString( RTL_CONSTASCII_USTRINGPARAM("[]") ) + _xElementTD->getName());
 }
 
@@ -613,6 +616,129 @@ Reference< XTypeDescription > SequenceTypeDescriptionImpl::getReferencedType()
     return _xElementTD;
 }
 
+//==================================================================================================
+class ArrayTypeDescriptionImpl : public WeakImplHelper1< XArrayTypeDescription >
+{
+    Reference< XTypeDescription > _xElementTD;
+    Mutex                         _aDimensionMutex;
+    sal_Int32                     _nDimensions;
+    Sequence< sal_Int32 >         _seqDimensions;
+    OUString                      _sDimensions;
+
+    void initDimensions(const OUString& rSDimensions);
+public:
+    ArrayTypeDescriptionImpl( const Reference< XTypeDescription > & xElementTD,
+                              sal_Int32 nDimensions, const OUString& rSDimensions )
+        : _xElementTD( xElementTD )
+        , _nDimensions( nDimensions )
+        , _seqDimensions( Sequence< sal_Int32 >(nDimensions) )
+        , _sDimensions( rSDimensions )
+        {
+            initDimensions( rSDimensions );
+        }
+    virtual ~ArrayTypeDescriptionImpl() {}
+
+    // XTypeDescription
+    virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+
+    // XArrayTypeDescription
+    virtual Reference< XTypeDescription > SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getNumberOfDimensions() throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< sal_Int32 > SAL_CALL getDimensions() throw(::com::sun::star::uno::RuntimeException);
+};
+//__________________________________________________________________________________________________
+static sal_Int32 unicodeToInteger( sal_Int8 base, const sal_Unicode *s )
+{
+    sal_Int32    r = 0;
+    sal_Int32    negative = 0;
+
+    if (*s == '-')
+       {
+        negative = 1;
+          s++;
+       }
+       if (base == 8 && *s == '0')
+        s++;
+       else if (base == 16 && *s == '0' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
+        s += 2;
+
+       for (; *s; s++)
+       {
+           if (*s <= '9' && *s >= '0')
+            r = (r * base) + (*s - '0');
+          else if (base > 10 && *s <= 'f' && *s >= 'a')
+            r = (r * base) + (*s - 'a' + 10);
+          else if (base > 10 && *s <= 'F' && *s >= 'A')
+            r = (r * base) + (*s - 'A' + 10);
+           else
+            break;
+    }
+       if (negative) r *= -1;
+    return r;
+}
+//__________________________________________________________________________________________________
+void ArrayTypeDescriptionImpl::initDimensions(const OUString& rSDimensions)
+{
+    MutexGuard aGuard( _aDimensionMutex );
+
+    sal_Int32 *  pDimensions = _seqDimensions.getArray();
+    OUString tmp(rSDimensions);
+    sal_Unicode* p = (sal_Unicode*)tmp.getStr()+1;
+    sal_Unicode* pOffset = p;
+    sal_Int32 len = tmp.getLength() - 1 ;
+    sal_Int32 i = 0;
+
+    while ( len > 0)
+    {
+        pOffset++;
+        if (*pOffset == ']')
+        {
+            *pOffset = '\0';
+            pOffset += 2;
+            len -= 3;
+            pDimensions[i++] = unicodeToInteger(10, p);
+            p = pOffset;
+        } else
+            len--;
+    }
+}
+
+// XTypeDescription
+//__________________________________________________________________________________________________
+TypeClass ArrayTypeDescriptionImpl::getTypeClass()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return TypeClass_ARRAY;
+}
+//__________________________________________________________________________________________________
+OUString ArrayTypeDescriptionImpl::getName()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return (_xElementTD->getName() + _sDimensions);
+}
+
+// XArrayTypeDescription
+//__________________________________________________________________________________________________
+Reference< XTypeDescription > ArrayTypeDescriptionImpl::getType()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return _xElementTD;
+}
+
+//__________________________________________________________________________________________________
+sal_Int32 ArrayTypeDescriptionImpl::getNumberOfDimensions()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return _nDimensions;
+}
+
+//__________________________________________________________________________________________________
+Sequence< sal_Int32 > ArrayTypeDescriptionImpl::getDimensions()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return _seqDimensions;
+}
 
 //##################################################################################################
 //##################################################################################################
@@ -674,6 +800,16 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
             Reference< XTypeDescription > xElemType;
             if (extract( getByHierarchicalName( rName.copy( 2 ) ), xElemType ))
                 aRet <<= Reference< XTypeDescription >( new SequenceTypeDescriptionImpl( xElemType ) );
+            else
+                return Any(); // further lookup makes no sense
+        }
+        if (rName[rName.getLength()-1] == ']') // test for array
+        {
+            sal_Int32 nDims = rName.getTokenCount('[') - 1;
+            sal_Int32 dimOffset = rName.indexOf('[');
+            Reference< XTypeDescription > xElemType;
+            if (extract( getByHierarchicalName( rName.copy( 0, dimOffset ) ), xElemType ))
+                aRet <<= Reference< XTypeDescription >( new ArrayTypeDescriptionImpl( xElemType, nDims, rName.copy(dimOffset) ) );
             else
                 return Any(); // further lookup makes no sense
         }
