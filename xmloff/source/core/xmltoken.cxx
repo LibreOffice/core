@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.90 $
+*  $Revision: 1.91 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:09:52 $
+*  last change: $Author: vg $ $Date: 2005-03-23 11:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2863,6 +2863,7 @@ namespace xmloff { namespace token {
         TOKEN( "urn:oasis:names:tc",    XML_URN_OASIS_NAMES_TC ),
         TOKEN( "opendocument",          XML_OPENDOCUMENT),
         TOKEN( "1.0", XML_1_0 ),
+
         TOKEN( "is-list-header",     XML_IS_LIST_HEADER ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0",      XML_N_SVG_COMPAT ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",      XML_N_FO_COMPAT ),
@@ -2870,6 +2871,9 @@ namespace xmloff { namespace token {
         TOKEN( "http://www.w3.org/2001/SMIL20", XML_N_SMIL_OLD ),
         TOKEN( "xforms-submission",            XML_XFORMS_SUBMISSION ),
         TOKEN( "xforms-list-source",            XML_XFORMS_LIST_SOURCE ),
+
+        TOKEN( "http://www.w3.org/",    XML_URI_W3_PREFIX ),
+        TOKEN( "/xforms",               XML_URI_XFORMS_SUFFIX ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
