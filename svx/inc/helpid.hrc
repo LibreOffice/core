@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:14:27 $
+ *  last change: $Author: kz $ $Date: 2004-07-27 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,6 +741,8 @@
 #define HID_SVX_CONFIG_MENU_CONTENTS                (HID_SVX_EXT0_START + 138)
 #define HID_SVX_CONFIG_TOOLBAR                      (HID_SVX_EXT0_START + 139)
 #define HID_SVX_CONFIG_TOOLBAR_CONTENTS             (HID_SVX_EXT0_START + 140)
+#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 141)
+
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
