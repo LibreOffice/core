@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2001-02-20 14:04:37 $
+#   last change: $Author: obr $ $Date: 2001-03-12 12:36:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,7 +174,7 @@ IDLFILES=\
     XControlContainer.idl\
     XControlModel.idl\
     XCurrencyField.idl\
-    XDataTransfer.idl\
+    XDataTransferProviderAccess.idl\
     XDateField.idl\
     XDevice.idl\
     XDialog.idl\
