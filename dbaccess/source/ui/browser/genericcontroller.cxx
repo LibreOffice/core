@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 13:20:12 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeE
 {
     // our frame ?
     Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(Source.Source, UNO_QUERY);
-    if (((::com::sun::star::frame::XFrame*)xSourceFrame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get()) && m_xCurrentFrame.is())
+    if (m_xCurrentFrame.is() && (xSourceFrame == m_xCurrentFrame))
         m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
 }
 //------------------------------------------------------------------------
@@ -652,7 +652,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< ::com::su
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw(::com::sun::star::uno::RuntimeException)
+void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
@@ -660,7 +660,7 @@ void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, co
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(::com::sun::star::uno::RuntimeException)
+void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(RuntimeException)
 {
     // remeber the listener together with the ::com::sun::star::util::URL
     m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
@@ -670,7 +670,7 @@ void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star:
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(::com::sun::star::uno::RuntimeException)
+void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(RuntimeException)
 {
     DispatchIterator iterSearch = m_arrStatusListener.begin();
     DispatchIterator iterEnd    = m_arrStatusListener.end();
@@ -753,13 +753,13 @@ void OGenericUnoController::disposing()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener) throw(RuntimeException)
 {
     OGenericUnoController_COMPBASE::addEventListener(aListener);
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
+void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener) throw(RuntimeException)
 {
     OGenericUnoController_COMPBASE::removeEventListener(aListener);
 }
@@ -994,6 +994,20 @@ IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
             xTask->close();
     }
     return 0L;
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OGenericUnoController::getViewData(void) throw( RuntimeException )
+{
+    return Any();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::restoreViewData(const Any& Data) throw( RuntimeException )
+{
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OGenericUnoController::attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException )
+{
+    return sal_False;
 }
 // -----------------------------------------------------------------------------
 

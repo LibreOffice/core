@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 14:42:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,10 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     if (xDatasourceContainer.is())
         xDatasourceContainer->removeContainerListener(this);
 
+    // check out from all the objects we are listening
+    // the frame
+    if (m_xCurrentFrameParent.is())
+        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
     SbaXDataBrowserController::disposing();
 }
 
@@ -1123,7 +1127,8 @@ void SbaTableQueryBrowser::connectExternalDispatches()
     if (xProvider.is())
     {
         sal_Int32 nExternalIds[] = { ID_BROWSER_DOCUMENT_DATASOURCE, ID_BROWSER_FORMLETTER, ID_BROWSER_INSERTCOLUMNS, ID_BROWSER_INSERTCONTENT };
-        for (sal_Int32 i=0; i<sizeof(nExternalIds)/sizeof(nExternalIds[0]); ++i)
+        sal_Int32 nSize = sizeof(nExternalIds)/sizeof(nExternalIds[0]);
+        for (sal_Int32 i=0; i<nSize; ++i)
         {
             URL aURL = getURLForId(nExternalIds[i]);
             m_aDispatchers[nExternalIds[i]] = xProvider->queryDispatch(aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT);
@@ -1175,56 +1180,63 @@ void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) throw(RuntimeException)
 {
-    // search the external dispatcher causing this call in our map
-    Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
-    if(xSource.is())
-    {
-        for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
-                aLoop != m_aDispatchers.end();
-                ++aLoop
-            )
-        {
-            if (aLoop->second.get() == xSource.get())
-            {
-                SpecialSlotDispatchersIterator aPrevious = aLoop;
-                --aPrevious;
-
-                // remove it
-                m_aDispatchers.erase(aLoop);
-                m_aDispatchStates.erase(aLoop->first);
-
-                // maybe update the UI
-                implCheckExternalSlot(aLoop->first);
-
-                // continue, the same XDispatch may be resposible for more than one URL
-                aLoop = aPrevious;
-            }
-        }
-    }
+    // our frame ?
+    Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(_rSource.Source, UNO_QUERY);
+    if (m_xCurrentFrameParent.is() && (xSourceFrame == m_xCurrentFrameParent))
+        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
     else
     {
-        Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
-        if(xCon.is())
-        {   // our connection is in dispose so we have to find the entry equal with this connection
-            // and close it what means to collapse the entry
-            // get the top-level representing the removed data source
-            SvLBoxEntry* pDSLoop = m_pTreeView->getListBox()->FirstChild(NULL);
-            while (pDSLoop)
+        // search the external dispatcher causing this call in our map
+        Reference< XDispatch > xSource(_rSource.Source, UNO_QUERY);
+        if(xSource.is())
+        {
+            for (   SpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
+                    aLoop != m_aDispatchers.end();
+                    ++aLoop
+                )
             {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pDSLoop->GetUserData());
-                if(pData && pData->xObject == xCon)
+                if (aLoop->second.get() == xSource.get())
                 {
-                    // we set the conenction to null to avoid a second disposing of the connection
-                    pData->xObject = NULL;
-                    closeConnection(pDSLoop,sal_False);
-                    break;
-                }
+                    SpecialSlotDispatchersIterator aPrevious = aLoop;
+                    --aPrevious;
 
-                pDSLoop = m_pTreeView->getListBox()->NextSibling(pDSLoop);
+                    // remove it
+                    m_aDispatchers.erase(aLoop);
+                    m_aDispatchStates.erase(aLoop->first);
+
+                    // maybe update the UI
+                    implCheckExternalSlot(aLoop->first);
+
+                    // continue, the same XDispatch may be resposible for more than one URL
+                    aLoop = aPrevious;
+                }
             }
         }
         else
-            SbaXDataBrowserController::disposing(_rSource);
+        {
+            Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
+            if(xCon.is())
+            {   // our connection is in dispose so we have to find the entry equal with this connection
+                // and close it what means to collapse the entry
+                // get the top-level representing the removed data source
+                SvLBoxEntry* pDSLoop = m_pTreeView->getListBox()->FirstChild(NULL);
+                while (pDSLoop)
+                {
+                    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pDSLoop->GetUserData());
+                    if(pData && pData->xObject == xCon)
+                    {
+                        // we set the conenction to null to avoid a second disposing of the connection
+                        pData->xObject = NULL;
+                        closeConnection(pDSLoop,sal_False);
+                        break;
+                    }
+
+                    pDSLoop = m_pTreeView->getListBox()->NextSibling(pDSLoop);
+                }
+            }
+            else
+                SbaXDataBrowserController::disposing(_rSource);
+        }
     }
 }
 
@@ -1323,7 +1335,17 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
 {
     implRemoveStatusListeners();
 
+    if (m_xCurrentFrameParent.is())
+        m_xCurrentFrameParent->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+
     SbaXDataBrowserController::attachFrame(_xFrame);
+
+    if(m_xCurrentFrame.is())
+    {
+        m_xCurrentFrameParent = m_xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
+        if(m_xCurrentFrameParent.is())
+            m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    }
 
     // get the dispatchers for the external slots
     connectExternalDispatches();
@@ -3908,6 +3930,21 @@ void SbaTableQueryBrowser::ensureObjectExists(SvLBoxEntry* _pApplyTo)
         }
     }
 }
+//------------------------------------------------------------------------------
+void SbaTableQueryBrowser::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
+{
+    if (aEvent.Frame == m_xCurrentFrameParent)
+    {
+        if(aEvent.Action == FrameAction_COMPONENT_DETACHING)
+            implRemoveStatusListeners();
+        else if (aEvent.Action == FrameAction_COMPONENT_REATTACHED)
+            connectExternalDispatches();
+    }
+    else
+        OGenericUnoController::frameAction(aEvent);
+
+}
+// -----------------------------------------------------------------------------
 
 // .........................................................................
 }   // namespace dbaui

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:19 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2496,6 +2496,13 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
 {
     return *const_cast<SbaXDataBrowserController*>(this)->getArrayHelper();
 }
+// -----------------------------------------------------------------------------
+Reference< XPropertySetInfo > SAL_CALL SbaXDataBrowserController::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+
 //==================================================================
 // LoadFormHelper
 //==================================================================
@@ -2816,7 +2823,6 @@ IMPL_LINK(LoadFormThread::ThreadStopper, OnDeleteInMainThread, LoadFormThread::T
     delete pThis;
     return 0L;
 }
-
 //..................................................................
 }   // namespace dbaui
 //..................................................................
