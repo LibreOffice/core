@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-20 08:24:57 $
+ *  last change: $Author: os $ $Date: 2002-10-08 13:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,15 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 
 // Enable this to use the helpclass SwRVPMark
@@ -2249,8 +2258,9 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
         // UnderLineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
+        const SwViewOption* pViewOption = GetShell()->GetViewOptions();
         bChgUnderColor = ! bPrt && GetShell() &&
-                         GetShell()->GetViewOptions()->IsAlwaysAutoColor();
+                         pViewOption->IsAlwaysAutoColor();
 
         bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgUnderColor;
 
@@ -2291,9 +2301,15 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 
             // we take the window text color for painting
             if( GetShell() && GetShell()->GetWin() )
-                nNewColor = GetShell()->GetWin()->GetSettings().
-                            GetStyleSettings().GetWindowTextColor().
-                            GetColor();
+            {
+                if(pViewOption->IsPagePreview() &&
+                        !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
+                    nNewColor = COL_BLACK;
+                else
+                    nNewColor = GetShell()->GetWin()->GetSettings().
+                                GetStyleSettings().GetWindowTextColor().
+                                GetColor();
+            }
 
             // change painting color depending of dark/bright background
             Color aTmpColor( nNewColor );
