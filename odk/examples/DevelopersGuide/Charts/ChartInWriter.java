@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartInWriter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:09:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -108,7 +108,7 @@ public class ChartInWriter
 
         // insert a new chart into the "Chart" sheet of the
         // spreadsheet document
-        XChartDocument aChartDoc = aChartHelper.insertOLEChart(
+        XChartDocument aChartDoc = aChartHelper.insertOLEChartInWriter(
             "BarChart",
             aPos,
             aExtent,
