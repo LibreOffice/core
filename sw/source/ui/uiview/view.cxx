@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-30 15:59:56 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 14:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,9 +273,6 @@
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1297,8 +1294,8 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
     com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( sXML_view_id ) );
-    OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_view ) ) );
+    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "ViewId" ) );
+    OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( "view" ) ) );
     SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
     pValue->Value <<= sBuffer.makeStringAndClear();
     pValue++;nIndex++;
