@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:01:00 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ polish ] = "ZewnÍtrzne ürÛd≥o danych";
     Text[ portuguese_brazilian ] = "External source";
     Text[ japanese ] = "äOïî√ﬁ∞¿ø∞Ω";
-    Text[ korean ] = "ø‹∫Œ º“Ω∫";
+    Text[ korean ] = "ø‹∫Œ µ•¿Ã≈Õº“Ω∫";
     Text[ chinese_simplified ] = "Õ‚≤ø ˝æ›‘¥";
     Text[ chinese_traditional ] = "•~≥°∏ÍÆ∆®”∑Ω";
     Text[ arabic ] = "„’œ— »Ì«‰«  Œ«—ÃÌ";
