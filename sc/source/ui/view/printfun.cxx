@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-08 11:38:12 $
+ *  last change: $Author: nn $ $Date: 2001-02-23 09:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1480,8 +1480,8 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     SFX_APP()->SpoilDemoOutput( *pDev, OutputDevice::LogicToLogic(
                                 aPageRect, aTwipMode, aOffsetMode ) );
     pDev->SetClipRegion();
-//
-    aOutputData.SetMetaFileMode(FALSE);
+
+//  aOutputData.SetMetaFileMode(FALSE);
     aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
     aOutputData.DrawFrame();
     aOutputData.DrawStrings();
