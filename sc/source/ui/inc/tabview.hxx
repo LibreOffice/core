@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-20 16:50:16 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,8 @@ public:
     void            PaintLeft();
 
     BOOL            PaintExtras();
+
+    void            RecalcPPT();
 
     void            CreateAnchorHandles(SdrHdlList& rHdl, const ScAddress& rAddress);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,6 +1056,10 @@ void __EXPORT ScUndoDetective::Undo()
         }
     }
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->RecalcPPT();    //! use broadcast instead?
+
     EndUndo();
 }
 
@@ -1072,6 +1076,10 @@ void __EXPORT ScUndoDetective::Redo()
         pDoc->ClearDetectiveOperations();
     else
         pDoc->AddDetectiveOperation( ScDetOpData( aPos, (ScDetOpType) nAction ) );
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->RecalcPPT();    //! use broadcast instead?
 
     EndRedo();
 }

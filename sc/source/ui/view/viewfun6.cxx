@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ void ScViewFunc::DetectiveAddPred()
                     DetectiveAddPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();    //! use broadcast in DocFunc instead?
 }
 
 void ScViewFunc::DetectiveDelPred()
@@ -164,6 +166,8 @@ void ScViewFunc::DetectiveDelPred()
                     DetectiveDelPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddSucc()
@@ -173,6 +177,8 @@ void ScViewFunc::DetectiveAddSucc()
                     DetectiveAddSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelSucc()
@@ -182,6 +188,8 @@ void ScViewFunc::DetectiveDelSucc()
                     DetectiveDelSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddError()
@@ -191,6 +199,8 @@ void ScViewFunc::DetectiveAddError()
                     DetectiveAddError( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelAll()
@@ -200,6 +210,8 @@ void ScViewFunc::DetectiveDelAll()
                     DetectiveDelAll( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveMarkInvalid()
@@ -209,6 +221,8 @@ void ScViewFunc::DetectiveMarkInvalid()
                     DetectiveMarkInvalid( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 void ScViewFunc::DetectiveRefresh()
@@ -217,6 +231,8 @@ void ScViewFunc::DetectiveRefresh()
     BOOL bDone = pDocSh->GetDocFunc().DetectiveRefresh();
     if (!bDone)
         Sound::Beep();
+
+    RecalcPPT();
 }
 
 //---------------------------------------------------------------------------

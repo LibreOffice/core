@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,6 +2256,35 @@ BOOL ScTabView::PaintExtras()
     }
     pTabControl->UpdateStatus();                        // TRUE = active
     return bRet;
+}
+
+void ScTabView::RecalcPPT()
+{
+    //  called after changes that require the PPT values to be recalculated
+    //  (currently from detective operations)
+
+    double nOldX = aViewData.GetPPTX();
+    double nOldY = aViewData.GetPPTY();
+
+    Fraction aZoomX = aViewData.GetZoomX();
+    Fraction aZoomY = aViewData.GetZoomY();
+    aViewData.SetZoom( aZoomX, aZoomY );            // pre-calculate new PPT values
+
+    BOOL bChangedX = ( aViewData.GetPPTX() != nOldX );
+    BOOL bChangedY = ( aViewData.GetPPTY() != nOldY );
+    if ( bChangedX || bChangedY )
+    {
+        //  call view SetZoom (including draw scale, split update etc)
+        //  and paint only if values changed
+
+        SetZoom( aZoomX, aZoomY );
+
+        PaintGrid();
+        if (bChangedX)
+            PaintTop();
+        if (bChangedY)
+            PaintLeft();
+    }
 }
 
 void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
