@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,12 @@ Window RID_MAIL_WINDOW
         Text[English] = "Send";
         TabStop = TRUE;
         Text[ english_us ] = "Send";
-        Text[ portuguese ] = "Send";
+        Text[ portuguese ] = "E~nviar";
         Text[ russian ] = "Send";
-        Text[ greek ] = "Send";
-        Text[ dutch ] = "Send";
-        Text[ french ] = "En~voyer";
-        Text[ spanish ] = "Send";
+        Text[ greek ] = "¡Ô~ÛÙÔÎﬁ";
+        Text[ dutch ] = "~Zenden";
+        Text[ french ] = "Envo~yer";
+        Text[ spanish ] = "Enviar";
         Text[ italian ] = "Send";
         Text[ danish ] = "Send";
         Text[ swedish ] = "~Skicka";
@@ -89,10 +89,10 @@ Window RID_MAIL_WINDOW
         Text[ portuguese_brazilian ] = "Send";
         Text[ japanese ] = "ëóêM";
         Text[ korean ] = "Send";
-        Text[ chinese_simplified ] = "Send";
+        Text[ chinese_simplified ] = "ºƒ∑¢";
         Text[ chinese_traditional ] = "µo∞e";
         Text[ turkish ] = "Send";
-        Text[ arabic ] = "Send";
+        Text[ arabic ] = "≈—”«·";
     };
     PushButton PB_MAILWIN_CLOSE
     {
@@ -102,23 +102,23 @@ Window RID_MAIL_WINDOW
         Text[English] = "Close";
         TabStop = TRUE;
         Text[ english_us ] = "Close";
-        Text[ portuguese ] = "Close";
+        Text[ portuguese ] = "~Fechar";
         Text[ russian ] = "Close";
-        Text[ greek ] = "Close";
-        Text[ dutch ] = "Close";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ dutch ] = "S~luiten";
         Text[ french ] = "~Fermer";
-        Text[ spanish ] = "Close";
+        Text[ spanish ] = "Cerrar";
         Text[ italian ] = "Close";
         Text[ danish ] = "Luk";
-        Text[ swedish ] = "Close";
+        Text[ swedish ] = "S~t‰ng";
         Text[ polish ] = "Close";
         Text[ portuguese_brazilian ] = "Close";
         Text[ japanese ] = "ï¬Ç∂ÇÈ";
         Text[ korean ] = "Close";
-        Text[ chinese_simplified ] = "Close";
+        Text[ chinese_simplified ] = "πÿ±’";
         Text[ chinese_traditional ] = "√ˆ≥¨";
         Text[ turkish ] = "Close";
-        Text[ arabic ] = "Close";
+        Text[ arabic ] = "≈€·«ﬁ";
     };
     ListBox LB_MAILWIN_ROLE
     {
@@ -146,111 +146,111 @@ Window RID_MAIL_WINDOW
     };
     StringList [ english_us ] =
     {
-            < "To" ; 3 ; > ;
-        < "Copy" ; 3 ; > ;
+            < "To" ; 1 ; > ;
+        < "Copy" ; 2 ; > ;
         < "Blind Copy" ; 3 ; > ;
     };
     StringList [ portuguese ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < "Para" ; 1 ; > ;
+        < "CÛpia" ; 2 ; > ;
+        < "Cco." ; 3 ; > ;
     };
     StringList [ russian ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ greek ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < "–ÒÔÚ" ; 1 ; > ;
+        < "¡ÌÙﬂ„Ò·ˆÔ" ; 2 ; > ;
+        < "…‰È·ﬂÙÂÒÁ ÍÔÈÌÔÔﬂÁÛÁ" ; 3 ; > ;
     };
     StringList [ dutch ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < "Aan" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
+        < "Blinde kopie" ; 3 ; > ;
     };
     StringList [ french ] =
     {
-            < "¿" ; 3 ; > ;
-        < "Copie" ; 3 ; > ;
+            < "¿" ; 1 ; > ;
+        < "Copie" ; 2 ; > ;
         < "Copie cachÈe" ; 3 ; > ;
     };
     StringList [ spanish ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < "A" ; 1 ; > ;
+        < "Copia" ; 2 ; > ;
+        < "CCC" ; 3 ; > ;
     };
     StringList [ italian ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ danish ] =
     {
-            < "Til" ; 3 ; > ;
-        < "Kopi" ; 3 ; > ;
+            < "Til" ; 1 ; > ;
+        < "Kopi" ; 2 ; > ;
         < "Blindkopi" ; 3 ; > ;
     };
     StringList [ swedish ] =
     {
-            < "Till" ; 3 ; > ;
-        < "Kopia" ; 3 ; > ;
+            < "Till" ; 1 ; > ;
+        < "Kopia" ; 2 ; > ;
         < "Blindkopia" ; 3 ; > ;
     };
     StringList [ polish ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ japanese ] =
     {
-            < "à∂êÊ" ; 3 ; > ;
-        < "CC" ; 3 ; > ;
+            < "à∂êÊ" ; 1 ; > ;
+        < "CC" ; 2 ; > ;
         < "BCC" ; 3 ; > ;
     };
     StringList [ korean ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < " ’º˛»À" ; 1 ; > ;
+        < "≥≠ÀÕ" ; 2 ; > ;
+        < "√‹≥≠" ; 3 ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¶¨•Û™Ã" ; 3 ; > ;
-        < "ß€∞e" ; 3 ; > ;
+            < "¶¨•Û™Ã" ; 1 ; > ;
+        < "ß€∞e" ; 2 ; > ;
         < "±Kß€" ; 3 ; > ;
     };
     StringList [ turkish ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
         < "Blindkopie" ; 3 ; > ;
     };
     StringList [ arabic ] =
     {
-            < "An" ; 3 ; > ;
-        < "Kopie" ; 3 ; > ;
-        < "Blindkopie" ; 3 ; > ;
+            < "≈·Ï" ; 1 ; > ;
+        < "‰”Œ…" ; 2 ; > ;
+        < "‰”Œ… ⁄„Ì«¡" ; 3 ; > ;
     };
     };
     Edit ED_MAILWIN_ROLE
@@ -273,23 +273,23 @@ Window RID_MAIL_WINDOW
         Text = "~Betreff:";
         Text[English] = "Subject:";
         Text[ english_us ] = "Subject:";
-        Text[ portuguese ] = "Subject:";
+        Text[ portuguese ] = "A~ssunto:";
         Text[ russian ] = "Subject:";
-        Text[ greek ] = "Subject:";
-        Text[ dutch ] = "Subject:";
+        Text[ greek ] = "»›Ï·:";
+        Text[ dutch ] = "~Onderwerp:";
         Text[ french ] = "O~bjet :";
-        Text[ spanish ] = "Subject:";
+        Text[ spanish ] = "Asunto:";
         Text[ italian ] = "Subject:";
         Text[ danish ] = "Emne:";
-        Text[ swedish ] = "Subject:";
+        Text[ swedish ] = "~AngÂende:";
         Text[ polish ] = "Subject:";
         Text[ portuguese_brazilian ] = "Subject:";
         Text[ japanese ] = "åèñº:";
         Text[ korean ] = "Subject:";
-        Text[ chinese_simplified ] = "Subject:";
+        Text[ chinese_simplified ] = " ¬”…£∫";
         Text[ chinese_traditional ] = "•D¶Æ°G";
         Text[ turkish ] = "Subject:";
-        Text[ arabic ] = "Subject:";
+        Text[ arabic ] = "«·„Ê÷Ê⁄:";
     };
     Edit ED_MAILWIN_SUBJECT
     {
@@ -304,23 +304,23 @@ Window RID_MAIL_WINDOW
         Text = "~Von:";
         Text[English] = "From:";
         Text[ english_us ] = "From:";
-        Text[ portuguese ] = "From:";
+        Text[ portuguese ] = "~De:";
         Text[ russian ] = "From:";
-        Text[ greek ] = "From:";
-        Text[ dutch ] = "From:";
+        Text[ greek ] = "¡¸:";
+        Text[ dutch ] = "~Van:";
         Text[ french ] = "~De :";
-        Text[ spanish ] = "From:";
+        Text[ spanish ] = "De:";
         Text[ italian ] = "From:";
         Text[ danish ] = "Fra:";
-        Text[ swedish ] = "From:";
+        Text[ swedish ] = "~FrÂn:";
         Text[ polish ] = "From:";
         Text[ portuguese_brazilian ] = "From:";
         Text[ japanese ] = "ç∑èoêl:";
         Text[ korean ] = "From:";
-        Text[ chinese_simplified ] = "From:";
+        Text[ chinese_simplified ] = "∑¢º˛»À£∫";
         Text[ chinese_traditional ] = "±H•Û™Ã°G";
         Text[ turkish ] = "From:";
-        Text[ arabic ] = "From:";
+        Text[ arabic ] = "„‰:";
     };
     Edit ED_MAILWIN_FROM
     {
@@ -336,12 +336,12 @@ Window RID_MAIL_WINDOW
         Text = "~Priorit‰t:";
         Text[English] = "Priority:";
         Text[ english_us ] = "Priority:";
-        Text[ portuguese ] = "Priority:";
+        Text[ portuguese ] = "~Prioridade:";
         Text[ russian ] = "Priority:";
-        Text[ greek ] = "Priority:";
-        Text[ dutch ] = "Priority:";
+        Text[ greek ] = "~–ÒÔÙÂÒ·È¸ÙÁÙ·:";
+        Text[ dutch ] = "~Prioriteit:";
         Text[ french ] = "~PrioritÈ :";
-        Text[ spanish ] = "Priority:";
+        Text[ spanish ] = "Prioridad:";
         Text[ italian ] = "Priority:";
         Text[ danish ] = "Prioritet:";
         Text[ swedish ] = "~Prioritet:";
@@ -349,10 +349,10 @@ Window RID_MAIL_WINDOW
         Text[ portuguese_brazilian ] = "Priority:";
         Text[ japanese ] = "èdóvìx:";
         Text[ korean ] = "Priority:";
-        Text[ chinese_simplified ] = "Priority:";
+        Text[ chinese_simplified ] = "÷ÿ“™–‘£∫";
         Text[ chinese_traditional ] = "≠´≠n© °G";
         Text[ turkish ] = "Priority:";
-        Text[ arabic ] = "Priority:";
+        Text[ arabic ] = "«·√Ê·ÊÌ…:";
     };
     ListBox LB_MAILWIN_PRIO
     {
@@ -386,147 +386,147 @@ Window RID_MAIL_WINDOW
     };
     StringList [ english_us ] =
     {
-            < "Urgent" ; 5 ; > ;
-        < "Important" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Low" ; 5 ; > ;
+            < "Urgent" ; 1 ; > ;
+        < "Important" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Low" ; 4 ; > ;
         < "Lowest" ; 5 ; > ;
     };
     StringList [ portuguese ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "Urgente" ; 1 ; > ;
+        < "Importante" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Baixa" ; 4 ; > ;
+        < "Muito baixa" ; 5 ; > ;
     };
     StringList [ russian ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ greek ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "–ÔÎ˝ ı¯ÁÎﬁ" ; 1 ; > ;
+        < "’¯ÁÎﬁ" ; 2 ; > ;
+        < " ·ÌÔÌÈÍﬁ" ; 3 ; > ;
+        < "◊·ÏÁÎﬁ" ; 4 ; > ;
+        < "–ÔÎ˝ ˜·ÏÁÎﬁ" ; 5 ; > ;
     };
     StringList [ dutch ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "dringend" ; 1 ; > ;
+        < "belangrijk" ; 2 ; > ;
+        < "normaal" ; 3 ; > ;
+        < "laag" ; 4 ; > ;
+        < "zeer laag" ; 5 ; > ;
     };
     StringList [ french ] =
     {
-            < "TrËs ÈlevÈe" ; 5 ; > ;
-        < "…levÈe" ; 5 ; > ;
-        < "Normale" ; 5 ; > ;
-        < "Faible" ; 5 ; > ;
+            < "TrËs ÈlevÈe" ; 1 ; > ;
+        < "…levÈe" ; 2 ; > ;
+        < "Normale" ; 3 ; > ;
+        < "Faible" ; 4 ; > ;
         < "TrËs faible" ; 5 ; > ;
     };
     StringList [ spanish ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "Muy alta" ; 1 ; > ;
+        < "Alta" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Baja" ; 4 ; > ;
+        < "Muy baja" ; 5 ; > ;
     };
     StringList [ italian ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ danish ] =
     {
-            < "Meget h¯j" ; 5 ; > ;
-        < "H¯j" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Lav" ; 5 ; > ;
+            < "Meget h¯j" ; 1 ; > ;
+        < "H¯j" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Lav" ; 4 ; > ;
         < "Meget lav" ; 5 ; > ;
     };
     StringList [ swedish ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "Mycket hˆg" ; 1 ; > ;
+        < "Hˆg" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "LÂg" ; 4 ; > ;
+        < "Mycket lÂg" ; 5 ; > ;
     };
     StringList [ polish ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ japanese ] =
     {
-            < "çÇÇ¢" ; 5 ; > ;
-        < "Ç‚Ç‚çÇÇ¢" ; 5 ; > ;
-        < "ïWèÄ" ; 5 ; > ;
-        < "Ç‚Ç‚í·Ç¢" ; 5 ; > ;
+            < "çÇÇ¢" ; 1 ; > ;
+        < "Ç‚Ç‚çÇÇ¢" ; 2 ; > ;
+        < "ïWèÄ" ; 3 ; > ;
+        < "Ç‚Ç‚í·Ç¢" ; 4 ; > ;
         < "í·Ç¢" ; 5 ; > ;
     };
     StringList [ korean ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "∫‹∏ﬂ" ; 1 ; > ;
+        < "∏ﬂ" ; 2 ; > ;
+        < "∆’Õ®" ; 3 ; > ;
+        < "µÕ" ; 4 ; > ;
+        < "∫‹µ◊" ; 5 ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "´‹∞™" ; 5 ; > ;
-        < "∞™" ; 5 ; > ;
-        < "§@ØÎ" ; 5 ; > ;
-        < "ßC" ; 5 ; > ;
+            < "´‹∞™" ; 1 ; > ;
+        < "∞™" ; 2 ; > ;
+        < "§@ØÎ" ; 3 ; > ;
+        < "ßC" ; 4 ; > ;
         < "´‹ßC" ; 5 ; > ;
     };
     StringList [ turkish ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
         < "Sehr niedrig" ; 5 ; > ;
     };
     StringList [ arabic ] =
     {
-            < "Sehr hoch" ; 5 ; > ;
-        < "Hoch" ; 5 ; > ;
-        < "Normal" ; 5 ; > ;
-        < "Niedrig" ; 5 ; > ;
-        < "Sehr niedrig" ; 5 ; > ;
+            < "«·√⁄·Ï" ; 1 ; > ;
+        < "⁄«·Ì" ; 2 ; > ;
+        < "⁄«œÌ" ; 3 ; > ;
+        < "„‰Œ›÷" ; 4 ; > ;
+        < "«·√œ‰Ï" ; 5 ; > ;
     };
     };
     Image IMG_MAILWIN_SEND
