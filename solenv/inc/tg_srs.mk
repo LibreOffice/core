@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:45:51 $
+#   last change: $Author: hr $ $Date: 2003-04-29 17:34:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,28 +95,32 @@ RSCUPDVERMAC=-DUPDVER=¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"$(RSCUPDVER)¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶"
 RSCUPDVERMAC=-DUPDVER="$(RSCUPDVER)"
 .ENDIF
 
+.IF "$(lintit)"==""
+.IF "$(GUI)"=="WNT"
+.IF "$(CPU)"=="I"
+.IF "$(no_hids)$(NO_HIDS)"==""
+.IF "$(USE_SHELL)"=="4nt"
+.IF "$(SRCFILES)"!=""
+HIDFILES=$(foreach,i,$(SRCFILES:f) $(SRS)$/$(i:s/.src/.hid/))
+HIDSRSPARTICLE=$(MISC)$/$(TARGET)_srs.hid
+$(HIDSRSPARTICLE) : $(HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $(HIDSRSPARTICLE) rm $(HIDSRSPARTICLE)
+    +$(TYPE) $(HIDFILES) > $(HIDSRSPARTICLE)
+ALLTAR : $(HIDSRSPARTICLE)
+.ENDIF
+.ENDIF                  # "$(USE_SHELL)"=="4nt"
+.ENDIF
+.ENDIF
+.ENDIF
+.ENDIF
+
+
 .IF "$(SRCTARGET)"!=""
 $(SRCTARGET) : $(SRCFILES)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"=="WNT"
-.IF "$(CPU)"=="I"
-#.IF "$(UPDATER)"=="YES"
-#.IF "$(BUILD_SOSL)"==""
-.IF "$(no_hids)$(NO_HIDS)"==""
-.IF "$(USE_SHELL)"=="4nt"
-    @+type $(mktmp $(SRCFILES:+"\n")) > $(TMP)$/$(TARGET).tra
-    @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
-    +type $(TMP)$/$(TARGET).art | $(SORT) -u  > $(TMP)$/$(TARGET).tra
-    +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
-    @+-del $(TMP)$/$(TARGET).tra
-    @+-del $(TMP)$/$(TARGET).art
-.ENDIF			# "$(USE_SHELL)"=="4nt"
-.ENDIF
-#.ENDIF
-#.ENDIF
-.ENDIF
-.ENDIF			 # "$(GUI)"=="WNT"
 .IF "$(make_srs_deps)" != ""
     +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERMAC) -fp$@ $(SRCFILES)
 .ELSE
@@ -173,27 +177,30 @@ SRC1 SRC2 SRC3 SRC4 SRC5 SRC6 SRC7 SRC8 SRC9 :
     @+dmake "$(SRS)$/$(SRS$(TNR)NAME).srs" MULTI_SRC_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ENDIF
 .ELSE
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
-    @echo ------------------------------
-    @echo Making: $@
+
+.IF "$(lintit)"==""
 .IF "$(GUI)"=="WNT"
 .IF "$(CPU)"=="I"
-#.IF "$(UPDATER)"=="YES"
-#.IF "$(BUILD_SOSL)"==""
 .IF "$(no_hids)$(NO_HIDS)"==""
 .IF "$(USE_SHELL)"=="4nt"
-    @+type $(mktmp $(SRC$(TNR)FILES:+"\n")) > $(TMP)$/$(TARGET).tra
-    @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
-    +type $(TMP)$/$(TARGET).art | $(SORT) -u > $(TMP)$/$(TARGET).tra
-    +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
-    @+del $(TMP)$/$(TARGET).art
-    @+del $(TMP)$/$(TARGET).tra
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)$/$(i:s/.src/.hid/))
+HIDSRS$(TNR)PARTICLE=$(MISC)$/$(SRS$(TNR)NAME)_srs.hid
+$(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
+        @echo ------------------------------
+        @echo Making: $@
+        @+if exist $(HIDSRS$(TNR)PARTICLE) rm $(HIDSRS$(TNR)PARTICLE)
+        +$(TYPE) $(HID$(TNR)FILES) > $(HIDSRS$(TNR)PARTICLE)
+
+SRS$(TNR) : $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+.ENDIF                  # "$(USE_SHELL)"=="4nt"
 .ENDIF
-#.ENDIF
-#.ENDIF
 .ENDIF
 .ENDIF
+.ENDIF
+
+$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+    @echo ------------------------------
+    @echo Making: $@
 .IF "$(make_srs_deps)" != ""
     +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERMAC) -fp$@ $(SRC$(TNR)FILES)
 .ELSE
