@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:27:02 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Οξλÿ θ δθΰγπΰμμϋ";
         Text[ greek ] = "Πεδία και διαγράμματα";
         Text[ dutch ] = "Velden en diagrammen actualiseren";
-        Text[ french ] = "Champs et diagrammes";
+        Text[ french ] = "Automatique";
         Text[ spanish ] = "Campos y diagramas";
         Text[ finnish ] = "Felder und Diagramme aktualisieren";
         Text[ italian ] = "Campi e diagrammi";
@@ -255,7 +255,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Οξλÿ ΰβςξμΰςθχερκθ";
         Text[ greek ] = "Αυτόματη ενημέρωση ~εντολών πεδίων";
         Text[ dutch ] = "V~eldopdrachten automatisch";
-        Text[ french ] = "Automatiquement les ~champs";
+        Text[ french ] = "Champs";
         Text[ spanish ] = "Actualizar ~campos automαticamente";
         Text[ finnish ] = "F~eldbefehle automatisch";
         Text[ italian ] = "Aggiorna i comandi di campo automaticamente";
@@ -283,7 +283,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Δθΰγπΰμμϋ ΰβςξμΰςθχερκθ";
         Text[ greek ] = "Αυτόματη ενημέρωση δια~γραμμάτων";
         Text[ dutch ] = "~Diagrammen automatisch";
-        Text[ french ] = "Automatiquement les dia~grammes";
+        Text[ french ] = "Diagrammes";
         Text[ spanish ] = "Actualizar ~diagramas automαticamente";
         Text[ finnish ] = "Dia~gramme automatisch";
         Text[ italian ] = "Aggiorna i diagrammi automaticamente";
@@ -1115,7 +1115,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ dutch ] = "Aan het begin" ;
         Text [ spanish ] = "Al principio" ;
         Text [ english_us ] = "At the beginning" ;
-        Text[ chinese_simplified ] = "ΤΪΚΧ¶Λ";
+        Text[ chinese_simplified ] = "ΤΪΖπΚΌΞ»ΦΓ";
         Text[ russian ] = "Β νΰχΰλε";
         Text[ polish ] = "Na poczΉtku";
         Text[ japanese ] = "Ε‰‚Ι";
@@ -1142,11 +1142,11 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ dutch ] = "Aan het einde" ;
         Text [ spanish ] = "Al final" ;
         Text [ english_us ] = "At the end" ;
-        Text[ chinese_simplified ] = "ΤΪΞ²¶Λ";
+        Text[ chinese_simplified ] = "ΤΪ½αΚψΞ»ΦΓ";
         Text[ russian ] = "Β κξνφε";
         Text[ polish ] = "Na koρcu";
         Text[ japanese ] = "Εγ‚Ι";
-        Text[ chinese_traditional ] = "¦b§ΐΊέ";
+        Text[ chinese_traditional ] = "¦bµ²§τ¦μΈm";
         Text[ arabic ] = "έν ΗαδεΗνΙ";
         Text[ greek ] = "Στο τέλος";
         Text[ korean ] = "Έ¶ΑφΈ·Ώ΅";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
