@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: af $ $Date: 2001-05-15 14:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,6 +1636,9 @@ SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputD
     aPtA = Point( 500, aSize.Height() / 2 );
     aPtB = Point( aSize.Width() - 500, aSize.Height() / 2 );
     InitSettings( TRUE, TRUE );
+
+    //  Draw the control's border as a flat thin black line.
+    SetBorderStyle (WINDOW_BORDER_MONO);
 }
 
 // -----------------------------------------------------------------------
