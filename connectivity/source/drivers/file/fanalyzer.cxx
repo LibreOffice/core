@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:26:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,15 +242,15 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
     OCodeStack aCodeStack;
 
     if (!rCodeList.size())
-        return;     // kein Prädikat
+        return;     // kein Praedikat
     if (!rParameterColumns->size())
         return; // keine Parameter
 
-    // Anlegen von Columns, die eine genauere Beschreibung für die enthalten
+    // Anlegen von Columns, die eine genauere Beschreibung fuer die enthalten
     ::vos::ORef<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
 
 
-    // Anlegen einer Testzeile, wird benötigt um die Parameter zu beschreiben
+    // Anlegen einer Testzeile, wird benoetigt um die Parameter zu beschreiben
     OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->size());
     bindParameterRow(aParameterRow);
 
@@ -265,7 +265,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
             aCodeStack.push(pOperand);
         else
         {
-            if (pOperator->getRequestedOperands() == 2)     // bei zwei Operatoren ist es möglich
+            if (pOperator->getRequestedOperands() == 2)     // bei zwei Operatoren ist es moeglich
             {                                               // einen Parameter weiter zu spezifizieren
                 OOperandParam *pParam  = PTR_CAST(OOperandParam,aCodeStack.top());
                 if (pParam)  // Anpassen des ParameterTyps, wenn der linke Operand ein Attribut ist
@@ -275,7 +275,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     {
                         Reference< XPropertySet> xCol;
                         Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
-                        OSL_ENSURE(xCol.is(), "Ungültige Struktur");
+                        OSL_ENSURE(xCol.is(), "Ungueltige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
                     }
                 }
