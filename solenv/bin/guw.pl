@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:47:52 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:41:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,8 @@ sub WinFormat {
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables twice!
   $variable =~ s/:/;/g;
   $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
-  # Search for posix path ;entry; and replace with cygpath -w entry
-  while ( $variable =~ /(?:;|\A)((?:\/[\w\.\- ~]+)+(?:;|\Z))/ ) { # Normal paths
+  # Search for posix path ;entry; and replace with cygpath -w entry, accept quotes.
+  while ( $variable =~ /(?:;|\A)[\'\"]?((?:\/[\w\.\- ~]+)+)[\'\"]?(?:;|\Z)/ ) { # Normal paths
     if ( defined $debug ) { print(STDERR "WinFormat:\nnormal path:\n$variable\n");};
     $d1 = $1 ;
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
