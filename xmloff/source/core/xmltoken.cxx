@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:23:40 $
+ *  last change: $Author: dvo $ $Date: 2004-07-15 13:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2269,6 +2269,10 @@ namespace xmloff { namespace token {
         TOKEN( "segments" ),                        // XML_SEGMENTS
         TOKEN( "word-wrap" ),                       // XML_WORD_WRAP
         TOKEN( "auto-grow-size" ),                  // XML_AUTO_GROW_SIZE
+
+        TOKEN( "collapsing" ),                      // XML_COLLAPSING
+        TOKEN( "separating" ),                      // XML_SEPARATING
+        TOKEN( "border-model" ),                    // XML_BORDER_MODEL
 
         TOKEN( "data-pilot-field-reference"),       // XML_DATA_PILOT_FIELD_REFERENCE
         TOKEN( "member-difference"),                // XML_MEMBER_DIFFERENCE
