@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:01:01 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,12 @@ public class TestParameters extends Hashtable {
      */
     public Integer TimeOut = new Integer(30000);
 
+    /*
+     * This parameter contains the timeout used<br>
+     * by the complex tests
+     */
+    public Integer ThreadTimeOut = new Integer(30000);
+
     /**
      * Wraper around "get()" with some debug output
      * @param key A key of this table.
@@ -271,14 +277,15 @@ public class TestParameters extends Hashtable {
         put(PropertyName.CONNECTION_STRING,ConnectionString);
         put(PropertyName.TEST_BASE,TestBase);
         put(PropertyName.TEST_DOCUMENT_PATH,TestDocumentPath);
-        put(PropertyName.LOGGING_IS_ACTIVE,new Boolean(LoggingIsActive));
-        put(PropertyName.DEBUG_IS_ACTIVE,new Boolean(DebugIsActive));
+        put(PropertyName.LOGGING_IS_ACTIVE,Boolean.valueOf(LoggingIsActive));
+        put(PropertyName.DEBUG_IS_ACTIVE,Boolean.valueOf(DebugIsActive));
         put(PropertyName.OUT_PRODUCER,OutProducer);
         put(PropertyName.SHORT_WAIT,new Integer(ShortWait));
         put(PropertyName.OFFICE_PROVIDER,OfficeProvider);
         put(PropertyName.LOG_WRITER,LogWriter);
         put(PropertyName.APP_EXECUTION_COMMAND,AppExecutionCommand);
         put(PropertyName.TIME_OUT,TimeOut);
+        put(PropertyName.THREAD_TIME_OUT,ThreadTimeOut);
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
