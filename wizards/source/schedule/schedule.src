@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:58:17 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 17:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ Text[ swedish ] = "Egna data";
     Text[ japanese ] = "撈帺偺棉袄";
     Text[ korean ] = "俺牢利牢 单捞磐";
     Text[ chinese_simplified ] = "个人数据";
-    Text[ chinese_traditional ] = "计誹";
+    Text[ chinese_traditional ] = "计沮";
     Text[ arabic ] = "轻软卿鞘 轻吻丈";
     Text[ turkish ] = "Ki㱮sel veriler";
 };
@@ -488,7 +488,7 @@ Text[ swedish ] = "Egna data";
     Text[ japanese ] = "撈帺偺棉袄";
     Text[ korean ] = "俺牢 单捞磐";
     Text[ chinese_simplified ] = "个人数据";
-    Text[ chinese_traditional ] = "计誹";
+    Text[ chinese_traditional ] = "计沮";
     Text[ arabic ] = "轻软卿鞘 轻吻丈";
     Text[ turkish ] = "Ki㱮sel veriler";
 };
