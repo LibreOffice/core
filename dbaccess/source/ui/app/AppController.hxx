@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ namespace dbaui
 
         // late construction
         virtual sal_Bool    Construct(Window* pParent);
-        virtual void        AddSupportedFeatures();
+        virtual void        describeSupportedFeatures();
 
     protected:
         // XEventListener
