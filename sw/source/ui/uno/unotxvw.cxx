@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:41:22 $
+ *  last change: $Author: os $ $Date: 2001-06-19 10:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,25 +952,28 @@ void SAL_CALL SwXTextView::setRubyList(
             else if(pProperties[nProp].Name.equalsAsciiL(
                                     SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME)))
             {
-                pProperties[nProp].Value >>= sTmp;
-                String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
-                sal_uInt16 nPoolId = sName.Len() ?
-                    SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : 0;
+                if((pProperties[nProp].Value >>= sTmp))
+                {
+                    String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                    sal_uInt16 nPoolId = sName.Len() ?
+                        SwDoc::GetPoolId( sName, GET_POOLID_CHRFMT ) : 0;
 
-                pEntry->GetRubyAttr().SetCharFmtName( sName );
-                pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
+                    pEntry->GetRubyAttr().SetCharFmtName( sName );
+                    pEntry->GetRubyAttr().SetCharFmtId( nPoolId );
+                }
             }
             else if(pProperties[nProp].Name.equalsAsciiL(
                                     SW_PROP_NAME(UNO_NAME_RUBY_ADJUST)))
             {
                 sal_Int16 nTmp;
-                pProperties[nProp].Value >>= nTmp;
-                pEntry->GetRubyAttr().SetAdjustment(nTmp);
+                if((pProperties[nProp].Value >>= nTmp))
+                    pEntry->GetRubyAttr().SetAdjustment(nTmp);
             }
             else if(pProperties[nProp].Name.equalsAsciiL(
                                     SW_PROP_NAME(UNO_NAME_RUBY_IS_ABOVE)))
             {
-                sal_Bool bValue = *(sal_Bool*)pProperties[nProp].Value.getValue();
+                sal_Bool bValue = pProperties[nProp].Value.hasValue() ?
+                    *(sal_Bool*)pProperties[nProp].Value.getValue() : sal_True;
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }
