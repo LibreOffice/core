@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:20:22 $
+ *  last change: $Author: pluby $ $Date: 2000-12-07 00:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     CFStringRef     pPath=0;
     CFURLRef        pURL=0;
     CFBundleRef     pLib=0;
-    sal_Char        *searchPath;
+    sal_Char        *searchPath=0;
     sal_Char        path[PATH_MAX + 1];
 
     OSL_ASSERT(pszModuleName);
@@ -322,7 +322,10 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     OSL_ASSERT(hModule);
 
     if (hModule)
+    {
+        CFBundleUnloadExecutable((CFBundleRef)hModule);
         CFRelease((CFBundleRef)hModule);
+    }
 
 #else /* MACOSX */
 
@@ -384,8 +387,8 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 {
 #ifdef MACOSX
 
-    CFStringRef pSymbolName;
-    void *pSymbol;
+    CFStringRef pSymbolName=0;
+    void *pSymbol=0;
 
     OSL_ASSERT(hModule);
     OSL_ASSERT(pszSymbolName);
