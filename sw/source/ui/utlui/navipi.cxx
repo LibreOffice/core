@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-03-13 08:48:02 $
+ *  last change: $Author: os $ $Date: 2002-04-04 13:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,9 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus
     rBind.LEAVEREGISTRATIONS();
 
     Rectangle aRect(rRect);
-    aRect.SetPos(OutputToScreenPixel(aRect.TopLeft()));
+    Point aT1 = aRect.TopLeft();
+    aT1 = pPopup->GetParent()->AbsoluteScreenToOutputPixel(aContentToolBox.OutputToAbsoluteScreenPixel(aT1));
+    aRect.SetPos(aT1);
     pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_RIGHT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
     if(bSetFocus)
     {
