@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:59:23 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:05:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,14 +76,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        dview.cxx		\
-        dcontact.cxx	\
-        dflyobj.cxx     \
-        drawdoc.cxx     \
-        dobjfac.cxx     \
-        dpage.cxx
-
 SLOFILES =  \
         $(SLO)$/dview.obj	\
         $(SLO)$/dcontact.obj	\
@@ -91,6 +83,9 @@ SLOFILES =  \
         $(SLO)$/drawdoc.obj \
         $(SLO)$/dobjfac.obj \
         $(SLO)$/dpage.obj
+
+EXCEPTIONSFILES= \
+                $(SLO)$/drawdoc.obj
 
 # --- Tagets -------------------------------------------------------
 
