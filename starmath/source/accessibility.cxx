@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 12:46:42 $
+ *  last change: $Author: tl $ $Date: 2002-10-17 09:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,10 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    INT32 nLen = GetAccessibleText_Impl().Len();
+    if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
+        !(0 <= nEndIndex    &&  nEndIndex   < nLen))
+        throw IndexOutOfBoundsException();
     return FALSE;
 }
 
@@ -708,16 +712,18 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
+    //!! nEndIndex may be the string lenght per definition of the interface !!
+    //!! text should be copied exclusive that end index though. And arguments
+    //!! may be switched.
+
     vos::OGuard aGuard(Application::GetSolarMutex());
     String aTxt( GetAccessibleText_Impl() );
-    xub_StrLen nStart = (xub_StrLen) nStartIndex;
-    xub_StrLen nEnd   = (xub_StrLen) nEndIndex;
-    if (!(0 <= nStart  &&  nStart < aTxt.Len()) ||
-        !(0 <= nEnd    &&  nEnd   < aTxt.Len()))
+    xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
+    xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
+    if (!(0 <= nStart  &&  nStart <= aTxt.Len()) ||
+        !(0 <= nEnd    &&  nEnd   <= aTxt.Len()))
         throw IndexOutOfBoundsException();
-    if (nStartIndex > nEndIndex)
-        return OUString();
-    return aTxt.Copy( nStart, nEnd );
+    return aTxt.Copy( nStart, nEnd - nStart );
 }
 
 OUString SAL_CALL SmGraphicAccessible::getTextAtIndex(
@@ -726,12 +732,13 @@ OUString SAL_CALL SmGraphicAccessible::getTextAtIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if (AccessibleTextType::CHARACTER != aTextType)
-        return OUString();
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
-    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+    //!! nIndex is allowed to be the string length
+    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
+    if (AccessibleTextType::CHARACTER != aTextType  ||  nIdx == aTxt.Len())
+        return OUString();
     return aTxt.Copy(nIdx, 1);
 }
 
@@ -741,12 +748,13 @@ OUString SAL_CALL SmGraphicAccessible::getTextBeforeIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if (AccessibleTextType::CHARACTER != aTextType)
-        return OUString();
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
-    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+    //!! nIndex is allowed to be the string length
+    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
+    if (AccessibleTextType::CHARACTER != aTextType)
+        return OUString();
     return aTxt.Copy(0, nIdx);
 }
 
@@ -756,13 +764,14 @@ OUString SAL_CALL SmGraphicAccessible::getTextBehindIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if (AccessibleTextType::CHARACTER != aTextType)
-        return OUString();
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
-    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+    //!! nIndex is allowed to be the string length
+    if (!(0 <= nIdx  &&  nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
-    return aTxt.Copy(nIdx, aTxt.Len()-1);
+    if (AccessibleTextType::CHARACTER != aTextType  ||  nIdx == aTxt.Len())
+        return OUString();
+    return aTxt.Copy(nIdx, aTxt.Len() - nIdx);
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::copyText(
@@ -773,22 +782,14 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bReturn = sal_False;
 
-    if ( pWin )
+    if (!pWin)
+        throw RuntimeException();
+    else
     {
-        String aTxt( GetAccessibleText_Impl() );
-        xub_StrLen nStart = (xub_StrLen) nStartIndex;
-        xub_StrLen nEnd   = (xub_StrLen) nEndIndex;
-        if (!(0 <= nStart  &&  nStart < aTxt.Len()) ||
-            !(0 <= nEnd    &&  nEnd   < aTxt.Len()))
-            throw IndexOutOfBoundsException();
-        String aCopy;
-        if (nStart <= nEnd)
-            aCopy =  aTxt.Copy(nStart, nEnd - nStart + 1);
-
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( aCopy );
+            ::rtl::OUString sText( getTextRange(nStartIndex, nEndIndex) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
