@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 07:31:54 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,7 @@ namespace sdr
             // Access to possible sub-hierarchy
             virtual sal_uInt32 GetObjectCount() const;
             virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-            // Since MasterPages are part of the hierarchy of a DrawPage, the
-            // link to ParentContacts may be 1:n
-            virtual sal_Bool GetParentContacts(ViewContactVector& rVContacts) const;
+            virtual ViewContact* GetParentContact() const;
 
             // React on changes of the object of this ViewContact
             virtual void ActionChanged();
