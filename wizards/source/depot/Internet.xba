@@ -57,10 +57,10 @@ Dim ChartSource as String
 		sStockID = oFirstSheet.GetCellByPosition(SBCOLUMNID1, CurRow).String
 		ChartSource = ReplaceString(HistoryChartSource, sStockID, &quot;&lt;StockID&gt;&quot;)
 		ChartSource = ReplaceString(ChartSource, iStartDay, &quot;&lt;StartDay&gt;&quot;)
-		ChartSource = ReplaceString(ChartSource, iStartMonth, &quot;&lt;StartMonth&gt;&quot;)
+		ChartSource = ReplaceString(ChartSource, cStr(iStartMonth-1), &quot;&lt;StartMonth&gt;&quot;)
 		ChartSource = ReplaceString(ChartSource, iStartYear, &quot;&lt;StartYear&gt;&quot;)	
 		ChartSource = ReplaceString(ChartSource, iEndDay, &quot;&lt;EndDay&gt;&quot;)
-		ChartSource = ReplaceString(ChartSource, iEndMonth, &quot;&lt;EndMonth&gt;&quot;)
+		ChartSource = ReplaceString(ChartSource, cStr(iEndMonth-1), &quot;&lt;EndMonth&gt;&quot;)
 		ChartSource = ReplaceString(ChartSource, iEndYear, &quot;&lt;EndYear&gt;&quot;)
 		ChartSource = ReplaceString(ChartSource, sInterval, &quot;&lt;interval&gt;&quot;)
 		oStatusLine.SetValue(2)
