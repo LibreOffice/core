@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-06 18:45:06 $
+#   last change: $Author: dg $ $Date: 2002-05-06 19:16:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,24 +68,24 @@ $(MISC)$/instance$/%.xml : $(MISC)$/xcdformat$/%.xcd
 
 # convert to old format xcd format
 $(MISC)$/xcdformat$/%.xcd : %.xcs
-    -$(MKDIR) $(@:d)
+    -$(MKDIR) -p $(@:d)
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
 
 # stripping schema files 
 $(MISC)$/registry$/schema$/%.xcs : %.xcs
-    -$(MKDIR) $(@:d)
+    -$(MKDIR) -p $(@:d)
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(MISC)$/registry$/schema$/$(<:d)$(<:b).tmp
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $(MISC)$/registry$/schema$/$(<:d)$(<:b).tmp $(MISC)$/registry$/schema$/$(<:d)$(<:b).xcs
 
 # creating a locale independent file 
 $(MISC)$/registry$/data$/%.xcu : %.xcu
-    -$(MKDIR) $(@:d) 
+    -$(MKDIR) -p $(@:d) 
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(MISC)$/registry$/data$/$(<:d)$(<:b).tmp
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar org.openoffice.helper.PrettyPrinter $(MISC)$/registry$/data$/$(<:d)$(<:b).tmp $(MISC)$/registry$/data$/$(<:d)$(<:b).xcu
 
 # creating locale dependent entries
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
-    -$(MKDIR) $(@:d)
+    -$(MKDIR) -p $(@:d)
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $@ locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
     
 #xxxxxxxxx
@@ -95,15 +95,15 @@ $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     
 # comparing generated xcd with original xcd
 $(MISC)$/compare$/%.xcd : $(MISC)$/xcdformat$/%.xcd
-    -$(MKDIR) $(@:d)
+    -$(MKDIR) -p $(@:d)
     java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare.xsl $@ org=$(PRJ)$/data$/{$(subst,$(MISC)$/xcdformat,  $(<:d))}$(<:b).xcd
 
 #$(MISC)$/compare-instance$/%.xml : $(MISC)$/instance$/%.xml
-#	-$(MKDIR) $(@:d)
+#	-$(MKDIR) -p $(@:d)
 #	java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare-xml.xsl $@ org=$(PRJ)$/instance$/{$(subst,$(MISC)$/instance,  $(<:d))}$(<:b).xml
 
 #$(MISC)$/compare-template$/%.xml : $(MISC)$/template$/%.xml
-#	-$(MKDIR) $(@:d)
+#	-$(MKDIR) -p $(@:d)
 #	java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare-xml.xsl $@ org=$(PRJ)$/template$/{$(subst,$(MISC)$/template,  $(<:d))}$(<:b).xml
 
 
