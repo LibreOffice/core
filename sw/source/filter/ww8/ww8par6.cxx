@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 13:56:52 $
+ *  last change: $Author: cmc $ $Date: 2001-11-05 10:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3073,20 +3073,15 @@ void SwWW8ImplReader::Read_Symbol( USHORT nId, const BYTE* pData, short nLen )
     if( !bIgnoreText )
     {
         if( nLen < 0 )
-        {
             bSymbol = FALSE;
-            ResetCharSetVars();
-        }
         else
         {
             // Make new Font-Atribut
             // (will be closed in SwWW8ImplReader::ReadChars() )
 
-            /*
-            aside: Is it still necessary to close the symbol font in the char
-            handler. Would be cleaner to trust our property handler and
-            charset manager to handle this as part of the ordinary case
-            */
+            //Will not be added to the charencoding stack, for styles the real
+            //font setting will be put in as the styles charset, and for plain
+            //text encoding for symbols is moot.
             if (SetNewFontAttr(SVBT16ToShort( pData ), FALSE, RES_CHRATR_FONT))
             {
                 if( bVer67 )
@@ -3581,7 +3576,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
         //If we fail (and are not doing a style) then put something into the
         //character encodings stack anyway so that the property end that pops
         //off the stack will keep in sync
-        if (!pAktColl)
+        if (!pAktColl && !pAktItemSet)
         {
             if (pFontSrcCharSets->Count())
                 eSrcCharSet = (*pFontSrcCharSets)[pFontSrcCharSets->Count()-1];
@@ -3603,7 +3598,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
             if (RES_CHRATR_CJK_FONT != nWhich )
                 pCollA[nAktColl].eFontSrcCharSet = eSrcCharSet;
         }
-        else
+        else if (!pAktItemSet)
         {
             //Add character text encoding to stack
             pFontSrcCharSets->Insert(eSrcCharSet,pFontSrcCharSets->Count());
