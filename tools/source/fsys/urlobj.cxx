@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 17:05:29 $
+ *  last change: $Author: sb $ $Date: 2001-10-15 09:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3378,8 +3378,7 @@ INetURLObject::getAbbreviated(
                         aResult2 = aResult1;
                     else
                     {
-                        aResult2 = rtl::OUStringBuffer(aBuffer);
-                            //TODO! rtl::OUStringBuffer::operator =() is buggy
+                        aResult2 = aBuffer;
                         aResult2.
                             appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
                         aResult2.append(aSegment);
@@ -3430,8 +3429,7 @@ INetURLObject::getAbbreviated(
                         aResult2 = aResult1;
                     else
                     {
-                        aResult2 = rtl::OUStringBuffer(aBuffer);
-                            //TODO! rtl::OUStringBuffer::operator =() is buggy
+                        aResult2 = aBuffer;
                         aResult2.
                             appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
                         aResult2.append(aSegment);
