@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: vg $ $Date: 2002-01-23 11:01:22 $
+#   last change: $Author: vg $ $Date: 2002-01-29 17:12:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.44 $ ';
+$id_str = ' $Revision: 1.45 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -155,7 +155,7 @@ if (($ENV{GUI} ne 'UNX') && $cmd_file) {
 $ENV{mk_tmp} = '';
 if ($cmd_file) {
     close CMD_FILE;
-    print STDOUT "Script $cm generated\n";
+    print STDOUT "Script $cmd_file generated\n";
 };
 exit(0);
 
