@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:13 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@
 #include "xlroot.hxx"
 #endif
 
-const int EXC_INCL_EXP_OCX = 1;     /// 1 = Compile with OCX export.
+// 1 = Compile with OCX export.
+#define EXC_INCL_EXP_OCX 0
 
 // OCX controls ===============================================================
 
@@ -86,10 +87,6 @@ protected:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       XShapeRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >    XDrawPageRef;
 
-private:
-    sal_uInt16                  mnCurrTab;      /// Stores sheet index of an object for GetDrawPage().
-    sal_uInt16                  mnCachedTab;    /// Sheet index of cached draw page.
-
 protected:
     explicit                    XclOcxConverter( const XclRoot& rRoot );
     virtual                     ~XclOcxConverter();
@@ -100,24 +97,31 @@ protected:
 private:
     /** Returns the current draw page. */
     virtual const XDrawPageRef& GetDrawPage();
+
+private:
+    sal_uInt16                  mnCurrTab;      /// Stores sheet index of an object for GetDrawPage().
+    sal_uInt16                  mnCachedTab;    /// Sheet index of cached draw page.
 };
 
 
 // ----------------------------------------------------------------------------
 
 class XclImpEscherOle;
+class XclImpEscherCtrl;
 
 /** Converter for import of OXC controls. */
 class XclImpOcxConverter : public XclOcxConverter
 {
-private:
-    SvStorageStreamRef          mxStrm;         /// The 'Ctls' strem.
-
 public:
     explicit                    XclImpOcxConverter( const XclRoot& rRoot );
 
-    /** Reads the form control data of the passed control object and creates it in the document. */
-    void                        ReadControl( XclImpEscherOle& rObj );
+    /** Reads the control formatting data for the passed object and creates the SdrUnoObj.
+        @return  true = SdrUnoObj successfully created. */
+    bool                        CreateSdrUnoObj( XclImpEscherOle& rOleObj );
+
+    /** Creates the SdrUnoObj for the passed old-fashioned control object.
+        @return  true = SdrUnoObj successfully created. */
+    bool                        CreateSdrUnoObj( XclImpEscherCtrl& rCtrlObj );
 
 private:
     /** Inserts the passed control rxFComp into the document. */
@@ -126,6 +130,9 @@ private:
                                     const ::com::sun::star::awt::Size& rSize,
                                     XShapeRef* pxShape,
                                     BOOL bFloatingCtrl );
+
+private:
+    SvStorageStreamRef          mxStrm;         /// The 'Ctls' strem.
 };
 
 
@@ -139,15 +146,15 @@ class XclExpObjControl;
 /** Converter for export of OXC controls. */
 class XclExpOcxConverter : public XclOcxConverter
 {
-private:
-    SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
-
 public:
     explicit                    XclExpOcxConverter( const XclRoot& rRoot );
 
     /** Creates an OBJ record for the passed form control object.
         @descr  Writes the form control data to the 'Ctls' stream. */
     XclExpObjControl*           CreateObjRec( const XShapeRef& rxShape );
+
+private:
+    SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
 };
 
 #endif
