@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-18 14:59:01 $
+ *  last change: $Author: ka $ $Date: 2001-12-14 16:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,13 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _SVDOGRAF_HXX //autogen
+#include <svx/svdograf.hxx>
+#endif
+#ifndef _SVDPAGV_HXX //autogen
+#include <svx/svdpagv.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "app.hrc"
@@ -118,6 +125,7 @@
 #include "fumorph.hxx"
 #include "fuvect.hxx"
 #include "sdwindow.hxx"
+#include "drawview.hxx"
 #include "drviewsh.hxx"
 #include "zoomlist.hxx"
 #include "drawview.hxx"
@@ -388,8 +396,6 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
-#if defined WIN || defined WNT || defined UNX
-
         case SID_TWAIN_SELECT:
         {
             BOOL bDone = FALSE;
@@ -409,7 +415,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
                 }
                 catch(...)
                 {
-                }
+}
             }
 
             if( !bDone )
@@ -421,6 +427,9 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
 #endif
                 InfoBox( pWindow, String( SdResId( nId ) ) ).Execute();
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 
@@ -432,8 +441,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
             {
                 try
                 {
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext >
-                        aContexts( mxScannerManager->getAvailableScanners() );
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
 
                     if( aContexts.getLength() )
                     {
@@ -462,10 +470,11 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
                 rBindings.Invalidate( SID_TWAIN_SELECT );
                 rBindings.Invalidate( SID_TWAIN_TRANSFER );
             }
+
+            Cancel();
+            rReq.Done();
         }
         break;
-
-#endif
 
         case SID_POLYGON_MORPHING:
         {
@@ -515,9 +524,75 @@ void SdDrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& r
 
                 if( !!aScanBmp )
                 {
-                    SfxRequest aSfxRequest( SID_TWAIN_TRANSFER, SFX_CALLMODE_SLOT, GetPool() );
-                    pFuActual = new FuInsertTwain( this, pWindow, pDrView, pDoc, aSfxRequest, aScanBmp.GetBitmap() );
-                    Cancel();
+                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SdrPage*            pPage = pDrView->GetPageViewPvNum( 0 )->GetPage();
+                    Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
+                    const MapMode       aMap100( MAP_100TH_MM );
+
+                    if( !aBmpSize.Width() || !aBmpSize.Height() )
+                        aBmpSize = aScanBmp.GetSizePixel();
+
+                    if( aScanBmp.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+                        aBmpSize = pWindow->PixelToLogic( aBmpSize, aMap100 );
+                    else
+                        aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
+
+                    aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
+                    aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+
+                    if( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width()    > aPageSize.Width() ) && aBmpSize.Height() && aPageSize.Height() )
+                    {
+                        double fGrfWH = (double) aBmpSize.Width() / aBmpSize.Height();
+                        double fWinWH = (double) aPageSize.Width() / aPageSize.Height();
+
+                        if( fGrfWH < fWinWH )
+                        {
+                            aBmpSize.Width() = FRound( aPageSize.Height() * fGrfWH );
+                            aBmpSize.Height()= aPageSize.Height();
+                        }
+                        else if( fGrfWH > 0.F )
+                        {
+                            aBmpSize.Width() = aPageSize.Width();
+                            aBmpSize.Height()= FRound( aPageSize.Width() / fGrfWH );
+                        }
+                    }
+
+                    Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
+                    aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                    Rectangle   aRect( aPnt, aBmpSize );
+                    SdrGrafObj* pGrafObj = NULL;
+                    BOOL        bInsertNewObject = TRUE;
+
+                    if( pView->HasMarkedObj() )
+                    {
+                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+
+                        if( rMarkList.GetMarkCount() == 1 )
+                        {
+                            SdrMark*    pMark = rMarkList.GetMark(0);
+                            SdrObject*  pObj = pMark->GetObj();
+
+                            if( pObj->ISA( SdrGrafObj ) )
+                            {
+                                pGrafObj = static_cast< SdrGrafObj* >( pObj );
+
+                                if( pGrafObj->IsEmptyPresObj() )
+                                {
+                                    bInsertNewObject = FALSE;
+                                    pGrafObj->SetEmptyPresObj(FALSE);
+                                    pGrafObj->SetOutlinerParaObject(NULL);
+                                    pGrafObj->SetGraphic( Graphic( aScanBmp ) );
+                                }
+                            }
+                        }
+                    }
+
+                    if( bInsertNewObject )
+                    {
+                        pGrafObj = new SdrGrafObj( Graphic( aScanBmp ), aRect );
+                        SdrPageView* pPV = pView->GetPageViewPvNum(0);
+                        pView->InsertObject( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER );
+                    }
                 }
             }
         }
@@ -527,5 +602,3 @@ void SdDrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& r
     rBindings.Invalidate( SID_TWAIN_SELECT );
     rBindings.Invalidate( SID_TWAIN_TRANSFER );
 }
-
-

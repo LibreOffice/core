@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-25 15:38:22 $
+ *  last change: $Author: ka $ $Date: 2001-12-14 16:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,6 @@ SO2_DECL_REF(SvStorage)
 TYPEINIT1( FuInsertGraphic, FuPoor );
 TYPEINIT1( FuInsertClipboard, FuPoor );
 TYPEINIT1( FuInsertOLE, FuPoor );
-TYPEINIT1( FuInsertTwain, FuPoor );
-
 
 /*************************************************************************
 |*
@@ -680,124 +678,3 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 FuInsertOLE::~FuInsertOLE()
 {
 }
-
-
-/*************************************************************************
-|*
-|* FuInsertTwain::Ctor
-|*
-\************************************************************************/
-
-FuInsertTwain::FuInsertTwain(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                             SdDrawDocument* pDoc, SfxRequest& rReq,
-                             const Bitmap& rBmp )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
-{
-
-    if ( pViewSh->ISA(SdDrawViewShell) )
-    {
-        Size aSize;
-        Size aBmpSize( rBmp.GetPrefSize() );
-
-        if ( !aBmpSize.Width() || !aBmpSize.Height() )
-            aBmpSize = rBmp.GetSizePixel();
-
-        if ( rBmp.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        {
-            const MapMode&   rWinMap = pWin->GetMapMode();
-            const Fraction&  rWinScaleX = rWinMap.GetScaleX();
-            const Fraction&  rWinScaleY = rWinMap.GetScaleY();
-
-            aSize = pWin->PixelToLogic( aBmpSize );
-            aSize.Width() = ( aSize.Width() * rWinScaleX.GetNumerator() /
-                              rWinScaleX.GetDenominator() );
-            aSize.Height() = ( aSize.Height() * rWinScaleY.GetNumerator() /
-                               rWinScaleY.GetDenominator() );
-        }
-        else
-            aSize = OutputDevice::LogicToLogic( aBmpSize, rBmp.GetPrefMapMode(),
-                                                MapMode( MAP_100TH_MM ) );
-
-        // Groesse ggf. auf Seitengroesse begrenzen
-        SdrPage* pPage = pView->GetPageViewPvNum(0)->GetPage();
-        Size aPageSize = pPage->GetSize();
-        aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-        aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
-        if ((aSize.Height() > aPageSize.Height()) ||
-            (aSize.Width()  > aPageSize.Width()) &&
-            aSize.Height() && aPageSize.Height())
-        {
-            float fGrfWH =  (float)aSize.Width() /
-                            (float)aSize.Height();
-            float fWinWH =  (float)aPageSize.Width() /
-                            (float)aPageSize.Height();
-
-            // Grafik an Pagesize anpassen (skaliert)
-            if ( fGrfWH < fWinWH )
-            {
-                aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
-                aSize.Height()= aPageSize.Height();
-            }
-            else if ( fGrfWH > 0.F )
-            {
-                aSize.Width() = aPageSize.Width();
-                aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
-            }
-        }
-
-        // Ausgaberechteck fuer Grafik setzen
-        Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                    (aPageSize.Height() - aSize.Height()) / 2);
-        aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
-        Rectangle aRect (aPnt, aSize);
-
-        SdrGrafObj* pGrafObj = NULL;
-
-        BOOL bInsertNewObject = TRUE;
-
-        if ( pView->HasMarkedObj() )
-        {
-            /**********************************************************
-            * Ist ein leeres Graphik-Objekt vorhanden?
-            **********************************************************/
-            const SdrMarkList& rMarkList = pView->GetMarkList();
-
-            if (rMarkList.GetMarkCount() == 1)
-            {
-                SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetObj();
-
-                if (pObj->GetObjInventor() == SdrInventor &&
-                    pObj->GetObjIdentifier() == OBJ_GRAF)
-                {
-                    pGrafObj = (SdrGrafObj*) pObj;
-
-                    if ( pGrafObj->IsEmptyPresObj() )
-                    {
-                        /**********************************************
-                        * Das leere Graphik-Objekt bekommt eine neue
-                        * Graphik
-                        **********************************************/
-                        bInsertNewObject = FALSE;
-                        pGrafObj->SetEmptyPresObj(FALSE);
-                        pGrafObj->SetOutlinerParaObject(NULL);
-                        pGrafObj->SetGraphic( Graphic( rBmp ) );
-                    }
-                }
-            }
-        }
-
-        if (bInsertNewObject)
-        {
-            pGrafObj = new SdrGrafObj( Graphic( rBmp ), aRect );
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            pView->InsertObject(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
-        }
-    }
-}
-
-
-

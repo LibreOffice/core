@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: ka $ $Date: 2001-12-14 16:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,17 +100,4 @@ class FuInsertOLE : public FuPoor
     virtual ~FuInsertOLE();
 };
 
-/************************************************************************/
-
-class FuInsertTwain : public FuPoor
-{
- public:
-    TYPEINFO();
-
-    FuInsertTwain( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                   SdDrawDocument* pDoc, SfxRequest& rReq,
-                   const Bitmap& rBmp );
-};
-
 #endif      // _SD_FUINSERT_HXX
-
