@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-29 14:30:06 $
+ *  last change: $Author: mav $ $Date: 2002-04-29 15:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,11 +727,15 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     Sequence< sal_Int8 > aType( (sal_Int8*)sMediaType.getStr(),
                                 nBufferLength );
 
+
     pEntry->sName = sMime;
     pEntry->nMethod = STORED;
-    pEntry->nCrc =
     pEntry->nSize = pEntry->nCompressedSize = nBufferLength;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+    CRC32 aCRC32;
+    aCRC32.update( aType );
+    pEntry->nCrc = aCRC32.getValue();
 
     try
     {
