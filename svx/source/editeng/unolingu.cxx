@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 07:37:52 $
+ *  last change: $Author: tl $ $Date: 2000-12-15 10:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,41 +741,34 @@ sal_Bool SvxSaveDictionaries( const Reference< XDictionaryList >  &xDicList )
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 {
-    //  empty language -> LANGUAGE_NONE
+    //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
-    String aLangStr = rLocale.Language;
-    String aCtryStr = rLocale.Country;
-    //  Variant is ignored
-
-    LanguageType eRet = ConvertIsoNamesToLanguage( aLangStr, aCtryStr );
-    if ( eRet == LANGUAGE_SYSTEM )
-        eRet = LANGUAGE_NONE;
-
-    return eRet;
+    //  Variant of Locale is ignored
+    return ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
 }
 
 Locale& SvxLanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
     String aLangStr, aCtryStr;
-    if ( eLang == LANGUAGE_NONE )
-        eLang = LANGUAGE_SYSTEM;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+
     rLocale.Language = aLangStr;
     rLocale.Country  = aCtryStr;
+    rLocale.Variant  = OUString();
 
     return rLocale;
 }
 
 Locale SvxCreateLocale( LanguageType eLang )
 {
-    if ( eLang == LANGUAGE_NONE )
-        eLang = LANGUAGE_SYSTEM;
     String aLangStr, aCtryStr;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
 
-    return Locale( aLangStr, aCtryStr, String() );
+    return Locale( aLangStr, aCtryStr, OUString() );
 }
 
 

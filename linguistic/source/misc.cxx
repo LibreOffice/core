@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-21 18:29:14 $
+ *  last change: $Author: tl $ $Date: 2000-12-15 10:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,42 +214,37 @@ Reference< XDictionaryEntry > SearchDicList(
 
 ///////////////////////////////////////////////////////////////////////////
 
-Locale CreateLocale( LanguageType eLang )
-{
-    if ( eLang == LANGUAGE_NONE )
-        eLang = LANGUAGE_SYSTEM;
-    String aLangStr, aCtryStr;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
-
-    return Locale( aLangStr, aCtryStr, OUString() );
-}
-
 LanguageType LocaleToLanguage( const Locale& rLocale )
 {
-    //  empty language -> LANGUAGE_NONE
+    //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 
     //  Variant of Locale is ignored
-    LanguageType eRet =
-            ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
-    if ( eRet == LANGUAGE_SYSTEM )
-        eRet = LANGUAGE_NONE;
-
-    return eRet;
+    return ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
 }
 
 
 Locale& LanguageToLocale( Locale& rLocale, LanguageType eLang )
 {
     String aLangStr, aCtryStr;
-    if ( eLang == LANGUAGE_NONE )
-        eLang = LANGUAGE_SYSTEM;
-    ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+
     rLocale.Language = aLangStr;
     rLocale.Country  = aCtryStr;
+    rLocale.Variant  = OUString();
 
     return rLocale;
+}
+
+Locale CreateLocale( LanguageType eLang )
+{
+    String aLangStr, aCtryStr;
+    if ( eLang != LANGUAGE_NONE /* &&  eLang != LANGUAGE_SYSTEM */)
+        ConvertLanguageToIsoNames( eLang, aLangStr, aCtryStr );
+
+    return Locale( aLangStr, aCtryStr, OUString() );
 }
 
 uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< INT16 > &rLangSeq )
