@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ namespace xmloff
         */
         virtual void    exportCollectionElements(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) = 0;
+
+        virtual ::rtl::OUString                             getObjectStyleName(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) = 0;
     };
 
     //=====================================================================
@@ -182,6 +185,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.6  2001/01/24 09:34:10  fs
  *  +IFormsImportContext::enter-/leaveEventContext
  *
