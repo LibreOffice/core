@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-14 09:21:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
     Text [ ENGLISH ] = "Header/Footer" ; \
     Text [ norwegian ] = "Header/Footer" ; \
     Text [ italian ] = "Intestazione/piè di pagina" ; \
-    Text [ portuguese_brazilian ] = "Cabeşalho/RodapÚ" ; \
+    Text [ portuguese_brazilian ] = "Cabe?alho/Rodap?" ; \
     Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
     Text [ finnish ] = "Yläotsikot/alaselitteet" ; \
     Text [ danish ] = "Sidehoved/Sidefod" ; \
@@ -95,7 +95,7 @@
     Text [ ENGLISH ] = "Header" ; \
     Text [ norwegian ] = "Header" ; \
     Text [ italian ] = "Riga d'intestazione" ; \
-    Text [ portuguese_brazilian ] = "Cabeçalho" ; \
+    Text [ portuguese_brazilian ] = "Cabe?alho" ; \
     Text [ portuguese ] = "Cabeçalho" ; \
     Text [ finnish ] = "Yläotsikko" ; \
     Text [ danish ] = "Sidehoved" ; \
@@ -124,7 +124,7 @@
     Text [ ENGLISH ] = "Footer" ; \
     Text [ norwegian ] = "Footer" ; \
     Text [ italian ] = "Piè di pagina" ; \
-    Text [ portuguese_brazilian ] = "RodapÚ" ; \
+    Text [ portuguese_brazilian ] = "Rodap?" ; \
     Text [ portuguese ] = "Rodapé" ; \
     Text [ finnish ] = "Alaselite" ; \
     Text [ danish ] = "Sidefod" ; \
@@ -152,7 +152,7 @@
     Text [ ENGLISH ] = "Header (right)" ; \
     Text [ norwegian ] = "Header (right)" ; \
     Text [ italian ] = "Riga d'intestazione (destra)" ; \
-    Text [ portuguese_brazilian ] = "Cabeçalho (direito)" ; \
+    Text [ portuguese_brazilian ] = "Cabe?alho (direito)" ; \
     Text [ portuguese ] = "Cabeçalho (direito)" ; \
     Text [ finnish ] = "Yläotsikko (oikea)" ; \
     Text [ danish ] = "Sidehoved (højre)" ; \
@@ -180,7 +180,7 @@
     Text [ ENGLISH ] = "Header (left)" ; \
     Text [ norwegian ] = "Header (left)" ; \
     Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
-    Text [ portuguese_brazilian ] = "Cabeçalho (esquerdo)" ; \
+    Text [ portuguese_brazilian ] = "Cabe?alho (esquerdo)" ; \
     Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
     Text [ finnish ] = "Yläotsikko (vasen)" ; \
     Text [ danish ] = "Sidehoved (venstre)" ; \
@@ -209,7 +209,7 @@
     Text [ ENGLISH ] = "Footer (right)" ; \
     Text [ norwegian ] = "Footer (right)" ; \
     Text [ italian ] = "Piè di pagina (destra)" ; \
-    Text [ portuguese_brazilian ] = "RodapÚ (direito)" ; \
+    Text [ portuguese_brazilian ] = "Rodap? (direito)" ; \
     Text [ portuguese ] = "Rodapé (direito)" ; \
     Text [ finnish ] = "Alaselite (oikea)" ; \
     Text [ danish ] = "Sidefod (højre)" ; \
@@ -238,7 +238,7 @@
     Text [ ENGLISH ] = "Footer (left)" ; \
     Text [ norwegian ] = "Footer (left)" ; \
     Text [ italian ] = "Piè di pagina (sinistra)" ; \
-    Text [ portuguese_brazilian ] = "RodapÚ (esquerdo)" ; \
+    Text [ portuguese_brazilian ] = "Rodap? (esquerdo)" ; \
     Text [ portuguese ] = "Rodapé (esquerdo)" ; \
     Text [ finnish ] = "Alaselite (vasen)" ; \
     Text [ danish ] = "Sidefod (venstre)" ; \
@@ -273,7 +273,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ ENGLISH ] = "Header" ;
     Text [ norwegian ] = "Header" ;
     Text [ italian ] = "Intestazioni" ;
-    Text [ portuguese_brazilian ] = "Cabeçalho" ;
+    Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalhos" ;
     Text [ finnish ] = "Yläotsikot" ;
     Text [ danish ] = "Sidehoveder" ;
@@ -330,7 +330,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ ENGLISH ] = "Footer" ;
     Text [ norwegian ] = "Footer" ;
     Text [ italian ] = "Piè di pagina" ;
-    Text [ portuguese_brazilian ] = "Rodapé" ;
+    Text [ portuguese_brazilian ] = "Rodap?" ;
     Text [ portuguese ] = "Rodapé" ;
     Text [ finnish ] = "Alaselitteet" ;
     Text [ danish ] = "Sidefødder" ;
@@ -707,7 +707,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Left Area" ;
         Text [ norwegian ] = "~Left Area" ;
         Text [ italian ] = "Area ~sinistra" ;
-        Text [ portuguese_brazilian ] = "~Área Esquerda" ;
+        Text [ portuguese_brazilian ] = "~?rea Esquerda" ;
         Text [ portuguese ] = "~Área esquerda" ;
         Text [ finnish ] = "~Vasen alue" ;
         Text [ danish ] = "Venstre område" ;
@@ -747,7 +747,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Center Area" ;
         Text [ norwegian ] = "~Center Area" ;
         Text [ italian ] = "Area ~centrale" ;
-        Text [ portuguese_brazilian ] = "~Área Central" ;
+        Text [ portuguese_brazilian ] = "~?rea Central" ;
         Text [ portuguese ] = "~Área central" ;
         Text [ finnish ] = "~Keskitä alue" ;
         Text [ danish ] = "Midterområde" ;
@@ -758,7 +758,7 @@ TabPage RID_HFBASE
         Text [ english_us ] = "~Center Area" ;
         Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
         Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
-        Text[ polish ] = "Œrodkowy obszar";
+        Text[ polish ] = "?rodkowy obszar";
         Text[ japanese ] = "’†‰›‚Ì”ÍˆÍ(~C)";
         Text[ chinese_traditional ] = "¤¤¶¡°Ï°ì(~C)";
         Text[ arabic ] = "ãäØŞÉ æÓØì";
@@ -787,7 +787,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Right Area" ;
         Text [ norwegian ] = "~Right Area" ;
         Text [ italian ] = "Area ~destra" ;
-        Text [ portuguese_brazilian ] = "~Área Direita" ;
+        Text [ portuguese_brazilian ] = "~?rea Direita" ;
         Text [ portuguese ] = "~Área direita" ;
         Text [ finnish ] = "~Oikea alue" ;
         Text [ danish ] = "Højre område" ;
@@ -846,7 +846,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Ändern der Textattribute der aktuellen Selektion : ndern der Textattribute der aktuellen Selektion */
     QuickHelpText[ russian ] = "Àòğèáóòû òåêñòà";
         QuickHelpText[ polish ] = "Atrybuty tekstu";
-        QuickHelpText[ japanese ] = "Ã·½Ä‚Ì‘®«";
+        QuickHelpText[ japanese ] = "Ã·½Ä‚Ì‘®«!";
         QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
         QuickHelpText[ chinese_traditional ] = "¤å¦rÄİ©Ê";
         QuickHelpText[ arabic ] = "ÓãÇÊ ÇáäÕ";
@@ -885,7 +885,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des Dateinames des aktuellen Dokumentes : Einf³gen des Dateinames des aktuellen Dokumentes */
         QuickHelpText[ russian ] = "Èìÿ ôàéëà";
         QuickHelpText[ polish ] = "Nazwa pliku";
-        QuickHelpText[ japanese ] = "Ì§²Ù–¼";
+        QuickHelpText[ japanese ] = "Ì§²Ù–¼!";
         QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
         QuickHelpText[ chinese_traditional ] = "ÀÉ®×¦WºÙ";
         QuickHelpText[ arabic ] = "ÇÓã Çáãáİ";
@@ -981,7 +981,7 @@ TabPage RID_HFBASE
                 Text[ english_us ] = "Path/File Name";
     Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
                 Text[ russian ] = "Èìÿ ïóòè/ôàéëà";
-                Text[ polish ] = "Œcie¿ka/Nazwa pliku";
+                Text[ polish ] = "?cie¿ka/Nazwa pliku";
                 Text[ japanese ] = "Êß½/Ì§²Ù–¼";
                 Text[ chinese_traditional ] = "¸ô®|/ÀÉ®×¦WºÙ";
                 Text[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
@@ -1024,7 +1024,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Tabellennamens : Einf³gen des aktuellen Tabellennamens */
     QuickHelpText[ russian ] = "Èìÿ ëèñòà";
         QuickHelpText[ polish ] = "Nazwa tabeli";
-        QuickHelpText[ japanese ] = "•\\–¼";
+        QuickHelpText[ japanese ] = "•\\–¼!";
         QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
         QuickHelpText[ chinese_traditional ] = "¤u§@ªí¦WºÙ";
         QuickHelpText[ arabic ] = "ÇÓã ÇáÌÏæá";
@@ -1063,7 +1063,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Seitenzahl : Einf³gen der aktuellen Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöà";
         QuickHelpText[ polish ] = "Strona";
-        QuickHelpText[ japanese ] = "Íß°¼Ş";
+        QuickHelpText[ japanese ] = "Íß°¼Ş!";
         QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
         QuickHelpText[ chinese_traditional ] = "­¶";
         QuickHelpText[ arabic ] = "ÕİÍÉ";
@@ -1102,7 +1102,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der letzten Seitenzahl : Einf³gen der letzten Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöû";
         QuickHelpText[ polish ] = "Strony";
-        QuickHelpText[ japanese ] = "Íß°¼Ş";
+        QuickHelpText[ japanese ] = "Íß°¼Ş!";
         QuickHelpText[ chinese_simplified ] = "Ò³Êı";
         QuickHelpText[ chinese_traditional ] = "­¶";
         QuickHelpText[ arabic ] = "ÕİÍÇÊ";
@@ -1141,7 +1141,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Datums : Einf³gen des aktuellen Datums */
     QuickHelpText[ russian ] = "Äàòà";
         QuickHelpText[ polish ] = "Data";
-        QuickHelpText[ japanese ] = "“ú•t";
+        QuickHelpText[ japanese ] = "“ú•t!";
         QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
         QuickHelpText[ chinese_traditional ] = "¤é´Á";
         QuickHelpText[ arabic ] = "ÇáÊÇÑíÎ";
@@ -1180,7 +1180,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Uhrzeit : Einf³gen der aktuellen Uhrzeit */
     QuickHelpText[ russian ] = "Âğåìÿ";
         QuickHelpText[ polish ] = "Godzina";
-        QuickHelpText[ japanese ] = "";
+        QuickHelpText[ japanese ] = "!";
         QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
         QuickHelpText[ chinese_traditional ] = "®É¶¡";
         QuickHelpText[ arabic ] = "ÇáæŞÊ";
@@ -1202,7 +1202,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ norwegian ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
         Text [ italian ] = "Usare i pulsanti per modificare il tipo di carattere\no per inserire comandi speciali come data, ora, ecc." ;
-        Text [ portuguese_brazilian ] = "Use os botões de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
+        Text [ portuguese_brazilian ] = "Use os bot?s de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
         Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
         Text [ finnish ] = "Näppäimien avulla voit vaihtaa fonttia tai lisätä kenttäkomentoja, kuten päivämäärän tai kellonajan." ;
         Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
