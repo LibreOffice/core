@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-22 22:49:42 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,16 +1195,74 @@ String STR_DESCRIPTION_REMOTE_VOLUME
 {
     Text = "Netzwerkverbindung" ;
     Text [ english_us ] = "Network connection" ;
+    Text[ portuguese ] = "Network connection";
+    Text[ russian ] = "Network connection";
+    Text[ greek ] = "Network connection";
+    Text[ dutch ] = "Network connection";
+    Text[ french ] = "Network connection";
+    Text[ spanish ] = "Network connection";
+    Text[ finnish ] = "Network connection";
+    Text[ italian ] = "Network connection";
+    Text[ danish ] = "Network connection";
+    Text[ swedish ] = "Network connection";
+    Text[ polish ] = "Network connection";
+    Text[ portuguese_brazilian ] = "Network connection";
+    Text[ japanese ] = "Network connection";
+    Text[ korean ] = "Network connection";
+    Text[ chinese_simplified ] = "网络连接";
+    Text[ chinese_traditional ] = "Network connection";
+    Text[ turkish ] = "Network connection";
+    Text[ arabic ] = "Network connection";
+    Text[ catalan ] = "Network connection";
 };
 String STR_DESCRIPTION_LOCALE_VOLUME
 {
     Text = "Lokales Laufwerk" ;
     Text [ english_us ] = "Local drive" ;
+    Text[ portuguese ] = "Local drive";
+    Text[ russian ] = "Local drive";
+    Text[ greek ] = "Local drive";
+    Text[ dutch ] = "Local drive";
+    Text[ french ] = "Local drive";
+    Text[ spanish ] = "Local drive";
+    Text[ finnish ] = "Local drive";
+    Text[ italian ] = "Local drive";
+    Text[ danish ] = "Local drive";
+    Text[ swedish ] = "Local drive";
+    Text[ polish ] = "Local drive";
+    Text[ portuguese_brazilian ] = "Local drive";
+    Text[ japanese ] = "Local drive";
+    Text[ korean ] = "Local drive";
+    Text[ chinese_simplified ] = "局部驱动器";
+    Text[ chinese_traditional ] = "Local drive";
+    Text[ turkish ] = "Local drive";
+    Text[ arabic ] = "Local drive";
+    Text[ catalan ] = "Local drive";
 };
 String STR_DESCRIPTION_CDROM_VOLUME
 {
     Text = "CD-ROM-Laufwerk" ;
     Text [ english_us ] = "CD-ROM drive" ;
+    Text[ portuguese ] = "CD-ROM drive";
+    Text[ russian ] = "CD-ROM drive";
+    Text[ greek ] = "CD-ROM drive";
+    Text[ dutch ] = "CD-ROM drive";
+    Text[ french ] = "CD-ROM drive";
+    Text[ spanish ] = "CD-ROM drive";
+    Text[ finnish ] = "CD-ROM drive";
+    Text[ italian ] = "CD-ROM drive";
+    Text[ danish ] = "CD-ROM drive";
+    Text[ swedish ] = "CD-ROM drive";
+    Text[ polish ] = "CD-ROM drive";
+    Text[ portuguese_brazilian ] = "CD-ROM drive";
+    Text[ japanese ] = "CD-ROM drive";
+    Text[ korean ] = "CD-ROM drive";
+    Text[ chinese_simplified ] = "光盘驱动器";
+    Text[ chinese_traditional ] = "CD-ROM drive";
+    Text[ turkish ] = "CD-ROM drive";
+    Text[ arabic ] = "CD-ROM drive";
+    Text[ catalan ] = "CD-ROM drive";
 };
+
 
 
