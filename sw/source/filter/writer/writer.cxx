@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 15:13:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,126 +408,61 @@ ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
 }
 
 
-BOOL Writer::CopyLocalFileToINet( String& rFileNm, BOOL bCIdTarget )
+BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 {
     BOOL bRet = FALSE;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
-    if( ( INET_PROT_FILE == aFileUrl.GetProtocol() ||
-          (bCIdTarget && INET_PROT_CID == aFileUrl.GetProtocol()) ) &&
-        ( (bCIdTarget && INET_PROT_FILE == aTargetUrl.GetProtocol()) ||
-          (!bCIdTarget && INET_PROT_FILE != aTargetUrl.GetProtocol() &&
-                          INET_PROT_FTP <= aTargetUrl.GetProtocol() &&
-                          INET_PROT_NEWS >= aTargetUrl.GetProtocol()) ) )
+
+// JP 01.11.00: what is the correct question for the portal??
+//  if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
+//      return bRet;
+// this is our old without the Mail-Export
+    if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
+            INET_PROT_FILE != aTargetUrl.GetProtocol() &&
+            INET_PROT_FTP <= aTargetUrl.GetProtocol() &&
+            INET_PROT_NEWS >= aTargetUrl.GetProtocol() ) )
+        return bRet;
+
+    if( pImpl->pSrcArr )
     {
-        if( pImpl->pSrcArr )
+        // wurde die Datei schon verschoben
+        USHORT nPos;
+        if( pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
         {
-            // wurde die Datei schon verschoben
-            USHORT nPos;
-            if( pImpl->pSrcArr->Seek_Entry( &rFileNm, &nPos ))
-            {
-                rFileNm = *(*pImpl->pDestArr)[ nPos ];
-                return TRUE;
-            }
+            rFileNm = *(*pImpl->pDestArr)[ nPos ];
+            return TRUE;
         }
-        else
-        {
-            pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
-            pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
-        }
+    }
+    else
+    {
+        pImpl->pSrcArr = new SvStringsSortDtor( 4, 4 );
+        pImpl->pDestArr = new SvStringsSortDtor( 4, 4 );
+    }
 
-        String* pSrc = new String( rFileNm );
+    String *pSrc = new String( rFileNm );
+    String *pDest = new String( aTargetUrl.GetPartBeforeLastName() );
+    *pDest += aFileUrl.GetName();
 
-        String* pDest = 0;
+    SfxMedium aSrcFile( *pSrc, STREAM_READ, FALSE );
+    SfxMedium aDstFile( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE, FALSE );
 
-        if( INET_PROT_FILE == aFileUrl.GetProtocol() )
-        {
-            SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );
+    *aDstFile.GetOutStream() << *aSrcFile.GetInStream();
 
-            pDest = new String( aTargetUrl.GetPartBeforeLastName() );
-            *pDest += aFileUrl.GetName();
+    aSrcFile.Close();
+    aDstFile.Commit();
 
-            if( INET_PROT_FILE == aTargetUrl.GetProtocol() )
-            {
-                ASSERT( bCIdTarget,
-                        "CopyLocalFile: file->file: CId-Flag nicht gesetzt" );
-                INetURLObject aCpyURL( *pDest );
-                SvFileStream aCpy( aCpyURL.PathToFileName(), STREAM_WRITE );
-                aCpy << aTmp;
+    bRet = 0 == aDstFile.GetError();
 
-                aCpy.Close();
-                bRet = SVSTREAM_OK == aCpy.GetError();
-            }
-            else
-            {
-                ASSERT( !bCIdTarget,
-                        "CopyLocalFile: file->net: CId-Flag gesetzt" );
-                SfxMedium aMedium( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                    FALSE );
-
-                SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE );
-                aCpy << aTmp;
-                aCpy.Close();
-
-                aMedium.Close();
-                aMedium.Commit();
-
-                bRet = 0 == aMedium.GetError();
-            }
-        }
-        else
-        {
-            ASSERT( INET_PROT_CID == aFileUrl.GetProtocol(),
-                    "CopyLocalFile: cid->file: Source-URL nicht cid" );
-            ASSERT( INET_PROT_FILE == aTargetUrl.GetProtocol(),
-                    "CopyLocalFile: cid->file: Target-URL nicht file" );
-            ASSERT( bCIdTarget,
-                    "CopyLocalFile: cid->file: CId-Flag nicht gesetzt" );
-
-            SfxMedium aMedium( *pSrc, STREAM_READ | STREAM_SHARE_DENYNONE,
-                                FALSE );
-            if( aMedium.GetInStream() )
-            {
-                // Eine CID-URL wird in eine Datei kopiert, wenn eine
-                // Mail beantworted wird. Die Datei muss dann die richtige
-                // Extension bekommen. Da Netscape-CIDs keine Extensions
-                // enthalten muessen wir sie ueber den Grafik-Typ
-                // bestimmen und koennen sie nicht uas der URL extrahieren.
-                GraphicDescriptor aDesc( *aMedium.GetInStream() );
-                GraphicFilter *pGrfFilter = GetGrfFilter();
-
-                if ( aDesc.Detect( FALSE ) )
-                {
-                    String aExt( pGrfFilter->GetImportFormatShortName(
-                        aDesc.GetImportFormatNumber( aDesc.GetFileFormat(),
-                                                pGrfFilter->GetConfig() ) ) );
-
-                    INetURLObject aAbsObj(URIHelper::SmartRelToAbs(aTargetUrl.GetMainURL()));
-                    aAbsObj.removeSegment();
-                    String sPath(aAbsObj.GetMainURL());
-                    TempFile aTempFile(aTargetUrl.GetBase(), &aExt, &sPath);
-
-                    SvFileStream aCpy( aTempFile.GetName(), STREAM_WRITE );
-                    aCpy << *aMedium.GetInStream();
-                    aCpy.Close();
-
-                    bRet = SVSTREAM_OK == aCpy.GetError();
-                    if( bRet )
-                        pDest = new String( aTempFile.GetName() );
-                }
-            }
-        }
-
-        if( bRet )
-        {
-            pImpl->pSrcArr->Insert( pSrc );
-            pImpl->pDestArr->Insert( pDest );
-            rFileNm = *pDest;
-        }
-        else
-        {
-            delete pSrc;
-            delete pDest;
-        }
+    if( bRet )
+    {
+        pImpl->pSrcArr->Insert( pSrc );
+        pImpl->pDestArr->Insert( pDest );
+        rFileNm = *pDest;
+    }
+    else
+    {
+        delete pSrc;
+        delete pDest;
     }
 
     return bRet;
@@ -701,11 +636,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.2 2000-10-17 15:13:50 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.3 2000-11-01 19:31:51 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/17 15:13:50  os
+      Change: SfxMedium Ctor
+
       Revision 1.1.1.1  2000/09/18 17:14:57  hr
       initial import
 
