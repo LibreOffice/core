@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:19:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,12 @@
 #ifndef _OFF_APP_HXX
 #include <sfx2/app.hxx>
 #endif
+
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
+
 // #include <svx/svxacorr.hxx>
 // #include <comphelper/processfactory.hxx>
 // #include <svx/unolingu.hxx>
@@ -138,6 +142,8 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
         bResetPgDesc = bResetPgBrk = FALSE;
 
     bDelFullPara = bFullPara;
+
+    bCacheComment = false;
 
     SwDoc * pDoc = rPam.GetDoc();
 #ifdef COMPACT
@@ -561,13 +567,55 @@ SwUndoDelete::~SwUndoDelete()
     delete pRedlSaveData;
 }
 
+static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
+{
+    SwRewriter aRewriter;
+
+    bool bDone = false;
+
+    for (int n = 0; n < rHistory.Count(); n++)
+    {
+        USHORT nWhich = rHistory[n]->Which();
+        String aDescr = rHistory[n]->GetDescription();
+
+        if (aDescr.Len() > 0)
+        {
+            aRewriter.AddRule(UNDO_ARG2, aDescr);
+
+            bDone = true;
+            break;
+        }
+    }
+
+    if (! bDone)
+    {
+        aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_FIELD));
+    }
+
+    return aRewriter;
+}
+
 SwRewriter SwUndoDelete::GetRewriter() const
 {
     SwRewriter aResult;
     String * pStr = NULL;
 
     if (nNode != 0)
-        aResult.AddRule(UNDO_ARG1, String(SW_RES(STR_PARAGRAPHS)));
+    {
+        if (sTableName.Len() > 0)
+        {
+
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
+            aRewriter.AddRule(UNDO_ARG2, sTableName);
+            aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+
+            String sTmp = aRewriter.Apply(SW_RES(STR_TABLE_NAME));
+            aResult.AddRule(UNDO_ARG1, sTmp);
+        }
+        else
+            aResult.AddRule(UNDO_ARG1, String(SW_RES(STR_PARAGRAPHS)));
+    }
     else
     {
         if (pSttStr != NULL)
@@ -575,17 +623,29 @@ SwRewriter SwUndoDelete::GetRewriter() const
         else if (pEndStr != NULL)
             pStr = pEndStr;
 
+        String aStr;
         if (pStr != NULL)
         {
-            String aStr;
-
-            aStr += String(SW_RES(STR_START_QUOTE));
-            aStr += ShortenString(*pStr, nUndoStringLength,
-                                  String(SW_RES(STR_LDOTS)));
-            aStr += String(SW_RES(STR_END_QUOTE));
-
-            aResult.AddRule(UNDO_ARG1, aStr);
+            aStr = DenoteSpecialCharacters(*pStr);
         }
+        else
+        {
+            aStr = UNDO_ARG2;
+        }
+
+        if (pHistory)
+        {
+            SwRewriter aRewriter = lcl_RewriterFromHistory(*pHistory);
+
+            aStr = aRewriter.Apply(aStr);
+        }
+        else
+        {
+            aStr = ShortenString(aStr, nUndoStringLength,
+                                 String(SW_RES(STR_LDOTS)));
+        }
+
+        aResult.AddRule(UNDO_ARG1, aStr);
     }
 
     return aResult;
@@ -888,6 +948,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
             if( pNextNd )
             {
                 SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
+
                 const SfxPoolItem *pItem;
                 if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
                     FALSE, &pItem ) )
@@ -945,3 +1006,7 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 }
 
 
+void SwUndoDelete::SetTableName(const String & rName)
+{
+    sTableName = rName;
+}
