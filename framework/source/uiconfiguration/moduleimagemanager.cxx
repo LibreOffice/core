@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:37:13 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         for ( sal_uInt32 i = 0; i < m_aImageCommandNameVector.size(); i++ )
         {
             INetURLObject aURLObj( m_aImageCommandNameVector[i] );
-            m_aImageNameVector[i] = ( aURLObj.GetURLPath().ToLowerAscii() += aExt );
+            m_aImageNameVector[i] = ( aURLObj.GetURLPath().toAsciiLowerCase() += aExt );
             m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( m_aImageCommandNameVector[i],
                                                                                 m_aImageNameVector[i] ));
         }
