@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:13:11 $
+ *  last change: $Author: pb $ $Date: 2001-05-18 11:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,10 @@ Sequence < OUString > GetFolderContentProperties_Impl( const String& rFolder, co
             }
         }
     }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "GetFolderContents: CommandAbortedException" );
+    }
     catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
@@ -610,8 +614,9 @@ String SvtFileView::GetCurrentURL() const
 void SvtFileView::CreateNewFolder( const String& rNewFolder )
 {
     INetURLObject aObj( maViewURL );
-    aObj.insertName( rNewFolder );
-    String aURL = aObj.GetMainURL();
+    aObj.insertName( rNewFolder, false, INetURLObject::LAST_SEGMENT,
+                     true, INetURLObject::ENCODE_ALL );
+    String aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
     if ( ::utl::UCBContentHelper::MakeFolder( aURL ) )
     {
         String aEntry = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
