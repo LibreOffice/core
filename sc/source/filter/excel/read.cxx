@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:00:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,30 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 
+namespace {
+
+void lclSeekToEof( XclImpStream& rStrm )
+{
+    int nBofLevel = 1;
+    while( nBofLevel > 0 )
+    {
+        if( rStrm.StartNextRecord() )
+        {
+            switch( rStrm.GetRecId() )
+            {
+                case EXC_ID2_BOF:
+                case EXC_ID3_BOF:
+                case EXC_ID4_BOF:
+                case EXC_ID5_BOF:   ++nBofLevel;    break;
+                case EXC_ID_EOF:    --nBofLevel;    break;
+            }
+        }
+        else
+            nBofLevel = 0;
+    }
+}
+
+} // namespace
 
 FltError ImportExcel::Read( void )
 {
@@ -599,6 +623,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345]
                         GetNumFmtBuffer().CreateScFormats();
+                        GetXFBuffer().CreateUserStyles();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x18:  GetNameBuffer().ReadName( maStrm );             break;
@@ -984,8 +1009,12 @@ FltError ImportExcel::Read( void )
         AdjustRowHeight();
         PostDocLoad();
 
-        if( bTabTruncated || IsTruncated() )
-            eLastErr = eERR_RNGOVRFLW;
+        if( IsTabTruncated() )
+            eLastErr = SCWARN_IMPORT_SHEET_OVERFLOW;
+        else if( bTabTruncated || IsRowTruncated() )
+            eLastErr = SCWARN_IMPORT_ROW_OVERFLOW;
+        else if( IsColTruncated() )
+            eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
     }
 
     return eLastErr;
@@ -1113,6 +1142,7 @@ FltError ImportExcel8::Read( void )
                 {
                     case 0x0A:                          // EOF          [ 2345   ]
                         GetNumFmtBuffer().CreateScFormats();
+                        GetXFBuffer().CreateUserStyles();
                         eAkt = Z_Biff8E;
                         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
@@ -1335,6 +1365,8 @@ FltError ImportExcel8::Read( void )
                         {
                             ePrev = eAkt;
                             eAkt = Z_Biffn0;
+                            // #i29930# show warning box
+                            CheckCellAddress( ScAddress( 0, 0, GetCurrScTab() ) );
                             break;
                         }
 
@@ -1458,8 +1490,12 @@ FltError ImportExcel8::Read( void )
         XclImpChangeTrack aImpChTr( pExcRoot, maStrm );
         aImpChTr.Apply();
 
-        if( bTabTruncated || IsTruncated() )
-            eLastErr = eERR_RNGOVRFLW;
+        if( IsTabTruncated() )
+            eLastErr = SCWARN_IMPORT_SHEET_OVERFLOW;
+        else if( bTabTruncated || IsRowTruncated() )
+            eLastErr = SCWARN_IMPORT_ROW_OVERFLOW;
+        else if( IsColTruncated() )
+            eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
     }
 
     return eLastErr;
@@ -1479,15 +1515,8 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
     XclImpChart* pChart = GetObjectManager().GetCurrChartData();
     if( !pChart )
     {
-        bLoop = TRUE;
-        while( bLoop )
-        {
-            bLoop = aIn.StartNextRecord();
-            if( bLoop )
-                bLoop = (aIn.GetRecId() != 0x000A);
-        }
+        lclSeekToEof( aIn );
         rProgress.Progress( aIn.GetSvStreamPos() );
-
         return eERR_OK;
     }
 
@@ -1516,6 +1545,8 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
 
         switch( nOpcode )
         {
+            // #i31882# ignore embedded chart object
+            case 0x0809:    lclSeekToEof( aIn );                                break;  // BOF
             case 0x000A:    ChartEof(); bLoop = FALSE;                          break;  // EOF
             case 0x005D:    GetTracer().TraceChartEmbeddedObj();                break;  // OBJ
             case 0x0858:    pChart->ReadPivotChartTableName();                  break;  // Pivot Chart Table Name
