@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:11:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #include "node.hxx"
 #endif
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 #include <set>
+
+class SfxMedium;
 
 #define EQNOLEFILEHDR_SIZE 28
 class EQNOLEFILEHDR
@@ -127,8 +127,8 @@ public:
     {
         Init();
     }
-    int Parse(SvStorage *pS);
-    int ConvertFromStarMath(SvStorage *pStor);
+    int Parse( SotStorage* pStor );
+    int ConvertFromStarMath( SfxMedium& rMedium );
 private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
