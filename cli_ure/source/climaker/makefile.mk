@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:05:48 $
+#   last change: $Author: obo $ $Date: 2003-10-16 15:23:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,11 @@ UNOTYPES = \
     com.sun.star.reflection.XCompoundTypeDescription		\
     com.sun.star.reflection.XEnumTypeDescription
 
+.IF "$(COMEX)"=="10"
+CFLAGS += /clr:noAssembly,initialAppDomain
+.ELSE
 CFLAGS += /clr:noAssembly
+.ENDIF
 
 OBJFILES = \
     $(OBJ)$/climaker_emit.obj	\
