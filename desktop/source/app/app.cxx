@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:00:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,7 @@ Desktop::Desktop()
 : m_pIntro( 0 )
 , m_aBootstrapError( BE_OK )
 , m_pLockfile( NULL )
+, m_bServicesRegistered( false )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -1244,7 +1245,7 @@ void Desktop::Main()
         // Startup screen
         OpenSplashScreen();
 
-        UserInstall::UserInstallError instErr = UserInstall::finalize();
+        UserInstall::UserInstallError instErr = UserInstall::finalize( *this );
         if ( instErr != UserInstall::E_None )
         {
             // problems with user installation...
