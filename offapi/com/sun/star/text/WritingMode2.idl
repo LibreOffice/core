@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WritingMode2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 17:02:55 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 14:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 
 //=============================================================================
 
-/** this enum describes different writing directions, and also allows
- * for a value 'PAGE' which causes the writing mode to be obtained from
- * the current page.
+/** this set of constants describes different writing directions, and
+ * also allows for a value 'PAGE' which causes the writing mode to be
+ * obtained from the current page.
  */
-enum WritingMode2
+constants WritingMode2
 {
     //-------------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ enum WritingMode2
         <p>
         Typically, this is the writing mode for normal "alphabetic" text.
      */
-    LR_TB,
+    const short LR_TB = 0;
 
     //-------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ enum WritingMode2
         <p>
         Typically, this writing mode is used in Arabic and Hebrew text.
      */
-    RL_TB,
+    const short RL_TB = 1;
 
     //-------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ enum WritingMode2
         <p>
         Typically, this writing mode is used in Chinese and Japanese text.
      */
-    TB_RL,
+    const short TB_RL = 2;
 
     //-------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ enum WritingMode2
         <p>
         Typically, this writing mode is used in Mongolian text.
      */
-    TB_LR,
+    const short TB_LR = 3;
 
     //-------------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ enum WritingMode2
         <p>
         May not be used in page styles.
     */
-    PAGE
+    const short PAGE = 4;
 
 };
 

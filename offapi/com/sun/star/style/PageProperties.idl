@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 11:39:16 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 14:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,9 @@ of the current page is used as limit.
  */
 [optional,property] long FootnoteLineDistance;
 //-----------------------------------------------------------------------------
-/** contains the writing direction
- */
-[optional,property] com::sun::star::text::WritingMode2 WritingMode;
+/** contains the writing direction, as represented by the <type
+ scope="com::sun::star::text">WritingMode2</type> constants */
+[optional,property] short WritingMode;
 //-----------------------------------------------------------------------------
 /** contains the mode of the text grid (none, lines, ...), as
     represented by <type scope="com::sun::star::text">TextGridMode</type>
