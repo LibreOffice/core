@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:06:03 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,24 +795,6 @@ BOOL SwTableAutoFmt::Save( SvStream& rStream ) const
     BOOL b;
     rStream << nVal;
     rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
-    if( USHRT_MAX == nStrResId && 0 != SFX_INIMANAGER()->Get(
-            SFX_GROUP_WORKINGSET_IMPL, String::CreateFromAscii(
-            RTL_CONSTASCII_STRINGPARAM("SaveTableAutoFmtNameId" ))).ToInt32())
-    {
-        // check Name for ResId
-        for( USHORT nId = RID_SVXSTR_TBLAFMT_BEGIN;
-                    RID_SVXSTR_TBLAFMT_END > nId; ++nId )
-        {
-            String s( SVX_RES( nId ) );
-            if( s == aName )
-            {
-                SwTableAutoFmt* pThis = (SwTableAutoFmt*)this;
-                pThis->nStrResId = nId - RID_SVXSTR_TBLAFMT_BEGIN;
-                break;
-            }
-        }
-    }
-
     rStream << nStrResId;
     rStream << ( b = bInclFont );
     rStream << ( b = bInclJustify );
@@ -902,7 +884,8 @@ BOOL SwTableAutoFmtTbl::Load()
     BOOL bRet = FALSE;
     String sNm( String::CreateFromAscii(
                 RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName )));
-    if( SFX_INIMANAGER()->SearchFile( sNm, SFX_KEY_USERCONFIG_PATH ))
+    SvtPathOptions aOpt;
+    if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
         SfxMedium aStream( sNm, STREAM_STD_READ, TRUE );
         bRet = Load( *aStream.GetInStream() );
