@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:23:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,11 +164,6 @@ interface SlideSorterView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_DIA // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_ATTR_ZOOM // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -229,26 +224,6 @@ interface SlideSorterView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_DIA_EFFECT // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetAttrState ;
-    ]
-    SID_DIA_SPEED // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetAttrState ;
-    ]
-    SID_DIA_AUTO // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetAttrState ;
-    ]
-    SID_DIA_TIME // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetAttrState ;
-    ]
     SID_PAGES_PER_ROW // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -292,17 +267,7 @@ interface SlideSorterView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_SLIDE_CHANGE_WIN // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_SLIDE_CHANGE_STATE // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_SLIDE_CHANGE_ASSIGN // ole : no, status : ?
+    SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
