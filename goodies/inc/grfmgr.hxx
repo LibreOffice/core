@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,14 @@ private:
                                            int nNumTilesX, int nNumTilesY,
                                            const Size& rTileSize,
                                            const GraphicAttr* pAttr, ULONG nFlags );
+
+    void                    ImplTransformBitmap( BitmapEx&          rBmpEx,
+                                                 const GraphicAttr& rAttr,
+                                                 const Size&        rCropLeftTop,
+                                                 const Size&        rCropRightBottom,
+                                                 const Rectangle&   rCropRect,
+                                                 const Size&        rDstSize,
+                                                 BOOL               bEnlarge ) const;
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
