@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:29:45 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 22:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class ScDocShell;
 class ScDocument;
 class SdrUndoAction;
 class ScPrintRangeSaver;
+class SdrObject;
 
 //----------------------------------------------------------------------------
 
@@ -447,6 +448,31 @@ private:
     USHORT  nNewFlags;
 };
 
+
+class ScUndoRenameObject: public ScSimpleUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoRenameObject(
+                            ScDocShell* pNewDocShell, const String& rPN,
+                            const String& rON, const String& rNN );
+
+    virtual         ~ScUndoRenameObject();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    String  aPersistName;       // to find object (works only for OLE objects)
+    String  aOldName;
+    String  aNewName;
+
+    SdrObject*  GetObject();
+};
 
 
 

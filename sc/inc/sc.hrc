@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mh $ $Date: 2001-12-05 10:26:43 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 21:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@
 
 #define HID_CHG_PROTECT         ( HID_SC_TOOLBOX_START + 8 )
 
+#define HID_SC_RENAME_OBJECT    ( HID_SC_TOOLBOX_START + 9 )
+
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
 #define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )
@@ -552,6 +554,8 @@
 #define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
 
 #define SID_ENABLE_HYPHENATION          (SC_VIEW_START + 87)
+
+#define SID_RENAME_OBJECT               (SC_VIEW_START + 88)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -1245,6 +1249,8 @@
 #define SCSTR_CLPBRD_CLEAR          (STR_START + 213)
 
 #define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
+
+#define SCSTR_RENAMEOBJECT          (STR_START + 215)
 
 // Navigator - in der Reihenfolge wie SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)

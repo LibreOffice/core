@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-06 12:52:28 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 22:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,11 @@
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xftsfit.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -89,6 +91,9 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
+#include "strindlg.hxx"
+#include "scresid.hxx"
+#include "undotab.hxx"
 
 #include "sc.hrc"
 
@@ -491,6 +496,47 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                     pView->SetAttributes( aSet );
                 }
                 rReq.Done();
+            }
+            break;
+
+        case SID_RENAME_OBJECT:
+            {
+                const SdrMarkList& rMarkList = pView->GetMarkList();
+                if ( rMarkList.GetMarkCount() == 1 )
+                {
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
+                    {
+                        // PersistName is used to identify object in Undo
+                        String aPersistName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+
+                        //  Currently only OLE objects (charts and others) are supported,
+                        //  Graphics and groups may be added later (Undo must be changed then)
+
+                        String aOldName = pObj->GetName();
+                        ScStringInputDlg* pDlg = new ScStringInputDlg( pViewData->GetDialogParent(),
+                                                      String(ScResId(SCSTR_RENAMEOBJECT)),
+                                                      String(ScResId(SCSTR_NAME)),
+                                                      aOldName, nSlotId );
+                        USHORT nRet = pDlg->Execute();
+                        if ( nRet == RET_OK )
+                        {
+                            String aNewName;
+                            pDlg->GetInputString( aNewName );
+                            if ( aNewName != aOldName )
+                            {
+                                pObj->SetName( aNewName );              // set new name
+
+                                ScDocShell* pDocSh = pViewData->GetDocShell();
+                                pDocSh->GetUndoManager()->AddUndoAction(
+                                            new ScUndoRenameObject( pDocSh, aPersistName, aOldName, aNewName ) );
+
+                                pDocSh->SetDrawModified();
+                            }
+                        }
+                        delete pDlg;
+                    }
+                }
             }
             break;
 

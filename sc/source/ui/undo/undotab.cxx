@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:24:01 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 22:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,13 @@
 #include "printfun.hxx"
 #include "chgtrack.hxx"
 
+// for ScUndoRenameObject - might me moved to another file later
+#include <svx/svditer.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
+#include "drwlayer.hxx"
+#include "scresid.hxx"
+
 extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
 
 using namespace com::sun::star;
@@ -113,6 +120,7 @@ TYPEINIT1(ScUndoShowHideTab,    SfxUndoAction);
 TYPEINIT1(ScUndoProtect,        SfxUndoAction);
 TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
 TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
+TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -1396,6 +1404,90 @@ BOOL __EXPORT ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return FALSE;
 }
+
+
+//---------------------------------------------------------------------------------
+//
+//      rename object
+//      (move to different file?)
+//
+
+ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const String& rPN,
+                                        const String& rON, const String& rNN ) :
+    ScSimpleUndo( pNewDocShell ),
+    aPersistName( rPN ),
+    aOldName    ( rON ),
+    aNewName    ( rNN )
+{
+}
+
+ScUndoRenameObject::~ScUndoRenameObject()
+{
+}
+
+String ScUndoRenameObject::GetComment() const
+{
+    //  string resource shared with title for dialog
+    return String( ScResId(SCSTR_RENAMEOBJECT) );
+}
+
+SdrObject* ScUndoRenameObject::GetObject()
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    if ( pDrawLayer )
+    {
+        USHORT nCount = pDrawLayer->GetPageCount();
+        for (USHORT nTab=0; nTab<nCount; nTab++)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            DBG_ASSERT(pPage,"Page ?");
+
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObject = aIter.Next();
+            while (pObject)
+            {
+                if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                        ((SdrOle2Obj*)pObject)->GetPersistName() == aPersistName )
+                {
+                    return pObject;
+                }
+
+                pObject = aIter.Next();
+            }
+        }
+    }
+    DBG_ERROR("Object not found");
+    return NULL;
+}
+
+void ScUndoRenameObject::Undo()
+{
+    BeginUndo();
+    SdrObject* pObj = GetObject();
+    if ( pObj )
+        pObj->SetName( aOldName );
+    EndUndo();
+}
+
+void ScUndoRenameObject::Redo()
+{
+    BeginRedo();
+    SdrObject* pObj = GetObject();
+    if ( pObj )
+        pObj->SetName( aNewName );
+    EndRedo();
+}
+
+void ScUndoRenameObject::Repeat(SfxRepeatTarget& rTarget)
+{
+}
+
+BOOL ScUndoRenameObject::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return FALSE;
+}
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 14:33:02 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 22:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ void ScDrawView::InvalidateAttribs()
 
     rBindings.Invalidate( SID_ANCHOR_TOGGLE );
     rBindings.Invalidate( SID_ORIGINALSIZE );
+    rBindings.Invalidate( SID_RENAME_OBJECT );
 
     rBindings.Invalidate( SID_ATTR_TRANSFORM );
 
@@ -725,13 +726,16 @@ BOOL ScDrawView::SelectObject( const String& rName )
 
 String ScDrawView::GetSelectedChartName() const
 {
+    //  used for modifying a chart's data area - PersistName must always be used
+    //  (as in ScDocument::FindChartData and UpdateChartArea)
+
     const SdrMarkList& rMarkList = GetMarkList();
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
             if ( pDoc->IsChart(pObj) )
-                return ScDrawLayer::GetVisibleName( pObj );
+                return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
     }
 
     return EMPTY_STRING;        // nichts gefunden

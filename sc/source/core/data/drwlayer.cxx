@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-27 10:11:46 $
+ *  last change: $Author: nn $ $Date: 2001-12-05 22:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,17 +1345,28 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 // static
 String ScDrawLayer::GetVisibleName( SdrObject* pObj )
 {
+    String aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
     {
-        //  For OLE, always use persist name as long as the visible name
-        //  isn't accessible to change (preserve old behavior, otherwise
-        //  there could be duplicate names that can't be changed).
-        //  All OLE objects should appear in Navigator etc.,
-        //  so persist name must at least be used if no name is set.
+        //  #95575# For OLE, the user defined name (GetName) is used
+        //  if it's not empty (accepting possibly duplicate names),
+        //  otherwise the persist name is used so every object appears
+        //  in the Navigator at all.
 
-        return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+        if ( !aName.Len() )
+            aName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
     }
-    return pObj->GetName();
+    return aName;
+}
+
+inline IsNamedObject( SdrObject* pObj, const String& rName )
+{
+    //  TRUE if rName is the object's Name or PersistName
+    //  (used to find a named object)
+
+    return ( pObj->GetName() == rName ||
+            ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
+              static_cast<SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
 
 SdrObject* ScDrawLayer::GetNamedObject( const String& rName, USHORT nId, USHORT& rFoundTab ) const
@@ -1372,7 +1383,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const String& rName, USHORT nId, USHORT&
             while (pObject)
             {
                 if ( nId == 0 || pObject->GetObjIdentifier() == nId )
-                    if ( GetVisibleName( pObject ) == rName )
+                    if ( IsNamedObject( pObject, rName ) )
                     {
                         rFoundTab = nTab;
                         return pObject;
