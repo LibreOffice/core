@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:31:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 //___________________________________________________________________
 
 extern const sal_Char* pRevLogStreamName;
+extern const sal_Char* pUserNamesStreamName;
 
 //___________________________________________________________________
 // class XclImpChangeTrack
@@ -117,6 +118,13 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     SvStorage& rStorage = *pExcRoot->pRootStorage;
 
     if( !rStorage.IsContained( sStreamName ) || !rStorage.IsStream( sStreamName ) )
+        return;
+
+    // Verify that the User Names stream exists before going any further. Excel adds both
+    // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
+    // remains if Change Tracking is turned off.
+    String sUserNamesStreamName( pUserNamesStreamName, RTL_TEXTENCODING_ASCII_US );
+    if( !rStorage.IsContained( sUserNamesStreamName ) || !rStorage.IsStream( sUserNamesStreamName ) )
         return;
 
     pInStrm = rStorage.OpenStream( sStreamName, STREAM_STD_READ );
