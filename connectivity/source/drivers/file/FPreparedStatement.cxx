@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _CONNECTIVITY_FILE_ORESULTSETMETADATA_HXX_
 #include "file/FResultSetMetaData.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE file
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif

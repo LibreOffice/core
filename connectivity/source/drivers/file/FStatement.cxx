@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE file
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -106,8 +107,16 @@
 #define THROW_SQL(x) \
     OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
-using namespace connectivity::file;
-using namespace connectivity;
+namespace connectivity
+{
+    namespace file
+    {
+// define the properties of this lib
+// this file includes the properties for this dll
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -363,3 +372,5 @@ OResultSet* OStatement::createResultSet()
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");
 
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE file
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
 
 
 using namespace connectivity;
@@ -156,7 +160,11 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,const Reference< XFastProper
                :OOperandAttr(_nPos,_xColumn)
 {
 }
-
+// -------------------------------------------------------------------------
+sal_Bool OFILEOperandAttr::isIndexed() const
+{
+    return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(m_xColumn,::com::sun::star::uno::UNO_QUERY)->getPropertySetInfo()->hasPropertyByName(connectivity::file::PROPERTY_ISASCENDING);
+}
 //------------------------------------------------------------------
 OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:34:18 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,26 +101,18 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
-#endif
 #ifndef _CONNECTIVITY_FILE_CATALOG_HXX_
 #include "file/FCatalog.hxx"
 #endif
-#if SUPD > 605
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#else
-#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
-#include <com/sun/star/frame/XConfigManager.hpp>
-#endif
-#endif // SUPD
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
 
 using namespace connectivity::file;
+using namespace connectivity::dbtools;
 
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
@@ -178,16 +170,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     if (aURL.GetProtocol() == INET_PROT_FILE)
     {
-#if SUPD > 605
         SvtPathOptions aPathOptions;
         aFileName = aPathOptions.SubstituteVariable(aFileName);
-#else
-        // $Inst muﬂ gesetzt sein
-        Reference< ::com::sun::star::frame::XConfigManager > xSofficeIni(
-                m_pDriver->getFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY);
-
-        aFileName = xSofficeIni->substituteVariables(aFileName);
-#endif
     }
 
     ::rtl::OUString aExt;
