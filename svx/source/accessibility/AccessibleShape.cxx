@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:09:02 $
+ *  last change: $Author: ka $ $Date: 2002-05-06 10:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include "AccessibleShape.hxx"
 #endif
-
 #ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
 #endif
@@ -70,6 +69,9 @@
 #include "AccessibleShapeInfo.hxx"
 #endif
 
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
@@ -94,7 +96,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
 #endif
-
 #ifndef _SVX_UNOEDSRC_HXX
 #include "unoedsrc.hxx"
 #endif
@@ -107,7 +108,6 @@
 #include "unoapi.hxx"
 #endif
 #include <com/sun/star/uno/Exception.hpp>
-
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
 
@@ -536,7 +536,8 @@ com::sun::star::uno::Any SAL_CALL
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
             static_cast<XAccessibleExtendedComponent*>(this),
-            static_cast<lang::XEventListener*>(this)
+            static_cast<lang::XEventListener*>(this),
+            static_cast<lang::XUnoTunnel*>(this)
             );
     return aReturn;
 }
@@ -603,17 +604,22 @@ uno::Sequence<uno::Type> SAL_CALL
     // ... define local types, ...
     const uno::Type aEventListenerType =
         ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+    const uno::Type aUnoTunnelType =
+        ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
     //    const uno::Type aStateSetType =
     //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
-    sal_Int32 nTypeCount (aTypeList.getLength()),
-        nComponentTypeCount (aComponentTypeList.getLength());
-    aTypeList.realloc (nTypeCount + nComponentTypeCount + 1);
-    int i;
+    sal_Int32   nTypeCount (aTypeList.getLength()), nComponentTypeCount (aComponentTypeList.getLength());
+    int         i;
+
+    aTypeList.realloc (nTypeCount + nComponentTypeCount + 2);
+
     for (i=0; i<nComponentTypeCount; i++)
         aTypeList[nTypeCount + i] = aComponentTypeList[i];
-    aTypeList[nTypeCount + i] = aEventListenerType;
+
+    aTypeList[nTypeCount + i++ ] = aEventListenerType;
+    aTypeList[nTypeCount + i ] = aUnoTunnelType;
 
     return aTypeList;
 }
@@ -657,8 +663,55 @@ void SAL_CALL
     }
 }
 
+//=====  lang::XUnoTunnel  ================================================
 
+const uno::Sequence< sal_Int8 >&
+    AccessibleShape::getUnoTunnelImplementationId()
+    throw()
+{
+    static uno::Sequence< sal_Int8 >* pSeq = 0;
 
+    if( !pSeq )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*) aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+
+    return( *pSeq );
+}
+
+//------------------------------------------------------------------------------
+AccessibleShape*
+    AccessibleShape::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
+    throw()
+{
+    uno::Reference< lang::XUnoTunnel >  xTunnel( rxIFace, uno::UNO_QUERY );
+    AccessibleShape*                    pReturn = NULL;
+
+    if( xTunnel.is() )
+        pReturn = reinterpret_cast< AccessibleShape* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
+
+    return( pReturn );
+}
+
+//------------------------------------------------------------------------------
+sal_Int64 SAL_CALL
+    AccessibleShape::getSomething( const uno::Sequence< sal_Int8 >& rIdentifier )
+    throw(uno::RuntimeException)
+{
+    sal_Int64 nReturn( 0 );
+
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
+        nReturn = reinterpret_cast< sal_Int64 >( this );
+
+    return( nReturn );
+}
 
 //=====  IAccessibleViewForwarderListener  ====================================
 
@@ -940,6 +993,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     return aDG();
 }
 
+uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
+{
+    return( mxShape );
+}
 
 
 // protected

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: af $ $Date: 2002-05-06 09:31:55 $
+#   last change: $Author: ka $ $Date: 2002-05-06 10:34:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ CXXFILES =								\
     AccessibleOLEShape.cxx				\
     AccessibleContextBase.cxx			\
     AccessibleComponentBase.cxx			\
+    AccessibleSelectionBase.cxx			\
     AccessibleShapeTreeInfo.cxx			\
     ShapeTypeHandler.cxx				\
     SvxShapeTypes.cxx					\
@@ -100,6 +101,7 @@ SLOFILES =	\
     $(SLO)$/DescriptionGenerator.obj 			\
     $(SLO)$/AccessibleContextBase.obj			\
     $(SLO)$/AccessibleComponentBase.obj			\
+    $(SLO)$/AccessibleSelectionBase.obj			\
     $(SLO)$/AccessibleShape.obj					\
     $(SLO)$/AccessibleGraphicShape.obj			\
     $(SLO)$/AccessibleOLEShape.obj				\
