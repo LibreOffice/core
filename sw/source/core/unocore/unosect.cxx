@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 12:04:24 $
+ *  last change: $Author: mib $ $Date: 2001-11-15 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_XMLCNITEM_HXX
+#include <svx/xmlcnitm.hxx>
 #endif
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
@@ -165,6 +168,7 @@ struct SwTextSectionProperties_Impl
     SvxBrushItem* pBrushItem;
     SwFmtFtnAtTxtEnd* pFtnItem;
     SwFmtEndAtTxtEnd* pEndItem;
+    SvXMLAttrContainerItem *pXMLAttr;
     sal_Bool    bDDE;
     sal_Bool    bHidden;
     sal_Bool    bProtect;
@@ -178,6 +182,7 @@ struct SwTextSectionProperties_Impl
         pBrushItem(0),
         pFtnItem(0),
         pEndItem(0),
+        pXMLAttr(0),
         bUpdateType(sal_True){}
 
     ~SwTextSectionProperties_Impl()
@@ -186,6 +191,7 @@ struct SwTextSectionProperties_Impl
         delete pBrushItem;
         delete pFtnItem;
         delete pEndItem;
+        delete pXMLAttr;
     }
 };
 /* -----------------------------11.07.00 12:10--------------------------------
@@ -380,6 +386,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                     RES_COL, RES_COL,
                     RES_BACKGROUND, RES_BACKGROUND,
                     RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
+                    RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
                     0);
             if(pProps->pBrushItem)
                 aSet.Put(*pProps->pBrushItem);
@@ -389,6 +396,8 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                 aSet.Put(*pProps->pFtnItem);
             if(pProps->pEndItem)
                 aSet.Put(*pProps->pEndItem);
+            if(pProps->pXMLAttr)
+                aSet.Put(*pProps->pXMLAttr);
 
         // section password
         if (pProps->aPassword.getLength() > 0)
@@ -707,6 +716,12 @@ void SwXTextSection::setPropertyValues(
                                     pProps->pEndItem = new SwFmtEndAtTxtEnd;
                                 pPutItem = pProps->pEndItem;
                             }
+                            else if(RES_UNKNOWNATR_CONTAINER== pMap->nWID)
+                            {
+                                if(!pProps->pXMLAttr)
+                                    pProps->pXMLAttr= new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
+                                pPutItem = pProps->pXMLAttr;
+                            }
                             if(pPutItem)
                                 pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
@@ -960,6 +975,12 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                                 if(!pProps->pEndItem)
                                     pProps->pEndItem = new SwFmtEndAtTxtEnd;
                                 pQueryItem = pProps->pEndItem;
+                            }
+                            else if(RES_UNKNOWNATR_CONTAINER== pMap->nWID)
+                            {
+                                if(!pProps->pXMLAttr)
+                                    pProps->pXMLAttr= new SvXMLAttrContainerItem ;
+                                pQueryItem = pProps->pXMLAttr;
                             }
                             if(pQueryItem)
                                 pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
