@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-05 15:31:33 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,7 +1182,7 @@ void SfxViewFrame::SetObjectShell_Impl
     // Modulshell einf"ugen
     SfxModule* pModule = xObjSh->GetModule();
     if( pModule )
-        pDispatcher->InsertShell_Impl( *pModule, 0 );
+        pDispatcher->InsertShell_Impl( *pModule, 1 );
 
     pDispatcher->Push( rObjSh );
     pDispatcher->Flush();
@@ -1559,6 +1559,8 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
     // ViewFrames, erh"alt er ein ParentDeactivate
     if ( bUI )
     {
+        if ( GetFrame()->GetWorkWindow_Impl() )
+            GetFrame()->GetWorkWindow_Impl()->SaveStatus_Impl();
 /*
         SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
         if( pMed )
