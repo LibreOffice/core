@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,20 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCONREC_HXX
-#define _SD_FUCONREC_HXX
+#ifndef SD_FU_CONSTRUCT_RECTANGLE_HXX
+#define SD_FU_CONSTRUCT_RECTANGLE_HXX
 
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
 #endif
 
+class KeyEvent;
+class SdDrawDocument;
+class SdrObject;
+class SdxRequest;
+class SfxItemSet;
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -77,17 +80,21 @@
 |*
 \************************************************************************/
 
-class FuConstRectangle : public FuConstruct
+class FuConstructRectangle
+    : public FuConstruct
 {
- public:
+public:
     TYPEINFO();
 
-    FuConstRectangle(SdViewShell* pViewSh, SdWindow* pWin,
-                     SdView* pView, SdDrawDocument* pDoc,
-                     SfxRequest& rReq);
+    FuConstructRectangle (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuConstructRectangle (void);
 
-    virtual ~FuConstRectangle();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -103,7 +110,7 @@ class FuConstRectangle : public FuConstruct
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUCONREC_HXX
+#endif
 

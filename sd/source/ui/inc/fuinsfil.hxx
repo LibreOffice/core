@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 12:26:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUINSFIL_HXX
-#define _SD_FUINSFIL_HXX
+#ifndef SD_FU_INSERT_FILE_HXX
+#define SD_FU_INSERT_FILE_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 #include <vector>
@@ -70,12 +70,27 @@
 class SfxMedium;
 struct StyleRequestData;
 
-// ----------------
-// - FuInsertFile -
-// ----------------
+namespace sd {
 
-class FuInsertFile : public FuPoor
+class FuInsertFile
+    : public FuPoor
 {
+public:
+    TYPEINFO();
+
+    FuInsertFile (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuInsertFile (void);
+
+    virtual void    Activate();     // Function aktivieren
+    virtual void    Deactivate();   // Function deaktivieren
+
+    static void     GetSupportedFilterVector( ::std::vector< String >& rFilterVector );
+
 private:
 
     String          aLayoutName;    // Layoutname der aktuell eingefuegten Seite
@@ -86,20 +101,8 @@ private:
     void            InsSDDinOlMode(SfxMedium* pMedium);
     void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
     BOOL            InsSDDinDrMode(SfxMedium* pMedium);
-
-public:
-    TYPEINFO();
-
-                    FuInsertFile(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                                 SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual         ~FuInsertFile();
-
-    virtual void    Activate();     // Function aktivieren
-    virtual void    Deactivate();   // Function deaktivieren
-
-public:
-
-    static void     GetSupportedFilterVector( ::std::vector< String >& rFilterVector );
 };
 
-#endif // _SD_FUINSFIL_HXX
+} // end of namespace sd
+
+#endif
