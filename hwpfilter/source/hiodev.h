@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hiodev.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:36:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
  * hwpio.h
  * (C) 1999 Mizi Research, All rights are reserved
  *
- * $Id: hiodev.h,v 1.1 2003-10-15 14:36:13 dvo Exp $
+ * $Id: hiodev.h,v 1.2 2005-02-16 18:16:29 vg Exp $
  */
 
 #ifndef _HIODEV_H_
@@ -109,7 +109,7 @@ class DLLEXPORT HIODev
 
 struct gz_stream;
 
-/// 파일 입출력 장치
+/* 파일 입출력 장치 */
 
 /**
  * This controls the HStream given by constructor
@@ -118,7 +118,7 @@ struct gz_stream;
 class HStreamIODev : public HIODev
 {
     private:
-// zlib으로 압축을 풀기 위한 자료 구조
+/* zlib으로 압축을 풀기 위한 자료 구조 */
         gz_stream *_gzfp;
         HStream& _stream;
     public:
@@ -171,7 +171,7 @@ class HStreamIODev : public HIODev
         virtual void init();
 };
 
-/// 메모리 입출력 장치
+/* 메모리 입출력 장치 */
 /**
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device

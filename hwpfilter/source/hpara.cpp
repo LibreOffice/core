@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hpara.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:40:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.cpp,v 1.1 2003-10-15 14:40:24 dvo Exp $ */
+/* $Id: hpara.cpp,v 1.2 2005-02-16 18:16:43 vg Exp $ */
 
 #include "precompile.h"
 
@@ -118,7 +118,7 @@ HWPPara::~HWPPara(void)
     if (hhstr)
     {
 // virtual destructor
-// C++은 null에 대해서도 동작한다.
+/* C++은 null에 대해서도 동작한다. */
         for (ii = 0; ii < nch; ++ii)
             delete hhstr[ii];
 
@@ -143,12 +143,12 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read1b(&pstyno, 1);
 
 
-// Paragraph 대표 글자
+/* Paragraph 대표 글자 */
     cshape.Read(hwpf);
     if (nch > 0)
         hwpf.AddCharShape(&cshape);
 
-// Paragraph 문단 모양
+/* Paragraph 문단 모양 */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
@@ -231,7 +231,7 @@ HWPPara *HWPPara::Next(void)
 }
 
 
-// layout을 위한 함수
+/* layout을 위한 함수 */
 
 LineInfo *HWPPara::GetLineInfo(int line)
 {

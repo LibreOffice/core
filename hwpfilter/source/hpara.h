@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hpara.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:36:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.h,v 1.1 2003-10-15 14:36:22 dvo Exp $ */
+/* $Id: hpara.h,v 1.2 2005-02-16 18:17:03 vg Exp $ */
 
 #ifndef _HWPPARA_H_
 #define _HWPPARA_H_
@@ -70,7 +70,7 @@
 #include <hwpfile.h>
 #include <hinfo.h>
 
-class HBox;
+struct HBox;
 
 /**
  * etc flag
@@ -99,7 +99,7 @@ class HWPPara;
 
 struct LineInfo
 {
-//시작하는 글자의 위치 : 콘트롤은 여러 길이를 가진다
+/* 시작하는 글자의 위치 : 콘트롤은 여러 길이를 가진다 */
 /**
  * Starting character position
  */
@@ -168,7 +168,7 @@ class DLLEXPORT HWPPara
 
         void  SetNext(HWPPara *n) { _next = n; };
 
-// layout을 위한 함수
+/* layout을 위한 함수 */
 /**
  * Get line information of given line
  */
