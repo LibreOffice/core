@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-12 18:01:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             if ( pOldWindow )
             {
                 ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, (void*) pOldMenuBar );
-                pOldWindow->SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+                pOldWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
             }
             if ( pMenuBar )
             {
