@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-27 10:44:53 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,18 @@ extern "C" {
 
 /* Prototype of sal main entry */
 
-int SAL_CALL sal_main();
+int  SAL_CALL sal_main (int argc, char ** argv);
+void SAL_CALL osl_setCommandArgs(int argc, char ** argv);
 
 
 /* Definition macros for CRT entries */
 
 #ifdef SAL_W32
+
+#ifndef INCLUDED_STDLIB_H
+#include <stdlib.h>
+#define INCLUDED_STDLIB_H
+#endif
 
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 
@@ -107,41 +113,43 @@ DECLARE_HANDLE(HINSTANCE);
 
 #endif
 
-
 #define SAL_DEFINE_CRT_ENTRY() \
-int __cdecl main() \
+int __cdecl main(int argc, char ** argv) \
 { \
-    return sal_main(); \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main(argc, argv); \
 } \
 int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nshow ) \
 { \
-    return sal_main(); \
+    int argc = __argc; char ** argv = __argv; \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main(argc, argv); \
 }
-
 
 #else   /* ! SAL_W32 */
 
 #define SAL_DEFINE_CRT_ENTRY() \
-int main() \
+int main(int argc, char ** argv) \
 { \
-    return sal_main(); \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main(argc, argv); \
 } \
 
-#endif
+#endif /* ! SAL_W32 */
 
 /* Implementation macro */
 
-#define SAL_IMPLEMENT_MAIN() \
+#define SAL_IMPLEMENT_MAIN_WITH_ARGS(_argc_, _argv_) \
     SAL_DEFINE_CRT_ENTRY() \
-    int SAL_CALL sal_main()
+    int SAL_CALL sal_main(int _argc_, char ** _argv_)
+
+#define SAL_IMPLEMENT_MAIN() SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 
 /*
-    "How to use" Example:
-
+    "How to use" Examples:
 
     #include <sal/main.h>
-
 
     SAL_IMPLEMENT_MAIN()
     {
@@ -150,8 +158,14 @@ int main() \
         return 0;
     }
 
-*/
+    SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+    {
+        DoSomethingWithArgs(argc, argv);
 
+        return 0;
+    }
+
+*/
 
 #ifdef __cplusplus
 }   /* extern "C" */
