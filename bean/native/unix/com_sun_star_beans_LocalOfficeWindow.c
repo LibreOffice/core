@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: OfficeWindow.java,v $
+ *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: mi $ $Date: 2004-10-18 07:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,30 +59,65 @@
  *
  ************************************************************************/
 
-package com.sun.star.beans;
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-import java.awt.Component;
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Intrinsic.h>
 
-import com.sun.star.awt.XWindowPeer;
+#include "jawt.h"
+#include "jawt_md.h"
 
-/**
- * The concreate implementation of the OfficeWindow extends an
- * approperate type of visual component (java.awt.Canvas for local
- * and java.awt.Container for remote).
+//#include "../inc/com_sun_star_comp_beans_LocalOfficeWindow.h"
+
+#if defined assert
+#undef assert
+#endif
+
+#define assert(X) if (!X) { (*env)->ThrowNew(env, (*env)->FindClass(env, "java/lang/RuntimeException"), "assertion failed"); return;}
+
+
+#define SYSTEM_WIN32   1
+#define SYSTEM_WIN16   2
+#define SYSTEM_JAVA    3
+#define SYSTEM_OS2     4
+#define SYSTEM_MAC     5
+#define SYSTEM_XWINDOW 6
+
+/*****************************************************************************/
+/*
+ * Class:     com_sun_star_comp_beans_LocalOfficeWindow
+ * Method:    getNativeWindowSystemType
+ * Signature: ()I
  */
-public interface OfficeWindow
+JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindowSystemType
+  (JNIEnv * env, jobject obj_this)
 {
-    /**
-     * Retrives an AWT component object associated with the OfficeWindow.
-     *
-     * @return The AWT component object associated with the OfficeWindow.
-     */
-    Component getAWTComponent();
-
-    /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
-     *
-     * @return The UNO XWindowPeer object associated with the OfficeWindow.
-     */
-    XWindowPeer getUNOWindowPeer();
+    return (SYSTEM_XWINDOW);
 }
+
+
+/*****************************************************************************/
+/*
+ * Class:     com_sun_star_beans_LocalOfficeWindow
+ * Method:    getNativeWindow
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
+  (JNIEnv * env, jobject obj_this)
+{
+    return Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow(env, obj_this);
+}
+
+
+
+
+
+
+
+
+
+
+

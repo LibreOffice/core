@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: OfficeWindow.java,v $
+ *  $RCSfile: NativeService.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: mi $ $Date: 2004-10-18 07:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,9 @@
 
 package com.sun.star.beans;
 
-import java.awt.Component;
 
-import com.sun.star.awt.XWindowPeer;
-
-/**
- * The concreate implementation of the OfficeWindow extends an
- * approperate type of visual component (java.awt.Canvas for local
- * and java.awt.Container for remote).
- */
-public interface OfficeWindow
-{
-    /**
-     * Retrives an AWT component object associated with the OfficeWindow.
-     *
-     * @return The AWT component object associated with the OfficeWindow.
-     */
-    Component getAWTComponent();
-
-    /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
-     *
-     * @return The UNO XWindowPeer object associated with the OfficeWindow.
-     */
-    XWindowPeer getUNOWindowPeer();
+/* package */ interface NativeService {
+    public String getIdentifier();
+    public void startupService() throws java.io.IOException;
+    public int getStartupTime();
 }

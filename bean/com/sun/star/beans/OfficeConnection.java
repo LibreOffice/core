@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeConnection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:35:07 $
+ *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12,11 +12,11 @@
  *         - GNU Lesser General Public License Version 2.1
  *         - Sun Industry Standards Source License Version 1.1
  *
- *  Sun Microsystems Inc., September, 2004
+ *  Sun Microsystems Inc., October, 2000
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2004 by Sun Microsystems, Inc.
+ *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2004 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -61,13 +61,53 @@
 
 package com.sun.star.beans;
 
-/** reprecents a connection to the office application.
+import java.awt.Container;
+import java.net.MalformedURLException;
 
-    @deprecated
-        use com.sun.star.comp.beans.OfficeConnection instead
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.XComponentContext;
+
+/**
+ * This abstract class reprecents a connection to the office
+ * application.
  */
 public interface OfficeConnection
-    extends com.sun.star.comp.beans.OfficeConnection
+    extends XComponent
 {
-}
+    /**
+     * Sets a connection URL.
+     *
+     * @param url This is UNO URL which describes the type of a connection.
+     */
+    void setUnoUrl(String url)
+        throws java.net.MalformedURLException;
 
+    /**
+     * Sets an AWT container catory.
+     *
+     * @param containerFactory This is a application provided AWT container
+     *  factory.
+     */
+    void setContainerFactory(ContainerFactory containerFactory);
+
+    /**
+     * Retrives the UNO component context.
+     * Establishes a connection if necessary and initialises the
+     * UNO service manager if it has not already been initialised.
+     *
+     * @return The office UNO component context.
+     */
+    XComponentContext getComponentContext();
+
+    /**
+     * Creates an office window.
+     * The window is either a sub-class of java.awt.Canvas (local) or
+     * java.awt.Container (RVP).
+     *
+     * This method does not add add the office window to its container.
+     *
+     * @param container This is an AWT container.
+     * @return The office window instance.
+     */
+    OfficeWindow createOfficeWindow(Container container);
+}

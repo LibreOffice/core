@@ -14,7 +14,8 @@ USE_DEFFILE=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/com_sun_star_comp_beans_LocalOfficeWindow.obj
+    $(SLO)$/com_sun_star_comp_beans_LocalOfficeWindow.obj \
+    $(SLO)$/com_sun_star_beans_LocalOfficeWindow.obj
 
 SHL1TARGET=$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib

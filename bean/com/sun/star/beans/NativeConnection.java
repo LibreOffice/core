@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: OfficeWindow.java,v $
+ *  $RCSfile: NativeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: mi $ $Date: 2004-10-18 07:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,32 @@
 
 package com.sun.star.beans;
 
-import java.awt.Component;
+import com.sun.star.connection.XConnection;
 
-import com.sun.star.awt.XWindowPeer;
-
-/**
- * The concreate implementation of the OfficeWindow extends an
- * approperate type of visual component (java.awt.Canvas for local
- * and java.awt.Container for remote).
- */
-public interface OfficeWindow
+/* package */ class NativeConnection
+    implements XConnection
 {
-    /**
-     * Retrives an AWT component object associated with the OfficeWindow.
-     *
-     * @return The AWT component object associated with the OfficeWindow.
-     */
-    Component getAWTComponent();
+    public native void connect(NativeService aNativeService)
+        throws com.sun.star.io.IOException;
 
-    /**
-     * Retrives an UNO XWindowPeer object associated with the OfficeWindow.
-     *
-     * @return The UNO XWindowPeer object associated with the OfficeWindow.
-     */
-    XWindowPeer getUNOWindowPeer();
+    public native int read(/*OUT*/byte[][] aReadBytes, /*IN*/int nBytesToRead)
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+
+    public native void write(/*IN*/byte[] aData)
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+
+    public native void flush()
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+
+    public native void close()
+        throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException;
+
+    public synchronized String getDescription()
+        throws com.sun.star.uno.RuntimeException
+    {
+        return Description;
+    }
+
+    private long    NativeHandle;
+    private String  Description;
 }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+#   last change: $Author: mi $ $Date: 2004-10-18 07:17:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,39 +60,33 @@
 #
 #*************************************************************************
 
-PRJ	= ..$/..$/..$/..
-PRJNAME = beans
-TARGET  = com_sun_star_beans
-PACKAGE = com$/sun$/star$/beans
+PRJ     = ..
+PRJNAME = bean
+TARGET  = officebean
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
+USE_EXTENDED_MANIFESTFILE=TRUE
+USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 
-.IF "$(OS)"=="MACOSX"
+.INCLUDE : settings.mk
 
-dummy:
-    @echo "Nothing to build for OS $(OS)"
+JARCLASSDIRS    = \
+    com$/sun$/star$/comp$/beans \
+    com$/sun$/star$/beans
 
-.ELSE		# "$(OS)"=="MACOSX"
+JARTARGET       = $(TARGET).jar
+JARCOMPRESS     = TRUE
 
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar
-
-# --- Sources --------------------------------------------------------
-
-JAVAFILES=  \
-    ContainerFactory.java \
-    JavaWindowPeerFake.java \
-    LocalOfficeConnection.java \
-    LocalOfficeWindow.java \
-    NativeConnection.java \
-    NativeService.java \
-    OfficeConnection.java \
-    OfficeWindow.java 
-
-JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-.ENDIF
+# Special work necessary for building java reference with javadoc.
+# The source of puplic APIs must be delivered and used later in the
+# odk module.
+ZIP1TARGET=$(TARGET)_src
+ZIP1FLAGS=-u -r
+ZIP1DIR=$(PRJ)
+ZIP1LIST=com -x "*makefile.mk"
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+.INCLUDE : target.mk
+
+
