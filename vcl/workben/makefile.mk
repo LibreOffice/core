@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2001-10-01 12:33:42 $
+#   last change: $Author: hdu $ $Date: 2002-09-04 13:40:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=SV
 TARGET=svdem
 LIBTARGET=NO
+TARGETTYPE=GUI
 
 # --- Settings -----------------------------------------------------
 
