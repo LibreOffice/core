@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 12:33:03 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 17:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,26 +614,19 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
             bStarMath = TRUE;
         }
 
-        if ( IsSelection() )
+        if( IsSelection() )
         {
-            if ( bStarMath )
+            if( bStarMath )
             {
                 String aMathData;
                 GetSelectedText( aMathData, GETSELTXT_PARABRK_TO_ONLYCR );
-                if ( aMathData.Len() )
+                if( aMathData.Len() && aRef->SetData( aMathData ) )
                 {
-                    SvData aData( FORMAT_STRING );
-                    aData.SetData( aMathData );
-                    if ( aRef->SetData( &aData ) )
-                    {
-                        bActivate = FALSE;
-                        //StarMath size depends on the Printer, which is
-                        //passed here direct for avoiding time consuming
-                        //connections between StarWriter and StarMath
-                        aRef->OnDocumentPrinterChanged( GetPrt() );
-                    }
-                    else
-                        bActivate = TRUE;
+                    bActivate = FALSE;
+                    //StarMath size depends on the Printer, which is
+                    //passed here direct for avoiding time consuming
+                    //connections between StarWriter and StarMath
+                    aRef->OnDocumentPrinterChanged( GetPrt() );
                 }
             }
             DelRight();
@@ -1584,6 +1577,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.8  2001/03/01 12:33:03  jp
+   Bug #74707#: use new flag CheckForOLEInCaption
+
    Revision 1.7  2001/02/23 12:45:30  os
    Complete use of DefaultNumbering component
 
