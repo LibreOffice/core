@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-10 06:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,7 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pAllBorderProperty = NULL;
     XMLPropertyState* pAllBorderWidthProperty = NULL;
-    XMLPropertyState* pParaIndent = NULL;
     ::std::vector< XMLPropertyState >::iterator i = rProperties.begin();
-    ::std::vector< XMLPropertyState >::iterator aParaIndentItr = rProperties.begin();
     for (i; i != rProperties.end(); i++)
     {
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(i->mnIndex);
@@ -176,11 +174,6 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
                 pAllBorderWidthProperty = new XMLPropertyState(i->mnIndex, i->maValue);
             }
             break;
-            case CTF_PARAINDENT :
-            {
-                pParaIndent = new XMLPropertyState(i->mnIndex, i->maValue);
-                aParaIndentItr = i;
-            }
         }
     }
     if (pAllPaddingProperty)
@@ -211,17 +204,6 @@ void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rPro
         {
             aNewProperty.mnIndex = nIndex++;
             rProperties.push_back(aNewProperty);
-        }
-    }
-    if (pParaIndent)
-    {
-        sal_Int32 nValue;
-        if (pParaIndent->maValue >>= nValue)
-        {
-            sal_Int16 n16Value = nValue;
-            pParaIndent->maValue <<= n16Value;
-            aParaIndentItr->mnIndex = pParaIndent->mnIndex;
-            aParaIndentItr->maValue = pParaIndent->maValue;
         }
     }
 }
