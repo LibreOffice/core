@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:25:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XCHAPTERNUMBERINGSUPPLIER_HPP_
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLASTPLP_HXX
 #include "xmlaustp.hxx"
@@ -140,7 +143,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::document::XEventsSupplier;
@@ -265,7 +268,28 @@ sal_Bool XMLStyleExport::exportStyle(
             {
                 OUString sListName;
                 aAny >>= sListName;
-                if( sListName.getLength() )
+
+                Reference< XChapterNumberingSupplier > xCNSupplier
+                    (GetExport().GetModel(), UNO_QUERY);
+
+                OUString sOutlineName;
+                if (xCNSupplier.is())
+                {
+                    Reference< XIndexReplace > xNumRule
+                        ( xCNSupplier->getChapterNumberingRules() );
+                    DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+
+                    if (xNumRule.is())
+                    {
+                        Reference< XPropertySet > xNumRulePropSet
+                            (xNumRule, UNO_QUERY);
+                        xNumRulePropSet->getPropertyValue(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
+                            >>= sOutlineName;
+                    }
+                }
+
+                if( sListName.getLength() && sListName != sOutlineName)
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_LIST_STYLE_NAME,
                               GetExport().EncodeStyleName( sListName ) );
