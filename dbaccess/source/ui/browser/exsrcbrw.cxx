@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 12:08:57 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,8 +451,8 @@ void SAL_CALL SbaExternalSourceBrowser::unloading(const ::com::sun::star::lang::
 void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 {
     // switch the control to design mode
-    if (getContent() && getContent()->getGridControl().is())
-        getContent()->getGridControl()->setDesignMode(sal_True);
+    if (getBrowserView() && getBrowserView()->getGridControl().is())
+        getBrowserView()->getGridControl()->setDesignMode(sal_True);
 
     // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
     Any aOldPos;
@@ -535,6 +535,7 @@ void SAL_CALL SbaExternalSourceBrowser::disposing(const ::com::sun::star::lang::
             m_xCurrentFrame->removeFrameActionListener(xAggListener);
         }
     }
+    SbaXDataBrowserController::disposing(Source);
 }
 //------------------------------------------------------------------
 void SbaExternalSourceBrowser::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
@@ -588,9 +589,9 @@ void SAL_CALL SbaExternalSourceBrowser::focusGained(const ::com::sun::star::awt:
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( RuntimeException )
 {
-    if (!getContent() || !getContent()->getGridControl().is())
+    if (!getBrowserView() || !getBrowserView()->getGridControl().is())
         return;
-    Reference< ::com::sun::star::awt::XVclWindowPeer >  xMyGridPeer(getContent()->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< ::com::sun::star::awt::XVclWindowPeer >  xMyGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     if (!xMyGridPeer.is())
         return;
     Reference< ::com::sun::star::awt::XWindowPeer >  xNextControlPeer(e.NextFocus, UNO_QUERY);
@@ -609,7 +610,7 @@ void SAL_CALL SbaExternalSourceBrowser::focusLost(const ::com::sun::star::awt::F
         ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
 
     // commit the changes of the grid control (as we're deactivated)
-    Reference< ::com::sun::star::form::XBoundComponent >  xCommitable(getContent()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xCommitable.is())
         xCommitable->commit();
     else
@@ -648,7 +649,7 @@ SbaExternalSourceBrowser::FormControllerImpl::~FormControllerImpl()
 //------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XControl >  SbaExternalSourceBrowser::FormControllerImpl::getCurrentControl(void) throw( RuntimeException )
 {
-    return m_pOwner->getContent() ? m_pOwner->getContent()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
+    return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
 }
 
 //------------------------------------------------------------------
@@ -688,17 +689,17 @@ void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setContainer(const R
 //------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getContainer(void) throw( RuntimeException )
 {
-    if (m_pOwner->getContent())
-        return m_pOwner->getContent()->getContainer();
+    if (m_pOwner->getBrowserView())
+        return m_pOwner->getBrowserView()->getContainer();
     return Reference< ::com::sun::star::awt::XControlContainer > ();
 }
 
 //------------------------------------------------------------------
 Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getControls(void) throw( RuntimeException )
 {
-    if (m_pOwner->getContent())
+    if (m_pOwner->getBrowserView())
     {
-        Reference< ::com::sun::star::awt::XControl >  xGrid = m_pOwner->getContent()->getGridControl();
+        Reference< ::com::sun::star::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
         return Sequence< Reference< ::com::sun::star::awt::XControl > >(&xGrid, 1);
     }
     return Sequence< Reference< ::com::sun::star::awt::XControl > >();
@@ -719,15 +720,15 @@ void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder(voi
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateFirst(void) throw( RuntimeException )
 {
-    if (m_pOwner->getContent())
-        m_pOwner->getContent()->getVclControl()->ActivateCell();
+    if (m_pOwner->getBrowserView())
+        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateLast(void) throw( RuntimeException )
 {
-    if (m_pOwner->getContent())
-        m_pOwner->getContent()->getVclControl()->ActivateCell();
+    if (m_pOwner->getBrowserView())
+        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+
+// syntax of the tree                   userdata
+// datasource                           holds the connection
+//      queries                         holds the nameaccess for the queries
+//          query                       holds the query
+//      tables                          holds the nameaccess for the tables
+//          table                       holds the table
 
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }

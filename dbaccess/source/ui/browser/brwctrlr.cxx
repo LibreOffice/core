@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 19:10:18 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,11 +232,10 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
-
-::rtl::OUString URL_CONFIRM_DELETION(::rtl::OUString::createFromAscii(".uno:FormSlots/ConfirmDeletion"));
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -253,12 +252,12 @@ using namespace ::comphelper;
         aEvent.Reason <<= eExtendedInfo;                                    \
         errorOccured(aEvent);                                               \
     }                                                                       \
-    catch(...)                                                              \
+    catch(Exception&)                                                               \
     {                                                                       \
         DBG_ERROR(message);                                                 \
     }                                                                       \
 
-#define DO_SAFE( action, message ) try { action; } catch(...) { DBG_ERROR(message); } ;
+#define DO_SAFE( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); } ;
 
 //..................................................................
 namespace dbaui
@@ -287,95 +286,6 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
     m_aValues = _rValues;
 }
 
-//==================================================================
-//= OAsyncronousLink
-//==================================================================
-//------------------------------------------------------------------
-OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, NAMESPACE_VOS(OMutex)* _pEventSafety, NAMESPACE_VOS(OMutex)* _pDestructionSafety)
-    :m_aHandler(_rHandler)
-    ,m_pEventSafety(NULL)
-    ,m_pDestructionSafety(NULL)
-    ,m_bOwnMutexes(FALSE)
-    ,m_nEventId(0)
-{
-    if (_pEventSafety && _pDestructionSafety)
-    {
-        m_pEventSafety = _pEventSafety;
-        m_pDestructionSafety = _pDestructionSafety;
-        m_bOwnMutexes = FALSE;
-    }
-    else
-    {
-        m_pEventSafety = new ::vos::OMutex;
-        m_pDestructionSafety = new ::vos::OMutex;
-        m_bOwnMutexes = TRUE;
-    }
-}
-
-//------------------------------------------------------------------
-OAsyncronousLink::~OAsyncronousLink()
-{
-    {
-        ::vos::OGuard aEventGuard(*m_pEventSafety);
-        if (m_nEventId)
-            Application::RemoveUserEvent(m_nEventId);
-        m_nEventId = 0;
-    }
-
-    {
-        ::vos::OGuard aDestructionGuard(*m_pDestructionSafety);
-        // this is just for the case we're deleted while another thread just handled the event :
-        // if this other thread called our link while we were deleting the event here, the
-        // link handler blocked. With leaving the above block it continued, but now we are prevented
-        // to leave this destructor 'til the link handler recognizes that nEvent == 0 and leaves.
-    }
-    if (m_bOwnMutexes)
-    {
-        delete m_pEventSafety;
-        delete m_pDestructionSafety;
-    }
-    m_pEventSafety = NULL;
-    m_pDestructionSafety = NULL;
-}
-
-
-//------------------------------------------------------------------
-void OAsyncronousLink::Call(void* _pArgument)
-{
-    ::vos::OGuard aEventGuard(*m_pEventSafety);
-    if (m_nEventId)
-        Application::RemoveUserEvent(m_nEventId);
-    m_nEventId = Application::PostUserEvent(LINK(this, OAsyncronousLink, OnAsyncCall));
-}
-
-//------------------------------------------------------------------
-void OAsyncronousLink::CancelCall()
-{
-    ::vos::OGuard aEventGuard(*m_pEventSafety);
-    if (m_nEventId)
-        Application::RemoveUserEvent(m_nEventId);
-    m_nEventId = 0;
-}
-
-//------------------------------------------------------------------
-IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
-{
-    {
-        ::vos::OGuard aDestructionGuard(*m_pDestructionSafety);
-        {
-            ::vos::OGuard aEventGuard(*m_pEventSafety);
-            if (!m_nEventId)
-                // our destructor deleted the event just while we we're waiting for m_pEventSafety
-                // -> get outta here
-                return 0;
-            m_nEventId = 0;
-        }
-    }
-    if (m_aHandler.IsSet())
-        return m_aHandler.Call(_pArg);
-
-    return 0L;
-}
 
 //==================================================================
 //= SbaXDataBrowserController
@@ -385,7 +295,7 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
     if(aRet.hasValue())
         return aRet;
-    aRet = SbaXDataBrowserController_Base2::queryInterface(_rType);
+    aRet = OGenericUnoController::queryInterface(_rType);
     if(aRet.hasValue())
         return aRet;
     return OPropertySetHelper::queryInterface(_rType);
@@ -393,44 +303,32 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
 
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-: ::comphelper::OPropertyContainer(m_aPropertyBroadcastHelper)
+    : OGenericUnoController(_rM)
+    ,::comphelper::OPropertyContainer(m_aPropertyBroadcastHelper)
     ,m_aPropertyBroadcastHelper(m_aPropertyMutex)
-    ,m_pContent(NULL)
-    ,m_bCurrentlyModified(sal_False)
     ,m_pLoadThread(NULL)
     ,m_bClosingKillOpen(sal_False)
     ,m_nPendingLoadFinished(0)
     ,m_sLoadStopperCaption(ModuleRes(RID_STR_LOADING_DATASOURCE))
     ,m_nFormActionNestingLevel(0)
     ,m_bErrorOccured(false)
-    ,m_bFrameUiActive(sal_False)
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
-    ,m_aDisposeListeners(m_aPropertyMutex)
-    ,m_xMultiServiceFacatory(_rM)
     ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
-    ,m_aAsyncInvalidateAll(LINK(this, SbaXDataBrowserController, OnAsyncInvalidateAll))
 {
-    try
-    {
-        m_xUrlTransformer = Reference< ::com::sun::star::util::XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
-    }
-    catch(Exception&)
-    {
-    }
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
 }
 
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::~SbaXDataBrowserController()
 {
-    m_pContent = NULL;
+    delete m_pView;
+    m_pView = NULL;
 }
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::initFormatter()
@@ -449,6 +347,13 @@ void SbaXDataBrowserController::initFormatter()
     }
     else // clear the formatter
         m_xFormatter = NULL;
+}
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::AddSupportedFeatures()
+{
+    OGenericUnoController::AddSupportedFeatures();
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")] = ID_BROWSER_UNDORECORD;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVEDOC;
 }
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
@@ -484,44 +389,39 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pContent = new UnoDataBrowserView(pParent,m_xMultiServiceFacatory);
-    if (!m_pContent)
+    m_pView = new UnoDataBrowserView(pParent,m_xMultiServiceFacatory);
+    if (!getBrowserView())
         return sal_False;
 
     // late construction
     sal_Bool bSuccess = sal_False;
     try
     {
-        m_pContent->Construct(getControlModel());
+        getBrowserView()->Construct(getControlModel());
         bSuccess = sal_True;
     }
     catch(SQLException&)
     {
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaXDataBrowserController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if (!bSuccess)
     {
-        delete m_pContent;
-        m_pContent = NULL;
+        delete m_pView;
+        m_pView = NULL;
         return sal_False;
     }
-    m_pContent->Show();
 
-    AddSupportedFeatures();
+    // this call create the toolbox
+    OGenericUnoController::Construct(pParent);
 
-    // want to have a toolbox ?
-    ToolBox* pTB = CreateToolBox(m_pContent);
-    m_pContent->setToolBox(pTB);
-    if (pTB)
-        // we want to handle the select
-        pTB->SetSelectHdl(LINK(this, SbaXDataBrowserController, OnToolBoxSelected));
+    getBrowserView()->Show();
 
     // set the callbacks for the grid control
-    SbaGridControl* pVclGrid = m_pContent->getVclControl();
+    SbaGridControl* pVclGrid = getBrowserView()->getVclControl();
     DBG_ASSERT(pVclGrid, "SbaXDataBrowserController::Construct : have no VCL control !");
     pVclGrid->SetMasterListener(this);
 
@@ -553,7 +453,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         xFormParameter->addParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
 
     addModelListeners(getControlModel());
-    addControlListeners(m_pContent->getGridControl());
+    addControlListeners(getBrowserView()->getGridControl());
 
     // -------------
     // load the form
@@ -569,7 +469,7 @@ sal_Bool SbaXDataBrowserController::LoadForm()
     {
         bThreadSafe = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_THREADSAFE));
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
@@ -600,56 +500,6 @@ void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet 
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertySet > & xCol)
 {
-}
-//-------------------------------------------------------------------------
-sal_Bool SAL_CALL SbaXDataBrowserController::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
-    for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-        if (pArray->equals(ServiceName))
-            return sal_True;
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
-{
-    Reference< ::com::sun::star::awt::XWindow >     xParent;
-    Reference< ::com::sun::star::frame::XFrame >    xFrame;
-
-    PropertyValue aValue;
-    const Any* pBegin   = aArguments.getConstArray();
-    const Any* pEnd     = pBegin + aArguments.getLength();
-
-    ::rtl::OUString aFrameName = ::rtl::OUString::createFromAscii("Frame");
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if((*pBegin >>= aValue) && aValue.Name == aFrameName)
-        {
-            if((aValue.Value >>= xFrame) && xFrame.is())
-            {
-                xParent = xFrame->getContainerWindow();
-                VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-                Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
-                if (!pParentWin)
-                {
-                    throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
-                }
-
-                if(xFrame.is() && Construct(pParentWin))
-                {
-                    xFrame->setComponent(getContent()->GetWindowPeer(), this);
-                    attachFrame(xFrame);
-                    pParentComponent->setVisible(sal_True);
-                }
-                break; // no more needed here
-            }
-            else
-            {
-                OSL_ENSHURE(0,"SbaXDataBrowserController::initialize: Frame is null!");
-            }
-        }
-    }
 }
 //------------------------------------------------------------------------------
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
@@ -714,12 +564,12 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun
 void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
 {
     // to ge the 'modified' for the current cell
-    Reference< ::com::sun::star::util::XModifyBroadcaster >  xBroadcaster(m_pContent->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::util::XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->addModifyListener((::com::sun::star::util::XModifyListener*)this);
 
     // introduce ourself as dispatch provider for the grid
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xInterception(m_pContent->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xInterception.is())
         xInterception->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
 }
@@ -739,7 +589,7 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::s
 // -------------------------------------------------------------------------
 void SbaXDataBrowserController::disposingGridControl(const ::com::sun::star::lang::EventObject& Source)
 {
-    removeControlListeners(m_pContent->getGridControl());
+    removeControlListeners(getBrowserView()->getGridControl());
 }
 
 // -------------------------------------------------------------------------
@@ -786,10 +636,10 @@ void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lan
 void SbaXDataBrowserController::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
 {
     // is it the grid control ?
-    if (m_pContent)
+    if (getBrowserView())
     {
         Reference< ::com::sun::star::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
-        if (xSourceControl == m_pContent->getGridControl())
+        if (xSourceControl == getBrowserView()->getGridControl())
             disposingGridControl(Source);
     }
 
@@ -810,11 +660,7 @@ void SbaXDataBrowserController::disposing(const ::com::sun::star::lang::EventObj
         if (xInfo->hasPropertyByName(PROPERTY_WIDTH))
             disposingColumnModel(Source);
     }
-
-    // our frame ?
-    Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(Source.Source, UNO_QUERY);
-    if (((::com::sun::star::frame::XFrame*)xSourceFrame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get()) && m_xCurrentFrame.is())
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    OGenericUnoController::disposing(Source);
 }
 
 // -----------------------------------------------------------------------
@@ -916,20 +762,6 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 }
 
 // -----------------------------------------------------------------------
-void SbaXDataBrowserController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
-{
-    if (m_xCurrentFrame.is())
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
-
-    m_xCurrentFrame = xFrame;
-    if (m_xCurrentFrame.is())
-    {
-        m_xCurrentFrame->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
-        m_bFrameUiActive = m_xCurrentFrame->isActive();
-    }
-}
-
-// -----------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
     m_bSuspending = sal_True;
@@ -985,304 +817,9 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     return bReturn;
 }
 // -----------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState)
-{
-    ToolBox* pTB = m_pContent ? m_pContent->getToolBox() : NULL;
-    if (!pTB || (pTB->GetItemPos(nId) == TOOLBOX_ITEM_NOTFOUND))
-        return sal_False;
-
-    pTB->EnableItem(nId, rState.bEnabled);
-    switch (rState.aState.getValueTypeClass())
-    {
-        case TypeClass_BOOLEAN:
-            pTB->CheckItem(nId, ::comphelper::getBOOL(rState.aState));
-            break;
-
-        case TypeClass_STRING:
-            if (pTB->GetItemWindow(nId))
-                pTB->GetItemWindow(nId)->SetText(::comphelper::getString(rState.aState));
-            break;
-
-        case TypeClass_VOID:
-            break;
-
-        default:
-            DBG_WARNING("SbaXDataBrowserController::ImplInvalidateTBItem : don't know what to do with the item state !");
-    }
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache)
-{
-    sal_Int32 nFeat = m_aSupportedFeatures[_rFeature];
-    ::com::sun::star::frame::FeatureStateEvent aEvent;
-    FeatureState aFeatState( GetState(nFeat));
-
-    // check if we really need to notify the listeners : this method may be called much more often than needed, so check
-    // the cached state of the feature
-    sal_Bool bAlreadyCached = (m_aStateCache.find(nFeat) != m_aStateCache.end());
-    FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
-    if (bAlreadyCached && !_bIgnoreCache && (rCachedState.bEnabled == aFeatState.bEnabled))
-    {   // the enabled flag hasn't changed, maybe the state ?
-        if (rCachedState.aState.getValueTypeClass() == aFeatState.aState.getValueTypeClass())
-        {   // at least the type of the state hasn't
-            sal_Bool bEqualValue = sal_False;
-            switch (rCachedState.aState.getValueTypeClass())
-            {
-                case TypeClass_VOID:
-                    bEqualValue = !aFeatState.aState.hasValue();
-                    break;
-                case TypeClass_BOOLEAN:
-                    bEqualValue = ::comphelper::getBOOL(rCachedState.aState) == ::comphelper::getBOOL(aFeatState.aState);
-                    break;
-                case TypeClass_SHORT:
-                    bEqualValue = ::comphelper::getINT16(rCachedState.aState) == ::comphelper::getINT16(aFeatState.aState);
-                    break;
-                case TypeClass_LONG:
-                    bEqualValue = ::comphelper::getINT32(rCachedState.aState) == ::comphelper::getINT32(aFeatState.aState);
-                    break;
-                case TypeClass_STRING:
-                    bEqualValue = ::comphelper::getString(rCachedState.aState).equals(::comphelper::getString(aFeatState.aState));
-                    break;
-                default:
-                    DBG_ERROR("SbaXDataBrowserController::ImplBroadcastFeatureState : unknown state type (not implemented yet) !");
-                    break;
-            }
-            if (bEqualValue)
-                return;
-        }
-    }
-    rCachedState = aFeatState;
-
-    aEvent.FeatureURL.Complete = _rFeature;
-    if (m_xUrlTransformer.is())
-        m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
-    aEvent.Source = (::com::sun::star::frame::XDispatch*)this;
-    aEvent.IsEnabled = aFeatState.bEnabled;
-    aEvent.Requery = aFeatState.bRequery;
-    aEvent.State = aFeatState.aState;
-
-    // a special listener ?
-    if (xListener.is())
-        xListener->statusChanged(aEvent);
-    else
-    {   // no -> iterate through all listeners responsible for the ::com::sun::star::util::URL
-        DispatchIterator iterSearch = m_arrStatusListener.begin();
-        DispatchIterator iterEnd = m_arrStatusListener.end();
-
-        while (iterSearch != iterEnd)
-        {
-            DispatchTarget& rCurrent = *iterSearch;
-            if (rCurrent.aURL.Complete.equals(_rFeature))
-                rCurrent.xListener->statusChanged(aEvent);
-            ++iterSearch;
-        }
-    }
-
-    // give the TB a chance
-    ImplInvalidateTBItem(nFeat, aFeatState);
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::InvalidateFeature(const ::rtl::OUString& rURLPath, const Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bForceBroadcast)
-{
-    ImplBroadcastFeatureState(rURLPath, xListener, _bForceBroadcast);
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::InvalidateFeature(sal_uInt16 _nId, const Reference< ::com::sun::star::frame::XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
-{
-    sal_Bool bFound = sal_False;
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
-    for(;aIter != m_aSupportedFeatures.end();++aIter)
-    {
-        if(aIter->second == _nId)
-        {
-            ImplBroadcastFeatureState(aIter->first,_xListener, _bForceBroadcast);
-            bFound = sal_True;
-        }
-    }
-    if(!bFound)
-        ImplInvalidateTBItem(_nId, GetState(_nId));
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::InvalidateAll(sal_Bool bAsync)
-{
-    if (bAsync)
-    {
-        m_aAsyncInvalidateAll.Call();
-        return;
-    }
-
-    sal_uInt16 i;
-    // ---------------------------------
-    // invalidate all aupported features
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
-    for(;aIter != m_aSupportedFeatures.end();++aIter)
-    {
-        ImplBroadcastFeatureState(aIter->first, Reference< ::com::sun::star::frame::XStatusListener > (), sal_True);
-    }
-
-    // ------------------------------
-    // invalidate all slots in the TB (if any)
-    ToolBox* pTB = getContent() ? getContent()->getToolBox() : NULL;
-    if (pTB)
-    {
-        for (i=0; i<pTB->GetItemCount(); ++i)
-            if (pTB->GetItemId(i))
-                InvalidateFeature(pTB->GetItemId(i));
-    }
-}
-
-// -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  SbaXDataBrowserController::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
-{
-    if (aURL.Complete.equals(URL_CONFIRM_DELETION))
-        return (::com::sun::star::frame::XDispatch*)this;
-
-    if (m_aSupportedFeatures.find(aURL.Complete) != m_aSupportedFeatures.end())
-        return (::com::sun::star::frame::XDispatch*)this;
-
-    if (m_xSlaveDispatcher.is())
-        return m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
-
-    return Reference< ::com::sun::star::frame::XDispatch > ();
-}
-
-// -----------------------------------------------------------------------
-Sequence< Reference< ::com::sun::star::frame::XDispatch > > SbaXDataBrowserController::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( RuntimeException )
-{
-    Sequence< Reference< ::com::sun::star::frame::XDispatch > > aReturn;
-    if (!aDescripts.getLength())
-        return aReturn;
-
-    aReturn.realloc(aDescripts.getLength());
-    Reference< ::com::sun::star::frame::XDispatch > * pReturn = aReturn.getArray();
-
-    const ::com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for (sal_uInt16 i=0; i<aDescripts.getLength(); ++i, ++pDescripts, ++pReturn)
-        *pReturn = queryDispatch(pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags);
-
-    return aReturn;
-}
-
-// -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatchProvider >  SbaXDataBrowserController::getSlaveDispatchProvider(void) throw( RuntimeException )
-{
-    return m_xSlaveDispatcher;
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::setSlaveDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( RuntimeException )
-{
-    m_xSlaveDispatcher = _xNewProvider;
-}
-
-// -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatchProvider >  SbaXDataBrowserController::getMasterDispatchProvider(void) throw( RuntimeException )
-{
-    return m_xMasterDispatcher;
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::setMasterDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( RuntimeException )
-{
-    m_xMasterDispatcher = _xNewProvider;
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs)
-{
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
-    if (aIter != m_aSupportedFeatures.end())
-        Execute(aIter->second);
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL)
-{
-    // remeber the listener together with the ::com::sun::star::util::URL
-    m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(aURL, aListener));
-
-    // initially broadcast the state
-    InvalidateFeature(aURL.Complete, aListener, sal_True);
-        // force the new state to be broadcasted to the new listener
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL)
-{
-    DispatchIterator iterSearch = m_arrStatusListener.begin();
-    DispatchIterator iterEnd = m_arrStatusListener.end();
-
-    sal_Bool bRemoveForAll = (aURL.Complete.getLength() == 0);
-    while (iterSearch != iterEnd)
-    {
-        DispatchTarget& rCurrent = *iterSearch;
-        if  (   (rCurrent.xListener == aListener)
-            &&  (   bRemoveForAll
-                ||  (rCurrent.aURL.Complete.equals(aURL.Complete))
-                )
-            )
-        {
-            if (!bRemoveForAll)
-            {   // remove the listener only for the given ::com::sun::star::util::URL, so we can exit the loop after deletion
-                m_arrStatusListener.erase(iterSearch);
-                break;
-            }
-            else
-            {   // we have to remove the listener for all URLs, so a simple erase isn't sufficient (as the iterator may be invalid then)
-                sal_Int32 nOffset = iterSearch - m_arrStatusListener.begin();
-                m_arrStatusListener.erase(iterSearch);
-                iterSearch = m_arrStatusListener.begin() + nOffset;
-                iterEnd = m_arrStatusListener.end();
-            }
-        }
-        else
-            ++iterSearch;
-    }
-
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
-    if (aIter != m_aSupportedFeatures.end())
-    {   // clear the cache for that feature
-        StateCacheIterator aCachePos = m_aStateCache.find(aIter->second);
-        if (aCachePos != m_aStateCache.end())
-            m_aStateCache.erase(aCachePos);
-    }
-}
-
-// -----------------------------------------------------------------------
 void SbaXDataBrowserController::dispose()
 {
-    // say our dispose listeners goodbye
-    ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (XWeak*)(::cppu::OWeakObject*)this;
-    m_aDisposeListeners.disposeAndClear(aEvt);
-
-    // our status listeners, too
-    while (m_arrStatusListener.size() > 0)
-    {
-        DispatchIterator iterCurrent = m_arrStatusListener.begin();
-
-        DispatchTarget& rCurrent = *iterCurrent;
-        ::com::sun::star::lang::EventObject aDisposeEvent;
-        aDisposeEvent.Source = (::com::sun::star::lang::XComponent*)this;
-
-#ifdef DBG_UTIL
-        sal_Int32 nSize = m_arrStatusListener.size();
-#endif
-        rCurrent.xListener->disposing(aDisposeEvent);
-        DBG_ASSERT(nSize > m_arrStatusListener.size(), "SbaXDataBrowserController::dispose : the listener did not call removeStatusListener !");
-            // in disposing the status listener should remove itself via removeStatusListener, therein we remove it from
-            // m_arrStatusListener, so the size should have decreased.
-    }
-
-    // check out from all the objects we are listening
-    // the frame
-    if (m_xCurrentFrame.is())
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    OGenericUnoController::dispose();
 
     if (!PendingLoad())
     {
@@ -1323,11 +860,11 @@ void SbaXDataBrowserController::dispose()
 
     removeModelListeners(getControlModel());
 
-    if (m_pContent)
+    if (getBrowserView())
     {
-        removeControlListeners(m_pContent->getGridControl());
+        removeControlListeners(getBrowserView()->getGridControl());
         // don't delete explicitly, this is done by the owner (and user) of this controller (me hopes ...)
-        m_pContent = NULL;
+        m_pView = NULL;
     }
 
     if(m_aInvalidateClipboard.IsActive())
@@ -1343,19 +880,6 @@ void SbaXDataBrowserController::dispose()
             xDataSourceComponent->dispose();
     }
 }
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::addEventListener(const Reference< ::com::sun::star::lang::XEventListener > & aListener)
-{
-    m_aDisposeListeners.addInterface(aListener);
-}
-
-// -----------------------------------------------------------------------
-void SbaXDataBrowserController::removeEventListener(const Reference< ::com::sun::star::lang::XEventListener > & aListener)
-{
-    m_aDisposeListeners.removeInterface(aListener);
-}
-
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
@@ -1367,7 +891,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                 // ensure that the active cell (if any) has the focus
                 m_aAsyncGetCellFocus.Call();
                 // start the clipboard timer
-                if (m_pContent && m_pContent->getVclControl() && !m_aInvalidateClipboard.IsActive())
+                if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.SetTimeout(300);
                     m_aInvalidateClipboard.Start();
@@ -1376,7 +900,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
             case ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING:
                 m_bFrameUiActive = sal_False;
                 // stop the clipboard invalidator
-                if (m_pContent && m_pContent->getVclControl() && m_aInvalidateClipboard.IsActive())
+                if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Stop();
                     LINK(this, SbaXDataBrowserController, OnInvalidateClipboard).Call(NULL);
@@ -1395,7 +919,7 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
     if (aInfo.isValid())
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
-        OSQLMessageBox aDlg(getContent(), aInfo);
+        OSQLMessageBox aDlg(getBrowserView(), aInfo);
         aDlg.Execute();
     }
     if (m_nFormActionNestingLevel)
@@ -1419,8 +943,8 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         // don't use the content as parent if it isn't visible
     // (and don't use NULL as parent : this may be displayed in the beamer and really shouldn't be task-local)
         // 69297 - FS - 25.10.99
-    if (m_pContent && m_pContent->IsVisible())
-        pParent = m_pContent;
+    if (getBrowserView() && getBrowserView()->IsVisible())
+        pParent = getBrowserView();
 
     // default handling: instantiate an interaction handler and let it handle the parameter request
     try
@@ -1489,46 +1013,6 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::loaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
-{
-    // not interested in
-    // we're loading within an separate thread and have a handling  for it's "finished event"
-}
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::unloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
-{
-    // not interested in
-}
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::unloaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
-{
-    InvalidateAll(sal_True);
-        // do this asynchron, there are other listeners reacting on this message ...
-        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
-        // change as a reaction on that event. as we have no chance to be notified of this change (which is
-        // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
-}
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::reloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
-{
-    // not interested in
-}
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
-{
-    InvalidateAll(sal_True);
-        // do this asynchron, there are other listeners reacting on this message ...
-        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
-        // change as a reaction on that event. as we have no chance to be notified of this change (which is
-        // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
-}
 
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( RuntimeException )
@@ -1546,37 +1030,11 @@ void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObje
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( RuntimeException )
 {
-    if (QueryBox(m_pContent, ModuleRes(QUERY_BRW_DELETE_ROWS)).Execute() != RET_YES)
+    if (QueryBox(getBrowserView(), ModuleRes(QUERY_BRW_DELETE_ROWS)).Execute() != RET_YES)
         return sal_False;
 
     return sal_True;
 }
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::EmptyWindow()
-{
-    // dispatch en empty ::com::sun::star::util::URL so we will be cleaned up
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-    if (xProvider.is())
-    {
-        Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(::com::sun::star::util::URL(), m_xCurrentFrame->getName(), 0);
-        if (xDispatcher.is())
-            xDispatcher->dispatch(::com::sun::star::util::URL(), Sequence< PropertyValue >());
-    }
-}
-
-//------------------------------------------------------------------------------
-void SbaXDataBrowserController::AddSupportedFeatures()
-{
-    // add all supported features
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/copyContent")] = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/cutContent")] = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/pasteContent")] = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserSlots/EditDoc")] = ID_BROWSER_EDITDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")] = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVEDOC;
-}
-
 //------------------------------------------------------------------------------
 FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
 {
@@ -1586,7 +1044,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
     try
     {
         // no chance without a view
-        if (!m_pContent || !m_pContent->getVclControl())
+        if (!getBrowserView() || !getBrowserView()->getVclControl())
             return aReturn;
         // no chance without valid models
         if (isValid() && !isValidCursor())
@@ -1609,7 +1067,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
             case ID_BROWSER_CUT:
             case ID_BROWSER_PASTE:
             {
-                DbCellControllerRef xCurrentController = m_pContent->getVclControl()->Controller();
+                DbCellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
                 if (xCurrentController.Is() && xCurrentController->ISA(DbEditCellController))
                 {
                     Edit& rEdit = (Edit&)xCurrentController->GetWindow();
@@ -1644,7 +1102,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
             case ID_BROWSER_ORDERCRIT:
             case ID_BROWSER_FILTERCRIT:
                 // we are not in the handle column
-                aReturn.bEnabled = m_pContent->getVclControl()->GetCurColumnId() != 0;
+                aReturn.bEnabled = getBrowserView()->getVclControl()->GetCurColumnId() != 0;
                 // a native statement can't be filtered or sorted
                 //  aReturn.bEnabled &= m_xParser.is();
                 break;
@@ -1698,7 +1156,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
 
                 aReturn.bEnabled = sal_True;
 
-                sal_Int16 nGridMode = m_pContent->getVclControl()->GetOptions();
+                sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
                 aReturn.aState = ::comphelper::makeBoolAny(nGridMode > DbGridControl::OPT_READONLY);
             }
             break;
@@ -1766,7 +1224,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
         if(bFilter)
         {
-            DlgFilterCrit aDlg(getContent(),xCon,m_xParser,xSup->getColumns(),xField->getName());
+            DlgFilterCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns(),xField->getName());
             String aFilter;
             if(!aDlg.Execute())
             {
@@ -1778,7 +1236,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         }
         else
         {
-            DlgOrderCrit aDlg(getContent(),xCon,m_xParser,xSup->getColumns());
+            DlgOrderCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns());
             String aOrder;
             if(!aDlg.Execute())
             {
@@ -1789,7 +1247,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             aDlg.BuildOrderPart();
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         return;
     }
@@ -1799,7 +1257,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     sal_Bool bOldFilterApplied(sal_False);
     if (bFilter)
     {
-        try { bOldFilterApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER)); } catch(...) { } ;
+        try { bOldFilterApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER)); } catch(Exception&) { } ;
     }
 
     if (sOldVal.equals(sNewVal))
@@ -1807,7 +1265,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         return;
 
     {
-        WaitObject aWO(getContent());
+        WaitObject aWO(getBrowserView());
         try
         {
             if (bFilter)
@@ -1822,7 +1280,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             FormErrorHelper aReportError(this);
             xReload->reload();
         }
-        catch(...)
+        catch(Exception&)
         {
         }
         ;
@@ -1849,7 +1307,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
             xReload->reload();
         }
-        catch(...)
+        catch(Exception&)
         {
         }
         ;
@@ -1861,15 +1319,15 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 void SbaXDataBrowserController::ExecuteSearch()
 {
     // calculate the control source of the active field
-    Reference< ::com::sun::star::form::XGrid >  xGrid(m_pContent->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     DBG_ASSERT(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an ::com::sun::star::form::XGrid interface !");
 
-    Reference< ::com::sun::star::form::XGridPeer >  xGridPeer(m_pContent->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns = xGridPeer->getColumns();
     DBG_ASSERT(xGridPeer.is() && xColumns.is(), "SbaXDataBrowserController::ExecuteSearch : invalid peer !");
 
     sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
-    sal_Int16 nModelCol = m_pContent->View2ModelPos(nViewCol);
+    sal_Int16 nModelCol = getBrowserView()->View2ModelPos(nViewCol);
 
     Reference< XPropertySet >  xCurrentCol = *(Reference< XPropertySet > *)xColumns->getByIndex(nModelCol).getValue();
     String sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
@@ -1891,7 +1349,7 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
 
-    FmSearchDialog dlg(getContent(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),
+    FmSearchDialog dlg(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),
         FmSearchDialog::SM_ALLOWSCHEDULE);
     dlg.SetActiveField(sActiveField);
 
@@ -1920,7 +1378,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 xActiveSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(!bApplied)));
                 Reference< ::com::sun::star::form::XLoadable >  xReload(xActiveSet, UNO_QUERY);
                 {
-                    WaitObject aWO(getContent());
+                    WaitObject aWO(getBrowserView());
                     xReload->reload();
                 }
             }
@@ -1928,9 +1386,9 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             break;
         case ID_BROWSER_EDITDOC:
         {
-            sal_Int16 nGridMode = m_pContent->getVclControl()->GetOptions();
+            sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
             if (nGridMode == DbGridControl::OPT_READONLY)
-                m_pContent->getVclControl()->SetOptions(DbGridControl::OPT_UPDATE | DbGridControl::OPT_INSERT | DbGridControl::OPT_DELETE);
+                getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_UPDATE | DbGridControl::OPT_INSERT | DbGridControl::OPT_DELETE);
                     // the options not supported by the data source will be removed automatically
             else
             {
@@ -1942,7 +1400,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 if (GetState(ID_BROWSER_UNDO).bEnabled)
                     Execute(ID_BROWSER_UNDO);
 
-                m_pContent->getVclControl()->SetOptions(DbGridControl::OPT_READONLY);
+                getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_READONLY);
             }
             InvalidateFeature(ID_BROWSER_EDITDOC);
         }
@@ -1957,7 +1415,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
         case ID_BROWSER_CUT:
         case ID_BROWSER_PASTE:
         {
-            DbCellControllerRef xCurrentController = m_pContent->getVclControl()->Controller();
+            DbCellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
             if (!xCurrentController.Is())
                 // should be intercepted by GetState. Normally.
                 // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
@@ -2007,7 +1465,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
             if (bParserSuccess)
             {
-                WaitObject aWO(getContent());
+                WaitObject aWO(getBrowserView());
                 try
                 {
                     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2017,7 +1475,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     FormErrorHelper aReportError(this);
                     xReload->reload();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 ;
@@ -2034,7 +1492,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
                     xReload->reload();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 ;
@@ -2076,7 +1534,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
             if (bParserSuccess)
             {
-                WaitObject aWO(getContent());
+                WaitObject aWO(getBrowserView());
                 try
                 {
                     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2087,7 +1545,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     FormErrorHelper aReportError(this);
                     xReload->reload();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 ;
@@ -2105,7 +1563,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
                     xReload->reload();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 ;
@@ -2135,13 +1593,13 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             xSet->setPropertyValue(PROPERTY_FILTER,makeAny(::rtl::OUString()));
             xSet->setPropertyValue(PROPERTY_ORDER,makeAny(::rtl::OUString()));
             {
-                WaitObject aWO(getContent());
+                WaitObject aWO(getBrowserView());
                 try
                 {
                     Reference< ::com::sun::star::form::XLoadable >  xReload(getRowSet(), UNO_QUERY);
                     xReload->reload();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 ;
@@ -2155,7 +1613,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             if (SaveData(sal_True, sal_False))
             {
                 Reference< ::com::sun::star::form::XLoadable >  xReload(getRowSet(), UNO_QUERY);
-                WaitObject aWO(getContent());
+                WaitObject aWO(getBrowserView());
                 xReload->reload();
             }
             break;
@@ -2220,27 +1678,23 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bCommit)
     catch(SQLException&)
     {
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaXDataBrowserController::SaveModified : could not save the current record !");
         bResult = sal_False;
     }
 
-
-
-    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
-    InvalidateFeature(ID_BROWSER_UNDO);
-
+    OGenericUnoController::SaveModified();
     return bResult;
 }
 
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::CommitCurrent()
 {
-    if (!m_pContent)
+    if (!getBrowserView())
         return sal_True;
 
-    Reference< ::com::sun::star::awt::XControl >  xActiveControl(m_pContent->getGridControl());
+    Reference< ::com::sun::star::awt::XControl >  xActiveControl(getBrowserView()->getGridControl());
     Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(xActiveControl, UNO_QUERY);
     sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     sal_Bool bResult = sal_True;
@@ -2255,14 +1709,6 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
     }
     return sal_True;
 }
-
-//------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnToolBoxSelected, ToolBox*, pToolBox)
-{
-    Execute(pToolBox->GetCurItemId());
-    return 0L;
-}
-
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::ColumnChanged()
 {
@@ -2308,7 +1754,7 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, void*, EMPTYARG)
 //------------------------------------------------------------------
 sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    if (!m_pContent)
+    if (!getBrowserView())
         return sal_True;
 
     if (!isValidCursor())
@@ -2316,9 +1762,9 @@ sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsi
 
     if (bUI && GetState(ID_BROWSER_SAVEDOC).bEnabled)
     {
-        m_pContent->getVclControl()->GrabFocus();
+        getBrowserView()->getVclControl()->GrabFocus();
 
-        QueryBox aQry(m_pContent->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+        QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
         if (bForBrowsing)
             aQry.AddButton(ResId(RID_STR_NEW_TASK), RET_NEWTASK,
                 BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
@@ -2335,7 +1781,8 @@ sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsi
         }
     }
 
-    return (sal_uInt16)SaveModified();
+
+    return OGenericUnoController::SaveData(bUI,bForBrowsing);
 }
 
 // -------------------------------------------------------------------------
@@ -2346,12 +1793,12 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     // get the current column from the grid
     if (nViewPos == (sal_uInt16)-1)
     {
-        Reference< ::com::sun::star::form::XGrid >  xGrid(m_pContent->getGridControl(), UNO_QUERY);
+        Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
         if (!xGrid.is())
             return xEmptyReturn;
         nViewPos = xGrid->getCurrentColumnPosition();
     }
-    sal_uInt16 nCurrentCol = m_pContent->View2ModelPos(nViewPos);
+    sal_uInt16 nCurrentCol = getBrowserView()->View2ModelPos(nViewPos);
     if (nCurrentCol == (sal_uInt16)-1)
         return xEmptyReturn;
 
@@ -2371,7 +1818,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, pContext)
 {
-    Reference< ::com::sun::star::container::XIndexAccess >  xPeerContainer(getContent()->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
     // check all grid columns for their control source
     Reference< ::com::sun::star::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
@@ -2390,7 +1837,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
-        sal_uInt16 nModelPos = m_pContent->View2ModelPos(nViewPos);
+        sal_uInt16 nModelPos = getBrowserView()->View2ModelPos(nViewPos);
         Reference< XPropertySet >  xCurrentColModel = *(Reference< XPropertySet > *)xModelColumns->getByIndex(nModelPos).getValue();
         ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
@@ -2433,7 +1880,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
 
     // and move to the field
-    Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(m_pContent->getGridControl()->getPeer(), UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     for (sal_uInt16 nViewPos=0; nViewPos<aColumnControls->getCount(); ++nViewPos)
     {
         Reference< XInterface >  xCurrent(*(Reference< XInterface > *)aColumnControls->getByIndex(nViewPos).getValue(), UNO_QUERY);
@@ -2444,7 +1891,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
                 break;
     }
 
-    Reference< ::com::sun::star::form::XGrid >  xGrid(m_pContent->getGridControl(), UNO_QUERY);
+    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     xGrid->setCurrentColumnPosition(nViewPos);
 
     return 0;
@@ -2515,7 +1962,7 @@ IMPL_LINK(SbaXDataBrowserController, OnAsyncClose, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
 {
-    SbaGridControl* pVclGrid = m_pContent ? m_pContent->getVclControl() : NULL;
+    SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this
     if(pVclGrid)
     {
@@ -2530,20 +1977,13 @@ IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnAsyncInvalidateAll, void*, EMPTYARG)
-{
-    InvalidateAll(sal_False);
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
 void SbaXDataBrowserController::FormLoaded(sal_Bool /*bWasSynch*/)
 {
     if (isValid() && !m_bLoadCanceled)
     {
         // --------------------------------
         // switch the control to alive mode
-        m_pContent->getGridControl()->setDesignMode(sal_False);
+        getBrowserView()->getGridControl()->setDesignMode(sal_False);
 
         // ----------------------------------------------
         // create a parser (needed for filtering/sorting)
@@ -2566,7 +2006,7 @@ void SbaXDataBrowserController::FormLoaded(sal_Bool /*bWasSynch*/)
                 m_xParser->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_WARNING("SbaXDataBrowserController::Construct : something went wrong while creating the parser !");
             m_xParser = NULL;
@@ -2586,7 +2026,46 @@ void SbaXDataBrowserController::FormLoaded(sal_Bool /*bWasSynch*/)
         m_aAsynClose.Call();
     }
 }
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::loaded(const EventObject& aEvent) throw( RuntimeException )
+{
+    // not interested in
+    // we're loading within an separate thread and have a handling  for it's "finished event"
+}
 
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::unloading(const EventObject& aEvent) throw( RuntimeException )
+{
+    // not interested in
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( RuntimeException )
+{
+    InvalidateAll();
+        // do this asynchron, there are other listeners reacting on this message ...
+        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
+        // change as a reaction on that event. as we have no chance to be notified of this change (which is
+        // the one we're interested in) we give them time to do what they want to before invalidating our
+        // bound-field-dependent slots ....
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::reloading(const EventObject& aEvent) throw( RuntimeException )
+{
+    // not interested in
+}
+
+//------------------------------------------------------------------------------
+void SbaXDataBrowserController::reloaded(const EventObject& aEvent) throw( RuntimeException )
+{
+    InvalidateAll();
+        // do this asynchron, there are other listeners reacting on this message ...
+        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
+        // change as a reaction on that event. as we have no chance to be notified of this change (which is
+        // the one we're interested in) we give them time to do what they want to before invalidating our
+        // bound-field-dependent slots ....
+}
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::enterFormAction()
 {
@@ -2602,26 +2081,6 @@ void SbaXDataBrowserController::leaveFormAction()
 {
     DBG_ASSERT(m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !");
     --m_nFormActionNestingLevel;
-}
-
-// -------------------------------------------------------------------------
-URL SbaXDataBrowserController::getURLForId(sal_Int32 _nId) const
-{
-    URL aReturn;
-    for (   ConstSupportedFeaturesIterator aLoop = m_aSupportedFeatures.begin();
-            aLoop != m_aSupportedFeatures.end();
-            ++aLoop
-        )
-        if (aLoop->second == _nId)
-        {
-            aReturn.Complete = aLoop->first;
-            break;
-        }
-
-    if (m_xUrlTransformer.is())
-        m_xUrlTransformer->parseStrict(aReturn);
-
-    return aReturn;
 }
 
 // -------------------------------------------------------------------------
@@ -2845,7 +2304,7 @@ void LoadFormThread::run()
         else
             bErrorOccured = true;
     }
-    catch(...)
+    catch(Exception&)
     {
         bErrorOccured = true;
     }

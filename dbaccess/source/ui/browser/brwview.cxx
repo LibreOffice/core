@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,6 @@
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
 #endif
-#ifndef _SFXAPP_HXX //autogen wg. SFX_APP
-#include <sfx2/app.hxx>
-#endif
-#ifndef _SFXIMGMGR_HXX //autogen wg. SFX_IMAGEMANAGER
-#include <sfx2/imgmgr.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -107,10 +101,8 @@ using namespace ::com::sun::star::container;
 
 // -------------------------------------------------------------------------
 UnoDataBrowserView::UnoDataBrowserView(Window* pParent, const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
-:Window(pParent,WB_BORDER)
-    ,m_pToolBox(NULL)
+    :ODataView(pParent,_rFactory)
     ,m_pVclControl(NULL)
-    ,m_xServiceFactory(_rFactory)
     ,m_pSplitter(NULL)
     ,m_pTreeView(NULL)
 {
@@ -120,12 +112,9 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 {
     try
     {
-        // our UNO representation
-        m_xMe = VCLUnoHelper::CreateControlContainer(this);
-        DBG_ASSERT(m_xMe.is(), "UnoDataBrowserView::Construct : no UNO representation");
-
+        ODataView::Construct(xModel);
         // create the (UNO-) control
-        m_xGrid = new SbaXGridControl(m_xServiceFactory);
+        m_xGrid = new SbaXGridControl(getORB());
         DBG_ASSERT(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);
@@ -138,7 +127,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_xGrid->setModel(xModel);
         // introduce the container (me) to the grid
         Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(xModel, UNO_QUERY);
-        m_xMe->addControl(::comphelper::getString(xModelSet->getPropertyValue(PROPERTY_NAME)), m_xGrid);
+        getContainer()->addControl(::comphelper::getString(xModelSet->getPropertyValue(PROPERTY_NAME)), m_xGrid);
 
         // get the VCL-control
         m_pVclControl = NULL;
@@ -152,18 +141,15 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
-    catch(...)
+    catch(Exception&)
     {
         ::comphelper::disposeComponent(m_xGrid);
-        ::comphelper::disposeComponent(m_xMe);
         throw;
     }
 }
 // -------------------------------------------------------------------------
 UnoDataBrowserView::~UnoDataBrowserView()
 {
-    setToolBox(NULL);
-
     m_pVclControl = NULL;
 
     delete m_pSplitter;
@@ -173,7 +159,6 @@ UnoDataBrowserView::~UnoDataBrowserView()
         delete m_pTreeView;
         m_pTreeView = NULL;
     }
-    ::comphelper::disposeComponent(m_xMe);
     ::comphelper::disposeComponent(m_xGrid);
 }
 // -----------------------------------------------------------------------------
@@ -186,30 +171,6 @@ IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
     return 0L;
 }
 // -------------------------------------------------------------------------
-void UnoDataBrowserView::setToolBox(ToolBox* pTB)
-{
-    if (pTB == m_pToolBox)
-        return;
-
-    if (m_pToolBox)
-    {
-        SFX_IMAGEMANAGER()->ReleaseToolBox(m_pToolBox);
-        delete m_pToolBox;
-    }
-
-    m_pToolBox = pTB;
-    if (m_pToolBox)
-    {
-        SFX_IMAGEMANAGER()->RegisterToolBox(m_pToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
-
-        m_pToolBox->SetParent(this);
-        m_pToolBox->Show();
-    }
-
-    // rearrange the grid and the TB
-    Resize();
-}
-// -------------------------------------------------------------------------
 void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 {
     m_pSplitter = _pSplitter;
@@ -219,23 +180,27 @@ void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 // -------------------------------------------------------------------------
 void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
-    if (m_pTreeView)
-        delete m_pTreeView;
-    m_pTreeView = _pTreeView;
+    if (m_pTreeView != _pTreeView)
+    {
+        if (m_pTreeView)
+            delete m_pTreeView;
+        m_pTreeView = _pTreeView;
+    }
 }
 // -------------------------------------------------------------------------
-
-// -------------------------------------------------------------------------
-void UnoDataBrowserView::Resize()
+void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
 {
-    Window::Resize();
     Point   aSplitPos(0,0);
     Size    aSplitSize(0,0);
-    Size    aNewSize( GetOutputSizePixel() );
+    Size    aNewSize( _rRect.GetSize() );
 
-    Size aToolBoxSize(0,0);
-    if (m_pToolBox)
-        aToolBoxSize = m_pToolBox->GetSizePixel();
+    Size aToolBoxSize;
+    ToolBox* pToolBox = getToolBox();
+    if(pToolBox)
+    {
+        aToolBoxSize = pToolBox->GetOutputSizePixel();
+        pToolBox->SetSizePixel(aToolBoxSize);
+    }
 
     if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
@@ -260,18 +225,15 @@ void UnoDataBrowserView::Resize()
                                         Size( aNewSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) ) );
     }
 
-    // set the size of the toolbox
-    if (m_pToolBox)
-        m_pToolBox->SetPosSizePixel(Point(0, 0),
-            Size(aNewSize.Width() - aSplitSize.Width() - aSplitPos.X(), aToolBoxSize.Height()));
-
     // set the size of grid control
     Reference< ::com::sun::star::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
     if (xGridAsWindow.is())
         xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aToolBoxSize.Height() ,
-                                   aNewSize.Width() - aSplitSize.Width() - aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
+                                   aNewSize.Width() - aSplitSize.Width() - aSplitPos.X(),_rRect.GetHeight() - aToolBoxSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
 
-
+    // set the rect for the baseclass
+    _rRect.SetPos(Point(0, 0));
+    _rRect.SetSize(Size(aNewSize.Width(),aToolBoxSize.Height()));
 }
 
 //------------------------------------------------------------------
