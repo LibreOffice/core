@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:16:58 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ οπθ θμοξπςθπξβΰνθθ.";
         Text[ polish ] = "Za ma³o pamiκci dla importu.";
         Text[ japanese ] = "²έΞί°Δ‚Ι•s\\•ª‚ΘÒΣΨ‹σ‚«—e—ΚB";
-        Text[ chinese_traditional ] = "¦bΏι¤J®Ι°OΎΠΕι¤£¨¬΅C";
+        Text[ chinese_traditional ] = "¶Χ¤J®Ι°OΎΠΕι¤£¨¬΅C";
         Text[ arabic ] = "ΗαΠΗίΡΙ ανΣΚ ίΗένΙ ΓΛδΗΑ ΗαΗΣΚνΡΗΟ.";
         Text[ greek ] = "Κατά την εισαγωγή προέκυψε πρόβλημα μνήμης.";
         Text[ korean ] = "°΅Α®Ώΐ±βΈ¦ ΗΟ±β ΐ§ΗΡ ΈήΈπΈ®°΅ ΊΞΑ·ΗΥ΄Ο΄Ω.";
@@ -233,7 +233,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Ξψθακΰ β ρςπσκςσπε τΰιλΰ οπθ θμοξπςθπξβΰνθθ.";
         Text[ polish ] = "B³Ήd struktury pliku podczas importowania.";
         Text[ japanese ] = "²έΞί°Δ‚ΜΜ§²Ω\\‘Ά‚Ε‚Μ΄Χ°B";
-        Text[ chinese_traditional ] = "¦bΏι¤J®Ιµo¥ΝΐΙ®Χµ²ΊcΏω»~΅C";
+        Text[ chinese_traditional ] = "¶Χ¤J®Ιµo¥ΝΐΙ®Χµ²ΊcΏω»~΅C";
         Text[ arabic ] = "ΝΟΛ ΞΨΓ έν ΘδνΙ Ηαγαέ ΓΛδΗΑ ΗαΗΣΚνΡΗΟ.";
         Text[ greek ] = "Σφάλμα στη δομή του αρχείου κατά την εισαγωγή.";
         Text[ korean ] = "°΅Α®Ώΐ±βΈ¦ ΗΟ΄ΒµΏΎΘ ΖΔΐΟ ±ΈΑ¶Ώ΅Ό­ Ώΐ·ω";
@@ -506,7 +506,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Μΰκρθμΰλόνξε χθρλξ ρςπξκ οπεβϋψενξ.Ρςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, θμοξπςθπξβΰνϋ νε ασδσς!";
         Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bκdΉ importowane!";
         Text[ japanese ] = "s‚ΜΕ‚”‚π’΄‚¦‚Δ‚Ά‚ά‚·B‰ίθ‚Μs‚Ν²έΞί°Δ‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
-        Text[ chinese_traditional ] = "¶WΉL¦CΌΖ³Μ°ª­­«Χ΅C¶WΉLªΊ¦C¤£·|³QΏι¤J΅I";
+        Text[ chinese_traditional ] = "¶WΉL¦CΌΖ³Μ°ª­­«Χ΅C¶WΉLªΊ¦C¤£·|³Q¶Χ¤J΅I";
         Text[ arabic ] = "Κγ ΚΞΨν ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ. αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
         Text[ korean ] = "ΗΰΐΗ ΓΦ΄λΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. ΓΚ°ϊµΘ ΗΰΐΊ °΅Α®ΏΓΌφ Ύψ½ΐ΄Ο΄Ω.";
