@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 17:47:26 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void PADialog::PrintTestPage()
     if( m_pPrinter ) // already printing; user pressed button twice
         return;
 
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     String sPrinter( getSelectedDevice() );
 
@@ -617,7 +617,7 @@ void PADialog::ConfigureDevice()
 
 void PADialog::RenameDevice()
 {
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     String aPrinter( getSelectedDevice() );
     OUString aOldPrinter( aPrinter );
@@ -656,7 +656,7 @@ void PADialog::RenameDevice()
 
 void PADialog::UpdateDevice()
 {
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     m_aDevicesLB.Clear();
 

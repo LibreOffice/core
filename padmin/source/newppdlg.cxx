@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:49:55 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void PPDImportDialog::Import()
         {
 #ifdef DEBUG
             fprintf( stderr, "Warning: File %s has empty printer name.\n",
-                     ByteString( ByteString( aPath.PathToFileName(), gsl_getSystemTextEncoding() ).GetBuffer() ) );
+                     ByteString( ByteString( aPath.PathToFileName(), osl_getThreadTextEncoding() ).GetBuffer() ) );
 #endif
             continue;
         }
@@ -212,7 +212,7 @@ void PPDImportDialog::Import()
 
 IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
 {
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     if( pButton == &m_aCancelBtn )
     {
@@ -277,7 +277,7 @@ IMPL_LINK( PPDImportDialog, ModifyHdl, ComboBox*, pListBox )
 {
     if( pListBox == &m_aPathBox )
     {
-        ByteString aDir( m_aPathBox.GetText(), gsl_getSystemTextEncoding() );
+        ByteString aDir( m_aPathBox.GetText(), osl_getThreadTextEncoding() );
         if( ! access( aDir.GetBuffer(), F_OK ) )
             Import();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 19:47:09 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _PAD_COMMANDDLG_HXX_
 #include <cmddlg.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 
 #define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
@@ -145,7 +148,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
         m_pCommandPage( NULL )
 {
     FreeResource();
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     String aTitle( GetText() );
     aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), m_aJobData.m_aPrinterName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:23:11 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ Config& padmin::getPadminRC()
     if( ! pRC )
     {
         static const char* pEnv = getenv( "HOME" );
-        String aFileName( pEnv ? pEnv : "", gsl_getSystemTextEncoding() );
+        String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
         aFileName.AppendAscii( "/.padminrc" );
         pRC = new Config( aFileName );
     }

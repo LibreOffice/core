@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 09:50:28 $
+ *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         char pBuffer[1024];
         FILE* pPipe;
         String aCommand;
-        rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+        rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
         pPipe = popen( "which gs 2>/dev/null", "r" );
         if( pPipe )
