@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:52:42 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,7 @@ public:
 #define PORTIONKIND_LINEBREAK   2
 #define PORTIONKIND_FIELD       3
 #define PORTIONKIND_HYPHENATOR  4
+#define PORTIONKIND_EXTRASPACE  5
 
 #define DELMODE_SIMPLE          0
 #define DELMODE_RESTOFWORD      1

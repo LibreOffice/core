@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-29 13:29:08 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <bulitem.hxx>
 #include <flditem.hxx>
 #include <emphitem.hxx>
+#include <scriptspaceitem.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -132,7 +133,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
 
         ppDefItems[0]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
         ppDefItems[1]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
-        ppDefItems[2]  = new SfxBoolItem( EE_PARA_ASIANCJKSPACING, TRUE );
+        ppDefItems[2]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
         ppDefItems[3]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
         ppDefItems[4]  = new SfxBoolItem( EE_PARA_HYPHENATE, FALSE );
         ppDefItems[5]  = new SfxUInt16Item( EE_PARA_BULLETSTATE, 0 );

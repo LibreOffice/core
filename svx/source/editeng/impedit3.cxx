@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-15 11:35:52 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <wghtitem.hxx>
 #include <postitem.hxx>
 #include <langitem.hxx>
+#include <scriptspaceitem.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -581,8 +582,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         eJustification = ((const SvxAdjustItem&)pNode->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
     sal_Bool bHyphenatePara = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
-    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)
-        pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
+    const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&) pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
+    const BOOL bScriptSpace = ((const SvxScriptSpaceItem&) pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
 
 //  const sal_uInt16 nInvalidEnd = ( pParaPortion->GetInvalidDiff() > 0 )
 //      ? pParaPortion->GetInvalidPosStart() + pParaPortion->GetInvalidDiff()
@@ -922,6 +923,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             }
             else
             {
+                DBG_ASSERT( pPortion->GetLen(), "Empty Portion - Extra Space?!" );
                 SeekCursor( pNode, nTmpPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
@@ -934,6 +936,27 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     // => Immer einfach schnelles insert.
                     sal_uInt16 nPos = nTmpPos - pLine->GetStart();
                     pLine->GetCharPosArray().Insert( pBuf, nLen, nPos );
+                }
+
+                if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
+                {
+                    USHORT nSpacePortion = nTmpPortion+1;
+                    TextPortion* pSpacePortion = NULL;
+
+                    TextPortion* pNextPortion = ( nSpacePortion < pParaPortion->GetTextPortions().Count() ) ? pParaPortion->GetTextPortions().GetObject( nSpacePortion ): NULL;
+                    if ( pNextPortion && ( pNextPortion->GetKind() == PORTIONKIND_EXTRASPACE ) )
+                    {
+                        pSpacePortion = pNextPortion;
+                    }
+                    else
+                    {
+                        pSpacePortion = new TextPortion( 0 );
+                        pSpacePortion->GetKind() = PORTIONKIND_EXTRASPACE;
+                        pParaPortion->GetTextPortions().Insert( pSpacePortion, nSpacePortion );
+                    }
+                    nTmpPortion++;  // Skip this Portion
+                    pSpacePortion->GetSize().Width() = pPortion->GetSize().Height()/5;
+                    nTmpWidth += pSpacePortion->GetSize().Width();
                 }
             }
 
@@ -1036,7 +1059,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 default:
                 {
                     // Ein Feature wird nicht umgebrochen:
-                    DBG_ASSERT( pPortion->GetKind() == PORTIONKIND_LINEBREAK, "Was fuer ein Feature ?" );
+                    DBG_ASSERT( ( pPortion->GetKind() == PORTIONKIND_LINEBREAK ) /*|| ( pPortion->GetKind() == PORTIONKIND_EXTRASPACE )*/, "Was fuer ein Feature ?" );
                     bEOL = sal_True;
                     bFixedEnd = sal_True;
                 }
@@ -1738,7 +1761,15 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
         if ( nTmpPos >= nPos )
         {
             if ( nTmpPos == nPos )  // dann braucht nichts geteilt werden
+            {
+                // Skip Portions with 0 len, eg. ExtraSpace
+                while ( ( (nSplitPortion+1) < nPortions ) && !pPortion->GetTextPortions().GetObject(nSplitPortion+1)->GetLen() )
+                {
+                    nSplitPortion++;
+                    DBG_ASSERT( pPortion->GetTextPortions().GetObject(nSplitPortion)->GetKind() == PORTIONKIND_EXTRASPACE, "What am I skipping?" );
+                }
                 return nSplitPortion;
+            }
             pTextPortion = pTP;
             break;
         }
@@ -2481,6 +2512,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpPos.Y() += nTxtWidth;
                             }
                             break;
+                            case PORTIONKIND_EXTRASPACE:
                             case PORTIONKIND_TAB:
                             {
                                 if ( pTextPortion->GetExtraValue() && ( pTextPortion->GetExtraValue() != ' ' ) )

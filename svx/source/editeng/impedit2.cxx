@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2485,6 +2485,7 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine )
             case PORTIONKIND_FIELD:
             case PORTIONKIND_HYPHENATOR:
             case PORTIONKIND_TAB:
+            case PORTIONKIND_EXTRASPACE:
             {
                 nWidth += pTextPortion->GetSize().Width();
             }

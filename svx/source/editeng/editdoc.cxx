@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:52:42 $
+ *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,9 @@ DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
 
 SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { 0, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
         { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },   // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // EE_PARA_ASIANCJKSPACING
         { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },     // EE_PARA_NUMBULL
         { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_HYPHENATE
         { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_BULLETSTATE
@@ -533,6 +533,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
             case PORTIONKIND_TAB:
+            case PORTIONKIND_EXTRASPACE:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }
