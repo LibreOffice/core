@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 17:54:42 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:44:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ LIBTARGET = NO
 # --- Allgemein ------------------------------------------------------------
 
 OBJFILES = \
-    $(OBJ)$/ttstrhlp.obj	\
     $(OBJ)$/ttbasic.obj	\
     $(OBJ)$/basicrt.obj	\
     $(OBJ)$/processw.obj    \
@@ -107,7 +106,6 @@ SRC1FILES = \
 LIB1TARGET=$(LB)$/app.lib
 LIB1ARCHIV=$(LB)$/libapp.a
 LIB1OBJFILES = \
-        $(OBJ)$/ttstrhlp.obj	\
         $(OBJ)$/basicrt.obj	\
         $(OBJ)$/processw.obj     \
         $(OBJ)$/process.obj      \
