@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: align.hrc,v $
+ *  $RCSfile: frmdirlbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dr $ $Date: 2002-09-12 09:53:47 $
  *
@@ -58,69 +58,74 @@
  *
  *
  ************************************************************************/
-#ifndef _SVX_ALIGN_HRC
-#define _SVX_ALIGN_HRC
 
-// defines ------------------------------------------------------------------
+#pragma hdrstop
 
-// resource id's
-#define FL_ALIGNMENT                10
-#define FT_HORALIGN                 11
-#define LB_HORALIGN                 12
-#define FT_INDENT                   13
-#define ED_INDENT                   14
-#define FT_VERALIGN                 15
-#define LB_VERALIGN                 16
-
-#define FL_ORIENTATION              20
-#define BTN_TXTSTACKED              21
-#define CTR_DIAL                    22
-#define FT_DEGREES                  23
-#define NF_DEGREES                  24
-#define FT_BORDER_LOCK              25
-#define CTR_BORDER_LOCK             26
-#define BTN_ASIAN_VERTICAL          27
-
-#define FL_SPACE                    30
-#define FT_LEFTSPACE                31
-#define ED_LEFTSPACE                32
-#define FT_RIGHTSPACE               33
-#define ED_RIGHTSPACE               34
-#define FT_TOPSPACE                 35
-#define ED_TOPSPACE                 36
-#define FT_BOTTOMSPACE              37
-#define ED_BOTTOMSPACE              38
-
-#define FL_WRAP                     40
-#define BTN_WRAP                    41
-#define BTN_HYPH                    42
-#define FT_TEXTFLOW                 43
-#define LB_FRAMEDIR                 44
-
-//#define ED_INDENT1                  100
-
-// list box indexes
-#define ALIGNDLG_HORALIGN_STD       0
-#define ALIGNDLG_HORALIGN_LEFT      1
-#define ALIGNDLG_HORALIGN_CENTER    2
-#define ALIGNDLG_HORALIGN_RIGHT     3
-#define ALIGNDLG_HORALIGN_BLOCK     4
-
-#define ALIGNDLG_VERALIGN_STD       0
-#define ALIGNDLG_VERALIGN_TOP       1
-#define ALIGNDLG_VERALIGN_MID       2
-#define ALIGNDLG_VERALIGN_BOTTOM    3
-
-// image list for ValueSets:
-#define IL_LOCK_BMPS                1
-#define IL_LOCK_BMPS_HC             2
-#define IID_BOTTOMLOCK              1
-#define IID_TOPLOCK                 2
-#define IID_CELLLOCK                3
-
-#define STR_BOTTOMLOCK              1
-#define STR_TOPLOCK                 2
-#define STR_CELLLOCK                3
-
+#ifndef _SVX_FRMDIRLBOX_HXX
+#include "frmdirlbox.hxx"
 #endif
+
+namespace svx {
+
+// ----------------------------------------------------------------------------
+
+inline void* lcl_EnumToVoid( SvxFrameDirection eDirection )
+{
+    return reinterpret_cast< void* >( static_cast< sal_uInt32 >( eDirection ) );
+}
+
+inline SvxFrameDirection lcl_VoidToEnum( void* pDirection )
+{
+    return static_cast< SvxFrameDirection >( reinterpret_cast< sal_uInt32 >( pDirection ) );
+}
+
+// ----------------------------------------------------------------------------
+
+FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nStyle ) :
+    ListBox( pParent, nStyle )
+{
+}
+
+FrameDirectionListBox::FrameDirectionListBox( Window* pParent, const ResId& rResId ) :
+    ListBox( pParent, rResId )
+{
+}
+
+FrameDirectionListBox::~FrameDirectionListBox()
+{
+}
+
+void FrameDirectionListBox::InsertEntryValue( const String& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
+{
+    sal_uInt16 nRealPos = InsertEntry( rString, nPos );
+    SetEntryData( nRealPos, lcl_EnumToVoid( eDirection ) );
+}
+
+void FrameDirectionListBox::RemoveEntryValue( SvxFrameDirection eDirection )
+{
+    sal_uInt16 nPos = GetEntryPos( lcl_EnumToVoid( eDirection ) );
+    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        RemoveEntry( nPos );
+}
+
+void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
+{
+    sal_uInt16 nPos = GetEntryPos( lcl_EnumToVoid( eDirection ) );
+    if( nPos == LISTBOX_ENTRY_NOTFOUND )
+        SetNoSelection();
+    else
+        SelectEntryPos( nPos );
+}
+
+SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
+{
+    sal_uInt16 nPos = GetSelectEntryPos();
+    if( nPos == LISTBOX_ENTRY_NOTFOUND )
+        return static_cast< SvxFrameDirection >( 0xFFFF );
+    return lcl_VoidToEnum( GetEntryData( nPos ) );
+}
+
+// ----------------------------------------------------------------------------
+
+} // namespace svx
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-15 12:09:30 $
+ *  last change: $Author: dr $ $Date: 2002-09-12 09:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,6 +1086,10 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
         SvtLanguageOptions  aLangOptions;
         if( aLangOptions.IsCTLFontEnabled() )
         {
+            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+            aTextDirectionLB.InsertEntry( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+
             aPropertiesFL.Show();
             aTextDirectionFT.Show();
             aTextDirectionLB.Show();
@@ -1212,12 +1216,10 @@ BOOL SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     if( aTextDirectionLB.IsVisible() )
     {
-        USHORT          nPos = aTextDirectionLB.GetSelectEntryPos();
-        if( nPos != aTextDirectionLB.GetSavedValue() )
+        SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
+        if( eDir != aTextDirectionLB.GetSavedValue() )
         {
-            USHORT      nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
-            sal_uInt32  nDirection = sal_uInt32( aTextDirectionLB.GetEntryData( nPos ) );
-            rOutSet.Put( SvxFrameDirectionItem( SvxFrameDirection( nDirection ), nWhich ) );
+            rOutSet.Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
             bModified = TRUE;
         }
     }
@@ -1308,10 +1310,8 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     //text direction
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( nWhich ) )
     {
-        const SvxFrameDirectionItem&    rFrameDirItem = ( const SvxFrameDirectionItem& ) rSet.Get( nWhich );
-        sal_uInt32                      nVal  = rFrameDirItem.GetValue();
-        USHORT                          nPos = aTextDirectionLB.GetEntryPos( ( void* ) nVal );
-        aTextDirectionLB.SelectEntryPos( nPos );
+        const SvxFrameDirectionItem& rFrameDirItem = ( const SvxFrameDirectionItem& ) rSet.Get( nWhich );
+        aTextDirectionLB.SelectEntryValue( (SvxFrameDirection)rFrameDirItem.GetValue() );
         aTextDirectionLB.SaveValue();
     }
 

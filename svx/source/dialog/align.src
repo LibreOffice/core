@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:36:55 $
+ *  last change: $Author: dr $ $Date: 2002-09-12 09:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     FixedText FT_VERALIGN
     {
         Pos = MAP_APPFONT ( 160 , 14 ) ;
-        Size = MAP_APPFONT ( 94 , 8 ) ;
+        Size = MAP_APPFONT ( 88 , 8 ) ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text[ english_us ] = "~Vertical";
@@ -420,7 +420,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 160 , 25  );
-        Size = MAP_APPFONT ( 94 , 60 );
+        Size = MAP_APPFONT ( 88 , 60 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList =
@@ -969,7 +969,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 148 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Textfluss" ;
+        Text = "Eigenschaften" ;
         Text [ English ] = "Text Flow" ;
         Text [ english_us ] = "Text flow" ;
         Text [ swedish ] = "Textfl�de" ;
@@ -1001,7 +1001,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     TriStateBox BTN_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 159 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Automatischer Zeilenumbru~ch" ;
         Text [ ENGLISH ] = "Linebrea~k" ;
         Text [ norwegian ] = "Linebrea~k" ;
@@ -1032,8 +1032,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     TriStateBox BTN_HYPH
     {
-        Pos = MAP_APPFONT ( 22 , 172 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 159 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Silben~trennung aktiv" ;
         Text [ ENGLISH ] = "Hyphenation active" ;
         Text[ english_us ] = "Hyphenation active";
@@ -1057,6 +1057,21 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ arabic ] = "Hyphenation active";
         Text[ catalan ] = "Divisi� sil.labes activa";
         Text[ thai ] = "ยัติภังค์ที่ใช้งาน";
+    };
+    FixedText FT_TEXTFLOW
+    {
+        Pos = MAP_APPFONT( 12 , 173 );
+        Size = MAP_APPFONT( 64 , 8 );
+        Text = "Te~xtfluss";
+        Text [ english ] = "Te~xt flow";
+        Text [ english_us ] = "Te~xt flow";
+    };
+    ListBox LB_FRAMEDIR
+    {
+        Pos = MAP_APPFONT( 78 , 171 );
+        Size = MAP_APPFONT( 170 , 50 );
+        Border = TRUE;
+        DropDown = TRUE;
     };
     ImageList IL_LOCK_BMPS
     {

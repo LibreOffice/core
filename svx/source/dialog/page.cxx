@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:40:51 $
+ *  last change: $Author: dr $ $Date: 2002-09-12 09:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,15 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
+    //  fill text flow listbox with valid entries
+    aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
+    if( bCTL )
+        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
+    if( bCJK )
+        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
+//    if( ... )
+//        aTextFlowBox.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+
     if( !bWeb && (bCJK || bCTL) &&
         SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
@@ -314,24 +323,6 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
         aTextFlowBox.SetSelectHdl(LINK(this, SvxPageDescPage, FrameDirectionModify_Impl ));
 
         aBspWin.EnableFrameDirection(sal_True);
-
-        sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
-        USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-        aTextFlowBox.RemoveEntry( nPos );
-
-        if(!bCJK)
-        {
-            nVal = FRMDIR_VERT_TOP_RIGHT;
-            nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-            aTextFlowBox.RemoveEntry( nPos );
-        }
-        if(!bCTL)
-        {
-            nVal = FRMDIR_HORI_RIGHT_TOP;
-            nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-            aTextFlowBox.RemoveEntry( nPos );
-        }
-
     }
     Init_Impl();
 
@@ -609,6 +600,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             aTblAlignFT.Show();
             aHorzBox.Show();
             aVertBox.Show();
+            DisableVerticalPageDir();
 
             // Horizontale Ausrichtung
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
@@ -630,6 +622,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
         case SVX_PAGE_MODE_PRESENTATION:
         {
+            DisableVerticalPageDir();
             aAdaptBox.Show();
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
             aAdaptBox.Check( pItem ?
@@ -696,8 +689,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         sal_uInt32 nVal  = SFX_ITEM_SET == eState
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
-        USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
-        aTextFlowBox.SelectEntryPos( nPos );
+        aTextFlowBox.SelectEntryValue( static_cast< SvxFrameDirection >( nVal ) );
         aTextFlowBox.SaveValue();
         aBspWin.SetFrameDirection(nVal);
     }
@@ -927,13 +919,10 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         delete pRegItem;
     }
 
-    if( aTextFlowBox.IsVisible() &&
-        ( nPos = aTextFlowBox.GetSelectEntryPos() ) !=
-                                            aTextFlowBox.GetSavedValue() )
+    SvxFrameDirection eDirection = aTextFlowBox.GetSelectEntryValue();
+    if( aTextFlowBox.IsVisible() && (eDirection != aTextFlowBox.GetSavedValue()) )
     {
-        sal_uInt32 nDirection = (sal_uInt32)aTextFlowBox.GetEntryData( nPos );
-        rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection,
-                                    GetWhich( SID_ATTR_FRAMEDIRECTION )));
+        rSet.Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
         bModified = TRUE;
     }
 
@@ -1720,13 +1709,24 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     aRegisterLB.Enable( bEnable );
     return 0;
 }
-/* -----------------------------14.06.2002 09:03------------------------------
 
- ---------------------------------------------------------------------------*/
+// ----------------------------------------------------------------------------
+
+void SvxPageDescPage::DisableVerticalPageDir()
+{
+    aTextFlowBox.RemoveEntryValue( FRMDIR_VERT_TOP_RIGHT );
+    aTextFlowBox.RemoveEntryValue( FRMDIR_VERT_TOP_LEFT );
+    if( aTextFlowBox.GetEntryCount() < 2 )
+    {
+        aTextFlowLbl.Hide();
+        aTextFlowBox.Hide();
+        aBspWin.EnableFrameDirection( sal_False );
+    }
+}
+
 IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  pListBox)
 {
-    aBspWin.SetFrameDirection(
-        (sal_uInt32)aTextFlowBox.GetEntryData( pListBox->GetSelectEntryPos()));
+    aBspWin.SetFrameDirection( (sal_uInt32) aTextFlowBox.GetSelectEntryValue() );
     aBspWin.Invalidate();
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:43:32 $
+ *  last change: $Author: dr $ $Date: 2002-09-12 09:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,157 +1605,13 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "Text ~direction";
         Text[ thai ] = "Text ~direction";
     };
-    ListBox     LB_TEXTDIRECTION
+    ListBox LB_TEXTDIRECTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 105 , 165 ) ;
         Size = MAP_APPFONT ( 146 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList =
-        {
-            < "Links-nach-rechts" ; 0; > ;
-            < "Rechts-nach-links" ; 1; > ;
-            < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Left-to-right" ; 0; > ;
-            < "Right-to-left" ; 1; > ;
-            < "Use superordinate settings" ; 4; > ;
-        };
-        StringList [ language_user1 ] =
-        {
-            < "Links nach rechts" ; 0; > ;
-            < "Rechts nach links" ; 1; > ;
-            < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "左から右へ" ; 0; > ;
-            < "右から左へ" ; 1; > ;
-            < "周りのテキストの文字方向に合わせる" ; 4; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Left-to-right" ; 0; > ;
-            < "Right-to-left" ; 1; > ;
-            < "Use superordinate object settings" ; 4; > ;
-        };
-    StringList [ portuguese ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ russian ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ greek ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ dutch ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ french ] =
-    {
-         < "De gauche � droite" ; 0; > ;
-        < "De droite � gauche" ; 1; > ;
-        < "Utiliser les param�tres de l'objet sup�rieur" ; 4; > ;
-    };
-    StringList [ spanish ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Utilizar la configuraci�n del objeto superior. " ; 4; > ;
-    };
-    StringList [ finnish ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ italian ] =
-    {
-         < "Da sinistra a destra" ; 0; > ;
-        < "Da destra a sinistra" ; 1; > ;
-        < "Usa le impostazioni dell'oggetto superiore" ; 4; > ;
-    };
-    StringList [ danish ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ swedish ] =
-    {
-         < "V�nster-till-h�ger" ; 0; > ;
-        < "H�ger-till-v�nster" ; 1; > ;
-        < "Anv�nd det �verordnade objektets inst�llningar" ; 4; > ;
-    };
-    StringList [ polish ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ korean ] =
-    {
-         < "왼쪽에서 오른쪽으로" ; 0; > ;
-        < "오른쪽에서 왼쪽으로" ; 1; > ;
-        < "상위 개체의 설정 적용" ; 4; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-         < "从左向右" ; 0; > ;
-        < "从左向右" ; 1; > ;
-        < "沿用现有的文字方向的设定" ; 4; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-         < "從左向右" ; 0; > ;
-        < "從右向左" ; 1; > ;
-        < "沿用現有的文字方向的設定" ; 4; > ;
-    };
-    StringList [ turkish ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ arabic ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ catalan ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "Links nach rechts" ; 0; > ;
-        < "Rechts nach links" ; 1; > ;
-        < "Einstellungen des �ergeordneten Objektes verwenden" ; 4; > ;
-    };
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";

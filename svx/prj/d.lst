@@ -595,7 +595,9 @@ hedabu: ..\inc\dataaccessdescriptor.hxx %_DEST%\inc%_EXT%\svx\dataaccessdescript
 hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 hedabu: ..\inc\UnoNamespaceMap.hxx %_DEST%\inc%_EXT%\svx\UnoNamespaceMap.hxx
 hedabu: ..\inc\unomaster.hxx %_DEST%\inc%_EXT%\svx\unomaster.hxx
+hedabu: ..\inc\frmdir.hxx %_DEST%\inc%_EXT%\svx\frmdir.hxx
 hedabu: ..\inc\frmdiritem.hxx %_DEST%\inc%_EXT%\svx\frmdiritem.hxx
+hedabu: ..\inc\frmdirlbox.hxx %_DEST%\inc%_EXT%\svx\frmdirlbox.hxx
 hedabu: ..\inc\AccessibleContextBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleContextBase.hxx
 hedabu: ..\inc\AccessibleComponentBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleComponentBase.hxx
 hedabu: ..\inc\AccessibleSelectionBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleSelectionBase.hxx

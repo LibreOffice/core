@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-06 07:16:43 $
+ *  last change: $Author: dr $ $Date: 2002-09-12 09:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,10 @@
 #define ITEMID_ORIENTATION      SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
+#define ITEMID_FRAMEDIR         SID_ATTR_FRAMEDIRECTION
 
 #include "algitem.hxx"
+#include "frmdiritem.hxx"
 #include "align.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
@@ -93,6 +95,9 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
@@ -108,6 +113,7 @@ static USHORT pRanges[] =
     SID_ATTR_ALIGN_LOCKPOS,SID_ATTR_ALIGN_LOCKPOS,
     SID_ATTR_ALIGN_HYPHENATION,SID_ATTR_ALIGN_HYPHENATION,
     SID_ATTR_ALIGN_ASIANVERTICAL,SID_ATTR_ALIGN_ASIANVERTICAL,
+    SID_ATTR_FRAMEDIRECTION,SID_ATTR_FRAMEDIRECTION,
     0
 };
 
@@ -147,6 +153,8 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
     aFlWrap         ( this, ResId( FL_WRAP ) ),
     aBtnWrap        ( this, ResId( BTN_WRAP ) ),
     aBtnHyphen      ( this, ResId( BTN_HYPH ) ),
+    aFtTextFlow     ( this, ResId( FT_TEXTFLOW ) ),
+    aLbFrameDir     ( this, ResId( LB_FRAMEDIR ) ),
 
     bHyphenDisabled ( FALSE )
 {
@@ -158,6 +166,16 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
         aWinOrient.SetTxtStackedClickHdl( LINK( this, SvxAlignmentTabPage, TxtStackedClickHdl_Impl ) );
     else
         aBtnAsianVert.Hide();
+
+    // CTL frame direction
+    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+    aLbFrameDir.InsertEntryValue( SVX_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+    if( !SvtLanguageOptions().IsCTLFontEnabled() )
+    {
+        aFtTextFlow.Hide();
+        aLbFrameDir.Hide();
+    }
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -397,6 +415,15 @@ void SvxAlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
         }
     }
 
+    pItem = GetUniqueItem( rCoreAttrs, SID_ATTR_FRAMEDIRECTION );
+    if( pItem )
+    {
+        SvxFrameDirection eDir = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
+        aLbFrameDir.SelectEntryValue( eDir );
+    }
+    else
+        aLbFrameDir.SetNoSelection();
+
     HorAlignSelectHdl_Impl( NULL );
 
     aBtnWrap.SaveValue();  // TriStateButton
@@ -595,6 +622,20 @@ BOOL SvxAlignmentTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
         rCoreAttrs.ClearItem( nWhich );
 
+    // CTL frame direction
+    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+    pOld = GetUniqueItem( rOldSet, SID_ATTR_FRAMEDIRECTION );
+    SvxFrameDirection eDir = aLbFrameDir.GetSelectEntryValue();
+    BOOL bSelected = aLbFrameDir.GetSelectEntryCount() > 0;
+
+    if( bSelected && (!pOld || (((const SvxFrameDirectionItem*)pOld)->GetValue() != eDir)) )
+    {
+        rCoreAttrs.Put( SvxFrameDirectionItem( eDir, nWhich ) );
+        bAttrsChanged = TRUE;
+    }
+    else if ( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
+        rCoreAttrs.ClearItem( nWhich );
+
     return bAttrsChanged;
 }
 
@@ -660,6 +701,8 @@ void SvxAlignmentTabPage::SetFlags( USHORT nFlags )
     {
         aFlWrap.Disable();
         aBtnWrap.Disable();
+        aFtTextFlow.Disable();
+        aLbFrameDir.Disable();
     }
 
     if ( nFlags & ( WBA_NO_LINEBREAK | WBA_NO_HYPHENATION ) )

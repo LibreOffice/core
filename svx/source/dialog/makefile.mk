@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: oj $ $Date: 2002-07-30 10:35:50 $
+#   last change: $Author: dr $ $Date: 2002-09-12 09:53:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -247,7 +247,8 @@ SRC1FILES =  \
         zoom.src	\
         dlgctrl.src \
         grfflt.src \
-        langbox.src
+        langbox.src \
+        frmdirlbox.src
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -350,7 +351,9 @@ SLOFILES=\
         $(SLO)$/txenctab.obj \
         $(SLO)$/txencbox.obj \
         $(SLO)$/zoom.obj	 \
-        $(SLO)$/grfflt.obj
+        $(SLO)$/grfflt.obj	\
+        $(SLO)$/frmdirlbox.obj
+
 
 EXCEPTIONSFILES=\
         $(SLO)$/charmap.obj		\
