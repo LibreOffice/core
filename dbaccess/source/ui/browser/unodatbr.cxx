@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:09:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,10 +1491,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             {
                 Image aImage(ModuleRes(VIEW_TREE_ICON));
                 populateTree(xViewSup->getViews(),_pParent,aImage);
-                Reference<XContainer> xCont(xViewSup->getViews(),UNO_QUERY);
-                if(xCont.is())
-                    // add as listener to get notified if elements are inserted or removed
-                    xCont->addContainerListener(this);
             }
 
             Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
