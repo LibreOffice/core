@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 18:46:40 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 18:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,4 +649,3 @@ ModalDialog DLG_LICENSE
     Text[ hindi ] = "License Agreement";
     Text[ slovak ] = "Licenčný dohovor";
 };
->>>>>>> 1.11.28.1
