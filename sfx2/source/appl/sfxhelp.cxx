@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 06:03:59 $
+ *  last change: $Author: pb $ $Date: 2001-10-17 11:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,9 @@
 #include <svtools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 
+#define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGSSORT
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svtools/svstdarr.hxx>
 
 #include "sfxsids.hrc"
 #include "app.hxx"
@@ -265,8 +266,8 @@ public:
 
 SfxHelp_Impl::SfxHelp_Impl( const String& rPath, sal_Bool bDebug ) :
 
-    m_bIsDebug  ( bDebug ),
-    m_pOpt      ( 0 )
+    m_bIsDebug      ( bDebug ),
+    m_pOpt          ( NULL )
 
 {
 }
@@ -343,24 +344,27 @@ SfxHelp::~SfxHelp()
 String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
 {
     String aModuleName;
-    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
     {
+        SfxViewFrame* pParentViewFrame = pViewFrame->GetParentViewFrame_Impl();
+
         // Wenn es ein Slot ist, kann es sein, da\s internes InPlace vorliegt
         // und eine Container-SlotId gefragt ist
-        if (nHelpId >= (ULONG) SID_SFX_START && nHelpId <= (ULONG) SHRT_MAX)
+        if ( nHelpId >= (ULONG) SID_SFX_START && nHelpId <= (ULONG) SHRT_MAX && pParentViewFrame )
         {
-            if ( pViewFrame->GetParentViewFrame_Impl() )
-            {
-                // Ist es ein ContainerSlot ?
-                const SfxSlot* pSlot = SFX_APP()->GetSlotPool(pViewFrame).GetSlot( (USHORT) nHelpId );
-                if ( !pSlot || pSlot->IsMode( SFX_SLOT_CONTAINER ) )
-                    pViewFrame = pViewFrame->GetParentViewFrame_Impl();
-            }
+            // Ist es ein ContainerSlot ?
+            const SfxSlot* pSlot = SFX_APP()->GetSlotPool(pViewFrame).GetSlot( (USHORT) nHelpId );
+            if ( !pSlot || pSlot->IsMode( SFX_SLOT_CONTAINER ) )
+                pViewFrame = pParentViewFrame;
         }
 
-        if( pViewFrame->GetObjectShell() )
+        if ( pViewFrame->GetObjectShell() )
+        {
             aModuleName = String::CreateFromAscii( pViewFrame->GetObjectShell()->GetFactory().GetShortName() );
+            if ( aModuleName.EqualsAscii( "schart" ) && pParentViewFrame && pParentViewFrame->GetObjectShell() )
+                aModuleName = String::CreateFromAscii( pParentViewFrame->GetObjectShell()->GetFactory().GetShortName() );
+        }
     }
 
     // cut sub factoryname, if necessary
@@ -453,6 +457,14 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
+    String aHelpURL( rURL );
+    INetURLObject aObj( aHelpURL );
+    if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
+    {
+        aHelpURL = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
+        aHelpURL += DEFINE_CONST_UNICODE("&Keyword=");
+        aHelpURL += rURL;
+    }
     Reference < XDispatchProvider > xFrame;
     Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
@@ -481,7 +493,6 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
             Reference < XFrame > xFrameFinder( xDesktop, UNO_QUERY );
             Reference < XFrame > xTask = xFrameFinder->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
             xTask->setName( DEFINE_CONST_OUSTRING("OFFICE_HELP_TASK") );
-            xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
             pWin->SetText( String( SfxResId( STR_HELP_WINDOW_TITLE ) ) );
             SfxHelpWindow_Impl* pHlpWin = new SfxHelpWindow_Impl( xTask, pWin, WB_DOCKBORDER );
@@ -493,7 +504,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
             else
             {
                 pHlpWin->setContainerWindow( xTask->getContainerWindow() );
-                pHlpWin->SetHelpURL( rURL );
+                pHlpWin->SetHelpURL( aHelpURL );
+                xFrame = Reference < XDispatchProvider >( pHlpWin->getTextFrame(), UNO_QUERY );
                 xTask->getContainerWindow()->setVisible( sal_True );
             }
         }
@@ -504,12 +516,12 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     if ( xFrame.is() )
     {
         ::com::sun::star::util::URL aURL;
-        aURL.Complete = rURL;
+        aURL.Complete = aHelpURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aURL );
-        Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
-                                DEFINE_CONST_UNICODE("OFFICE_HELP"), nFlag );
+        Reference < XDispatch > xDispatch =
+            xFrame->queryDispatch( aURL, DEFINE_CONST_UNICODE("OFFICE_HELP"), nFlag );
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aProps );
 
