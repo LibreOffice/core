@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,14 @@ Menu RID_MAIN_MENU
                 Text[ chinese_simplified ] = "关闭(~C)";
                 Text[ greek ] = "����~����";
                 Text[ korean ] = "닫기(~C)";
-                Text[ turkish ] = "Kapa~t";
+                Text[ turkish ] = "~Kapat";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "~Tanca";
                 Text[ thai ] = "~ปิด";
-            };
+                Text[ czech ] = "Zavřít";
+                        Text[ hebrew ] = "‮סגירה‬";
+                        Text[ hindi ] = "~बन्द करो";
+                    };
             MenuItem
             {
                 ITEM_FILE_SAVEDOC
@@ -173,19 +176,22 @@ Menu RID_MAIN_MENU
                         Text[ korean ] = "보내기(~D)";
                         Text[ chinese_simplified ] = "发送(~D)";
                         Text[ chinese_traditional ] = "傳送(~D)";
-                        Text[ portuguese ] = "Sen~d";
-                        Text[ russian ] = "Sen~d";
-                        Text[ greek ] = "Sen~d";
-                        Text[ dutch ] = "Sen~d";
+                        Text[ portuguese ] = "~Enviar";
+                        Text[ russian ] = "��������~�";
+                        Text[ greek ] = "�~�������";
+                        Text[ dutch ] = "~Zenden";
                         Text[ spanish ] = "~Enviar";
-                        Text[ finnish ] = "Sen~d";
-                        Text[ danish ] = "Sen~d";
-                        Text[ polish ] = "Sen~d";
-                        Text[ portuguese_brazilian ] = "Sen~d";
-                        Text[ turkish ] = "Sen~d";
-                        Text[ arabic ] = "Sen~d";
-                        Text[ catalan ] = "Sen~d";
-                        Text[ thai ] = "Sen~d";
+                        Text[ finnish ] = "L�he~t�";
+                        Text[ danish ] = "S~end";
+                        Text[ polish ] = "Wy�lij";
+                        Text[ portuguese_brazilian ] = "Enviar";
+                        Text[ turkish ] = "G�n~der";
+                        Text[ arabic ] = "�����";
+                        Text[ catalan ] = "Env~ia";
+                        Text[ thai ] = "ส่~ง";
+                        Text[ czech ] = "Odeslat";
+                        Text[ hebrew ] = "‮שליחה‬";
+                        Text[ hindi ] = "~भेजो";
                     };
             MenuItem
             {
@@ -281,8 +287,8 @@ Menu RID_MAIN_MENU
                         Text[ italian ] = "A~ssegnazione colonne...";
                         Text[ danish ] = "~Kolonnetildeling...";
                         Text[ swedish ] = "~Kolumntilldelning...";
-                        Text[ polish ] = "Przyporz�dkowanie kolumn...";
-                        Text[ portuguese_brazilian ] = "~Column assignment...";
+                        Text[ polish ] = "~Rozmieszczenie kolumn...";
+                        Text[ portuguese_brazilian ] = "~Disposi��o das Colunas...";
                         Text[ japanese ] = "列の分類(~C)...";
                         Text[ korean ] = "열 배치(~C)...";
                         Text[ chinese_simplified ] = "编排列(~C)...";
@@ -293,6 +299,9 @@ Menu RID_MAIN_MENU
                         Text[ catalan ] = "Disposici� de les ~columnes...";
                         Text[ finnish ] = "~Sarakej�rjestys...";
                         Text[ thai ] = "จัดเรียง~คอลัมน์...";
+                        Text[ czech ] = "Uspořádání sloupců...";
+                        Text[ hebrew ] = "~Spaltenzuordnung...";
+                        Text[ hindi ] = "~स्तंभ को क्रम में रखना...";
                     };
             MenuItem
             {
@@ -316,12 +325,15 @@ Menu RID_MAIN_MENU
                         Text[ finnish ] = "~Tietol�hde...";
                         Text[ italian ] = "~Seleziona sorgente dati...";
                         Text[ danish ] = "~Datakilde...";
-                        Text[ polish ] = "�r�d�o danych...";
-                        Text[ portuguese_brazilian ] = "~Data source...";
-                        Text[ turkish ] = "~Veri kayna��...";
+                        Text[ polish ] = "�r�d�o ~danych...";
+                        Text[ portuguese_brazilian ] = "~Fonte de Dados...";
+                        Text[ turkish ] = "~Veri Kayna��n� Se�...";
                         Text[ arabic ] = "���� ��������...";
                         Text[ catalan ] = "Font de les ~dades...";
                         Text[ thai ] = "แหล่ง~ข้อมูล...";
+                        Text[ czech ] = "Zdroj dat...";
+                        Text[ hebrew ] = "~Datenquelle auswählen...";
+                        Text[ hindi ] = "~ड़ॉटा मूल...";
                     };
             MenuItem
             {
@@ -347,10 +359,13 @@ Menu RID_MAIN_MENU
                         Text[ korean ] = "레코드 삭제";
                         Text[ chinese_simplified ] = "删除数据条目";
                         Text[ chinese_traditional ] = "刪除資料條目(~R)";
-                        Text[ turkish ] = "Delete ~Record";
+                        Text[ turkish ] = "~Tutana�� Sil";
                         Text[ arabic ] = "Delete ~Record";
                         Text[ catalan ] = "Delete ~Record";
                         Text[ thai ] = "Delete ~Record";
+                        Text[ czech ] = "Smazat záznam";
+                        Text[ hebrew ] = "~Datensatz löschen";
+                        Text[ hindi ] = "Delete ~Record";
                     };
             };
         };
@@ -366,6 +381,9 @@ Menu RID_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
             Text[ thai ] = "แ~ก้ไข";
+            Text[ czech ] = "Ú~pravy";
+            Text[ hebrew ] = "‮עריכה‬";
+            Text[ hindi ] = "~संपादन";
         };
         MenuItem
         {
@@ -402,36 +420,42 @@ Menu RID_MAIN_MENU
                         Text[ korean ] = "~레코드";
                         Text[ chinese_simplified ] = "数据条目(~R)";
                         Text[ chinese_traditional ] = "資料條目(~R)";
-                        Text[ turkish ] = "~Record";
+                        Text[ turkish ] = "~Tutanak";
                         Text[ arabic ] = "~Record";
                         Text[ catalan ] = "~Record";
                         Text[ thai ] = "~Record";
+                        Text[ czech ] = "Záznam";
+                        Text[ hebrew ] = "‮רשומה‬";
+                        Text[ hindi ] = "~Record";
                     };
 
                 };
             };
             Text[ language_user1 ] = "May ; May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
             Text[ english_us ] = "~Insert";
-            Text[ portuguese ] = "~Insert";
-            Text[ russian ] = "~Insert";
-            Text[ greek ] = "~Insert";
-            Text[ dutch ] = "~Insert";
+            Text[ portuguese ] = "~Inserir";
+            Text[ russian ] = "���~����";
+            Text[ greek ] = "~����������";
+            Text[ dutch ] = "~Plakken";
             Text[ french ] = "~Insertion";
             Text[ spanish ] = "~Insertar";
-            Text[ finnish ] = "~Insert";
+            Text[ finnish ] = "~Lis��";
             Text[ italian ] = "~Inserisci";
-            Text[ danish ] = "~Insert";
+            Text[ danish ] = "Inds�t";
             Text[ swedish ] = "~Infoga";
-            Text[ polish ] = "~Insert";
+            Text[ polish ] = "W~staw";
             Text[ portuguese_brazilian ] = "~Inserir";
             Text[ japanese ] = "挿入(~I)";
             Text[ korean ] = "삽입(~I)";
             Text[ chinese_simplified ] = "插入(~I)";
             Text[ chinese_traditional ] = "插入(~I)";
-            Text[ turkish ] = "~Insert";
-            Text[ arabic ] = "~Insert";
+            Text[ turkish ] = "~Ekle";
+            Text[ arabic ] = "�����";
             Text[ catalan ] = "~Insereix";
             Text[ thai ] = "~วาง";
+            Text[ czech ] = "Vložit";
+            Text[ hebrew ] = "‮הוספה‬";
+            Text[ hindi ] = "~Insert";
         };
     MenuItem
     {
@@ -477,11 +501,14 @@ Menu RID_MAIN_MENU
                         Text[ chinese_simplified ] = "筛选(~F)...";
                         Text[ chinese_traditional ] = "篩選(~F)...";
                         Text[ arabic ] = "�����...";
-                        Text[ turkish ] = "~Filtrele...";
+                        Text[ turkish ] = "~S�zge�...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Filtre...";
                         Text[ finnish ] = "~Suodatin";
                         Text[ thai ] = "~ตัวกรอง...";
+                        Text[ czech ] = "Filtr...";
+                        Text[ hebrew ] = "‮סינון...‬";
+                        Text[ hindi ] = "~फिल्टर...";
                     };
              MenuItem
             {
@@ -511,11 +538,40 @@ Menu RID_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "เ~ครื่องมือ";
+            Text[ czech ] = "Nástroje";
+            Text[ hebrew ] = "‮כלים‬";
+            Text[ hindi ] = "~औज़ार";
         };
     ITEM_WINDOW_MENU
     ITEM_HELP_MENU
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
