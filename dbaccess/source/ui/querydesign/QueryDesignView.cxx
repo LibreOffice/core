@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:05:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2592,7 +2592,7 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
     switch (rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             {
                 Window* pFocus = Application::GetFocusWindow();
             }
