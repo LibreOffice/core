@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:22:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,6 +903,30 @@ USHORT ToolBox::GetItemPos( USHORT nItemId ) const
             return (USHORT)nPos;
 
     return TOOLBOX_ITEM_NOTFOUND;
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ToolBox::GetItemPos( const Point& rPos ) const
+{
+    // search the item position on the given point
+    USHORT nRet = TOOLBOX_ITEM_NOTFOUND;
+    USHORT nPos = 0;
+    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+    while( it != mpData->m_aItems.end() )
+    {
+        if ( it->maRect.IsInside( rPos ) )
+        {
+            // item found -> save position and break
+            nRet = nPos;
+            break;
+        }
+
+        ++it;
+        ++nPos;
+    }
+
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
