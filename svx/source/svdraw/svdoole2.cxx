@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:31:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
         }
 
-        if( pModel && rObj.GetModel() && xObjRef.is() )
+        if( pModel && rObj.GetModel() )
         {
             SfxObjectShell* pDestPers = pModel->GetPersist();
             SfxObjectShell* pSrcPers = rObj.GetModel()->GetPersist();
@@ -1303,8 +1303,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             {
                 ImpCopyObject( pSrcPers, pDestPers, mpImpl->aPersistName );
                 Connect();
-
-                try
+                if( xObjRef.is() && rOle2Obj.xObjRef.is() ) try
                 {
                     awt::Size aVisSize = rOle2Obj.xObjRef->getVisualAreaSize( rOle2Obj.GetAspect() );
                     if( rOle2Obj.xObjRef->getMapUnit( rOle2Obj.GetAspect() ) == xObjRef->getMapUnit( GetAspect() ) )
@@ -1314,16 +1313,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 {
                     // setting of VisArea not necessary for objects that don't cache it in loaded state
                 }
-                catch( ::com::sun::star::uno::Exception& e )
-                {
-                    (void)e;
-                    DBG_ERROR(
-                        (OString("SdrOle2Obj::operator=(), "
-                                "exception caught: ") +
-                        rtl::OUStringToOString(
-                            comphelper::anyToString( cppu::getCaughtException() ),
-                            RTL_TEXTENCODING_UTF8 )).getStr() );
-                }
+                Disconnect();
             }
         }
     }
