@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:47:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
                                  Window *pParent) :
     SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
     aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
-    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM )),
-    bAdjustPosition(TRUE)
+    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM ))
 {
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -179,22 +178,26 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    if (bAdjustPosition && STATE_CHANGE_INITSHOW == nStateChange)
+    static BOOL bSetPosition = TRUE;
+    if (STATE_CHANGE_INITSHOW == nStateChange)
     {
         // calculate initial position to be used after creation of the window...
-        AdjustPosition( Point() );
-        bAdjustPosition = FALSE;
+        AdjustPosSize( bSetPosition );
+        bSetPosition = FALSE;
+
+        SetCategory(RID_UNBINOPS_CAT);
     }
     //... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
 
-void SmToolBoxWindow::AdjustPosition(const Point &rPoint)
+void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 {
     Size        CatSize (31 * 5, 31 * 2);
     Size        CmdSize (31 * 5, 31 * 5);
     Size        WndSize (31 * 5, CatSize.Height() + 10 + CmdSize.Height());
+<<<<<<< toolbox.cxx
 
     // basic window settings
     SetOutputSizePixel(WndSize);
@@ -208,13 +211,25 @@ void SmToolBoxWindow::AdjustPosition(const Point &rPoint)
     Size  aS( CatSize.Width() - 10, 10 );
     aToolBoxCat_Delim.SetSizePixel( aS );
     // category settings
+=======
+
+    // basic window settings
+    SetOutputSizePixel(WndSize);
+    // catalog settings
+    aToolBoxCat.SetPosPixel( Point(0, 3) );
+    aToolBoxCat.SetSizePixel( CatSize );
+    // settings for catalog / category delimiter
+    Point aP( aToolBoxCat_Delim.GetPosPixel() );
+    aP.X() += 5;
+    aToolBoxCat_Delim.SetPosPixel( aP );
+    Size  aS( CatSize.Width() - 10, 10 );
+    aToolBoxCat_Delim.SetSizePixel( aS );
+    // category settings
+>>>>>>> 1.9.10.1
     for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
         vToolBoxCategories[i]->SetSizePixel(CmdSize);
 
-    Point aPt;
-    const Rectangle aRect( aPt, GetParent()->GetOutputSizePixel() );
-    const Rectangle aSelf( rPoint, WndSize );
-    if ( !rPoint.X() || !rPoint.Y() || !aRect.IsInside( aSelf ) )
+    if (bSetPos)
     {
         SmViewShell *pView = SmGetActiveView();
         DBG_ASSERT( pView, "view shell missing" );
@@ -231,8 +246,6 @@ void SmToolBoxWindow::AdjustPosition(const Point &rPoint)
             aPos.Y() = 0;
         SetPosPixel( aPos );
     }
-
-    SetCategory(RID_UNBINOPS_CAT);
 }
 
 
@@ -327,7 +340,9 @@ SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
     SfxChildWindow(pParentWindow, nId)
 {
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+
     pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
+    ((SfxFloatingWindow *)pWindow)->Initialize(pInfo);
 }
 
 
