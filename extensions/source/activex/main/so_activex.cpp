@@ -63,14 +63,14 @@ const char* aMimeType[] = { "application/vnd.stardivision.chart",
                           "application/vnd.stardivision.draw",
                           "application/vnd.stardivision.impress",
                           "application/vnd.stardivision.calc",
-                          "application/vnd.staroffice.writer",
+                          "application/vnd.stardivision.writer",
 
                           "application/vnd.sun.xml.writer",
                           "application/vnd.sun.xml.calc",
                           "application/vnd.sun.xml.impress",
                           "application/vnd.sun.xml.draw",
                           "application/vnd.sun.xml.writer.global" };
-
+const int nForModes[] = { 1, 2, 4, 8, 16, 16, 8, 4, 2, 16 };
 
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
@@ -110,7 +110,7 @@ BOOL createKey( HKEY hkey,
 
 }
 
-STDAPI DllRegisterServerNative( BOOL bForAllUsers )
+STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers )
 {
     BOOL aResult = FALSE;
 
@@ -192,52 +192,56 @@ STDAPI DllRegisterServerNative( BOOL bForAllUsers )
                           && ERROR_SUCCESS == RegCloseKey( hkey2 )
                       && ERROR_SUCCESS == RegCloseKey( hkey1 )
                   && ERROR_SUCCESS == RegCloseKey( hkey ) );
+
+            hkey = hkey1 = hkey2 = hkey3 = hkey4 = NULL;
         }
     }
 
     for( ind = 0; ind < SUPPORTED_EXT_NUM && aResult; ind++ )
     {
-        wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
-        if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
-//          || ERROR_SUCCESS != RegSetValueEx(hkey, "Extension", 0, REG_SZ,
-//             (const BYTE *)aFileExt[ind], strlen( aFileExt[ind] ) )
-          || ERROR_SUCCESS != RegSetValueEx(hkey, "CLSID", 0, REG_SZ,
-             (const BYTE *)aClassID, strlen(aClassID)) )
-                aResult = FALSE;
+        if( nForModes[ind] & nMode )
+        {
+            wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
+            if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
+//              || ERROR_SUCCESS != RegSetValueEx(hkey, "Extension", 0, REG_SZ,
+//               (const BYTE *)aFileExt[ind], strlen( aFileExt[ind] ) )
+              || ERROR_SUCCESS != RegSetValueEx(hkey, "CLSID", 0, REG_SZ,
+                 (const BYTE *)aClassID, strlen(aClassID)) )
+                    aResult = FALSE;
 
-        if( hkey )
-            RegCloseKey(hkey);
+            if( hkey )
+                RegCloseKey(hkey),hkey= NULL;
 
 /*
-        wsprintf( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
-        if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
-          || ERROR_SUCCESS != RegSetValueEx(hkey, "Content Type", 0, REG_SZ,
-             (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
-                aResult = FALSE;
-        if( hkey )
-            RegCloseKey(hkey);
+            wsprintf( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
+            if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
+              || ERROR_SUCCESS != RegSetValueEx(hkey, "Content Type", 0, REG_SZ,
+                 (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
+                    aResult = FALSE;
+            if( hkey )
+                RegCloseKey(hkey),hkey= NULL;
 */
+        }
     }
-
 
     wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
     if ( aResult && ERROR_SUCCESS == RegOpenKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
     {
-        for( ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
-        {
-            wsprintf( aSubKey, "EnableFullPage\\%s", aFileExt[ind] );
-            if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
-                aResult = FALSE;
+           for( ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
+           {
+               wsprintf( aSubKey, "EnableFullPage\\%s", aFileExt[ind] );
+               if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
+                   aResult = FALSE;
 
             if ( hkey1 )
-                RegCloseKey(hkey1);
+                   RegCloseKey(hkey1),hkey1= NULL;
          }
     }
     else
         aResult = FALSE;
 
     if ( hkey )
-        RegCloseKey(hkey);
+           RegCloseKey(hkey),hkey= NULL;
 
     return aResult;
 }
@@ -245,7 +249,7 @@ STDAPI DllRegisterServerNative( BOOL bForAllUsers )
 /////////////////////////////////////////////////////////////////////////////
 // DllUnregisterServer - Removes entries from the system registry
 
-STDAPI DllUnregisterServerNative( BOOL bForAllUsers )
+STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers )
 {
     HKEY        hkey = NULL;
     BOOL        fErr = FALSE;
@@ -255,50 +259,52 @@ STDAPI DllUnregisterServerNative( BOOL bForAllUsers )
 
       for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
     {
-        DWORD nSubKeys = 0, nValues = 0;
-           wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
-           if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
-            fErr = TRUE;
-        else
+        if( nForModes[ind] & nMode )
         {
-               if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
+            DWORD nSubKeys = 0, nValues = 0;
+               wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
+               if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
                 fErr = TRUE;
-
-               if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
-                                                &nSubKeys, NULL, NULL,
-                                                &nValues, NULL, NULL, NULL, NULL ) )
-            {
-                RegCloseKey( hkey );
-                fErr = TRUE;
-            }
             else
             {
-                RegCloseKey( hkey );
-                if ( !nSubKeys && !nValues )
-                    SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
-            }
-        }
+                   if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
+                    fErr = TRUE;
 
-           wsprintf( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
-           if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
-            fErr = TRUE;
-        else
-        {
-               if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
-                                                &nSubKeys, NULL, NULL,
-                                                &nValues, NULL, NULL, NULL, NULL ) )
-            {
-                RegCloseKey( hkey );
-                fErr = TRUE;
+                   if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
+                                                    &nSubKeys, NULL, NULL,
+                                                    &nValues, NULL, NULL, NULL, NULL ) )
+                {
+                    RegCloseKey( hkey ), hkey = NULL;
+                    fErr = TRUE;
+                }
+                else
+                {
+                    RegCloseKey( hkey ), hkey = NULL;
+                    if ( !nSubKeys && !nValues )
+                        SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
+                }
             }
+
+               wsprintf( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
+               if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey) )
+                fErr = TRUE;
             else
             {
-                RegCloseKey( hkey );
-                if ( !nSubKeys && !nValues )
-                    SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
+                   if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
+                                                    &nSubKeys, NULL, NULL,
+                                                    &nValues, NULL, NULL, NULL, NULL ) )
+                {
+                    RegCloseKey( hkey ), hkey = NULL;
+                    fErr = TRUE;
+                }
+                else
+                {
+                    RegCloseKey( hkey ), hkey = NULL;
+                    if ( !nSubKeys && !nValues )
+                        SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
+                }
             }
         }
-
     }
 
     wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
@@ -340,7 +346,7 @@ const char* aMSMimeType[] = { "application/msword",
                           "application/mspowerpoint",
                           "application/mspowerpoint",
                           "application/mspowerpoint" };
-const int nForModes[] = { 1, 1, 2, 2, 4, 4, 4 };
+const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
 STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
 {
@@ -354,7 +360,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
 
     for( ind = 0; ind < SUPPORTED_MSEXT_NUM && aResult; ind++ )
     {
-        if( nForModes[ind] & nMode )
+        if( nForMSModes[ind] & nMode )
         {
                wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
                if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
@@ -365,7 +371,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
                        aResult = FALSE;
 
                if( hkey )
-                   RegCloseKey(hkey);
+                   RegCloseKey(hkey),hkey= NULL;
 
                wsprintf( aSubKey, "%s%s", aPrefix, aMSFileExt[ind] );
                if ( ERROR_SUCCESS != RegCreateKey(bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey, &hkey)
@@ -374,7 +380,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
                        aResult = FALSE;
 
                if( hkey )
-                   RegCloseKey(hkey);
+                   RegCloseKey(hkey),hkey= NULL;
         }
     }
 
@@ -384,14 +390,14 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
     {
            for( ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
            {
-            if( nForModes[ind] & nMode )
+            if( nForMSModes[ind] & nMode )
             {
                    wsprintf( aSubKey, "EnableFullPage\\%s", aMSFileExt[ind] );
                    if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
                        aResult = FALSE;
 
                    if ( hkey1 )
-                       RegCloseKey(hkey1);
+                       RegCloseKey(hkey1),hkey1= NULL;
             }
            }
     }
@@ -399,7 +405,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers )
         aResult = FALSE;
 
     if ( hkey )
-        RegCloseKey(hkey);
+        RegCloseKey(hkey),hkey= NULL;
 
     return aResult;
 }
@@ -419,7 +425,7 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
 
       for( int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
        {
-        if( nForModes[ind] & nMode )
+        if( nForMSModes[ind] & nMode )
         {
             DWORD nSubKeys = 0, nValues = 0;
 
@@ -438,12 +444,12 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
                                                         &nSubKeys, NULL, NULL,
                                                         &nValues, NULL, NULL, NULL, NULL ) )
                 {
-                    RegCloseKey( hkey );
+                    RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
                 else
                 {
-                    RegCloseKey( hkey );
+                    RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
                         SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
                 }
@@ -461,12 +467,12 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
                                                         &nSubKeys, NULL, NULL,
                                                         &nValues, NULL, NULL, NULL, NULL ) )
                 {
-                    RegCloseKey( hkey );
+                    RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
                 else
                 {
-                    RegCloseKey( hkey );
+                    RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
                         SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey );
                 }
@@ -479,16 +485,16 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
 
 STDAPI DllRegisterServer( void )
 {
-    HRESULT aResult = DllRegisterServerNative( TRUE );
+    HRESULT aResult = DllRegisterServerNative( 31, TRUE );
     if( FAILED( aResult ) )
-        aResult = DllRegisterServerNative( FALSE );
+        aResult = DllRegisterServerNative( 31, FALSE );
 
     return aResult;
 }
 
 STDAPI DllUnregisterServer( void )
 {
-    DllUnregisterServerNative( FALSE );
-    return DllUnregisterServerNative( TRUE );
+    DllUnregisterServerNative( 31, FALSE );
+    return DllUnregisterServerNative( 31, TRUE );
 }
 
