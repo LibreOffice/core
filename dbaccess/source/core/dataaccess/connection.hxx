@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-12 10:43:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE9_HXX_
+#include <cppuhelper/implbase9.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -103,6 +103,9 @@
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -111,7 +114,7 @@ namespace dbaccess
 
 //==========================================================================
 //==========================================================================
-typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper9 <   ::com::sun::star::container::XChild
                             ,   ::com::sun::star::sdbcx::XTablesSupplier
                             ,   ::com::sun::star::sdbcx::XViewsSupplier
                             ,   ::com::sun::star::sdbc::XConnection
@@ -119,6 +122,7 @@ typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XChild
                             ,   ::com::sun::star::sdb::XSQLQueryComposerFactory
                             ,   ::com::sun::star::sdb::XCommandPreparation
                             ,   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::lang::XMultiServiceFactory
                             >   OConnection_Base;
 
 class ODatabaseSource;
@@ -223,6 +227,10 @@ public:
 // ::com::sun::star::sdbc::XCloseable
     virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
+    // XMultiServiceFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // flush the tables and queries
     void flushMembers();
