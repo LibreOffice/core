@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:01:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 07:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <string.h>
 #include <vector>
 #include <math.h>
@@ -1699,6 +1698,9 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mpData->maDropdownTimer.SetTimeout( 250 );
     mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
 
+    mpData->maResetAutoSizeTriesTimer.SetTimeout( 500 );
+    mpData->maResetAutoSizeTriesTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplResetAutoSizeTriesHdl ) );
+
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
 
@@ -2924,6 +2926,15 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, pThis )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( ToolBox, ImplResetAutoSizeTriesHdl, void*, EMPTYARG )
+{
+    // #i31756# always reset autosizetries after some timeout
+    // otherwise calling SetSizePixel a few times and thereby incrementing
+    // the counter will result in no proper repaint
+    mpData->m_nUpdateAutoSizeTries = 0;
+    return 0;
+}
+
 IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -2955,6 +2966,7 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
         }
         ImplFormat();
         mpData->m_nUpdateAutoSizeTries++;
+        mpData->maResetAutoSizeTriesTimer.Start();
     }
     else
         mpData->m_nUpdateAutoSizeTries = 0;
@@ -4556,19 +4568,6 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
 
 void ToolBox::Paint( const Rectangle& rPaintRect )
 {
-    // check if locking has changed and recalc accordingly
-    if( !ImplIsFloatingMode() )
-    {
-        ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-        if( pWrapper && mpData->mbIsLocked != pWrapper->IsLocked() )
-        {
-            mpData->mbIsLocked = pWrapper->IsLocked();
-            mbCalc = TRUE;
-            SetSizePixel( CalcWindowSizePixel(1) );
-            return;
-        }
-    }
-
     if ( rPaintRect == Rectangle( 0, 0, mnDX-1, mnDY-1 ) )
         mbFullPaint = TRUE;
     ImplFormat();
@@ -4630,9 +4629,14 @@ void ToolBox::Move()
 
 void ToolBox::Resize()
 {
+    Size aSize = GetOutputSizePixel();
+    // #i31422# some WindowManagers send (0,0) sizes when
+    // switching virtual desktops - ignore this and avoid reformatting
+    if( !aSize.Width() && !aSize.Height() )
+        return;
+
     long nOldDX = mnDX;
     long nOldDY = mnDY;
-    Size aSize = GetOutputSizePixel();
     mnDX = aSize.Width();
     mnDY = aSize.Height();
     if( ImplIsFloatingMode() )
