@@ -1,10 +1,10 @@
-/*************************************************************************
+/************************************************************************
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 15:00:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,3 +212,8 @@ hidspecial HID_SD_TASK_PANE_PREVIEW_CURRENT { HelpId = HID_SD_TASK_PANE_PREVIEW_
 hidspecial HID_SD_TASK_PANE_PREVIEW_RECENT  { HelpId = HID_SD_TASK_PANE_PREVIEW_RECENT; };
 hidspecial HID_SD_TASK_PANE_PREVIEW_ALL     { HelpId = HID_SD_TASK_PANE_PREVIEW_ALL; };
 hidspecial HID_SD_TASK_PANE_PREVIEW_LAYOUTS { HelpId = HID_SD_TASK_PANE_PREVIEW_LAYOUTS; };
+
+hidspecial HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE            { HelpId = HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE; };
+hidspecial HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS            { HelpId = HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS; };
+hidspecial HID_SD_CUSTOMANIMATIONDIALOG_EXIT                { HelpId = HID_SD_CUSTOMANIMATIONDIALOG_EXIT; };
+hidspecial HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH          { HelpId = HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH; };
