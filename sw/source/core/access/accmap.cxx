@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 11:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,9 @@ public:
 #endif
     WeakReference < XAccessible > xCaretContext;
 
-    SwAccessibleContextMap_Impl() :
+    SwAccessibleContextMap_Impl()
 #ifndef PRODUCT
-        bLocked( sal_False )
+        : bLocked( sal_False )
 #endif
     {}
 
@@ -441,7 +441,9 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
         if( !pMap )
         {
             pMap = new SwAccessibleContextMap_Impl;
+#ifndef PRODUCT
             pMap->bLocked = sal_False;
+#endif
         }
 
 #ifndef PRODUCT
