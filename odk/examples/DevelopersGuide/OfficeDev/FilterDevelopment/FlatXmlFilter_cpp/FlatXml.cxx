@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FlatXml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:39:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 13:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,51 +42,35 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-
-#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/XNamingService.hpp>
-
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
-
 #include <com/sun/star/connection/XConnector.hpp>
-
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
-
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
-#endif
+#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/textenc.h>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
 using namespace ::rtl;
 using namespace ::cppu;
