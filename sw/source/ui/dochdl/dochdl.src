@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 07:49:06 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,16 +82,16 @@ String STR_NOGLOS1
     TEXT [ dutch ] = "AutoTekst voor afkortingen'" ;
     TEXT [ spanish ] = "AutoTexto para la abreviatura '" ;
     TEXT [ english_us ] = "AutoText for Shortcut '" ;
-    TEXT[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ '";
+    TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ '";
     TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
     TEXT[ polish ] = "Autotekst do skrótu '";
-    TEXT[ japanese ] = "“ü—Íx‰‡‚Ì¼®°Ä¶¯Äu";
-    TEXT[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g '";
+    TEXT[ japanese ] = "å…¥åŠ›æ”¯æ´ã®ï½¼ï½®ï½°ï¾„ï½¶ï½¯ï¾„ã€Œ";
+    TEXT[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†çš„ç¸®å¯«<";
     TEXT[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ '";
     TEXT[ dutch ] = "AutoTekst voor afkortingen'";
-    TEXT[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ '";
+    TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ '";
     TEXT[ greek ] = "ÁõôïÊåßìåíï ãéá ôá áñ÷éêÜ '";
-    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â '";
+    TEXT[ korean ] = "ìë™í…ìŠ¤íŠ¸ ë°”ë¡œê°€ê¸° '";
     TEXT[ turkish ] = "Otomatik metin kısaltması '";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "AutoTexto para la abreviatura '";
@@ -115,16 +115,16 @@ String STR_NOGLOS2
     TEXT [ dutch ] = "' niet gevonden." ;
     TEXT [ spanish ] = "' no se encontró." ;
     TEXT [ english_us ] = "' not found." ;
-    TEXT[ chinese_simplified ] = "' Ã»ÓĞ±»ÕÒµ½¡£";
+    TEXT[ chinese_simplified ] = "' æ²¡æœ‰è¢«æ‰¾åˆ°ã€‚";
     TEXT[ russian ] = "' íå íàéäåí.";
     TEXT[ polish ] = "' nie znaleziono.";
-    TEXT[ japanese ] = "v‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    TEXT[ chinese_traditional ] = "' ¨S¦³³Q§ä¨ì¡C";
+    TEXT[ japanese ] = "ã€ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
+    TEXT[ chinese_traditional ] = ">æ²’æœ‰æ‰¾åˆ°ã€‚";
     TEXT[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     TEXT[ dutch ] = "' niet gevonden.";
-    TEXT[ chinese_simplified ] = "' Ã»ÓĞ±»ÕÒµ½¡£";
+    TEXT[ chinese_simplified ] = "' æ²¡æœ‰è¢«æ‰¾åˆ°ã€‚";
     TEXT[ greek ] = "' äåí âñİèçêå.";
-    TEXT[ korean ] = "' À»£¨¸¦£©Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
+    TEXT[ korean ] = "' ì„ï¼ˆë¥¼ï¼‰ì°¾ì§€ã€€ëª»í–ˆìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "' bulunamadı.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "' no se encontró.";
@@ -146,16 +146,16 @@ String STR_NO_TABLE
     Text [ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd." ;
     Text [ spanish ] = "Actualmente no se puede insertar ninguna tabla." ;
     Text [ english_us ] = "It is currently not possible to insert a table" ;
-    Text[ chinese_simplified ] = "µ±Ç°ÎŞ·¨²åÈëÈÎºÎ±í¸ñ¡£";
+    Text[ chinese_simplified ] = "å½“å‰æ— æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
     Text[ russian ] = "Â íàñòîÿùåå âğåìÿ âñòàâèòü òàáëèöó íåâîçìîæíî.";
     Text[ polish ] = "W tym momencie nie mo¿e byæ wstawiona tabela.";
-    Text[ japanese ] = "Œ»İA•\\‚Ì‘}“ü‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "·í«eµLªk´¡¤J¥ô¦óªí®æ¡C";
+    Text[ japanese ] = "ç¾åœ¨ã€è¡¨ã®æŒ¿å…¥ã¯ã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç•¶å‰ç„¡æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá ÛíÑ ããßä ÍÇáíÇğ.";
     Text[ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd.";
-    Text[ chinese_simplified ] = "µ±Ç°ÎŞ·¨²åÈëÈÎºÎ±í¸ñ¡£";
+    Text[ chinese_simplified ] = "å½“å‰æ— æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
     Text[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá åéóá÷èåß ğßíáêáò.";
-    Text[ korean ] = "Ç¥¸¦ »ğÀÔÇÏ´Â°ÍÀÌ ÇöÀç ºÒ°¡´ÉÇÕ´Ï´Ù.";
+    Text[ korean ] = "í‘œë¥¼ ì‚½ì…í•˜ëŠ”ê²ƒì´ í˜„ì¬ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.";
     Text[ turkish ] = "Şu an tablo eklenemiyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Actualmente no se puede insertar ninguna tabla.";
@@ -177,16 +177,16 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ dutch ] = "AutoTekst kon niet worden gemaakt" ;
     MESSAGE [ spanish ] = "No se pudo crear el AutoTexto." ;
     MESSAGE [ english_us ] = "AutoText could not be created." ;
-    MESSAGE[ chinese_simplified ] = "ÎŞ·¨½¨Á¢×Ô¶¯Í¼ÎÄ¼¯¡£";
+    MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
     MESSAGE[ russian ] = "Ñîçäàòü àâòîòåêñò íåâîçìîæíî.";
     MESSAGE[ polish ] = "Autotekst nie móg³ zostaæ utworzony.";
-    MESSAGE[ japanese ] = "“ü—Íx‰‡‚Å‚«‚Ü‚¹‚ñ";
-    MESSAGE[ chinese_traditional ] = "µLªk«Ø¥ß¦Û°Ê¹Ï¤å¶°¡C";
+    MESSAGE[ japanese ] = "å…¥åŠ›æ”¯æ´ã§ãã¾ã›ã‚“";
+    MESSAGE[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹è‡ªå‹•åœ–æ–‡é›†ã€‚";
     MESSAGE[ arabic ] = "ÊÚĞÑ Úãá äÕ ÊáŞÇÆí.";
     MESSAGE[ dutch ] = "AutoTekst kon niet worden gemaakt";
-    MESSAGE[ chinese_simplified ] = "ÎŞ·¨½¨Á¢×Ô¶¯Í¼ÎÄ¼¯¡£";
+    MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
     MESSAGE[ greek ] = "Äåí Şôáí äõíáôŞ ç åéóáãùãŞ ÁõôïÊåßìåíï.";
-    MESSAGE[ korean ] = "ÀÚµ¿ÅØ½ºÆ®¸¦ ¸¸µé¼ö ¾ø½À´Ï´Ù.";
+    MESSAGE[ korean ] = "ìë™í…ìŠ¤íŠ¸ë¥¼ ë§Œë“¤ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "Otomatik metin oluşturulamadı.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No se pudo crear el AutoTexto.";
@@ -208,16 +208,16 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar." ;
     MESSAGE [ spanish ] = "El formato deseado del portapapeles no está disponible." ;
     MESSAGE [ english_us ] = "Requested clipboard format is not available." ;
-    MESSAGE[ chinese_simplified ] = "ËùĞèÒªµÄ²Ã¼ô°å¸ñÊ½²»´æÔÚ¡£";
+    MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ russian ] = "Æåëàåìûé ôîğìàò áóôåğà îáìåíà íåäîñòóïåí.";
     MESSAGE[ polish ] = "Szukany format schowka jest niedostêpny.";
-    MESSAGE[ japanese ] = "w’è‚Ì¸Ø¯ÌßÎŞ°ÄŞ‘®‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ chinese_traditional ] = "©Ò»İ­nªºµô°ÅÃ¯®æ¦¡¤£¦s¦b¡C";
+    MESSAGE[ japanese ] = "æŒ‡å®šã®ï½¸ï¾˜ï½¯ï¾Œï¾Ÿï¾ï¾ï½°ï¾„ï¾æ›¸å¼ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
+    MESSAGE[ chinese_traditional ] = "æ‰€éœ€è¦çš„è£å‰ªç°¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ arabic ] = "ÊäÓíŞ ÇáÍÇİÙÉ ÇáãØáæÈ ÛíÑ ãÊæİÑ.";
     MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
-    MESSAGE[ chinese_simplified ] = "ËùĞèÒªµÄ²Ã¼ô°å¸ñÊ½²»´æÔÚ¡£";
+    MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ greek ] = "Ç æçôïıìåíç ìïñöŞ ôïõ ğñü÷åéñïõ äåí åßíáé äéáèİóéìç.";
-    MESSAGE[ korean ] = "¿äÃ»µÈ Å¬¸³º¸µå ¼­½ÄÀº °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.";
+    MESSAGE[ korean ] = "ìš”ì²­ëœ í´ë¦½ë³´ë“œ ì„œì‹ì€ ê°€ëŠ¥í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "İstenen pano formatı mevcut değil.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El formato deseado del portapapeles no está disponible.";
@@ -242,16 +242,16 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ english_us ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
     /* ### ACHTUNG: Neuer Text in Resource? Der Bereich liegt in einem alten Format vor.\nEr muß konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden? : Der Bereich liegt in einem alten Format vor.\nEr mu˜ konvertiert werden, um nderungen\nspeichern zu k÷nnen.\nSoll er konvertiert werden? */
     Message = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
-    Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
+    Message[ chinese_simplified ] = "è¿™ä¸ªåŒºåŸŸå…·æœ‰çš„æ ¼å¼æ˜¯æ—§çš„ã€‚\nè¦å­˜ç›˜æ›´æ”¹å°±å¿…é¡»è¿›è¡Œæ ¼å¼è½¬æ¢ã€‚\nè¦è½¬æ¢æ ¼å¼å—ï¼Ÿ";
     Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ñ òåì ÷òîáû ìîæíî \náûëî ñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
     Message[ polish ] = "Format obszaru nie jest aktualny.\nObszar musi byæ skonwertowany, by mo¿na by³o zapisaæ zmiany\n. Skonwertowaæ go?";
-    Message[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í‹Œ‘®‚É‚ ‚è‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚·‚é‚É‚Í\n‘®‚ğ•ÏŠ·‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‘®•ÏŠ·‚µ‚Ü‚·‚©?";
-    Message[ chinese_traditional ] = "³o­Ó°Ï°ìªº®æ¦¡¬OÂÂªº¡C\n­nÀx¦sÅÜ§ó´N¥²¶·Âà´«¥¦®æ¦¡¡C\n±z­nÂà´«¥¦ªº®æ¦¡¡H";
+    Message[ japanese ] = "ã“ã®ç¯„å›²ã¯æ—§æ›¸å¼ã«ã‚ã‚Šã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã™ã‚‹ã«ã¯\næ›¸å¼ã‚’å¤‰æ›ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\næ›¸å¼å¤‰æ›ã—ã¾ã™ã‹?";
+    Message[ chinese_traditional ] = "é€™å€‹å€åŸŸçš„æ ¼å¼æ˜¯èˆŠçš„ã€‚\nè¦å„²å­˜è®Šæ›´å°±å¿…é ˆè½‰æ›å®ƒæ ¼å¼ã€‚\næ‚¨è¦è½‰æ›å®ƒçš„æ ¼å¼ï¼Ÿ";
     Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
     Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
-    Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
+    Message[ chinese_simplified ] = "è¿™ä¸ªåŒºåŸŸå…·æœ‰çš„æ ¼å¼æ˜¯æ—§çš„ã€‚\nè¦å­˜ç›˜æ›´æ”¹å°±å¿…é¡»è¿›è¡Œæ ¼å¼è½¬æ¢ã€‚\nè¦è½¬æ¢æ ¼å¼å—ï¼Ÿ";
     Message[ greek ] = "Ç ğåñéï÷Ş õğÜñ÷åé óå êÜğïéá ğñïãåíİóôåñç ìïñöŞ.\nĞñİğåé íá ìåôáôñáğåß ãéá íá åßíáé äõíáôŞ\nç áğïèŞêåõóç ôùí áëëáãşí.\nÈİëåôå íá ãßíåé ç ìåôáô ";
-    Message[ korean ] = "±¸¿ª ¼­½ÄÀº ¿À·¡µÈ °ÍÀÔ´Ï´Ù.\n ÀÌ°ÍÀ» º¯È¯ÇÏ¿©¾ß º¯°æ»çÇ×À»\nÀúÀåÇÒ ¼ö ÀÖ½À´Ï´Ù.\n Áö±İ º¯È¯ ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "êµ¬ì—­ ì„œì‹ì€ ì˜¤ë˜ëœ ê²ƒì…ë‹ˆë‹¤.\n ì´ê²ƒì„ ë³€í™˜í•˜ì—¬ì•¼ ë³€ê²½ì‚¬í•­ì„\nì €ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n ì§€ê¸ˆ ë³€í™˜ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Bölümün formatı eski.\nDeğişikliklerin kaydedilebilmesi n\niçin değiştirilmesi gerekiyor.\nFormat değiştirilsin mi?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El formato del área no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n¿Desea usted convertirlo?";
@@ -298,13 +298,13 @@ String STR_PRIVATEGRAPHIC
     Text [ dutch ] = "Afbeelding [%PRODUCTNAME Writer]" ;
     Text [ spanish ] = "Imagen [%PRODUCTNAME Writer]" ;
     Text [ english_us ] = "Graphics [%PRODUCTNAME Writer]" ;
-    Text[ chinese_simplified ] = "Í¼ĞÎ [%PRODUCTNAME Writer]";
+    Text[ chinese_simplified ] = "å›¾å½¢ [%PRODUCTNAME Writer]";
     Text[ russian ] = "Ğèñóíîê [%PRODUCTNAME Writer]";
     Text[ polish ] = "Grafika [%PRODUCTNAME Writer]";
-    Text[ japanese ] = "} [%PRODUCTNAME Writer]";
+    Text[ japanese ] = "å›³ [%PRODUCTNAME Writer]";
     Text[ greek ] = "Ãñáöéêü [%PRODUCTNAME Writer]";
-    Text[ korean ] = "±×·¡ÇÈ [%PRODUCTNAME Writer]";
-    Text[ chinese_traditional ] = "¹Ï§Î [%PRODUCTNAME Writer]";
+    Text[ korean ] = "ê·¸ë˜í”½ [%PRODUCTNAME Writer]";
+    Text[ chinese_traditional ] = "åœ–å½¢ [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer] ÑÓæãÇÊ";
     Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
     Text[ catalan ] = "Imagen [%PRODUCTNAME Writer]";
@@ -322,13 +322,13 @@ String STR_PRIVATEOLE
     Text [ danish ] = "Objekt [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Objecto [%PRODUCTNAME Writer]" ;
     Text [ portuguese_brazilian ] = "Objekt [%PRODUCTNAME Writer]" ;
-    Text[ chinese_simplified ] = "¶ÔÏó [%PRODUCTNAME Writer]";
+    Text[ chinese_simplified ] = "å¯¹è±¡ [%PRODUCTNAME Writer]";
     Text[ russian ] = "Îáúåêò [%PRODUCTNAME Writer]";
     Text[ polish ] = "Obiekt [%PRODUCTNAME Writer]";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä [%PRODUCTNAME Writer]";
+    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ [%PRODUCTNAME Writer]";
     Text[ greek ] = "Áíôéêåßìåíï [%PRODUCTNAME Writer]";
-    Text[ korean ] = "°³Ã¼ [%PRODUCTNAME Writer]";
-    Text[ chinese_traditional ] = "ª«¥ó [%PRODUCTNAME Writer]";
+    Text[ korean ] = "ê°œì²´ [%PRODUCTNAME Writer]";
+    Text[ chinese_traditional ] = "ç‰©ä»¶ [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer]ßÇÆä ";
     Text[ turkish ] = "Nesne [%PRODUCTNAME Writer]";
     Text[ catalan ] = "Objeto [%PRODUCTNAME Writer]";
@@ -350,18 +350,19 @@ String STR_DDEFORMAT
     Text [ dutch ] = "DDE-koppeling" ;
     Text [ spanish ] = "Vínculo DDE" ;
     Text [ english_us ] = "DDE link" ;
-    Text[ chinese_simplified ] = "DDE Á´½Ó";
+    Text[ chinese_simplified ] = "DDE é“¾æ¥";
     Text[ russian ] = "Ñâÿçü DDE";
     Text[ polish ] = "£¹cza DDE ";
-    Text[ japanese ] = "DDE Øİ¸";
-    Text[ chinese_traditional ] = "DDE ±¶®|";
+    Text[ japanese ] = "DDE ï¾˜ï¾ï½¸";
+    Text[ chinese_traditional ] = "DDE æ·å¾‘";
     Text[ arabic ] = "ÇÑÊÈÇØ DDE";
     Text[ dutch ] = "DDE-koppeling";
-    Text[ chinese_simplified ] = "DDE Á´½Ó";
+    Text[ chinese_simplified ] = "DDE é“¾æ¥";
     Text[ greek ] = "Óıíäåóìïò DDE";
-    Text[ korean ] = "DDE ¿¬°á";
+    Text[ korean ] = "DDE ì—°ê²°";
     Text[ turkish ] = "DDE bağlantısı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vínculo DDE";
 };
+
 
