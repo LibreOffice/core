@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementfactorymanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:03:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::ui;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
@@ -549,15 +549,15 @@ DEFINE_XINTERFACE_4                    (    UIElementFactoryManager             
                                             OWeakObject                                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIElementFactory                 ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIElementFactoryRegistration     )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory                 ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactoryRegistration     )
                                         )
 
 DEFINE_XTYPEPROVIDER_4                  (   UIElementFactoryManager                                     ,
                                             css::lang::XTypeProvider                                    ,
                                             css::lang::XServiceInfo                                     ,
-                                            drafts::com::sun::star::ui::XUIElementFactory               ,
-                                            drafts::com::sun::star::ui::XUIElementFactoryRegistration
+                                            ::com::sun::star::ui::XUIElementFactory               ,
+                                            ::com::sun::star::ui::XUIElementFactoryRegistration
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UIElementFactoryManager                         ,
