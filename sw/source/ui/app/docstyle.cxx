@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:09:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,7 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
                 SwPageDesc aDesc( *pDesc );
                 aDesc.SetFollow( pFollowDesc );
                 rDoc.ChgPageDesc( nId, aDesc );
-                pDesc = &rDoc.GetPageDesc( nId );
+                pDesc = &const_cast<const SwDoc &>(rDoc).GetPageDesc( nId );
             }
         }
         break;
@@ -1336,7 +1336,7 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
         {
             ::ItemSetToPageDesc( aSet, *pNewDsc );
             rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
-            pDesc = &rDoc.GetPageDesc( nPgDscPos );
+            pDesc = &const_cast<const SwDoc &>(rDoc).GetPageDesc( nPgDscPos );
             rDoc.PreDelPageDesc(pNewDsc); // #i7983#
             delete pNewDsc;
         }
@@ -1393,7 +1393,8 @@ void lcl_SaveStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             for( sal_uInt16 n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
-                void* p = (void*)&rDoc.GetPageDesc( n );
+                void* p =
+                    (void*)&const_cast<const SwDoc &>(rDoc).GetPageDesc( n );
                 rArr.Insert( p, n );
             }
         }
@@ -1467,7 +1468,8 @@ void lcl_DeleteInfoStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
             SvUShorts aDelArr;
             for( n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
-                void* p = (void*)&rDoc.GetPageDesc( n );
+                void* p =
+                    (void*)&const_cast<const SwDoc &>(rDoc).GetPageDesc( n );
                 if( USHRT_MAX == rArr.GetPos( p ))
                     aDelArr.Insert( n, 0 );
             }
@@ -1723,7 +1725,7 @@ void   SwDocStyleSheet::Create()
             if( !pDesc )
             {
                 USHORT nId = rDoc.MakePageDesc(aName);
-                pDesc = &rDoc.GetPageDesc(nId);
+                pDesc = &const_cast<const SwDoc &>(rDoc).GetPageDesc(nId);
             }
             break;
 
@@ -2138,7 +2140,9 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
                 pTargetFmt->ResetAllAttr();
 
             if( USHRT_MAX != nPgDscPos )
-                rDoc.ChgPageDesc( nPgDscPos, rDoc.GetPageDesc(nPgDscPos) );
+                rDoc.ChgPageDesc( nPgDscPos,
+                                  const_cast<const SwDoc &>(rDoc).
+                                  GetPageDesc(nPgDscPos) );
         }
         ((SwDocStyleSheet&)rTarget).SetItemSet( rSource.GetItemSet() );
     }
@@ -2655,7 +2659,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         const USHORT nCount = rDoc.GetPageDescCnt();
         for(USHORT i = 0; i < nCount; ++i)
         {
-            const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
+            const SwPageDesc& rDesc =
+                const_cast<const SwDoc &>(rDoc).GetPageDesc(i);
             const USHORT nId = rDesc.GetPoolFmtId();
             BOOL bUsed = bSearchUsed && ( bOrganizer || rDoc.IsUsed(rDesc));
             if( !bUsed )
