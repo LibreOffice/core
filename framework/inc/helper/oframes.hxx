@@ -1,0 +1,437 @@
+/*************************************************************************
+ *
+ *  $RCSfile: oframes.hxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
+#define __FRAMEWORK_HELPER_OFRAMES_HXX_
+
+//_________________________________________________________________________________________________________________
+//  my own includes
+//_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
+#include <classes/framecontainer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#include <macros/generic.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
+#include <macros/xinterface.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#include <macros/debug.hxx>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
+#include <com/sun/star/frame/XFrames.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  namespace
+//_________________________________________________________________________________________________________________
+
+namespace framework{
+
+#define ANY                                 ::com::sun::star::uno::Any
+#define INDEXOUTOFBOUNDSEXCEPTION           ::com::sun::star::lang::IndexOutOfBoundsException
+#define MUTEX                               ::osl::Mutex
+#define OWEAKOBJECT                         ::cppu::OWeakObject
+#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
+#define UNOTYPE                             ::com::sun::star::uno::Type
+#define WEAKREFERENCE                       ::com::sun::star::uno::WeakReference
+#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
+#define XFRAME                              ::com::sun::star::frame::XFrame
+#define XFRAMES                             ::com::sun::star::frame::XFrames
+#define XMULTISERVICEFACTORY                ::com::sun::star::lang::XMultiServiceFactory
+
+//_________________________________________________________________________________________________________________
+//  exported const
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  exported definitions
+//_________________________________________________________________________________________________________________
+
+/*-************************************************************************************************************//**
+    @short          implement XFrames, XIndexAccess and XElementAccess interfaces as helper for services
+    @descr          Use this class as helper for these interfaces. We share mutex and framecontainer with ouer owner.
+                    The framecontainer is a member of it from type "FrameContainer". That means;
+                    we have the same information as ouer owner. In current implementation we use mutex and lock-mechanism
+                    to prevent against compete access. In future we plan support of semaphore!
+
+    @devstatus      deprecated
+    @implements     XInterface
+                    XFrames
+                    XIndexAccess
+                    XElementAccess
+                    [ XDebugging if TEST_TREE is defined! ]
+    @base           OWeakObject
+
+    @ATTENTION      Don't use this class as direct member - use it dynamicly. Do not derive from this class.
+                    We hold a weakreference to ouer owner not to ouer superclass.
+
+    @devstatus      deprecated
+*//*-*************************************************************************************************************/
+
+//class OFrames :   DERIVE_FROM_XSPECIALDEBUGINTERFACE      // => These macro will expand to nothing, if no testmode is set in debug.h!
+class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess => XElementAccess
+                    public OWEAKOBJECT
+{
+    //-------------------------------------------------------------------------------------------------------------
+    //  public methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    public:
+
+        //---------------------------------------------------------------------------------------------------------
+        //  constructor / destructor
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      standard ctor
+            @descr      These initialize a new instance of this class with all needed informations for work.
+                        We share mutex and framecontainer with owner implementation!
+
+            @seealso    -
+
+            @param      "xFactory"          , reference to factory which has created ouer owner(!). We can use these to create new uno-services.
+            @param      "aMutex"            , reference to shared mutex of owner implementation.
+            @param      "xOwner"            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
+            @param      "pFrameContainer"   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+         OFrames(   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory        ,
+                            MUTEX&                              aMutex          ,
+                    const   REFERENCE< XFRAME >&                xOwner          ,
+                            FrameContainer*                     pFrameContainer );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XInterface
+        //---------------------------------------------------------------------------------------------------------
+
+        DECLARE_XINTERFACE
+//      DECLARE_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XFrames
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      append frame to container
+            @descr      We share the container with ouer owner. We can do this only, if no lock is set on container.
+                        Valid references are accepted only!
+
+            @seealso    class FrameContainer
+
+            @param      "xFrame", reference to an existing frame to append.
+            @return     -
+
+            @onerror    We do nothing in release or throw an assert in debug version.
+        *//*-*****************************************************************************************************/
+
+        virtual void SAL_CALL append( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+
+        /*-****************************************************************************************************//**
+            @short      remove frame from container
+            @descr      This is the companion to append(). We only accept valid references and don't work, if
+                        a lock is set.
+
+            @seealso    class FrameContainer
+
+            @param      "xFrame", reference to an existing frame to remove.
+            @return     -
+
+            @onerror    We do nothing in release or throw an assert in debug version.
+        *//*-*****************************************************************************************************/
+
+        virtual void SAL_CALL remove( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+
+        /*-****************************************************************************************************//**
+            @short      return list of all applicable frames for given flags
+            @descr      Call these to get a list of all frames, which are match with given search flags.
+
+            @seealso    -
+
+            @param      "nSearchFlag", flags to search right frames.
+            @return     A list of founded frames.
+
+            @onerror    An empty list is returned.
+        *//*-*****************************************************************************************************/
+
+        virtual SEQUENCE< REFERENCE< XFRAME > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( RUNTIMEEXCEPTION );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XIndexAccess
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      get count of all current frames in container
+            @descr      This is the beginning of full index-access. With a count you can step over all items in container.
+                        Next call shuoöd be getByIndex(). But these mechanism works only, if no lock in container is set!
+
+            @seealso    class FrameContainer
+            @seealso    method getByIndex()
+
+            @param      -
+            @return     Count of current items in container.
+
+            @onerror    If a lock is set, we return 0 for prevent further access!
+        *//*-*****************************************************************************************************/
+
+        virtual sal_Int32 SAL_CALL getCount() throw( RUNTIMEEXCEPTION );
+
+        /*-****************************************************************************************************//**
+            @short      get specified container item by index
+            @descr      If you called getCount() successful - this method return the specified element as an Any.
+                        You must observe the range from 0 to count-1! Otherwise an IndexOutOfBoundsException is thrown.
+
+            @seealso    class FrameContainer
+            @seealso    method getCount()
+
+            @param      "nIndex", valid index to get container item.
+            @return     A container item (specified by index) wrapped in an Any.
+
+            @onerror    If a lock is set, we return an empty Any!
+            @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
+        *//*-*****************************************************************************************************/
+
+        virtual ANY SAL_CALL getByIndex( sal_Int32 nIndex ) throw(  INDEXOUTOFBOUNDSEXCEPTION   ,
+                                                                    WRAPPEDTARGETEXCEPTION      ,
+                                                                    RUNTIMEEXCEPTION            );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XElementAccess
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      get uno-type of all container items
+            @descr      In current implementation type is fixed to XFrame!
+                        (container-lock is ignored)
+
+            @seealso    -
+
+            @param      -
+            @return     A uno-type descriptor.
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual UNOTYPE SAL_CALL getElementType() throw( RUNTIMEEXCEPTION );
+
+        /*-****************************************************************************************************//**
+            @short      get fill state of current container
+            @descr      Call these to get information about, if items exist in container or not.
+                        (container-lock is ignored)
+
+            @seealso    -
+
+            @param      -
+            @return     sal_True, if container contains some items.
+            @return     sal_False, otherwise.
+
+            @onerror    We return sal_False.
+        *//*-*****************************************************************************************************/
+
+        virtual sal_Bool SAL_CALL hasElements() throw( RUNTIMEEXCEPTION );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  protected methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    protected:
+
+        /*-****************************************************************************************************//**
+            @short      standard destructor
+            @descr      This method destruct an instance of this class and clear some member.
+                        This method is protected, because its not allowed to use this class as a member!
+                        You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual ~OFrames();
+
+        /*-****************************************************************************************************//**
+            @short      reset instance to default values
+            @descr      There are two ways to delete an instance of this class.<BR>
+                        1) delete with destructor<BR>
+                        2) dispose from parent or factory ore ...<BR>
+                        This method do the same for both ways! It free used memory and release references ...
+
+            @seealso    method dispose() (if it exist!)
+            @seealso    destructor ~TaskEnumeration()
+
+            @param      -
+
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual void impl_resetObject();
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  private methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+
+        /*-****************************************************************************************************//**
+            @short      append one sequence to another
+            @descr      There is no operation to add to sequences! Use this helper-method to do this.
+
+            @seealso    class Sequence
+
+            @param      "seqDestination", reference to sequence on which operation will append the other sequence.
+            @param      "seqSource"     , reference to sequence for append.
+            @return     "seqDestination" is parameter AND return value at the same time.
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void impl_appendSequence(           SEQUENCE< REFERENCE< XFRAME > >&    seqDestination  ,
+                                     const  SEQUENCE< REFERENCE< XFRAME > >&    seqSource       );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  debug methods
+    //  (should be private everyway!)
+    //-------------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      debug-method to check incoming parameter of some other mehods of this class
+            @descr      The following methods are used to check parameters for other methods
+                        of this class. The return value is used directly for an ASSERT(...).
+
+            @seealso    ASSERTs in implementation!
+
+            @param      references to checking variables
+            @return     sal_False ,on invalid parameter
+            @return     sal_True  ,otherwise
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+    #ifdef ENABLE_ASSERTIONS
+
+    private:
+
+        sal_Bool impldbg_checkParameter_OFramesCtor (   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory        ,
+                                                                MUTEX&                              aMutex          ,
+                                                        const   REFERENCE< XFRAME >&                xOwner          ,
+                                                                FrameContainer*                     pFrameContainer );
+        sal_Bool impldbg_checkParameter_append      (   const   REFERENCE< XFRAME >&                xFrame          );
+        sal_Bool impldbg_checkParameter_remove      (   const   REFERENCE< XFRAME >&                xFrame          );
+        sal_Bool impldbg_checkParameter_queryFrames (           sal_Int32                           nSearchFlags    );
+
+    #endif  // #ifdef ENABLE_ASSERTIONS
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  variables
+    //  (should be private everyway!)
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+
+        REFERENCE< XMULTISERVICEFACTORY >       m_xFactory                      ;   /// reference to global servicemanager
+        MUTEX&                                  m_aMutex                        ;   /// shared mutex with owner of an instance of this class
+        WEAKREFERENCE< XFRAME >                 m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
+        FrameContainer*                         m_pFrameContainer               ;   /// with owner shared list to hold all direct childs of an XFramesSupplier
+        sal_Bool                                m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
+
+};      //  class OFrames
+
+}       //  namespace framework
+
+#endif  //  #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_

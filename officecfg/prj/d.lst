@@ -1,0 +1,28 @@
+mkdir: %_DEST%\xml%_EXT%
+mkdir: %_DEST%\xml%_EXT%\office
+mkdir: %_DEST%\xml%_EXT%\office\instance
+mkdir: %_DEST%\xml%_EXT%\office\schema
+mkdir: %_DEST%\xml%_EXT%\office\definition
+
+..\schema\schema.description.dtd %_DEST%\xml%_EXT%\office\schema\schema.description.dtd
+
+..\%__SRC%\misc\org.openoffice.Office.Calc.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Calc.xml
+..\%__SRC%\misc\org.openoffice.Office.Chart.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Chart.xml
+..\%__SRC%\misc\org.openoffice.Office.Common.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Common.xml
+..\%__SRC%\misc\org.openoffice.Office.DataAccess.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.DataAccess.xml
+..\%__SRC%\misc\org.openoffice.Office.Draw.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Draw.xml
+..\%__SRC%\misc\org.openoffice.Office.Impress.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Impress.xml
+..\%__SRC%\misc\org.openoffice.Office.Java.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Java.xml
+..\%__SRC%\misc\org.openoffice.Office.Linguistic.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Linguistic.xml
+..\%__SRC%\misc\org.openoffice.Office.Math.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Math.xml
+..\%__SRC%\misc\org.openoffice.Office.Writer.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Writer.xml
+..\%__SRC%\misc\org.openoffice.Office.WriterWeb.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.WriterWeb.xml
+..\%__SRC%\misc\org.openoffice.Inet.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Inet.xml
+..\%__SRC%\misc\org.openoffice.ucb.Hierarchy.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.ucb.Hierarchy.xml
+..\%__SRC%\misc\org.openoffice.Setup.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Setup.xml
+..\%__SRC%\misc\org.openoffice.Templates.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.Templates.xml
+..\%__SRC%\misc\org.openoffice.UserProfile.ins %_DEST%\xml%_EXT%\office\instance\org.openoffice.UserProfile.xml
+
+..\%__SRC%\misc\*.xsd %_DEST%\xml%_EXT%\office\schema\*.xsd
+..\data\*.xml %_DEST%\xml%_EXT%\office\definition\*.xml
+
