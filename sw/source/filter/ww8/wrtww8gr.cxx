@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:43:17 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
+#endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
 #endif
 
 #ifndef _WW8STRUC_HXX
@@ -628,15 +631,19 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
     */
     if ( (aGrTwipSz.Width() > USHRT_MAX) || (aGrTwipSz.Height() > USHRT_MAX)
         || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
-        {
-            aGrTwipSz.Width() = nWidth;
-            aGrTwipSz.Height() = nHeight;
-        }
-    Set_UInt16(pArr, aGrTwipSz.Width() * 254L / 144);       // set xExt
-    Set_UInt16(pArr, aGrTwipSz.Height() * 254L / 144);  // set yExt
-    pArr += 16;                                     // skip hMF & rcWinMF
-    Set_UInt16( pArr, (UINT16)aGrTwipSz.Width() );  // set dxaGoal
-    Set_UInt16( pArr, (UINT16)aGrTwipSz.Height() ); // set dyaGoal
+    {
+        aGrTwipSz.Width() = nWidth;
+        aGrTwipSz.Height() = nHeight;
+    }
+    using namespace sw::types;
+    // set xExt & yExt
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width() * 254L / 144));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height() * 254L / 144));
+    pArr += 16;
+    // skip hMF & rcWinMF
+    // set dxaGoal & dyaGoal
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width()));
+    Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height()));
 
     if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
