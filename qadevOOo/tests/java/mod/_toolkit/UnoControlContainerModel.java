@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainerModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:02:22 $
+ *  last change:$Date: 2003-09-08 13:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,40 +58,42 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
-public class UnoControlContainerModel extends TestCase  {
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
 
-    public TestEnvironment createTestEnvironment (TestParameters param,
-                                                        PrintWriter log) {
+
+public class UnoControlContainerModel extends TestCase {
+    public TestEnvironment createTestEnvironment(TestParameters param,
+                                                 PrintWriter log) {
         XInterface oObj = null;
+
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)param.getMSF()).createInstance
-                ("com.sun.star.awt.UnoControlContainerModel");
-        }
-        catch (Exception e) {
+            oObj = (XInterface) ( (XMultiServiceFactory) param.getMSF())
+                                     .createInstance("com.sun.star.awt.UnoControlContainerModel");
+        } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create " +
-                "UnoControlContainerModel", e);
+                                      "UnoControlContainerModel", e);
         }
 
-        log.println("creating a new environment for UnoControlContainer object");
+        log.println(
+                "creating a new environment for UnoControlContainer object");
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
         tEnv.addObjRelation("OBJNAME",
-            "stardiv.vcl.controlmodel.ControlContainer");
-        System.out.println("ImplementationName: " + utils.getImplName(oObj ));
+                            "stardiv.vcl.controlmodel.ControlContainer");
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
+
         return tEnv;
     }
-
 }
-
