@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-27 13:57:06 $
+ *  last change: $Author: os $ $Date: 2000-10-12 07:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeExcept
  ---------------------------------------------------------------------------*/
 BOOL SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.FootnoteProperties") == rServiceName;
+    return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
 /* -----------------------------06.04.00 11:43--------------------------------
 
@@ -421,7 +421,7 @@ Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames(void) throw
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.FootnoteProperties");
+    pArray[0] = C2U("com.sun.star.text.FootnoteSettings");
     return aRet;
 }
 /*-- 14.12.98 14:03:20---------------------------------------------------
@@ -721,7 +721,7 @@ OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeExcepti
  ---------------------------------------------------------------------------*/
 BOOL SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.EndnoteProperties") == rServiceName;
+    return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
 /* -----------------------------06.04.00 11:45--------------------------------
 
@@ -730,7 +730,7 @@ Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames(void) throw(
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.EndnoteProperties");
+    pArray[0] = C2U("com.sun.star.text.FootnoteSettings");
     return aRet;
 }
 /*-- 14.12.98 14:27:39---------------------------------------------------
@@ -2329,6 +2329,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/27 13:57:06  os
+    #78252# don't create styles without a name
+
     Revision 1.1.1.1  2000/09/19 00:08:29  hr
     initial import
 
