@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slidebitmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:20:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class XBitmap;
-} } } } }
+} } } }
 
 
 /* Definition of SlideBitmap class */
@@ -130,7 +130,7 @@ namespace presentation
 
             // TODO(Q2): Remove UNO bitmap as the transport medium
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XBitmap >      mxBitmap;
+                ::com::sun::star::rendering::XBitmap >      mxBitmap;
         };
 
         typedef ::boost::shared_ptr< ::presentation::internal::SlideBitmap > SlideBitmapSharedPtr;
