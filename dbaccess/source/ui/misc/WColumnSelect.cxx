@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:05:10 $
+ *  last change: $Author: jmarmion $ $Date: 2002-07-11 13:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,12 +389,62 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
             const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
             ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
             OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
-            USHORT nPos = aPos - pSrcVector->begin();
+            USHORT nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
 
             _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, nPos),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
         }
     }
+}
+// -----------------------------------------------------------------------------
+// Simply returning fields back to their original position is
+// not enough. We need to take into acccount what fields have
+// been removed earlier and adjust accordingly. Based on the
+// algorithm employed in moveColumn().
+USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
+                                               const ::rtl::OUString&   _sColumnName,
+                                               USHORT nCurrentPos,
+                                               const ::comphelper::TStringMixEqualFunctor& _aCase)
+{
+    USHORT nAdjustedPos = 0;
+
+    // if returning all entries to their original position,
+    // then there is no need to adjust the positions.
+    if (m_ibColumns_LH.HasFocus())
+        return nAdjustedPos;
+
+    sal_uInt16 nCount = _pLeft->GetEntryCount();
+    ::rtl::OUString sColumnString;
+    for(sal_uInt16 i=0; i < nCount; ++i)
+    {
+        sColumnString = _pLeft->GetEntry(i);
+        if(_sColumnName != sColumnString)
+        {
+            // find the new column in the dest name mapping to obtain the old column
+            OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+                                                                    ::std::compose1(
+                                                                    ::std::bind2nd(_aCase, sColumnString),
+                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    );
+
+            DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+            const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
+            ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
+            if ( aSrcIter != pSrcColumns->end() )
+            {
+                // we need also the old position of this column to insert it back on that position again
+                const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
+                ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
+                USHORT nPos = aPos - pSrcVector->begin();
+                if( nPos < nCurrentPos)
+                {
+                    nAdjustedPos++;
+                }
+            }
+        }
+    }
+
+    return nAdjustedPos;
 }
 // -----------------------------------------------------------------------------
 void OWizColumnSelect::enableButtons()

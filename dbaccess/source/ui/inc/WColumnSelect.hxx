@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:52:55 $
+ *  last change: $Author: jmarmion $ $Date: 2002-07-11 13:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,13 @@ namespace dbaui
                                 const ::comphelper::TStringMixEqualFunctor& _aCase);
 
         void enableButtons();
+
+
+        USHORT adjustColumnPosition(ListBox* _pLeft,
+                                    const ::rtl::OUString&  _sColumnName,
+                                    USHORT nCurrentPos,
+                                    const ::comphelper::TStringMixEqualFunctor& _aCase);
+
     public:
         virtual void            Reset ( );
         virtual void            ActivatePage();
