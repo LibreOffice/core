@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:10:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if (pItem)
             InsertHyperlink(*((const SvxHyperlinkItem *)pItem));
         rReq.Done();
+        break;
+    case SID_INSERT_AVMEDIA:
+        rReq.SetReturnValue(SfxBoolItem(nSlot, InsertMediaDlg( rReq )));
         break;
     case  SID_INSERT_SOUND:
     case  SID_INSERT_VIDEO:
