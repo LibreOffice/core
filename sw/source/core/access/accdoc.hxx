@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 09:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,27 @@
 #include "acccontext.hxx"
 #endif
 
-class SwRootFrm;
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
 
-class SwAccessibleDocument : public SwAccessibleContext
+class SwRootFrm;
+class SwFEShell;
+class SwFlyFrm;
+
+class SwAccessibleDocument : public SwAccessibleContext,
+                             public drafts::com::sun::star::accessibility::XAccessibleSelection
 {
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> xParent;
+
+    // helpers for XAccessibleSelection
+
+    /// get FE-Shell
+    SwFEShell* GetFEShell();
+
+    /// get current selected Fly-Frame, if it's a child of this frame
+    const SwFlyFrm* GetSelectedChildFlyFrame();
 
 protected:
 
@@ -115,6 +130,7 @@ public:
 
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException);
+
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -135,6 +151,49 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XInterface  ======================================================
+
+    // XInterface is inherited through SwAcessibleContext and
+    // XAccessibleSelection. These methods are needed to avoid
+    // ambigiouties.
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire(  ) throw ()
+        { SwAccessibleContext::acquire(); };
+
+    virtual void SAL_CALL release(  ) throw ()
+        { SwAccessibleContext::release(); };
+
+    //=====  XAccessibleSelection  ============================================
+
+    virtual void SAL_CALL selectAccessibleChild(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL clearAccessibleSelection(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL selectAllAccessible(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
 };
 
 
