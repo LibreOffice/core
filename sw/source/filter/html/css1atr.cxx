@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:54:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3944,7 +3944,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_HEADER_FOOTER_EAT_SPACING */ 0,
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
 /* RES_FOLLOW_TEXT_FLOW */          0,
-/* RES_FRMATR_DUMMY1 */             0, // Dummy:
+/* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
 /* RES_FRMATR_DUMMY2 */             0, // Dummy:
 /* RES_FRMATR_DUMMY3 */             0, // Dummy:
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
