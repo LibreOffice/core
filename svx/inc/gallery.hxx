@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tv $ $Date: 2000-12-14 11:21:04 $
+ *  last change: $Author: tv $ $Date: 2001-05-10 15:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,10 @@
 #define GALLERY_THEME_COMMUNICATION     29
 #define GALLERY_THEME_FINANCES          30
 #define GALLERY_THEME_COMPUTER          31
+#define GALLERY_THEME_CLIMA             32
+#define GALLERY_THEME_EDUCATION         33
+#define GALLERY_THEME_TROUBLE           34
 
-#define GALLERY_THEME_DUMMY1            32
-#define GALLERY_THEME_DUMMY2            33
-#define GALLERY_THEME_DUMMY3            34
 #define GALLERY_THEME_DUMMY4            35
 #define GALLERY_THEME_DUMMY5            36
 

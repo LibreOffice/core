@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:35:57 $
+ *  last change: $Author: tv $ $Date: 2001-05-10 15:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,26 +888,86 @@ String RID_GALLERYSTR_THEME_COMPUTER
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_DUMMY1
+String RID_GALLERYSTR_THEME_CLIMA
 {
-    // !!! Don't translate, please !!!
-    Text = "Dummy 1";
+    Text = "Klima";
+    Text[ENGLISH] = "Climate";
+    Text[english_us] = "Climate";
+    Text[ portuguese ] = "Climate";
+    Text[ russian ] = "Climate";
+    Text[ greek ] = "Climate";
+    Text[ dutch ] = "Climate";
+    Text[ french ] = "Climate";
+    Text[ spanish ] = "Climate";
+    Text[ italian ] = "Climate";
+    Text[ danish ] = "Climate";
+    Text[ swedish ] = "Climate";
+    Text[ polish ] = "Climate";
+    Text[ portuguese_brazilian ] = "Climate";
+    Text[ japanese ] = "Climate";
+    Text[ korean ] = "Climate";
+    Text[ chinese_simplified ] = "Climate";
+    Text[ chinese_traditional ] = "Climate";
+    Text[ turkish ] = "Climate";
+    Text[ arabic ] = "Climate";
+    Text[ catalan ] = "Climate";
+    Text[ finnish ] = "Climate";
 };
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_DUMMY2
+String RID_GALLERYSTR_THEME_EDUCATION
 {
-    // !!! Don't translate, please !!!
-    Text = "Dummy 2";
+    Text = "Schule & Uni";
+    Text[ENGLISH] = "School & University";
+    Text[english_us] = "School & University";
+    Text[ portuguese ] = "School & University";
+    Text[ russian ] = "School & University";
+    Text[ greek ] = "School & University";
+    Text[ dutch ] = "School & University";
+    Text[ french ] = "School & University";
+    Text[ spanish ] = "School & University";
+    Text[ italian ] = "School & University";
+    Text[ danish ] = "School & University";
+    Text[ swedish ] = "School & University";
+    Text[ polish ] = "School & University";
+    Text[ portuguese_brazilian ] = "School & University";
+    Text[ japanese ] = "School & University";
+    Text[ korean ] = "School & University";
+    Text[ chinese_simplified ] = "School & University";
+    Text[ chinese_traditional ] = "School & University";
+    Text[ turkish ] = "School & University";
+    Text[ arabic ] = "School & University";
+    Text[ catalan ] = "School & University";
+    Text[ finnish ] = "School & University";
 };
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_DUMMY3
+String RID_GALLERYSTR_THEME_TROUBLE
 {
-    // !!! Don't translate, please !!!
-    Text = "Dummy 3";
+    Text = "Problemlösungen";
+    Text[ENGLISH] = "Problem Solving";
+    Text[english_us] = "Problem Solving";
+    Text[ portuguese ] = "Problem Solving";
+    Text[ russian ] = "Problem Solving";
+    Text[ greek ] = "Problem Solving";
+    Text[ dutch ] = "Problem Solving";
+    Text[ french ] = "Problem Solving";
+    Text[ spanish ] = "Problem Solving";
+    Text[ italian ] = "Problem Solving";
+    Text[ danish ] = "Problem Solving";
+    Text[ swedish ] = "Problem Solving";
+    Text[ polish ] = "Problem Solving";
+    Text[ portuguese_brazilian ] = "Problem Solving";
+    Text[ japanese ] = "Problem Solving";
+    Text[ korean ] = "Problem Solving";
+    Text[ chinese_simplified ] = "Problem Solving";
+    Text[ chinese_traditional ] = "Problem Solving";
+    Text[ turkish ] = "Problem Solving";
+    Text[ arabic ] = "Problem Solving";
+    Text[ catalan ] = "Problem Solving";
+    Text[ finnish ] = "Problem Solving";
 };
 
 // -----------------------------------------------------------------------------
