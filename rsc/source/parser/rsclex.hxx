@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:50:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,21 @@
  ************************************************************************/
 #include <tools/stack.hxx>
 
-#define MINBUF          256
-#define MAXBUF          256
+#include <hash_set>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+
+// a buffer for unique strings
+class StringContainer
+{
+    std::hash_set< rtl::OString, rtl::OStringHash >     m_aStrings;
+public:
+    StringContainer() {}
+    ~StringContainer() {}
+
+    const char* putString( const char* pString );
+};
+
 
 enum MODE_ENUM { MODE_MODELESS, MODE_APPLICATIONMODAL, MODE_SYSTEMMODAL };
 
@@ -80,9 +93,6 @@ struct RSCHEADER {
     RscTop *    pRefClass;
     RscExpType  nName2;
 };
-
-DECLARE_STACK( RscCharStack, char * )
-void PutStringBack( char * pStr );
 
 /************** O b j e c t s t a c k ************************************/
 struct Node {
@@ -144,10 +154,9 @@ int  yylex( void );
 
 class RscTypCont;
 class RscFileInst;
-class RscCharStack;
 
 extern RscTypCont*              pTC;
 extern RscFileInst *            pFI;
-extern RscCharStack *           pCS;
 extern RscExpression *          pExp;
 extern ObjectStack              S;
+extern StringContainer*         pStringContainer;
