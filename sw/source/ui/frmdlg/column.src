@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 21:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Aantal";
         Text[ chinese_simplified ] = "ÊıÄ¿(~A)";
         Text[ greek ] = "~Áñéèìüò";
-        Text[ korean ] = "°³¼ö(~A)";
+        Text[ korean ] = "°³¼ö";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "S~ayı";
     };
@@ -214,14 +214,14 @@ TabPage TP_COLUMN
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
         Text[ chinese_traditional ] = "¹wÄı";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ dutch ] = "Voorbeeld";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ language_user1 ] = " ";
@@ -439,7 +439,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "A~utomatische breedte";
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿í¶È(~W)";
         Text[ greek ] = "Áõôüìáôï ğëÜôïò";
-        Text[ korean ] = "ÀÚµ¿ ³Êºñ(~W)";
+        Text[ korean ] = "ÀÚµ¿ ³Êºñ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "O~tomatik genişlik";
     };
@@ -465,7 +465,7 @@ TabPage TP_COLUMN
         Text[ polish ] = "Szer. kolumny";
         Text[ japanese ] = "’i‚Ì•";
         Text[ chinese_traditional ] = "Äæ¼e";
-        Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
+        Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
         Text[ dutch ] = "Kolombreedte";
         Text[ chinese_simplified ] = "À¸¿í";
         Text[ greek ] = "ĞëÜôïò óôŞëçò";
@@ -500,7 +500,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Type";
         Text[ chinese_simplified ] = "ÀàĞÍ(~L)";
         Text[ greek ] = "Ôı~ğïò";
-        Text[ korean ] = "¼±(~L)";
+        Text[ korean ] = "Á¾·ù";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "T~ür";
     };
@@ -638,7 +638,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Hoogte";
         Text[ chinese_simplified ] = "¸ß(~H)";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ korean ] = "³ôÀÌ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Yüks.";
     };
@@ -684,7 +684,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Positie";
         Text[ chinese_simplified ] = "Î»ÖÃ(~P)";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡(~P)";
+        Text[ korean ] = "À§Ä¡";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Konum";
     };
@@ -854,7 +854,7 @@ TabPage TP_COLUMN
         Text [ norwegian ] = "Lines between" ;
         Text [ italian ] = "Linea di separazione" ;
         Text [ portuguese_brazilian ] = "Linhas entre" ;
-        Text [ portuguese ] = "Separador" ;
+        Text [ portuguese ] = "Linha de separação" ;
         Text [ finnish ] = "Rivejä välissä" ;
         Text [ danish ] = "Separator" ;
         Text [ french ] = "Trait de séparation" ;
@@ -1080,10 +1080,10 @@ ModalDialog DLG_COLUMN
     StringList [ korean ] =
     {
             < "¼±ÅÃ" ;              LISTBOX_SELECTION; > ;
-        < "ÇöÀç ¼±ÅÃ" ;     LISTBOX_SECTION     ; > ;
+        < "ÇöÀç ±¸¿ª" ;     LISTBOX_SECTION     ; > ;
         < "¼±ÅÃµÈ ±¸¿ª" ;  LISTBOX_SECTIONS ; > ;
         < "ÇÁ·¹ÀÓ" ;                LISTBOX_FRAME       ; > ;
-        < "ÆäÀÌÁö ¼³Á¤: " ;         LISTBOX_PAGE        ; > ;
+        < "ÂÊ À¯Çü: " ;         LISTBOX_PAGE        ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -1095,7 +1095,7 @@ ModalDialog DLG_COLUMN
     };
     StringList [ chinese_traditional ] =
     {
-            < "¿ï¾Ü" ;              LISTBOX_SELECTION; > ;
+            < "¿ï¨ú" ;              LISTBOX_SELECTION; > ;
         < "·í«eªº°Ï°ì" ;    LISTBOX_SECTION     ; > ;
         < "¿ï¾Üªº°Ï°ì" ;  LISTBOX_SECTIONS  ; > ;
         < "®Ø" ;                LISTBOX_FRAME       ; > ;
