@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplenameclashresolverequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 11:42:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     ucb::NameClashResolveRequest aRequest;
 //    aRequest.Message        = // OUString
 //    aRequest.Context        = // XInterface
-    aRequest.Classification  = task::InteractionClassification_ERROR;
+    aRequest.Classification  = task::InteractionClassification_QUERY;
     aRequest.TargetFolderURL = rTargetFolderURL;
     aRequest.ClashingName    = rClashingName;
     aRequest.ProposedNewName = rProposedNewName;
