@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 13:21:25 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 17:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,10 +242,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                Image* pImage = GetImageFromURL( rFrame, aItemCommand );
-
-                if ( pImage )
-                    pMenu->SetItemImage( nItemId, *pImage );
+                Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                if ( !!aImage )
+                    pMenu->SetItemImage( nItemId, aImage );
 
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imageproducer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 08:02:22 $
+ *  last change: $Author: mba $ $Date: 2001-05-03 17:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,15 @@
 #include <rtl/ustring.hxx>
 #endif
 
-typedef Image* ( *pfunc_getImage)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL );
+namespace framework
+{
+
+typedef Image ( *pfunc_getImage)( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig );
 
 pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-Image* SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL );
+Image SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig );
+
+};
 
 #endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
