@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:11:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ AstDeclaration const * eraseStructInstances(AstDeclaration const * decl) {
 %type <lbval>	case_label
 %type <mval>	element_spec
 
-%type <bval>    optional_inherited_interface opt_rest
+%type <bval>    optional_inherited_interface opt_rest opt_service_body
 
 %type <attexcval> opt_attribute_block attribute_block_rest opt_attribute_raises
 
@@ -1989,7 +1989,7 @@ service_interface_dfn:
     ':' scoped_name
     {
         AstScope * scope = idlc()->scopes()->nextToTop();
-            // skip the scope (needlessly) pushed by service_dcl
+            // skip the scope pushed by service_dcl
         AstDeclaration * decl = scope->lookupByName(*$2);
         if (decl != 0 && resolveTypedefs(decl)->getNodeType() == NT_interface) {
             if (idlc()->error()->checkPublished(decl)) {
@@ -2002,11 +2002,17 @@ service_interface_dfn:
         delete $2;
     }
     opt_service_body
+    {
+        AstService * s = static_cast< AstService * >(idlc()->scopes()->top());
+        if (s != 0) {
+            s->setDefaultConstructor(!$4);
+        }
+    }
     ;
 
 opt_service_body:
-    service_body
-    | /* empty */
+    service_body { $$ = true; }
+    | /* empty */ { $$ = false; }
     ;
 
 service_body:
