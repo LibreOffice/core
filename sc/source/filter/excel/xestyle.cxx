@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,11 +784,25 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
     /*  We need to determine if a CJK or CTL fontitem is set in the itemset.
         This is discussed in #i17050#. It is possible that both may be present.
         In this case, we will choose CJK. Either option is equally correct. */
-    bool bCjk   = ScfTools::CheckItem( rItemSet, ATTR_CJK_FONT, true );
-    bool bCtl   = ScfTools::CheckItem( rItemSet, ATTR_CTL_FONT, true );
     BYTE nScript = SCRIPTTYPE_LATIN;
-    if( bCjk || bCtl )
-        nScript =  bCjk ? SCRIPTTYPE_ASIAN : SCRIPTTYPE_COMPLEX ;
+
+    // #114008# do not let a font from a parent style override an explicit cell font
+    const SfxItemSet* pCurrSet = &rItemSet;
+    bool bFound = false;
+    while( !bFound && pCurrSet )
+    {
+        bFound = true;
+        if( ScfTools::CheckItem( *pCurrSet, ATTR_CJK_FONT, false ) )
+            nScript = SCRIPTTYPE_ASIAN;
+        else if( ScfTools::CheckItem( *pCurrSet, ATTR_CTL_FONT, false ) )
+            nScript = SCRIPTTYPE_COMPLEX;
+        else if( ScfTools::CheckItem( *pCurrSet, ATTR_FONT, false ) )
+            nScript = SCRIPTTYPE_LATIN;
+        else
+            bFound = false;
+        pCurrSet = pCurrSet->GetParent();
+    }
+
     Font aFont;
     ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, NULL, NULL, NULL, nScript );
     return Insert( aFont, bAppFont );
@@ -796,9 +810,7 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
 
 sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern, bool bAppFont )
 {
-    Font aFont;
-    rPattern.GetFont( aFont, SC_AUTOCOL_RAW );
-    return Insert( aFont, bAppFont );
+    return Insert( rPattern.GetItemSet(), bAppFont );
 }
 
 void XclExpFontBuffer::Save( XclExpStream& rStrm )
