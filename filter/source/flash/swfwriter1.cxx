@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 23:16:53 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,6 +1333,11 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 
 // -----------------------------------------------------------------------------
 
+/* CL: The idea was to export page fields as text fields that get theire
+   string from a variable set with actionscript by each page. This didn't
+   work out since the formating is always wrong when text follows the
+   page number field since pages greater one may require more space than
+   page 1
 bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 {
     startTag( TAG_DEFINEEDITTEXT );
@@ -1371,6 +1376,7 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 
     return true;
 }
+*/
 
 // -----------------------------------------------------------------------------
 
@@ -1683,6 +1689,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         }
                     }
                 }
+/*
                 else if( pA->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_BEGIN;PageField" ) == COMPARE_EQUAL )
                 {
 
@@ -1706,6 +1713,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         }
                     }
                 }
+*/
             }
             break;
 

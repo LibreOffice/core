@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-03 15:50:15 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,8 @@ private:
     sal_Bool mbExportOLEAsJPEG;
 
     sal_Bool mbPresentation;
+
+    sal_Int32 mnPageNumber;
 };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-06 12:12:45 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,12 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 // -----------------------------------------------------------------------------
 
 FlashExporter::FlashExporter(const Reference< XMultiServiceFactory > &rxMSF, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
-:   mxMSF( rxMSF ), mpWriter( NULL ), mnJPEGcompressMode(nJPEGCompressMode), mbExportOLEAsJPEG(bExportOLEAsJPEG), mbPresentation(true)
+:   mxMSF( rxMSF ),
+    mpWriter( NULL ),
+    mnJPEGcompressMode(nJPEGCompressMode),
+    mbExportOLEAsJPEG(bExportOLEAsJPEG),
+    mbPresentation(true),
+    mnPageNumber( - 1 )
 {
 }
 
@@ -244,6 +249,8 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
     xStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Macromedia Flash (SWF)" )), nPageCount);
     for( nPage = 0; nPage < nPageCount; nPage++)
     {
+        mnPageNumber = nPage + 1;
+
         xStatusIndicator->setValue( nPage );
         xDrawPages->getByIndex(nPage) >>= xDrawPage;
 
@@ -727,14 +734,16 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     utl::TempFile aFile;
     aFile.EnableKillingFile();
 
-    Sequence< PropertyValue > aFilterData(bExportAsJPEG ? 2 : 1);
+    Sequence< PropertyValue > aFilterData(bExportAsJPEG ? 3 : 2);
     aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Version") );
     aFilterData[0].Value <<= (sal_Int32)6000;
+    aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PageNumber") );
+    aFilterData[1].Value <<= mnPageNumber;
 
     if(bExportAsJPEG)
     {
-        aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Translucent") );
-        aFilterData[1].Value <<= (sal_Bool)sal_True;
+        aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Translucent") );
+        aFilterData[2].Value <<= (sal_Bool)sal_True;
     }
 
     Sequence< PropertyValue > aDescriptor( bOnlyBackground ? 4 : 3 );
