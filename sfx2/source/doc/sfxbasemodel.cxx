@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:12:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,11 +1030,20 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
         {
             SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
             TransformParameters( SID_OPENDOC, rArgs, aSet );
+
             m_pData->m_pObjectShell->GetMedium()->GetItemSet()->Put( aSet );
             SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
             if ( pItem )
                 m_pData->m_pObjectShell->GetMedium()->SetFilter(
                     m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
+
+            SFX_ITEMSET_ARG( &aSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
+            if ( pTitleItem )
+            {
+                SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
+                if ( pFrame )
+                    pFrame->UpdateTitle();
+            }
         }
     }
 
@@ -2481,10 +2490,10 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
-                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
                     if ( pStream )
                     {
+                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
                         delete pStream;
@@ -2514,11 +2523,11 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
-                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
 
                     if ( pStream )
                     {
+                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
                         delete pStream;
@@ -2552,11 +2561,11 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_BMP );
-                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
 
                     if ( pStream )
                     {
+                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
                         delete pStream;
@@ -2575,11 +2584,11 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
-                    pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     delete pMetaFile;
 
                     if ( pStream )
                     {
+                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
                                                         pStream->Seek( STREAM_SEEK_TO_END ) );
                         delete pStream;
