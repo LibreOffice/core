@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-25 13:21:47 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 16:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 {
     try {
         uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
-        OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
+        OSL_ENSURE( !m_xObjectStorage.is() || xComponent.is(), "Wrong storage implementation!" );
         if ( xComponent.is() )
             xComponent->dispose();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 10:27:48 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 16:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 {
     try {
         uno::Reference< lang::XComponent > xComponent( m_xObjectStream, uno::UNO_QUERY );
-        OSL_ENSURE( xComponent.is(), "Wrong stream implementation!" );
+        OSL_ENSURE( !m_xObjectStream.is() || xComponent.is(), "Wrong stream implementation!" );
         if ( xComponent.is() )
             xComponent->dispose();
     }
@@ -766,7 +766,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     GetRidOfComponent();
     CreateOleComponent_Impl( pNewOleComponent );
 
-    if ( m_xParentStorage != xStorage || !m_aNewEntryName.equals( sEntName ) )
+    if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
 
     if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )

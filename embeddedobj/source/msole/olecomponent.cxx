@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
+ *  last change: $Author: mav $ $Date: 2003-11-26 16:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,22 +727,83 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
 
     CComPtr< IDataObject > pDataObject;
     HRESULT hr = pOleLinkComponent->m_pObj->QueryInterface( IID_IDataObject, (void**)&pDataObject );
-    if ( FAILED( hr ) || !pDataObject || OleQueryCreateFromData( pDataObject ) )
-        throw io::IOException(); // TODO: the object doesn't allow initialization based on data
+    if ( SUCCEEDED( hr ) && pDataObject && SUCCEEDED( OleQueryCreateFromData( pDataObject ) ) )
+    {
+        m_pIStorage = CreateNewIStorage_Impl();
+        if ( !m_pIStorage )
+            throw uno::RuntimeException(); // TODO:
 
-    m_pIStorage = CreateNewIStorage_Impl();
-    if ( !m_pIStorage )
-        throw uno::RuntimeException(); // TODO:
 
-    hr = OleCreateFromData( pDataObject,
-                            IID_IUnknown,
-                            OLERENDER_DRAW,
-                            NULL,
-                            NULL,
-                            m_pIStorage,
-                            (void**)&m_pObj );
+        hr = OleCreateFromData( pDataObject,
+                                IID_IUnknown,
+                                OLERENDER_DRAW,
+                                NULL,
+                                NULL,
+                                m_pIStorage,
+                                (void**)&m_pObj );
+    }
 
-    if ( FAILED( hr ) || !m_pObj)
+    if ( !m_pObj )
+    {
+        CComPtr< IOleLink > pOleLink;
+        hr = pOleLinkComponent->m_pObj->QueryInterface( IID_IOleLink, (void**)&pOleLink );
+        if ( FAILED( hr ) || !pOleLink )
+            throw io::IOException(); // TODO: the object doesn't support IOleLink
+
+        CComPtr< IMoniker > pMoniker;
+        hr = pOleLink->GetSourceMoniker( &pMoniker );
+        if ( FAILED( hr ) || !pMoniker )
+            throw io::IOException(); // TODO: can not retrieve moniker
+
+        // In case of file moniker life is easy :)
+        DWORD aMonType = 0;
+        hr = pMoniker->IsSystemMoniker( &aMonType );
+        if ( SUCCEEDED( hr ) && aMonType == MKSYS_FILEMONIKER )
+        {
+            CComPtr< IMalloc > pMalloc;
+            CoGetMalloc( 1, &pMalloc ); // if fails there will be a memory leak
+            OSL_ENSURE( pMalloc, "CoGetMalloc() failed!" );
+
+            LPOLESTR pOleStr = NULL;
+            hr = pOleLink->GetSourceDisplayName( &pOleStr );
+            if ( SUCCEEDED( hr ) && pOleStr )
+            {
+                ::rtl::OUString aFilePath( (sal_Unicode*)pOleStr );
+                if ( pMalloc )
+                    pMalloc->Free( (void*)pOleStr );
+
+                hr = OleCreateFromFile( CLSID_NULL,
+                                        aFilePath.getStr(),
+                                        IID_IUnknown,
+                                        OLERENDER_DRAW, // OLERENDER_FORMAT
+                                        NULL,
+                                        NULL,
+                                        m_pIStorage,
+                                        (void**)&m_pObj );
+            }
+        }
+
+        // in case of other moniker types the only way is to get storage
+        if ( !m_pObj )
+        {
+            CComPtr< IBindCtx > pBindCtx;
+            hr = CreateBindCtx( 0, (LPBC FAR*)&pBindCtx );
+            if ( SUCCEEDED( hr ) && pBindCtx )
+            {
+                CComPtr< IStorage > pObjectStorage;
+                hr = pMoniker->BindToStorage( pBindCtx, NULL, IID_IStorage, (void**)&pObjectStorage );
+                if ( SUCCEEDED( hr ) && pObjectStorage )
+                {
+                    hr = pObjectStorage->CopyTo( 0, NULL, NULL, m_pIStorage );
+                    if ( SUCCEEDED( hr ) )
+                        hr = OleLoad( m_pIStorage, IID_IUnknown, NULL, (void**)&m_pObj );
+                }
+            }
+        }
+    }
+
+    // If object could not be created the only way is to use graphical representation
+    if ( FAILED( hr ) || !m_pObj )
         throw uno::RuntimeException(); // TODO
 
     // TODO: May be the Icon should be also copied?
