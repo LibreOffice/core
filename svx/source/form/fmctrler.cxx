@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #endif
 #ifndef SVX_FORM_CONFIRMDELETE_HXX
 #include "confirmdelete.hxx"
+#endif
+#ifndef SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
+#include "fmcontrolbordermanager.hxx"
+#endif
+#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
+#include "fmdocumentclassification.hxx"
 #endif
 #ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
@@ -241,6 +247,7 @@
 
 #include <algorithm>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
@@ -412,6 +419,7 @@ FmXFormController::FmXFormController(const Reference< XMultiServiceFactory > & _
                   ,m_aParameterListeners(m_aMutex)
                   ,m_pView(_pView)
                   ,m_pWindow(_pWindow)
+                  ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_bDBConnection(sal_False)
                   ,m_bCycle(sal_False)
                   ,m_bCanUpdate(sal_False)
@@ -480,6 +488,8 @@ FmXFormController::~FmXFormController()
         m_xAggregate->setDelegator( NULL );
         m_xAggregate.clear();
     }
+
+    DELETEZ( m_pControlBorderManager );
 
     DBG_DTOR( FmXFormController, NULL );
 }
@@ -878,6 +888,8 @@ void FmXFormController::disposing(void)
     removeBoundFieldListener();
     stopFiltering();
 
+    m_pControlBorderManager->restoreAll();
+
     m_aFilters.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -920,6 +932,21 @@ void FmXFormController::disposing(void)
 
     m_xORB              = NULL;
     m_bDBConnection = sal_False;
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    static bool lcl_shouldUseDynamicControlBorder( const Reference< XInterface >& _rxForm, const Any& _rDynamicColorProp )
+    {
+        bool bDoUse = false;
+        if ( !( _rDynamicColorProp >>= bDoUse ) )
+        {
+            DocumentType eDocType = DocumentClassification::classifyHostDocument( _rxForm );
+            bDoUse = ( eDocType == eElectronicForm ) || ( eDocType == eDatabaseForm );
+        }
+        return bDoUse;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -976,6 +1003,19 @@ void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) 
 
             if (!m_bCurrentRecordModified)
                 m_bModified = sal_False;
+        }
+        else if ( evt.PropertyName == FM_PROP_DYNAMIC_CONTROL_BORDER )
+        {
+            bool bEnable = lcl_shouldUseDynamicControlBorder( evt.Source, evt.NewValue );
+            if ( bEnable )
+            {
+                m_pControlBorderManager->enableDynamicBorderColor();
+                m_pControlBorderManager->focusGained( m_xActiveControl.get() );
+            }
+            else
+            {
+                m_pControlBorderManager->disableDynamicBorderColor();
+            }
         }
     }
 }
@@ -1240,9 +1280,11 @@ sal_Bool FmXFormController::determineLockState() const
 //------------------------------------------------------------------------------
 void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController::focusGained: Object already disposed!" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
+
+    m_pControlBorderManager->focusGained( e.Source );
 
     if (m_bDBConnection)
     {
@@ -1269,7 +1311,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
 #if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
             Reference< XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
-            DBG_ASSERT(!bControlIsLocked, "FmXFormController::focusLost : I'm modified and the current control is locked ? How this ?");
+            DBG_ASSERT(!bControlIsLocked, "FmXFormController::Gained: I'm modified and the current control is locked ? How this ?");
             // normalerweise sollte ein gelocktes Control nicht modified sein, also muss wohl mein bModified aus einem anderen Kontext
             // gesetzt worden sein, was ich nicht verstehen wuerde ...
 #endif
@@ -1377,7 +1419,10 @@ void FmXFormController::onActivate()
 //------------------------------------------------------------------------------
 void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::focusLost: Object already disposed!" );
+
+    m_pControlBorderManager->focusLost( e.Source );
+
     Reference< XControl >  xControl(e.Source, UNO_QUERY);
     Reference< XWindowPeer >  xNext(e.NextFocus, UNO_QUERY);
     Reference< XControl >  xNextControl = isInList(xNext);
@@ -1390,6 +1435,30 @@ void FmXFormController::focusLost(const FocusEvent& e) throw( RuntimeException )
     }
 }
 
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::mousePressed( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
+{
+    // not interested in
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::mouseReleased( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
+{
+    // not interested in
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::mouseEntered( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
+{
+    m_pControlBorderManager->mouseEntered( _rEvent.Source );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL FmXFormController::mouseExited( const awt::MouseEvent& _rEvent ) throw (RuntimeException)
+{
+    m_pControlBorderManager->mouseExited( _rEvent.Source );
+}
+
 //------------------------------------------------------------------------------
 void FmXFormController::setModel(const Reference< XTabControllerModel > & Model) throw( RuntimeException )
 {
@@ -1397,69 +1466,101 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
     ::osl::MutexGuard aGuard( m_aMutex );
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::setModel : invalid aggregate !");
 
-    // disconnect from the old model
-    if (m_xModelAsIndex.is())
+    try
     {
-        if (m_bDBConnection)
+        // disconnect from the old model
+        if (m_xModelAsIndex.is())
         {
-            // we are currently working on the model
-            EventObject aEvt(m_xModelAsIndex);
-            unloaded(aEvt);
+            if (m_bDBConnection)
+            {
+                // we are currently working on the model
+                EventObject aEvt(m_xModelAsIndex);
+                unloaded(aEvt);
+            }
+
+            Reference< XLoadable >  xForm(m_xModelAsIndex, UNO_QUERY);
+            if (xForm.is())
+                xForm->removeLoadListener(this);
+
+            Reference< XSQLErrorBroadcaster >  xBroadcaster(m_xModelAsIndex, UNO_QUERY);
+            if (xBroadcaster.is())
+                xBroadcaster->removeSQLErrorListener(this);
+
+            Reference< XDatabaseParameterBroadcaster >  xParamBroadcaster(m_xModelAsIndex, UNO_QUERY);
+            if (xParamBroadcaster.is())
+                xParamBroadcaster->removeParameterListener(this);
         }
 
-        Reference< XLoadable >  xForm(m_xModelAsIndex, UNO_QUERY);
-        if (xForm.is())
-            xForm->removeLoadListener(this);
+        m_aControllerFeatures.dispose();
 
-        Reference< XSQLErrorBroadcaster >  xBroadcaster(m_xModelAsIndex, UNO_QUERY);
-        if (xBroadcaster.is())
-            xBroadcaster->removeSQLErrorListener(this);
+        // set the new model wait for the load event
+        if (m_xTabController.is())
+            m_xTabController->setModel(Model);
+        m_xModelAsIndex = Reference< XIndexAccess > (Model, UNO_QUERY);
+        m_xModelAsManager = Reference< XEventAttacherManager > (Model, UNO_QUERY);
 
-        Reference< XDatabaseParameterBroadcaster >  xParamBroadcaster(m_xModelAsIndex, UNO_QUERY);
-        if (xParamBroadcaster.is())
-            xParamBroadcaster->removeParameterListener(this);
-    }
-
-    m_aControllerFeatures.dispose();
-
-    // set the new model wait for the load event
-    if (m_xTabController.is())
-        m_xTabController->setModel(Model);
-    m_xModelAsIndex = Reference< XIndexAccess > (Model, UNO_QUERY);
-    m_xModelAsManager = Reference< XEventAttacherManager > (Model, UNO_QUERY);
-
-    // only if both ifaces exit, the controller will work successful
-    if (!m_xModelAsIndex.is() || !m_xModelAsManager.is())
-    {
-        m_xModelAsManager = NULL;
-        m_xModelAsIndex = NULL;
-    }
-
-    if (m_xModelAsIndex.is())
-    {
-        m_aControllerFeatures.assign( this );
-
-        // adding load and ui interaction listeners
-        Reference< XLoadable >  xForm(Model, UNO_QUERY);
-        if (xForm.is())
-            xForm->addLoadListener(this);
-
-        Reference< XSQLErrorBroadcaster >  xBroadcaster(Model, UNO_QUERY);
-        if (xBroadcaster.is())
-            xBroadcaster->addSQLErrorListener(this);
-
-        Reference< XDatabaseParameterBroadcaster >  xParamBroadcaster(Model, UNO_QUERY);
-        if (xParamBroadcaster.is())
-            xParamBroadcaster->addParameterListener(this);
-
-        // well, is the database already loaded?
-        // then we have to simulate a load event
-        Reference< XLoadable >  xCursor(m_xModelAsIndex, UNO_QUERY);
-        if (xCursor.is() && xCursor->isLoaded())
+        // only if both ifaces exit, the controller will work successful
+        if (!m_xModelAsIndex.is() || !m_xModelAsManager.is())
         {
-            EventObject aEvt(xCursor);
-            loaded(aEvt);
+            m_xModelAsManager = NULL;
+            m_xModelAsIndex = NULL;
         }
+
+        if (m_xModelAsIndex.is())
+        {
+            m_aControllerFeatures.assign( this );
+
+            // adding load and ui interaction listeners
+            Reference< XLoadable >  xForm(Model, UNO_QUERY);
+            if (xForm.is())
+                xForm->addLoadListener(this);
+
+            Reference< XSQLErrorBroadcaster >  xBroadcaster(Model, UNO_QUERY);
+            if (xBroadcaster.is())
+                xBroadcaster->addSQLErrorListener(this);
+
+            Reference< XDatabaseParameterBroadcaster >  xParamBroadcaster(Model, UNO_QUERY);
+            if (xParamBroadcaster.is())
+                xParamBroadcaster->addParameterListener(this);
+
+            // well, is the database already loaded?
+            // then we have to simulate a load event
+            Reference< XLoadable >  xCursor(m_xModelAsIndex, UNO_QUERY);
+            if (xCursor.is() && xCursor->isLoaded())
+            {
+                EventObject aEvt(xCursor);
+                loaded(aEvt);
+            }
+
+            Reference< XPropertySet > xModelProps( m_xModelAsIndex, UNO_QUERY );
+            Reference< XPropertySetInfo > xPropInfo( xModelProps->getPropertySetInfo() );
+            if (  xPropInfo.is()
+               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER )
+               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_FOCUS )
+               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_MOUSE )
+               )
+            {
+                bool bEnableDynamicControlBorder = lcl_shouldUseDynamicControlBorder(
+                    xModelProps.get(), xModelProps->getPropertyValue( FM_PROP_DYNAMIC_CONTROL_BORDER ) );
+                if ( bEnableDynamicControlBorder )
+                    m_pControlBorderManager->enableDynamicBorderColor();
+                else
+                    m_pControlBorderManager->disableDynamicBorderColor();
+
+                sal_Int32 nColor = 0;
+                if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_FOCUS ) >>= nColor )
+                {
+                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_FOCUSED, nColor );
+                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_BOTH, nColor );
+                }
+                if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_MOUSE ) >>= nColor )
+                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_MOUSE_HOVER, nColor );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormController::setModel: caught an exception!" );
     }
 }
 
@@ -1559,7 +1660,8 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
             Reference< XWindow >  xWindow(*pControls, UNO_QUERY);
             if (xWindow.is())
             {
-                xWindow->removeFocusListener(this);
+                xWindow->removeFocusListener( this );
+                xWindow->removeMouseListener( this );
 
                 // abmelden beim Eventattacher
                 removeFromEventAttacher(*pControls);
@@ -1613,7 +1715,8 @@ void FmXFormController::setContainer(const Reference< XControlContainer > & xCon
                 Reference< XWindow >  xWindow(xCtrl, UNO_QUERY);
                 if (xWindow.is())
                 {
-                    xWindow->addFocusListener(this);
+                    xWindow->addFocusListener( this );
+                    xWindow->addMouseListener( this );
                     // anmelden beim Eventattacher
                     addToEventAttacher(xCtrl);
                 }
@@ -1987,7 +2090,9 @@ void FmXFormController::insertControl(const Reference< XControl > & xControl)
     Reference< XWindow >  xWindow(xControl, UNO_QUERY);
     if (xWindow.is())
     {
-        xWindow->addFocusListener(this);
+        xWindow->addFocusListener( this );
+        xWindow->addMouseListener( this );
+
         // register at the Eventattacher but not in filter mode
         if (m_bAttachEvents)
             addToEventAttacher(xControl);
@@ -2039,7 +2144,8 @@ void FmXFormController::removeControl(const Reference< XControl > & xControl)
     Reference< XWindow >  xWindow(xControl, UNO_QUERY);
     if (xWindow.is())
     {
-        xWindow->removeFocusListener(this);
+        xWindow->removeFocusListener( this );
+        xWindow->removeMouseListener( this );
         if (m_bDetachEvents)
             removeFromEventAttacher(xControl);
     }
@@ -2227,44 +2333,64 @@ void FmXFormController::removeBoundFieldListener()
 //------------------------------------------------------------------------------
 void FmXFormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
-    if ( m_bCanInsert || m_bCanUpdate )   // form can be modified
+    try
     {
-        _rxForm->addPropertyChangeListener( FM_PROP_ISNEW, this );
-        _rxForm->addPropertyChangeListener( FM_PROP_ISMODIFIED, this );
-
-        if ( !_bPropertiesOnly )
+        if ( m_bCanInsert || m_bCanUpdate )   // form can be modified
         {
-            // set the Listener for UI interaction
-            Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
-            if ( xApprove.is() )
-                xApprove->addRowSetApproveListener( this );
+            _rxForm->addPropertyChangeListener( FM_PROP_ISNEW, this );
+            _rxForm->addPropertyChangeListener( FM_PROP_ISMODIFIED, this );
 
-            // listener for row set changes
-            Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
-            if ( xRowSet.is() )
-                xRowSet->addRowSetListener( this );
+            if ( !_bPropertiesOnly )
+            {
+                // set the Listener for UI interaction
+                Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
+                if ( xApprove.is() )
+                    xApprove->addRowSetApproveListener( this );
+
+                // listener for row set changes
+                Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
+                if ( xRowSet.is() )
+                    xRowSet->addRowSetListener( this );
+            }
         }
+
+        if ( _rxForm->getPropertySetInfo().is() && _rxForm->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
+            _rxForm->addPropertyChangeListener( FM_PROP_DYNAMIC_CONTROL_BORDER, this );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormController::startFormListening: caught an exception!" );
     }
 }
 
 //------------------------------------------------------------------------------
 void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
-    if ( m_bCanInsert || m_bCanUpdate )
+    try
     {
-        _rxForm->removePropertyChangeListener( FM_PROP_ISNEW, this );
-        _rxForm->removePropertyChangeListener( FM_PROP_ISMODIFIED, this );
-
-        if ( !_bPropertiesOnly )
+        if ( m_bCanInsert || m_bCanUpdate )
         {
-            Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
-            if (xApprove.is())
-                xApprove->removeRowSetApproveListener(this);
+            _rxForm->removePropertyChangeListener( FM_PROP_ISNEW, this );
+            _rxForm->removePropertyChangeListener( FM_PROP_ISMODIFIED, this );
 
-            Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
-            if ( xRowSet.is() )
-                xRowSet->removeRowSetListener( this );
+            if ( !_bPropertiesOnly )
+            {
+                Reference< XRowSetApproveBroadcaster > xApprove( _rxForm, UNO_QUERY );
+                if (xApprove.is())
+                    xApprove->removeRowSetApproveListener(this);
+
+                Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
+                if ( xRowSet.is() )
+                    xRowSet->removeRowSetListener( this );
+            }
         }
+
+        if ( _rxForm->getPropertySetInfo().is() && _rxForm->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
+            _rxForm->removePropertyChangeListener( FM_PROP_DYNAMIC_CONTROL_BORDER, this );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormController::stopFormListening: caught an exception!" );
     }
 }
 
