@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:44:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix(DST_JDBC) : String());
+    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix( DST_ADABAS ) : String());
     *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
@@ -473,7 +473,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_SCHEMA, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_INDEXAPPENDIX, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_CONN_LDAP_USESSL, sal_False);
+    *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, String());
     *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, sal_False);
+    *pCounter++ = new SfxStringItem(DSID_DATABASENAME, String());
 
 
     // create the pool
@@ -529,6 +531,8 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
         {0,0},
         {0,0},
+        {0,0},
+        {0,0}
     };
 
     OSL_ENSURE(sizeof(aItemInfos)/sizeof(aItemInfos[0]) == DSID_LAST_ITEM_ID,"Invlaid Ids!");
@@ -564,6 +568,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     _rppDefaults = NULL;
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
