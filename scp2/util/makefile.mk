@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:21:17 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:08:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,10 @@ SCP1FILES +=                           \
              folderitem_math.par       \
              module_activex.par        \
              file_activex.par          \
-             custom_activex.par
+             custom_activex.par \
+         module_winexplorerext.par  \
+         file_winexplorerext.par          \
+         registryitem_winexplorerext.par
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
