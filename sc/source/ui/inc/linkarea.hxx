@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:43:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_LINKAREA_HXX
 #define SC_LINKAREA_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
@@ -86,14 +90,14 @@
 #endif
 
 
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
+//REMOVE    #ifndef _EMBOBJ_HXX //autogen
+//REMOVE    #include <so3/embobj.hxx>
+//REMOVE    #endif
 
-#ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-#define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-SO2_DECL_REF(SvEmbeddedObject)
-#endif
+//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
+//REMOVE    #endif
 
 class ScDocShell;
 
@@ -117,7 +121,8 @@ private:
     HelpButton          aBtnHelp;
 
     ScDocShell*         pSourceShell;
-    SvEmbeddedObjectRef aSourceRef;
+    SfxObjectShellRef   aSourceRef;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xSourceObject;
 
     DECL_LINK( FileHdl, ComboBox* );
     DECL_LINK( BrowseHdl, PushButton* );
