@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 10:50:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFX_FCONTNR_HXX
+#include <sfx2/fcontnr.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -456,7 +459,7 @@ SwSrcView::~SwSrcView()
     DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?")
     TextEngine* pTextEngine = aEditWin.GetTextEngine();
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
-    ((SwWebDocShell*)pDocShell)->SetSourcePara(rSel.GetStart().GetPara());
+    ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
 
     SfxDocumentInfo& rDocInfo = pDocShell->GetDocInfo();
@@ -542,16 +545,33 @@ void SwSrcView::Execute(SfxRequest& rReq)
         {
             SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
-
-            FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
+            // filesave dialog with autoextension
+            FileDialogHelper aDlgHelper( ::sfx2::FILESAVE_AUTOEXTENSION,
+                                         TemplateDescription::FILESAVE_SIMPLE );
             Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-        //    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
+//          pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
-            String sHtml(C2S("HTML"));
-            xFltMgr->appendFilter( sHtml, C2S("*.html;*.htm") );
-            xFltMgr->setCurrentFilter( sHtml ) ;
+            // search for an html filter for export
+            SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
+            const SfxFilter* pFilter =
+                pFilterCont->GetFilter4Extension( C2S("html"), SFX_FILTER_EXPORT );
+            if ( pFilter )
+            {
+                // filter found -> use its uiname and wildcard
+                const String& rUIName = pFilter->GetUIName();
+                const WildCard& rCard = pFilter->GetWildcard();
+                xFltMgr->appendFilter( rUIName, rCard() );
+                xFltMgr->setCurrentFilter( rUIName ) ;
+            }
+            else
+            {
+                // filter not found
+                String sHtml(C2S("HTML"));
+                xFltMgr->appendFilter( sHtml, C2S("*.html;*.htm") );
+                xFltMgr->setCurrentFilter( sHtml ) ;
+            }
+
             xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
@@ -848,7 +868,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     }
 
     SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
-    aSearchOpt.Locale = CreateLocale( GetAppLanguage() );
+    aSearchOpt.Locale = CreateLocale( static_cast< LanguageType >( GetAppLanguage() ) );
 
     USHORT nFound;
     BOOL bAll = FALSE;
@@ -977,7 +997,7 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
     USHORT nLinespPage = (USHORT) (aPaperSz.Height()/nLineHeight);
     USHORT nCharspLine = (USHORT) (aPaperSz.Width() / pPrinter->GetTextWidth( 'X' ));
-    USHORT nParas = pTextEngine->GetParagraphCount();
+    USHORT nParas = static_cast< USHORT >( pTextEngine->GetParagraphCount() );
 
     USHORT nPages = (USHORT) (nParas/nLinespPage+1 );
     USHORT nCurPage = 1;
