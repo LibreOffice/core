@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-28 13:40:42 $
+ *  last change: $Author: kz $ $Date: 2001-07-02 23:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text = "Fabverlauf~sstreifen" ;
         Text [ ENGLISH ] = "Gradient ~stripes" ;
         Text[ english_us ] = "Gradient ~stripes";
-        Text[ portuguese ] = "Faixa de gradaзгo";
+        Text[ portuguese ] = "Faixas de gradaзгo";
         Text[ russian ] = "Градиентные полосы";
         Text[ greek ] = "Gradient ~stripes";
         Text[ dutch ] = "Gradient ~stripes";
@@ -420,25 +420,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Text = "Hohe Druck~qualitдt" ;
         Text [ ENGLISH ] = "High ~quality" ;
         Text[ english_us ] = "~High print quality";
-        Text[ portuguese ] = "~Boa qualidade de impressгo";
-        Text[ russian ] = "~Нормальное качество печати";
-        Text[ greek ] = "~High quality";
-        Text[ dutch ] = "~High quality";
-        Text[ french ] = "Qualitй d'impression ~optimale";
+        Text[ portuguese ] = "~Qualidade de impressгo optimizada";
+        Text[ russian ] = "~Хорошее качество печати";
+        Text[ greek ] = "~Good quality";
+        Text[ dutch ] = "~Good quality";
+        Text[ french ] = "Qualitй d'impression optimale";
         Text[ spanish ] = "~Buena calidad de impresiуn";
         Text[ italian ] = "Stampa di ~buona qualitа";
-        Text[ danish ] = "~High quality";
-        Text[ swedish ] = "God utskrifts~kvalitet";
+        Text[ danish ] = "~Good quality";
+        Text[ swedish ] = "Hцg utskrifts~kvalitet";
         Text[ polish ] = "Wysoka jakoњж wydruku";
-        Text[ portuguese_brazilian ] = "~High quality";
+        Text[ portuguese_brazilian ] = "~Good quality";
         Text[ japanese ] = "Ќ‚“x‚И€уЌь•iЋї";
-        Text[ korean ] = "~High quality";
-        Text[ chinese_simplified ] = "УЕБјµДґтУЎЦКБї";
-        Text[ chinese_traditional ] = "Ё}¦nЄє¦C¦L«~Ѕи";
-        Text[ turkish ] = "~High quality";
-        Text[ arabic ] = "~High quality";
-        Text[ catalan ] = "~High quality";
-        Text[ finnish ] = "~Hohe Druckqualitдt";
+        Text[ korean ] = "~Good quality";
+        Text[ chinese_simplified ] = "єЬєГµДґтУЎЦКБї";
+        Text[ chinese_traditional ] = "«Ь¦nЄє¦C¦L«~Ѕи";
+        Text[ turkish ] = "~Good quality";
+        Text[ arabic ] = "~Good quality";
+        Text[ catalan ] = "~Good quality";
+        Text[ finnish ] = "~Gute Druckqualitдt";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
@@ -477,7 +477,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ ENGLISH ] = "Reso~lution" ;
         Text[ english_us ] = "Reso~lution";
         Text[ portuguese ] = "~Resoluзгo";
-        Text[ russian ] = "Reso~lution";
+        Text[ russian ] = "Разрешение";
         Text[ greek ] = "Reso~lution";
         Text[ dutch ] = "Reso~lution";
         Text[ french ] = "~Rйsolution";
@@ -931,7 +931,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text = "Ihr Dokument enthдlt transparente Objekte.\nAuf vielen Druckern fьhrt dies zu\nverlдngerten Druckzeiten. Soll die Transparenz\nfьr diesen Ausdruck ignoriert werden?";
         Text [ english ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
         Text [ english_us ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
-        Text[ russian ] = "В данном документе содержатся прозрачные объекты.\nПечать таких объектов может занять некоторое\n время. Игнорировать прозрачность в печати?";
+        Text[ russian ] = "В данном документе содержатся прозрачные объекты.\nПечать таких объектов может занять некоторое\n время. Игнорировать прозрачность в печа";
         Text[ greek ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ danish ] = "Dokumentet indeholder transparente objekter.\nPе nogle printere kan dette fшre til lжngere\nudskrivningstider. Skal transparensinformationerne\nfor udskrivningen ignoreres?";
         Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektуrych drukarek wydruk tych obiektуw\nmoїe potrwaж trochк dіuїej. Czy zignorowaж\ninformacje o przezroczystoњci?";
@@ -1066,5 +1066,6 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
 
