@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:22:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,20 +308,29 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
                     aStr += c;
                     aStr += ')';
                     nIndex = rKey.Len();
-                    static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
-                    if ( rKey.EqualsAscii( ">>", nIndex-2, 2 ) ||
-                         rKey.Equals( cGreaterGreater, nIndex-2, 2 ) )
-                        nIndex -= 2;
-                    static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
-                    if ( rKey.EqualsAscii( "...", nIndex-3, 3 ) ||
-                         rKey.Equals( cDotDotDot, nIndex-3, 3 ) )
-                        nIndex -= 3;
-                    sal_Unicode cLastChar = rKey.GetChar( nIndex-1 );
-                    if ( (cLastChar == ':') || (cLastChar == 0xFF1A) ||
-                         (cLastChar == '.') || (cLastChar == 0xFF0E) ||
-                         (cLastChar == '?') || (cLastChar == 0xFF1F) ||
-                         (cLastChar == ' ') )
-                        nIndex--;
+                    if( nIndex >= 2 )
+                    {
+                        static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
+                        if ( rKey.EqualsAscii( ">>", nIndex-2, 2 ) ||
+                            rKey.Equals( cGreaterGreater, nIndex-2, 2 ) )
+                            nIndex -= 2;
+                    }
+                    if( nIndex >= 3 )
+                    {
+                        static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
+                        if ( rKey.EqualsAscii( "...", nIndex-3, 3 ) ||
+                            rKey.Equals( cDotDotDot, nIndex-3, 3 ) )
+                            nIndex -= 3;
+                    }
+                    if( nIndex >= 1)
+                    {
+                        sal_Unicode cLastChar = rKey.GetChar( nIndex-1 );
+                        if ( (cLastChar == ':') || (cLastChar == 0xFF1A) ||
+                            (cLastChar == '.') || (cLastChar == 0xFF0E) ||
+                            (cLastChar == '?') || (cLastChar == 0xFF1F) ||
+                            (cLastChar == ' ') )
+                            nIndex--;
+                    }
                     rKey.Insert( aStr, nIndex );
                     bChanged = TRUE;
                     break;
