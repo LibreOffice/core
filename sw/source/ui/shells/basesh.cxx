@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:27:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,6 @@
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #include <svx/sizeitem.hxx>
 #endif
-//CHINA001 #ifndef _SVX_BORDER_HXX
-//CHINA001 #include <svx/border.hxx>
-//CHINA001 #endif
 #include <svx/flagsdef.hxx> //CHINA001
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
@@ -980,34 +977,105 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             sal_Unicode cDelim = 0;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFmt* pTAFmt = 0;
-            //CHINA001 SwConvertTableDlg *pDlg = new SwConvertTableDlg( GetView() );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-            AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg( GetView(),ResId( DLG_CONV_TEXT_TABLE ));
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            if( RET_OK == pDlg->Execute() )
+            SwTableAutoFmtTbl* pAutoFmtTbl = 0;
+            bool bDeleteFormat = true;
+            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem))
             {
-                pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
+                aInsTblOpts.mnInsMode = 0;
+                //Delimiter
+                String sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
+                if(sDelim.Len())
+                    cDelim = sDelim.GetChar(0);
+                //AutoFormat
+                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_2, TRUE, &pItem))
+                {
+                    String sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
+                    pAutoFmtTbl = new SwTableAutoFmtTbl;
+                    pAutoFmtTbl->Load();
+
+                    for( USHORT i = 0, nCount = pAutoFmtTbl->Count(); i < nCount; i++ )
+                    {
+                        SwTableAutoFmt* pFmt = (*pAutoFmtTbl)[ i ];
+                        if( pFmt->GetName() == sAutoFmt )
+                        {
+                            pTAFmt = pFmt;
+                            bDeleteFormat = false;
+                            break;
+                        }
+                    }
+                }
+                //WithHeader
+                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_3, TRUE, &pItem) &&
+                            static_cast< const SfxBoolItem* >(pItem)->GetValue())
+                    aInsTblOpts.mnInsMode |= tabopts::HEADLINE;
+                // RepeatHeaderLines
+                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_4, TRUE, &pItem))
+                   aInsTblOpts.mnRowsToRepeat =
+                            (USHORT)static_cast< const SfxInt16Item* >(pItem)->GetValue();
+                //WithBorder
+                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_5, TRUE, &pItem) &&
+                    static_cast< const SfxBoolItem* >(pItem)->GetValue())
+                    aInsTblOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
+                //DontSplitTable
+                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_6, TRUE, &pItem) &&
+                    !static_cast< const SfxBoolItem* >(pItem)->GetValue() )
+                    aInsTblOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
             }
-            delete pDlg;
+            else
+            {
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg( GetView(),ResId( DLG_CONV_TEXT_TABLE ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                if( RET_OK == pDlg->Execute() )
+                {
+                    pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
+
+                }
+                delete pDlg;
+            }
 
             if( cDelim )
             {
                 //Shellwechsel!
                 SwView& rSaveView = rView;
                 BOOL bInserted = FALSE;
-                if( rSh.GetTableFmt() )
+                BOOL bToText = rSh.GetTableFmt() != 0;
+                //recording:
+
+                SfxViewFrame* pViewFrame = GetView().GetViewFrame();
+                if( SfxRequest::HasMacroRecorder(pViewFrame) )
+                {
+                    SfxRequest aReq( pViewFrame, nSlot);
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, String(cDelim) ));
+                    if(!bToText)
+                    {
+                        if(pTAFmt)
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFmt->GetName()));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTblOpts.mnInsMode & tabopts::HEADLINE)));
+                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTblOpts.mnRowsToRepeat ));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
+                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT)));
+                    }
+                    aReq.Done();
+                }
+
+                if( bToText )
                     rSh.TableToText( cDelim );
                 else
+                {
                     bInserted = rSh.TextToTable( aInsTblOpts, cDelim, HORI_FULL, pTAFmt );
+                }
                 rSh.EnterStdMode();
 
                 if( bInserted )
                     rSaveView.AutoCaption( TABLE_CAP );
             }
-            delete pTAFmt;
+            if(bDeleteFormat)
+                delete pTAFmt;
+            delete pAutoFmtTbl;
         }
         break;
         case SID_STYLE_WATERCAN:
