@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:48 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 16:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,3 +1031,9 @@ void XMLShapeImportHelper::restoreConnections()
     }
 }
 
+SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel )
+{
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
+    UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    return new SvXMLImportPropertyMapper( xMapper );
+}
