@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:34:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 13:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@
 
 #include "scitems.hxx"
 #include <offmgr/app.hxx>
-#include <offmgr/sbaobj.hxx>
-#include <offmgr/sbadb.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -445,42 +443,10 @@ void ScDBFunc::HideAutoFilter()
 
 void ScDBFunc::StartQuerySh( const ScImportParam& rParam )
 {
-    SbaObject* pSbaObject = OFF_APP()->GetSbaObject();
-    DBG_ASSERT(pSbaObject != NULL,"ScDBFunc::StartQuerySh: pSbaObject == NULL");
+    //! show the database beamer, with the database from rParam if one is set
+    //! this will be handled by a uno service in the future
 
-    String aDBName;
-    String aLogicName;      // Tabellen-/Query-Name
-    String aStatement;      // SQL-String
-    BOOL bSql     = FALSE;
-    BOOL bNative  = FALSE;
-    DBObject eObj = dbTable;
-
-    if (rParam.bImport)                         // alte Abfrage wieder anzeigen
-    {
-        aDBName         = rParam.aDBName;
-//!     bNative         = rParam.bNative;       //! Native gibt momentan Aerger ??!??!?!
-        bSql            = rParam.bSql;
-        if ( bSql )
-            aStatement  = rParam.aStatement;    // Statement direkt
-        else
-            aLogicName  = rParam.aStatement;    // Name (Tabelle/Abfrage)
-
-        eObj = (DBObject) rParam.nType;         // Unterscheidung Tabelle/Abfrage
-    }
-    else                                        // war nix im Parameter -> Adressbuch
-    {
-        aDBName     = pSbaObject->GetAddrDBName();
-        aLogicName  = pSbaObject->GetAddrTableName();
-    }
-
-    SbaDatabaseRef pDatabase = pSbaObject->GetDatabase(aDBName, TRUE);  // TRUE: Fehlermeldungen
-    if (pDatabase.Is())
-    {
-        if ( bSql )
-            pDatabase->ShowStatement(aStatement, bNative);
-        else
-            pDatabase->ShowDBDef(eObj, aLogicName);
-    }
+    DBG_ERROR("Database beamer integration is not implemented yet");
 }
 
 //      Re-Import
