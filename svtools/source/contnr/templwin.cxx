@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 06:48:07 $
+ *  last change: $Author: gt $ $Date: 2002-10-04 06:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,8 +988,7 @@ void SvtFrameWindow_Impl::Resize()
     pEmptyWin->SetSizePixel( aWinSize );
 }
 
-void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
-                                    sal_Bool bIsTemplate, sal_Bool bAsTemplate )
+void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate )
 {
     if ( bPreview )
         aCurrentURL = rURL;
@@ -1040,12 +1039,30 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
                 if ( pTextWin->IsReallyVisible() )
                 {
                     sal_Bool    b = sal_True;
-                    Sequence < PropertyValue > aArgs( 2 );
+                    Sequence < PropertyValue > aArgs( 3 );
                     aArgs[0].Name = ASCII_STR("Preview");
                     aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
                     aArgs[1].Name = ASCII_STR("ReadOnly");
                     aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
+                    aArgs[2].Name = ASCII_STR("AsTemplate");    // prevents getting an empty URL with getURL()!
+                    b = sal_False;
+                    aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
                     xDisp->dispatch( aURL, aArgs );
+
+                    ::rtl::OUString                                         aDispURL;
+                    Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
+                    if( xCtrl.is() )
+                    {
+                        Reference< ::com::sun::star::frame::XModel >        xMdl = xCtrl->getModel();
+                        if( xMdl.is() )
+                            aDispURL = xMdl->getURL();
+                    }
+
+                    if( aDispURL != aURL.Complete )
+                    {
+                        xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+                        ViewEmptyWin();
+                    }
                 }
             }
             else if ( bIsTemplate )
