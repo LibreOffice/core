@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:10:19 $
+#   last change: $Author: rt $ $Date: 2004-11-26 17:46:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,13 @@ IDLFILES=\
     XHandoutMasterSupplier.idl\
     XPresentation.idl\
     XPresentationPage.idl\
-    XPresentationSupplier.idl
+    XPresentationSupplier.idl\
+    EffectNodeType.idl\
+    EffectPresetClass.idl\
+    ParagraphTarget.idl\
+    ShapeAnimationSubType.idl\
+    TextAnimationType.idl\
+    EffectCommands.idl
 
 # ------------------------------------------------------------------
 
