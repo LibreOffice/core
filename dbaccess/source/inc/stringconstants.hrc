@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@
 #define PROPERTY_ID_TEXTRELIEF              96
 #define PROPERTY_ID_HELPTEXT                97
 #define PROPERTY_ID_CONTROLDEFAULT          98
+#define PROPERTY_ID_AUTOINCREMENTCREATION   99
 
 //============================================================
 //= property names
@@ -291,6 +292,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_HELPTEXT);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROLDEFAULT);
 DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTTEXT);
 DECLARE_CONSTASCII_USTRING(PROPERTY_EFFECTIVEDEFAULT);
+DECLARE_CONSTASCII_USTRING(PROPERTY_AUTOINCREMENTCREATION);
 //============================================================
 //= service names
 //============================================================

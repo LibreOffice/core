@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTEMPHASIS, "FontEmphasisMark");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTRELIEF, "FontRelief");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTTEXT, "DefaultText");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EFFECTIVEDEFAULT, "EffectiveDefault");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_AUTOINCREMENTCREATION, "AutoIncrementCreation");
 
 //============================================================
 //= service names
