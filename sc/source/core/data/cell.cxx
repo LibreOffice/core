@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:17:34 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,10 @@
     // StackSpace
 #include <mac_start.h>
 #include <Memory.h>
-#include <fp.h>
 #include <mac_end.h>
 #endif
 
-#if defined (SOLARIS) || defined (FREEBSD)
-#include <ieeefp.h>
-#elif ( defined ( LINUX ) && ( GLIBC < 2 ) )
-#include <i386/ieeefp.h>
-#endif
-
 #include <svtools/zforlist.hxx>
-#include <float.h>          // _finite
 
 #include "scitems.hxx"
 #include "attrib.hxx"
@@ -708,7 +700,10 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     nMatRows( rScFormulaCell.nMatRows )
 {
     if (rScFormulaCell.pMatrix)
+    {
         pMatrix = rScFormulaCell.pMatrix->Clone();
+        pMatrix->SetEternalRef();
+    }
     else
         pMatrix = NULL;
     pCode = rScFormulaCell.pCode->Clone();
@@ -1321,7 +1316,8 @@ void ScFormulaCell::Interpret()
         {
             if ( pMatrix )
             {
-                delete pMatrix;
+                DBG_ASSERT( pMatrix->IsEternalRef(), "ScFormulaCell.pMatrix is not eternal");
+                pMatrix->Delete();
                 pMatrix = NULL;
             }
 
@@ -1445,6 +1441,7 @@ void ScFormulaCell::Interpret()
         pMatrix = p->GetMatrixResult();
         if( pMatrix )
         {
+            pMatrix->SetEternalRef();
 #if 0
 //! MatrixFormel immer changed?!?
 // ist bei MD's Rundumschlag von r1.167 --> r1.168 reingekommen
@@ -1457,7 +1454,7 @@ void ScFormulaCell::Interpret()
             if( cMatrixFlag != MM_FORMULA )
 #endif
             {   // mit linker oberer Ecke weiterleben
-                delete pMatrix;
+                pMatrix->Delete();
                 pMatrix = NULL;
             }
         }
@@ -1688,8 +1685,12 @@ ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
     delete pCode;
-    delete pMatrix;
-    pMatrix = NULL;
+    if ( pMatrix )
+    {
+        DBG_ASSERT( pMatrix->IsEternalRef(), "~ScFormulaCell:: pMatrix is not eternal");
+        pMatrix->Delete();
+        pMatrix = NULL;
+    }
 #ifdef DBG_UTIL
     eCellType = CELLTYPE_DESTROYED;
 #endif
