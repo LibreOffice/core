@@ -50,19 +50,19 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB$(TNR)TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB$(TNR)ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
@@ -72,11 +72,11 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB$(TNR)OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB$(TNR)OBJFILES) | sed s\#$(PRJ:s/./\./)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n 1 >> $@
 .IF "$(LIB$(TNR)ARCHIV)" != ""
     @+$(RM) $(LIB$(TNR)ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB$(TNR)ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB$(TNR)ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
