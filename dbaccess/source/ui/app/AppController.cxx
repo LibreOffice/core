@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:03:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,6 +1971,13 @@ sal_Bool OApplicationController::requestContextMenu( const CommandEvent& _rEvent
 {
     return sal_False;
 }
+
+// -----------------------------------------------------------------------------
+sal_Bool OApplicationController::requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const
+{
+    return sal_False;
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::requestDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
