@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:36:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,12 @@ using namespace ::rtl;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
-SwXMLBlockListImport::SwXMLBlockListImport ( SwXMLTextBlocks &rBlocks )
-: rBlockList (rBlocks)
+// #110680#
+SwXMLBlockListImport::SwXMLBlockListImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SwXMLTextBlocks &rBlocks )
+:   SvXMLImport( xServiceFactory ),
+    rBlockList (rBlocks)
 {
     GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
                            GetXMLToken ( XML_N_BLOCK_LIST ),
@@ -112,10 +116,16 @@ SvXMLImportContext *SwXMLBlockListImport::CreateContext(
     return pContext;
 }
 
-SwXMLTextBlockImport::SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String & rNewText, sal_Bool bNewTextOnly )
-: rBlockList ( rBlocks )
-, bTextOnly ( bNewTextOnly )
-, m_rText ( rNewText )
+// #110680#
+SwXMLTextBlockImport::SwXMLTextBlockImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SwXMLTextBlocks &rBlocks,
+    String & rNewText,
+    sal_Bool bNewTextOnly )
+:   SvXMLImport(xServiceFactory),
+    rBlockList ( rBlocks ),
+    bTextOnly ( bNewTextOnly ),
+    m_rText ( rNewText )
 {
 }
 
