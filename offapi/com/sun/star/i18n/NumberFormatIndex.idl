@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatIndex.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:37:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,15 +135,15 @@ published constants NumberFormatIndex
 {
     /// Start of simple numerical formats (first format)
     const short NUMBER_START                = 0;
-    /// The "General" format
+    /// The "General" standard format
     const short NUMBER_STANDARD             = NUMBER_START;
-    /// 0
+    /// 0           <br/>Integer number
     const short NUMBER_INT                  = NUMBER_START+1;
-    /// 0.00
+    /// 0.00        <br/>Decimal number with 2 decimals
     const short NUMBER_DEC2                 = NUMBER_START+2;
-    /// #,##0
+    /// #,##0       <br/>Integer number with group separator
     const short NUMBER_1000INT              = NUMBER_START+3;
-    /// #,##0.00
+    /// #,##0.00    <br/>Decimal number with group separator
     const short NUMBER_1000DEC2             = NUMBER_START+4;
     /// #,##0.00    <br/> In SO5/Win this format was retrieved from the Regional Settings
     const short NUMBER_SYSTEM               = NUMBER_START+5;
@@ -153,9 +153,9 @@ published constants NumberFormatIndex
 
     /// Start of Scientific formats (first format)
     const short SCIENTIFIC_START            = NUMBER_END+1;
-    /// 0.00E+000
+    /// 0.00E+000   <br/>Number in scientific notation with exponent in 3 digit placeholders
     const short SCIENTIFIC_000E000          = SCIENTIFIC_START;
-    /// 0.00E+00
+    /// 0.00E+00    <br/>Number in scientific notation with exponent in 2 digit placeholders
     const short SCIENTIFIC_000E00           = SCIENTIFIC_START+1;
     /// End of Scientific formats (last format)
     const short SCIENTIFIC_END              = SCIENTIFIC_000E00;
@@ -163,9 +163,9 @@ published constants NumberFormatIndex
 
     /// Start of Percent formats (first format)
     const short PERCENT_START               = SCIENTIFIC_END+1;
-    /// 0%
+    /// 0%          <br/>Percentage format, rounded to integer
     const short PERCENT_INT                 = PERCENT_START;
-    /// 0.00%
+    /// 0.00%       <br/>Percentage format, rounded to 2 decimals
     const short PERCENT_DEC2                = PERCENT_START+1;
     /// End of Percent formats (last format)
     const short PERCENT_END                 = PERCENT_DEC2;
@@ -173,9 +173,9 @@ published constants NumberFormatIndex
 
     /// Start of Fraction formats (first format)
     const short FRACTION_START              = PERCENT_END+1;
-    /// # ?/?
+    /// # ?/?       <br/>Number with decimal in fraction in 1 digit placeholder
     const short FRACTION_1                  = FRACTION_START;
-    /// # ??/??
+    /// # ??/??     <br/>Number with decimal in fraction in 2 digit placeholders
     const short FRACTION_2                  = FRACTION_START+1;
     /// End of Fraction formats (last format)
     const short FRACTION_END                = FRACTION_2;
@@ -183,17 +183,17 @@ published constants NumberFormatIndex
 
     /// Start of Currency formats (first format)
     const short CURRENCY_START              = FRACTION_END+1;
-    /// #,##0 DM
+    /// #,##0 DM    <br/>Integer currency format with group separator
     const short CURRENCY_1000INT            = CURRENCY_START;
-    /// #,##0.00 DM
+    /// #,##0.00 DM <br/>Decimal currency format with group separator
     const short CURRENCY_1000DEC2           = CURRENCY_START+1;
-    /// #,##0 DM   negative red
+    /// #,##0 DM    <br/>Integer currency format with negative in red
     const short CURRENCY_1000INT_RED        = CURRENCY_START+2;
-    /// #,##0.00 DM   negative red
+    /// #,##0.00 DM <br/>Decimal currency format with negative in red
     const short CURRENCY_1000DEC2_RED       = CURRENCY_START+3;
-    /// #,##0.00 DEM   currency abbreviation
+    /// #,##0.00 DEM <br/>Currency in ISO-4217 abbreviation format
     const short CURRENCY_1000DEC2_CCC       = CURRENCY_START+4;
-    /// #,##0.-- DM
+    /// #,##0.-- DM <br/>Currency format with dash representing 0 in decimals
     const short CURRENCY_1000DEC2_DASHED    = CURRENCY_START+5;
     /// End of Currency formats (last format)
     const short CURRENCY_END                = CURRENCY_1000DEC2_DASHED;
@@ -251,19 +251,19 @@ published constants NumberFormatIndex
 
     /// Start of Time formats (first format)
     const short TIME_START                  = DATE_END+1;
-    /// HH:MM
+    /// HH:MM           <br/>Time format with hour and minute
     const short TIME_HHMM                   = TIME_START;
-    /// HH:MM:SS
+    /// HH:MM:SS        <br/>Time format with hour, minute and second
     const short TIME_HHMMSS                 = TIME_START+1;
-    /// HH:MM AM/PM
+    /// HH:MM AM/PM     <br/>Time format with hour, minute and morning/afternoon notation
     const short TIME_HHMMAMPM               = TIME_START+2;
-    /// HH:MM:SS AM/PM
+    /// HH:MM:SS AM/PM  <br/>Time format with hour, minute, second and morning/afternoon notation
     const short TIME_HHMMSSAMPM             = TIME_START+3;
-    /// [HH]:MM:SS
+    /// [HH]:MM:SS      <br/>Time format with amount of hours
     const short TIME_HH_MMSS                = TIME_START+4;
-    /// MM:SS,00
+    /// MM:SS,00        <br/>Time format with second in fraction
     const short TIME_MMSS00                 = TIME_START+5;
-    /// [HH]:MM:SS,00
+    /// [HH]:MM:SS,00   <br/>Time format with amount of hours and seconds with fraction
     const short TIME_HH_MMSS00              = TIME_START+6;
     /// End of Time formats (last format)
     const short TIME_END                    = TIME_HH_MMSS00;
@@ -271,9 +271,9 @@ published constants NumberFormatIndex
 
     /// Start of DateTime formats (first format)
     const short DATETIME_START              = TIME_END + 1;
-    /// 08.10.97 01:23
+    /// 08.10.97 01:23 Date/time format
     const short DATETIME_SYSTEM_SHORT_HHMM  = DATETIME_START;
-    /** 08.10.1997 01:23:45
+    /** 08.10.1997 01:23:45 Date/time format with second
         <br/><b>Note:</b> When editing already existing date/time data this
         format is forced in order to always edit the full century.  */
     const short DATETIME_SYS_DDMMYYYY_HHMMSS= DATETIME_START+1;
