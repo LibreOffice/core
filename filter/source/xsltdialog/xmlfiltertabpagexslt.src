@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:19:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,17 @@
 
 #define FIRST_ROW_X         6
 #define FIRST_ROW_Y         6
-#define FIRST_ROW_WIDTH     60
+#define FIRST_ROW_WIDTH     75
 
 #define SECOND_ROW_X        (FIRST_ROW_X + FIRST_ROW_WIDTH + SPACING)
 #define SECOND_ROW_Y        6
-#define SECOND_ROW_WIDTH    (TAB_PAGE_WIDTH - SECOND_ROW_X - SPACING)
-#define BROWSE_WIDTH        40
+#define SECOND_ROW_WIDTH    (TAB_PAGE_WIDTH - SECOND_ROW_X - 2*SPACING)
+#define BROWSE_WIDTH        50
 
+#define EDIT_OFFSET         1
 #define FIXED_TEXT_OFFSET   2
 
-#define ROW_HEIGHT          12
+#define ROW_HEIGHT          14
 
 
 TabPage RID_XML_FILTER_TABPAGE_XSLT
@@ -87,13 +88,13 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     Hide                    = TRUE;
     Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
     Text [ de ] = "Transformation" ;
-    Text [ en-US ]      = "Transformation";
+    Text [ en-US ] = "Transformation";
 
     // DocType --------------------------------------------------------
 
     FixedText FT_XML_DOCTYPE
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ de ] = "DocType";
         Text [ en-US ]  = "DocType";
@@ -101,7 +102,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     Edit ED_XML_DOCTYPE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
         HelpId              = HID_XML_FILTER_DOCTYPE;
         Border              = TRUE;
@@ -111,7 +112,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_DTD_SCHEMA
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ de ] = "DTD";
         Text [ en-US ]  = "DTD";
@@ -119,7 +120,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     ComboBox ED_XML_DTD_SCHEMA
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
         HelpId              = HID_XML_FILTER_DTD;
         Border              = TRUE;
@@ -129,7 +130,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     PushButton ED_XML_DTD_SCHEMA_BROWSE
     {
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
-        Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_DTD_BROWSE;
         Text [ de ] = "Auswählen...";
         Text [ en-US ]  = "Browse...";
@@ -139,7 +140,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_EXPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH, 8 ) ;
         Text [ de ] = "Export-XSLT";
         Text [ en-US ]  = "XSLT for export";
@@ -147,7 +148,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     ComboBox ED_XML_EXPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT;
         Border              = TRUE;
@@ -156,7 +157,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     PushButton PB_XML_EXPORT_XSLT_BROWSE
     {
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
-        Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT_BROWSE;
         Text [ de ] = "Auswählen...";
         Text [ en-US ]  = "Browse...";
@@ -166,7 +167,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_IMPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ de ] = "Import-XSLT";
         Text [ en-US ]  = "XSLT for import";
@@ -174,7 +175,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     ComboBox ED_XML_IMPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT;
         Border              = TRUE;
@@ -183,7 +184,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     PushButton PB_XML_IMPORT_XSLT_BROWSE
     {
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
-        Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT_BROWSE;
         Text [ de ] = "Auswählen...";
         Text [ en-US ]  = "Browse...";
@@ -193,7 +194,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_IMPORT_TEMPLATE
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ de ] = "Import-Dokumentvorlage";
         Text [ en-US ]  = "Template for import";
@@ -201,7 +202,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     ComboBox ED_XML_IMPORT_TEMPLATE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE;
         Border              = TRUE;
@@ -210,20 +211,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     PushButton PB_XML_IMPORT_TEMPLATE_BROWSE
     {
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
-        Size                = MAP_APPFONT ( BROWSE_WIDTH , 12 ) ;
+        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
         Text [ de ] = "Auswählen...";
         Text [ en-US ]  = "Browse...";
     };
 };
-
-
-
-
-
-
-
-
-
-
 
