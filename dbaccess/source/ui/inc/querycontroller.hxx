@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace dbaui
         void deleteIterator();
         void executeQuery();
         void doSaveAsDoc(sal_Bool _bSaveAs);
+        ::rtl::OUString translateStatement();
 
     protected:
         virtual String          getMenu() const;
