@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-15 08:11:57 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,138 +671,6 @@ void FmControlData::ModelReplaced(const Reference< XFormComponent > & xNew, cons
     m_xFormComponent = xNew;
     // Images neu setzen
     aCollapsedImage = aExpandedImage = GetImage(ilNavigatorImages);
-}
-
-//========================================================================
-// class FmXNavPropertyObserver
-//========================================================================
-
-//------------------------------------------------------------------------
-FmXNavPropertyObserver::FmXNavPropertyObserver(NavigatorTreeModel* _pModel)
-                          :m_pNavModel(_pModel)
-                          ,m_bCanUndo(sal_True)
-                          ,m_nLocks(0)
-{
-}
-
-// XPropertyChangeListener
-//------------------------------------------------------------------------
-void SAL_CALL FmXNavPropertyObserver::disposing(const EventObject& Source) throw( RuntimeException )
-{
-}
-
-//------------------------------------------------------------------------
-void SAL_CALL FmXNavPropertyObserver::propertyChange(const PropertyChangeEvent& evt) throw(RuntimeException)
-{
-    if( !m_pNavModel ) return;
-    if( evt.PropertyName != FM_PROP_NAME ) return;
-
-    Reference< XFormComponent >  xFormComponent(evt.Source, UNO_QUERY);
-    Reference< XForm >  xForm(evt.Source, UNO_QUERY);
-
-    FmEntryData* pEntryData;
-    if( xForm.is() )
-        pEntryData = m_pNavModel->FindData( xForm, m_pNavModel->GetRootList() );
-    else if( xFormComponent.is() )
-        pEntryData = m_pNavModel->FindData( xFormComponent, m_pNavModel->GetRootList() );
-
-    if( pEntryData )
-    {
-        ::rtl::OUString aNewName =  ::comphelper::getString(evt.NewValue);
-        pEntryData->SetText( aNewName );
-        FmNavNameChangedHint aNameChangedHint( pEntryData, aNewName );
-        m_pNavModel->Broadcast( aNameChangedHint );
-    }
-}
-
-// XContainerListener
-//------------------------------------------------------------------------------
-void SAL_CALL FmXNavPropertyObserver::elementInserted(const ContainerEvent& evt) throw(RuntimeException)
-{
-    if (IsLocked() || !m_pNavModel)
-        return;
-
-    // keine Undoaction einfuegen
-    m_bCanUndo = sal_False;
-
-    Reference< XInterface > xTemp;
-    evt.Element >>= xTemp;
-    Insert(xTemp, ::comphelper::getINT32(evt.Accessor));
-
-    m_bCanUndo = sal_True;
-}
-
-//------------------------------------------------------------------------------
-void FmXNavPropertyObserver::Insert(const Reference< XInterface > & xIface, sal_Int32 nIndex)
-{
-    Reference< XForm >  xForm(xIface, UNO_QUERY);
-    if (xForm.is())
-    {
-        m_pNavModel->InsertForm(xForm, sal_uInt32(nIndex));
-        Reference< XIndexContainer >  xContainer(xForm, UNO_QUERY);
-        Reference< XInterface > xTemp;
-        for (sal_Int32 i = 0; i < xContainer->getCount(); i++)
-        {
-            xContainer->getByIndex(i) >>= xTemp;
-            Insert(xTemp, i);
-        }
-    }
-    else
-    {
-        Reference< XFormComponent >  xFormComp(xIface, UNO_QUERY);
-        if (xFormComp.is())
-            m_pNavModel->InsertFormComponent(xFormComp, sal_uInt32(nIndex));
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmXNavPropertyObserver::elementReplaced(const ContainerEvent& evt) throw(RuntimeException)
-{
-    if (IsLocked() || !m_pNavModel)
-        return;
-
-    m_bCanUndo = sal_False;
-
-    // EntryData loeschen
-    Reference< XFormComponent >  xReplaced;
-    evt.ReplacedElement >>= xReplaced;
-    FmEntryData* pEntryData = m_pNavModel->FindData(xReplaced, m_pNavModel->GetRootList(), sal_True);
-    if (pEntryData)
-    {
-        if (pEntryData->ISA(FmControlData))
-        {
-            Reference< XFormComponent >  xComp;
-            evt.Element >>= xComp;
-            DBG_ASSERT(xComp.is(), "FmXNavPropertyObserver::elementReplaced : invalid argument !");
-                // an einer FmControlData sollte eine XFormComponent haengen
-            m_pNavModel->ReplaceFormComponent(xReplaced, xComp);
-        }
-        else if (pEntryData->ISA(FmFormData))
-        {
-            DBG_ERROR("replacing forms not implemented yet !");
-        }
-    }
-
-    m_bCanUndo = sal_True;
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmXNavPropertyObserver::elementRemoved(const ContainerEvent& evt) throw(RuntimeException)
-{
-    if (IsLocked() || !m_pNavModel)
-        return;
-
-    m_bCanUndo = sal_False;
-
-    //////////////////////////////////////////////////////////
-    // EntryData loeschen
-    Reference< XInterface > xTemp;
-    evt.Element >>= xTemp;
-    FmEntryData* pEntryData = m_pNavModel->FindData(xTemp, m_pNavModel->GetRootList(), sal_True);
-    if (pEntryData)
-        m_pNavModel->Remove(pEntryData);
-
-    m_bCanUndo = sal_True;
 }
 
 //............................................................................
