@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:38:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef _SVX_OPTASIAN_HXX
 #include <optasian.hxx>
