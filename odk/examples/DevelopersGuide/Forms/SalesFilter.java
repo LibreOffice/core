@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalesFilter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -81,7 +81,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         m_nPreviousFilterIndex = -1;
         initFilterDates();
 
-        // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+        // -------------------------------------------------------------
         // remember the components
         m_aDocument = aDocument;
         m_xSalesForm = xSalesForm;
@@ -92,7 +92,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
 
         try
         {
-            // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+            // ----------------------------------------------------------
             // init control models
             m_xFilterList.setPropertyValue( "Dropdown", new Boolean( true ) );
             m_xFilterList.setPropertyValue( "LineCount", new Short( (short)11 ) );
@@ -104,7 +104,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             updateFilterControl();
             updateApplyButton();
 
-            // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
+            // ----------------------------------------------------------
             // add as listener to the events which require action
 
             // want to know about changed selection
