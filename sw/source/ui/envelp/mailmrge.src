@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:49:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "ÀüÃ¼(~A)";
         Text[ turkish ] = "Tümü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "T~odos";
     };
     RadioButton RB_MARKED
     {
@@ -145,6 +146,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ·¹ÄÚµå(~S)";
         Text[ turkish ] = "Seçili veri kümeleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Registros seleccionados";
     };
     RadioButton RB_FROM
     {
@@ -174,6 +176,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "·Î ºÎÅÍ(~F):";
         Text[ turkish ] = "Ýlk:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Del:";
     };
     NumericField NF_FROM
     {
@@ -213,6 +216,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "±îÁö:)(~T)";
         Text[ turkish ] = "Son:";
         Text[ language_user1 ] = "RB: SW Datei - Serienbrief";
+        Text[ catalan ] = "~al:";
     };
     NumericField NF_TO
     {
@@ -251,6 +255,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "·¹ÄÚµå";
         Text[ turkish ] = "Veri kümeleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Registros";
     };
     RadioButton RB_PRINTER
     {
@@ -279,6 +284,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "ÇÁ¸°ÅÍ(~P)";
         Text[ turkish ] = "~Yazýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Impresora";
     };
     RadioButton RB_MAILING
     {
@@ -306,6 +312,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "¸ÞÀÏ(~E)";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
+        Text[ catalan ] = "~Enviar correo";
     };
     RadioButton RB_FILE
     {
@@ -333,6 +340,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Archivo";
     };
     FixedText FT_PATH
     {
@@ -360,6 +368,7 @@ ModalDialog DLG_MAILMERGE
         Text[ greek ] = "ÄéáäñïìÞ";
         Text[ korean ] = "°æ·Î";
         Text[ turkish ] = "Veri yolu";
+        Text[ catalan ] = "Ruta";
     };
     Edit ED_PATH
     {
@@ -404,6 +413,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "·ÎºÎÅÍ ÆÄÀÏ ÀÌ¸§ »ý¼º";
         Text[ turkish ] = "Dosya adý kaynaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre de archivo a partir de";
     };
     RadioButton RB_COLUMN
     {
@@ -432,6 +442,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "Å×ÀÌÅÍº£ÀÌ½º ÇÊµå";
         Text[ turkish ] = "Veritabaný alaný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campo de base de datos";
     };
     RadioButton RB_FILENAME
     {
@@ -461,6 +472,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "¼öµ¿ ¼³Á¤";
         Text[ turkish ] = "Manüel giriþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Manualmente";
     };
     ListBox LB_COLUMN
     {
@@ -505,6 +517,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "°¢ ÀÎ¼â ÀÛ¾÷¡¡¸¸µé±â(~S)";
         Text[ turkish ] = "Bireysel yazdýrma iþleri oluþtur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Crear tareas individuales de impresión";
     };
     FixedText FT_ADDRESS
     {
@@ -533,6 +546,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "ÁÖ¼Ò ÇÊµå(~F)";
         Text[ turkish ] = "Adres alaný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Campo dirección";
     };
     ListBox LB_ADDRESSFLD
     {
@@ -570,6 +584,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "Á¦¸ñ(~S)";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~sunto";
     };
     Edit ED_SUBJECT
     {
@@ -605,6 +620,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "Ã·ºÎ";
         Text[ turkish ] = "Ekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anexos";
     };
     Edit ED_ATTACH
     {
@@ -650,6 +666,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "¿ìÆí ¼­½Ä";
         Text[ turkish ] = "E-posta formatý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato de correo";
     };
     CheckBox CB_FORMAT_HTML
     {
@@ -678,6 +695,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "HTM~L";
         Text[ turkish ] = "HTM~L";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "HTM~L";
     };
     CheckBox CB_FORMAT_RTF
     {
@@ -705,6 +723,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "RT~F";
         Text[ turkish ] = "~RTF";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "R~TF";
     };
     CheckBox CB_FORMAT_SW
     {
@@ -732,6 +751,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "%PRODUCTNAME Writer";
         Text[ turkish ] = "%PRODUCTNAME Writer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Writer";
     };
     GroupBox GB_DEST
     {
@@ -758,6 +778,7 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "Ãâ·Â";
         Text[ turkish ] = "Çýktý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Destino";
     };
     OKButton BTN_OK
     {
@@ -785,4 +806,5 @@ ModalDialog DLG_MAILMERGE
     Text[ korean ] = "Æû¡¡·¹ÅÍ";
     Text[ turkish ] = "Standart mektup";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carta en serie";
 };
