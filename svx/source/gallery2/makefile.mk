@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+#   last change: $Author: ka $ $Date: 2001-05-31 10:38:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ SRCFILES =	\
 SLOFILES =	\
             $(SLO)$/galexpl.obj		\
             $(SLO)$/galdlg.obj		\
+            $(SLO)$/galctrl.obj		\
             $(SLO)$/gallery1.obj	\
             $(SLO)$/galtheme.obj	\
             $(SLO)$/galmisc.obj		\
@@ -99,4 +100,3 @@ RESLIB1SRSFILES = $(SRS)$/$(TARGET).srs
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
-

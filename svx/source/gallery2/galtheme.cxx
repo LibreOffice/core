@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:53:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 10:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,8 @@ BOOL GalleryTheme::InsertObject( const SgaObject& rObj, ULONG nInsertPos )
                     delete pOldObj;
                 }
             }
+            else if( rObj.GetTitle() == String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) ) )
+                ( (SgaObject&) rObj ).SetTitle( String() );
 
             ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry );
             pFoundEntry->nOffset = aNewEntry.nOffset;

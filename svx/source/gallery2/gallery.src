@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:16:32 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1905,7 +1905,6 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text[ catalan ] = "Nuevo tema...";
     Text[ finnish ] = "Uusi teema";
 };
-
 String RID_SVXSTR_GALLERY_READONLY
 {
     Text = " (schreibgeschützt)" ;
@@ -1935,7 +1934,6 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = " (solo lectura)";
 };
-
 String RID_SVXSTR_GALLERY_ALLFILES
 {
     Text = "<Alle Dateien>" ;
@@ -1964,7 +1962,6 @@ String RID_SVXSTR_GALLERY_ALLFILES
     Text[ catalan ] = "<Todos los archivos>";
     Text[ finnish ] = "<Kaikki tiedostot>";
 };
-
 String RID_SVXSTR_GALLERY_DIALOGID
 {
     Text = "ID vergeben" ;
@@ -1993,7 +1990,6 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ catalan ] = "Asignar ID";
     Text[ finnish ] = "Liitä tunnus";
 };
-
 String RID_SVXSTR_GALLERY_ID_EXISTS
 {
     Text = "Diese ID existiert bereits..." ;
@@ -2021,6 +2017,58 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Esta ID ya existe...";
     Text[ finnish ] = "Tunnus on jo olemassa";
+};
+String RID_SVXSTR_GALLERY_TITLE
+{
+    Text = "Titel" ;
+    Text [ ENGLISH ] = "Title" ;
+    Text [ english_us ] = "Title" ;
+    Text[ portuguese ] = "Título";
+    Text[ russian ] = "Çàãîëîâîê";
+    Text[ greek ] = "Ôßôëïò";
+    Text[ dutch ] = "Titel";
+    Text[ french ] = "Titre";
+    Text[ spanish ] = "Título";
+    Text[ italian ] = "Titolo";
+    Text[ danish ] = "Titel";
+    Text[ swedish ] = "Namn";
+    Text[ polish ] = "Tytu³";
+    Text[ portuguese_brazilian ] = "Title";
+    Text[ japanese ] = "À²ÄÙ(T)";
+    Text[ korean ] = "Á¦¸ñ(T)";
+    Text[ chinese_simplified ] = "±êÌâ(T)";
+    Text[ chinese_traditional ] = "¼ÐÃD(T)";
+    Text[ arabic ] = "ÚäæÇä";
+    Text[ turkish ] = "Baþlýk";
+    Text[ catalan ] = "Título";
+    Text[ finnish ] = "Otsikko";
+};
+String RID_SVXSTR_GALLERY_PATH
+{
+    Text = "Pfad" ;
+    Text [ English ] = "Path" ;
+    Text [ norwegian ] = "Bane" ;
+    Text [ italian ] = "Percorso" ;
+    Text [ portuguese_brazilian ] = "Caminho" ;
+    Text [ portuguese ] = "Atalho" ;
+    Text [ finnish ] = "Polku" ;
+    Text [ danish ] = "Sti" ;
+    Text [ french ] = "Chemin" ;
+    Text [ swedish ] = "Sökväg" ;
+    Text [ dutch ] = "Pad" ;
+    Text [ spanish ] = "Ruta" ;
+    Text [ english_us ] = "Path" ;
+    Text[ chinese_simplified ] = "Â·¾¶";
+    Text[ russian ] = "Ïóòü";
+    Text[ polish ] = "?cie¿ka";
+    Text[ japanese ] = "Êß½";
+    Text[ chinese_traditional ] = "¸ô®|";
+    Text[ arabic ] = "ÇáãÓÇÑ";
+    Text[ greek ] = "ÄéáäñïìÞ";
+    Text[ korean ] = "°æ·Î";
+    Text[ turkish ] = "Veri yolu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ruta";
 };
 
 /******************************************************************************/
@@ -2070,6 +2118,11 @@ Bitmap RID_SVXBMP_THEME_DEFAULT_BIG
     File = "galdefl.bmp" ;
 };
 
+Bitmap RID_SVXBMP_GALLERY_SOUND
+{
+    File = "galsound.bmp";
+};
+
 Bitmap RID_SVXBMP_GALLERY_SOUND_0
 {
     File = "galsnd0.bmp";
@@ -2109,6 +2162,19 @@ Bitmap RID_SVXBMP_GALLERY_SOUND_7
 {
     File = "galsnd7.bmp";
 };
+
+Image RID_SVXIMG_GALLERY_VIEW_ICON
+{
+    ImageBitmap = Bitmap { File = "galicon.bmp"; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+
+Image RID_SVXIMG_GALLERY_VIEW_LIST
+{
+    ImageBitmap = Bitmap { File = "gallist.bmp"; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+
 
 /******************************************************************************/
 

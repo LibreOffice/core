@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 16:14:53 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 10:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
-    mpThemes->SetControlForeground( COL_WHITE );
-    mpThemes->SetControlBackground( COL_GRAY );
+    mpThemes->SetControlForeground( COL_BLACK );
+    mpThemes->SetControlBackground( Application::GetSettings().GetStyleSettings().GetLightColor() );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
 
     for( ULONG i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
@@ -195,12 +195,13 @@ void GalleryBrowser1::ImplAdjustControls()
 {
     const Size  aOutSize( GetOutputSizePixel() );
     const long  nNewThemeHeight = LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height();
+    const long  nStartY = nNewThemeHeight + 4;
 
     maNewTheme.SetPosSizePixel( Point(),
                                 Size( aOutSize.Width(), nNewThemeHeight ) );
 
-    mpThemes->SetPosSizePixel( Point( 0, nNewThemeHeight ),
-                               Size( aOutSize.Width(), aOutSize.Height() - nNewThemeHeight ) );
+    mpThemes->SetPosSizePixel( Point( 0, nStartY ),
+                               Size( aOutSize.Width(), aOutSize.Height() - nStartY ) );
 }
 
 // -----------------------------------------------------------------------------
