@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:01:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 16:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,8 +636,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "~Zulassen" ;
-        Text [ en-US ] = "Enable" ;
+        Text [ de ] = "Einfügen" ;
+        Text [ en-US ] = "Insert" ;
         Group = TRUE ;
     };
     FixedText FT_BREAKTYPE
