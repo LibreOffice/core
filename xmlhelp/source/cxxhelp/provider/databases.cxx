@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-31 13:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-11-08 15:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,58 +604,66 @@ KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
     :  m_xCollator( xCollator ),
        key( ky )
 {
-    if( key.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ) != -1 )
-        while( false );
-
     pDatabases->replaceName( key );
     init( pDatabases,pDb,data );
 }
 
 
-bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
+bool KeywordInfo::KeywordElement::compare( const KeywordElement& ra ) const
 {
     const rtl::OUString& l = key;
     const rtl::OUString& r = ra.key;
 
+    bool ret;
     if( m_xCollator.is() )
     {
         sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
-        sal_Int32 l3;
-        if( l1 == -1 )
-            // Compare the whole length
-            l3 = l.getLength();
-        else
-            // Only until ;
-            l3 = l1;
-
-        sal_Int32 l2 = l.getLength() - l1 - 1;
+        sal_Int32 l3 = ( l1 == -1 ? l.getLength() : l1 );
 
         sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
-        sal_Int32 r3;
-        if( r1 == -1 )
-            // Compare the whole length
-            r3 = r.getLength();
-        else
-            // Only until ;
-            r3 = r1;
-        sal_Int32 r2 = r.getLength() - r1 - 1;
+        sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
+
+
 
         sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
 
         if( c1 == +1 )
-            return false;
-        else
+            ret = false;
+        else if( c1 == 0 )
         {
-            if( c1 == 0 )
-                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 ) ? true : false;
-            else
-                return true;
+            sal_Int32 l2 = l.getLength() - l1 - 1;
+            sal_Int32 r2 = r.getLength() - r1 - 1;
+            ret = ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 );
         }
+        else
+            ret = true;
     }
     else
-        return ( l <= r ) ? true : false;
+        ret = l < r;
+
+    return ret;
 }
 
+
+
+// This is a workaround for a solaris compiler bug
+// it enforces an additional stack frame for operator<
+void inc( int& k )
+{
+    return;
+}
+
+
+
+bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
+{
+// This is a workaround for a compiler bug
+    int k = 0;
+    inc(k);
+//
+    bool temp = compare( ra );
+    return temp;
+}
 
 
 void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl::OUString& ids )
