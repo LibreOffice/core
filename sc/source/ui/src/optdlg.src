@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:11:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,12 @@ StringList [ catalan ] =\
          < "दिखाओ" ; Default ; > ;\
         < "छिपाओ" ; Default ; > ;\
         < "स्थानधारक" ; Default ; > ;\
+    };\
+    StringList [ slovak ] = \
+    {\
+         < "Zobraziť" ; Default ; > ;\
+        < "Skryť" ; Default ; > ;\
+        < "Zástupné znaky" ; Default ; > ;\
     };
 
 /**************************************************************************/
@@ -279,6 +285,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Iterace";
         Text[ hebrew ] = "~Iterationen";
         Text[ hindi ] = "~अइटरेशन्स";
+        Text[ slovak ] = "~Iterácie";
     };
     FixedText FT_STEPS
     {
@@ -312,6 +319,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Kroky";
         Text[ hebrew ] = "Sch~ritte";
         Text[ hindi ] = "~स्टेप्स";
+        Text[ slovak ] = "K~roky";
     };
     FixedText FT_EPS
     {
@@ -345,6 +353,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Minimální změna";
         Text[ hebrew ] = "Minimaler Änderungs~wert";
         Text[ hindi ] = "~न्यूनतम परिवर्तन";
+        Text[ slovak ] = "~Minimálna zmena";
     };
     NumericField ED_STEPS
     {
@@ -394,6 +403,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Iterační odkazy";
         Text[ hebrew ] = "Zirkuläre Referenzen";
         Text[ hindi ] = "अइटरेटिव रेफरेन्स";
+        Text[ slovak ] = "Iteračné odkazy";
     };
     RadioButton BTN_DATESTD
     {
@@ -453,6 +463,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hindi ] = "12/30/1899 (अनुप~स्थिति)";
         QuickHelpText[ portuguese_brazilian ] = "O valor 0 corresponde a 30/12/1899";
         QuickHelpText[ hindi ] = "मूल्य 0 12/30/1899 से अनुरूप";
+        Text[ slovak ] = "12/30/1899 (výc~hodzie)";
+        QuickHelpText[ slovak ] = "Hodnota 0 zodpovedá 12/30/1899";
     };
     RadioButton BTN_DATESC10
     {
@@ -513,6 +525,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hindi ] = "01/01/1900 (Star~Calc 1.0)";
         QuickHelpText[ portuguese_brazilian ] = "O valor 0 corresponde a 01/01/1900";
         QuickHelpText[ hindi ] = "मूल्य 0 01/01/1900 से अनुरूप";
+        Text[ slovak ] = "01/01/1900 (Star~Calc 1.0)";
+        QuickHelpText[ slovak ] = "Hodnota 0 zodpovedá 01/01/1900";
     };
     RadioButton BTN_DATE1904
     {
@@ -573,6 +587,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hindi ] = "~01/01/1904";
         QuickHelpText[ portuguese_brazilian ] = "0 corresponde a 01/01/1904";
         QuickHelpText[ hindi ] = "0 01/01/1904 से अनुरूप";
+        Text[ slovak ] = "~01/01/1904";
+        QuickHelpText[ slovak ] = "0 zodpovedá 01/01/1904";
     };
     FixedLine FL_SEPARATOR
     {
@@ -611,6 +627,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "दिनांक";
+        Text[ slovak ] = "Dátum";
     };
     FixedLine FL_H_SEPARATOR
     {
@@ -650,6 +667,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Desetinná místa";
         Text[ hebrew ] = "Nach~kommastellen";
         Text[ hindi ] = "~दशांश स्थान";
+        Text[ slovak ] = "~Desatinné miesta";
     };
     NumericField ED_PREC
     {
@@ -691,6 +709,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Rozlišovat malá/velká písmena";
         Text[ hebrew ] = "~Groß-/Kleinschreibung beachten";
         Text[ hindi ] = "केस स~चेतन";
+        Text[ slovak ] = "Rozlišovať malé/veľké písme~ná";
     };
     CheckBox BTN_CALC
     {
@@ -724,6 +743,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Přesnost podle zobrazení";
         Text[ hebrew ] = "Gena~uigkeit wie angezeigt";
         Text[ hindi ] = "~Precision as shown";
+        Text[ slovak ] = "~Presnosť podľa zobrazenia";
     };
     CheckBox BTN_MATCH
     {
@@ -747,7 +767,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_traditional ] = "搜尋範圍 = 和 <> 必須適用全部的儲存格(~W)";
         Text[ arabic ] = "��� �� ����� ������ ����� = � <> ��� ����� �����";
         Text[ greek ] = "�� �������� ���������� = ��� <> ������ �� ���������� �� �������� �����";
-        Text[ korean ] = "검색 기준 = 과 <> 은 전체 셀에 적용되어야 합니다.(~W)";
+        Text[ korean ] = "검색 기준 = 과 <> 를 전체 셀에 적용(~W)";
         Text[ turkish ] = "Ara �l��tleri = ve <> t�m h�creler ile e�le�melidir";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Hakuehtojen = ja <> on koskettava ~soluja kokonaisuudessaan";
@@ -756,6 +776,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Vyhledávací kritéria = a <> musí platit pro celé buňky";
         Text[ hebrew ] = "Suchkri~terien = und <> müssen auf ganze Zellen zutreffen";
         Text[ hindi ] = "~पूरा कोष्ठों केलिए खोज सिद्धान्त = और <> को लागू करना है ";
+        Text[ slovak ] = "Výhľadávacie kritérium = a <> musí byť platné pre celé ~bunky";
     };
     CheckBox BTN_REGEX
     {
@@ -788,6 +809,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Povolit regulární výrazy ve vzorcích";
         Text[ hebrew ] = "Reguläre Ausdrücke in ~Formeln ermöglichen";
         Text[ hindi ] = "सूत्रों में रहनेवाला नियमित वर्णन को ~सक्षम करो";
+        Text[ slovak ] = "Povoliť r~egulárne výrazy vo vzorcoch";
     };
     CheckBox BTN_LOOKUP
     {
@@ -808,7 +830,7 @@ TabPage RID_SCPAGE_CALC
         Text[ russian ] = "�������������� ����� �������� ��� �������� � �����";
         Text[ polish ] = "~Automatycznie znajd� etykiety kolumn i wierszy";
         Text[ japanese ] = "行と列のラベルを自動的に検索(~A)";
-        Text[ chinese_traditional ] = "自動搜尋列/欄標題(~A)";
+        Text[ chinese_traditional ] = "自動尋找列/欄標題(~A)";
         Text[ arabic ] = "����� �� ������ ������� ������� ��������";
         Text[ greek ] = "�������� ��������� ��������� ������/�������";
         Text[ korean ] = "열 및 행의 레이블을 자동으로 찾기(~A)";
@@ -820,6 +842,7 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "Automaticky najít popisky sloupců a řádek ";
         Text[ hebrew ] = "Spalten-/Zeilen~beschriftungen automatisch suchen";
         Text[ hindi ] = "स्तंभ और पक्ति लेबिलों को ~स्वचालित प्रकार से अन्वेषण करो ";
+        Text[ slovak ] = "~Automaticky nájsť popisky stĺpcov a riadkov ";
     };
 };
 
@@ -868,6 +891,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Seznamy";
         Text[ hebrew ] = "L~isten";
         Text[ hindi ] = "~सूचियाँ";
+        Text[ slovak ] = "~Zoznamy";
     };
     ListBox LB_LISTS
     {
@@ -908,6 +932,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Položky";
         Text[ hebrew ] = "Ein~träge";
         Text[ hindi ] = "~प्रविष्टियाँ";
+        Text[ slovak ] = "~Položky";
     };
     MultiLineEdit ED_ENTRIES
     {
@@ -956,6 +981,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Kopírovat seznam z";
         Text[ hebrew ] = "Liste kopieren ~aus";
         Text[ hindi ] = "~से सूची की प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať zozna~m z";
     };
     PushButton BTN_NEW
     {
@@ -989,6 +1015,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Nový";
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
+        Text[ slovak ] = "~Nový";
     };
     PushButton BTN_ADD
     {
@@ -1024,6 +1051,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_REMOVE
     {
@@ -1058,6 +1086,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     PushButton BTN_COPY
     {
@@ -1091,13 +1120,14 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Kopírovat";
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "~प्रतिलिपि";
+        Text[ slovak ] = "~Kopírovať";
     };
     String STR_DISMISS
     {
         Text = "~Verwerfen" ;
         Text [ ENGLISH ] = "~Dismiss" ;
         Text [ english_us ] = "~Discard" ;
-        Text [ italian ] = "~Non salvare" ;
+        Text [ italian ] = "Non salvare" ;
         Text [ spanish ] = "~Rechazar" ;
         Text [ french ] = "~Rejeter" ;
         Text [ dutch ] = "~Verwerpen" ;
@@ -1121,6 +1151,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Zničit";
         Text[ hebrew ] = "‮התעלמות משינויים‬";
         Text[ hindi ] = "~उपेक्षा";
+        Text[ slovak ] = "Zaho~diť";
     };
     String STR_QUERYREMOVE
     {
@@ -1153,6 +1184,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Má být položka\n#\nodstraněna?";
         Text[ hebrew ] = "Soll der Eintrag\n#\ngelöscht werden?";
         Text[ hindi ] = "प्रविष्टि\n#\nको मिटाना है?";
+        Text[ slovak ] = "Má byť položka\n#\nodstránená?";
     };
     String STR_COPYLIST
     {
@@ -1183,6 +1215,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Kopírovat seznam";
         Text[ hebrew ] = "Liste kopieren";
         Text[ hindi ] = "सूची का प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať zoznam";
     };
     String STR_COPYFROM
     {
@@ -1213,6 +1246,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Vypsat od";
         Text[ hebrew ] = "Liste aus";
         Text[ hindi ] = "से सूची";
+        Text[ slovak ] = "Zoznam z";
     };
     String STR_COPYERR
     {
@@ -1243,6 +1277,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ czech ] = "Buňky neobsahující text byly ignorovány.";
         Text[ hebrew ] = "Zellen ohne einfachen Text wurden ignoriert.";
         Text[ hindi ] = "टेक्स्ट् रहित कोष्ठों को उपेक्षा किया है ।";
+        Text[ slovak ] = "Bunky bez textu boli ignorované.";
     };
 };
 
@@ -1289,6 +1324,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Pomůcky zobrazení";
         Text[ hebrew ] = "Optische Hilfen";
         Text[ hindi ] = "दृष्टि-सम्बन्धी सहायता";
+        Text[ slovak ] = "Pomôcky zobrazenia";
     };
     CheckBox CB_GRID
     {
@@ -1322,6 +1358,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Mřížka";
         Text[ hebrew ] = "~Gitterlinien";
         Text[ hindi ] = "~जाल रेखाएँ";
+        Text[ slovak ] = "Ria~dky mriežky";
     };
     FixedText FT_COLOR
     {
@@ -1355,6 +1392,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
+        Text[ slovak ] = "~Farba";
     };
     ListBox LB_COLOR
     {
@@ -1395,6 +1433,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Zalomení stránky";
         Text[ hebrew ] = "~Seitenumbrüche";
         Text[ hindi ] = "~पृष्ठ खण्डन";
+        Text[ slovak ] = "~Zalomenia stránky";
     };
     CheckBox CB_GUIDELINE
     {
@@ -1426,6 +1465,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Zobrazovat vodítka při přesunu";
         Text[ hebrew ] = "H~ilfslinien während der Bewegung";
         Text[ hindi ] = "स्थान परिवर्तन ~के समय सहायक";
+        Text[ slovak ] = "Vo~dítka pri pohybe";
     };
     CheckBox CB_HANDLES
     {
@@ -1458,6 +1498,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Jednoduché úchopy";
         Text[ hebrew ] = "~Einfache Griffe";
         Text[ hindi ] = "~सामान्य हॉन्डलें";
+        Text[ slovak ] = "Jednoduché úchy~tky";
     };
     CheckBox CB_BIGHANDLES
     {
@@ -1490,6 +1531,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Velké úchopy";
         Text[ hebrew ] = "Gr~oße Griffe";
         Text[ hindi ] = "~बड़ा हॉन्डलें";
+        Text[ slovak ] = "Veľ~ké úchytky";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1528,6 +1570,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखाओ";
+        Text[ slovak ] = "Zobraziť";
     };
     CheckBox CB_FORMULA
     {
@@ -1561,6 +1604,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Vzorce";
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
+        Text[ slovak ] = "Vzorc~e";
     };
     CheckBox CB_NIL
     {
@@ -1594,6 +1638,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Nulové hodnoty";
         Text[ hebrew ] = "~Nullwerte";
         Text[ hindi ] = "शून्य मू~ल्य";
+        Text[ slovak ] = "N~ulové hodnoty";
     };
     CheckBox CB_ANNOT
     {
@@ -1627,6 +1672,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Indikátor poznámky";
         Text[ hebrew ] = "Noti~zanzeiger";
         Text[ hindi ] = "~टिप्पणी निदर्शक";
+        Text[ slovak ] = "I~ndikátor poznámky";
     };
     CheckBox CB_VALUE
     {
@@ -1649,7 +1695,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ russian ] = "��������� �������� ������";
         Text[ polish ] = "Wyr�n~ianie warto�ci";
         Text[ japanese ] = "値の強調表示(~I)";
-        Text[ chinese_traditional ] = "突出顯示數值(~I)";
+        Text[ chinese_traditional ] = "反白顯示數值(~I)";
         Text[ arabic ] = "����� �����";
         Text[ greek ] = "���������� �����";
         Text[ korean ] = "값 강조(~I)";
@@ -1660,6 +1706,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Zvýrazňování hodnot";
         Text[ hebrew ] = "Werte her~vorheben";
         Text[ hindi ] = "मूल्य को वि~शेष प्रकार से दिखाना";
+        Text[ slovak ] = "Zvýraznen~ie hodnoty";
     };
     CheckBox CB_ANCHOR
     {
@@ -1692,6 +1739,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Ukotvit";
         Text[ hebrew ] = "‮עוגן‬";
         Text[ hindi ] = "~जोड़";
+        Text[ slovak ] = "~Ukotvenie";
     };
     CheckBox CB_CLIP
     {
@@ -1724,6 +1772,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Přetečení textu";
         Text[ hebrew ] = "~Textüberlauf";
         Text[ hindi ] = "टे~क्स्ट् अधिकता";
+        Text[ slovak ] = "Pretečenie te~xtu";
     };
     CheckBox CB_RFIND
     {
@@ -1756,6 +1805,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Zobrazit odkazy barevně";
         Text[ hebrew ] = "~Referenzen farbig anzeigen";
         Text[ hindi ] = "रेफरेन्स को रंग में दिखाओ";
+        Text[ slovak ] = "Zobraziť odkazy farebne";
     };
     FixedLine GB_OBJECT
     {
@@ -1789,6 +1839,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Objekty";
         Text[ hebrew ] = "Objekte";
         Text[ hindi ] = "वस्तु";
+        Text[ slovak ] = "Objekty";
     };
     FixedText FT_OBJGRF
     {
@@ -1822,6 +1873,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Objekty/Grafika";
         Text[ hebrew ] = "Ob~jekte/Grafiken";
         Text[ hindi ] = "व~स्तु/सुचित्र";
+        Text[ slovak ] = "Ob~jekty/Obrázky";
     };
     ListBox LB_OBJGRF
     {
@@ -1860,6 +1912,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Grafy";
         Text[ hebrew ] = "~Diagramme";
         Text[ hindi ] = "चा~र्ट";
+        Text[ slovak ] = "G~rafy";
     };
     ListBox LB_DIAGRAM
     {
@@ -1898,6 +1951,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Kresby";
         Text[ hebrew ] = "Zei~chenobjekte";
         Text[ hindi ] = "~रेखाचित्र वस्तु";
+        Text[ slovak ] = "Kres~ba";
     };
     ListBox LB_DRAW
     {
@@ -1941,6 +1995,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Okno";
         Text[ hebrew ] = "‮חלונות‬";
         Text[ hindi ] = "विन्डो";
+        Text[ slovak ] = "Okno";
     };
     CheckBox CB_ROWCOLHEADER
     {
@@ -1974,6 +2029,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Záhlaví sloupce/řádku";
         Text[ hebrew ] = "Zeilen- und Spaltenk~öpfe";
         Text[ hindi ] = "स्तं~भ/पंक्ति शीर्षकें";
+        Text[ slovak ] = "~Hlavičky stĺpcov/riadkov";
     };
     CheckBox CB_HSCROLL
     {
@@ -2007,6 +2063,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Horizontální posuvník";
         Text[ hebrew ] = "~Horizontale Bildlaufleiste";
         Text[ hindi ] = "सम~तल स्क्रॉल पट्टी";
+        Text[ slovak ] = "Vo~dorovná posuvná lišta";
     };
     CheckBox CB_VSCROLL
     {
@@ -2040,6 +2097,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Svislý posuvník";
         Text[ hebrew ] = "‮פס גלילה אנכי‬";
         Text[ hindi ] = "~लंबरूप स्क्रॉल पट्टी";
+        Text[ slovak ] = "Z~vislá posuvná lišta";
     };
     CheckBox CB_TBLREG
     {
@@ -2073,6 +2131,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Záložky listů";
         Text[ hebrew ] = "Ta~bellenregister";
         Text[ hindi ] = "शी~ट् टॉब्स";
+        Text[ slovak ] = "Zál~ožky listov";
     };
     CheckBox CB_OUTLINE
     {
@@ -2106,6 +2165,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ czech ] = "Symboly pro souhrny";
         Text[ hebrew ] = "Glieder~ungssymbole";
         Text[ hindi ] = "~बाहरी रूपरेखा संकेत";
+        Text[ slovak ] = "Symboly ~osnovy";
     };
 };
 
@@ -2153,6 +2213,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Měrné systémy";
         Text[ hebrew ] = "Metriken";
         Text[ hindi ] = "मेट्रिक्स";
+        Text[ slovak ] = "Merné systémy";
     };
     FixedText FT_UNIT
     {
@@ -2184,6 +2245,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Měrná jednotka";
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नाप ~यूनिट्";
+        Text[ slovak ] = "Merná jedn~otka";
     };
     ListBox LB_UNIT
     {
@@ -2530,6 +2592,18 @@ TabPage RID_SCPAGE_LAYOUT
         < "पिका" ; FUNIT_PICA ; > ;
         < "स्थान" ; FUNIT_POINT ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "Milimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "Míľa" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Bod" ; FUNIT_POINT ; > ;
+    };
     };
     FixedText FT_TAB
     {
@@ -2561,6 +2635,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Zarážky tabulátoru";
         Text[ hebrew ] = "‮עצירות טאב‬";
         Text[ hindi ] = "~टॉब रुकावट";
+        Text[ slovak ] = "~Tabulátory";
     };
     MetricField MF_TAB
     {
@@ -2614,6 +2689,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Probíhá aktualizace";
         Text[ hebrew ] = "Aktualisierung";
         Text[ hindi ] = "अपडेट् करना";
+        Text[ slovak ] = "Aktualizácia";
     };
     FixedText FT_UPDATE_LINKS
     {
@@ -2646,6 +2722,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Aktualizovat odkazy při otevření souboru";
         Text[ hebrew ] = "Verknüpfungen beim Laden aktualisieren";
         Text[ hindi ] = "खोलने के समय लिंक्स को अपडेट् करना";
+        Text[ slovak ] = "Aktualizovať odkazy pri otvorení";
     };
     RadioButton RB_ALWAYS
     {
@@ -2679,6 +2756,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Vždy";
         Text[ hebrew ] = "~Immer";
         Text[ hindi ] = "~हमेशा";
+        Text[ slovak ] = "Vž~dy";
     };
     RadioButton RB_REQUEST
     {
@@ -2712,6 +2790,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Na vyžádání";
         Text[ hebrew ] = "Auf Nach~frage";
         Text[ hindi ] = "~निवेदन करने पर";
+        Text[ slovak ] = "Pýt~ať sa";
     };
     RadioButton RB_NEVER
     {
@@ -2745,6 +2824,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Nikdy";
         Text[ hebrew ] = "~Nie";
         Text[ hindi ] = "~कभी नहीं";
+        Text[ slovak ] = "~Nikdy";
     };
     FixedLine GB_OPTIONS
     {
@@ -2776,6 +2856,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Nastavení vstupu dat";
         Text[ hebrew ] = "Eingabeeinstellungen";
         Text[ hindi ] = "इनपुट् निर्धारण";
+        Text[ slovak ] = "Zadajte nastavenia";
     };
     CheckBox CB_ALIGN
     {
@@ -2808,6 +2889,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Stisk klávesy Enter přesune výběr";
         Text[ hebrew ] = "Eingabebestätigung setzt die ~Selektion nach";
         Text[ hindi ] = "~चुनाव का स्थान परिवर्तन करने केलिए कृपया ऐन्टर कीजिए ";
+        Text[ slovak ] = "Stlačte E~nter pre posunutie výberu";
     };
     ListBox LB_ALIGN
     {
@@ -3005,6 +3087,13 @@ TabPage RID_SCPAGE_LAYOUT
         < "ऊपर" ; Default ; > ;
         < "बायाँ" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Dole" ; Default ; > ;
+        < "Vpravo" ; Default ; > ;
+        < "Hore" ; Default ; > ;
+        < "Vľavo" ; Default ; > ;
+    };
     };
     CheckBox CB_EDITMODE
     {
@@ -3037,6 +3126,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Stisk klávesy Enter přepne mód editace";
         Text[ hebrew ] = "Eingabetaste schaltet in den ~Editmodus";
         Text[ hindi ] = "~संपादन प्रकार में जाने केलिए कृपया ऐन्टर कीजिए";
+        Text[ slovak ] = "Stlačte Enter pre prepnutie do ~editovacieho módu";
     };
     CheckBox CB_FORMAT
     {
@@ -3069,6 +3159,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Rozšířené formátování";
         Text[ hebrew ] = "Formatierung ~ausdehnen";
         Text[ hindi ] = "रचना को ~विस्तार करो";
+        Text[ slovak ] = "Rozšírené ~formátovanie";
     };
     CheckBox CB_EXPREF
     {
@@ -3101,6 +3192,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Rozšířit odkazy při vložení nových sloupců nebo řádků";
         Text[ hebrew ] = "~Referenzen beim Spalten-/Zeileneinfügen an deren Rändern ausdehnen";
         Text[ hindi ] = "नया स्तंभें/पंक्तियों को जोड़ने के समय रेफरेन्स को विस्तृत करो";
+        Text[ slovak ] = "~Rozšíriť odkazy pri vsunutí nových stĺpcov/riadkov";
     };
     CheckBox CB_MARKHDR
     {
@@ -3121,7 +3213,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "�������� ������ ����� � ���������� �������� � �����";
         Text[ polish ] = "Wy~r�nij zaznaczenie w nag��wkach kolumn/wierszy";
         Text[ japanese ] = "選択したセルの行列番号を強調表示(~C)";
-        Text[ chinese_traditional ] = "突出顯示選中的列欄標題(~C)";
+        Text[ chinese_traditional ] = "反白顯示選中的列欄標題(~C)";
         Text[ arabic ] = "����� ������� �� ���� �������/������";
         Text[ greek ] = "���������� ��� ���~����� ���� �������/������ ��� ���������";
         Text[ korean ] = "열과 행 머리글에서 선택 강조(~C)";
@@ -3133,6 +3225,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Zvýraznit výběr v záhlaví sloupců a řádek";
         Text[ hebrew ] = "Se~lektion in Spalten-/Zeilenköpfen hervorheben";
         Text[ hindi ] = "स्तंभ/पंक्ति का शीर्षकों में चु~नाव को विशेष प्रकार से दिखाओ";
+        Text[ slovak ] = "Zvýrazniť výber v hlavičkách stĺp~cov/riadkov";
     };
     CheckBox CB_TEXTFMT
     {
@@ -3164,6 +3257,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ czech ] = "Použít metriku tiskárny pro formátování textu";
         Text[ hebrew ] = "~Druckermaße für Textformatierung verwenden";
         Text[ hindi ] = "टेक्स्ट् का रचना करने केलिए मुद्रक मेट्रिक्स का उपयोग करो ";
+        Text[ slovak ] = "Použiť mierky tlačiarne pri formátovaní textu";
     };
     CheckBox CB_REPLWARN
     {
@@ -3195,6 +3289,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese_brazilian ] = "Show overwrite ~warning when pasting data";
         Text[ thai ] = "Show overwrite ~warning when pasting data";
         Text[ hindi ] = "Show overwrite ~warning when pasting data";
+        Text[ slovak ] = "Ukázať varovanie pred prepisom dát počas ~vkladania";
     };
 };
 
@@ -3241,6 +3336,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ czech ] = "Stránky";
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "पृष्ठ";
+        Text[ slovak ] = "Stránky";
     };
     CheckBox BTN_SKIPEMPTYPAGES
     {
@@ -3272,6 +3368,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ czech ] = "Potlačit výstup prázdných stránek";
         Text[ hebrew ] = "~Ausgabe leerer Seiten unterdrücken";
         Text[ hindi ] = "खाली पृष्ठों का औटपुट् को ~दबाओ";
+        Text[ slovak ] = "Potlačiť výstup prázdnych ~strán";
     };
     FixedLine FL_SHEETS
     {
@@ -3303,6 +3400,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ czech ] = "Listy";
         Text[ hebrew ] = "Tabellen";
         Text[ hindi ] = "शीट्";
+        Text[ slovak ] = "Listy";
     };
     CheckBox BTN_SELECTEDSHEETS
     {
@@ -3334,8 +3432,11 @@ TabPage RID_SCPAGE_PRINT
         Text[ czech ] = "Tisknout pouze vybrané listy";
         Text[ hebrew ] = "~Nur ausgewählte Tabellen drucken";
         Text[ hindi ] = "केवल चुने हुए शीटों का ~छपाई करो";
+        Text[ slovak ] = "~Tlačiť len vybrané listy";
     };
 };
+
+
 
 
 
