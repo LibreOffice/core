@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:11:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
   m_bReadOnly( sal_False ),
   m_bWaitForClose( sal_False ),
   m_bAllowClosing( sal_False ),
+  m_bDesktopTerminated( sal_False ),
   m_nNoBorderResizeReact( 0 )
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
@@ -256,7 +257,8 @@ DocumentHolder::~DocumentHolder()
         m_pInterceptor->release();
     }
 
-    FreeOffice();
+    if ( !m_bDesktopTerminated )
+        FreeOffice();
 }
 
 //---------------------------------------------------------------------------
@@ -1264,7 +1266,7 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
     OSL_ENSURE( !m_xComponent.is(), "Just a disaster..." );
 
     uno::Reference< frame::XDesktop > xDesktop( aSource.Source, uno::UNO_QUERY );
-
+    m_bDesktopTerminated = sal_True;
     if ( xDesktop.is() )
         xDesktop->removeTerminateListener( ( frame::XTerminateListener* )this );
 }
