@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotRemoveableException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module beans {
 /** This exception is thrown to indicate that removing a property from an
     <type>XPropertyContainer</type> is not allowed.
  */
-exception NotRemoveableException: com::sun::star::uno::Exception
+published exception NotRemoveableException: com::sun::star::uno::Exception
 {
 };
 
