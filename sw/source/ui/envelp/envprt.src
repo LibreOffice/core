@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:46:30 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~T)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "À§·ÎºÎÅÍ ÀÎ¼â(~P)";
+        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
         Text[ turkish ] = "Üstten yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -162,7 +162,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "¾Æ·¡·ÎºÎÅÍ ÀÎ¼â(~B)";
+        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
         Text[ turkish ] = "Alttan yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -191,7 +191,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "¦V¥k(~S)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "Ğñïò ôá äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ¹Ğ±â(~S)";
+        Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿(~S)";
         Text[ turkish ] = "S~ağa";
         Text[ language_user1 ] = " ";
     };
@@ -237,7 +237,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "¦V¤U(~D)";
         Text[ arabic ] = "Åáì ÃÓİá";
         Text[ greek ] = "Ğñïò ôá êÜôù";
-        Text[ korean ] = "¾Æ·¡·Î ¹Ğ±â(~D)";
+        Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿(~D)";
         Text[ turkish ] = "~Aşağı";
         Text[ language_user1 ] = " ";
     };
