@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:44:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,15 +151,8 @@ Window DLG_NAVIGATION_PI
                 HelpID = HID_NAVI_TBX24 ;
                 Text [ de ] = "Navigation" ;
                 Text [ en-US ] = "Navigation" ;
+                DropDown = TRUE ;
             };
-            /*            ToolBoxItem
-            {
-                Identifier = FN_CONTENT_LB ;
-                HelpID = HID_NAVI_TBX1 ;
-                Text [ de ] = "Inhaltstyp" ;
-                 // Listbox mit Inhaltsauswahl
-                Text [ en-US ] = "Content Type" ;
-            };*/
             ToolBoxItem
             {
                 Identifier = FN_UP ;
@@ -418,7 +411,7 @@ Window DLG_NAVIGATION_PI
     {
         Border = TRUE ;
         Pos = MAP_PIXEL ( 50 , 29 ) ;
-        Size = MAP_PIXEL ( 44 , 20 ) ;
+        Size = MAP_PIXEL ( 34 , 20 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
