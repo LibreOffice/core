@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinetab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: dr $ $Date: 2002-09-18 13:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,14 +360,14 @@ BOOL ScOutlineArray::Insert( USHORT nStartCol, USHORT nEndCol, BOOL& rSizeChange
     return TRUE;
 }
 
-BOOL ScOutlineArray::FindTouchedLevel( USHORT nBlockStart, USHORT nBlockEnd, USHORT& rFindLevel )
+BOOL ScOutlineArray::FindTouchedLevel( USHORT nBlockStart, USHORT nBlockEnd, USHORT& rFindLevel ) const
 {
     BOOL bFound = FALSE;
     rFindLevel = 0;
 
     for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
     {
-        ScOutlineCollection* pCollect = &aCollections[nLevel];
+        const ScOutlineCollection* pCollect = &aCollections[nLevel];
         USHORT nCount = pCollect->GetCount();
         for (USHORT i=0; i<nCount; i++)
         {
@@ -389,6 +389,8 @@ BOOL ScOutlineArray::FindTouchedLevel( USHORT nBlockStart, USHORT nBlockEnd, USH
 
 void ScOutlineArray::RemoveSub( USHORT nStartPos, USHORT nEndPos, USHORT nLevel )
 {
+    if ( nLevel >= nDepth )
+        return;
     ScOutlineCollection* pCollect = &aCollections[nLevel];
     USHORT nCount = pCollect->GetCount();
     BOOL bFound = FALSE;
@@ -494,17 +496,17 @@ BOOL ScOutlineArray::Remove( USHORT nBlockStart, USHORT nBlockEnd, BOOL& rSizeCh
     return bAny;
 }
 
-ScOutlineEntry* ScOutlineArray::GetEntry( USHORT nLevel, USHORT nIndex )
+ScOutlineEntry* ScOutlineArray::GetEntry( USHORT nLevel, USHORT nIndex ) const
 {
-    return (ScOutlineEntry*) aCollections[nLevel].At(nIndex);
+    return (ScOutlineEntry*)((nLevel < nDepth) ? aCollections[nLevel].At(nIndex) : NULL);
 }
 
-USHORT ScOutlineArray::GetCount( USHORT nLevel )
+USHORT ScOutlineArray::GetCount( USHORT nLevel ) const
 {
-    return aCollections[nLevel].GetCount();
+    return (nLevel < nDepth) ? aCollections[nLevel].GetCount() : 0;
 }
 
-ScOutlineEntry* ScOutlineArray::GetEntryByPos( USHORT nLevel, USHORT nPos )
+ScOutlineEntry* ScOutlineArray::GetEntryByPos( USHORT nLevel, USHORT nPos ) const
 {
     USHORT          nCount  = GetCount( nLevel );
     ScOutlineEntry* pEntry;
@@ -518,37 +520,67 @@ ScOutlineEntry* ScOutlineArray::GetEntryByPos( USHORT nLevel, USHORT nPos )
     return NULL;
 }
 
+BOOL ScOutlineArray::GetEntryIndex( USHORT nLevel, USHORT nPos, USHORT& rnIndex ) const
+{
+    // found entry contains passed position
+    USHORT nCount  = GetCount( nLevel );
+    for ( rnIndex = 0; rnIndex < nCount; ++rnIndex )
+    {
+        const ScOutlineEntry* pEntry = GetEntry( nLevel, rnIndex );
+        if ( (pEntry->GetStart() <= nPos) && (nPos <= pEntry->GetEnd()) )
+            return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL ScOutlineArray::GetEntryIndexInRange(
+        USHORT nLevel, USHORT nBlockStart, USHORT nBlockEnd, USHORT& rnIndex ) const
+{
+    // found entry will be completely inside of passed range
+    USHORT nCount  = GetCount( nLevel );
+    for ( rnIndex = 0; rnIndex < nCount; ++rnIndex )
+    {
+        const ScOutlineEntry* pEntry = GetEntry( nLevel, rnIndex );
+        if ( (nBlockStart <= pEntry->GetStart()) && (pEntry->GetEnd() <= nBlockEnd) )
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void ScOutlineArray::SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue, BOOL bSkipHidden )
 {
-    ScOutlineEntry* pEntry = (ScOutlineEntry*) aCollections[nLevel].At(nEntry);
-    USHORT nStart = pEntry->GetStart();
-    USHORT nEnd   = pEntry->GetEnd();
-
-    for (USHORT nSubLevel=nLevel+1; nSubLevel<nDepth; nSubLevel++)
+    ScOutlineEntry* pEntry = GetEntry( nLevel, nEntry );
+    if( pEntry )
     {
-        USHORT i = 0;
-        pEntry = (ScOutlineEntry*) aCollections[nSubLevel].At(i);
-        while (pEntry)
-        {
-            if (pEntry->GetStart() >= nStart && pEntry->GetEnd() <= nEnd)
-            {
-                pEntry->SetVisible(bValue);
+        USHORT nStart = pEntry->GetStart();
+        USHORT nEnd   = pEntry->GetEnd();
 
-                if (bSkipHidden)
-                    if (!pEntry->IsHidden())
-                        SetVisibleBelow( nSubLevel, i, bValue, TRUE );
+        for (USHORT nSubLevel=nLevel+1; nSubLevel<nDepth; nSubLevel++)
+        {
+            USHORT i = 0;
+            pEntry = (ScOutlineEntry*) aCollections[nSubLevel].At(i);
+            while (pEntry)
+            {
+                if (pEntry->GetStart() >= nStart && pEntry->GetEnd() <= nEnd)
+                {
+                    pEntry->SetVisible(bValue);
+
+                    if (bSkipHidden)
+                        if (!pEntry->IsHidden())
+                            SetVisibleBelow( nSubLevel, i, bValue, TRUE );
+                }
+
+                ++i;
+                pEntry = (ScOutlineEntry*) aCollections[nSubLevel].At(i);
             }
 
-            ++i;
-            pEntry = (ScOutlineEntry*) aCollections[nSubLevel].At(i);
+            if (bSkipHidden)
+                nSubLevel = nDepth;             // Abbruch
         }
-
-        if (bSkipHidden)
-            nSubLevel = nDepth;             // Abbruch
     }
 }
 
-void ScOutlineArray::GetRange( USHORT& rStart, USHORT& rEnd )
+void ScOutlineArray::GetRange( USHORT& rStart, USHORT& rEnd ) const
 {
     USHORT nCount = aCollections[0].GetCount();
     if (nCount)
@@ -583,7 +615,7 @@ void ScOutlineArray::ExtendBlock( USHORT nLevel, USHORT& rBlkStart, USHORT& rBlk
     }
 }
 
-BOOL ScOutlineArray::TestInsertSpace( USHORT nSize, USHORT nMaxVal )
+BOOL ScOutlineArray::TestInsertSpace( USHORT nSize, USHORT nMaxVal ) const
 {
     USHORT nCount = aCollections[0].GetCount();
     if (nCount)

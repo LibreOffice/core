@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-14 12:24:42 $
+ *  last change: $Author: dr $ $Date: 2002-09-18 14:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,689 +59,100 @@
  *
  ************************************************************************/
 
-// System - Includes -----------------------------------------------------
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
 
-
-// INCLUDE ---------------------------------------------------------------
-
+#include <vcl/taskpanelist.hxx>
 #include "olinewin.hxx"
 #include "olinetab.hxx"
-#include "document.hxx"                     // GetOutline
+#include "document.hxx"
+#include "dbfunc.hxx"
 #include "sc.hrc"
-#include "dbfunc.hxx"                       // Funktionen
 
-#define SC_OL_BITMAPSIZE    12
+// ============================================================================
 
-#define SC_OL_IMAGE_PLUS        9
-#define SC_OL_IMAGE_MINUS       10
-#define SC_OL_IMAGE_NOTPRESSED  11
-#define SC_OL_IMAGE_PRESSED     12
+const sal_Int32 SC_OL_BITMAPSIZE            = 12;
+const sal_Int32 SC_OL_POSOFFSET             = 2;
 
-//==================================================================
+const sal_uInt16 SC_OL_NOLEVEL              = 0xFFFF;
+const sal_uInt16 SC_OL_HEADERENTRY          = 0xFFFF;
 
-ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eNewMode,
-                                    ScViewData* pData, ScSplitPos eNewWhich ) :
+const sal_uInt16 SC_OL_IMAGE_PLUS           = 9;
+const sal_uInt16 SC_OL_IMAGE_MINUS          = SC_OL_IMAGE_PLUS + 1;
+const sal_uInt16 SC_OL_IMAGE_NOTPRESSED     = SC_OL_IMAGE_MINUS + 1;
+const sal_uInt16 SC_OL_IMAGE_PRESSED        = SC_OL_IMAGE_NOTPRESSED + 1;
+
+
+// ============================================================================
+
+ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewData* pViewData, ScSplitPos eWhich ) :
     Window( pParent ),
-    eMode( eNewMode ),
-    pViewData( pData ),
-    eWhich( eNewWhich ),
-    nHeaderSize( 0 ),
-    bHitMode( FALSE ),
-    aColor( COL_BLACK ),
-    pSymbols( NULL )
+    mrViewData( *pViewData ),
+    meWhich( eWhich ),
+    mbHoriz( eMode == SC_OUTLINE_HOR ),
+    mpSymbols( NULL ),
+    maLineColor( COL_BLACK ),
+    mnHeaderSize( 0 ),
+    mbMTActive( false ),
+    mbMTPressed( false ),
+    mnFocusLevel( 0 ),
+    mnFocusEntry( SC_OL_HEADERENTRY ),
+    mbDontDrawFocus( false )
 {
-    ImplInitSettings();
-}
+    InitSettings();
+    maFocusRect.SetEmpty();
 
-
-__EXPORT ScOutlineWindow::~ScOutlineWindow()
-{
-}
-
-
-BOOL ScOutlineWindow::IsFirst(USHORT nPos)
-{
-    //  sind alle Spalten vor dieser ausgeblendet?
-
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
-    for (;;)
+    // insert the window into task pane list for "F6 cycling"
+    SystemWindow* pSysWin = GetSystemWindow();
+    if( pSysWin )
     {
-        if (nPos==0)
-            return TRUE;
-        BOOL bHidden;
-        if (bHor)
-            bHidden = (pDoc->GetColFlags(nPos-1,nTab)&CR_HIDDEN)!=0;
-        else
-            bHidden = (pDoc->GetRowFlags(nPos-1,nTab)&CR_HIDDEN)!=0;
-        if (bHidden)
-            --nPos;
-        else
-            return FALSE;
+        TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
+        if( pTaskPaneList )
+            pTaskPaneList->AddWindow( this );
     }
 }
 
-
-BOOL ScOutlineWindow::GetEntryPos( ScOutlineEntry* pEntry,
-                                    long& rFirstEntry, long& rSecondEntry, long& rBitmapEntry,
-                                    ScOutlineEntry* pPrevious )
+ScOutlineWindow::~ScOutlineWindow()
 {
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
-
-    USHORT nStart = pEntry->GetStart();
-    USHORT nEnd   = pEntry->GetEnd();
-
-    if (bHor)
+    // remove the window from task pane list
+    SystemWindow* pSysWin = GetSystemWindow();
+    if( pSysWin )
     {
-        rFirstEntry = nHeaderSize + pViewData->GetScrPos( nStart, 0, eWhich, TRUE ).X();
-        rSecondEntry = nHeaderSize + pViewData->GetScrPos( nEnd+1, 0, eWhich, TRUE ).X();
-    }
-    else
-    {
-        rFirstEntry = nHeaderSize + pViewData->GetScrPos( 0, nStart, eWhich, TRUE ).Y();
-        rSecondEntry = nHeaderSize + pViewData->GetScrPos( 0, nEnd+1, eWhich, TRUE ).Y();
-    }
-    //  bAllowNeg = TRUE bei GetScrPos -> auch ausserhalb des sichtbaren Bereichs weiterzaehlen,
-    //  sonst wuerde die Bitmap nach oben geschoben, wenn die Position ganz unten ist.
-
-    BOOL bHidden;
-    if (bHor)
-        bHidden = (pDoc->GetColFlags(nStart,nTab)&CR_HIDDEN)!=0;
-    else
-        bHidden = (pDoc->GetRowFlags(nStart,nTab)&CR_HIDDEN)!=0;
-
-    if (bHidden)
-        rBitmapEntry = rFirstEntry - SC_OL_BITMAPSIZE / 2;
-    else
-        rBitmapEntry = rFirstEntry + 1;
-    rBitmapEntry = Min( (long)rBitmapEntry,
-                        (long)(( rFirstEntry+rSecondEntry-SC_OL_BITMAPSIZE ) / 2 ));
-
-        // Anpassungen
-
-    if (bHidden && IsFirst(nStart))
-        rBitmapEntry = rFirstEntry;             // ganz links nicht abschneiden
-
-    if (!bHidden && pPrevious)                  // ausgeblendeten nicht mit naechstem verdecken
-    {
-         USHORT nPrevEnd = pPrevious->GetEnd();
-         if (nPrevEnd+1 == nStart)
-         {
-            BOOL bPrevHidden;
-            if (bHor)
-                bPrevHidden = (pDoc->GetColFlags(nPrevEnd,nTab)&CR_HIDDEN)!=0;
-            else
-                bPrevHidden = (pDoc->GetRowFlags(nPrevEnd,nTab)&CR_HIDDEN)!=0;
-
-            if (bPrevHidden)
-            {
-                if ( IsFirst( pPrevious->GetStart() ) )
-                    rBitmapEntry = rFirstEntry + SC_OL_BITMAPSIZE;
-                else
-                    rBitmapEntry = rFirstEntry + SC_OL_BITMAPSIZE / 2;
-            }
-         }
-    }
-
-    //  rFirstEntry und rSecondEntry koennen auf den sichtbaren Bereich begrenzt werden,
-    //  der "Haken" unten/rechts wird nur gezeichnet, wenn die letzte Zelle sichtbar ist.
-    //  Ohne Begrenzung wird in die Ziffernfelder hineingemalt.
-    if ( rFirstEntry < nHeaderSize )
-        rFirstEntry = nHeaderSize;
-    if ( rSecondEntry < nHeaderSize )
-        rSecondEntry = nHeaderSize;
-
-        // Filter
-
-    BOOL bVisible;
-    if (bHor)
-        bVisible = TRUE;                    // horizontal: keine Filter
-    else
-    {
-        bVisible = FALSE;
-        USHORT nRow;
-        for (nRow=nStart; nRow<=nEnd && !bVisible; nRow++)
-            if (!pDoc->IsFiltered(nRow,nTab))
-                bVisible = TRUE;
-    }
-
-    return bVisible;
-}
-
-
-void ScOutlineWindow::ImplDrawImage( const Point& rPos, sal_uInt16 nId )
-{
-    DBG_ASSERT( pSymbols, "ScOutlineWindow::ImplDrawImage - no images" );
-    const Image& rImage = pSymbols->GetImage( nId );
-    SetLineColor();
-    SetFillColor( GetBackground().GetColor() );
-    DrawRect( Rectangle( rPos, rImage.GetSizePixel() ) );
-    DrawImage( rPos, rImage );
-}
-
-void ScOutlineWindow::ImplDrawBorder( const Point& rPos, bool bPressed )
-{
-    DBG_ASSERT( pSymbols, "ScOutlineWindow::ImplDrawBorder - no images" );
-    DrawImage( rPos, pSymbols->GetImage( bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED ) );
-}
-
-
-#define GETPREV(nLevel,nEntryNo) (nEntryNo ? pArray->GetEntry( nLevel, nEntryNo-1 ) : 0)
-
-
-void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
-{
-    USHORT nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
-    if (!pTable)
-        return;
-
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    ScOutlineArray* pArray = bHor ? pTable->GetColArray() : pTable->GetRowArray();
-    USHORT nDepth = pArray->GetDepth();
-    USHORT nLevel;
-
-    Size aSize = GetOutputSizePixel();
-    long nAllSize = bHor ? aSize.Height() : aSize.Width();
-    long nDestPos = nAllSize - 1;
-
-    SetLineColor( aColor );
-    if (bHor)
-        DrawLine(Point(0,nDestPos), Point(aSize.Width()-1,nDestPos));
-    else
-        DrawLine(Point(nDestPos,0), Point(nDestPos,aSize.Height()-1));
-
-    Point aFirstPos;
-    long& nFirstLevel = bHor ? aFirstPos.Y() : aFirstPos.X();
-    long& nFirstEntry = bHor ? aFirstPos.X() : aFirstPos.Y();
-
-    Point aSecondPos;
-    long& nSecondLevel = bHor ? aSecondPos.Y() : aSecondPos.X();
-    long& nSecondEntry = bHor ? aSecondPos.X() : aSecondPos.Y();
-
-    if (nHeaderSize)
-    {
-                                            //  Ebenen - Nummern
-                                            //
-
-        nFirstEntry = ( nHeaderSize - SC_OL_BITMAPSIZE ) / 2;
-        nFirstLevel = ( nAllSize - (nDepth+1) * SC_OL_BITMAPSIZE ) / 2;
-
-        for (nLevel=0; nLevel<=nDepth; nLevel++)
-        {
-            ImplDrawImage( aFirstPos, nLevel + 1 );
-            nFirstLevel += SC_OL_BITMAPSIZE;
-        }
-
-        long nStart = nHeaderSize-1;
-        SetLineColor( aColor );
-        if (bHor)
-            DrawLine(Point(nStart,0),Point(nStart,nDestPos));
-        else
-            DrawLine(Point(0,nStart),Point(nDestPos,nStart));
-    }
-
-    USHORT nStartIndex;
-    USHORT nEndIndex;
-    if (bHor)
-    {
-        nStartIndex = pViewData->GetPosX( WhichH(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsX( WhichH(eWhich) );
-        while ( nStartIndex>0 ? (pDoc->GetColFlags(nStartIndex-1,nTab) & CR_HIDDEN) : FALSE )
-            --nStartIndex;
-    }
-    else
-    {
-        nStartIndex = pViewData->GetPosY( WhichV(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsY( WhichV(eWhich) );
-        while ( nStartIndex>0 ? (pDoc->GetRowFlags(nStartIndex-1,nTab) & CR_HIDDEN) : FALSE )
-            --nStartIndex;
-    }
-
-        //
-        //      Outline-Gruppen
-        //
-
-    nFirstLevel = ( nAllSize - (nDepth+1) * SC_OL_BITMAPSIZE ) / 2;
-    for (nLevel=0; nLevel<nDepth; nLevel++)
-    {
-        short nEntryCount = (short) pArray->GetCount( nLevel );
-        short nEntryNo;
-        for (nEntryNo=0; nEntryNo<nEntryCount; nEntryNo++)
-        {
-            ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntryNo );
-            BOOL bDoThis = FALSE;
-
-            long nBitmapEntry;
-            USHORT nStart = pEntry->GetStart();
-            USHORT nEnd   = pEntry->GetEnd();
-
-            if ( nEnd >= nStartIndex && nStart <= nEndIndex )
-                if (GetEntryPos( pEntry, nFirstEntry, nSecondEntry, nBitmapEntry, GETPREV(nLevel,nEntryNo) ))
-                    if (pEntry->IsVisible())                // nicht von hoeherer Ebene verdeckt
-                        bDoThis = TRUE;
-
-            if (bDoThis)
-            {
-                Point aOldFirstPos = aFirstPos;
-                BOOL bDraw = FALSE;
-                BOOL bLeftOut = ( nStart < nStartIndex );
-
-                if (pEntry->IsHidden())
-                    bDraw = FALSE;                                              // ausgeblendet
-                else
-                    bDraw = TRUE;                                               // eingeblendet
-
-                if (bDraw)
-                {
-                    SetLineColor();
-                    SetFillColor( aColor );
-
-                    nSecondLevel = nFirstLevel;
-                    nSecondLevel += 1;
-                    if (!bLeftOut)
-                        nFirstEntry += 1;
-                    nSecondEntry -= 2;
-                    DrawRect( Rectangle( aFirstPos, aSecondPos ) );             // Linie
-
-                    if ( nEnd <= nEndIndex )
-                    {
-                        aFirstPos = aSecondPos;
-                        nFirstEntry -= 1;
-                        nSecondLevel += SC_OL_BITMAPSIZE / 3;
-                        DrawRect( Rectangle( aFirstPos, aSecondPos ) );         // rechts
-                    }
-
-                    //                  links wird von Bitmap verdeckt
-                }
-
-                aFirstPos = aOldFirstPos;
-            }
-        }
-
-        for (nEntryNo=nEntryCount-1; nEntryNo>=0; nEntryNo--)       // short
-        {
-            ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntryNo );
-            BOOL bDoThis = FALSE;
-
-            long nBitmapEntry;
-            USHORT nStart = pEntry->GetStart();
-            USHORT nEnd   = pEntry->GetEnd();
-
-            if ( nEnd >= nStartIndex && nStart <= nEndIndex + 1 )   // +1 wegen Verschiebung
-                if (GetEntryPos( pEntry, nFirstEntry, nSecondEntry, nBitmapEntry, GETPREV(nLevel,nEntryNo) ))
-                    if (pEntry->IsVisible())                // nicht von hoeherer Ebene verdeckt
-                        bDoThis = TRUE;
-
-            if (bDoThis)
-            {
-                Point aOldFirstPos = aFirstPos;
-                BOOL bLeftOut = ( nStart < nStartIndex );
-
-                if (!bLeftOut)
-                {
-                    aFirstPos = aOldFirstPos;
-                    nFirstEntry = nBitmapEntry;
-
-                    BOOL bClip = ( nBitmapEntry < (long) nHeaderSize );
-                    if (bClip)
-                    {
-                        if (bHor)
-                            SetClipRegion( Rectangle( Point(nHeaderSize,0),
-                                                Point(aSize.Width()-1,aSize.Height()-1) ) );
-                        else
-                            SetClipRegion( Rectangle( Point(0,nHeaderSize),
-                                                Point(aSize.Width()-1,aSize.Height()-1) ) );
-                    }
-
-                    if (pEntry->IsHidden())
-                        ImplDrawImage( aFirstPos, SC_OL_IMAGE_PLUS );
-                    else
-                        ImplDrawImage( aFirstPos, SC_OL_IMAGE_MINUS );
-
-                    if (bClip)
-                        SetClipRegion();
-                }
-
-                aFirstPos = aOldFirstPos;
-            }
-        }
-
-        nFirstLevel += SC_OL_BITMAPSIZE;
+        TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
+        if( pTaskPaneList )
+            pTaskPaneList->RemoveWindow( this );
     }
 }
 
-
-BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry, BOOL& rHeader,
-                                Point& rImagePos )
+void ScOutlineWindow::SetHeaderSize( sal_Int32 nNewSize )
 {
-    USHORT nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
-    if (!pTable)
-        return FALSE;
-
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    ScOutlineArray* pArray = bHor ? pTable->GetColArray() : pTable->GetRowArray();
-    USHORT nDepth = pArray->GetDepth();
-    Size aSize = GetOutputSizePixel();
-    long nAllSize = bHor ? aSize.Height() : aSize.Width();
-
-    USHORT nStartIndex;
-    USHORT nEndIndex;
-    if (bHor)
+    if ( nNewSize != mnHeaderSize )
     {
-        nStartIndex = pViewData->GetPosX( WhichH(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsX( WhichH(eWhich) );
-        while ( nStartIndex>0 ? (pDoc->GetColFlags(nStartIndex-1,nTab) & CR_HIDDEN) : FALSE )
-            --nStartIndex;
-    }
-    else
-    {
-        nStartIndex = pViewData->GetPosY( WhichV(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsY( WhichV(eWhich) );
-        while ( nStartIndex>0 ? (pDoc->GetRowFlags(nStartIndex-1,nTab) & CR_HIDDEN) : FALSE )
-            --nStartIndex;
-    }
-
-    long nEntryPos;
-    long nLevelPos;
-    long nEntryMouse = bHor ? rPos.X() : rPos.Y();
-    long nLevelMouse = bHor ? rPos.Y() : rPos.X();
-
-    USHORT nLevel;
-    nLevelPos = ( nAllSize - (nDepth+1) * SC_OL_BITMAPSIZE ) / 2;
-    for (nLevel=0; nLevel<=nDepth; nLevel++)
-    {
-        if ( nLevelMouse >= nLevelPos && nLevelMouse <= nLevelPos + SC_OL_BITMAPSIZE )
-        {
-            if (nHeaderSize)                // Ebenen-Nummern
-            {
-                nEntryPos = ( nHeaderSize - SC_OL_BITMAPSIZE ) / 2;
-                if ( nEntryMouse >= nEntryPos && nEntryMouse <= nEntryPos + SC_OL_BITMAPSIZE )
-                {
-                    rLevel = nLevel;
-                    rEntry = 0;
-                    rHeader = TRUE;
-                    if (bHor)
-                        rImagePos = Point( nEntryPos, nLevelPos );
-                    else
-                        rImagePos = Point( nLevelPos, nEntryPos );
-                    return TRUE;
-                }
-            }
-
-            if (nLevel<nDepth)              // Outline-Handles
-            {
-                USHORT nEntryCount = pArray->GetCount( nLevel );
-                for (USHORT nEntryNo=0; nEntryNo<nEntryCount; nEntryNo++)
-                {
-                    ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntryNo );
-
-                    USHORT nStart = pEntry->GetStart();
-                    if ( nStart >= nStartIndex && nStart <= nEndIndex )
-                    {
-                        long nDummy1;
-                        long nDummy2;
-                        if (GetEntryPos( pEntry, nDummy1, nDummy2, nEntryPos, GETPREV(nLevel,nEntryNo) ))
-                        {
-                            if (pEntry->IsVisible())
-                            {
-                                if ( nEntryMouse >= nEntryPos && nEntryMouse <= nEntryPos + SC_OL_BITMAPSIZE )
-                                {
-                                    rLevel = nLevel;
-                                    rEntry = nEntryNo;
-                                    rHeader = FALSE;
-                                    if (bHor)
-                                        rImagePos = Point( nEntryPos, nLevelPos );
-                                    else
-                                        rImagePos = Point( nLevelPos, nEntryPos );
-                                    return TRUE;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        nLevelPos += SC_OL_BITMAPSIZE;
-    }
-
-    return FALSE;
-}
-
-
-BOOL ScOutlineWindow::LineHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry )
-{
-    USHORT nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
-    if (!pTable)
-        return FALSE;
-
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    ScOutlineArray* pArray = bHor ? pTable->GetColArray() : pTable->GetRowArray();
-    USHORT nDepth = pArray->GetDepth();
-    Size aSize = GetOutputSizePixel();
-    long nAllSize = bHor ? aSize.Height() : aSize.Width();
-
-    USHORT nStartIndex;
-    USHORT nEndIndex;
-    if (bHor)
-    {
-        nStartIndex = pViewData->GetPosX( WhichH(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsX( WhichH(eWhich) );
-    }
-    else
-    {
-        nStartIndex = pViewData->GetPosY( WhichV(eWhich) );
-        nEndIndex = nStartIndex + pViewData->VisibleCellsY( WhichV(eWhich) );
-    }
-
-    long nEntryStart;
-    long nEntryEnd;
-    long nLevelPos;
-    long nEntryMouse = bHor ? rPos.X() : rPos.Y();
-    long nLevelMouse = bHor ? rPos.Y() : rPos.X();
-
-    USHORT nLevel;
-    nLevelPos = ( nAllSize - (nDepth+1) * SC_OL_BITMAPSIZE ) / 2;
-    for (nLevel=0; nLevel<nDepth; nLevel++)
-    {
-        if ( nLevelMouse >= nLevelPos && nLevelMouse <= nLevelPos + SC_OL_BITMAPSIZE / 2 )
-        {
-            ScOutlineEntry* pEntry;
-            USHORT nEntryNo = pArray->GetCount( nLevel );           // Rueckwaerts !
-            while (nEntryNo)
-            {
-                --nEntryNo;
-                pEntry = pArray->GetEntry( nLevel, nEntryNo );
-
-                USHORT nStart = pEntry->GetStart();
-                USHORT nEnd   = pEntry->GetEnd();
-                if ( nEnd >= nStartIndex && nStart <= nEndIndex )
-                {
-                    long nDummy;
-                    if (GetEntryPos( pEntry, nEntryStart, nEntryEnd, nDummy, GETPREV(nLevel,nEntryNo) ))
-                    {
-                        if (pEntry->IsVisible())
-                        {
-                            if ( nEntryMouse >= nEntryStart && nEntryMouse < nEntryEnd )
-                            {
-                                rLevel = nLevel;
-                                rEntry = nEntryNo;
-                                return TRUE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        nLevelPos += SC_OL_BITMAPSIZE;
-    }
-
-    return FALSE;
-}
-
-
-void ScOutlineWindow::DoFunction( USHORT nLevel, USHORT nEntry, BOOL bHeader )
-{
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-
-    if (bHeader)
-        pViewData->GetView()->SelectLevel( bHor, nLevel );
-    else
-    {
-        ScDocument* pDoc = pViewData->GetDocument();
-        USHORT nTab = pViewData->GetTabNo();
-        ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
-        ScOutlineArray* pArray = bHor ? pTable->GetColArray() : pTable->GetRowArray();
-        ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
-
-        if (pEntry->IsHidden())
-            pViewData->GetView()->ShowOutline( bHor, nLevel, nEntry );
-        else
-            pViewData->GetView()->HideOutline( bHor, nLevel, nEntry );
-    }
-}
-
-
-void __EXPORT ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    USHORT nLevel;
-    USHORT nEntry;
-    BOOL bHeader;
-    Point aDummy;
-
-    if ( bHitMode )
-    {
-        BOOL bHit = FALSE;
-        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummy ) )
-            if ( nLevel == nHitLevel && nEntry == nHitEntry && bHeader == bHitHeader )
-                bHit = TRUE;
-
-        if (bHit)
-        {
-            if (!bIsInverted)
-                ImplDrawBorder( aImagePos, true );
-            bIsInverted = TRUE;
-        }
-        else
-        {
-            if (bIsInverted)
-                ImplDrawBorder( aImagePos, false );
-            bIsInverted = FALSE;
-        }
-    }
-}
-
-
-void __EXPORT ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    USHORT nLevel;
-    USHORT nEntry;
-    BOOL bHeader;
-    Point aDummy;
-
-    if ( bHitMode )
-    {
-        if ( bIsInverted )
-            ImplDrawBorder( aImagePos, false );
-
-        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aDummy ) )
-            if ( nLevel == nHitLevel && nEntry == nHitEntry && bHeader == bHitHeader )
-                DoFunction( nLevel, nEntry, bHeader );
-
-        bHitMode = FALSE;
-    }
-}
-
-
-void __EXPORT ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    USHORT nLevel;
-    USHORT nEntry;
-    BOOL bHeader;
-
-    if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry, bHeader, aImagePos ) )
-    {
-        bHitMode = TRUE;
-        nHitLevel = nLevel;
-        nHitEntry = nEntry;
-        bHitHeader = bHeader;
-
-        ImplDrawBorder( aImagePos, true );
-        bIsInverted = TRUE;
-    }
-    else if ( rMEvt.GetClicks() == 2 )
-    {
-        if ( LineHit( rMEvt.GetPosPixel(), nLevel, nEntry ) )
-            DoFunction( nLevel, nEntry, FALSE );
-    }
-}
-
-
-void ScOutlineWindow::SetHeaderSize( USHORT nNewSize )
-{
-    if ( nNewSize != nHeaderSize )
-    {
-        nHeaderSize = nNewSize;
+        mnHeaderSize = nNewSize;
         Invalidate();
     }
 }
 
-
-long ScOutlineWindow::GetDepthSize()
+sal_Int32 ScOutlineWindow::GetDepthSize() const
 {
-    long nSize = 0;
-
-    const ScOutlineTable* pTable = pViewData->GetDocument()->GetOutlineTable(pViewData->GetTabNo());
-    if (pTable)
-    {
-        BOOL bHor = (eMode==SC_OUTLINE_HOR);
-        const ScOutlineArray* pArray = bHor ? pTable->GetColArray() : pTable->GetRowArray();
-        USHORT nDepth = pArray->GetDepth();
-
-        if ( nDepth )
-            nSize = ( (nDepth+1) * SC_OL_BITMAPSIZE ) + 5;
-    }
-
+    sal_Int32 nSize = GetLevelCount() * SC_OL_BITMAPSIZE;
+    if ( nSize > 0 )
+        nSize += 2 * SC_OL_POSOFFSET + 1;
     return nSize;
 }
 
-
-void ScOutlineWindow::ScrollPixel( long nDiff )
+void ScOutlineWindow::ScrollPixel( sal_Int32 nDiff )
 {
-    BOOL bHor = (eMode==SC_OUTLINE_HOR);
-    if (nHeaderSize)
-    {
-        long nStart = nHeaderSize;
-        long nEnd;
-        long nSize;
-        Size aSize = GetOutputSizePixel();
-        if (bHor)
-        {
-            nEnd = aSize.Width() - 1;
-            nSize = aSize.Height() - 1;
-        }
-        else
-        {
-            nEnd = aSize.Height() - 1;
-            nSize = aSize.Width() - 1;
-        }
-        long nInvStart;
-        long nInvEnd;
+    HideFocus();
+    mbDontDrawFocus = true;
 
+    if ( mnHeaderSize > 0 )
+    {
+        sal_Int32 nStart = mnHeaderSize;
+        sal_Int32 nEnd = GetOutputSizeEntry() - 1;
+
+        sal_Int32 nInvStart, nInvEnd;
         if (nDiff < 0)
         {
             nStart -= nDiff;
@@ -755,47 +166,840 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
             nInvEnd = nStart + nDiff;
         }
 
-        if (bHor)
-        {
-            Scroll( nDiff, 0, Rectangle( nStart, 0, nEnd, nSize ) );
-            Invalidate( Rectangle( nInvStart, 0, nInvEnd, nSize ) );
-        }
-        else
-        {
-            Scroll( 0, nDiff, Rectangle( 0, nStart, nSize, nEnd ) );
-            Invalidate( Rectangle( 0, nInvStart, nSize, nInvEnd ) );
-        }
+        ScrollRel( nDiff, nStart, nEnd );
+        Invalidate( GetRectangle( 0, nInvStart, GetOutputSizeLevel() - 1, nInvEnd ) );
         Update();
     }
     else
-    {
-        if (bHor)
-            Scroll( nDiff, 0 );
-        else
-            Scroll( 0, nDiff );
-    }
+        ScrollRel( nDiff );
+
+    // if focus becomes invisible, move it to next visible button
+    if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
+        ImplMoveFocusByEntry( nDiff < 0 );
+
+    mbDontDrawFocus = false;
+    ShowFocus();
 }
 
-void ScOutlineWindow::ImplInitSettings()
+void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff )
+{
+    if ( mbHoriz )
+        Scroll( nEntryDiff, 0 );
+    else
+        Scroll( 0, nEntryDiff );
+}
+
+void ScOutlineWindow::ScrollRel( sal_Int32 nEntryDiff, sal_Int32 nEntryStart, sal_Int32 nEntryEnd )
+{
+    Rectangle aRect( GetRectangle( 0, nEntryStart, GetOutputSizeLevel() - 1, nEntryEnd ) );
+    if ( mbHoriz )
+        Scroll( nEntryDiff, 0, aRect );
+    else
+        Scroll( 0, nEntryDiff, aRect );
+}
+
+
+// internal -------------------------------------------------------------------
+
+void ScOutlineWindow::InitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
-    aColor = rStyleSettings.GetButtonTextColor();
-    pSymbols = ScGlobal::GetOutlineSymbols( GetBackground().GetColor().IsDark() );
-
+    maLineColor = rStyleSettings.GetButtonTextColor();
+    mpSymbols = ScGlobal::GetOutlineSymbols( GetBackground().GetColor().IsDark() );
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+const ScOutlineArray* ScOutlineWindow::GetOutlineArray() const
+{
+    const ScOutlineTable* pTable = GetDoc().GetOutlineTable( GetTab() );
+    if ( !pTable ) return NULL;
+    return mbHoriz ? pTable->GetColArray() : pTable->GetRowArray();
+}
+
+const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+{
+    const ScOutlineArray* pArray = GetOutlineArray();
+    return pArray ? pArray->GetEntry( nLevel, nEntry ) : NULL;
+}
+
+bool ScOutlineWindow::IsHidden( sal_uInt16 nColRowIndex ) const
+{
+    sal_uInt8 nFlags = mbHoriz ?
+        GetDoc().GetColFlags( nColRowIndex, GetTab() ) :
+        GetDoc().GetRowFlags( nColRowIndex, GetTab() );
+    return (nFlags & CR_HIDDEN) != 0;
+}
+
+bool ScOutlineWindow::IsFiltered( sal_uInt16 nColRowIndex ) const
+{
+    // columns cannot be filtered
+    return !mbHoriz && GetDoc().IsFiltered( nColRowIndex, GetTab() );
+}
+
+bool ScOutlineWindow::IsFirstVisible( sal_uInt16 nColRowIndex ) const
+{
+    bool bAllHidden = true;
+    for ( sal_uInt16 nPos = 0; (nPos < nColRowIndex) && bAllHidden; ++nPos )
+        bAllHidden = IsHidden( nPos );
+    return bAllHidden;
+}
+
+void ScOutlineWindow::GetVisibleRange( sal_uInt16& rnColRowStart, sal_uInt16& rnColRowEnd ) const
+{
+    if ( mbHoriz )
+    {
+        rnColRowStart = mrViewData.GetPosX( WhichH( meWhich ) );
+        rnColRowEnd = rnColRowStart + mrViewData.VisibleCellsX( WhichH( meWhich ) );
+    }
+    else
+    {
+        rnColRowStart = mrViewData.GetPosY( WhichV( meWhich ) );
+        rnColRowEnd = rnColRowStart + mrViewData.VisibleCellsY( WhichV( meWhich ) );
+    }
+
+    // include collapsed columns/rows in front of visible range
+    while ( (rnColRowStart > 0) && IsHidden( rnColRowStart - 1 ) )
+        --rnColRowStart;
+}
+
+Point ScOutlineWindow::GetPoint( sal_Int32 nLevelPos, sal_Int32 nEntryPos ) const
+{
+    return mbHoriz ? Point( nEntryPos, nLevelPos ) : Point( nLevelPos, nEntryPos );
+}
+
+Rectangle ScOutlineWindow::GetRectangle(
+        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
+        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd ) const
+{
+    return Rectangle( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
+}
+
+sal_Int32 ScOutlineWindow::GetOutputSizeLevel() const
+{
+    Size aSize( GetOutputSizePixel() );
+    return mbHoriz ? aSize.Height() : aSize.Width();
+}
+
+sal_Int32 ScOutlineWindow::GetOutputSizeEntry() const
+{
+    Size aSize( GetOutputSizePixel() );
+    return mbHoriz ? aSize.Width() : aSize.Height();
+}
+
+sal_uInt16 ScOutlineWindow::GetLevelCount() const
+{
+    const ScOutlineArray* pArray = GetOutlineArray();
+    return pArray ? (pArray->GetDepth() + 1) : 0;
+}
+
+sal_Int32 ScOutlineWindow::GetLevelPos( sal_uInt16 nLevel ) const
+{
+    return SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE;
+}
+
+sal_uInt16 ScOutlineWindow::GetLevelFromPos( sal_Int32 nLevelPos ) const
+{
+    if ( nLevelPos < SC_OL_POSOFFSET ) return SC_OL_NOLEVEL;
+    sal_uInt16 nLevel = static_cast< sal_uInt16 >( (nLevelPos - SC_OL_POSOFFSET) / SC_OL_BITMAPSIZE );
+    return (nLevel < GetLevelCount()) ? nLevel : SC_OL_NOLEVEL;
+}
+
+sal_Int32 ScOutlineWindow::GetColRowPos( sal_uInt16 nColRowIndex ) const
+{
+    sal_Int32 nDocPos = mbHoriz ?
+        mrViewData.GetScrPos( nColRowIndex, 0, meWhich, TRUE ).X() :
+        mrViewData.GetScrPos( 0, nColRowIndex, meWhich, TRUE ).Y();
+    return mnHeaderSize + nDocPos;
+}
+
+sal_Int32 ScOutlineWindow::GetHeaderEntryPos() const
+{
+    return (mnHeaderSize - SC_OL_BITMAPSIZE) / 2;
+}
+
+bool ScOutlineWindow::GetEntryPos(
+        sal_uInt16 nLevel, sal_uInt16 nEntry,
+        sal_Int32& rnStartPos, sal_Int32& rnEndPos, sal_Int32& rnImagePos ) const
+{
+    const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
+    if ( !pEntry || !pEntry->IsVisible() )
+        return false;
+
+    sal_uInt16 nStart = pEntry->GetStart();
+    sal_uInt16 nEnd = pEntry->GetEnd();
+
+    // --- common calculation ---
+
+    rnStartPos = GetColRowPos( nStart );
+    rnEndPos = GetColRowPos( nEnd + 1 );
+
+    bool bHidden = IsHidden( nStart );
+    rnImagePos = bHidden ? (rnStartPos - SC_OL_BITMAPSIZE / 2) : rnStartPos + 1;
+    rnImagePos = Min( rnImagePos, (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE) / 2L );
+
+    // --- refinements ---
+
+    // do not cut leftmost/topmost image
+    if ( bHidden && IsFirstVisible( nStart ) )
+        rnImagePos = rnStartPos;
+
+    // do not cover previous collapsed image
+    if ( !bHidden && nEntry )
+    {
+        const ScOutlineEntry* pPrevEntry = GetOutlineEntry( nLevel, nEntry - 1 );
+        sal_uInt16 nPrevEnd = pPrevEntry->GetEnd();
+        if ( (nPrevEnd + 1 == nStart) && IsHidden( nPrevEnd ) )
+        {
+            if ( IsFirstVisible( pPrevEntry->GetStart() ) )
+                rnStartPos += SC_OL_BITMAPSIZE;
+            else
+                rnStartPos += SC_OL_BITMAPSIZE / 2;
+            rnImagePos = rnStartPos;
+        }
+    }
+
+    // restrict rnStartPos...rnEndPos to valid area
+    rnStartPos = Max( rnStartPos, mnHeaderSize );
+    rnEndPos = Max( rnEndPos, mnHeaderSize );
+
+    // --- all rows filtered? ---
+
+    bool bVisible = true;
+    if ( !mbHoriz )
+    {
+        bVisible = false;
+        for ( sal_uInt16 nRow = nStart; (nRow <= nEnd) && !bVisible; ++nRow )
+            bVisible = !IsFiltered( nRow );
+    }
+    return bVisible;
+}
+
+bool ScOutlineWindow::GetImagePos( sal_uInt16 nLevel, sal_uInt16 nEntry, Point& rPos ) const
+{
+    bool bRet = nLevel < GetLevelCount();
+    if ( bRet )
+    {
+        sal_Int32 nLevelPos = GetLevelPos( nLevel );
+        if ( nEntry == SC_OL_HEADERENTRY )
+            rPos = GetPoint( nLevelPos, GetHeaderEntryPos() );
+        else
+        {
+            sal_Int32 nStartPos, nEndPos, nImagePos;
+            bRet = GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos );
+            rPos = GetPoint( nLevelPos, nImagePos );
+        }
+    }
+    return bRet;
+}
+
+bool ScOutlineWindow::IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+{
+    bool bRet = false;
+    if ( nEntry == SC_OL_HEADERENTRY )
+        bRet = (nLevel < GetLevelCount());
+    else
+    {
+        const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
+        if ( pEntry && pEntry->IsVisible() )
+        {
+            sal_uInt16 nStart, nEnd;
+            GetVisibleRange( nStart, nEnd );
+            bRet = (nStart <= pEntry->GetStart()) && (pEntry->GetStart() <= nEnd);
+        }
+    }
+    return bRet;
+}
+
+bool ScOutlineWindow::ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry, bool& rbButton ) const
+{
+    const ScOutlineArray* pArray = GetOutlineArray();
+    if ( !pArray ) return false;
+
+    sal_uInt16 nStartIndex, nEndIndex;
+    GetVisibleRange( nStartIndex, nEndIndex );
+
+    sal_uInt16 nLevel = GetLevelFromPos( mbHoriz ? rPos.Y() : rPos.X() );
+    if ( nLevel == SC_OL_NOLEVEL )
+        return false;
+
+    sal_Int32 nLevelPos = GetLevelPos( nLevel );
+    sal_Int32 nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
+
+    // --- level buttons ---
+
+    if ( mnHeaderSize > 0 )
+    {
+        sal_Int32 nImagePos = GetHeaderEntryPos();
+        if ( (nImagePos <= nEntryMousePos) && (nEntryMousePos < nImagePos + SC_OL_BITMAPSIZE) )
+        {
+            rnLevel = nLevel;
+            rnEntry = SC_OL_HEADERENTRY;
+            rbButton = true;
+            return true;
+        }
+    }
+
+    // --- expand/collapse buttons and expanded lines ---
+
+    // search outline entries backwards
+    sal_uInt16 nEntry = pArray->GetCount( nLevel );
+    while ( nEntry )
+    {
+        --nEntry;
+
+        const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+        sal_uInt16 nStart = pEntry->GetStart();
+        sal_uInt16 nEnd = pEntry->GetEnd();
+
+        if ( (nEnd >= nStartIndex) && (nStart <= nEndIndex) )
+        {
+            sal_Int32 nStartPos, nEndPos, nImagePos;
+            if ( GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos ) )
+            {
+                rnLevel = nLevel;
+                rnEntry = nEntry;
+
+                // button?
+                if ( (nStart >= nStartIndex) && (nImagePos <= nEntryMousePos) && (nEntryMousePos < nImagePos + SC_OL_BITMAPSIZE) )
+                {
+                    rbButton = true;
+                    return true;
+                }
+
+                // line?
+                if ( (nStartPos <= nEntryMousePos) && (nEntryMousePos <= nEndPos) )
+                {
+                    rbButton = false;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool ScOutlineWindow::ButtonHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const
+{
+    bool bButton;
+    bool bRet = ItemHit( rPos, rnLevel, rnEntry, bButton );
+    return bRet && bButton;
+}
+
+bool ScOutlineWindow::LineHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const
+{
+    bool bButton;
+    bool bRet = ItemHit( rPos, rnLevel, rnEntry, bButton );
+    return bRet && !bButton;
+}
+
+void ScOutlineWindow::DoFunction( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+{
+    ScDBFunc& rFunc = *mrViewData.GetView();
+    if ( nEntry == SC_OL_HEADERENTRY )
+        rFunc.SelectLevel( mbHoriz, nLevel );
+    else
+    {
+        const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
+        if ( pEntry )
+        {
+            if ( pEntry->IsHidden() )
+                rFunc.ShowOutline( mbHoriz, nLevel, nEntry );
+            else
+                rFunc.HideOutline( mbHoriz, nLevel, nEntry );
+        }
+    }
+}
+
+void ScOutlineWindow::DoExpand( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+{
+    const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
+    if ( pEntry && pEntry->IsHidden() )
+        DoFunction( nLevel, nEntry );
+}
+
+void ScOutlineWindow::DoCollapse( sal_uInt16 nLevel, sal_uInt16 nEntry ) const
+{
+    const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
+    if ( pEntry && !pEntry->IsHidden() )
+        DoFunction( nLevel, nEntry );
+}
+
+void ScOutlineWindow::Resize()
+{
+    Window::Resize();
+    if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
+    {
+        HideFocus();
+        ShowFocus();    // calculates valid position
+    }
+}
 
 void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings();
+        InitSettings();
         Invalidate();
     }
-    else
-        Window::DataChanged( rDCEvt );
+    Window::DataChanged( rDCEvt );
 }
+
+
+// drawing --------------------------------------------------------------------
+
+void ScOutlineWindow::SetEntryAreaClipRegion()
+{
+    SetClipRegion( Rectangle( GetPoint( 0, mnHeaderSize ), GetOutputSizePixel() ) );
+}
+
+void ScOutlineWindow::DrawLineRel(
+        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
+        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd )
+{
+    DrawLine( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
+}
+
+void ScOutlineWindow::DrawRectRel(
+        sal_Int32 nLevelStart, sal_Int32 nEntryStart,
+        sal_Int32 nLevelEnd, sal_Int32 nEntryEnd )
+{
+    DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
+}
+
+void ScOutlineWindow::DrawImageRel( sal_Int32 nLevelPos, sal_Int32 nEntryPos, sal_uInt16 nId )
+{
+    DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawImageRel - no images" );
+    const Image& rImage = mpSymbols->GetImage( nId );
+    SetLineColor();
+    SetFillColor( GetBackground().GetColor() );
+    Point aPos( GetPoint( nLevelPos, nEntryPos ) );
+    DrawRect( Rectangle( aPos, rImage.GetSizePixel() ) );
+    DrawImage( aPos, rImage );
+}
+
+void ScOutlineWindow::DrawBorderRel( sal_uInt16 nLevel, sal_uInt16 nEntry, bool bPressed )
+{
+    Point aPos;
+    if ( GetImagePos( nLevel, nEntry, aPos ) )
+    {
+        DBG_ASSERT( mpSymbols, "ScOutlineWindow::DrawBorderRel - no images" );
+        sal_uInt16 nId = bPressed ? SC_OL_IMAGE_PRESSED : SC_OL_IMAGE_NOTPRESSED;
+        bool bClip = (nEntry != SC_OL_HEADERENTRY);
+        if ( bClip )
+            SetEntryAreaClipRegion();
+        DrawImage( aPos, mpSymbols->GetImage( nId ) );
+        if ( bClip )
+            SetClipRegion();
+    }
+    mbMTPressed = bPressed;
+}
+
+void ScOutlineWindow::ShowFocus()
+{
+    if ( HasFocus() )
+    {
+        // first move to a visible position
+        if ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) )
+            ImplMoveFocusByEntry( true );
+
+        Point aPos;
+        if ( GetImagePos( mnFocusLevel, mnFocusEntry, aPos ) )
+        {
+            aPos += Point( 1, 1 );
+            maFocusRect = Rectangle( aPos, Size( SC_OL_BITMAPSIZE - 2, SC_OL_BITMAPSIZE - 2 ) );
+            bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
+            if ( bClip )
+                SetEntryAreaClipRegion();
+            InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+            if ( bClip )
+                SetClipRegion();
+        }
+    }
+}
+
+void ScOutlineWindow::HideFocus()
+{
+    if ( !maFocusRect.IsEmpty() )
+    {
+        bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
+        if ( bClip )
+            SetEntryAreaClipRegion();
+        InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+        if ( bClip )
+            SetClipRegion();
+        maFocusRect.SetEmpty();
+    }
+}
+
+void ScOutlineWindow::Paint( const Rectangle& rRect )
+{
+    Size aSize = GetOutputSizePixel();
+    sal_Int32 nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
+    sal_Int32 nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
+
+    SetLineColor( maLineColor );
+    DrawLineRel( nLevelEnd, 0, nLevelEnd, nEntryEnd );
+
+    const ScOutlineArray* pArray = GetOutlineArray();
+    if ( !pArray ) return;
+
+    sal_uInt16 nLevelCount = GetLevelCount();
+
+    // --- draw header images ---
+
+    if ( mnHeaderSize > 0 )
+    {
+        sal_Int32 nEntryPos = GetHeaderEntryPos();
+        for ( sal_uInt16 nLevel = 0; nLevel < nLevelCount; ++nLevel )
+            DrawImageRel( GetLevelPos( nLevel ), nEntryPos, nLevel + 1 );
+
+        SetLineColor( maLineColor );
+        DrawLineRel( 0, mnHeaderSize - 1, nLevelEnd, mnHeaderSize - 1 );
+    }
+
+    // --- draw lines & collapse/expand images ---
+
+    SetEntryAreaClipRegion();
+
+    sal_uInt16 nStartIndex, nEndIndex;
+    GetVisibleRange( nStartIndex, nEndIndex );
+
+    for ( sal_uInt16 nLevel = 0; nLevel < nLevelCount - 1; ++nLevel )
+    {
+        sal_Int32 nLevelPos = GetLevelPos( nLevel );
+        sal_Int32 nEntryPos1, nEntryPos2, nImagePos;
+
+        sal_uInt16 nEntryCount = pArray->GetCount( nLevel );
+        sal_uInt16 nEntry;
+
+        // first draw all lines in the current level
+        SetLineColor();
+        SetFillColor( maLineColor );
+        for ( nEntry = 0; nEntry < nEntryCount; ++nEntry )
+        {
+            const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+            sal_uInt16 nStart = pEntry->GetStart();
+            sal_uInt16 nEnd = pEntry->GetEnd();
+
+            // visible range?
+            bool bDraw = (nEnd >= nStartIndex) && (nStart <= nEndIndex);
+            // find output coordinates
+            if ( bDraw )
+                bDraw = GetEntryPos( nLevel, nEntry, nEntryPos1, nEntryPos2, nImagePos );
+            // draw, if not collapsed
+            if ( bDraw && !pEntry->IsHidden() )
+            {
+                if ( nStart >= nStartIndex )
+                    ++nEntryPos1;
+                nEntryPos2 -= 2;
+                DrawRectRel( nLevelPos, nEntryPos1, nLevelPos + 1, nEntryPos2 );
+
+                if ( nEnd <= nEndIndex )
+                    DrawRectRel( nLevelPos, nEntryPos2 - 1, nLevelPos + SC_OL_BITMAPSIZE / 3, nEntryPos2 );
+            }
+        }
+
+        // draw all images in the level from last to first
+        nEntry = nEntryCount;
+        while ( nEntry )
+        {
+            --nEntry;
+
+            const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+            sal_uInt16 nStart = pEntry->GetStart();
+            sal_uInt16 nEnd = pEntry->GetEnd();
+
+            // visible range?
+            bool bDraw = (nStartIndex <= nStart) && (nStart <= nEndIndex + 1);
+            // find output coordinates
+            if ( bDraw )
+                bDraw = GetEntryPos( nLevel, nEntry, nEntryPos1, nEntryPos2, nImagePos );
+            // draw, if not hidden by higher levels
+            if ( bDraw )
+            {
+                sal_uInt16 nImageId = pEntry->IsHidden() ? SC_OL_IMAGE_PLUS : SC_OL_IMAGE_MINUS;
+                DrawImageRel( nLevelPos, nImagePos, nImageId );
+            }
+        }
+    }
+
+    SetClipRegion();
+
+    if ( !mbDontDrawFocus )
+        ShowFocus();
+}
+
+
+// focus ----------------------------------------------------------------------
+
+/** Increments or decrements a value and wraps at the specified limits.
+    @return  true = value wrapped. */
+bool lcl_RotateValue( sal_uInt16& rnValue, sal_uInt16 nMin, sal_uInt16 nMax, bool bForward )
+{
+    bool bWrap = false;
+    if ( bForward )
+    {
+        if ( rnValue < nMax )
+            ++rnValue;
+        else
+        {
+            rnValue = nMin;
+            bWrap = true;
+        }
+    }
+    else
+    {
+        if ( rnValue > nMin )
+            --rnValue;
+        else
+        {
+            rnValue = nMax;
+            bWrap = true;
+        }
+    }
+    return bWrap;
+}
+
+bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward )
+{
+    const ScOutlineArray* pArray = GetOutlineArray();
+    if ( !pArray )
+        return false;
+
+    bool bWrapped = false;
+    sal_uInt16 nEntryCount = pArray->GetCount( mnFocusLevel );
+
+    do
+    {
+        if ( mnFocusEntry == SC_OL_HEADERENTRY )
+        {
+            if ( nEntryCount > 0 )
+                mnFocusEntry = bForward ? 0 : nEntryCount - 1;
+            if ( !nEntryCount || !bForward )
+                bWrapped = true;
+        }
+        else if ( lcl_RotateValue( mnFocusEntry, 0, nEntryCount - 1, bForward ) )
+        {
+            mnFocusEntry = SC_OL_HEADERENTRY;
+            if ( bForward )
+                bWrapped = true;
+        }
+    }
+    while ( !IsButtonVisible( mnFocusLevel, mnFocusEntry ) );
+
+    return bWrapped;
+}
+
+bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
+{
+    const ScOutlineArray* pArray = GetOutlineArray();
+    if ( !pArray )
+        return false;
+
+    bool bWrapped = false;
+    sal_uInt16 nLevelCount = GetLevelCount();
+
+    if ( mnFocusEntry == SC_OL_HEADERENTRY )
+    {
+        if ( nLevelCount > 0 )
+            bWrapped = lcl_RotateValue( mnFocusLevel, 0, nLevelCount - 1, bForward );
+    }
+    else
+    {
+        const ScOutlineEntry* pEntry = pArray->GetEntry( mnFocusLevel, mnFocusEntry );
+        if ( pEntry )
+        {
+            sal_uInt16 nStart = pEntry->GetStart();
+            sal_uInt16 nEnd = pEntry->GetEnd();
+            sal_uInt16 nNewLevel = mnFocusLevel;
+            sal_uInt16 nNewEntry;
+
+            bool bFound = false;
+            if ( bForward && (mnFocusLevel + 2 < nLevelCount) )
+            {
+                // next level -> find first child entry
+                nNewLevel = mnFocusLevel + 1;
+                bFound = pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nNewEntry );
+            }
+            else if ( !bForward && (mnFocusLevel > 0) )
+            {
+                // previous level -> find parent entry
+                nNewLevel = mnFocusLevel - 1;
+                bFound = pArray->GetEntryIndex( nNewLevel, nStart, nNewEntry );
+            }
+
+            if ( bFound && IsButtonVisible( nNewLevel, nNewEntry ) )
+            {
+                mnFocusLevel = nNewLevel;
+                mnFocusEntry = nNewEntry;
+            }
+        }
+    }
+
+    return bWrapped;
+}
+
+void ScOutlineWindow::MoveFocusByEntry( bool bForward )
+{
+    HideFocus();
+    ImplMoveFocusByEntry( bForward );
+    ShowFocus();
+}
+
+void ScOutlineWindow::MoveFocusByLevel( bool bForward )
+{
+    HideFocus();
+    ImplMoveFocusByLevel( bForward );
+    ShowFocus();
+}
+
+void ScOutlineWindow::MoveFocusByTabOrder( bool bForward )
+{
+    HideFocus();
+
+    if ( !bForward && (mnFocusEntry == SC_OL_HEADERENTRY) )
+        ImplMoveFocusByLevel( false );
+    bool bWrap = ImplMoveFocusByEntry( bForward );
+    if ( bForward && bWrap )
+        ImplMoveFocusByLevel( true );
+
+    ShowFocus();
+}
+
+void ScOutlineWindow::GetFocus()
+{
+    Window::GetFocus();
+    ShowFocus();
+}
+
+void ScOutlineWindow::LoseFocus()
+{
+    HideFocus();
+    Window::LoseFocus();
+}
+
+
+// mouse ----------------------------------------------------------------------
+
+void ScOutlineWindow::StartMouseTracking( sal_uInt16 nLevel, sal_uInt16 nEntry )
+{
+    mbMTActive = true;
+    mnMTLevel = nLevel;
+    mnMTEntry = nEntry;
+    DrawBorderRel( nLevel, nEntry, true );
+}
+
+void ScOutlineWindow::EndMouseTracking()
+{
+    if ( mbMTPressed )
+        DrawBorderRel( mnMTLevel, mnMTEntry, false );
+    mbMTActive = false;
+}
+
+void ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
+{
+    if ( IsMouseTracking() )
+    {
+        sal_uInt16 nLevel, nEntry;
+        bool bHit = false;
+
+        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry ) )
+            bHit = (nLevel == mnMTLevel) && (nEntry == mnMTEntry);
+
+        if ( bHit != mbMTPressed )
+            DrawBorderRel( mnMTLevel, mnMTEntry, bHit );
+    }
+}
+
+void ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    if ( IsMouseTracking() )
+    {
+        EndMouseTracking();
+
+        sal_uInt16 nLevel, nEntry;
+        if ( ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry ) )
+            if ( (nLevel == mnMTLevel) && (nEntry == mnMTEntry) )
+                DoFunction( nLevel, nEntry );
+    }
+}
+
+void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    sal_uInt16 nLevel, nEntry;
+    bool bHit = ButtonHit( rMEvt.GetPosPixel(), nLevel, nEntry );
+    if ( bHit )
+        StartMouseTracking( nLevel, nEntry );
+    else if ( rMEvt.GetClicks() == 2 )
+    {
+        bHit = LineHit( rMEvt.GetPosPixel(), nLevel, nEntry );
+        if ( bHit )
+            DoFunction( nLevel, nEntry );
+    }
+
+    // if an item has been hit and window is focused, move focus to this item
+    if ( bHit && HasFocus() )
+    {
+        HideFocus();
+        mnFocusLevel = nLevel;
+        mnFocusEntry = nEntry;
+        ShowFocus();
+    }
+}
+
+
+// keyboard -------------------------------------------------------------------
+
+void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode& rKCode = rKEvt.GetKeyCode();
+    bool bNoMod = !rKCode.GetModifier();
+    bool bShift = (rKCode.GetModifier() == KEY_SHIFT);
+    bool bCtrl = (rKCode.GetModifier() == KEY_MOD1);
+
+    sal_uInt16 nCode = rKCode.GetCode();
+    bool bUpDownKey = (nCode == KEY_UP) || (nCode == KEY_DOWN);
+    bool bLeftRightKey = (nCode == KEY_LEFT) || (nCode == KEY_RIGHT);
+
+    // TAB key
+    if ( (nCode == KEY_TAB) && (bNoMod || bShift) )
+        // move forward without SHIFT key
+        MoveFocusByTabOrder( bNoMod );
+
+    // LEFT/RIGHT/UP/DOWN keys
+    else if ( bNoMod && (bUpDownKey || bLeftRightKey) )
+    {
+        bool bForward = (nCode == KEY_DOWN) || (nCode == KEY_RIGHT);
+        if ( mbHoriz == bLeftRightKey )
+            // move inside level with LEFT/RIGHT in horizontal and with UP/DOWN in vertical
+            MoveFocusByEntry( bForward );
+        else
+            // move to next/prev level with LEFT/RIGHT in vertical and with UP/DOWN in horizontal
+            MoveFocusByLevel( bForward );
+    }
+
+    // CTRL + number
+    else if ( bCtrl && (nCode >= KEY_1) && (nCode <= KEY_9) )
+    {
+        sal_uInt16 nLevel = nCode - KEY_1;
+        if ( nLevel < GetLevelCount() )
+            DoFunction( nLevel, SC_OL_HEADERENTRY );
+    }
+
+    // other key codes
+    else switch ( rKCode.GetFullCode() )
+    {
+        case KEY_ADD:       DoExpand( mnFocusLevel, mnFocusEntry );     break;
+        case KEY_SUBTRACT:  DoCollapse( mnFocusLevel, mnFocusEntry );   break;
+        case KEY_SPACE:
+        case KEY_RETURN:    DoFunction( mnFocusLevel, mnFocusEntry );   break;
+        default:            Window::KeyInput( rKEvt );
+    }
+}
+
+
+// ============================================================================
+
