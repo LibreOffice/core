@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:49:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,18 @@
 #ifndef _SVX_DIALMGR_HXX
 #include <dialmgr.hxx>
 #endif
+#include <comphelper/processfactory.hxx>
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
 
+// namespaces
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
@@ -99,25 +106,30 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 class TableWindow : public SfxPopupWindow
 {
 private:
-    Color           aLineColor;
-    Color           aHighlightLineColor;
-    Color           aFillColor;
-    Color           aHighlightFillColor;
-    long            nCol;
-    long            nLine;
-    long            nWidth;
-    long            nHeight;
-    long            nMX;
-    long            nMY;
-    long            nTextHeight;
-    BOOL            bInitialKeyInput;
-    BOOL            m_bMod1;
-    ToolBox&        rTbx;
+    Color               aLineColor;
+    Color               aHighlightLineColor;
+    Color               aFillColor;
+    Color               aHighlightFillColor;
+    long                nCol;
+    long                nLine;
+    long                nWidth;
+    long                nHeight;
+    long                nMX;
+    long                nMY;
+    long                nTextHeight;
+    BOOL                bInitialKeyInput;
+    BOOL                m_bMod1;
+    ToolBox&            rTbx;
+    Reference< XFrame > mxFrame;
+    rtl::OUString       maCommand;
 
     void UpdateSize_Impl( long nNewCol, long nNewLine);
 
 public:
-                            TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
+                            TableWindow( USHORT                     nSlotId,
+                                         const rtl::OUString&       rCmd,
+                                         ToolBox&                   rParentTbx,
+                                         const Reference< XFrame >& rFrame );
                             ~TableWindow();
 
     void                    KeyInput( const KeyEvent& rKEvt );
@@ -134,12 +146,13 @@ public:
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) :
-
-    SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
+TableWindow::TableWindow( USHORT nSlotId, const rtl::OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+    SfxPopupWindow( nSlotId, rFrame, WB_SYSTEMWINDOW ),
     bInitialKeyInput(TRUE),
     m_bMod1(FALSE),
-    rTbx(rParentTbx)
+    rTbx(rParentTbx),
+    mxFrame( rFrame ),
+    maCommand( rCmd )
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -174,7 +187,7 @@ TableWindow::~TableWindow()
 
 SfxPopupWindow* TableWindow::Clone() const
 {
-    return new TableWindow( GetId(), (SfxBindings&)GetBindings(), rTbx );
+    return new TableWindow( GetId(), maCommand, rTbx, mxFrame );
 }
 
 // -----------------------------------------------------------------------
@@ -183,12 +196,11 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
-    Point aMousePos = OutputToScreenPixel( aPos );
-    Point aWinPos = GetPosPixel();
+    Point aMousePos( aPos );
 
     if ( rMEvt.IsEnterWindow() )
         CaptureMouse();
-    else if ( aMousePos.X() < aWinPos.X() || aMousePos.Y() < aWinPos.Y() )
+    else if ( aMousePos.X() < 0 || aMousePos.Y() < 0 )
     {
         nCol = 0;
         nLine = 0;
@@ -463,11 +475,28 @@ void TableWindow::PopupModeEnd()
         Window* pParent = rTbx.GetParent();
         USHORT nId = GetId();
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
-        SfxUInt16Item aCol( SID_ATTR_TABLE_COLUMN, (UINT16)nCol );
-        SfxUInt16Item aRow( SID_ATTR_TABLE_ROW, (UINT16)nLine );
-        SfxUInt16Item aModifier(SID_MODIFIER, m_bMod1 ? KEY_MOD1 : 0);
-        GetBindings().GetDispatcher()->Execute(
-            GetId(), SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, &aRow, &aModifier, 0L );
+
+        Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
+        if ( xDispatchProvider.is() )
+        {
+            com::sun::star::util::URL aTargetURL;
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                                  UNO_QUERY );
+            aTargetURL.Complete = maCommand;
+            xTrans->parseStrict( aTargetURL );
+            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
+            if ( xDispatch.is() )
+            {
+                Sequence< PropertyValue > aArgs( 2 );
+                aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+                aArgs[0].Value = makeAny( sal_Int16( nCol ));
+                aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Rows" ));
+                aArgs[1].Value = makeAny( sal_Int16( nLine ));
+
+                xDispatch->dispatch( aTargetURL, aArgs );
+            }
+        }
     }
     else if ( IsPopupModeCanceled() )
         ReleaseMouse();
@@ -479,21 +508,23 @@ void TableWindow::PopupModeEnd()
 class ColumnsWindow : public SfxPopupWindow
 {
 private:
-    Color           aLineColor;
-    Color           aHighlightLineColor;
-    Color           aFillColor;
-    Color           aHighlightFillColor;
-    long            nCol;
-    long            nWidth;
-    long            nMX;
-    long            nTextHeight;
-    BOOL            bInitialKeyInput;
-    BOOL            m_bMod1;
-    ToolBox&        rTbx;
+    Color               aLineColor;
+    Color               aHighlightLineColor;
+    Color               aFillColor;
+    Color               aHighlightFillColor;
+    long                nCol;
+    long                nWidth;
+    long                nMX;
+    long                nTextHeight;
+    BOOL                bInitialKeyInput;
+    BOOL                m_bMod1;
+    ToolBox&            rTbx;
+    Reference< XFrame > mxFrame;
+    OUString            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
+                            ColumnsWindow( USHORT nId, const OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -508,14 +539,13 @@ public:
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
-                            ToolBox& rParentTbx ) :
-
-    SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
+ColumnsWindow::ColumnsWindow( USHORT nId, const OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+    SfxPopupWindow( nId, rFrame, WB_SYSTEMWINDOW ),
     bInitialKeyInput(TRUE),
     m_bMod1(FALSE),
-    rTbx(rParentTbx)
-
+    rTbx(rParentTbx),
+    mxFrame(rFrame),
+    maCommand( rCmd )
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -538,13 +568,14 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
     Size aLogicSize = LogicToPixel( Size( 95, 155 ), MapMode( MAP_10TH_MM ) );
     nMX = aLogicSize.Width();
     SetOutputSizePixel( Size( nMX*nWidth-1, aLogicSize.Height()+nTextHeight ) );
+    StartCascading();
 }
 
 // -----------------------------------------------------------------------
 
 SfxPopupWindow* ColumnsWindow::Clone() const
 {
-    return new ColumnsWindow( GetId(), (SfxBindings&)GetBindings(), rTbx );
+    return new ColumnsWindow( GetId(), maCommand, rTbx, mxFrame );
 }
 
 // -----------------------------------------------------------------------
@@ -553,12 +584,12 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
-    Point aMousePos = OutputToScreenPixel( aPos );
+    Point aMousePos = aPos;
     Point aWinPos = GetPosPixel();
 
     if ( rMEvt.IsEnterWindow() )
         CaptureMouse();
-    else if ( aMousePos.X() < aWinPos.X() || aMousePos.Y() < aWinPos.Y() )
+    else if ( aMousePos.X() < 0 || aMousePos.Y() < 0 )
     {
         nCol = 0;
         ReleaseMouse();
@@ -583,7 +614,7 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
     Size    aWinSize = GetOutputSizePixel();
     long    nMinCol = 0;
     long    nMaxCol = 0;
-    Point aWinPos = GetPosPixel();
+    Point   aWinPos;// = GetPosPixel();
 
     if ( nWidth <= nNewCol )
     {
@@ -769,10 +800,15 @@ void ColumnsWindow::PopupModeEnd()
         Window* pParent = rTbx.GetParent();
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
 
-        SfxUInt16Item aCol( SID_ATTR_COLUMNS, (UINT16)nCol );
-        SfxUInt16Item aModifier(SID_MODIFIER, m_bMod1 ? KEY_MOD1 : 0);
-        GetBindings().GetDispatcher()->Execute(
-            nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, &aModifier, 0L );
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+        aArgs[0].Value = makeAny( sal_Int16( nCol ));
+        aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Modifier" ));
+        aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
+
+        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                        maCommand,
+                                        aArgs );
     }
     else if ( IsPopupModeCanceled() )
         ReleaseMouse();
@@ -781,14 +817,12 @@ void ColumnsWindow::PopupModeEnd()
 
 // class SvxTableToolBoxControl ------------------------------------------
 
-SvxTableToolBoxControl::SvxTableToolBoxControl( USHORT nId, ToolBox& rTbx,
-                                                SfxBindings& rBind ) :
-
-    SfxToolBoxControl( nId, rTbx, rBind ),
-
+SvxTableToolBoxControl::SvxTableToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     bEnabled( TRUE )
-
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -811,8 +845,9 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
     if ( bEnabled )
     {
         ToolBox& rTbx = GetToolBox();
-        TableWindow* pWin = new TableWindow( GetId(), GetBindings(), rTbx );
+        TableWindow* pWin = new TableWindow( GetSlotId(), m_aCommandURL, rTbx, m_xFrame );
         pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
+        SetPopupWindow( pWin );
         return pWin;
     }
     return 0;
@@ -823,16 +858,14 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
 SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 {
     if ( bEnabled )
-        return new TableWindow( GetId(), GetBindings(), GetToolBox() );
+        return new TableWindow( GetSlotId(), m_aCommandURL, GetToolBox(), m_xFrame );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxTableToolBoxControl::StateChanged(
-
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-
 {
     if ( pState && pState->ISA(SfxUInt16Item) )
     {
@@ -852,11 +885,11 @@ void SvxTableToolBoxControl::StateChanged(
 
 // class SvxColumnsToolBoxControl ------------------------------------------
 
-SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( USHORT nId, ToolBox& rTbx,
-                                                    SfxBindings& rBind ) :
-
-    SfxToolBoxControl( nId, rTbx, rBind )
+SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -879,9 +912,10 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-        pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
-        pWin->StartPopupMode( &GetToolBox(),
-                    FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
+            pWin = new ColumnsWindow( GetSlotId(), m_aCommandURL, GetToolBox(), m_xFrame );
+            pWin->StartPopupMode( &GetToolBox(),
+                                  FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
+            SetPopupWindow( pWin );
     }
     return pWin;
 }
@@ -893,7 +927,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-        pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
+        pWin = new ColumnsWindow( GetSlotId(), m_aCommandURL, GetToolBox(), m_xFrame );
     }
     return pWin;
 }
