@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:55:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,6 +908,7 @@ BOOL SvStream::ReadCString( ByteString& rStr )
     while( !bEnd && !GetError() )
     {
         USHORT nLen = (USHORT)Read( buf, sizeof(buf)-1 );
+        USHORT nReallyRead = nLen;
         if( !nLen )
             break;
 
@@ -915,7 +916,11 @@ BOOL SvStream::ReadCString( ByteString& rStr )
         while( *pPtr && nLen )
             ++pPtr, --nLen;
 
-        bEnd = 0 == *pPtr;
+        bEnd =  ( nReallyRead < sizeof(buf)-1 )         // read less than attempted to read
+                ||  (  ( nLen > 0 )                    // OR it is inside the block we read
+                    &&  ( 0 == *pPtr )                  //    AND found a string terminator
+                    );
+
         rStr.Append( buf, pPtr - buf );
     }
 
