@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 10:52:47 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 11:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,7 +1142,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     }
 
     if( GetError() != SVSTREAM_OK )
-        return aStorage;
+        return NULL;
 
     bTriedStorage = sal_True;
 
