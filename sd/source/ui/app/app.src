@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:08:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 
 #include "app.hrc"
-#include <offmgr/ofaids.hrc>
-#include <offmgr/offmenu.hrc>
-#include <offmgr/sba.hrc>
 #include "res_bmp.hrc"
 #include <svx/dialogs.hrc>
 #include "cfgids.hxx"
