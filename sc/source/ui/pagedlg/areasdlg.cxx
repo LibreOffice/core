@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-02 09:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,8 +685,9 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, ScRefEdit*, pEd )
     {
         BOOL    bFound  = FALSE;
         String* pSymbol = NULL;
+        USHORT i;
 
-        for ( USHORT i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
+        for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
             pSymbol = (String*)pLb->GetEntryData( i );
             bFound  = ( (*pSymbol == aStrEd) || (*pSymbol == aEdUpper) );
