@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,10 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pColorTab->GetName(), INET_PROT_FILE );
+            INetURLObject   aURL( pColorTab->GetPath() );
+
+            aURL.Append( pColorTab->GetName() );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if ( aURL.getBase().Len() > 18 )
             {
@@ -767,11 +770,14 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
 
         if( pFileDlg->Execute() == RET_OK )
         {
-            INetURLObject aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-            INetURLObject aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+            INetURLObject aURL( pFileDlg->GetPath() );
+            INetURLObject aPathURL( aURL );
+
+            aPathURL.removeSegment();
+            aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XColorTable* pColTab = new XColorTable( aPathURL.PathToFileName(), pXPool );
+            XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL(), pXPool );
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
@@ -864,7 +870,9 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
 
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
     pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-    INetURLObject aFile( SvtPathOptions().GetPalettePath(), INET_PROT_FILE );
+
+    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( pColorTab->GetName().Len() )
     {
@@ -874,15 +882,18 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soc" ) ) );
     }
 
-    pFileDlg->SetPath( aFile.PathToFileName() );
+    pFileDlg->SetPath( aFile.GetMainURL() );
 
     if ( pFileDlg->Execute() == RET_OK )
     {
-        INetURLObject   aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-        INetURLObject   aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+        INetURLObject   aURL( pFileDlg->GetPath() );
+        INetURLObject   aPathURL( aURL );
+
+        aPathURL.removeSegment();
+        aPathURL.removeFinalSlash();
 
         pColorTab->SetName( aURL.getName() );
-        pColorTab->SetPath( aPathURL.PathToFileName() );
+        pColorTab->SetPath( aPathURL.GetMainURL() );
 
         if( pColorTab->Save() )
         {

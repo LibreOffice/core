@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #define _ANIMATION
 #define ITEMID_GRF_CROP 0
 
-#ifndef _SFXINIMGR_HXX //autogen wg. SfxIniManager
-#include <svtools/iniman.hxx>
-#endif
 #ifndef SVX_LIGHT
 #include <so3/lnkbase.hxx>
 #endif
@@ -73,6 +70,8 @@
 #include <vcl/salbtype.hxx>
 #include <sot/formats.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <svtools/style.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/urihelper.hxx>
@@ -242,32 +241,30 @@ GraphicFilter* SVX_LIGHT_GetGrfFilter_Impl()
 {
     if( !SVX_LIGHT_pGrapicFilter )
     {
-        SVX_LIGHT_pGrapicFilter = new GraphicFilter;
+        String aURLStr;
 
-        INetURLObject aFilterURL;
+        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetpApp()->GetAppFileName(), aURLStr ) )
+        {
+            INetURLObject aFilterURL( aURLStr );
 
-        aFilterURL.SetSmartProtocol( INET_PROT_FILE );
-        aFilterURL.SetSmartURL( GetpApp()->GetAppFileName() );
-        aFilterURL.removeSegment();
-        aFilterURL.removeFinalSlash();
+            aFilterURL.removeSegment();
+            aFilterURL.removeFinalSlash();
 
-        INetURLObject aConfigURL( aFilterURL );
+            INetURLObject aConfigURL( aFilterURL );
 
-        aFilterURL.Append( "filter" );
+            aFilterURL.Append( "filter" );
 #ifndef UNX
-        aConfigURL.Append( "sop.ini" );
+            aConfigURL.Append( "sop.ini" );
 #else
-        aConfigURL.Append( "soprc" );
+            aConfigURL.Append( "soprc" );
 #endif
 
-        SVX_LIGHT_pGrapicFilter->SetFilterPath( aFilterURL.PathToFileName() );
-        SVX_LIGHT_pGrapicFilter->SetConfigPath( aConfigURL.PathToFileName() );
+            SVX_LIGHT_pGrapicFilter = new GraphicFilter;
+            SVX_LIGHT_pGrapicFilter->SetFilterPath( aFilterURL );
+            SVX_LIGHT_pGrapicFilter->SetConfigPath( aConfigURL );
+        }
     }
 
-    const Link aLink;
-    SVX_LIGHT_pGrapicFilter->SetStartFilterHdl( aLink );
-    SVX_LIGHT_pGrapicFilter->SetEndFilterHdl( aLink );
-    SVX_LIGHT_pGrapicFilter->SetUpdatePercentHdl( aLink );
     return SVX_LIGHT_pGrapicFilter;
 }
 
@@ -1425,7 +1422,7 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
     rOut.WriteByteString(aFilterName);
 
     // ab V11
-    rOut << (BOOL)aFileName.Len();
+    rOut << (BOOL)( aFileName.Len() != 0 );
 
 #ifdef GRAFATTR
     SfxItemPool* pPool = GetItemPool();
@@ -1478,23 +1475,31 @@ void SdrGrafObj::ReadDataTilV10( const SdrObjIOHeader& rHead, SvStream& rIn )
     if(rHead.GetVersion() >= 9)
     {
         // UNICODE: rIn >> aFilterName;
-        rIn.ReadByteString(aFileName);
+        rIn.ReadByteString(aFilterName);
     }
     else
-    {
-        aFilterName = String();
-        aFilterName.AppendAscii("BMP - MS Windows");
-    }
+        aFilterName = String( RTL_CONSTASCII_USTRINGPARAM( "BMP - MS Windows" ) );
 
-    if(aFileName.Len())
+    if( aFileName.Len() )
     {
 #ifndef SVX_LIGHT
-        GraphicFilter*  pFilter = GetGrfFilter();
-        USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
-        SvFileStream    aIStm( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
-        USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, aIStm, nFilter );
+        String aFileURLStr;
 
-        SetGraphicLink( aFileName, aFilterName );
+        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aFileURLStr ) )
+        {
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURLStr, STREAM_READ | STREAM_SHARE_DENYNONE );
+
+            if( pIStm )
+            {
+                GraphicFilter*  pFilter = GetGrfFilter();
+                USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
+                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileURLStr, *pIStm, nFilter );
+
+                SetGraphicLink( aFileURLStr, aFilterName );
+
+                delete pIStm;
+            }
+        }
 #else
         DBG_ERROR("SdrGrafObj::ReadDataTilV10(): SVX_LIGHT kann keine Graphic-Links");
 #endif
@@ -1636,18 +1641,21 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
             else
                 bNotLoaded = bSwappedOut = TRUE;
 #else
-            Graphic aGraphic;
-            GraphicFilter*  pFilter = SVX_LIGHT_GetGrfFilter_Impl();
-            USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
-            SvFileStream    aIStm( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
-            USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, aIStm, nFilter );
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_READ | STREAM_SHARE_DENYNONE );
 
-            pGraphic->SetGraphic( aGraphic );
-            bGraphicLink = FALSE;
-            aFileName = aFilterName = String();
+            if( pIStm )
+            {
+                Graphic         aGraphic;
+                GraphicFilter*  pFilter = SVX_LIGHT_GetGrfFilter_Impl();
+                USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
+                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter );
 
-//            DBG_ERROR("SdrGrafObj::ReadData(): SVX_LIGHT kann keine Graphic-Links");
+                pGraphic->SetGraphic( aGraphic );
+                bGraphicLink = FALSE;
+                aFileName = aFilterName = String();
 
+                delete pIStm;
+            }
 #endif
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <sfx2/inimgr.hxx>
+#include <svtools/pathoptions.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "gallery1.hxx"
 #include "galtheme.hxx"
@@ -81,7 +81,7 @@ Gallery* GalleryExplorer::ImplGetGallery()
     static Gallery* pGallery = NULL;
 
     if( !pGallery )
-        pGallery = Gallery::AcquireGallery( SFX_INIMANAGER()->Get( SFX_KEY_GALLERY_DIR ) );
+        pGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
 
     return pGallery;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
-#endif
-
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen
@@ -823,8 +819,9 @@ SdrGlobalData::~SdrGlobalData()
 OLEObjCache::OLEObjCache()
 :   Container( 0 )
 {
-    SfxIniManager* pIniMgr = SfxIniManager::Get();
     nSize = 20;
+/* !!! IniManager
+    SfxIniManager* pIniMgr = SfxIniManager::Get();
 
     if(pIniMgr)
     {
@@ -845,7 +842,7 @@ OLEObjCache::OLEObjCache()
                 nSize = 5;
         }
     }
-
+*/
     pTimer = new AutoTimer();
     Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-31 12:42:41 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,15 +418,18 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
         String          aString( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        INetURLObject   aURLDash( pDashList->GetName(), INET_PROT_FILE );
+        INetURLObject   aDashURL( pDashList->GetPath() );
 
-        if ( aURLDash.getBase().Len() > 18 )
+        aDashURL.Append( pDashList->GetName() );
+        DBG_ASSERT( aDashURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+        if ( aDashURL.getBase().Len() > 18 )
         {
-            aString += aURLDash.getBase().Copy( 0, 15 );
+            aString += aDashURL.getBase().Copy( 0, 15 );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
         }
         else
-            aString += aURLDash.getBase();
+            aString += aDashURL.getBase();
 
         aGrpLine.SetText( aString );
 
@@ -469,15 +472,18 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
         aString = String( ResId( RID_SVXSTR_TABLE, pMgr ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        INetURLObject   aURLEnd( pLineEndList->GetName(), INET_PROT_FILE );
+        INetURLObject aLineURL( pLineEndList->GetPath() );
 
-        if ( aURLEnd.getBase().Len() > 18 )
+        aLineURL.Append( pLineEndList->GetName() );
+        DBG_ASSERT( aLineURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+        if ( aLineURL.getBase().Len() > 18 )
         {
-            aString += aURLEnd.getBase().Copy( 0, 15 );
+            aString += aLineURL.getBase().Copy( 0, 15 );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
         }
         else
-            aString += aURLEnd.getBase();
+            aString += aLineURL.getBase();
 
         aGrpLineEnds.SetText( aString );
 

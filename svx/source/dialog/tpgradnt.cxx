@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,10 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pGradientList->GetName(), INET_PROT_FILE );
+            INetURLObject   aURL( pGradientList->GetPath() );
+
+            aURL.Append( pGradientList->GetName() );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if ( aURL.getBase().Len() > 18 )
             {
@@ -705,11 +708,14 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
         {
             EnterWait();
 
-            INetURLObject aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-            INetURLObject aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+            INetURLObject aURL( pFileDlg->GetPath() );
+            INetURLObject aPathURL( aURL );
+
+            aPathURL.removeSegment();
+            aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XGradientList* pGrdList = new XGradientList( aPathURL.PathToFileName(), pXPool );
+            XGradientList* pGrdList = new XGradientList( aPathURL.GetMainURL(), pXPool );
             pGrdList->SetName( aURL.getName() );
 
             if ( pGrdList->Load() )
@@ -789,7 +795,9 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
 
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
     pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-    INetURLObject aFile( SvtPathOptions().GetPalettePath(), INET_PROT_FILE );
+
+    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( pGradientList->GetName().Len() )
     {
@@ -799,16 +807,19 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
     }
 
-    pFileDlg->SetPath( aFile.PathToFileName() );
+    pFileDlg->SetPath( aFile.GetMainURL() );
 
     if( pFileDlg->Execute() == RET_OK )
     {
 
-        INetURLObject   aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-        INetURLObject   aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+        INetURLObject   aURL( pFileDlg->GetPath() );
+        INetURLObject   aPathURL( aURL );
+
+        aPathURL.removeSegment();
+        aPathURL.removeFinalSlash();
 
         pGradientList->SetName( aURL.getName() );
-        pGradientList->SetPath( aPathURL.PathToFileName() );
+        pGradientList->SetPath( aPathURL.GetMainURL() );
 
         if( pGradientList->Save() )
         {

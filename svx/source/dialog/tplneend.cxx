@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,10 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pLineEndList->GetName(), INET_PROT_FILE );
+            INetURLObject   aURL( pLineEndList->GetPath() );
+
+            aURL.Append( pLineEndList->GetName() );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if ( aURL.getBase().Len() > 18 )
             {
@@ -609,11 +612,14 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
         if( pFileDlg->Execute() == RET_OK )
         {
-            INetURLObject aURL; aURL.SetSmartURL( pFileDlg->GetPath() );
-            INetURLObject aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+            INetURLObject aURL( pFileDlg->GetPath() );
+            INetURLObject aPathURL( aURL );
+
+            aPathURL.removeSegment();
+            aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XLineEndList* pLeList = new XLineEndList( aPathURL.PathToFileName(), pXPool );
+            XLineEndList* pLeList = new XLineEndList( aPathURL.GetMainURL(), pXPool );
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
@@ -682,7 +688,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soe" ) );
     pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-    INetURLObject aFile( SvtPathOptions().GetPalettePath(), INET_PROT_FILE );
+
+    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( pLineEndList->GetName().Len() )
     {
@@ -692,15 +700,18 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soe" ) ) );
     }
 
-    pFileDlg->SetPath( aFile.PathToFileName() );
+    pFileDlg->SetPath( aFile.GetMainURL() );
 
     if( pFileDlg->Execute() == RET_OK )
     {
-        INetURLObject   aURL; aURL.SetSmartURL( pFileDlg->GetPath() );
-        INetURLObject   aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+        INetURLObject   aURL( pFileDlg->GetPath() );
+        INetURLObject   aPathURL( aURL );
+
+        aPathURL.removeSegment();
+        aPathURL.removeFinalSlash();
 
         pLineEndList->SetName( aURL.getName() );
-        pLineEndList->SetPath( aPathURL.PathToFileName() );
+        pLineEndList->SetPath( aPathURL.GetMainURL() );
 
         if( pLineEndList->Save() )
         {

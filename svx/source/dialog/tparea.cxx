@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,7 +1870,10 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL; aURL.SetSmartURL( pColorTab->GetName() );
+    INetURLObject   aURL( pColorTab->GetPath() );
+
+    aURL.Append( pColorTab->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().Len() > 18 )
     {
@@ -1961,7 +1964,10 @@ IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL; aURL.SetSmartURL( pGradientList->GetName() );
+    INetURLObject   aURL( pGradientList->GetPath() );
+
+    aURL.Append( pGradientList->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().Len() > 18 )
     {
@@ -2058,7 +2064,10 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( SVX_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL; aURL.SetSmartURL( pHatchingList->GetName() );
+    INetURLObject   aURL( pHatchingList->GetPath() );
+
+    aURL.Append( pHatchingList->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().Len() > 18 )
     {
@@ -2225,7 +2234,10 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( SVX_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL; aURL.SetSmartURL( pBitmapList->GetName() );
+    INetURLObject   aURL( pBitmapList->GetPath() );
+
+    aURL.Append( pBitmapList->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().Len() > 18 )
     {

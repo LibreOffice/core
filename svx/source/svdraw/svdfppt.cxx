@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 10:18:39 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,18 +1704,27 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
 
 #ifdef DBG_EXTRACTOLEOBJECTS
 
-            static sal_Int32 nCount;
-            String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbgole" ) ) );
-            aFileName.Append( String::CreateFromInt32( nCount++ ) );
-            INetURLObject aURL( Application::GetAppFileName(), INET_PROT_FILE );
-            aURL.SetName( aFileName );
-            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
-            if ( pDbgOut )
+            static sal_Int32    nCount;
+            String              aFileURLStr;
+
+            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aFileURLStr ) )
             {
-                pDest->Seek( STREAM_SEEK_TO_END );
-                pDbgOut->Write( pDest->GetData(), pDest->Tell() );
-                pDest->Seek( STREAM_SEEK_TO_BEGIN );
-                delete pDbgOut;
+                INetURLObject   aURL( aFileURLStr );
+                String          aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbgole" ) ) );
+
+                aFileName.Append( String::CreateFromInt32( nCount++ ) );
+                aURL.SetName( aFileName );
+
+                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+
+                if( pDbgOut )
+                {
+                    pDest->Seek( STREAM_SEEK_TO_END );
+                    pDbgOut->Write( pDest->GetData(), pDest->Tell() );
+                    pDest->Seek( STREAM_SEEK_TO_BEGIN );
+
+                    delete pDbgOut;
+                }
             }
 #endif
             if ( !aZCodec.EndCompression() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,17 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -257,7 +257,10 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( SVX_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pBitmapList->GetName(), INET_PROT_FILE );
+            INetURLObject   aURL( pBitmapList->GetPath() );
+
+            aURL.Append( pBitmapList->GetName() );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if( aURL.getBase().Len() > 18 )
             {
@@ -656,13 +659,17 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
     {
         Graphic         aGraphic;
         GraphicFilter&  rFilter = pDlg->GetFilter();
-        INetURLObject   aURL; aURL.SetSmartURL( pDlg->GetPath() );
-        String          aPath( aURL.PathToFileName() );
-        SvFileStream    aIStm( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
+        INetURLObject   aURL( pDlg->GetPath() );
+        SvStream*       pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYNONE );
+        USHORT          nError = 1;
 
-        EnterWait();
-        USHORT nError = rFilter.ImportGraphic( aGraphic, aPath, aIStm );
-        LeaveWait();
+        if( pIStm )
+        {
+            EnterWait();
+            nError = rFilter.ImportGraphic( aGraphic, aURL.GetMainURL(), *pIStm );
+            LeaveWait();
+            delete pIStm;
+        }
 
         if( !nError )
         {
@@ -866,11 +873,14 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, p )
         {
             EnterWait();
 
-            INetURLObject aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-            INetURLObject aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+            INetURLObject aURL( pFileDlg->GetPath() );
+            INetURLObject aPathURL( aURL );
+
+            aPathURL.removeSegment();
+            aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XBitmapList* pBmpList = new XBitmapList( aPathURL.PathToFileName(), pXPool );
+            XBitmapList* pBmpList = new XBitmapList( aPathURL.GetMainURL(), pXPool );
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {
@@ -946,7 +956,9 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
 
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
     pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-    INetURLObject aFile( SvtPathOptions().GetPalettePath(), INET_PROT_FILE );
+
+    INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+    DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( pBitmapList->GetName().Len() )
     {
@@ -956,15 +968,18 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
     }
 
-    pFileDlg->SetPath( aFile.PathToFileName() );
+    pFileDlg->SetPath( aFile.GetMainURL() );
 
     if( pFileDlg->Execute() == RET_OK )
     {
-        INetURLObject   aURL( pFileDlg->GetPath(), INET_PROT_FILE );
-        INetURLObject   aPathURL( aURL ); aPathURL.removeSegment(); aPathURL.removeFinalSlash();
+        INetURLObject   aURL( pFileDlg->GetPath() );
+        INetURLObject   aPathURL( aURL );
+
+        aPathURL.removeSegment();
+        aPathURL.removeFinalSlash();
 
         pBitmapList->SetName( aURL.getName() );
-        pBitmapList->SetPath( aURL.PathToFileName() );
+        pBitmapList->SetPath( aPathURL.GetMainURL() );
 
         if( pBitmapList->Save() )
         {

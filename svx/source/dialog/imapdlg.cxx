@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-26 13:35:48 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -644,41 +647,36 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
 void SvxIMapDlg::DoOpen()
 {
-    SfxSimpleFileDialog aDlg( this, WB_3DLOOK | WB_OPEN );
+    SfxFileDialog   aDlg( this, WB_3DLOOK | WB_OPEN );
     ImageMap        aLoadIMap;
     const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
 
-#ifdef MAC
-    aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ), "XXXX0" );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ), "XXXX0" );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ), "XXXX0" );
-    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ), "XXXX0" );
-#else
     aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
-#endif
 
     aDlg.SetCurFilter( aFilter );
-    aDlg.SetPath( SvtPathOptions().GetGraphicPath() );
+    aDlg.SetPath( SvtPathOptions().GetWorkPath() );
     aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
 
-    if ( aDlg.Execute() == RET_OK )
+    if( aDlg.Execute() == RET_OK )
     {
-        SvFileStream aIStm( aDlg.GetPath(), STREAM_READ );
+        INetURLObject aURL( aDlg.GetPath() );
+        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
 
-        if ( aIStm.IsOpen() )
+        if( pIStm )
         {
-            aLoadIMap.Read( aIStm, IMAP_FORMAT_DETECT );
+            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
 
-            if ( !aIStm.GetError() )
-                pIMapWnd->SetImageMap( aLoadIMap );
-            else
+            if( pIStm->GetError() )
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+            else
+                pIMapWnd->SetImageMap( aLoadIMap );
+
+            delete pIStm;
         }
-        else
-            ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     }
 }
 
@@ -691,7 +689,7 @@ void SvxIMapDlg::DoOpen()
 
 BOOL SvxIMapDlg::DoSave()
 {
-    SfxSimpleFileDialog     aDlg( this, WB_3DLOOK | WB_SAVEAS );
+    SfxFileDialog   aDlg( this, WB_3DLOOK | WB_SAVEAS );
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
     const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
@@ -699,23 +697,16 @@ BOOL SvxIMapDlg::DoSave()
     const BOOL      bChanged = pModel->IsChanged();
     BOOL            bRet;
 
-#ifdef MAC
-    aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ), "XXXX0" );
-    aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ), "XXXX0" );
-    aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ), "XXXX0" );
-#else
     aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
     aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
     aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
-#endif
 
     aDlg.SetCurFilter( aCERNFilter );
-    aDlg.SetPath( SvtPathOptions().GetGraphicPath() );
+    aDlg.SetPath( SvtPathOptions().GetWorkPath() );
     aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
 
     if( aDlg.Execute() == RET_OK )
     {
-        String          aPath( aDlg.GetPath() );
         const String    aFilter( aDlg.GetCurFilter() );
         String          aExt;
         ULONG           nFormat;
@@ -736,31 +727,34 @@ BOOL SvxIMapDlg::DoSave()
             aExt = DEFINE_CONST_UNICODE( IMAP_NCSA_EXT );
         }
 
-        INetURLObject aURL;
-        aURL.SetSmartURL( aPath );
+        INetURLObject aURL( aDlg.GetPath() );
 
-        if( !aURL.getExtension().Len() )
+        if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            aURL.setExtension( aExt );
-            aPath = aURL.PathToFileName();
-        }
-
-        SvFileStream    aOStm( aPath, STREAM_WRITE | STREAM_TRUNC );
-        const ImageMap& rImageMap = pIMapWnd->GetImageMap();
-
-        if ( aOStm.IsOpen() )
-        {
-            rImageMap.Write( aOStm, nFormat );
-
-            if ( aOStm.GetError() )
-                ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+            DBG_ERROR( "invalid URL" );
+            bRet = FALSE;
         }
         else
-            ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+        {
+            if( !aURL.getExtension().Len() )
+                aURL.setExtension( aExt );
 
-        // Status restaurieren, da 'GetImageMap' den Status zuruecksetzt
-        pModel->SetChanged( bChanged );
-        bRet = TRUE;
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+
+            if( pOStm )
+            {
+                pIMapWnd->GetImageMap().Write( *pOStm, nFormat );
+
+                if( pOStm->GetError() )
+                    ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+
+                delete pOStm;
+                pModel->SetChanged( bChanged );
+                bRet = TRUE;
+            }
+            else
+                bRet = FALSE;
+        }
     }
     else
         bRet = FALSE;

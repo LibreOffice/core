@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-08 18:01:03 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,11 @@
 #endif
 
 #include "svdmodel.hxx"
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#include <unotools/ucbstreamhelper.hxx>
+
 #ifndef _STRING_H
 #include <tools/string.hxx>
 #endif
@@ -801,22 +806,31 @@ const SdrModel* SdrModel::LoadModel(const String& rFileName)
         delete pLoadedModel;
         pLoadedModel = NULL;
         aLoadedModelFN = String();
-        SdrModel* pModel = new SdrModel;
-        SvFileStream aIn(rFileName, STREAM_READ);
 
-        pModel->GetItemPool().Load(aIn);
-        aIn >> *pModel;
+        SdrModel*           pModel = new SdrModel;
+        const INetURLObject aFileURL( rFileName );
 
-        if(aIn.GetError())
+        DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL(), STREAM_READ );
+
+        if( pIStm )
         {
-            delete pModel;
-            pModel = NULL;
+            pModel->GetItemPool().Load( *pIStm );
+            (*pIStm) >> *pModel;
+
+            if( pIStm->GetError() )
+                delete pModel, pModel = NULL;
+            else
+            {
+                pLoadedModel = pModel;
+                aLoadedModelFN = rFileName;
+            }
+
+            delete pIStm;
         }
         else
-        {
-            pLoadedModel = pModel;
-            aLoadedModelFN = rFileName;
-        }
+            delete pModel, pModel = NULL;
 
         return pModel;
     }

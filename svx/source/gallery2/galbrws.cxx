@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include <vcl/split.hxx>
 #include <vcl/ctrl.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/inimgr.hxx>
 #include "gallery.hrc"
 #include "galmisc.hxx"
 #include "gallery1.hxx"
@@ -100,7 +99,7 @@ GalleryBrowser::GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
                                 Window* pParent, const ResId& rResId ) :
     SfxDockingWindow( pBindings, pCW, pParent, rResId )
 {
-    mpGallery = Gallery::AcquireGallery( SFX_INIMANAGER()->Get( SFX_KEY_GALLERY_DIR ) );
+    mpGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
     mpBrowser1 = new GalleryBrowser1( this, GAL_RESID( GALLERY_BROWSER1 ), mpGallery );
     mpSplitter = new Splitter( this, GAL_RESID( GALLERY_SPLITTER ) );
     mpBrowser2 = new GalleryBrowser2( this, GAL_RESID( GALLERY_BROWSER2 ), mpGallery );
