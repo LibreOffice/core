@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2000-11-21 16:21:06 $
+#   last change: $Author: tl $ $Date: 2000-12-07 09:11:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,8 @@ CFLAGS+=-DDG_DLL
 
 .IF "$(header)" == ""
 
-IMGLST_SRS=$(SRS)$/options.srs
-BMP_IN=$(PRJ)$/win/res
+#IMGLST_SRS=$(SRS)$/options.srs
+#BMP_IN=$(PRJ)$/win/res
 
 CXXFILES = \
         optpath.cxx		\
