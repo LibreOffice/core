@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-20 14:23:14 $
+#   last change: $Author: vg $ $Date: 2003-06-24 11:31:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.85 $ ';
+$id_str = ' $Revision: 1.86 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -828,7 +828,10 @@ sub get_options {
         $arg =~ /^-i$/      and $ignore = 1                         and next;
         $arg =~ /^--version$/   and exit(0);
         $arg =~ /^-V$/          and exit(0);
-        $arg =~ /^--$/ and  &get_dmake_args;
+        if ($arg =~ /^--$/) {
+            &get_dmake_args;
+            next;
+        };
         push (@dmake_args, $arg);
     };
     &print_error('Switches --with_branches and --all collision') if ($build_from && $build_from_opt);
