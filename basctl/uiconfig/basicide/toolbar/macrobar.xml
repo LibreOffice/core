@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:LibSelector" toolbar:helpid="helpid:30787" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CompileBasic" toolbar:helpid="helpid:5954" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RunBasic" toolbar:helpid="helpid:5955" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicStop" toolbar:helpid="helpid:5958" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepOver" toolbar:helpid="helpid:5957" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepInto" toolbar:helpid="helpid:5956" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepOut" toolbar:helpid="helpid:5963" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleBreakPoint" toolbar:helpid="helpid:30768" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ManageBreakPoints" toolbar:helpid="helpid:30810" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AddWatch" toolbar:helpid="helpid:30769" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectCatalog" toolbar:helpid="helpid:30774" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ChooseMacro" toolbar:helpid="helpid:30770" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ModuleDialog" toolbar:helpid="helpid:30773" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MatchGroup" toolbar:helpid="helpid:30782" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ChooseControls" toolbar:helpid="helpid:10144" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LoadBasic" toolbar:helpid="helpid:5951" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SaveBasicAs" toolbar:helpid="helpid:5953" toolbar:text="" />
+</toolbar:toolbar>
