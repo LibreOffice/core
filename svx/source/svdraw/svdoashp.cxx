@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:10:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,22 +152,22 @@
 #ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "../customshapes/EnhancedCustomShape2d.hxx"
 #endif
-#ifndef _com_sun_star_beans_PropertyValues_hpp__
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP__
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_hpp__
+#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
+#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
+#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
