@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:41:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text = "Kriterien" ;
                 Text [ ENGLISH ] = "Criteria" ;
                 Text[ english_us ] = "Criteria";
-                Text[ portuguese ] = "Valores";
+                Text[ portuguese ] = "Critérios";
                 Text[ russian ] = "Êğèòåğèè";
                 Text[ greek ] = "ÊñéôŞñéá";
                 Text[ dutch ] = "Waarden";
@@ -100,7 +100,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ japanese ] = "ğŒ";
                 Text[ korean ] = "°ª";
                 Text[ chinese_simplified ] = "Ìõ¼ş";
-                Text[ chinese_traditional ] = "¼Æ­È";
+                Text[ chinese_traditional ] = "±ø¥ó";
                 Text[ turkish ] = "Değerler";
                 Text[ arabic ] = "ÇáŞíã";
                 Text[ catalan ] = "Valores";
@@ -209,7 +209,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ russian ] = "Ğàçğåøèòü";
         Text[ polish ] = "Pozwól";
         Text[ japanese ] = "“ü—Í’l‚Ìí—Ş(~A)";
-        Text[ chinese_traditional ] = "®e³\\(~A)";
+        Text[ chinese_traditional ] = "¤¹³\\(~A)";
         Text[ arabic ] = "ÓãÇÍ";
         Text[ greek ] = "Íá åğéôñáğåß";
         Text[ korean ] = "Çã¿ë(~A)";
@@ -813,7 +813,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ russian ] = "Ïğîïóñê ïóñòûõ ÿ÷ååê";
         Text[ polish ] = "Dopuœæ puste komórki";
         Text[ japanese ] = "‹ó”’¾Ù‚àg‚¤(~B)";
-        Text[ chinese_traditional ] = "®e³\\ªÅ®æ(~B)";
+        Text[ chinese_traditional ] = "¤¹³\\ªÅ®æ(~B)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÎáÇíÇ ÇáİÇÑÛÉ";
         Text[ greek ] = "Íá åğéôñáğïıí êåíÜ êåëéÜ";
         Text[ korean ] = "ºó¡¡¼¿¡¡Çã¿ë(~B)";
@@ -1026,7 +1026,7 @@ TabPage TP_VALIDATION_ERROR
         Text [ spanish ] = "Mostrar mensaje de ~error al introducir valores incorrectos" ;
         Text [ french ] = "~Message d'erreur en cas de saisie de valeurs incorrectes" ;
         Text [ portuguese_brazilian ] = "~Fehlermeldung bei Eingabe ung?tiger Werte anzeigen" ;
-        Text [ portuguese ] = "~Mostrar mensagem de erro na entrada de valores incorrectos." ;
+        Text [ portuguese ] = "~Mostrar mensagem de erro ao introduzir valores incorrectos" ;
         Text[ chinese_simplified ] = "ÊäÈëÎŞĞ§ÊıÖµÊ±ÏÔÊ¾´íÎó±¨¸æ(~M)";
         Text[ russian ] = "Âûäàâàòü ñîîáùåíèå îá îøèáêå ïğè ââîäå íåäîïóñòèìûõ çíà÷åíèé";
         Text[ polish ] = "Poka¿ ko~munikat o b³êdzie po wpisaniu nieprawid³owych wartoœci";
@@ -1355,5 +1355,6 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
