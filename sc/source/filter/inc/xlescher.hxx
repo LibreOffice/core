@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:49:07 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ const sal_uInt16 EXC_ID_OBJ_FTPICTFMLA      = 0x0009;   /// OLE link formula.
 const sal_uInt16 EXC_ID_OBJ_FTCBLS          = 0x000A;   /// Check box/radio button data.
 const sal_uInt16 EXC_ID_OBJ_FTSBS           = 0x000C;   /// Scroll bar data.
 const sal_uInt16 EXC_ID_OBJ_FTSBSFMLA       = 0x000E;   /// Scroll bar/list box/combo box cell link.
+const sal_uInt16 EXC_ID_OBJ_FTGBODATA       = 0x000F;   /// Group box data.
 const sal_uInt16 EXC_ID_OBJ_FTLBSDATA       = 0x0013;   /// List box/combo box data.
 const sal_uInt16 EXC_ID_OBJ_FTCBLSFMLA      = 0x0014;   /// Check box/radio button cell link.
 const sal_uInt16 EXC_ID_OBJ_FTCMO           = 0x0015;   /// Common object settings.
@@ -142,18 +143,22 @@ const sal_uInt16 EXC_OBJ_CBLS_STATEMASK     = 0x0003;
 const sal_uInt16 EXC_OBJ_CBLS_STATE_UNCHECK = 0x0000;
 const sal_uInt16 EXC_OBJ_CBLS_STATE_CHECK   = 0x0001;
 const sal_uInt16 EXC_OBJ_CBLS_STATE_TRI     = 0x0002;
-const sal_uInt16 EXC_OBJ_CBLS_3D            = 0x0001;
+const sal_uInt16 EXC_OBJ_CBLS_FLAT          = 0x0001;
+
+// ftGboData: Group box data
+const sal_uInt16 EXC_OBJ_GBO_FLAT           = 0x0001;
 
 // ftLbsData: List box data
 const sal_uInt16 EXC_OBJ_LBS_SELMASK        = 0x0030;
 const sal_uInt16 EXC_OBJ_LBS_SEL_SIMPLE     = 0x0000;   /// Simple selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_MULTI      = 0x0010;   /// Multi selection.
 const sal_uInt16 EXC_OBJ_LBS_SEL_EXT        = 0x0020;   /// Extended selection.
-const sal_uInt16 EXC_OBJ_LBS_3D             = 0x0008;
+const sal_uInt16 EXC_OBJ_LBS_FLAT           = 0x0008;
 
 // ftSbs: Spin button/scrollbar data
 const sal_uInt16 EXC_OBJ_SBS_HORIZONTAL     = 0x0001;
-const sal_uInt16 EXC_OBJ_SBS_3D             = 0x0008;
+const sal_uInt16 EXC_OBJ_SBS_DEFAULTFLAGS   = 0x0001;
+const sal_uInt16 EXC_OBJ_SBS_FLAT           = 0x0008;
 const sal_Int16 EXC_OBJ_SBS_MINSCROLL       = 0;
 const sal_Int16 EXC_OBJ_SBS_MAXSCROLL       = 30000;
 
