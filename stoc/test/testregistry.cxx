@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:14:45 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,15 +228,8 @@ void test_SimpleRegistry(
     Reference<XInterface> xIFace;
     Module module;
 
-#ifdef SAL_W32
-    OUString dllName( OUString::createFromAscii("simreg.dll") );
-#else
-#ifdef MACOSX
-    OUString dllName( OUString::createFromAscii("libsimreg.dylib") );
-#else
-    OUString dllName( OUString::createFromAscii("libsimreg.so") );
-#endif
-#endif
+    OUString dllName(
+        RTL_CONSTASCII_USTRINGPARAM("simplreg.uno" SAL_DLLEXTENSION) );
 
     if (module.load(dllName))
     {
@@ -246,8 +239,9 @@ void test_SimpleRegistry(
 
         if (pCompFactoryFunc)
         {
-            XSingleServiceFactory * pRet = (XSingleServiceFactory *)(*pCompFactoryFunc)(
-                "com.sun.star.comp.stoc.SimpleRegistry", 0, 0 );
+            XSingleServiceFactory * pRet = (XSingleServiceFactory *)
+                (*pCompFactoryFunc)(
+                    "com.sun.star.comp.stoc.SimpleRegistry", 0, 0 );
             if (pRet)
             {
                 xIFace = pRet;
