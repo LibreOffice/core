@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:47:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,10 @@ Menu MENU_TABLETREE_POPUP
             Text[ swedish ] = "Sortera stigande";
             Text[ polish ] = "Sortuj rosn¹co";
             Text[ portuguese_brazilian ] = "Functions";
-            Text[ japanese ] = "¸‡‚É•À‚×‘Ö‚¦";
-            Text[ korean ] = "¿À¸§Â÷¼øÀ¸·Î  Á¤·Ä";
-            Text[ chinese_simplified ] = "ÏòÉÏÅÅĞò";
-            Text[ chinese_traditional ] = "¦V¤W±Æ§Ç";
+            Text[ japanese ] = "æ˜‡é †ã«ä¸¦ã¹æ›¿ãˆ";
+            Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ  ì •ë ¬";
+            Text[ chinese_simplified ] = "å‘ä¸Šæ’åº";
+            Text[ chinese_traditional ] = "å‘ä¸Šæ’åº";
             Text[ arabic ] = "İÑÒ ÊÕÇÚÏí";
             Text[ turkish ] = "Artan sıralama";
             Text[ language_user1 ] = " ";
@@ -132,10 +132,10 @@ Menu MENU_TABLETREE_POPUP
             Text[ swedish ] = "Sortera fallande";
             Text[ polish ] = "Sortuj malej¹co";
             Text[ portuguese_brazilian ] = "Functions";
-            Text[ japanese ] = "~‡‚É•À‚×‘Ö‚¦";
-            Text[ korean ] = "³»¸²Â÷¼øÀ¸·Î  Á¤·Ä";
-            Text[ chinese_simplified ] = "ÏòÏÂÅÅĞò";
-            Text[ chinese_traditional ] = "¦V¤U±Æ§Ç";
+            Text[ japanese ] = "é™é †ã«ä¸¦ã¹æ›¿ãˆ";
+            Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ  ì •ë ¬";
+            Text[ chinese_simplified ] = "å‘ä¸‹æ’åº";
+            Text[ chinese_traditional ] = "å‘ä¸‹æ’åº";
             Text[ arabic ] = "İÑÒ ÊäÇÒáí";
             Text[ turkish ] = "Azalan sıralama";
             Text[ language_user1 ] = " ";
@@ -161,10 +161,10 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ swedish ] = "Det gick inte att upprätta en förbindelse till SDBC-drivrutinsmanagern (#servicename#).";
     Text[ polish ] = "Brak po³¹czenia z mened¿erem sterownika SDCB (#servicename#).";
     Text[ portuguese_brazilian ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
-    Text[ japanese ] = "SDBC ÄŞ×²ÊŞÏÈ¼Ş¬°(#servicename#)‚ÖÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "SDBC µå¶óÀÌ¹ö °ü¸®ÀÚ (#servicename#)¿¡ ´ëÇÑ ¿¬°áÀ» ) ±¸ÃàÇÏÁö ¸øÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÎŞ·¨ºÍ SDBC Çı¶¯³ÌÊ½¹ÜÀíÆ÷(#servicename#)½¨Á¢Á¬½Ó¡£";
-    Text[ chinese_traditional ] = "µLªk³s½u¨ì SDBC ÅX°Êµ{¦¡ºŞ²z(#servicename#) ¡C";
+    Text[ japanese ] = "SDBC ï¾„ï¾ï¾—ï½²ï¾Šï¾ï¾ï¾ˆï½¼ï¾ï½¬ï½°(#servicename#)ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "SDBC ë“œë¼ì´ë²„ ê´€ë¦¬ì (#servicename#)ì— ëŒ€í•œ ì—°ê²°ì„ ) êµ¬ì¶•í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "æ— æ³•å’Œ SDBC é©±åŠ¨ç¨‹å¼ç®¡ç†å™¨(#servicename#)å»ºç«‹è¿æ¥ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ° SDBC é©…å‹•ç¨‹å¼ç®¡ç†(#servicename#) ã€‚";
     Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇáÇÊÕÇá ÈÜ (#servicename#) SDBC Driver Manager .";
     Text[ catalan ] = "No se pudo establecer una conexión al administrador de controladores SDBC (#servicename#).";
@@ -187,10 +187,10 @@ String STR_NOREGISTEREDDRIVER
     Text[ swedish ] = "Det har inte registrerats någon drivrutin för URL:en #connurl#.";
     Text[ polish ] = "Brak zarejestrowanego sterownika dla URL #connurl# !";
     Text[ portuguese_brazilian ] = "There is no registered driver for the URL #connurl#";
-    Text[ japanese ] = "URL #connurl# ‚ÌÄŞ×²ÊŞ‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Text[ korean ] = "URL #connurl#¿¡ ´ëÇØ µî·ÏµÈ µå¶óÀÌ¹ö°¡ ¾ø½À´Ï´Ù!";
-    Text[ chinese_simplified ] = "Ã»ÓĞÎª URL #connurl# µÇ¼ÇÇı¶¯³ÌĞò¡£";
-    Text[ chinese_traditional ] = "¤£¦s¦b¥ô¦óµn°Oªº URL #connurl# ÅX°Êµ{§Ç¡C";
+    Text[ japanese ] = "URL #connurl# ã®ï¾„ï¾ï¾—ï½²ï¾Šï¾ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "URL #connurl#ì— ëŒ€í•´ ë“±ë¡ëœ ë“œë¼ì´ë²„ê°€ ì—†ìŠµë‹ˆë‹¤!";
+    Text[ chinese_simplified ] = "æ²¡æœ‰ä¸º URL #connurl# ç™»è®°é©±åŠ¨ç¨‹åºã€‚";
+    Text[ chinese_traditional ] = "ä¸å­˜åœ¨ä»»ä½•ç™»è¨˜çš„ URL #connurl# é©…å‹•ç¨‹åºã€‚";
     Text[ turkish ] = "There is no registered driver for the URL #connurl#";
     Text[ arabic ] = "áÇ íæÌÏ ÈÑäÇãÌ ÊÔÛíá ãÓÌá ááÜ URL #connurl#!";
     Text[ catalan ] = "No existe un controlador registrado para la URL #connurl#";
@@ -213,10 +213,10 @@ String STR_COULDNOTCONNECT
     Text[ swedish ] = "Det gick inte att upprätta någon förbindelse till URL:en #connurl#.";
     Text[ polish ] = "Brak po³¹czenia z URL #connurl#.";
     Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
-    Text[ japanese ] = "URL #connurl# ‚ÖÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "URL #connurl#¿¡ ´ëÇÑ ¿¬°áÀ» ±¸ÃàÇÏÁö ¸øÇß½À´Ï´Ù .";
-    Text[ chinese_simplified ] = "ÎŞ·¨ºÍ URL #connurl# ½¨Á¢Á¬½Ó¡£";
-    Text[ chinese_traditional ] = "µLªk³s½u¨ì URL #connurl# ¡C";
+    Text[ japanese ] = "URL #connurl# ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "URL #connurl#ì— ëŒ€í•œ ì—°ê²°ì„ êµ¬ì¶•í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤ .";
+    Text[ chinese_simplified ] = "æ— æ³•å’Œ URL #connurl# å»ºç«‹è¿æ¥ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ° URL #connurl# ã€‚";
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
     Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇÊÕÇá ááÜ URL #connurl#..";
     Text[ catalan ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
@@ -238,10 +238,10 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ swedish ] = "Kontrollera de aktuella inställningarna, t.ex. med avseende på användarnamn och lösenord.";
     Text[ polish ] = "SprawdŸ bie¿¹ce konfiguracje, np. nazwê u¿ytkownika i has³o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
-    Text[ japanese ] = "Õ°»Ş°–¼‚âÊß½Ü°ÄŞ‚È‚ÇŒ»İİ’è‚³‚ê‚Ä‚¢‚é“à—e‚ğ‚à‚¤ˆê“xÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "ÇöÀçÀÇ ¼³Á¤À» Á¡°ËÇÏ½Ê½Ã¿À,  ¿¹¸¦ µé¸é »ç¿ëÀÚ ÀÌ¸§/ ÆĞ½º¿öµå¿Í °ü·ÃÇØ¼­.";
-    Text[ chinese_simplified ] = "ÇëÄú¼ì²éµ±Ç°µÄÉè¶¨£¬ÈçÊ¹ÓÃÃûºÍÃÜÂë¡£";
-    Text[ chinese_traditional ] = "½Ğ±zÀË¬d±zªº³]©w¡A¦p¨Ï¥ÎªÌ©M±K½X¡C";
+    Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°åã‚„ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ãªã©ç¾åœ¨è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’ã‚‚ã†ä¸€åº¦ï¾ï½ªï½¯ï½¸ã—ã¦ãã ã•ã„ã€‚";
+    Text[ korean ] = "í˜„ì¬ì˜ ì„¤ì •ì„ ì ê²€í•˜ì‹­ì‹œì˜¤,  ì˜ˆë¥¼ ë“¤ë©´ ì‚¬ìš©ì ì´ë¦„/ íŒ¨ìŠ¤ì›Œë“œì™€ ê´€ë ¨í•´ì„œ.";
+    Text[ chinese_simplified ] = "è¯·æ‚¨æ£€æŸ¥å½“å‰çš„è®¾å®šï¼Œå¦‚ä½¿ç”¨åå’Œå¯†ç ã€‚";
+    Text[ chinese_traditional ] = "è«‹æ‚¨æª¢æŸ¥æ‚¨çš„è¨­å®šï¼Œå¦‚ä½¿ç”¨è€…å’Œå¯†ç¢¼ã€‚";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ arabic ] = "ÇáÑÌÇÁ İÍÕ ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ¡ ãËá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ Úáì ÓÈíá ÇáãËÇá.";
     Text[ catalan ] = "Compruebe la configuración actual, p.ej. el nombre de usuario y la contraseña.";
@@ -263,10 +263,10 @@ String STR_NOTABLEINFO
     Text[ swedish ] = "Förbindelsen upprättades men det gick inte att få fram någon information om tabeller i databasen.";
     Text[ polish ] = "Po³¹czenie zosta³o pomyœlnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
     Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
-    Text[ japanese ] = "³í‚ÉÚ‘±‚Å‚«‚Ü‚µ‚½‚ªAÃŞ°ÀÍŞ°½‚ÌÃ°ÌŞÙ‚ÉŠÖ‚·‚éî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "¿¬°áÀº ¼º°øÀûÀ¸·Î ±¸ÃàµÇ¾úÁö¸¸, Ç¥ ±×¸®°í/¶Ç´Â º¸±â¿¡ ´ëÇÑ Á¤º¸¸¦ ¼öÁıÇÏÁö ¸øÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "Á¬½ÓÒÑ¾­³É¹¦£¬µ«ÊÇÎŞ·¨»ñµÃÏà¹ØµÄÊı¾İ¿â±í¸ñÊı¾İ¡£";
-    Text[ chinese_traditional ] = "¤w¸g¦¨¥\\³s½u¡A¦ı¬O¨S¦³§ä¨ì¸ê®Æ®wªºªí®æ¤º®e¡C";
+    Text[ japanese ] = "æ­£å¸¸ã«æ¥ç¶šã§ãã¾ã—ãŸãŒã€ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®ï¾ƒï½°ï¾Œï¾ï¾™ã«é–¢ã™ã‚‹æƒ…å ±ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ì—°ê²°ì€ ì„±ê³µì ìœ¼ë¡œ êµ¬ì¶•ë˜ì—ˆì§€ë§Œ, í‘œ ê·¸ë¦¬ê³ /ë˜ëŠ” ë³´ê¸°ì— ëŒ€í•œ ì •ë³´ë¥¼ ìˆ˜ì§‘í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "è¿æ¥å·²ç»æˆåŠŸï¼Œä½†æ˜¯æ— æ³•è·å¾—ç›¸å…³çš„æ•°æ®åº“è¡¨æ ¼æ•°æ®ã€‚";
+    Text[ chinese_traditional ] = "å·²ç¶“æˆåŠŸé€£ç·šï¼Œä½†æ˜¯æ²’æœ‰æ‰¾åˆ°è³‡æ–™åº«çš„è¡¨æ ¼å…§å®¹ã€‚";
     Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ arabic ] = "Êã ÊÃÓíÓ ÇáÇÊÕÇá ÈäÌÇÍ¡ ÅáÇ Ãäå ÊÚĞÑ ÇáÍÕæá Úáì ãÚáæãÇÊ ÈÎÕæÕ ÌÏÇæá ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
     Text[ catalan ] = "Se ha realizado una conexión satisfactoriamente, pero no se ha conseguido ninguna información sobre tablas en la base de datos.";
@@ -288,10 +288,10 @@ String STR_ALL_TABLES
     Text[ swedish ] = "Alla tabeller";
     Text[ polish ] = "Wszystkie tabele";
     Text[ portuguese_brazilian ] = "All tables";
-    Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙ";
-    Text[ korean ] = "¸ğµç Å×ÀÌºí";
-    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñ";
-    Text[ chinese_traditional ] = "¥ş³¡ªºªí®æ";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™";
+    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸”";
+    Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼";
+    Text[ chinese_traditional ] = "å…¨éƒ¨çš„è¡¨æ ¼";
     Text[ turkish ] = "All tables";
     Text[ arabic ] = "ßá ÇáÌÏÇæá";
     Text[ catalan ] = "Todas las tablas";
@@ -313,10 +313,10 @@ String STR_ALL_VIEWS
     Text[ swedish ] = "Alla tabellvyer";
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
-    Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙËŞ­°";
-    Text[ korean ] = "¸ğµç Å×ÀÌºí º¸±â";
-    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñÊÓÍ¼";
-    Text[ chinese_traditional ] = "©Ò¦³ªºªí®æÀËµø";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™ï¾‹ï¾ï½­ï½°";
+    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸” ë³´ê¸°";
+    Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼è§†å›¾";
+    Text[ chinese_traditional ] = "æ‰€æœ‰çš„è¡¨æ ¼æª¢è¦–";
     Text[ turkish ] = "All views";
     Text[ arabic ] = "ßÇİÉ ØÑŞ ÚÑÖ ÇáÌÏÇæá";
     Text[ catalan ] = "Todas las visualizaciones de tablas";
@@ -338,10 +338,10 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ swedish ] = "Alla tabeller och tabellvyer";
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
-    Text[ japanese ] = "‚·‚×‚Ä‚ÌÃ°ÌŞÙ‚ÆÃ°ÌŞÙËŞ­°";
-    Text[ korean ] = "¸ğµç Å×ÀÌºí°ú Å×ÀÌºí º¸±â";
-    Text[ chinese_simplified ] = "È«²¿µÄ±í¸ñºÍ±í¸ñÊÓÍ¼";
-    Text[ chinese_traditional ] = "©Ò¦³ªºªí®æ©Mªí®æÀËµø";
+    Text[ japanese ] = "ã™ã¹ã¦ã®ï¾ƒï½°ï¾Œï¾ï¾™ã¨ï¾ƒï½°ï¾Œï¾ï¾™ï¾‹ï¾ï½­ï½°";
+    Text[ korean ] = "ëª¨ë“  í…Œì´ë¸”ê³¼ í…Œì´ë¸” ë³´ê¸°";
+    Text[ chinese_simplified ] = "å…¨éƒ¨çš„è¡¨æ ¼å’Œè¡¨æ ¼è§†å›¾";
+    Text[ chinese_traditional ] = "æ‰€æœ‰çš„è¡¨æ ¼å’Œè¡¨æ ¼æª¢è¦–";
     Text[ turkish ] = "All tables and views";
     Text[ arabic ] = "ßÇİÉ ÇáÌÏÇæá æØÑŞ ÚÑÖåÇ";
     Text[ catalan ] = "Todas las tablas y visualizaciones de tablas";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/07/13 20:47:36  kz
+ *  Merge SRC638: 13.07.01 - 22:46:26
+ *
  *  Revision 1.12  2001/05/16 15:24:36  rt
  *  Merge SRC632: 16.05.01 - 17:24:45 (NoBranch)
  *
@@ -390,5 +393,6 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
 
