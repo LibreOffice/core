@@ -39,61 +39,13 @@ public class ScriptSelector {
     private static final int BIG_GAP = 10;
     private static final int MED_GAP = 5;
 
-    public static String go(final XScriptContext ctxt)
+    private ScriptSelectorPanel selectorPanel;
+
+    public ScriptSelector()
     {
-        String result = "";
-
-        try {
-            XBrowseNode root = getRootNode(ctxt);
-
-            final ScriptSelectorPanel selectorPanel =
-                new ScriptSelectorPanel(root);
-
-            final JOptionPane optionPane = new JOptionPane(
-                 selectorPanel,
-                 JOptionPane.PLAIN_MESSAGE,
-                 JOptionPane.OK_CANCEL_OPTION);
-
-            final JDialog dialog = new JDialog();
-            dialog.setModal(true);
-            dialog.setContentPane(optionPane);
-            dialog.setDefaultCloseOperation(
-                JDialog.DO_NOTHING_ON_CLOSE);
-
-            optionPane.addPropertyChangeListener(
-                new PropertyChangeListener() {
-                    public void propertyChange(java.beans.PropertyChangeEvent e)
-                    {
-                        String prop = e.getPropertyName();
-
-                        if (dialog.isVisible()
-                            && (e.getSource() == optionPane)
-                            && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-                                dialog.setVisible(false);
-                        }
-                    }
-                }
-            );
-
-            dialog.pack();
-            dialog.setSize(375, 350);
-            dialog.setVisible(true);
-
-            int value = ((Integer)optionPane.getValue()).intValue();
-            if (value == JOptionPane.YES_OPTION) {
-                result = selectorPanel.textField.getText();
-            }
-        }
-        catch (com.sun.star.uno.RuntimeException rue) {
-            rue.printStackTrace();
-        }
-        catch (java.lang.Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
-    public static void showOrganizer(final XScriptContext ctxt)
+    public void showOrganizer(final XScriptContext ctxt)
     {
         try {
             XBrowseNode root = getRootNode(ctxt);
@@ -104,10 +56,9 @@ public class ScriptSelector {
 
             final JFrame client = new JFrame("Script");
 
-            final ScriptSelectorPanel selectorPanel =
-                new ScriptSelectorPanel(root);
+            selectorPanel = new ScriptSelectorPanel(root);
 
-            final JButton runButton, closeButton, assignButton,
+            final JButton runButton, closeButton, createButton,
                           editButton, deleteButton;
 
             runButton = new JButton("Run");
@@ -121,12 +72,11 @@ public class ScriptSelector {
             JPanel northButtons =
                 new JPanel(new GridLayout(2, 1, MED_GAP, MED_GAP));
 
-            // northButtons.add(runButton);
-            northButtons.add(editButton);
+            northButtons.add(runButton);
             northButtons.add(closeButton);
 
-            assignButton = new JButton("Assign");
-            assignButton.setEnabled(false);
+            createButton = new JButton("Create");
+            createButton.setEnabled(false);
 
             deleteButton = new JButton("Delete");
             deleteButton.setEnabled(false);
@@ -134,9 +84,9 @@ public class ScriptSelector {
             JPanel southButtons =
                 new JPanel(new GridLayout(3, 1, MED_GAP, MED_GAP));
 
-            // southButtons.add(assignButton);
-            // southButtons.add(editButton);
-            // southButtons.add(deleteButton);
+            southButtons.add(editButton);
+            southButtons.add(createButton);
+            southButtons.add(deleteButton);
 
             selectorPanel.tree.addTreeSelectionListener(
                 new TreeSelectionListener() {
@@ -145,6 +95,7 @@ public class ScriptSelector {
                         XPropertySet props = (XPropertySet)
                             UnoRuntime.queryInterface(XPropertySet.class, xbn);
 
+                        checkEnabled(props, "Creatable", createButton);
                         checkEnabled(props, "Deletable", deleteButton);
                         checkEnabled(props, "Editable", editButton);
 
@@ -185,8 +136,6 @@ public class ScriptSelector {
                         client.dispose();
                     }
                     else if (event.getSource() == editButton) {
-                        String uri = selectorPanel.textField.getText();
-
                         DefaultMutableTreeNode node =
                           (DefaultMutableTreeNode)
                           selectorPanel.tree.getLastSelectedPathComponent();
@@ -195,16 +144,30 @@ public class ScriptSelector {
 
                         showEditor(ctxt, node);
                     }
-                    else if (event.getSource() == assignButton) {
+                    else if (event.getSource() == createButton) {
+                        DefaultMutableTreeNode node =
+                          (DefaultMutableTreeNode)
+                          selectorPanel.tree.getLastSelectedPathComponent();
+
+                        if (node == null) return;
+
+                        doCreate(ctxt, node);
                     }
                     else if (event.getSource() == deleteButton) {
+                        DefaultMutableTreeNode node =
+                          (DefaultMutableTreeNode)
+                          selectorPanel.tree.getLastSelectedPathComponent();
+
+                        if (node == null) return;
+
+                        doDelete(ctxt, node);
                     }
                 }
             };
 
             runButton.addActionListener(listener);
             closeButton.addActionListener(listener);
-            assignButton.addActionListener(listener);
+            createButton.addActionListener(listener);
             editButton.addActionListener(listener);
             deleteButton.addActionListener(listener);
 
@@ -220,7 +183,16 @@ public class ScriptSelector {
 
             client.getContentPane().add(mainPanel);
             client.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            client.setSize(375, 350);
+            client.setSize(500, 350);
+
+            // set the x and y locations so that the frame is in the
+            // centre of the screen
+            Dimension d = client.getToolkit().getScreenSize();
+
+            int x = (int)((d.getWidth() - client.getWidth()) / 2);
+            int y = (int)((d.getHeight() - client.getHeight()) / 2);
+
+            client.setLocation(x, y);
 
             client.show();
         }
@@ -232,7 +204,53 @@ public class ScriptSelector {
         }
     }
 
-    private static void showEditor(
+    private void doDelete(
+        XScriptContext ctxt, DefaultMutableTreeNode node)
+    {
+        Object obj = node.getUserObject();
+        XInvocation inv =
+            (XInvocation)UnoRuntime.queryInterface(
+            XInvocation.class, obj);
+        Object[] args = new Object[] { ctxt };
+        try {
+            Object result = inv.invoke("Deletable", args,
+                new short[1][0], new Object[1][0]);
+
+            if (result != null && AnyConverter.toBoolean(result) == true)
+            {
+                selectorPanel.removeNode(node);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doCreate(
+        XScriptContext ctxt, DefaultMutableTreeNode node)
+    {
+        Object obj = node.getUserObject();
+        XInvocation inv =
+            (XInvocation)UnoRuntime.queryInterface(
+            XInvocation.class, obj);
+        Object[] args = new Object[] { ctxt };
+        try {
+            Object result = inv.invoke("Creatable", args,
+                new short[1][0], new Object[1][0]);
+
+            if (result != null)
+            {
+                XBrowseNode xbn = (XBrowseNode)
+                    AnyConverter.toObject(new Type(XBrowseNode.class), result);
+                selectorPanel.addNode(node, xbn);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showEditor(
         XScriptContext ctxt, DefaultMutableTreeNode node)
     {
         Object obj = node.getUserObject();
@@ -249,34 +267,7 @@ public class ScriptSelector {
         }
     }
 
-    private static void showBasicEditor(XScriptContext ctxt) {
-        XComponentContext xcc = ctxt.getComponentContext();
-        XModel doc = ctxt.getDocument();
-
-        System.err.println("let's start the Basic IDE");
-
-        try {
-            XDispatchProvider xProvider = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class,
-                    doc.getCurrentController().getFrame());
-
-            Object obj = xcc.getServiceManager().createInstanceWithContext(
-                "com.sun.star.frame.DispatchHelper", xcc);
-
-            XDispatchHelper xDispatchHelper =
-                (XDispatchHelper)UnoRuntime.queryInterface(
-                    XDispatchHelper.class, obj);
-
-            xDispatchHelper.executeDispatch(xProvider,
-                ".uno:BasicIDEAppear", "", 0,
-                new com.sun.star.beans.PropertyValue[0]);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void checkEnabled(XPropertySet props, String name,
+    private void checkEnabled(XPropertySet props, String name,
         JButton button)
     {
         boolean enable = false;
@@ -306,7 +297,7 @@ public class ScriptSelector {
         button.setEnabled(enable);
     }
 
-    private static XBrowseNode getRootNode(XScriptContext ctxt) {
+    private XBrowseNode getRootNode(XScriptContext ctxt) {
 
         XBrowseNode result = null;
 
@@ -338,6 +329,7 @@ class ScriptSelectorPanel extends JPanel {
     private XBrowseNode myrootnode = null;
     public JTextField textField;
     public JTree tree;
+    public DefaultTreeModel treeModel;
 
     public ScriptSelectorPanel(XBrowseNode root)
     {
@@ -366,7 +358,8 @@ class ScriptSelectorPanel extends JPanel {
                 }
             };
         initNodes(myrootnode, top);
-        tree = new JTree(top);
+        treeModel = new DefaultTreeModel(top);
+        tree = new JTree(treeModel);
 
         tree.setCellRenderer(new ScriptTreeRenderer());
 
@@ -404,7 +397,25 @@ class ScriptSelectorPanel extends JPanel {
 
         textField = new JTextField();
         add(textField, BorderLayout.SOUTH);
-        setSize(600, 300);
+    }
+
+    public void removeNode(DefaultMutableTreeNode node) {
+        MutableTreeNode parent = (MutableTreeNode)(node.getParent());
+        if (parent != null) {
+            treeModel.removeNodeFromParent(node);
+        }
+    }
+
+    public void addNode(DefaultMutableTreeNode parent, XBrowseNode xbn) {
+        DefaultMutableTreeNode newNode =
+            new DefaultMutableTreeNode(xbn) {
+                public String toString() {
+                    return ((XBrowseNode)getUserObject()).getName();
+                }
+            };
+
+        treeModel.insertNodeInto(newNode, parent, parent.getChildCount());
+        tree.scrollPathToVisible(new TreePath(newNode.getPath()));
     }
 
     private void initNodes(XBrowseNode parent, DefaultMutableTreeNode top) {
