@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiServiceFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 14:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,15 @@ service MultiServiceFactory
     // DocMerge from xml: service com::sun::star::lang::MultiServiceFactory: interface com::sun::star::lang::XMultiServiceFactory
     /** uses a service name with this interface to instanciate a
                 component which supports the specified service.
+
+               @DEPRECATED use XMultiComponentFactory instead
      */
     interface com::sun::star::lang::XMultiServiceFactory;
+
+    /** uses a service name and context with this interface to instanciate a
+                component which supports the specified service.
+     */
+    interface com::sun::star::lang::XMultiComponentFactory;
 
     // DocMerge from xml: service com::sun::star::lang::MultiServiceFactory: interface com::sun::star::lang::XServiceInfo
     /** A factory, as well as all other services, should always support
@@ -113,6 +120,9 @@ service MultiServiceFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:47:00  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:41  mi
     moved from api
 

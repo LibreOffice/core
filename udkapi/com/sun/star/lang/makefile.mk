@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+#   last change: $Author: dbo $ $Date: 2001-05-04 14:24:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,10 +101,12 @@ IDLFILES=\
     XInitialization.idl\
     XLocalizable.idl\
     XMultiServiceFactory.idl\
+    XMultiComponentFactory.idl\
     XServiceDisplayName.idl\
     XServiceInfo.idl\
     XServiceName.idl\
     XSingleServiceFactory.idl\
+    XSingleComponentFactory.idl\
     XTypeProvider.idl\
     XUnoTunnel.idl\
     XMain.idl\
