@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-29 08:10:23 $
+ *  last change: $Author: os $ $Date: 2001-09-26 13:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,10 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_TOOLBOXSTYLE     2
 #define PROPERTYNAME_USESYSTEMFILEDIALOG          OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemFileDialog"))
 #define PROPERTYHANDLE_USESYSTEMFILEDIALOG        3
+#define PROPERTYNAME_PRINTMODIFY          OUString(RTL_CONSTASCII_USTRINGPARAM("ModifyByPrinting"))
+#define PROPERTYHANDLE_PRINTMODIFY        4
 
-#define PROPERTYCOUNT                   4
+#define PROPERTYCOUNT                   5
 
 DECLARE_LIST( LinkList, Link * );
 
@@ -143,6 +145,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Int16   m_nToolboxStyle;
     sal_Bool    m_bPluginsEnabled;
     sal_Bool    m_bUseSystemFileDialog;
+    sal_Bool    m_bModifyByPrinting;
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -194,6 +197,12 @@ class SvtMiscOptions_Impl : public ConfigItem
         //---------------------------------------------------------------------------------------------------------
         //  public interface
         //---------------------------------------------------------------------------------------------------------
+
+        sal_Bool IsModifyByPrinting() const
+            { return m_bModifyByPrinting;}
+
+        void SetModifyByPrinting(sal_Bool bSet )
+            { m_bModifyByPrinting = bSet; SetModified(); }
 
         sal_Bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
@@ -294,6 +303,12 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                         }
                                                     break;
+            case PROPERTYHANDLE_PRINTMODIFY :
+            {
+                if( !(seqValues[nProperty] >>= m_bModifyByPrinting) )
+                    DBG_ERROR("Wrong type of \"Misc\\ModifyByPrinting\"!" );
+            }
+            break;
         }
     }
 
@@ -395,6 +410,12 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
                                                                 DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                             }
                                                     break;
+            case PROPERTYHANDLE_PRINTMODIFY :
+            {
+                if( !(seqValues[nProperty] >>= m_bModifyByPrinting) )
+                    DBG_ERROR("Wrong type of \"Misc\\ModifyByPrinting\"!" );
+            }
+            break;
             default:
                 DBG_ERROR( "SvtMiscOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
                 break;
@@ -434,6 +455,11 @@ void SvtMiscOptions_Impl::Commit()
                                                         seqValues[nProperty] <<= m_bUseSystemFileDialog;
                                                     }
                                                     break;
+            case PROPERTYHANDLE_PRINTMODIFY :
+            {
+                seqValues[nProperty] <<= m_bModifyByPrinting;
+            }
+            break;
         }
     }
     // Set properties in configuration.
@@ -451,7 +477,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
-        PROPERTYNAME_USESYSTEMFILEDIALOG
+        PROPERTYNAME_USESYSTEMFILEDIALOG,
+        PROPERTYNAME_PRINTMODIFY
     };
 
     // Initialize return sequence with these list ...
@@ -515,6 +542,15 @@ void SvtMiscOptions::SetPluginsEnabled( sal_Bool bEnable )
 sal_Int16 SvtMiscOptions::GetSymbolSet() const
 {
     return m_pDataContainer->GetSymbolSet();
+}
+
+sal_Bool SvtMiscOptions::IsModifyByPrinting() const
+{
+    return m_pDataContainer->IsModifyByPrinting();
+}
+void SvtMiscOptions::SetModifyByPrinting(sal_Bool bSet )
+{
+    m_pDataContainer->SetModifyByPrinting(bSet);
 }
 
 void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
