@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:15:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,12 +1720,6 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 return 1;
 
         ImplFontData* pData = ImplLogMetricToDevFontDataW( pLogFont, &(pMetric->ntmTm), nFontType );
-
-        // prefer the system character set, so that we get as much as
-        // possible important characters. In the other case we could only
-        // display a limited set of characters (#87309#)
-        if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
-            pData->mnQuality += 100;
 
         // knowing Courier to be scalable is nice
         if( pInfo->mbCourier )
