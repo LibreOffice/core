@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:05:16 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "futhes.hxx"
+
 #include <tools/pstm.hxx>
 #include <svx/outliner.hxx>
 #include <offmgr/osplcfg.hxx>
@@ -96,12 +98,21 @@
 #include "strings.hrc"
 #include "drawdoc.hxx"
 #include "app.hxx"
-#include "futhes.hxx"
-#include "sdview.hxx"
-#include "sdoutl.hxx"
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "sdresid.hxx"
 
 using namespace ::rtl;
@@ -112,6 +123,8 @@ using namespace ::com::sun::star::linguistic2;
 
 class SfxRequest;
 
+namespace sd {
+
 TYPEINIT1( FuThesaurus, FuPoor );
 
 /*************************************************************************
@@ -120,14 +133,14 @@ TYPEINIT1( FuThesaurus, FuPoor );
 |*
 \************************************************************************/
 
-FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                   SdDrawDocument* pDoc, SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
                              pWin, RID_SVXERRCTX, DIALOG_MGR() );
 
-    if ( pViewShell->ISA(SdDrawViewShell) )
+    if ( pViewShell->ISA(DrawViewShell) )
     {
         SdrTextObj* pTextObj = NULL;
 
@@ -147,7 +160,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             }
         }
 
-        Outliner* pOutliner = pView->GetTextEditOutliner();
+        ::Outliner* pOutliner = pView->GetTextEditOutliner();
         const OutlinerView* pOutlView = pView->GetTextEditOutlinerView();
 
         if ( pTextObj && pOutliner && pOutlView )
@@ -174,7 +187,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             }
         }
     }
-    else if ( pViewShell->ISA(SdOutlineViewShell) )
+    else if ( pViewShell->ISA(OutlineViewShell) )
     {
         Outliner* pOutliner = pDoc->GetOutliner();
         OutlinerView* pOutlView = pOutliner->GetView(0);
@@ -214,3 +227,4 @@ FuThesaurus::~FuThesaurus()
 }
 
 
+} // end of namespace sd
