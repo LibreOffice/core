@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:03:50 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@
 #endif
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
+#endif
+// OD 27.11.2003 #112045#
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
 #endif
 
 #ifndef _DFLYOBJ_HXX
@@ -645,18 +649,32 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
                 const SdrMarkList& rMrkList = pDView->GetMarkList();
                 StartUndo();
 
-                ULONG nCount = rMrkList.GetMarkCount();
-                for( ULONG i=0; i < nCount; i++ )
+                // OD 27.11.2003 #112045# - copy marked drawing objects to
+                // local list to perform the corresponding action for each object
+                std::vector<SdrObject*> aDrawObjs;
                 {
-                    SdrObject *pObj = rMrkList.GetMark(i)->GetObj();
-                    if( !pObj->ISA(SwVirtFlyDrawObj) )
+                    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+                    {
+                        SdrObject* pDrawObj = rMrkList.GetMark(i)->GetObj();
+                        aDrawObjs.push_back( pDrawObj );
+                    }
+                }
+                // loop on marked drawing objects
+                while ( !aDrawObjs.empty() )
+                {
+                    SdrObject* pDrawObj = aDrawObjs.back();
+                    if ( !pDrawObj->ISA(SwVirtFlyDrawObj) &&
+                         !pDrawObj->ISA(SwFlyDrawObj) )
                     {
                         SwFlyFrmFmt *pFmt =
-                            GetDoc()->InsertDrawLabel( rTxt, nId, *pObj );
+                            GetDoc()->InsertDrawLabel( rTxt, nId, *pDrawObj );
                         if( !pFlyFmt )
                             pFlyFmt = pFmt;
                     }
+
+                    aDrawObjs.pop_back();
                 }
+
                 EndUndo();
             }
             break;
