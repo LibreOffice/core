@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kso $ $Date: 2002-06-19 15:08:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ Content* Content::create(
     if ( hasData( pProvider, aURI, xPackage ) )
         return 0;
 #else
-    xPackage = pProvider->createPackage( aURI.getPackage() );
+    xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
 #endif
 
     uno::Reference< star::ucb::XContentIdentifier > xId
@@ -2308,12 +2308,12 @@ uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
     if ( rURI.getPackage() == m_aUri.getPackage() )
     {
         if ( !m_xPackage.is() )
-            m_xPackage = m_pProvider->createPackage( m_aUri.getPackage() );
+            m_xPackage = m_pProvider->createPackage( m_aUri.getPackage(), m_aUri.getParam() );
 
         return m_xPackage;
     }
 
-    return m_pProvider->createPackage( rURI.getPackage() );
+    return m_pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
 }
 
 //=========================================================================
@@ -2329,7 +2329,7 @@ sal_Bool Content::hasData(
             const PackageUri& rURI,
             uno::Reference< container::XHierarchicalNameAccess > & rxPackage )
 {
-    rxPackage = pProvider->createPackage( rURI.getPackage() );
+    rxPackage = pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
     if ( !rxPackage.is() )
         return sal_False;
 
@@ -2362,7 +2362,7 @@ sal_Bool Content::loadData(
             ContentProperties& rProps,
             uno::Reference< container::XHierarchicalNameAccess > & rxPackage )
 {
-    rxPackage = pProvider->createPackage( rURI.getPackage() );
+    rxPackage = pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
     if ( !rxPackage.is() )
         return sal_False;
 

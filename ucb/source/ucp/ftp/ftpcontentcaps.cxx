@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ Sequence< Property > FTPContent::getProperties(
     const Reference< XCommandEnvironment > & xEnv
 )
 {
-    Sequence< Property > props(6);
+    Sequence< Property > props(7);
 
     props[0] =
         Property(
@@ -126,6 +126,13 @@ Sequence< Property > FTPContent::getProperties(
             -1,
             getCppuType( static_cast< DateTime* >( 0 ) ),
             PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+    props[6] =
+        Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            -1,
+            getCppuBooleanType(),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
 
     return props;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 14:58:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,10 +328,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL
-                = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
-            aURL += rtl::OUString::createFromAscii( "/" );
-            aURL += aName;
+            rtl::OUString aURL = assembleChildURL( aName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
 
@@ -411,10 +408,7 @@ sal_uInt32 DataSupplier::totalCount()
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL
-                = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
-            aURL += rtl::OUString::createFromAscii( "/" );
-            aURL += aName;
+            rtl::OUString aURL = assembleChildURL( aName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
         }
@@ -518,4 +512,35 @@ void DataSupplier::validate()
     if ( m_pImpl->m_bThrowException )
         throw star::ucb::ResultSetException();
 }
+
+//=========================================================================
+::rtl::OUString DataSupplier::assembleChildURL( const ::rtl::OUString& aName )
+{
+    rtl::OUString aURL;
+    rtl::OUString aContURL = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
+    sal_Int32 nParam = aContURL.indexOf( '?' );
+    if ( nParam >= 0 )
+    {
+        aURL = aContURL.copy( 0, nParam );
+
+        sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
+        if ( nPackageUrlEnd != aURL.getLength() - 1 )
+            aURL += rtl::OUString::createFromAscii( "/" );
+
+        aURL += aName;
+        aURL += aContURL.copy( nParam );
+    }
+    else
+    {
+        aURL = aContURL;
+
+        sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
+        if ( nPackageUrlEnd != aURL.getLength() - 1 )
+            aURL += rtl::OUString::createFromAscii( "/" );
+
+        aURL += aName;
+    }
+    return aURL;
+}
+
 

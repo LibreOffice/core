@@ -12,4 +12,3 @@ uc	ucb\source\ucp\hierarchy	nmake	-	all	uc_hierarchy uc_unotypes NULL
 uc	ucb\source\ucp\remote		nmake	-	all	uc_remote uc_regexp NULL
 uc	ucb\source\ucp\webdav		nmake	-	all	uc_webdav uc_unotypes NULL
 uc	ucb\source\ucp\package		nmake	-	all	uc_package uc_unotypes NULL
-uc  ucb\source\ucp\ftpproxy     nmake   -   all uc_ftpproxy uc_unotypes NULL

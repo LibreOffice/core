@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-28 16:20:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,17 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
                                      char *       inoutUserName,
                                      char *       inoutPassWord )
 {
+/* The callback used to request the username and password in the given
+ * realm. The username and password must be copied into the buffers
+ * which are both of size NE_ABUFSIZ.  The 'attempt' parameter is zero
+ * on the first call to the callback, and increases by one each time
+ * an attempt to authenticate fails.
+ *
+ * The callback must return zero to indicate that authentication
+ * should be attempted with the username/password, or non-zero to
+ * cancel the request. (if non-zero, username and password are
+ * ignored.)  */
+
 #if 0
     // Give'em only a limited mumber of retries..
     if ( attempt > 9 )
@@ -288,24 +299,65 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         // abort
         return -1;
     }
+    rtl::OUString theUserName;
+    rtl::OUString thePassWord;
 
-    // username buffer is prefilled with user name from last attempt.
-    rtl::OUString theUserName(
-                    rtl::OUString::createFromAscii( inoutUserName ) );
-    rtl::OUString thePassWord; /*(
-                    // @@@ Neon does not initialize password buffer
-                    //   (last checked: 0.22.0).
-                    rtl::OUString::createFromAscii( inoutPassWord ) ); */
+    if ( attempt == 0 )
+    {
+        // neon does not handle username supplied with request URI (for instance
+        // when doing FTP over proxy - last checked: 0.23.5 )
+
+        NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
+        rtl::OUString aUserInfo( uri.GetUserInfo() );
+        if ( aUserInfo.getLength() )
+        {
+            sal_Int32 nPos = aUserInfo.indexOf( '@' );
+            if ( nPos == -1 )
+            {
+                theUserName = aUserInfo;
+            }
+            else
+            {
+                theUserName = aUserInfo.copy( 0, nPos );
+                thePassWord = aUserInfo.copy( nPos + 1 );
+            }
+        }
+    }
+    else
+    {
+        // username buffer is prefilled with user name from last attempt.
+        theUserName = rtl::OUString::createFromAscii( inoutUserName );
+        // @@@ Neon does not initialize password buffer (last checked: 0.22.0).
+        //thePassWord = rtl::OUString::createFromAscii( inoutPassWord );
+    }
 
     int theRetVal = pListener->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
                             theUserName,
                             thePassWord );
-    strcpy( inoutUserName,
+    rtl::OString aUser(
+        rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
+    if ( aUser.getLength() > ( NE_ABUFSIZ - 1 ) )
+    {
+        OSL_ENSURE(
+            sal_False, "NeonSession_NeonAuth - username to long!" );
+        return -1;
+    }
+
+    rtl::OString aPass(
+        rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+    if ( aPass.getLength() > ( NE_ABUFSIZ - 1 ) )
+    {
+        OSL_ENSURE(
+            sal_False, "NeonSession_NeonAuth - password to long!" );
+        return -1;
+    }
+
+    strcpy( inoutUserName, // #100211# - checked
             rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
 
-    strcpy( inoutPassWord,
+    strcpy( inoutPassWord, // #100211# - checked
             rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
 
     return theRetVal;

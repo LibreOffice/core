@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-29 12:43:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,9 +702,10 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     throw(curl_exception)
 {
     if(!replaceExisting) {
-        FTPDirentry aDirentry(direntry());
-        if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
-            throw curl_exception(FILE_EXIST_DURING_INSERT);
+//      FTPDirentry aDirentry(direntry());
+//      if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
+        // throw curl_exception(FILE_EXIST_DURING_INSERT);
+        throw curl_exception(FILE_MIGHT_EXIST_DURING_INSERT);
     } // else
     // overwrite is default in libcurl
 
@@ -749,8 +750,9 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     FTPDirentry aDirentry(direntry());
     if(!ReplaceExisting) {
-        if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
-            throw curl_exception(FOLDER_EXIST_DURING_INSERT);
+//      if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
+//          throw curl_exception(FOLDER_EXIST_DURING_INSERT);
+        throw curl_exception(FOLDER_MIGHT_EXIST_DURING_INSERT);
     } else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
         slist = curl_slist_append(slist,del.getStr());
 

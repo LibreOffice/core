@@ -69,6 +69,7 @@
     <type> com.sun.star.task.XInteractionAbort                 </type>
     <type> com.sun.star.task.XInteractionReply                 </type>
     <type> com.sun.star.ucb.AuthenticationRequest              </type>
+    <type> com.sun.star.ucb.CommandFailedException             </type>
     <type> com.sun.star.ucb.ContentCreationException           </type>
     <type> com.sun.star.ucb.ContentInfoAttribute               </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>

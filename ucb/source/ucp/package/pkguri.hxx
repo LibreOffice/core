@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class PackageUri
     mutable ::rtl::OUString m_aPackage;
     mutable ::rtl::OUString m_aPath;
     mutable ::rtl::OUString m_aName;
+    mutable ::rtl::OUString m_aParam;
     mutable bool            m_bValid;
 
 private:
@@ -113,6 +114,9 @@ public:
 
     const ::rtl::OUString & getName() const
     { init(); return m_aName; }
+
+    const ::rtl::OUString & getParam() const
+    { init(); return m_aParam; }
 
     inline sal_Bool isRootFolder() const;
 };

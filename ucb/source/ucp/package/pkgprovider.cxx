@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-26 12:42:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
 //=========================================================================
 
 uno::Reference< container::XHierarchicalNameAccess >
-ContentProvider::createPackage( const rtl::OUString & rName )
+ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString & rParam )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -305,9 +305,11 @@ ContentProvider::createPackage( const rtl::OUString & rName )
         return uno::Reference< container::XHierarchicalNameAccess >();
     }
 
+    rtl::OUString rURL = rName + rParam;
+
     if ( m_pPackages )
     {
-        Packages::const_iterator it = m_pPackages->find( rName );
+        Packages::const_iterator it = m_pPackages->find( rURL );
         if ( it != m_pPackages->end() )
         {
             // Already instanciated. Return package.
@@ -321,7 +323,7 @@ ContentProvider::createPackage( const rtl::OUString & rName )
     try
     {
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rName;
+        aArguments[ 0 ] <<= rURL;
 
         uno::Reference< uno::XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
@@ -340,9 +342,9 @@ ContentProvider::createPackage( const rtl::OUString & rName )
                         "Got no hierarchical name access!" );
 
             rtl::Reference< Package> xPackage
-                = new Package( rName, xNameAccess, this );
+                = new Package( rURL, xNameAccess, this );
 
-            (*m_pPackages)[ rName ] = xPackage.get();
+            (*m_pPackages)[ rURL ] = xPackage.get();
 
             return xPackage.get();
         }

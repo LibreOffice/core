@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 
  *************************************************************************/
 
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <ucbhelper/contentbroker.hxx>
 #include <osl/socket.hxx>
 #include "ftpcontentprovider.hxx"

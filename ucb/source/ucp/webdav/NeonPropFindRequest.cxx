@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                                     pname->name, "resourcetype" ) == 0 )
         {
             OString aValue( value );
+            aValue = aValue.trim(); // #107358# remove leading/trailing spaces
             if ( aValue.getLength() )
             {
                 aValue = aValue.toAsciiLowerCase();
@@ -156,15 +157,12 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                     thePropertyValue.Value
                         <<= OUString::createFromAscii( "collection" );
                 }
-                else
-                {
-                    thePropertyValue.Value
-                        <<= OUString::createFromAscii( value );
-                }
             }
-            else
+
+            if ( !thePropertyValue.Value.hasValue() )
             {
-                thePropertyValue.Value <<= OUString();
+                // Take over the value exactly as supplied by the server.
+                thePropertyValue.Value <<= OUString::createFromAscii( value );
             }
         }
         else if ( rtl_str_compareIgnoreAsciiCase(

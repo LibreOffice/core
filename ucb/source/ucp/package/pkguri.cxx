@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-08 13:59:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void PackageUri::init() const
     if ( m_aUri.getLength() && !m_aPath.getLength() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aPackage = m_aParentUri = m_aName = OUString();
+        m_aPackage = m_aParentUri = m_aName = m_aParam = OUString();
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
@@ -138,16 +138,26 @@ void PackageUri::init() const
             return;
         }
 
+        rtl::OUString aPureUri;
+        sal_Int32 nParam = m_aUri.indexOf( '?' );
+        if( nParam >= 0 )
+        {
+            m_aParam = m_aUri.copy( nParam );
+            aPureUri = m_aUri.copy( 0, nParam );
+        }
+        else
+            aPureUri = m_aUri;
+
         // Scheme is case insensitive.
         rtl::OUString aScheme
-            = m_aUri.copy( 0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+            = aPureUri.copy( 0, PACKAGE_URL_SCHEME_LENGTH ).toAsciiLowerCase();
         if ( aScheme.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( PACKAGE_URL_SCHEME ) ) )
         {
-            m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
+            aPureUri = aPureUri.replaceAt( 0, aScheme.getLength(), aScheme );
 
             sal_Int32 nStart = PACKAGE_URL_SCHEME_LENGTH + 3;
-            sal_Int32 nEnd   = m_aUri.lastIndexOf( '/' );
+            sal_Int32 nEnd   = aPureUri.lastIndexOf( '/' );
             if ( nEnd == PACKAGE_URL_SCHEME_LENGTH + 3 )
             {
                 // Only <scheme>:/// - Empty authority
@@ -156,9 +166,9 @@ void PackageUri::init() const
                 m_aPath = rtl::OUString::createFromAscii( "/" );
                 return;
             }
-            else if ( nEnd == ( m_aUri.getLength() - 1 ) )
+            else if ( nEnd == ( aPureUri.getLength() - 1 ) )
             {
-                if ( m_aUri.getStr()[ m_aUri.getLength() - 2 ]
+                if ( aPureUri.getStr()[ aPureUri.getLength() - 2 ]
                                                 == sal_Unicode( '/' ) )
                 {
                     // Only <scheme>://// or <scheme>://<something>//
@@ -169,25 +179,26 @@ void PackageUri::init() const
                 }
 
                 // Remove trailing slash.
-                m_aUri = m_aUri.copy( 0, nEnd );
+                aPureUri = aPureUri.copy( 0, nEnd );
             }
 
-            nEnd = m_aUri.indexOf( '/', nStart );
+
+            nEnd = aPureUri.indexOf( '/', nStart );
             if ( nEnd == -1 )
             {
                 // root folder.
 
-                OUString aNormPackage = m_aUri.copy( nStart );
+                OUString aNormPackage = aPureUri.copy( nStart );
                 normalize( aNormPackage );
 
-                m_aUri = m_aUri.replaceAt(
-                            nStart, m_aUri.getLength() - nStart, aNormPackage );
+                aPureUri = aPureUri.replaceAt(
+                            nStart, aPureUri.getLength() - nStart, aNormPackage );
                 m_aPackage = decodeSegment( aNormPackage );
                 m_aPath = rtl::OUString::createFromAscii( "/" );
             }
             else
             {
-                m_aPath = m_aUri.copy( nEnd + 1 );
+                m_aPath = aPureUri.copy( nEnd + 1 );
 
                 // Empty path segments?
                 if ( m_aPath.indexOf(
@@ -198,18 +209,19 @@ void PackageUri::init() const
                     return;
                 }
 
-                OUString aNormPackage = m_aUri.copy( nStart, nEnd - nStart );
+                OUString aNormPackage = aPureUri.copy( nStart, nEnd - nStart );
                 normalize( aNormPackage );
 
-                m_aUri = m_aUri.replaceAt(
+                aPureUri = aPureUri.replaceAt(
                             nStart, nEnd - nStart, aNormPackage );
                 m_aPackage = decodeSegment( aNormPackage );
 
-                sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
+
+                sal_Int32 nLastSlash = aPureUri.lastIndexOf( '/' );
                 if ( nLastSlash != -1 )
                 {
-                    m_aParentUri = m_aUri.copy( 0, nLastSlash );
-                    m_aName      = m_aUri.copy( nLastSlash + 1 );
+                    m_aParentUri = aPureUri.copy( 0, nLastSlash );
+                    m_aName      = aPureUri.copy( nLastSlash + 1 );
                 }
             }
 

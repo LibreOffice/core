@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: abi $ $Date: 2001-12-05 12:10:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,6 +665,7 @@ namespace fileaccess {
         // Default properties
 
         const rtl::OUString Title;
+        const rtl::OUString CasePreservingURL;
         const rtl::OUString IsDocument;
         const rtl::OUString IsFolder;
         const rtl::OUString DateModified;

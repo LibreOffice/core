@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 16:24:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,10 @@ namespace fileaccess
 //          void SAL_CALL installError( sal_Int32 CommandId,
 //                                      sal_Int32 ErrorCode,
 //                                      rtl::OUString message );
+
+        void SAL_CALL retrieveError( sal_Int32 CommandId,
+                                     sal_Int32 &ErrorCode,
+                                     sal_Int32 &minorCode);
 
         /**
          *  Deinstalls the task and evaluates a possibly set error code.

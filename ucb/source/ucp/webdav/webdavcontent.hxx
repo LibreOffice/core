@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 14:15:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,18 @@ class ContentProperties;
 class Content : public ::ucb::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
+    enum ResourceType
+    {
+        UNKNOWN,
+        FTP,
+        NON_DAV,
+        DAV
+    };
+
     std::auto_ptr< DAVResourceAccess > m_xResAccess;
     std::auto_ptr< ContentProperties > m_xCachedProps; // locally cached props
     rtl::OUString     m_aEscapedTitle;
+    ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
       sal_Bool        m_bTransient;
     sal_Bool          m_bCollection;
@@ -137,7 +146,8 @@ private:
       virtual ::rtl::OUString getParentURL();
 
       sal_Bool isFolder( const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( ::com::sun::star::uno::Exception );
 
     void getProperties( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
@@ -147,14 +157,16 @@ private:
       getPropertyValues( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
                           const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( ::com::sun::star::uno::Exception );
 
-     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-     setPropertyValues(
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    setPropertyValues(
                      const ::com::sun::star::uno::Sequence<
                          ::com::sun::star::beans::PropertyValue >& rValues,
                         const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( ::com::sun::star::uno::Exception );
 
     typedef rtl::Reference< Content > ContentRef;
       typedef std::list< ContentRef > ContentRefList;
@@ -165,6 +177,11 @@ private:
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
     const rtl::OUString getBaseURI();
+
+    const ResourceType & getResourceType(
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( ::com::sun::star::uno::Exception );
 
       // Command "insert"
       void insert( const ::com::sun::star::uno::Reference<
@@ -192,6 +209,8 @@ private:
                         com::sun::star::ucb::XCommandEnvironment > & xEnv,
                     sal_Bool bWrite = sal_False )
         throw( ::com::sun::star::uno::Exception );
+
+    static bool shouldAccessNetworkAfterException( const DAVException & e );
 
 public:
       Content( const ::com::sun::star::uno::Reference<

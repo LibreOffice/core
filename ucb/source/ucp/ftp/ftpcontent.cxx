@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-12 11:30:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
  *************************************************************************/
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HDL_
-#include <com/sun/star/beans/PropertyAttribute.hdl>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 #include "ftpdynresultset.hxx"
@@ -80,6 +80,7 @@
 #include "ftpcontentidentifier.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpstrcont.hxx"
+#include "ftpintreq.hxx"
 
 #include <memory>
 #include <vector>
@@ -98,7 +99,6 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -110,7 +110,9 @@
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
+#include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
+//#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 
@@ -625,7 +627,6 @@ FTPContent::queryCreatableContentsInfo(  )
     seq[0].Type = FTP_FILE;
     seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
         | ContentInfoAttribute::KIND_DOCUMENT;
-
     Sequence< Property > props( 1 );
     props[0] = Property(
         rtl::OUString::createFromAscii( "Title" ),
@@ -742,25 +743,52 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
         ucbhelper::cancelCommandExecution(aAny,Env);
     }
 
+    bool bReplace(aInsertCommand.ReplaceExisting);
+
+ retry:
     try {
         if(m_aInfo.Type == FTP_FILE) {
             InsertData data(aInsertCommand.Data);
-            m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),
-                             &data);
+            m_aFTPURL.insert(bReplace,&data);
         } else if(m_aInfo.Type == FTP_FOLDER)
-            m_aFTPURL.mkdir(bool(aInsertCommand.ReplaceExisting));
+            m_aFTPURL.mkdir(bReplace);
     } catch(const curl_exception& e) {
-        if(e.code() == FILE_EXIST_DURING_INSERT) {
-            Any aAny;
+        if(e.code() == FILE_EXIST_DURING_INSERT ||
+           e.code() == FOLDER_EXIST_DURING_INSERT) {
+            // Deprecated, not used anymore:
             NameClashException excep;
             excep.Name = m_aFTPURL.child();
-            ucbhelper::cancelCommandExecution(aAny,Env);
-        } else if(e.code() == FOLDER_EXIST_DURING_INSERT) {
             Any aAny;
-            NameClashException excep;
-            excep.Name = m_aFTPURL.child();
+            aAny <<= excep;
             ucbhelper::cancelCommandExecution(aAny,Env);
-        } else
+        } else if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
+                  e.code() == FILE_MIGHT_EXIST_DURING_INSERT) {
+            // Interact
+            Reference<XInteractionHandler> xInt;
+            if(Env.is())
+                xInt = Env->getInteractionHandler();
+
+            UnsupportedNameClashException excep;
+            excep.NameClash = 0; //NameClash::ERROR;
+
+            if(!xInt.is()) {
+                Any aAny;
+                aAny <<= excep;
+                ucbhelper::cancelCommandExecution(aAny,Env);
+            }
+
+            XInteractionRequestImpl* p =
+                new XInteractionRequestImpl(m_aFTPURL.child());
+            Reference<XInteractionRequest> req(p);
+            xInt->handle(req);
+            if(p->approved()) {
+                bReplace = true;
+                goto retry;
+            }
+            else
+                throw excep;
+        }
+        else
             throw;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-24 11:59:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ void DAVResourceAccess::OPTIONS( DAVCapabilities & rCapabilities,
             m_xSession->OPTIONS( getRequestURI(),
                                  rCapabilities,
                                  DAVRequestEnvironment(
+                                    getRequestURI(),
                                     new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -249,6 +250,7 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
                                   rPropertyNames,
                                   rResources,
                                   DAVRequestEnvironment(
+                                    getRequestURI(),
                                     new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -280,6 +282,7 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
                                   nDepth,
                                   rResInfo,
                                   DAVRequestEnvironment(
+                                    getRequestURI(),
                                     new AuthListener( xEnv ) ) ) ;
         }
         catch ( DAVException & e )
@@ -309,6 +312,7 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
             m_xSession->PROPPATCH( getRequestURI(),
                                    rValues,
                                    DAVRequestEnvironment(
+                                    getRequestURI(),
                                     new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -340,6 +344,7 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
                               rHeaderNames,
                               rResource,
                               DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -368,6 +373,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         {
             xStream = m_xSession->GET( getRequestURI(),
                                        DAVRequestEnvironment(
+                                        getRequestURI(),
                                         new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -399,6 +405,7 @@ void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
             m_xSession->GET( getRequestURI(),
                              rStream,
                              DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -431,6 +438,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                        rHeaderNames,
                                        rResource,
                                        DAVRequestEnvironment(
+                                        getRequestURI(),
                                         new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -466,6 +474,7 @@ void DAVResourceAccess::GET(
                              rHeaderNames,
                              rResource,
                              DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -495,6 +504,7 @@ void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
             m_xSession->PUT( getRequestURI(),
                              rStream,
                              DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -529,6 +539,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
                                         rReferer,
                                         rInputStream,
                                         DAVRequestEnvironment(
+                                            getRequestURI(),
                                             new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -567,6 +578,7 @@ void DAVResourceAccess::POST(
                               rInputStream,
                               rOutputStream,
                               DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -594,6 +606,7 @@ void DAVResourceAccess::MKCOL( const uno::Reference<
         {
             m_xSession->MKCOL( getRequestURI(),
                                DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
@@ -625,6 +638,7 @@ void DAVResourceAccess::COPY( const ::rtl::OUString & rSourcePath,
             m_xSession->COPY( rSourcePath,
                               rDestinationURI,
                               DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ),
                               bOverwrite );
         }
@@ -657,6 +671,7 @@ void DAVResourceAccess::MOVE( const ::rtl::OUString & rSourcePath,
             m_xSession->MOVE( rSourcePath,
                               rDestinationURI,
                               DAVRequestEnvironment(
+                                getRequestURI(),
                                 new AuthListener( xEnv ) ),
                               bOverwrite );
         }
@@ -685,6 +700,7 @@ void DAVResourceAccess::DESTROY( const uno::Reference<
         {
             m_xSession->DESTROY( getRequestURI(),
                                  DAVRequestEnvironment(
+                                    getRequestURI(),
                                     new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )

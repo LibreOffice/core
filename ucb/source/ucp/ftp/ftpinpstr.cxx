@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpinpstr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,9 @@ FTPInputStream::FTPInputStream(FILE* tmpfl)
     : m_tmpfl(tmpfl ? tmpfl : tmpfile())
 {
     fseek(m_tmpfl,0,SEEK_END);
-    fpos_t pos;
-    fgetpos(m_tmpfl,&pos);
+//  fpos_t pos;
+//  fgetpos(m_tmpfl,&pos);
+    long pos = ftell(m_tmpfl);
     rewind(m_tmpfl);
     m_nLength = sal_Int64(pos);
 }
@@ -140,11 +141,16 @@ sal_Int32 SAL_CALL FTPInputStream::readBytes(Sequence< sal_Int8 >& aData,
     if(0 <= nBytesToRead && aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
-    fpos_t bpos,epos;
+//     fpos_t bpos,epos;
 
-    fgetpos(m_tmpfl,&bpos);
+//     fgetpos(m_tmpfl,&bpos);
+//     fread(aData.getArray(),nBytesToRead,1,m_tmpfl);
+//     fgetpos(m_tmpfl,&epos);
+    long bpos,epos;
+
+    bpos = ftell(m_tmpfl);
     fread(aData.getArray(),nBytesToRead,1,m_tmpfl);
-    fgetpos(m_tmpfl,&epos);
+    epos = ftell(m_tmpfl);
 
     return sal_Int32(epos-bpos);
 }
@@ -222,8 +228,10 @@ FTPInputStream::getPosition(
     if(!m_tmpfl)
         throw IOException();
 
-    fpos_t pos;
-    fgetpos(m_tmpfl,&pos);
+//     fpos_t pos;
+//     fgetpos(m_tmpfl,&pos);
+    long pos;
+    pos = ftell(m_tmpfl);
     return sal_Int64(pos);
 }
 

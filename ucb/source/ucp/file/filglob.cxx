@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 16:24:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include "com/sun/star/breans/PropertyValue.hpp"
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include "com/sun/star/uno/Any.hxx"
 #endif
@@ -129,8 +132,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include "rtl/ustrbuf.hxx"
 #endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
@@ -612,6 +618,18 @@ namespace fileaccess {
                         "an error occured writing or reading from a file")),
                 xComProc );
         }
+        else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
+        {
+            ioErrorCode = IOErrorCode_OUT_OF_DISK_SPACE;
+            cancelCommandExecution(
+                ioErrorCode,
+                generateErrorArguments(pShell,aUncPath),
+                xEnv,
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "device full")),
+                xComProc);
+        }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
                  errorCode == TASKHANDLING_READING_FILE_FOR_PAGING )
         {
@@ -729,17 +747,69 @@ namespace fileaccess {
             aAny <<= excep;
             cancelCommandExecution( aAny,xEnv );
         }
+        else if( errorCode == TASKHANDLING_INVALID_NAME_MKDIR )
+        {
+            InteractiveAugmentedIOException excep;
+            excep.Code = IOErrorCode_INVALID_CHARACTER;
+            PropertyValue prop;
+            prop.Name = rtl::OUString::createFromAscii("ResourceName");
+            prop.Handle = -1;
+            rtl::OUString m_aClashingName(
+                rtl::Uri::decode(
+                    getTitle(aUncPath),
+                    rtl_UriDecodeWithCharset,
+                    RTL_TEXTENCODING_UTF8));
+            prop.Value <<= m_aClashingName;
+            Sequence<Any> seq(1);
+            seq[0] <<= prop;
+            excep.Arguments = seq;
+            excep.Classification = InteractionClassification_ERROR;
+            Reference<XInterface> xContext(xComProc,UNO_QUERY);
+            excep.Context = xContext;
+            excep.Message = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "the name contained invalid characters"));
+            if(isHandled)
+                throw excep;
+            else {
+                aAny <<= excep;
+                cancelCommandExecution( aAny,xEnv );
+            }
+//              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
+//              cancelCommandExecution(
+//                  ioErrorCode,
+//                  generateErrorArguments(pShell,aUncPath),
+//                  xEnv,
+//                  rtl::OUString(
+//                      RTL_CONSTASCII_USTRINGPARAM(
+//                          "the name contained invalid characters")),
+//                  xComProc );
+        }
         else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
         {
-            ioErrorCode = IOErrorCode_ALREADY_EXISTING;
-            cancelCommandExecution(
-                ioErrorCode,
-                generateErrorArguments(pShell,aUncPath),
-                xEnv,
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "the folder exists")),
-                xComProc );
+            NameClashException excep;
+            excep.Name = getTitle(aUncPath);
+            excep.Classification = InteractionClassification_ERROR;
+            Reference<XInterface> xContext(xComProc,UNO_QUERY);
+            excep.Context = xContext;
+            excep.Message = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "folder exists and overwritte forbidden"));
+            if(isHandled)
+                throw excep;
+            else {
+                aAny <<= excep;
+                cancelCommandExecution( aAny,xEnv );
+            }
+//          ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+//          cancelCommandExecution(
+//              ioErrorCode,
+//              generateErrorArguments(pShell,aUncPath),
+//              xEnv,
+//              rtl::OUString(
+//                  RTL_CONSTASCII_USTRINGPARAM(
+//                      "the folder exists")),
+//              xComProc );
         }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )

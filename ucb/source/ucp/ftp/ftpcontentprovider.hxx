@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-29 12:43:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,20 +67,14 @@
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/providerhelper.hxx>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include "ftphandleprovider.hxx"
 #include "ftpurl.hxx"
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME         "com.sun.star.ucb.FTPContentProvider"
+#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME  "com.sun.star.ucb.FTPContentProvider"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  35
 #define MYUCP_URL_SCHEME        "ftp"
 #define MYUCP_URL_SCHEME_LENGTH 3
@@ -101,12 +95,14 @@ namespace ftp {
 
     class FTPContentProvider:
         public ::ucb::ContentProviderImplHelper,
-        // public ::com::sun::star::lang::XComponent,
         public FTPHandleProvider
     {
     public:
 
-        FTPContentProvider(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xMSF );
+        FTPContentProvider(
+            const com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory>& xMSF );
+
         ~FTPContentProvider();
 
         // XInterface

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: filinsreq.hxx,v $
+ *  $RCSfile: ftpintreq.hxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _FILINSREQ_HXX_
-#define _FILINSREQ_HXX_
+#ifndef _FTP_FTPINTREQ_HXX
+#define _FTP_FTPINTREQ_HXX
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -78,34 +77,28 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
-#include <com/sun/star/task/XInteractionAbort.hpp>
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionDisapprove.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYNAME_HPP_
-#include <com/sun/star/ucb/XInteractionSupplyName.hpp>
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionApprove.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #endif
 
 
-namespace fileaccess {
+namespace ftp {
 
 
-    class shell;
-
-
-    class XInteractionSupplyNameImpl
+    class XInteractionApproveImpl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::ucb::XInteractionSupplyName
+          public com::sun::star::task::XInteractionApprove
     {
     public:
 
-        XInteractionSupplyNameImpl()
-            : m_bSelected(false)
-        {
-        }
+        XInteractionApproveImpl();
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
@@ -127,48 +120,27 @@ namespace fileaccess {
 
         XTYPEPROVIDER_DECL()
 
-
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException)
-        {
-            m_bSelected = true;
-        }
+            throw (com::sun::star::uno::RuntimeException);
 
-        void SAL_CALL setName(const ::rtl::OUString& Name)
-            throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_aNewName = Name;
-        }
-
-        rtl::OUString getName() const
-        {
-            return m_aNewName;
-        }
-
-        bool isSelected() const
-        {
-            return m_bSelected;
-        }
+        bool isSelected() const;
 
     private:
 
         bool          m_bSelected;
-        rtl::OUString m_aNewName;
     };
 
 
 
-    class XInteractionAbortImpl
+
+    class XInteractionDisapproveImpl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionAbort
+          public com::sun::star::task::XInteractionDisapprove
     {
     public:
 
-        XInteractionAbortImpl()
-            : m_bSelected(false)
-        {
-        }
+        XInteractionDisapproveImpl();
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
@@ -190,18 +162,10 @@ namespace fileaccess {
 
         XTYPEPROVIDER_DECL()
 
-
         virtual void SAL_CALL select()
-            throw (::com::sun::star::uno::RuntimeException)
-        {
-            m_bSelected = true;
-        }
+            throw (com::sun::star::uno::RuntimeException);
 
-
-        bool isSelected() const
-        {
-            return m_bSelected;
-        }
+        bool isSelected() const;
 
     private:
 
@@ -217,12 +181,7 @@ namespace fileaccess {
     {
     public:
 
-        XInteractionRequestImpl(
-            const rtl::OUString& aClashingName,
-            const com::sun::star::uno::Reference<
-            com::sun::star::uno::XInterface>& xOrigin,
-            shell* pShell,
-            sal_Int32 CommandId);
+        XInteractionRequestImpl(const rtl::OUString& aName);
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
@@ -244,44 +203,30 @@ namespace fileaccess {
 
         XTYPEPROVIDER_DECL()
 
-        ::com::sun::star::uno::Any SAL_CALL getRequest(  )
-            throw (::com::sun::star::uno::RuntimeException);
+        com::sun::star::uno::Any SAL_CALL
+        getRequest(  )
+            throw (com::sun::star::uno::RuntimeException);
 
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
-            throw (::com::sun::star::uno::RuntimeException)
-        {
-            return m_aSeq;
-        }
+            throw (com::sun::star::uno::RuntimeException);
 
-        bool aborted() const
-        {
-            return p2->isSelected();
-        }
+        bool aborted() const;
 
-        rtl::OUString newName() const
-        {
-            if( p1->isSelected() )
-                return p1->getName();
-            else
-                return rtl::OUString();
-        }
+        bool approved() const;
 
     private:
 
-        XInteractionSupplyNameImpl* p1;
-        XInteractionAbortImpl* p2;
-        sal_Int32 m_nErrorCode,m_nMinorError;
+        XInteractionApproveImpl* p1;
+        XInteractionDisapproveImpl* p2;
+
+        rtl::OUString m_aName;
 
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > m_aSeq;
-
-        rtl::OUString m_aClashingName;
-        com::sun::star::uno::Reference<
-            com::sun::star::uno::XInterface> m_xOrigin;
     };
 
 }

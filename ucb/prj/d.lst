@@ -22,7 +22,7 @@
 ..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
 ..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
 ..\source\ucp\file\ucpfile.xml %_DEST%\xml%_EXT%\ucpfile.xml
-..\source\ucp\ftpproxy\ucpfpx.xml %_DEST%\xml%_EXT%\ucpfpx.xml
+..\source\ucp\ftp\ucpftp.xml %_DEST%\xml%_EXT%\ucpftp.xml
 ..\source\ucp\hierarchy\ucphier.xml %_DEST%\xml%_EXT%\ucphier.xml
 ..\source\ucp\package\ucppkg.xml %_DEST%\xml%_EXT%\ucppkg.xml
 ..\source\ucp\remote\ucprmt.xml %_DEST%\xml%_EXT%\ucprmt.xml

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public:
 
     // adds all properties described by rProps that are actually contained in
     // rContentProps to this instance. In case of duplicates the value
-    // already contained in this will left anchanged.
+    // already contained in this will left unchanged.
     void addProperties( const std::vector< rtl::OUString > & rProps,
                         const ContentProperties & rContentProps );
 

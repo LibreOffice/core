@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 16:24:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,7 +1265,14 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             if( success )
                 break;
 
-            XInteractionRequestImpl *aRequestImpl = new XInteractionRequestImpl;
+            XInteractionRequestImpl *aRequestImpl =
+                new XInteractionRequestImpl(
+                    rtl::Uri::decode(
+                        getTitle(m_aUncPath),
+                        rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8),
+                    (cppu::OWeakObject*)this,
+                    m_pMyShell,nMyCommandIdentifier);
             uno::Reference< task::XInteractionRequest > aReq( aRequestImpl );
 
             m_pMyShell->handleTask( nMyCommandIdentifier,aReq );

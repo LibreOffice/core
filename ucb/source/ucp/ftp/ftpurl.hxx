@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-25 14:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@ namespace ftp {
 
 
     enum FTPErrors { FILE_EXIST_DURING_INSERT = CURL_LAST +1,
-                     FOLDER_EXIST_DURING_INSERT };
+                     FOLDER_EXIST_DURING_INSERT,
+                     FOLDER_MIGHT_EXIST_DURING_INSERT,
+                     FILE_MIGHT_EXIST_DURING_INSERT };
 
 
     class malformed_exception { };

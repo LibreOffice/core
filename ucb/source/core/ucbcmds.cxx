@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 14:12:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,12 +1289,6 @@ static void globalTransfer(
             }
         }
     }
-    catch ( uno::Exception const & )
-    {
-        OSL_ENSURE( sal_False, "Cannot insert new object!" );
-        throw;
-    }
-
 
     //////////////////////////////////////////////////////////////////////
     //

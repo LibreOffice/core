@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 16:24:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,21 @@ void SAL_CALL TaskManager::clearError( sal_Int32 CommandId )
     if( it != m_aTaskMap.end() )
         it->second.clearError();
 }
+
+
+void SAL_CALL TaskManager::retrieveError( sal_Int32 CommandId,
+                                          sal_Int32 &ErrorCode,
+                                          sal_Int32 &minorCode)
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it != m_aTaskMap.end() )
+    {
+        ErrorCode = it->second.getInstalledError();
+        minorCode = it->second. getMinorErrorCode();
+    }
+}
+
 
 
 void SAL_CALL TaskManager::installError( sal_Int32 CommandId,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVRequestEnvironment.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,14 @@ namespace webdav_ucp
 
 struct DAVRequestEnvironment
 {
+    rtl::OUString m_aRequestURI;
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
 //    rtl::Reference< DAVStatusListener >   m_xStatusListener;
 //    rtl::Reference< DAVProgressListener > m_xStatusListener;
 
-    DAVRequestEnvironment( const rtl::Reference< DAVAuthListener > & xListener )
-    : m_xAuthListener( xListener ) {}
+    DAVRequestEnvironment( const rtl::OUString & rRequestURI,
+                           const rtl::Reference< DAVAuthListener > & xListener )
+    : m_aRequestURI( rRequestURI ), m_xAuthListener( xListener ) {}
 
     DAVRequestEnvironment() {}
 };

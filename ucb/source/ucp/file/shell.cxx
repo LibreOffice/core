@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-31 16:24:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,8 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       m_sCommandInfo( 8 ),
       m_bFaked( false ),
       Title( rtl::OUString::createFromAscii( "Title" ) ),
+      CasePreservingURL(
+          rtl::OUString::createFromAscii( "CasePreservingURL" ) ),
       IsDocument( rtl::OUString::createFromAscii( "IsDocument" ) ),
       IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
       DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
@@ -288,6 +290,18 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
+
+    // CasePreservingURL
+    m_aDefaultProperties.insert(
+        MyProperty( true,
+                    CasePreservingURL,
+                    -1 ,
+                    getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                    uno::Any(),
+                    beans::PropertyState_DEFAULT_VALUE,
+                    beans::PropertyAttribute::MAYBEVOID
+                    | beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY ) );
 
 
     // IsFolder
@@ -370,15 +384,21 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Remote
-    m_aDefaultProperties.insert( MyProperty( true,
-                                             IsHidden,
-                                             -1 ,
-                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
-                                             uno::Any(),
-                                             beans::PropertyState_DEFAULT_VALUE,
-                                             beans::PropertyAttribute::MAYBEVOID
-                                             | beans::PropertyAttribute::BOUND
-                                             | beans::PropertyAttribute::READONLY ) );
+    m_aDefaultProperties.insert(
+        MyProperty(
+            true,
+            IsHidden,
+            -1 ,
+            getCppuType( static_cast< sal_Bool* >( 0 ) ),
+            uno::Any(),
+            beans::PropertyState_DEFAULT_VALUE,
+            beans::PropertyAttribute::MAYBEVOID
+            | beans::PropertyAttribute::BOUND
+#ifdef WNT
+        ));
+#else
+    | beans::PropertyAttribute::READONLY)); // under unix/linux only readable
+#endif
 
 
 
@@ -983,20 +1003,50 @@ shell::setv( sal_Int32 CommandId,
                 else
                     ret[i] <<= beans::IllegalTypeException();
             }
-            else if( values[i].Name == IsReadOnly )
+            else if(values[i].Name == IsReadOnly ||
+                    values[i].Name == IsHidden)
             {
-                sal_Bool readonly ;
-                if( values[i].Value >>= readonly )
+                sal_Bool value ;
+                if( values[i].Value >>= value )
                 {
-                    osl::FileBase::RC err;
-                    if( readonly )
-                        err = osl::File::setAttributes( aUnqPath,Attribute_ReadOnly );
-                    else
-                        err = osl::File::setAttributes( aUnqPath,
-                                                        Attribute_GrpWrite    |
-                                                        Attribute_GrpRead     |
-                                                        Attribute_OwnWrite    |
-                                                        Attribute_OwnRead );
+                    osl::DirectoryItem aDirItem;
+                    osl::FileBase::RC err =
+                        osl::DirectoryItem::get(aUnqPath,aDirItem);
+                    sal_uInt64 nAttributes(0);
+                    if(err == osl::FileBase::E_None)
+                    {
+                        osl::FileStatus aFileStatus(FileStatusMask_Attributes);
+                        err = aDirItem.getFileStatus(aFileStatus);
+                        if(err == osl::FileBase::E_None &&
+                           aFileStatus.isValid(FileStatusMask_Attributes))
+                            nAttributes = aFileStatus.getAttributes();
+                    }
+                    // now we have the attributes provided all went well.
+                    if(err == osl::FileBase::E_None) {
+                        if(values[i].Name == IsReadOnly)
+                        {
+                            nAttributes &= ~(Attribute_OwnWrite |
+                                             Attribute_GrpWrite |
+                                             Attribute_OthWrite |
+                                             Attribute_ReadOnly);
+                            if(value)
+                                nAttributes |= Attribute_ReadOnly;
+                            else
+                                nAttributes |= (
+                                    Attribute_OwnWrite |
+                                    Attribute_GrpWrite |
+                                    Attribute_OthWrite);
+                        }
+                        else if(values[i].Name == IsHidden)
+                        {
+                            nAttributes &= ~(Attribute_Hidden);
+                            if(value)
+                                nAttributes |= Attribute_Hidden;
+                        }
+                        err = osl::File::setAttributes(
+                            aUnqPath,nAttributes);
+                    }
+
                     if( err != osl::FileBase::E_None )
                     {
                         --propChanged; // unsuccessful setting
@@ -1005,32 +1055,47 @@ shell::setv( sal_Int32 CommandId,
                         IOErrorCode ioError;
                         switch( err )
                         {
-                            case osl::FileBase::E_NOMEM:  // not enough memory for allocating structures <br>
-                                ioError = IOErrorCode_OUT_OF_MEMORY;
-                                break;
-                            case osl::FileBase::E_INVAL:  // the format of the parameters was not valid<p>
-                                ioError = IOErrorCode_INVALID_PARAMETER;
-                                break;
-                            case osl::FileBase::E_NAMETOOLONG:  // File name too long<br>
-                                ioError = IOErrorCode_NAME_TOO_LONG;
-                                break;
-                            case osl::FileBase::E_NOENT:        // No such file or directory<br>
-                            case osl::FileBase::E_NOLINK:       // Link has been severed<br>
-                                ioError = IOErrorCode_NOT_EXISTING;
-                                break;
-                            case osl::FileBase::E_ROFS: // #i4735# handle ROFS transparently as ACCESS_DENIED
-                            case osl::FileBase::E_ACCES:        // permission denied<br>
-                                ioError = IOErrorCode_ACCESS_DENIED;
-                                break;
-                            case osl::FileBase::E_LOOP:         // Too many symbolic links encountered<br>
-                            case osl::FileBase::E_FAULT:        // Bad address<br>
-                            case osl::FileBase::E_IO:           // I/O error<br>
-                            case osl::FileBase::E_NOSYS:        // Function not implemented<br>
-                            case osl::FileBase::E_MULTIHOP:     // Multihop attempted<br>
-                            case osl::FileBase::E_INTR:         // function call was interrupted<p>
-                            default:
-                                ioError = IOErrorCode_GENERAL;
-                                break;
+                        case osl::FileBase::E_NOMEM:
+                            // not enough memory for allocating structures <br>
+                            ioError = IOErrorCode_OUT_OF_MEMORY;
+                            break;
+                        case osl::FileBase::E_INVAL:
+                            // the format of the parameters was not valid<p>
+                            ioError = IOErrorCode_INVALID_PARAMETER;
+                            break;
+                        case osl::FileBase::E_NAMETOOLONG:
+                            // File name too long<br>
+                            ioError = IOErrorCode_NAME_TOO_LONG;
+                            break;
+                        case osl::FileBase::E_NOENT:
+                            // No such file or directory<br>
+                        case osl::FileBase::E_NOLINK:
+                            // Link has been severed<br>
+                            ioError = IOErrorCode_NOT_EXISTING;
+                            break;
+                        case osl::FileBase::E_ROFS:
+                            // #i4735# handle ROFS transparently
+                            // as ACCESS_DENIED
+                        case  osl::FileBase::E_PERM:
+                        case osl::FileBase::E_ACCES:
+                            // permission denied<br>
+                            ioError = IOErrorCode_ACCESS_DENIED;
+                            break;
+                        case osl::FileBase::E_LOOP:
+                            // Too many symbolic links encountered<br>
+                        case osl::FileBase::E_FAULT:
+                            // Bad address<br>
+                        case osl::FileBase::E_IO:
+                            // I/O error<br>
+                        case osl::FileBase::E_NOSYS:
+                            // Function not implemented<br>
+                        case osl::FileBase::E_MULTIHOP:
+                            // Multihop attempted<br>
+                        case osl::FileBase::E_INTR:
+                            // function call was interrupted<p>
+                        default:
+                            ioError = IOErrorCode_GENERAL;
+                            break;
                         }
                         ret[i] <<= InteractiveAugmentedIOException(
                             rtl::OUString(),
@@ -1079,8 +1144,18 @@ shell::getv( sal_Int32 CommandId,
     osl::FileStatus aFileStatus( n_Mask );
 
     osl::DirectoryItem aDirItem;
-    osl::DirectoryItem::get( aUnqPath,aDirItem );
-    aDirItem.getFileStatus( aFileStatus );
+    osl::FileBase::RC nError1 = osl::DirectoryItem::get( aUnqPath,aDirItem );
+    if( nError1 != osl::FileBase::E_None )
+        installError(CommandId,
+                     TASKHANDLING_OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
+                     nError1);
+
+    osl::FileBase::RC nError2 = aDirItem.getFileStatus( aFileStatus );
+    if( nError1 == osl::FileBase::E_None &&
+        nError2 != osl::FileBase::E_None )
+        installError(CommandId,
+                     TASKHANDLING_OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED
+                     nError2);
 
     {
         vos::OGuard aGuard( m_aMutex );
@@ -1671,7 +1746,7 @@ shell::mkdir( sal_Int32 CommandId,
     {
         case osl::FileBase::E_EXIST:   // Directory cannot be overwritten
         {
-            if( ! OverWrite )
+            if( !OverWrite )
             {
                 installError( CommandId,
                               TASKHANDLING_FOLDER_EXISTS_MKDIR );
@@ -1680,6 +1755,12 @@ shell::mkdir( sal_Int32 CommandId,
             else
                 return sal_True;
         }
+        case osl::FileBase::E_INVAL:
+        {
+            installError(CommandId,
+                         TASKHANDLING_INVALID_NAME_MKDIR);
+            return sal_False;
+        }
         case osl::FileBase::E_None:
         {
             rtl::OUString aPrtPath = getParentName( aUnqPath );
@@ -1687,7 +1768,10 @@ shell::mkdir( sal_Int32 CommandId,
             return sal_True;
         }
         default:
-            return ensuredir( CommandId,aUnqPath,TASKHANDLING_CREATEDIRECTORY_MKDIR );
+            return ensuredir(
+                CommandId,
+                aUnqPath,
+                TASKHANDLING_CREATEDIRECTORY_MKDIR );
     }
 }
 
@@ -1847,6 +1931,12 @@ shell::write( sal_Int32 CommandId,
                     installError( CommandId,
                                   TASKHANDLING_FILEIOERROR_FOR_WRITE,
                                   err );
+                    break;
+                }
+                else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
+                {
+                    installError( CommandId,
+                                  TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
                     break;
                 }
 
@@ -2094,17 +2184,43 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 //
 
 
-void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
+void SAL_CALL
+shell::getMaskFromProperties(
+    sal_Int32& n_Mask,
+    const uno::Sequence< beans::Property >& seq )
 {
-    // always try to get all properties
-    n_Mask = FileStatusMask_FileURL;
-    n_Mask |= FileStatusMask_LinkTargetURL;
-    n_Mask |= FileStatusMask_Type;
-    n_Mask |= FileStatusMask_FileName;
-    n_Mask |= FileStatusMask_Type;
-    n_Mask |= FileStatusMask_ModifyTime;
-    n_Mask |= FileStatusMask_FileSize;
-    n_Mask |= FileStatusMask_Attributes;
+    n_Mask = 0;
+    for(sal_Int32 j = 0; j < seq.getLength(); ++j) {
+        if(seq[j].Name == Title)
+            n_Mask |= FileStatusMask_FileName;
+        else if(seq[j].Name == CasePreservingURL)
+            n_Mask |= FileStatusMask_FileURL;
+        else if(seq[j].Name == IsDocument ||
+                seq[j].Name == IsFolder ||
+                seq[j].Name == IsVolume ||
+                seq[j].Name == IsRemoveable ||
+                seq[j].Name == IsRemote ||
+                seq[j].Name == IsCompactDisc ||
+                seq[j].Name == IsFloppy ||
+                seq[j].Name == ContentType)
+            n_Mask |= (FileStatusMask_Type | FileStatusMask_LinkTargetURL);
+        else if(seq[j].Name == Size)
+            n_Mask |= (FileStatusMask_FileSize |
+                      FileStatusMask_Type |
+                      FileStatusMask_LinkTargetURL);
+        else if(seq[j].Name == IsHidden ||
+                seq[j].Name == IsReadOnly)
+            n_Mask |= FileStatusMask_Attributes;
+        else if(seq[j].Name == DateModified)
+            n_Mask |= FileStatusMask_ModifyTime;
+//         n_Mask = FileStatusMask_FileURL;
+//         n_Mask |= FileStatusMask_LinkTargetURL;
+//         n_Mask |= FileStatusMask_FileName;
+//         n_Mask |= FileStatusMask_Type;
+//         n_Mask |= FileStatusMask_ModifyTime;
+//         n_Mask |= FileStatusMask_FileSize;
+//         n_Mask |= FileStatusMask_Attributes;
+    }
 }
 
 
@@ -2210,8 +2326,20 @@ shell::commit( const shell::ContentMap::iterator& it,
             }
             it1->setValue( aAny );
         }
-        else
-            it1->setValue( emptyAny );
+//      else
+//          it1->setValue( emptyAny );
+    }
+
+    it1 = properties.find( MyProperty( CasePreservingURL ) );
+    if( it1 != properties.end() )
+    {
+        if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+        {
+            aAny <<= aFileStatus.getFileURL();
+            it1->setValue( aAny );
+        }
+//      else
+//          it1->setValue( emptyAny );
     }
 
 
@@ -2236,7 +2364,9 @@ shell::commit( const shell::ContentMap::iterator& it,
                     osl::FileStatus::Regular == aFileStatus2.getFileType();
             }
             else
-            { // extremly ugly, but otherwise default construction of aDirItem and aFileStatus2
+            {
+                // extremly ugly, but otherwise default construction
+                // of aDirItem and aFileStatus2
                 // before the preciding if
                 isVolume = osl::FileStatus::Volume == aFileStatus.getFileType();
                 isDirectory =
@@ -2309,29 +2439,29 @@ shell::commit( const shell::ContentMap::iterator& it,
             if( it1 != properties.end() ) it1->setValue( aAny );
         }
     }
-    else
-    {
-        it1 = properties.find( MyProperty( IsVolume ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//  else
+//  {
+//      it1 = properties.find( MyProperty( IsVolume ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//      it1 = properties.find( MyProperty( IsFolder ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//      it1 = properties.find( MyProperty( IsDocument ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsRemote ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//      it1 = properties.find( MyProperty( IsRemote ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsRemoveable ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//      it1 = properties.find( MyProperty( IsRemoveable ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsCompactDisc ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
+//      it1 = properties.find( MyProperty( IsCompactDisc ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
 
-        it1 = properties.find( MyProperty( IsFloppy ) );
-        if( it1 != properties.end() ) it1->setValue( emptyAny );
-    }
+//      it1 = properties.find( MyProperty( IsFloppy ) );
+//      if( it1 != properties.end() ) it1->setValue( emptyAny );
+//  }
 
 
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
@@ -2385,8 +2515,8 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= dirSize;
             it1->setValue( aAny );
         }
-        else
-            it1->setValue( emptyAny );
+//      else
+//          it1->setValue( emptyAny );
     }
 
 
@@ -2400,8 +2530,8 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= readonly;
             it1->setValue( aAny );
         }
-        else
-            it1->setValue( emptyAny );
+//      else
+//          it1->setValue( emptyAny );
     }
 
 
@@ -2427,8 +2557,8 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= ishidden;
             it1->setValue( aAny );
         }
-        else
-            it1->setValue( emptyAny );
+//      else
+//          it1->setValue( emptyAny );
     }
 
 
@@ -2469,16 +2599,15 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= aDateTime;
             it1->setValue( aAny );
         }
-        else
-            it1->setValue( emptyAny );
+//      else
+//          it1->setValue( emptyAny );
     }
 
 }
 
 
-
-// Special optimized method for getting the properties of a directoryitem, which
-// is returned by osl::DirectoryItem::getNextItem()
+// Special optimized method for getting the properties of a
+// directoryitem, which is returned by osl::DirectoryItem::getNextItem()
 
 
 uno::Reference< sdbc::XRow > SAL_CALL
@@ -2495,33 +2624,37 @@ shell::getv(
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
 
-    // Always retrieve the target URL if item is a link
-    osl::FileStatus aFileStatus( n_Mask | FileStatusMask_LinkTargetURL );
+    // Always retrieve the type and the target URL because item might be a link
+    osl::FileStatus aFileStatus( n_Mask |
+                                 FileStatusMask_FileURL |
+                                 FileStatusMask_Type |
+                                 FileStatusMask_LinkTargetURL );
     aDirItem.getFileStatus( aFileStatus );
-
     aUnqPath = aFileStatus.getFileURL();
 
     // If the directory item type is a link retrieve the type of the target
 
     if ( aFileStatus.getFileType() == osl::FileStatus::Link )
     {
-        osl::FileBase::RC   result = osl::FileBase::E_INVAL;    // Assume failure
-
+        // Assume failure
+        osl::FileBase::RC   result = osl::FileBase::E_INVAL;
         osl::DirectoryItem  aTargetItem;
-
         osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
-
-
         if ( aTargetItem.is() )
         {
             osl::FileStatus aTargetStatus( FileStatusMask_Type );
 
-            if ( osl::FileBase::E_None == ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
-                aIsRegular = aTargetStatus.getFileType() == osl::FileStatus::Regular;
+            if ( osl::FileBase::E_None ==
+                 ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
+                aIsRegular =
+                    aTargetStatus.getFileType() == osl::FileStatus::Regular;
         }
 
-        // FIXME: aIsRegular undefined in error case. Don't know how to transport error
-        OSL_ENSURE( osl::FileBase::E_None == result, "shell::getv: Link target can't be retrieved. Missing error handling !!!" );
+        // FIXME: aIsRegular undefined in error case.
+        // Don't know how to transport error
+        OSL_ENSURE( osl::FileBase::E_None == result,
+                    "shell::getv: Link target can't be retrieved."
+                    " Missing error handling !!!" );
     }
     else
         aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;

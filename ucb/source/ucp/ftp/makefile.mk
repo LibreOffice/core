@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: abi $ $Date: 2002-10-17 16:28:24 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:26:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,12 @@ NO_BSYMBOLIC=TRUE
 # Version
 UCPFTP_MAJOR=1
 
+
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
+
+#CFLAGS +=-fno-inline
 
 # --- General -----------------------------------------------------
 
@@ -92,6 +95,7 @@ SLOFILES1=\
     $(SLO)$/ftpdirp.obj     \
     $(SLO)$/ftpcfunc.obj     \
     $(SLO)$/ftpurl.obj     \
+    $(SLO)$/ftpintreq.obj     \
     $(SLO)$/debughelper.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
@@ -110,7 +114,6 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
-    $(VOSLIB)  \
     $(UCBHELPERLIB) \
     $(CURLLIB)
 
@@ -129,5 +132,26 @@ DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=	$(TARGET).dxp
 DEF1DES=UCB Ftp Content Provider
 
+.IF "$(COMPHELPERLIB)"==""
+.IF "$(GUI)" == "UNX"
+COMPHELPERLIB=-licomphelp2
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+COMPHELPERLIB=icomphelp2.lib
+.ENDIF # wnt
+.ENDIF
 
 .INCLUDE: target.mk
+
+
+
+
+
+
+
+
+
+
+
+
+

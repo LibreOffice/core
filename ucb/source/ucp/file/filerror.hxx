@@ -3,6 +3,7 @@
 namespace fileaccess {
 
 // Error codes used to deliver the resulting exceptions
+#define LOWEST_FREE_ERROR                               72
 
 #define TASKHANDLER_NO_ERROR                            0
 #define TASKHANDLER_UNSUPPORTED_COMMAND                 1
@@ -39,12 +40,14 @@ namespace fileaccess {
 #define TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE      29
 #define TASKHANDLING_IOEXCEPTION_FOR_WRITE             30
 #define TASKHANDLING_FILEIOERROR_FOR_WRITE             31
+#define TASKHANDLING_FILEIOERROR_FOR_NO_SPACE          71
 #define TASKHANDLING_FILESIZE_FOR_WRITE                32
 #define TASKHANDLING_INPUTSTREAM_FOR_WRITE             33
 #define TASKHANDLING_NOREPLACE_FOR_WRITE               34
 #define TASKHANDLING_ENSUREDIR_FOR_WRITE               35
 
 #define TASKHANDLING_FOLDER_EXISTS_MKDIR               69
+#define TASKHANDLING_INVALID_NAME_MKDIR                70
 #define TASKHANDLING_CREATEDIRECTORY_MKDIR             36
 
 #define TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE        38
@@ -84,3 +87,7 @@ namespace fileaccess {
 }
 
 #endif
+
+
+
+

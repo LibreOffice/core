@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ public:
 
     virtual void validate()
         throw( com::sun::star::ucb::ResultSetException );
+
+    ::rtl::OUString assembleChildURL( const ::rtl::OUString& aName );
 };
 
 }
