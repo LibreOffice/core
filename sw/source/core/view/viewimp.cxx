@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-02 12:57:28 $
+ *  last change: $Author: od $ $Date: 2002-12-06 16:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,9 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pIdleAct( 0 ),
     pSdrPageView( 0 ),
     pDrawView( 0 ),
-    nRestoreActions( 0 )
+    nRestoreActions( 0 ),
+    // OD 04.12.2002 #103492#
+    mpCurrPreviewData( 0 )
 #ifdef ACCESSIBLE_LAYOUT
     ,pAccMap( 0 )
 #endif
@@ -201,6 +203,9 @@ SwViewImp::~SwViewImp()
 #ifdef ACCESSIBLE_LAYOUT
     delete pAccMap;
 #endif
+
+    // OD 04.12.2002 #103492#
+    delete mpCurrPreviewData;
 
     //JP 29.03.96: nach ShowPage muss auch HidePage gemacht werden!!!
     if( pDrawView )

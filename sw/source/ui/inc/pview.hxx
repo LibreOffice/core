@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 12:17:24 $
+ *  last change: $Author: od $ $Date: 2002-12-06 16:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ public:
         @author OD
     */
     void AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor );
+
     const Size&                GetPreviewDocSize() const
                                     { return maPreviewDocSize;}
 
@@ -204,7 +205,7 @@ class SwPagePreView: public SfxViewShell
     // aktiv sind
     Window                  *pScrollFill;
 
-    USHORT                  nPageCount;
+    USHORT                  mnPageCount;
     BOOL                    bNormalPrint;
 
     void            Init(const SwViewOption* = 0);
@@ -262,7 +263,7 @@ public:
     void            ShowVScrollbar(sal_Bool bShow);
     sal_Bool        IsVScrollbarVisible()const;
 
-    USHORT          GetPageCount() const        { return nPageCount; }
+    USHORT          GetPageCount() const        { return mnPageCount; }
 
     BOOL            HandleWheelCommands( const CommandEvent& );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-12-03 15:38:21 $
+ *  last change: $Author: od $ $Date: 2002-12-06 16:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #endif
 #include "swtypes.hxx"
 #include "swrect.hxx"
+// OD 04.12.2002 #103492#
+#include "previewdata.hxx"
 
 class ViewShell;
 class SwFlyFrm;
@@ -92,82 +94,6 @@ class SwAccessibleMap;
 class SdrObject;
 class Fraction;
 #endif
-
-/** struct to save current preview settings for a view
-
-    OD 27.11.2002 #103492#
-
-    @author OD
-*/
-struct CurrentPreviewSettings
-{
-    bool        bLayoutInfoValid;
-    bool        bLayoutSizesValid;
-    bool        bPaintInfoValid;
-    Size        aWinSize;
-    sal_uInt16  nCols;
-    sal_uInt16  nRows;
-    sal_uInt16  nPages;
-    Size        aMaxPageSize;
-    Size        aPreviewDocSize;
-    SwTwips     nColWidth;
-    SwTwips     nRowHeight;
-    bool        bDoesLayoutRowsFitIntoWindow;
-    sal_uInt16  nPaintPhyStartPageNum;
-    sal_uInt16  nPaintStartCol;
-    sal_uInt16  nPaintStartRow;
-    Point       aPaintStartPageOffset;
-    Point       aPaintPreviewDocOffset;
-    Point       aAdditionalPaintOffset;
-
-    inline CurrentPreviewSettings();
-    inline void Clear();
-};
-
-inline CurrentPreviewSettings::CurrentPreviewSettings()
-    : bLayoutInfoValid( false ),
-      bLayoutSizesValid( false ),
-      bPaintInfoValid( false ),
-      aWinSize( Size(0,0) ),
-      nCols( 0 ),
-      nRows( 0 ),
-      nPages( 0 ),
-      aMaxPageSize( Size(0,0) ),
-      aPreviewDocSize( Size(0,0) ),
-      nColWidth( 0 ),
-      nRowHeight( 0 ),
-      bDoesLayoutRowsFitIntoWindow( false ),
-      nPaintPhyStartPageNum( 0 ),
-      nPaintStartCol( 0 ),
-      nPaintStartRow( 0 ),
-      aPaintStartPageOffset( Point(0,0) ),
-      aPaintPreviewDocOffset( Point(0,0) ),
-      aAdditionalPaintOffset( Point(0,0) )
-{};
-
-inline void CurrentPreviewSettings::Clear()
-{
-    bLayoutInfoValid = bLayoutSizesValid = bPaintInfoValid = false;
-    aWinSize.Width() = 0;
-    aWinSize.Height() = 0;
-    nCols = nRows = 0;
-    nPages = 0;
-    aMaxPageSize.Width() = 0;
-    aMaxPageSize.Height() = 0;
-    aPreviewDocSize.Width() = 0;
-    aPreviewDocSize.Height() = 0;
-    nColWidth = nRowHeight = 0;
-    bDoesLayoutRowsFitIntoWindow = false;
-    nPaintPhyStartPageNum = 0;
-    nPaintStartCol = nPaintStartRow = 0;
-    aPaintStartPageOffset.X() = 0;
-    aPaintStartPageOffset.Y() = 0;
-    aPaintPreviewDocOffset.X() = 0;
-    aPaintPreviewDocOffset.Y() = 0;
-    aAdditionalPaintOffset.X() = 0;
-    aAdditionalPaintOffset.Y() = 0;
-};
-// end of declaration/definition of struct <CurrentPreviewSettings>
 
 class SwViewImp
 {
@@ -218,7 +144,7 @@ class SwViewImp
     SwRect aSmoothRect;
 
     // OD 27.11.2002 #103492#
-    CurrentPreviewSettings maCurrPreviewSettings;
+    CurrentPreviewData* mpCurrPreviewData;
 
     /**
         Signal whether to stop printing.
@@ -353,10 +279,16 @@ public:
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
-    // OD 27.11.2002 #103492#
-    inline CurrentPreviewSettings& CurrPrevwSet()
+    // OD 04.12.2002 #103492#
+    inline void InitPreviewData()
     {
-        return maCurrPreviewSettings;
+        mpCurrPreviewData = new CurrentPreviewData;
+    }
+
+    // OD 04.12.2002 #103492#
+    inline CurrentPreviewData* CurrPrevwData()
+    {
+        return mpCurrPreviewData;
     }
 
 #ifdef ACCESSIBLE_LAYOUT

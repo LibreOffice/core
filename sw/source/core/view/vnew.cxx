@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:29:56 $
+ *  last change: $Author: od $ $Date: 2002-12-06 16:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     bEndActionByVirDev = FALSE;
     bPaintWorks = bEnableSmooth = TRUE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
+    // OD 04.12.2002 #103492#
+    if ( bPreView )
+        pImp->InitPreviewData();
 
     pDoc->AddLink();
     pOutput = pOut;
@@ -276,6 +279,9 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
+    // OD 04.12.2002 #103492#
+    if ( bPreView )
+        pImp->InitPreviewData();
 
     SET_CURR_SHELL( this );
 
@@ -396,5 +402,3 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
     pDView->ValidateMarkList();
     return pDView;
 }
-
-
