@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 
 sal_Char __READONLY_DATA sXML_np__text[] = "text";
 sal_Char __READONLY_DATA sXML_np__table[] = "table";
@@ -312,6 +313,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     if( XML_NAMESPACE_OFFICE==nPrefix &&
         ( 0 == rLocalName.compareToAscii(sXML_document) ||
           0 == rLocalName.compareToAscii(sXML_document_meta) ||
+          0 == rLocalName.compareToAscii(sXML_document_settings) ||
           0 == rLocalName.compareToAscii(sXML_document_styles) ||
           0 == rLocalName.compareToAscii(sXML_document_content) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
@@ -717,7 +719,7 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
     SetFontDecls( pFSContext );
     return pFSContext;
 }
-void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewProps)
+void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 {
     if( !GetModel().is() )
         return;
@@ -741,7 +743,7 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
         aRect = ((SfxInPlaceObject *)pDoc->GetDocShell())->GetVisArea();
 
     sal_Int32 nCount = aViewProps.getLength();
-    const beans::PropertyValue *pValue = aViewProps.getConstArray();
+    const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
     sal_Bool bShowRedlineChanges = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
@@ -797,8 +799,38 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
 
 }
 
-void SwXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
+void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue > & aConfigProps)
 {
+    Reference < XPropertySet > xPropSet = Reference < XPropertySet >(GetModel(), UNO_QUERY);
+    if (xPropSet.is())
+    {
+        sal_Int32 nCount = aConfigProps.getLength();
+        const PropertyValue *pValue = aConfigProps.getConstArray();
+
+        OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
+        OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
+        OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
+        OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
+        OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
+        OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
+
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            if (pValue->Name.equals( sLinkUpdateMode ) )
+                xPropSet->setPropertyValue( sLinkUpdateMode, pValue->Value);
+            else if (pValue->Name.equals( sFieldAutoUpdate ) )
+                xPropSet->setPropertyValue( sFieldAutoUpdate, pValue->Value);
+            else if (pValue->Name.equals( sChartAutoUpdate ) )
+                xPropSet->setPropertyValue( sChartAutoUpdate, pValue->Value);
+            else if (pValue->Name.equals( sAddParaTableSpacing ) )
+                xPropSet->setPropertyValue( sAddParaTableSpacing, pValue->Value);
+            else if (pValue->Name.equals( sAddParaTableSpacingAtStart ) )
+                xPropSet->setPropertyValue( sAddParaTableSpacingAtStart, pValue->Value);
+            else if (pValue->Name.equals( sPrinterName ) )
+                xPropSet->setPropertyValue( sPrinterName, pValue->Value);
+            pValue++;
+        }
+    }
 }
 
 void SwXMLImport::SetProgressRef( sal_Int32 nParagraphs )
