@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 
@@ -146,7 +146,6 @@ public:
 
     long                operator [] ( long nPos ) const;
 };
-
 
 //-----------------------------------------------------------------------------
 #define LISTACTION  com::sun::star::ucb::ListAction
@@ -203,7 +202,7 @@ class SortedResultSet:
 
     SRSPropertySetInfo* mpPropSetInfo;
     SortInfo*           mpSortInfo;
-    ::vos::OMutex       maMutex;
+    osl::Mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
     List                maO2S;          // maps the original Entries to the sorted ones
     List                maModList;      // keeps track of modified entries

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,8 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #endif
 
-#include <tools/debug.hxx>
-
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 //-----------------------------------------------------------------------------
@@ -306,7 +304,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
 void SAL_CALL SortedResultSet::dispose()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpDisposeEventListeners && mpDisposeEventListeners->getLength() )
     {
@@ -338,7 +336,7 @@ void SAL_CALL SortedResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
@@ -352,7 +350,7 @@ void SAL_CALL SortedResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpDisposeEventListeners )
         mpDisposeEventListeners->removeInterface( Listener );
@@ -366,7 +364,7 @@ OUString SAL_CALL
 SortedResultSet::queryContentIdentfierString()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentfierString();
 }
 
@@ -375,7 +373,7 @@ Reference< XContentIdentifier > SAL_CALL
 SortedResultSet::queryContentIdentifier()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XContentAccess >::query(mxOriginal)->queryContentIdentifier();
 }
 
@@ -384,7 +382,7 @@ Reference< XContent > SAL_CALL
 SortedResultSet::queryContent()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XContentAccess >::query(mxOriginal)->queryContent();
 }
 
@@ -395,7 +393,7 @@ SortedResultSet::queryContent()
 sal_Bool SAL_CALL SortedResultSet::next()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     mnCurEntry++;
 
@@ -458,7 +456,7 @@ sal_Bool SAL_CALL SortedResultSet::isLast()
 void SAL_CALL SortedResultSet::beforeFirst()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     mnCurEntry = 0;
     mxOriginal->beforeFirst();
 }
@@ -467,7 +465,7 @@ void SAL_CALL SortedResultSet::beforeFirst()
 void SAL_CALL SortedResultSet::afterLast()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     mnCurEntry = mnCount+1;
     mxOriginal->afterLast();
 }
@@ -476,7 +474,7 @@ void SAL_CALL SortedResultSet::afterLast()
 sal_Bool SAL_CALL SortedResultSet::first()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mnCount )
     {
@@ -495,7 +493,7 @@ sal_Bool SAL_CALL SortedResultSet::first()
 sal_Bool SAL_CALL SortedResultSet::last()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mnCount )
     {
@@ -546,7 +544,7 @@ sal_Int32 SAL_CALL SortedResultSet::getRow()
 sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     sal_Int32 nIndex;
 
@@ -609,7 +607,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
 sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -654,7 +652,7 @@ sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
 sal_Bool SAL_CALL SortedResultSet::previous()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     mnCurEntry -= 1;
 
@@ -676,7 +674,7 @@ sal_Bool SAL_CALL SortedResultSet::previous()
 void SAL_CALL SortedResultSet::refreshRow()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -690,7 +688,7 @@ void SAL_CALL SortedResultSet::refreshRow()
 sal_Bool SAL_CALL SortedResultSet::rowUpdated()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -704,7 +702,7 @@ sal_Bool SAL_CALL SortedResultSet::rowUpdated()
 sal_Bool SAL_CALL SortedResultSet::rowInserted()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -718,7 +716,7 @@ sal_Bool SAL_CALL SortedResultSet::rowInserted()
 sal_Bool SAL_CALL SortedResultSet::rowDeleted()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -732,7 +730,7 @@ sal_Bool SAL_CALL SortedResultSet::rowDeleted()
 Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
     throw ( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( ( mnCurEntry <= 0 ) || ( mnCurEntry > mnCount ) )
     {
@@ -749,7 +747,7 @@ Reference< XInterface > SAL_CALL SortedResultSet::getStatement()
 sal_Bool SAL_CALL SortedResultSet::wasNull()
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->wasNull();
 }
 
@@ -757,7 +755,7 @@ sal_Bool SAL_CALL SortedResultSet::wasNull()
 OUString SAL_CALL SortedResultSet::getString( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getString( columnIndex );
 }
 
@@ -765,7 +763,7 @@ OUString SAL_CALL SortedResultSet::getString( sal_Int32 columnIndex )
 sal_Bool SAL_CALL SortedResultSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBoolean( columnIndex );
 }
 
@@ -773,7 +771,7 @@ sal_Bool SAL_CALL SortedResultSet::getBoolean( sal_Int32 columnIndex )
 sal_Int8 SAL_CALL SortedResultSet::getByte( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getByte( columnIndex );
 }
 
@@ -781,7 +779,7 @@ sal_Int8 SAL_CALL SortedResultSet::getByte( sal_Int32 columnIndex )
 sal_Int16 SAL_CALL SortedResultSet::getShort( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getShort( columnIndex );
 }
 
@@ -789,14 +787,14 @@ sal_Int16 SAL_CALL SortedResultSet::getShort( sal_Int32 columnIndex )
 sal_Int32 SAL_CALL SortedResultSet::getInt( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getInt( columnIndex );
 }
 //-------------------------------------------------------------------------
 sal_Int64 SAL_CALL SortedResultSet::getLong( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getLong( columnIndex );
 }
 
@@ -804,7 +802,7 @@ sal_Int64 SAL_CALL SortedResultSet::getLong( sal_Int32 columnIndex )
 float SAL_CALL SortedResultSet::getFloat( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getFloat( columnIndex );
 }
 
@@ -812,7 +810,7 @@ float SAL_CALL SortedResultSet::getFloat( sal_Int32 columnIndex )
 double SAL_CALL SortedResultSet::getDouble( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getDouble( columnIndex );
 }
 
@@ -820,7 +818,7 @@ double SAL_CALL SortedResultSet::getDouble( sal_Int32 columnIndex )
 Sequence< sal_Int8 > SAL_CALL SortedResultSet::getBytes( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBytes( columnIndex );
 }
 
@@ -828,7 +826,7 @@ Sequence< sal_Int8 > SAL_CALL SortedResultSet::getBytes( sal_Int32 columnIndex )
 Date SAL_CALL SortedResultSet::getDate( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getDate( columnIndex );
 }
 
@@ -836,7 +834,7 @@ Date SAL_CALL SortedResultSet::getDate( sal_Int32 columnIndex )
 Time SAL_CALL SortedResultSet::getTime( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getTime( columnIndex );
 }
 
@@ -844,7 +842,7 @@ Time SAL_CALL SortedResultSet::getTime( sal_Int32 columnIndex )
 DateTime SAL_CALL SortedResultSet::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getTimestamp( columnIndex );
 }
 
@@ -853,7 +851,7 @@ Reference< XInputStream > SAL_CALL
 SortedResultSet::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBinaryStream( columnIndex );
 }
 
@@ -862,7 +860,7 @@ Reference< XInputStream > SAL_CALL
 SortedResultSet::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getCharacterStream( columnIndex );
 }
 
@@ -871,7 +869,7 @@ Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
                        const Reference< XNameAccess >& typeMap )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getObject( columnIndex,
                                                             typeMap);
 }
@@ -880,7 +878,7 @@ Any SAL_CALL SortedResultSet::getObject( sal_Int32 columnIndex,
 Reference< XRef > SAL_CALL SortedResultSet::getRef( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getRef( columnIndex );
 }
 
@@ -888,7 +886,7 @@ Reference< XRef > SAL_CALL SortedResultSet::getRef( sal_Int32 columnIndex )
 Reference< XBlob > SAL_CALL SortedResultSet::getBlob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getBlob( columnIndex );
 }
 
@@ -896,7 +894,7 @@ Reference< XBlob > SAL_CALL SortedResultSet::getBlob( sal_Int32 columnIndex )
 Reference< XClob > SAL_CALL SortedResultSet::getClob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getClob( columnIndex );
 }
 
@@ -904,7 +902,7 @@ Reference< XClob > SAL_CALL SortedResultSet::getClob( sal_Int32 columnIndex )
 Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XRow >::query(mxOriginal)->getArray( columnIndex );
 }
 
@@ -916,7 +914,7 @@ Reference< XArray > SAL_CALL SortedResultSet::getArray( sal_Int32 columnIndex )
 void SAL_CALL SortedResultSet::close()
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     Reference< XCloseable >::query(mxOriginal)->close();
 }
 
@@ -927,7 +925,7 @@ void SAL_CALL SortedResultSet::close()
 Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
     throw( SQLException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     return Reference< XResultSetMetaDataSupplier >::query(mxOriginal)->getMetaData();
 }
 
@@ -939,7 +937,7 @@ Reference< XResultSetMetaData > SAL_CALL SortedResultSet::getMetaData()
 Reference< XPropertySetInfo > SAL_CALL
 SortedResultSet::getPropertySetInfo() throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpPropSetInfo )
     {
@@ -960,10 +958,10 @@ void SAL_CALL SortedResultSet::setPropertyValue(
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
-    if ( ( PropertyName.compareToAscii( "RowCount" ) == COMPARE_EQUAL ) ||
-         ( PropertyName.compareToAscii( "IsRowCountFinal" ) == COMPARE_EQUAL ) )
+    if ( ( PropertyName.compareToAscii( "RowCount" ) == 0 ) ||
+         ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 ) )
         throw IllegalArgumentException();
     else
         throw UnknownPropertyException();
@@ -975,15 +973,15 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     Any aRet;
 
-    if ( PropertyName.compareToAscii( "RowCount" ) == COMPARE_EQUAL )
+    if ( PropertyName.compareToAscii( "RowCount" ) == 0 )
     {
         aRet <<= maS2O.Count();
     }
-    else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == COMPARE_EQUAL )
+    else if ( PropertyName.compareToAscii( "IsRowCountFinal" ) == 0 )
     {
         sal_Int32   nOrgCount;
         sal_Bool    bOrgFinal;
@@ -1018,7 +1016,7 @@ void SAL_CALL SortedResultSet::addPropertyChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpPropChangeListeners )
         mpPropChangeListeners =
@@ -1035,7 +1033,7 @@ void SAL_CALL SortedResultSet::removePropertyChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpPropChangeListeners )
         mpPropChangeListeners->removeInterface( PropertyName, Listener );
@@ -1049,7 +1047,7 @@ void SAL_CALL SortedResultSet::addVetoableChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpVetoChangeListeners )
         mpVetoChangeListeners =
@@ -1066,7 +1064,7 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
            WrappedTargetException,
            RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpVetoChangeListeners )
         mpVetoChangeListeners->removeInterface( PropertyName, Listener );
@@ -1277,7 +1275,7 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
             }
         default:
             {
-                DBG_ERRORFILE( "DataType not supported for compare!" );
+                OSL_ENSURE( sal_False, "DataType not supported for compare!" );
             }
     }
 
@@ -1400,7 +1398,7 @@ long SortedResultSet::FindPos( SortListData *pEntry,
 //--------------------------------------------------------------------------
 void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpPropChangeListeners )
         return;
@@ -1518,7 +1516,7 @@ void SortedResultSet::Initialize(
 //--------------------------------------------------------------------------
 void SortedResultSet::CheckProperties( long nOldCount, BOOL bWasFinal )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpPropChangeListeners )
         return;
@@ -1722,7 +1720,7 @@ void SortedResultSet::BuildSortInfo(
 
     if ( ! xMeta.is() )
     {
-        DBG_ERRORFILE( "No MetaData, No Sorting!" );
+        OSL_ENSURE( sal_False, "No MetaData, No Sorting!" );
         return;
     }
 
@@ -1941,12 +1939,12 @@ long SortedEntryList::operator [] ( long nPos ) const
             return pData->mnCurPos;
         else
         {
-            DBG_ERRORFILE( "SortedEntryList: Can't get value for modified entry!");
+            OSL_ENSURE( sal_False, "SortedEntryList: Can't get value for modified entry!");
             return 0;
         }
     else
     {
-        DBG_ERRORFILE( "SortedEntryList: invalid pos!");
+        OSL_ENSURE( sal_False, "SortedEntryList: invalid pos!");
         return 0;
     }
 }
@@ -2004,9 +2002,9 @@ Property SAL_CALL
 SRSPropertySetInfo::getPropertyByName( const OUString& Name )
     throw( UnknownPropertyException, RuntimeException )
 {
-    if ( Name.compareToAscii( "RowCount" ) == COMPARE_EQUAL )
+    if ( Name.compareToAscii( "RowCount" ) == 0 )
         return maProps[0];
-    else if ( Name.compareToAscii( "IsRowCountFinal" ) == COMPARE_EQUAL )
+    else if ( Name.compareToAscii( "IsRowCountFinal" ) == 0 )
         return maProps[1];
     else
         throw UnknownPropertyException();
@@ -2017,9 +2015,9 @@ sal_Bool SAL_CALL
 SRSPropertySetInfo::hasPropertyByName( const OUString& Name )
     throw( RuntimeException )
 {
-    if ( Name.compareToAscii( "RowCount" ) == COMPARE_EQUAL )
+    if ( Name.compareToAscii( "RowCount" ) == 0 )
         return TRUE;
-    else if ( Name.compareToAscii( "IsRowCountFinal" ) == COMPARE_EQUAL )
+    else if ( Name.compareToAscii( "IsRowCountFinal" ) == 0 )
         return TRUE;
     else
         return FALSE;

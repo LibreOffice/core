@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,9 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
-
-#include <tools/list.hxx>
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
@@ -160,7 +158,7 @@ class SortedDynamicResultSet:
     SortedDynamicResultSetListener*     mpOwnListener;
 
     EventList                           maActions;
-    ::vos::OMutex                       maMutex;
+    osl::Mutex                          maMutex;
     BOOL                                mbGotWelcome    :1;
     BOOL                                mbUseOne        :1;
     BOOL                                mbStatic        :1;
@@ -247,7 +245,7 @@ class SortedDynamicResultSetListener:
                 public com::sun::star::ucb::XDynamicResultSetListener
 {
     SortedDynamicResultSet  *mpOwner;
-    ::vos::OMutex            maMutex;
+    osl::Mutex              maMutex;
 
 public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );

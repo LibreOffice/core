@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+#   last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,16 +96,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \
-    $(TOOLSLIB) \
-    $(VOSLIB)
-
-#SHL1STDLIBS=\
-#	$(CPPUHELPERLIB) \
-#	$(CPPULIB) \
-#	$(SALLIB) \
-#	$(STORELIB)
-
-
+    $(TOOLSLIB)
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=i$(TARGET)
@@ -126,7 +117,6 @@ $(MISC)$/$(SHL1TARGET).flt:
     @echo cpp >> $@
     @echo m_ >> $@
     @echo rtl >> $@
-    @echo vos >> $@
     @echo component_getImplementationEnvironment >> $@
     @echo component_writeInfo >> $@
     @echo component_getFactory >> $@

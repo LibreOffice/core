@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:23 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
 void SAL_CALL SortedDynamicResultSet::dispose()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpDisposeEventListeners && mpDisposeEventListeners->getLength() )
     {
@@ -212,7 +212,7 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( !mpDisposeEventListeners )
         mpDisposeEventListeners =
@@ -226,7 +226,7 @@ void SAL_CALL SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpDisposeEventListeners )
         mpDisposeEventListeners->removeInterface( Listener );
@@ -239,7 +239,7 @@ Reference< XResultSet > SAL_CALL
 SortedDynamicResultSet::getStaticResultSet()
     throw( ListenerAlreadySetException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
@@ -261,7 +261,7 @@ void SAL_CALL
 SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener >& Listener )
     throw( ListenerAlreadySetException, RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
@@ -310,7 +310,7 @@ sal_Int16 SAL_CALL
 SortedDynamicResultSet::getCapabilities()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     sal_Int16 nCaps = 0;
 
@@ -345,7 +345,7 @@ void SAL_CALL
 SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     BOOL bHasNew = FALSE;
     BOOL bHasModified = FALSE;
@@ -634,7 +634,7 @@ void SAL_CALL
 SortedDynamicResultSetListener::disposing( const EventObject& Source )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpOwner )
         mpOwner->impl_disposing( Source );
@@ -647,7 +647,7 @@ void SAL_CALL
 SortedDynamicResultSetListener::notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpOwner )
         mpOwner->impl_notify( Changes );
@@ -659,7 +659,7 @@ SortedDynamicResultSetListener::notify( const ListEvent& Changes )
 void SAL_CALL
 SortedDynamicResultSetListener::impl_OwnerDies()
 {
-    vos::OGuard aGuard( maMutex );
+    osl::Guard< osl::Mutex > aGuard( maMutex );
     mpOwner = NULL;
 }
 
