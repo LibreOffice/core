@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 14:16:30 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,7 +1907,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             // unload
             unloadForm(sal_False, sal_False); // don't dispose the connection, don't flush
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pTemp->GetUserData());
-            OSL_ENSURE(pData,"elementReplaced: There must be user data!");
+            OSL_ENSURE(pData,"elementRemoved: There must be user data!");
             delete pData;
             m_pTreeModel->Remove(pTemp);
         }
@@ -1920,7 +1920,6 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
                 if (m_pTreeView->getListBox()->GetEntryText(pChild) == aName)
                 {
                     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pChild->GetUserData());
-                    OSL_ENSURE(pData,"elementReplaced: There must be user data!");
                     delete pData;
                     m_pTreeModel->Remove(pChild);
                     break;
