@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-28 09:47:01 $
+ *  last change: $Author: cl $ $Date: 2001-03-28 11:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,10 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
             // write 3DSceneLights
             export3DLamps( xPropSet );
-        }
 
-        // write members
-        exportShapes( xShapes, nFeatures, pRefPoint );
+            // write members
+            exportShapes( xShapes, nFeatures, pRefPoint );
+        }
     }
 }
 

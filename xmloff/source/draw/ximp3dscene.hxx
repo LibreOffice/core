@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2001-03-28 11:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,24 +82,8 @@
 #include <tools/rtti.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
-#include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
-
-#ifndef _SVX_VECTOR3D_HXX
-#include <goodies/vector3d.hxx>
 #endif
 
 #ifndef _XIMPSHAPE_HXX
@@ -107,61 +91,13 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// dr3d:3dlight context
-
-class SdXML3DLightContext: public SvXMLImportContext
-{
-    // local parameters which need to be read
-    Color                       maDiffuseColor;
-    Vector3D                    maDirection;
-    BOOL                        mbEnabled;
-    BOOL                        mbSpecular;
-
-public:
-    SdXML3DLightContext(
-        SdXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXML3DLightContext();
-
-    const Color& GetDiffuseColor() { return maDiffuseColor; }
-    const Vector3D& GetDirection() { return maDirection; }
-    BOOL GetEnabled() { return mbEnabled; }
-    BOOL GetSpecular() { return mbSpecular; }
-};
-DECLARE_LIST(Imp3DLightList, SdXML3DLightContext*);
-
-//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dscene context
 
-class SdXML3DSceneShapeContext : public SdXMLShapeContext
+class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAttributesHelper
 {
     // the shape group this group is working on
     // this is the scene at the same time
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChilds;
-
-    // list for local light contexts
-    Imp3DLightList              maList;
-
-    // local parameters which need to be read
-    com::sun::star::drawing::HomogenMatrix mxHomMat;
-    BOOL                        mbSetTransform;
-
-    com::sun::star::drawing::ProjectionMode mxPrjMode;
-    sal_Int32                   mnDistance;
-    sal_Int32                   mnFocalLength;
-    sal_Int32                   mnShadowSlant;
-    com::sun::star::drawing::ShadeMode mxShadeMode;
-    Color                       maAmbientColor;
-    BOOL                        mbLightingMode;
-
-    Vector3D                    maVRP;
-    Vector3D                    maVPN;
-    Vector3D                    maVUP;
-    BOOL                        mbVRPUsed;
-    BOOL                        mbVPNUsed;
-    BOOL                        mbVUPUsed;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
