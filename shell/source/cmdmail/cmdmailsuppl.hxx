@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 08:49:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  includes of other projects
 //----------------------------------------------------------
 
-#ifndef _CPPUHELPER_COMPLBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -76,6 +76,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
@@ -90,26 +94,17 @@
 // class declaration
 //----------------------------------------------------------
 
-class CmdMailSupplBase
-{
-protected:
-    osl::Mutex  m_aMutex;
-};
-
 class CmdMailSuppl :
-    public CmdMailSupplBase,
-    public  cppu::WeakComponentImplHelper4<
-            com::sun::star::system::XSimpleMailClientSupplier,
-            com::sun::star::system::XSimpleMailClient,
-            com::sun::star::lang::XEventListener,
-            com::sun::star::lang::XServiceInfo >
+    public  cppu::WeakImplHelper3<
+        com::sun::star::system::XSimpleMailClientSupplier,
+        com::sun::star::system::XSimpleMailClient,
+        com::sun::star::lang::XServiceInfo >
 {
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigurationProvider;
 
 public:
-    CmdMailSuppl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+    CmdMailSuppl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
     //------------------------------------------------
     // XSimpleMailClientSupplier
@@ -127,13 +122,6 @@ public:
 
     virtual void SAL_CALL sendSimpleMailMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    // XEventListener
-    //------------------------------------------------
-
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
