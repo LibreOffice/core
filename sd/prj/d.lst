@@ -5,11 +5,11 @@ mkdir: %COMMON_DEST%\res%_EXT%
 
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\lib\sdi.lib %_DEST%\lib%_EXT%\sdi.lib
-..\%__SRC%\lib\sdlib.lib %_DEST%\lib%_EXT%\sdlib.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\bin\sdraw3.exe %_DEST%\bin%_EXT%\sdraw3.exe
 ..\%__SRC%\bin\sd?????.dll %_DEST%\bin%_EXT%\sd?????.dll
+..\%__SRC%\bin\sd??????.dll %_DEST%\bin%_EXT%\sd??????.dll
 ..\%__SRC%\bin\sd?????.res %_DEST%\bin%_EXT%\sd?????.res
 ..\%__SRC%\bin\emp?????.* %_DEST%\bin%_EXT%\emp?????.*
 ..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
