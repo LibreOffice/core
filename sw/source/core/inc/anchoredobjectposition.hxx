@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:17:56 $
+ *  last change: $Author: od $ $Date: 2004-03-11 13:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,196 +64,106 @@
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-#ifndef _SWRECT_HXX
-#include <swrect.hxx>
-#endif
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-#ifndef _SOLAR_H
-#include <tools/solar.h>
-#endif
 #ifndef _ORNTENUM_HXX
 #include <orntenum.hxx>
 #endif
 
 class SdrObject;
-class SwContact;
 class SwFrm;
-class SwTxtFrm;
-class SwLayoutFrm;
 class SwFlyFrm;
-class SwFlyInCntFrm;
-class SwFlyLayFrm;
-class SwFlyAtCntFrm;
+class SwContact;
 class SwFrmFmt;
-class SwFmtVertOrient;
-class SwFmtHoriOrient;
+class SwRect;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
+class SwFmtHoriOrient;
 
 namespace objectpositioning
 {
-    enum SwObjPosType { AS_CHAR, TO_CNTNT, TO_LAYOUT };
-
-    // flags for positioning algorithm of as-character-anchored objects
-    typedef sal_uInt8 AsCharFlags;
-    #define AS_CHAR_NOFLAG  0
-    #define AS_CHAR_QUICK   1
-    #define AS_CHAR_ULSPACE 2
-    #define AS_CHAR_INIT    4
-    #define AS_CHAR_ROTATE  8
-    #define AS_CHAR_REVERSE 16
-    #define AS_CHAR_BIDI    32
+    class SwEnvironmentOfAnchoredObject;
 
     class SwAnchoredObjectPosition
     {
         private:
-            // object position type
-            SwObjPosType    mTypeOfObjPos;
-
             // object to be positioned
             SdrObject&  mrDrawObj;
 
-            // information about object
-            // does the object represents a fly frame
+         // information about object
+            // does the object represents a Writer fly frame
             bool        mbIsObjFly;
             // frame the object belongs to; NULL, if !<mbObjIsFly>
-            SwFrm*      mpFrmOfObj;
+            SwFrm* mpFrmOfObj;
             // frame the object is anchored at
-            SwFrm*      mpAnchorFrm;
+            SwFrm* mpAnchorFrm;
             // contact object
             SwContact*  mpContact;
-
-            // calculated data for object position type AS_CHAR
-            Point       maAnchorPos;
-            SwTwips     mnRelPos;
-            SwRect      maObjBoundRect;
-
-            // calculated data for object position type TO_LAYOUT
-            Point       maRelPos;
-
-            // calculated data for object position type TO_CNTNT
-            const SwFrm*    mpVertPosOrientFrm;
-
-            // data for calculation of position for object position type TO_CNTNT
-            bool        mbAnchorToChar;
-            SwRect*     mpToCharRect;
+            // frame format
+            const SwFrmFmt* mpFrmFmt;
 
             /** determine information about object
 
                 OD 30.07.2003 #110978#
-                member <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm> and
-                <mpContact> are set
+                member <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm>, <mpContact>
+                and <mpFrmFmt> are set
 
                 @author OD
             */
             void _GetInfoAboutObj();
 
-        // *********************************************************************
-        // helper methods for object position type AS_CHAR
-        // *********************************************************************
-            /** determine the relative position to base line for object position type AS_CHAR
+        protected:
+            SwAnchoredObjectPosition( SdrObject& _rDrawObj );
+            ~SwAnchoredObjectPosition();
 
-                OD 29.07.2003 #110978#
-                Note about output parameter <_onLineAlignment> -
-                value gives feedback for the line formatting.
-                0 - no feedback; 1|2|3 - proposed formatting of characters
-                at top|at center|at bottom of line.
+         // accessors for object and its corresponding data/information
+            SdrObject& GetObject() const;
+            bool       IsObjFly() const;
+            SwFrm*     GetFrmOfObj() const;
+            SwFrm&     GetAnchorFrm() const;
+            SwContact& GetContact() const;
+            const SwFrmFmt&  GetFrmFmt() const;
 
-                @author OD
-
-                @param _ObjBoundHeight
-                height including corresponding spacing of the object, for which
-                the Y-position has to be calculated.
-
-                @param _rVert
-                given vertical positioning and alignment
-
-                @param _nLineAscent
-                line ascent given by the character in the line. parameter needed
-                for an alignment relative to the character height
-
-                @param _nLineDescent
-                line descent given by the character in the line. parameter needed
-                for an alignment relative to the character height
-
-                @param _nLineAscentInclObjs
-                line ascent given by the character and the other objects in the
-                line. parameter needed for an alignment relative to the line height
-
-                @param _nLineDescentInclObjs
-                line descent given by the character and the other objects in the
-                line. parameter needed for an alignment relative to the line height
-
-                @param _onLineAlignment
-                output parameter - for alignment relative to the line height.
-                following values are set:
-                0 - no line alignment, 1 - at top, 2 - at center, 3 - at bottom
-
-                @return relative position to the base line
-            */
-            SwTwips _GetRelPosToBase( const SwTwips          _nObjBoundHeight,
-                                      const SwFmtVertOrient& _rVert,
-                                      const SwTwips          _nLineAscent,
-                                      const SwTwips          _nLineDescent,
-                                      const SwTwips          _nLineAscentInclObjs,
-                                      const SwTwips          _nLineDescentInclObjs,
-                                      sal_uInt8&             _onLineAlignment );
+         // virtual methods providing data for to character anchored objects.
+            virtual bool IsAnchoredToChar() const;
+            virtual const SwFrm* ToCharOrientFrm() const;
+            virtual const SwRect* ToCharRect() const;
+            // OD 12.11.2003 #i22341#
+            virtual SwTwips ToCharTopOfLine() const;
 
         // *********************************************************************
-        // helper methods for object position type TO_LAYOUT
-        // *********************************************************************
-            /** calculated relative position for object position type TO_LAYOUT
-
-                @author OD
-            */
-            void _CalcPositionForToLayout();
+            void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
+                                          const SwFrm& _rPageAlignLayFrm,
+                                          const SwRelationOrient _eRelOrient,
+                                          SwTwips&      _orAlignAreaHeight,
+                                          SwTwips&      _orAlignAreaOffset ) const;
 
         // *********************************************************************
-        // helper methods for object position type TO_CNTNT
-        // *********************************************************************
-            /** calculated relative position for object position type TO_CNTNT
-
-                @author OD
-            */
-            void _CalcPositionForToCntnt();
+            SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
+                                    const SwFrm& _rPageAlignLayFrm,
+                                    const SwVertOrient     _eVertOrient,
+                                    const SwRelationOrient _eRelOrient,
+                                    const SwTwips          _nVertPos,
+                                    const SvxLRSpaceItem& _rLRSpacing,
+                                    const SvxULSpaceItem& _rULSpacing ) const;
 
         // *********************************************************************
             /** adjust calculated vertical in order to keep object inside
                 'page' alignment layout frame.
 
+                @param _rPageAlignLayFrm
+                input paramter - layout frame, which determines the 'page area'
+                the object has to be vertical positioned in.
+
+                @param _nProposedRelPosY
+                input parameter - proposed relative vertical position, which
+                will be adjusted.
+
                 @author OD
             */
             SwTwips _AdjustVertRelPos( const SwFrm&  _rPageAlignLayFrm,
-                                       const SwFrm&  _rVertOrientFrm,
                                        const SwTwips _nProposedRelPosY ) const;
 
         // *********************************************************************
-            /** determine frame for horizontal position for object position type TO_CNTNT
-
-                OD 04.08.2003
-                if the given proposed frame is a content frame, the proposed
-                frame is returned.
-                otherwise (given proposed frame is a layout frame),
-                the lower content frames of the proposed frame are checked and
-                the nearest by vertical position is returned. if none
-                lower content frame is found, the proposed frame is returned.
-
-                @author OD
-
-                @param _pProposedFrm
-                input parameter - proposed frame for horizontal position
-
-                @return constant reference to <SwFrm> object, at which the
-                horizontal position is determined.
-            */
-            const SwFrm& _GetHoriVirtualAnchor( const SwFrm& _pProposedFrm ) const;
-
-        // *********************************************************************
-            /** calculate relative horizontal position for object type position TO_CNTNT
-
-                OD 11.08.2003 #110978#
+            /** calculate relative horizontal position
 
                 @author OD
 
@@ -261,17 +171,13 @@ namespace objectpositioning
                 input parameter - frame the horizontal position of the object
                 is oriented at.
 
-                @param _pToCharOrientFrm
-                input parameter - if object is to-character anchored (mbAnchorToChar),
-                this is the frame the position is oriented at.
+                @param _rEnvOfObj
+                input parameter - object instance to retrieve environment
+                information about the object
 
                 @param _rHoriOrient
                 input parameter - horizontal positioning and alignment, for which
                 the relative position is calculated.
-
-                @param _bFollowTextFlow
-                input parameter - boolean indicating, if object has to follow
-                the text flow.
 
                 @param _rLRSpacing
                 input parameter - left and right spacing of the object to the text
@@ -289,9 +195,8 @@ namespace objectpositioning
                 @return relative horizontal position in SwTwips
             */
             SwTwips _CalcRelPosX( const SwFrm& _rHoriOrientFrm,
-                                  const SwFrm*  _pToCharOrientFrm,
+                                  const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
                                   const SwFmtHoriOrient& _rHoriOrient,
-                                  const bool _bFollowTextFlow,
                                   const SvxLRSpaceItem& _rLRSpacing,
                                   const SvxULSpaceItem& _rULSpacing,
                                   const bool _bObjWrapThrough,
@@ -299,37 +204,48 @@ namespace objectpositioning
                                 ) const;
 
         // *********************************************************************
-            /** determine layout frame for positioning aligned at 'page' areas
-                for object position type TO_CNTNT
-
-                OD 22.09.2003
-                If an object is aligned to a 'page area' - REL_PG_FRAME,
-                REL_PG_PRTAREA, REL_PG_LEFT and REL_PG_RIGHT -, the layout frame,
-                which determines the alignment area has to be determined.
-                If an object doesn't follow the text flow,
-                   this is the cell frame, if object is anchored inside a cell or
-                   it's the fly frame, if object is anchored inside a fly frame;
-                otherwise it's the page frame
+            /** adjust calculated horizontal in order to keep object inside
+                'page' alignment layout frame for object type position TO_CNTNT
 
                 @author OD
 
-                @param _rOrientFrm
-                input parameter - frame, at which the vertical respectively
-                horizontal positioning is oriented.
-                Starting point for the search of the layout frame
+                @param _rPageAlignLayFrm
+                input paramter - layout frame, which determines the 'page area'
+                the object has to be horizontal positioned in.
 
-                @param _b
-                @return reference to the layout frame, which determines the
-                'page area' the object will be positioned in.
+                @param _nProposedRelPosX
+                input parameter - proposed relative horizontal position, which
+                will be adjusted.
+
+                @return adjusted relative horizontal position in SwTwips.
             */
-//            const SwLayoutFrm& _GetPageAlignmentLayoutFrm( const SwFrm& _rOrientFrm,
-//                                                           const bool   _bFollowTextFlow ) const;
+            SwTwips _AdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
+                                       const SwTwips _nProposedRelPosX ) const;
 
         // *********************************************************************
-            /** determine alignment values for horizontal position for object
-                position type TO_CNTNT and TO_LAYOUT
+            /** toggle given horizontal orientation and relative alignment
 
-                OD 04.08.2003
+                @author OD
+
+                @param _bToggleLeftRight
+                input parameter - boolean indicating, if horizontal orientation
+                and relative alignment has to be toggled.
+
+                @param _ioeHoriOrient
+                input/output parameter - horizontal orientation, that is toggled,
+                if needed.
+
+                @param _iopeRelOrient
+                optional input/output parameter (default value NULL)
+                - if set, relative alignment, that is toggled, if needed.
+            */
+            void _ToggleHoriOrientAndAlign( const bool         _bToggleLeftRight,
+                                            SwHoriOrient&      _ioeHoriOrient,
+                                            SwRelationOrient&  _iopeRelOrient
+                                          ) const;
+
+        // *********************************************************************
+            /** determine alignment values for horizontal position of object
 
                 @author OD
 
@@ -340,10 +256,6 @@ namespace objectpositioning
                 @param _rPageAlignLayFrm
                 input paramter - layout frame, which determines the 'page area'
                 the object has to be horizontal positioned in.
-
-                @param _pToCharOrientFrm
-                input parameter - if object is to-character anchored (mbAnchorToChar),
-                this is the frame the position is oriented at.
 
                 @param _eRelOrient
                 input parameter - horizontal relative alignment, for which
@@ -374,53 +286,11 @@ namespace objectpositioning
             */
             void _GetHoriAlignmentValues( const SwFrm&  _rHoriOrientFrm,
                                           const SwFrm&  _rPageAlignLayFrm,
-                                          const SwFrm*  _pToCharOrientFrm,
                                           const SwRelationOrient _eRelOrient,
                                           const bool    _bObjWrapThrough,
                                           SwTwips&      _orAlignAreaWidth,
                                           SwTwips&      _orAlignAreaOffset,
                                           bool&         _obAlignedRelToPage ) const;
-
-        // *********************************************************************
-            /** toggle given horizontal orientation and relative alignment
-
-                @author OD
-
-                @param _bToggleLeftRight
-                input parameter - boolean indicating, if horizontal orientation
-                and relative alignment has to be toggled.
-
-                @param _ioeHoriOrient
-                input/output parameter - horizontal orientation, that is toggled,
-                if needed.
-
-                @param _iopeRelOrient
-                optional input/output parameter (default value NULL)
-                - if set, relative alignment, that is toggled, if needed.
-            */
-            void _ToggleHoriOrientAndAlign( const bool         _bToggleLeftRight,
-                                            SwHoriOrient&      _ioeHoriOrient,
-                                            SwRelationOrient*  _iopeRelOrient = 0L
-                                          ) const;
-
-        // *********************************************************************
-            /** adjust calculated horizontal in order to keep object inside
-                'page' alignment layout frame for object type position TO_CNTNT
-
-                @author OD
-
-                @param _rPageAlignLayFrm
-                input paramter - layout frame, which determines the 'page area'
-                the object has to be horizontal positioned in.
-
-                @param _nProposedRelPosX
-                input parameter - proposed relative horizontal position, which
-                will be adjusted.
-
-                @return adjusted relative horizontal position in SwTwips.
-            */
-            SwTwips _AdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
-                                       const SwTwips _nProposedRelPosX ) const;
 
         // *********************************************************************
             /** adjust calculated horizontal position in order to draw object
@@ -469,7 +339,6 @@ namespace objectpositioning
         // *********************************************************************
             /** detemine, if object has to draw aside given fly frame
 
-                OD 11.08.2003 #110978#
                 method used by <_AdjustHoriRelPosForDrawAside(..)>
 
                 @author OD
@@ -510,7 +379,6 @@ namespace objectpositioning
         // *********************************************************************
             /** determine, if object has to draw aside another object
 
-                OD 04.08.2003
                 the different alignments of the objects determines, if one has
                 to draw aside another one. Thus, the given alignment are checked
                 against each other, which one has to be drawn aside the other one.
@@ -538,209 +406,8 @@ namespace objectpositioning
                          SwRelationOrient _eRelOrient2,
                          bool             _bLeft ) const;
 
-        // *********************************************************************
-            void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
-                                          const SwFrm& _rPageAlignLayFrm,
-                                          const SwRelationOrient _eRelOrient,
-                                          SwTwips&      _orAlignAreaHeight,
-                                          SwTwips&      _orAlignAreaOffset ) const;
-
-        // *********************************************************************
-            SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
-                                    const SwFrm& _rPageAlignLayFrm,
-                                    const SwVertOrient     _eVertOrient,
-                                    const SwRelationOrient _eRelOrient,
-                                    const SwTwips          _nVertPos,
-                                    const SvxLRSpaceItem& _rLRSpacing,
-                                    const SvxULSpaceItem& _rULSpacing ) const;
-
-        // *********************************************************************
         public:
-            SwAnchoredObjectPosition( SwObjPosType _TypeOfObjPos,
-                                      SdrObject& _rDrawObj );
-            ~SwAnchoredObjectPosition();
-
-            SwObjPosType GetObjPosType() const;
-
-            // accessors for object and its corresponding data/information
-            // basic accessors
-            SdrObject& GetObject() const;
-            bool       IsObjFly() const;
-            SwFrm*     GetFrmOfObj() const;
-            SwFrm&     GetAnchorFrm() const;
-            SwContact* GetContact() const;
-            SwFrmFmt*  GetFrmFmt() const;
-            // accessors for object position type AS_CHAR and TO_CNTNT
-            SwTxtFrm&       GetAnchorTxtFrm() const;
-            // accessors for object position type AS_CHAR
-            SwFlyInCntFrm*  GetFlyInCntFrmOfObj() const;
-            // accessors for object position type TO_LAYOUT
-            SwFlyLayFrm*    GetFlyLayFrmOfObj() const;
-            // accessors for object position type TO_CNTNT
-            SwFlyAtCntFrm*  GetFlyAtCntFrmOfObj() const;
-
-        // *********************************************************************
-        // methods for object position type AS_CHAR
-        // *********************************************************************
-            /** calculate position for object position type AS_CHAR
-
-                OD 30.07.2003 #110978#
-                members <maAnchorPos>, <mnRelPos> and <maObjBoundRect> are calculated.
-                calculated position is set at the given object.
-
-                @param _rAnchorFrm
-                paragraph frame the given object is anchored at.
-
-                @param _rProposedAnchorPos
-                proposed anchor position; starting point for the calculation
-                of the anchor position
-
-                @param _nFlags
-                flags that influences the calculation of the anchor position
-                AS_CHAR_QUICK   : quick formatting - calculated position not set at object
-                AS_CHAR_ULSPACE : consider upper/lower spacing - adjustment of anchor position
-                AS_CHAR_INIT    : initial calculation
-                AS_CHAR_ROTATE  : object is rotated by 90 degrees
-                AS_CHAR_REVERSE : object is reversed (rotated by 270 degrees)
-                AS_CHAR_BIDI    : object belongs to a BIDI-multi-portion
-
-                @param _nLineAscent, _nLineDescent, _nLineAscentInclObjs,
-                _nLineDescentInclObjs - needed line values for the different
-                alignments.
-
-                @param _onLineAlignment
-                output parameter - for alignment relative to the line height.
-                gives feedback for the line formatting.
-
-                @author OD
-            */
-            void CalcPosition( const Point&      _rProposedAnchorPos,
-                               const AsCharFlags _nFlags,
-                               const SwTwips     _nLineAscent,
-                               const SwTwips     _nLineDescent,
-                               const SwTwips     _nLineAscentInclObjs,
-                               const SwTwips     _nLineDescentInclObjs,
-                               sal_uInt8&        _onLineAlignment );
-
-            /** calculated anchored position for object position type AS_CHAR
-
-                @author OD
-            */
-            Point GetAnchorPos() const;
-
-            /** calculated relative position to base line for object position type AS_CHAR
-
-                @author OD
-            */
-            SwTwips GetRelPosY() const;
-
-            /** determined object rectangle including spacing for object position type AS_CHAR
-
-                @author OD
-            */
-            SwRect GetObjBoundRectInclSpacing() const;
-
-        // *********************************************************************
-        // methods for object position type TO_LAYOUT and TO_CNTNT
-        // *********************************************************************
-            /** calculate position for object position type TO_LAYOUT and TO_CNTNT
-
-                OD 30.07.2003 #110978#
-
-                @author OD
-            */
-            void CalcPosition();
-
-            /** calculated relative position for object position type TO_LAYOUT
-
-                @author OD
-            */
-            Point GetRelPos() const;
-
-            /** frame vertical position is oriented at for object position type TO_CNTNT
-
-                OD 06.10.2003 #110978#
-
-                @author OD
-            */
-            const SwFrm& GetVertPosOrientFrm() const;
-
-        // *********************************************************************
-            /** determine environment layout frame for possible vertical object
-                positions respectively for alignments to 'page areas'
-                for object position type TO_CNTNT
-
-                this is, if object has to follow the text flow:
-                - cell frame, if anchored inside a cell
-                - fly frame, if anchored inside a fly frame
-                - header/footer frame, if anchored inside page header/footer
-                - footnote frame, if anchored inside footnote
-                otherwise it's the document body frame
-
-                this is, if object hasn't to follow the text flow:
-                - page frame.
-                - Exception: If environment layout frame is used for page alignment,
-                  it's the cell frame, if anchored inside a cell.
-
-                @author OD
-
-                @param _rVertOrientFrm
-                input parameter - frame, at which the vertical position is
-                oriented at (typically it's the anchor frame).
-                starting point for the search of the layout frame.
-
-                @param _bFollowTextFlow
-                input parameter - indicates, if object has to follow the text
-                flow or not.
-
-                @param _bForPageAlignment
-                input parameter - indicates, if the environment layout frame
-                for the page alignments has to be determined or not.
-
-                @return reference to the layout frame, which determines the
-                the vertical environment the object has to be positioned in.
-            */
-            static const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm,
-                                                                   const bool _bFollowTextFlow,
-                                                                   const bool _bForPageAlignment );
-
-        // *********************************************************************
-            /** determine environment layout frame for possible horizontal object
-                positions respectively for alignment to 'page areas'
-                for object position type TO_CNTNT
-
-                OD 08.09.2003
-                this is, if object has to follow the text flow:
-                - cell frame, if anchored inside a cell
-                - fly frame, if anchored inside a fly frame
-                otherwise it's the page frame
-
-                this is, if object hasn't to follow the text flow:
-                - page frame.
-                - Exception: If environment layout frame is used for page alignment,
-                  it's the cell frame, if anchored inside a cell.
-
-                @author OD
-
-                @param _rHoriOrientFrm
-                input parameter - frame, at which the horizontal position is
-                oriented at (typically it's the anchor frame).
-                starting point for the search of the layout frame.
-
-                @param _bFollowTextFlow
-                input parameter - indicates, if object has to follow the text
-                flow or not.
-
-                @param _bForPageAlignment
-                input parameter - indicates, if the environment layout frame
-                for the page alignments has to be determined or not.
-
-                @return reference to the layout frame, which determines the
-                the horizontal environment the object has to be positioned in.
-            */
-            static const SwLayoutFrm& GetHoriEnvironmentLayoutFrm( const SwFrm& _rHoriOrientFrm,
-                                                                   const bool _bFollowTextFlow,
-                                                                   const bool _bForPageAlignment );
+            virtual void CalcPosition() = 0;
     };
 };
 
