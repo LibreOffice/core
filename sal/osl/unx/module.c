@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:09 $
+ *  last change: $Author: mfe $ $Date: 2001-02-19 16:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,12 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
         rtl_uString2String( &strModuleName,
                             rtl_uString_getStr(ustrModuleName),
                             rtl_uString_getLength(ustrModuleName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pszModuleName=rtl_string_getStr(strModuleName);
+
+        fprintf(stderr,"lib to load : [%s]\n",pszModuleName);
 
 
         if ( strncmp(pszModuleName,"//./",4) == 0 )
@@ -386,7 +388,7 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString* ustrSymbolName)
         rtl_uString2String( &strSymbolName,
                             rtl_uString_getStr(ustrSymbolName),
                             rtl_uString_getLength(ustrSymbolName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pszSymbolName = rtl_string_getStr(strSymbolName);
