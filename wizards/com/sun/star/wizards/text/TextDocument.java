@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextDocument.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:22:16 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:36:20 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -59,18 +59,30 @@
 */
 package com.sun.star.wizards.text;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XModel;
+import com.sun.star.i18n.NumberFormatIndex;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.Locale;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
+import com.sun.star.style.XStyle;
+import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.task.XStatusIndicatorFactory;
 import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XSimpleText;
@@ -79,9 +91,13 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.DateTime;
 import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Helper.DateUtils;
 import com.sun.star.wizards.document.OfficeDocument;
 
 public class TextDocument {
@@ -97,6 +113,7 @@ public class TextDocument {
     public com.sun.star.awt.XWindowPeer xWindowPeer;
     public int PageWidth;
     public int ScaleWidth;
+    public Size DocSize;
     public com.sun.star.awt.Rectangle PosSize;
     public com.sun.star.lang.Locale CharLocale;
 
@@ -168,6 +185,51 @@ public class TextDocument {
         CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
     }
 
+    public XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate) {
+        PropertyValue loadValues[] = new PropertyValue[3];
+        //      open document in the Preview mode
+        loadValues[0] = new PropertyValue();
+        loadValues[0].Name = "ReadOnly";
+        loadValues[0].Value = Boolean.TRUE;
+        loadValues[1] = new PropertyValue();
+        loadValues[1].Name = "AsTemplate";
+        loadValues[1].Value = asTemplate ? Boolean.TRUE : Boolean.FALSE;
+        loadValues[2] = new PropertyValue();
+        loadValues[2].Name = "Preview";
+        loadValues[2].Value = Boolean.TRUE;
+
+
+        Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
+        xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
+        DocSize = getPageSize();
+        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+
+        ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+        try {
+            myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return xTextDocument;
+    }
+
+    public Size getPageSize() {
+        try {
+            XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
+            com.sun.star.container.XNameAccess xNameAccess = null;
+            xNameAccess = xStyleFamiliesSupplier.getStyleFamilies();
+            com.sun.star.container.XNameContainer xPageStyleCollection = null;
+            xPageStyleCollection = (com.sun.star.container.XNameContainer) UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
+            XStyle xPageStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName("First Page"));
+            return (Size) Helper.getUnoPropertyValue(xPageStyle, "Size");
+
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+            return null;
+        }
+    }
+
     //creates an instance of TextDocument and creates a frame and loads a document
     public TextDocument(XMultiServiceFactory xMSF, String URL, PropertyValue[] xArgs) {
         this.xMSF = xMSF;
@@ -228,6 +290,54 @@ public class TextDocument {
     public void unlockallControllers() {
         while (xTextDocument.hasControllersLocked() == true) {
             xTextDocument.unlockControllers();
+        }
+    }
+
+    /**
+     * This method sets the Author of a Wizard-generated template correctly
+     * and adds a explanatory sentence to the template description.
+     * @param WizardName The name of the Wizard.
+     * @param TemplateDescription The old Description which is being appended with another sentence.
+     * @return void.
+     */
+    public void setWizardTemplateDocInfo(String WizardName, String TemplateDescription) {
+        try {
+            Object uD = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.UserProfile/Data", false);
+            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, uD);
+            Object gn = xNA.getByName("givenname");
+            Object sn = xNA.getByName("sn");
+            String fullname = (String)gn + " " + (String)sn;
+
+            Calendar cal = new GregorianCalendar();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            DateTime currentDate = new DateTime();
+            currentDate.Day = (short)day;
+            currentDate.Month = (short)month;
+            currentDate.Year = (short)year;
+            DateUtils du = new DateUtils(xMSF, this.xTextDocument);
+            int ff = du.getFormat( NumberFormatIndex.DATE_SYS_DDMMYY );
+            String myDate = du.format(ff, currentDate);
+
+            XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
+            XDocumentInfo xDocInfo = xDocInfoSuppl.getDocumentInfo();
+            Helper.setUnoPropertyValue(xDocInfo, "Author", fullname);
+            Helper.setUnoPropertyValue(xDocInfo, "ModifiedBy", fullname);
+            String description = (String)Helper.getUnoPropertyValue(xDocInfo, "Description");
+            description = description + " " + TemplateDescription;
+            description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
+            description = JavaTools.replaceSubString(description, myDate, "<current_date>");
+            Helper.setUnoPropertyValue(xDocInfo, "Description", description);
+        } catch (NoSuchElementException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (WrappedTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
