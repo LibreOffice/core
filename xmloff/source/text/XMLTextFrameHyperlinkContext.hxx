@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,8 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     ::rtl::OUString              sHRef;
     ::rtl::OUString              sName;
     ::rtl::OUString              sTargetFrameName;
-    ::com::sun::star::text::TextContentAnchorType eAnchorType;
-    // OD 2004-04-20 #i26791#
-    XMLTextFrameHint_Impl* mpTextFrameHint;
+    ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType;
+    SvXMLImportContextRef       xFrameContext;
     sal_Bool                    bMap;
 
 public:
@@ -100,9 +99,7 @@ public:
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            ::com::sun::star::text::TextContentAnchorType eAnchorType,
-            // OD 2004-04-20 #i26791#
-            XMLTextFrameHint_Impl* pTextFrameHint = 0 );
+            ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType );
     virtual ~XMLTextFrameHyperlinkContext();
 
     virtual void EndElement();
@@ -112,6 +109,9 @@ public:
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
+    ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextContent > GetTextContent() const;
 };
 
 
