@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 12:09:18 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "attrib.hxx"
+#include "flttools.hxx"
 
 
 //------------------------------------------------------------------------
@@ -192,30 +193,41 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     }
 
     // create ranges for HTML tables
-    ScRange aNewRange;
+    ScRange aNewRange( aRange.aStart );
     ComplRefData aRefData;
     ScTokenArray aTokArray;
-    ScRangeData* pRangeData;
+    ScRangeData* pRangeData = NULL;
     ScRangeName* pRangeName = pDoc->GetRangeName();
 
-    String aHeading( RTL_CONSTASCII_STRINGPARAM( "HTML_" ) );
+    // 1 - entire document
+    String aName( ScFilterTools::pHTMLDocName, RTL_TEXTENCODING_ASCII_US );
+    USHORT nColDim, nRowDim;
+    pParser->GetDimensions( nColDim, nRowDim );
+    aNewRange.aEnd.IncCol( nColDim - 1 );
+    aNewRange.aEnd.IncRow( nRowDim - 1 );
+    aRefData.InitRange( aNewRange );
+    aTokArray.AddDoubleReference( aRefData );
+    pRangeData = new ScRangeData( pDoc, aName, aTokArray );
+    if( !pRangeName->Insert( pRangeData ) )
+        delete pRangeData;
+
+    // 2 - single tables
+    short nColDiff = (short)aRange.aStart.Col();
+    short nRowDiff = (short)aRange.aStart.Row();
+    short nTabDiff = (short)aRange.aStart.Tab();
+
     ScHTMLTableData* pTable = NULL;
     ULONG nTab = 0;
     while( pTable = pHTMLTables->GetTable( ++nTab ) )
     {
         pTable->GetRange( aNewRange );
+        aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
         aRefData.InitRange( aNewRange );
         aTokArray.Clear();
         aTokArray.AddDoubleReference( aRefData );
 
         // insert table number as name
-        String aName( aHeading );
-        aName += String::CreateFromInt32( (sal_Int32) nTab );
-
-        USHORT nPos;
-        if( pRangeName->SearchName( aName, nPos ) )
-            pRangeName->AtFree( nPos );
-
+        aName = ScFilterTools::GetNameFromHTMLIndex( nTab );
         pRangeData = new ScRangeData( pDoc, aName, aTokArray );
         if( !pRangeName->Insert( pRangeData ) )
             delete pRangeData;
@@ -223,11 +235,14 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         // insert table id as name
         if( pTable->GetTableName().Len() )
         {
-            aName = aHeading;
-            aName += pTable->GetTableName();
-            pRangeData = new ScRangeData( pDoc, aName, aTokArray );
-            if( !pRangeName->Insert( pRangeData ) )
-                delete pRangeData;
+            aName = ScFilterTools::GetNameFromHTMLName( pTable->GetTableName() );
+            USHORT nPos;
+            if( !pRangeName->SearchName( aName, nPos ) )
+            {
+                pRangeData = new ScRangeData( pDoc, aName, aTokArray );
+                if( !pRangeName->Insert( pRangeData ) )
+                    delete pRangeData;
+            }
         }
     }
 }
