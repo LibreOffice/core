@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:48:34 $
+ *  last change: $Author: mtg $ $Date: 2001-07-27 09:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2063,7 +2063,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "notify-on-update-of-ranges" ),  // XML_NOTIFY_ON_UPDATE_OF_RANGES
 
-        TOKEN( "macro" ),  // XML_MACRO
+        TOKEN( "byte" ),                        // XML_BYTE
+        TOKEN( "macro" ),                       // XML_MACRO
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
