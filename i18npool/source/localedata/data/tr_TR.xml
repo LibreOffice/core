@@ -350,10 +350,17 @@
 </Calendar>
 </LC_CALENDAR>
 <LC_CURRENCY>
-<Currency default="true" usedInCompatibleFormatCodes="true">
+<Currency default="false" usedInCompatibleFormatCodes="true">
 <CurrencyID>TL</CurrencyID>
 <CurrencySymbol>TL</CurrencySymbol>
 <BankSymbol>TRL</BankSymbol>
+<CurrencyName>Lira</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+<Currency default="true" usedInCompatibleFormatCodes="false">
+<CurrencyID>TRY</CurrencyID>
+<CurrencySymbol>YTL</CurrencySymbol>
+<BankSymbol>TRY</BankSymbol>
 <CurrencyName>Lira</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
