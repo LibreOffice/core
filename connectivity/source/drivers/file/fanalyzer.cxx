@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:11 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@ OSQLAnalyzer::OSQLAnalyzer()
                , m_aInterpreter(m_aCompiler)
 {
 }
+
+// -----------------------------------------------------------------------------
+OSQLAnalyzer::~OSQLAnalyzer()
+{
+}
+
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 {
