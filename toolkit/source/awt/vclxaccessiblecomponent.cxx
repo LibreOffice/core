@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 17:48:20 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 19:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ Window* VCLXAccessibleComponent::GetWindow() const
     return xAcc;
 }
 
-void VCLXAccessibleComponent::FillAccessibleStateSet( AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
 }
 
@@ -124,15 +124,14 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
+    if ( i >= getAccessibleChildCount() )
+        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        if ( i >= getAccessibleChildCount() )
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
-
-
         Window* pChild = GetWindow()->GetAccessibleChildWindow( (USHORT)i );
         if ( pChild )
             xAcc = pChild->GetAccessible();
@@ -150,7 +149,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
     {
         Window* pParent = GetWindow()->GetAccessibleParentWindow();
         if ( pParent )
-            xAcc = GetWindow()->GetParent()->GetAccessible();
+            xAcc = pParent->GetAccessible();
     }
 
     return xAcc;
@@ -166,9 +165,9 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (::com::
         Window* pParent = GetWindow()->GetAccessibleParentWindow();
         if ( pParent )
         {
-            for ( USHORT n = pParent->GetChildCount(); n; )
+            for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
             {
-                Window* pChild = pParent->GetChild( --n );
+                Window* pChild = pParent->GetAccessibleChildWindow( --n );
                 if ( pChild == GetWindow() )
                 {
                     nIndex = n;
@@ -184,110 +183,11 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // MT: Move to VCL Window, so that everybody can overwrite the role!
-
-    using namespace ::drafts::com::sun::star;
-
     sal_Int16 nRole = 0;
+
     if ( GetWindow() )
-    {
-        switch ( GetWindow()->GetType() )
-        {
-            case WINDOW_MESSBOX:    // MT: Would be nice to have special roles!
-            case WINDOW_INFOBOX:
-            case WINDOW_WARNINGBOX:
-            case WINDOW_ERRORBOX:
-            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::OPTIONPANE; break;
+        nRole = GetWindow()->GetAccessibleRole();
 
-            case WINDOW_MODELESSDIALOG:
-            case WINDOW_MODALDIALOG:
-            case WINDOW_SYSTEMDIALOG:
-            case WINDOW_PRINTERSETUPDIALOG:
-            case WINDOW_PRINTDIALOG:
-            case WINDOW_TABDIALOG:
-            case WINDOW_BUTTONDIALOG:
-            case WINDOW_DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
-
-            case WINDOW_PUSHBUTTON:
-            case WINDOW_OKBUTTON:
-            case WINDOW_CANCELBUTTON:
-            case WINDOW_HELPBUTTON:
-            case WINDOW_IMAGEBUTTON:
-            case WINDOW_MENUBUTTON:
-            case WINDOW_MOREBUTTON:
-            case WINDOW_SPINBUTTON:
-            case WINDOW_BUTTON: nRole = accessibility::AccessibleRole::PUSHBUTTON; break;
-
-            case WINDOW_PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORYPANE; break;
-            case WINDOW_FILEDIALOG: nRole = accessibility::AccessibleRole::FILECHOOSER; break;
-            case WINDOW_COLORDIALOG: nRole = accessibility::AccessibleRole::COLORCHOOSER; break;
-            case WINDOW_FONTDIALOG: nRole = accessibility::AccessibleRole::FONTCHOOSER; break;
-
-            case WINDOW_IMAGERADIOBUTTON:
-            case WINDOW_RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIOBUTTON; break;
-            case WINDOW_TRISTATEBOX:
-            case WINDOW_CHECKBOX: nRole = accessibility::AccessibleRole::CHECKBOX; break;
-
-            case WINDOW_MULTILINEEDIT:
-            case WINDOW_PATTERNFIELD:
-            case WINDOW_NUMERICFIELD:
-            case WINDOW_METRICFIELD:
-            case WINDOW_CURRENCYFIELD:
-            case WINDOW_LONGCURRENCYFIELD:
-            case WINDOW_EDIT: nRole = ( GetWindow()->GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORDTEXT) : (accessibility::AccessibleRole::TEXT); break;
-
-            case WINDOW_PATTERNBOX:
-            case WINDOW_NUMERICBOX:
-            case WINDOW_METRICBOX:
-            case WINDOW_CURRENCYBOX:
-            case WINDOW_LONGCURRENCYBOX:
-            case WINDOW_COMBOBOX: nRole = accessibility::AccessibleRole::COMBOBOX; break;
-
-            case WINDOW_LISTBOX:
-            case WINDOW_MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
-
-            case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
-            case WINDOW_FIXEDBORDER:
-            case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
-            case WINDOW_FIXEDBITMAP:
-            case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
-            case WINDOW_GROUPBOX: nRole = accessibility::AccessibleRole::GROUPBOX; break;
-            case WINDOW_SCROLLBAR: nRole = accessibility::AccessibleRole::SCROLLBAR; break;
-
-            case WINDOW_SLIDER:
-            case WINDOW_SPLITTER:
-            case WINDOW_SPLITWINDOW: nRole = accessibility::AccessibleRole::SPLITPANE; break;
-
-            case WINDOW_DATEBOX:
-            case WINDOW_TIMEBOX:
-            case WINDOW_DATEFIELD:
-            case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATEEDITOR; break;
-
-            case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPINBOX; break;
-
-            case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOLBAR; break;
-            case WINDOW_STATUSBAR: nRole = accessibility::AccessibleRole::STATUSBAR; break;
-
-            case WINDOW_TABPAGE: nRole = accessibility::AccessibleRole::PAGETAB; break;
-            case WINDOW_TABCONTROL: nRole = accessibility::AccessibleRole::PAGETABLIST; break;
-
-            case WINDOW_DOCKINGWINDOW:
-            case WINDOW_SYSWINDOW:
-            case WINDOW_FLOATINGWINDOW: nRole = accessibility::AccessibleRole::LAYEREDPANE; break;
-
-            case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::FRAME; break;
-
-
-            case WINDOW_SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
-
-            case WINDOW_WINDOW:
-            case WINDOW_CONTROL:
-            case WINDOW_BORDERWINDOW:
-            case WINDOW_SYSTEMCHILDWINDOW:
-            default: nRole = accessibility::AccessibleRole::WINDOW;
-
-        }
-    }
     return nRole;
 }
 
@@ -296,10 +196,10 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::rtl::OUString aDescription;
+
     if ( GetWindow() )
-    {
-//      aDescription = GetWindow()->GetText();
-    }
+        aDescription = GetWindow()->GetAccessibleDescription();
+
     return aDescription;
 }
 
@@ -310,7 +210,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     ::rtl::OUString aName;
     if ( GetWindow() )
     {
-        aName = GetWindow()->GetText();
+        aName = GetWindow()->GetAccessibleName();
 #ifdef DEBUG
         aName += String( RTL_CONSTASCII_USTRINGPARAM( " (Type = " ) );
         aName += String::CreateFromInt32( GetWindow()->GetType() );
@@ -330,10 +230,10 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-//  AccessibleStateSetHelper* pStateSetHelper = new AccessibleStateSetHelper;
-//  ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
-//  ...
-//  FillStateSet( *pStateSetHelper );
+    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
+    FillAccessibleStateSet( *pStateSetHelper );
+//    return xSet;
     return NULL;
 }
 
@@ -383,7 +283,7 @@ sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& 
     return xAcc;
 }
 
-::com::sun::star::awt::Size VCLXAccessibleComponent::getSize(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size VCLXAccessibleComponent::getSize() throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::awt::Size aSize;
     if ( GetWindow() )
@@ -431,7 +331,7 @@ sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& 
     return aPos;
 }
 
-sal_Bool VCLXAccessibleComponent::isShowing(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isShowing() throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -442,7 +342,7 @@ sal_Bool VCLXAccessibleComponent::isShowing(  ) throw (::com::sun::star::uno::Ru
     return bShowing;
 }
 
-sal_Bool VCLXAccessibleComponent::isVisible(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isVisible() throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -453,7 +353,7 @@ sal_Bool VCLXAccessibleComponent::isVisible(  ) throw (::com::sun::star::uno::Ru
     return bVisible;
 }
 
-sal_Bool VCLXAccessibleComponent::isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isFocusTraversable() throw (::com::sun::star::uno::RuntimeException)
 {
     return FALSE;
 }
@@ -482,7 +382,7 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (::com::sun::star::uno::Runtim
         mxWindow->setFocus();
 }
 
-::com::sun::star::uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return ::com::sun::star::uno::Any();

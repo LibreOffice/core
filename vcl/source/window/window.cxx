@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 17:13:26 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 19:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7373,6 +7373,7 @@ String Window::GetAccessibleName() const
     }
     else
     {
+        aAccessibleName = GetText();
     }
 
     return aAccessibleName;

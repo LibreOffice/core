@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 17:47:36 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 19:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,10 @@
 
 class Window;
 class VCLXWindow;
+
+namespace utl {
 class AccessibleStateSetHelper;
+}
 
 class MutexHelper_Impl
 {
@@ -112,7 +115,7 @@ private:
     void*                           pDummy2;
 
 //  virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void    FillAccessibleStateSet( AccessibleStateSetHelper& rStateSet );
+    virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
