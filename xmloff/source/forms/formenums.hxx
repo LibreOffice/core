@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 13:54:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ namespace xmloff
             epFontRelief,
             epListLinkageType,
             epOrientation,
+            epVisualEffect,
+            epImagePosition,
+            epImageAlign,
 
             KNOWN_ENUM_PROPERTIES
         };
