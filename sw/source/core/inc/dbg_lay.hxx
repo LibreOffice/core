@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: ama $ $Date: 2001-09-24 12:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #define PROT_LEAF       0x00008000
 #define PROT_TESTFORMAT 0x00010000
 #define PROT_FRMCHANGES 0x00020000
-
+#define PROT_SNAPSHOT   0x00040000
 
 #define ACT_START           1
 #define ACT_END             2
@@ -92,6 +92,10 @@
 #define ACT_MERGE           7
 #define ACT_NEXT_SECT       8
 #define ACT_PREV_SECT       9
+
+#define SNAP_LOWER       0x00000001
+#define SNAP_FLYFRAMES   0x00000002
+#define SNAP_TABLECONT   0x00000004
 
 #ifndef PRODUCT
 
@@ -113,6 +117,7 @@ public:
     static void Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAction, void* pParam );
     static void Init();
     static void Stop();
+    static void SnapShot( const SwFrm* pFrm, ULONG nFlags );
 };
 
 class SwEnterLeave
@@ -131,6 +136,7 @@ public:
 #define PROTOCOL_INIT SwProtocol::Init();
 #define PROTOCOL_STOP SwProtocol::Stop();
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar ) SwEnterLeave aEnter( pFrm, nFunc, nAct, pPar );
+#define PROTOCOL_SNAPSHOT( pFrm, nFlags ) SwProtocol::SnapShot( pFrm, nFlags );
 
 #else
 
@@ -138,6 +144,7 @@ public:
 #define PROTOCOL_INIT
 #define PROTOCOL_STOP
 #define PROTOCOL_ENTER( pFrm, nFunc, nAct, pPar )
+#define PROTOCOL_SNAPSHOT( pFrm, nFlags )
 
 #endif
 

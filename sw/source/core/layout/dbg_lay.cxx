@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-09-24 12:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,25 @@
 
 #include "frame.hxx"
 #include "layfrm.hxx"
+#include "flyfrm.hxx"
+#include "txtfrm.hxx"
+#include "ndtxt.hxx"
+#include "dflyobj.hxx"
 
 ULONG SwProtocol::nRecord = 0;
 SwImplProtocol* SwProtocol::pImpl = NULL;
+
+ULONG lcl_GetFrameId( const SwFrm* pFrm )
+{
+#ifndef PRODUCT
+    static BOOL bFrameId = FALSE;
+    if( bFrameId )
+        return pFrm->GetFrmId();
+#endif
+    if( pFrm && pFrm->IsTxtFrm() )
+        return ((SwTxtFrm*)pFrm)->GetTxtNode()->GetIndex();
+    return 0;
+}
 
 class SwImplProtocol
 {
@@ -189,6 +205,7 @@ public:
     BOOL DeleteFrm( USHORT nFrmId );    // FrmId entfernen, diesen nicht mehr Aufzeichnen
     void FileInit();                    // Auslesen der INI-Datei
     void ChkStream() { if( !pStream ) NewStream(); }
+    void SnapShot( const SwFrm* pFrm, ULONG nFlags );
 };
 
 /* -----------------11.01.99 10:43-------------------
@@ -294,6 +311,14 @@ void SwProtocol::Stop()
         pImpl = NULL;
      }
      nRecord = 0;
+}
+
+// Creates a more or less detailed snapshot of the layout structur
+
+void SwProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
+{
+    if( pImpl )
+        pImpl->SnapShot( pFrm, nFlags );
 }
 
 SwImplProtocol::SwImplProtocol()
@@ -546,7 +571,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
     USHORT nSpecial = 0;
     if( nSpecial )  // Debugger-Manipulationsmoeglichkeit
     {
-        USHORT nId = pFrm->GetFrmId();
+        USHORT nId = USHORT(lcl_GetFrameId( pFrm ));
         switch ( nSpecial )
         {
             case 1: InsertFrm( nId ); break;
@@ -559,7 +584,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
     if( !pStream && !NewStream() )
         return; // Immer noch kein Stream
 
-    if( pFrmIds && !pFrmIds->Seek_Entry( pFrm->GetFrmId() ) )
+    if( pFrmIds && !pFrmIds->Seek_Entry( USHORT(lcl_GetFrameId( pFrm )) ) )
         return; // gehoert nicht zu den gewuenschten FrmIds
 
     if( !(pFrm->GetType() & nTypes) )
@@ -569,11 +594,13 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
         return; // Wir sollen nur innerhalb einer Testformatierung aufzeichnen
     BOOL bTmp = FALSE;
     ByteString aOut = aLayer;
-    aOut += pFrm->GetFrmId();       // Erstmal die FrmId ausgeben
+    aOut += ByteString::CreateFromInt64( lcl_GetFrameId( pFrm ) );
     aOut += ' ';
     lcl_FrameType( aOut, pFrm );    // dann den FrameType
     switch ( nFunction )            // und die Funktion
     {
+        case PROT_SNAPSHOT: lcl_Flags( aOut, pFrm );
+                            break;
         case PROT_MAKEALL:  aOut += "MakeAll";
                             lcl_Start( aOut, aLayer, nAct );
                             if( nAct == ACT_START )
@@ -585,7 +612,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
                             if( pParam )
                             {
                                 aOut += ' ';
-                                aOut += *((USHORT*)pParam);
+                                aOut += ByteString::CreateFromInt32( *((USHORT*)pParam) );
                             }
                             break;
         case PROT_GROW_TST: if( ACT_START != nAct )
@@ -604,7 +631,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
                             if( pParam )
                             {
                                 aOut += ' ';
-                                aOut += *((long*)pParam);
+                                aOut += ByteString::CreateFromInt64( *((long*)pParam) );
                             }
                             break;
         case PROT_POS:      break;
@@ -614,7 +641,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
         case PROT_SIZE:     aOut += "Size";
                             lcl_Start( aOut, aLayer, nAct );
                             aOut += ' ';
-                            aOut += pFrm->Frm().Height();
+                            aOut += ByteString::CreateFromInt64( pFrm->Frm().Height() );
                             break;
         case PROT_LEAF:     aOut += "Prev/NextLeaf";
                             lcl_Start( aOut, aLayer, nAct );
@@ -622,7 +649,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
                             if( pParam )
                             {
                                 aOut += ' ';
-                                aOut += ((SwFrm*)pParam)->GetFrmId();
+                                aOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
                             }
                             break;
         case PROT_FILE_INIT: FileInit();
@@ -632,7 +659,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
                             break;
         case PROT_CUT:      bTmp = TRUE; // NoBreak
         case PROT_PASTE:    aOut += bTmp ? "Cut from " : "Paste to ";
-                            aOut += ((SwFrm*)pParam)->GetFrmId();
+                            aOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
                             break;
         case PROT_TESTFORMAT: aOut += "Test";
                             lcl_Start( aOut, aLayer, nAct );
@@ -647,29 +674,29 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
                                 if( pFrm->Frm().Pos() != rFrm.Pos() )
                                 {
                                     aOut += "PosChg: (";
-                                    aOut += rFrm.Left();
+                                    aOut += ByteString::CreateFromInt64(rFrm.Left());
                                     aOut += ", ";
-                                    aOut += rFrm.Top();
+                                    aOut += ByteString::CreateFromInt64(rFrm.Top());
                                     aOut += ") (";
-                                    aOut += pFrm->Frm().Left();
+                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Left());
                                     aOut += ", ";
-                                    aOut += pFrm->Frm().Top();
+                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Top());
                                     aOut += ") ";
                                 }
                                 if( pFrm->Frm().Height() != rFrm.Height() )
                                 {
                                     aOut += "Height: ";
-                                    aOut += rFrm.Height();
+                                    aOut += ByteString::CreateFromInt64(rFrm.Height());
                                     aOut += " -> ";
-                                    aOut += pFrm->Frm().Height();
+                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Height());
                                     aOut += " ";
                                 }
                                 if( pFrm->Frm().Width() != rFrm.Width() )
                                 {
                                     aOut += "Width: ";
-                                    aOut += rFrm.Width();
+                                    aOut += ByteString::CreateFromInt64(rFrm.Width());
                                     aOut += " -> ";
-                                    aOut += pFrm->Frm().Width();
+                                    aOut += ByteString::CreateFromInt64(pFrm->Frm().Width());
                                     aOut += " ";
                                 }
                                 break;
@@ -692,17 +719,17 @@ void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* pFrm, ULONG nAct, 
     switch( nAct )
     {
         case ACT_MERGE:         rOut += "Merge Section ";
-                                rOut += ((SwFrm*)pParam)->GetFrmId();
+                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
                                 break;
         case ACT_CREATE_MASTER: bTmp = TRUE; // NoBreak
         case ACT_CREATE_FOLLOW: rOut += "Create Section ";
                                 rOut += bTmp ? "Master to " : "Follow from ";
-                                rOut += ((SwFrm*)pParam)->GetFrmId();
+                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
                                 break;
         case ACT_DEL_MASTER:    bTmp = TRUE; // NoBreak
         case ACT_DEL_FOLLOW:    rOut += "Delete Section ";
                                 rOut += bTmp ? "Master to " : "Follow from ";
-                                rOut += ((SwFrm*)pParam)->GetFrmId();
+                                rOut += ByteString::CreateFromInt64( lcl_GetFrameId( (SwFrm*)pParam ) );
                                 break;
     }
 }
@@ -734,6 +761,40 @@ BOOL SwImplProtocol::DeleteFrm( USHORT nId )
         return FALSE;
     pFrmIds->Remove( nPos );
     return TRUE;
+}
+
+/*-----------------20.9.2001 10:29------------------
+ * SwProtocol::SnapShot(..)
+ * creates a snapshot of the given frame and its content.
+ * --------------------------------------------------*/
+void SwImplProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
+{
+    while( pFrm )
+    {
+        _Record( pFrm, PROT_SNAPSHOT, 0, 0);
+        if( pFrm->GetDrawObjs() && nFlags & SNAP_FLYFRAMES )
+        {
+            aLayer += "[ ";
+            const SwDrawObjs &rObjs = *pFrm->GetDrawObjs();
+            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            {
+                SdrObject *pO = rObjs[i];
+                if ( pO->IsWriterFlyFrame() )
+                    SnapShot( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm(), nFlags );
+            }
+            if( aLayer.Len() > 1 )
+                aLayer.Erase( aLayer.Len() - 2 );
+        }
+        if( pFrm->IsLayoutFrm() && nFlags & SNAP_LOWER &&
+            ( !pFrm->IsTabFrm() || nFlags & SNAP_TABLECONT ) )
+        {
+            aLayer += "  ";
+            SnapShot( ((SwLayoutFrm*)pFrm)->Lower(), nFlags );
+            if( aLayer.Len() > 1 )
+                aLayer.Erase( aLayer.Len() - 2 );
+        }
+        pFrm = pFrm->GetNext();
+    }
 }
 
 /* -----------------11.01.99 11:53-------------------
@@ -790,13 +851,13 @@ void SwSizeEnterLeave::Leave()
 
 void SwUpperEnterLeave::Enter()
 {
-    nFrmId = pFrm->GetUpper() ? pFrm->GetUpper()->GetFrmId() : 0;
+    nFrmId = pFrm->GetUpper() ? USHORT(lcl_GetFrameId( pFrm->GetUpper() )) : 0;
     SwProtocol::Record( pFrm, nFunction, ACT_START, &nFrmId );
 }
 
 void SwUpperEnterLeave::Leave()
 {
-    nFrmId = pFrm->GetUpper() ? pFrm->GetUpper()->GetFrmId() : 0;
+    nFrmId = pFrm->GetUpper() ? USHORT(lcl_GetFrameId( pFrm->GetUpper() )) : 0;
     SwProtocol::Record( pFrm, nFunction, ACT_END, &nFrmId );
 }
 
