@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 12:20:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
             ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
             xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
         }
-        if ( !_sElementName.getLength() && KeyType::PRIMARY == nKeyType )
+        if ( KeyType::PRIMARY == nKeyType )
         {
             aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP PRIMARY KEY"));
         }
