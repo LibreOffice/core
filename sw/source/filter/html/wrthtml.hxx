@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:15:32 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,10 +434,6 @@ public:
     void OutCSS1_UnitProperty( const sal_Char *pProp, long nVal );
     void OutCSS1_PixelProperty( const sal_Char *pProp, long nVal, sal_Bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, sal_Bool bDeep=sal_True );
-#if USED
-    void OutCSS1_SfxItem( const SfxPoolItem *pItem1,
-                          const SfxPoolItem *pItem2 = 0 );
-#endif
 
     // BODY-Tag-Events aus der SFX-Konfigaurion
     void OutBasicBodyEvents();
