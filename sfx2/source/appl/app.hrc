@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 10:25:36 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,12 @@
 #define IMG_HELP_TOOLBOX_NEXT                   (RID_SFX_APP_START+114)
 #define IMG_HELP_TOOLBOX_PRINT                  (RID_SFX_APP_START+115)
 #define IMG_HELP_TOOLBOX_BOOKMARKS              (RID_SFX_APP_START+116)
+
+#define IMG_HELP_CONTENT_BOOK_OPEN              (RID_SFX_APP_START+120)
+#define IMG_HELP_CONTENT_BOOK_CLOSED            (RID_SFX_APP_START+121)
+#define IMG_HELP_CONTENT_CHAPTER_OPEN           (RID_SFX_APP_START+122)
+#define IMG_HELP_CONTENT_CHAPTER_CLOSED         (RID_SFX_APP_START+123)
+#define IMG_HELP_CONTENT_DOC                    (RID_SFX_APP_START+124)
 
 #define RID_IMAGE_USER1                         1
 #define RID_IMAGE_USER2                         2

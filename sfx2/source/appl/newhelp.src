@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-12 10:29:14 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ Window WIN_HELP_INDEX
         Pos = MAP_APPFONT ( 3, 19 ) ;
         PageList =
         {
-/*          PageItem
+            PageItem
             {
                 Identifier = HELP_INDEX_PAGE_CONTENTS ;
                 Text = "Inhalte" ;
@@ -109,7 +109,7 @@ Window WIN_HELP_INDEX
                 Text[ chinese_traditional ] = "§∫Æe";
                 Text[ turkish ] = "Contents";
                 Text[ arabic ] = "«·„Õ ÊÌ« ";
-            };*/
+            };
             PageItem
             {
                 Identifier = HELP_INDEX_PAGE_INDEX ;
@@ -442,6 +442,26 @@ Image IMG_HELP_TOOLBOX_BOOKMARKS
 {
     ImageBitmap = Bitmap { File = "favourite.bmp" ; };
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_CONTENT_BOOK_OPEN
+{
+    ImageBitmap = Bitmap { File = "fldopen.bmp" ; };
+};
+Image IMG_HELP_CONTENT_BOOK_CLOSED
+{
+    ImageBitmap = Bitmap { File = "fldclose.bmp" ; };
+};
+Image IMG_HELP_CONTENT_CHAPTER_OPEN
+{
+    ImageBitmap = Bitmap { File = "fldopen.bmp" ; };
+};
+Image IMG_HELP_CONTENT_CHAPTER_CLOSED
+{
+    ImageBitmap = Bitmap { File = "fldclose.bmp" ; };
+};
+Image IMG_HELP_CONTENT_DOC
+{
+    ImageBitmap = Bitmap { File = "doccl.bmp" ; };
 };
 
 String STR_HELP_WINDOW_TITLE
