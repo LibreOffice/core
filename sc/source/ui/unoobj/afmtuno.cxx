@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:24:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ const SfxItemPropertyMap* lcl_GetAutoFieldMap()
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,       &::getCppuType((const table::CellHoriJustify*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,        &::getBooleanCppuType(),                    0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,         &::getBooleanCppuType(),                    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,       &::getCppuType((const table::CellOrientation*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,           &::getCppuType((const table::CellOrientation*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
@@ -842,19 +842,49 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 
         if ( IsScItemWid( pMap->nWID ) )
         {
-            const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
-            if (pItem)
+            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID ) )
             {
-                SfxPoolItem* pNewItem = pItem->Clone();
-                sal_Bool bDone = pNewItem->PutValue( aValue, pMap->nMemberId );
-                if (bDone)
-                {
-                    pData->PutItem( nFieldIndex, *pNewItem );
+                sal_Bool bDone = sal_False;
 
+                switch( pMap->nWID )
+                {
+                    case ATTR_STACKED:
+                    {
+                        table::CellOrientation eOrient;
+                        if( aValue >>= eOrient )
+                        {
+                            switch( eOrient )
+                            {
+                                case table::CellOrientation_STANDARD:
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                break;
+                                case table::CellOrientation_TOPBOTTOM:
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                                break;
+                                case table::CellOrientation_BOTTOMTOP:
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                                break;
+                                case table::CellOrientation_STACKED:
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                break;
+                            }
+                            bDone = sal_True;
+                        }
+                    }
+                    break;
+                    default:
+                        SfxPoolItem* pNewItem = pItem->Clone();
+                        bDone = pNewItem->PutValue( aValue, pMap->nMemberId );
+                        if (bDone)
+                            pData->PutItem( nFieldIndex, *pNewItem );
+                        delete pNewItem;
+                }
+
+                if (bDone)
                     //! Notify fuer andere Objekte?
                     pFormats->SetSaveLater(sal_True);
-                }
-                delete pNewItem;
             }
         }
         else
@@ -899,9 +929,22 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
 
         if ( IsScItemWid( pMap->nWID ) )
         {
-            const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID );
-            if (pItem)
-                pItem->QueryValue( aVal, pMap->nMemberId );
+            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID ) )
+            {
+                switch( pMap->nWID )
+                {
+                    case ATTR_STACKED:
+                    {
+                        const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
+                        sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
+                        BOOL bStacked = ((const SfxBoolItem*)pItem)->GetValue();
+                        SvxOrientationItem( nRot, bStacked ).QueryValue( aVal );
+                    }
+                    break;
+                    default:
+                        pItem->QueryValue( aVal, pMap->nMemberId );
+                }
+            }
         }
         else
         {
