@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 11:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 10:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,13 +1622,14 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                     for(pRelevantItems = pSecondRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
                         ++nSLen;
 
-                    pAdabasItems = new sal_Int32[nFLen + nSLen];
+                    pAdabasItems = new sal_Int32[nFLen + nSLen + 1];
                     nFLen = 0;
                     for(pRelevantItems = pFirstRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
                         pAdabasItems[nFLen++] = *pRelevantItems;
 
                     for(pRelevantItems = pSecondRelevantItems;pRelevantItems && *pRelevantItems;++pRelevantItems)
                         pAdabasItems[nFLen++] = *pRelevantItems;
+                    pAdabasItems[nFLen] = 0;
 
                 }
                 pRelevantItems = pAdabasItems;
@@ -2443,6 +2444,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/03/30 11:54:34  fs
+ *  #65293# missing include
+ *
  *  Revision 1.42  2001/03/29 07:44:43  fs
  *  #84826# +clearPassword
  *

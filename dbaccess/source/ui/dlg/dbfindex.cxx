@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-07 16:44:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 10:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     aPB_Remove(         this, ResId( PB_REMOVE ) ),
     aPB_AddAll(         this, ResId( PB_ADDALL ) ),
     aPB_RemoveAll(      this, ResId( PB_REMOVEALL ) ),
-    m_aDSN(aDataSrcName)
+    m_aDSN(aDataSrcName),
+    m_bCaseSensitiv(sal_True)
 {
     aCB_Tables.SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
     aPB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
@@ -531,6 +532,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/07 16:44:40  fs
+ *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
+ *
  *  Revision 1.3  2000/12/14 15:43:32  oj
  *  use ucb instead of DirEntry
  *
