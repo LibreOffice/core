@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-20 15:06:36 $
+ *  last change: $Author: ama $ $Date: 2002-02-20 15:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,7 +1216,7 @@ FASTBOOL SwCursor::GoNextWord()
 
         nPtPos = (xub_StrLen)pBreakIt->xBreak->nextWord(
                                 pTxtNd->GetTxt(), nPtPos,
-            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
 
         if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
