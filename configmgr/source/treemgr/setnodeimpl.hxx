@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace configmgr
 
             bool isValid()  const { return m_pTree != 0; }
 
-            data::Accessor      accessor() const { return m_aAccessor; }
+            data::Accessor const& accessor() const { return m_aAccessor; }
             ElementTreeImpl* tree() const { return m_pTree; };
 
             view::ViewTreeAccess    getTreeView() const;
