@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WindowState.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:41:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,24 @@
                     <desc>Specifies the style of a toolbar. This property is only used by toolbar user interface elements. 0 = symbol buttons, 1 = text buttons, 2 = symbols+text buttons</desc>
                 </info>
                 <value>0</value>
+            </prop>
+            <prop oor:name="NoClose" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies that a user interface element shouldn't have a closer. This property is only used by toolbars or floating window user interface elements.</desc>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="SoftClose" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies that a user interface element shouldn't be closed forever. This is usefull for context sensitive ui elements which must be visible whenever their context is active. This property is only used by toolbars or floating window user interface elements.</desc>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="ContextActive" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies if a context sensitive user interface element is currently bound to its context. This property can be used to disable context sensitivity without losing the information that a user interface element is normally context sensitive.</desc>
+                </info>
+                <value>true</value>
             </prop>
         </group>
 	</templates>
