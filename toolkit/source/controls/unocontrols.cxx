@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
+ *  last change: $Author: fs $ $Date: 2000-11-03 13:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1618,7 +1618,9 @@ void UnoListBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, c
         if ( !( aVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID ) )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer > xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-            xW->setProperty( aSelPropName, aVal );
+            if (xW.is())
+                // same comment as in UnoControl::ImplSetPeerProperty - see there
+                xW->setProperty( aSelPropName, aVal );
         }
     }
 }
@@ -3029,8 +3031,11 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
         ::rtl::OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
 
         ::com::sun::star::uno::Reference < ::com::sun::star::awt::XPatternField >  xPF( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xPF->setString( Text );
-        xPF->setMasks( EditMask, LiteralMask );
+        if (xPF.is())
+        {   // same comment as in UnoControl::ImplSetPeerProperty - see there
+            xPF->setString( Text );
+            xPF->setMasks( EditMask, LiteralMask );
+        }
     }
     else
         UnoControl::ImplSetPeerProperty( rPropName, rVal );

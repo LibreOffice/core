@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-03 13:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -94,6 +95,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
@@ -186,7 +190,12 @@ UnoControl::~UnoControl()
 void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-    xW->setProperty( rPropName, rVal );
+    if (xW.is())
+        // since a change made in propertiesChange, we can't be sure that this is called with an valid mxPeer,
+        // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
+        // releases our mutex before calling here in)
+        // That's why this additional check
+        xW->setProperty( rPropName, rVal );
 }
 
 void UnoControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
@@ -285,12 +294,16 @@ void UnoControl::removeEventListener( const ::com::sun::star::uno::Reference< ::
 // ::com::sun::star::beans::XPropertiesChangeListener
 void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::ClearableGuard< ::osl::Mutex > aGuard( GetMutex() );
 
     // kommt von xModel
     if( !IsUpdatingModel() && mxPeer.is() )
     {
-        Table aDependingValues;
+        DECLARE_STL_VECTOR( ::com::sun::star::beans::PropertyValue, PropertyValueVector);
+        PropertyValueVector     aPeerPropertiesToSet;
+        sal_Int32               nIndependentPos = 0;
+            // position where to insert the independent properties, dependent ones are inserted at the end of the vector
+
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
@@ -329,25 +342,27 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
                 // Properties die von anderen abhaengen erst hinterher einstellen,
                 // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
                 // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
-                aDependingValues.Insert( nPType, new ::com::sun::star::uno::Any( rEvt.NewValue ) );
+                aPeerPropertiesToSet.push_back(::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
             }
             else
             {
-                ImplSetPeerProperty( rEvt.PropertyName, rEvt.NewValue );
+                aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
+                    ::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
+                ++nIndependentPos;
             }
         }
 
-        sal_uInt16 nDependings = aDependingValues.Count();
-        if ( nDependings )
+        aGuard.clear();
+            // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
+            // usually don't have an own mutex but use the SolarMutex instead.
+            // To prevent deadlocks resulting from this, we release our own mutex here
+            // FS - 11/03/2000
+        for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
+                aLoop != aPeerPropertiesToSet.end();
+                ++aLoop
+            )
         {
-            for ( sal_uInt16 n = 0; n < nDependings; n++ )
-            {
-                ::com::sun::star::uno::Any* pAny = (::com::sun::star::uno::Any*) aDependingValues.GetObject( n );
-                sal_Int32 nPropId = aDependingValues.GetObjectKey( n );
-                ::rtl::OUString aPropName = GetPropertyName( nPropId );
-                ImplSetPeerProperty( aPropName, *pAny );
-                delete pAny;
-            }
+            ImplSetPeerProperty( aLoop->Name, aLoop->Value );
         }
     }
 }
