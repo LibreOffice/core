@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 11:08:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,28 +60,30 @@
  ************************************************************************/
 
 #include "dialogs.hrc"
+#include "helpids.hrc"
 
 ModalDialog RID_XMLSECDLG_CERTCHOOSER
 {
-//  HelpId = HID_XMLSECDLG_CERTCHOOSER;
+    HelpId = HID_XMLSEC_DLG_CERTCHOOSER;
     Size = MAP_APPFONT( CS_WIDTH, CS_HEIGHT );
     OutputSize = TRUE;
     Closeable = TRUE;
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text = "Zertifikat auswählen";
+    Text [ de ] ="Zertifikat auswählen";
     Text [ en-US ] = "Select Certificate";
 
     FixedText FT_HINT_SELECT
     {
         Pos = MAP_APPFONT( CS_COL_0, CS_ROW_0 );
         Size = MAP_APPFONT( CS_COL_2-CS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Select the certificate you want to use for signing";
+        Text [ de ] ="Wählen Sie das Zertifikat aus, das Sie zum Signieren benutzen möchten.";
         Text [ en-US ] = "Select the certificate you want to use for signing";
     };
     Control LB_SIGNATURES
     {
+        HelpId = HID_XMLSEC_CTRL_CHOOSESIGNATURES;
         Pos = MAP_APPFONT( CS_COL_0, CS_ROW_1 );
         Size = MAP_APPFONT( CS_LB_WIDTH, CS_ROW_2-CS_ROW_1 );
         SVLook = TRUE;
@@ -89,14 +91,14 @@ ModalDialog RID_XMLSECDLG_CERTCHOOSER
     };
     String STR_HEADERBAR
     {
-        Text = "Issued to\tIssued by\tExpiration Date";
-        Text [ en-US ] = "Issued to\tIssued by\tExpiration Date";
+        Text [ de ] ="Ausgestellt für\tAusgestellt durch\tAblaufdatum";
+        Text [ en-US ] = "Issued to\tIssued by\tExpiration date";
     };
     PushButton BTN_VIEWCERT
     {
         Pos = MAP_APPFONT( CS_COL_1, CS_ROW_3 );
         Size = MAP_APPFONT( CS_COL_2-CS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Zertifikat anzeigen...";
+        Text [ de ] ="Zertifikat zeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     FixedLine FL_BOTTOM_SEP
