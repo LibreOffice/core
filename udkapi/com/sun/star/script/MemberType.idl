@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MemberType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef __com_sun_star_script_MemberType_idl__
 #define __com_sun_star_script_MemberType_idl__
 
-
 //=============================================================================
 
 module com { module sun { module star { module script {
@@ -70,7 +69,7 @@ module com { module sun { module star { module script {
 /** These values are used to specify a member accessible by
     <type>XInvocation</type>.
 */
-enum MemberType
+published enum MemberType
 {
     METHOD,
     PROPERTY,

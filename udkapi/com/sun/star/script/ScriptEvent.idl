@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,10 @@
 
 //=============================================================================
 /** script event that gets delivered whenever a script event takes place.
-
     <p>For that to happen, a "ScriptEventDescriptor" must be registered at
     and attached to an object by an <type>XEventAttacherManager</type>.</p>
  */
-struct ScriptEvent: com::sun::star::script::AllEventObject
+published struct ScriptEvent: com::sun::star::script::AllEventObject
 {
     //-------------------------------------------------------------------------
     /** type of the script language as string; for example, "Basic" or "StarScript".

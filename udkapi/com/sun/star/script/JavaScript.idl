@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaScript.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,9 @@
 
     <p>The interpreter should be similar to JavaScript 1.1. The exact
     behavior will be specified in future.</p>
-
     @deprecated
  */
-service JavaScript
+published service JavaScript
 {
     /// Parent service
     service com::sun::star::script::Engine;
