@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,30 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
+BOOL ScGridWindow::DoPageFieldSelection( USHORT nCol, USHORT nRow )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+    if ( pDPObj && nCol > 0 )
+    {
+        // look for the dimension header left of the drop-down arrow
+        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+        long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
+        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
+        {
+            BOOL bIsDataLayout = FALSE;
+            String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
+            if ( aFieldName.Len() && !bIsDataLayout )
+            {
+                DoPageFieldMenue( nCol, nRow );
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
 void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rMEvt )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -181,8 +205,9 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
     }
     else if (pDPObj)
     {
+        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
         ScAddress aPos( nCol, nRow, nTab );
-        long nField = pDPObj->GetHeaderDim(aPos);
+        long nField = pDPObj->GetHeaderDim( aPos, nOrient );
         if ( nField >= 0 )
         {
             bDPMouse   = TRUE;
@@ -684,7 +709,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
             ScDPObject aNewObj( *pDragDPObj );
             aNewObj.SetSaveData( aSaveData );
             ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, TRUE, FALSE );
+            // when dragging fields, allow re-positioning (bAllowMove)
+            aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, TRUE, FALSE, TRUE );
             pViewData->GetView()->CursorPosChanged();       // shells may be switched
         }
     }
