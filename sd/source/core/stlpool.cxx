@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-24 17:03:54 $
+ *  last change: $Author: dl $ $Date: 2000-11-28 07:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,14 +279,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     // Font fuer Titel und Gliederung
     SvxFontItem aSvxFontItem;
-    aSvxFontItem.GetFamily() = FAMILY_ROMAN;
-    aSvxFontItem.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
-    aSvxFontItem.GetCharSet() = gsl_getSystemTextEncoding();
     SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
-    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii(
-                                      RTL_CONSTASCII_STRINGPARAM( "Arial Unicode MS;Andale WT UI;MS PGothic;HG Mincho;MS Mincho;SimSun;Song;PmingLiU;Ming;Batang;Myeomgjo;Gulim" ) );
     SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
-    aSvxFontItemCTL.GetFamilyName() = UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "Simplified Arabic;David" ) );
+    GetDefaultFonts( aSvxFontItem, aSvxFontItemCJK, aSvxFontItemCTL );
 
     Font aBulletFont( GetBulletFont() );
 
