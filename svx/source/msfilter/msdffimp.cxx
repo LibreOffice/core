@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:19:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
 #include <math.h>
 #include <limits.h>
 #include <vector>
@@ -75,7 +79,15 @@
 #include <rtl/math.hxx>
 #endif
 
-#pragma hdrstop
+#include <sot/clsids.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <sot/exchange.hxx>
+#include <sot/storinfo.hxx>
+#include <vcl/cvtgrf.hxx>
+
+#include "viscache.hxx"
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 
@@ -158,7 +170,7 @@
 #include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 
 #ifndef _SFX_OBJFAC_HXX
@@ -176,9 +188,9 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX
-#include <sfx2/interno.hxx>
-#endif
+//#ifndef _SFX_INTERNO_HXX
+//#include <sfx2/interno.hxx>
+//#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
@@ -404,6 +416,208 @@ using namespace container           ;
 // static counter for OLE-Objects
 static sal_uInt32 nMSOleObjCntr = 0;
 #define MSO_OLE_Obj "MSO_OLE_Obj"
+
+
+/*************************************************************************/
+BOOL Impl_OlePres::Read( SvStream & rStm )
+{
+    ULONG nBeginPos = rStm.Tell();
+    INT32 n;
+    rStm >> n;
+    if( n != -1 )
+    {
+        pBmp = new Bitmap;
+        rStm >> *pBmp;
+        if( rStm.GetError() == SVSTREAM_OK )
+        {
+            nFormat = FORMAT_BITMAP;
+            aSize = pBmp->GetPrefSize();
+            MapMode aMMSrc;
+            if( !aSize.Width() || !aSize.Height() )
+            {
+                // letzte Chance
+                aSize = pBmp->GetSizePixel();
+                aMMSrc = MAP_PIXEL;
+            }
+            else
+                aMMSrc = pBmp->GetPrefMapMode();
+            MapMode aMMDst( MAP_100TH_MM );
+            aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
+            return TRUE;
+        }
+        else
+        {
+            delete pBmp;
+            pBmp = NULL;
+
+            pMtf = new GDIMetaFile();
+            rStm.ResetError();
+            rStm >> *pMtf;
+            if( rStm.GetError() == SVSTREAM_OK )
+            {
+                nFormat = FORMAT_GDIMETAFILE;
+                aSize = pMtf->GetPrefSize();
+                MapMode aMMSrc = pMtf->GetPrefMapMode();
+                MapMode aMMDst( MAP_100TH_MM );
+                aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
+                return TRUE;
+            }
+            else
+            {
+                delete pMtf;
+                pMtf = NULL;
+            }
+        }
+
+    }
+
+    rStm.ResetError();
+    rStm.Seek( nBeginPos );
+    nFormat = ReadClipboardFormat( rStm );
+    // JobSetup, bzw. TargetDevice ueberlesen
+    // Information aufnehmen, um sie beim Schreiben nicht zu verlieren
+    nJobLen = 0;
+    rStm >> nJobLen;
+    if( nJobLen >= 4 )
+    {
+        nJobLen -= 4;
+        if( nJobLen )
+        {
+            pJob = new BYTE[ nJobLen ];
+            rStm.Read( pJob, nJobLen );
+        }
+    }
+    else
+    {
+        rStm.SetError( SVSTREAM_GENERALERROR );
+        return FALSE;
+    }
+    UINT32 nAsp;
+    rStm >> nAsp;
+    USHORT nSvAsp = USHORT( nAsp );
+    SetAspect( nSvAsp );
+    rStm.SeekRel( 4 ); //L-Index ueberlesen
+    rStm >> nAdvFlags;
+    rStm.SeekRel( 4 ); //Compression
+    UINT32 nWidth  = 0;
+    UINT32 nHeight = 0;
+    UINT32 nSize   = 0;
+    rStm >> nWidth >> nHeight >> nSize;
+    aSize.Width() = nWidth;
+    aSize.Height() = nHeight;
+
+    if( nFormat == FORMAT_GDIMETAFILE )
+    {
+        pMtf = new GDIMetaFile();
+        ReadWindowMetafile( rStm, *pMtf );
+    }
+    else if( nFormat == FORMAT_BITMAP )
+    {
+        pBmp = new Bitmap();
+        rStm >> *pBmp;
+    }
+    else
+    {
+        void * p = new BYTE[ nSize ];
+        rStm.Read( p, nSize );
+        delete p;
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/************************************************************************/
+void Impl_OlePres::Write( SvStream & rStm )
+{
+    WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
+    rStm << (INT32)(nJobLen +4);       // immer leeres TargetDevice
+    if( nJobLen )
+        rStm.Write( pJob, nJobLen );
+    rStm << (UINT32)nAspect;
+    rStm << (INT32)-1;      //L-Index immer -1
+    rStm << (INT32)nAdvFlags;
+    rStm << (INT32)0;       //Compression
+    rStm << (INT32)aSize.Width();
+    rStm << (INT32)aSize.Height();
+    ULONG nPos = rStm.Tell();
+    rStm << (INT32)0;
+
+    if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
+    {
+        // Immer auf 1/100 mm, bis Mtf-Loesung gefunden
+        // Annahme (keine Skalierung, keine Org-Verschiebung)
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
+                    "X-Skalierung im Mtf" )
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
+                    "Y-Skalierung im Mtf" )
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
+                    "Origin-Verschiebung im Mtf" )
+        MapUnit nMU = pMtf->GetPrefMapMode().GetMapUnit();
+        if( MAP_100TH_MM != nMU )
+        {
+            Size aPrefS( pMtf->GetPrefSize() );
+            Size aS( aPrefS );
+            aS = OutputDevice::LogicToLogic( aS, nMU, MAP_100TH_MM );
+
+            pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
+                         Fraction( aS.Height(), aPrefS.Height() ) );
+            pMtf->SetPrefMapMode( MAP_100TH_MM );
+            pMtf->SetPrefSize( aS );
+        }
+        WriteWindowMetafileBits( rStm, *pMtf );
+    }
+    else
+    {
+        DBG_ERROR( "unknown format" )
+    }
+    ULONG nEndPos = rStm.Tell();
+    rStm.Seek( nPos );
+    rStm << (UINT32)nEndPos - nPos - 4;
+    rStm.Seek( nEndPos );
+}
+
+Impl_OlePres * CreateCache_Impl( SotStorage * pStor )
+{
+    SotStorageStreamRef xOleObjStm =pStor->OpenSotStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Ole-Object" ) ),
+                                                        STREAM_READ | STREAM_NOCREATE );
+    if( xOleObjStm->GetError() )
+        return NULL;
+    SotStorageRef xOleObjStor = new SotStorage( *xOleObjStm );
+    if( xOleObjStor->GetError() )
+        return NULL;
+
+    String aStreamName;
+    if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) ) ) )
+        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) );
+    else if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ) ) )
+        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) );
+
+    if( aStreamName.Len() == 0 )
+        return NULL;
+
+
+    for( USHORT i = 1; i < 10; i++ )
+    {
+        SotStorageStreamRef xStm = xOleObjStor->OpenSotStream( aStreamName,
+                                                STREAM_READ | STREAM_NOCREATE );
+        if( xStm->GetError() )
+            break;
+
+        xStm->SetBufferSize( 8192 );
+        Impl_OlePres * pEle = new Impl_OlePres( 0 );
+        if( pEle->Read( *xStm ) && !xStm->GetError() )
+        {
+            if( pEle->GetFormat() == FORMAT_GDIMETAFILE || pEle->GetFormat() == FORMAT_BITMAP )
+                return pEle;
+        }
+        delete pEle;
+        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres00" ) );
+        aStreamName += String( i );
+    };
+    return NULL;
+}
+
+
 
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
@@ -5127,6 +5341,499 @@ void SvxMSDffManager::GetGroupAnchors( const DffRecordHeader& rHd, SvStream& rSt
     }
 }
 
+SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
+                                       DffObjData& rObjData,
+                                       void* pData,
+                                       Rectangle& rTextRect,
+                                       SdrObject* pObj
+                                       )
+{
+    if( !rTextRect.IsEmpty() )
+    {
+        SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
+        SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
+        SvxMSDffImportRec* pTextImpRec = pImpRec;
+
+        // fill Import Record with data
+        pImpRec->nShapeId   = rObjData.nShapeId;
+        pImpRec->eShapeType = rObjData.eShapeType;
+
+        MSO_WrapMode eWrapMode( (MSO_WrapMode)GetPropertyValue(
+                                                            DFF_Prop_WrapText,
+                                                            mso_wrapSquare ) );
+        rObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt,
+                                            DFF_msofbtClientAnchor,
+                                            SEEK_FROM_CURRENT_AND_RESTART );
+        if( rObjData.bClientAnchor )
+            ProcessClientAnchor( rSt,
+                    maShapeRecords.Current()->nRecLen,
+                    pImpRec->pClientAnchorBuffer, pImpRec->nClientAnchorLen );
+
+        rObjData.bClientData = maShapeRecords.SeekToContent( rSt,
+                                            DFF_msofbtClientData,
+                                            SEEK_FROM_CURRENT_AND_RESTART );
+        if( rObjData.bClientData )
+            ProcessClientData( rSt,
+                    maShapeRecords.Current()->nRecLen,
+                    pImpRec->pClientDataBuffer, pImpRec->nClientDataLen );
+
+
+        // process user (== Winword) defined parameters in 0xF122 record
+        if(    maShapeRecords.SeekToContent( rSt,
+                                             DFF_msofbtUDefProp,
+                                             SEEK_FROM_CURRENT_AND_RESTART )
+            && maShapeRecords.Current()->nRecLen )
+        {
+            UINT32  nBytesLeft = maShapeRecords.Current()->nRecLen;
+            UINT32  nUDData;
+            UINT16  nPID;
+            while( 5 < nBytesLeft )
+            {
+                rSt >> nPID;
+                if ( rSt.GetError() != 0 )
+                    break;
+                rSt >> nUDData;
+                switch( nPID )
+                {
+                    case 0x038F: pImpRec->nXAlign = nUDData; break;
+                    case 0x0390: pImpRec->nXRelTo = nUDData; break;
+                    case 0x0391: pImpRec->nYAlign = nUDData; break;
+                    case 0x0392: pImpRec->nYRelTo = nUDData; break;
+                    case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
+                }
+                if ( rSt.GetError() != 0 )
+                    break;
+                pImpRec->bHasUDefProp = TRUE;
+                nBytesLeft  -= 6;
+            }
+        }
+
+        //  Textrahmen, auch Title oder Outline
+        SdrObject*  pOrgObj  = pObj;
+        SdrRectObj* pTextObj = 0;
+        UINT32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
+        if( nTextId )
+        {
+            SfxItemSet aSet( pSdrModel->GetItemPool() );
+
+            //Originally anything that as a mso_sptTextBox was created as a
+            //textbox, this was changed for #88277# to be created as a simple
+            //rect to keep impress happy. For the rest of us we'd like to turn
+            //it back into a textbox again.
+            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
+            if (!bTextFrame)
+            {
+                //Either
+                //a) its a simple text object or
+                //b) its a rectangle with text and square wrapping.
+                bTextFrame =
+                (
+                    (pImpRec->eShapeType == mso_sptTextSimple) ||
+                    (
+                        (pImpRec->eShapeType == mso_sptRectangle)
+                        && (eWrapMode == mso_wrapSquare)
+                        && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
+                    )
+                );
+            }
+
+            if (bTextFrame)
+            {
+                delete pObj;
+                pObj = pOrgObj = 0;
+            }
+
+            // Distance of Textbox to it's surrounding Customshape
+            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
+            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
+            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
+            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+
+            ScaleEmu( nTextLeft );
+            ScaleEmu( nTextRight );
+            ScaleEmu( nTextTop );
+            ScaleEmu( nTextBottom );
+
+            INT32 nTextRotationAngle=0;
+            bool bVerticalText = false;
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT:
+                        nTextRotationAngle = 9000;
+                    break;
+                    case mso_txflVertN:
+                    case mso_txflTtoBN:
+                        nTextRotationAngle = 27000;
+                        break;
+                    case mso_txflTtoBA:
+                        bVerticalText = true;
+                    break;
+                    case mso_txflHorzA:
+                        bVerticalText = true;
+                        nTextRotationAngle = 9000;
+                    case mso_txflHorzN:
+                    default :
+                        break;
+                }
+            }
+
+            if (nTextRotationAngle)
+            {
+                while (nTextRotationAngle > 360000)
+                    nTextRotationAngle-=9000;
+                switch (nTextRotationAngle)
+                {
+                    case 9000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextBottom;
+                            nTextRight = nOldTextTop;
+                            nTextTop = nOldTextLeft;
+                            nTextBottom = nOldTextRight;
+                        }
+                        break;
+                    case 27000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextTop;
+                            nTextRight = nOldTextBottom;
+                            nTextTop = nOldTextRight;
+                            nTextBottom = nOldTextLeft;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            pTextImpRec = new SvxMSDffImportRec(*pImpRec);
+
+            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
+            // hier rausrechnen
+            Rectangle aNewRect(rTextRect);
+            aNewRect.Bottom() -= nTextTop + nTextBottom;
+            aNewRect.Right() -= nTextLeft + nTextRight;
+
+            // Nur falls es eine einfache Textbox ist, darf der Writer
+            // das Objekt durch einen Rahmen ersetzen, ansonsten
+            if( bTextFrame )
+            {
+                SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
+                aTmpRec.bSortByShapeId = TRUE;
+
+                USHORT nFound;
+                if( pShapeInfos->Seek_Entry( &aTmpRec, &nFound ) )
+                {
+                    SvxMSDffShapeInfo& rInfo = *pShapeInfos->GetObject(nFound);
+                    pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
+                    pTextImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
+                }
+            }
+
+            if( !pObj )
+                ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+
+            bool bFitText = false;
+            if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+                aSet.Put( SdrTextMinFrameHeightItem(
+                    aNewRect.Bottom() - aNewRect.Top() ) );
+                aSet.Put( SdrTextMinFrameWidthItem(
+                    aNewRect.Right() - aNewRect.Left() ) );
+                bFitText = true;
+            }
+            else
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+            }
+
+            switch ( (MSO_WrapMode)
+                GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
+            {
+                case mso_wrapNone :
+                    aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                    if (bFitText)
+                    {
+                        //can't do autowidth in flys #i107184#
+                        pTextImpRec->bReplaceByFly = false;
+                    }
+                break;
+                case mso_wrapByPoints :
+                    aSet.Put( SdrTextContourFrameItem( TRUE ) );
+                break;
+            }
+
+            // Abstaende an den Raendern der Textbox setzen
+            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
+            aSet.Put( SdrTextRightDistItem( nTextRight ) );
+            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
+            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            pTextImpRec->nDxTextLeft    = nTextLeft;
+            pTextImpRec->nDyTextTop     = nTextTop;
+            pTextImpRec->nDxTextRight   = nTextRight;
+            pTextImpRec->nDyTextBottom  = nTextBottom;
+
+            // Textverankerung lesen
+            if ( IsProperty( DFF_Prop_anchorText ) )
+            {
+                MSO_Anchor eTextAnchor =
+                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
+
+                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
+                BOOL bTVASet(FALSE);
+                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+                BOOL bTHASet(FALSE);
+
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                        bTVASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorTopCentered:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+
+                    case mso_anchorMiddle:
+                        bTVASet = TRUE;
+                    break;
+                    case mso_anchorMiddleCentered:
+                    {
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorBottom:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                        bTVASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorBottomCentered:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+    /*
+                    case mso_anchorTopBaseline:
+                    case mso_anchorBottomBaseline:
+                    case mso_anchorTopCenteredBaseline:
+                    case mso_anchorBottomCenteredBaseline:
+                    break;
+    */
+                }
+                // Einsetzen
+                if ( bTVASet )
+                    aSet.Put( SdrTextVertAdjustItem( eTVA ) );
+                if ( bTHASet )
+                    aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+            }
+
+            pTextObj->SetMergedItemSet(aSet);
+            pTextObj->SetModel(pSdrModel);
+
+            if (bVerticalText)
+                pTextObj->SetVerticalWriting(sal_True);
+
+            if (nTextRotationAngle)
+            {
+                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                    rTextRect.GetWidth() : rTextRect.GetHeight();
+                nMinWH /= 2;
+                Point aPivot(rTextRect.TopLeft());
+                aPivot.X() += nMinWH;
+                aPivot.Y() += nMinWH;
+                double a = nTextRotationAngle * nPi180;
+                pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+            }
+
+            // rotate text with shape ?
+            if ( mnFix16Angle )
+            {
+                double a = mnFix16Angle * nPi180;
+                pTextObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                    sin( a ), cos( a ) );
+            }
+
+            if( !pObj )
+            {
+                pObj = pTextObj;
+            }
+            else
+            {
+                if( pTextObj != pObj )
+                {
+                    SdrObject* pGroup = new SdrObjGroup;
+                    pGroup->GetSubList()->NbcInsertObject( pObj );
+                    pGroup->GetSubList()->NbcInsertObject( pTextObj );
+                    if (pOrgObj == pObj)
+                        pOrgObj = pGroup;
+                    else
+                        pOrgObj = pObj;
+                    pObj = pGroup;
+                }
+            }
+        }
+        else if( !pObj )
+        {
+            // simple rectangular objects are ignored by ImportObj()  :-(
+            // this is OK for Draw but not for Calc and Writer
+            // cause here these objects have a default border
+            pObj = new SdrRectObj(rTextRect);
+            pOrgObj = pObj;
+            pObj->SetModel( pSdrModel );
+            SfxItemSet aSet( pSdrModel->GetItemPool() );
+            ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+
+            const SfxPoolItem* pPoolItem=NULL;
+            SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
+                                                     FALSE, &pPoolItem );
+            if( SFX_ITEM_DEFAULT == eState )
+                aSet.Put( XFillColorItem( String(),
+                          Color( mnDefaultColor ) ) );
+            pObj->SetMergedItemSet(aSet);
+        }
+
+        //Means that fBehindDocument is set
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
+            pImpRec->bDrawHell = TRUE;
+        else
+            pImpRec->bDrawHell = FALSE;
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
+            pImpRec->bHidden = TRUE;
+        pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
+        pTextImpRec->bHidden = pImpRec->bHidden;
+        pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
+        pTextImpRec->nNextShapeId=pImpRec->nNextShapeId;
+
+        if ( nTextId )
+        {
+            pTextImpRec->aTextId.nTxBxS = (UINT16)( nTextId >> 16 );
+            pTextImpRec->aTextId.nSequence = (UINT16)nTextId;
+        }
+
+        pTextImpRec->nDxWrapDistLeft = GetPropertyValue(
+                                    DFF_Prop_dxWrapDistLeft, 114935L ) / 635L;
+        pTextImpRec->nDyWrapDistTop = GetPropertyValue(
+                                    DFF_Prop_dyWrapDistTop, 0 ) / 635L;
+        pTextImpRec->nDxWrapDistRight = GetPropertyValue(
+                                    DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
+        pTextImpRec->nDyWrapDistBottom = GetPropertyValue(
+                                    DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
+        // 16.16 fraction times total image width or height, as appropriate.
+
+        if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
+        {
+            delete pTextImpRec->pWrapPolygon;
+            sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
+            rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            {
+                pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                {
+                    sal_Int32 nX, nY;
+                    if (nElemSizeVert == 8)
+                        rSt >> nX >> nY;
+                    else
+                    {
+                        sal_Int16 nSmallX, nSmallY;
+                        rSt >> nSmallX >> nSmallY;
+                        nX = nSmallX;
+                        nY = nSmallY;
+                    }
+                    (*(pTextImpRec->pWrapPolygon))[i].X() = nX;
+                    (*(pTextImpRec->pWrapPolygon))[i].Y() = nY;
+                }
+            }
+        }
+
+        pImpRec->nCropFromTop = GetPropertyValue(
+                                    DFF_Prop_cropFromTop, 0 );
+        pImpRec->nCropFromBottom = GetPropertyValue(
+                                    DFF_Prop_cropFromBottom, 0 );
+        pImpRec->nCropFromLeft = GetPropertyValue(
+                                    DFF_Prop_cropFromLeft, 0 );
+        pImpRec->nCropFromRight = GetPropertyValue(
+                                    DFF_Prop_cropFromRight, 0 );
+
+        pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) ? true : false;
+        pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) ? true : false;
+
+        UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+        pImpRec->eLineStyle = (nLineFlags & 8)
+                            ? (MSO_LineStyle)GetPropertyValue(
+                                                DFF_Prop_lineStyle,
+                                                mso_lineSimple )
+                            : (MSO_LineStyle)USHRT_MAX;
+        pTextImpRec->eLineStyle = pImpRec->eLineStyle;
+
+        if( pImpRec->nShapeId )
+        {
+            // Import-Record-Liste ergaenzen
+            if( pOrgObj )
+            {
+                pImpRec->pObj = pOrgObj;
+                rImportData.aRecords.Insert( pImpRec );
+            }
+
+            if( pTextObj && (pOrgObj != pTextObj) )
+            {
+                // Modify ShapeId (must be unique)
+                pImpRec->nShapeId |= 0x8000000;
+                pTextImpRec->pObj = pTextObj;
+                rImportData.aRecords.Insert( pTextImpRec );
+            }
+
+            // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
+            /*Only store objects which are not deep inside the tree*/
+            if( ( rObjData.nCalledByGroup == 0 )
+                ||
+                ( (rObjData.nSpFlags & SP_FGROUP)
+                 && (rObjData.nCalledByGroup < 2) )
+              )
+                StoreShapeOrder( pImpRec->nShapeId,
+                                ( ( (ULONG)pImpRec->aTextId.nTxBxS ) << 16 )
+                                    + pImpRec->aTextId.nSequence, pObj );
+        }
+        else
+            delete pImpRec;
+    }
+
+    return pObj;
+};
+
 void SvxMSDffManager::StoreShapeOrder(ULONG         nId,
                                       ULONG         nTxBx,
                                       SdrObject*    pObject,
@@ -6255,19 +6962,12 @@ void SvxMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     return;  // wird von SJ im Draw ueberladen
 }
 
-SdrObject* SvxMSDffManager::ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj )
-{
-    return 0; // see SwMSDffManager::ProcessObj
-}
-
-
 ULONG SvxMSDffManager::Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const
 {
     return nOrgVal;
 }
 
-BOOL SvxMSDffManager::GetOLEStorageName( long nOLEId, String& ,
-                                        SvStorageRef& , SvStorageRef& ) const
+BOOL SvxMSDffManager::GetOLEStorageName( long nOLEId, String&, SvStorageRef&, uno::Reference < embed::XStorage >& ) const
 {
     return FALSE;
 }
@@ -6282,10 +6982,12 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
 {
     SdrObject* pRet = 0;
     String sStorageName;
-    SvStorageRef xSrcStg, xDstStg;
+    SvStorageRef xSrcStg;
+    ErrCode nError = ERRCODE_NONE;
+    uno::Reference < embed::XStorage > xDstStg;
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
         pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
-                                        rGrf, rBoundRect, pStData,
+                                        rGrf, rBoundRect, pStData, nError,
                                         nSvxMSDffOLEConvFlags );
     return pRet;
 }
@@ -6317,138 +7019,434 @@ const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& 
     return pMtf;
 }
 
+BOOL SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile & rMtf )
+{
+    String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
+    SotStorageStreamRef xStm = pStor->OpenSotStream( aPersistStream );
+    xStm->SetVersion( pStor->GetVersion() );
+    xStm->SetBufferSize( 8192 );
 
-#ifndef SVX_LIGHT
-const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
-                        SvStorage& rSrcStg, SvStorage& rDestStorage,
+    USHORT nAspect = ASPECT_CONTENT;
+    ULONG nAdviseModes = 2;
+
+    Impl_OlePres aEle( FORMAT_GDIMETAFILE );
+    // Die Groesse in 1/100 mm umrechnen
+    // Falls eine nicht anwendbare MapUnit (Device abhaengig) verwendet wird,
+    // versucht SV einen BestMatchden richtigen Wert zu raten.
+    Size aSize = rMtf.GetPrefSize();
+    MapMode aMMSrc = rMtf.GetPrefMapMode();
+    MapMode aMMDst( MAP_100TH_MM );
+    aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
+    aEle.SetSize( aSize );
+     aEle.SetAspect( nAspect );
+    aEle.SetAdviseFlags( nAdviseModes );
+    aEle.SetMtf( rMtf );
+    aEle.Write( *xStm );
+
+    xStm->SetBufferSize( 0 );
+    return xStm->GetError() == SVSTREAM_OK;
+}
+
+struct ClsIDs {
+    UINT32      nId;
+    const sal_Char* pSvrName;
+    const sal_Char* pDspName;
+};
+static ClsIDs aClsIDs[] = {
+
+    { 0x000212F0, "MSWordArt",          "Microsoft Word Art"            },
+    { 0x000212F0, "MSWordArt.2",        "Microsoft Word Art 2.0"        },
+
+    // MS Apps
+    { 0x00030000, "ExcelWorksheet",     "Microsoft Excel Worksheet"     },
+    { 0x00030001, "ExcelChart",         "Microsoft Excel Chart"         },
+    { 0x00030002, "ExcelMacrosheet",    "Microsoft Excel Macro"         },
+    { 0x00030003, "WordDocument",       "Microsoft Word Document"       },
+    { 0x00030004, "MSPowerPoint",       "Microsoft PowerPoint"          },
+    { 0x00030005, "MSPowerPointSho",    "Microsoft PowerPoint Slide Show"},
+    { 0x00030006, "MSGraph",            "Microsoft Graph"               },
+    { 0x00030007, "MSDraw",             "Microsoft Draw"                },
+    { 0x00030008, "Note-It",            "Microsoft Note-It"             },
+    { 0x00030009, "WordArt",            "Microsoft Word Art"            },
+    { 0x0003000a, "PBrush",             "Microsoft PaintBrush Picture"  },
+    { 0x0003000b, "Equation",           "Microsoft Equation Editor"     },
+    { 0x0003000c, "Package",            "Package"                       },
+    { 0x0003000d, "SoundRec",           "Sound"                         },
+    { 0x0003000e, "MPlayer",            "Media Player"                  },
+    // MS Demos
+    { 0x0003000f, "ServerDemo",         "OLE 1.0 Server Demo"           },
+    { 0x00030010, "Srtest",             "OLE 1.0 Test Demo"             },
+    { 0x00030011, "SrtInv",             "OLE 1.0 Inv Demo"              },
+    { 0x00030012, "OleDemo",            "OLE 1.0 Demo"                  },
+
+    // Coromandel / Dorai Swamy / 718-793-7963
+    { 0x00030013, "CoromandelIntegra",  "Coromandel Integra"            },
+    { 0x00030014, "CoromandelObjServer","Coromandel Object Server"      },
+
+    // 3-d Visions Corp / Peter Hirsch / 310-325-1339
+    { 0x00030015, "StanfordGraphics",   "Stanford Graphics"             },
+
+    // Deltapoint / Nigel Hearne / 408-648-4000
+    { 0x00030016, "DGraphCHART",        "DeltaPoint Graph Chart"        },
+    { 0x00030017, "DGraphDATA",         "DeltaPoint Graph Data"         },
+
+    // Corel / Richard V. Woodend / 613-728-8200 x1153
+    { 0x00030018, "PhotoPaint",         "Corel PhotoPaint"              },
+    { 0x00030019, "CShow",              "Corel Show"                    },
+    { 0x0003001a, "CorelChart",         "Corel Chart"                   },
+    { 0x0003001b, "CDraw",              "Corel Draw"                    },
+
+    // Inset Systems / Mark Skiba / 203-740-2400
+    { 0x0003001c, "HJWIN1.0",           "Inset Systems"                 },
+
+    // Mark V Systems / Mark McGraw / 818-995-7671
+    { 0x0003001d, "ObjMakerOLE",        "MarkV Systems Object Maker"    },
+
+    // IdentiTech / Mike Gilger / 407-951-9503
+    { 0x0003001e, "FYI",                "IdentiTech FYI"                },
+    { 0x0003001f, "FYIView",            "IdentiTech FYI Viewer"         },
+
+    // Inventa Corporation / Balaji Varadarajan / 408-987-0220
+    { 0x00030020, "Stickynote",         "Inventa Sticky Note"           },
+
+    // ShapeWare Corp. / Lori Pearce / 206-467-6723
+    { 0x00030021, "ShapewareVISIO10",   "Shapeware Visio 1.0"           },
+    { 0x00030022, "ImportServer",       "Spaheware Import Server"       },
+
+    // test app SrTest
+    { 0x00030023, "SrvrTest",           "OLE 1.0 Server Test"           },
+
+    // test app ClTest.  Doesn't really work as a server but is in reg db
+    { 0x00030025, "Cltest",             "OLE 1.0 Client Test"           },
+
+    // Microsoft ClipArt Gallery   Sherry Larsen-Holmes
+    { 0x00030026, "MS_ClipArt_Gallery", "Microsoft ClipArt Gallery"     },
+    // Microsoft Project  Cory Reina
+    { 0x00030027, "MSProject",          "Microsoft Project"             },
+
+    // Microsoft Works Chart
+    { 0x00030028, "MSWorksChart",       "Microsoft Works Chart"         },
+
+    // Microsoft Works Spreadsheet
+    { 0x00030029, "MSWorksSpreadsheet", "Microsoft Works Spreadsheet"   },
+
+    // AFX apps - Dean McCrory
+    { 0x0003002A, "MinSvr",             "AFX Mini Server"               },
+    { 0x0003002B, "HierarchyList",      "AFX Hierarchy List"            },
+    { 0x0003002C, "BibRef",             "AFX BibRef"                    },
+    { 0x0003002D, "MinSvrMI",           "AFX Mini Server MI"            },
+    { 0x0003002E, "TestServ",           "AFX Test Server"               },
+
+    // Ami Pro
+    { 0x0003002F, "AmiProDocument",     "Ami Pro Document"              },
+
+    // WordPerfect Presentations For Windows
+    { 0x00030030, "WPGraphics",         "WordPerfect Presentation"      },
+    { 0x00030031, "WPCharts",           "WordPerfect Chart"             },
+
+    // MicroGrafx Charisma
+    { 0x00030032, "Charisma",           "MicroGrafx Charisma"           },
+    { 0x00030033, "Charisma_30",        "MicroGrafx Charisma 3.0"       },
+    { 0x00030034, "CharPres_30",        "MicroGrafx Charisma 3.0 Pres"  },
+    // MicroGrafx Draw
+    { 0x00030035, "Draw",               "MicroGrafx Draw"               },
+    // MicroGrafx Designer
+    { 0x00030036, "Designer_40",        "MicroGrafx Designer 4.0"       },
+
+    // STAR DIVISION
+//  { 0x000424CA, "StarMath",           "StarMath 1.0"                  },
+    { 0x00043AD2, "FontWork",           "Star FontWork"                 },
+//  { 0x000456EE, "StarMath2",          "StarMath 2.0"                  },
+
+    { 0, "", "" } };
+
+
+BOOL SvxMSDffManager::ConvertToOle2( SvStream& rStm, UINT32 nReadLen,
+                    const GDIMetaFile * pMtf, const SotStorageRef& rDest )
+{
+    BOOL bMtfRead = FALSE;
+    SotStorageStreamRef xOle10Stm = rDest->OpenSotStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ),
+                                                    STREAM_WRITE| STREAM_SHARE_DENYALL );
+    if( xOle10Stm->GetError() )
+        return FALSE;
+
+    UINT32 nType;
+    UINT32 nRecType;
+    UINT32 nStrLen;
+    String aSvrName;
+    UINT32 nDummy0;
+    UINT32 nDummy1;
+    UINT32 nDataLen;
+    void * pData;
+    UINT32 nBytesRead = 0;
+    do
+    {
+        rStm >> nType;
+        rStm >> nRecType;
+        rStm >> nStrLen;
+        if( nStrLen )
+        {
+            if( 0x10000L > nStrLen )
+            {
+                sal_Char * pBuf = new sal_Char[ nStrLen ];
+                rStm.Read( pBuf, nStrLen );
+                aSvrName.Assign( String( pBuf, (USHORT) nStrLen-1, gsl_getSystemTextEncoding() ) );
+                delete[] pBuf;
+            }
+            else
+                break;
+        }
+        rStm >> nDummy0;
+        rStm >> nDummy1;
+        rStm >> nDataLen;
+
+        nBytesRead += 6 * sizeof( UINT32 ) + nStrLen + nDataLen;
+
+        if( !rStm.IsEof() && nReadLen > nBytesRead && nDataLen )
+        {
+            if( xOle10Stm.Is() )
+            {
+                pData = new BYTE[ nDataLen ];
+                if( !pData )
+                    return FALSE;
+
+                rStm.Read( pData, nDataLen );
+
+                // write to ole10 stream
+                *xOle10Stm << nDataLen;
+                xOle10Stm->Write( pData, nDataLen );
+                xOle10Stm = SotStorageStreamRef();
+
+                // set the compobj stream
+                ClsIDs* pIds;
+                for( pIds = aClsIDs; pIds->nId; pIds++ )
+                {
+                    if( COMPARE_EQUAL == aSvrName.CompareToAscii( pIds->pSvrName ) )
+                        break;
+                }
+                SvGlobalName* pClsId = NULL;
+                String aShort, aFull;
+                if( pIds->nId )
+                {
+                    // gefunden!
+                    ULONG nCbFmt = SotExchange::RegisterFormatName( aSvrName );
+                    rDest->SetClass( SvGlobalName( pIds->nId, 0, 0, 0xc0,0,0,0,0,0,0,0x46 ), nCbFmt,
+                                    String( pIds->pDspName, RTL_TEXTENCODING_ASCII_US ) );
+                }
+                else
+                {
+                    ULONG nCbFmt = SotExchange::RegisterFormatName( aSvrName );
+                    rDest->SetClass( SvGlobalName(), nCbFmt, aSvrName );
+                }
+
+                delete[] pData;
+            }
+            else if( nRecType == 5 && !pMtf )
+            {
+                ULONG nPos = rStm.Tell();
+                UINT16 sz[4];
+                rStm.Read( sz, 8 );
+                //rStm.SeekRel( 8 );
+                Graphic aGraphic;
+                if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() )
+                {
+                    const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
+                    MakeContentStream( rDest, rMtf );
+                    bMtfRead = TRUE;
+                }
+                // set behind the data
+                rStm.Seek( nPos + nDataLen );
+            }
+            else
+                rStm.SeekRel( nDataLen );
+        }
+    } while( !rStm.IsEof() && nReadLen >= nBytesRead );
+
+    if( !bMtfRead && pMtf )
+    {
+        MakeContentStream( rDest, *pMtf );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
+{
+    if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+        return "swriter";
+    else if ( aGlobName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+        return "scalc";
+    else if ( aGlobName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+        return "simpress";
+    else if ( aGlobName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+        return "sdraw";
+    else if ( aGlobName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+        return "smath";
+    else if ( aGlobName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+        return "schart";
+    return 0;
+}
+
+com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
+                        SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf )
 {
-    static struct _ObjImpType
+    uno::Reference < embed::XEmbeddedObject > xObj;
+    SvGlobalName aStgNm = rSrcStg.GetClassName();
+    const char* pName = GetInternalServerName_Impl( aStgNm );
+    String sStarName;
+    if ( pName )
+        sStarName = String::CreateFromAscii( pName );
+    else if ( nConvertFlags )
     {
-        UINT32 nFlag;
-        const char* pFactoryNm;
-        // GlobalNameId
-        UINT32 n1;
-        USHORT n2, n3;
-        BYTE b8, b9, b10, b11, b12, b13, b14, b15;
-    } aArr[] = {
-        { OLE_MATHTYPE_2_STARMATH, "smath",
-            0x0002ce02L, 0x0000, 0x0000,
-            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_MATHTYPE_2_STARMATH, "smath",
-            0x00021700L, 0x0000, 0x0000,
-            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_WINWORD_2_STARWRITER, "swriter",
-            0x00020906L, 0x0000, 0x0000,
-            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_EXCEL_2_STARCALC, "scalc",                // Excel table
-            0x00020810L, 0x0000, 0x0000,
-            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_EXCEL_2_STARCALC, "scalc",                // Excel chart
-            0x00020820L, 0x0000, 0x0000,
-            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
-        { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint presentation
-            0x64818d10L, 0x4f9b, 0x11cf,
-            0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
-        { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint slide
-            0x64818d11L, 0x4f9b, 0x11cf,
-            0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
-        { 0,0 }
-    };
-
-    SvInPlaceObjectRef xIPObj;
-    SvGlobalName aStgNm;
-    BOOL bFirstCompare = TRUE;
-    for( const _ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
-        if( nConvertFlags & pArr->nFlag )
+        static struct _ObjImpType
         {
-            SvGlobalName aTypeName( pArr->n1, pArr->n2, pArr->n3,
-                            pArr->b8, pArr->b9, pArr->b10, pArr->b11,
-                            pArr->b12, pArr->b13, pArr->b14, pArr->b15 );
-            if( bFirstCompare )
-            {
-                aStgNm = rSrcStg.GetClassName();
-                bFirstCompare = FALSE;
-            }
-            if( aStgNm == aTypeName )
-            {
-                String sStarName( String::CreateFromAscii( pArr->pFactoryNm ));
-                SfxFilterMatcher aMatch( sStarName );
-                SfxMedium* pMed = new SfxMedium( &rSrcStg, FALSE );
-                const SfxFilter* pFilter = 0;
-                String aType = SfxFilter::GetTypeFromStorage( rSrcStg );
-                if ( aType.Len() )
-                    pFilter = aMatch.GetFilter4EA( aType );
+            UINT32 nFlag;
+            const char* pFactoryNm;
+            // GlobalNameId
+            UINT32 n1;
+            USHORT n2, n3;
+            BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+        } aArr[] = {
+            { OLE_MATHTYPE_2_STARMATH, "smath",
+                0x0002ce02L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_MATHTYPE_2_STARMATH, "smath",
+                0x00021700L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_WINWORD_2_STARWRITER, "swriter",
+                0x00020906L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_EXCEL_2_STARCALC, "scalc",                // Excel table
+                0x00020810L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_EXCEL_2_STARCALC, "scalc",                // Excel chart
+                0x00020820L, 0x0000, 0x0000,
+                0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 },
+            { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint presentation
+                0x64818d10L, 0x4f9b, 0x11cf,
+                0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
+            { OLE_POWERPOINT_2_STARIMPRESS, "simpress",     // PowerPoint slide
+                0x64818d11L, 0x4f9b, 0x11cf,
+                0x86,0xea,0x00,0xaa,0x00,0xb9,0x29,0xe8 },
+            { 0,0 }
+        };
 
-                if ( pFilter )
+        for( const _ObjImpType* pArr = aArr; pArr->nFlag; ++pArr )
+        {
+            if( nConvertFlags & pArr->nFlag )
+            {
+                SvGlobalName aTypeName( pArr->n1, pArr->n2, pArr->n3,
+                                pArr->b8, pArr->b9, pArr->b10, pArr->b11,
+                                pArr->b12, pArr->b13, pArr->b14, pArr->b15 );
+
+                if ( aStgNm == aTypeName )
                 {
-                    //then the StarFactory can import this storage
-                    pMed->SetFilter( pFilter );
-
-                    SfxObjectShellRef xObjShell( SfxObjectShell::CreateObjectByFactoryName( sStarName ,SFX_CREATE_MODE_EMBEDDED ) );
-                    if ( xObjShell.Is() )
-                    {
-                        xObjShell->OwnerLock( sal_True );
-                        xIPObj = xObjShell->GetInPlaceObject();
-
-                        //Reuse current ole name
-                        String aDstStgName(String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
-
-                        aDstStgName +=
-                                String::CreateFromInt32(nMSOleObjCntr);
-
-                        SvStorageRef xObjStor(rDestStorage.OpenUCBStorage(
-                                    aDstStgName,
-                                    STREAM_READWRITE| STREAM_SHARE_DENYALL));
-
-                        xObjShell->DoLoad( pMed );
-                        // JP 26.10.2001: Bug 93374 / 91928 the writer
-                        // objects need the correct visarea needs the
-                        // correct visarea, but this is not true for
-                        // PowerPoint (see bugdoc 94908b)
-                        // SJ: 19.11.2001 bug 94908, also chart objects
-                        // needs the correct visarea
-                        if( sStarName.EqualsAscii( "swriter" )
-                            || sStarName.EqualsAscii( "scalc" ) )
-                        {
-                            Size aSz(lcl_GetPrefSize(rGrf, MapMode( xIPObj->GetMapUnit())));
-                            // don't modify the object
-                            xIPObj->EnableSetModified( FALSE );
-                            xIPObj->SetVisArea( Rectangle( xIPObj->GetVisArea().TopLeft(), aSz ));
-                            xIPObj->EnableSetModified( TRUE );
-                        }
-                        else if ( sStarName.EqualsAscii( "smath" ) )
-                        {   // SJ: force the object to recalc its visarea
-                            xIPObj->OnDocumentPrinterChanged( NULL );
-                        }
-                        xObjShell->DoSaveAs( xObjStor );
-                        xObjShell->DoSaveCompleted( xObjStor );
-                        xObjShell->RemoveOwnerLock();
-                        pMed = 0;
-                    }
+                    sStarName = String::CreateFromAscii( pArr->pFactoryNm );
+                    break;
                 }
-                delete pMed;
-                break;
             }
         }
-    return xIPObj;
-}
-#endif
+    }
 
+    if ( sStarName.Len() )
+    {
+        //TODO/MBA: check if (and when) storage and stream will be destroyed!
+        const SfxFilter* pFilter = 0;
+        SvMemoryStream* pStream = new SvMemoryStream;
+        if ( pName )
+        {
+            // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also
+            SotStorageStreamRef xStr = rSrcStg.OpenSotStream( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "package_stream" ) ), STREAM_STD_READ );
+            *xStr >> *pStream;
+        }
+        else
+        {
+            SfxFilterMatcher aMatch( sStarName );
+            SotStorageRef xStorage = new SotStorage( FALSE, *pStream );
+            rSrcStg.CopyTo( xStorage );
+            xStorage->Commit();
+            xStorage.Clear();
+            String aType = SfxFilter::GetTypeFromStorage( rSrcStg );
+            if ( aType.Len() )
+                pFilter = aMatch.GetFilter4EA( aType );
+        }
+
+        if ( pName || pFilter )
+        {
+            //Reuse current ole name
+            String aDstStgName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
+            aDstStgName += String::CreateFromInt32(nMSOleObjCntr);
+
+            uno::Sequence < beans::PropertyValue > aMedium( pFilter ? 3 : 2);
+            aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
+            uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream );
+            aMedium[0].Value <<= xStream;
+            aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMedium[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) );
+            if ( pFilter )
+            {
+                aMedium[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                aMedium[2].Value <<= ::rtl::OUString( pFilter->GetName() );
+            }
+
+            ::rtl::OUString aName( aDstStgName );
+            comphelper::EmbeddedObjectContainer aCnt( rDestStorage );
+            xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
+            if ( !xObj.is() )
+                // TODO/LATER: error handling
+                return xObj;
+
+            // TODO/LATER: ViewAspect must be passed from outside!
+            sal_Int64 nViewAspect = embed::Aspects::MSOLE_CONTENT;
+
+            // JP 26.10.2001: Bug 93374 / 91928 the writer
+            // objects need the correct visarea needs the
+            // correct visarea, but this is not true for
+            // PowerPoint (see bugdoc 94908b)
+            // SJ: 19.11.2001 bug 94908, also chart objects
+            // needs the correct visarea
+
+            if( sStarName.EqualsAscii( "swriter" ) || sStarName.EqualsAscii( "scalc" ) )
+            {
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) );
+                Size aSz(lcl_GetPrefSize(rGrf, MapMode( aMapUnit ) ) );
+                // don't modify the object
+                //TODO/LATER: remove those hacks, that needs to be done differently!
+                //xIPObj->EnableSetModified( FALSE );
+                awt::Size aSize;
+                aSize.Width = aSz.Width();
+                aSize.Height = aSz.Height();
+                xObj->setVisualAreaSize( nViewAspect, aSize );
+                //xIPObj->EnableSetModified( TRUE );
+            }
+            else if ( sStarName.EqualsAscii( "smath" ) )
+            {   // SJ: force the object to recalc its visarea
+                //TODO/LATER: wait for PrinterChangeNotification
+                //xIPObj->OnDocumentPrinterChanged( NULL );
+            }
+        }
+    }
+
+    return xObj;
+}
+
+// TODO/MBA: code review and testing!
 SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 const String& rStorageName,
                 SvStorageRef& rSrcStorage,
-                SvStorageRef& rDestStorage,
+                const uno::Reference < embed::XStorage >& xDestStorage,
                 const Graphic& rGrf,
                 const Rectangle& rBoundRect,
                 SvStream* pDataStrm,
+                ErrCode& rError,
                 UINT32 nConvertFlags )
 {
     SdrOle2Obj* pRet = 0;
-#ifndef SVX_LIGHT
-    if( rSrcStorage.Is() && rDestStorage.Is() && rStorageName.Len() )
+    if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.Len() )
     {
+        comphelper::EmbeddedObjectContainer aCnt( xDestStorage );
         // Ist der 01Ole-Stream ueberhaupt vorhanden ?
         // ( ist er z.B. bei FontWork nicht )
         // Wenn nicht -> Einbindung als Grafik
@@ -6457,16 +7455,15 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                                 RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
 
         aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
-        SvStorageRef xObjStor;
 
         {
-            SvStorageRef xObjStg = rSrcStorage->OpenStorage( rStorageName,
+            SvStorageRef xObjStg = rSrcStorage->OpenSotStorage( rStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
             if( xObjStg.Is()  )
             {
                 {
                     BYTE aTestA[10];    // exist the \1CompObj-Stream ?
-                    SvStorageStreamRef xSrcTst = xObjStg->OpenStream(
+                    SvStorageStreamRef xSrcTst = xObjStg->OpenSotStream(
                                 String(RTL_CONSTASCII_STRINGPARAM("\1CompObj"),
                                         RTL_TEXTENCODING_MS_1252 ));
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
@@ -6474,7 +7471,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
-                        xSrcTst = xObjStg->OpenStream(
+                        xSrcTst = xObjStg->OpenSotStream(
                                     String(RTL_CONSTASCII_STRINGPARAM("\1Ole"),
                                             RTL_TEXTENCODING_MS_1252 ));
                         bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
@@ -6482,14 +7479,21 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     }
                 }
 
-                if( bValidStorage && nConvertFlags )
+                if( bValidStorage )
                 {
-                    SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
-                                nConvertFlags, *xObjStg, *rDestStorage, rGrf ));
-                    if (xIPObj.Is())
+                    uno::Reference < embed::XEmbeddedObject > xObj( CheckForConvertToSOObj(
+                                nConvertFlags, *xObjStg, xDestStorage, rGrf ));
+                    if ( xObj.is() )
                     {
-                        pRet = new SdrOle2Obj(xIPObj, String(), rBoundRect,
-                            false);
+                        // object could be converted to own object
+                        // TODO/LATER: needs ViewAspect
+                        svt::EmbeddedObjectRef aObj( xObj );
+
+                        // TODO/LATER: need MediaType
+                        aObj.SetGraphic( rGrf, ::rtl::OUString() );
+
+                        // TODO/MBA: check setting of PersistName
+                        pRet = new SdrOle2Obj( aObj, String(), rBoundRect, false);
                         // we have the Object, don't create another
                         bValidStorage = false;
                     }
@@ -6499,23 +7503,24 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
         if( bValidStorage )
         {
-            rSrcStorage->CopyTo( rStorageName, rDestStorage, aDstStgName );
+            // object is not an own object
+            SotStorageRef xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, STREAM_READWRITE );
 
-            xObjStor = rDestStorage->OpenOLEStorage( aDstStgName,
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
-            if( xObjStor.Is() && xObjStor->GetError() )
+            if ( xObjStor.Is() )
             {
-                rDestStorage->SetError( xObjStor->GetError() );
-                xObjStor.Clear();
-                bValidStorage = FALSE;
-            }
-            else if( SVSTREAM_OK != rDestStorage->GetError() || !xObjStor.Is() )
-                bValidStorage = FALSE;
-            else
-            {
-                GDIMetaFile aMtf;
-                SvEmbeddedObject::MakeContentStream( xObjStor,
-                            *lcl_GetMetaFileFromGrf_Impl( rGrf, aMtf ) );
+                SotStorageRef xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, STREAM_READ );
+                xSrcStor->CopyTo( xObjStor );
+
+                if( !xObjStor->GetError() )
+                    xObjStor->Commit();
+
+                if( xObjStor->GetError() )
+                {
+                    rError = xObjStor->GetError();
+                    bValidStorage = FALSE;
+                }
+                else if( !xObjStor.Is() )
+                    bValidStorage = FALSE;
             }
         }
         else if( pDataStrm )
@@ -6530,36 +7535,41 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             else
             {
                 // or is it an OLE-1 Stream in the DataStream?
-                xObjStor = rDestStorage->OpenOLEStorage( aDstStgName
-                                /*, STREAM_READWRITE | STREAM_SHARE_DENYALL*/ );
-
+                SvStorageRef xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName );
+                //TODO/MBA: remove metafile conversion from ConvertToOle2
+                //when is this code used?!
                 GDIMetaFile aMtf;
-                SotStorageRef xRef( &xObjStor );
-                bValidStorage = SvEmbeddedObject::ConvertToOle2(
-                            *pDataStrm, nLen,
-                            lcl_GetMetaFileFromGrf_Impl( rGrf, aMtf ), xRef );
+                bValidStorage = ConvertToOle2( *pDataStrm, nLen, &aMtf, xObjStor );
+                xObjStor->Commit();
             }
         }
 
         if( bValidStorage )
         {
-            SvInPlaceObjectRef xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                    ClassFactory())->CreateAndLoad(xObjStor) );
-            if( xInplaceObj.Is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = aCnt.GetEmbeddedObject( aDstStgName );
+            if( xObj.is() )
             {
-                // VisArea am OutplaceObject setzen!!
-                Size aSz(lcl_GetPrefSize(rGrf,
-                    MapMode(xInplaceObj->GetMapUnit())));
-                // modifiziert wollen wir nicht werden
-                xInplaceObj->EnableSetModified( FALSE );
-                xInplaceObj->SetVisArea( Rectangle( Point(), aSz ));
-                xInplaceObj->EnableSetModified( TRUE );
-                pRet = new SdrOle2Obj(xInplaceObj, aDstStgName, rBoundRect,
-                    false);
+                //TODO/LATER: retrieve aspect from MS document
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+                Size aSz(lcl_GetPrefSize(rGrf, MapMode(aMapUnit)));
+                //xInplaceObj->EnableSetModified( FALSE );
+                awt::Size aAwtSz;
+                aAwtSz.Width = aSz.Width();
+                aAwtSz.Height = aSz.Height();
+                xObj->setVisualAreaSize( nAspect, aAwtSz );
+                //xInplaceObj->EnableSetModified( TRUE );*/
+
+                svt::EmbeddedObjectRef aObj( xObj, nAspect );
+
+                // TODO/LATER: need MediaType
+                aObj.SetGraphic( rGrf, ::rtl::OUString() );
+
+                pRet = new SdrOle2Obj( aObj, aDstStgName, rBoundRect, false);
             }
         }
     }
-#endif
+
     return pRet;
 }
 
@@ -6725,4 +7735,5 @@ SvxMSDffImportRec::~SvxMSDffImportRec()
     if (pWrapPolygon)
         delete pWrapPolygon;
 }
+
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
