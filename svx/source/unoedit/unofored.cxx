@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,18 @@ sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelectio
     rEditEngine.QuickFormatDoc();
 
     return sal_True;
+}
+
+USHORT SvxEditEngineForwarder::GetDepth( USHORT nPara ) const
+{
+    // EditEngine does not support outline depth
+    return 0;
+}
+
+sal_Bool SvxEditEngineForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+{
+    // EditEngine does not support outline depth
+    return nNewDepth == 0 ? sal_True : sal_False;
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-18 14:59:08 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 // -
         }
 
-        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
+        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, mpObject );
 
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = sal_True;
@@ -606,7 +606,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
         if( pEditOutliner )
         {
-            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner );
+            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, mpObject );
 
             mbForwarderIsEditMode = sal_True;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,28 +547,8 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                 sal_Int16 nLevel;
                 if( aValue >>= nLevel )
                 {
-                    SdrObject* pObj = pEditSource->GetSdrObject();
-
-                    if(pObj == NULL)
-                        return sal_False;
-
-                    const sal_Bool bOutlinerText = (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT);
-                    if(bOutlinerText)
-                        nLevel++;
-
-                    if(nLevel >= 0 && nLevel <= 9)
-                    {
-                        Outliner& rOutliner = ((SvxOutlinerForwarder*)pForwarder)->GetOutliner();
-
-                        Paragraph* pPara = rOutliner.GetParagraph( pSelection->nStartPara );
-                        if( pPara )
-                        {
-                            rOutliner.SetDepth( pPara, nLevel );
-                            if( bOutlinerText )
-                                rOutliner.SetLevelDependendStyleSheet( pSelection->nStartPara );
-                            return sal_True;
-                        }
-                    }
+                    // #101004# Call interface method instead of unsafe cast
+                    return pForwarder->SetDepth( pSelection->nStartPara, nLevel );
                 }
             }
         }
@@ -709,22 +689,8 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
             if(pForwarder && pSelection)
             {
-
-                Outliner& rOutliner = ((SvxOutlinerForwarder*)pForwarder)->GetOutliner();
-                Paragraph* pPara = rOutliner.GetParagraph( pSelection->nStartPara );
-
-                sal_Int16 nLevel = 0;
-                if( pPara )
-                    nLevel = rOutliner.GetDepth( pSelection->nStartPara );
-
-                SdrObject* pObj = pEditSource->GetSdrObject();
-
-                if(pObj != NULL)
-                {
-                    if((pObj->GetObjInventor() == SdrInventor) &&
-                       (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT))
-                            nLevel--;
-                }
+                // #101004# Call interface method instead of unsafe cast
+                sal_Int16 nLevel( pForwarder->GetDepth( pSelection->nStartPara ) );
                 aAny <<= nLevel;
             }
         }
@@ -1235,23 +1201,9 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         }
         else if( pMap->nWID == WID_NUMLEVEL )
         {
-            sal_Int16 nLevel = 0;
-
-            SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
-            SdrObject* pObj = pEditSource->GetSdrObject();
-
-            if(pObj)
-            {
-                if((pObj->GetObjInventor() == SdrInventor) &&
-                   (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT))
-                    nLevel++;
-
-                Outliner& rOutliner = ((SvxOutlinerForwarder*)pForwarder)->GetOutliner();
-                Paragraph* pPara =  rOutliner.GetParagraph( aSelection.nStartPara );
-                if( pPara )
-                    rOutliner.SetDepth( pPara, nLevel );
-                return;
-            }
+            // #101004# Call interface method instead of unsafe cast
+            pForwarder->SetDepth( aSelection.nStartPara, 0 );
+            return;
         }
         else
         {
@@ -2293,6 +2245,16 @@ USHORT SvxDummyTextSource::GetLineLen( USHORT nPara, USHORT nLine ) const
 sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL bFull )
 {
     return sal_False;
+}
+
+USHORT SvxDummyTextSource::GetDepth( USHORT nPara ) const
+{
+    return 0;
+}
+
+sal_Bool SvxDummyTextSource::SetDepth( USHORT nPara, USHORT nNewDepth )
+{
+    return nNewDepth == 0 ? sal_True : sal_False;
 }
 
 sal_Bool SvxDummyTextSource::Delete( const ESelection& )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:44:27 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,6 +1143,20 @@ sal_Bool SvxAccessibleTextAdapter::QuickFormatDoc( BOOL bFull )
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->QuickFormatDoc( bFull );
+}
+
+USHORT SvxAccessibleTextAdapter::GetDepth( USHORT nPara ) const
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    return mrTextForwarder->GetDepth( nPara );
+}
+
+sal_Bool SvxAccessibleTextAdapter::SetDepth( USHORT nPara, USHORT nNewDepth )
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    return mrTextForwarder->SetDepth( nPara, nNewDepth );
 }
 
 void SvxAccessibleTextAdapter::SetForwarder( SvxTextForwarder& rForwarder )

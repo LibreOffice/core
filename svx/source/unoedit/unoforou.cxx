@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 15:49:18 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <editeng.hxx>
 #include <editdata.hxx>
 #include <outliner.hxx>
+#include "svdobj.hxx"
 
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
@@ -92,8 +93,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl ) :
+SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, SdrObject* pSdrObj ) :
     rOutliner( rOutl ),
+    pSdrObject( pSdrObj ),
     mpAttribsCache( NULL ),
     mpParaAttribsCache( NULL ),
     mnParaAttribsCache( 0 )
@@ -417,6 +419,57 @@ sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection&
     rOutliner.QuickFormatDoc();
 
     return sal_True;
+}
+
+USHORT SvxOutlinerForwarder::GetDepth( USHORT nPara ) const
+{
+    DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::GetDepth: Invalid paragraph index");
+
+    Paragraph* pPara = rOutliner.GetParagraph( nPara );
+
+    USHORT nLevel(0);
+
+    if( pPara )
+    {
+        nLevel = rOutliner.GetDepth( nPara );
+
+        if(pSdrObject != NULL)
+        {
+            if((pSdrObject->GetObjInventor() == SdrInventor) &&
+               (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT))
+                --nLevel;
+        }
+    }
+
+    return nLevel;
+}
+
+sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+{
+    DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::SetDepth: Invalid paragraph index");
+
+    if(pSdrObject == NULL)
+        return sal_False;
+
+    const sal_Bool bOutlinerText = (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
+
+    if(bOutlinerText)
+        ++nNewDepth;
+
+    if(nNewDepth >= 0 && nNewDepth <= 9)
+    {
+        Paragraph* pPara = rOutliner.GetParagraph( nPara );
+        if( pPara )
+        {
+            rOutliner.SetDepth( pPara, nNewDepth );
+            if( bOutlinerText )
+                rOutliner.SetLevelDependendStyleSheet( nPara );
+
+            return sal_True;
+        }
+    }
+
+    return sal_False;
 }
 
 //------------------------------------------------------------------------

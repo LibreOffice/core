@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:11:24 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ public:
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
+    virtual USHORT          GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
 
     void                    SetForwarder( SvxTextForwarder& );
     sal_Bool                HaveImageBullet( USHORT nPara ) const;
