@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-30 12:25:56 $
+ *  last change: $Author: ka $ $Date: 2002-07-19 13:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,18 +319,58 @@ const Graphic& SdrGrafObj::GetGraphic() const
 
 Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 {
-    Graphic     aTransGraphic;
-    GraphicType eType = GetGraphicType();
+    Graphic         aTransGraphic( GetGraphic() );
+    GraphicType     eType = GetGraphicType();
+    const MapMode   aDstMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
+    const Size      aSrcSize( aTransGraphic.GetPrefSize() );
+    const Size      aDstSize( GetLogicRect().GetSize() );
+    const BOOL      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
+    const BOOL      bRotate = ( ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
+                                ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType ) && !IsAnimated() );
 
-    if( SDRGRAFOBJ_TRANSFORMATTR_NONE == nTransformFlags )
-        aTransGraphic = GetGraphic();
-    else if( eType != GRAPHIC_NONE )
+    if( GRAPHIC_GDIMETAFILE == eType )
+    {
+        GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
+
+        aMtf.Scale( Fraction( aDstSize.Width(), aSrcSize.Width() ), Fraction( aDstSize.Height(), aSrcSize.Height() ) );
+        aMtf.SetPrefMapMode( aDstMap );
+
+        aTransGraphic = aMtf;
+    }
+    else if( GRAPHIC_BITMAP == eType )
+    {
+        if( bRotate && !IsAnimated() )
+        {
+            BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
+            const Size  aSizePixel( aBmpEx.GetSizePixel() );
+
+            if( aSizePixel.Width() && aSizePixel.Height() && aDstSize.Width() && aDstSize.Height() )
+            {
+                double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
+                double fDstWH = (double) aDstSize.Width() / aDstSize.Height();
+                double fScaleX = 1.0, fScaleY = 1.0;
+
+                // always choose scaling to shrink bitmap
+                if( fSrcWH < fDstWH )
+                    fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+                else
+                    fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+                aBmpEx.Scale( fScaleX, fScaleY );
+                aTransGraphic = aBmpEx;
+            }
+        }
+
+        aTransGraphic.SetPrefSize( aDstSize );
+        aTransGraphic.SetPrefMapMode( aDstMap );
+    }
+
+    if( ( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags ) && ( GRAPHIC_NONE != eType ) )
     {
         ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
-
         GraphicAttr aActAttr( aGrafInfo );
 
-        if( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR )
+        if( bMirror )
         {
             USHORT      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
             FASTBOOL    bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
@@ -339,13 +379,11 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
             aActAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
         }
 
-        if( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) &&
-            ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType ) && !IsAnimated() )
-        {
+        if( bRotate )
             aActAttr.SetRotation( aGeo.nDrehWink / 10 );
-        }
 
-        aTransGraphic = pGraphic->GetTransformedGraphic( &aActAttr );
+        GraphicObject aGrfObj( aTransGraphic );
+        aTransGraphic = aGrfObj.GetTransformedGraphic( &aActAttr );
     }
 
     return aTransGraphic;
