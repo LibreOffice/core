@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:01:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3243,8 +3243,8 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  note: this works because hWM_Parent is direct child of root,
      *  not necessarily parent of GetShellWindow()
      */
-    maGeometry.nX       = xp + maGeometry.nLeftDecoration;
-    maGeometry.nY       = yp + maGeometry.nTopDecoration;
+    maGeometry.nX       = xp + nLeft;
+    maGeometry.nY       = yp + nTop;
     bool bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
     maGeometry.nWidth   = w;
     maGeometry.nHeight = h;
