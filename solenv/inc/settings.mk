@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-21 14:58:03 $
+#   last change: $Author: kz $ $Date: 2001-07-09 15:15:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1043,6 +1043,10 @@ CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 CDEFS += -DUSE_PSPRINT
 PSPRINT=true
 .ENDIF
+.ENDIF
+
+.IF "$(TIMELOG)" != ""
+CDEFS+=-DTIMELOG
 .ENDIF
 
 #to be removed soon!!!
