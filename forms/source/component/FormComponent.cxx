@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void OControl::disposing()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName) throw ( ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName) throw ( RuntimeException)
 {
         Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
@@ -301,44 +301,44 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& Toolkit, const Ref
 }
 
 //------------------------------------------------------------------------------
-Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( ::com::sun::star::uno::RuntimeException)
+Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( RuntimeException)
 {
     return m_xControl.is() ? m_xControl->setModel( Model ) : sal_False;
 }
 
 //------------------------------------------------------------------------------
-Reference<XControlModel> SAL_CALL OControl::getModel() throw ( ::com::sun::star::uno::RuntimeException)
+Reference<XControlModel> SAL_CALL OControl::getModel() throw ( RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getModel() : Reference<XControlModel>();
 }
 
 //------------------------------------------------------------------------------
-Reference<XView> SAL_CALL OControl::getView() throw ( ::com::sun::star::uno::RuntimeException)
+Reference<XView> SAL_CALL OControl::getView() throw ( RuntimeException)
 {
         return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->setDesignMode(bOn);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::isDesignMode() throw ( ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OControl::isDesignMode() throw ( RuntimeException)
 {
     return m_xControl.is() ? m_xControl->isDesignMode() : sal_True;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::isTransparent() throw ( ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
 {
     return m_xControl.is() ? m_xControl->isTransparent() : sal_True;
 }
@@ -602,7 +602,7 @@ void OControlModel::doSetDelegator()
 
 // XChild
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControlModel::getParent() throw(::com::sun::star::uno::RuntimeException)
+InterfaceRef SAL_CALL OControlModel::getParent() throw(RuntimeException)
 {
     return m_xParent;
 }
@@ -643,7 +643,7 @@ void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(Runtim
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( RuntimeException)
 {
         Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
@@ -1423,10 +1423,10 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             sal_Int32 nFieldType;
             xFieldCandidate->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
             if (_approve(nFieldType))
-                m_xField = xFieldCandidate;
+                setField(xFieldCandidate,sal_False);
         }
         else
-            m_xField = NULL;
+            setField(NULL,sal_False);
 
         if (m_xField.is())
         {
@@ -1443,7 +1443,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             else
             {
                 OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
-                m_xField = NULL;
+                setField(NULL,sal_False);
             }
         }
     }
@@ -1470,6 +1470,7 @@ void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject
 {
     osl::MutexGuard aGuard(m_aMutex);
     Reference<XRowSet> xForm(_rEvent.Source, UNO_QUERY);
+    Reference<XPropertySet> xOldField = m_xField;
     connectToField(xForm);
 
     m_bLoaded = sal_True;
@@ -1486,6 +1487,14 @@ void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject
             if ( !xRowset->isBeforeFirst() && !xRowset->isAfterLast() )
                 _onValueChanged();
         }
+    }
+
+    if ( xOldField != m_xField )
+    {
+        Any aNewValue; aNewValue <<= m_xField;
+        Any aOldValue; aOldValue <<= xOldField;
+        sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
+        OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
     }
 }
 
@@ -1521,10 +1530,11 @@ void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObj
 void SAL_CALL OBoundControlModel::reloaded(const com::sun::star::lang::EventObject& aEvent) throw(RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
+    Reference<XPropertySet> xOldField = m_xField;
     // did we lost the connection to the field because there was a new created?
     if (!m_xField.is())
     {
-                Reference<XRowSet> xForm(aEvent.Source, UNO_QUERY);
+        Reference<XRowSet> xForm(aEvent.Source, UNO_QUERY);
         connectToField(xForm);
     }
 
@@ -1534,6 +1544,14 @@ void SAL_CALL OBoundControlModel::reloaded(const com::sun::star::lang::EventObje
     // do we have a field, than get the new value
     if (m_xField.is())
         _onValueChanged();
+
+    if ( xOldField != m_xField )
+    {
+        Any aNewValue; aNewValue <<= m_xField;
+        Any aOldValue; aOldValue <<= xOldField;
+        sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
+        OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1634,6 +1652,23 @@ void OBoundControlModel::reset() throw (RuntimeException)
     while (aIterDone.hasMoreElements())
         reinterpret_cast<XResetListener*>(aIterDone.next())->resetted(aResetEvent);
 }
+// -----------------------------------------------------------------------------
+void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_Bool _bFire)
+{
+    // fire a property change event
+    if ( m_xField != _rxField )
+    {
+        Any aOldValue; aOldValue <<= m_xField;
+        m_xField = _rxField;
+        if ( _bFire )
+        {
+            Any aNewValue; aNewValue <<= _rxField;
+            sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
+            OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 
 //.........................................................................
 }
