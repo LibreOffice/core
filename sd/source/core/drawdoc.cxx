@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-11 14:51:14 $
+ *  last change: $Author: dl $ $Date: 2000-12-13 16:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
 #ifndef SVX_LIGHT
     // Language setzen
-    eLanguage = LANGUAGE_SYSTEM;
+    LanguageType eLang = LANGUAGE_SYSTEM;
 
     try
     {
@@ -295,11 +295,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
             uno::Any aAny( xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultLanguage"))));
 
             if( aAny >>= nValue )
-                eLanguage = nValue;
+                eLang = nValue;
         }
         else
         {
-            eLanguage = Application::GetAppInternational().GetLanguage();
+            eLang = Application::GetAppInternational().GetLanguage();
         }
     }
     catch(...)
@@ -307,13 +307,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         DBG_ERROR("No 'DefaultLanguage' property");
     }
 
-    if (eLanguage == LANGUAGE_SYSTEM)
-        eLanguage = System::GetLanguage();
-    if (eLanguage == LANGUAGE_DONTKNOW)
-        eLanguage = LANGUAGE_ENGLISH_US;
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE );
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
+    if (eLang == LANGUAGE_SYSTEM)
+        eLang = System::GetLanguage();
+    if (eLang == LANGUAGE_DONTKNOW)
+        eLang = LANGUAGE_ENGLISH_US;
+    SetLanguage( eLang, EE_CHAR_LANGUAGE );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
@@ -343,9 +343,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         DBG_ERROR( "Ill. Type inside linguistic property" );
     }
 #else
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE );
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
-    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
+    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
 #endif // !SVX_LIGHT
 
     // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
