@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-22 14:49:20 $
+ *  last change: $Author: mtg $ $Date: 2001-02-27 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2575,7 +2575,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             if (pTmpWordList)
             {
                 SaveExceptList_Imp( *pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xDstStg, TRUE );
-                pTmpWordList->DeleteAndDestroy( ); // With no arguments, this deletes everything inside
+                pTmpWordList->DeleteAndDestroy( 0, pTmpWordList->Count() );
                 pTmpWordList = NULL;
             }
 
@@ -2588,7 +2588,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             if (pTmpWordList)
             {
                 SaveExceptList_Imp( *pTmpWordList, pXMLImplCplStt_ExcptLstStr, xDstStg, TRUE );
-                pTmpWordList->DeleteAndDestroy( ); // With no arguments, this deletes everything inside
+                pTmpWordList->DeleteAndDestroy( 0, pTmpWordList->Count() );
             }
 
             GetAutocorrWordList();
