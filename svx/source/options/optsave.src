@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:51:43 $
+ *  last change: $Author: rt $ $Date: 2001-12-19 18:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ε¨ζ–‡δ»¶η³»η»ε†…(~F)";
         Text[ russian ] = "β ρθρςεμε τΰιλξβ";
         Text[ polish ] = "W systemie pli~kσw";
-        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ« γ‚·γ‚Ήγƒ†γƒ (~F)";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ‚·γ‚Ήγƒ†γƒ (~F)";
         Text[ chinese_traditional ] = "ε¨ζª”ζ΅η³»ηµ±ε…§(~F)";
         Text[ arabic ] = "δΩΗγ Ηαγαέ";
         Text[ greek ] = "στο σύστημα αρχείων";
@@ -819,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
