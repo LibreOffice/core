@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-19 10:15:20 $
+#   last change: $Author: avy $ $Date: 2001-03-22 09:13:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,14 +64,14 @@ PRJ=..$/..
 PRJNAME=svx
 TARGET=xml
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
-
 SLOFILES = \
         $(SLO)$/xmlxtimp.obj		\
         $(SLO)$/xmlxtexp.obj		\
