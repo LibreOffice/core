@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:54:50 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,15 @@ File gid_File_Scripts_Python
     Styles = (ARCHIVE);
     Dir = gid_Dir_Share_Scripts;
     Name = "ScriptsPython.zip";
+End
+
+// Scripting Framework Python configuration settings
+
+File gid_File_Registry_Spool_Oo_Scripting_Python_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Office.Scripting-python.xcu";
 End
 
 #ifdef WNT
