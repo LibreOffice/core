@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:18:46 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 08:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,7 @@ public:
     sal_Bool bForceSynchron : 1;
     sal_Bool bDontCreateCancellable : 1;
     sal_Bool bDownloadDone          : 1;
+    sal_Bool bDontCallDoneLinkOnSharingError : 1;
     sal_Bool bStreamReady: 1;
     sal_Bool bIsStorage: 1;
 
@@ -582,7 +583,7 @@ void SfxMedium::Done_Impl( ErrCode nError )
     DELETEZ( pImp->pCancellable );
     pImp->bDownloadDone = sal_True;
     SetError( nError );
-    if ( pImp->bStreamReady || !pInStream )
+    if ( ( !nError || !pImp->bDontCallDoneLinkOnSharingError ) && ( pImp->bStreamReady || !pInStream ) )
     {
         pImp->aDoneLink.ClearPendingCall();
         pImp->aDoneLink.Call( (void*) nError );
@@ -626,7 +627,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
-    bDownloadDone( sal_True ), nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
+    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
 {
     aDoneLink.CreateMutex();
 }
@@ -1067,7 +1068,7 @@ SvStorage* SfxMedium::GetStorage()
     String aStorageName;
     if ( pImp->pTempFile )
     {
-        aStorageName = pImp->pTempFile->GetFileName();
+        aStorageName = pImp->pTempFile->GetURL();
         pStream = GetOutStream();
     }
     else
@@ -1087,8 +1088,16 @@ SvStorage* SfxMedium::GetStorage()
     if( !pStream || ( GetError() != SVSTREAM_OK ) )
         return aStorage;
 
-    aStorage = new SvStorage( pStream, FALSE );
-    aStorage->SetName( aStorageName );
+    if ( pImp->pTempFile && pOutStream )
+    {
+        DELETEZ( pOutStream );
+        aStorage = new SvStorage( aStorageName );
+    }
+    else
+    {
+        aStorage = new SvStorage( pStream, FALSE );
+        aStorage->SetName( aStorageName );
+    }
 
     if ( aStorage->GetError() == SVSTREAM_OK )
         GetVersionList();
@@ -1397,11 +1406,10 @@ void SfxMedium::GetMedium_Impl()
         ::utl::UcbLockBytesRef xLockBytes;
         if ( !pImp->aHandler.Is() )
             pImp->aHandler = new SfxLockBytesHandler_Impl( this );
-
-        SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
+        ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
 
         BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
-        ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
+        SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
         if ( pStreamItem )
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
@@ -1416,43 +1424,39 @@ void SfxMedium::GetMedium_Impl()
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
 
             // no callbacks for opening read/write because we might try readonly later
+            pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
             xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, bIsWritable ? NULL : pHandler );
-            if ( ( !xLockBytes.Is() || xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS )  )
+            if ( !xLockBytes.Is() )
             {
-                if ( bIsWritable && bAllowReadOnlyMode )
-                {
-                    // later error code will be corrected to ERRCODE_ACCESS_DENIED !
-                    QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
-                    BOOL bSilent = TRUE;    // don't ask at the moment
-                    if ( bSilent || RET_YES == aBox.Execute() )
-                    {
-                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                        SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                        ResetError();
-                        xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
-                    }
-                }
+                pImp->bDontCallDoneLinkOnSharingError = sal_False;
+                Done_Impl( ERRCODE_IO_NOTEXISTS );
+            }
+            else if ( xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS && bIsWritable && bAllowReadOnlyMode )
+            {
+                GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                ResetError();
+                pImp->bDownloadDone = sal_False;
+                pImp->bDontCallDoneLinkOnSharingError = sal_False;
+                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
             }
             else if ( bIsWritable && !pImp->bDownloadDone )
                 // opening readwrite is always done synchronously
-                Done_Impl( xLockBytes.Is() ? xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
+                Done_Impl( xLockBytes->GetError() );
         }
 
         if ( xLockBytes.Is() )
         {
             if ( bSynchron )
                 xLockBytes->SetSynchronMode( sal_True );
-            pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
+            if ( !pImp->bDownloadDone )
+                pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
             pInStream = new SvStream( xLockBytes );
             pImp->bStreamReady = sal_True;
         }
-        else
-        {
-            Done_Impl( ERRCODE_IO_NOTEXISTS );
-        }
     }
 
-    // Download complete happened while pInStream was constructed
+    // Download completion happened while pInStream was constructed
     if ( pImp->bDownloadDone )
         Done_Impl( GetError() );
 
