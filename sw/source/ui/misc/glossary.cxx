@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-08 11:08:31 $
+ *  last change: $Author: os $ $Date: 2001-12-06 14:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                     }
             }
 
-            if( i && RET_OK == xFP->execute() )
+            if( i && aDlgHelper.Execute() == ERRCODE_NONE )
             {
                 if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
                     Init();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 09:49:28 $
+ *  last change: $Author: os $ $Date: 2001-12-06 14:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2591,7 +2591,7 @@ IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
     String sTemp(aURLED.GetText());
     if(sTemp.Len())
         xFP->setDisplayDirectory(sTemp);
-    if( xFP->execute() == RET_OK )
+    if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getFiles().getConstArray()[0], FALSE,
                                         INetURLObject::WAS_ENCODED,

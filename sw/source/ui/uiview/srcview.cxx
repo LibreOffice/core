@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
+ *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             xFltMgr->appendFilter( sHtml, C2S("*.html;*.htm") );
             xFltMgr->setCurrentFilter( sHtml ) ;
             xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
-            if( RET_OK == xFP->execute())
+            if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
                 SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
                                     STREAM_WRITE | STREAM_SHARE_DENYNONE,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:43:35 $
+ *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     {
         xFltMgr->setCurrentFilter( rGF.GetExportFormatName( nDfltFilter ) ) ;
 
-        if( RET_OK == xFP->execute() )
+        if( aDlgHelper.Execute() == ERRCODE_NONE )
         {
             String sPath( xFP->getFiles().getConstArray()[0] );
             //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!

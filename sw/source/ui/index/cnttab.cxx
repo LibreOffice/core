@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-30 17:28:42 $
+ *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
         xFP->setDisplayDirectory( aPathOpt.GetUserConfigPath() );
     }
 
-    if( xFP->execute() == RET_OK )
+    if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         sRet = xFP->getFiles().getConstArray()[0];
     }
