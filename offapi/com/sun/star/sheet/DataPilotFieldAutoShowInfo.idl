@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotFieldAutoShowInfo.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:49:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-07 09:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DataPilotField
  */
-struct DataPilotFieldAutoShowInfo
+published struct DataPilotFieldAutoShowInfo
 {
     //-------------------------------------------------------------------------
 
