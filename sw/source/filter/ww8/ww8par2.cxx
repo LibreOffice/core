@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:05:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,9 +191,10 @@ private:
 public:
     short nGroupXStart;
     short nGroupWidth;
+    bool bGroupLocked;
 
     WW8SelBoxInfo(short nXCenter, short nWidth)
-        : nGroupXStart( nXCenter ), nGroupWidth( nWidth )
+        : nGroupXStart( nXCenter ), nGroupWidth( nWidth ), bGroupLocked(false)
     {}
 };
 
@@ -1771,8 +1772,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         //considered part of the same table
         bool bStartApo, bStopApo;
         WW8FlyPara *rpNowStyleApo=0;
-        pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo, pIo->nInTable, false,
-            pTabPos);
+        const BYTE* pSprm29 = pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo,
+            pIo->nInTable, false, pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -1780,8 +1781,18 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         part of this table, but instead is an absolutely positioned table
         outside of this one
         */
-        if (bStartApo || bStopApo)
+        if (bStopApo)
             break;
+        if (bStartApo)
+        {
+            //if there really is a fly here, and not a "null" fly then break.
+            WW8FlyPara *pNewFly =
+                pIo->ConstructApo(pSprm29, rpNowStyleApo, pTabPos);
+            if (pNewFly)
+                delete pNewFly;
+            else
+                break;
+        }
 
         nStartCp = aRes.nEndPos;
     }
@@ -2301,7 +2312,7 @@ void WW8TabDesc::MergeCells()
                             // X-Bereich ueberdecken
                             short nMGrIdx;
                             while(FindMergeGroup( nX1, nWidth, false, nMGrIdx))
-                                (*pMergeGroups)[ nMGrIdx ]->nGroupXStart = -999;
+                                (*pMergeGroups)[ nMGrIdx ]->bGroupLocked = true;
                         }
 
                         // 2. aktuelle Merge-Gruppe anlegen
@@ -2582,7 +2593,7 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
         {
             // die aktuell untersuchte Gruppe
             pActGroup = (*pMergeGroups)[ iGr ];
-            if( -999 < pActGroup->nGroupXStart  )
+            if (!pActGroup->bGroupLocked)
             {
                 // ungefaehre Gruppengrenzen mit Toleranz nach *aussen* hin
                 nGrX1 = pActGroup->nGroupXStart - nToleranz;
