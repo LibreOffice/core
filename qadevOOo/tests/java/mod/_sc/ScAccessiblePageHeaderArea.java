@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeaderArea.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2004-11-02 12:02:00 $
+ *  last change: $Date: 2004-12-10 17:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,17 +206,8 @@ public class ScAccessiblePageHeaderArea extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XAccessible zoomIn = null;
-        try {
-            XAccessibleContext mainWin =
-                at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR,"Page");
-
-            System.out.println("TOOLBAR: "+mainWin.getAccessibleName());
-
-            zoomIn = mainWin.getAccessibleChild(5);
-            log.println("Getting "+
-                            zoomIn.getAccessibleContext().getAccessibleName());
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
+        XAccessibleContext zoomIn =
+            at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
         final XAccessibleAction pressZoom = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
