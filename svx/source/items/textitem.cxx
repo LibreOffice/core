@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 11:28:51 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1343,7 +1343,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             ePropUnit = SFX_MAPUNIT_RELATIVE;
             nProp = 100;
-            float fPoint;
+            double fPoint;
             if(!(rVal >>= fPoint))
             {
                 sal_Int32 nValue;
@@ -1351,6 +1351,8 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     return sal_False;
                 fPoint = (float)nValue;
             }
+            if(fPoint < 0. || fPoint > 10000.)
+                    return sal_False;
 
             nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
