@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 16:29:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,15 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             m_declarations.push_back(pDecl);
             return pDecl;
         }
+        if ( (NT_service == m_nodeType) &&
+             ((pDecl->getNodeType() == NT_interface_member)
+              && (pDeclaration->getNodeType() == NT_interface)) ||
+             ((pDecl->getNodeType() == NT_service_member)
+              && (pDeclaration->getNodeType() == NT_service)))
+        {
+            m_declarations.push_back(pDecl);
+            return pDecl;
+        }
 
         idlc()->error()->error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
         return NULL;
@@ -175,7 +184,6 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
         // OK, not global scope yet, so simply iterate with parent scope
         pDecl = pScope->lookupByName(scopedName);
         return pDecl;
-        //return pScope->lookupByName(scopedName);
     }
 
     // The name does not start with "::"
@@ -205,8 +213,6 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
                 if (m_nodeType == NT_interface)
                     pDecl = lookupInInherited(scopedName);
             }
-//          if ( !pDecl )
-//              pDecl = lookupInForwarded(scopedName);
        }
     }
 
@@ -223,12 +229,25 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
                 nOffset = 1;
             }
             if( !pDecl )
-                return NULL;
+                break;
         } while( nIndex != -1 );
-    }
 
-//  if ( !pDecl )
-//      pDecl = lookupInForwarded(scopedName);
+        if ( !pDecl )
+        {
+            // last try if is not the global scope and the scopeName isn't specify global too
+            pDecl = scopeAsDecl(this);
+            if ( pDecl && (pDecl->getLocalName() != "") )
+            {
+                pScope = pDecl->getScope();
+                if ( pScope )
+                    pDecl = pScope->lookupByName(scopedName);
+            } else
+            {
+                pDecl = NULL;
+            }
+        }
+
+    }
 
     return pDecl;
 }
@@ -271,8 +290,9 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
 
         while ( iter != end )
         {
-            pDecl = ((AstInterface*)(*iter))->lookupByName(scopedName);
-            if ( pDecl )
+            if ( pDecl = ((AstInterface*)(*iter))->lookupByNameLocal(scopedName) )
+                return pDecl;
+            if ( pDecl = ((AstInterface*)(*iter))->lookupInInherited(scopedName) )
                 return pDecl;
             ++iter;
         }
@@ -280,31 +300,7 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
     // Not found
     return NULL;
 }
-/*
-AstDeclaration* AstScope::lookupInForwarded(const OString& scopedName)
-{
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
-    AstDeclaration* pDecl = NULL;
 
-    while ( iter != end )
-    {
-        pDecl = *iter;
-        if ( pDecl->getNodeType() == NT_interface_fwd )
-        {
-            if ( pDecl->getScopedName() == scopedName )
-            {
-                AstInterfaceFwd* pFwd = (AstInterfaceFwd*)pDecl;
-                if ( pFwd )
-                    return pFwd->getFullDefintion();
-            }
-            break;
-        }
-        ++iter;
-    }
-    return NULL;
-}
-*/
 AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 {
     AstDeclaration* pDecl = NULL;
@@ -384,5 +380,12 @@ AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
 {
     if ( !pDecl )
         return NULL;
-   return lookupByNameLocal(pDecl->getLocalName());
+
+    AstDeclaration* pRetDecl = lookupByNameLocal(pDecl->getLocalName());
+
+    if ( (pRetDecl == NULL) &&
+         m_nodeType == NT_interface )
+        pRetDecl = lookupInInherited(pDecl->getLocalName());
+
+   return pRetDecl;
 }
