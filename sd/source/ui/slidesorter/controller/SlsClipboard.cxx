@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:21:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ void Clipboard::DoPaste (::Window* pWindow)
             {
                 const ::vos::OGuard aGuard (Application::GetSolarMutex());
 
+                bMergeMasterPages = (pDataDoc != mrController.GetModel().GetDocument());
                 nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
                 mrController.GetModel().GetDocument()->InsertBookmarkAsPage(
                     NULL,
@@ -282,19 +283,6 @@ void Clipboard::DoPaste (::Window* pWindow)
                     FALSE);
             }
         }
-        /*AF
-        SfxUInt16Item aItem (SID_PAGES_PER_ROW, nPagesPerRow);
-
-        ( pDocSh->GetViewShell()
-            ? pDocSh->GetViewShell()->GetViewFrame()
-            : SfxViewFrame::Current()
-            )->GetDispatcher()->Execute(
-                SID_PAGES_PER_ROW,
-                SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
-                &aItem,
-                0L,
-                0L);
-            */
         mrController.HandleModelChange();
     }
 }
