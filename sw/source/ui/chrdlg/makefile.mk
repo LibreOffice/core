@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:15:58 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:55:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=chrdlg
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,16 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        break.cxx \
-        chardlg.cxx \
-        drpcps.cxx \
-        ccoll.cxx \
-        pardlg.cxx \
-        tblnumfm.cxx \
-        numpara.cxx
-
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         swbreak.src \
         chardlg.src \
         chrdlg.src \
