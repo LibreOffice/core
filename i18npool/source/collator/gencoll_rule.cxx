@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:28:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-29 10:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,4 +171,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         delete coll;
 
     exit(U_SUCCESS(status) ? 0 : 1);
+    return 0;
 }   // End of main
