@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 12:04:16 $
+ *  last change: $Author: af $ $Date: 2002-09-12 09:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -890,7 +889,10 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( R
     if( NULL == mpControl )
         throw DisposedException();
 
-    return Rectangle( mpControl->GetParent()->OutputToScreenPixel( mpControl->GetPosPixel() ), mpControl->GetSizePixel() );
+    return Rectangle(
+        mpControl->GetParent()->OutputToAbsoluteScreenPixel(
+            mpControl->GetPosPixel() ),
+        mpControl->GetSizePixel() );
 }
 
 //-----------------------------------------------------------------------------
