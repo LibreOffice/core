@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:45:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,8 +263,7 @@ enum ScXMLTableAttrTokens
     XML_TOK_TABLE_PROTECTION,
     XML_TOK_TABLE_PRINT_RANGES,
     XML_TOK_TABLE_PASSWORD,
-    XML_TOK_TABLE_PRINT,
-    XML_TOK_TABLE_AUTOMATIC_PRINT_RANGE
+    XML_TOK_TABLE_PRINT
 };
 
 enum ScXMLTableScenarioAttrTokens
