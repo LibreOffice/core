@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 15:39:11 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ spanish ] = "~Entrelazado" ;
         Text [ french ] = "~Entrelacé" ;
         Text [ dutch ] = "~Interlaced" ;
-        Text [ portuguese ] = "~Interlaced" ;
+        Text [ portuguese ] = "~Entrelaçado" ;
         Text[ chinese_simplified ] = "½»´í(~I)";
         Text[ russian ] = "~Ñ ÷åðåäîâàíèåì";
         Text[ polish ] = "Interlaced";
