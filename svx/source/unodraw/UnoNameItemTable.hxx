@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: rt $ $Date: 2001-01-29 17:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
