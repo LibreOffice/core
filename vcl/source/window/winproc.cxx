@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-09 11:27:24 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 13:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,8 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
                 pChild->RequestHelp( aHelpEvent );
                 pSVData->maHelpData.mbRequestingHelp = FALSE;
             }
-            else if ( pSVData->maHelpData.mpHelpWin )
+            // #104172# do not kill keyboard activated tooltips
+            else if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp)
             {
                 ImplDestroyHelpWindow( FALSE );
             }
@@ -423,7 +424,15 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         if ( (nSVEvent == EVENT_MOUSEBUTTONUP) && pSVData->maHelpData.mbExtHelpMode )
             Help::EndExtHelp();
         if ( pSVData->maHelpData.mpHelpWin )
-            ImplDestroyHelpWindow();
+        {
+            if( pWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
+            {
+                ImplDestroyHelpWindow();
+                return 1; // pWindow is dead now - avoid crash!
+            }
+            else
+                ImplDestroyHelpWindow();
+        }
 
         if ( (pWindow->mpFrameData->mnLastMouseX != nX) ||
              (pWindow->mpFrameData->mnLastMouseY != nY) )
@@ -1136,6 +1145,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             {
                 // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
                 // simulate mouseposition at center of window
+
                 Size aSize = pChild->GetOutputSize();
                 Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
                 aPos = pChild->OutputToScreenPixel( aPos );
@@ -1509,7 +1519,11 @@ static void KillOwnPopups( Window* pWindow )
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
+    {
         KillOwnPopups( pWindow );
+        if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
+            ImplDestroyHelpWindow();
+    }
 
     if ( (nNewWidth > 0) && (nNewHeight > 0) ||
          pWindow->ImplGetWindow()->mbAllResize )
@@ -1545,7 +1559,11 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
     }
 
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
+    {
         KillOwnPopups( pWindow );
+        if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
+            ImplDestroyHelpWindow();
+    }
 
     if ( pWindow->IsVisible() )
         pWindow->ImplCallMove();
