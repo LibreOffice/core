@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:45:40 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ dutch ] = "Waarde" ;
         Text [ spanish ] = "Valor" ;
         Text [ english_us ] = "Value" ;
-        Text[ chinese_simplified ] = "Öµ";
+        Text[ chinese_simplified ] = "ÊıÖµ";
         Text[ russian ] = "Çíà÷åíèå";
         Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l";
@@ -2269,11 +2269,11 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         MapUnit = MAP_APPFONT ;
         Delta = 32 ;
     };
-    Text[ chinese_simplified ] = "ÌØÊâÉ¸Ñ¡";
+    Text[ chinese_simplified ] = "¸ß¼¶É¸Ñ¡";
     Text[ russian ] = "Ğàñøèğåííûé ôèëüòğ";
     Text[ polish ] = "Filtr specjalny";
     Text[ japanese ] = "“ÁêÌ¨ÙÀ";
-    Text[ chinese_traditional ] = "¯S®í¿z¿ï";
+    Text[ chinese_traditional ] = "¶i¶¥¿z¿ï";
     Text[ arabic ] = "İáÊÑ ÎÇÕ";
     Text[ greek ] = "Åéäéêü ößëôñï";
     Text[ korean ] = "°í±ŞÇÊÅÍ";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
