@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:31:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
