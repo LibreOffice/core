@@ -138,17 +138,20 @@ public class AccessibilityTreeModel
         AccessibleTreeNode aChild = null;
         if (aParent != null)
             aChild = aParent.getChild(nIndex);
-        registerAccListener (aChild);
 
         // Keep translation table up-to-date.
         if (aChild != null)
             if (aChild instanceof AccTreeNode)
-            {
-                maXAccessibleToNode.put (((AccTreeNode)aChild).getAccessible(), aChild);
-                addToCanvas ((AccTreeNode)aChild);
-            }
+                if (maXAccessibleToNode.get (((AccTreeNode)aChild).getAccessible()) == null)
+                {
+                    registerAccListener (aChild);
+                    maXAccessibleToNode.put (((AccTreeNode)aChild).getAccessible(), aChild);
+                    addToCanvas ((AccTreeNode)aChild);
+                }
+
         if (aChild == null)
             System.out.println ("getChild: child not found");
+
         return aChild;
     }
 
@@ -199,7 +202,10 @@ public class AccessibilityTreeModel
         try
         {
             if( aNode == null )
+            {
+                System.out.println ("can't remove null node");
                 return;
+            }
             removeAccListener (aNode);
             removeFromCanvas (aNode);
             if (aNode instanceof AccTreeNode)
@@ -217,7 +223,7 @@ public class AccessibilityTreeModel
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {
-            // Ignore.
+            System.out.println ("caught exception while removing node " + aNode + " : " + e);
         }
     }
 
@@ -369,12 +375,13 @@ public class AccessibilityTreeModel
     private final XAccessibleEventListener xListener;
 
 
-    protected XAccessibleEventBroadcaster getBroadcaster( Object aObject )
+    protected XAccessibleEventBroadcaster getBroadcaster (Object aObject)
     {
-        if( aObject instanceof AccTreeNode )
-            aObject = ((AccTreeNode)aObject).getContext();
-        return (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
-            XAccessibleEventBroadcaster.class, aObject);
+        if (aObject instanceof AccTreeNode)
+            return (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
+                XAccessibleEventBroadcaster.class, ((AccTreeNode)aObject).getContext());
+        else
+            return null;
     }
 
     protected void registerAccListener( Object aObject )
