@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-24 17:20:49 $
+ *  last change: $Author: thb $ $Date: 2002-10-25 15:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,8 +746,8 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
         // ===================================================
 
         VirtualDevice   aVDev;
-        int             nNumTilesInCacheX( (MaxTileCacheSize1D + aOutTileSize.Width()-1) / aOutTileSize.Width() );
-        int             nNumTilesInCacheY( (MaxTileCacheSize1D + aOutTileSize.Height()-1) / aOutTileSize.Height() );
+        const int       nNumTilesInCacheX( (MaxTileCacheSize1D + aOutTileSize.Width()-1) / aOutTileSize.Width() );
+        const int       nNumTilesInCacheY( (MaxTileCacheSize1D + aOutTileSize.Height()-1) / aOutTileSize.Height() );
 
         aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*aOutTileSize.Width(), nNumTilesInCacheY*aOutTileSize.Height() ) );
         aVDev.SetMapMode( aMapMode );
@@ -792,26 +792,45 @@ BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
     }
     else
     {
-        // normalize offset to at utmost tileSize
-        Size aOffset( rOffset.Width() % rSize.Width(),
-                      rOffset.Height() % rSize.Height() );
-
-        // normalize offset to positive values
-        if( aOffset.Width() < 0 )
-            aOffset.Width() = rSize.Width() + aOffset.Width();
-        if( aOffset.Height() < 0 )
-            aOffset.Height() = rSize.Height() + aOffset.Height();
-
-        const Size      aOutOffset( pOut->LogicToPixel( aOffset, aOutMapMode ) );
+        const Size      aOutOffset( pOut->LogicToPixel( rOffset, aOutMapMode ) );
         const Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
+
+        // number of invisible (because out-of-area) tiles
+        int nInvisibleTilesX;
+        int nInvisibleTilesY;
+
+        // round towards -infty for negative offset
+        if( aOutOffset.Width() < 0 )
+            nInvisibleTilesX = (aOutOffset.Width() - aOutTileSize.Width() + 1) / aOutTileSize.Width();
+        else
+            nInvisibleTilesX = aOutOffset.Width() / aOutTileSize.Width();
+
+        // round towards -infty for negative offset
+        if( aOutOffset.Height() < 0 )
+            nInvisibleTilesY = (aOutOffset.Height() - aOutTileSize.Height() + 1) / aOutTileSize.Height();
+        else
+            nInvisibleTilesY = aOutOffset.Height() / aOutTileSize.Height();
+
+        // origin from where to 'virtually' start drawing in pixel
+        const Point aOutOrigin( pOut->LogicToPixel( Point( rArea.Left() - rOffset.Width(),
+                                                           rArea.Top() - rOffset.Height() ) ) );
+        // position in pixel from where to really start output
+        const Point aOutStart( aOutOrigin.X() + nInvisibleTilesX*aOutTileSize.Width(),
+                               aOutOrigin.Y() + nInvisibleTilesY*aOutTileSize.Height() );
+
+        pOut->Push( PUSH_CLIPREGION );
+        pOut->IntersectClipRegion( rArea );
 
         // Paint all tiles
         // ===============
-        return ImplDrawTiled( *pOut, Point( aOutArea.Left() - aOutOffset.Width(),
-                                            aOutArea.Top() - aOutOffset.Height() ),
-                              (aOutArea.GetWidth() + 2*aOutOffset.Width() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
-                              (aOutArea.GetHeight() + 2*aOutOffset.Height() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
-                              aOutTileSize, pAttr, nFlags );
+        BOOL bRet( ImplDrawTiled( *pOut, aOutStart,
+                                  (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
+                                  (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
+                                  aOutTileSize, pAttr, nFlags ) );
+
+        pOut->Pop();
+
+        return bRet;
     }
 }
 

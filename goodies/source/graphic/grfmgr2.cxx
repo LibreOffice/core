@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-24 17:21:13 $
+ *  last change: $Author: thb $ $Date: 2002-10-25 15:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1547,26 +1547,27 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
+BOOL GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSize, const GraphicAttr* pAttr, ULONG nFlags )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, ULONG nFlags )
 {
-    Point   aCurrPos( rPos );
+    Point   aCurrPos( rPosPixel );
+    Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );
     int     nX, nY;
 
     for( nY=0; nY < nNumTilesY; ++nY )
     {
-        aCurrPos.X() = rPos.X();
+        aCurrPos.X() = rPosPixel.X();
 
         for( nX=0; nX < nNumTilesX; ++nX )
         {
-            if( !Draw( &rOut, rOut.PixelToLogic( aCurrPos ), rOut.PixelToLogic( rTileSize ), pAttr, nFlags ) )
+            if( !Draw( &rOut, rOut.PixelToLogic( aCurrPos ), aTileSizeLogic, pAttr, nFlags ) )
                 return FALSE;
 
-            aCurrPos.X() += rTileSize.Width();
+            aCurrPos.X() += rTileSizePixel.Width();
         }
 
-        aCurrPos.Y() += rTileSize.Height();
+        aCurrPos.Y() += rTileSizePixel.Height();
     }
 
     return TRUE;
