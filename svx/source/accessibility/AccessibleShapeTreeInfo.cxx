@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 13:13:45 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,10 @@ AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (
     : mxDocumentWindow (rxDocumentWindow),
       mxModelBroadcaster (rxModelBroadcaster),
       mpView (NULL),
-      mpWindow (NULL)
+      mpWindow (NULL),
+      mpViewForwarder (NULL)
 {
+    // Empty.
 }
 
 
@@ -82,9 +84,36 @@ AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (
 
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (void)
     : mpView (NULL),
-      mpWindow (NULL)
+      mpWindow (NULL),
+      mpViewForwarder (NULL)
 {
-    //empty
+    // Empty.
+}
+
+
+
+
+AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo& rInfo)
+    : mxDocumentWindow (rInfo.mxDocumentWindow),
+      mxModelBroadcaster (rInfo.mxModelBroadcaster),
+      mpView (rInfo.mpView),
+      mpWindow (rInfo.mpWindow),
+      mpViewForwarder (rInfo.mpViewForwarder)
+{
+    // Empty.
+}
+
+
+
+
+AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleShapeTreeInfo& rInfo)
+{
+    mxDocumentWindow = rInfo.mxDocumentWindow;
+    mxModelBroadcaster = rInfo.mxModelBroadcaster;
+    mpView = rInfo.mpView;
+    mpWindow = rInfo.mpWindow;
+    mpViewForwarder = rInfo.mpViewForwarder;
+    return *this;
 }
 
 
