@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: as $ $Date: 2002-08-23 08:12:28 $
+ *  last change: $Author: as $ $Date: 2002-08-29 07:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,10 +532,11 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             // external filters can't be detected with this service ( only their type may be used )
             pExternalFilter = pFilter;
         }
-        // No filter - no valid detection.
-        // Return nothing so the outside detection code can try the next possible type!
+        // No filter - return the original given typename.
+        // It's neccessary for our beamer db components. Because the have no filter
+        // but a frame loader. If we return noting here such components not loadable any longer :-(
         else if (!pFilter)
-                return ::rtl::OUString();
+                return aTypeName;
     }
 
     String aPrefix = String::CreateFromAscii( "private:factory/" );
