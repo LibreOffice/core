@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:47:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,11 +461,66 @@ String STR_DESCRIPTION_SXGLOBAL_DOC
     Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
 };
-
 String STR_DESCRIPTION_MATHML_DOC
 {
     Text [ de ] = "MathML Dokument" ;
     Text [ en-US ] = "MathML Document" ;
+};
+
+String STR_DESCRIPTION_OO_DATABASE_DOC
+{
+    Text [ de ] = "Open Office Datenbank" ;
+    Text [ en-US ] = "Open Office Database" ;
+};
+String STR_DESCRIPTION_OO_DRAW_DOC
+{
+    Text [ de ] = "Open Office Zeichnung" ;
+    Text [ en-US ] = "Open Office Drawing" ;
+};
+String STR_DESCRIPTION_OO_MATH_DOC
+{
+    Text [ de ] = "Open Office Formel" ;
+    Text [ en-US ] = "Open Office Formula" ;
+};
+String STR_DESCRIPTION_OO_GLOBAL_DOC
+{
+    Text [ de ] = "Open Office Globaldokument" ;
+    Text [ en-US ] = "Open Office Master Document" ;
+};
+String STR_DESCRIPTION_OO_IMPRESS_DOC
+{
+    Text [ de ] = "Open Office Präsentation" ;
+    Text [ en-US ] = "Open Office Presentation" ;
+};
+String STR_DESCRIPTION_OO_CALC_DOC
+{
+    Text [ de ] = "Open Office Tabellendokument" ;
+    Text [ en-US ] = "Open Office Spreadsheet" ;
+};
+String STR_DESCRIPTION_OO_WRITER_DOC
+{
+    Text [ de ] = "Open Office Text" ;
+    Text [ en-US ] = "Open Office Text" ;
+};
+String STR_DESCRIPTION_OO_CALC_TEMPLATE
+{
+    Text [ de ] = "Open Office Tabellendokumentvorlage" ;
+    Text [ en-US ] = "Open Office Spreadsheet Template" ;
+};
+String STR_DESCRIPTION_OO_DRAW_TEMPLATE
+{
+    Text [ de ] = "Open Office Zeichnungsdokumentvorlage" ;
+    Text [ en-US ] = "Open Office Drawing Template" ;
+};
+String STR_DESCRIPTION_OO_IMPRESS_TEMPLATE
+{
+    Text [ de ] = "Open Office Präsentationsdokumentvorlage" ;
+    Text [ en-US ] = "Open Office Presentation Template" ;
+};
+String STR_DESCRIPTION_OO_WRITER_TEMPLATE
+{
+    Text [ de ] = "Open Office Textdokument Vorlage" ;
+    Text [ en-US ] = "Open Office Text Document Template" ;
 };
 
 Bitmap BMP_PLUGIN
