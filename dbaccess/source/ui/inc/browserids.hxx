@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:55:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@
 #define ID_BROWSER_COLUMNINFO               24  // copies the column description to insert it into the table design
 #define ID_BROWSER_COUNTALL                 SID_FM_COUNTALL // count all
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
-#define ID_BROWSER_DESIGN                   SID_SBA_QRY_DESIGN
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
 #define ID_BROWSER_DOCUMENT_DATASOURCE      SID_DOCUMENT_DATA_SOURCE
 
@@ -110,31 +109,22 @@
 #define ID_TREE_ADMINISTRATE                 1
 #define ID_TREE_CLOSE_CONN                   2
 #define ID_TREE_REBUILD_CONN                 3
-#define ID_TREE_RELATION_DESIGN              7
-#define ID_TABLE_DESIGN_NO_CONNECTION        8
-#define ID_OPEN_DOCUMENT                     9
-#define ID_EDIT_DOCUMENT                    10
 // free
 // free
 // free
-#define ID_CREATE_NEW_DOC                   14
+// free
 #define ID_FORM_NEW_TEXT                    15
 #define ID_FORM_NEW_CALC                    16
 #define ID_FORM_NEW_IMPRESS                 17
 #define ID_FORM_NEW_PILOT                   18
-#define ID_FORM_NEW_TEMPLATE                19
 #define ID_NEW_QUERY_DESIGN                 20
 #define ID_EDIT_QUERY_DESIGN                21
 #define ID_NEW_QUERY_SQL                    22
 #define ID_EDIT_QUERY_SQL                   23
-#define ID_DROP_QUERY                       24
 #define ID_NEW_TABLE_DESIGN                 25
-#define ID_EDIT_TABLE                       26
-#define ID_DROP_TABLE                       27
 #define ID_NEW_VIEW_DESIGN                  28
 #define ID_DIRECT_SQL                       32
 #define ID_BROWSER_REFRESH_REBUILD          34
-#define ID_RENAME_ENTRY                     35
 #define ID_INDEX_NEW                        36
 #define ID_INDEX_DROP                       37
 #define ID_INDEX_RENAME                     38
@@ -142,37 +132,16 @@
 #define ID_INDEX_RESET                      40
 #define ID_DOCUMENT_CREATE_REPWIZ           41
 #define ID_BROWSER_SQL                      42
-#define ID_APP_NEW_FORM                     43
+
 #define ID_APP_NEW_QUERY_AUTO_PILOT         44
 #define ID_NEW_TABLE_DESIGN_AUTO_PILOT      45
 #define ID_NEW_VIEW_DESIGN_AUTO_PILOT       46
 #define ID_NEW_VIEW_SQL                     47
-#define ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL   48
-#define ID_FORM_NEW_PILOT_PRE_SEL           49
-#define ID_APP_NEW_FOLDER                   50
 
-
-// image ids
-#define SID_DB_FORM_DELETE                  65
-#define SID_DB_FORM_RENAME                  66
-#define SID_DB_FORM_EDIT                    67
-#define SID_DB_FORM_OPEN                    68
-#define SID_DB_REPORT_DELETE                69
-#define SID_DB_REPORT_RENAME                70
-#define SID_DB_REPORT_EDIT                  71
-#define SID_DB_REPORT_OPEN                  72
-#define SID_DB_QUERY_OPEN                   73
-#define SID_DB_TABLE_OPEN                   74
-#define SID_DB_QUERY_EDIT                   75
 
 // other
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
-#define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY
-#define ID_RELATION_ADD_RELATION            SID_SBA_ADD_RELATION
-#define ID_BROWSER_QUERY_VIEW_FUNCTIONS     SID_SBA_QUERY_VIEW_FUNCTIONS
-#define ID_BROWSER_QUERY_VIEW_TABLES        SID_SBA_QUERY_VIEW_TABLES
-#define ID_BROWSER_QUERY_VIEW_ALIASES       SID_SBA_QUERY_VIEW_ALIASES
-#define ID_BROWSER_QUERY_DISTINCT_VALUES    SID_SBA_QUERY_DISTINCT_VALUES
+
 #define ID_BROWSER_CLOSE                    SID_CLOSEWIN
 #define ID_BROWSER_ESACPEPROCESSING         SID_FM_NATIVESQL
 
