@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:02:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,7 +1042,7 @@ void SwDoc::SetUseVirtualDevice( short nNew )
             {
                 ASSERT( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION == nNew,
                         "Virtual device type: != DISABLED, LOW_RESOLUTION, HIGH_RESOLUTION" )
-                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE96 );
+                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
             }
         }
 
