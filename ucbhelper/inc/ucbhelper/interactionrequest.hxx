@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:42:26 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ protected:
                     rContinuations );
 
     InteractionRequest();
+    virtual ~InteractionRequest();
 
 public:
     /**
@@ -132,7 +133,6 @@ public:
       * @param rRequest is the exception describing the error.
       */
     InteractionRequest( const com::sun::star::uno::Any & rRequest );
-    virtual ~InteractionRequest();
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
@@ -209,10 +209,10 @@ protected:
       * method the way that they call this method.
       */
     void recordSelection();
+    virtual ~InteractionContinuation();
 
 public:
     InteractionContinuation( InteractionRequest * pRequest );
-    virtual ~InteractionContinuation();
 };
 
 //============================================================================
