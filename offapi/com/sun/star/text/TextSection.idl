@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSection.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:46:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ module com { module sun { module star { module text {
     texts.
 
 */
-service TextSection
+published service TextSection
 {
     service com::sun::star::text::TextContent;
     interface com::sun::star::text::XTextSection;
