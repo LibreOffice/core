@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:16:08 $
+ *  last change: $Author: vg $ $Date: 2001-08-24 10:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName = "AutoFormat bei Eingabe";
     SlotName [ english ] =  "AutoFormat while Typing";
     SlotName[ english_us ] = "AutoFormat While Typing";
-    SlotName[ portuguese ] = "AutoFormatoAoDigitar";
+    SlotName[ portuguese ] = "AutoFormato ao digitar";
     SlotName[ russian ] = "ΐβςξτξπμΰς βξ βπεμÿ ββξδΰ";
     SlotName[ greek ] = "ΑυτοΜορφή";
     SlotName[ dutch ] = "AutoOpmaak";
@@ -216,10 +216,10 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ finnish ] = "Automaattinen muotoilu";
     SlotName[ italian ] = "Foramttazione automatica durante la digitazione";
     SlotName[ danish ] = "AutoFormat";
-    SlotName[ swedish ] = "Autoformat";
+    SlotName[ swedish ] = "AutoFormat vid inmatning";
     SlotName[ polish ] = "Autoformat";
     SlotName[ japanese ] = "ε…¥ε›ζ™‚ο½µο½°οΎ„οΎο½«ο½°οΎο½―οΎ„";
-    SlotName[ korean ] = "μλ™μ„μ‹";
+    SlotName[ korean ] = "μ…λ ¥μ‹ μλ™ν¬λ§·";
     SlotName[ chinese_simplified ] = "θΎ“ε…¥ζ—¶δ½Ώη”¨θ‡ªε¨ζ ΌεΌ";
     SlotName[ chinese_traditional ] = "θΌΈε…¥ζ™‚δ½Ώη”¨θ‡ªε‹•ζ ΌεΌ";
     SlotName[ turkish ] = "Otomatik formatlama";
@@ -3402,7 +3402,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ spanish ] = "Caja de diαlogo: Cσdigo de campo";
     SlotName[ italian ] = "Dialogo comando di campo";
     SlotName[ danish ] = "Indsζt felt";
-    SlotName[ swedish ] = "Infoga fδltkommando";
+    SlotName[ swedish ] = "Dialogruta fφr fδltkommandon";
     SlotName[ polish ] = "Wstaw pola";
     SlotName[ portuguese_brazilian ] = "InsertFieldCode";
     SlotName[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎγ®οΎ€οΎο½²ο½±οΎ›ο½ΈοΎ";
@@ -3412,7 +3412,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ dutch ] = "Veldopdracht invoegen";
     SlotName[ chinese_simplified ] = "ε­—ζ®µζ‡δ»¤ε―Ήθ―ζ΅†";
     SlotName[ greek ] = "Εισαγωγή εντολής πεδίου";
-    SlotName[ korean ] = "ν•„λ“ μ‚½μ…";
+    SlotName[ korean ] = "ν•„λ“ λª…λ Ήμ–΄ λ€ν™”μƒμ";
     SlotName[ turkish ] = "Alan φπesi ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cσdigo de campo";
@@ -8428,7 +8428,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ spanish ] = "Anclar como carαcter";
     SlotName[ italian ] = "Ancora come carattere";
     SlotName[ danish ] = "Forankring til tegnet";
-    SlotName[ swedish ] = "Fφrankra vid tecknet";
+    SlotName[ swedish ] = "Fφrankra som tecken";
     SlotName[ polish ] = "Zakotwicz przy znaku";
     SlotName[ portuguese_brazilian ] = "Anchor at Character";
     SlotName[ japanese ] = "ζ–‡ε­—γ¨γ—γ¦ο½±οΎο½¶ο½°γ™γ‚‹";
@@ -8438,7 +8438,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ dutch ] = "Aan teken verankeren";
     SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
     SlotName[ greek ] = "Αγκύρωση στον χαρακτήρα";
-    SlotName[ korean ] = "λ¬Έμμ— μ„μΉκ³ μ •";
+    SlotName[ korean ] = "λ¬Έμλ΅ μ„μΉ κ³ μ •";
     SlotName[ turkish ] = "Karaktere sabitle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al carαcter";
@@ -9393,7 +9393,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ russian ] = "Βρςΰβθςό ύλεμενς ροθρκΰ λθςεπΰςσπϋ";
     SlotName[ greek ] = "Εισαγωγή καταχώρισης βιβλιογραφίας";
     SlotName[ dutch ] = "Item voor literatuurlijst invoegen";
-    SlotName[ french ] = "Insιrer une entrιe de bibliographie";
+    SlotName[ french ] = "Insertion d'une entrιe de bibliographie";
     SlotName[ spanish ] = "Insertar entrada de bibliografνa";
     SlotName[ italian ] = "Inserisci voce bibliografica";
     SlotName[ danish ] = "Indsζt litteraturlisteelement";
@@ -9489,6 +9489,7 @@ SfxSlotInfo FN_EDIT_HYPERLINK
     SlotName[ catalan ] = "Editar hiperenlace";
     SlotName[ finnish ] = "Muokkaa hyperlinkkiδ";
 };
+
 
 
 
