@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-03 09:04:51 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:19:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ dummy:
     @echo GTK disabled - nothing to build
 
 .ELSE           # "$(ENABLE_GTK)"==""
-.IF "$(OS)"=="LINUX"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 INC+= -DNP_LINUX
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
@@ -99,8 +99,10 @@ SHL1OBJS=	$(SLO)$/npshell.obj \
 .IF "$(GUI)"=="UNX"
 SHL1OBJS+=$(SLO)$/npunix.obj
 SLOFILES+=$(SLO)$/npunix.obj
+.IF "$(OS)"!="FREEBSD"
 SHL1STDLIBS+= -ldl -lnsl
-.ENDIF
+.ENDIF #FREEBSD
+.ENDIF #UNX
 .IF "$(GUI)"=="WNT"
 SHL1OBJS+=$(SLO)$/npwin.obj
 SLOFILES+=$(SLO)$/npwin.obj
@@ -131,7 +133,7 @@ APP1STDLIBS=\
 
 .IF "$(GUI)"=="UNX"
 APP1STDLIBS+=$(PKGCONFIG_LIBS:s/-lpangoxft-1.0//)
-.IF "$(OS)"=="LINUX"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 .ELSE
 APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
 .ENDIF
