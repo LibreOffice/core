@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:43:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1304,30 +1304,40 @@ const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
     return 0;
 }
 
-const SwFrm *lcl_FindFirstInvaFly( const SwPageFrm *pPage, long nBottom )
+// --> OD 2005-02-21 #i37877# - consider drawing objects
+const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
+                                              long _nBottom )
 {
-    ASSERT( pPage->GetSortedObjs(), "FindFirstInvaFly, no Flys" )
+    ASSERT( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" )
 
-    for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
+    for ( USHORT i = 0; i < _pPage->GetSortedObjs()->Count(); ++i )
     {
-        const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+        const SwAnchoredObject* pObj = (*_pPage->GetSortedObjs())[i];
         if ( pObj->ISA(SwFlyFrm) )
         {
             const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
-            if ( pFly->Frm().Top() <= nBottom )
+            if ( pFly->Frm().Top() <= _nBottom )
             {
                 if ( pFly->IsInvalid() || pFly->IsCompletePaint() )
                     return pFly;
 
-                const SwFrm *pTmp;
-                if ( 0 != (pTmp = lcl_FindFirstInvaCntnt( pFly, nBottom, 0 )) &&
-                     pTmp->Frm().Top() <= nBottom )
-                    return pTmp;
+                const SwFrm* pTmp;
+                if ( 0 != (pTmp = lcl_FindFirstInvaCntnt( pFly, _nBottom, 0 )) &&
+                     pTmp->Frm().Top() <= _nBottom )
+                    return pFly;
+            }
+        }
+        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        {
+            if ( !static_cast<const SwAnchoredDrawObject*>(pObj)->IsValidPos() )
+            {
+                return pObj;
             }
         }
     }
     return 0;
 }
+// <--
 
 BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
@@ -1500,14 +1510,15 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
     if ( !bRet && bBrowse )
     {
         const long nBottom = rVis.Bottom();
-        const SwFrm *pFrm;
+        const SwAnchoredObject* pObj( 0L );
         if ( prPage->GetSortedObjs() &&
              (prPage->IsInvalidFlyLayout() || prPage->IsInvalidFlyCntnt()) &&
-             0 != (pFrm = lcl_FindFirstInvaFly( prPage, nBottom )) &&
-             pFrm->Frm().Top() <= nBottom )
+             0 != (pObj = lcl_FindFirstInvaObj( prPage, nBottom )) &&
+             pObj->GetObjRect().Top() <= nBottom )
         {
             return FALSE;
         }
+        const SwFrm* pFrm( 0L );
         if ( prPage->IsInvalidLayout() &&
              0 != (pFrm = lcl_FindFirstInvaLay( prPage, nBottom )) &&
              pFrm->Frm().Top() <= nBottom )
@@ -2303,7 +2314,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                     if ( !pTmp )
                     {
                         if ( (!(IS_FLYS && IS_INVAFLY) ||
-                              !lcl_FindFirstInvaFly( pPage, nBottom )) &&
+                              !lcl_FindFirstInvaObj( pPage, nBottom )) &&
                               (!pPage->IsInvalidLayout() ||
                                !lcl_FindFirstInvaLay( pPage, nBottom )))
                             SetBrowseActionStop( TRUE );
@@ -2350,7 +2361,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                 if ( !pTmp )
                 {
                     if ( (!(IS_FLYS && IS_INVAFLY) ||
-                            !lcl_FindFirstInvaFly( pPage, nBottom )) &&
+                            !lcl_FindFirstInvaObj( pPage, nBottom )) &&
                             (!pPage->IsInvalidLayout() ||
                             !lcl_FindFirstInvaLay( pPage, nBottom )))
                         SetBrowseActionStop( TRUE );
