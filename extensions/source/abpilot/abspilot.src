@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-27 10:25:51 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 06:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die neue Datenquelle einzurichten, sind noch weiter gehende Angaben notwendig.\n\n"
-            "Dafür wird, sobald Sie die unten befindlichen Schaltfläche betätigen, ein weiterer Dialog geöffnet. "
+        Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
+            "Dafür wird, sobald Sie die unten befindliche Schaltfläche betätigen, ein weiterer Dialog geöffnet. "
             "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
             "For this, another dialog will be opened, as soon as you press the button below. "
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/08/27 10:25:51  nf
+ *  Fixes for merge #87134#
+ *
  *  Revision 1.10  2001/08/24 10:53:00  rt
  *  Merge SRC638: 24.08.01 - 12:52:46
  *
