@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SetUpdate.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_SetUpdate_idl__
+#define __com_sun_star_configuration_SetUpdate_idl__
+
+#ifndef __com_sun_star_configuration_SetAccess_idl__
+#include <com/sun/star/configuration/SetAccess.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_SimpleSetUpdate_idl__
+#include <com/sun/star/configuration/SimpleSetUpdate.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides write access to a dynamic homogeneous set of values or nested
+ trees within a (by name) hierarchy.
+
+ <p>Allows adding and removing elements.
+ Helps creating new elements to be added.
+ </p>
+
+ <p>This service extends <type>SetAccess</type> to support
+ modifying the container.
+ </p>
+
+ <p>Any child and descendant objects shall again support modifying access,
+ unless they represent a read-only tree element (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>).
+ </p>
+*/
+service SetUpdate
+{
+/** is the basic service providing (read) access to a <em>set</em> within the
+ hierarchy.
+*/
+    service SetAccess;
+
+/** is the basic service providing modifying access to a
+ (not necessarily hierarchical) <em>set</em>.
+
+ <p>Changes can be observed by registering a listener with interface
+ <type scope="com::sun::star::container">XContainer</type>.
+ </p>
+
+ <p>If the elements of this set are of object type,new elements are constructed
+ to match the tree structure prescribed by the element template of this set, when
+ using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ and (if supported) <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
+ </p>
+
+ <p>Objects that are removed from a set can be reinserted into any set supporting
+ the same template within the same hierarchy (even under a different name).
+ </p>
+
+ <p>Implementations that support insertion of objects that weren't obtained
+ from within the hierarchy must reject elements that don't have the correct
+ structure as described by the template, even if the object returns the
+ correct template name from <member>XTemplateInstance::getTemplateName</member>.
+ </p>
+
+ <p>Other ways in which an element may be moved among or within compatible sets
+ include <member scope="com::sun::star::container">XChild::setParent</member>
+ and <member scope="com::sun::star::container">XNamed::setName</member>, if
+ the element implements them.
+ </p>
+
+ @see com::sun::star::configuration::SetElement
+*/
+    service SimpleSetUpdate;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

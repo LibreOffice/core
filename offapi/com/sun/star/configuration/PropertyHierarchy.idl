@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PropertyHierarchy.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_PropertyHierarchy_idl__
+#define __com_sun_star_configuration_PropertyHierarchy_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XHierarchicalPropertySet_idl__
+#include <com/sun/star/beans/XHierarchicalPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiHierarchicalPropertySet_idl__
+#include <com/sun/star/beans/XMultiHierarchicalPropertySet.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides access to and information about properties and subproperties
+ of an implementation.
+
+ <p>Properties in a property set may be full-fledged objects that have
+ properties themselves (and so on recursively), thereby forming a hierarchy
+ of properties. This service describes such a hierarchy, and allows
+ direct access even to subproperties.
+ </p>
+
+ <p>Properties of an implementation that are objects themselves will often
+ implement <type scope="com::sun::star::beans">XProperty</type> to allow
+ direct access to information about the object.
+ If such properties have properties of their own, they should fully implement
+ <type>PropertyHierarchy</type> (this service) again.
+ </p>
+*/
+service PropertyHierarchy
+{
+/** provides access to and information about the (immediate) properties
+ of an implementation.
+*/
+    interface com::sun::star::beans::XPropertySet;
+
+/** provides access to and information about the (immediate) properties
+ of an implementation.
+
+ <p>This interface allows retrieving or setting multiple properties at once.
+ Accesses are guaranteed to occur as single atomic operations even if
+ multiple threads are accessing the object simultaneously.
+ </p>
+*/
+    interface com::sun::star::beans::XMultiPropertySet;
+
+/** provides access to and information about the whole hierarchy
+ of properties and subproperties of an implementation.
+*/
+    interface com::sun::star::beans::XHierarchicalPropertySet;
+
+/** provides access to and information about the whole hierarchy
+ of properties and subproperties of an implementation.
+
+ <p>This interface allows retrieving or setting multiple properties at once.
+ Accesses are guaranteed to occur as single atomic operations even if
+ multiple threads are accessing the object simultaneously.
+ </p>
+*/
+    interface com::sun::star::beans::XMultiHierarchicalPropertySet;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,220 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SetElement.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_SetElement_idl__
+#define __com_sun_star_configuration_SetElement_idl__
+
+#ifndef __com_sun_star_configuration_HierarchyElement_idl__
+#include <com/sun/star/configuration/HierarchyElement.idl>
+#endif
+
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_XTemplateInstance_idl__
+#include <com/sun/star/configuration/XTemplateInstance.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides information about a dynamic element that can be inserted into a
+ homogeneous set of elements within a (by name) hierarchy.
+
+ <p>Provides information about the element.
+ Provides access to its containing 'set' object.
+ Allows controlling the lifetime of the element.
+ </p>
+
+ <p>Set elements may be added to and removed from the hierarchy at runtime.
+ They bear user-defined names. They may exist independently, outside any
+ container.
+ </p>
+
+ <p>New set element instances generally are created through members of
+ <type scope="com::sun::star::lang">XSingleServiceFactory</type> or
+ (if supported) <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>. Initially they are not
+ contained in a 'set' object, and have no (meaningful) name.
+ </p>
+
+ <p>While an instance is not contained in a 'set' object, it is owned by
+ the client and can be disposed by calling
+ <member scope="com::sun::star::lang">XComponent::dispose</member>. The name
+ of the object can freely be changed in that situation (though without
+ persistent effect).
+ </p>
+
+ <p>When the instance is inserted into a set (which includes replacing an
+ existing element), ownership is transferred to the container.
+ While it is contained in the container, clients must not dispose the
+ object. When inserted, the name of the object is fixed and is used to
+ identify it within the container. An implementation should support
+ <member scope="com::sun::star::container">XNamed::setName</member> even in
+ this case. If it does, changing the name has the same effect of removing
+ the object (under the old name) and then reinserting it into the same
+ container (using the new name).
+ </p>
+
+ <p>When an instance is removed from a set (which includes being replaced by
+ a new element), ownership is transferred to the client again. It can then be
+ disposed or reinserted into a container. An instance can only be inserted
+ into a container, if it was obtained from the same hierarchy.
+ </p>
+
+ <p>When a set element is removed from its set from outside the hierarchy, the
+ container disposes the object. This occurrence can be detected by registering
+ a <type scope="com::sun::star::lang">XEventListener</type> with the object.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ changing the name or parent is not supported (the object can't be removed from
+ its container anyway).
+ </p>
+
+ @see com::sun::star::configuration::SetAccess
+    Parent objects of this service generally implement service SetAccess.
+
+ @see com::sun::star::configuration::GroupElement
+    A complementary service, for elements of a static heterogeneous collection.
+
+ @see com::sun::star::configuration::AccessRootElement
+    A complementary service, for the root element of a hierarchy.
+
+*/
+service SetElement
+{
+/** is the basic service for accessing information about an element in the
+ hierarchy.
+*/
+    service HierarchyElement;
+
+/** provides access to the containing 'set' object.
+
+ <p>In this service this interface is mandatory</p>
+
+ <p><member scope="com::sun::star::container">XChild::getParent</member>
+ returns <NULL/>, if the object is currently not contained in a container.
+ </p>
+
+ <p>An implementation may also support
+ <member scope="com::sun::star::container">XChild::setParent</member>.
+ If it does, changing the parent has the effect of first removing the object
+ from its old parent (if any) and then inserting it into the new parent
+ (unless that is <NULL/>) under the same name. The new parent must be part of
+ the same hierarchy as the old one. The name of the object must have been set
+ before.
+ </p>
+*/
+    interface com::sun::star::container::XChild;
+
+/** allows controlling or observing the lifetime of the object.
+
+ <p>Clients may dispose the object (using
+ <member scope="com::sun::star::lang">XComponent::dispose</member>, only if
+ the object is currently not contained in a container (
+ <member scope="com::sun::star::container">XChild::getParent</member>
+ returns <NULL/>).
+ </p>
+
+ <p>Clients may register a <type scope="com::sun::star::lang">XEventListener</type>
+ to be notified, if the object is removed from its container by an outside source.
+ </p>
+*/
+    interface com::sun::star::lang::XComponent;
+
+/** provides information about the type of the element.
+
+ <p>Set elements have a predetermined structure (their <em>type</em>),
+ that is described by and can be generated from a <em>Template</em>.
+ </p>
+
+ <p>If the object was created using interface
+ <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>, this interface describes the
+ same template as interface <type>XTemplateContainer</type> on that
+ <type>SetUpdate</type>.
+ </p>
+ <p>If the object was created using interface
+ <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>, this interface describes the
+ template whose name was used as a service identifier for the factory method.
+ </p>
+ <p>Otherwise the semantics of the information provided about the template depends on the
+ implementation.
+ </p>
+
+ @ see com::sun::star::configuration::XTemplateContainer
+*/
+    interface com::sun::star::configuration::XTemplateInstance;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

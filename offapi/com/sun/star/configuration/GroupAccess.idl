@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ *  $RCSfile: GroupAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_GroupAccess_idl__
+#define __com_sun_star_configuration_GroupAccess_idl__
+
+#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
+#include <com/sun/star/configuration/HierarchyAccess.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_PropertyHierarchy_idl__
+#include <com/sun/star/configuration/PropertyHierarchy.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyState_idl__
+#include <com/sun/star/beans/XPropertyState.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
+#include <com/sun/star/beans/XMultiPropertyState.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides access to a predefined heterogeneous group of values and nested
+ trees as part of a (by name) hierarchy.
+
+ <p>Provides access to and information about its children and descendants
+ viewed either as properties or as contained elements.
+ </p>
+
+ <p><em>Groups</em> are static collections within the hierarchy.</p>
+
+ <p>The number and names of contained elements are fixed in advance,
+ and each child may have a different type.
+ </p>
+
+ <p>This service subsumes two alternate ways of accessing child and descendent
+ elements. These strongly overlap, supporting the basic identity
+ <code>xGroup.getPropertyValue( aName ) == xGroup.getByName( aName )</code>.
+ </p>
+
+ @see com::sun::star::configuration::GroupElement
+    Child objects of this service generally implement service GroupElement.
+
+ @see com::sun::star::configuration::SetAccess
+    A complementary service, providing for dynamic homogeneous sets of elements.
+
+*/
+service GroupAccess
+{
+/** is the basic service for accessing child and descendent nodes using
+ a view of the tree as a container of values and structuring elements.
+*/
+    service HierarchyAccess;
+
+/** is the basic service for accessing child and descendent nodes using
+ a view of the tree as a hierarchy of properties and subproperties.
+
+ <p>This view is meaningful only for a static fragment of the hierarchy
+ ( objects' properties may change, but not which properties they have ).
+ Therefore dynamic elements of the hierarchy (see <type>SetAccess</type>)
+ do not implement service <type>PropertyHierarchy</type>.
+ </p>
+
+ <p>If such elements occur as (sub)properties of an implementation,
+ it is not specified whether direct subproperty access using
+ <type scope="com::sun::star::beans">XHierarchicalPropertySet</type> or
+ <type scope="com::sun::star::beans">XMultiHierarchicalPropertySet</type> can
+ be used to access descendants of such such elements.
+ </p>
+
+ <p>Similarly, information about such descendants may not be available from
+ the <type scope="com::sun::star::beans">XHierarchicalPropertySetInfo</type>
+ the implementation provides.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ all properties and subproperties will be reported as having attribute
+ <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const> set,
+ and attempts to change property values will fail.
+ </p>
+*/
+    service PropertyHierarchy;
+
+/** provides access to the state of child elements of an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values.
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertyState;
+
+/** provides access to the states of multiple child elements of
+ an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values,
+ or if the implementation does not support recursive defaults (see below).
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XMultiPropertyState;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

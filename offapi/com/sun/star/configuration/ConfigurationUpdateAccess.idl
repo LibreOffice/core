@@ -2,9 +2,13 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:05 $
+<<<<<<< ConfigurationUpdateAccess.idl
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+=======
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+>>>>>>> 1.4
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,49 +69,110 @@
 #include <com/sun/star/configuration/ConfigurationAccess.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNameReplace_idl__
-#include <com/sun/star/container/XNameReplace.idl>
+#ifndef __com_sun_star_configuration_SetUpdate_idl__
+#include <com/sun/star/configuration/SetUpdate.idl>
 #endif
 
-#ifndef __com_sun_star_util_XChangesBatch_idl__
-#include <com/sun/star/util/XChangesBatch.idl>
+#ifndef __com_sun_star_configuration_GroupUpdate_idl__
+#include <com/sun/star/configuration/GroupUpdate.idl>
 #endif
 
+#ifndef __com_sun_star_configuration_UpdateRootElement_idl__
+#include <com/sun/star/configuration/UpdateRootElement.idl>
+#endif
 
 //=============================================================================
 
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides write access to a subtree of the configuration hierarchy.
- Changes to values in the subtree will not become effective unless they are committed using
- <member>XChangesBatch::commitChanges()</member>..
+/** provides modifying access to a fragment of the configuration hierarchy.
 
-    @guarantees:<B>
-    -thread safe
+ <p>Extends <type>ConfigurationAccess</type> to support modifying values
+ or inserting and removing elements.
+ </p>
 
-    @author Joerg Barfurth
-    @version 1.0 2000/06/01
+ <p>Descendants of this service also implement this service
+ (and so on recursively), unless they are marked <em>read-only</em> in the
+ schema (which is indicated by attribute
+ <const scope="com::sun::star::beans>PropertyAttribute::READONLY</const>),
+ in which case they only need implement <type>ConfigurationAccess</type>.
+ </p>
+
+ <p>The classification of implementations that is described for
+ <type>ConfigurationAccess</type> applies to implementations of this service
+ as well. Therefore an implementation will support one of several alternate
+ services describing its <em>Container</em> role and one of several alternate
+ services describing its <em>Element</em> role. These services are
+ extensions of the respective services documented for <type>ConfigurationAccess</type>.
+ </p>
+ <ul>
+    <li><em>Container</em> role:
+        A <em>group</em> permits changing child values.
+        A <em>set</em> permits inserting and removing contained elements.
+    </li>
+    <li><em>Element</em> role:
+        The root element of a modifiable tree provides extended functionality
+        to control processing of changes for the entire tree (fragment) by
+        supporting <type scope="com::sun::star::util>XChangesBatch</type>.
+        For elements of a <em>set</em> or a <em>group</em> no additinal
+        interfaces are supported.
+    </li>
+ </ul>
+
+ @see ConfigurationProvider
+    Root instances of this service can be requested from a
+    <type>ConfigurationProvider</type>
 */
 service ConfigurationUpdateAccess
 {
-/** is extended by this service to allow write access.
- The property set interfaces that were optional in the base service are
- mandatory in this service.
-*/
+    /** is the basic service providing (read) access to an element of the
+     configuration hierarchy and its child and descendent elements.
+
+     <p>The <type>HierarchyAccess</type> specialization implemented will be
+     further specialized to support modifying access.
+     Implementations shall therefore implement one of <type>SetUpdate</type> or
+     <type>GroupUpdate</type> depending on the <em>Container</em> role.
+     </p>
+
+     <p>If the <type>HierarchyElement</type> specialization that is implemented
+     is <type>AccessRootElement</type>, the implementation must support the
+     extended functionality of <type>UpdateRootElement</type>. Otherwise there
+     are no new requirements mandated by the <em>Element</em> role.
+     </p>
+
+    */
     service ConfigurationAccess;
 
-/** allows changing child values of this node.
-*/
-    interface com::sun::star::container::XNameReplace;
+    /** specializes <type>SetAccess</type> to support modifying the element.
 
-/** allows committing changes done on this node or nodes obtained from it.
- This interface is optional and will be present if, and only if, this is the
- root node of the update (as initially obtained from a <type>ConfigurationProvider</type>).
- Otherwise <member>XChild::getParent()</member> can be used to navigate to the root
- of the update to commit any changes.
-*/
-    [optional] interface com::sun::star::util::XChangesBatch;
+     <p>Implemented, if this element is a <em>Set</em>.
+     <BR/>[Alternatively to <type>GroupUpdate</type>]
+     </p>
+    */
+    [optional] service SetUpdate;
+
+    /** specializes <type>GroupAccess</type> to support modifying contained
+     data.
+
+     <p>Implemented, if this element is a <em>Group</em>.
+     <BR/>[Alternatively to <type>SetUpdate</type>]
+     </p>
+    */
+    [optional] service GroupUpdate;
+
+    /** specializes <type>AccessRootElement</type>, to support transaction-like
+     control over a batch of changes accumulated within the tree (fragment).
+
+     <p>Implemented, if this element is the <em>Root</em> of the whole hierarchy.
+     <BR/>[Alternatively to <type>SetElement</type> or <type>GroupElement</type>]
+     </p>
+
+     @see ConfigurationProvider
+        Instances obtained from a <type>ConfigurationProvider</type> will
+        implement this version of <type>HierarchyElement</type>.
+    */
+    [optional] service UpdateRootElement;
 };
 
 //=============================================================================

@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ *  $RCSfile: HierarchyElement.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_HierarchyElement_idl__
+#define __com_sun_star_configuration_HierarchyElement_idl__
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_container_XHierarchicalName_idl__
+#include <com/sun/star/container/XHierarchicalName.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XProperty_idl__
+#include <com/sun/star/beans/XProperty.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyWithState_idl__
+#include <com/sun/star/beans/XPropertyWithState.idl>
+#endif
+
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides information about an element within a (by name) hierarchy.
+
+ <p>The local name and the full hierarchical name can be retrieved.
+ Attributes detailing the role of the element can be queried.
+ The state of the element (regarding defaults) can be accessed.
+ </p>
+
+ <p>Implementations of this service usually also implement
+ service <type>HierarchyAccess</type>, which concerns the complementary role
+ of providing access to subelements of the Hierarchy.
+ </p>
+*/
+service HierarchyElement
+{
+/** provides the complete hierarchical name of this element
+ within the hierarchy tree.
+*/
+    interface com::sun::star::container::XHierarchicalName;
+
+/** provides the (local) name of this element within its parent.
+
+ <p><em>Renaming an element is generally not supported.</em></p>
+*/
+    interface com::sun::star::container::XNamed;
+
+/** provides a property descriptor for this element.[optional]
+
+ <p>This interface may be missing, if the hierarchy supports no traits that are
+ described by <type.scope="com::sun::star::beans">PropertyAttribute</type>
+ values.
+ </p>
+
+ <p>If the parent of this object implements
+ <type scope="com::sun::star::beans">XPropertySetInfo</type> then this returns
+ the same <type scope="com::sun::star::beans">Property</type> as the
+ <type scope="com::sun::star::beans">XPropertySetInfo</type> of the parent.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XProperty;
+
+/** provides access to the (default) state of this element. [optional]
+
+ <p>This interface may be missing, if the hierarchy supports access to
+ a default state and values only for simple values (or not at all)
+ </p>
+
+ <p>If the parent of this object implements
+ <type scope="com::sun::star::beans">XPropertyState</type> then members
+ of this interface have the same effect as corresponding members of the parent.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertyWithState;
+
+/** provides access to the parent of this element [optional].
+
+ <p>This interface may be missing, if this object is not obtained
+ as child or descendant of another tree node
+ (e.g. directly from a factory or provider).
+ </p>
+
+ <p><member scope="com::sun::star::container">XChild::getParent</member>
+ returns NULL, if this object is (currently) not contained in another node.
+ </p>
+
+ <p><em>Setting a different parent is generally not supported.</em></p>
+*/
+    [optional] interface com::sun::star::container::XChild;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:24 $
+ *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,28 +65,193 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** is a one instance service serving as entry point to the configuration.
- Only entire subtrees matching the structure prescribed for elements of this node
- can be added (or removed).
+/** manages one (or more) complete set(s) of configuration data and serves as a
+ factory for objects that provide access to a subset of the configuration.
 
-    @guarantees:<B>
-
-    @author Joerg Barfurth
-    @version 1.0 2000/06/01
+ <p>An implementation is usually obtained from a (global)
+ <type scope="com::sun::star::lang">ServiceManager</type>. The default
+ <code>"com.sun.star.configuration.ConfigurationProvider"</code> object, that is
+ instantiated without using no extra arguments, is a one instance service.
+ </p>
 */
 service ConfigurationProvider
 {
-/** allows creating access objects for specific subtrees.
- The <param>aServiceSpecifier</param> passed to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
- and the arguments to be passed to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
- will be specified shortly.
+/** allows creating access objects for specific views (aka subsets,fragments)
+ of the configuration.
+.
+ <p>The parameter <var>aServiceSpecifier</var> passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ supports at least the service specifiers
+ <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
+ <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
+ </p>
+
+ <p>Using the first of these requests a read-only view of the configuration.
+ The object that is created implements service <type>ConfigurationAccess</type>.
+ To reflect its <em>element role</em> as root of the view, it implements
+ service <type>AccessRootElement</type>.
+ </p>
+
+ <p>Using the second form requests an updatable view of the configuration.
+ The object that is created should implement service
+ <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ which here includes controlling updates for the whole view, it implements
+ service <type>UpdateRootElement</type>.
+ <BR/>If the root element of the view is marked read-only (as indicated
+ by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
+ the implementation may either raise an exception or return a (read-only)
+ <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ </p>
+
+ <p>The arguments passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ in parameter <var>aArguments</var> specify the view of the configuration that
+ should be created. That is, they determine the subset of elements that can be
+ accessed starting from the returned object. Each element of the argument
+ sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>,
+ so that the parameters can be identified by name (rather than by position).
+ </p>
+
+ <p>What combinations of arguments are supported depends on the service name.
+ </p>
+
+ <p>With both of the standard service-specifiers above, an implementation must
+ accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
+ This argument must contain the (absolute) path to an element of the
+ configuration. The view that is selected consists of the named element and
+ all its decendants.
+ </p>
+
+ <p>Other arguments can be used to control the behavior of the view. These
+ are different for different implementations. Whether and how they are used
+ may also depend on the configuration store and configuration that were
+ selected when the provider was created.
+ </p>
+
+ <p>An implementation must ignore unknown arguments.</p>
+
+ <p>Some parameters that are commonly supported are:</p>
+
+ <ul>
+    <li>
+       <strong>Selecting data into a view:</strong>
+       <dl>
+         <dd><code>"nodepath"</code> : <atom>string</atom></dd>
+         <dt>specifies the location of the view root in the configuration.</dt>
+         <dd><code>"depth"</code> : <atom>short</atom></dd>
+         <dt>specifies that elements of the hierarchy that are more than the given
+          number of nesting levels away from the root need not be included in the
+          view.
+         </dt>
+         <dd><code>"locale"</code> : <type scope="com::sun::star::lang">Locale</type></dd>
+         <dt>specifies the locale for which localized values should be
+          retrieved.
+         </dt>
+       </dl>
+       <p><strong>Example:<strong> In the hierarchy
+<BR/><pre>
+ A - B1 - C1
+   |
+   - B2 - C2 (localized: de, en, fr, ..)
+   |    |
+   |    - C3 - D1
+   |    |    |
+   |    |    - D2 - E1
+   |    |
+   |    - C4 - D3 - E2 - F1
+   |    |              |
+   |    |              - F2
+   |    |
+   |    - C5
+   |
+   - B3
+   |
+   - B4 - C6 - D4 - E3
+
+</pre>
+         <BR/>selecting a view with <code>nodepath = "/A/B2"</code>,
+         <code>depth = 2</code> and <code>locale = &lt;Locale for en_US&gt;</code>
+         would result in the tree fragment
+<BR/><pre>
+(A-) B2 - C2 (en)
+        |
+        - C3 - D1
+        |    |
+        |    - D2 (..)
+        |
+        - C4 - D3 (..)
+        |
+        - C5
+
+</pre>
+       </p>
+    </li>
+
+    <li>
+       <strong>Controlling cache behavior:</strong> (with providers that
+        cache configuration data)
+       <dl>
+         <dd><code>"lazywrite"</code> : <atom>boolean</atom></dd>
+         <dt>controls how updates are handled in the cache. If <TRUE/>, the
+          cache may operate in <em>write-back</em> mode, where updates at
+          first only affect the cache and are written to persistent storage
+          at some later time. If <FALSE/>, the cache must operate in
+          <em>write-through</em> mode, where updates are written to persistent
+          storage at once - that is before
+          <member scope="com::sun::star::util>XChangesBatch::commitChanges</member>
+          returns.
+         </dt>
+
+         <dd><code>"nocache"</code> : <atom>boolean</atom></dd>
+         <dt>specifies that data for the view is not taken from the cache, but
+          read directly from storage. This may entail that future changes that
+          become visible in the cache are not reflected in this view and that
+          changes done through this view are not reflected in the cache.
+          <BR/><strong>Use with caution !</strong>
+         </dt>
+       </dl>
+    </li>
+ </ul>
+
+ <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ may be unusable. Only if an implementation supports service names that can be
+ used with no further arguments, it should support this method, returning the
+ same result as if
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ had been called using an empty sequence of arguments.
+ </p>
+
 */
     interface com::sun::star::lang::XMultiServiceFactory;
+
+
+/** allows controlling or observing the lifetime of the configuration.
+
+ <p>The owner of the provider may dispose this object
+ (using <member scope="com::sun::star::lang">XComponent::dispose</member>).
+ Note that the default provider is owned by the
+ <type scope="com::sun::star::lang">ServiceManager</type> and should not be
+ disposed by user code.
+ </p>
+
+ <p>Views created by the provider generally refer to data that is managed by
+  the provider. Therefore disposing the provider will cause all objects
+  belonging to these views to be disposed as well. This does not apply to
+  <em>snapshot</em> views that have their own copy of the data - if they are
+  available.
+ </p>
+
+*/
+    interface com::sun::star::lang::XComponent;
 
 };
 
