@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:15:49 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2122,7 +2122,7 @@ String SCSTR_PASSWORD
     Text [ dutch ] = "Wachtwoord:" ;
     Text [ spanish ] = "Contraseña:" ;
     Text [ english_us ] = "Password:" ;
-    Text[ chinese_simplified ] = "¿ÚÁî£º";
+    Text[ chinese_simplified ] = "ÃÜÂë£º";
     Text[ russian ] = "Ïàğîëü:";
     Text[ polish ] = "Has³o:";
     Text[ japanese ] = "Êß½Ü°ÄŞ:";
@@ -2148,7 +2148,7 @@ String SCSTR_PASSWORDOPT
     Text [ dutch ] = "Wachtwoord (optioneel):" ;
     Text [ spanish ] = "Contraseña (opcional):" ;
     Text [ english_us ] = "Password (optional):" ;
-    Text[ chinese_simplified ] = "¿ÚÁî(¿ÉÊ¡ÂÔ)£º";
+    Text[ chinese_simplified ] = "ÃÜÂë(¿ÉÊ¡ÂÔ)£º";
     Text[ russian ] = "Ïàğîëü (íå îáÿçàòåëüíî):";
     Text[ polish ] = "Has³o (opcjonalne):";
     Text[ japanese ] = "Êß½Ü°ÄŞ(µÌß¼®İ):";
@@ -2175,7 +2175,7 @@ String SCSTR_WRONGPASSWORD
     Text [ dutch ] = "Dit wachtwoord is niet correct." ;
     Text [ spanish ] = "Contraseña incorrecta" ;
     Text [ english_us ] = "Incorrect Password" ;
-    Text[ chinese_simplified ] = "¿ÚÁîÎŞĞ§";
+    Text[ chinese_simplified ] = "ÃÜÂëÎŞĞ§";
     Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
     Text[ polish ] = "Niepoprawne has³o";
     Text[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ";
