@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:10:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ public:
         SEL_BEZ       = 0x0800, // Bezierobjekte editieren
         SEL_DRW_FORM  = 0x1000, // Zeichenobjekte: DB-Forms
         FOC_FRM_CTRL  = 0x2000, // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
-        SEL_MEDIA     = 0x4000  // Media object
+        SEL_MEDIA     = 0x4000, // Media object
+        SEL_EXTRUDED_CUSTOMSHAPE = 0x8000, // extruded custom shape
+        SEL_FONTWORK  = 0x10000 // fontwork
     };
     int     GetSelectionType() const;
 
