@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:45:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,81 +654,72 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
     INT16  nType = NUMBERFORMAT_DEFINED;
     ULONG  nKey = 0;
 
-    rParams.EraseAllChars('\'');
+    SwapQuotesInField(rParams);
 
     //#102782#, #102815# & #108341# have to work at the same time :-)
+    rbForceJapanese = false;
     bool bForceNatNum(false);
-    static const char aJapaneseNatNum[] =
+    xub_StrLen nLen = rParams.Len();
+    xub_StrLen nI = 0;
+    while (nI < nLen)
     {
-        'O', 'o'
-    };
-
-    for (size_t i = 0; i < sizeof(aJapaneseNatNum); ++i)
-    {
-        if (STRING_NOTFOUND != rParams.Search(aJapaneseNatNum[i]))
+        if (rParams.GetChar(nI) == '\\')
+            nI+=2;
+        else if (rParams.GetChar(nI) == '\"')
         {
-            bForceNatNum = true;
-            break;
+            ++nI;
+            //While not at the end and not at an unescaped end quote
+            while ((nI < nLen) && (!(rParams.GetChar(nI) == '\"') && (rParams.GetChar(nI-1) != '\\')))
+                ++nI;
         }
-    }
-
-    xub_StrLen nPos = 0;
-    while(1)
-    {
-        nPos = rParams.Search('A', nPos);
-        if (nPos == STRING_NOTFOUND)
-            break;
-        if (IsNotAM(rParams, nPos))
+        else //normal unquoted section
         {
-            rParams.SetChar(nPos, 'D');
-            bForceNatNum = true;
+            sal_Unicode nChar = rParams.GetChar(nI);
+            if (nChar == 'O')
+            {
+                rParams.SetChar(nI, 'M');
+                bForceNatNum = true;
+            }
+            else if (nChar == 'o')
+            {
+                rParams.SetChar(nI, 'm');
+                bForceNatNum = true;
+            }
+            else if ((nChar == 'A') && IsNotAM(rParams, nI))
+            {
+                rParams.SetChar(nI, 'D');
+                bForceNatNum = true;
+            }
+            else if ((nChar == 'g') || (nChar == 'G'))
+                rbForceJapanese = true;
+            else if ((nChar == 'a') && IsNotAM(rParams, nI))
+                rbForceJapanese = true;
+            else if (nChar == 'E')
+            {
+                if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'E'))
+                {
+                    rParams.Replace(nI, 2, CREATE_CONST_ASC("YYYY"));
+                    nLen+=2;
+                    nI+=3;
+                }
+                rbForceJapanese = true;
+            }
+            else if (nChar == 'e')
+            {
+                if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'e'))
+                {
+                    rParams.Replace(nI, 2, CREATE_CONST_ASC("yyyy"));
+                    nLen+=2;
+                    nI+=3;
+                }
+                rbForceJapanese = true;
+            }
+            ++nI;
         }
-        ++nPos;
-
     }
 
     if (bForceNatNum)
         rbForceJapanese = true;
-    else
-    {
-        rbForceJapanese = false;
-        static const char aJapaneseLang[] =
-        {
-            'E', 'e', 'g', 'G'
-        };
-
-        for (size_t i = 0; i < sizeof(aJapaneseLang); ++i)
-        {
-            if (STRING_NOTFOUND != rParams.Search(aJapaneseLang[i]))
-            {
-                rbForceJapanese = true;
-                break;
-            }
-        }
-
-        if (!rbForceJapanese)
-        {
-            xub_StrLen nPos = 0;
-            while(1)
-            {
-                nPos = rParams.Search('a', nPos);
-                if (nPos == STRING_NOTFOUND)
-                    break;
-                if (IsNotAM(rParams, nPos))
-                    rbForceJapanese = true;
-                ++nPos;
-            }
-        }
-    }
-
-    rParams.SearchAndReplaceAll(CREATE_CONST_ASC("EE"),
-        CREATE_CONST_ASC("YYYY"));
-
-    rParams.SearchAndReplaceAll('O', 'M');
-
-    rParams.SearchAndReplaceAll(CREATE_CONST_ASC("ee"),
-        CREATE_CONST_ASC("yyyy"));
-    rParams.SearchAndReplaceAll('o', 'm');
 
     if (bForceNatNum)
         rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
