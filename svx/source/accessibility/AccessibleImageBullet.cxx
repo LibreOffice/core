@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:38:01 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 16:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,6 @@ namespace accessibility
 
     sal_Int16 SAL_CALL  AccessibleImageBullet::getAccessibleRole() throw (uno::RuntimeException)
     {
-        // TODO
         return AccessibleRole::GRAPHIC;
     }
 

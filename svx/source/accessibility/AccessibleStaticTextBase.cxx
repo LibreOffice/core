@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 15:43:05 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 16:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleStaticTextBase::setCaretPosition( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        // TODO
+        setSelection(nIndex, nIndex);
     }
 
     sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)

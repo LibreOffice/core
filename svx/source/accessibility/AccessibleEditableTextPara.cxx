@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 15:43:04 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 16:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,6 @@ namespace accessibility
 
     sal_Int16 SAL_CALL AccessibleEditableTextPara::getAccessibleRole() throw (uno::RuntimeException)
     {
-        // TODO
         return AccessibleRole::PARAGRAPH;
     }
 
@@ -913,7 +912,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleEditableTextPara::setCaretPosition( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        // TODO
+        setSelection(nIndex, nIndex);
     }
 
     sal_Unicode SAL_CALL AccessibleEditableTextPara::getCharacter( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
