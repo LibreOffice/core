@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-29 16:02:05 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 09:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,24 +88,7 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
-        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto";
-        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Òåêñò";
-        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO;Êåßìåíï";
-        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
-        Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte";
-        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto";
-        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo";
-        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
-        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
-        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst";
-        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;Ã·½Ä";
-        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
-        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;ÎÄ×Ö";
-        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;¤å¦r";
-        Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text";
-        Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;äÕ";
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
     };
 };
 
@@ -179,6 +162,9 @@ String STR_OBJECT_ALREADY_EXSISTS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/01/29 16:02:05  nn
+ *  added DST_CALC
+ *
  *  Revision 1.9  2001/01/11 09:20:21  oj
  *  #81232# new string
  *
