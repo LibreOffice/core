@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:22:40 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
+#endif
+#ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#include "fmcontrollayout.hxx"
 #endif
 #ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
@@ -939,7 +942,7 @@ namespace
         if ( !( _rDynamicColorProp >>= bDoUse ) )
         {
             DocumentType eDocType = DocumentClassification::classifyHostDocument( _rxForm );
-            bDoUse = ( eDocType == eEnhancedForm ) || ( eDocType == eDatabaseForm );
+            return ControlLayouter::useDynamicBorderColor( eDocType );
         }
         return bDoUse;
     }
