@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeattributelayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:19:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,19 @@ namespace presentation
              */
             void setClip( const ::basegfx::B2DPolyPolygon& rNewClip );
 
+            /** Query whether the dim color attribute is valid
+
+                The dim color globally 'dims' the shape towards that
+                color
+             */
+            bool isDimColorValid() const;
+            /** Get the dim color for the whole shape.
+             */
+            RGBColor getDimColor() const;
+            /** Set the dim color globally for the whole shape.
+             */
+            void setDimColor( const RGBColor& nNewColor );
+
             /** Query whether the fill color attribute is valid
              */
             bool isFillColorValid() const;
@@ -547,6 +560,7 @@ namespace presentation
             ::com::sun::star::awt::FontSlant            meCharPosture;
             sal_Int16                                   mnUnderlineMode;
 
+            RGBColor                                    maDimColor;
             RGBColor                                    maFillColor;
             RGBColor                                    maLineColor;
             RGBColor                                    maCharColor;
@@ -578,6 +592,7 @@ namespace presentation
             bool                                        mbCharRotationAngleValid: 1;
             bool                                        mbCharScaleValid        : 1;
 
+            bool                                        mbDimColorValid         : 1;
             bool                                        mbFillColorValid        : 1;
             bool                                        mbLineColorValid        : 1;
             bool                                        mbCharColorValid        : 1;
