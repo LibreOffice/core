@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 12:02:42 $
+ *  last change:$Date: 2003-06-11 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,43 +119,44 @@ public class OfficeProvider implements AppProvider {
                                             ";urp;StarOffice.ServiceManager";
         debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
         XMultiServiceFactory msf = connectOffice(cncstr);
-        if (msf != null) {
-            return msf;
-        }
-        String exc = "";
-        boolean isExecutable = false;
-        boolean isAppKnown = cncstr.indexOf("host=localhost")>0;
-        isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
-        if (isAppKnown) {
-            if (debug)
-                System.out.println("Local Connection trying to start the Office");
-            String cmd = (String) param.get("AppExecutionCommand");
-            ProcessHandler ph = new ProcessHandler(cmd);
-            isExecutable = ph.executeAsynchronously();
-            if (isExecutable) {
-                param.put("AppProvider",ph);
-                OfficeWatcher ow = new OfficeWatcher(param);
-                param.put("Watcher",ow);
-                ow.start();
-                ow.ping();
+        if (msf == null) {
+            String exc = "";
+            boolean isExecutable = false;
+            boolean isAppKnown = cncstr.indexOf("host=localhost")>0;
+            isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
+            if (isAppKnown) {
+                if (debug)
+                    System.out.println("Local Connection trying to start the Office");
+                String cmd = (String)param.get("AppExecutionCommand");
+                ProcessHandler ph = new ProcessHandler(cmd);
+                isExecutable = ph.executeAsynchronously();
+                if (isExecutable) {
+                    param.put("AppProvider",ph);
+                    OfficeWatcher ow = new OfficeWatcher(param);
+                    param.put("Watcher",ow);
+                    ow.start();
+                    ow.ping();
+                }
+                int k=0;
+                while ((k<11) && (msf==null)) {
+                    try {
+                        Thread.sleep(k*1000);
+                        msf = connect(cncstr);
+                    } catch (com.sun.star.uno.Exception ue) {
+                        exc=ue.getMessage();
+                    } catch (java.lang.Exception je) {
+                        exc=je.getMessage();
+                    }
+                    k++;
+                }
+                if(msf==null) System.out.println(
+                                            "Exception while connecting.\n"+exc);
             }
-        } else {
-            return msf;
-        }
-        int k=0;
-        while ((k<11) && (msf==null)) {
-            try {
-                Thread.sleep(k*1000);
-                msf = connect(cncstr);
-            } catch (com.sun.star.uno.Exception ue) {
-                exc=ue.getMessage();
-            } catch (java.lang.Exception je) {
-                exc=je.getMessage();
+            else {
+                System.out.println("Could not connect an Office" +
+                                                " and cannot start one.");
             }
-            k++;
         }
-        if (debug && msf==null) System.out.println(
-                                        "Exception while connecting "+exc);
         return msf;
     }
 
