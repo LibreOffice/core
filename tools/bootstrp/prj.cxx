@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-15 15:20:01 $
+ *  last change: $Author: nf $ $Date: 2001-02-22 12:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,14 +631,10 @@ Star::~Star()
 BOOL Star::NeedsUpdate()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ ) {
-        DirEntry aEntry( *aLoadedFilesList.GetObject( i ));
-        FileStat aStat( aEntry );
-
-        if (( aStat.DateModified() > aDate ) ||
-            (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
+    for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ )
+        if ( aLoadedFilesList.GetObject( i )->NeedsUpdate())
             return TRUE;
-    }
+
     return FALSE;
 }
 
@@ -655,13 +651,13 @@ void Star::Read( String &rFileName )
     sSourceRoot = aEntry.GetFull();
 
     while( aFileList.Count()) {
-        DirEntry aEntry( *aFileList.GetObject(( ULONG ) 0 ));
-        if ( aEntry.Exists()) {
+        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+        if ( pFile->Exists()) {
             SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
-        aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
+        aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aFileList.Remove(( ULONG ) 0 );
     }
     // resolve all dependencies recursive
@@ -675,16 +671,15 @@ void Star::Read( SolarFileList *pSolarFiles )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        DirEntry aEntry( *pSolarFiles->GetObject(( ULONG ) 0 ));
-        if ( aEntry.Exists()) {
+        StarFile *pFile = new StarFile( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        if ( pFile->Exists()) {
             SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
 
-        aLoadedFilesList.Insert( pSolarFiles->GetObject(( ULONG ) 0 ),
-            LIST_APPEND );
-        pSolarFiles->Remove(( ULONG ) 0 );
+        aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        delete pSolarFiles->Remove(( ULONG ) 0 );
     }
     delete pSolarFiles;
 
@@ -1171,15 +1166,15 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 
     while( aFileList.Count()) {
 
-        DirEntry aEntry( *aFileList.GetObject(( ULONG ) 0 ));
-        if ( aEntry.Exists()) {
+        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+        if ( pFile->Exists()) {
             SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
 
-        aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
-        aFileList.Remove(( ULONG ) 0 );
+        aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        delete aFileList.Remove(( ULONG ) 0 );
     }
     // resolve all dependencies recursive
     Expand_Impl();
@@ -1199,16 +1194,15 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        DirEntry aEntry(  *pSolarFiles->GetObject(( ULONG ) 0 ));
-        if ( aEntry.Exists()) {
+        StarFile *pFile = new StarFile(  *pSolarFiles->GetObject(( ULONG ) 0 ));
+        if ( pFile->Exists()) {
             SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
 
-        aLoadedFilesList.Insert( pSolarFiles->GetObject(( ULONG ) 0 ),
-            LIST_APPEND );
-        pSolarFiles->Remove(( ULONG ) 0 );
+        aLoadedFilesList.Insert( pFile, LIST_APPEND );
+        delete pSolarFiles->Remove(( ULONG ) 0 );
     }
     delete pSolarFiles;
 
@@ -1325,9 +1319,6 @@ USHORT StarWriter::Write( String aFileName )
 
     aFileStream.Close();
 
-    aDate = Date();
-    aTime = Time();
-
     return 0;
 }
 
@@ -1360,9 +1351,6 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
             pPrj = Next();
         } while ( pPrj );
     }
-
-    aDate = Date();
-    aTime = Time();
 
     return 0;
 }
@@ -1618,5 +1606,44 @@ Prj* StarWriter::RemoveProject ( ByteString aProjectName )
     Remove( pPrjFound );
 
     return pPrjFound;
+}
+
+//
+// class StarFile
+//
+
+/*****************************************************************************/
+StarFile::StarFile( const String &rFile )
+/*****************************************************************************/
+                : aFileName( rFile )
+{
+    DirEntry aEntry( aFileName );
+    if ( aEntry.Exists()) {
+        bExists = TRUE;
+        FileStat aStat( aEntry );
+        aDate = aStat.DateModified();
+        aTime = aStat.TimeModified();
+    }
+    else
+        bExists = FALSE;
+}
+
+/*****************************************************************************/
+BOOL StarFile::NeedsUpdate()
+/*****************************************************************************/
+{
+    DirEntry aEntry( aFileName );
+    if ( aEntry.Exists()) {
+        if ( !bExists ) {
+            bExists = TRUE;
+            return TRUE;
+        }
+        FileStat aStat( aEntry );
+        if (( aStat.DateModified() > aDate ) ||
+            (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
+            return TRUE;
+    }
+    else
+        return FALSE;
 }
 
