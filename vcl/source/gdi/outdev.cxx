@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,7 @@ OutputDevice::OutputDevice() :
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
+    meTextLanguage      = 0;  // TODO: get default from configuration?
     mbLineColor         = TRUE;
     mbFillColor         = TRUE;
     mbInitLineColor     = TRUE;
