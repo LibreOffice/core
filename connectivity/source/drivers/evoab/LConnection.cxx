@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:48:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,9 +209,10 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("ThousandDelimiter"), 0, makeAny(::rtl::OUString(&m_cThousandDelimiter,1)), PropertyState_DIRECT_VALUE));
 
     // build a new parameter sequence from the original parameters, appended bý the new parameters from above
-    aDriverParam = ::comphelper::concatSequences(
+        PropertyValue *pParams = aParam.empty() ? 0 : &aParam[0];
+        aDriverParam = ::comphelper::concatSequences(
         info,
-        Sequence< PropertyValue >( aParam.begin(),aParam.size() )
+        Sequence< PropertyValue >( pParams, aParam.size() )
     );
 
     // transform "sdbc:address:evolution" part of URL to "sdbc:flat:file:///..."
