@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:59:33 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ spanish ] = "Campo de control" ;
         Text [ french ] = "Contrфle" ;
         Text [ dutch ] = "Controleveld" ;
-        Text [ portuguese ] = "Campo de controlo" ;
+        Text [ portuguese ] = "Controlo" ;
         Text[ chinese_simplified ] = "їШЦЖ";
         Text[ russian ] = "Элемент управления";
         Text[ polish ] = "Pole kontrolne";
@@ -2061,4 +2061,5 @@ ImageButton BTN_NAVI
         Text[ finnish ] = "Siirtyminen";
     };
 };
+
 
