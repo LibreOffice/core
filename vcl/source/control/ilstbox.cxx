@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:12:49 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,8 +512,11 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mbInUserDraw        = FALSE;
     mbReadOnly          = FALSE;
     mbHasFocusRect      = FALSE;
+    mbRight             = ( nWinStyle & WB_RIGHT )      ? TRUE : FALSE;
+    mbCenter            = ( nWinStyle & WB_CENTER )     ? TRUE : FALSE;
     mbSimpleMode        = ( nWinStyle & WB_SIMPLEMODE ) ? TRUE : FALSE;
-    mbSort              = ( nWinStyle & WB_SORT ) ? TRUE : FALSE;
+    mbSort              = ( nWinStyle & WB_SORT )       ? TRUE : FALSE;
+
     // pb: #106948# explicit mirroring for calc
     mbMirroring         = FALSE;
 
@@ -1650,12 +1653,18 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
         XubString aStr( mpEntryList->GetEntryText( nPos ) );
         if ( aStr.Len() )
         {
-            Point aPtTxt( mnBorder - mnLeft, nY + ( ( mnMaxHeight - mnMaxTxtHeight ) / 2 ) );
+            long nMaxWidth = Max( static_cast< long >( mnMaxWidth ),
+                                  GetOutputSizePixel().Width() - 2*mnBorder );
+
+            Rectangle aTextRect( Point( mnBorder - mnLeft, nY ),
+                                 Size( nMaxWidth, mnMaxHeight ) );
+
             if( !bDrawTextAtImagePos && ( mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled() ) )
             {
                 USHORT nMaxWidth = Max( mnMaxImgWidth, (USHORT)maUserItemSize.Width() );
-                aPtTxt.X() += nMaxWidth + IMG_TXT_DISTANCE;
+                aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
             }
+
             if( bLayout )
                 mpLayoutData->m_aLineIndices.push_back( mpLayoutData->m_aDisplayText.Len() );
 
@@ -1663,15 +1672,12 @@ void ImplListBoxWindow::DrawEntry( USHORT nPos, BOOL bDrawImage, BOOL bDrawText,
             if ( mbMirroring )
             {
                 // right aligned
-                long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-                long nMaxWidth = Max( static_cast< long >( mnMaxWidth ),
-                                      GetOutputSizePixel().Width() - 2*mnBorder );
-                aPtTxt.X() = nMaxWidth + mnBorder - GetTextWidth( aStr ) - mnLeft;
+                aTextRect.Left() = nMaxWidth + mnBorder - GetTextWidth( aStr ) - mnLeft;
                 if ( aImgSz.Width() > 0 )
-                    aPtTxt.X() -= ( aImgSz.Width() + IMG_TXT_DISTANCE );
+                    aTextRect.Left() -= ( aImgSz.Width() + IMG_TXT_DISTANCE );
             }
 
-            DrawText( aPtTxt, aStr, 0, STRING_LEN, pVector, pDisplayText );
+            DrawText( aTextRect, aStr, ImplGetTextStyle(), pVector, pDisplayText );
         }
     }
 
@@ -1950,6 +1956,24 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ImplCalcMetrics();
         Invalidate();
     }
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ImplListBoxWindow::ImplGetTextStyle() const
+{
+    USHORT nTextStyle = TEXT_DRAW_VCENTER;
+
+    if ( mpEntryList->HasImages() )
+        nTextStyle |= TEXT_DRAW_LEFT;
+    else if ( mbCenter )
+        nTextStyle |= TEXT_DRAW_CENTER;
+    else if ( mbRight )
+        nTextStyle |= TEXT_DRAW_RIGHT;
+    else
+        nTextStyle |= TEXT_DRAW_LEFT;
+
+    return nTextStyle;
 }
 
 // =======================================================================
@@ -2661,16 +2685,28 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
     if( bDrawText && maString.Len() )
     {
-        long nTextHeight = GetTextHeight();
-        Point aPtTxt( nBorder, (aOutSz.Height()-nTextHeight)/2 );
+        USHORT nTextStyle = TEXT_DRAW_VCENTER;
+
+        if ( bDrawImage && bImage && !bLayout )
+            nTextStyle |= TEXT_DRAW_LEFT;
+        else if ( GetStyle() & WB_CENTER )
+            nTextStyle |= TEXT_DRAW_CENTER;
+        else if ( GetStyle() & WB_RIGHT )
+            nTextStyle |= TEXT_DRAW_RIGHT;
+        else
+            nTextStyle |= TEXT_DRAW_LEFT;
+
+        Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
+
         if ( !bDrawTextAtImagePos && ( bImage || IsUserDrawEnabled() ) )
         {
             long nMaxWidth = Max( maImage.GetSizePixel().Width(), maUserItemSize.Width() );
-            aPtTxt.X() += nMaxWidth + IMG_TXT_DISTANCE;
+            aTextRect.Left() += nMaxWidth + IMG_TXT_DISTANCE;
         }
+
         MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
         String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
-        DrawText( aPtTxt, maString, 0, STRING_LEN, pVector, pDisplayText );
+        DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 
     if( HasFocus() && !bLayout )
