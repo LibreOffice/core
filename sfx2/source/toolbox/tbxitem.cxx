@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:10:18 $
+ *  last change: $Author: os $ $Date: 2001-09-05 14:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,7 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
     aTimer.SetTimeout( 250 );
     aTimer.SetTimeoutHdl( LINK( this, SfxAppToolBoxControl_Impl, Timeout ) );
     rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
+    rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
 }
 
 void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
