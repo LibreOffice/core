@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:36:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,14 +211,6 @@ namespace sd {
 
 static const int DELTA_ZOOM = 10;
 
-// Use magenta as transparency color instead of the standard gray that is
-// imported from vcl/image.hxx
-#undef IMAGE_STDBTN_COLOR
-#undef IMAGE_STDBTN_COLOR_HC
-#define IMAGE_STDBTN_COLOR Color(0xff,0x00,0xff)
-#define IMAGE_STDBTN_COLOR_HC Color(0xff,0x00,0xff)
-
-
 SfxViewFrame* ViewShell::GetViewFrame (void) const
 {
     OSL_ASSERT (GetViewShell()!=NULL);
@@ -372,29 +364,27 @@ void ViewShell::Construct(void)
     mpContentWindow->SetViewShell(this);
     mpContentWindow->Show();
 
-    // Create scroll bars and the filler between the scroll bars.
-    mpHorizontalScrollBar.reset (new ScrollBar(
-        GetParentWindow(),
-        WinBits(WB_HSCROLL | WB_DRAG)));
-    mpHorizontalScrollBar->EnableRTL (FALSE);
-    mpHorizontalScrollBar->SetRange(Range(0, 32000));
-    mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
-    mpHorizontalScrollBar->Show();
+    if ( ! GetDocSh()->IsPreview())
+    {
+        // Create scroll bars and the filler between the scroll bars.
+        mpHorizontalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
+        mpHorizontalScrollBar->EnableRTL (FALSE);
+        mpHorizontalScrollBar->SetRange(Range(0, 32000));
+        mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
+        mpHorizontalScrollBar->Show();
 
-    mpVerticalScrollBar.reset (new ScrollBar(
-        GetParentWindow(),
-        WinBits(WB_VSCROLL | WB_DRAG)));
-    mpVerticalScrollBar->SetRange(Range(0, 32000));
-    mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
-    mpVerticalScrollBar->Show();
+        mpVerticalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
+        mpVerticalScrollBar->SetRange(Range(0, 32000));
+        mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
+        mpVerticalScrollBar->Show();
 
-    aScrBarWH = Size(mpVerticalScrollBar->GetSizePixel().Width(),
-                     mpHorizontalScrollBar->GetSizePixel().Height());
+        aScrBarWH = Size(
+            mpVerticalScrollBar->GetSizePixel().Width(),
+            mpHorizontalScrollBar->GetSizePixel().Height());
 
-    mpScrollBarBox.reset(new ScrollBarBox(
-        GetParentWindow(),
-        WB_SIZEABLE));
-    mpScrollBarBox->Show();
+        mpScrollBarBox.reset(new ScrollBarBox(GetParentWindow(), WB_SIZEABLE));
+        mpScrollBarBox->Show();
+    }
 
     String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
     SetName (aName);
@@ -419,7 +409,6 @@ void ViewShell::Construct(void)
         ::std::auto_ptr<ObjectBarManager::ObjectBarFactory>(
             new ViewShellObjectBarFactory(*this)));
     GetObjectBarManager().Clear ();
-    GetObjectBarManager().EnableObjectBarSwitching();
 }
 
 
