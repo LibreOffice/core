@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 19:02:05 $
+ *  last change: $Author: nn $ $Date: 2000-11-13 19:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
 class String;
 
 struct ScImportParam;
@@ -77,8 +81,13 @@ class SfxViewFrame;
 class SbaSelectionList;
 class ScDBData;
 class ScDocShell;
+class ScAddress;
 class ScRange;
 class ScDPObject;
+
+namespace com { namespace sun { namespace star { namespace beans {
+    struct PropertyValue;
+} } } }
 
 // ---------------------------------------------------------------------------
 
@@ -100,6 +109,10 @@ public:
     BOOL            DoImport( USHORT nTab, const ScImportParam& rParam,
                                         const SbaSelectionList* pSelection,
                                         BOOL bRecord, BOOL bAddrInsert = FALSE );
+
+    BOOL            DoImportUno( const ScAddress& rPos,
+                                const com::sun::star::uno::Sequence<
+                                    com::sun::star::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 

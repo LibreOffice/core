@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-10 19:04:05 $
+ *  last change: $Author: nn $ $Date: 2000-11-13 19:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ using namespace com::sun::star;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
+#define SC_DBPROP_SELECTION         "Selection"
+#define SC_DBPROP_CURSOR            "Cursor"
 
 // -----------------------------------------------------------------
 
@@ -144,6 +146,99 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
         DBG_ERROR("no dispatcher for the database URL!");
 }
 
+// -----------------------------------------------------------------
+
+BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
+                                const uno::Sequence<beans::PropertyValue>& aArgs )
+{
+    BOOL bDone = FALSE;
+
+    ScImportParam aImParam;
+    aImParam.nCol1 = aImParam.nCol2 = rPos.Col();
+    aImParam.nRow1 = aImParam.nRow2 = rPos.Row();
+    aImParam.bImport = TRUE;
+
+    uno::Reference<sdbc::XResultSet> xResSet;
+    uno::Sequence<sal_Int32> aSelection;
+
+    rtl::OUString aStrVal;
+    const beans::PropertyValue* pPropArray = aArgs.getConstArray();
+    long nPropCount = aArgs.getLength();
+    long i;
+    for (i = 0; i < nPropCount; i++)
+    {
+        const beans::PropertyValue& rProp = pPropArray[i];
+        String aPropName = rProp.Name;
+
+        if ( aPropName.EqualsAscii( SC_DBPROP_DATASOURCENAME ))
+        {
+            if ( rProp.Value >>= aStrVal )
+                aImParam.aDBName = aStrVal;
+        }
+        else if ( aPropName.EqualsAscii( SC_DBPROP_COMMAND ))
+        {
+            if ( rProp.Value >>= aStrVal )
+                aImParam.aStatement = aStrVal;
+        }
+        else if ( aPropName.EqualsAscii( SC_DBPROP_COMMANDTYPE ))
+        {
+            sal_Int32 nType;
+            if ( rProp.Value >>= nType )
+            {
+                aImParam.bSql = ( nType == sdb::CommandType::COMMAND );
+                aImParam.nType = ( nType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable;
+                // nType is ignored if bSql is set
+            }
+        }
+        else if ( aPropName.EqualsAscii( SC_DBPROP_SELECTION ))
+        {
+            rProp.Value >>= aSelection;
+        }
+        else if ( aPropName.EqualsAscii( SC_DBPROP_CURSOR ))
+        {
+            rProp.Value >>= xResSet;
+        }
+    }
+
+    SbaSelectionList aList;
+    long nSelLen = aSelection.getLength();
+    for (i = 0; i < nSelLen; i++)
+    {
+        long nEntry = aSelection[i];
+        aList.Insert( (void*)nEntry, LIST_APPEND );
+    }
+
+    BOOL bAddrInsert = FALSE;       //!???
+    if ( bAddrInsert )
+    {
+        bDone = DoImport( rPos.Tab(), aImParam, &aList, TRUE, bAddrInsert );
+    }
+    else
+    {
+        //  create database range
+        //! merge this with SID_SBA_IMPORT execute in docsh4.cxx
+
+        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, FALSE );
+        DBG_ASSERT(pDBData, "can't create DB data");
+        String sTarget = pDBData->GetName();
+
+        //! change UpdateImport to use only one of rTableName, rStatement
+
+        String aTableName, aStatement;
+        if ( aImParam.bSql )
+            aStatement = aImParam.aStatement;
+        else
+            aTableName = aImParam.aStatement;
+
+        UpdateImport( sTarget, aImParam.aDBName,
+                        aTableName, aStatement,
+                        aImParam.bNative, aImParam.nType,
+                        &aList );
+        bDone = TRUE;
+    }
+
+    return bDone;
+}
 
 // -----------------------------------------------------------------
 
@@ -312,41 +407,46 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                         }
                     }
 
-                    if ( nRow <= MAXROW )
+                    if ( !bEnd )
                     {
-                        nCol = rParam.nCol1;
-                        for (i=0; i<nColCount; i++)
+                        if ( nRow <= MAXROW )
                         {
-                            ScDatabaseDocUtil::PutData( pImportDoc, nCol, nRow, nTab,
-                                            xRow, i+1, pTypeArr[i], pCurrArr[i] );
-                            ++nCol;
-                        }
-                        nEndRow = nRow;
-                        ++nRow;
-
-                        //  progress bar
-
-                        ++nInserted;
-                        if (!(nInserted & 15))
-                        {
-                            String aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
-                            String aText = aPict.GetToken(0,'#');
-                            aText += String::CreateFromInt32( nInserted );
-                            aText += aPict.GetToken(1,'#');
-
-                            if (!aProgress.SetStateText( 0, aText ))    // stopped by user?
+                            nCol = rParam.nCol1;
+                            for (i=0; i<nColCount; i++)
                             {
-                                bEnd = TRUE;
-                                bSuccess = FALSE;
-                                nErrStringId = STR_DATABASE_ABORTED;
+                                ScDatabaseDocUtil::PutData( pImportDoc, nCol, nRow, nTab,
+                                                xRow, i+1, pTypeArr[i], pCurrArr[i] );
+                                ++nCol;
+                            }
+                            nEndRow = nRow;
+                            ++nRow;
+
+                            //  progress bar
+
+                            ++nInserted;
+                            if (!(nInserted & 15))
+                            {
+                                String aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
+                                String aText = aPict.GetToken(0,'#');
+                                aText += String::CreateFromInt32( nInserted );
+                                aText += aPict.GetToken(1,'#');
+
+                                if (!aProgress.SetStateText( 0, aText ))    // stopped by user?
+                                {
+                                    bEnd = TRUE;
+                                    bSuccess = FALSE;
+                                    nErrStringId = STR_DATABASE_ABORTED;
+                                }
                             }
                         }
+                        else        // past the end of the spreadsheet
+                        {
+                            bEnd = TRUE;            // don't continue
+                            bTruncated = TRUE;      // warning flag
+                        }
                     }
-                    else        // past the end of the spreadsheet
-                    {
-                        bEnd = TRUE;            // don't continue
-                        bTruncated = TRUE;      // warning flag
-                    }
+
+                    ++nRowsRead;
                 }
 
                 bSuccess = TRUE;
