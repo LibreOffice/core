@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 11:15:09 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 21:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text [ spanish ] = "FontWork" ;
     Text [ danish ] = "FontWork" ;
     Text [ swedish ] = "FontWork" ;
-    Text [ finnish ] = "Fonttityö" ;
+    Text [ finnish ] = "Fonttity?" ;
     Text [ english_us ] = "FontWork" ;
     Moveable = TRUE ;
     Zoomable = TRUE ;
@@ -176,7 +176,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Çevir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rodar";
-                Text[ finnish ] = "Kierrä";
+                Text[ finnish ] = "Kierr?";
             };
             ToolBoxItem
             {
@@ -211,7 +211,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Dik";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Derecho";
-                Text[ finnish ] = "Pystyssä";
+                Text[ finnish ] = "Pystyss?";
             };
             ToolBoxItem
             {
@@ -400,7 +400,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Centrado";
-                Text[ finnish ] = "Keskitä";
+                Text[ finnish ] = "Keskell?";
             };
             ToolBoxItem
             {
@@ -474,7 +474,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Otomatik metin boyu";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tamaño automático de texto";
-                Text[ finnish ] = "Automaattinen tekstin koon määritys";
+                Text[ finnish ] = "Automaattinen tekstin koon m??ritys";
             };
         };
     };
@@ -527,7 +527,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
         QuickHelpText[ catalan ] = "Distancia";
-        QuickHelpText[ finnish ] = "Etäisyys";
+        QuickHelpText[ finnish ] = "Et?isyys!";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -575,7 +575,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
         QuickHelpText[ catalan ] = "Sangría";
-        QuickHelpText[ finnish ] = "Sisennä";
+        QuickHelpText[ finnish ] = "Sisenn?!";
     };
     ToolBox TBX_SHADOW
     {
@@ -616,7 +616,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Kontur";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorno";
-                Text[ finnish ] = "Ääriviiva";
+                Text[ finnish ] = "??riviiva";
             };
             ToolBoxItem
             {
@@ -651,7 +651,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Metin konturu";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorno de caracteres";
-                Text[ finnish ] = "Tekstin ääriviiva";
+                Text[ finnish ] = "Tekstin ??riviiva";
             };
             ToolBoxItem
             {
@@ -725,7 +725,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ turkish ] = "Dikey";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vertical";
-                Text[ finnish ] = "Pystysuora";
+                Text[ finnish ] = "Pystytaso";
             };
             ToolBoxItem
             {
@@ -830,7 +830,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ turkish ] = "Abstand X";
         CustomUnitText[ catalan ] = "Grados";
         QuickHelpText[ catalan ] = "Distancia X";
-        QuickHelpText[ finnish ] = "Etäisyys X";
+        QuickHelpText[ finnish ] = "Et?isyys X!";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -894,7 +894,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ catalan ] = "%";
         QuickHelpText[ catalan ] = "Distancia Y";
         CustomUnitText[ finnish ] = "%";
-        QuickHelpText[ finnish ] = "Etäisyys Y";
+        QuickHelpText[ finnish ] = "Et?isyys Y!";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -978,7 +978,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
         QuickHelpText[ catalan ] = "Color sombra";
-        QuickHelpText[ finnish ] = "Varjon väri";
+        QuickHelpText[ finnish ] = "Varjon v?ri!";
     };
     Text[ chinese_simplified ] = "ç¾å·¥å­—ä½“";
     Text[ russian ] = "FontWork";
@@ -1071,7 +1071,7 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text [ spanish ] = "Semicírculo superior" ;
     Text [ danish ] = "Halvcirkel" ;
     Text [ swedish ] = "Övre halvcirkel" ;
-    Text [ finnish ] = "Ylempi puoliympyrä" ;
+    Text [ finnish ] = "Ylempi puoliympyr?" ;
     Text [ english_us ] = "Upper Semicircle" ;
     Text[ chinese_simplified ] = "ä¸ŠåŠåœ†";
     Text[ russian ] = "Âåğõíèé ïîëóêğóã";
@@ -1098,7 +1098,7 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text [ spanish ] = "Semicírculo inferior" ;
     Text [ danish ] = "Buet nedad" ;
     Text [ swedish ] = "Undre halvcirkel" ;
-    Text [ finnish ] = "Puoliympyrä (alaosa)" ;
+    Text [ finnish ] = "Puoliympyr? (alaosa)" ;
     Text [ english_us ] = "Lower Semicircle" ;
     Text[ chinese_simplified ] = "ä¸‹åŠåœ†";
     Text[ russian ] = "Íèæíèé ïîëóêğóã";
@@ -1125,7 +1125,7 @@ String RID_SVXSTR_FONTWORK_FORM3
     Text [ spanish ] = "Semicírculo izquierdo" ;
     Text [ danish ] = "Venstre halvcirkel" ;
     Text [ swedish ] = "Vänster halvcirkel" ;
-    Text [ finnish ] = "Puoliympyrä (vasen puoli)" ;
+    Text [ finnish ] = "Puoliympyr? (vasen puoli)" ;
     Text [ english_us ] = "Left Semicircle" ;
     Text[ chinese_simplified ] = "å·¦åŠåœ†";
     Text[ russian ] = "Ëåâûé ïîëóêğóã";
@@ -1152,7 +1152,7 @@ String RID_SVXSTR_FONTWORK_FORM4
     Text [ spanish ] = "Semicírculo derecho" ;
     Text [ danish ] = "Højre halvcirkel" ;
     Text [ swedish ] = "Höger halvcirkel" ;
-    Text [ finnish ] = "Puoliympyrä (oikea puoli)" ;
+    Text [ finnish ] = "Puoliympyr? (oikea puoli)" ;
     Text [ english_us ] = "Right Semicircle" ;
     Text[ chinese_simplified ] = "å³åŠåœ†";
     Text[ russian ] = "Ïğàâûé ïîëóêğóã";
@@ -1179,7 +1179,7 @@ String RID_SVXSTR_FONTWORK_FORM5
     Text [ spanish ] = "Arco superior de círculo" ;
     Text [ danish ] = "Buet opad" ;
     Text [ swedish ] = "Övre cirkelbåge" ;
-    Text [ finnish ] = "Yläkaari" ;
+    Text [ finnish ] = "Yl?kaari" ;
     Text [ english_us ] = "Upper Arc" ;
     Text[ chinese_simplified ] = "ä¸Šåœ†å¼§";
     Text[ russian ] = "Âåğõíÿÿ äóãà";
@@ -1287,7 +1287,7 @@ String RID_SVXSTR_FONTWORK_FORM9
     Text [ spanish ] = "Circulo abierto" ;
     Text [ danish ] = "Åben cirkel" ;
     Text [ swedish ] = "Öppen cirkel" ;
-    Text [ finnish ] = "Avoin ympyrä" ;
+    Text [ finnish ] = "Avoin ympyr?" ;
     Text [ english_us ] = "Open Circle" ;
     Text[ chinese_simplified ] = "ä¸å°é—­çš„åœ†å½¢";
     Text[ russian ] = "Íåçàìêíóòûé êğóã";
@@ -1314,7 +1314,7 @@ String RID_SVXSTR_FONTWORK_FORM10
     Text [ spanish ] = "Círculo cerrado" ;
     Text [ danish ] = "Cirkulær" ;
     Text [ swedish ] = "Stängd cirkel" ;
-    Text [ finnish ] = "Suljettu ympyrä" ;
+    Text [ finnish ] = "Suljettu ympyr?" ;
     Text [ english_us ] = "Closed Circle" ;
     Text[ chinese_simplified ] = "å°é—­çš„åœ†å½¢";
     Text[ russian ] = "Çàìêíóòûé êğóã";
@@ -1341,7 +1341,7 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text [ spanish ] = "Círculo cerrado II" ;
     Text [ danish ] = "Cirkulær II" ;
     Text [ swedish ] = "Stängd cirkel II" ;
-    Text [ finnish ] = "Suljettu ympyrä II" ;
+    Text [ finnish ] = "Suljettu ympyr? II" ;
     Text [ english_us ] = "Closed Circle II" ;
     Text[ chinese_simplified ] = "å°é—­çš„åœ†å½¢ II";
     Text[ russian ] = "Çàìêíóòûé êğóã II";
@@ -1368,7 +1368,7 @@ String RID_SVXSTR_FONTWORK_FORM12
     Text [ spanish ] = "Círculo abierto vertical" ;
     Text [ danish ] = "Åben cirkel lodret" ;
     Text [ swedish ] = "Öppen cirkel lodrätt" ;
-    Text [ finnish ] = "Avoin pystysuora ympyrä" ;
+    Text [ finnish ] = "Avoin pystysuora ympyr?" ;
     Text [ english_us ] = "Open Circle Vertical" ;
     Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘ä¸å°é—­çš„åœ†å½¢";
     Text[ russian ] = "Âåğòèêàëüíûé íåçàìêíóòûé êğóã";
@@ -1406,9 +1406,10 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ turkish ] = "FontWork nesnesi oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear objeto FontWork";
-    Text[ finnish ] = "Luo fonttityöobjekti";
+    Text[ finnish ] = "Luo fonttity?bjekti";
 };
  // ********************************************************************** EOF
+
 
 
 
