@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 08:21:21 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 10:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ namespace svt
         }
 
         // show the (n+1)th page
-        if (!ShowPage(nNextState))
+        if (!ShowPage(nCurrentState))
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here ....
@@ -455,7 +455,6 @@ namespace svt
         }
 
         // all fine
-        m_aStateHistory.push(nCurrentState);
         return sal_True;
     }
 
@@ -520,6 +519,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/23 08:21:21  fs
+ *  +skip / +implCheckNextButton / +determineNextButtonState
+ *
  *  Revision 1.2  2001/02/19 16:20:00  kz
  *  locale using of projectheaders
  *
