@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:29:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_traditional ] = "Εγ₯ά(~S)...";
         Text[ arabic ] = "ΕΩεΗΡ...";
         Text[ greek ] = "Εμφάνιση...";
-        Text[ korean ] = "Η₯½Γ(~S)...";
+        Text[ korean ] = "ΊΈΐΜ±β(~S)...";
         Text[ turkish ] = "~Gφrόntόle...";
         Text[ language_user1 ] = " ";
     };
@@ -478,7 +478,7 @@ ModalDialog DLG_COMMENTS
         Text[ chinese_traditional ] = "§@ͺΜ ";
         Text[ arabic ] = "ήΗγ ΘΪγανΙ ΗαΝέΩ";
         Text[ greek ] = "αποθήκευση από ";
-        Text[ korean ] = "ΐϊΐε ΑΦΓΌ ";
+        Text[ korean ] = "£®£®ΐϊΐε ";
         Text[ turkish ] = "Kaydeden ";
         Text[ language_user1 ] = " ";
     };
