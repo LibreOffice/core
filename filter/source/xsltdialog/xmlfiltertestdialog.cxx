@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-08 11:09:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,9 @@ static OUString getFileNameFromURL( OUString& rURL )
     OUString aName( aURL.getName() );
     if( 0 == aName.getLength() )
     {
-        sal_Int32 n = aName.lastIndexOf( sal_Unicode('/') );
+        sal_Int32 n = rURL.lastIndexOf( sal_Unicode('/') );
         if( n != -1 )
-            aName = aName.copy( n+1 );
+            aName = rURL.copy( n+1 );
     }
 
     return aName;
