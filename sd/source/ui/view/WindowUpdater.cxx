@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:41:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
 #endif
 #include "drawdoc.hxx"
 #ifndef SD_SHOW_WINDOW_HXX
@@ -159,48 +153,6 @@ void WindowUpdater::SetViewShell (ViewShell& rViewShell)
 void WindowUpdater::SetDocument (SdDrawDocument* pDocument)
 {
     mpDocument = pDocument;
-}
-
-
-
-
-void WindowUpdater::RegisterPreview (void)
-{
-    RegisterWindow (GetPreviewWindow());
-}
-
-
-
-
-void WindowUpdater::UnregisterPreview (void)
-{
-    UnregisterWindow (GetPreviewWindow());
-}
-
-
-
-
-::Window* WindowUpdater::GetPreviewWindow (void) const
-{
-    ShowWindow* pShowWindow = NULL;
-
-    // Get the show window of the preview.
-    if (mpViewShell != NULL)
-    {
-        SfxChildWindow* pPreviewChildWindow =
-            mpViewShell->GetViewFrame()->GetChildWindow (
-                PreviewChildWindow::GetChildWindowId());
-        if (pPreviewChildWindow != NULL)
-        {
-            PreviewWindow* pPreviewWindow =
-                static_cast<PreviewWindow*> (pPreviewChildWindow->GetWindow());
-            if (pPreviewWindow!=NULL
-                && pPreviewWindow->GetDoc()==mpViewShell->GetDoc())
-                pShowWindow = pPreviewWindow->GetShowWindow();
-        }
-    }
-
-    return pShowWindow;
 }
 
 
