@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:23:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,10 @@
 #include "languageoptions.hxx"
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include "cjkoptions.hxx"
+#include <cjkoptions.hxx>
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
-#include "ctloptions.hxx"
+#include <ctloptions.hxx>
 #endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
@@ -77,6 +77,12 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -94,6 +100,7 @@ SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
 
     m_pCJKOptions = new SvtCJKOptions( _bDontLoad );
     m_pCTLOptions = new SvtCTLOptions( _bDontLoad );
+    StartListening(*m_pCTLOptions);
 }
 //------------------------------------------------------------------------------
 SvtLanguageOptions::~SvtLanguageOptions()
@@ -208,6 +215,15 @@ sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) con
     }
     return bReadOnly;
 }
+/* -----------------30.04.2003 11:03-----------------
+
+ --------------------------------------------------*/
+void SvtLanguageOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    Broadcast( rHint );
+}
+
 // -----------------------------------------------------------------------------
 // returns for a language the scripttype
 sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
