@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 11:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,8 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_MEMTEST();
     DBG_DTOR(SfxVirtualMenu, 0);
 
+    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+
     if ( bIsActive )
     {
         pBindings->LEAVEREGISTRATIONS(); --nLocks; bIsActive = FALSE;
@@ -281,6 +283,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
     SvtMenuOptions aOptions;
+    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
@@ -369,7 +372,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                     if ( aCmd.Len() )
                     {
-                        pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
+                        if ( aOptions.IsMenuIconsEnabled() )
+                            pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId,
                             *pSVMenu, *pBindings, this );
                         if ( pMnuCtrl )
@@ -450,6 +454,39 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
 
     return TRUE;
 }
+
+IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
+{
+    SvtMenuOptions aOptions;
+    USHORT nCount = pSVMenu->GetItemCount();
+    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
+    SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
+    BOOL bIcons = aOptions.IsMenuIconsEnabled();
+
+    for ( USHORT nSVPos=0; nSVPos<nCount; ++nSVPos )
+    {
+        USHORT nId = pSVMenu->GetItemId( nSVPos );
+        PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
+        if ( !pPopup )
+        {
+            if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRING && bIcons )
+            {
+                String aCmd( pSVMenu->GetItemCommand( nId ) );
+                if ( aCmd.Len() )
+                    pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
+                else
+                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
+            }
+            else if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE && !bIcons )
+            {
+                pSVMenu->SetItemImage( nId, Image() );
+            }
+        }
+    }
+
+    return 0;
+}
+
 //--------------------------------------------------------------------
 
 FASTBOOL SfxVirtualMenu::Bind_Impl( Menu *pMenu )
