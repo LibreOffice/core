@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <math.h>
 
 #ifndef _ESCHESDO_HXX
@@ -205,8 +204,7 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
 
 // -------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                            const Point& rRefPoint )
+void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
 {
     INT32 nAngle = rObj.GetAngle();
     Rectangle aRect( rObj.GetRect() );
@@ -795,17 +793,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
 
         if( rObj.GetAngle() )
-        {
-            if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("RotationPointX") ))
-            {
-                Point aRefPoint( *( (INT32*)rObj.GetUsrAny().getValue() ), 0 );
-                if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("RotationPointY") ))
-                {
-                    aRefPoint.Y() = *( (INT32*)rObj.GetUsrAny().getValue() );
-                    ImplFlipBoundingBox( rObj, aPropOpt, ImplMapPoint( aRefPoint ) );
-                }
-            }
-        }
+            ImplFlipBoundingBox( rObj, aPropOpt );
+
         aPropOpt.Commit( mpEscherEx->GetStream() );
         if( mpEscherEx->GetGroupLevel() > 1 )
         {
@@ -879,7 +868,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             if ( nAngle < 0 )
                 nAngle = ( 36000 + nAngle ) % 36000;
             if ( nAngle )
-                ImplFlipBoundingBox( rObj, aPropOpt, rObj.GetRect().TopLeft() );
+                ImplFlipBoundingBox( rObj, aPropOpt );
         }
         else
         {
