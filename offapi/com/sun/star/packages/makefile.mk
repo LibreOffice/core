@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-13 16:30:32 $
+#   last change: $Author: mtg $ $Date: 2001-07-04 14:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,16 +76,7 @@ IDLFILES=\
         Package.idl\
         PackageFolder.idl\
         PackageFolderEnumeration.idl\
-        PackageStream.idl\
-        XZipFile.idl\
-        ZipEntry.idl\
-        XChecksum.idl \
-        XDeflater.idl \
-        XInflater.idl \
-        XZipInputStream.idl \
-        XZipOutputStream.idl \
-        ZipException.idl \
-        ZipConstants.idl
+        PackageStream.idl
 
 # ------------------------------------------------------------------
 
