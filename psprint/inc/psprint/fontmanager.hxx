@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:03:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,34 @@ class PrintFontManager
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
+    struct XLFDEntry
+    {
+        static const int MaskFoundry    = 1;
+        static const int MaskFamily     = 2;
+        static const int MaskAddStyle   = 4;
+        static const int MaskItalic     = 8;
+        static const int MaskWeight     = 16;
+        static const int MaskWidth      = 32;
+        static const int MaskPitch      = 64;
+        static const int MaskEncoding   = 128;
+
+        int                 nMask; // contains a bit set for every valid member
+
+        rtl::OString        aFoundry;
+        rtl::OString        aFamily;
+        rtl::OString        aAddStyle;
+        italic::type        eItalic;
+        weight::type        eWeight;
+        width::type         eWidth;
+        pitch::type         ePitch;
+        rtl_TextEncoding    aEncoding;
+
+        XLFDEntry() { nMask = 0; }
+
+        bool operator<(const XLFDEntry& rRight) const;
+        bool operator==(const XLFDEntry& rRight) const;
+    };
+
     static rtl::OString s_aEmptyOString;
 
     fontID                                      m_nNextFontID;
@@ -341,6 +369,8 @@ class PrintFontManager
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
+    std::map< struct XLFDEntry, std::list< struct XLFDEntry > >
+    m_aXLFD_Aliases;
     utl::MultiAtomProvider*                   m_pAtoms;
     // for speeding up findFontFileID
     std::hash_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
@@ -363,7 +393,7 @@ class PrintFontManager
     rtl::OString getAfmFile( PrintFont* pFont ) const;
     rtl::OString getFontFile( PrintFont* pFont ) const;
 
-    void getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const;
+    void getFontAttributesFromXLFD( PrintFont* pFont, const std::list< rtl::OString >& rXLFDs ) const;
 
     bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, bool bReadFile, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts ) const;
     rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
@@ -396,6 +426,10 @@ class PrintFontManager
     // else returns false (e.g. no libfontconfig found
     // called from initialize()
     bool initFontconfig();
+
+    static bool parseXLFD( const rtl::OString& rXLFD, XLFDEntry& rEntry );
+    void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
+    void initFontsAlias();
 
     PrintFontManager();
     ~PrintFontManager();
