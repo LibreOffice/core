@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBeanViewer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:22:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -194,7 +194,7 @@ public class OOoBeanViewer extends java.applet.Applet
             {
                 try
                 {
-                    buffer = aBean.storeToByteArray( buffer, null );
+                    buffer = aBean.storeToByteArray( null, null );
                 }
                 catch ( Throwable aExc )
                 {
