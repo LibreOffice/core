@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellRangesObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:38 $
+ *  last change:$Date: 2003-01-31 15:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -192,7 +195,8 @@ public class ScCellRangesObj extends TestCase {
             UnoRuntime.queryInterface (XIndexAccess.class, oSheets);
         XSpreadsheet oSheet = null;
         try {
-            oSheet = (XSpreadsheet) oIndSheets.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class), oIndSheets.getByIndex(0));
             XNameContainer oRanges = (XNameContainer)
                 UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
@@ -245,7 +249,10 @@ public class ScCellRangesObj extends TestCase {
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println( "adding INSTANCEn as mod relation to environment" );
 
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT= Integer.parseInt((String)Param.get("THRCNT"));
+        }
         int a = 0;
         int b = 0;
         for (int n = 1; n < (THRCNT + 1) ; n++) {

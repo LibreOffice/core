@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellFieldsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:40 $
+ *  last change:$Date: 2003-01-31 14:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object that represents a colection of text fields
@@ -159,7 +161,8 @@ public class ScCellFieldsObj extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet)oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             XCell oCell = oSheet.getCellByPosition(2,3);
             oText = (XText)UnoRuntime.queryInterface(XText.class, oCell);

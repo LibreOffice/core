@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellRangeObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:38 $
+ *  last change:$Date: 2003-01-31 15:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -181,8 +184,9 @@ public class ScCellRangeObj extends TestCase {
 
         XSpreadsheet oSheet = null;
         try {
-            oSheet = (XSpreadsheet)
-                oNames.getByName(oNames.getElementNames()[0]);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                new Type(XSpreadsheet.class),
+                    oNames.getByName(oNames.getElementNames()[0]));
 
             oObj = oSheet.getCellRangeByPosition( 0, 0, 3, 4 );
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -194,6 +198,10 @@ public class ScCellRangeObj extends TestCase {
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
         } catch(com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log);
+            throw new StatusException(
+                "Error getting cell object from spreadsheet document", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
