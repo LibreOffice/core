@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,11 +225,11 @@ FASTBOOL SwWrtShell::_FwdPara()
         return 0;
     }
     SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
-    SwCrsrShell::MovePara(fnParaNext, fnParaStart);
+    FASTBOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
     Combine();
-    return 1;
+    return bRet;
 }
 
 
@@ -245,11 +245,11 @@ FASTBOOL SwWrtShell::_BwdPara()
     SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
     if(!IsSttOfPara())
         SttPara();
-    SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
+    FASTBOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
 
     ClearMark();
     Combine();
-    return 1;
+    return bRet;
 }
 
 
