@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:34 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ String STR_DROP_OVER
     Text[ czech ] = "Iniciála nad";
     Text[ hebrew ] = "Initialen über";
     Text[ hindi ] = "ऊपर बड़े अक्षरों को हटाओ";
+    Text[ slovak ] = "Stránkovanie veľkými písmenami nad";
 };
 String STR_DROP_LINES
 {
@@ -128,6 +129,7 @@ String STR_DROP_LINES
     Text[ czech ] = "řádky";
     Text[ hebrew ] = "Zeilen";
     Text[ hindi ] = "पंक्तियाँ";
+    Text[ slovak ] = "riadky";
 };
 String STR_NO_DROP_LINES
 {
@@ -160,6 +162,7 @@ String STR_NO_DROP_LINES
     Text[ czech ] = "Bez iniciál";
     Text[ hebrew ] = "keine Initialen";
     Text[ hindi ] = "बड़े अक्षर हटाने का विकल्प नहीं है";
+    Text[ slovak ] = "Bez iniciálok";
 };
 String STR_NO_PAGEDESC
 {
@@ -192,6 +195,7 @@ String STR_NO_PAGEDESC
     Text[ czech ] = "Bez zalomení stránky";
     Text[ hebrew ] = "kein Seitenumbruch";
     Text[ hindi ] = "कोई पृष्ठ खण्डन नहीं";
+    Text[ slovak ] = "Bez zalomenia stránky";
 };
 String STR_NO_MIRROR
 {
@@ -224,6 +228,7 @@ String STR_NO_MIRROR
     Text[ czech ] = "Nezrcadlit";
     Text[ hebrew ] = "nicht Spiegeln";
     Text[ hindi ] = "दर्पण मत करो";
+    Text[ slovak ] = "Nezrkadliť";
 };
 String STR_VERT_MIRROR
 {
@@ -256,6 +261,7 @@ String STR_VERT_MIRROR
     Text[ czech ] = "Převrátit svisle";
     Text[ hebrew ] = "vertikal Spiegeln";
     Text[ hindi ] = "लंबरूप प्रकार से फ्लिप करो";
+    Text[ slovak ] = "Prevrátiť zvislo";
 };
 String STR_HORI_MIRROR
 {
@@ -288,6 +294,7 @@ String STR_HORI_MIRROR
     Text[ czech ] = "Převrátit vodorovně";
     Text[ hebrew ] = "horizontal Spiegeln";
     Text[ hindi ] = "समतल में फ्लिप करो";
+    Text[ slovak ] = "Prevrátiť vodorovne";
 };
 String STR_BOTH_MIRROR
 {
@@ -320,6 +327,7 @@ String STR_BOTH_MIRROR
     Text[ czech ] = "Převrátit vodorovně a svisle";
     Text[ hebrew ] = "vert. und horizontal Spiegeln";
     Text[ hindi ] = "समतल और लंबरूप प्रकार से फ्लिप करो";
+    Text[ slovak ] = "Prevrátiť vodorovne a zvislo";
 };
 String STR_MIRROR_TOGGLE
 {
@@ -352,6 +360,7 @@ String STR_MIRROR_TOGGLE
     Text[ czech ] = "+ zrcadlit vodorovně na sudých stranách";
     Text[ hebrew ] = " + auf geraden Seiten horizontal Spiegeln";
     Text[ hindi ] = "+ सम संख्या पृष्ठों में समतल दर्पण";
+    Text[ slovak ] = "+ zrkadliť vodorovne na párnych stranách";
 };
 String STR_CHARFMT
 {
@@ -384,6 +393,7 @@ String STR_CHARFMT
     Text[ czech ] = "Styl znaku";
     Text[ hebrew ] = "Zeichenvorlage";
     Text[ hindi ] = "अक्षर शैली";
+    Text[ slovak ] = "Štýl znaku";
 };
 String STR_NO_CHARFMT
 {
@@ -416,6 +426,7 @@ String STR_NO_CHARFMT
     Text[ czech ] = "Není styl znaku";
     Text[ hebrew ] = "keine Zeichenvorlage";
     Text[ hindi ] = "अक्षर शैली नहीं";
+    Text[ slovak ] = "Nie je štýl znaku";
 };
 String STR_FOOTER
 {
@@ -449,6 +460,7 @@ String STR_FOOTER
     Text[ czech ] = "Zápatí";
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+    Text[ slovak ] = "Zápätie";
 };
 String STR_NO_FOOTER
 {
@@ -482,6 +494,7 @@ String STR_NO_FOOTER
     Text[ czech ] = "Bez zápatí";
     Text[ hebrew ] = "keine Fußzeile";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका नहीं";
+    Text[ slovak ] = "Bez zápätia";
 };
 String STR_HEADER
 {
@@ -514,6 +527,7 @@ String STR_HEADER
     Text[ czech ] = "Záhlaví";
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+    Text[ slovak ] = "Záhlavie";
 };
 String STR_NO_HEADER
 {
@@ -546,6 +560,7 @@ String STR_NO_HEADER
     Text[ czech ] = "Bez záhlaví";
     Text[ hebrew ] = "keine Kopfzeile";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका नहीं";
+    Text[ slovak ] = "Bez záhlavia";
 };
 String STR_SURROUND_IDEAL
 {
@@ -578,6 +593,7 @@ String STR_SURROUND_IDEAL
     Text[ czech ] = "Optimální obtékání";
     Text[ hebrew ] = "idealer Umlauf";
     Text[ hindi ] = "योग्य लपेटना";
+    Text[ slovak ] = "Optimálne obtekanie";
 };
 String STR_SURROUND_NONE
 {
@@ -610,6 +626,7 @@ String STR_SURROUND_NONE
     Text[ czech ] = "Bez obtékání";
     Text[ hebrew ] = "kein Umlauf";
     Text[ hindi ] = "लपेटना नहीं ";
+    Text[ slovak ] = "Bez obtekania";
 };
 String STR_SURROUND_THROUGHT
 {
@@ -642,6 +659,7 @@ String STR_SURROUND_THROUGHT
     Text[ czech ] = "Přes";
     Text[ hebrew ] = "Durchlauf";
     Text[ hindi ] = "पर";
+    Text[ slovak ] = "Cez";
 };
 String STR_SURROUND_PARALLEL
 {
@@ -674,6 +692,7 @@ String STR_SURROUND_PARALLEL
     Text[ czech ] = "Paralelní obtékání";
     Text[ hebrew ] = "paralleler Umlauf";
     Text[ hindi ] = "समानान्तर प्रकार से लपेटना";
+    Text[ slovak ] = "Paralelné obtekanie";
 };
 String STR_SURROUND_COLUMN
 {
@@ -706,6 +725,7 @@ String STR_SURROUND_COLUMN
     Text[ czech ] = "Sloupcové obtékání";
     Text[ hebrew ] = "spaltiger Umlauf";
     Text[ hindi ] = "स्तंभ लपेटना";
+    Text[ slovak ] = "Stĺpcové obtekanie";
 };
 String STR_SURROUND_LEFT
 {
@@ -738,6 +758,7 @@ String STR_SURROUND_LEFT
     Text[ czech ] = "Obtékat vlevo";
     Text[ hebrew ] = "linker Umlauf";
     Text[ hindi ] = "बायाँ लपेटना ";
+    Text[ slovak ] = "Obtekať vľavo";
 };
 String STR_SURROUND_RIGHT
 {
@@ -770,6 +791,7 @@ String STR_SURROUND_RIGHT
     Text[ czech ] = "Obtékat vpravo";
     Text[ hebrew ] = "rechter Umlauf";
     Text[ hindi ] = "दाहिना लपेटना";
+    Text[ slovak ] = "Obtekať vpravo";
 };
 String STR_SURROUND_INSIDE
 {
@@ -802,6 +824,7 @@ String STR_SURROUND_INSIDE
     Text[ czech ] = "Obtékat uvnitř";
     Text[ hebrew ] = "Umlauf innen";
     Text[ hindi ] = "भीतरी लपेटना";
+    Text[ slovak ] = "Vnútorné obtekanie";
 };
 String STR_SURROUND_OUTSIDE
 {
@@ -835,6 +858,7 @@ String STR_SURROUND_OUTSIDE
     Text[ czech ] = "Obtékat vně";
     Text[ hebrew ] = "Umlauf außen";
     Text[ hindi ] = "बाहरी लपेटना";
+    Text[ slovak ] = "Obtekať zvonka";
 };
 String STR_SURROUND_ANCHORONLY
 {
@@ -867,6 +891,7 @@ String STR_SURROUND_ANCHORONLY
     Text[ czech ] = "(Pouze ukotvení)";
     Text[ hebrew ] = "(nur Anker)";
     Text[ hindi ] = "(केवल ऐन्कर)";
+    Text[ slovak ] = "(Iba ukotvenie)";
 };
 String STR_FRM_WIDTH
 {
@@ -899,6 +924,7 @@ String STR_FRM_WIDTH
     Text[ czech ] = "Šířka:";
     Text[ hebrew ] = "‮רוחב‬:";
     Text[ hindi ] = "चौड़ाई:";
+    Text[ slovak ] = "Šírka:";
 };
 String STR_FRM_FIXEDHEIGHT
 {
@@ -932,6 +958,7 @@ String STR_FRM_FIXEDHEIGHT
     Text[ czech ] = "Pevná výška:";
     Text[ hebrew ] = "feste Höhe:";
     Text[ hindi ] = "स्थिर ऊँचाई:";
+    Text[ slovak ] = "Pevná výška:";
 };
 String STR_FRM_MINHEIGHT
 {
@@ -965,6 +992,7 @@ String STR_FRM_MINHEIGHT
     Text[ czech ] = "Min. výška:";
     Text[ hebrew ] = "min. Höhe:";
     Text[ hindi ] = "न्यूनतम ऊँचाई:";
+    Text[ slovak ] = "Min. výška:";
 };
 String STR_FLY_AT_CNTNT
 {
@@ -997,6 +1025,7 @@ String STR_FLY_AT_CNTNT
     Text[ czech ] = "na odstavec";
     Text[ hebrew ] = "absatzgebunden";
     Text[ hindi ] = "परिच्छेद में";
+    Text[ slovak ] = "na odstavec";
 };
 String STR_FLY_IN_CNTNT
 {
@@ -1029,6 +1058,7 @@ String STR_FLY_IN_CNTNT
     Text[ czech ] = "na znak";
     Text[ hebrew ] = "zeichengebunden";
     Text[ hindi ] = "अक्षर में";
+    Text[ slovak ] = "na znak";
 };
 String STR_FLY_PAGE
 {
@@ -1061,6 +1091,7 @@ String STR_FLY_PAGE
     Text[ czech ] = "na stránku";
     Text[ hebrew ] = "seitengebunden";
     Text[ hindi ] = "पृष्ठ में";
+    Text[ slovak ] = "na stránku";
 };
 String STR_POS_X
 {
@@ -1093,6 +1124,7 @@ String STR_POS_X
     Text[ czech ] = "Souřadnice X:";
     Text[ hebrew ] = "X-Koord.:";
     Text[ hindi ] = "X समकक्ष:";
+    Text[ slovak ] = "Súradnica X:";
 };
 String STR_POS_Y
 {
@@ -1125,6 +1157,7 @@ String STR_POS_Y
     Text[ czech ] = "Souřadnice Y:";
     Text[ hebrew ] = "Y-Koord.:";
     Text[ hindi ] = "Y समकक्ष:";
+    Text[ slovak ] = "Súradnica Y:";
 };
 String STR_VERT_TOP
 {
@@ -1157,6 +1190,7 @@ String STR_VERT_TOP
     Text[ czech ] = "nahoře";
     Text[ hebrew ] = "oben";
     Text[ hindi ] = "ऊपर में";
+    Text[ slovak ] = "hore";
 };
 String STR_VERT_CENTER
 {
@@ -1189,6 +1223,7 @@ String STR_VERT_CENTER
     Text[ czech ] = "Svisle na střed";
     Text[ hebrew ] = "vertikal zentriert";
     Text[ hindi ] = "लंबरूप प्रकार से केन्द्रित";
+    Text[ slovak ] = "Zvisle na stred";
 };
 String STR_VERT_BOTTOM
 {
@@ -1221,6 +1256,7 @@ String STR_VERT_BOTTOM
     Text[ czech ] = "dole";
     Text[ hebrew ] = "unten";
     Text[ hindi ] = "तल में ";
+    Text[ slovak ] = "dole";
 };
 String STR_LINE_TOP
 {
@@ -1253,6 +1289,7 @@ String STR_LINE_TOP
     Text[ czech ] = "Vrchol řádku";
     Text[ hebrew ] = "Zeile oben";
     Text[ hindi ] = "रेखा के ऊपर";
+    Text[ slovak ] = "Vrchol riadku";
 };
 String STR_LINE_CENTER
 {
@@ -1285,6 +1322,7 @@ String STR_LINE_CENTER
     Text[ czech ] = "Uprostřed řádku";
     Text[ hebrew ] = "vertikal zur Zeile zentriert";
     Text[ hindi ] = "रेखा केन्द्रित";
+    Text[ slovak ] = "Uprostred";
 };
 String STR_LINE_BOTTOM
 {
@@ -1317,6 +1355,7 @@ String STR_LINE_BOTTOM
     Text[ czech ] = "Pata řádku";
     Text[ hebrew ] = "Zeile unten";
     Text[ hindi ] = "रेखा के नीचे";
+    Text[ slovak ] = "Päta riadku";
 };
 String STR_REGISTER_ON
 {
@@ -1349,6 +1388,7 @@ String STR_REGISTER_ON
     Text[ czech ] = "Registr";
     Text[ hebrew ] = "Registerhaltigkeit";
     Text[ hindi ] = "रिजिस्टर-सच्चा";
+    Text[ slovak ] = "Register";
 };
 String STR_REGISTER_OFF
 {
@@ -1381,6 +1421,7 @@ String STR_REGISTER_OFF
     Text[ czech ] = "Bez registru";
     Text[ hebrew ] = "keine Registerhaltigkeit";
     Text[ hindi ] = "रजिस्टर-सही नहीं";
+    Text[ slovak ] = "Bez registra";
 };
 String STR_HORI_RIGHT
 {
@@ -1413,6 +1454,7 @@ String STR_HORI_RIGHT
     Text[ czech ] = "vpravo";
     Text[ hebrew ] = "rechts";
     Text[ hindi ] = "दाहिनी ओर में";
+    Text[ slovak ] = "vpravo";
 };
 String STR_HORI_CENTER
 {
@@ -1445,6 +1487,7 @@ String STR_HORI_CENTER
     Text[ czech ] = "Vodorovně na střed";
     Text[ hebrew ] = "horizontal zentriert";
     Text[ hindi ] = "समतल प्रकार से केन्द्रित ";
+    Text[ slovak ] = "Vodorovne na stred";
 };
 String STR_HORI_LEFT
 {
@@ -1477,6 +1520,7 @@ String STR_HORI_LEFT
     Text[ czech ] = "vlevo";
     Text[ hebrew ] = "links";
     Text[ hindi ] = "बायाँ ओर में";
+    Text[ slovak ] = "vľavo";
 };
 String STR_HORI_INSIDE
 {
@@ -1509,6 +1553,7 @@ String STR_HORI_INSIDE
     Text[ czech ] = "uvnitř";
     Text[ hebrew ] = "innen";
     Text[ hindi ] = "भीतर";
+    Text[ slovak ] = "Vnútri";
 };
 String STR_HORI_OUTSIDE
 {
@@ -1542,6 +1587,7 @@ String STR_HORI_OUTSIDE
     Text[ czech ] = "vně";
     Text[ hebrew ] = "außen";
     Text[ hindi ] = "बाहर";
+    Text[ slovak ] = "zvonka";
 };
 String STR_HORI_FULL
 {
@@ -1574,6 +1620,7 @@ String STR_HORI_FULL
     Text[ czech ] = "Plná šířka";
     Text[ hebrew ] = "‮רוחב מלא‬";
     Text[ hindi ] = "सम्पूर्ण चौड़ाई ";
+    Text[ slovak ] = "Plná šírka";
 };
 String STR_COLUMNS
 {
@@ -1606,6 +1653,7 @@ String STR_COLUMNS
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
+    Text[ slovak ] = "Stĺpce";
 };
 String STR_LINE_WIDTH
 {
@@ -1638,6 +1686,7 @@ String STR_LINE_WIDTH
     Text[ czech ] = "Šířka oddělovače:";
     Text[ hebrew ] = "Trennlinienbreite:";
     Text[ hindi ] = "अलगानेवाला चौड़ाई:";
+    Text[ slovak ] = "Šírka oddeľovača:";
 };
 String STR_MAX_FTN_HEIGHT
 {
@@ -1671,6 +1720,7 @@ String STR_MAX_FTN_HEIGHT
     Text[ czech ] = "Max. velikost zápatí:";
     Text[ hebrew ] = "max. Fußnotenbereich:";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका का अधिकतम विस्तीर्ण:";
+    Text[ slovak ] = "Max. veľkosť zápätia:";
 };
 String STR_EDIT_IN_READONLY
 {
@@ -1709,6 +1759,7 @@ String STR_EDIT_IN_READONLY
     Text[ czech ] = "Editovatelné v dokumentu pouze ke čtení";
     Text[ hebrew ] = "editierbar im schreibgeschütztem Dokument";
     Text[ hindi ] = "केवल पढ़ने योग्य लेखपत्र में संपादन";
+    Text[ slovak ] = "Upravované v dokumente iba na čítanie";
 };
 String STR_LAYOUT_SPLIT
 {
@@ -1741,6 +1792,7 @@ String STR_LAYOUT_SPLIT
     Text[ czech ] = "Rozdělit";
     Text[ hebrew ] = "Trennen";
     Text[ hindi ] = "अलगाना";
+    Text[ slovak ] = "Rozdeliť";
 };
 String STR_NUMRULE_ON
 {
@@ -1773,6 +1825,7 @@ String STR_NUMRULE_ON
     Text[ czech ] = "Číslování";
     Text[ hebrew ] = "‮מיספור‬";
     Text[ hindi ] = "संख्या देना";
+    Text[ slovak ] = "Číslovanie";
 };
 String STR_NUMRULE_OFF
 {
@@ -1805,6 +1858,7 @@ String STR_NUMRULE_OFF
     Text[ czech ] = "bez číslování";
     Text[ hebrew ] = "keine Nummerierung";
     Text[ hindi ] = "संख्या देना नहीं";
+    Text[ slovak ] = "Bez číslovania";
 };
 String STR_CONNECT1
 {
@@ -1837,6 +1891,7 @@ String STR_CONNECT1
     Text[ czech ] = "propojeno s ";
     Text[ hebrew ] = "Verbunden mit";
     Text[ hindi ] = "केलिए लिंक किया हुआ";
+    Text[ slovak ] = "prepojené s ";
 };
 String STR_CONNECT2
 {
@@ -1869,6 +1924,7 @@ String STR_CONNECT2
     Text[ czech ] = "a ";
     Text[ hebrew ] = " und";
     Text[ hindi ] = "और ";
+    Text[ slovak ] = "a ";
 };
 String STR_LINECOUNT
 {
@@ -1901,6 +1957,7 @@ String STR_LINECOUNT
     Text[ czech ] = "Počítat řádky";
     Text[ hebrew ] = "Zeilen zählen";
     Text[ hindi ] = "रेखाओं को गिनना";
+    Text[ slovak ] = "Počítať riadky";
 };
 String STR_DONTLINECOUNT
 {
@@ -1933,6 +1990,7 @@ String STR_DONTLINECOUNT
     Text[ czech ] = "nepočítat řádky";
     Text[ hebrew ] = "Zeilen nicht zählen";
     Text[ hindi ] = "रेखाओं को मत गिनना";
+    Text[ slovak ] = "nepočítať riadky";
 };
 String STR_LINCOUNT_START
 {
@@ -1965,6 +2023,7 @@ String STR_LINCOUNT_START
     Text[ czech ] = "restartovat počítání řádků od: ";
     Text[ hebrew ] = "Zeilenzähler starten mit:";
     Text[ hindi ] = "के सहित रेखा गिनती का पुनः प्रारंभ: ";
+    Text[ slovak ] = "reštartovať počítanie riadkov od: ";
 };
 
 String STR_LUMINANCE
@@ -1995,6 +2054,7 @@ String STR_LUMINANCE
     Text[ czech ] = "Jas: ";
     Text[ hebrew ] = "Helligkeit:";
     Text[ hindi ] = "चमक: ";
+    Text[ slovak ] = "Jas: ";
 };
 
 String STR_CHANNELR
@@ -2025,6 +2085,7 @@ String STR_CHANNELR
     Text[ czech ] = "Červená: ";
     Text[ hebrew ] = "Rotanteil:";
     Text[ hindi ] = "लाल: ";
+    Text[ slovak ] = "Červená: ";
 };
 
 String STR_CHANNELG
@@ -2055,6 +2116,7 @@ String STR_CHANNELG
     Text[ czech ] = "Zelená: ";
     Text[ hebrew ] = "Grünanteil:";
     Text[ hindi ] = "हरा: ";
+    Text[ slovak ] = "Zelená: ";
 };
 
 String STR_CHANNELB
@@ -2085,6 +2147,7 @@ String STR_CHANNELB
     Text[ czech ] = "Modrá: ";
     Text[ hebrew ] = "Blauanteil:";
     Text[ hindi ] = "नीला: ";
+    Text[ slovak ] = "Modrá: ";
 };
 
 String STR_CONTRAST
@@ -2115,6 +2178,7 @@ String STR_CONTRAST
     Text[ czech ] = "Kontrast: ";
     Text[ hebrew ] = "Kontrast:";
     Text[ hindi ] = "भेद बतलाना: ";
+    Text[ slovak ] = "Kontrast: ";
 };
 
 String STR_GAMMA
@@ -2145,6 +2209,7 @@ String STR_GAMMA
     Text[ czech ] = "Gamma: ";
     Text[ hebrew ] = "Gamma: ";
     Text[ hindi ] = "गामा: ";
+    Text[ slovak ] = "Gamma: ";
 };
 
 String STR_TRANSPARENCY
@@ -2175,6 +2240,7 @@ String STR_TRANSPARENCY
     Text[ czech ] = "Průhlednost: ";
     Text[ hebrew ] = "Transparenz:";
     Text[ hindi ] = "पारदर्शकता: ";
+    Text[ slovak ] = "Priehľadnosť: ";
 };
 
 String STR_INVERT
@@ -2205,6 +2271,7 @@ String STR_INVERT
     Text[ czech ] = "Převrátit";
     Text[ hebrew ] = "‮היפוך‬";
     Text[ hindi ] = "उलटा करो";
+    Text[ slovak ] = "Prevrátiť";
 };
 String STR_INVERT_NOT
 {
@@ -2234,6 +2301,7 @@ String STR_INVERT_NOT
     Text[ czech ] = "neobracet";
     Text[ hebrew ] = "nicht invertieren";
     Text[ hindi ] = "मत उलटना";
+    Text[ slovak ] = "neotáčať";
 };
 
 String STR_DRAWMODE
@@ -2264,6 +2332,7 @@ String STR_DRAWMODE
     Text[ czech ] = "Grafický režim: ";
     Text[ hebrew ] = "Grafikmodus:";
     Text[ hindi ] = "सुचित्र प्रकार: ";
+    Text[ slovak ] = "Grafický režim: ";
 };
 
 String STR_DRAWMODE_STD
@@ -2294,6 +2363,7 @@ String STR_DRAWMODE_STD
     Text[ czech ] = "Standardní";
     Text[ hebrew ] = "Standard";
     Text[ hindi ] = "स्टान्डर्ड";
+    Text[ slovak ] = "Štandardný";
 };
 String STR_DRAWMODE_GREY
 {
@@ -2323,6 +2393,7 @@ String STR_DRAWMODE_GREY
     Text[ czech ] = "Stupně šedi";
     Text[ hebrew ] = "Graustufen";
     Text[ hindi ] = "ग्रेस्केल";
+    Text[ slovak ] = "Stupne šedej";
 };
 String STR_DRAWMODE_BLACKWHITE
 {
@@ -2352,6 +2423,7 @@ String STR_DRAWMODE_BLACKWHITE
     Text[ czech ] = "Černobílé";
     Text[ hebrew ] = "Schwarz/Weiß";
     Text[ hindi ] = "काला और सफेद ";
+    Text[ slovak ] = "Čiernobiele";
 };
 String STR_DRAWMODE_WATERMARK
 {
@@ -2381,6 +2453,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ czech ] = "Vodoznak";
     Text[ hebrew ] = "Wasserzeichen";
     Text[ hindi ] = "जलसंकेत";
+    Text[ slovak ] = "Vodoznak";
 };
 String STR_ROTATION
 {
@@ -2410,6 +2483,7 @@ String STR_ROTATION
     Text[ czech ] = "Rotace";
     Text[ hebrew ] = "‮סיבוב‬";
     Text[ hindi ] = "घुमाव";
+    Text[ slovak ] = "Rotácia";
 };
 
 String STR_GRID_NONE
@@ -2440,6 +2514,7 @@ String STR_GRID_NONE
     Text[ czech ] = "Žádná mřížka";
     Text[ hebrew ] = "Kein Raster";
     Text[ hindi ] = "No grid";
+    Text[ slovak ] = "Bez mriežky";
 };
 
 String STR_GRID_LINES_ONLY
@@ -2470,6 +2545,7 @@ String STR_GRID_LINES_ONLY
     Text[ czech ] = "Mřížka (pouze čáry)";
     Text[ hebrew ] = "Raster (nur Linien)";
     Text[ hindi ] = "Grid (lines only)";
+    Text[ slovak ] = "Mriežka (len riadky)";
 };
 
 String STR_GRID_LINES_CHARS
@@ -2500,7 +2576,10 @@ String STR_GRID_LINES_CHARS
     Text[ czech ] = "Mřížka (čáry a znaky)";
     Text[ hebrew ] = "Raster (Linien und Zeichen)";
     Text[ hindi ] = "Grid (lines and characters)";
+    Text[ slovak ] = "Mriežka (riadky a znaky)";
 };
+
+
 
 
 
