@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:14:08 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 }
 
 SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
-    const SfxItemSet &rFlySet)
+    const SfxItemSet &rFlySet, const SfxItemSet &rGrfSet)
 {
     SvPersist *pPersist = rDoc.GetPersist();
     ASSERT(pPersist, "No persist, cannot insert objects correctly");
@@ -356,14 +356,14 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
-        pRet = rDoc.InsertOLE(*pPaM, sNewName, pFlySet);
+        pRet = rDoc.InsertOLE(*pPaM, sNewName, pFlySet, &rGrfSet);
     }
     delete pMathFlySet;
     return pRet;
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
-    const SfxItemSet* pFlySet)
+    const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet)
 {
     ::SetProgressState(nProgress, mpDocShell);     // Update
     SwFrmFmt* pFmt = 0;
@@ -409,7 +409,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     {
         if (pRet->ISA(SdrOle2Obj))
         {
-            pFmt = InsertOle(*((SdrOle2Obj*)pRet),*pFlySet);
+            pFmt = InsertOle(*((SdrOle2Obj*)pRet), *pFlySet, *pGrfSet);
             delete pRet;        // das brauchen wir nicht mehr
         }
         else
@@ -420,7 +420,8 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
                 GRAPHIC_BITMAP == aGraph.GetType()
             )
     {
-        pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,0);
+        pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,
+            pGrfSet);
     }
     delete pTempSet;
     return pFmt;
