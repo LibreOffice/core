@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-08 11:09:33 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2513,6 +2513,9 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
     BOOL    bReplaceFont = !ImplIsFontAvailable( hDC, XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) ) );
+
+    bReplaceFont |= aStyleSettings.GetUseSystemUIFonts();
+
     if ( aSalShlData.mbWNT )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
