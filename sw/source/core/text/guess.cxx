@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,12 +327,16 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // if we are formatting multi portions we want to allow line breaks
         // at the border between single line and multi line portion
-        if ( nBreakPos < rInf.GetLineStart() && rInf.IsFirstMulti() )
+        // we have to be carefull with footnote portions, they always come in
+        // with an index 0
+        if ( nBreakPos < rInf.GetLineStart() &&
+             rInf.IsFirstMulti() &&
+             ! rInf.IsFtnInside() )
             nBreakPos = rInf.GetLineStart();
 
         nBreakStart = nBreakPos;
 
-        bHyph = aResult.breakType == BreakType::HYPHENATION;
+        bHyph = BreakType::HYPHENATION == aResult.breakType;
 
         if ( bHyph && nBreakPos != STRING_LEN)
         {
