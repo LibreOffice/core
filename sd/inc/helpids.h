@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 10:39:28 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 08:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,3 +218,6 @@
 
 #define HID_SD_TABBAR_PAGES                 (HID_SD_START + 123)
 #define HID_SD_TABBAR_LAYERS                (HID_SD_START + 124)
+
+#define HID_SD_UNDODELETEWARNING_DLG        (HID_SD_START + 125)
+#define HID_SD_UNDODELETEWARNING_CBX        (HID_SD_START + 126)
