@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:31:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,17 @@
 
 // STATIC DATA ---------------------------------------------------------------
 
+// List box positions for print range (PR)
+const USHORT SC_AREASDLG_PR_NONE    = 0;
+const USHORT SC_AREASDLG_PR_ENTIRE  = 1;
+const USHORT SC_AREASDLG_PR_USER    = 2;
+const USHORT SC_AREASDLG_PR_SELECT  = 3;
+const USHORT SC_AREASDLG_PR_OFFSET  = 4;
 
+// List box positions for repeat ranges (RR)
+const USHORT SC_AREASDLG_RR_NONE    = 0;
+const USHORT SC_AREASDLG_RR_USER    = 1;
+const USHORT SC_AREASDLG_RR_OFFSET  = 2;
 
 //============================================================================
 
@@ -103,7 +113,6 @@
 // globale Funktionen (->am Ende der Datei):
 
 BOOL    lcl_GetColNum( String rStr, USHORT& rColumn );
-String  lcl_GetColStr( USHORT nColNo );
 BOOL    lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange );
 void    lcl_GetRepeatRangeString( const ScRange* pRange, BOOL bIsRow, String& rStr );
 void    lcl_CheckEqual( String& rStr );
@@ -166,7 +175,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScPrintAreasDlg::~ScPrintAreasDlg()
+ScPrintAreasDlg::~ScPrintAreasDlg()
 {
     // Extra-Data an ListBox-Entries abraeumen
 
@@ -190,7 +199,7 @@ __EXPORT ScPrintAreasDlg::~ScPrintAreasDlg()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScPrintAreasDlg::Close()
+BOOL ScPrintAreasDlg::Close()
 {
     return DoClose( ScPrintAreasDlgWrapper::GetChildWindowId() );
 }
@@ -266,7 +275,7 @@ void ScPrintAreasDlg::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScPrintAreasDlg::Deactivate()
+void ScPrintAreasDlg::Deactivate()
 {
     bDlgLostFocus = TRUE;
 }
@@ -353,6 +362,8 @@ void ScPrintAreasDlg::Impl_Reset()
     Impl_ModifyHdl( &aEdPrintArea );
     Impl_ModifyHdl( &aEdRepeatRow );
     Impl_ModifyHdl( &aEdRepeatCol );
+    if( pDoc->IsPrintEntireSheet( nCurTab ) )
+        aLbPrintArea.SelectEntryPos( SC_AREASDLG_PR_ENTIRE );
 
     aEdPrintArea.SaveValue();   // fuer FillItemSet() merken:
     aEdRepeatRow.SaveValue();
@@ -456,7 +467,7 @@ void ScPrintAreasDlg::Impl_FillLists()
         aList->Format( aStrRange, SCR_ABS, pDoc );
     }
 
-    aLbPrintArea.SetEntryData( 2, new String( aStrRange ) );
+    aLbPrintArea.SetEntryData( SC_AREASDLG_PR_SELECT, new String( aStrRange ) );
 
     //------------------------------------------------------
     // Ranges holen und in ListBoxen merken
@@ -534,7 +545,17 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             //-------------------------
             // Druckbereich veraendert?
             //-------------------------
-            bDataChanged = Impl_GetItem( &aEdPrintArea, aPrintArea );
+
+            // first try the list box, if "Entite sheet" is selected
+            BOOL bEntireSheet = (aLbPrintArea.GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
+            SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
+
+            bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );
+            if( !bEntireSheet )
+            {
+                // if new list box selection is not "Entire sheet", get the edit field contents
+                bDataChanged |= Impl_GetItem( &aEdPrintArea, aPrintArea );
+            }
 
             //-------------------------------
             // Wiederholungszeile veraendert?
@@ -552,7 +573,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
                 SwitchToDocument();
                 GetBindings().GetDispatcher()->Execute( SID_CHANGE_PRINTAREA,
                                           SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
-                                          &aPrintArea, &aRepeatRow, &aRepeatCol, 0L );
+                                          &aPrintArea, &aRepeatRow, &aRepeatCol, &aEntireSheet, 0L );
             }
 
             Close();
@@ -596,22 +617,38 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 {
-    USHORT  nSelPos = pLb->GetSelectEntryPos();
-    Edit*   pEd     = &aEdPrintArea;
+    USHORT nSelPos = pLb->GetSelectEntryPos();
+    Edit* pEd = NULL;
 
-    if ( pLb == &aLbRepeatCol )
+    // list box positions of specific entries, default to "repeat row/column" list boxes
+    USHORT nAllSheetPos = SC_AREASDLG_RR_NONE;
+    USHORT nUserDefPos = SC_AREASDLG_RR_USER;
+    USHORT nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
+
+    // find edit field for list box, and list box positions
+    if( pLb == &aLbPrintArea )
+    {
+        pEd = &aEdPrintArea;
+        nAllSheetPos = SC_AREASDLG_PR_ENTIRE;
+        nUserDefPos = SC_AREASDLG_PR_USER;
+        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    // "Selection" and following
+    }
+    else if( pLb == &aLbRepeatCol )
         pEd = &aEdRepeatCol;
-    else if ( pLb == &aLbRepeatRow )
+    else if( pLb == &aLbRepeatRow )
         pEd = &aEdRepeatRow;
+    else
+        return 0;
 
-    if ( nSelPos > 1 )
-        pEd->SetText( *(String*)pLb->GetEntryData( nSelPos ) );
-    else if ( nSelPos == 0 )
+    // fill edit field according to list box selection
+    if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
         pEd->SetText( EMPTY_STRING );
-    else if ( nSelPos == 1 && !pLb->IsTravelSelect() && pEd->GetText().Len() == 0 )
-        pLb->SelectEntryPos(0);
+    else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().Len() == 0 )
+        pLb->SelectEntryPos( 0 );
+    else if( nSelPos >= nFirstCustomPos )
+        pEd->SetText( *static_cast< String* >( pLb->GetEntryData( nSelPos ) ) );
 
-    return NULL;
+    return 0;
 }
 
 
@@ -619,33 +656,46 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 
 IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, ScRefEdit*, pEd )
 {
-    ListBox* pLb = &aLbPrintArea;
+    ListBox* pLb = NULL;
 
-    if ( pEd == &aEdRepeatCol )
+    // list box positions of specific entries, default to "repeat row/column" list boxes
+    USHORT nUserDefPos = SC_AREASDLG_RR_USER;
+    USHORT nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
+
+    if( pEd == &aEdPrintArea )
+    {
+        pLb = &aLbPrintArea;
+        nUserDefPos = SC_AREASDLG_PR_USER;
+        nFirstCustomPos = SC_AREASDLG_PR_SELECT;    // "Selection" and following
+    }
+    else if( pEd == &aEdRepeatCol )
         pLb = &aLbRepeatCol;
-    else if ( pEd == &aEdRepeatRow )
+    else if( pEd == &aEdRepeatRow )
         pLb = &aLbRepeatRow;
+    else
+        return 0;
 
+    // set list box selection according to edit field
     USHORT  nEntryCount = pLb->GetEntryCount();
     String  aStrEd( pEd->GetText() );
     String  aEdUpper = aStrEd;
     aEdUpper.ToUpperAscii();
 
-    if ( (nEntryCount > 2) && aStrEd.Len() > 0 )
+    if ( (nEntryCount > nFirstCustomPos) && aStrEd.Len() > 0 )
     {
         BOOL    bFound  = FALSE;
         String* pSymbol = NULL;
 
-        for ( USHORT i=2; i<nEntryCount && !bFound; i++ )
+        for ( USHORT i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
             pSymbol = (String*)pLb->GetEntryData( i );
             bFound  = ( (*pSymbol == aStrEd) || (*pSymbol == aEdUpper) );
         }
 
-        pLb->SelectEntryPos( bFound ? i-1 : 1 );
+        pLb->SelectEntryPos( bFound ? i-1 : nUserDefPos );
     }
     else
-        pLb->SelectEntryPos( !aStrEd.Len() ? 0 : 1 );
+        pLb->SelectEntryPos( aStrEd.Len() ? nUserDefPos : 0 );
 
     return NULL;
 }
@@ -683,29 +733,6 @@ BOOL lcl_GetColNum( String rStr, USHORT& rColumn )
         }
 
     return bOk;
-}
-
-
-//----------------------------------------------------------------------------
-
-String lcl_GetColStr( USHORT nColNo )
-{
-    // bekommt Spalte bei 0 beginnend (A -> 0)
-
-    String aStr;
-
-    if ( nColNo <= MAXCOL )
-    {
-        if ( nColNo < 26 )
-            aStr = (sal_Unicode) ( 'A' + nColNo );
-        else
-        {
-            aStr  = (sal_Unicode) ( 'A' + ( nColNo / 26 ) - 1 );
-            aStr += (sal_Unicode) ( 'A' + ( nColNo % 26 ) );
-        }
-    }
-
-    return aStr;
 }
 
 
@@ -837,11 +864,11 @@ void lcl_GetRepeatRangeString( const ScRange* pRange, BOOL bIsRow, String& rStr 
         }
         else
         {
-            rStr += lcl_GetColStr( rStart.Col() );
+            rStr += ::ColToAlpha( rStart.Col() );
             if ( rStart.Col() != rEnd.Col() )
             {
                 rStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":$" ));
-                rStr += lcl_GetColStr( rEnd.Col() );
+                rStr += ::ColToAlpha( rEnd.Col() );
             }
         }
     }
