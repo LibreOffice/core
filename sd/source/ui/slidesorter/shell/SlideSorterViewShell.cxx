@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:22:48 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "FrameView.hxx"
 #include "sdpage.hxx"
 #include "SdUnoSlideView.hxx"
+#include "PaneManager.hxx"
 
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -203,6 +204,27 @@ void SlideSorterViewShell::Init (void)
 
     ViewShell::Init ();
     SetupListeners ();
+}
+
+
+
+
+SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase)
+{
+    // Test the center, left, and right pane for showing a slide sorter.
+    ViewShell* pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_CENTER);
+    if (pShell==NULL || pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+        pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_LEFT);
+    if (pShell==NULL || pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+        pShell = rBase.GetPaneManager().GetViewShell (PaneManager::PT_RIGHT);
+
+    // Set the shell to NULL when still no slide sorter.
+    if (pShell!=NULL && pShell->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+        pShell = NULL;
+
+    SlideSorterViewShell* pSlideSorter = static_cast<SlideSorterViewShell*>(pShell);
+
+    return pSlideSorter;
 }
 
 
