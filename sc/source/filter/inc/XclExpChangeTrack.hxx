@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:41:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 
 //___________________________________________________________________
 
-class ExcUPN;
 class ScBaseCell;
 
 //___________________________________________________________________
@@ -484,15 +483,15 @@ inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, SCTAB nTab ) cons
 struct XclExpChTrData
 {
     XclExpString*               pString;
-    ExcUPN*                     pUPN;
+    XclExpTokenArrayRef         mxTokArr;
     XclExpRefLogVec             aRefLog;
     double                      fValue;
     sal_Int32                   nRKValue;
     sal_uInt16                  nType;
     sal_uInt16                  nSize;
 
-    inline                      XclExpChTrData();
-    inline                      ~XclExpChTrData() { Clear(); }
+                                XclExpChTrData();
+                                ~XclExpChTrData();
     void                        Clear();
 
     void                        WriteFormula(
@@ -504,16 +503,6 @@ struct XclExpChTrData
                                     const RootData& rRootData,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
 };
-
-inline XclExpChTrData::XclExpChTrData() :
-    pString( NULL ),
-    pUPN( NULL ),
-    fValue( 0.0 ),
-    nRKValue( 0 ),
-    nType( EXC_CHTR_TYPE_EMPTY ),
-    nSize( 0 )
-{
-}
 
 //___________________________________________________________________
 // XclExpChTrCellContent - changed cell content
