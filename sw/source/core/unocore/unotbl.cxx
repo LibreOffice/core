@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-01-30 10:40:15 $
+ *  last change: $Author: os $ $Date: 2001-02-12 09:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2564,6 +2564,12 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     //
     SwFrmFmt* pFmt = GetFrmFmt();
     uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
@@ -2602,6 +2608,12 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
@@ -2639,6 +2651,12 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
+    if(!nRowCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2678,7 +2696,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(pFmt)
     {
         sal_Int16 nRowCount = getRowCount();
-        if(rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
+        if(!nRowCount || rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
             return;
@@ -2715,6 +2733,12 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nColCount = getColumnCount();
+    if(!nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -2751,6 +2775,12 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nColCount = getColumnCount();
+    if(!nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -3777,6 +3807,12 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData(void) throw( uno:
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
     //
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -3812,6 +3848,12 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
+    if(!nRowCount || !nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
@@ -3851,6 +3893,12 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nRowCount = getRowCount();
+    if(!nRowCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
@@ -3891,7 +3939,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(pFmt)
     {
         sal_Int16 nRowCount = getRowCount();
-        if(rRowDesc.getLength() < bFirstRowAsLabel ? nRowCount - 1 : nRowCount)
+        if(!nRowCount || rRowDesc.getLength() < bFirstRowAsLabel ? nRowCount - 1 : nRowCount)
         {
             throw uno::RuntimeException();
             return;
@@ -3926,6 +3974,12 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nColCount = getColumnCount();
+    if(!nColCount)
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("Table too complex");
+        throw aRuntime;
+    }
     uno::Sequence< OUString > aRet(bFirstRowAsLabel ? nColCount - 1 : nColCount);
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
