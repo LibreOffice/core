@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Policy.idl,v $
+ *  $RCSfile: AllPermission.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,23 +58,31 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_security_Policy_idl__
-#define __com_sun_star_security_Policy_idl__
+#ifndef __com_sun_star_security_AllPermission_idl__
+#define __com_sun_star_security_AllPermission_idl__
 
-#ifndef __com_sun_star_security_XPolicy_idl__
-#include <com/sun/star/security/XPolicy.idl>
-#endif
-
+//=============================================================================
 
 module com {  module sun {  module star {  module security {
 
-/** Service for getting sets of permissions reading from some persistent
-    storage.
+//=============================================================================
+
+/** The AllPermission is a permission that implies all other permissions.
+
+    @attention
+    Granting AllPermission should be done with extreme care, as it implies all
+    other permissions.  Thus, it grants code the ability to run with security
+    disabled.  Extreme caution should be taken before granting such a
+    permission to code.  This permission should be used only during testing,
+    or in extremely rare cases where an application is completely trusted and
+    adding the necessary permissions to the policy is prohibitively cumbersome.
 */
-service Policy
+struct AllPermission
 {
-    interface XPolicy;
+    byte dummy;
 };
+
+//=============================================================================
 
 }; }; }; };
 

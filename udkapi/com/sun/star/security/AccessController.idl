@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessController.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-07 16:08:18 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,18 @@ module com {  module sun {  module star {  module security {
 
 //=============================================================================
 
-/** This service supports the XAccessController interface for checking security
-    permissions.
-    <p>
-    It obviously has also to be ensured that the object is process-local to assure
-    that permission checks are not corrupted via insecure inter-process
+/** This meta service supports the XAccessController interface for checking
+    security permissions.
+
+    @attention
+    The specific service implementation of this meta service has to take care
+    of bootstrapping problems, i.e. recurring calls during initialization
+    have to be resolved.  This happens when the implementation calls other
+    service implementations.
+
+    Also, it obviously has also to be ensured that the object is process-local
+    to assure that permission checks are not corrupted via insecure inter-process
     communication.
-    </p>
 */
 service AccessController
 {

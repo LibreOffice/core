@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessControlException.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 16:36:36 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <com/sun/star/uno/SecurityException.idl>
 #endif
 
-#ifndef __com_sun_star_security_Permission_idl__
-#include <com/sun/star/security/Permission.idl>
-#endif
-
 
 //=============================================================================
 
@@ -81,12 +77,13 @@ module com {  module sun {  module star {  module security {
 */
 exception AccessControlException : com::sun::star::uno::SecurityException
 {
-    /** lacking permission; although this is most often a Permission struct,
-        this is extensible for future permissions keeping compatible.
-        <p>
-        Remember: code calling checkPermission() giving a permission
-        specification most often does not catch a coming AccessControlException!
-        </p>
+    /** lacking permission.
+
+        @attention
+        If it is the case, that XAccessController::checkPermission() was called
+        passing a sequence< any >, i.e. a sequence of paermissions are demanded,
+        then this any holds the sequence of lacking permissions in the same
+        order as they were passed to XAccessController::checkPermission().
     */
     any LackingPermission;
 };

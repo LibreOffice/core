@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessController.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:05:47 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #include <com/sun/star/security/XAction.idl>
 #endif
 
-#ifndef __com_sun_star_security_Permission_idl__
-#include <com/sun/star/security/Permission.idl>
-#endif
-
 #ifndef __com_sun_star_security_AccessControlException_idl__
 #include <com/sun/star/security/AccessControlException.idl>
 #endif
@@ -96,9 +92,11 @@ interface XAccessController : com::sun::star::uno::XInterface
     /** Determines whether the access request indicated by the specified
         permission should be allowed or denied, based on the security policy
         currently in effect.
-        The type names and semantics are equivalent to the security permission
-        classes of the Java platform.
+        The semantics are equivalent to the security permission classes of
+        the Java platform.
         <p>
+        You can also pass a sequence of permissions (sequence< any >) to check
+        a set of permissions, e.g. for performance reasons.
         This method quietly returns if the access request is permitted,
         or throws a suitable AccessControlException otherwise.
         </p>
@@ -108,9 +106,15 @@ interface XAccessController : com::sun::star::uno::XInterface
 
         @throws AccessControlException
                 thrown if access is denied
+
+        @see ::com::sun::star::security::AccessControlException
+        @see ::com::sun::star::uno::AllPermission
+        @see ::com::sun::star::uno::RuntimePermission
+        @see ::com::sun::star::io::FilePermission
+        @see ::com::sun::star::connection::SocketPermission
     */
     void checkPermission(
-        [in] Permission perm )
+        [in] any perm )
         raises (AccessControlException);
 
     /** Perform the specified action restricting permissions to the given
@@ -123,6 +127,7 @@ interface XAccessController : com::sun::star::uno::XInterface
         If the specified XAccessControlContext is null, then the action is performed
         with unmodified permissions, i.e. the call makes no sense.
         </p>
+
         @param action
                action object to be executed
         @param restriction

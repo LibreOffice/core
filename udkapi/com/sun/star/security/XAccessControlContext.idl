@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessControlContext.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 16:36:36 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_security_Permission_idl__
-#include <com/sun/star/security/Permission.idl>
-#endif
-
 #ifndef __com_sun_star_security_AccessControlException_idl__
 #include <com/sun/star/security/AccessControlException.idl>
 #endif
@@ -95,9 +91,11 @@ interface XAccessControlContext : com::sun::star::uno::XInterface
 {
     /** Determines whether the access request indicated by the specified
         permission should be allowed or denied, based on this context.
-        The type names and semantics are equivalent to the security permission
-        classes of the Java platform.
+        The semantics are equivalent to the security permission classes of
+        the Java platform.
         <p>
+        You can also pass a sequence of permissions (sequence< any >) to check
+        a set of permissions, e.g. for performance reasons.
         This method quietly returns if the access request is permitted,
         or throws a suitable AccessControlException otherwise.
         </p>
@@ -107,9 +105,15 @@ interface XAccessControlContext : com::sun::star::uno::XInterface
 
         @throws AccessControlException
                 thrown if access is denied
+
+        @see ::com::sun::star::security::AccessControlException
+        @see ::com::sun::star::uno::AllPermission
+        @see ::com::sun::star::uno::RuntimePermission
+        @see ::com::sun::star::io::FilePermission
+        @see ::com::sun::star::connection::SocketPermission
     */
     void checkPermission(
-        [in] Permission perm )
+        [in] any perm )
         raises (AccessControlException);
 };
 

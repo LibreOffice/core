@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPolicy.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-07 16:08:18 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,33 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_security_Permission_idl__
-#include <com/sun/star/security/Permission.idl>
-#endif
-
 
 module com {  module sun {  module star {  module security {
 
-/** Interface for getting permissions collections.
+/** Interface for getting sets of permissions of a specified user or
+    the default permissions if no user is given.
+
+    @see com::sun::star::security::Policy
 */
 interface XPolicy : com::sun::star::uno::XInterface
 {
-    /** Gets the permissions of the specified user.
+    /** Gets the permissions of the specified user including the default permissions
+        granted to all users.
 
-        @return permissions of the specified user
+        @param userId
+               user id
+        @return
+               permissions of the specified user
     */
-    sequence< Permission > getPermissions(
+    sequence< any > getPermissions(
         [in] string userId );
 
-    /** Gets the default permissions
+    /** Gets the default permissions granted to all users.
 
-        @return default permissions
+        @return
+               default permissions
     */
-    sequence< Permission > getDefaultPermissions();
+    sequence< any > getDefaultPermissions();
 
     /** Refreshes the policy configuration.
     */
