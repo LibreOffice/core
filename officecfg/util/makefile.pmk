@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:48:28 $
+#   last change: $Author: rt $ $Date: 2004-07-23 10:30:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 
 $(MISC)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @+echo -------------+ validating and stripping schema files
-    -$(MKDIR) -p $(@:d)
+    -$(MKDIRHIER) $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_val.xsl $(@:d)$*.val componentName=$(PACKAGE).$*
@@ -92,10 +92,15 @@ $(MISC)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     +$(RM) $(@:d)$*.val > $(NULLDEV)
     +$(RM) $(@:d)$*.san > $(NULLDEV)
     
+$(MISC)$/merge$/$(PACKAGEDIR)$/%.xcs : %.xcs
+# just a copy for now - insert "cfgex" commandline when required
+    +$(MKDIRHIER) $(@:d)
+    +$(COPY) $< $@
+
 # Create properties files for localized <info> contents (Currently not built)
-$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| %.xcs
+$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcs
     @+echo -------------+ creating locale dependent resource bundles
-    -$(MKDIR) -p $(@:d)
+    -$(MKDIRHIER) $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))}
 .ELSE
@@ -108,7 +113,7 @@ $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| %.xcs
 
 $(MISC)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @+echo -------------+ validating and creating a locale independent file
-    -$(MKDIR) -p $(@:d) 
+    -$(MKDIRHIER) $(@:d) 
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/data_val.xsl $(@:d)$*.val xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema
@@ -139,9 +144,13 @@ $(MISC)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
 
 # --- localizations ---
 
-$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
+$(MISC)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
+    +$(MKDIRHIER) $(@:d)
+    $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
+
+$(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(MISC)$/merge$/$(PACKAGEDIR)$/%.xcu
     @+echo -------------+ creating locale dependent entries
-    -$(MKDIR) -p $(@:d)
+    -$(MKDIRHIER) $(@:d)
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$*.tmp xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))}	
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
@@ -163,7 +172,7 @@ $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
 
 $(MISC)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
     @+echo -------------+ creating a Langpack module for locale $*
-    -$(MKDIR) -p $(@:d) 
+    -$(MKDIRHIER) $(@:d) 
     $(SED) -e "s/__LANGUAGE__/$*/" -e "/^<!--/,/-->/d" $< > $@
     
 
@@ -171,7 +180,7 @@ $(MISC)$/registry$/spool$/Langpack-%.xcu : Langpack.xcu.tmpl
 
 $(MISC)$/registry$/spool$/$(PACKAGE).%.xcu :| $$(@:b:s!.!$/!:s!-!.!:b).xcu
     @+echo -------------+ creating a module file
-    -$(MKDIR) -p $(@:d) 
+    -$(MKDIRHIER) $(@:d) 
 .IF "$(SOLAR_JAVA)"!=""
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
