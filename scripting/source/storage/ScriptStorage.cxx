@@ -2,8 +2,8 @@
  *
  *  $RCSfile: ScriptStorage.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:17:49 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: npower $ $Date: 2002-09-24 15:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
+
+#include <osl/file.hxx>
 
 #include <util/util.hxx>
 
@@ -508,15 +510,6 @@ throw (lang::IllegalArgumentException,
 }
 
 //*************************************************************************
-/**
-    copies a parcel to a temporary location
-
-    @params parcelURI
-    the location of the parcel (file URI) to be copied
-
-    @return
-    <type>::rtl::OUString</type> the new location of the parcel (file URI)
-*/
 OUString SAL_CALL ScriptStorage::prepareForInvocation( const OUString& parcelURI ) throw (RuntimeException)
 {
     try
@@ -532,7 +525,9 @@ OUString SAL_CALL ScriptStorage::prepareForInvocation( const OUString& parcelURI
                 Reference<XInterface> ());
         }
 
-        OUString dest = OUString::createFromAscii("file:///tmp");
+        OUString dest;
+        ::osl::FileBase::getTempDirURL(dest);
+
         sal_Int32 idx = parcelURI.lastIndexOf('/');
         sal_Int32 len = parcelURI.getLength();
         if (idx == (len-1))
@@ -561,13 +556,6 @@ OUString SAL_CALL ScriptStorage::prepareForInvocation( const OUString& parcelURI
         throw RuntimeException(temp.concat(e.Message),
                                Reference<XInterface> ());
     }
-    catch(Exception &e)
-    {
-        OUString temp = OUSTR(
-                            "ScriptStorage::prepareForInvocation UnknownException: ");
-        throw RuntimeException(temp.concat(e.Message),
-                               Reference<XInterface> ());
-    }
 #ifdef _DEBUG
     catch ( ... )
     {
@@ -580,18 +568,12 @@ OUString SAL_CALL ScriptStorage::prepareForInvocation( const OUString& parcelURI
 
 //*************************************************************************
 /**
-   This function copies the contents of the source folder into the
-   destination folder. If the destination folder does not exist, it
-   is created. If the destination folder exists, it is deleted and then
-   created. All URIs supported by the relevant XSimpleFileAccess
-   implementation are supported.
-
-    @params src
-        the source folder (file URI)
-
-    @params dest
-    the destination folder (file URI)
-*/
+ * This function copies the contents of the source folder into the
+ * destination folder. If the destination folder does not exist, it
+ * is created. If the destination folder exists, it is deleted and then
+ * created. All URIs supported by the relevant XSimpleFileAccess
+ * implementation are supported.
+ */
 void ScriptStorage::copyFolder(const OUString &src, const OUString &dest) throw (RuntimeException)
 {
     try
