@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-02 15:37:39 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,10 @@ SvStream& operator << (SvStream& rStream, const SmSym& rSymbol)
 
 SvStream& operator >> (SvStream& rStream, SmSym& rSymbol)
 {
-    rStream.ReadByteString( rSymbol.Name, gsl_getSystemTextEncoding() );
+    ByteString aByteStr;
+
+    rStream.ReadByteString( aByteStr );
+    rSymbol.Name = ImportString( aByteStr );
     if (SF_Ident == SF_SM20IDENT)
         ReadSM20Font(rStream, rSymbol.Face);
     else
@@ -422,8 +425,10 @@ SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet)
 {
     USHORT      n;
     SmSym     *pSymbol;
+    ByteString aByteStr;
 
-    rStream.ReadByteString(rSymbolSet.Name, gsl_getSystemTextEncoding());
+    rStream.ReadByteString( aByteStr );
+    rSymbolSet.Name = ImportString( aByteStr );
     rStream >> n;
 
     for (int i = 0; i < n; i++)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nCharSet = nTmp16;
+            aRes.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
         else
             bOK = FALSE;
         ++pValue;
@@ -848,7 +848,7 @@ void SmMathConfig::SaveFontFormatList()
         // CharSet
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= (INT16) aFntFmt.nCharSet;
+        pVal->Value <<= (INT16) aFntFmt.nCharSet; // 6.0 file-format GetSOStoreTextEncoding not needed
         pVal++;
         // Family
         pVal->Name  = aNodeNameDelim;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,9 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     }
 
     GetFont() = rFormat.GetFont(FNT_MATH);
-    GetFont().SetCharSet(RTL_TEXTENCODING_SYMBOL);
+    //GetFont().SetCharSet(RTL_TEXTENCODING_SYMBOL);
+    DBG_ASSERT( GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
+            "unexpected CharSet" );
     GetFont().SetWeight(WEIGHT_NORMAL);
     GetFont().SetItalic(ITALIC_NONE);
 

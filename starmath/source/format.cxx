@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ SmFormat::SmFormat()
     vFont[FNT_SANS]     = SmFace(C2S(FNTNAME_HELV),  aBaseSize);
     vFont[FNT_FIXED]    = SmFace(C2S(FNTNAME_COUR),  aBaseSize);
     vFont[FNT_MATH]     = SmFace(C2S(FNTNAME_MATH),  aBaseSize);
+
+    vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 
     vFont[FNT_VARIABLE].SetItalic(ITALIC_NORMAL);
     vFont[FNT_FUNCTION].SetItalic(ITALIC_NONE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,12 @@ class String;
 
 #define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 
-const ByteString ExportString(const String& rString);
+/////////////////////////////////////////////////////////////////
 
+const ByteString    ExportString( const String& rString );
+const String        ImportString( const ByteString& rByteString );
+
+/////////////////////////////////////////////////////////////////
 
 inline long SmPtsTo100th_mm(long nNumPts)
     // returns the length (in 100th of mm) that corresponds to the length

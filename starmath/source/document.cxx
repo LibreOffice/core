@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-02 15:36:37 $
+ *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,6 +1083,7 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream, BOOL bInsert)
     long         lTime;
     ULONG        lDate;
     String       aBuffer;
+    ByteString   aByteStr;
     SmSymSet    *pSymbolSet;
     ULONG        FilePos = pStream->Tell();
 
@@ -1093,13 +1094,14 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream, BOOL bInsert)
         DBG_ASSERT((lVersion == FRMVERSION), "Illegal file version");
 
         *pStream >> cTag;
-        rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+        rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
         while (cTag && !pStream->IsEof())
         {
             switch (cTag)
             {
                 case 'T':
-                    pStream->ReadByteString(aBuffer, eEnc);
+                    pStream->ReadByteString( aByteStr );
+                    aBuffer = ImportString( aByteStr );
                     if (! bInsert)
                     {
                         aText = aBuffer;
@@ -1589,6 +1591,7 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
         long         lTime;
         ULONG        lDate;
         String       aBuffer;
+        ByteString   aByteStr;
 
         *pSvStream >> lIdent >> lVersion;
 
@@ -1598,13 +1601,14 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
                        (lVersion == SM50VERSION), "Illegal file version");
 
             *pSvStream >> cTag;
-            rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+            rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
             while (cTag && !pSvStream->IsEof())
             {
                 switch (cTag)
                 {
                     case 'T':
-                        pSvStream->ReadByteString(aText, eEnc);
+                        pSvStream->ReadByteString( aByteStr );
+                        aText = ImportString( aByteStr );
                         Parse();
                         break;
 
@@ -1634,7 +1638,7 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
                     {
                         String      aTmp;
                         USHORT      n;
-                        pSvStream->ReadByteString(aTmp, gsl_getSystemTextEncoding());
+                        pSvStream->ReadByteString(aTmp, eEnc);
                         *pSvStream >> n;
                         break;
                     }
@@ -1689,6 +1693,7 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
         ULONG        lDate;
         UINT32       lDataSize;
         String       aBuffer;
+        ByteString   aByteStr;
         SmSymSet    *pSymbolSet;
 
         *pSvStream >> lDataSize >> lIdent >> lVersion;
@@ -1698,14 +1703,14 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
             DBG_ASSERT((lVersion == FRMVERSION), "Illegal file version");
 
             *pSvStream >> cTag;
-            rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+            rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
             while (cTag && !pSvStream->IsEof())
             {
                 switch (cTag)
                 {
                     case 'T':
-                        pSvStream->ReadByteString(aBuffer, eEnc);
-                        aText = aBuffer;
+                        pSvStream->ReadByteString( aByteStr );
+                        aText = ImportString( aByteStr );
                         Parse();
                         break;
 
