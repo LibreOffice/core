@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:44:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,11 @@ namespace dbaui
         void                        DeleteFields( const String& rAliasName );
         // AddGroupBy:: F"ugt ein Feld mit Funktion == Grupierung. Falls das Feld schon vorhanden ist und ein Aggregate Funktion
         // benutzt, wird das Flag nicht gesetzt
-        void                        AddGroupBy( const OTableFieldDescRef& rInfo );
+        void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
         void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const String& rValue,
                                                   const sal_uInt16 nLevel, const char* pOp=0 );
-        void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt16& nPos);
+        void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
         OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
         sal_Bool                    Save();
