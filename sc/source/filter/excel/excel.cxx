@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:12:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "exp_op.hxx"
-
-void InitFuncData( BOOL bBiff8 );
-void DeInitFuncData();
 
 
 FltError ScImportExcel( SfxMedium& r, ScDocument* p )
@@ -261,8 +258,6 @@ FltError ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
 
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
 
-    InitFuncData( bBiff8 );
-
     FltError eRet = eERR_UNKN_BIFF;
     XclExpRootData aExpData( bBiff8 ? xlBiff8 : xlBiff5, rMedium, xRootStrg, *xStrgStrm, *pDocument, eNach );
     if ( bBiff8 )
@@ -278,8 +273,6 @@ FltError ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
 
     if( eRet == eERR_RNGOVRFLW )
         eRet = SCWARN_EXPORT_MAXROW;
-
-    DeInitFuncData();
 
     SvGlobalName aGlobName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
     sal_uInt32 nClip = SotExchange::RegisterFormatName( aClipName );
