@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EmbeddedObjectDescriptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:49:56 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_document_EmbeddedObjectDescriptor_idl__
-#define __com_sun_star_document_EmbeddedObjectDescriptor_idl__
+#ifndef __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
+#define __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
 
 #ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
@@ -81,46 +81,51 @@
 #include <com/sun/star/task/XStatusIndicator.idl>
 #endif
 
-//=============================================================================
+#ifndef __com_sun_star_frame_XDispatchProviderInterceptor_idl__
+#include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
+#endif
 
-module com { module sun { module star { module document {
+//============================================================================
 
-//=============================================================================
+module com { module sun { module star { module embed {
+
+//============================================================================
 /** describes properties of an embedded object
 
     <p>
     This service may be represented by a
     <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
-    Such descriptors will be passed to different functions, included into possible
-    load/save proccesses. Every member of such process can use this descriptor
-    and may change it if to actualize the informations about the document.
-    So this descriptor should be used as an in/out parameter.
-    </p>
-
-    <p>
-    Note:<br>
-    It's not allowed to hold member of this descriptor by references longer the they
-    will be used (especialy a possible stream). It's allowed to use it directly
-    or by copying it only.
+    Such descriptors will be passed to different functions, included into
+    possible load/save proccesses. Every member of such process can use
+    this descriptor and may change it to actualize the informations about
+    the object. So this descriptor should be used as an in/out parameter.
     </p>
 
     @see com::sun::star::beans::PropertyValue
  */
 service EmbeddedObjectDescriptor
 {
-    //-------------------------------------------------------------------------
-    /** let the graphical representation of embedded document be stored
+    //------------------------------------------------------------------------
+    /** lets the graphical representation of embedded document be stored.
 
         <p>
-        Tells the embedded object that controlls the document to store or not to store
-        the graphical representation of the document in to the object persistence.
+        Setting of this property to true tells the embedded object that
+        controlls the document to store or not to store the graphical
+        representation of the document in to the object persistence.
         If this property is not set the object makes the decision itself.
         </p>
     */
     [optional,property] boolean StoreVisualReplacement;
+
+    //------------------------------------------------------------------------
+    /** allows to provide a dispatch interceptor for outplace activation.
+    */
+    [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor
+                                                OutplaceDispatchInterceptor;
+
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
