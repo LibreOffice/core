@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxftblrd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2002-12-04 12:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,13 @@ void DXFLType::Read(DXFGroupReader & rDGR)
 {
     long nDashIndex=-1;
 
-    while (rDGR.Read()!=0) {
-        switch (rDGR.GetG()) {
-            case  2: strcpy(sName,rDGR.GetS()); break;
+    while (rDGR.Read()!=0)
+    {
+        switch (rDGR.GetG())
+        {
+            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
             case 70: nFlags=rDGR.GetI(); break;
-            case  3: strcpy(sDescription,rDGR.GetS()); break;
+            case  3: strncpy( sDescription, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
             case 73:
                 if (nDashIndex!=-1) {
                     rDGR.SetError();
@@ -120,10 +122,10 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
 {
     while (rDGR.Read()!=0) {
         switch(rDGR.GetG()) {
-            case  2: strcpy(sName,rDGR.GetS()); break;
+            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
             case 70: nFlags=rDGR.GetI(); break;
             case 62: nColor=rDGR.GetI(); break;
-            case  6: strcpy(sLineType,rDGR.GetS()); break;
+            case  6: strncpy( sLineType, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         }
     }
 }
@@ -148,15 +150,15 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
 {
     while (rDGR.Read()!=0) {
         switch(rDGR.GetG()) {
-            case  2: strcpy(sName,rDGR.GetS()); break;
+            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
             case 70: nFlags=rDGR.GetI(); break;
             case 40: fHeight=rDGR.GetF(); break;
             case 41: fWidthFak=rDGR.GetF(); break;
             case 50: fOblAngle=rDGR.GetF(); break;
             case 71: nTextGenFlags=rDGR.GetI(); break;
             case 42: fLastHeightUsed=rDGR.GetF(); break;
-            case  3: strcpy(sPrimFontFile,rDGR.GetS()); break;
-            case  4: strcpy(sBigFontFile,rDGR.GetS()); break;
+            case  3: strncpy( sPrimFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+            case  4: strncpy( sBigFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         }
     }
 }
@@ -205,7 +207,7 @@ void DXFVPort::Read(DXFGroupReader & rDGR)
 {
     while (rDGR.Read()!=0) {
         switch(rDGR.GetG()) {
-            case  2: strcpy(sName,rDGR.GetS()); break;
+            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1); break;
             case 70: nFlags=rDGR.GetI(); break;
             case 10: fMinX=rDGR.GetF(); break;
             case 20: fMinY=rDGR.GetF(); break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfblkrd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2002-12-04 12:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,19 @@ void DXFBlock::Read(DXFGroupReader & rDGR)
     nFlags=0;
     sXRef[0]=0;
 
-    while (rDGR.Read()!=0) switch (rDGR.GetG()) {
-        case  2: strcpy(sName,rDGR.GetS()); break;
-        case  3: strcpy(sAlsoName,rDGR.GetS()); break;
-        case 70: nFlags=rDGR.GetI(); break;
-        case 10: aBasePoint.fx=rDGR.GetF(); break;
-        case 20: aBasePoint.fy=rDGR.GetF(); break;
-        case 30: aBasePoint.fz=rDGR.GetF(); break;
-        case  1: strcpy(sXRef,rDGR.GetS()); break;
+    while (rDGR.Read()!=0)
+    {
+        switch (rDGR.GetG())
+        {
+            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+            case  3: strncpy( sAlsoName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+            case 70: nFlags=rDGR.GetI(); break;
+            case 10: aBasePoint.fx=rDGR.GetF(); break;
+            case 20: aBasePoint.fy=rDGR.GetF(); break;
+            case 30: aBasePoint.fz=rDGR.GetF(); break;
+            case  1: strncpy( sXRef, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+        }
     }
-
     DXFEntities::Read(rDGR);
 }
 

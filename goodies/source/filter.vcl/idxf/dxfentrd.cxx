@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfentrd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
+ *  last change: $Author: sj $ $Date: 2002-12-04 12:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
 {
     eType=eThisType;
     pSucc=NULL;
-    strcpy(sLayer,"0");
-    strcpy(sLineType,"BYLAYER");
+    strncpy(sLayer,"0", 2 );
+    strncpy(sLineType,"BYLAYER", 8 );
     fElevation=0;
     fThickness=0;
     nColor=256;
@@ -86,9 +86,10 @@ void DXFBasicEntity::Read(DXFGroupReader & rDGR)
 
 void DXFBasicEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
-    switch (rDGR.GetG()) {
-        case   8: strcpy(sLayer,rDGR.GetS()); break;
-        case   6: strcpy(sLineType,rDGR.GetS()); break;
+    switch (rDGR.GetG())
+    {
+        case   8: strncpy( sLayer, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+        case   6: strncpy( sLineType, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case  38: fElevation=rDGR.GetF(); break;
         case  39: fThickness=rDGR.GetF(); break;
         case  62: nColor=rDGR.GetI(); break;
@@ -237,7 +238,7 @@ DXFTextEntity::DXFTextEntity() : DXFBasicEntity(DXF_TEXT)
     fRotAngle=0.0;
     fXScale=1.0;
     fOblAngle=0.0;
-    strcpy(sStyle,"STANDARD");
+    strncpy( sStyle, "STANDARD", 9 );
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
@@ -250,11 +251,11 @@ void DXFTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: strcpy(sText,rDGR.GetS()); break;
+        case  1: strncpy( sText, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 42: fOblAngle=rDGR.GetF(); break;
-        case  7: strcpy(sStyle,rDGR.GetS()); break;
+        case  7: strncpy( sStyle, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 73: nVertJust=rDGR.GetI(); break;
@@ -283,7 +284,7 @@ void DXFShapeEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fSize=rDGR.GetF(); break;
-        case  2: strcpy(sName,rDGR.GetS()); break;
+        case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
@@ -311,7 +312,7 @@ void DXFInsertEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
         case 66: nAttrFlag=rDGR.GetI(); break;
-        case  2: strcpy(sName,rDGR.GetS()); break;
+        case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 10: aP0.fx=rDGR.GetF(); break;
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
@@ -340,7 +341,7 @@ DXFAttDefEntity::DXFAttDefEntity() : DXFBasicEntity(DXF_ATTDEF)
     fRotAngle=0.0;
     fXScale=1.0;
     fOblAngle=0.0;
-    strcpy(sStyle,"STANDARD");
+    strncpy( sStyle, "STANDARD", 9 );
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
@@ -353,15 +354,15 @@ void DXFAttDefEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: strcpy(sDefVal,rDGR.GetS()); break;
-        case  3: strcpy(sPrompt,rDGR.GetS()); break;
-        case  2: strcpy(sTagStr,rDGR.GetS()); break;
+        case  1: strncpy( sDefVal, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+        case  3: strncpy( sPrompt, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+        case  2: strncpy( sTagStr, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 70: nAttrFlags=rDGR.GetI(); break;
         case 73: nFieldLen=rDGR.GetI(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
-        case  7: strcpy(sStyle,rDGR.GetS()); break;
+        case  7: strncpy( sStyle, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 74: nVertJust=rDGR.GetI(); break;
@@ -384,7 +385,7 @@ DXFAttribEntity::DXFAttribEntity() : DXFBasicEntity(DXF_ATTRIB)
     fRotAngle=0.0;
     fXScale=1.0;
     fOblAngle=0.0;
-    strcpy(sStyle,"STANDARD");
+    strncpy( sStyle, "STANDARD", 9 );
     nGenFlags=0;
     nHorzJust=0;
     nVertJust=0;
@@ -397,14 +398,14 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
         case 20: aP0.fy=rDGR.GetF(); break;
         case 30: aP0.fz=rDGR.GetF(); break;
         case 40: fHeight=rDGR.GetF(); break;
-        case  1: strcpy(sText,rDGR.GetS()); break;
-        case  2: strcpy(sTagStr,rDGR.GetS()); break;
+        case  1: strncpy( sText, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+        case  2: strncpy( sTagStr, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 70: nAttrFlags=rDGR.GetI(); break;
         case 73: nFieldLen=rDGR.GetI(); break;
         case 50: fRotAngle=rDGR.GetF(); break;
         case 41: fXScale=rDGR.GetF(); break;
         case 51: fOblAngle=rDGR.GetF(); break;
-        case  7: strcpy(sStyle,rDGR.GetS()); break;
+        case  7: strncpy( sStyle, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         case 71: nGenFlags=rDGR.GetI(); break;
         case 72: nHorzJust=rDGR.GetI(); break;
         case 74: nVertJust=rDGR.GetI(); break;
@@ -836,7 +837,7 @@ DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
 void DXFDimensionEntity::EvaluateGroup(DXFGroupReader & rDGR)
 {
     switch (rDGR.GetG()) {
-        case  2: strcpy(sPseudoBlock,rDGR.GetS()); break;
+        case  2: strncpy( sPseudoBlock, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
         default: DXFBasicEntity::EvaluateGroup(rDGR);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-11 10:58:09 $
+ *  last change: $Author: sj $ $Date: 2002-12-04 12:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ void DXFGroupReader::SetS(USHORT nG, const char * sS)
             pPtr = S999_1009[ nG ];
     }
     if ( pPtr )
-        strcpy( pPtr, sS );
+        strncpy( pPtr, sS, DXF_MAX_STRING_LEN + 1 );
 }
 
 
