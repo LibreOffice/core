@@ -67,11 +67,13 @@ USE_JAVAVER:=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVAVER:s/.//)" >= "140" 
+.IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
+
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
 JAVAFILES = \
     AccessBridge.java \
     KeyHandler.java \
+    PopupWindow.java \
     WindowsAccessBridgeAdapter.java
 
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
@@ -80,7 +82,8 @@ JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE) org/openoffice/java/accessibility 
 CUSTOMMANIFESTFILE      = manifest
-.ENDIF
+
+.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 # --- Targets ------------------------------------------------------
 
