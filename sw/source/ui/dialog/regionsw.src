@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:03:27 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
     Text[ chinese_simplified ] = "´øÌõ¼ş(~W)";  \
     Text[ russian ] = "Ïğè óñëîâèè";    \
     Text[ polish ] = "Warunkowy";   \
-    Text[ japanese ] = "ğŒ•t(~W)";    \
+    Text[ japanese ] = "ğŒ•t‚«(~W)";  \
     Text[ chinese_traditional ] = "¦³±ø¥ó(~W)"; \
     Text[ arabic ] = "ÈÔÑØ";    \
     Text[ greek ] = "Ìå óõíèŞê~ç";  \
