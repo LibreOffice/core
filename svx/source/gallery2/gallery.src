@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-02 14:53:23 $
+ *  last change: $Author: kz $ $Date: 2001-04-04 19:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,7 +1440,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂË";
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ";
     Text[ polish ] = "Filtr graficzny";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ";
+    Text[ japanese ] = "‰æ‘œÌ¨ÙÀ";
     Text[ chinese_traditional ] = "¹Ï§Î¹LÂo";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter";
