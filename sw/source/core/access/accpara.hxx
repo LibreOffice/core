@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 07:19:35 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,8 @@ public:
 protected:
 
     // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTILINE(1)
+    // This drived class additinaly sets MULTILINE(1), MULTISELECTABLE(+),
+    // FOCUSABLE(+) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,6 @@ class SwAccessibleHeaderFooter : public SwAccessibleContext
 {
 
 protected:
-
-    // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTISELECTABLE(1)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ~SwAccessibleHeaderFooter();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@ class SwAccessiblePage : public SwAccessibleContext
 
     sal_Bool    IsSelected();
 
-    /// helper method for getAccessibleDescription, getAccessibleName
-    ::rtl::OUString GetPageResource( sal_uInt16 nResId );
-
 protected:
 
     // return the bounding box for the page in page preview mode
@@ -113,10 +110,6 @@ public:
 
     virtual ::rtl::OUString SAL_CALL getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::rtl::OUString SAL_CALL getAccessibleName (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
 
     //
     // XServiceInfo

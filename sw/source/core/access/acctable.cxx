@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:33 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,11 @@ void SwAccessibleTable::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
+
+    // MULTISELECTABLE
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+    if( pCrsrShell  )
+        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
 }
 
 SwAccessibleTable::SwAccessibleTable(

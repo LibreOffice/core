@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,11 +143,17 @@ void SwAccessibleFrameBase::GetStates(
 {
     SwAccessibleContext::GetStates( rStateSet );
 
+    const ViewShell *pVSh = GetMap()->GetShell();
+    DBG_ASSERT( pVSh, "no shell?" );
+    sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
+
     // SELECTABLE
-    rStateSet.AddState( AccessibleStateType::SELECTABLE );
+    if( bSelectable )
+        rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
     // FOCUSABLE
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if( bSelectable )
+        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
     // SELECTED and FOCUSED
     if( IsSelected() )

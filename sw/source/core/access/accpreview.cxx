@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpreview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:32 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _ACCESS_HRC
+#include "access.hrc"
+#endif
 #ifndef _ACCPREVIEW_HXX
 #include <accpreview.hxx>
 #endif
@@ -91,6 +94,7 @@ using ::rtl::OUString;
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMap ) :
     SwAccessibleDocumentBase( pMap )
 {
+    SetName( GetResource( STR_ACCESS_DOC_NAME ) );
 }
 
 SwAccessiblePreview::~SwAccessiblePreview()

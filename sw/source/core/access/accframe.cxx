@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:21:18 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,8 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
         return sal_False;
 
     ASSERT( pVSh, "no view shell" );
-    if( pVSh && pVSh->GetViewOptions()->IsReadonly() )
+    if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
+                 pVSh->IsPreView()) )
         return sal_False;
 
     if( !pFrm->IsRootFrm() && pFrm->IsProtected() )

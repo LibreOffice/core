@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:31 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,14 @@ void SwAccessibleParagraph::GetStates(
     // MULTILINE
     rStateSet.AddState( AccessibleStateType::MULTILINE );
 
+    // MULTISELECTABLE
+    SwCrsrShell *pCrsrSh = GetCrsrShell();
+    if( pCrsrSh )
+        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+
     // FOCUSABLE
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if( pCrsrSh )
+        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCrsr();

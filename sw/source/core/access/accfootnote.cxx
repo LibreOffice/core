@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:28 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,6 @@ const sal_Char sServiceNameFootnote[] = "drafts.com.sun.star.text.AccessibleFoot
 const sal_Char sServiceNameEndnote[] = "drafts.com.sun.star.text.AccessibleEndnoteView";
 const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnote";
 const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnote";
-
-void SwAccessibleFootnote::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
-{
-    SwAccessibleContext::GetStates( rStateSet );
-
-    // MULTISELECTABLE
-    rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
-}
 
 SwAccessibleFootnote::SwAccessibleFootnote(
         SwAccessibleMap *pMap,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:25 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,10 @@ void SwAccessibleCell::GetStates(
     SwAccessibleContext::GetStates( rStateSet );
 
     // SELECTABLE
-    rStateSet.AddState( AccessibleStateType::SELECTABLE );
+    const ViewShell *pVSh = GetMap()->GetShell();
+    DBG_ASSERT( pVSh, "no shell?" );
+    if( pVSh->ISA( SwCrsrShell ) )
+        rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
     // SELECTED
     if( IsSelected() )

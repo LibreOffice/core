@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:30 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -178,6 +181,13 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
 {
     DBG_ASSERT( pFrame != NULL, "need frame" );
     DBG_ASSERT( pMap != NULL, "need map" );
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    OUString sPage = OUString::valueOf(
+        static_cast<sal_Int32>(
+            static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() ) );
+    SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
@@ -187,6 +197,13 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
     DBG_ASSERT( pFrame != NULL, "need frame" );
     DBG_ASSERT( pMap != NULL, "need map" );
     DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    OUString sPage = OUString::valueOf(
+        static_cast<sal_Int32>(
+            static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() ) );
+    SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 
 SwAccessiblePage::~SwAccessiblePage()
@@ -223,27 +240,11 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     return aRet;
 }
 
-
-OUString SwAccessiblePage::GetPageResource( sal_uInt16 nResId )
-{
-    OUString sPage = OUString::valueOf(
-        static_cast<sal_Int32>(
-            static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() ) );
-    return SwAccessibleContext::GetResource( nResId, &sPage );
-}
-
 OUString SwAccessiblePage::getAccessibleDescription( )
     throw( RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    return GetPageResource( STR_ACCESS_PAGE_DESC );
-}
-
-OUString SwAccessiblePage::getAccessibleName( )
-    throw( RuntimeException )
-{
-    CHECK_FOR_DEFUNC( XAccessibleContext );
-
-    return GetPageResource( STR_ACCESS_PAGE_NAME );
+    OUString sArg( GetFormattedPageNumber() );
+    return GetResource( STR_ACCESS_PAGE_DESC, &sArg );
 }

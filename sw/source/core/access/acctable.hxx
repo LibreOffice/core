@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: mib $ $Date: 2002-07-10 16:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class SwAccessibleTable :
 protected:
 
     // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets ???
+    // This drived class additinaly sets MULTISELECTABLE(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ~SwAccessibleTable();
