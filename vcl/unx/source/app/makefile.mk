@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:22:47 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:41:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,7 @@ SLOFILES+=$(SLO)$/getfpsoli.obj
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
 
-
+# local rule to create the additional object file for SOLARIS
 $(SLO)$/%.obj: %.s
-    CC -c -o $(@:s/.obj/.o/) $< && touch $@
+    $(CXX) -c -o $(@:s/.obj/.o/) $< && touch $@
 
