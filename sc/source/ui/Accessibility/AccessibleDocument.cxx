@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-30 08:39:34 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 15:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ struct ScAccessibleShapeData
     ~ScAccessibleShapeData();
     mutable accessibility::AccessibleShape* pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
-    SdrObject*                  pShape;
+//    SdrObject*                  pShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
     mutable sal_Bool            bSelected;
 };
@@ -757,11 +757,16 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
 
         xShapes->add(maZOrderedShapes[nIndex]->xShape);
 
-        xSelectionSupplier->select(uno::makeAny(xShapes));
-
-        maZOrderedShapes[nIndex]->bSelected = sal_True;
-        if (maZOrderedShapes[nIndex]->pAccShape)
-            maZOrderedShapes[nIndex]->pAccShape->SetState(AccessibleStateType::SELECTED);
+        try
+        {
+            xSelectionSupplier->select(uno::makeAny(xShapes));
+            maZOrderedShapes[nIndex]->bSelected = sal_True;
+            if (maZOrderedShapes[nIndex]->pAccShape)
+                maZOrderedShapes[nIndex]->pAccShape->SetState(AccessibleStateType::SELECTED);
+        }
+        catch (lang::IllegalArgumentException&)
+        {
+        }
     }
 }
 
@@ -798,9 +803,15 @@ void ScChildrenShapes::SelectAll()
         uno::Reference<drawing::XShapes> xShapes;
         xShapes = new SvxShapeCollection();
 
-        std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), SelectShape(xShapes));
-
-        xSelectionSupplier->select(uno::makeAny(xShapes));
+        try
+        {
+            std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), SelectShape(xShapes));
+            xSelectionSupplier->select(uno::makeAny(xShapes));
+        }
+        catch (lang::IllegalArgumentException&)
+        {
+            SelectionChanged(); // find all selected shapes and set the flags
+        }
     }
 }
 
@@ -895,7 +906,14 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
             if (xShapes.is())
                 xShapes->remove(xShape);
 
-            xSelectionSupplier->select(uno::makeAny(xShapes));
+            try
+            {
+                xSelectionSupplier->select(uno::makeAny(xShapes));
+            }
+            catch (lang::IllegalArgumentException&)
+            {
+                DBG_ERRORFILE("something not selectable");
+            }
 
             maZOrderedShapes[nChildIndex]->bSelected = sal_False;
             if (maZOrderedShapes[nChildIndex]->pAccShape)
