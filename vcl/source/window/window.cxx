@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-03 09:07:28 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,9 @@
 #endif
 #define SYSDATA_ONLY_BASETYPE
 #include <sysdata.hxx>
-
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -521,6 +523,7 @@ void Window::ImplInitData( WindowType nType )
     mnBottomBorder      = 0;            // bottom border
     mnX                 = 0;            // X-Position to Parent
     mnY                 = 0;            // Y-Position to Parent
+    mnAbsScreenX        = 0;            // absolute X-position on screen, used for RTL window positioning
     mnHelpId            = 0;            // help id
     mnUniqId            = 0;            // unique id
     mpChildClipRegion   = NULL;         // Child-Clip-Region when ClipChildren
@@ -3022,20 +3025,6 @@ void Window::ImplUpdateSysObjPos()
 
 // -----------------------------------------------------------------------
 
-/* --- RTL ---
-void Window::ImplAlignChilds()
-{
-    Window* pChild = mpFirstChild;
-    while ( pChild )
-    {
-        pChild->ImplPosSizeWindow( pChild->maPos.X(), 0, 0, 0, WINDOW_POSSIZE_X );
-        pChild = pChild->mpNext;
-    }
-}
-*/
-
-// -----------------------------------------------------------------------
-
 void Window::ImplPosSizeWindow( long nX, long nY,
                                 long nWidth, long nHeight, USHORT nFlags )
 {
@@ -3073,16 +3062,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             nWidth = 0;
         if ( nWidth != mnOutWidth )
         {
-/* --- RTL ---
-            if ( !ImplIsOverlapWindow() )
-            {
-                if ( !(nFlags & WINDOW_POSSIZE_X) )
-                {
-                    nFlags |= WINDOW_POSSIZE_X;
-                    nX = mnX;
-                }
-            }
-*/
             mnOutWidth = nWidth;
             bNewSize = TRUE;
             bCopyBits = FALSE;
@@ -3103,14 +3082,13 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
     if ( nFlags & WINDOW_POSSIZE_X )
     {
-        if ( nX != mnX )
+        //if ( nX != mnX )
+        // --- RTL ---  (compare the screen coordinates)
+        Point aPtDev( ImplLogicToDevicePixel( Point( nX, 0 ) ) );
+        if( ImplGetGraphics() && mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL )
+            ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X() );
+        if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
         {
-            long nOrgX = nX;
-/* --- RTL ---
-            if ( !ImplIsOverlapWindow() )
-                nX = mpParent->mnOutWidth-mnOutWidth-nX;
-*/
-
             if ( bCopyBits && !pOverlapRegion )
             {
                 pOverlapRegion = new Region();
@@ -3119,7 +3097,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                        *pOverlapRegion, FALSE, TRUE, TRUE );
             }
             mnX = nX;
-            maPos.X() = nOrgX;
+            maPos.X() = nX;
+            mnAbsScreenX = aPtDev.X();  // --- RTL --- (store real screen pos)
             bNewPos = TRUE;
         }
     }
@@ -3189,11 +3168,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( mpBorderWindow )
                 maPos = mpBorderWindow->maPos;
         }
-
-/* --- RTL ---
-        if ( bNewWidth && !ImplIsOverlapWindow() )
-            ImplAlignChilds();
-*/
 
         // Move()/Resize() werden erst bei Show() gerufen, damit min. eins vor
         // einem Show() kommt

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pl $ $Date: 2002-07-08 14:18:58 $
+#   last change: $Author: ssa $ $Date: 2002-07-11 07:31:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
+            $(SLO)$/salgdilayout.obj \
             $(SLO)$/virdev.obj		\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\

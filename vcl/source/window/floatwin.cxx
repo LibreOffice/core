@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 15:25:49 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,11 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         nArrangeIndex = 4;
     else
         nArrangeIndex = 0;
+
+    // TODO: use GetLayoutMode() here
+    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+    BOOL bRTL = pEnv ? TRUE : FALSE;
+
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
         bLeft = FALSE;
@@ -321,18 +326,35 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         bBreak = TRUE;
         switch ( nArrangeAry[nArrangeIndex] )
         {
+
             case FLOATWIN_POPUPMODE_LEFT:
                 aPos.X() = devRect.Left()-aSize.Width();
                 aPos.Y() = devRect.Top();
                 aPos.Y() -= pWindow->mnTopBorder;
-                if ( aPos.X() < aScreenRect.Left() )
-                    bBreak = FALSE;
+                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
+                {
+                    if( (devRect.Right()+aSize.Width()) > aScreenRect.Right() )
+                        bBreak = FALSE;
+                }
+                else
+                {
+                    if ( aPos.X() < aScreenRect.Left() )
+                        bBreak = FALSE;
+                }
                 break;
             case FLOATWIN_POPUPMODE_RIGHT:
                 aPos     = devRect.TopRight();
                 aPos.Y() -= pWindow->mnTopBorder;
-                if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
-                    bBreak = FALSE;
+                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
+                {
+                    if( (devRect.Left() - aSize.Width()) < aScreenRect.Left() )
+                        bBreak = FALSE;
+                }
+                else
+                {
+                    if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
+                        bBreak = FALSE;
+                }
                 break;
             case FLOATWIN_POPUPMODE_UP:
                 aPos.X() = devRect.Left();
@@ -391,6 +413,9 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         nArrangeIndex = 4;
 
     // Ansonsten soweit wie moeglich in den Bildschirm einpassen
+    /*
+    // should not be required anymore: moving windows
+    // into the screen is done in the sal layer anyway
     if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
         aPos.X() = aScreenRect.Right()-aSize.Width();
     if ( aPos.X() < aScreenRect.Left() )
@@ -399,7 +424,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         aPos.Y() = aScreenRect.Bottom()-aSize.Height();
     if ( aPos.Y() < aScreenRect.Top() )
         aPos.Y() = aScreenRect.Top();
-
+*/
     rArrangeIndex = nArrangeIndex;
 
     aPos = pW->AbsoluteScreenToOutputPixel( aPos );
