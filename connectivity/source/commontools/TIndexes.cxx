@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 15:17:33 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace connectivity;
@@ -169,13 +172,13 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
 
     if(!m_pTable->isNew())
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
+        ::rtl::OUStringBuffer aSql( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE ")));
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        if(comphelper::getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
-            aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
-        aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
+        if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
+            aSql.appendAscii("UNIQUE ");
+        aSql.appendAscii("INDEX ");
 
 
         ::rtl::OUString aCatalog,aSchema,aTable;
@@ -185,35 +188,37 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
         dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInIndexDefinitions);
         if ( aName.getLength() )
         {
-            aSql = aSql + ::dbtools::quoteName( aQuote,aName )
-                        + ::rtl::OUString::createFromAscii(" ON ")
-                        + aComposedName
-                        + ::rtl::OUString::createFromAscii(" ( ");
+            aSql.append(::dbtools::quoteName( aQuote,aName ));
+            aSql.appendAscii(" ON ");
+            aSql.append(aComposedName);
+            aSql.appendAscii(" ( ");
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
             Reference< XPropertySet > xColProp;
-            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+            sal_Bool bAddIndexAppendix = ::dbtools::isDataSourcePropertyEnabled(m_pTable->getConnection(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix")),sal_True);
+            sal_Int32 nCount = xColumns->getCount();
+            for(sal_Int32 i = 0 ; i < nCount; ++i)
             {
-                ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-                aSql = aSql + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+                xColProp.set(xColumns->getByIndex(i),UNO_QUERY);
+                aSql.append(::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
 
-                if ( ::dbtools::isDataSourcePropertyEnabled(m_pTable->getConnection(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix")),sal_True) )
+                if ( bAddIndexAppendix )
                 {
 
-                    aSql += (any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING)))
+                    aSql.appendAscii(any2bool(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISASCENDING)))
                                                 ?
-                                    ::rtl::OUString::createFromAscii(" ASC")
+                                    " ASC"
                                                 :
-                                    ::rtl::OUString::createFromAscii(" DESC"));
+                                    " DESC");
                 }
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                aSql.appendAscii(",");
             }
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+            aSql.setCharAt(aSql.getLength()-1,')');
         }
         else
         {
-            aSql = aSql + aComposedName;
+            aSql.append(aComposedName);
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -223,13 +228,15 @@ void OIndexesHelper::appendObject( const Reference< XPropertySet >& descriptor )
 
             xColumns->getByIndex(0) >>= xColProp;
 
-            aSql = aSql + aDot + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+            aSql.append(aDot);
+            aSql.append(::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
         }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if ( xStmt.is() )
         {
-            xStmt->execute(aSql);
+            ::rtl::OUString sSql = aSql.makeStringAndClear();
+            xStmt->execute(sSql);
             ::comphelper::disposeComponent(xStmt);
         }
     }
