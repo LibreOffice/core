@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:33:18 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,8 @@ namespace
             Tree aTree( anEntry.accessor(), pTree );
             NodeRef aTreeRoot = aTree.getRootNode();
 
-            OSL_ASSERT( NodeVisitor::DONE == SetNodeVisitor::DONE );
-            OSL_ASSERT( NodeVisitor::CONTINUE == SetNodeVisitor::CONTINUE );
+            OSL_ASSERT( Result(NodeVisitor::DONE) == SetNodeVisitor::DONE );
+            OSL_ASSERT( Result(NodeVisitor::CONTINUE) == SetNodeVisitor::CONTINUE );
 
             aResult = Result( aTree.visit(aTreeRoot,m_rVisitor) );
         }
@@ -279,8 +279,8 @@ namespace
 
         ValueRef const aValueRef = TreeImplHelper::makeValue(aValueName,m_nParentPos);
 
-        OSL_ASSERT( NodeVisitor::DONE       == GroupMemberVisitor::DONE );
-        OSL_ASSERT( NodeVisitor::CONTINUE   == GroupMemberVisitor::CONTINUE );
+        OSL_ASSERT( Result(NodeVisitor::DONE)       == GroupMemberVisitor::DONE );
+        OSL_ASSERT( Result(NodeVisitor::CONTINUE)   == GroupMemberVisitor::CONTINUE );
 
         aResult = Result( m_aParentTree.visit(aValueRef,m_rVisitor) );
 
@@ -1403,8 +1403,8 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
     {
         GroupVisitorAdapter aAdapter(*this,aNode,aVisitor);
 
-        OSL_ASSERT( NodeVisitor::DONE       == GroupMemberVisitor::DONE );
-        OSL_ASSERT( NodeVisitor::CONTINUE   == GroupMemberVisitor::CONTINUE );
+        OSL_ASSERT( NodeVisitor::DONE       == Result(GroupMemberVisitor::DONE) );
+        OSL_ASSERT( NodeVisitor::CONTINUE   == Result(GroupMemberVisitor::CONTINUE) );
 
         view::GroupNode const aParent = aView.toGroupNode(aNode);
 
@@ -1424,8 +1424,8 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
     {
         SetVisitorAdapter aAdapter(aVisitor);
 
-        OSL_ASSERT( NodeVisitor::DONE == SetNodeVisitor::DONE );
-        OSL_ASSERT( NodeVisitor::CONTINUE == SetNodeVisitor::CONTINUE );
+        OSL_ASSERT( NodeVisitor::DONE == Result(SetNodeVisitor::DONE) );
+        OSL_ASSERT( NodeVisitor::CONTINUE == Result(SetNodeVisitor::CONTINUE) );
 
         aRet = Result(aView.dispatchToElements(aView.toSetNode(aNode),aAdapter));
     }
