@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,6 +430,14 @@ void SbiInstance::Stop()
         p->Stop();
 }
 
+// Allows Basic IDE to set watch mode to suppress errors
+static bool bWatchMode = false;
+
+void setBasicWatchMode( bool bOn )
+{
+    bWatchMode = bOn;
+}
+
 void SbiInstance::Error( SbError n )
 {
     Error( n, String() );
@@ -437,8 +445,11 @@ void SbiInstance::Error( SbError n )
 
 void SbiInstance::Error( SbError n, const String& rMsg )
 {
-    aErrorMsg = rMsg;
-    pRun->Error( n );
+    if( !bWatchMode )
+    {
+        aErrorMsg = rMsg;
+        pRun->Error( n );
+    }
 }
 
 void SbiInstance::FatalError( SbError n )
@@ -609,6 +620,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
         }
     }
 }
+
 
 // Einen P-Code ausfuehren
 
