@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-05 14:23:11 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 15:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <offmgr/sbaitems.hxx>  // SbaSelectionList
+#include <svx/dataaccessdescriptor.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -80,6 +81,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include "dbdocfun.hxx"
 #include "docsh.hxx"
@@ -111,41 +114,37 @@ using namespace com::sun::star;
 // static
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
 {
-    if (!pFrame)
+    //  called after opening the database beamer
+
+    if ( !pFrame || !rParam.bImport )
         return;
 
     uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
-     util::URL aURL;
-    aURL.Complete = rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
-    uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL,
-                                        rtl::OUString::createFromAscii("_beamer"),
-                                         0x0C);
-    if (xD.is())
-    {
-        uno::Sequence<beans::PropertyValue> aProperties;
 
-        if (rParam.bImport)         // called for a range with imported data?
+    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
+                                        rtl::OUString::createFromAscii("_beamer"),
+                                        frame::FrameSearchFlag::CHILDREN);
+    if (xBeamerFrame.is())
+    {
+        uno::Reference<frame::XController> xController = xBeamerFrame->getController();
+        uno::Reference<view::XSelectionSupplier> xControllerSelection(xController, uno::UNO_QUERY);
+        if (xControllerSelection.is())
         {
             sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
                         ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                         sdb::CommandType::TABLE );
 
-            aProperties.realloc(3);
-            beans::PropertyValue* pProperties = aProperties.getArray();
-            pProperties[0].Name = rtl::OUString::createFromAscii( SC_DBPROP_DATASOURCENAME );
-            pProperties[0].Value <<= rtl::OUString( rParam.aDBName );
-            pProperties[1].Name = rtl::OUString::createFromAscii( SC_DBPROP_COMMAND );
-            pProperties[1].Value <<= rtl::OUString( rParam.aStatement );
-            pProperties[2].Name = rtl::OUString::createFromAscii( SC_DBPROP_COMMANDTYPE );
-            pProperties[2].Value <<= nType;
-        }
-        //! else address book?
+            ::svx::ODataAccessDescriptor aSelection;
+            aSelection[svx::daDataSource]   <<= rtl::OUString( rParam.aDBName );
+            aSelection[svx::daCommand]      <<= rtl::OUString( rParam.aStatement );
+            aSelection[svx::daCommandType]  <<= nType;
 
-        xD->dispatch(aURL, aProperties);
+            xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
+        }
+        else
+            DBG_ERROR("no selection supplier in the beamer!");
     }
-    else
-        DBG_ERROR("no dispatcher for the database URL!");
 }
 
 // -----------------------------------------------------------------
@@ -509,7 +508,8 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
     {
         //  old and new range editable?
         if ( !pDoc->IsBlockEditable(nTab, rParam.nCol1,rParam.nRow1,rParam.nCol2,rParam.nRow2) ||
-             !pDoc->IsBlockEditable(nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow) )
+             !pDoc->IsBlockEditable(nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow) ||
+             pDoc->GetChangeTrack() != NULL )
         {
             nErrStringId = STR_PROTECTIONERR;
             bSuccess = FALSE;

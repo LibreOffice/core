@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 19:34:39 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 15:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@
 #include <offmgr/sbasltid.hrc>
 #include <vcl/msgbox.hxx>
 
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+
 #include "cellsh.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -218,52 +220,37 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
     switch ( nSlotId )
     {
-        case SID_IMPORT_DATA:
+        case SID_VIEW_DATA_SOURCE_BROWSER:
             {
-                //! was wird mit dem Adressbuch?
-#if 0
-                if( pScApp->GetSbaObject()->IsAddrPIOpen() )
+                //  check if database beamer is open
+
+                SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+                BOOL bWasOpen = FALSE;
                 {
-                    pViewData->GetDispatcher().Execute( SID_SBA_ADDRPI,
-                                            SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                    uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+                    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
+                                                        rtl::OUString::createFromAscii("_beamer"),
+                                                        frame::FrameSearchFlag::CHILDREN);
+                    if ( xBeamerFrame.is() )
+                        bWasOpen = TRUE;
                 }
-#endif
 
-                if( pReqArgs )
+                if ( bWasOpen )
                 {
-                    const SfxPoolItem* pItem;
-                    if( IS_AVAILABLE( SID_IMPORT_DATA, &pItem ) )
-                    {
-                        String  aDBName, aSQLCommand;
+                    //  close database beamer: just forward to SfxViewFrame
 
-                        aDBName = ((const SfxStringItem*)pItem)->GetValue();
-
-                        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
-                            aSQLCommand = ((const SfxStringItem*)pItem)->GetValue();
-
-
-                        ScImportParam aImportParam;
-                        ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_IMPORT);        // Namen vergeben
-                        pDBData->GetImportParam( aImportParam );
-                        aImportParam.aDBName    = aDBName;
-                        aImportParam.aStatement = aSQLCommand;
-                        aImportParam.bSql       = TRUE;             // kein Name, sondern Sql
-                        aImportParam.bImport    = TRUE;
-
-                        pTabViewShell->ImportData( aImportParam );
-                        pDBData->SetImportParam( aImportParam );
-
-                        rReq.Done();
-                    }
-                    else
-                    {
-                        rReq.Ignore();
-                    }
+                    pViewFrame->ExecuteSlot( rReq );
                 }
-                else            // DB-Browser anzeigen
+                else
                 {
+                    //  show database beamer: SfxViewFrame call must be synchronous
+
+                    pViewFrame->ExecuteSlot( rReq, (BOOL) FALSE );      // FALSE = synchronous
+
+                    //  select current database in database beamer
+
                     ScImportParam aImportParam;
-                    ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_OLD);       // nicht neu anlegen
+                    ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_OLD);       // don't create if none found
                     if (pDBData)
                         pDBData->GetImportParam( aImportParam );
 
@@ -1154,17 +1141,11 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                 }
                 break;
 
-            case SID_IMPORT_DATA:
+            case SID_VIEW_DATA_SOURCE_BROWSER:
                 {
-                    if(pDoc->GetChangeTrack()!=NULL)
-                        rSet.DisableItem( nWhich );
-/*                  Import (F4) ist immer moeglich, Default ist Adressbuch
+                    //  get state (BoolItem) from SfxViewFrame
 
-                    //  importierte Daten auch mit Selektion
-                    ScDBData* pDBData = GetDBData(FALSE,SC_DB_OLD);
-                    if (!pDBData || !pDBData->HasImportParam())
-                        rSet.DisableItem( nWhich );
-*/
+                    pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
                 }
                 break;
             case SID_SBA_BRW_INSERT:
