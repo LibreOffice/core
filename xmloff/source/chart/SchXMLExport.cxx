@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-20 09:34:59 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                         xChartData->isNotANumber( fData ))
                         fData = fSolarNaN;
 
-                    SvXMLUnitConverter::convertNumber( msStringBuffer, fData );
+                    SvXMLUnitConverter::convertDouble( msStringBuffer, fData );
                     msString = msStringBuffer.makeStringAndClear();
 
                         // <table:table-cell>

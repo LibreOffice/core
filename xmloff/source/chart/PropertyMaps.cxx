@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:16:39 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     // convert from 100th degrees to degrees (double)
                     rProperty.maValue >>= nValue;
                     double fVal = (double)(nValue) / 100.0;
-                    SvXMLUnitConverter::convertNumber( sValueBuffer, fVal );
+                    SvXMLUnitConverter::convertDouble( sValueBuffer, fVal );
                 }
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
@@ -423,7 +423,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                 {
                     // convert from degrees (double) to 100th degrees (integer)
                     double fVal;
-                    SvXMLUnitConverter::convertNumber( fVal, rValue );
+                    SvXMLUnitConverter::convertDouble( fVal, rValue );
                     nValue = (sal_Int32)( fVal * 100.0 );
                     rProperty.maValue <<= nValue;
                 }

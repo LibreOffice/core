@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-15 17:44:36 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         double fData;
         // the result may be false if a NaN is read, but that's ok
-        SvXMLUnitConverter::convertNumber( fData, aCellContent );
+        SvXMLUnitConverter::convertDouble( fData, aCellContent );
 
         aCell.fValue = fData;
         // dont read following <text:p> element
