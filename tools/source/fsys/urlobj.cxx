@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-15 15:07:57 $
+ *  last change: $Author: sb $ $Date: 2000-11-16 09:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,11 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
    path = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~"
 
 
+   ; private
+   vnd-sun-star-pkg-url = "VND.SUN.STAR.PKG://" reg_name *("/" *pchar)
+   reg_name = 1*(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+
+
    ; RFC 2255
    ldap-url = "LDAP://" [hostport] ["/" [dn ["?" [attrdesct *("," attrdesc)] ["?" ["base" / "one" / "sub"] ["?" [filter] ["?" extension *("," extension)]]]]]]
    dn = {RFC 2253 <distinguishedName> using *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")}
@@ -325,7 +330,7 @@ struct INetURLObject::SchemeInfo
 //============================================================================
 struct INetURLObject::PrefixInfo
 {
-    enum Kind { OFFICIAL, EXTERNAL, INTERNAL };
+    enum Kind { OFFICIAL, INTERNAL, EXTERNAL, ALIAS }; // order is important!
 
     sal_Char const * m_pPrefix;
     sal_Char const * m_pTranslatedPrefix;
@@ -383,8 +388,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { ".component", ".component:", 0, false, false, false, false,
           false, false, false, true },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false },
+        { "vnd.sun.star.pkg", "vnd.sun.star.pkg://", 0, true, false, false,
+          false, false, false, true, false },
         { "ldap", "ldap://", 389, true, false, false, false, true, true,
           false, true },
         { "db", "db:", 0, false, false, false, false, false, false, false,
@@ -659,7 +664,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
         m_eScheme = pPrefix->m_eScheme;
         aSynAbsURIRef
             = UniString::CreateFromAscii(pPrefix->m_eKind
-                                                 == PrefixInfo::EXTERNAL ?
+                                                 >= PrefixInfo::EXTERNAL ?
                                              pPrefix->m_pTranslatedPrefix :
                                              pPrefix->m_pPrefix);
     }
@@ -808,6 +813,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
         switch (m_eScheme)
         {
             case INET_PROT_VND_SUN_STAR_HELP:
+            case INET_PROT_VND_SUN_STAR_PKG:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -1885,10 +1891,14 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
               PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.pkg:", 0, INET_PROT_VND_SUN_STAR_PKG,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.wfs:", 0, INET_PROT_VND_SUN_STAR_WFS,
-              PrefixInfo::OFFICIAL } };
+              PrefixInfo::OFFICIAL },
+            { "wfs:", "vnd.sun.star.wfs:", INET_PROT_VND_SUN_STAR_WFS,
+              PrefixInfo::ALIAS } };
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
     PrefixInfo const * pMatch = 0;
@@ -2334,6 +2344,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             break;
 
         case INET_PROT_VND_SUN_STAR_HIER:
+        case INET_PROT_VND_SUN_STAR_PKG:
             if (pPos < pEnd && *pPos != '/')
             {
                 setInvalid();
@@ -3174,7 +3185,8 @@ void INetURLObject::makeAuthCanonic()
 UniString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
-    // Check because PROT_VND_SUN_STAR_HELP misuses m_aHost:
+    // Check because PROT_VND_SUN_STAR_HELP and PROT_VND_SUN_STAR_PKG misuse
+    // m_aHost:
     if (!getSchemeInfo().m_bHost)
         return UniString();
     UniString aHostPort(decode(m_aHost, getEscapePrefix(), eMechanism,
