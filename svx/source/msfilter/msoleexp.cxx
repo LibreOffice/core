@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:51:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 //TODO/MBA: check if writing a size is enough
                 if( rObj.GetObject().is() )
                 {
+                    // MSOLE objects don't need to be in running state for VisualArea access
                     awt::Size aSize = rObj->getVisualAreaSize( rObj.GetViewAspect() );
                     //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
                     sal_Int32 pRect[4];
