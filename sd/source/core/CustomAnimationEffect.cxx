@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:04:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -155,6 +158,8 @@
 
 #include <algorithm>
 
+#include <cppuhelper/implbase1.hxx>
+
 #ifndef _SD_CUSTOMANIMATIONEFFECT_HXX
 #include "CustomAnimationEffect.hxx"
 #endif
@@ -179,6 +184,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::beans::NamedValue;
@@ -194,6 +200,8 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::lang::Locale;
+using ::com::sun::star::util::XChangesNotifier;
+using ::com::sun::star::util::XChangesListener;
 
 namespace sd
 {
@@ -357,7 +365,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             ParagraphTarget aParaTarget;
             if( aTarget >>= aParaTarget )
             {
-                xShape.query( aParaTarget.Shape );
+                xShape.set( aParaTarget.Shape, UNO_QUERY );
                 nOnlyPara = aParaTarget.Paragraph;
             }
         }
@@ -877,12 +885,14 @@ void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference<
     Reference< XAudio > xAudio( mxAudio );
     sal_Int16 nIterateType = mnIterateType;
     double fIterateInterval = mfIterateInterval;
+    sal_Int16 nSubItem = mnTargetSubItem;
 
     setNode( xNode );
 
     setAudio( xAudio );
     setNodeType( nNodeType );
     setTarget( aTarget );
+    setTargetSubItem( nSubItem );
     setDuration( fDuration );
     setBegin( fBegin );
 
@@ -1670,7 +1680,7 @@ void EffectSequenceHelper::reset()
     maEffects.clear();
 }
 
-Reference< XAnimationNode > EffectSequenceHelper::getRootNode() const
+Reference< XAnimationNode > EffectSequenceHelper::getRootNode()
 {
     Reference< XAnimationNode > xRoot( mxSequenceRoot, UNO_QUERY );
     return xRoot;
@@ -2112,7 +2122,7 @@ EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffect
 
 // --------------------------------------------------------------------
 
-void EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
+bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 {
     bool bChanges = false;
 
@@ -2131,8 +2141,7 @@ void EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
         }
     }
 
-    if( bChanges )
-        rebuild();
+    return bChanges;
 }
 
 // --------------------------------------------------------------------
@@ -3010,33 +3019,111 @@ double EffectSequenceHelper::calculateIterateNodeDuration(
 */
 // ====================================================================
 
-MainSequence::MainSequence()
+class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >
 {
-    Reference< XAnimationNode > xNode(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY);
-    if( xNode.is() )
+public:
+    AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
+
+    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
+private:
+    MainSequence* mpMainSequence;
+};
+
+void SAL_CALL AnimationChangeListener::changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (RuntimeException)
+{
+    if( mpMainSequence )
+        mpMainSequence->startRecreateTimer();
+}
+
+void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
+{
+}
+
+// ====================================================================
+
+MainSequence::MainSequence()
+: mxTimingRootNode( ::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))), UNO_QUERY )
+, mbRebuilding( false )
+, mnRebuildLockGuard( 0 )
+, mbPendingRebuildRequest( false )
+{
+    if( mxTimingRootNode.is() )
     {
         Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
         aUserData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
         aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
-        xNode->setUserData( aUserData );
+        mxTimingRootNode->setUserData( aUserData );
     }
-    init( xNode );
+    init();
 }
+
+// --------------------------------------------------------------------
 
 MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+: mxTimingRootNode( xNode, UNO_QUERY )
+, mbRebuilding( false )
+, mnRebuildLockGuard( 0 )
+, mbPendingRebuildRequest( false )
 {
-    init( xNode );
+    init();
 }
 
-void MainSequence::init( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+// --------------------------------------------------------------------
+
+MainSequence::~MainSequence()
+{
+    reset();
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::init()
 {
     mnSequenceType = EffectNodeType::MAIN_SEQUENCE;
 
-    if( xNode.is() ) try
-    {
-        reset();
+    maTimer.SetTimeoutHdl( LINK(this, MainSequence, onTimerHdl) );
+    maTimer.SetTimeout(500);
 
-        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
+    mxChangesListener.set( new AnimationChangeListener( this ) );
+
+    create();
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode )
+{
+    reset();
+
+    mxTimingRootNode.set( xTimingRootNode, UNO_QUERY );
+
+    create();
+}
+
+// --------------------------------------------------------------------
+
+Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootNode()
+{
+    DBG_ASSERT( mnRebuildLockGuard == 0, "MainSequence::getRootNode(), rebuild is locked, ist this really what you want?" );
+
+    if( maTimer.IsActive() && mbTimerMode )
+    {
+        // force a rebuild NOW if one is pending
+        maTimer.Stop();
+        implRebuild();
+    }
+
+    return EffectSequenceHelper::getRootNode();
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::create()
+{
+    if( mxTimingRootNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxTimingRootNode, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
         while( xEnumeration->hasMoreElements() )
         {
@@ -3045,7 +3132,7 @@ void MainSequence::init( const ::com::sun::star::uno::Reference< ::com::sun::sta
             if( nNodeType == EffectNodeType::MAIN_SEQUENCE )
             {
                 mxSequenceRoot.set( xChildNode, UNO_QUERY );
-                create( xChildNode );
+                EffectSequenceHelper::create( xChildNode );
             }
             else if( nNodeType == EffectNodeType::INTERACTIVE_SEQUENCE )
             {
@@ -3073,23 +3160,26 @@ void MainSequence::init( const ::com::sun::star::uno::Reference< ::com::sun::sta
                 mxSequenceRoot->setDuration( makeAny((double)0.0) );
 
                 Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
-                Reference< XTimeContainer > xParent( xNode, UNO_QUERY_THROW );
-                xParent->appendChild( xMainSequenceNode );
+                mxTimingRootNode->appendChild( xMainSequenceNode );
             }
         }
 
         updateTextGroups();
 
         notify_listeners();
+
+        Reference< XChangesNotifier > xNotifier( mxTimingRootNode, UNO_QUERY );
+        if( xNotifier.is() )
+            xNotifier->addChangesListener( mxChangesListener );
     }
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::MainSequence::MainSequence(), exception cought!" );
+        DBG_ERROR( "sd::MainSequence::create(), exception cought!" );
         return;
     }
 
-    DBG_ASSERT( mxSequenceRoot.is(), "sd::MainSequence::MainSequence(), found no main sequence!" );
+    DBG_ASSERT( mxSequenceRoot.is(), "sd::MainSequence::create(), found no main sequence!" );
 }
 
 // --------------------------------------------------------------------
@@ -3102,6 +3192,17 @@ void MainSequence::reset()
     for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
         (*aIter)->reset();
     maInteractiveSequenceList.clear();
+
+    try
+    {
+        Reference< XChangesNotifier > xNotifier( mxTimingRootNode, UNO_QUERY );
+        if( xNotifier.is() )
+            xNotifier->removeChangesListener( mxChangesListener );
+    }
+    catch( Exception& )
+    {
+        // ...
+    }
 }
 
 // --------------------------------------------------------------------
@@ -3134,9 +3235,9 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
 
 // --------------------------------------------------------------------
 
-void MainSequence::disposeShape( const Reference< XShape >& xShape )
+bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 {
-    EffectSequenceHelper::disposeShape( xShape );
+    bool bChanges = EffectSequenceHelper::disposeShape( xShape );
 
     InteractiveSequenceList::iterator aIter;
     for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
@@ -3144,12 +3245,18 @@ void MainSequence::disposeShape( const Reference< XShape >& xShape )
         if( (*aIter)->getTriggerShape() == xShape )
         {
             aIter = maInteractiveSequenceList.erase( aIter );
+            bChanges = true;
         }
         else
         {
-            (*aIter++)->disposeShape( xShape );
+            bChanges |= (*aIter++)->disposeShape( xShape );
         }
     }
+
+    if( bChanges )
+        startRebuildTimer();
+
+    return bChanges;
 }
 
 // --------------------------------------------------------------------
@@ -3232,11 +3339,43 @@ void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
 
 void MainSequence::rebuild()
 {
-    implRebuild();
+    startRebuildTimer();
 }
+
+// --------------------------------------------------------------------
+
+void MainSequence::lockRebuilds()
+{
+    mnRebuildLockGuard++;
+}
+
+// --------------------------------------------------------------------
+
+void MainSequence::unlockRebuilds()
+{
+    DBG_ASSERT( mnRebuildLockGuard, "sd::MainSequence::unlockRebuilds(), no corresponding lockRebuilds() call!" );
+    if( mnRebuildLockGuard )
+        mnRebuildLockGuard--;
+
+    if( (mnRebuildLockGuard == 0) && mbPendingRebuildRequest )
+    {
+        mbPendingRebuildRequest = false;
+        startRebuildTimer();
+    }
+}
+
+// --------------------------------------------------------------------
 
 void MainSequence::implRebuild()
 {
+    if( mnRebuildLockGuard )
+    {
+        mbPendingRebuildRequest = true;
+        return;
+    }
+
+    mbRebuilding = true;
+
     EffectSequenceHelper::implRebuild();
 
     InteractiveSequenceList::iterator aIter( maInteractiveSequenceList.begin() );
@@ -3262,6 +3401,7 @@ void MainSequence::implRebuild()
     }
 
     notify_listeners();
+    mbRebuilding = false;
 }
 
 // --------------------------------------------------------------------
@@ -3314,6 +3454,44 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
 }
 
+// --------------------------------------------------------------------
+
+IMPL_LINK( MainSequence, onTimerHdl, Timer *, EMPTYARG )
+{
+    if( mbTimerMode )
+    {
+        implRebuild();
+    }
+    else
+    {
+        reset();
+        create();
+    }
+
+    return 0;
+}
+
+// --------------------------------------------------------------------
+
+/** starts a timer that recreates the internal structure from the API core after 1 second */
+void MainSequence::startRecreateTimer()
+{
+    if( !mbRebuilding )
+    {
+        mbTimerMode = false;
+        maTimer.Start();
+    }
+}
+
+// --------------------------------------------------------------------
+
+/** starts a timer that rebuilds the API core from the internal structure after 1 second */
+void MainSequence::startRebuildTimer()
+{
+    mbTimerMode = true;
+    maTimer.Start();
+}
+
 // ====================================================================
 
 InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence )
@@ -3356,5 +3534,21 @@ void InteractiveSequence::implRebuild()
 {
     EffectSequenceHelper::implRebuild();
 }
+
+// --------------------------------------------------------------------
+
+MainSequenceRebuildGuard::MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence )
+: mpMainSequence( pMainSequence )
+{
+    if( mpMainSequence.get() )
+        mpMainSequence->lockRebuilds();
+}
+
+MainSequenceRebuildGuard::~MainSequenceRebuildGuard()
+{
+    if( mpMainSequence.get() )
+        mpMainSequence->unlockRebuilds();
+}
+
 
 };
