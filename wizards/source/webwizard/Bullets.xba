@@ -25,7 +25,7 @@ Dim oRules
 Dim bDoReplace as Boolean
 Dim oSize as New com.sun.star.awt.Size
 Dim oNumberingBuffer(0) as New com.sun.star.beans.PropertyValue
-Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
+Dim oNewBuffer(0) as New com.sun.star.beans.PropertyValue
 	oRules = oBookMarkCursor.NumberingRules
 	If Vartype(oRules()) = 9 Then
 		oNumberingBuffer(0).Name = &quot;NumberingType&quot;
@@ -40,11 +40,11 @@ Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
 		oBookmarkCursor.NumberingRules = oRules
 		oNewBuffer(0).Name = &quot;GraphicURL&quot;
 		oNewBuffer(0).Value = sBulletUrl
-		oNewBuffer(1).Name = &quot;GraphicSize&quot;
+&apos;		oNewBuffer(1).Name = &quot;GraphicSize&quot;
 &apos; Todo: Get the original Size of the Bullet (see Bug #86196)
-		oSize.Height = 300
-		oSize.Width = 300
-		oNewBuffer(1).Value = oSize
+&apos;		oSize.Height = 300
+&apos;		oSize.Width = 300
+&apos;		oNewBuffer(1).Value = oSize
 		For n = 0 To oRules.Count - 1
 			oLevel() = oRules.GetByIndex(0)
 			bDoReplace = ModifyPropertyValue(oLevel(), oNewBuffer())
@@ -67,6 +67,7 @@ Dim oRules
 Dim bIsFirstRun as Boolean
 Dim oNewBuffer()&apos; as New com.sun.star.beans.PropertyValue
 Dim bDoReplace as Boolean
+Dim oBookmarkCursor as Object
 	bIsFirstRun = True
 	oBookmarks = oBaseDocument.BookMarks
 	For i = 0 To oBookmarks.Count - 1
@@ -106,11 +107,11 @@ Dim oSize as New com.sun.star.awt.Size
 				FileCopy(oLevel(i).Value, SavePath &amp; BulletName)
 			End If
 			oNewBuffer(i).Value = BulletName
-		ElseIf oLevel(i).Name = &quot;GraphicSize&quot; Then
-&apos; Todo: Get the original Size of the Bullet (see Bug #86196)
-			oSize.Height = 300
-			oSize.Width = 300
-			oNewBuffer(i).Value = oSize
+&apos;		ElseIf oLevel(i).Name = &quot;GraphicSize&quot; Then
+&apos;&apos; Todo: Get the original Size of the Bullet (see Bug #86196)
+&apos;			oSize.Height = 300
+&apos;			oSize.Width = 300
+&apos;			oNewBuffer(i).Value = oSize
 		Else
 			oNewBuffer(i).Value = oLevel(i).Value					
 		End If

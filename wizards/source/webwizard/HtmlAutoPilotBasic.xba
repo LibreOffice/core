@@ -110,6 +110,7 @@ Dim CurInd as Integer
 	oCursor = oBaseDocument.Text.CreateTextCursor()
 	oCursor.GotoStart(False)
 	oCursor.GotoEnd(True)
+	oCursor.SetPropertyToDefault(&quot;CharHeight&quot;)
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 	SetBulletAndGraphics
 	CheckControls(oBaseDocument.DrawPage)
@@ -226,8 +227,8 @@ Dim oGraphicObjects as Object
 Dim oGraphic as Object
 Dim i as Integer
 Dim SavePath as String
-
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	GetPaths()
 	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
 	&apos; Note: The sub DirectoryNameoutofPath should be change, so that the last character is a slash
@@ -263,7 +264,7 @@ Dim sFileName as String
 Dim sNewFileUrl as String
 	sFileName = FileNameoutofPath(SourceUrl)
 	sNewFileUrl = TargetDir &amp; sFileName
-	FileCopy(SourceUrl, sNewFileUrl)
+	oUcb.Copy(SourceUrl, sNewFileUrl)
 	CopyFile() = sFileName
 End Function
 
