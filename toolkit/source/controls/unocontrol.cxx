@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:20:52 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,13 @@
 
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 WorkWindow* lcl_GetDefaultWindow()
 {
@@ -366,6 +373,12 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
             // 82300 - 12/21/00 - FS
         if (bNeedNewPeer && xParent.is())
         {
+            NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex() );
+                // and now this is the final withdrawal:
+                // With 83561, I have no other idea than locking the SolarMutex here ....
+                // I really hate the fact that VCL is not theadsafe ....
+                // 01.03.2001 - FS
+
             // Funktioniert beim Container nicht!
             mxPeer->dispose();
             mxPeer.clear();
