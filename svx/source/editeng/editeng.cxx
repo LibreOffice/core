@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-10 16:45:25 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1705,6 +1705,9 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
 
     sal_Bool bTextPos = sal_False;
     // #90780# take unrotated positions for calculation here

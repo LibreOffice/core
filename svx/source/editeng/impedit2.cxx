@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-10 16:46:18 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 
 #include <sot/formats.hxx>
 
+#include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
 
@@ -969,7 +970,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
     long nX;
     if ( pView->pImpEditView->nTravelXPos == TRAVEL_X_DONTKNOW )
     {
-        nX = pPPortion->GetXPos( pLine, rPaM.GetIndex() );
+        nX = GetXPos( pPPortion, pLine, rPaM.GetIndex() );
         pView->pImpEditView->nTravelXPos = nX+nOnePixelInRef;
     }
     else
@@ -1013,7 +1014,7 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView* pView )
     if ( pView->pImpEditView->nTravelXPos == TRAVEL_X_DONTKNOW )
     {
         EditLine* pLine = pPPortion->GetLines().GetObject(nLine);
-        nX = pPPortion->GetXPos( pLine, rPaM.GetIndex() );
+        nX = GetXPos( pPPortion, pLine, rPaM.GetIndex() );
         pView->pImpEditView->nTravelXPos = nX+nOnePixelInRef;
     }
     else
@@ -1251,6 +1252,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     rTypes.Remove( 0, rTypes.Count() );
 
+
 //  pParaPortion->aExtraCharInfos.Remove( 0, pParaPortion->aExtraCharInfos.Count() );
 
     ContentNode* pNode = pParaPortion->GetNode();
@@ -1413,6 +1415,112 @@ BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
         }
     }
     return bScriptChange;
+}
+
+BOOL ImpEditEngine::HasScriptType( USHORT nPara, USHORT nType ) const
+{
+    BOOL bTypeFound = FALSE;
+
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+    if ( !pParaPortion->aScriptInfos.Count() )
+        ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    for ( USHORT n = rTypes.Count(); n && !bTypeFound; )
+    {
+        if ( rTypes[--n].nScriptType == nType )
+                bTypeFound = TRUE;
+    }
+    return bTypeFound;
+}
+
+void ImpEditEngine::InitWritingDirections( USHORT nPara )
+{
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+    WritingDirectionInfos& rInfos = pParaPortion->aWritingDirectionInfos;
+    rInfos.Remove( 0, rInfos.Count() );
+
+    BOOL bCTL = FALSE;
+    ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    for ( USHORT n = 0; n < rTypes.Count(); n++ )
+    {
+        if ( rTypes[n].nScriptType == i18n::ScriptType::COMPLEX )
+           {
+            bCTL = TRUE;
+            break;
+        }
+    }
+
+    const BYTE nDefaultDir = IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
+    if ( ( bCTL || ( nDefaultDir == UBIDI_RTL ) ) && pParaPortion->GetNode()->Len() )
+    {
+
+        String aText( *pParaPortion->GetNode() );
+
+        //
+        // Bidi functions from icu 2.0
+        //
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
+        nError = U_ZERO_ERROR;
+
+        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nDefaultDir, NULL, &nError );
+        nError = U_ZERO_ERROR;
+
+        long nCount = ubidi_countRuns( pBidi, &nError );
+
+        UTextOffset nStart = 0;
+        UTextOffset nEnd;
+        UBiDiLevel nCurrDir;
+
+        for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
+        {
+            ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
+            rInfos.Insert( WritingDirectionInfo( nCurrDir, (USHORT)nStart, (USHORT)nEnd ), rInfos.Count() );
+            nStart = nEnd;
+        }
+
+        ubidi_close( pBidi );
+    }
+
+    // No infos mean no CTL and default dir is L2R...
+    if ( !rInfos.Count() )
+        rInfos.Insert( WritingDirectionInfo( 0, 0, (USHORT)pParaPortion->GetNode()->Len() ), rInfos.Count() );
+
+}
+
+BOOL ImpEditEngine::IsRightToLeft( USHORT nPara )
+{
+    return FALSE;
+}
+
+BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )
+{
+    BYTE nRightToLeft = IsRightToLeft( nPara ) ? 1 : 0;
+
+    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    if ( pNode && pNode->Len() )
+    {
+        ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+        if ( !pParaPortion->aWritingDirectionInfos.Count() )
+            InitWritingDirections( nPara );
+
+        BYTE nType = 0;
+        WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
+        for ( USHORT n = 0; n < rDirInfos.Count(); n++ )
+        {
+            if ( ( rDirInfos[n].nStartPos <= nPos ) && ( rDirInfos[n].nEndPos >= nPos ) )
+               {
+                nRightToLeft = rDirInfos[n].nType;
+                if ( pStart )
+                    *pStart = rDirInfos[n].nStartPos;
+                if ( pEnd )
+                    *pEnd = rDirInfos[n].nEndPos;
+                break;
+            }
+        }
+    }
+    return nRightToLeft;
 }
 
 //  ----------------------------------------------------------------------
@@ -2381,6 +2489,14 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL
     if ( !aStatus.IsOutliner() )
         eJustification = ((const SvxAdjustItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
 
+    ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
+
+    USHORT nPara = GetEditDoc().GetPos( pPortion->GetNode() );
+    if ( !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
+        GetRefDevice()->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
+    else
+        GetRefDevice()->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
+
     // Berechnung der Breite ohne die Indents...
     ULONG nWidth = 0;
     USHORT nPos = pLine->GetStart();
@@ -2414,6 +2530,9 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL
         }
         nPos += pTextPortion->GetLen();
     }
+
+    GetRefDevice()->SetLayoutMode( nOldLayoutMode );
+
     return nWidth;
 }
 
@@ -2995,132 +3114,285 @@ USHORT ImpEditEngine::GetChar( ParaPortion* pParaPortion, EditLine* pLine, long 
 {
     DBG_ASSERT( pLine, "Keine Zeile erhalten: GetChar" );
 
-    Size aTmpSz;
-    TextPortion* pPortion;
-
+    USHORT nChar = 0xFFFF;
     USHORT nCurIndex = pLine->GetStart();
-    long nTmpX = pLine->GetStartPosX();
 
-    if ( nTmpX >= nXPos  )
-        return nCurIndex;
 
-    long nLastWidth;
-
+    // Search best matching portion with GetPortionXOffset()
     for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
     {
-        pPortion = pParaPortion->aTextPortionList.GetObject( i );
-        switch ( pPortion->GetKind() )
+        TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( i );
+        long nXLeft = GetPortionXOffset( pParaPortion, pLine, i );
+        long nXRight = nXLeft + pPortion->GetSize().Width();
+        if ( ( nXLeft <= nXPos ) && ( nXRight >= nXPos ) )
         {
-            case PORTIONKIND_TEXT:
-            case PORTIONKIND_FIELD:
-            case PORTIONKIND_HYPHENATOR:
-            case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
-            {
-                nLastWidth = pPortion->GetSize().Width();
-                nTmpX += nLastWidth;
-            }
-            break;
-            case PORTIONKIND_LINEBREAK:
-            {
-                return nCurIndex;
-            }
-            // break; erzeugt Warnung: "Unreachable code"
-            default: DBG_ERROR( "GetChar: Unbekannte Portion" );
-        }
+             nChar = nCurIndex;
 
-        if ( nTmpX > nXPos )
-        {
-            // Spezielle Portions werden nicht weiter unterteilt:
+            // Search within Portion...
+
+            // Don't search within special portions...
             if ( pPortion->GetKind() != PORTIONKIND_TEXT )
             {
-                // Aber gewichtet:
-                long nLeftDiff = nXPos-(nTmpX-nLastWidth);
-                long nRightDiff = nTmpX-nXPos;
-                if ( bSmart && ( Abs( nRightDiff ) < Abs( nLeftDiff ) ) )
-                    nCurIndex++;
-                return nCurIndex;
-            }
-
-            nTmpX -= nLastWidth;    // vor die Portion stellen
-
-            USHORT nMax = pPortion->GetLen();
-            USHORT nOffset = 0xFFFF;
-            USHORT nTmpCurIndex = nCurIndex - pLine->GetStart();
-
-            for ( USHORT x = 0; x < nMax; x++ )
-            {
-                long nTmpPosMax = nTmpX+pLine->GetCharPosArray().GetObject( nTmpCurIndex+x );
-                if ( nTmpPosMax > nXPos )
+                // ...but check on which side
+                if ( bSmart )
                 {
-                    // pruefen, ob dieser oder der davor...
-                    long nTmpPosMin = nTmpX;
-                    if ( x )
-                        nTmpPosMin += pLine->GetCharPosArray().GetObject( nTmpCurIndex+x-1 );
-                    long nDiffLeft = nXPos - nTmpPosMin;
-                    long nDiffRight = nTmpPosMax - nXPos;
-                    DBG_ASSERT( nDiffLeft >= 0, "DiffLeft negativ" );
-                    DBG_ASSERT( nDiffRight >= 0, "DiffRight negativ" );
-                    nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
-                    // I18N: If there are character position with the length
-                    // of 0, they belong to the same character, we can not
-                    // use this position as an index.
-                    // Skip all 0-positions, cheaper than using XBreakIterator:
-                    if ( nOffset < nMax )
-                    {
-                        const long nX = pLine->GetCharPosArray().GetObject(nOffset);
-                        while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray().GetObject(nOffset+1) == nX ) )
-                            nOffset++;
-                    }
-                    break;
+                    long nLeftDiff = nXPos-nXLeft;
+                    long nRightDiff = nXRight-nXPos;
+                    if ( nRightDiff < nLeftDiff )
+                        nChar++;
                 }
             }
-
-            // Bei Verwendung des CharPosArray duerfte es keine Ungenauigkeiten geben!
-            // Vielleicht bei Kerning ?
-            // 0xFFF passiert z.B. bei Outline-Font, wenn ganz hinten.
-            if ( nOffset == 0xFFFF )
-                nOffset = nMax;
-
-            DBG_ASSERT( nOffset <= nMax, "nOffset > nMax" );
-
-            nCurIndex += nOffset;
-
-            // nicht gefunden => Ende der Zeile ?
-            // Nein: Dann sorgt die obere While-Schleife schon fuer das
-            // richtige n.
-            // Die unteren beiden Zeilen haben den Effekt, dass man
-            // nicht zwischen die letzten beiden Zeichen klicken kann.
-            //  if ( ( nTmpX + aTmpSz.Width() ) < nXPos )
-            //      nCurIndex++;
-
-            // Check if index is within a cell:
-            if ( nCurIndex && ( nCurIndex < pParaPortion->GetNode()->Len() ) )
+            else
             {
-                EditPaM aPaM( pParaPortion->GetNode(), nCurIndex+1 );
-                USHORT nScriptType = GetScriptType( aPaM );
-                if ( nScriptType == i18n::ScriptType::COMPLEX )
+                USHORT nMax = pPortion->GetLen();
+                USHORT nOffset = 0xFFFF;
+                USHORT nTmpCurIndex = nChar - pLine->GetStart();
+
+                long nXInPortion = nXPos - nXLeft;
+                if ( pPortion->IsRightToLeft() )
+                    nXInPortion = nXRight - nXPos;
+
+                // Search in Array...
+                for ( USHORT x = 0; x < nMax; x++ )
                 {
-                    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-                    sal_Int32 nCount = 1;
-                    lang::Locale aLocale = GetLocale( aPaM );
-                    USHORT nRight = (USHORT)xBI->nextCharacters( *pParaPortion->GetNode(), nCurIndex, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
-                    USHORT nLeft = (USHORT)xBI->previousCharacters( *pParaPortion->GetNode(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
-                    if ( ( nLeft != nCurIndex ) && ( nRight != nCurIndex ) )
+                    long nTmpPosMax = pLine->GetCharPosArray().GetObject( nTmpCurIndex+x );
+                    if ( nTmpPosMax > nXInPortion )
                     {
-                        nCurIndex = ( Abs( nRight - nCurIndex ) < Abs( nLeft - nCurIndex ) ) ? nRight : nLeft;
+                        // pruefen, ob dieser oder der davor...
+                        long nTmpPosMin = x ? pLine->GetCharPosArray().GetObject( nTmpCurIndex+x-1 ) : 0;
+                        long nDiffLeft = nXInPortion - nTmpPosMin;
+                        long nDiffRight = nTmpPosMax - nXInPortion;
+                        DBG_ASSERT( nDiffLeft >= 0, "DiffLeft negativ" );
+                        DBG_ASSERT( nDiffRight >= 0, "DiffRight negativ" );
+                        nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
+                        // I18N: If there are character position with the length of 0,
+                        // they belong to the same character, we can not use this position as an index.
+                        // Skip all 0-positions, cheaper than using XBreakIterator:
+                        if ( nOffset < nMax )
+                        {
+                            const long nX = pLine->GetCharPosArray().GetObject(nOffset);
+                            while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray().GetObject(nOffset+1) == nX ) )
+                                nOffset++;
+                        }
+                        break;
+                    }
+                }
+
+                // Bei Verwendung des CharPosArray duerfte es keine Ungenauigkeiten geben!
+                // Vielleicht bei Kerning ?
+                // 0xFFF passiert z.B. bei Outline-Font, wenn ganz hinten.
+                if ( nOffset == 0xFFFF )
+                    nOffset = nMax;
+
+                DBG_ASSERT( nOffset <= nMax, "nOffset > nMax" );
+
+                nChar += nOffset;
+
+                // Check if index is within a cell:
+                if ( nChar && ( nChar < pParaPortion->GetNode()->Len() ) )
+                {
+                    EditPaM aPaM( pParaPortion->GetNode(), nChar+1 );
+                    USHORT nScriptType = GetScriptType( aPaM );
+                    if ( nScriptType == i18n::ScriptType::COMPLEX )
+                    {
+                        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+                        sal_Int32 nCount = 1;
+                        lang::Locale aLocale = GetLocale( aPaM );
+                        USHORT nRight = (USHORT)xBI->nextCharacters( *pParaPortion->GetNode(), nChar, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                        USHORT nLeft = (USHORT)xBI->previousCharacters( *pParaPortion->GetNode(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                        if ( ( nLeft != nChar ) && ( nRight != nChar ) )
+                        {
+                            nChar = ( Abs( nRight - nChar ) < Abs( nLeft - nChar ) ) ? nRight : nLeft;
+                        }
                     }
                 }
             }
-
-            return nCurIndex;
         }
 
         nCurIndex += pPortion->GetLen();
     }
-    return nCurIndex;
+
+    if ( nChar == 0xFFFF )
+    {
+        nChar = ( nXPos <= pLine->GetStartPosX() ) ? pLine->GetStart() : pLine->GetEnd();
+    }
+
+    return nChar;
 }
 
+long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion )
+{
+    long nX = pLine->GetStartPosX();
+
+    for ( USHORT i = pLine->GetStartPortion(); i < nTextPortion; i++ )
+    {
+        TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( i );
+        switch ( pPortion->GetKind() )
+        {
+            case PORTIONKIND_FIELD:
+            case PORTIONKIND_TEXT:
+            case PORTIONKIND_HYPHENATOR:
+            case PORTIONKIND_TAB:
+//          case PORTIONKIND_EXTRASPACE:
+            {
+                nX += pPortion->GetSize().Width();
+            }
+            break;
+        }
+    }
+
+    TextPortion* pDestPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+    if ( pDestPortion->GetRightToLeft() )
+    {
+        // Portions behind must be added, visual before this portion
+        sal_uInt16 nTmpPortion = nTextPortion+1;
+        while ( nTmpPortion <= pLine->GetEndPortion() )
+        {
+            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( pNextTextPortion->GetRightToLeft() )
+                nX += pNextTextPortion->GetSize().Width();
+            else
+                break;
+            nTmpPortion++;
+        }
+        // Portions before must be removed, visual behind this portion
+        nTmpPortion = nTextPortion;
+        while ( nTmpPortion > pLine->GetStartPortion() )
+        {
+            --nTmpPortion;
+            TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+            if ( pPrevTextPortion->GetRightToLeft() )
+                nX -= pPrevTextPortion->GetSize().Width();
+            else
+                break;
+        }
+    }
+
+    return nX;
+}
+
+long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT nIndex, BOOL bPreferPortionStart )
+{
+    DBG_ASSERT( pLine, "Keine Zeile erhalten: GetXPos" );
+    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "GetXPos muss richtig gerufen werden!" );
+
+    BOOL bDoPreferPortionStart = bPreferPortionStart;
+    // Assure that the portion belongs to this line:
+    if ( nIndex == pLine->GetStart() )
+        bDoPreferPortionStart = TRUE;
+    else if ( nIndex == pLine->GetEnd() )
+        bDoPreferPortionStart = FALSE;
+
+    USHORT nTextPortionStart = 0;
+    USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
+
+    DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
+
+    TextPortion* pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+
+//    if ( bPreferPortionStart && ( nTextPortion < pLine->GetEndPortion() ) && ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) ) )
+//    {
+//        nTextPortion++;
+//        nTextPortionStart = nIndex;
+//        pPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+//    }
+
+    long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
+
+    // calc text width, portion size may include CJK/CTL spacing...
+    long nPortionTextWidth = pPortion->GetSize().Width();
+    if ( ( pPortion->GetKind() == PORTIONKIND_TEXT ) && pPortion->GetLen() )
+        nPortionTextWidth = pLine->GetCharPosArray().GetObject( nTextPortionStart + pPortion->GetLen() - 1 - pLine->GetStart() );
+
+    if ( nTextPortionStart != nIndex )
+    {
+        // Search within portion...
+        if ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) )
+        {
+            // End of Portion
+            if ( !pPortion->IsRightToLeft() )
+                nX += nPortionTextWidth;
+        }
+        else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
+        {
+            DBG_ASSERT( nIndex != pLine->GetStart(), "Strange behavior in new GetXPos()" );
+
+            long nPosInPortion = pLine->GetCharPosArray().GetObject( nIndex - 1 - pLine->GetStart() );
+
+            if ( !pPortion->IsRightToLeft() )
+            {
+                nX += nPosInPortion;
+            }
+            else
+            {
+                nX += nPortionTextWidth - nPosInPortion;
+            }
+
+            if ( pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
+            {
+                nX += pPortion->GetExtraInfos()->nPortionOffsetX;
+                if ( pPortion->GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
+                {
+                    BYTE nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex ) );
+                    if ( nType == CHAR_PUNCTUATIONRIGHT )
+                    {
+                        USHORT n = nIndex - nTextPortionStart;
+                        const long* pDXArray = pLine->GetCharPosArray().GetData()+( nTextPortionStart-pLine->GetStart() );
+                        long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
+                                                        - ( n ? pDXArray[n-1] : 0 );
+                        if ( (n+1) < pPortion->GetLen() )
+                        {
+                            // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
+                            nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex+1 ) );
+                            if ( nType == CHAR_PUNCTUATIONRIGHT )
+                            {
+                                long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
+                                                                - pDXArray[n];
+                                long nCompressed = nNextCharWidth/2;
+                                nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
+                                nCompressed /= 10000;
+                                nCharWidth += nCompressed;
+                            }
+                        }
+                        else
+                        {
+                            nCharWidth *= 2;    // last char pos to portion end is only compressed size
+                        }
+                        nX += nCharWidth/2; // 50% compression
+                    }
+                }
+            }
+        }
+    }
+    else // if ( nIndex == pLine->GetStart() )
+    {
+        if ( pPortion->IsRightToLeft() )
+        {
+            nX += nPortionTextWidth;
+        }
+    }
+
+    return nX;
+}
+
+/*
+TextPortion* ImpEditEngine::FindRightPortion( ParaPortion* pParaPortion, USHORT nTextPortion )
+{
+    TextPortion* pRightPortion = NULL;
+
+    USHORT nTextPortions = pParaPortion->GetTextPortions().Count();
+    TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+    if ( pTextPortion->GetRightToLeft() )
+    {
+    }
+    else
+    {
+
+    }
+
+    return pRightPortion;
+}
+*/
 
 void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
 {
@@ -3275,7 +3547,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, USHORT nIndex, US
     aEditCursor.Bottom() = nY-1;
 
     // innerhalb der Zeile suchen....
-    long nX = pPortion->GetXPos( pLine, nIndex );
+    long nX = GetXPos( pPortion, pLine, nIndex );
     aEditCursor.Left() = aEditCursor.Right() = nX;
 
     if ( nFlags & GETCRSR_TXTONLY )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mhu $ $Date: 2002-05-10 21:17:12 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ USHORT aV4Map[] = {
 
 SV_IMPL_PTRARR( ContentList, ContentNode* );
 SV_IMPL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo );
+SV_IMPL_VARARR( WritingDirectionInfos, WritingDirectionInfo );
 // SV_IMPL_VARARR( ExtraCharInfos, ExtraCharInfo );
 
 
@@ -433,12 +434,13 @@ EditLine::EditLine()
 {
     DBG_CTOR( EE_EditLine, 0 );
 
-    nStart = nEnd = 0;              // kommt weg ?!
+    nStart = nEnd = 0;
     nStartPortion = 0;              // damit in ungueltiger Zeile ohne Portions von einer gueltigen Zeile mit der Portion Nr0 unterscieden werden kann.
     nEndPortion = 0;
     nHeight = 0;
     nStartPosX = 0;
     nTxtHeight = 0;
+    nTxtWidth = 0;
     nCrsrHeight = 0;
     nMaxAscent = 0;
     bHangingPunctuation = FALSE;
@@ -458,6 +460,7 @@ EditLine::EditLine( const EditLine& r )
     nHeight = 0;
     nStartPosX = 0;
     nTxtHeight = 0;
+    nTxtWidth = 0;
     nCrsrHeight = 0;
     nMaxAscent = 0;
     bInvalid = TRUE;

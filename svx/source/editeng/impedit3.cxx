@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,9 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     // Absatzattribute holen......
     // ---------------------------------------------------------------
     ContentNode* const pNode = pParaPortion->GetNode();
+
+    BOOL bRightToLeftPara = IsRightToLeft( nPara );
+
     SvxAdjust eJustification = SVX_ADJUST_LEFT;
     if ( !aStatus.IsOutliner() )
         eJustification = ((const SvxAdjustItem&)pNode->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
@@ -669,7 +672,21 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         }
     }
 
+    // SW disables TEXT_LAYOUT_COMPLEX_DISABLED, so maybe I have to enable it...
+    ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
+    BOOL bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
+    if ( !bCTL )
+    {
+        GetRefDevice()->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
+    }
+    else
+    {
+        GetRefDevice()->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
+        bQuickFormat = FALSE;
+    }
+
     sal_uInt16 nRealInvalidStart = nInvalidStart;
+
     if ( bEmptyNodeWithPolygon )
     {
         TextPortion* pDummyPortion = new TextPortion( 0 );
@@ -682,7 +699,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         RecalcTextPortion( pParaPortion, nInvalidStart, nInvalidDiff );
     }
     else    // nRealInvalidStart kann vor InvalidStart liegen, weil Portions geloescht....
+    {
         CreateTextPortions( pParaPortion, nRealInvalidStart );
+    }
+
 
     // ---------------------------------------------------------------
     // Zeile mit InvalidPos suchen, eine Zeile davor beginnen...
@@ -964,6 +984,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         bLineBreak = sal_True;
                         pPortion->GetKind() = PORTIONKIND_LINEBREAK;
                         bCompressedChars = FALSE;
+                        pLine->GetCharPosArray().Insert( pPortion->GetSize().Width(), nTmpPos-pLine->GetStart() );
                     }
                     break;
                     case EE_FEATURE_FIELD:
@@ -981,7 +1002,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                                 pPortion->GetSize().Width() = nXWidth;
                         }
                         nTmpWidth += pPortion->GetSize().Width();
-                        pLine->GetCharPosArray().Insert( pPortion->GetSize().Width()-nCurWidth, nTmpPos-pLine->GetStart() );
+                        pLine->GetCharPosArray().Insert( pPortion->GetSize().Width(), nTmpPos-pLine->GetStart() );
                         pPortion->GetKind() = cChar ? PORTIONKIND_TEXT : PORTIONKIND_FIELD;
                         // Wenn dies das erste Token in der Zeile ist,
                         // und nTmpWidth > aPaperSize.Width, habe ich eine
@@ -1024,12 +1045,34 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
                 nTmpWidth += pPortion->GetSize().Width();
 
-                if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
+                pPortion->SetRightToLeft( GetRightToLeft( nPara, nTmpPos+1 ) );
+
+                USHORT nPortionEnd = nTmpPos + pPortion->GetLen();
+                if( bScriptSpace && ( nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nPortionEnd ) ) )
                 {
-                    long nExtraSpace = pPortion->GetSize().Height()/5;
-                    nExtraSpace = GetXValue( nExtraSpace );
-                    pPortion->GetSize().Width() += nExtraSpace;
-                    nTmpWidth += nExtraSpace;
+                    // itrform2.cxx:
+                    // BOOL bAllowBefore = rCC.isLetterNumeric( *pNode, nPortionEnd - 1 );
+                    // BOOL bAllowBehind = rCC.isLetterNumeric( *pNode, nPortionEnd );
+
+                    BOOL bAllow = TRUE;
+                    if ( pPortion->GetRightToLeft() )
+                    {
+                        if ( nTmpPortion && pParaPortion->GetTextPortions().GetObject( nTmpPortion-1 )->GetRightToLeft() )
+                            bAllow = FALSE;
+                    }
+                    else
+                    {
+                        // Check if paragraph writing direction is R2L...
+                    }
+
+                    // No spacing within L2R/R2L nesting
+                    if ( bAllow )
+                    {
+                        long nExtraSpace = pPortion->GetSize().Height()/5;
+                        nExtraSpace = GetXValue( nExtraSpace );
+                        pPortion->GetSize().Width() += nExtraSpace;
+                        nTmpWidth += nExtraSpace;
+                    }
                 }
             }
 
@@ -1307,6 +1350,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             pTP->GetSize().Width() += n;
         }
 
+        pLine->SetTextWidth( aTextSize.Width() );
         switch ( eJustification )
         {
             case SVX_ADJUST_CENTER:
@@ -1486,6 +1530,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
     if ( bMapChanged )
         GetRefDevice()->Pop();
+
+    GetRefDevice()->SetLayoutMode( nOldLayoutMode );
 
     return bHeightChanged;
 }
@@ -1832,8 +1878,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nEndPortion );
         DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "BlankRubber: Keine TextPortion!" );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
-        sal_uInt16 nPosInArray = nBreakPos-1-pLine->GetStart();
+        sal_uInt16 nPosInArray = nBreakPos - 1 - pLine->GetStart();
         pTP->GetSize().Width() = ( nPosInArray && ( pTP->GetLen() > 1 ) ) ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0;
+        pLine->GetCharPosArray()[ nPosInArray ] = pTP->GetSize().Width();
     }
     else if ( bHyphenated )
     {
@@ -1961,6 +2008,11 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
         aPositions.Insert( rTypes[nT].nStartPos );
+
+//  MT: Need Multi-Portions first...
+//  const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
+//  for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
+//      aPositions.Insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
@@ -2171,7 +2223,6 @@ void ImpEditEngine::SetVertical( BOOL bVertical )
         }
     }
 }
-
 
 void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rFont, OutputDevice* pOut, sal_uInt16 nIgnoreWhich )
 {
@@ -2525,11 +2576,24 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // Ueber die Portions der Zeile...
                     // --------------------------------------------------
                     nIndex = pLine->GetStart();
+                    long nR2LWidth = 0;
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Zeile ohne Textportion im Paint!" );
                         TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
                         DBG_ASSERT( pTextPortion, "NULL-Pointer im Portioniterator in UpdateViews" );
+
+                        // New position after processing R2L text...
+                        if ( nR2LWidth && !pTextPortion->GetRightToLeft() )
+                        {
+                            if ( !IsVertical() )
+                                aTmpPos.X() += nR2LWidth;
+                            else
+                                aTmpPos.Y() += nR2LWidth;
+
+                            nR2LWidth = 0;
+                        }
+
                         switch ( pTextPortion->GetKind() )
                         {
                             case PORTIONKIND_TEXT:
@@ -2544,7 +2608,29 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpFont.SetTransparent( sal_False );
                                 }
 #endif
+
+#if defined (DEBUG) && defined( DBG_UTIL )
+                                if ( pTextPortion->GetRightToLeft()  )
+                                {
+                                    aTmpFont.SetFillColor( COL_LIGHTGRAY );
+                                    aTmpFont.SetTransparent( sal_False );
+                                }
+                                else if ( GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) ) == i18n::ScriptType::COMPLEX )
+                                {
+                                    aTmpFont.SetFillColor( COL_LIGHTCYAN );
+                                    aTmpFont.SetTransparent( sal_False );
+                                }
+
+#endif
                                 aTmpFont.SetPhysFont( pOutDev );
+
+                                ULONG nOldLayoutMode = pOutDev->GetLayoutMode();
+                                short nScriptType = GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) );
+                                if ( nScriptType != i18n::ScriptType::COMPLEX )
+                                    pOutDev->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
+                                else
+                                    pOutDev->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
+
 
                                 XubString aText;
                                 USHORT nTextStart = 0;
@@ -2592,14 +2678,33 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                 long nTxtWidth = pTextPortion->GetSize().Width();
 
+                                Point aOutPos( aTmpPos );
+                                if ( pTextPortion->GetRightToLeft() )
+                                {
+                                    sal_uInt16 nNextPortion = y+1;
+                                    while ( nNextPortion <= pLine->GetEndPortion() )
+                                    {
+                                        TextPortion* pNextTextPortion = pPortion->GetTextPortions().GetObject( nNextPortion );
+                                        if ( pNextTextPortion->GetRightToLeft() )
+                                        {
+                                            if ( !IsVertical() )
+                                                aOutPos.X() += pNextTextPortion->GetSize().Width();
+                                            else
+                                                aOutPos.Y() += pNextTextPortion->GetSize().Width();
+                                        }
+                                        else
+                                            break;
+                                        nNextPortion++;
+                                    }
+
+                                }
                                 if ( bStripOnly )
                                 {
                                     // VERT???
-                                    GetEditEnginePtr()->DrawingText( aTmpPos, aText, nTextStart, nTextLen, pDXArray, aTmpFont, n, nIndex );
+                                    GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray, aTmpFont, n, nIndex );
                                 }
                                 else
                                 {
-                                    Point aOutPos( aTmpPos );
                                     short nEsc = aTmpFont.GetEscapement();
                                     if ( nOrientation )
                                     {
@@ -2677,12 +2782,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         {
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
-                                        ULONG nOldLayoutMode = pOutDev->GetLayoutMode();
-                                        short nScriptType = GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) );
-                                        if ( nScriptType != i18n::ScriptType::COMPLEX )
-                                            pOutDev->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
-                                        pOutDev->SetLayoutMode( nOldLayoutMode );
                                     }
 
 #ifndef SVX_LIGHT
@@ -2696,12 +2796,22 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #endif // !SVX_LIGHT
                                 }
 
+                                pOutDev->SetLayoutMode( nOldLayoutMode );
+
                                 if ( pTmpDXArray )
                                     delete pTmpDXArray;
-                                if ( !IsVertical() )
-                                    aTmpPos.X() += nTxtWidth;
+
+                                if ( !pTextPortion->GetRightToLeft() )
+                                {
+                                    if ( !IsVertical() )
+                                        aTmpPos.X() += nTxtWidth;
+                                    else
+                                        aTmpPos.Y() += nTxtWidth;
+                                }
                                 else
-                                    aTmpPos.Y() += nTxtWidth;
+                                {
+                                    nR2LWidth += nTxtWidth;
+                                }
                             }
                             break;
 //                          case PORTIONKIND_EXTRASPACE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-02 10:59:00 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,15 +221,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     if ( pRegion )
         pPolyPoly = new PolyPolygon;
 
-    sal_Bool bInvertSelection = sal_False;
-    sal_Bool bPixelMode = pOutWin->GetMapMode() == MAP_PIXEL;
     sal_Bool bClipRegion = pOutWin->IsClipRegion();
     Region aOldRegion = pOutWin->GetClipRegion();
-    // aTmpOutArea: Falls OutputArea > Papierbreite und
-    // Text > Papierbreite ( uebergrosse Felder )
-    Rectangle aTmpOutArea( aOutArea );
-    if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
-        aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
 
     if ( !pRegion )
     {
@@ -241,11 +234,12 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         if ( !aTmpSel.HasRange() )
             return;
 
+        // aTmpOutArea: Falls OutputArea > Papierbreite und
+        // Text > Papierbreite ( uebergrosse Felder )
+        Rectangle aTmpOutArea( aOutArea );
+        if ( aTmpOutArea.GetWidth() > pEditEngine->pImpEditEngine->GetPaperSize().Width() )
+            aTmpOutArea.Right() = aTmpOutArea.Left() + pEditEngine->pImpEditEngine->GetPaperSize().Width();
         pOutWin->IntersectClipRegion( aTmpOutArea );
-
-#ifdef MAC
-        bInvertSelection = ( GetBackground().GetColor() != COL_WHITE );
-#endif
 
         if ( pOutWin->GetCursor() )
             pOutWin->GetCursor()->Hide();
@@ -254,7 +248,6 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     DBG_ASSERT( !pEditEngine->pImpEditEngine->aIdleFormatter.IsActive(), "DrawSelection: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->pImpEditEngine->GetEditDoc() );
 
-    // Alte Selektion EE_SELMODE_STD siehe Rev 1.101 (schneller!)
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
     sal_uInt16 nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( pStartNode );
@@ -288,78 +281,71 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             EditLine* pLine = pTmpPortion->GetLines().GetObject( nLine );
             DBG_ASSERT( pLine, "Zeile nicht gefunden: DrawSelection()" );
 
+            BOOL bPartOfLine = FALSE;
             sal_uInt16 nStartIndex = pLine->GetStart();
             sal_uInt16 nEndIndex = pLine->GetEnd();
-            if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
+            if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) && ( nStartIndex != aTmpSel.Min().GetIndex() ) )
+            {
                 nStartIndex = aTmpSel.Min().GetIndex();
-            if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
+                bPartOfLine = TRUE;
+            }
+            if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) && ( nEndIndex != aTmpSel.Max().GetIndex() ) )
+            {
                 nEndIndex = aTmpSel.Max().GetIndex();
+                bPartOfLine = TRUE;
+            }
 
             // Kann passieren, wenn am Anfang einer umgebrochenen Zeile.
             if ( nEndIndex < nStartIndex )
                 nEndIndex = nStartIndex;
 
             Rectangle aTmpRec( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
-            aTmpRec.Top() += nParaStart;
-            aTmpRec.Bottom() += nParaStart;
-
             Point aTopLeft( aTmpRec.TopLeft() );
             Point aBottomRight( aTmpRec.BottomRight() );
-            aBottomRight.X() = pTmpPortion->GetXPos( pLine, nEndIndex );
+
+            aTopLeft.Y() += nParaStart;
+            aBottomRight.Y() += nParaStart;
 
             // Nur Painten, wenn im sichtbaren Bereich...
             if ( aTopLeft.Y() > GetVisDocBottom() )
                 break;
 
-            if ( ( aTopLeft.X() != aBottomRight.X() ) && ( aBottomRight.Y() >= GetVisDocTop() ) )
+            if ( aBottomRight.Y() < GetVisDocTop() )
+                continue;
+
+            // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' postion
+            if ( !bPartOfLine )
             {
-                Point aPnt1( GetWindowPos( aTopLeft ) );
-                Point aPnt2( GetWindowPos( aBottomRight ) );
+                aTopLeft.X() = pLine->GetStartPosX();
+                aBottomRight.X() = pLine->GetStartPosX() + pLine->GetTextWidth();
 
-                if ( eSelectionMode == EE_SELMODE_STD )
-                {
-                    // Bekannter Bug:
-                    // Wenn in diesem Modus am Anfang einer nicht-ersten-Zeile
-                    // in einem Absatz nach unten selektiert wird,
-                    // findet FindLine die Zeile davor, lediglich der Cursor
-                    // weiter unten angezeigt wird
-                    // => rechter Rand der Selektion wird nicht richtig eingestellt!
-                    if ( !( ( nPara == nStartPara ) && ( nLine == nStartLine ) ) )
-                        aPnt1.X() = aTmpOutArea.Left();
+                ImplDrawHighlightRect( pOutWin, aTopLeft, aBottomRight, pPolyPoly );
+            }
+            else
+            {
+                USHORT nTmpStartIndex = nStartIndex;
+                USHORT nWritingDirStart, nTmpEndIndex;
 
-                    if ( !( ( nPara == nEndPara ) && ( nLine == nEndLine ) ) )
-                        aPnt2.X() = aTmpOutArea.Right()-1;
-                }
+                while ( nTmpStartIndex < nEndIndex )
+                {
+                    pEditEngine->pImpEditEngine->GetRightToLeft( nPara, nTmpStartIndex+1, &nWritingDirStart, &nTmpEndIndex );
+                    if ( nTmpEndIndex > nEndIndex )
+                        nTmpEndIndex = nEndIndex;
 
-                if ( !IsVertical() )
-                {
-                    lcl_AllignToPixel( aPnt1, pOutWin, +1, 0 );
-                    lcl_AllignToPixel( aPnt2, pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
-                }
-                else
-                {
-                    lcl_AllignToPixel( aPnt1, pOutWin, 0, +1 );
-                    lcl_AllignToPixel( aPnt2, pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
-                }
+                    DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelection, Start >= End?" );
 
-                Rectangle aRect( aPnt1, aPnt2 );
-                if ( pRegion )
-                {
-                    Polygon aTmpPoly( 4 );
-                    aTmpPoly[0] = aRect.TopLeft();
-                    aTmpPoly[1] = aRect.TopRight();
-                    aTmpPoly[2] = aRect.BottomRight();
-                    aTmpPoly[3] = aRect.BottomLeft();
-                    pPolyPoly->Insert( aTmpPoly );
-                }
-                else
-                {
-                    if ( bInvertSelection )
-                        pOutWin->InvertRect( aRect );
-                    else
-                        pOutWin->HighlightRect( aRect );
+                    long nX1 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpStartIndex, TRUE );
+                    long nX2 = pEditEngine->pImpEditEngine->GetXPos( pTmpPortion, pLine, nTmpEndIndex );
+
+                    Point aPt1( Min( nX1, nX2 ), aTopLeft.Y() );
+                    Point aPt2( Max( nX1, nX2 ), aBottomRight.Y() );
+
+                    ImplDrawHighlightRect( pOutWin, aPt1, aPt2, pPolyPoly );
+
+                    nTmpStartIndex = nTmpEndIndex;
                 }
             }
+
         }
     }
 
@@ -378,8 +364,45 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
         else
             pOutWin->SetClipRegion();
     }
-
 }
+
+void ImpEditView::ImplDrawHighlightRect( Window* pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly )
+{
+    if ( rDocPosTopLeft.X() != rDocPosBottomRight.X() )
+    {
+        sal_Bool bPixelMode = pOutWin->GetMapMode() == MAP_PIXEL;
+
+        Point aPnt1( GetWindowPos( rDocPosTopLeft ) );
+        Point aPnt2( GetWindowPos( rDocPosBottomRight ) );
+
+        if ( !IsVertical() )
+        {
+            lcl_AllignToPixel( aPnt1, pOutWin, +1, 0 );
+            lcl_AllignToPixel( aPnt2, pOutWin, 0, ( bPixelMode ? 0 : -1 ) );
+        }
+        else
+        {
+            lcl_AllignToPixel( aPnt1, pOutWin, 0, +1 );
+            lcl_AllignToPixel( aPnt2, pOutWin, ( bPixelMode ? 0 : +1 ), 0 );
+        }
+
+        Rectangle aRect( aPnt1, aPnt2 );
+        if ( pPolyPoly )
+        {
+            Polygon aTmpPoly( 4 );
+            aTmpPoly[0] = aRect.TopLeft();
+            aTmpPoly[1] = aRect.TopRight();
+            aTmpPoly[2] = aRect.BottomRight();
+            aTmpPoly[3] = aRect.BottomLeft();
+            pPolyPoly->Insert( aTmpPoly );
+        }
+        else
+        {
+            pOutWin->HighlightRect( aRect );
+        }
+    }
+}
+
 
 BOOL ImpEditView::IsVertical() const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,8 @@ protected:
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();
 
+    void ImplDrawHighlightRect( Window* pOutWin, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, PolyPolygon* pPolyPoly );
+
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow );
                     ~ImpEditView();
@@ -542,6 +544,8 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
+    long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT nIndex, BOOL bPreferPortionStart = FALSE );
+    long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion );
     USHORT              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
 
@@ -617,6 +621,7 @@ private:
     USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     USHORT              GetScriptType( const EditSelection& rSel ) const;
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
+    BOOL                HasScriptType( USHORT nPara, USHORT nType ) const;
 
     BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
@@ -704,6 +709,10 @@ public:
 
     void                    SetVertical( BOOL bVertical );
     BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+
+    void                    InitWritingDirections( USHORT nPara );
+    BOOL                    IsRightToLeft( USHORT nPara );
+    BYTE                    GetRightToLeft( USHORT nPara, USHORT nChar, USHORT* pStart = NULL, USHORT* pEnd = NULL );
 
     void                    SetTextRanger( TextRanger* pRanger );
     TextRanger*             GetTextRanger() const { return pTextRanger; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void TextPortionList::DeleteFromPortion( USHORT nDelFrom )
     Remove( nDelFrom, Count()-nDelFrom );
 }
 
-USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart )
+USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOOL bPreferStartingPortion )
 {
     // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
     USHORT nTmpPos = 0;
@@ -155,8 +155,12 @@ USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart )
         nTmpPos += pPortion->GetLen();
         if ( nTmpPos >= nCharPos )
         {
-            nPortionStart = nTmpPos - pPortion->GetLen();
-            return nPortion;
+            // take this one if we don't prefer the starting portion, or if it's the last one
+            if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( nPortion == Count() - 1 ) )
+            {
+                nPortionStart = nTmpPos - pPortion->GetLen();
+                return nPortion;
+            }
         }
     }
     DBG_ERROR( "FindPortion: Nicht gefunden!" );
@@ -267,6 +271,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     }
     bInvalid = TRUE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
+    aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
 //  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
@@ -286,6 +291,7 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
     bInvalid = TRUE;
     bSimple = FALSE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
+    aWritingDirectionInfos.Remove( 0, aWritingDirectionInfos.Count() );
 //  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
@@ -389,92 +395,6 @@ USHORT ParaPortion::GetLineNumber( USHORT nIndex )
     // Dann sollte es am Ende der letzten Zeile sein!
     DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ]->GetEnd(), "Index voll daneben!" );
     return (aLineList.Count()-1);
-}
-
-long ParaPortion::GetXPos( EditLine* pLine, USHORT nIndex )
-{
-    DBG_ASSERT( pLine, "Keine Zeile erhalten: GetXPos" );
-    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "GetXPos muss richtig gerufen werden!" );
-
-    TextPortion* pPortion;
-    Size aTmpSz;
-
-    long nX = pLine->GetStartPosX();
-    USHORT nCurIndex = pLine->GetStart();
-
-    for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
-    {
-        pPortion = aTextPortionList.GetObject( i );
-        nCurIndex += pPortion->GetLen();
-        if ( nCurIndex <= nIndex )
-        {
-            switch ( pPortion->GetKind() )
-            {
-                case PORTIONKIND_FIELD:
-                case PORTIONKIND_TEXT:
-                case PORTIONKIND_HYPHENATOR:
-                case PORTIONKIND_TAB:
-//              case PORTIONKIND_EXTRASPACE:
-                {
-                    nX += pPortion->GetSize().Width();
-                }
-                break;
-            }
-            if ( nCurIndex == nIndex )
-                break;  // for
-        }
-        else    // suchen und Ende
-        {
-            nCurIndex -= pPortion->GetLen();
-
-            // Wenn ich auf einem Feature stehe,
-            // braucht die X-Postion nicht korrigiert werden...
-            if (pPortion->GetKind() == PORTIONKIND_TEXT )
-            {
-                // nIndex - 1, weil kein Wert fuer Stelle 0.
-                if ( nIndex != pLine->GetStart() )
-                {
-                    nX += pLine->GetCharPosArray().GetObject( nIndex - 1 - pLine->GetStart() );
-                    if ( pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
-                    {
-                        nX += pPortion->GetExtraInfos()->nPortionOffsetX;
-                        if ( pPortion->GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
-                        {
-                            BYTE nType = GetCharTypeForCompression( GetNode()->GetChar( nIndex ) );
-                            if ( nType == CHAR_PUNCTUATIONRIGHT )
-                            {
-                                USHORT n = nIndex - nCurIndex;
-                                const long* pDXArray = pLine->GetCharPosArray().GetData()+( nCurIndex-pLine->GetStart() );
-                                long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
-                                                                - ( n ? pDXArray[n-1] : 0 );
-                                if ( (n+1) < pPortion->GetLen() )
-                                {
-                                    // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
-                                    nType = GetCharTypeForCompression( GetNode()->GetChar( nIndex+1 ) );
-                                    if ( nType == CHAR_PUNCTUATIONRIGHT )
-                                    {
-                                        long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
-                                                                        - pDXArray[n];
-                                        long nCompressed = nNextCharWidth/2;
-                                        nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
-                                        nCompressed /= 10000;
-                                        nCharWidth += nCompressed;
-                                    }
-                                }
-                                else
-                                {
-                                    nCharWidth *= 2;    // last char pos to portion end is only compressed size
-                                }
-                                nX += nCharWidth/2; // 50% compression
-                            }
-                        }
-                    }
-                }
-            }
-            break;  // for
-        }
-    }
-    return nX;
 }
 
 void ParaPortion::SetVisible( BOOL bMakeVisible )

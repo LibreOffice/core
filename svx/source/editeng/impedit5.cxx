@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-18 11:27:45 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,7 @@ SfxItemSet ImpEditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, 
 
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
+    DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
     SfxItemSet aAttribs( ((ImpEditEngine*)this)->GetEmptyItemSet() );
 
@@ -530,8 +531,6 @@ SfxItemSet ImpEditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, 
     {
         if ( nEnd > pNode->Len() )
             nEnd = pNode->Len();
-
-        DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
         if ( nStart > nEnd )
             nStart = nEnd;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 10:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,22 @@ struct ScriptTypePosInfo
 };
 
 SV_DECL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo, 0, 4 );
+
+struct WritingDirectionInfo
+{
+    BYTE    nType;
+    USHORT  nStartPos;
+    USHORT  nEndPos;
+
+    WritingDirectionInfo( BYTE _Type, USHORT _Start, USHORT _End )
+    {
+        nType = _Type;
+        nStartPos = _Start;
+        nEndPos = _End;
+    }
+};
+
+SV_DECL_VARARR( WritingDirectionInfos, WritingDirectionInfo, 0, 4 );
 
 typedef EditCharAttrib* EditCharAttribPtr;
 SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0, 4 );
@@ -408,19 +424,20 @@ private:
     USHORT              nLen;
     Size                aOutSz;
     BYTE                nKind;
+    BYTE                nRightToLeft;
     sal_Unicode         nExtraValue;
 
 
                 TextPortion()               { DBG_CTOR( EE_TextPortion, 0 );
-                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0;}
+                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = FALSE;}
 
 public:
                 TextPortion( USHORT nL ) : aOutSz( -1, -1 )
                                             {   DBG_CTOR( EE_TextPortion, 0 );
-                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; }
+                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = FALSE;}
                 TextPortion( const TextPortion& r ) : aOutSz( r.aOutSz )
                                             { DBG_CTOR( EE_TextPortion, 0 );
-                                                pExtraInfos = NULL; nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; }
+                                                pExtraInfos = NULL; nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; nRightToLeft = r.nRightToLeft; }
 
                 ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
@@ -433,6 +450,10 @@ public:
 
     BYTE&       GetKind()                   { return nKind; }
     BYTE        GetKind() const             { return nKind; }
+
+    void        SetRightToLeft( BYTE b )    { nRightToLeft = b; }
+    BYTE        GetRightToLeft() const      { return nRightToLeft; }
+    BOOL        IsRightToLeft() const       { return (nRightToLeft&1); }
 
     sal_Unicode GetExtraValue() const       { return nExtraValue; }
     void        SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
@@ -456,7 +477,7 @@ public:
             ~TextPortionList();
 
     void    Reset();
-    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart );
+    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart, BOOL bPreferStartingPortion = FALSE );
     USHORT  GetStartPos( USHORT nPortion );
     void    DeleteFromPortion( USHORT nDelFrom );
 };
@@ -472,6 +493,7 @@ class EditLine
 {
 private:
     CharPosArray    aPositions;
+    long            nTxtWidth;
     USHORT          nStartPosX;
     USHORT          nStart;     // koennte durch nStartPortion ersetzt werden
     USHORT          nEnd;       // koennte durch nEndPortion ersetzt werden
@@ -516,9 +538,12 @@ public:
                         nTxtHeight = ( nTxtH ? nTxtH : nH );
                         nCrsrHeight = ( nCrsrH ? nCrsrH : nTxtHeight );
                     }
-    USHORT          GetHeight() const                           { return nHeight; }
-    USHORT          GetTxtHeight() const                        { return nTxtHeight; }
-    USHORT          GetCrsrHeight() const                       { return nCrsrHeight; }
+    USHORT          GetHeight() const               { return nHeight; }
+    USHORT          GetTxtHeight() const            { return nTxtHeight; }
+    USHORT          GetCrsrHeight() const           { return nCrsrHeight; }
+
+    void            SetTextWidth( long n )          { nTxtWidth = n; }
+    long            GetTextWidth() const            { return nTxtWidth; }
 
     void            SetMaxAscent( USHORT n )        { nMaxAscent = n; }
     USHORT          GetMaxAscent() const            { return nMaxAscent; }
@@ -579,8 +604,8 @@ private:
     ContentNode*        pNode;
     long                nHeight;
 
-    ScriptTypePosInfos  aScriptInfos;
-//    ExtraCharInfos      aExtraCharInfos;
+    ScriptTypePosInfos      aScriptInfos;
+    WritingDirectionInfos   aWritingDirectionInfos;
 
     USHORT              nInvalidPosStart;
     USHORT              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
@@ -599,7 +624,6 @@ public:
                         ~ParaPortion();
 
     USHORT              GetLineNumber( USHORT nIndex );
-    long                GetXPos( EditLine* pLine, USHORT nIndex );
 
     EditLineList&       GetLines()                  { return aLineList; }
 
