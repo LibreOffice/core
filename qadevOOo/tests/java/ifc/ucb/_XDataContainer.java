@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataContainer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:29:48 $
+ *  last change:$Date: 2003-09-08 11:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XDataContainer;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.ucb.XDataContainer</code>
