@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-19 12:27:23 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 15:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,7 +675,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
     if( !pOther )
         return FALSE;
     SwSectionFrm* pSect = pOther->FindSctFrm();
-    if( !pSect || ( pSect != this ) )
+    if( pSect != this )
         return FALSE;
     // Den Inhalt zur Seite stellen
     SwFrm* pSav = ::SaveCntnt( this, bApres ? pOther : pFrm );
@@ -691,7 +691,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
 #ifdef VERTICAL_LAYOUT
         if( pNew->IsVertical() )
             pNew->Init();
-        SWRECTFN( pSect )
+        SWRECTFN( this )
         (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
 #else
         pNew->Frm().Pos() = pSect->Frm().Pos();
@@ -699,7 +699,12 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
         pNew->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
 #endif
         ::RestoreCntnt( pSav, pLay, NULL );
-        pSect->_InvalidateSize();
+        _InvalidateSize();
+        if( HasFollow() )
+        {
+            pNew->SetFollow( GetFollow() );
+            SetFollow( NULL );
+        }
         return TRUE;
     }
     return FALSE;
@@ -1184,9 +1189,9 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
             nDeadLine = (Frm().*fnRect->fnGetTop)();
         }
         const Size aOldSz( Prt().SSize() );
+        long nTop = (this->*fnRect->fnGetTopMargin)();
         (Frm().*fnRect->fnSetBottom)( nDeadLine );
         nDiff = (Frm().*fnRect->fnGetHeight)();
-        long nTop = (this->*fnRect->fnGetTopMargin)();
         if( nTop > nDiff )
             nTop = nDiff;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
