@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:14:05 $
+ *  last change: $Author: dvo $ $Date: 2002-05-27 13:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2672,6 +2672,27 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
 
 // -----------------------------------------------------------------------
 
+/**
+ * the list of formats which will be offered to the user in the 'Paste
+ * Special...' dialog and the paste button menu
+ */
+static USHORT aPasteSpecialIds[] =
+{
+    SOT_FORMATSTR_ID_HTML,
+    SOT_FORMATSTR_ID_HTML_SIMPLE,
+    FORMAT_RTF,
+    FORMAT_STRING,
+    SOT_FORMATSTR_ID_SONLK,
+    SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
+    SOT_FORMATSTR_ID_DRAWING,
+    SOT_FORMATSTR_ID_SVXB,
+    FORMAT_GDIMETAFILE,
+    FORMAT_BITMAP,
+    SOT_FORMATSTR_ID_SVIM,
+    SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR,
+    0
+};
+
 int SwTransferable::PasteSpecial( SwWrtShell& rSh,
                                     TransferableDataHelper& rData )
 {
@@ -2731,21 +2752,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
 
 #endif
 
-    static USHORT aIds[] = {
-            SOT_FORMATSTR_ID_HTML,
-            SOT_FORMATSTR_ID_HTML_SIMPLE,
-            FORMAT_RTF,
-            FORMAT_STRING,
-            SOT_FORMATSTR_ID_SONLK,
-            SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
-            SOT_FORMATSTR_ID_DRAWING,
-            SOT_FORMATSTR_ID_SVXB,
-            FORMAT_GDIMETAFILE,
-            FORMAT_BITMAP,
-            SOT_FORMATSTR_ID_SVIM,
-            0 };
-
-    for( USHORT* pIds = aIds; *pIds; ++pIds )
+    for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
             pDlg->Insert( *pIds, aEmptyStr );
 
@@ -2803,21 +2810,7 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
 
 #endif
 
-    static USHORT aIds[] = {
-            SOT_FORMATSTR_ID_HTML,
-            SOT_FORMATSTR_ID_HTML_SIMPLE,
-            FORMAT_RTF,
-            FORMAT_STRING,
-            SOT_FORMATSTR_ID_SONLK,
-            SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
-            SOT_FORMATSTR_ID_DRAWING,
-            SOT_FORMATSTR_ID_SVXB,
-            FORMAT_GDIMETAFILE,
-            FORMAT_BITMAP,
-            SOT_FORMATSTR_ID_SVIM,
-            0 };
-
-    for( USHORT* pIds = aIds; *pIds; ++pIds )
+    for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
             rToFill.AddClipbrdFormat( *pIds, aEmptyStr );
 }
