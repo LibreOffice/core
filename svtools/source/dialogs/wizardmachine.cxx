@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,12 @@ namespace svt
         sal_Bool                        bUsingHeaders;      // do we use page headers?
         sal_Bool                        m_bCheckButtonStates;
 
+        bool                            m_bInCallOfLink;
+
         WizardMachineImplData()
             :nFirstUnknownPage( 0 )
             ,bUsingHeaders( sal_False )
+            ,m_bInCallOfLink( false )
         {
         }
     };
@@ -577,10 +580,17 @@ namespace svt
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnFinish, PushButton*, NOINTERESTEDIN)
     {
+        if( IsInCallOfLink() )
+            return 0;
+        SetInCallOfLink( true );
         if ( !prepareLeaveCurrentState( eFinish ) )
+        {
+            SetInCallOfLink( false);
             return 0L;
-
-        return onFinish( RET_OK );
+        }
+        long nRet = onFinish( RET_OK );
+        SetInCallOfLink( false);
+        return nRet;
     }
 
     //---------------------------------------------------------------------
@@ -779,19 +789,45 @@ namespace svt
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnPrevPage, PushButton*, NOINTERESTEDIN)
     {
-        return travelPrevious();
+        if( IsInCallOfLink() )
+            return 0;
+        SetInCallOfLink( true );
+        sal_Int32 nRet = travelPrevious();
+        SetInCallOfLink( false );
+        return nRet;
     }
 
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnNextPage, PushButton*, NOINTERESTEDIN)
     {
-        return travelNext();
+        if( IsInCallOfLink() )
+            return 0;
+        SetInCallOfLink( true );
+        sal_Int32 nRet = travelNext();
+        SetInCallOfLink( false );
+        return nRet;
     }
     //---------------------------------------------------------------------
     IWizardPage* OWizardMachine::getWizardPage(TabPage* _pCurrentPage) const
     {
         OWizardPage* pPage = static_cast<OWizardPage*>(_pCurrentPage);
         return pPage;
+    }
+    /*-- 23.02.2005 10:50:17---------------------------------------------------
+
+    -----------------------------------------------------------------------*/
+    bool OWizardMachine::IsInCallOfLink() const
+    {
+        return m_pImpl->m_bInCallOfLink;
+    }
+
+    /*-- 23.02.2005 10:48:01---------------------------------------------------
+
+      -----------------------------------------------------------------------*/
+    void OWizardMachine::SetInCallOfLink( bool bSet )
+    {
+       DBG_ASSERT( bSet != m_pImpl->m_bInCallOfLink, "OWizardMachine::SetInCallOfLink - state already set" );
+       m_pImpl->m_bInCallOfLink = bSet;
     }
 
 //.........................................................................
