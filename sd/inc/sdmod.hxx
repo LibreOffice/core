@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:35:42 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
 
+#include <sfx2/module.hxx>
+
 class SdOptions;
 class BasicIDE;
 class SvxSearchItem;
@@ -120,7 +122,7 @@ enum SdOptionStreamMode
 |*
 \************************************************************************/
 
-class SdModule : public SdModuleDummy, public SfxListener
+class SdModule : public SfxModule, public SfxListener
 {
 protected:
 
@@ -146,7 +148,7 @@ public:
                             SFX_DECL_INTERFACE(SD_IF_SDAPP);
                             DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
-                            SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact);
+                            SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact);
     virtual                 ~SdModule();
 
     SdTransferable*         pTransferClip;
@@ -155,9 +157,6 @@ public:
 
     void                    Execute(SfxRequest& rReq);
     void                    GetState(SfxItemSet&);
-
-    virtual SfxModule*      Load();
-    virtual void            Free();
 
     virtual void            FillStatusBar(StatusBar& rBar);
 
