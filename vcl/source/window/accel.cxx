@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:01:59 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,9 +356,9 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
     GetRes( rResId );
 
     maHelpStr = ReadStringRes();
-    USHORT nObjFollows = ReadShortRes();
+    ULONG nObjFollows = ReadLongRes();
 
-    for( USHORT i = 0; i < nObjFollows; i++ )
+    for( ULONG i = 0; i < nObjFollows; i++ )
     {
         InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
@@ -413,15 +413,15 @@ void Accelerator::InsertItem( const ResId& rResId )
 {
     DBG_CHKTHIS( Accelerator, NULL );
 
-    USHORT              nObjMask;
-    USHORT              nAccelKeyId;
+    ULONG               nObjMask;
+    ULONG               nAccelKeyId;
     USHORT              bDisable;
     KeyCode             aKeyCode;
     Accelerator*        pAutoAccel  = NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
-    nObjMask        = ReadShortRes();
-    nAccelKeyId     = ReadShortRes();
+    nObjMask        = ReadLongRes();
+    nAccelKeyId     = ReadLongRes();
     bDisable        = ReadShortRes();
 
     if ( nObjMask & ACCELITEM_KEY )
