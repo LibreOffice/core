@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:34:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,8 @@ String STR_QUERY_REL_EDIT_RELATION
 };
 String STR_RELATIONDESIGN
 {
-    Text [ de ] = "Relationenentwurf" ;
-    Text [ en-US ] = "Relation design" ;
+    Text [ de ] = " - %PRODUCTNAME Base: Relationenentwurf" ;
+    Text [ en-US ] = " - %PRODUCTNAME Base: Relation design" ;
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
