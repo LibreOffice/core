@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,162 @@ inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 }
 
 //______________________________________________________________________________
+namespace {
+
+void createDefaultUnoValue(
+    JNI_context const & jni, void * uno_data,
+    typelib_TypeDescriptionReference * type,
+    JNI_type_info const * info /* maybe 0 */, bool assign)
+{
+    switch (type->eTypeClass) {
+    case typelib_TypeClass_BOOLEAN:
+        *static_cast< sal_Bool * >(uno_data) = false;
+        break;
+
+    case typelib_TypeClass_BYTE:
+        *static_cast< sal_Int8 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_SHORT:
+        *static_cast< sal_Int16 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_UNSIGNED_SHORT:
+        *static_cast< sal_uInt16 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_LONG:
+        *static_cast< sal_Int32 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_UNSIGNED_LONG:
+        *static_cast< sal_uInt32 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_HYPER:
+        *static_cast< sal_Int64 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_UNSIGNED_HYPER:
+        *static_cast< sal_uInt64 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_FLOAT:
+        *static_cast< float * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_DOUBLE:
+        *static_cast< double * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_CHAR:
+        *static_cast< sal_Unicode * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_STRING:
+        if (!assign) {
+            *static_cast< rtl_uString ** >(uno_data) = 0;
+        }
+        rtl_uString_new(static_cast< rtl_uString ** >(uno_data));
+        break;
+
+    case typelib_TypeClass_TYPE:
+        if (assign) {
+            typelib_typedescriptionreference_release(
+                *static_cast< typelib_TypeDescriptionReference ** >(uno_data));
+        }
+        *static_cast< typelib_TypeDescriptionReference ** >(uno_data)
+            = *typelib_static_type_getByTypeClass(typelib_TypeClass_VOID);
+        OSL_ASSERT(
+            *static_cast< typelib_TypeDescriptionReference ** >(uno_data) != 0);
+        typelib_typedescriptionreference_acquire(
+            *static_cast< typelib_TypeDescriptionReference ** >(uno_data));
+        break;
+
+    case typelib_TypeClass_ANY:
+        if (assign) {
+            uno_any_destruct(static_cast< uno_Any * >(uno_data), 0);
+        }
+        uno_any_construct(
+            static_cast< uno_Any * >(uno_data), 0,
+            jni.get_info()->m_XInterface_type_info->m_td.get(), 0);
+        break;
+
+    case typelib_TypeClass_SEQUENCE:
+        {
+            auto_ptr< rtl_mem > seq(seq_allocate(0, 0));
+            if (assign) {
+                uno_type_destructData(uno_data, type, 0);
+            }
+            *static_cast< uno_Sequence ** >(uno_data)
+                = reinterpret_cast< uno_Sequence * >(seq.release());
+            break;
+        }
+
+    case typelib_TypeClass_ENUM:
+        // XXX  This does not work for a (deprecated) UNO enum type whose first
+        // element has a value other than zero:
+        *static_cast< sal_Int32 * >(uno_data) = 0;
+        break;
+
+    case typelib_TypeClass_STRUCT:
+        {
+            if (info == 0) {
+                info = jni.get_info()->get_type_info(jni, type);
+            }
+            JNI_compound_type_info const * comp_info
+                = static_cast< JNI_compound_type_info const * >(info);
+            typelib_CompoundTypeDescription * comp_td
+                = reinterpret_cast< typelib_CompoundTypeDescription * >(
+                    comp_info->m_td.get());
+            sal_Int32 nPos = 0;
+            sal_Int32 nMembers = comp_td->nMembers;
+            try {
+                if (comp_td->pBaseTypeDescription != 0) {
+                    createDefaultUnoValue(
+                        jni, uno_data,
+                        comp_td->pBaseTypeDescription->aBase.pWeakRef,
+                        comp_info->m_base, assign);
+                }
+                for (; nPos < nMembers; ++nPos) {
+                    createDefaultUnoValue(
+                        jni,
+                        (static_cast< char * >(uno_data)
+                         + comp_td->pMemberOffsets[nPos]),
+                        comp_td->ppTypeRefs[nPos], 0, assign);
+                }
+            } catch (...) {
+                if (!assign) {
+                    for (sal_Int32 i = 0; i < nPos; ++i) {
+                        uno_type_destructData(
+                            (static_cast< char * >(uno_data)
+                             + comp_td->pMemberOffsets[i]),
+                            comp_td->ppTypeRefs[i], 0);
+                    }
+                    if (comp_td->pBaseTypeDescription != 0) {
+                        uno_destructData(
+                            uno_data, &comp_td->pBaseTypeDescription->aBase, 0);
+                    }
+                }
+                throw;
+            }
+        }
+        break;
+
+    case typelib_TypeClass_INTERFACE:
+        if (assign) {
+            uno_Interface * p = *static_cast< uno_Interface ** >(uno_data);
+            if (p != 0) {
+                (*p->release)(p);
+            }
+        }
+        *static_cast< uno_Interface ** >(uno_data) = 0;
+        break;
+    }
+}
+
+}
+
 void Bridge::map_to_uno(
     JNI_context const & jni,
     void * uno_data, jvalue java_data,
@@ -623,6 +779,10 @@ void Bridge::map_to_uno(
 
         typelib_CompoundTypeDescription * comp_td =
             (typelib_CompoundTypeDescription *)comp_info->m_td.get();
+        bool polymorphic
+            = comp_td->aBase.eTypeClass == typelib_TypeClass_STRUCT
+            && reinterpret_cast< typelib_StructTypeDescription * >(
+                comp_td)->pParameterizedTypes != 0;
 
         sal_Int32 nPos = 0;
         sal_Int32 nMembers = comp_td->nMembers;
@@ -644,40 +804,161 @@ void Bridge::map_to_uno(
                 typelib_TypeDescriptionReference * member_type =
                     comp_td->ppTypeRefs[ nPos ];
                 jfieldID field_id = comp_info->m_fields[ nPos ];
+                bool parameterizedType = polymorphic
+                    && reinterpret_cast< typelib_StructTypeDescription * >(
+                        comp_td)->pParameterizedTypes[nPos];
                 switch (member_type->eTypeClass)
                 {
                 case typelib_TypeClass_CHAR:
-                    *(jchar *) p = jni->GetCharField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jchar *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jchar *) p = jni->GetCharField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_BOOLEAN:
-                    *(jboolean *) p =
-                        jni->GetBooleanField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jboolean *) p = false;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jboolean *) p = jni->GetBooleanField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_BYTE:
-                    *(jbyte *) p = jni->GetByteField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jbyte *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jbyte *) p = jni->GetByteField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_UNSIGNED_SHORT:
-                    *(jshort *) p = jni->GetShortField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jshort *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jshort *) p = jni->GetShortField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
-                    *(jint *) p = jni->GetIntField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jint *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jint *) p = jni->GetIntField( java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_HYPER:
                 case typelib_TypeClass_UNSIGNED_HYPER:
-                    *(jlong *) p = jni->GetLongField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jlong *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jlong *) p = jni->GetLongField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_FLOAT:
-                    *(jfloat *) p = jni->GetFloatField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jfloat *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jfloat *) p = jni->GetFloatField(
+                            java_data.l, field_id );
+                    }
                     break;
                 case typelib_TypeClass_DOUBLE:
-                    *(jdouble *) p =
-                        jni->GetDoubleField( java_data.l, field_id );
+                    if (parameterizedType) {
+                        JLocalAutoRef jo(
+                            jni, jni->GetObjectField( java_data.l, field_id ) );
+                        if ( jo.get() == 0 ) {
+                            *(jdouble *) p = 0;
+                        } else {
+                            jvalue val;
+                            val.l = jo.get();
+                            map_to_uno(
+                                jni, p, val, member_type, 0, assign, false,
+                                true );
+                        }
+                    } else {
+                        *(jdouble *) p = jni->GetDoubleField(
+                            java_data.l, field_id );
+                    }
                     break;
                 default:
                 {
                     JLocalAutoRef jo_field( jni );
+                    bool checkNull;
                     if (0 == field_id)
                     {
                         // special for Message: call Throwable.getMessage()
@@ -697,22 +978,23 @@ void Bridge::map_to_uno(
                                 m_jni_info->m_method_Throwable_getMessage, 0 )
                             );
                         jni.ensure_no_exception();
-                        if (! jo_field.is()) // message may be null
-                        {
-                            jo_field.reset( jni->NewStringUTF( "" ) );
-                            jni.ensure_no_exception();
-                        }
+                        checkNull = true;
                     }
                     else
                     {
                         jo_field.reset(
                             jni->GetObjectField( java_data.l, field_id ) );
+                        checkNull = parameterizedType;
                     }
-                    jvalue val;
-                    val.l = jo_field.get();
-                    map_to_uno(
-                        jni, p, val, member_type, 0,
-                        assign, false /* no out param */ );
+                    if (checkNull && !jo_field.is()) {
+                        createDefaultUnoValue(jni, p, member_type, 0, assign);
+                    } else {
+                        jvalue val;
+                        val.l = jo_field.get();
+                        map_to_uno(
+                            jni, p, val, member_type, 0,
+                            assign, false /* no out param */ );
+                    }
                     break;
                 }
                 }
@@ -728,7 +1010,7 @@ void Bridge::map_to_uno(
                     void * p =
                         (char *)uno_data + comp_td->pMemberOffsets[ nCleanup ];
                     uno_type_destructData(
-                        uno_data, comp_td->ppTypeRefs[ nCleanup ], 0 );
+                        p, comp_td->ppTypeRefs[ nCleanup ], 0 );
                 }
                 if (0 != comp_td->pBaseTypeDescription)
                 {
@@ -1660,6 +1942,10 @@ void Bridge::map_to_java(
                 typelib_TypeDescriptionReference ** ppMemberTypeRefs =
                     comp_td->ppTypeRefs;
                 sal_Int32 * pMemberOffsets = comp_td->pMemberOffsets;
+                bool polymorphic
+                    = comp_td->aBase.eTypeClass == typelib_TypeClass_STRUCT
+                    && reinterpret_cast< typelib_StructTypeDescription * >(
+                        comp_td)->pParameterizedTypes != 0;
                 for ( sal_Int32 nPos = comp_td->nMembers; nPos--; )
                 {
                     jfieldID field_id = linfo->m_fields[ nPos ];
@@ -1669,50 +1955,166 @@ void Bridge::map_to_java(
                             (char const *)uno_data + pMemberOffsets[ nPos ];
                         typelib_TypeDescriptionReference * member_type =
                             ppMemberTypeRefs[ nPos ];
+                        bool parameterizedType = polymorphic
+                            && (reinterpret_cast<
+                                typelib_StructTypeDescription * >(comp_td)->
+                                pParameterizedTypes[nPos]);
                         switch (member_type->eTypeClass)
                         {
                         case typelib_TypeClass_CHAR:
-                            jni->SetCharField(
-                                jo_comp.get(),
-                                field_id, *(jchar const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.c = *(jchar const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Character,
+                                        m_jni_info->m_ctor_Character_with_char,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetCharField(
+                                    jo_comp.get(),
+                                    field_id, *(jchar const *) p );
+                            }
                             break;
                         case typelib_TypeClass_BOOLEAN:
-                            jni->SetBooleanField(
-                                jo_comp.get(),
-                                field_id, *(jboolean const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.z = *(jboolean const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Boolean,
+                                        m_jni_info->m_ctor_Boolean_with_boolean,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetBooleanField(
+                                    jo_comp.get(),
+                                    field_id, *(jboolean const *) p );
+                            }
                             break;
                         case typelib_TypeClass_BYTE:
-                            jni->SetByteField(
-                                jo_comp.get(),
-                                field_id, *(jbyte const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.b = *(jbyte const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Byte,
+                                        m_jni_info->m_ctor_Byte_with_byte,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetByteField(
+                                    jo_comp.get(),
+                                    field_id, *(jbyte const *) p );
+                            }
                             break;
                         case typelib_TypeClass_SHORT:
                         case typelib_TypeClass_UNSIGNED_SHORT:
-                            jni->SetShortField(
-                                jo_comp.get(),
-                                field_id, *(jshort const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.s = *(jshort const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Short,
+                                        m_jni_info->m_ctor_Short_with_short,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetShortField(
+                                    jo_comp.get(),
+                                    field_id, *(jshort const *) p );
+                            }
                             break;
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
-                            jni->SetIntField(
-                                jo_comp.get(),
-                                field_id, *(jint const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.i = *(jint const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Integer,
+                                        m_jni_info->m_ctor_Integer_with_int,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetIntField(
+                                    jo_comp.get(),
+                                    field_id, *(jint const *) p );
+                            }
                             break;
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
-                            jni->SetLongField(
-                                jo_comp.get(),
-                                field_id, *(jlong const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.j = *(jlong const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Long,
+                                        m_jni_info->m_ctor_Long_with_long,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetLongField(
+                                    jo_comp.get(),
+                                    field_id, *(jlong const *) p );
+                            }
                             break;
                         case typelib_TypeClass_FLOAT:
-                            jni->SetFloatField(
-                                jo_comp.get(),
-                                field_id, *(jfloat const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.f = *(jfloat const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Float,
+                                        m_jni_info->m_ctor_Float_with_float,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetFloatField(
+                                    jo_comp.get(),
+                                    field_id, *(jfloat const *) p );
+                            }
                             break;
                         case typelib_TypeClass_DOUBLE:
-                            jni->SetDoubleField(
-                                jo_comp.get(),
-                                field_id, *(jdouble const *) p );
+                            if (parameterizedType) {
+                                jvalue arg;
+                                arg.d = *(jdouble const *) p;
+                                JLocalAutoRef jo(
+                                    jni,
+                                    jni->NewObjectA(
+                                        m_jni_info->m_class_Double,
+                                        m_jni_info->m_ctor_Double_with_double,
+                                        &arg ) );
+                                jni.ensure_no_exception();
+                                jni->SetObjectField(
+                                    jo_comp.get(), field_id, jo.get() );
+                            } else {
+                                jni->SetDoubleField(
+                                    jo_comp.get(),
+                                    field_id, *(jdouble const *) p );
+                            }
                             break;
                         case typelib_TypeClass_STRING: // string opt here
                         {
