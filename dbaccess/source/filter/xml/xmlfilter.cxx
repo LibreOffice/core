@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:57:30 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(const ::rtl::OUString& rLocal
     SvXMLImportContext *pContext = NULL;
     if (!pContext)
     {
-        pContext = new OTableStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
+        pContext = new OTableStylesContext(*this, XML_NAMESPACE_OOO, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
             //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
