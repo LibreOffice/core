@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:22:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
