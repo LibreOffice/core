@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-07 11:12:31 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 07:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
@@ -296,7 +299,7 @@ namespace pcr
                     reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
                 *pNames = pRealMemberDescription->pMemberName;
             }
-         }
+        }
 
         typelib_typedescription_release( (typelib_TypeDescription *)pType );
         return aNames;
@@ -827,7 +830,62 @@ namespace pcr
                         break;
                         default:
                         {
-                            xStatement = xConnection->prepareStatement(aObjectName);
+                            ::rtl::OUString sStatementToExecute( aObjectName );
+
+                            // try to let a query composer analyze the statement
+                            try
+                            {
+                                Reference< XSQLQueryComposerFactory > xComposerFac( xConnection, UNO_QUERY );
+                                Reference< XSQLQueryComposer > xComposer;
+                                if ( xComposerFac.is() )
+                                    xComposer = xComposerFac->createQueryComposer( );
+                                if ( xComposer.is() )
+                                {
+                                    xComposer->setQuery( sStatementToExecute );
+
+                                    // Now set the filter to a dummy restriction which will result in an empty
+                                    // result set.
+
+                                    // Unfortunately, if the statement already has a non-empty filter it is not
+                                    // removed when setting a new one. Instead, everything set with "setQuery",
+                                    // counts as base, everything added later (setQuery/setOrder and such) is
+                                    // _added_. So we need to strip the original WHERE clause (if there is one)
+                                    // manually
+                                    {
+                                        ::rtl::OUString sComplete = xComposer->getComposedQuery( );
+                                            // this way we norm it: now there's really a "WHERE", not only a "where" or such ...
+                                        sal_Int32 nWherePos = sComplete.lastIndexOf( ::rtl::OUString::createFromAscii( "WHERE" ) );
+                                        if ( -1 < nWherePos )
+                                        {
+                                            sComplete = sComplete.copy( 0, nWherePos );
+                                                // this is not correct. The "WHERE" may have been a part of e.g. a filter itself
+                                                // (something like "WHERE <field> = 'WHERE'"), but without an API
+                                                // for _analyzing_ (and not only _composing_) queries, we don't have
+                                                // much of a chance ...
+                                            try
+                                            {
+                                                xComposer->setQuery( sComplete );
+                                            }
+                                            catch( const Exception& )
+                                            {
+                                                // just in case we found the wrong WHERE substring ....
+                                            }
+                                        }
+                                    }
+
+                                    xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
+                                    sStatementToExecute = xComposer->getComposedQuery( );
+                                    // We're interested in columns only. And this "WHERE 0=1" restriction we applied
+                                    // on the statement allows the driver to calc the columns only, without
+                                    // retrieving any data (which would be expensive)
+                                }
+                            }
+                            catch( const Exception& )
+                            {
+                                // silent this error, this was just a try
+                            }
+
+                            xStatement = xConnection->prepareStatement( sStatementToExecute );
                             // not interested in any results
                             Reference< XPropertySet > (xStatement,UNO_QUERY)->setPropertyValue( ::rtl::OUString::createFromAscii("MaxRows"),makeAny(sal_Int32(0)));
                             Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
@@ -1473,7 +1531,7 @@ namespace pcr
                                 SvxMacro* pMacro = aTab.Get( nIndex++ );
                                 if ( pMacro )
                                 {
-                                       sScriptCode = pMacro->GetMacName();
+                                    sScriptCode = pMacro->GetMacName();
                                     if ( nEventIndex < nEventCount )
                                     {
                                         if ( m_xEventManager.is() )
@@ -2660,150 +2718,11 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2001/12/07 11:12:31  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.46  2001/11/09 13:35:20  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.45  2001/10/30 15:17:57  fs
- *  connectRowSet: better error message upon failure
- *
- *  Revision 1.44.4.2  2001/12/07 10:50:01  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.44.4.1  2001/11/08 17:42:26  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.44  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.43  2001/08/27 16:57:39  fs
- *  #91537# changed the runtime representation for form (control) StarBasic script events (now with 'application' resp. 'document')
- *
- *  Revision 1.42  2001/08/20 07:53:50  ab
- *  #90513# application and document location prefixes
- *
- *  Revision 1.41  2001/08/13 15:46:18  fs
- *  #90958# +getRowSet / +ensureRowsetConnection: allow to calc the connection even when only controls are inspected (and not forms)
- *
- *  Revision 1.40  2001/08/07 08:39:59  fs
- *  #87690# set the connection as ActiveConnection explicitly
- *
- *  Revision 1.39  2001/08/06 15:37:05  fs
- *  #88300# UpdateUI: don't grab the focus if we didn't have it before ...
- *
- *  Revision 1.38  2001/08/06 14:52:59  fs
- *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
- *
- *  Revision 1.37  2001/07/23 13:33:33  fs
- *  #900071# correctly call XFilePickerControlAccess::setValue
- *
- *  Revision 1.36  2001/06/15 10:26:46  fs
- *  #86986# moved css/ui/* to css/ui/dialogs/*
- *
- *  Revision 1.35  2001/06/15 09:51:11  fs
- *  #86986# moved css/ui/* to css/ui/dialogs/*
- *
- *  Revision 1.34  2001/06/11 11:30:29  fs
- *  #86096# moved the functionallity of ChangeFontProperty to the ControlCharacterDialog
- *
- *  Revision 1.33  2001/06/08 12:23:34  fs
- *  #86096# corrected setting the FontSlant
- *
- *  Revision 1.32  2001/06/08 11:07:39  fs
- *  #86096# corrected extracting sal_Int16/sal_Int32 values
- *
- *  Revision 1.31  2001/06/08 07:51:27  fs
- *  #65293# linux type conversion problem
- *
- *  Revision 1.30  2001/06/08 07:49:01  fs
- *  #65293# linux type conversion problem
- *
- *  Revision 1.29  2001/06/06 10:38:55  fs
- *  #86837# +PROPERTY_IMAGEALIGN
- *
- *  Revision 1.28  2001/06/06 08:16:55  fs
- *  #86096# ChangeFontProperty: added support for Relief, EmphasisMark, TextLineColor
- *
- *  Revision 1.27  2001/05/30 13:44:20  fs
- *  #86838# UpdateUI: let the property box grab the focus
- *
- *  Revision 1.26  2001/05/29 13:25:57  fs
- *  #87299# SetTables/SetQueries: allow for grid columns
- *
- *  Revision 1.25  2001/05/29 10:45:45  fs
- *  #87461# +OnImageURLClicked - now using the FileDlgHelper instead of the UNO service
- *
- *  Revision 1.24  2001/05/25 14:10:16  fs
- *  #86865# transport the FontSlant as FontSlant, not as Int16
- *
- *  Revision 1.23  2001/05/21 04:45:11  fs
- *  #86712# UpdateUI: no 'formatting' for date 'n' time fields
- *
- *  Revision 1.22  2001/05/17 11:15:07  fs
- *  #86859# ChangeFontProperty: translate COL_AUTO into a void Any
- *
- *  Revision 1.21  2001/05/14 15:58:23  fs
- *  #86810# don't use setPropertyToDefault - the 'standard' value is used for MAYBEVOID properties, not for MAYBEDEFAULT properties
- *
- *  Revision 1.20  2001/05/14 09:51:27  pl
- *  rtl string api changes
- *
- *  Revision 1.19  2001/05/11 10:37:11  fs
- *  replaced the SfxFileDialog/SvxImportGraphicsDialog
- *
- *  Revision 1.18  2001/05/02 12:41:49  tbe
- *  added scrollbar properties
- *
- *  Revision 1.17  2001/04/26 09:14:59  tbe
- *  colortable for fillcolor
- *
- *  Revision 1.16  2001/04/26 06:32:03  fs
- *  #86017# limit the decimal accuracy to 20
- *
- *  Revision 1.15  2001/04/12 06:30:10  fs
- *  #84694# +recalcConnection: show an error when trying to open a new connection
- *
- *  Revision 1.14  2001/04/03 12:44:06  fs
- *  corrected SetQueries for list-/combo boxes
- *
- *  Revision 1.13  2001/03/21 15:42:13  fs
- *  #82696# use the new font dialog for changing the control font
- *
- *  Revision 1.12  2001/03/15 09:02:28  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.11  2001/03/03 14:23:49  ab
- *  Integrated access to XScriptsEventSupplier for new UNO dialogs
- *
- *  Revision 1.10  2001/02/22 09:31:29  tbe
- *  added properties for dialog controls
- *
- *  Revision 1.9  2001/02/20 08:49:56  fs
- *  #84111# allow number formats to be removed
- *
- *  Revision 1.8  2001/02/13 16:27:08  fs
- *  #83848# no multiline input for 'DefaultText' of FileControl / #83655# -1 as minimum for MaxTextLength
- *
- *  Revision 1.7  2001/02/06 10:21:19  fs
- *  #83527# set the minimum for the BoundField property to 1
- *
- *  Revision 1.6  2001/02/05 14:38:26  fs
- *  #83461# no 'not defined' for radio buttons check state
- *
- *  Revision 1.5  2001/02/05 08:59:02  fs
- *  #83468# SetTables ... correctly retrieve the rowset for combo-/listboxes
- *
- *  Revision 1.4  2001/01/18 14:45:10  rt
- *  #65293# semicolon removed
- *
- *  Revision 1.3  2001/01/12 17:02:53  fs
- *  StringToAny: corrected the evaluation of booleans
- *
- *  Revision 1.2  2001/01/12 14:44:49  fs
- *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
- *
- *  Revision 1.1  2001/01/12 11:28:05  fs
- *  initial checkin - outsourced the form property browser
- *
  *
  *  Revision 1.0 10.01.01 08:51:55  fs
  ************************************************************************/
