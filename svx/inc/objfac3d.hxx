@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objfac3d.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _OBJFAC3D_HXX
 #define _OBJFAC3D_HXX
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 /*************************************************************************
 |*
@@ -76,7 +80,7 @@ class SdrObjFactory;
 #include <tools/link.hxx>
 #endif
 
-class E3dObjFactory
+class SVX_DLLPUBLIC E3dObjFactory
 {
 public:
     E3dObjFactory();
