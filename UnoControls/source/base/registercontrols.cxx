@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercontrols.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:43:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ using namespace ::com::sun::star::registry                      ;
     AS_DBG_OUT ( "\tCREATEFACTORY_SINGLE():\t[end]\n" )
 
 //******************************************************************************************************************************
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
@@ -252,7 +252,7 @@ using namespace ::com::sun::star::registry                      ;
 #endif /* MACOSX */
 
 //******************************************************************************************************************************
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
