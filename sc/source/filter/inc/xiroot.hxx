@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:19:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include "xlroot.hxx"
 #endif
 
+// Forward declarations of objects in public use ==============================
+
+class XclImpStream;
+class XclImpString;
+
 // Global data ================================================================
 
 class XclImpSst;
@@ -77,7 +82,7 @@ class XclImpXFRangeBuffer;
 class XclImpPageSettings;
 class _ScRangeListTabs;
 class XclImpTabInfo;
-class XclImpNameBuffer;
+class XclImpNameManager;
 class XclImpLinkManager;
 class XclImpObjectManager;
 class XclImpCondFormatManager;
@@ -96,7 +101,7 @@ struct XclImpRootData : public XclRootData
     typedef ::std::auto_ptr< XclImpXFRangeBuffer >      XclImpXFRangeBfrPtr;
     typedef ::std::auto_ptr< XclImpPageSettings >       XclImpPageSettPtr;
     typedef ::std::auto_ptr< XclImpTabInfo >            XclImpTabInfoPtr;
-    typedef ::std::auto_ptr< XclImpNameBuffer >         XclImpNameBfrPtr;
+    typedef ::std::auto_ptr< XclImpNameManager >        XclImpNameMgrPtr;
     typedef ::std::auto_ptr< XclImpLinkManager >        XclImpLinkMgrPtr;
     typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectMgrPtr;
     typedef ::std::auto_ptr< XclImpCondFormatManager >  XclImpCondFmtMgrPtr;
@@ -114,7 +119,7 @@ struct XclImpRootData : public XclRootData
     XclImpPageSettPtr   mxPageSettings;     /// Page settings for current sheet.
 
     XclImpTabInfoPtr    mxTabInfo;          /// Sheet creation order list.
-    XclImpNameBfrPtr    mxNameBfr;          /// Internal defined names.
+    XclImpNameMgrPtr    mxNameMgr;          /// Internal defined names.
     XclImpLinkMgrPtr    mxLinkMgr;          /// Manager for internal/external links.
 
     XclImpObjectMgrPtr  mxObjMgr;           /// All drawing objects.
@@ -159,13 +164,13 @@ public:
     XclImpPageSettings& GetPageSettings() const;
     /** Returns the buffer that contains all print areas in the document. */
     _ScRangeListTabs&   GetPrintAreaBuffer() const;
-    /** Returns the buffer that contains all print areas in the document. */
+    /** Returns the buffer that contains all print titles in the document. */
     _ScRangeListTabs&   GetTitleAreaBuffer() const;
 
     /** Returns the buffer that contains the sheet creation order. */
     XclImpTabInfo&      GetTabInfo() const;
     /** Returns the buffer that contains internal defined names. */
-    XclImpNameBuffer&   GetNameBuffer() const;
+    XclImpNameManager&  GetNameManager() const;
     /** Returns the link manager. */
     XclImpLinkManager&  GetLinkManager() const;
 
