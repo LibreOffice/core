@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:26:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ TabPage TP_DOCINFORELOAD
         Text[ russian ] = "~Àâòîçàãğóçêà êàæäûå";
         Text[ polish ] = "Prze³a~duj automatycznie co";
         Text[ japanese ] = "©“®“I‚ÉXV(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡­«·s¦Û°Ê¸Ë¸ü(~A)";
+        Text[ chinese_traditional ] = "¥ş³¡¦Û°Ê­«·s¸ü¤J(~A)";
         Text[ greek ] = "~Áõôüìáôç öüñôùóç êÜèå";
         Text[ korean ] = "¸ğµÎ ÀÚµ¿À¸·Î ´Ù½Ã ·Îµå(~A)";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÍãíá ÊáŞÇÆí ááßá";
