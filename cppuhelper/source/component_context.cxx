@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 12:01:49 $
+ *  last change: $Author: dbo $ $Date: 2001-06-07 12:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,8 @@ ComponentContext::ComponentContext(
         m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
     }
 
+    m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
+
     if (m_xDelegate.is())
     {
         Reference< lang::XComponent > xComp( m_xDelegate, UNO_QUERY );
@@ -373,14 +375,10 @@ ComponentContext::ComponentContext(
         {
             xComp->addEventListener( new Disposer_Impl( this ) );
         }
-        if (m_xSMgr.is())
+        if (! m_xSMgr.is())
         {
-            m_bDisposeSMgr = true;
-        }
-        else
-        {
-            m_bDisposeSMgr = false;
             m_xSMgr = m_xDelegate->getServiceManager();
+            m_bDisposeSMgr = false;
         }
     }
 }
@@ -396,13 +394,14 @@ ComponentContext::ComponentContext(
     {
         ContextEntry_Init const & rEntry = pEntries[ nEntries ];
 
-        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.lang.ServiceManager") ))
+        if (rEntry.name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_NAME) ))
         {
-            if (rEntry.value >>= m_xSMgr)
-                continue;
+            rEntry.value >>= m_xSMgr;
         }
         m_map[ rEntry.name ] = new ContextEntry( rEntry.bLateInitService, rEntry.value );
     }
+
+    m_bDisposeSMgr = (m_xSMgr.is() != sal_False);
 
     // late init singleton services
     if (xRegistry.is())
