@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.6 $
-*  last change: $Author: jmrice $ $Date: 2002-09-30 12:57:02 $
+*  $Revision: 1.7 $
+*  last change: $Author: jmrice $ $Date: 2002-10-01 07:00:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -179,6 +179,12 @@ throw ( RuntimeException, Exception )
 
 
         xStringUri = xStringUri.concat( ::rtl::OUString::createFromAscii( SCRIPT_DIR ) );
+
+       // No Scripts directory - just return
+       if ( ! m_xSimpleFileAccess->isFolder( xStringUri ) )
+       {
+           return;
+       }
 
         // get the list of language folders under the Scripts directory
         Sequence< ::rtl::OUString > languageDirs =
