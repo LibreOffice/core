@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:13:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,7 @@ SwModule::SwModule( SvFactory* pFact,
     pDBConfig(0),
     pColorConfig(0),
     pAccessibilityOptions(0),
+    pCTLOptions(0),
     pClipboard(0),
     pDragDrop(0),
     pXSelection(0),
@@ -563,7 +564,7 @@ void SwDLL::RegisterControls()
 
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
-    SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_COLUMN_SECTION, pMod );
+    SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_REGION, pMod );
     SvxTableToolBoxControl::RegisterControl(FN_INSERT_TABLE, pMod );
     SvxTableToolBoxControl::RegisterControl(FN_SHOW_MULTIPLE_PAGES, pMod );
 
