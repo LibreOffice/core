@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:46:10 $
+ *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,15 +590,20 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
             BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
             if( MAXLEVEL > nLvl )
             {
-                BYTE nWWLvl = 8 >= nLvl ? nLvl : 8;
-                rWrt.Strm() << sRTF_LS;
-                rWrt.OutULong( rWrt.pDoc->GetNumRuleTbl().Count() );
-                rWrt.Strm() << sRTF_ILVL; rWrt.OutULong( nWWLvl );
-                rWrt.Strm() << sRTF_OUTLINELEVEL; rWrt.OutULong( nWWLvl );
-                if( nWWLvl != nLvl )            // RTF-kennt nur 9 Ebenen
+                USHORT nNumId = rRTFWrt.GetNumRuleId(
+                                        *rWrt.pDoc->GetOutlineNumRule() );
+                if( USHRT_MAX != nNumId )
                 {
-                    OutComment( rWrt, sRTF_SOUTLVL );
-                    rWrt.OutULong( nLvl ) << '}';
+                    BYTE nWWLvl = 8 >= nLvl ? nLvl : 8;
+                    rWrt.Strm() << sRTF_LS;
+                    rWrt.OutULong( nNumId );
+                    rWrt.Strm() << sRTF_ILVL; rWrt.OutULong( nWWLvl );
+                    rWrt.Strm() << sRTF_OUTLINELEVEL; rWrt.OutULong( nWWLvl );
+                    if( nWWLvl != nLvl )            // RTF-kennt nur 9 Ebenen
+                    {
+                        OutComment( rWrt, sRTF_SOUTLVL );
+                        rWrt.OutULong( nLvl ) << '}';
+                    }
                 }
 
                 const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( nLvl );
@@ -1203,12 +1208,11 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
 
         rRTFWrt.OutListNum( *pNd );
-
         OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
     }
 
     // gibt es harte Attributierung ?
-    if( bNewFmts && pNd->GetpSwAttrSet() )
+    if( bNewFmts && ( pNd->GetpSwAttrSet() || pNd->GetNum() ))
     {
         rRTFWrt.pFlyFmt = 0;
 
@@ -3520,7 +3524,7 @@ static Writer& OutRTF_SwNumRule( Writer& rWrt, const SfxPoolItem& rHt )
         const SwNumRuleItem& rAttr = (const SwNumRuleItem&)rHt;
         USHORT nId;
         if( rAttr.GetValue().Len() &&
-            USHRT_MAX != (nId = rRTFWrt.GetId( rAttr ) ) )
+            USHRT_MAX != (nId = rRTFWrt.GetId( rAttr ) ))
         {
             rWrt.Strm() << sRTF_LS;
             rWrt.OutULong( nId );
@@ -3735,11 +3739,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.18 2001-05-03 11:46:10 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.19 2001-05-25 16:03:48 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/05/03 11:46:10  jp
+      new: export or scriptspace/forbiddenrule/hangingpuctuation
+
       Revision 1.17  2001/05/03 08:47:36  jp
       new: export ParaVertAlignItem
 

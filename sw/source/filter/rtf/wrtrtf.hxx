@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 16:56:38 $
+ *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class SwNumRuleTbl;
 class SwNodeNum;
 class DateTime;
 class RTFEndPosLst;
+class SwNumRuleTbl;
 
 extern SwAttrFnTab aRTFAttrFnTab;
 extern SwNodeFnTab aRTFNodeFnTab;
@@ -111,6 +112,7 @@ class SwRTFWriter : public Writer
     const SfxItemSet* pAttrSet;     // akt. Format/Collection vom Node
                                     // fuer den Zugriff auf einige Attribute
                                     // z.B. Font-Size, LR-Space,..
+    SwNumRuleTbl* pNumRuleTbl;      // list of all exported numrules
 
     USHORT nAktFlyPos;              // Index auf das naechste "FlyFrmFmt"
     void OutRTFColorTab();
@@ -123,6 +125,7 @@ class SwRTFWriter : public Writer
     void OutInfoDateTime( const DateTime&, const sal_Char* );
     void CheckEndNodeForSection( const SwNode& rNd );
 
+    void BuildNumRuleTbl();
 
 public:
     // --- public Member --------------------------------------------------
@@ -189,7 +192,8 @@ public:
 
     void OutPageDesc();
 
-    void OutListNum( const SwTxtNode& rNd );
+    BOOL OutListNum( const SwTxtNode& rNd );
+    USHORT GetNumRuleId( const SwNumRule& rRule );
 
     // fuer RTFSaveData
     SwPaM* GetEndPaM()              { return pOrigPam; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:34:28 $
+ *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ ULONG SwRTFWriter::WriteStream()
     pFlyFmt = 0;        // kein FlyFrmFormat gesetzt
 
     pColTbl = new RTFColorTbl;
+    pNumRuleTbl = 0;
 
     BYTE nSz = (BYTE)Min( pDoc->GetSpzFrmFmts()->Count(), USHORT(255) );
     SwPosFlyFrms aFlyPos( nSz, nSz );
@@ -342,6 +343,12 @@ ULONG SwRTFWriter::WriteStream()
 
     pFlyPos = 0;
     delete pColTbl;
+    if( pNumRuleTbl )
+    {
+        // don't destroy the numrule pointers in the DTOR.
+        pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
+        delete pNumRuleTbl;
+    }
 
     // schreibe Win-RTF-HelpFileFmt
     bOutOutlineOnly = bWriteHelpFmt = FALSE;
