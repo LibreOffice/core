@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compressedarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $  $Date: 2004-08-20 09:08:58 $
+ *  last change: $Author: rt $  $Date: 2004-08-25 10:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,8 +399,8 @@ unsigned long ScSummableCompressedArray<A,D>::SumValues( A nStart, A nEnd ) cons
 {
     size_t nIndex = Search( nStart);
     unsigned long nSum = SumValuesContinuation( nStart, nEnd, nIndex);
-    if (nEnd > nMaxAccess)
-        nSum += pData[nCount-1].aValue * (nEnd - nMaxAccess);
+    if (nEnd > this->nMaxAccess)
+        nSum += this->pData[this->nCount-1].aValue * (nEnd - this->nMaxAccess);
     return nSum;
 }
 
@@ -411,11 +411,11 @@ unsigned long ScSummableCompressedArray<A,D>::SumValuesContinuation(
 {
     unsigned long nSum = 0;
     A nS = nStart;
-    while (nIndex < nCount && nS <= nEnd)
+    while (nIndex < this->nCount && nS <= nEnd)
     {
-        A nE = ::std::min( pData[nIndex].nEnd, nEnd);
+        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
         // FIXME: test for overflow in a single region?
-        unsigned long nNew = (unsigned long) pData[nIndex].aValue * (nE - nS + 1);
+        unsigned long nNew = (unsigned long) this->pData[nIndex].aValue * (nE - nS + 1);
         nSum += nNew;
         if (nSum < nNew)
             return ::std::numeric_limits<unsigned long>::max();
@@ -433,10 +433,10 @@ unsigned long ScSummableCompressedArray<A,D>::SumScaledValuesContinuation(
 {
     unsigned long nSum = 0;
     A nS = nStart;
-    while (nIndex < nCount && nS <= nEnd)
+    while (nIndex < this->nCount && nS <= nEnd)
     {
-        A nE = ::std::min( pData[nIndex].nEnd, nEnd);
-        unsigned long nScaledVal = (unsigned long) (pData[nIndex].aValue * fScale);
+        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
+        unsigned long nScaledVal = (unsigned long) (this->pData[nIndex].aValue * fScale);
         // FIXME: test for overflow in a single region?
         unsigned long nNew = nScaledVal * (nE - nS + 1);
         nSum += nNew;
@@ -459,20 +459,20 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue & rValueToAnd) != pData[nIndex].aValue)
+        if ((this->pData[nIndex].aValue & rValueToAnd) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, pData[nIndex].aValue & rValueToAnd);
+            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
+            SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
                 break;  // while
             nIndex = Search( nE + 1);
         }
-        else if (pData[nIndex].nEnd >= nEnd)
+        else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         else
             ++nIndex;
-    } while (nIndex < nCount);
+    } while (nIndex < this->nCount);
 }
 
 
@@ -483,20 +483,20 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue | rValueToOr) != pData[nIndex].aValue)
+        if ((this->pData[nIndex].aValue | rValueToOr) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, pData[nIndex].aValue | rValueToOr);
+            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
+            SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
                 break;  // while
             nIndex = Search( nE + 1);
         }
-        else if (pData[nIndex].nEnd >= nEnd)
+        else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         else
             ++nIndex;
-    } while (nIndex < nCount);
+    } while (nIndex < this->nCount);
 }
 
 
@@ -548,12 +548,12 @@ A ScBitMaskCompressedArray<A,D>::GetBitStateStart( A nEnd,
 {
     A nStart = ::std::numeric_limits<A>::max();
     size_t nIndex = Search( nEnd);
-    while ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+    while ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
     {
         if (nIndex > 0)
         {
             --nIndex;
-            nStart = pData[nIndex].nEnd + 1;
+            nStart = this->pData[nIndex].nEnd + 1;
         }
         else
         {
@@ -571,10 +571,10 @@ A ScBitMaskCompressedArray<A,D>::GetBitStateEnd( A nStart,
 {
     A nEnd = ::std::numeric_limits<A>::max();
     size_t nIndex = Search( nStart);
-    while (nIndex < nCount && (pData[nIndex].aValue & rBitMask) ==
+    while (nIndex < this->nCount && (this->pData[nIndex].aValue & rBitMask) ==
             rMaskedCompare)
     {
-        nEnd = pData[nIndex].nEnd;
+        nEnd = this->pData[nIndex].nEnd;
         ++nIndex;
     }
     return nEnd;
@@ -588,15 +588,15 @@ A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
         {
-            A nFound = nIndex > 0 ? pData[nIndex-1].nEnd + 1 : 0;
+            A nFound = nIndex > 0 ? this->pData[nIndex-1].nEnd + 1 : 0;
             return ::std::max( nFound, nStart);
         }
-        if (pData[nIndex].nEnd >= nEnd)
+        if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         ++nIndex;
-    } while (nIndex < nCount);
+    } while (nIndex < this->nCount);
     return ::std::numeric_limits<A>::max();
 }
 
@@ -608,13 +608,13 @@ A ScBitMaskCompressedArray<A,D>::GetLastForCondition( A nStart, A nEnd,
     size_t nIndex = Search( nEnd);
     while (1)
     {
-        if ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
-            return ::std::min( pData[nIndex].nEnd, nEnd);
+        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+            return ::std::min( this->pData[nIndex].nEnd, nEnd);
 
         if (nIndex > 0)
         {
             --nIndex;
-            if (pData[nIndex].nEnd < nStart)
+            if (this->pData[nIndex].nEnd < nStart)
                 break;  // while
         }
         else
@@ -632,16 +632,16 @@ A ScBitMaskCompressedArray<A,D>::CountForCondition( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
         {
-            A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( pData[nIndex].nEnd, nEnd);
+            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             nRet += nE - nS + 1;
         }
-        if (pData[nIndex].nEnd >= nEnd)
+        if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         ++nIndex;
-    } while (nIndex < nCount);
+    } while (nIndex < this->nCount);
     return nRet;
 }
 
@@ -653,16 +653,16 @@ size_t ScBitMaskCompressedArray<A,D>::FillArrayForCondition( A nStart, A nEnd,
 {
     size_t nUsed = 0;
     size_t nIndex = Search( nStart);
-    while (nIndex < nCount && nUsed < nArraySize)
+    while (nIndex < this->nCount && nUsed < nArraySize)
     {
-        if ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
         {
-            A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( pData[nIndex].nEnd, nEnd);
+            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             while (nS <= nE && nUsed < nArraySize)
                 pArray[nUsed++] = nS++;
         }
-        if (pData[nIndex].nEnd >= nEnd)
+        if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         ++nIndex;
     }
@@ -677,12 +677,12 @@ bool ScBitMaskCompressedArray<A,D>::HasCondition( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
             return true;
-        if (pData[nIndex].nEnd >= nEnd)
+        if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         ++nIndex;
-    }  while (nIndex < nCount);
+    }  while (nIndex < this->nCount);
     return false;
 }
 
@@ -695,16 +695,16 @@ A ScBitMaskCompressedArray<A,D>::CountForAnyBitCondition( A nStart, A nEnd,
     size_t nIndex = Search( nStart);
     do
     {
-        if ((pData[nIndex].aValue & rBitMask) != 0)
+        if ((this->pData[nIndex].aValue & rBitMask) != 0)
         {
-            A nS = ::std::max( (nIndex>0 ? pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( pData[nIndex].nEnd, nEnd);
+            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             nRet += nE - nS + 1;
         }
-        if (pData[nIndex].nEnd >= nEnd)
+        if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
         ++nIndex;
-    } while (nIndex < nCount);
+    } while (nIndex < this->nCount);
     return nRet;
 }
 
@@ -714,12 +714,12 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
         const D& rBitMask ) const
 {
     A nEnd = ::std::numeric_limits<A>::max();
-    size_t nIndex = nCount-1;
+    size_t nIndex = this->nCount-1;
     while (1)
     {
-        if ((pData[nIndex].aValue & rBitMask) != 0)
+        if ((this->pData[nIndex].aValue & rBitMask) != 0)
         {
-            nEnd = pData[nIndex].nEnd;
+            nEnd = this->pData[nIndex].nEnd;
             break;  // while
         }
         else
@@ -727,7 +727,7 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
             if (nIndex > 0)
             {
                 --nIndex;
-                if (pData[nIndex].nEnd < nStart)
+                if (this->pData[nIndex].nEnd < nStart)
                     break;  // while
             }
             else
@@ -750,24 +750,24 @@ unsigned long ScBitMaskCompressedArray<A,D>::SumCoupledArrayForCondition(
     size_t nIndex2 = rArray.Search( nStart);
     do
     {
-        if ((pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
         {
             while (nIndex2 < rArray.GetEntryCount() &&
                     rArray.GetDataEntry(nIndex2).nEnd < nS)
                 ++nIndex2;
             unsigned long nNew = rArray.SumValuesContinuation( nS,
-                    ::std::min( pData[nIndex1].nEnd, nEnd), nIndex2);
+                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2);
             nSum += nNew;
             if (nSum < nNew)
                 return ::std::numeric_limits<unsigned long>::max();
         }
-        nS = pData[nIndex1].nEnd + 1;
+        nS = this->pData[nIndex1].nEnd + 1;
         ++nIndex1;
-    } while (nIndex1 < nCount && nS <= nEnd);
-    if (nEnd > nMaxAccess &&
-            (pData[GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
+    } while (nIndex1 < this->nCount && nS <= nEnd);
+    if (nEnd > this->nMaxAccess &&
+            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
         nSum += rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * (nEnd -
-                nMaxAccess);
+                this->nMaxAccess);
     return nSum;
 }
 
@@ -784,25 +784,25 @@ unsigned long ScBitMaskCompressedArray<A,D>::SumScaledCoupledArrayForCondition(
     size_t nIndex2 = rArray.Search( nStart);
     do
     {
-        if ((pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
+        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
         {
             while (nIndex2 < rArray.GetEntryCount() &&
                     rArray.GetDataEntry(nIndex2).nEnd < nS)
                 ++nIndex2;
             unsigned long nNew = rArray.SumScaledValuesContinuation( nS,
-                    ::std::min( pData[nIndex1].nEnd, nEnd), nIndex2, fScale);
+                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2, fScale);
             nSum += nNew;
             if (nSum < nNew)
                 return ::std::numeric_limits<unsigned long>::max();
         }
-        nS = pData[nIndex1].nEnd + 1;
+        nS = this->pData[nIndex1].nEnd + 1;
         ++nIndex1;
-    } while (nIndex1 < nCount && nS <= nEnd);
-    if (nEnd > nMaxAccess &&
-            (pData[GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
+    } while (nIndex1 < this->nCount && nS <= nEnd);
+    if (nEnd > this->nMaxAccess &&
+            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
         nSum += (unsigned long)
             (rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * fScale) *
-            (nEnd - nMaxAccess);
+            (nEnd - this->nMaxAccess);
     return nSum;
 }
 
