@@ -309,7 +309,6 @@ void PieChart::createShapes()
                 if(fY<0.0)
                 {
                     //@todo warn somehow that negative values are treated as positive
-                    continue;
                 }
                 if( ::rtl::math::isNan(fY) )
                     continue;
