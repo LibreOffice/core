@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:34:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include "DrawViewShell.hxx"
 #endif
 
+class Window;
+
 namespace sd {
 
 /** View shell of the Draw application.
@@ -86,7 +88,11 @@ public:
     SFX_DECL_VIEWFACTORY(GraphicViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICVIEWSHELL);
 
-    GraphicViewShell( SfxViewFrame* pFrame, const DrawViewShell& rShell );
+    GraphicViewShell (
+        SfxViewFrame* pFrame,
+        ::Window* pParentWindow,
+        const DrawViewShell& rShell);
+
     /** Create a new view shell for the Draw application.
         @param rViewShellBase
             The new object will be stacked on this view shell base.
@@ -97,11 +103,22 @@ public:
     GraphicViewShell (
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
+
     virtual ~GraphicViewShell (void);
 
+    /** This method is overloaded in order to have the layer mode allways
+        active.
+    */
+    virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
+
 protected:
-    void    Construct();
+    void Construct (void);
+    virtual void ArrangeGUIElements (void);
+
+private:
+    DECL_LINK(TabBarSplitHandler, TabBar*);
 };
 
 } // end of namespace sd
