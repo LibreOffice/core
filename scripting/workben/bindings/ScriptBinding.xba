@@ -201,10 +201,32 @@ Sub ExecuteKeyBinding()
 	bindingDialog.execute()
 end Sub
 
+    
 Sub initialiseNavigationComboArrays()
     locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot; )
-    languages = Array( &quot;Java&quot;, &quot;BeanShell&quot; )    
+    ReDim languages(0) as String
+	languages(0) = &quot;Java&quot;
+	
+    &apos; Setup languages array for all supported languages
+    oServiceManager = GetProcessServiceManager()
+    svrArray = oServiceManager.getAvailableServiceNames
+
+    langCount = 1
+    for index = 0 to ubound(svrArray)
+    	iPos = inStr(svrArray(index), &quot;ScriptRuntimeFor&quot;)
+        iJava = inStr(svrArray(index), &quot;ScriptRuntimeForJava&quot;)
+        		
+        if 	(iJava = 0) and  (iPos &gt; 0) then
+	        lang = Mid(svrArray(index), iPos + Len(&quot;ScriptRuntimeFor&quot;)
+
+            &apos;Add to language vector
+            ReDim Preserve languages(langCount) as String
+            languages(langCount) = lang
+            langCount = langCount +1
+        endif  
+    next index
 End Sub
+
 
 Sub ExecuteEventBinding
 	createAllEventTypes()
@@ -315,7 +337,16 @@ function GetDocumentType( bindingType as string ) as string
 end function
 
 function getScriptURI( selectedScript as String ) as String
-	&apos;Dim scripts() as new com.sun.star.beans.PropertyValue
+	combo = bindingDialog.getControl( &quot;LocationCombo&quot; )
+	location = combo.text 
+	if ( location = &quot;User&quot; ) then 
+		location = &quot;user&quot;
+	elseif ( location = &quot;Share&quot; ) then
+		location = &quot;share&quot;
+	else
+		location = &quot;document&quot;
+	end if
+
 	Dim scriptInfo as Object
 	scripts() = scriptDisplayList(0)
 	for n = LBOUND( scripts() ) to UBOUND( scripts() )
@@ -326,7 +357,7 @@ function getScriptURI( selectedScript as String ) as String
 		end if
 	next n
 
-	getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; + scriptInfo.getLanguage() + &quot;+function=&quot; + scriptInfo.getFunctionName() 	
+	getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; + scriptInfo.getLanguage() + &quot;+function=&quot; + scriptInfo.getFunctionName() + &quot;+location=&quot; + location 	
 	
 end function
 
