@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:23 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "‮מספר עותקים‬";
         Text[ hindi ] = "~प्रतिलिपियों की संख्या";
         Text[ slovak ] = "Počet ~kópií";
+        Text[ hungarian ] = "Más~olatok száma";
+        Text[ slovenian ] = "Število ~kopij";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -188,6 +190,8 @@ ModalDialog DLG_COPY
         QuickHelpText[ hebrew ] = "Werte von Selektion aufnehmen";
         QuickHelpText[ hindi ] = "चुने हुए मात्राएँ";
         QuickHelpText[ slovak ] = "Hodnoty z výberu";
+        QuickHelpText[ hungarian ] = "Értékek a kijelölésből";
+        QuickHelpText[ slovenian ] = "Vrednosti iz izbire";
     };
     PushButton BTN_SET_DEFAULT
     {
@@ -204,7 +208,7 @@ ModalDialog DLG_COPY
         Text[ french ] = "Par d�faut";
         Text[ spanish ] = "~Predeterminado";
         Text[ italian ] = "~Standard";
-        Text[ danish ] = "Standard";
+        Text[ danish ] = "Standar~d";
         Text[ swedish ] = "~Standard";
         Text[ polish ] = "~Domy�lnie";
         Text[ portuguese_brazilian ] = "~Padr�o";
@@ -222,6 +226,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzí";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -241,7 +247,7 @@ ModalDialog DLG_COPY
         CustomUnitText [ english_us ] = " degrees" ;
         CustomUnitText [ portuguese_brazilian ] = "graus" ;
         CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ danish ] = "grader" ;
+        CustomUnitText [ danish ] = " grader" ;
         CustomUnitText [ italian ] = "Gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degr�s" ;
@@ -264,6 +270,8 @@ ModalDialog DLG_COPY
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = "डिग्रियाँ";
         CustomUnitText[ slovak ] = " stupňov";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
     };
     FixedText FT_ANGLE
     {
@@ -276,7 +284,7 @@ ModalDialog DLG_COPY
         Text [ portuguese_brazilian ] = "~�ngulo" ;
         Text [ portuguese ] = "~�ngulo" ;
         Text [ finnish ] = "~Kiertokulma" ;
-        Text [ danish ] = "Rotationsvinkel" ;
+        Text [ danish ] = "~Vinkel" ;
         Text [ french ] = "~Angle rotation" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "Draa~ihoek" ;
@@ -298,6 +306,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "~Drehwinkel";
         Text[ hindi ] = "~कोण";
         Text[ slovak ] = "~Uhol";
+        Text[ hungarian ] = "S~zög";
+        Text[ slovenian ] = "~Kot";
     };
     FixedText FT_MOVE_X
     {
@@ -310,7 +320,7 @@ ModalDialog DLG_COPY
         Text [ portuguese_brazilian ] = "Eixo ~X" ;
         Text [ portuguese ] = "Eixo ~X" ;
         Text [ finnish ] = "~X-akselille" ;
-        Text [ danish ] = "X-akse" ;
+        Text [ danish ] = "~X-akse" ;
         Text [ french ] = "Axe X" ;
         Text [ swedish ] = "~X-axel" ;
         Text [ dutch ] = "~X-as" ;
@@ -332,6 +342,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "~X-Achse";
         Text[ hindi ] = "~X अक्षरेखा";
         Text[ slovak ] = "Os ~X";
+        Text[ hungarian ] = "~X tengely";
+        Text[ slovenian ] = "Os ~X";
     };
     MetricField MTR_FLD_MOVE_X
     {
@@ -412,7 +424,7 @@ ModalDialog DLG_COPY
         Text [ portuguese_brazilian ] = "Eixo ~Y" ;
         Text [ portuguese ] = "Eixo ~Y" ;
         Text [ finnish ] = "~Y-akselille" ;
-        Text [ danish ] = "Y-akse" ;
+        Text [ danish ] = "~Y-akse" ;
         Text [ french ] = "Axe ~Y" ;
         Text [ swedish ] = "~Y-axel" ;
         Text [ dutch ] = "~Y-as" ;
@@ -434,6 +446,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "~Y-Achse";
         Text[ hindi ] = "~Y अक्षरेखा";
         Text[ slovak ] = "Os ~Y";
+        Text[ hungarian ] = "~Y tengely";
+        Text[ slovenian ] = "Os ~Y";
     };
     FixedText FT_WIDTH
     {
@@ -446,7 +460,7 @@ ModalDialog DLG_COPY
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveyteen" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -468,6 +482,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "Szé~lesség";
+        Text[ slovenian ] = "~Širina";
     };
     FixedText FT_HEIGHT
     {
@@ -480,7 +496,7 @@ ModalDialog DLG_COPY
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "Al~tura" ;
         Text [ finnish ] = "~Korkeuteen" ;
-        Text [ danish ] = "H�jde" ;
+        Text [ danish ] = "~H�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H�j~d" ;
         Text [ dutch ] = "~Hoogte" ;
@@ -502,6 +518,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "~Višina";
     };
     FixedLine GRP_MOVEMENT
     {
@@ -536,6 +554,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "Verschiebung";
         Text[ hindi ] = "Placement";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Elhelyezés";
+        Text[ slovenian ] = "Postavitev";
     };
     FixedLine GRP_ENLARGEMENT
     {
@@ -570,6 +590,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "Vergrößerung";
         Text[ hindi ] = "Enlargement";
         Text[ slovak ] = "Zväčšenie";
+        Text[ hungarian ] = "Nagyítás";
+        Text[ slovenian ] = "Povečava";
     };
     FixedLine GRP_COLOR
     {
@@ -603,6 +625,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "Farben";
         Text[ hindi ] = "Colors";
         Text[ slovak ] = "Farby";
+        Text[ hungarian ] = "Színek";
+        Text[ slovenian ] = "Barve";
     };
     ListBox LB_START_COLOR
     {
@@ -625,7 +649,7 @@ ModalDialog DLG_COPY
         Text [ spanish ] = "~Comienzo" ;
         Text [ french ] = "~D�but" ;
         Text [ swedish ] = "St~art" ;
-        Text [ danish ] = "Start" ;
+        Text [ danish ] = "~Start" ;
         Text [ portuguese ] = "~In�cio" ;
         Text [ portuguese_brazilian ] = "~In�cio" ;
         Text[ chinese_simplified ] = "开始(~S)";
@@ -645,6 +669,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "~Anfang";
         Text[ hindi ] = "~प्रारंभ";
         Text[ slovak ] = "~Začiatok";
+        Text[ hungarian ] = "~Kezdés";
+        Text[ slovenian ] = "~Začetek";
     };
     ListBox LB_END_COLOR
     {
@@ -667,7 +693,7 @@ ModalDialog DLG_COPY
         Text [ spanish ] = "~Fin" ;
         Text [ french ] = "~Fin" ;
         Text [ swedish ] = "Sl~ut" ;
-        Text [ danish ] = "Slut" ;
+        Text [ danish ] = "~Slut" ;
         Text [ portuguese ] = "~Fim" ;
         Text [ portuguese_brazilian ] = "~Fim" ;
         Text[ chinese_simplified ] = "结束(~E)";
@@ -687,6 +713,8 @@ ModalDialog DLG_COPY
         Text[ hebrew ] = "E~nde";
         Text[ hindi ] = "~अन्त";
         Text[ slovak ] = "Koni~ec";
+        Text[ hungarian ] = "~Vége";
+        Text[ slovenian ] = "~Konec";
     };
     Text[ chinese_simplified ] = "复制件";
     Text[ russian ] = "�����������";
@@ -704,7 +732,11 @@ ModalDialog DLG_COPY
     Text[ hebrew ] = "Duplizieren";
     Text[ hindi ] = "नकल";
     Text[ slovak ] = "Duplikovať";
+    Text[ hungarian ] = "Megkettőzés";
+    Text[ slovenian ] = "Podvoji";
 };
+
+
 
 
 
