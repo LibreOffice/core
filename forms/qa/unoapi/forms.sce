@@ -1,3 +1,5 @@
+-o forms.ONavigationBarControl
+-o forms.ONavigationBarModel
 -o forms.OButtonControl
 -o forms.OButtonModel
 -o forms.OCheckBoxControl
