@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ namespace configmgr
             void finishCommit(TreeChangeList& rChangeList);
             // restore the changes in rChangeList as pending
             void revertCommit(TreeChangeList& rChangeList);
+            // throw away and clean up the changes in rChangeList after a commit failed
+            void failedCommit(TreeChangeList& rChangeList);
         };
 
 //-----------------------------------------------------------------------------

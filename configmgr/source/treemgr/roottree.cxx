@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,9 +190,24 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
 
     OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
     if (rChangeList.pathToRoot != aPath.toString())
-        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
+        throw configuration::Exception("INTERNAL ERROR: RevertCommit cannot handle rebased changes trees");
 
     m_pTree->legacyRevertCommit(rChangeList.root);
+}
+//-----------------------------------------------------------------------------
+
+void CommitHelper::failedCommit(TreeChangeList& rChangeList)
+{
+    OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
+
+    Name aRootName(m_pTree->name(m_pTree->root()));
+    AbsolutePath aPath = m_pTree->getContextPath();
+
+    OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
+    if (rChangeList.pathToRoot != aPath.toString())
+        throw configuration::Exception("INTERNAL ERROR: FailedCommit cannot handle rebased changes trees");
+
+    m_pTree->legacyFailedCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 

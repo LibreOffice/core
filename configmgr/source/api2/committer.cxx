@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:18:58 $
+ *  last change: $Author: jb $ $Date: 2000-12-07 14:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ void Committer::commit()
         // should be a special clean-up routine, but for now we just need a consistent state
         try
         {
-            aHelper.finishCommit(aChangeList);
+//          aHelper.finishCommit(aChangeList);
+            aHelper.failedCommit(aChangeList);
         }
         catch(configuration::Exception&)
         {
