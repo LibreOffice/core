@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:08:12 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 14:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ private:
     BOOL bSolidBackground;      // weiss statt transparent
 
     BOOL bUseStyleColor;
+    BOOL bForceAutoColor;
 
     BOOL bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
