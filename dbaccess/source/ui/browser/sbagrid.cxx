@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 08:41:03 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 09:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 
 #ifndef _SBA_GRID_HXX
@@ -303,8 +303,7 @@
 #include <vcl/stdtext.hxx>
 #endif
 
-
-using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 12:24:47 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 09:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@
 #include "detailpages.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
-#include <com/sun/star/ui/XFolderPicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -142,8 +142,8 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -162,7 +162,7 @@ namespace dbaui
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
-    using namespace ::com::sun::star::ui;
+    using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
@@ -1165,6 +1165,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/06 12:24:47  fs
+ *  #87187# MUST changes regarding the exceptions thrown by the ucbhelper classes
+ *
  *  Revision 1.8  2001/05/31 11:09:07  oj
  *  #87149# change subprotocol and Propertynames
  *
