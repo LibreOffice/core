@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 11:40:30 $
+ *  last change: $Author: ama $ $Date: 2001-11-16 14:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,8 @@ void SwTabFrm::MakeAll()
 
         //Fertig?
 #ifdef VERTICAL_LAYOUT
-        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)()))
+        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)())
+             <= 0)
 #else
         if ( GetUpper()->Prt().Bottom()+GetUpper()->Frm().Top() >=
              Frm().Bottom() )
@@ -2735,7 +2736,6 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
     //Nur soweit Shrinken, wie es der Inhalt der groessten Zelle zulaesst.
     SwTwips nRealDist = nDist;
-    if( !bVert )
     {
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
         SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ?
@@ -2768,7 +2768,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnSetHeight)( nHeight - nReal );
             if( IsVertical() && !bRev )
-                Frm().Pos().X() -= nReal;
+                Frm().Pos().X() += nReal;
         }
 
         SwTwips nTmp = GetUpper()->Shrink( nReal, bTst );
@@ -2807,7 +2807,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 pTab->FindMaster()->InvalidatePos();
             }
         }
-        AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, !bVert );
+        AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, TRUE );
     }
     return nReal;
 }
