@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: obo $ $Date: 2002-07-01 15:21:57 $
+#   last change: $Author: hjs $ $Date: 2002-07-09 13:34:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1460,6 +1460,7 @@ RSCDEFS+= $(ENVRSCDEFS)
 # RSCLINKFLAGS+= $(ENVRSCLINKFLAGS)
 RCFLAGS+= $(ENVRCFLAGS)
 RCLINKFLAGS+= $(ENVRCLINKFLAGS)
+CFLAGSAPPEND+=$(ENVWARNFLAGS)
 
 
 #to be removed soon!!!
