@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:00:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,151 +261,6 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             if ( aStr.getLength() )
                 aVariable = aStr;
         }
-    }
-    return sal_True;
-}
-// -----------------------------------------------------------------------------
-BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
-{
-    // wird die BlockNr 0 vorgegeben, wird der block ans Ende gehaengt
-    char cChar = 0;
-    BOOL bIsText = TRUE;
-    //  SdbConnection* pConnection = GetConnection();
-
-    ULONG nSize = 0;
-    ULONG nStreamSize;
-    BYTE nHeader[4];
-
-    ByteString aStr;
-        //      ::Sequence<sal_Int8>* pData = NULL;
-//  if (aVariable.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence< sal_Int8 > *)0))
-//  {
-//              pData = (::Sequence<sal_Int8>*)aVariable.get();
-//      nSize = pData->getLength();
-//  }
-//  else
-//  {
-        aStr = ByteString(String(aVariable.getString()), getConnection()->getTextEncoding());
-        nSize = aStr.Len();
-    //  }
-
-    // Anhaengen oder ueberschreiben
-    BOOL bAppend = rBlockNr == 0;
-
-    if (!bAppend)
-    {
-        switch (m_aMemoHeader.db_typ)
-        {
-            case MemodBaseIII: // dBase III-Memofeld, endet mit 2 * Ctrl-Z
-                bAppend = nSize > (512 - 2);
-                break;
-            case MemoFoxPro:
-            case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
-            {
-                char sHeader[4];
-                m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
-                m_pMemoStream->SeekRel(4L);
-                m_pMemoStream->Read(sHeader,4);
-
-                ULONG nOldSize;
-                if (m_aMemoHeader.db_typ == MemoFoxPro)
-                    nOldSize = ((((unsigned char)sHeader[0]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[3];
-                else
-                    nOldSize = ((((unsigned char)sHeader[3]) * 256 +
-                                 (unsigned char)sHeader[2]) * 256 +
-                                 (unsigned char)sHeader[1]) * 256 +
-                                 (unsigned char)sHeader[0]  - 8;
-
-                // passt die neue Laenge in die belegten Bloecke
-                ULONG nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
-                      nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
-                bAppend = nUsedBlocks > nOldUsedBlocks;
-            }
-        }
-    }
-
-    if (bAppend)
-    {
-        ULONG nStreamSize;
-        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-        // letzten block auffuellen
-        rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
-
-        m_pMemoStream->SetStreamSize(rBlockNr * m_aMemoHeader.db_size);
-        m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-    }
-    else
-    {
-        m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
-    }
-
-    switch (m_aMemoHeader.db_typ)
-    {
-        case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
-        {
-            const char cEOF = (char) 0x1a;
-            nSize++;
-
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
-                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
-            //  }
-
-            (*m_pMemoStream) << cEOF << cEOF;
-        } break;
-        case MemoFoxPro:
-        case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
-        {
-            (*m_pMemoStream) << (BYTE)0xFF
-                                         << (BYTE)0xFF
-                                         << (BYTE)0x08;
-
-            UINT32 nWriteSize = nSize;
-            if (m_aMemoHeader.db_typ == MemoFoxPro)
-            {
-                (*m_pMemoStream) << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
-                for (int i = 4; i > 0; nWriteSize >>= 8)
-                    nHeader[--i] = (BYTE) (nWriteSize % 256);
-            }
-            else
-            {
-                (*m_pMemoStream) << (BYTE) 0x00;
-                nWriteSize += 8;
-                for (int i = 0; i < 4; nWriteSize >>= 8)
-                    nHeader[i++] = (BYTE) (nWriteSize % 256);
-            }
-
-            m_pMemoStream->Write(nHeader,4);
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
-                m_pMemoStream->Write(aStr.GetBuffer(), aStr.Len());
-            //  }
-            m_pMemoStream->Flush();
-        }
-    }
-
-
-    // Schreiben der neuen Blocknummer
-    if (bAppend)
-    {
-        nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-        m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
-
-        // Schreiben der neuen Blocknummer
-        m_pMemoStream->Seek(0L);
-        (*m_pMemoStream) << m_aMemoHeader.db_next;
-        m_pMemoStream->Flush();
     }
     return sal_True;
 }
