@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:37:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     pImpl->provideNewStream( pImpl->getDescription().Mimetype,
                              Reference< com::sun::star::io::XActiveDataSource >(),
                              url,
-                             0, 0, sal_False );
+                             0, 0, (sal_Bool)(url.compareToAscii( "file:", 5  ) == 0) );
 
     if( ! pImpl->getPluginComm() )
     {
