@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-25 13:29:47 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 15:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,8 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                                 UNO_QUERY );
                     OSL_ENSURE( xEOS.is(),
                             "no embedded object supplier for own object" );
-                    pEContext->SetComponent( xEOS->getEmbeddedObject() );
+                    Reference<com::sun::star::lang::XComponent> aXComponent(xEOS->getEmbeddedObject());
+                    pEContext->SetComponent( aXComponent );
                 }
             }
             pContext = pEContext;
