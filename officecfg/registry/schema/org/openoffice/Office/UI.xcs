@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 14:44:45 $
+ *  last change: $Author: pb $ $Date: 2002-12-05 07:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,16 @@
 					</info>
 				</prop>
 			</group>
+			<group oor:name="FontColor">
+				<info>
+					<desc xml:lang="en-US">Settings for the font.</desc>
+				</info>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc xml:lang="en-US">Specifies color of the font.</desc>
+					</info>
+				</prop>
+			</group>
 			<group oor:name="Links">
 				<info>
 					<desc xml:lang="en-US">Settings for unvisited links.</desc>
@@ -163,7 +173,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the visibilty of unvisited links (true = visible).</desc>
 					</info>
-                    <value>false</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -179,7 +189,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the visibilty of visited links (true = visible).</desc>
 					</info>
-                    <value>false</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -437,7 +447,7 @@
 					</info>
 				</prop>
 			</group>
-            <group oor:name="DrawGrid">
+			<group oor:name="DrawGrid">
 				<info>
 					<desc xml:lang="en-US">Settings used for the grid in Draw/Impress.</desc>
 				</info>
