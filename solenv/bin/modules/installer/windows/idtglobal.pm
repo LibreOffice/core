@@ -1336,7 +1336,7 @@ sub include_subdir_into_componenttable
 
 sub add_childprojects
 {
-    my ($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesref) = @_;
+    my ($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesref, $allvariables) = @_;
 
     my $infoline = "";
     my $line = "";
@@ -1344,8 +1344,8 @@ sub add_childprojects
     $installer::globals::javafile = installer::worker::return_first_item_with_special_flag($filesref ,"JAVAFILE");
     $installer::globals::adafile = installer::worker::return_first_item_with_special_flag($filesref ,"ADAFILE");
 
-    if ( $installer::globals::javafile eq "" ) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
-    if ( $installer::globals::adafile eq "" ) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
+    if (( $installer::globals::javafile eq "" ) && ( $allvariables->{'JAVAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
+    if (( $installer::globals::adafile eq "" ) && ( $allvariables->{'ADAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
 
     # Content for Directory table
     # SystemFolder TARGETDIR .
@@ -1379,79 +1379,116 @@ sub add_childprojects
     # subadabas INSTALLLOCATION program:adabas
     # subjava   INSTALLLOCATION program:java
 
-    my $dirname = get_directory_name_from_file($installer::globals::javafile);
-    my $subjavadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::javafile);
+    my $dirname = "";
+    my $subjavadir = "";
+    my $subadadir = "";
 
-    $dirname = get_directory_name_from_file($installer::globals::adafile);
-    my $subadadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::adafile);
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $dirname = get_directory_name_from_file($installer::globals::javafile);
+        $subjavadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::javafile);
+    }
+
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $dirname = get_directory_name_from_file($installer::globals::adafile);
+        $subadadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::adafile);
+    }
 
     # Content for the Component table
     # The Java and Ada components have new directories
 
-    include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable);
-    include_subdir_into_componenttable($subadadir, $installer::globals::adafile, $componenttable);
+    if ( $allvariables->{'JAVAPRODUCT'} ) { include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable); }
+    if ( $allvariables->{'ADAPRODUCT'} ) { include_subdir_into_componenttable($subadadir, $installer::globals::adafile, $componenttable); }
 
     # Content for CustomAction table
 
-    $line = "InstallAdabas\t98\tSystemFolder\t$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
-    push(@{$customactiontable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $customactiontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $line = "InstallAdabas\t98\tSystemFolder\t$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
+        push(@{$customactiontable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $customactiontablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
-    $line = "InstallJava\t98\tSystemFolder\t$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
-    push(@{$customactiontable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $customactiontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $line = "InstallJava\t98\tSystemFolder\t$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
+        push(@{$customactiontable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $customactiontablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
-    $line = "MaintenanceAdabas\t82\t$installer::globals::adafile->{'uniquename'}\t\/S\n";
-    push(@{$customactiontable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $customactiontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $line = "MaintenanceAdabas\t82\t$installer::globals::adafile->{'uniquename'}\t\/S\n";
+        push(@{$customactiontable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $customactiontablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
-    $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/s \/v\"\/qr REBOOT=Suppress\"\n";
-    push(@{$customactiontable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $customactiontablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/s \/v\"\/qr REBOOT=Suppress\"\n";
+        push(@{$customactiontable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $customactiontablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
     # Content for InstallUISequence table
     # InstallAdabas &gm_o_Adabas=3 825
     # InstallJava &gm_o_Java=3 827
 
-    my $number = get_free_number_in_uisequence_table($installuitable);
-    my $featurename = get_feature_name("_Adabas", $featuretable);
-    $line = "InstallAdabas\t\&$featurename\=3 And Not Installed\t$number\n";
-    push(@{$installuitable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $installuitablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    my $number = "";
+    my $featurename = "";
 
-    $number = get_free_number_in_uisequence_table($installuitable) + 2;
-    $featurename = get_feature_name("_Java", $featuretable);
-    $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\"\t$number\n";
-    push(@{$installuitable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $installuitablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $number = get_free_number_in_uisequence_table($installuitable);
+        $featurename = get_feature_name("_Adabas", $featuretable);
+        $line = "InstallAdabas\t\&$featurename\=3 And Not Installed\t$number\n";
+        push(@{$installuitable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $installuitablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
-    $number = get_free_number_in_uisequence_table($installuitable) + 4;
-    $featurename = get_feature_name("_Adabas", $featuretable);
-    $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed\t$number\n";
-    push(@{$installuitable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $installuitablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $number = get_free_number_in_uisequence_table($installuitable) + 2;
+        $featurename = get_feature_name("_Java", $featuretable);
+        $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\"\t$number\n";
+        push(@{$installuitable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $installuitablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
-    $number = get_free_number_in_uisequence_table($installuitable) + 6;
-    $featurename = get_feature_name("_Java", $featuretable);
-    $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\"\t$number\n";
-    push(@{$installuitable} ,$line);
-    installer::remover::remove_leading_and_ending_whitespaces(\$line);
-    $infoline = "Added $line into table $installuitablename\n";
-    push(@installer::globals::logfileinfo, $infoline);
+    if ( $allvariables->{'ADAPRODUCT'} )
+    {
+        $number = get_free_number_in_uisequence_table($installuitable) + 4;
+        $featurename = get_feature_name("_Adabas", $featuretable);
+        $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed\t$number\n";
+        push(@{$installuitable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $installuitablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    if ( $allvariables->{'JAVAPRODUCT'} )
+    {
+        $number = get_free_number_in_uisequence_table($installuitable) + 6;
+        $featurename = get_feature_name("_Java", $featuretable);
+        $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\"\t$number\n";
+        push(@{$installuitable} ,$line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $installuitablename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
     # Content for Feature table, better from scp (translation)
     # gm_o_adabas gm_optional Adabas Description 2 200
