@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-12 11:18:12 $
+ *  last change: $Author: fme $ $Date: 2001-07-18 15:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ public:
     SwFont& operator=( const SwFont &rFont );
 
     inline BYTE GetActual() const { return nActual; }
-    inline void SetActual( BYTE nNew ) { nActual = nNew; bFntChg = TRUE; }
+    inline void SetActual( BYTE nNew );
     inline const SvxFont& GetActualFont() const { return aSub[nActual]; }
 
     // holt sich eine MagicNumber ueber SwFntAccess
@@ -741,6 +741,16 @@ inline void SwFont::SetSize( const Size& rSize, const BYTE nWhich )
         bFntChg = TRUE;
         bOrgChg = TRUE;
     }
+}
+
+inline void SwFont::SetActual( BYTE nNew )
+{
+     if ( nActual != nNew )
+     {
+        bFntChg = TRUE;
+        bOrgChg = TRUE;
+        nActual = nNew;
+     }
 }
 
 inline void SwSubFont::SetProportion( const BYTE nNewPropr )
