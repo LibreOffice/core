@@ -90,6 +90,8 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 SHL2VERSIONMAP=$(SOLARENV)$/src$/component.map
 
+
+
 # --- Targets ------------------------------------------------------
 ALL : \
         ALLTAR \
@@ -98,7 +100,7 @@ ALL : \
         $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
-
+        $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX)
 
 .INCLUDE :	target.mk
 
@@ -117,6 +119,23 @@ $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
 $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
     $(GNUCOPY) -p $? $@
     $(GIVE_EXEC_RIGHTS) $@
+
+.IF "$(SOLAR_JAVA)" != ""
+# jar-files, which regcomp needs so that it can use java
+MY_JARS=unoil.jar java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
+
+# CLASSPATH, which regcomp needs to be run
+MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
+MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))
+
+$(DESTDIR)$/bridgetest_javaserver : makefile.mk
+    -rm -f $@
+    +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR):..$/class$/testComponent.jar \
+        com.sun.star.comp.bridge.TestComponentMain \
+        \""uno:socket,host=localhost,port=2002;urp;test"\" \
+        > $@
+    $(GIVE_EXEC_RIGHTS) $@
+.ENDIF
 
 # I can't make a dependency on shared libraries, because dependent targets
 # get the .setdir current directory. AAARGGGGGG !

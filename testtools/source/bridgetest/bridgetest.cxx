@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: jbu $ $Date: 2001-07-04 08:41:23 $
-#*    $Revision: 1.2 $
+#*    last change   $Author: jbu $ $Date: 2002-09-17 15:08:40 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile: $
 #*
@@ -51,6 +51,13 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
+static sal_Bool check( sal_Bool b , char * message )
+{
+    if ( ! b )
+        fprintf( stderr, "%s failed\n" , message );
+    return b;
+}
+
 //==================================================================================================
 class TestBridgeImpl : public WeakImplHelper2< XMain, XServiceInfo >
 {
@@ -73,21 +80,21 @@ public:
 //==================================================================================================
 static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
 {
-    OSL_ENSURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
-    OSL_ENSURE( rData1.Char == rData2.Char, "### char does not match!" );
-    OSL_ENSURE( rData1.Byte == rData2.Byte, "### byte does not match!" );
-    OSL_ENSURE( rData1.Short == rData2.Short, "### short does not match!" );
-    OSL_ENSURE( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
-    OSL_ENSURE( rData1.Long == rData2.Long, "### long does not match!" );
-    OSL_ENSURE( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
-    OSL_ENSURE( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
-    OSL_ENSURE( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
-    OSL_ENSURE( rData1.Float == rData2.Float, "### float does not match!" );
-    OSL_ENSURE( rData1.Double == rData2.Double, "### double does not match!" );
-    OSL_ENSURE( rData1.Enum == rData2.Enum, "### enum does not match!" );
-    OSL_ENSURE( rData1.String == rData2.String, "### string does not match!" );
-    OSL_ENSURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
-    OSL_ENSURE( rData1.Any == rData2.Any, "### any does not match!" );
+    check( rData1.Bool == rData2.Bool, "### bool does not match!" );
+    check( rData1.Char == rData2.Char, "### char does not match!" );
+    check( rData1.Byte == rData2.Byte, "### byte does not match!" );
+    check( rData1.Short == rData2.Short, "### short does not match!" );
+    check( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
+    check( rData1.Long == rData2.Long, "### long does not match!" );
+    check( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
+    check( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
+    check( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
+    check( rData1.Float == rData2.Float, "### float does not match!" );
+    check( rData1.Double == rData2.Double, "### double does not match!" );
+    check( rData1.Enum == rData2.Enum, "### enum does not match!" );
+    check( rData1.String == rData2.String, "### string does not match!" );
+    check( rData1.Interface == rData2.Interface, "### interface does not match!" );
+    check( rData1.Any == rData2.Any, "### any does not match!" );
 
     return (rData1.Bool == rData2.Bool &&
             rData1.Char == rData2.Char &&
@@ -121,7 +128,7 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                OSL_ENSURE( sal_False, "### sequence element did not match!" );
+                check( sal_False, "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -182,7 +189,12 @@ static sal_Bool testAny( const type & value , const Reference< XBridgeTest > &xL
 
     Any any2 = xLBT->transportAny( any );
 
-    OSL_ASSERT( any == any2 );
+    if( ! ( any == any2 ) )
+    {
+        fprintf( stderr, "any is different after roundtrip: in %s, out %s\n",
+                 OUStringToOString( any.getValueType().getTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr(),
+                 OUStringToOString( any2.getValueType().getTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
     return any == any2;
 }
 
@@ -273,12 +285,41 @@ static sal_Bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT
     return sal_True;
 }
 
+static sal_Bool performQueryForUnknownType( const Reference< XBridgeTest > & xLBT )
+{
+    sal_Bool bRet = sal_True;
+    // use this when you want to test querying for unknown types
+    // currently (not supported by the java remote bridge )
+    {
+        // test queryInterface for an unknown type
+        typelib_TypeDescriptionReference *pTypeRef = 0;
+        OUString aName( RTL_CONSTASCII_USTRINGPARAM( "foo.MyInterface" ) );
+        typelib_typedescriptionreference_new(
+            &pTypeRef, typelib_TypeClass_INTERFACE,  aName.pData);
+        try
+        {
+            Any a = xLBT->queryInterface( Type( pTypeRef ) );
+            bRet = check( a == Any( ), "got an foo.MyInterface, but didn't expect to get one" );
+        }
+        catch( com::sun::star::uno::RuntimeException & e )
+        {
+            bRet = check( sal_False,
+                          "tried to query for an interface reference of an unknown type "
+                          "but got a runtime exception. This should work for the C++ bridge "
+                          "but isn't implemented for Java remote bridge\n"
+                          "Note: All subsequent tests should fail now as the remote bridge is broken\n"
+                          "QueryForUnknownType" );
+        }
+        typelib_typedescriptionreference_release( pTypeRef );
+    }
+    return bRet;
+}
 
 //==================================================================================================
 static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 {
-    OSL_ENSURE( xLBT.is(), "### no test interface!" );
-    sal_Bool bRet = sal_False;
+    check( xLBT.is(), "### no test interface!" );
+    sal_Bool bRet = sal_True;
     if (xLBT.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
@@ -293,8 +334,8 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
                 OUString::createFromAscii("dum dum dum ich tanz im kreis herum..."), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
-        OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
-        OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
+        bRet = check( aData.Any == xI, "### unexpected any!" ) && bRet;
+        bRet = check( !(aData.Any != xI), "### unexpected any!" ) && bRet;
 
         aData.Sequence = Sequence<TestElement >( (const TestElement *)&aData, 1 );
         // aData complete
@@ -323,7 +364,7 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) );
+        bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) , "getValues test") && bRet;
 
         // set last retrieved values
         TestData aSV2ret = xLBT->setValues2(
@@ -331,7 +372,7 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        OSL_ASSERT( equals( aData, aSV2ret ) && equals( aData, aRet2 ) );
+        bRet = check( equals( aData, aSV2ret ) && equals( aData, aRet2 ) , "getValues2 test") && bRet;
         }
         {
         TestData aRet, aRet2;
@@ -340,7 +381,7 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) && equals( aData, aGVret ) );
+        bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) && equals( aData, aGVret ), "getValues test" ) && bRet;
 
         // set last retrieved values
         xLBT->setBool( aRet.Bool );
@@ -381,29 +422,19 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         aRet.Sequence = xLBT->getSequence();
         aRet2 = xLBT->getStruct();
 
-        OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) );
-
+        bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) , "struct comparison test") && bRet;
         // any test
-        OSL_ASSERT( performAnyTest( xLBT , aData ) );
+        bRet = check( performAnyTest( xLBT , aData ) , "any test" ) && bRet;
 
         // sequence of call test
-        OSL_ASSERT( performSequenceOfCallTest( xLBT ) );
+        bRet = check( performSequenceOfCallTest( xLBT ) , "sequence of call test" ) && bRet;
 
         // recursive call test
-        OSL_ASSERT( performRecursiveCallTest( xLBT ) );
+        bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
 
-        bRet = (equals( aData, aRet ) && equals( aData, aRet2 ));
+        bRet = (equals( aData, aRet ) && equals( aData, aRet2 )) && bRet ;
         }
-        {
-            // test queryInterface for an unknown type
-            typelib_TypeDescriptionReference *pTypeRef = 0;
-            OUString aName( RTL_CONSTASCII_USTRINGPARAM( "foo.MyInterface" ) );
-            typelib_typedescriptionreference_new(
-                &pTypeRef, typelib_TypeClass_INTERFACE,  aName.pData);
-            Any a = xLBT->queryInterface( Type( pTypeRef ) );
-            typelib_typedescriptionreference_release( pTypeRef );
-            bRet = bRet && ( a  == Any( ));
-        }
+
     }
     return bRet;
 }
@@ -449,7 +480,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False, "### unexpected exception content!" );
+                    check( sal_False, "### unexpected exception content!" );
                 }
 
                 /** it is certain, that the RuntimeException testing will fail, if no */
@@ -465,7 +496,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             }
             else
             {
-                OSL_ENSURE( sal_False, "### unexpected exception content!" );
+                check( sal_False, "### unexpected exception content!" );
             }
 
             /** it is certain, that the RuntimeException testing will fail, if no */
@@ -481,7 +512,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         }
         else
         {
-            OSL_ENSURE( sal_False, "### unexpected exception content!" );
+            check( sal_False, "### unexpected exception content!" );
         }
         return (nCount == 3);
     }
@@ -497,7 +528,7 @@ static inline sal_Bool makeSurrogate( com::sun::star::uno::Reference< T > & rOut
     typelib_TypeDescription * pTD = 0;
     const com::sun::star::uno::Type & rType = ::getCppuType( &rOriginal );
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
-    OSL_ENSURE( pTD, "### cannot get typedescription!" );
+    check( pTD ? 1 : 0 , "### cannot get typedescription!" );
     if (pTD)
     {
         uno_Environment * pCppEnv1 = 0;
@@ -557,10 +588,12 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     }
 
     Reference<XBridgeTest > xLBT;
-    if (makeSurrogate( xLBT, xOriginal ) &&
-        performTest( xLBT ) &&
-        raiseException( xLBT ) &&
-        raiseOnewayException( xLBT ) )
+    sal_Bool bRet = check( makeSurrogate( xLBT, xOriginal ), "makeSurrogate" );
+    bRet = check( performTest( xLBT ), "standard test" ) && bRet;
+    bRet = check( raiseException( xLBT ) , "exception test" )&& bRet;
+    bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
+    bRet = performQueryForUnknownType( xLBT ) && bRet;
+    if( bRet )
     {
         printf( "> dynamic invocation test succeeded!\n" );
     }
@@ -667,6 +700,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/07/04 08:41:23  jbu
+    #88717# queryInterface for an unknown type is now tested (feature was introduced in UDK302b/UDK300o
+
     Revision 1.1  2001/05/04 07:05:17  kr
     moved from grande to openoffice
 
