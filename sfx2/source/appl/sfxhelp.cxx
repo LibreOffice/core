@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 14:22:35 $
+ *  last change: $Author: pb $ $Date: 2000-12-11 15:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,12 @@ String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
         if( pViewFrame->GetObjectShell() )
             aModuleName = String::CreateFromAscii( pViewFrame->GetObjectShell()->GetFactory().GetShortName() );
     }
+
+
+    // cut sub factoryname, if necessary
+    xub_StrLen nPos = aModuleName.Search( '/' );
+    if ( nPos != STRING_NOTFOUND )
+        aModuleName.Erase( nPos );
 
     return aModuleName;
 }
