@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1750,7 +1750,20 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
         }
     }
 
+    if ( pMed )
+    {
+        SFX_ITEMSET_ARG( pMed->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+        if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
+            aTitle += String( SfxResId(STR_REPAIREDDOCUMENT) );
+    }
+
     if ( IsReadOnlyUI() || pMed && pMed->IsReadOnly() )
         aTitle += String( SfxResId(STR_READONLY) );
     return aTitle;
 }
+
+void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
+{
+    eCreateMode = nMode;
+}
+
