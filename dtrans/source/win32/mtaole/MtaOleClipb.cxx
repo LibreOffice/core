@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-19 13:42:24 $
+ *  last change: $Author: tra $ $Date: 2001-07-24 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ public:
         if ( S_OK == m_hResult )
             OSL_ENSURE( sal_False, \
             "com was not yet initialzed, the thread was not created using osl_createThread" );
-        else if ( FAILED( m_hResult ) )
+        else if ( FAILED( m_hResult ) && !( RPC_E_CHANGED_MODE == m_hResult ) )
             OSL_ENSURE( sal_False, \
             "com could not be initialized, maybe the thread was not created using osl_createThread" );
     }
@@ -300,7 +300,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
         "flushClipboard from within clipboard sta thread called" );
 
-    MsgCtx    aMsgCtx;
+    MsgCtx  aMsgCtx;
 
     postMessage( MSG_FLUSHCLIPBOARD,
                  static_cast< WPARAM >( 0 ),
@@ -356,7 +356,8 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 }
 
 //--------------------------------------------------------------------
-//
+// this is an asynchronous method that's why we don't wait until the
+// request is completed
 //--------------------------------------------------------------------
 
 HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
@@ -372,15 +373,26 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
         "setClipboard from within the clipboard sta thread called" );
 
-    MsgCtx    aMsgCtx;
+    // because we marshall this request
+    // into the sta thread we better
+    // acquire the interface here so
+    // that the object will not be
+    // destroyed before the ole clipboard
+    // can acquire it
+    // remember: pIDataObject may be NULL
+    // which is an request to clear the
+    // current clipboard content
+    if ( pIDataObject )
+        pIDataObject->AddRef( );
 
-    postMessage( MSG_SETCLIPBOARD,
-                 reinterpret_cast< WPARAM >( pIDataObject ),
-                 reinterpret_cast< LPARAM >( &aMsgCtx ) );
+    postMessage(
+        MSG_SETCLIPBOARD,
+        reinterpret_cast< WPARAM >( pIDataObject ),
+        0 );
 
-    aMsgCtx.aCondition.wait( /* infinite */ );
-
-    return aMsgCtx.hr;
+    // because this is an asynchronous function
+    // the return value is useless
+    return S_OK;
 }
 
 //--------------------------------------------------------------------
@@ -400,7 +412,7 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
         "registerClipViewer from within the OleThread called" );
 
-    MsgCtx    aMsgCtx;
+    MsgCtx  aMsgCtx;
 
     postMessage( MSG_REGCLIPVIEWER,
                  reinterpret_cast<WPARAM>( pfncClipViewerCallback ),
@@ -577,8 +589,20 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
         switch( uMsg )
         {
         case MSG_SETCLIPBOARD:
-            aMsgCtx->hr = pImpl->onSetClipboard( reinterpret_cast< IDataObject* >(wParam) );
-            aMsgCtx->aCondition.set( );
+            {
+                IDataObject* pIDataObject = reinterpret_cast< IDataObject* >( wParam );
+                pImpl->onSetClipboard( pIDataObject );
+
+                // in setClipboard we did acquire the
+                // interface pointer in order to prevent
+                // destruction of the object before the
+                // ole clipboard can acquire the interface
+                // now we release the interface so that
+                // our lostOwnership mechanism works
+                // remember: pIDataObject may be NULL
+                if ( pIDataObject )
+                    pIDataObject->Release( );
+            }
             break;
 
         case MSG_GETCLIPBOARD:
@@ -609,24 +633,9 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
             DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
             break;
 
-        // under windows 95/98 the creation of the
-        // hidden target request window fails if
-        // we don't handle this message ourself
-        // because the DefWindowProc returns 0 as
-        // a result of handling WM_NCCREATE what
-        // leads to a failure of CreateWindow[Ex]!!!
-        case WM_NCCREATE:
-            lResult = TRUE;
-            break;
-
+        // force the sta thread to end
         case WM_DESTROY:
             PostQuitMessage( 0 );
-            break;
-
-        // FIX ME: DefWindowProcW always return 0 on Win9x fopr any message
-
-        case WM_QUERYENDSESSION:
-            lResult = TRUE;     // Allow Win9x to shutdown ;-)
             break;
 
         default:
