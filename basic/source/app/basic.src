@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:14:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 17:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "~Ýptal";
     };
-    TEXT[ portuguese ] = "%PRODUCTNAME Basic: Procurar texto";
+    TEXT[ portuguese ] = "StarBasic: Localizar texto";
     TEXT[ russian ] = "StarBasic: Find Text";
     TEXT[ greek ] = "StarBasic: Find Text";
     TEXT[ dutch ] = "%PRODUCTNAME Basic: tekst zoeken";
@@ -2124,7 +2124,7 @@ Menu RID_EDIT {
         HELPTEXT = "Die letzte Änderung rückgängig machen";
         HELPTEXT [ english_us ] = "Die letzte Änderung rückgängig machen";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
-            TEXT[ portuguese ] = "~Desfazer";
+            TEXT[ portuguese ] = "~Anular";
             TEXT[ russian ] = "~Undo";
             TEXT[ greek ] = "~Undo";
             TEXT[ dutch ] = "~Ongedaan";
