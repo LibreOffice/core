@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XEmbeddedObjectSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:57 $
+ *  last change:$Date: 2003-09-08 10:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.document;
 
-import com.sun.star.document.XEmbeddedObjectSupplier;
 import lib.MultiMethodTest;
+
+import com.sun.star.document.XEmbeddedObjectSupplier;
 
 /**
 * Testing <code>com.sun.star.document.XEmbeddedObjectSupplier</code>

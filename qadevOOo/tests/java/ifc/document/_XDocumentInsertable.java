@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentInsertable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:58 $
+ *  last change:$Date: 2003-09-08 10:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,15 @@
 
 package ifc.document;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.document.XDocumentInsertable;
-import com.sun.star.text.XTextRange;
-import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 import util.utils;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.XDocumentInsertable;
+import com.sun.star.text.XTextRange;
+import com.sun.star.uno.UnoRuntime;
 
 
 /**
@@ -202,6 +203,13 @@ public class _XDocumentInsertable extends MultiMethodTest {
         }
 
         tRes.tested("insertDocumentFromURL()", result);
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
     }
 }  // finish class _XDocumentInsertable
 

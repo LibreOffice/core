@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:58 $
+ *  last change:$Date: 2003-09-08 10:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.document;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.lang.ArrayIndexOutOfBoundsException;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.document.XDocumentInfo</code>
@@ -139,8 +140,6 @@ public class _XDocumentInfo extends MultiMethodTest {
     */
     public void _setUserFieldName() {
         requiredMethod("getUserFieldName()");
-
-        boolean passed = true;
 
         for (short i = 0; i < fieldCount; i++) {
             String newName = oldNames[i] + "_new";
@@ -220,8 +219,6 @@ public class _XDocumentInfo extends MultiMethodTest {
     */
     public void _setUserFieldValue() {
         requiredMethod("getUserFieldValue()");
-
-        boolean passed = true;
 
         for (short i = 0; i < fieldCount; i++) {
             String newValue = oldValues[i] + "_new";
