@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:28:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,10 @@ PRJNAME=sfx2
 TARGET=control
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
@@ -81,24 +77,6 @@ CFLAGS+=-Od
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-    unoctitm.cxx \
-    macro.cxx \
-    request.cxx \
-    dispatch.cxx \
-        ctrlitem.cxx \
-    statcach.cxx \
-    msgpool.cxx \
-    shell.cxx \
-    objface.cxx \
-    msg.cxx \
-    bindings.cxx \
-    macrconf.cxx \
-        macro.cxx \
-    minfitem.cxx \
-    srchitem.cxx \
-    $(PROJECTPCHSOURCE).cxx
 
 SLOFILES = \
     $(SLO)$/unoctitm.obj \
