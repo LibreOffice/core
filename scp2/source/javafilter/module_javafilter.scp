@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_javafilter.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:37 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 Module gid_Module_Optional_Javafilter
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER);
     ParentID = gid_Module_Optional;
+    Files = ( gid_File_Lib_Jfregca );
     Minimal = NO;
     Default = NO;
     Styles (01) = ();
