@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Kerning";
         Text[ polish ] = "Kerning";
         Text[ portuguese_brazilian ] = "Kerning";
-        Text[ japanese ] = "Kerning";
+        Text[ japanese ] = "¶°Æİ¸Ş";
         Text[ korean ] = "Kerning";
-        Text[ chinese_simplified ] = "Kerning";
-        Text[ chinese_traditional ] = "¦r¥À¶¡¹j";
+        Text[ chinese_simplified ] = "×Ö·û¼ä¸ô";
+        Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = "Kerning";
     };
@@ -104,24 +104,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Nur westliche Zeichen" ;
         Text [ English ] = "Western characters only" ;
-        Text[ english_us ] = "Western characters only";
+        Text[ english_us ] = "~Western characters only";
         Text[ portuguese ] = "Western characters only";
         Text[ russian ] = "Òîëüêî çàïàäíûå çíàêè";
         Text[ greek ] = "Ìü~íï äõôéêïıò ÷áñáêôŞñåò";
         Text[ dutch ] = "Western characters only";
         Text[ french ] = "Western characters only";
-        Text[ spanish ] = "Western characters only";
+        Text[ spanish ] = "Solo caracteres del alfabeto occidental";
         Text[ italian ] = "Western characters only";
         Text[ danish ] = "Western characters only";
         Text[ swedish ] = "Bara västliga tecke~n";
-        Text[ polish ] = "Western characters only";
+        Text[ polish ] = "Tylko znaki alfabetu ³aciñskiego";
         Text[ portuguese_brazilian ] = "Western characters only";
-        Text[ japanese ] = "Western characters only";
-        Text[ korean ] = "Western characters only";
-        Text[ chinese_simplified ] = "Western characters only";
-        Text[ chinese_traditional ] = "¶È¥Î©ó¦è¤å";
+        Text[ japanese ] = "‰pš‚Ì‚İ(~W)";
+        Text[ korean ] = "~Western characters only";
+        Text[ chinese_simplified ] = "½öÊÊÓÃÓÚÎ÷ÎÄ(~W)";
+        Text[ chinese_traditional ] = "¶È¥Î©ó¦è¤å(~W)";
         Text[ turkish ] = "Western characters only";
-        Text[ arabic ] = "Western characters only";
+        Text[ arabic ] = "ÃÍÑİ ÛÑÈíÉ İŞØ";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -129,24 +129,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Westlicher Text und Interpunktion" ;
         Text [ English ] = "Western text and punctuation" ;
-        Text[ english_us ] = "Western text and punctuation";
+        Text[ english_us ] = "Western ~text and punctuation";
         Text[ portuguese ] = "Western text and punctuation";
         Text[ russian ] = "Çàïàäíûé òåêñò è ïóíêòóàöèÿ";
         Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
         Text[ dutch ] = "Western text and punctuation";
         Text[ french ] = "Western text and punctuation";
-        Text[ spanish ] = "Western text and punctuation";
+        Text[ spanish ] = "Texto y puntuación occidentales";
         Text[ italian ] = "Western text and punctuation";
         Text[ danish ] = "Western text and punctuation";
         Text[ swedish ] = "~Västlig text och interpunktion";
-        Text[ polish ] = "Western text and punctuation";
+        Text[ polish ] = "Tekst i interpunkcja zachodnia";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
-        Text[ japanese ] = "Western text and punctuation";
-        Text[ korean ] = "Western text and punctuation";
-        Text[ chinese_simplified ] = "Western text and punctuation";
-        Text[ chinese_traditional ] = "¦è¤å©M¼ĞÂI²Å¸¹";
+        Text[ japanese ] = "”¼Šp‰pš‚Æ‹æØ‚è•¶š(~T)";
+        Text[ korean ] = "Wes~tern text and punctuation";
+        Text[ chinese_simplified ] = "Î÷ÎÄºÍ±êµã·ûºÅ(~T)";
+        Text[ chinese_traditional ] = "¦è¤å©M¼ĞÂI²Å¸¹(~T)";
         Text[ turkish ] = "Western text and punctuation";
-        Text[ arabic ] = "Western text and punctuation";
+        Text[ arabic ] = "äÕ ÛÑÈí æÚáÇãÇÊ ÊäŞíØ";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -154,7 +154,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zeichenabstand" ;
         Text [ English ] = "Character distance" ;
-        Text[ english_us ] = "Character distance";
+        Text[ english_us ] = "Character spacing";
         Text[ portuguese ] = "Character distance";
         Text[ russian ] = "Ğàññòîÿíèå ìåæäó çíàêàìè";
         Text[ greek ] = "Áğüóôáóç ÷áñáêôŞñùí";
@@ -164,11 +164,11 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Character distance";
         Text[ danish ] = "Character distance";
         Text[ swedish ] = "Teckenavstånd";
-        Text[ polish ] = "Character distance";
+        Text[ polish ] = "Odstêp miêdzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
-        Text[ japanese ] = "Character distance";
+        Text[ japanese ] = "•¶šŠÔŠu‚Ì’²®";
         Text[ korean ] = "Character distance";
-        Text[ chinese_simplified ] = "Character distance";
+        Text[ chinese_simplified ] = "×Ö·û¼ä¸ô";
         Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = "Character distance";
@@ -179,24 +179,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "~Keine Kompression" ;
         Text [ English ] = "No compression" ;
-        Text[ english_us ] = "No compression";
+        Text[ english_us ] = "~No compression";
         Text[ portuguese ] = "No compression";
         Text[ russian ] = "Áåç óæàòèÿ";
         Text[ greek ] = "×ùñßò óõìğßåóç";
         Text[ dutch ] = "No compression";
         Text[ french ] = "No compression";
-        Text[ spanish ] = "No compression";
+        Text[ spanish ] = "Sin compresión";
         Text[ italian ] = "No compression";
         Text[ danish ] = "No compression";
-        Text[ swedish ] = "No compression";
-        Text[ polish ] = "No compression";
+        Text[ swedish ] = "Ingen ~kompression";
+        Text[ polish ] = "Bez kompresji";
         Text[ portuguese_brazilian ] = "No compression";
-        Text[ japanese ] = "No compression";
-        Text[ korean ] = "No compression";
-        Text[ chinese_simplified ] = "No compression";
-        Text[ chinese_traditional ] = "¤£À£ÁY";
+        Text[ japanese ] = "ŠÔŠu‚ğ‹l‚ß‚È‚¢(~N)";
+        Text[ korean ] = "~No compression";
+        Text[ chinese_simplified ] = "²»Ñ¹Ëõ(~N)";
+        Text[ chinese_traditional ] = "¤£À£ÁY(~N)";
         Text[ turkish ] = "No compression";
-        Text[ arabic ] = "No compression";
+        Text[ arabic ] = "ÈÏæä ÖÛØ";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -204,24 +204,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Nur ~Interpunktion komprimieren" ;
         Text [ English ] = "Compress punctuation only" ;
-        Text[ english_us ] = "Compress punctuation only";
+        Text[ english_us ] = "~Compress punctuation only";
         Text[ portuguese ] = "Compress punctuation only";
         Text[ russian ] = "Óæàòü òîëüêî ïóíêòóàöèş";
         Text[ greek ] = "Óõìğßåóç ìüíï ôùí óçìåßùí óôßîçò";
         Text[ dutch ] = "Compress punctuation only";
         Text[ french ] = "Compress punctuation only";
-        Text[ spanish ] = "Compress punctuation only";
+        Text[ spanish ] = "Comprimir solo puntuación";
         Text[ italian ] = "Compress punctuation only";
         Text[ danish ] = "Compress punctuation only";
-        Text[ swedish ] = "Compress punctuation only";
-        Text[ polish ] = "Compress punctuation only";
+        Text[ swedish ] = "Komprimera bara ~interpunktion";
+        Text[ polish ] = "Skompresuj tylko interpunkcjê";
         Text[ portuguese_brazilian ] = "Compress punctuation only";
-        Text[ japanese ] = "Compress punctuation only";
-        Text[ korean ] = "Compress punctuation only";
-        Text[ chinese_simplified ] = "Compress punctuation only";
-        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹";
+        Text[ japanese ] = "‹å“Ç“_‚Ì‚İ‚ğ‹l‚ß‚é(~C)";
+        Text[ korean ] = "~Compress punctuation only";
+        Text[ chinese_simplified ] = "Ö»Ñ¹Ëõ±êµã·ûºÅ(~C)";
+        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹(~C)";
         Text[ turkish ] = "Compress punctuation only";
-        Text[ arabic ] = "Compress punctuation only";
+        Text[ arabic ] = "ÖÛØ ÚáÇãÇÊ ÇáÊäŞíØ İŞØ";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -229,22 +229,22 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Interpunktion und ~japanische Kana komprimieren" ;
         Text [ English ] = "Compress punctuation and japanese Kana" ;
-        Text[ english_us ] = "Compress punctuation and japanese Kana";
+        Text[ english_us ] = "Compress ~punctuation and Japanese Kana";
         Text[ portuguese ] = "Compress punctuation and japanese Kana";
         Text[ russian ] = "Óæàòü ïóíêòóàöèş è êàíó";
         Text[ greek ] = "Óõìğßåóç óçìåßùí óôßîçò êáé ~éáğùíİæéêçò Kana";
         Text[ dutch ] = "Compress punctuation and japanese Kana";
         Text[ french ] = "Compress punctuation and japanese Kana";
-        Text[ spanish ] = "Compress punctuation and japanese Kana";
+        Text[ spanish ] = "Comprimir puntuación y Kana japonés";
         Text[ italian ] = "Compress punctuation and japanese Kana";
         Text[ danish ] = "Compress punctuation and japanese Kana";
-        Text[ swedish ] = "Compress punctuation and japanese Kana";
-        Text[ polish ] = "Compress punctuation and japanese Kana";
+        Text[ swedish ] = "Komprimera interpunktion och ~japansk Kana";
+        Text[ polish ] = "Skompresuj interpunkcjê i japoñsk¹ Kanê";
         Text[ portuguese_brazilian ] = "Compress punctuation and japanese Kana";
-        Text[ japanese ] = "Compress punctuation and japanese Kana";
-        Text[ korean ] = "Compress punctuation and japanese Kana";
-        Text[ chinese_simplified ] = "Compress punctuation and japanese Kana";
-        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹©M¤é¤å°²¦W";
+        Text[ japanese ] = "‹å“Ç“_‚Æ‚©‚È‚ğ‹l‚ß‚é(~P)";
+        Text[ korean ] = "Com~press punctuation and japanese Kana";
+        Text[ chinese_simplified ] = "Ñ¹Ëõ±êµã·ûºÅºÍÈÕÎÄ¼ÙÃû(~P)";
+        Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹©M¤é¤å°²¦W(~P)";
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
     };
@@ -263,12 +263,12 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ spanish ] = "Start and end characters";
         Text[ italian ] = "Start and end characters";
         Text[ danish ] = "Start and end characters";
-        Text[ swedish ] = "Start and end characters";
-        Text[ polish ] = "Start and end characters";
+        Text[ swedish ] = "Start- och sluttecken";
+        Text[ polish ] = "Znaki pocz¹tkowe i koñcowe";
         Text[ portuguese_brazilian ] = "Start and end characters";
-        Text[ japanese ] = "Start and end characters";
+        Text[ japanese ] = "s“ª‹Ö‘¥•¶š‚Æs––‹Ö‘¥•¶š";
         Text[ korean ] = "Start and end characters";
-        Text[ chinese_simplified ] = "Start and end characters";
+        Text[ chinese_simplified ] = "¿ªÍ·ºÍ½áÎ²×Ö·û";
         Text[ chinese_traditional ] = "¶}ÀY¦r¤¸©Mµ²§À¦r¤¸";
         Text[ turkish ] = "Start and end characters";
         Text[ arabic ] = "Start and end characters";
@@ -279,24 +279,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Sprache" ;
         Text [ English ] = "Language" ;
-        Text[ english_us ] = "Language";
+        Text[ english_us ] = "~Language";
         Text[ portuguese ] = "Language";
         Text[ russian ] = "ßçûê";
         Text[ greek ] = "Ãëşó~óá";
         Text[ dutch ] = "Language";
         Text[ french ] = "Language";
-        Text[ spanish ] = "Language";
+        Text[ spanish ] = "Idioma";
         Text[ italian ] = "Language";
         Text[ danish ] = "Language";
         Text[ swedish ] = "~Språk";
-        Text[ polish ] = "Language";
+        Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language";
-        Text[ japanese ] = "Language";
-        Text[ korean ] = "Language";
-        Text[ chinese_simplified ] = "Language";
-        Text[ chinese_traditional ] = "»y¨¥";
+        Text[ japanese ] = "Œ¾Œê(~L)";
+        Text[ korean ] = "~Language";
+        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ chinese_traditional ] = "»y¨¥(~L)";
         Text[ turkish ] = "Language";
-        Text[ arabic ] = "Language";
+        Text[ arabic ] = "ÇááÛÉ";
     };
     ListBox LB_LANGUAGE
     {
@@ -311,24 +311,24 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "S~tandard" ;
         Text [ English ] = "Standard" ;
-        Text[ english_us ] = "Standard";
+        Text[ english_us ] = "~Default";
         Text[ portuguese ] = "Standard";
         Text[ russian ] = "Ñòàíäàğò";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ dutch ] = "Standard";
         Text[ french ] = "Standard";
-        Text[ spanish ] = "Standard";
+        Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
-        Text[ polish ] = "Standard";
+        Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "Standard";
-        Text[ japanese ] = "Standard";
-        Text[ korean ] = "Standard";
-        Text[ chinese_simplified ] = "Standard";
-        Text[ chinese_traditional ] = "¼Ğ·Ç";
+        Text[ japanese ] = "•W€(~D)";
+        Text[ korean ] = "Stan~dard";
+        Text[ chinese_simplified ] = "±ê×¼(~D)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
         Text[ turkish ] = "Standard";
-        Text[ arabic ] = "Standard";
+        Text[ arabic ] = "ŞíÇÓí";
     };
     FixedText FT_START
     {
@@ -336,24 +336,25 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Kein Zeilen~beginn:" ;
         Text [ English ] = "No start of line:" ;
-        Text[ english_us ] = "No start of line:";
+        Text[ english_us ] = "Not at start of line:";
         Text[ portuguese ] = "No start of line:";
-        Text[ russian ] = "&#1041;&#1077;&#1079; &#1079;&#1085;&#1072;&#1082;&#1072; &#1074; &#1085;&#1072;&#1095;&#1072;&#1083;&#1077; &#1089;&#1090;&#1088;&#1086;&#1082;&#1080;:";
+        Text[ russian ] = "Íå â íà÷àëå ñòğîêè:";
         Text[ greek ] = "&#908;&#967;&#953; &#963;&#964;&#951;&#957; &#945;&#961;&#967;&#942; &#956;&#953;&#945;&#962; &#963;&#949;&#953;&#961;&#940;&#962;:";
         Text[ dutch ] = "No start of line:";
         Text[ french ] = "No start of line:";
-        Text[ spanish ] = "No start of line:";
+        Text[ spanish ] = "Sin inicio de fila:";
         Text[ italian ] = "No start of line:";
         Text[ danish ] = "No start of line:";
-        Text[ swedish ] = "No start of line:";
-        Text[ polish ] = "No start of line:";
+        Text[ swedish ] = "Inte i ~början av rad:";
+        Text[ polish ] = "Nie na pocz¹tku wiersza:";
         Text[ portuguese_brazilian ] = "No start of line:";
-        Text[ japanese ] = "No start of line:";
+        Text[ japanese ] = "s“ª‹Ö‘¥•¶š:";
         Text[ korean ] = "No start of line:";
-        Text[ chinese_simplified ] = "No start of line:";
+        Text[ chinese_simplified ] = "ĞĞÊ×½ûÖ¹Ê¹ÓÃ×Ö·û£º";
         Text[ chinese_traditional ] = "&#34892;&#39318;&#31105;&#27490;&#20351;&#29992;&#23383;&#20803;&#65306;";
         Text[ turkish ] = "No start of line:";
-        Text[ arabic ] = "No start of line:";
+        Text[ arabic ] = "ÈÏæä ÈÏÇíÉ ÇáÓØÑ:";
+        Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
     };
     Edit ED_START
     {
@@ -367,24 +368,25 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Kein Zeil~enende:" ;
         Text [ English ] = "No end of line:" ;
-        Text[ english_us ] = "No end of line:";
+        Text[ english_us ] = "Not at end of line:";
         Text[ portuguese ] = "No end of line:";
-        Text[ russian ] = "Áåç çíàêà â êîíöå ñòğîêè:";
+        Text[ russian ] = "Íå â êîíöå ñòğîêè:";
         Text[ greek ] = "¼÷é óôï ôİëïò ìéáò ó~åéñÜò:";
         Text[ dutch ] = "No end of line:";
         Text[ french ] = "No end of line:";
-        Text[ spanish ] = "No end of line:";
+        Text[ spanish ] = "Sin fin de línea:";
         Text[ italian ] = "No end of line:";
         Text[ danish ] = "No end of line:";
-        Text[ swedish ] = "No end of line:";
-        Text[ polish ] = "No end of line:";
+        Text[ swedish ] = "Inte i slut~et av rad:";
+        Text[ polish ] = "Nie na koñcu wiersza:";
         Text[ portuguese_brazilian ] = "No end of line:";
-        Text[ japanese ] = "No end of line:";
+        Text[ japanese ] = "s––‹Ö‘¥•¶š:";
         Text[ korean ] = "No end of line:";
-        Text[ chinese_simplified ] = "No end of line:";
+        Text[ chinese_simplified ] = "ĞĞÄ©½ûÖ¹Ê¹ÓÃ×Ö·û£º";
         Text[ chinese_traditional ] = "¦æ¥½¸T¤î¨Ï¥Î¦r¤¸¡G";
         Text[ turkish ] = "No end of line:";
-        Text[ arabic ] = "No end of line:";
+        Text[ arabic ] = "ÈÏæä äåÇíÉ ÓØÑ:";
+        Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
     };
     Edit ED_END
     {
@@ -404,18 +406,18 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ greek ] = "×ùñßò ğñïóùğéêïıò ÷áñáêôŞñåò áëëáãŞò óåéñÜò";
         Text[ dutch ] = "Without user-defined line break symbols";
         Text[ french ] = "Without user-defined line break symbols";
-        Text[ spanish ] = "Without user-defined line break symbols";
+        Text[ spanish ] = "Sin carácter de cambio de fila definido por el usuario";
         Text[ italian ] = "Without user-defined line break symbols";
         Text[ danish ] = "Without user-defined line break symbols";
-        Text[ swedish ] = "Without user-defined line break symbols";
-        Text[ polish ] = "Without user-defined line break symbols";
+        Text[ swedish ] = "Utan användardefinierade radbrytningstecken";
+        Text[ polish ] = "Bez zdefiniowanych przez u¿ytkownika znaków podzia³u wiersza";
         Text[ portuguese_brazilian ] = "Without user-defined line break symbols";
-        Text[ japanese ] = "Without user-defined line break symbols";
+        Text[ japanese ] = "Õ°»Ş°’è‹`‚Ì‰üs‚Ì‹Ö‘¥•¶š‚Íœ‚­";
         Text[ korean ] = "Without user-defined line break symbols";
-        Text[ chinese_simplified ] = "Without user-defined line break symbols";
+        Text[ chinese_simplified ] = "²»¸½´øÊ¹ÓÃÕß×Ô¶¨µÄ»»ĞĞ·ûºÅ";
         Text[ chinese_traditional ] = "¤£ªş±a¨Ï¥ÎªÌ¦Û­qªº´«¦æ²Å¸¹";
         Text[ turkish ] = "Without user-defined line break symbols";
-        Text[ arabic ] = "Without user-defined line break symbols";
+        Text[ arabic ] = "ÈÏæä ÚáÇãÇÊ İÕá ÃÓØÑ ãÎÕÕÉ";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -429,9 +431,9 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ swedish ] = "Proxy";
     Text[ polish ] = "Proxy";
     Text[ portuguese_brazilian ] = "Proxy";
-    Text[ japanese ] = "Proxy";
+    Text[ japanese ] = "ÌßÛ·¼";
     Text[ korean ] = "Proxy";
-    Text[ chinese_simplified ] = "Proxy";
+    Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷";
     Text[ chinese_traditional ] = "¥N²z¦øªA¾¹";
     Text[ turkish ] = "Proxy";
     Text[ arabic ] = "Proxy";
