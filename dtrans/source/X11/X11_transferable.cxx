@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-21 16:34:09 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 08:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     {
         throw UnsupportedFlavorException( rFlavor.MimeType, static_cast < XTransferable * > ( this ) );
     }
-    if( rFlavor.MimeType.equalsIgnoreCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
+    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
     {
         int nLen = aData.getLength()/2;
         if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
@@ -148,14 +148,14 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
-        if( ! aFlavor.MimeType.equalsIgnoreCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) &&
+        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) &&
             aFlavor.DataType == getCppuType( (OUString*)0 ) )
             return false;
     }
 
     Sequence< DataFlavor > aFlavors( getTransferDataFlavors() );
     for( int i = 0; i < aFlavors.getLength(); i++ )
-        if( aFlavor.MimeType.equalsIgnoreCase( aFlavors.getConstArray()[i].MimeType ) &&
+        if( aFlavor.MimeType.equalsIgnoreAsciiCase( aFlavors.getConstArray()[i].MimeType ) &&
             aFlavor.DataType == aFlavors.getConstArray()[i].DataType )
             return sal_True;
 

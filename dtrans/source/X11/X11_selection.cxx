@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-07 11:12:22 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 08:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,20 +179,21 @@ static NativeTypeEntry aNativeConversionTab[] =
 rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
 {
     rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
-    OUString aMimeType( rMimeType.toLowerCase() );
-    int nTokens = aMimeType.getTokenCount( ';' );
-    if( aMimeType.getToken( 0, ';' ).equalsAsciiL( "text/plain" , 10 ) )
+    OUString aMimeType( rMimeType.toAsciiLowerCase() );
+    sal_Int32 nIndex = 0;
+    if( aMimeType.getToken( 0, ';', nIndex ).equalsAsciiL( "text/plain" , 10 ) )
     {
         if( aMimeType.getLength() == 10 ) // only "text/plain"
             aEncoding = RTL_TEXTENCODING_ISO_8859_1;
         else
         {
-            for( int i = 1; i < nTokens; i++ )
+            while( nIndex != -1 )
             {
-                OUString aToken = aMimeType.getToken( i, ';' );
-                if( aToken.getToken( 0, '=' ).equalsAsciiL( "charset", 7 ) )
+                OUString aToken = aMimeType.getToken( 0, ';', nIndex );
+                sal_Int32 nPos = 0;
+                if( aToken.getToken( 0, '=', nPos ).equalsAsciiL( "charset", 7 ) )
                 {
-                    OString aEncToken = OUStringToOString( aToken.getToken( 1, '=' ), RTL_TEXTENCODING_ISO_8859_1 );
+                    OString aEncToken = OUStringToOString( aToken.getToken( 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
                     aEncoding = rtl_getTextEncodingFromUnixCharset( aEncToken.getStr() );
                     if( aEncToken == RTL_TEXTENCODING_DONTKNOW )
                     {
@@ -505,9 +506,10 @@ bool SelectionManager::convertData(
 
     DataFlavor aFlavor;
     aFlavor.MimeType = rType;
-    if( rType.getToken( 0, ';' ).compareToAscii( "text/plain" ) == 0 )
+    sal_Int32 nIndex = 0;
+    if( rType.getToken( 0, ';', nIndex ).compareToAscii( "text/plain" ) == 0 )
     {
-        if( rType.getToken( 1, ';' ).compareToAscii( "charset=utf-16" ) == 0 )
+        if( rType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
             aFlavor.DataType = getCppuType( (OUString *) 0 );
         else
             aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
@@ -647,7 +649,7 @@ Atom SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
     OString aType( OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ) );
     for( int i = 0; i < nTabEntries; i++ )
     {
-        if( aType.equalsIgnoreCase( pTab[i].pType ) )
+        if( aType.equalsIgnoreAsciiCase( pTab[i].pType ) )
         {
             if( ! pTab[i].nAtom )
                 pTab[i].nAtom = getAtom( OStringToOUString( pTab[i].pNativeType, RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -900,10 +902,11 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             {
                 pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection );
                 pFlavors->DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
-                if( pFlavors->MimeType.getToken( 0, ';' ).equalsAsciiL( "text/plain", 10 ) )
+                sal_Int32 nIndex = 0;
+                if( pFlavors->MimeType.getToken( 0, ';', nIndex ).equalsAsciiL( "text/plain", 10 ) )
                 {
                     bHaveText = true;
-                    if( pFlavors->MimeType.getToken( 1, ';' ).compareToAscii( "charset=utf-16" ) == 0 )
+                    if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
                     {
                         bHaveUTF16 = true;
                         pFlavors->DataType = getCppuType( (OUString*)0 );
