@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ namespace xmloff
             case TypeClass_BOOLEAN:     // sal_Bool
             {
                 sal_Bool bValue;
-            #ifdef _DEBUG
+            #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
             #endif
                 _rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
@@ -232,7 +232,7 @@ namespace xmloff
                 if (!_pEnumMap)
                 {   // it's a real int32/16 property
                     sal_Int32 nValue(0);
-            #ifdef _DEBUG
+            #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bSuccess =
             #endif
                     _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
@@ -251,7 +251,7 @@ namespace xmloff
             case TypeClass_ENUM:
             {
                 sal_uInt16 nEnumValue;
-            #ifdef _DEBUG
+            #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
             #endif
                 _rImporter.GetMM100UnitConverter().convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
@@ -273,7 +273,7 @@ namespace xmloff
             case TypeClass_DOUBLE:
             {
                 double nValue;
-            #ifdef _DEBUG
+            #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
             #endif
                 _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
@@ -301,7 +301,7 @@ namespace xmloff
                 {
                     // first extract the double
                     double nValue = 0;
-                #ifdef _DEBUG
+                #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bSuccess =
                 #endif
                     _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
@@ -413,7 +413,7 @@ namespace xmloff
         }
     }
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     //---------------------------------------------------------------------
     void OPropertyElementsContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
@@ -496,7 +496,7 @@ namespace xmloff
             m_aPropType = aTypePos->second;
     }
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     //---------------------------------------------------------------------
     void OSinglePropertyContext::Characters(const ::rtl::OUString& _rChars)
     {
