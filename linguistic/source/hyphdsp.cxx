@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-04 13:27:09 $
+ *  last change: $Author: tl $ $Date: 2001-08-10 10:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,9 +319,16 @@ Reference< XHyphenatedWord > SAL_CALL
     {
         // allow only hyphenation positions to the left of the
         // first soft-hyphen
-        INT32 nFistSoftHyphenPos = rWord.indexOf( SVT_SOFT_HYPHEN );
-        if (nFistSoftHyphenPos >= 0  &&  nFistSoftHyphenPos <= nMaxLeading)
+        INT32 nFirstSoftHyphenPos = rWord.indexOf( SVT_SOFT_HYPHEN );
+        if (nFirstSoftHyphenPos >= 0  &&  nFirstSoftHyphenPos <= nMaxLeading)
+        {
+            INT16 nP = nFirstSoftHyphenPos - 1;
+            DBG_ASSERT( nP > 0, "unexpected soft-hyphen pos" );
+            xRes = queryAlternativeSpelling( rWord, rLocale, nP, rProperties );
+            if (!xRes.is())
+                xRes = new HyphenatedWord( rWord, nLanguage, nP, rWord, nP );
             return xRes;
+        }
 
         OUString aChkWord( rWord );
         bWordModified |= RemoveHyphens( aChkWord );
