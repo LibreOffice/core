@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:54:53 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 09:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
     return ( aTmp.Len() != 0 );
 }
 
-DECLARE_LIST( StringList_Impl, ::rtl::OUString* );
+DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
 ::com::sun::star::uno::Sequence < ::rtl::OUString > LocalFileHelper::GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder )
 {
