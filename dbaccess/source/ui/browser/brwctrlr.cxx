@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,6 +1611,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
         return;
     }
 
+    sal_uInt16 nPos = getCurrentColumnPosition();
     sal_Bool bSuccess = sal_False;
     try
     {
@@ -1638,6 +1639,8 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
         InvalidateAll();
     }
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+
+    setCurrentColumnPosition(nPos);
 }
 
 //------------------------------------------------------------------------------
@@ -1649,6 +1652,8 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
         OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserFilter: invalid row set!");
         return;
     }
+
+    sal_uInt16 nPos = getCurrentColumnPosition();
 
     sal_Bool bSuccess = sal_False;
     try
@@ -1681,6 +1686,8 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
         InvalidateAll();
     }
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+
+    setCurrentColumnPosition(nPos);
 }
 
 //------------------------------------------------------------------------------
@@ -1756,6 +1763,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         applyParserFilter(sOldVal, bOldFilterApplied);
     else
         applyParserOrder(sOldVal);
+
 }
 
 //------------------------------------------------------------------------------
@@ -1904,8 +1912,18 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
+            Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+            sal_uInt16 nViewPos = -1;
+            try
+            {
+                if ( xGrid.is() )
+                    nViewPos = xGrid->getCurrentColumnPosition();
+            }
+            catch(Exception&) {}
+
             if (bParserSuccess)
                 applyParserOrder(sOldSort);
+
         }
         break;
 
@@ -2844,6 +2862,30 @@ IMPL_LINK(LoadFormThread::ThreadStopper, OnDeleteInMainThread, LoadFormThread::T
 {
     delete pThis;
     return 0L;
+}
+// -----------------------------------------------------------------------------
+sal_uInt16 SbaXDataBrowserController::getCurrentColumnPosition()
+{
+    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    sal_uInt16 nViewPos = -1;
+    try
+    {
+        if ( xGrid.is() )
+            nViewPos = xGrid->getCurrentColumnPosition();
+    }
+    catch(Exception&) {}
+    return nViewPos;
+}
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::setCurrentColumnPosition(sal_uInt16 _nPos)
+{
+    Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    try
+    {
+        if ( -1 != _nPos )
+            xGrid->setCurrentColumnPosition(_nPos);
+    }
+    catch(Exception&) {}
 }
 //..................................................................
 }   // namespace dbaui
