@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 13:54:46 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:15:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@ CFLAGS+= -I/usr/X11R6/include
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe -fno-rtti
-CFLAGSCXX= -pipe -fno-for-scope -fpermissive -fno-rtti
+CFLAGSCXX= -pipe -fno-rtti
 
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS= -fexceptions
