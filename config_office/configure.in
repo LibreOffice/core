@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-03-07 17:28:33 $
+dnl * Date: $Date: 2005-03-08 16:31:52 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.105 $ )
+AC_REVISION( $Revision: 1.106 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -198,6 +198,12 @@ AC_ARG_WITH(system-sablot,
 AC_ARG_WITH(system-odbc,
 [  --with-system-odbc-headers      Use the odbc headers already on system
 ],,)
+AC_ARG_WITH(system-sane,
+[  --with-system-sane-header       Use sane.h already on system
+],,)
+AC_ARG_WITH(system-xrender,
+[  --with-system-xrender-headers   Use XRender headers already on system
+],,)
 AC_ARG_WITH(system-curl,
 [  --with-system-curl      Use curl already on system
 ],,)
@@ -240,7 +246,7 @@ AC_ARG_WITH(gxx_include_path,
                           Usage: --with-gxx-include-path=<absolute path to g++ include dir>
 ],,)
 AC_ARG_WITH(java,
-[  --with-java             Build with[out] Java support.  If you use --without-java then
+[  --with-java             Build with[[out]] Java support.  If you use --without-java/--with-java=no then
                           the build will have no support for Java components, applets, 
                           accessibility or XML filters. Use --with-java=gij to enable gij/gcj
                           as java/javac replacements
@@ -767,11 +773,14 @@ AC_SUBST(ENABLE_FONTCONFIG)
 dnl ===================================================================
 dnl Disable legacy binary file formats filters
 dnl ===================================================================
+AC_MSG_CHECKING([whether to enable filters for legacy binary file formats (StarOffice 5.2)])
 if test "$enable_binfilter" = "no"; then
    WITH_BINFILTER="NO"
+   AC_MSG_RESULT([no])
 else
    WITH_BINFILTER="YES"
    BUILD_TYPE="$BUILD_TYPE BINFILTER"
+   AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
 
@@ -843,11 +852,18 @@ Native windows programs cannot use cygwin symlinks. Remove the symbolic
 link, and copy the program to the name of the link.])
       fi
    dnl ===================================================================
+   dnl Another sanity check! More a band-aid. winenv.* adds guw.pl to
+   dnl CC and CXX but the configure checks here assume that guw.pl
+   dnl (if needed at all) is not yet present.
+   dnl ===================================================================
+   CC=`echo $CC | $SED -n "s/^guw.pl //p"`
+   CXX=`echo $CXX | $SED -n "s/^guw.pl //p"`
+   dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
    dnl $WITH_MINGWIN
    dnl ===================================================================
       if test -n "$CC";then
-         if test `$CC -dumpmachine | $AWK -F- '{ print $3 }'` = "mingw32"; then
+         if test "`$CC -dumpmachine 2>/dev/null | $AWK -F- '{ print $3 }'`" = "mingw32"; then
             WITH_MINGWIN="yes"
          fi
       fi
@@ -1309,10 +1325,13 @@ if test "$GXX" = "yes"; then
    _gpp_version=`$CXX -dumpversion`
    _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
    _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
+   
+   AC_MSG_RESULT([checked (g++ $_gpp_version)])
 
    if test "$_gpp_major" = "3"; then
       if test "$_gpp_minor" = "4"; then
-cat > conftest.cxx << EOF
+         AC_MSG_CHECKING([whether $CXX has the enum bug])
+AC_TRY_RUN([
 extern "C" void abort (void);
 extern "C" void exit (int status);
 
@@ -1333,15 +1352,9 @@ main (void)
   test (E0);
   return 0;
 }
-EOF
-         $CXX -O2 -o conftest conftest.cxx && ./conftest
-         if test $? -ne 0 ;  then
-            AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents OpenOffice.org from being compiled correctly
-please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])
-         fi
+],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents OpenOffice.org from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])], [AC_MSG_RESULT([no])])
       fi
    fi
-   AC_MSG_RESULT([checked (g++ $_gpp_version)])
 fi
 
 dnl ===================================================================
@@ -1349,16 +1362,22 @@ dnl Set the gcc/gxx include directories
 dnl ===================================================================
 # Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
 # often contains an i386 which is expanded as a macro. Solved in stlport.
-if test "$GXX" = "yes" -a -z "$with_gxx_include_path"; then
-   with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-   if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
-       with_gxx_include_path="/usr/include"
-   fi
+if test "$GXX" = "yes"; then
+   AC_MSG_CHECKING([for g++ include path])
+   if test -z "$with_gxx_include_path"; then
+      with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+      if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
+          with_gxx_include_path="/usr/include"
+      fi
+fi
 dnl This is the original code...
 dnl with_gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include 
 fi
 if test -z "$with_gxx_include_path"; then
    with_gxx_include_path="NO_GXX_INCLUDE"
+   AC_MSG_RESULT([no g++ includes])
+else
+   AC_MSG_RESULT([$with_gxx_include_path])
 fi
 GXX_INCLUDE_PATH="$with_gxx_include_path"
 AC_SUBST(GXX_INCLUDE_PATH)
@@ -1943,7 +1962,9 @@ else
 fi
 AC_SUBST(BUILD_DMAKE)
 
+AC_MSG_CHECKING([whether to enable EPM for packing])
 if test "z$enable_epm" = "z" -o "$enable_epm" != "no"; then
+   AC_MSG_RESULT([yes])
    dnl ===================================================================
    dnl Check for epm - not needed for windows
    dnl ===================================================================
@@ -1953,19 +1974,70 @@ if test "z$enable_epm" = "z" -o "$enable_epm" != "no"; then
       else
          AC_PATH_PROG(EPM, epm, no)
       fi
-      if test "$EPM" = "no"; then
-         AC_MSG_ERROR([epm is needed for native installers. install epm (www.easyway.com/epm)])
+      if test "$EPM" = "no" || test "$EPM" = "internal"; then
+         echo "EPM will be built."
+         BUILD_EPM=YES
+         BUILD_TYPE="$BUILD_TYPE EPM"
       else
          # Gentoo has some epm which is something different...
          AC_MSG_CHECKING([whether the found epm is the right epm])
-            if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
-               AC_MSG_RESULT([yes])
-            else
-               AC_MSG_ERROR([no. Install ESP Package Manager (www.easyway.com/epm) and/or specify the path to the right epm])
+         if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
+            AC_MSG_RESULT([yes])
+         else
+            AC_MSG_ERROR([no. Install ESP Package Manager (www.easysw.com/epm) and/or specify the path to the right epm])
+         fi
+         AC_MSG_CHECKING([epm version])
+         EPM_VERSION=`$EPM | grep 'ESP Package Manager' | cut -d' ' -f4 | $SED -e s/v//`
+	 if test "`echo $EPM_VERSION | cut -d'.' -f1`" -gt "3" || \
+	       test "`echo $EPM_VERSION | cut -d'.' -f1`" -eq "3" -a "`echo $EPM_VERSION | cut -d'.' -f2`" -ge "7"; then
+	    AC_MSG_RESULT([OK, >= 3.7])
+           BUILD_EPM=NO
+           if test "$_os" = "Linux" -o "$_os" = "SunOS"; then
+               if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
+                   AC_MSG_CHECKING([whether epm is patched for OOos needs])
+                   if grep "Patched for OpenOffice.org" $EPM >/dev/null 2>/dev/null; then
+                      AC_MSG_RESULT([yes])
+                   else
+                      AC_MSG_RESULT([no])
+                      if test "$_os" = "Linux"; then
+                          _pt="rpm"
+                          AC_MSG_WARN([the rpms will need to be installed with --nodeps])
+                          echo "the rpms will need to be installed with --nodeps" >> warn
+                      else
+                          _pt="pkg"
+                      fi
+                      AC_MSG_WARN([the ${_pt}s will not be relocateable])
+                      echo "the ${_pt}s will not be relocateable" >> warn
+                      AC_MSG_WARN([if you want to make sure installation without --nodeps and
+                      relocation will work, you need to patch your epm with the
+                      patch in epm/epm-3.7.patch or build with
+                      --with-epm=internal which will build a suitable epm])
+                  fi
+               fi
             fi
+	    if test "$_os" = "Darwin"; then
+	        AC_MSG_CHECKING([which PackageMaker EPM thinks to use])
+        	_pm=`strings $EPM | grep PackageMaker | cut -d" " -f1`
+        	if test "$_pm" = "/Developer/Applications/PackageMaker.app/Contents/MacOS/PackageMaker"; then
+          		AC_MSG_ERROR([$_pm; PackageMaker expected in wrong path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
+        	elif test "$_pm" = "Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker"; then
+          		AC_MSG_RESULT([$_pm, ok])
+        	else # we never should get here, but go safe
+			AC_MSG_ERROR([$_pm; PackageMaker expected in unknown path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
+		fi
+	    fi
+	 else
+           AC_MSG_RESULT([too old. epm >= 3.7 is required.])
+           echo "EPM will be built."
+           BUILD_EPM=YES
+           BUILD_TYPE="$BUILD_TYPE EPM"
+	 fi
       fi
    fi
    AC_SUBST(EPM)
+   AC_SUBST(BUILD_EPM)
+else
+   AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================
@@ -2385,6 +2457,7 @@ AC_SUBST(NAS_INCLUDES)
 AC_MSG_CHECKING([whether to enable portaudio/sndfile support])
 if test -n "$enable_pasf"; then
 	AC_MSG_RESULT([yes])
+   ENABLE_PASF=YES
   	AC_MSG_CHECKING([which sndfile to use])
 	if test -n "$with_system_sndfile" -o -n "$with_system_libs" && \
 		test "$with_system_sndfile" != "no"; then
@@ -2835,7 +2908,7 @@ if test -n "$enable_libart"; then
   PKG_CHECK_MODULES( LIBART, libart-2.0 >= 2.3.13 )
   WITH_LIBART=YES
 	
-elif test "$with_gpc" != "no" ; then
+elif test "$with_gpc" != "no" && test "$without_gpc" != "yes"; then
   WITH_GPC=YES
   AC_MSG_RESULT([GPC])
 
@@ -2858,6 +2931,8 @@ elif test "$with_gpc" != "no" ; then
 ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc,
 or install libart and use --enable-libart])
   fi
+else
+  AC_MSG_RESULT([internal])
 fi
 AC_SUBST(WITH_LIBART)
 AC_SUBST(LIBART_CFLAGS)
@@ -3279,7 +3354,7 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
          USE_XINERAMA=YES
          XINERAMA_LINK=static
       else
-         USE_XINERAMA_=NO
+         USE_XINERAMA=NO
          XINERAMA_LINK=none
       fi
    else
