@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,38 +132,36 @@ inline XclExpRecordBase* ExcRecordListRefs::Next()
 
 //----------------------------------------------------------- class DefRowXFs -
 
-class DefRowXFs : protected ScfUInt32List
+class DefRowXFs
 {
-protected:
+private:
+    struct XclExpDefRowXFEntry
+    {
+        sal_uInt32                  mnXFId;
+        sal_uInt16                  mnRow;
+        inline explicit             XclExpDefRowXFEntry() : mnXFId( 0 ), mnRow( 0 ) {}
+        inline explicit             XclExpDefRowXFEntry( sal_uInt32 nXFId, sal_uInt16 nRow ) :
+                                        mnXFId( nXFId ), mnRow( nRow ) {}
+    };
+
+    typedef ::std::vector< XclExpDefRowXFEntry > XclExpDefRowXFVec;
+
+    XclExpDefRowXFVec           maXFList;
     UINT32                      nLastList;
     UINT16                      nLastRow;
 
-    static inline void          Get( UINT32 nVal, UINT16& rRowNum, UINT16& rXF );
 public:
                                 DefRowXFs( void );
-    virtual                     ~DefRowXFs();
 
-    inline void                 Add( UINT16 nRowNum, UINT16 nXF );
+    inline void                 Append( sal_uInt16 nRow, sal_uInt32 nXFId );
 
-    BOOL                        ChangeXF( UINT16 nRowNum, UINT16& rXF );
+    BOOL                        ChangeXF( sal_uInt16 nRow, sal_uInt32& rnXFId );
 };
 
-// structure: 2 byte row number, 2 byte XF -> 4 byte
-
-inline void DefRowXFs::Add( UINT16 nR, UINT16 nXF )
+inline void DefRowXFs::Append( sal_uInt16 nRow, sal_uInt32 nXFId )
 {
-    ScfUInt32List::Append( ( UINT32 ) ( nR | ( ( UINT32 ) nXF << 16 ) ) );
+    maXFList.push_back( XclExpDefRowXFEntry( nXFId, nRow ) );
 }
-
-
-inline void DefRowXFs::Get( UINT32 nVal, UINT16& rR, UINT16& rXF )
-{
-    rR = ( UINT16 ) nVal;
-    rXF = ( UINT16 ) ( nVal >> 16 );
-}
-
-
-
 
 
 //------------------------------------------------------------ class ExcTable -
@@ -196,8 +194,8 @@ public:
     void                        FillAsHeader( ExcRecordListRefs& rBundleSheetRecList );
     void                        FillAsTable( void );
 
-    void                        SetDefRowXF( UINT16 nXF, UINT16 nRowNum );
-    BOOL                        ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF );
+    void                        SetDefRowXF( sal_uInt16 nRowNum, sal_uInt32 nXFId );
+    BOOL                        ModifyToDefaultRowXF( sal_uInt16 nRowNum, sal_uInt32& rnXFId );
 
     void                        Write( XclExpStream& );
 };
