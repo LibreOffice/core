@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:06:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEQUATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -100,8 +100,9 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
     std::vector< com::sun::star::beans::PropertyValue > maExtrusion;
     std::vector< com::sun::star::beans::PropertyValue > maPath;
     std::vector< com::sun::star::beans::PropertyValue > maTextPath;
-    std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation > maEquations;
     std::vector< com::sun::star::beans::PropertyValues > maHandles;
+    std::vector< rtl::OUString > maEquations;
+    std::vector< rtl::OUString > maEquationNames;
 
 public:
 
