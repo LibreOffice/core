@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:25:43 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     nState = nNewState;
     if ( !pObject )
         return;
@@ -197,6 +198,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
 
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pObject && nState == embed::EmbedStates::RUNNING )
         // updates only necessary in non-active states
         pObject->UpdateReplacement();
@@ -205,6 +207,8 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
 #if 0
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     if ( pObject && aEvent.EventName.equalsAscii("OnSaveDone") || aEvent.EventName.equalsAscii("OnSaveAsDone") )
     {
         // TODO/LATER: container must be set before!
