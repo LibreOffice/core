@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 13:38:43 $
+ *  last change: $Author: os $ $Date: 2000-11-08 13:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -264,6 +261,8 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#include <string>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -1920,12 +1919,105 @@ int SwFmtFtnEndAtTxtEnd::operator==( const SfxPoolItem& rItem ) const
 
 BOOL SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    return SfxEnumItem::QueryValue( rVal, nMemberId );
+    switch(nMemberId)
+    {
+        case MID_COLLECT     :
+        {
+            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND;
+            rVal.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+        case MID_RESTART_NUM :
+        {
+            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
+            rVal.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+        case MID_NUM_START_AT: rVal <<= (sal_Int16) nOffset; break;
+        case MID_OWN_NUM     :
+        {
+            sal_Bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
+            rVal.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+        case MID_NUM_TYPE    : rVal <<= (sal_Int16) aFmt.eType; break;
+        case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
+        case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
+        default: return FALSE;
+    }
+    return TRUE;
 }
 
 BOOL SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    return SfxEnumItem::PutValue( rVal, nMemberId );
+    BOOL bRet = TRUE;
+    switch(nMemberId)
+    {
+        case MID_COLLECT     :
+        {
+            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            if(!bVal && GetValue() >= FTNEND_ATTXTEND)
+                SetValue(FTNEND_ATPGORDOCEND);
+            else if(bVal && GetValue() < FTNEND_ATTXTEND)
+                SetValue(FTNEND_ATTXTEND);
+        }
+        break;
+        case MID_RESTART_NUM :
+        {
+            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ)
+                SetValue(FTNEND_ATTXTEND);
+            else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMSEQ)
+                SetValue(FTNEND_ATTXTEND_OWNNUMSEQ);
+        }
+        break;
+        case MID_NUM_START_AT:
+        {
+            sal_Int16 nVal;
+            rVal >>= nVal;
+            if(nVal >= 0)
+                nOffset = nVal;
+            else
+                bRet = FALSE;
+        }
+        break;
+        case MID_OWN_NUM     :
+        {
+            sal_Bool bVal = *(sal_Bool*)rVal.getValue();
+            if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT)
+                SetValue(FTNEND_ATTXTEND_OWNNUMSEQ);
+            else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMANDFMT)
+                SetValue(FTNEND_ATTXTEND_OWNNUMANDFMT);
+        }
+        break;
+        case MID_NUM_TYPE    :
+        {
+            sal_Int16 nVal;
+            rVal >>= nVal;
+            if(nVal >= 0 &&
+                (nVal <= SVX_NUM_ARABIC ||
+                    SVX_NUM_CHARS_UPPER_LETTER_N == nVal ||
+                        SVX_NUM_CHARS_LOWER_LETTER_N == nVal ))
+                aFmt.eType = (SvxExtNumType)nVal;
+            else
+                bRet = FALSE;
+        }
+        break;
+        case MID_PREFIX      :
+        {
+            OUString sVal; rVal >>= sVal;
+            sPrefix = sVal;
+        }
+        break;
+        case MID_SUFFIX      :
+        {
+            OUString sVal; rVal >>= sVal;
+            sSuffix = sVal;
+        }
+        break;
+        default: bRet = FALSE;
+    }
+    return bRet;
 }
 
 
