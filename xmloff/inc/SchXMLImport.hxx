@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 15:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@ enum SchXMLChartAttrMap
     XML_TOK_CHART_CLASS,
     XML_TOK_CHART_WIDTH,
     XML_TOK_CHART_HEIGHT,
-    XML_TOK_CHART_STYLE_NAME
+    XML_TOK_CHART_STYLE_NAME,
+    XML_TOK_CHART_ADDIN_NAME
 };
 
 enum SchXMLPlotAreaAttrTokenMap
