@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpreview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:38:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@
 #endif
 
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextDocumentPageView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
 
-// using namespace ::drafts::com::sun::star::accessibility;
+// using namespace ::com::sun::star::accessibility;
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
