@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-05 09:36:38 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 13:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3588,7 +3588,8 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
     for( USHORT n = 0; n < nItemCnt; ++n )
     {
         Font aFnt( OutputDevice::GetDefaultFont(
-            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage, 0, 0 ));
+            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage,
+            DEFAULTFONT_FLAGS_ONLYONE, 0 ));
         SvxFontItem* pI = aItemArr[ n ];
         pI->GetFamily() = aFnt.GetFamily();
         pI->GetFamilyName() = aFnt.GetName();
