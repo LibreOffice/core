@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:12:09 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 14:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #include "dbaccess_helpid.hrc"
 #endif
 
-const USHORT SOURCE_COLUMN = 1;
-const USHORT DEST_COLUMN = 2;
+#define SOURCE_COLUMN   1
+#define DEST_COLUMN     2
 
 namespace dbaui
 {
@@ -122,19 +122,19 @@ namespace dbaui
     {
         friend class OTableListBoxControl;
 
-        ULONG                                                                       m_nDeActivateEvent;
-        ::svt::ListBoxControl*                                                      m_pListCell;
-        OTableConnectionData*                                                       m_pConnData;
-        const OJoinTableView::OTableWindowMap*                                      m_pTableMap;
-        OTableListBoxControl*                                                       m_pBoxControl;
-        long                                                                        m_nDataPos;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xSourceDef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xDestDef;
+        ::svt::ListBoxControl*                  m_pListCell;
+        OTableConnectionData*                   m_pConnData;
+        const OJoinTableView::OTableWindowMap*  m_pTableMap;
+        OTableListBoxControl*                   m_pBoxControl;
+        long                                    m_nDataPos;
+        Reference< XPropertySet>                m_xSourceDef;
+        Reference< XPropertySet>                m_xDestDef;
 
 
-        void fillListBox(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest,long nRow,USHORT nColumnId);
-        /** getColumnIdent returns the column id for the editbrowsebox
-            @param  the column id SOURCE_COLUMN or DEST_COLUMN
+        void fillListBox(const Reference< XPropertySet>& _xDest,long nRow,USHORT nColumnId);
+        /** returns the column id for the editbrowsebox
+            @param  _nColId
+                    the column id SOURCE_COLUMN or DEST_COLUMN
 
             @return the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
         */
@@ -143,17 +143,19 @@ namespace dbaui
         ORelationControl( OTableListBoxControl* pParent,const OJoinTableView::OTableWindowMap* _pTableMap );
         virtual ~ORelationControl();
 
-        /** setWindowTables searches for a connection between these two tables
-            @param  _pSource    the left table
-            @param  _pDest      the right window
+        /** searches for a connection between these two tables
+            @param  _pSource
+                    the left table
+            @param  _pDest
+                    the right window
         */
         void setWindowTables(const OTableWindow* _pSource,const OTableWindow* _pDest);
 
-        /** getData allows to access the connection data from outside
+        /** allows to access the connection data from outside
 
             @return rthe connection data
         */
-        OTableConnectionData* getData() const { return m_pConnData; }
+        inline OTableConnectionData* getData() const { return m_pConnData; }
 
     protected:
         virtual void Resize();
@@ -184,12 +186,11 @@ namespace dbaui
     DBG_NAME(ORelationControl);
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER , BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL)
+        :EditBrowseBox( pParent, EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
         ,m_pListCell( NULL )
         ,m_pConnData( NULL )
         ,m_xSourceDef( NULL )
         ,m_xDestDef( NULL )
-        ,m_nDeActivateEvent(0)
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
     {
@@ -200,8 +201,6 @@ namespace dbaui
     ORelationControl::~ORelationControl()
     {
         DBG_DTOR(ORelationControl,NULL);
-        if (m_nDeActivateEvent)
-            Application::RemoveUserEvent(m_nDeActivateEvent);
 
         delete m_pListCell;
     }
@@ -224,66 +223,53 @@ namespace dbaui
         if( aFind != m_pTableMap->end() )
             m_xDestDef = aFind->second->GetTable();
 
-        BOOL bFirstCall = (ColCount() == 0);
-
-        if (bFirstCall)
+        if ( ColCount() == 0 )
         {
-            InsertDataColumn( 1, m_pConnData->GetSourceWinName(), 100);
-            InsertDataColumn( 2, m_pConnData->GetDestWinName(), 100);
+            InsertDataColumn( SOURCE_COLUMN, m_pConnData->GetSourceWinName(), 100);
+            InsertDataColumn( DEST_COLUMN, m_pConnData->GetDestWinName(), 100);
                 // wenn es die Defs noch nicht gibt, dann muessen sie noch mit SetSource-/-DestDef gesetzt werden !
 
             m_pListCell = new ListBoxControl( &GetDataWindow() );
 
             //////////////////////////////////////////////////////////////////////
-            // Browser Mode setzen
-            BrowserMode nMode = BROWSER_COLUMNSELECTION |
-                BROWSER_HLINESFULL | BROWSER_VLINESFULL |
-                BROWSER_HIDECURSOR | BROWSER_HIDESELECT;
-
-            SetMode(nMode);
+            // set browse mode
+            SetMode(    BROWSER_COLUMNSELECTION |
+                        BROWSER_HLINESFULL      |
+                        BROWSER_VLINESFULL      |
+                        BROWSER_HIDECURSOR      |
+                        BROWSER_HIDESELECT);
         }
         else
             // not the first call
             RowRemoved(0, GetRowCount());
 
         RowInserted(0, m_pConnData->GetConnLineDataList()->size(), TRUE);
-
     }
-
     //------------------------------------------------------------------------------
     void ORelationControl::Resize()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
         EditBrowseBox::Resize();
-        long nOutputWidth = GetOutputSizePixel().Width()-20;
-        SetColumnWidth(1, (long)(nOutputWidth*0.5));
-        SetColumnWidth(2, (long)(nOutputWidth*0.5));
+        long nOutputWidth = GetOutputSizePixel().Width();
+        SetColumnWidth(1, (nOutputWidth / 2));
+        SetColumnWidth(2, (nOutputWidth / 2));
     }
 
     //------------------------------------------------------------------------------
     long ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        if (rNEvt.GetType() == EVENT_LOSEFOCUS)
-            if (!HasChildPathFocus())
-            {
-                if (m_nDeActivateEvent)
-                    Application::RemoveUserEvent(m_nDeActivateEvent);
-                m_nDeActivateEvent = Application::PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
-            }
-        if (rNEvt.GetType() == EVENT_GETFOCUS)
-        {
-            if (m_nDeActivateEvent)
-                Application::RemoveUserEvent(m_nDeActivateEvent);
-            m_nDeActivateEvent = Application::PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
-        }
+        if (rNEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
+            PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate));
+        else if (rNEvt.GetType() == EVENT_GETFOCUS)
+            PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
+
         return EditBrowseBox::PreNotify(rNEvt);
     }
 
     //------------------------------------------------------------------------------
     IMPL_LINK(ORelationControl, AsynchActivate, void*, EMPTYARG)
     {
-        m_nDeActivateEvent = 0;
         ActivateCell();
         return 0L;
     }
@@ -291,7 +277,6 @@ namespace dbaui
     //------------------------------------------------------------------------------
     IMPL_LINK(ORelationControl, AsynchDeactivate, void*, EMPTYARG)
     {
-        m_nDeActivateEvent = 0;
         DeactivateCell();
         return 0L;
     }
@@ -303,13 +288,10 @@ namespace dbaui
         long nRow = GetCurRow();
         USHORT nCol = GetCurColumnId();
 
-        if (bForward && (nCol == 2) && (nRow == GetRowCount() - 1))
-            return FALSE;
+        BOOL bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
+                        ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
 
-        if (!bForward && (nCol == 1) && (nRow == 0))
-            return FALSE;
-
-        return EditBrowseBox::IsTabAllowed(bForward);
+        return bRet && EditBrowseBox::IsTabAllowed(bForward);
     }
 
     //------------------------------------------------------------------------------
@@ -389,12 +371,10 @@ namespace dbaui
         if(xDef.is())
         {
             fillListBox(xDef,nRow,nColumnId);
-            String aText = GetCellText( nRow, nColumnId );
-
-            m_pListCell->SelectEntry(aText);
+            m_pListCell->SelectEntry( GetCellText( nRow, nColumnId ) );
 
             m_pListCell->SetHelpId(nHelpId);
-            m_pListCell->SetHelpText(String());
+            //  m_pListCell->SetHelpText(String());
         }
     }
 
@@ -417,7 +397,7 @@ namespace dbaui
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        String aText = ((ORelationControl*)this)->GetCellText( m_nDataPos, nColumnId );
+        String aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
         Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
@@ -460,7 +440,7 @@ namespace dbaui
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Exception catched while compse tablename!");
+            OSL_ENSURE(0,"Exception caught while compose tablename!");
         }
     }
     // -----------------------------------------------------------------------------
@@ -550,6 +530,10 @@ namespace dbaui
         m_pRC_Tables->SetPosSizePixel( aDlgPoint, aDlgSize );
         m_pRC_Tables->Show();
 
+        Link aLink(LINK(this, OTableListBoxControl, OnTableChanged));
+        m_lmbLeftTable.SetSelectHdl(aLink);
+        m_lmbRightTable.SetSelectHdl(aLink);
+
         FreeResource();
     }
     // -----------------------------------------------------------------------------
@@ -577,24 +561,23 @@ namespace dbaui
                 pInitialRight = aIter->second;
         }
 
+        m_strCurrentLeft = pInitialLeft->GetWinName();
+        m_strCurrentRight = pInitialRight->GetWinName();
+
         // links das erste, rechts das zweite selektieren
-        m_lmbLeftTable.SelectEntryPos(0);
-        m_lmbRightTable.SelectEntryPos(1);
+        m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
+        m_lmbRightTable.SelectEntry(m_strCurrentRight);
 
         // die entsprechenden Defs an mein Controls
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
         // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
-        m_strCurrentLeft = pInitialLeft->GetWinName();
-        m_strCurrentRight = pInitialRight->GetWinName();
+
         if (m_pTableMap->size() > 2)
         {
             m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
             m_lmbRightTable.RemoveEntry(m_strCurrentLeft);
         }
-
-        m_lmbLeftTable.SetSelectHdl(LINK(this, OTableListBoxControl, OnTableChanged));
-        m_lmbRightTable.SetSelectHdl(LINK(this, OTableListBoxControl, OnTableChanged));
 
         m_lmbLeftTable.GrabFocus();
     }
@@ -692,10 +675,12 @@ namespace dbaui
         OConnectionLineDataVec::iterator aIter = pLines->begin();
         for(;aIter != pLines->end();++aIter)
         {
-            if ( ((*aIter)->GetDestFieldName().getLength() != 0) != ((*aIter)->GetSourceFieldName().getLength() != 0) )
+            sal_Int32 nDestLen  = (*aIter)->GetDestFieldName().getLength();
+            sal_Int32 nSrcLen   = (*aIter)->GetSourceFieldName().getLength();
+            if ( (nDestLen != 0) != (nSrcLen != 0) )
                 bValid = FALSE;
                 // wenn nich beide leer oder beide voll sind -> ungueltig
-            if (((*aIter)->GetDestFieldName().getLength() == 0) && ((*aIter)->GetSourceFieldName().getLength() == 0))
+            if ((nDestLen == 0) && (nSrcLen == 0))
                 ++nEmptyRows;
         }
         m_pParentDialog->setValid(bValid && (nEmptyRows != pLines->size()));
