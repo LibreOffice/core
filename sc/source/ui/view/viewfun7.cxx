@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-12 21:32:40 $
+ *  last change: $Author: er $ $Date: 2002-07-12 17:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,13 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     if (pRef)
         pRef->SetMapMode( aOldMapMode );
 
-    GetViewData()->GetViewShell()->SetDrawShell( TRUE );
+    // GetViewData()->GetViewShell()->SetDrawShell( TRUE );
+    // #99759# It is not sufficient to just set the DrawShell if we pasted, for
+    // example, a chart.  SetDrawShellOrSub() would only work for D&D in the
+    // same document but not if inserting from the clipboard, therefore
+    // MarkListHasChanged() is what we need.
+    pDrawView->MarkListHasChanged();
+
 }
 
 BOOL ScViewFunc::PasteObject( const Point& rPos, SvInPlaceObject* pObj,
