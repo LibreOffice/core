@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-09 08:25:40 $
+ *  last change: $Author: ka $ $Date: 2001-08-15 14:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,10 +840,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE );
     FASTBOOL        bLoading = FALSE;
     OutputDevice*   pOutDev = rOut.GetOutDev();
-    OutDevType      eOutDevType = ( pOutDev ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW );
-    FASTBOOL        bJustFillCache = ( NULL == pOutDev );
-    FASTBOOL        bPrn = ( !bJustFillCache && ( OUTDEV_PRINTER == eOutDevType ) );
-    GDIMetaFile*    pRecMetaFile = ( !bJustFillCache ? pOutDev->GetConnectMetaFile() : NULL );
+    GDIMetaFile*    pRecMetaFile = pOutDev->GetConnectMetaFile();
     FASTBOOL        bMtfRecording = ( pRecMetaFile && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause() );
     const SdrView*  pView = ( rInfoRec.pPV ? &rInfoRec.pPV->GetView() : NULL );
 
@@ -859,7 +856,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         else
 #endif
         {
-            if( !bPrn && !bMtfRecording && ( eOutDevType == OUTDEV_WINDOW ) && pView && pView->IsSwapAsynchron() )
+            if( ( OUTDEV_WINDOW == pOutDev->GetOutDevType() ) && !bMtfRecording && pView && pView->IsSwapAsynchron() )
             {
                 ( (SdrView*) pView )->ImpAddAsyncObj( this, pOutDev );
                 bLoading = TRUE;
@@ -869,12 +866,8 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         }
     }
 
-    if( pGraphic->IsSwappedOut() ||
-        pGraphic->GetType() == GRAPHIC_NONE ||
-        pGraphic->GetType() == GRAPHIC_DEFAULT )
-    {
+    if( pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE ) || ( pGraphic->GetType() == GRAPHIC_DEFAULT ) )
         bDraft=TRUE;
-    }
 
     long          nDrehWink = aGeo.nDrehWink, nShearWink = aGeo.nShearWink;
     FASTBOOL      bRotate = ( nDrehWink != 0 && nDrehWink != 18000 );
@@ -952,9 +945,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     }
 
     // auch GRAPHIC_NONE oder SwappedOut( AsyncSwap )
-    if( ( bEmptyPresObj || bDraft ) &&
-        ( !bDraft || ( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 ) ) &&
-        !bJustFillCache )
+    if( ( bEmptyPresObj || bDraft ) && ( !bDraft || !( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) ) )
     {
         XubString   aText;
         Bitmap*     pBmp = NULL;
@@ -991,7 +982,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         delete pBmp;
     }
 
-    if( bPrn )
+    if( OUTDEV_PRINTER == pOutDev->GetOutDevType() )
         ForceSwapOut();
 
     return( HasText() ? SdrTextObj::Paint( rOut, rInfoRec ) : TRUE );
