@@ -1,5 +1,5 @@
 tt	testtools	:	stoc remotebridges io cpputools NULL
 tt	testtools								usr1	-	all	tt_mkout NULL
 tt	testtools\source\bridgetest				nmake	-	all	tt_bridgetest tt_javaTestObjs NULL
-tt	testtools\source\bridgetest\cli				nmake	-	all	tt_cli tt_bridgetest NULL
+tt	testtools\source\bridgetest\cli				nmake	-	w	tt_cli tt_bridgetest NULL
 tt	testtools\com\sun\star\comp\bridge		nmake	-	all	tt_javaTestObjs NULL
