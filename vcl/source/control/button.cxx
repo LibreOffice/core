@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-10 12:42:24 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 14:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,6 +1628,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
                 nTextStyle |= TEXT_DRAW_MONO;
 
             aRect.Left() += rImageSize.Width()+nImageSep;
+            aRect.Left()++;
+            aRect.Right()--;
             rMouseRect = pDev->GetTextRect( aRect, aText, nTextStyle );
 
             pDev->DrawText( aRect, aText, nTextStyle );
@@ -2301,11 +2303,18 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     else
         aSize = maImage.GetSizePixel();
 
+    nMaxWidth -= aSize.Width();
+
     XubString aText = GetText();
     if ( aText.Len() )
     {
-        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+        // subtract what will be added later
+        nMaxWidth-=2;
+        nMaxWidth -= IMPL_SEP_BUTTON_IMAGE;
+
+        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
+        aSize.Width()+=2;   // for focus rect
         aSize.Width() += IMPL_SEP_BUTTON_IMAGE;
         aSize.Width() += aTextSize.Width();
         if ( aSize.Height() < aTextSize.Height() )
@@ -2472,6 +2481,8 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             nTextStyle |= TEXT_DRAW_MONO;
 
         aRect.Left() += rImageSize.Width()+nImageSep;
+        aRect.Left()++;
+        aRect.Right()--;
         rMouseRect = pDev->GetTextRect( aRect, aText, nTextStyle );
 
         pDev->DrawText( aRect, aText, nTextStyle );
@@ -2996,12 +3007,18 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 {
     Size aSize = GetCheckImage( GetSettings(), 0 ).GetSizePixel();
+    nMaxWidth -= aSize.Width();
 
     XubString aText = GetText();
     if ( aText.Len() )
     {
-        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+        // subtract what will be added later
+        nMaxWidth-=2;
+        nMaxWidth -= IMPL_SEP_BUTTON_IMAGE;
+
+        Size aTextSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth > 0 ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                                       aText, FixedText::ImplGetTextStyle( GetStyle() ) ).GetSize();
+        aSize.Width()+=2;    // for focus rect
         aSize.Width() += IMPL_SEP_BUTTON_IMAGE;
         aSize.Width() += aTextSize.Width();
         if ( aSize.Height() < aTextSize.Height() )
