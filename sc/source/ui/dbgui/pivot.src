@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-04 17:33:36 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ spanish ] = "Arrastre los campos de la pбgina derecha hacia el бrea deseada." ;
         Text [ english_us ] = "Drag the fields from the right into the desired position." ;
         Text[ chinese_simplified ] = "з”Ёйј ж ‡е°†еЏійЎµдё­зљ„е­—ж®µз§»е€°жЊ‡е®љзљ„еЊєеџџгЂ‚";
-        Text[ russian ] = "С помощью мыши перетяните поле с правой стороны в желаемую область.";
+        Text[ russian ] = "Перетащите поля с правой стороны в желаемую область.";
         Text[ polish ] = "Przesuс pola z prawej strony za pomoc№ myszy do ї№danego obszaru.";
         Text[ japanese ] = "еЏіеЃґгЃ«гЃ‚г‚‹гѓ•г‚Јгѓјгѓ«гѓ‰гѓњг‚їгѓіг‚’д»»ж„ЏгЃ®зЇ„е›ІгЃ«гѓ‰гѓ©гѓѓг‚°гЃ—гЃѕгЃ™гЂ‚";
         Text[ chinese_traditional ] = "и«‹дЅїз”Ёж»‘йј йЌµе°‡ж¬„дЅЌж‹–ж‹‰е€°еЏій Ѓзљ„д»»ж„ЏдёЂеЂ‹еЌЂеџџгЂ‚";
@@ -448,7 +448,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ spanish ] = "Resultado en" ;
         Text [ english_us ] = "Results to" ;
         Text[ chinese_simplified ] = "иѕ“е‡єеЊєеџџд»Ћ";
-        Text[ russian ] = "Начать с";
+        Text[ russian ] = "Результат в";
         Text[ polish ] = "Rozpocznij od";
         Text[ japanese ] = "зµђжћњиІјг‚Љд»гЃ‘е…€";
         Text[ chinese_traditional ] = "еЊЇе‡єеЌЂеџџеѕћ";
@@ -525,10 +525,10 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "~Ignorer les lignes vides" ;
         Text [ swedish ] = "~Ignorera tomma rader" ;
         Text [ dutch ] = "~Lege rijen negeren" ;
-        Text [ spanish ] = "~Ignorar filas vacнas" ;
+        Text [ spanish ] = "~Ignorar las filas vacнas" ;
         Text [ english_us ] = "Ignore ~empty rows" ;
         Text[ chinese_simplified ] = "еїЅз•Ґз©єиЎЊ(~E)";
-        Text[ russian ] = "Пропуск пустых строк";
+        Text[ russian ] = "Пропускать пустые строки";
         Text[ polish ] = "Zignoruj spacje";
         Text[ japanese ] = "з©єз™ЅиЎЊг‚’з„Ўи¦–гЃ™г‚‹(~E)";
         Text[ chinese_traditional ] = "еїЅз•Ґз©єе€—(~E)";
@@ -557,10 +557,10 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "~Identifier les catйgories" ;
         Text [ swedish ] = "Identifiera ~kategorier" ;
         Text [ dutch ] = "~Categorieлn opsporen" ;
-        Text [ spanish ] = "I~dentificar categorнas" ;
+        Text [ spanish ] = "I~dentificar las categorнas" ;
         Text [ english_us ] = "~Identify categories" ;
         Text[ chinese_simplified ] = "иЇ†е€«е€†з±»(~I)";
-        Text[ russian ] = "Распознание категорий";
+        Text[ russian ] = "Распознавание категорий";
         Text[ polish ] = "Identyfikacja kategorii";
         Text[ japanese ] = "е€†йЎћй …з›®гЃ®иЄЌи­(~I)";
         Text[ chinese_traditional ] = "и­е€Ґе€†йЎћ(~I)";
@@ -646,7 +646,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Sum - " ;
         Text [ french ] = "Somme - " ;
         Text [ swedish ] = "Summa -  " ;
-        Text [ dutch ] = "Som -  " ;
+        Text [ dutch ] = "Som -" ;
         Text [ spanish ] = "Total -  " ;
         Text [ english_us ] = "Sum - " ;
         Text[ chinese_simplified ] = "жЂ»и®Ў - ";
@@ -674,7 +674,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Antal - " ;
         Text [ french ] = "Nombre - " ;
         Text [ swedish ] = "Antal -  " ;
-        Text [ dutch ] = "Aantal -  " ;
+        Text [ dutch ] = "Aantal -" ;
         Text [ spanish ] = "Cantidad -  " ;
         Text [ english_us ] = "Count - " ;
         Text[ chinese_simplified ] = "ж•°з›® - ";
@@ -702,7 +702,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Middel - " ;
         Text [ french ] = "Moyenne - " ;
         Text [ swedish ] = "Medel - " ;
-        Text [ dutch ] = "Gemiddelde -  " ;
+        Text [ dutch ] = "Gemiddelde -" ;
         Text [ spanish ] = "Media -  " ;
         Text [ english_us ] = "Mean - " ;
         Text[ chinese_simplified ] = "дё­й—ґеЂј - ";
@@ -726,11 +726,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Max - " ;
         Text [ portuguese_brazilian ] = "Max - " ;
         Text [ portuguese ] = "Mбx - " ;
-        Text [ finnish ] = "Max - " ;
+        Text [ finnish ] = "MAKS - " ;
         Text [ danish ] = "Maks - " ;
         Text [ french ] = "Max - " ;
         Text [ swedish ] = "Max -  " ;
-        Text [ dutch ] = "Max -  " ;
+        Text [ dutch ] = "Max -" ;
         Text [ spanish ] = "Mбx -  " ;
         Text [ english_us ] = "Max - " ;
         Text[ chinese_simplified ] = "жњЂе¤§  - ";
@@ -758,7 +758,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Min - " ;
         Text [ french ] = "Min - " ;
         Text [ swedish ] = "Min -  " ;
-        Text [ dutch ] = "Min -  " ;
+        Text [ dutch ] = "Min -" ;
         Text [ spanish ] = "Mнn -  " ;
         Text [ english_us ] = "Min - " ;
         Text[ chinese_simplified ] = "жњЂе°Џ - ";
@@ -782,11 +782,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Prodotto - " ;
         Text [ portuguese_brazilian ] = "Produto - " ;
         Text [ portuguese ] = "Produto - " ;
-        Text [ finnish ] = "Tuote - " ;
+        Text [ finnish ] = "TULO - " ;
         Text [ danish ] = "Produkt - " ;
         Text [ french ] = "Produit - " ;
         Text [ swedish ] = "Produkt -  " ;
-        Text [ dutch ] = "Product -  " ;
+        Text [ dutch ] = "Product -" ;
         Text [ spanish ] = "Producto -  " ;
         Text [ english_us ] = "Product - " ;
         Text[ chinese_simplified ] = "д№з§Ї- ";
@@ -814,7 +814,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Antal - " ;
         Text [ french ] = "Nombre - " ;
         Text [ swedish ] = "Antal -  " ;
-        Text [ dutch ] = "Aantal -  " ;
+        Text [ dutch ] = "Aantal -" ;
         Text [ spanish ] = "Cantidad -  " ;
         Text [ english_us ] = "Count - " ;
         Text[ chinese_simplified ] = "ж•°з›® - ";
@@ -838,11 +838,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Dev - " ;
         Text [ portuguese_brazilian ] = "Dev - " ;
         Text [ portuguese ] = "DesvP - " ;
-        Text [ finnish ] = "StDev - " ;
+        Text [ finnish ] = "KESKIHAJONTA - " ;
         Text [ danish ] = "Stdafv - " ;
         Text [ french ] = "Ecartype -   " ;
         Text [ swedish ] = "StdAv - " ;
-        Text [ dutch ] = "StAfw -  " ;
+        Text [ dutch ] = "StAfw -" ;
         Text [ spanish ] = "DevNorm -  " ;
         Text [ english_us ] = "StDev - " ;
         Text[ chinese_simplified ] = "ж ‡е‡†еЃЏе·®(жЉЅж ·) - ";
@@ -866,11 +866,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "DevP - " ;
         Text [ portuguese_brazilian ] = "DevP - " ;
         Text [ portuguese ] = "DesvPadP - " ;
-        Text [ finnish ] = "StDevP - " ;
+        Text [ finnish ] = "KESKIHAJONTAP - " ;
         Text [ danish ] = "StdafvP - " ;
         Text [ french ] = "EcarTypeP -    " ;
         Text [ swedish ] = "StdAvP - " ;
-        Text [ dutch ] = "StAfwP -  " ;
+        Text [ dutch ] = "StAfwP -" ;
         Text [ spanish ] = "DevNormP -  " ;
         Text [ english_us ] = "StDevP - " ;
         Text[ chinese_simplified ] = "ж ‡е‡†еЃЏе·®(е…ЁйѓЁеџєж•°) - ";
@@ -898,7 +898,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "Varians - " ;
         Text [ french ] = "Var - " ;
         Text [ swedish ] = "Varians -  " ;
-        Text [ dutch ] = "Variantie -  " ;
+        Text [ dutch ] = "Variantie -" ;
         Text [ spanish ] = "Var -  " ;
         Text [ english_us ] = "Var - " ;
         Text[ chinese_simplified ] = "ж–№е·®- ";
@@ -926,7 +926,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ danish ] = "VariansP - " ;
         Text [ french ] = "VarP - " ;
         Text [ swedish ] = "VariansP - " ;
-        Text [ dutch ] = "Varianties -  " ;
+        Text [ dutch ] = "Varianties -" ;
         Text [ spanish ] = "Var2 -  " ;
         Text [ english_us ] = "VarP - " ;
         Text[ chinese_simplified ] = "ж–№е·® - ";
