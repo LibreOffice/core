@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-03-12 09:49:08 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ IMPL_LINK( StringInputDialog, OKHdl, Button *, EMPTYARG )
 //=========================================================================
 IMPL_LINK( StringInputDialog, NameHdl, Edit *, EMPTYARG )
 {
+/*
     // trim the strings
     String aName = m_aNameEdit.GetText();
     aName.EraseLeadingChars().EraseTrailingChars();
@@ -402,6 +403,7 @@ IMPL_LINK( StringInputDialog, NameHdl, Edit *, EMPTYARG )
         if ( m_aOKBtn.IsEnabled() )
             m_aOKBtn.Enable( FALSE );
     }
+*/
     return 0;
 }
 
@@ -979,8 +981,8 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                 }
             }
 
-            delete pMenu;
             delete pNewMenu;
+            delete pMenu;
             return;
         }
     }
