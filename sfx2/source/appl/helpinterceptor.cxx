@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
+ *  last change: $Author: pb $ $Date: 2001-10-17 10:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "helpinterceptor.hxx"
+#include "helpdispatch.hxx"
 #include "newhelp.hxx"
 #include "sfxuno.hxx"
 
@@ -184,17 +185,18 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     throw( RuntimeException )
 
 {
-    INetURLObject aObj( aURL.Complete );
-    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
-        addURL( aURL.Complete );
-
     Reference< XDispatch > xResult;
+    if ( m_xSlaveDispatcher.is() )
+        xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    if ( !xResult.is() && m_xSlaveDispatcher.is() )
-        xResult = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
-
-    if ( aTargetFrameName.getLength() > 0 || nSearchFlags )
-        m_pWindow->AddURLListener( aURL, xResult );
+    INetURLObject aObj( aURL.Complete );
+    sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+    if ( bHelpURL )
+    {
+        DBG_ASSERT( xResult.is(), "invalid dispatch" );
+        HelpDispatch_Impl* pHelpDispatch = new HelpDispatch_Impl( *this, xResult );
+        xResult = Reference< XDispatch >( static_cast< ::cppu::OWeakObject* >(pHelpDispatch), UNO_QUERY );
+    }
 
     return xResult;
 }
@@ -268,7 +270,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
-    aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://");
+    aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://*");
     return aURLList;;
 }
 

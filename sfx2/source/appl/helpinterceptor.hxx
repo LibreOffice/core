@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
+ *  last change: $Author: pb $ $Date: 2001-10-17 10:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 
 {
 private:
+friend class HelpDispatch_Impl;
+
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > m_xIntercepted;
 
@@ -129,7 +131,7 @@ private:
     ULONG                       m_nCurPos;
     String                      m_aCurrentURL;
 
-    void                    addURL( const String& rURL );
+    void                        addURL( const String& rURL );
 
 public:
     HelpInterceptor_Impl();
@@ -168,6 +170,7 @@ public:
     // extras
     void                    InitWaiter( OpenStatusListener_Impl* pListener, SfxHelpWindow_Impl* pWindow )
                                 { m_pOpenListener = pListener; m_pWindow = pWindow; }
+    SfxHelpWindow_Impl*     GetHelpWindow() const { return m_pWindow; }
 };
 
 // HelpListener_Impl -----------------------------------------------------
