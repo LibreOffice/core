@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:52:10 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,6 +608,33 @@ protected:
     void                            deleteInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
         // if createInterceptor was called for the given object the according interceptor will be removed
         // from the objects interceptor chain and released
+
+    /** checks all form controls belonging to our form for validity
+
+        If a form control supports the XValidatableFormComponent interface, this is used to determine
+        the validity of the control. If the interface is not supported, the control is supposed to be
+        valid.
+
+        @param _rFirstInvalidityExplanation
+            if the method returns <FALSE/> (i.e. if there is an invalid control), this string contains
+            the explanation for the invalidity, as obtained from the validator.
+
+        @param _rxFirstInvalidModel
+            if the method returns <FALSE/> (i.e. if there is an invalid control), this contains
+            the control model
+
+        @return
+            <TRUE/> if and only if all controls belonging to our form are valid
+    */
+    bool    checkFormComponentValidity(
+                ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation,
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& /* [out] */ _rxFirstInvalidModel
+            ) SAL_THROW(());
+
+    /** locates the control which belongs to a given model
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+            locateControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel ) SAL_THROW(());
 
     // in filter mode we do not listen for changes
     sal_Bool isListeningForChanges() const {return m_bDBConnection && !m_bFiltering && !isLocked();}
