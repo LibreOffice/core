@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 12:00:44 $
+ *  last change: $Author: aw $ $Date: 2001-04-19 16:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3482,20 +3482,32 @@ BOOL XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const 
 
 XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrModel* pModel ) const
 {
-    if( pModel )
+    // #85953# unique name only necessary when enabled
+    if(IsEnabled())
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
-                                                                XATTR_FILLFLOATTRANSPARENCE,
-                                                                &pModel->GetItemPool(),
-                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
-                                                                XFillFloatTransparenceItem::CompareValueFunc,
-                                                                RID_SVXSTR_TRASNGR0,
-                                                                NULL );
-
-        // if the given name is not valid, replace it!
-        if( aUniqueName != GetName() )
+        if( pModel )
         {
-            return new XFillFloatTransparenceItem( aUniqueName, GetValue(), bEnabled );
+            const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                    XATTR_FILLFLOATTRANSPARENCE,
+                                                                    &pModel->GetItemPool(),
+                                                                    pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                    XFillFloatTransparenceItem::CompareValueFunc,
+                                                                    RID_SVXSTR_TRASNGR0,
+                                                                    NULL );
+
+            // if the given name is not valid, replace it!
+            if( aUniqueName != GetName() )
+            {
+                return new XFillFloatTransparenceItem( aUniqueName, GetValue(), TRUE );
+            }
+        }
+    }
+    else
+    {
+        // #85953# if disabled, force name to empty string
+        if(GetName().Len())
+        {
+            return new XFillFloatTransparenceItem(String(), GetValue(), FALSE);
         }
     }
 
