@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:55:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,20 @@ void SbiRuntime::StepFIND( USHORT nOp1, USHORT nOp2 )
     PushVar( FindElement( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE ) );
 }
 
+// Search inside a class module (CM) to enable global search in time
+void SbiRuntime::StepFIND_CM( USHORT nOp1, USHORT nOp2 )
+{
+    if( !refLocals )
+        refLocals = new SbxArray;
+
+    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
+    if( pClassModuleObject )
+        pMod->SetFlag( SBX_GBLSEARCH );
+    PushVar( FindElement( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE ) );
+    if( pClassModuleObject )
+        pMod->ResetFlag( SBX_GBLSEARCH );
+}
+
 // Laden eines Objekt-Elements (+StringID+Typ)
 // Das Objekt liegt auf TOS
 
@@ -1005,7 +1019,7 @@ void SbiRuntime::StepLOCAL( USHORT nOp1, USHORT nOp2 )
 
 // Einrichten einer modulglobalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
+void SbiRuntime::StepPUBLIC_Impl( USHORT nOp1, USHORT nOp2, bool bUsedForClassModule )
 {
     String aName( pImg->GetString( nOp1 ) );
     SbxDataType t = (SbxDataType) nOp2;
@@ -1015,7 +1029,8 @@ void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
     if( p.Is() )
         pMod->Remove (p);
     SbProperty* pProp = pMod->GetProperty( aName, t );
-    pProp->SetFlag( SBX_PRIVATE );
+    if( !bUsedForClassModule )
+        pProp->SetFlag( SBX_PRIVATE );
     if( !bFlag )
         pMod->ResetFlag( SBX_NO_MODIFY );
     if( pProp )
@@ -1024,13 +1039,20 @@ void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
         // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
         pProp->SetFlag( SBX_NO_MODIFY);
     }
+}
 
+void SbiRuntime::StepPUBLIC( USHORT nOp1, USHORT nOp2 )
+{
+    StepPUBLIC_Impl( nOp1, nOp2, false );
 }
 
 // Einrichten einer globalen Variablen (+StringID+Typ)
 
 void SbiRuntime::StepGLOBAL( USHORT nOp1, USHORT nOp2 )
 {
+    if( pImg->GetFlag( SBIMG_CLASSMODULE ) )
+        StepPUBLIC_Impl( nOp1, nOp2, true );
+
     String aName( pImg->GetString( nOp1 ) );
     SbxDataType t = (SbxDataType) nOp2;
     BOOL bFlag = rBasic.IsSet( SBX_NO_MODIFY );
@@ -1047,7 +1069,6 @@ void SbiRuntime::StepGLOBAL( USHORT nOp1, USHORT nOp2 )
         // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
         p->SetFlag( SBX_NO_MODIFY);
     }
-
 }
 
 
