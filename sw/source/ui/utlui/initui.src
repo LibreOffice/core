@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ Resource RID_SW_SHELLRES
         TEXT [ norwegian ] = "(fix)" ;
         TEXT [ italian ] = "(fissa)" ;
         TEXT [ portuguese_brazilian ] = "(fix)" ;
-        TEXT [ portuguese ] = "(fixa)" ;
+        TEXT [ portuguese ] = "(fixo)" ;
         TEXT [ finnish ] = "(vakio)" ;
         TEXT [ danish ] = "(fast)" ;
         TEXT [ french ] = "(fixe)" ;
@@ -927,7 +927,7 @@ Resource RID_SW_SHELLRES
         TEXT [ norwegian ] = "Endret" ;
         TEXT [ italian ] = "Modifica" ;
         TEXT [ portuguese_brazilian ] = "Modificado" ;
-        TEXT [ portuguese ] = "Alteração" ;
+        TEXT [ portuguese ] = "Modificação" ;
         TEXT [ finnish ] = "Muokattu" ;
         TEXT [ danish ] = "Ændring" ;
         TEXT [ french ] = "Modification" ;
