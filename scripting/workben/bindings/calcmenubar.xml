@@ -240,7 +240,7 @@
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Script to ~Menu..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteEventBinding()" menu:label="Assign Script to ~Event..."/>
-     <menu:menuitem menu:id="script://Interactive.BeanShell" menu:label="Interactive ~Beanshell Scripting..."/>
+     <menu:menuitem menu:id="script://Interactive.BeanShell?location=user" menu:label="Interactive ~Beanshell Scripting..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshAllScripts()" menu:label="~Refresh All Scripts"/>
     </menu:menupopup>
    </menu:menu>
