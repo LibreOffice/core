@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xllink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 // (0x0017) EXTERNSHEET -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_EXTERNSHEET         = 0x0017;
-const sal_uInt16 EXC_EXTSH_EXTERNAL           = 0xFFFE;     /// Addins, DDE, OLE.
-const sal_uInt16 EXC_EXTSH_DELETED            = 0xFFFF;     /// Deleted 3D reference.
+const sal_uInt16 EXC_EXTSH_EXTERNAL         = 0xFFFE;     /// Addins, DDE, OLE.
+const sal_uInt16 EXC_EXTSH_DELETED          = 0xFFFF;     /// Deleted 3D reference.
 
 
 // (0x0018, 0x0218) NAME ------------------------------------------------------
