@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-10 15:50:32 $
+ *  last change: $Author: ka $ $Date: 2001-06-13 10:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -384,4 +387,50 @@ void Sound::SetSoundPath( const XubString& rSoundPath )
 const XubString& Sound::GetSoundPath()
 {
     return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Sound::IsSoundFile( const XubString& rSoundPath )
+{
+    BOOL bRet = FALSE;
+
+    if( rSoundPath.Len() )
+    {
+        INetURLObject   aSoundURL( rSoundPath );
+        String          aSoundName;
+
+        if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
+            aSoundName = aSoundURL.GetMainURL();
+        else if( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundPath, aSoundName ) )
+            aSoundName.Erase();
+
+        if( aSoundName.Len() )
+        {
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aSoundName, STREAM_READ );
+
+            if( pIStm )
+            {
+                sal_Char aData[ 12 ];
+
+                if( ( pIStm->Read( aData, 12 ) == 12 ) && !pIStm->GetError() )
+                {
+                    // check for WAV
+                    bRet = ( aData[ 0 ] == 'R' && aData[ 1 ] == 'I' && aData[ 2 ] == 'F' && aData[ 3 ] == 'F' &&
+                             aData[ 8 ] == 'W' && aData[ 9 ] == 'A' && aData[ 10 ] == 'V' && aData[ 11 ] == 'E' );
+                }
+
+                delete pIStm;
+            }
+
+            if( !bRet )
+            {
+                // check it the hard way
+                Sound aTestSound;
+                bRet = aTestSound.SetSoundName( rSoundPath );
+            }
+        }
+    }
+
+    return bRet;
 }
