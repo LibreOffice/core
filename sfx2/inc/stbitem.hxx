@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:46:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 #ifndef _SFXSTBITEM_HXX
 #define _SFXSTBITEM_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
+
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
 #endif
@@ -102,7 +110,7 @@ class CommandEvent;
 class MouseEvent;
 class UserDrawEvent;
 
-class SfxStatusBarControl: public svt::StatusbarController
+class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 {
     USHORT          nSlotId;
     USHORT          nId;
