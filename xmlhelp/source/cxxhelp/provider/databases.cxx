@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: abi $ $Date: 2002-02-05 13:31:30 $
+ *  last change: $Author: abi $ $Date: 2002-02-05 13:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,6 +531,7 @@ Databases::getCollator( const rtl::OUString& Language,
         rtl::OUString countryStr = country(Language);
         if( !countryStr.getLength() )
         {
+            // #97229# Workaround for wrong collatorfallback
             if( langStr.compareToAscii("de") == 0 )
                 countryStr = rtl::OUString::createFromAscii("DE");
             else if( langStr.compareToAscii("en") == 0 )
