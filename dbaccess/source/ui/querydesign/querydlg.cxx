@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:49:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,20 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
 
     sal_Bool bFull = sal_False;
     sal_Bool bOuter = sal_False;
+    Reference<XDatabaseMetaData> xMeta;
     try
     {
-        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        bFull = xMeta->supportsFullOuterJoins();
-        bOuter= xMeta->supportsOuterJoins();
+        xMeta = m_xConnection->getMetaData();
+        if ( xMeta.is() )
+            bFull = xMeta->supportsFullOuterJoins();
+    }
+    catch(SQLException&)
+    {
+    }
+    try
+    {
+        if ( xMeta.is() )
+            bOuter= xMeta->supportsOuterJoins();
     }
     catch(SQLException&)
     {
@@ -166,14 +175,14 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
         aLB_JoinType.Disable();
         m_pTableControl->Disable();
     }
-    else if ( !(bFull && bOuter) )
+    else if ( !bFull && !bOuter )
         aLB_JoinType.Disable();
     else
     {
         if ( !bFull )
             aLB_JoinType.RemoveEntry(3);
 
-        if ( !(bFull || bOuter) )
+        if ( !bOuter )
         {
             aLB_JoinType.RemoveEntry(0);
             aLB_JoinType.RemoveEntry(0);
