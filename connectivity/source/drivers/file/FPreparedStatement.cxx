@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 07:55:45 $
+ *  last change: $Author: oj $ $Date: 2001-07-25 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
 
-    (*m_aRow)[parameterIndex-1].setNull();
+    (*m_aRow)[parameterIndex].setNull();
 }
 // -------------------------------------------------------------------------
 
@@ -459,7 +459,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
     ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     if (parameterIndex < 1)
         throwInvalidIndexException(*this);
-    else if ((sal_Int32)(*m_aRow).size() < parameterIndex)
+    else if ((sal_Int32)(*m_aRow).size() <= parameterIndex)
         (*m_aRow).resize(parameterIndex+1);
 }
 // -----------------------------------------------------------------------------
