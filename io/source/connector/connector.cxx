@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 09:39:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace stoc_connector
     Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnectionDescription )
         throw( NoConnectException, ConnectionSetupException, RuntimeException)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString tmp = OUStringToOString(sConnectionDescription, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("connector %s\n", tmp.getStr());
 #endif
@@ -211,7 +211,7 @@ namespace stoc_connector
                 OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector."));
                 delegatee += aDesc.getName();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
                 OSL_TRACE("connector: trying to get service %s\n", tmp.getStr());
 #endif
