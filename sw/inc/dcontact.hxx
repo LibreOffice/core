@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,8 +492,10 @@ class SwDrawContact : public SwContact
         virtual ~SwDrawContact();
 
         // OD 2004-03-29 #i26791#
-        virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj = 0L ) const;
-        virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj = 0L );
+        // --> OD 2005-01-06 #i30669# - no default value for parameter <_pSdrObj>
+        virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const;
+        virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj );
+        // <--
 
         // OD 2004-04-01 #i26791#
         virtual const SdrObject* GetMaster() const;
