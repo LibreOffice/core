@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 17:00:14 $
+ *  last change: $Author: jb $ $Date: 2001-12-07 10:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,18 +293,22 @@ namespace configmgr
     }
 //  // -------------------------- ValueNode implementation --------------------------
 
-    void Subtree::forEachChild(NodeAction& anAction) const {
+    void Subtree::forEachChild(NodeAction& anAction) const
+    {
         for(ChildList::const_iterator it = m_aChildren.GetSet().begin();
             it != m_aChildren.GetSet().end();
             ++it)
             (**it).dispatch(anAction);
     }
 
-    void Subtree::forEachChild(NodeModification& anAction) {
-        for(ChildList::iterator it = m_aChildren.GetSet().begin();
-            it != m_aChildren.GetSet().end();
-            ++it)
-            (**it).dispatch(anAction);
+    void Subtree::forEachChild(NodeModification& anAction)
+    {
+        ChildList::iterator it = m_aChildren.GetSet().begin();
+        while( it != m_aChildren.GetSet().end() )
+        {
+            // modification-safe iteration
+            (**it++).dispatch(anAction);
+        }
       }
 
 //  // -------------------------- ValueNode implementation --------------------------
