@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup_main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 12:40:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@ SetupApp::SetupApp()
     GetVersionEx( &sInfoOS );
 
     m_nOSVersion    = sInfoOS.dwMajorVersion;
+    m_nMinorVersion = sInfoOS.dwMinorVersion;
     m_bIsWin9x      = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
+    m_bNeedReboot   = false;
 }
 
 //--------------------------------------------------------------------------

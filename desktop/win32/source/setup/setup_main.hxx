@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup_main.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 12:41:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@ class SetupApp
 {
     UINT            m_uiRet;
     DWORD           m_nOSVersion;
-    boolean         m_bIsWin9x;
+    DWORD           m_nMinorVersion;
+    boolean         m_bIsWin9x      : 1;
+    boolean         m_bNeedReboot   : 1;
 
 public:
                     SetupApp();
@@ -86,6 +88,10 @@ public:
     void            SetError( UINT nErr ) { m_uiRet = nErr; }
     boolean         IsWin9x() const { return m_bIsWin9x; }
     DWORD           GetOSVersion() const { return m_nOSVersion; }
+    DWORD           GetMinorVersion() const { return m_nMinorVersion; }
+
+    void            SetRebootNeeded( boolean bNeedReboot ) { m_bNeedReboot = bNeedReboot; }
+    boolean         NeedReboot() const { return m_bNeedReboot; }
 };
 
 SetupApp* Create_SetupAppA();
