@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2001-05-03 12:22:28 $
+#   last change: $Author: hr $ $Date: 2001-05-03 13:46:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.5 $ ';
+$id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -171,15 +171,14 @@ sub do_dos {
 
 sub do_hedabu {
     # just collect all hedabu files, actual filtering is done later
-    my ($from, $to);
     my $line = shift;
+    my ($from, $to);
+    my @globbed_files = ();
 
     $line = expand_macros($line);
-    if ( $line =~ /[\*\?\[\]]/ ) {
-        print_error("can't use wildcards with hedabu: $line", 0, 0);
-    }
     ($from, $to) = split(' ', $line);
-    push( @hedabu_list, [ $from, $to ]);
+
+    push( @hedabu_list, @{glob_line($from, $to)});
 }
 
 sub do_mkdir {
@@ -221,7 +220,7 @@ sub parse_options {
 }
 
 sub init_globals {
-    my ($dllsuffix, $gui, $inpath, $offenv, $outpath, $solarversion, $updminor);
+    my ($dllsuffix, $gui, $inpath, $offenv, $outpath, $solarversion, $upd, $updminor);
     my $ext;
     ($module, $base_dir, $dlst_file) =  get_base();
     print "Module=$module, Base_Diri=$base_dir, d.lst=$dlst_file\n" if $is_debug;
@@ -238,6 +237,7 @@ sub init_globals {
     $offenv         = $ENV{OFFENV_PATH};
     $outpath        = $ENV{OUTPATH};
     $solarversion   = $ENV{SOLARVERSION};
+    $upd            = $ENV{UPD};
     $updminor       = $ENV{UPDMINOR};
 
     # product build?
@@ -261,7 +261,6 @@ sub init_globals {
     # %GUIBASE%
     # %SDK%
     # %SOLARVER%
-    # %UPD%
 
     # valid macros
     @macros = (
@@ -273,7 +272,8 @@ sub init_globals {
                 [ '%COMMON_OUTDIR%',    $common_outdir  ],
                 [ '%DLLSUFFIX%',        $dllsuffix      ],
                 [ '%GUI%',              $gui            ],
-                [ '%OUTPATH%',          $outpath        ]
+                [ '%OUTPATH%',          $outpath        ],
+                [ '%UPD%',              $upd            ]
               );
 }
 
@@ -349,20 +349,18 @@ sub walk_action_data {
     # all actions have to be excuted relative to the prj directory
     chdir("$base_dir/prj");
     # dispatch depending on action type
-    for ($i=0; $i <= $#action_data; $i++) {
+    for (my $i=0; $i <= $#action_data; $i++) {
             &{"do_".$action_data[$i][0]}($action_data[$i][1]);
     }
 }
 
-sub glob_and_copy {
+sub glob_line {
     my $from = shift;
     my $to = shift;
-    my $touch = shift;
-    my $to_dir;
+    my $to_dir = shift;
     my $replace = 0;
+    my @globbed_files = ();
 
-    # if $to contains wildcards, replace wildcards with filename
-    # otherwise consider it as directory and attach filename
     if ( $to =~ /[\*\?\[\]]/ ) {
         my $to_fname;
         ($to_fname, $to_dir) = fileparse($to);
@@ -377,13 +375,26 @@ sub glob_and_copy {
         foreach $file ( @file_list ) {
             my ($fname, $dir) = fileparse($file);
             my $copy = ($replace) ? $to_dir . $fname : $to . '/' . $fname;
-            copy_if_newer($file, $copy, $touch)
-                    ? $files_copied++ : $files_unchanged++;
+            push(@globbed_files, [$file, $copy]);
         }
     }
     else {
         # no globbing but renaming possible
-        copy_if_newer($from, $to, $touch)
+        push(@globbed_files, [$from, $to]);
+    }
+    return \@globbed_files;
+}
+
+
+sub glob_and_copy {
+    my $from = shift;
+    my $to = shift;
+    my $touch = shift;
+
+    my @copy_files = @{glob_line($from, $to)};
+
+    for (my $i = 0; $i <= $#copy_files; $i++) {
+        copy_if_newer($copy_files[$i][0], $copy_files[$i][1], $touch)
                     ? $files_copied++ : $files_unchanged++;
     }
 }
@@ -489,17 +500,17 @@ sub push_default_actions {
 }
 
 sub walk_hedabu_list {
-    my ($i, @hedabu_headers);
+    my (@hedabu_headers);
     return if $#hedabu_list == -1;
 
     # create hash with all hedabu header names
-    for ($i = 0; $i <= $#hedabu_list; $i++) {
+    for (my $i = 0; $i <= $#hedabu_list; $i++) {
         my @field = split('/', $hedabu_list[$i][0]);
         push (@hedabu_headers, $field[-1]);
     }
 
     # now stream all hedabu headers through hedabu filter
-    for ($i = 0; $i <= $#hedabu_list; $i++) {
+    for (my $i = 0; $i <= $#hedabu_list; $i++) {
         hedabu_if_newer($hedabu_list[$i][0], $hedabu_list[$i][1], \@hedabu_headers)
                 ? $files_copied++ : $files_unchanged++;
     }
