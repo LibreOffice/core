@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:01:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
+BOOL ScGridWindow::HasPageFieldData( SCCOL nCol, SCROW nRow ) const
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
@@ -112,11 +112,19 @@ BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
             BOOL bIsDataLayout = FALSE;
             String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( aFieldName.Len() && !bIsDataLayout )
-            {
-                DoPageFieldMenue( nCol, nRow );
                 return TRUE;
-            }
         }
+    }
+    return FALSE;
+}
+
+// private method for mouse button handling
+BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
+{
+    if ( HasPageFieldData( nCol, nRow ) )
+    {
+        DoPageFieldMenue( nCol, nRow );
+        return TRUE;
     }
     return FALSE;
 }
