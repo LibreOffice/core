@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 10:57:54 $
+ *  last change: $Author: kz $ $Date: 2000-10-31 16:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+typedef connectivity::sdbcx::OTableDescriptor_BASE __OAdabas_BASE99;
 
 // -------------------------------------------------------------------------
 OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
@@ -388,7 +390,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
+    if ( __OAdabas_BASE99::rBHelper.bDisposed)
                 throw DisposedException();
 
     if(!isNew())
@@ -417,7 +419,7 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
 void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
+    if ( __OAdabas_BASE99::rBHelper.bDisposed)
                 throw DisposedException();
 
     if(!isNew())
@@ -481,7 +483,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
+    if ( __OAdabas_BASE99::rBHelper.bDisposed)
                 throw DisposedException();
 
         Reference< XPropertySet > xOld;
