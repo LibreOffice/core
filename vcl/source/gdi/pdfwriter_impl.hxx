@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:14 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,13 +238,6 @@ public:
         sal_Int32   m_nObject;
     };
 
-    struct HatchEmit
-    {
-        Hatch       m_aHatch;
-        sal_Int32   m_nObject;
-        MapMode     m_aMapMode;
-    };
-
     // for bitmap tilings (drawWallpaper)
     struct BitmapPatternEmit
     {
@@ -328,9 +321,6 @@ private:
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */
     std::list< GradientEmit >       m_aGradients;
-    /*  contains hatches to be emitted for the whole document
-     */
-    std::list< HatchEmit >          m_aHatches;
     /* contains bitmap tiling patterns */
     std::list< BitmapPatternEmit >  m_aTilings;
     std::list< TransparencyEmit >   m_aTransparentObjects;
@@ -416,6 +406,8 @@ private:
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
     void drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines );
+    void drawRelief( SalLayout& rLayout, const String& rText, bool bTextLines );
+    void drawShadow( SalLayout& rLayout, const String& rText, bool bTextLines );
 
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
@@ -442,15 +434,10 @@ private:
     bool writeGradientFunction( GradientEmit& rObject );
     /* creates a GradientEmit and returns its object number */
     sal_Int32 createGradient(  const Gradient& rGradient, const Size& rSize );
-    /* creates a HatchEmit and returns its object number */
-    sal_Int32 createHatch(  const Hatch& rHatch );
-
     /* writes all tilings */
     bool emitTilings();
     /* writes all gradient patterns */
     bool emitGradients();
-    /* writes all hatch patterns */
-    bool emitHatches();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuiltinFont( ImplFontData* pFont );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
