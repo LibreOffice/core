@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:52:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@
 // --> OD 2004-08-10 #i28749#
 #ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
 #include <com/sun/star/text/PositionLayoutDir.hpp>
+#endif
+// <--
+// --> OD 2005-03-09 #i44559#
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
 #endif
 // <--
 
@@ -344,15 +349,14 @@ void SwAnchoredDrawObject::MakeObjPos()
         // <--
         // --> OD 2004-09-29 #117975# - perform conversion of positioning
         // attributes only for 'master' drawing objects
+        // --> OD 2005-03-11 #i44334#, #i44681# - check, if positioning
+        // attributes already have been set.
         if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
-             GetFrmFmt().GetPositionLayoutDir() ==
-                    com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
-        // <--
+             !static_cast<SwDrawFrmFmt&>(GetFrmFmt()).IsPosAttrSet() )
         {
-            // --> OD 2004-10-19 #i35798# - set positioning attributes
             _SetPositioningAttr();
-            // <--
         }
+        // <--
     }
     // <--
 
@@ -602,36 +606,50 @@ void SwAnchoredDrawObject::InvalidateObjPos()
     {
         mbValidPos = false;
 
-        // --> OD 2004-11-22 #118547# - notify anchor frame of as-character
-        // anchored object, because its positioned by the format of its anchor frame.
-        if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+        // --> OD 2005-03-08 #i44339# - check, if anchor frame exists.
+        if ( GetAnchorFrm() )
         {
-            AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
-        }
-        // <--
+            // --> OD 2004-11-22 #118547# - notify anchor frame of as-character
+            // anchored object, because its positioned by the format of its anchor frame.
+            // --> OD 2005-03-09 #i44559# - assure, that text hint is already
+            // existing in the text frame
+            if ( GetAnchorFrm()->ISA(SwTxtFrm) &&
+                 GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            {
+                SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
+                if ( pAnchorTxtFrm->GetTxtNode()->GetpSwpHints() &&
+                     pAnchorTxtFrm->CalcFlyPos( &GetFrmFmt() ) != STRING_LEN )
+                {
+                    AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
+                }
+            }
+            // <--
 
-        SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
-        _InvalidatePage( pPageFrm );
-        // --> OD 2004-08-12 #i32270# - also invalidate page frame, at which the
-        // drawing object is registered at.
-        SwPageFrm* pPageFrmRegisteredAt = GetPageFrm();
-        if ( pPageFrmRegisteredAt &&
-             pPageFrmRegisteredAt != pPageFrm )
-        {
-            _InvalidatePage( pPageFrmRegisteredAt );
+            SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
+            _InvalidatePage( pPageFrm );
+
+            // --> OD 2004-08-12 #i32270# - also invalidate page frame, at which the
+            // drawing object is registered at.
+            SwPageFrm* pPageFrmRegisteredAt = GetPageFrm();
+            if ( pPageFrmRegisteredAt &&
+                 pPageFrmRegisteredAt != pPageFrm )
+            {
+                _InvalidatePage( pPageFrmRegisteredAt );
+            }
+            // <--
+            // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+            // have to be checked.
+            SwPageFrm* pPageFrmOfAnchor = FindPageFrmOfAnchor();
+            if ( pPageFrmOfAnchor &&
+                 pPageFrmOfAnchor != pPageFrm &&
+                 pPageFrmOfAnchor != pPageFrmRegisteredAt )
+            // <--
+            {
+                _InvalidatePage( pPageFrmOfAnchor );
+            }
         }
         // <--
-        // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
-        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
-        // have to be checked.
-        SwPageFrm* pPageFrmOfAnchor = FindPageFrmOfAnchor();
-        if ( pPageFrmOfAnchor &&
-             pPageFrmOfAnchor != pPageFrm &&
-             pPageFrmOfAnchor != pPageFrmRegisteredAt )
-        // <--
-        {
-            _InvalidatePage( pPageFrmOfAnchor );
-        }
     }
 }
 
@@ -755,31 +773,38 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         SwTwips nHoriPos = aObjRect.Left();
         SwTwips nVertPos = aObjRect.Top();
-        SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt().GetLayoutDir();
-        switch ( eLayoutDir )
+        // --> OD 2005-03-10 #i44334#, #i44681#
+        // perform conversion only if position is in horizontal-left-to-right-layout.
+        if ( GetFrmFmt().GetPositionLayoutDir() ==
+                com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
         {
-            case SwFrmFmt::HORI_L2R:
+            SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt().GetLayoutDir();
+            switch ( eLayoutDir )
             {
-                // nothing to do
-            }
-            break;
-            case SwFrmFmt::HORI_R2L:
-            {
-                nHoriPos = -aObjRect.Left() - aObjRect.Width();
-            }
-            break;
-            case SwFrmFmt::VERT_R2L:
-            {
-                nHoriPos = aObjRect.Top();
-                nVertPos = -aObjRect.Left() - aObjRect.Width();
-            }
-            break;
-            default:
-            {
-                ASSERT( false,
-                        "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
+                case SwFrmFmt::HORI_L2R:
+                {
+                    // nothing to do
+                }
+                break;
+                case SwFrmFmt::HORI_R2L:
+                {
+                    nHoriPos = -aObjRect.Left() - aObjRect.Width();
+                }
+                break;
+                case SwFrmFmt::VERT_R2L:
+                {
+                    nHoriPos = aObjRect.Top();
+                    nVertPos = -aObjRect.Left() - aObjRect.Width();
+                }
+                break;
+                default:
+                {
+                    ASSERT( false,
+                            "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
+                }
             }
         }
+        // <--
 
         const SwFmtHoriOrient& rHori = GetFrmFmt().GetHoriOrient();
         GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriPos,
