@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:20 $
+ *  last change: $Author: jp $ $Date: 2001-05-28 16:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>
+#endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
 #endif
 
 // tippt sich schneller
@@ -329,10 +332,11 @@ SwCalc::SwCalc( SwDoc& rD )
                                         RES_CHRATR_LANGUAGE )).GetLanguage();
     if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) )
     {
-        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
-        pCharClass = new CharClass( aLocale );
-        pLclData = new LocaleDataWrapper(
-                        ::comphelper::getProcessServiceFactory(), aLocale );
+        STAR_NMSPC::lang::Locale aLocale( SvxCreateLocale( eLang ));
+        STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF(
+                            ::comphelper::getProcessServiceFactory() );
+        pCharClass = new CharClass( xMSF, aLocale );
+        pLclData = new LocaleDataWrapper( xMSF, aLocale );
     }
 
     sCurrSym = pLclData->getCurrSymbol();

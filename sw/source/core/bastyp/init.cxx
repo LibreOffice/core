@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 15:19:22 $
+ *  last change: $Author: jp $ $Date: 2001-05-28 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ void _InitCore()
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
-    pAppCharClass = new CharClass( rLcl );
+    pAppCharClass = new CharClass( xMSF, rLcl );
     pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
