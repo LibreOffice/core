@@ -4,24 +4,14 @@
 //#include "chartview/servicenames_charttypes.hxx"
 //#include "chartview/servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
-#include "macros.hxx"
 #include "Linear3DTransformation.hxx"
 #include "ViewDefines.hxx"
 #include "CategoryPositionHelper.hxx"
 #include "TransformationHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 
-#ifndef _SV_GEN_HXX
-#include <tools/gen.hxx>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
-#endif
-#ifndef _SVX_UNOPRNMS_HXX
-#include <svx/unoprnms.hxx>
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -57,14 +47,14 @@ public:
 
     void                updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
 
-    double              getStartCategoryIndex() const {
+    sal_Int32           getStartCategoryIndex() const {
                             //first category (index 0) matches with real number 1.0
                             sal_Int32 nStart = static_cast<sal_Int32>(getLogicMinX() - 0.5);
                             if( nStart < 0 )
                                 nStart = 0;
                             return nStart;
                         }
-    double              getEndCategoryIndex() const  {
+    sal_Int32           getEndCategoryIndex() const  {
                             //first category (index 0) matches with real number 1.0
                             sal_Int32 nEnd = static_cast<sal_Int32>(getLogicMaxX() - 0.5);
                             if( nEnd < 0 )
@@ -310,8 +300,8 @@ void BarChart::createShapes()
     double fLogicBaseWidth = m_pPosHelper->getSlotWidth();
 
     //(@todo maybe different iteration for breaks in axis ?)
-    sal_Int32 nStartCategoryIndex = static_cast<sal_Int32>(m_pPosHelper->getStartCategoryIndex()); // inclusive
-    sal_Int32 nEndCategoryIndex   = static_cast<sal_Int32>(m_pPosHelper->getEndCategoryIndex()); //inclusive
+    sal_Int32 nStartCategoryIndex = m_pPosHelper->getStartCategoryIndex(); // inclusive
+    sal_Int32 nEndCategoryIndex   = m_pPosHelper->getEndCategoryIndex(); //inclusive
 //=============================================================================
     //iterate through all shown categories
     for( sal_Int32 nCatIndex = nStartCategoryIndex; nCatIndex < nEndCategoryIndex; nCatIndex++ )
