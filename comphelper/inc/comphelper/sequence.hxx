@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:28:36 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 12:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ namespace comphelper
     {
         sal_uInt32 nLength = _rSeq.getLength();
 
-        OSL_ENSURE(0 <= _nPos && _nPos < nLength, "invalid index");
+        OSL_ENSURE(0 <= _nPos && (sal_uInt32)_nPos < nLength, "invalid index");
 
-        for(int i = _nPos+1; i < nLength; ++i)
+        for (sal_uInt32 i = (sal_uInt32)_nPos + 1; i < nLength; ++i)
         {
             _rSeq[i-1] = _rSeq[i];
         }
