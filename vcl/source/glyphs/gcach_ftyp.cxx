@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.34 $
- *  last change: $Author: hdu $ $Date: 2001-05-09 10:02:59 $
+ *  $Revision: 1.35 $
+ *  last change: $Author: hdu $ $Date: 2001-05-10 12:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,8 +456,11 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
         if( FT_IS_SFNT( maFaceFT ) )
             aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
-        else
-            aChar &= 0x00FF;    // PS font symbol mapping
+        else {
+            if( (aChar&0xFF00) == 0xF000)
+                aChar &= 0x00FF;    // PS font symbol mapping
+            return (aChar<256) ? aChar : 0;
+        }
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
 
