@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-29 12:58:11 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-06 18:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ throw( RuntimeException )
         if ( sal_False == ( a >>= xInterface ) )
         {
             throw RuntimeException(
-                OUSTR( "ScriptRuntimeManager::GetScriptRuntime: could not obtain ScriptRuntimeForJava singleton" ),
+                sinfo->getLanguage().concat( OUSTR( " runtime support is not installed for this language" ) ),
                 Reference< XInterface >() );
         }
         validateXRef( xInterface,
