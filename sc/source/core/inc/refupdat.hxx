@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refupdat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 class ScDocument;
 class ScBigRange;
 struct ComplRefData;
+class ScAddress;
+class ScRange;
 
 enum ScRefUpdateRes {
     UR_NOTHING  = 0,        // keine Anpassungen
@@ -79,11 +81,11 @@ class ScRefUpdate
 public:
     static ScRefUpdateRes Update
         ( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                            USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                            USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                            short nDx, short nDy, short nDz,
-                            USHORT& theCol1, USHORT& theRow1, USHORT& theTab1,
-                            USHORT& theCol2, USHORT& theRow2, USHORT& theTab2 );
+                            SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                            SCCOL& theCol1, SCROW& theRow1, SCTAB& theTab1,
+                            SCCOL& theCol2, SCROW& theRow2, SCTAB& theTab2 );
 
     static ScRefUpdateRes Update( UpdateRefMode eUpdateRefMode,
                                 const ScBigRange& rWhere,
@@ -93,10 +95,10 @@ public:
     static ScRefUpdateRes Update( ScDocument* pDoc,
                                   UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rPos, const ScRange& rRange,
-                                  short nDx, short nDy, short nDz,
+                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   ComplRefData& rRef );
     static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
-                                short nDx, short nDy, short nDz,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                 ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute );
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                                 ComplRefData& rRef );
@@ -104,14 +106,14 @@ public:
     static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest,
                                 ComplRefData& rRef );
-    static void DoTranspose( short& rCol, short& rRow, short& rTab, ScDocument* pDoc,
+    static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
     static ScRefUpdateRes UpdateGrow(
-                                const ScRange& rArea, USHORT nGrowX, USHORT nGrowY,
+                                const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                 ComplRefData& rRef );
 
-    static ScRefUpdateRes DoGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY,
+    static ScRefUpdateRes DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                 ScRange& rRef );
 };
 
