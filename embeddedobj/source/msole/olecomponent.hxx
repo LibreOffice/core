@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:43:18 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ public:
 
     // ==== Initialization ==================================================
     void LoadEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
+
+    void CreateObjectFromClipboard();
 
     void CreateNewEmbeddedObject( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeqCLSID );
 
