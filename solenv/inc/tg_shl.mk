@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:47:48 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:39:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -274,14 +274,14 @@ SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)\"
 .IF "$(SHL$(TNR)RES)"!=""
 SHL$(TNR)RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL$(TNR)RES))
 SHL$(TNR)ALLRES+=$(SHL$(TNR)RES)
-SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
+LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 .ENDIF			# "$(SHL$(TNR)RES)"!=""
 .ENDIF
 
 .IF "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 SHL$(TNR)DEFAULTRES*=$(MISC)$/$(SHL$(TNR)TARGET)_def.res
 SHL$(TNR)ALLRES+=$(SHL$(TNR)DEFAULTRES)
-SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
+LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
@@ -351,9 +351,9 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
+    +$(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+    +$(TYPE) $(SHL$(TNR)ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -378,7 +378,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
         $(STDSHL) $(STDSHL$(TNR)) \
-        $(SHL$(TNR)LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -392,7 +392,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
         $(STDSHL) $(STDSHL$(TNR))                           \
-        $(SHL$(TNR)LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -408,7 +408,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)STDLIBS) \
         $(STDSHL) $(STDSHL$(TNR)) \
-        $(SHL$(TNR)LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
