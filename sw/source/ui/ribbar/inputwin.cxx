@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 15:29:53 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, sal_False ));
     SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, sal_False  ));
     SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, sal_False  ));
+
+    SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
+    SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
     Size aSize = GetSizePixel();
@@ -345,10 +348,7 @@ static const char * __READONLY_DATA aStrArr[] = {
     return 0;
 }
 
-//==================================================================
-
-
-void __EXPORT SwInputWindow::Click( )
+IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, pToolBox )
 {
     USHORT nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -360,6 +360,20 @@ void __EXPORT SwInputWindow::Click( )
             Point aPt(aBL.X(), aBL.Y());
             aPopMenu.Execute( this, aPt );
         }
+    }
+
+    return TRUE;
+}
+
+//==================================================================
+
+
+void __EXPORT SwInputWindow::Click( )
+{
+    USHORT nCurID = GetCurItemId();
+    EndSelection(); // setzt CurItemId zurueck !
+    switch ( nCurID )
+    {
         break;
         case FN_FORMULA_CANCEL:
         {
