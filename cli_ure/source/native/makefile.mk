@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:20 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:05:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,45 @@ USE_DEFFILE = TRUE
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
+use_shl_versions=
+
+.IF "$(USE_SHELL)"!="4nt"
+ECHOQUOTE='
+.ELSE
+ECHOQUOTE=
+.ENDIF
+
 .IF "$(BUILD_FOR_CLI)" != ""
+
+#!!! Always change version if code has changed. Provide a publisher
+#policy assembly!!!
+ASSEMBLY_VERSION="1.0.0.0"
+
+ASSEMBLY_KEY="$(BIN)$/cliuno.snk"
+
+ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_cppuhelper.cxx
+
+ALLTAR : \
+    $(ASSEMBLY_ATTRIBUTES)
+
+ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
+
+$(ASSEMBLY_ATTRIBUTES) .PHONY:
+    ECHO $(ASSEMBLY_KEY_X)
+    $(GNUCOPY) -p assembly.cxx $@
+    +echo $(ECHOQUOTE) \
+    [assembly:System::Reflection::AssemblyVersion( $(ASSEMBLY_VERSION) )]; $(ECHOQUOTE) \
+    >> $(OUT)$/misc$/assembly_cppuhelper.cxx	
+    +echo $(ECHOQUOTE) \
+    [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
+    >> $(OUT)$/misc$/assembly_cppuhelper.cxx
+
+
+LINKFLAGS += /delayload:cppuhelper3MSC.dll \
+             /delayload:cppu3.dll \
+             /delayload:sal3.dll
+
+UWINAPILIB=
 
 UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP = $(UNOUCRRDB)
@@ -89,16 +127,20 @@ UNOTYPES = \
 CFLAGS += -clr -AI $(OUT)$/bin
 
 SLOFILES = \
-        $(SLO)$/native_bootstrap.obj
+        $(SLO)$/native_bootstrap.obj \
+    $(SLO)$/assembly_cppuhelper.obj
+
 
 SHL1OBJS = $(SLOFILES)
 
 SHL1TARGET = $(TARGET)
 
 SHL1STDLIBS = \
-    $(CPPUHELPERLIB)	\
+    $(CPPUHELPERLIB) \
     $(CPPULIB)		\
     $(SALLIB)		\
+    delayimp.lib \
+    advapi32.lib \
     mscoree.lib
 
 SHL1VERSIONMAP = msvc.map
