@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-04 09:20:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,196 +58,105 @@
  *
  *
  ************************************************************************/
+
 package com.sun.star.comp.loader;
 
-import com.sun.star.lib.sandbox.ClassContext;
-import com.sun.star.lib.sandbox.ClassContextProxy;
-import com.sun.star.lib.sandbox.Resource;
-import com.sun.star.lib.sandbox.ResourceProxy;
+import com.sun.star.lib.util.WeakMap;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.StringTokenizer;
+import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 
-public class RegistrationClassFinder {
-    final static boolean DEBUG = false;
-
-       protected ClassContext   m_context       = null;
-    protected String        m_locationUrl   = null;
-    protected String        m_manifest      = null;
-    protected String        m_className     = null;
-
-    public RegistrationClassFinder( String locationUrl )
-        throws  java.io.IOException,
-                java.net.MalformedURLException
+final class RegistrationClassFinder {
+    public static Class find(String locationUrl)
+        throws ClassNotFoundException, IOException
     {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + locationUrl);
+        synchronized (map) {
+            Class c = (Class) WeakMap.getValue(map.get(locationUrl));
+            if (c != null) {
+                return c;
+            }
+        }
+        URL url = new URL(locationUrl);
+        checkAccess(url);
+        String name = null;
+        Manifest mf = new JarInputStream(url.openStream()).getManifest();
+        if (mf != null) {
+            name = mf.getMainAttributes().getValue("RegistrationClassName");
+        }
+        if (name == null) {
+            return null;
+        }
+        Class c = new URLClassLoader(new URL[] { url }).loadClass(name);
+        synchronized (map) {
+            Class c2 = (Class) WeakMap.getValue(map.get(locationUrl));
+            if (c2 != null) {
+                return c2;
+            }
+            map.put(locationUrl, c);
+        }
+        return c;
+    }
 
-        m_locationUrl = locationUrl;
+    private RegistrationClassFinder() {} // do not instantiate
 
-        if(locationUrl.endsWith(".jar")) {
-            // The class loader is to be regarded as secure. Therefore the security manager
-            // should not restrict the execution of Java components.
-            m_context = ClassContextProxy.create(new java.net.URL(m_locationUrl), null, null, true);
-            m_manifest = locationUrl + "/META-INF/MANIFEST.MF";
+    private static void checkAccess(URL url) throws ClassNotFoundException {
+        // The system property com.sun.star.comp.loader.CPLD_ACCESSPATH was
+        // introduced as a hack to restrict which UNO components can be
+        // instantiated.  It seems to be unused nowadays, and should probably be
+        // replaced by the native Java security features, anyway.
+        if (accessPath != null) {
+            if (!url.getProtocol().equals("file")) {
+                throw new ClassNotFoundException(
+                    "Access restriction: <" + url + "> is not a file URL");
+            }
+            String p;
+            try {
+                p = new File(url.getFile()).getCanonicalPath();
+            } catch (IOException e) {
+                throw new ClassNotFoundException(
+                    "Access restriction: <" + url + "> is bad: " + e);
+            }
+            for (int i = 0; i < accessPath.length; ++i) {
+                String p2 = accessPath[i];
+                if (p.startsWith(p2) && p.length() > p2.length()
+                    && (p2.charAt(p2.length() - 1) == File.separatorChar
+                        || p.charAt(p2.length()) == File.separatorChar))
+                {
+                    return;
+                }
+            }
+            throw new ClassNotFoundException(
+                "Access restriction: <" + url + "> is restricted");
         }
     }
 
-    private static String s_accessPath[];
-    private static boolean s_bInit = false;
+    private static final WeakMap map = new WeakMap();
 
-    private final static boolean checkAccessPath( java.net.URL url )
-    {
-        // init access path
-        if (! s_bInit)
-        {
-            String accessPath[] = null;
-
-            String env = System.getProperty( "com.sun.star.comp.loader.CPLD_ACCESSPATH" );
-            if (env != null)
-            {
-                int nPos = 0;
-                java.util.StringTokenizer tokens = new java.util.StringTokenizer( env, ";" );
-                accessPath = new String[ tokens.countTokens() ];
-
-                try
-                {
-                    while (tokens.hasMoreTokens())
-                    {
-                        try
-                        {
-                            accessPath[ nPos ] =
-                                (new java.io.File( tokens.nextToken() )).getCanonicalPath();
-                            ++nPos;
-                        }
-                        catch (java.io.IOException exc)
-                        {
-                        }
-                    }
-                }
-                catch (java.util.NoSuchElementException exc)
-                {
-                }
-
-                if (nPos != accessPath.length)
-                {
-                    // realloc accessPath to nPos
-                    String ar[] = new String[ nPos ];
-                    System.arraycopy( accessPath, 0, ar, 0, nPos );
-                    accessPath = ar;
-                }
+    private static final String[] accessPath;
+    static {
+        String[] ap = null;
+        String p = System.getProperty(
+            "com.sun.star.comp.loader.CPLD_ACCESSPATH");
+        if (p != null) {
+            StringTokenizer t = new StringTokenizer(p, ";");
+            ap = new String[t.countTokens()];
+            int i = 0;
+            while (t.hasMoreTokens()) {
+                try {
+                    ap[i] = new File(t.nextToken()).getCanonicalPath();
+                    ++i;
+                } catch (IOException e) {}
             }
-
-            s_accessPath = accessPath;
-            s_bInit = true;
-
-            if (DEBUG && s_accessPath != null)
-            {
-                System.err.print( "> CPLD_ACCESSPATH: " );
-                for ( int nPos = 0; nPos < s_accessPath.length; ++nPos )
-                {
-                    System.err.print( "\"" + s_accessPath[ nPos ] + "\" " );
-                }
-                System.err.println();
+            if (i != ap.length) {
+                String[] ap2 = new String[i];
+                System.arraycopy(ap, 0, ap2, 0, i);
+                ap = ap2;
             }
         }
-
-        if (s_accessPath == null)
-            return true; // no CPLD_ACCESSPATH set
-
-        if (! url.getProtocol().equals( "file" ))
-        {
-            if (DEBUG)
-                System.err.println( "> \"" + url.toExternalForm() + "\" is no file url!" );
-            return false;
-        }
-
-        String surl;
-
-        try
-        {
-            surl = (new java.io.File( url.getFile() )).getCanonicalPath();
-        }
-        catch (java.io.IOException exc)
-        {
-            if (DEBUG)
-                System.err.println( "> \"" + url.toExternalForm() + "\" cannot be resolved!" );
-            return false;
-        }
-
-        if (DEBUG)
-            System.err.print( "> java loader looking up: \"" + surl + "\"..." );
-
-        // check if jar is in access path
-        for ( int nPos = 0; nPos < s_accessPath.length; ++nPos )
-        {
-            String path = s_accessPath[ nPos ];
-            if (0 == surl.indexOf( path ) &&
-                surl.length() > path.length() &&
-                (path.charAt( path.length() -1 ) == java.io.File.separatorChar ||
-                 surl.charAt( path.length() ) == java.io.File.separatorChar)) // dir boundary
-            {
-                if (DEBUG)
-                    System.err.println( "succeeded!" );
-                return true;
-            }
-        }
-
-        if (DEBUG)
-            System.err.println( "failed!" );
-
-        return false;
-    }
-
-    public Class getRegistrationClass()
-        throws  java.io.IOException,
-                java.lang.ClassNotFoundException,
-                java.net.MalformedURLException
-    {
-        Class ret = null;
-
-        if (m_context != null) {
-            String className = null;
-
-            java.net.URL url = new java.net.URL(m_locationUrl);
-            if (! checkAccessPath( url ))
-                throw new ClassNotFoundException( "jar access failed!" );
-              Resource resource = ResourceProxy.load(url, null);
-              resource.loadJar(url);
-            m_context.addCargo( resource );
-
-              java.io.InputStream inManifest = ResourceProxy.load(new java.net.URL(m_manifest), null).getInputStream();
-            java.util.jar.Manifest manifest = new java.util.jar.Manifest( inManifest );
-            java.util.jar.Attributes attributes = manifest.getMainAttributes();
-            className = attributes.getValue( "RegistrationClassName" );
-
-            if (className != null) {
-                ret = m_context.loadClass( className );
-            }
-        }
-        else
-            ret = Class.forName(m_locationUrl);
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".getRegistrationClass:" + ret);
-
-        return ret;
-    }
-
-    public Class loadClass( String className )
-        throws  java.lang.ClassNotFoundException,
-                java.io.IOException,
-                java.net.MalformedURLException
-    {
-        Class ret = null;
-
-        if (m_context != null) {
-            java.net.URL url = new java.net.URL( m_locationUrl );
-            if (! checkAccessPath( url ))
-                throw new ClassNotFoundException( "jar access failed!" );
-             Resource resource = ResourceProxy.load(url, null);
-             resource.loadJar(url);
-
-            ret = m_context.loadClass(className);
-        } else {
-            ret = Class.forName(className);
-        }
-
-        return ret;
+        accessPath = ap;
     }
 }
