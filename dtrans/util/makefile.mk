@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-11 10:34:32 $
+#   last change: $Author: tra $ $Date: 2001-05-15 13:22:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 
-.IF "$(GUI)"!="WIN"
+.IF "$(GUI)"=="WIN"
 
 # --- ftransl dll ---
 
