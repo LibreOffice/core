@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-16 10:40:08 $
+ *  last change: $Author: pl $ $Date: 2002-05-22 12:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
     // Daten von der ToolBox holen
     Rectangle aRect = pBox->GetItemRect( nItemId );
     Point aPos;
-    aPos = GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
+    aPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
     aRect.SetPos( aPos );
 
     nFlags |=
