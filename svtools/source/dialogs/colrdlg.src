@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 07:52:26 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 17:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Rood";
         Text[ chinese_simplified ] = "ºìÉ«(~R)";
         Text[ greek ] = "Êüêêéíï";
-        Text[ korean ] = "»¡°­(~R)";
+        Text[ korean ] = "Àû»ö";
         Text[ turkish ] = "~Kýrmýzý";
         Text[ language_user1 ] = " ";
     };
@@ -158,7 +158,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Groen";
         Text[ chinese_simplified ] = "ÂÌÉ«(~G)";
         Text[ greek ] = "ÐñÜóéíï";
-        Text[ korean ] = "ÃÊ·Ï(~G)";
+        Text[ korean ] = "³ì»ö";
         Text[ turkish ] = "~Yeþil";
         Text[ language_user1 ] = " ";
     };
@@ -186,7 +186,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Blauw";
         Text[ chinese_simplified ] = "À¶É«(~B)";
         Text[ greek ] = "Ìðëå";
-        Text[ korean ] = "ÆÄ¶û(~B)";
+        Text[ korean ] = "Ã»»ö";
         Text[ turkish ] = "~Mavi";
         Text[ language_user1 ] = " ";
     };
@@ -275,7 +275,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Magenta";
         Text[ chinese_simplified ] = "×ÏºìÉ«(~M)";
         Text[ greek ] = "ÌáôæÝíôá";
-        Text[ korean ] = "¸¶Á¨Å¸(~M)";
+        Text[ korean ] = "¼±È«»ö";
         Text[ turkish ] = "M~or";
         Text[ language_user1 ] = " ";
     };
@@ -303,7 +303,7 @@ ModalDialog DLG_COLOR
         Text[ dutch ] = "~Yellow";
         Text[ chinese_simplified ] = "»ÆÉ«(~Y)";
         Text[ greek ] = "Êßôñéíï";
-        Text[ korean ] = "³ë¶û(~Y)";
+        Text[ korean ] = "È²»ö";
         Text[ turkish ] = "~Sarý";
         Text[ language_user1 ] = " ";
     };
