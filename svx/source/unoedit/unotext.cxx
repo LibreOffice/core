@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-13 14:01:44 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 16:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
     SvxTextForwarder* pForwarder = GetEditSource()->GetTextForwarder();
     SfxItemSet* pOldSet = NULL;
     if( nPara != -1 )
-        pOldSet = pForwarder->GetParaAttribs( nPara ).Clone();
+        pOldSet = pForwarder->GetParaAttribs( (USHORT)nPara ).Clone();
     else
         pOldSet = pForwarder->GetAttribs( GetSelection() ). Clone();
 
@@ -416,7 +416,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyNa
 
 
     if(nPara != -1)
-        pForwarder->SetParaAttribs( nPara, aNewSet );
+        pForwarder->SetParaAttribs( (USHORT)nPara, aNewSet );
     else
         pForwarder->QuickSetAttribs( aNewSet, GetSelection() );
 
@@ -551,7 +551,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
     SvxTextForwarder* pForwarder = GetEditSource()->GetTextForwarder();
     SfxItemSet* pAttribs = NULL;
     if( nPara != -1 )
-        pAttribs = pForwarder->GetParaAttribs( nPara ).Clone();
+        pAttribs = pForwarder->GetParaAttribs( (USHORT)nPara ).Clone();
     else
         pAttribs = pForwarder->GetAttribs( GetSelection() ).Clone();
 
@@ -664,7 +664,7 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
             if( rSet.GetItemState( EE_PARA_BULLETSTATE, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
             {
                 SfxUInt16Item* pItem = (SfxUInt16Item*)rSet.GetItem( EE_PARA_BULLETSTATE, sal_True );
-                bState = pItem->GetValue();
+                bState = pItem->GetValue() == TRUE;
             }
 
             aAny.setValue( &bState, ::getCppuBooleanType() );
@@ -718,7 +718,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
             while( *pWhichId )
             {
                 if(nPara != -1)
-                    eTempItemState = pForwarder->GetItemState( nPara, *pWhichId );
+                    eTempItemState = pForwarder->GetItemState( (USHORT)nPara, *pWhichId );
                 else
                     eTempItemState = pForwarder->GetItemState( GetSelection(), *pWhichId );
 
@@ -768,7 +768,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
     if( nWID != 0 )
     {
         if( nPara != -1 )
-            eItemState = pForwarder->GetItemState( nPara, nWID );
+            eItemState = pForwarder->GetItemState( (USHORT)nPara, nWID );
         else
             eItemState = pForwarder->GetItemState( GetSelection(), nWID );
     }
@@ -866,7 +866,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
     }
 
     if(nPara != -1)
-        pForwarder->SetParaAttribs( nPara, aSet );
+        pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
     else
         pForwarder->QuickSetAttribs( aSet, GetSelection() );
 

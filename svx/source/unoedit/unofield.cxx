@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:49:09 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 16:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public:
     OUString    msPresentation;
 };
 
-SfxItemPropertyMap* ImplGetFieldItemPropertyMap( USHORT mnId )
+SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
 {
     static SfxItemPropertyMap aExDateTimeFieldPropertyMap_Impl[] =
     {
