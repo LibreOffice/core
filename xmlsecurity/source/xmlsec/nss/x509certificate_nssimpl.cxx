@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:13:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_NssImpl :: getNotBefore() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_NssImpl :: getNotValidBefore() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
         SECStatus rv ;
         PRTime notBefore ;
@@ -172,7 +172,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_NssImpl :: getNotAfter() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_NssImpl :: getNotValidAfter() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
         SECStatus rv ;
         PRTime notAfter ;
@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_NssImpl :: findCertExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_NssImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL && m_pCert->extensions != NULL ) {
         CertificateExtension_XmlSecImpl* pExtn ;
         CERTCertExtension** extns ;
@@ -465,5 +465,39 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
 {
     return getThumbprint(m_pCert, SEC_OID_MD5);
 }
+
+sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    SECStatus rv;
+    SECItem tmpitem;
+    sal_Int32 usage;
+
+    rv = CERT_FindKeyUsageExtension(m_pCert, &tmpitem);
+    if ( rv == SECSuccess )
+    {
+        usage = tmpitem.data[0];
+        PORT_Free(tmpitem.data);
+        tmpitem.data = NULL;
+    }
+    else
+    {
+        usage = KU_ALL;
+    }
+
+    /*
+     * to make the nss implementation compatible with MSCrypto,
+     * the following usage is ignored
+     *
+     *
+    if ( CERT_GovtApprovedBitSet(m_pCert) )
+    {
+        usage |= KU_NS_GOVT_APPROVED;
+    }
+    */
+
+    return usage;
+}
+
 // MM : end
 
