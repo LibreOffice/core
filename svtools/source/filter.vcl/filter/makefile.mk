@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+#   last change: $Author: sj $ $Date: 2001-02-22 11:26:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,8 @@ CXXFILES= filter.cxx          \
           sgfbram.cxx         \
           sgvmain.cxx         \
           sgvtext.cxx         \
-          sgvspln.cxx         
+          sgvspln.cxx         \
+          FilterConfigCache.cxx
 
 SRCFILES= strings.src		  \
           dlgexpor.src		  \
@@ -120,9 +121,11 @@ SLOFILES= $(SLO)$/filter.obj   \
             $(SLO)$/sgfbram.obj  \
           $(SLO)$/sgvmain.obj  \
           $(SLO)$/sgvtext.obj  \
-          $(SLO)$/sgvspln.obj  
+          $(SLO)$/sgvspln.obj  \
+          $(SLO)$/FilterConfigCache.obj
 
-EXCEPTIONSNOOPTFILES= $(SLO)$/filter.obj
+EXCEPTIONSNOOPTFILES=	$(SLO)$/filter.obj				\
+                        $(SLO)$/FilterConfigCache.obj
 
 # --- Targets -------------------------------------------------------
 
