@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:20:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,23 +137,23 @@ using namespace ::com::sun::star::beans ;
 //#define FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT         6
 
 #define FIXPROPERTYCOUNT                    4
-
+/*
 #define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
-#define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("URL"                      ))
-#define PROPERTYNAME_FILTER                 OUString(RTL_CONSTASCII_USTRINGPARAM("Filter"                   ))
-#define PROPERTYNAME_TEMPNAME               OUString(RTL_CONSTASCII_USTRINGPARAM("TempName"                 ))
+#define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("OrgURL"                   ))
+#define PROPERTYNAME_FILTER                 OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"               ))
+#define PROPERTYNAME_TEMPNAME               OUString(RTL_CONSTASCII_USTRINGPARAM("TempURL"                  ))
 
 #define OFFSET_URL                          0
 #define OFFSET_FILTER                       1
 #define OFFSET_TEMPNAME                     2
-
+*/
 #define PATHDELIMITER                       OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
 #define FIXR                                OUString(RTL_CONSTASCII_USTRINGPARAM("r"                        ))
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
-
+/*
 struct tIMPL_RecoveryEntry
 {
     OUString    sURL        ;
@@ -178,7 +178,7 @@ struct tIMPL_RecoveryEntry
 };
 
 typedef deque< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
-
+*/
 class SvtInternalOptions_Impl : public ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ class SvtInternalOptions_Impl : public ConfigItem
         sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
         sal_Bool                m_bUseMailUI;
         OUString                m_aCurrentTempURL   ;
-        tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
+    //  tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -274,7 +274,7 @@ class SvtInternalOptions_Impl : public ConfigItem
 
         OUString    GetCurrentTempURL() const { return m_aCurrentTempURL; }
         void        SetCurrentTempURL( const OUString& aNewCurrentTempURL );
-
+/*
         void        PushRecoveryItem    (   const   OUString&   sURL        ,
                                             const   OUString&   sFilter     ,
                                              const  OUString&   sTempName   );
@@ -282,7 +282,7 @@ class SvtInternalOptions_Impl : public ConfigItem
                                                     OUString&   sFilter     ,
                                                     OUString&   sTempName   );
         sal_Bool    IsRecoveryListEmpty (                                   ) const;
-
+*/
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -356,7 +356,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ] >>= m_bRemoveMenuEntryBackToWebtop  ;
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP ] >>= m_bRemoveMenuEntryNewWebtop  ;
 //    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT ] >>= m_bRemoveMenuEntryLogout  ;
-
+/*
     // Read dynamical set "RecoveryList" then.
     // 3 subkeys for every item!
     // Attention: Start at next element after last fixed entry! We must ignore "Slot" and "SendCrashMail" ...
@@ -374,7 +374,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
         ++nPosition;
         m_aRecoveryList.push_front( aEntry );
     }
-
+*/
     // We don't need any notifications here.
     // "Slot" and "SendCrashMail" are readonly(!) and our recovery list should not modified during runtime - it's used
     // by our crash guard only ... otherwise we have a big problem.
@@ -407,6 +407,7 @@ void SvtInternalOptions_Impl::Commit()
 
     PutProperties( aNames, aValues );
 
+/*
     // Write set of dynamic properties then.
     ClearNodeSet( PROPERTYNAME_RECOVERYLIST );
 
@@ -415,7 +416,7 @@ void SvtInternalOptions_Impl::Commit()
     Sequence< PropertyValue >   seqPropertyValues( 3 )  ;   // Every node in set has 3 sub-nodes!( url, filter, tempname )
 
     // Copy list entries to save-list and write it to configuration.
-    /*
+
     sal_uInt32 nCount = m_aRecoveryList.size();
     for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
     {
@@ -431,7 +432,7 @@ void SvtInternalOptions_Impl::Commit()
 
         SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
     }
-    */
+
     tIMPL_RecoveryStack::iterator iRecovery = m_aRecoveryList.begin();
     for ( sal_uInt32 nItem=0; iRecovery != m_aRecoveryList.end(); ++nItem, ++iRecovery)
     {
@@ -447,7 +448,7 @@ void SvtInternalOptions_Impl::Commit()
         SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
     }
 
-
+    */
 }
 
 //*****************************************************************************************************************
@@ -462,6 +463,7 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+/*
 void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
                                                 const   OUString&   sFilter     ,
                                                 const   OUString&   sTempName   )
@@ -493,18 +495,21 @@ sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
 {
     return ( m_aRecoveryList.empty() );
 }
-
+*/
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
 {
+    /*
     // First get ALL names of current existing list items in configuration!
     Sequence< OUString > seqRecoveryItems = GetNodeNames( PROPERTYNAME_RECOVERYLIST );
     // Get information about list counts ...
     sal_Int32 nRecoveryCount = seqRecoveryItems.getLength();
     // ... and create a property list with right size! (+2...for fix properties!) (*3 ... = sub nodes for every set node!)
     Sequence< OUString > seqProperties( FIXPROPERTYCOUNT + (nRecoveryCount*3) );
+    */
+    Sequence< OUString > seqProperties(4);
 
     // Add names of fix properties to list.
     seqProperties[FIXPROPERTYHANDLE_SLOTCFG         ]   =   FIXPROPERTYNAME_SLOTCFG         ;
@@ -515,7 +520,7 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYBACKTOWEBTOP;
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP    ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYNEWWEBTOP;
 //    seqProperties[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT       ]   =   FIXPROPERTYNAME_REMOVEMENUENTRYLOGOUT;
-
+/*
     sal_uInt32 nPosition = FIXPROPERTYCOUNT;
     // Add names for recovery list to list.
     // 3 subkeys for every item!
@@ -529,7 +534,7 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
         seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_TEMPNAME  ;
         ++nPosition;
     }
-
+*/
     // Return result.
     return seqProperties;
 }
@@ -653,8 +658,11 @@ void SvtInternalOptions::PushRecoveryItem(  const   OUString&   sURL        ,
                                             const   OUString&   sFilter     ,
                                             const   OUString&   sTempName   )
 {
+    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
+    /*
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->PushRecoveryItem( sURL, sFilter, sTempName );
+    */
 }
 
 //*****************************************************************************************************************
@@ -664,8 +672,11 @@ void SvtInternalOptions::PopRecoveryItem(   OUString&   sURL        ,
                                             OUString&   sFilter     ,
                                             OUString&   sTempName   )
 {
+    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
+    /*
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->PopRecoveryItem( sURL, sFilter, sTempName );
+    */
 }
 
 //*****************************************************************************************************************
@@ -673,8 +684,12 @@ void SvtInternalOptions::PopRecoveryItem(   OUString&   sURL        ,
 //*****************************************************************************************************************
 sal_Bool SvtInternalOptions::IsRecoveryListEmpty() const
 {
+    OSL_ENSURE(sal_False, "(deprecated) Who calls it?");
+    return sal_True;
+    /*
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsRecoveryListEmpty();
+    */
 }
 
 //*****************************************************************************************************************
