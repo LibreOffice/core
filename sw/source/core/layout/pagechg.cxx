@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 16:21:59 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,10 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     pDesc( pPgDsc ),
     nPhyPageNum( 0 )
 {
+#ifdef VERTICAL_LAYOUT
+    // Test
+    SetDerivedVert( FALSE );
+#endif
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
     nType = FRMC_PAGE;

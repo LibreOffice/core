@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 09:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,6 +690,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     else
     {
         aDrawInf.SetPos( aPos );
+// Nothing but a test...
+    if( GetTxtFrm()->IsVertical() != pFnt->IsOutline() )
+        pFnt->SetOutline( GetTxtFrm()->IsVertical() );
+// end of test
         if( bKern )
             pFnt->_DrawStretchText( aDrawInf );
         else

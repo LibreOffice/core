@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 13:54:01 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 09:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,13 @@ public:
     inline BOOL IsInSct() const;
 #ifdef VERTICAL_LAYOUT
     inline BOOL IsVertical() const;
+    inline void SetVertical( BOOL bNew )   { bVertical    = bNew ? 1 : 0; }
+    inline void SetDerivedVert( BOOL bNew ){ bDerivedVert = bNew ? 1 : 0; }
+    inline void SetInvalidVert( BOOL bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline BOOL IsRightToLeft() const;
+    inline void SetRightToLeft( BOOL bNew ){ bRightToLeft = bNew ? 1 : 0; }
+    inline void SetDerivedR2L( BOOL bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
+    inline void SetInvalidR2L( BOOL bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
 #endif
     BOOL IsMoveable() const;
 
@@ -717,7 +723,7 @@ inline BOOL SwFrm::IsInSct() const
     return bInfSct;
 }
 #ifdef VERTICAL_LAYOUT
-inline BOOL SwFrm::IsVertical() const
+BOOL SwFrm::IsVertical() const
 {
     if( bInvalidVert )
         ((SwFrm*)this)->SetDirFlags( TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:01:04 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 09:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,6 +1081,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
+#ifdef VERTICAL_LAYOUT
+                SetInvalidVert( TRUE );  // Test
+#endif
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1113,6 +1116,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
+#ifdef VERTICAL_LAYOUT
+        SetInvalidVert( TRUE );  // Test
+#endif
         ASSERT( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1190,6 +1196,16 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
         case PREP_BOSS_CHGD :
         {
+#ifdef VERTICAL_LAYOUT
+    // Test
+            {
+                SetInvalidVert( FALSE );
+                BOOL bOld = IsVertical();
+                SetInvalidVert( TRUE );
+                if( bOld != IsVertical() )
+                    InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
+            }
+#endif
             if( HasFollow() )
             {
                 xub_StrLen nNxtOfst = GetFollow()->GetOfst();
