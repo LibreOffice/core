@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.3 $ 
+#   $Revision: 1.4 $ 
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:06:08 $ 
+#   last change: $Author: vg $ $Date: 2005-03-10 15:15:05 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -75,7 +75,15 @@ all:
 
 
 JARFILES = ridl.jar unoil.jar jurt.jar juh.jar hsqldb.jar
-JAVAFILES = $(shell $(FIND) .$/*.java)
+JAVAFILES =\
+    NativeInputStreamHelper.java\
+    NativeOutputStreamHelper.java\
+    NativeStorageAccess.java\
+    StorageAccess.java\
+    StorageFileAccess.java\
+    StorageNativeInputStream.java\
+    StorageNativeOutputStream.java
+    
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARCOMPRESS	= TRUE
