@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:27:33 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ Menu RID_MAIN_MENU
                 Text[ chinese_traditional ] = "·í§@¹q¤l¶l¥óµo°e(~E)...";
                         Text[ arabic ] = "ÅÑÓÇá ßÈÑíÏ ÅáßÊÑæäí...";
                         Text[ greek ] = "ÁğïóôïëŞ ~ùò E-mail...";
-                        Text[ korean ] = "ÀüÀÚ¿ìÆíÀ¸·Î º¸³»±â(~E)...";
+                        Text[ korean ] = "E-Mail ·Î º¸³»±â...";
                         Text[ turkish ] = "E-posta olarak gönder...";
                         Text[ language_user1 ] = " ";
                     };
