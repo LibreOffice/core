@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:47:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 13:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,36 +114,39 @@ int SAL_CALL main( int argc, char** argv )
     for (StringVector::const_iterator i(files.begin());
          i != files.end() && nErrors == 0; ++i)
     {
-        fprintf(
-            stdout, "%s: compile file %s...\n",
-            options.getProgramName().getStr(), i->getStr());
-        OString pathname(convertToAbsoluteSystemPath(*i));
-        nErrors = compileFile(&pathname);
-        if (idlc()->getWarningCount() > 0) {
-            fprintf(
-                stdout, "%s: detected %d warnings compiling file %s\n",
-                options.getProgramName().getStr(), idlc()->getWarningCount(),
-                i->getStr());
+        OString sysFileName( convertToAbsoluteSystemPath(*i) );
+
+        fprintf(stdout, "%s: compile '%s' ... \n",
+            options.getProgramName().getStr(), (*i).getStr());
+        nErrors = compileFile(&sysFileName);
+
+        if ( idlc()->getWarningCount() )
+            fprintf(stdout, "%s: detected %d warnings compiling file '%s'\n",
+                    options.getProgramName().getStr(), idlc()->getWarningCount(),
+                    (*i).getStr(), options.prepareVersion().getStr());
+
+        // prepare output file name
+        OString outputFileUrl;
+        if ( options.isValid("-O") )
+        {
+            OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
+            outputFileUrl = convertToFileUrl(options.getOption("-O"));
+            sal_Char c = outputFileUrl.getStr()[outputFileUrl.getLength()-1];
+
+            if ( c != '/' )
+                outputFileUrl += OString::valueOf('/');
+
+            outputFileUrl += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
+        } else
+        {
+            outputFileUrl = convertToFileUrl(sysFileName.replaceAt(sysFileName.getLength() -3 , 3, "urd"));
         }
-        sal_Int32 n = pathname.lastIndexOf(SEPARATOR) + 1;
-        OString filenameBase(
-            pathname.copy(
-                n, pathname.getLength() - n - RTL_CONSTASCII_LENGTH(".idl")));
-        if (nErrors > 0) {
-            OString outputPathname;
-            if (options.isValid("-O")) {
-                OString outputPathname = convertToAbsoluteSystemPath(
-                    options.getOption("-O"));
-                if (outputPathname[outputPathname.getLength() - 1] != '/') {
-                    outputPathname += "/";
-                }
-            }
-            outputPathname += filenameBase;
-            outputPathname += ".urd";
-            removeIfExists(outputPathname);
-        } else {
-            nErrors = produceFile(filenameBase);
-        }
+
+        if ( nErrors )
+            removeIfExists(outputFileUrl);
+        else
+            nErrors = produceFile(outputFileUrl);
+
         idlc()->reset();
     }
 
