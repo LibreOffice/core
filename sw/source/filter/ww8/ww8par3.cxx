@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 09:48:41 $
+ *  last change: $Author: cmc $ $Date: 2002-06-17 14:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,17 +1387,22 @@ sal_Bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
         if( !rStyleInfo.pOutlineNumrule )
         {
-            if(    (USHRT_MAX        > rStyleInfo.nLFOIndex )
-                && (nWW8MaxListLevel > rStyleInfo.nListLevel) )
-                RegisterNumFmtOnTxtNode( rStyleInfo.nLFOIndex,
-                                         rStyleInfo.nListLevel, sal_False);
+            if (
+                 (USHRT_MAX > rStyleInfo.nLFOIndex) &&
+                 (nWW8MaxListLevel > rStyleInfo.nListLevel)
+               )
+            {
+                RegisterNumFmtOnTxtNode(rStyleInfo.nLFOIndex,
+                    rStyleInfo.nListLevel, sal_False);
+            }
+#if 0       //Assume that style knows best, and allows #99950# to
+            //work correctly
             else
                 pTxtNode->UpdateNum( SwNodeNum(NO_NUMBERING) );
+#endif
 
             if( rStyleInfo.bHasStyNumRule && pTxtNode )
-            {
                 pTxtNode->SetNumLSpace( sal_False );
-            }
         }
     }
     return bRes;
@@ -1522,7 +1527,10 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
             {
                 //inherit numbering from base if not explicitly set for this
                 //style
-                if (rStyleInf.nBase < nStyle)
+                if  (
+                      (rStyleInf.nBase < nStyle) &&
+                      (SFX_ITEM_SET != rStyleInf.pFmt->GetItemState(RES_PARATR_NUMRULE,FALSE))
+                    )
                 {
                     rStyleInf.pOutlineNumrule =
                         pCollA[rStyleInf.nBase].pOutlineNumrule;
