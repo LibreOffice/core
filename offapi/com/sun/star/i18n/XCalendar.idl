@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalendar.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-11-08 17:42:17 $
+ *  last change: $Author: er $ $Date: 2000-11-10 23:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@ interface XCalendar : com::sun::star::uno::XInterface
     string  getUniqueID();
 
     /**
-        Set the date/time as an offset to the start of the calendar at 30Dec1899 00:00
+        Set the date/time as an offset to the start of the calendar at 1Jan1970 00:00
         The integer part represents the number of days passed since start date.
         The fractional part represents fractions of a day, thus 0.5 means 12 hours.
      */
     void    setDateTime( [in] double nTimeInDays );
 
     /**
-         Get the date/time as an offset to the start of the calendar at 30Dec1899 00:00
+         Get the date/time as an offset to the start of the calendar at 1Jan1970 00:00
         The integer part represents the number of days passed since start date.
         The fractional part represents fractions of a day, thus 0.5 means 12 hours.
      */
@@ -140,10 +140,10 @@ interface XCalendar : com::sun::star::uno::XInterface
     void    setFirstDayOfWeek( [in] short nDay );
 
     /// set how many days of a week must reside in the first week of a year
-    void    setMinimalDaysInFirstWeek( [in] short nDays );
+    void    setMinimumNumberOfDaysForFirstWeek( [in] short nDays );
 
     /// returns how many days of a week must reside in the first week of a year
-    short   getMinimalDaysInFirstWeek();
+    short   getMinimumNumberOfDaysForFirstWeek();
 
     /// returns the number of months in a year, e.g. <bold>12</bold>
     short   getNumberOfMonthsInYear();
