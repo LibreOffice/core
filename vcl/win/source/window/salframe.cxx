@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 11:39:19 $
+ *  last change: $Author: ssa $ $Date: 2002-07-05 16:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4802,3 +4802,22 @@ BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
         return FALSE;
 }
 
+// -----------------------------------------------------------------------
+
+bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
+{
+    RECT aRect;
+    ImplSalGetWorkArea( NULL, &aRect );
+
+    HDC hDC;
+    if( hDC = GetDC( NULL ) )
+    {
+        rInfo.nWidth    = aRect.right - aRect.left;
+        rInfo.nHeight   = aRect.bottom - aRect.top;
+        rInfo.nDepth    = GetDeviceCaps( hDC, BITSPIXEL );
+        ReleaseDC( NULL, hDC );
+        return true;
+    }
+    else
+        return false;
+}
