@@ -1,0 +1,177 @@
+[%APP_TITLE%]
+en-US = "Setup"
+de = "Setup"
+
+[%FILE_NOT_FOUND%]
+en-US = "Setup was unable to find the file '%s'."
+de = "Das Setup konnte die Datei '%s' nicht finden."
+
+[%INVALID_PARAM%]
+en-US = "Invalid command line option '%s'. Please use '/?' for help."
+de = "Der Kommandozeilenparameter '%s' ist ungültig. Bitte benutzen Sie '/?' für Hilfe."
+
+[%ALREADY_RUNNING%]
+en-US = "There is already a setup process running."
+de = "Es läuft bereits eine Setup Applikation."
+
+[%INVALID_PROFILE%]
+en-US = "Invalid or incomplete profile."
+de = "Ungültiges oder unvollständiges Profile."
+
+[%REQUIRES_ADMIN_PRIV%]
+en-US = "Administrator privileges are required for upgrading the Windows Installer."
+de = "Es werden Administrator Rechte benötigt, um den Windows Installer zu aktualisieren."
+
+
+[%OUTOFMEM%]
+en-US = "Out of Memory"
+de = "Nicht genug Speicher"
+
+[%NOMSI%]
+en-US = "Setup was unable to find the msi package."
+de = "Das Setup konnte das MSI Packet nicht finden."
+
+[%REQUIRES_NEWER_VERSION%]
+en-US = "Setup was unable to upgrade the Windows Installer to a version that supports schema."
+de = "Setup was unable to upgrade the Windows Installer to a version that supports schema."
+
+[%INVALID_PATH%]
+en-US = "The path '%1' is invalid."
+de = "The path '%1' is invalid."
+
+[%USER_CANCELLED%]
+en-US = "Setup was cancelled"
+de = "Setup was cancelled"
+
+[%FAILED_TO_UPGRADE_MSI%]
+en-US = "Setup was unable to upgrade the Windows Installer."
+de = "Setup was unable to upgrade the Windows Installer."
+
+[%REBOOT_REQUIRED%]
+en-US = "You must restart your system for the configuration changes to take effect. Click Yes to restart now or No if you plan to manually restart later."
+de = "You must restart your system for the configuration changes to take effect. Click Yes to restart now or No if you plan to manually restart later."
+
+[%INSTALL_ERROR%]
+en-US = "An error occured installing the package.  Windows Installer returned '%d'."
+de = "An error occured installing the package.  Windows Installer returned '%d'."
+
+[%ALLOW_MSI_UPDATE%]
+en-US = "This package requires a newer version of the Windows Installer. \nDo you want to update the version of the Windows Installer on your system?"
+de = "This package requires a newer version of the Windows Installer. \nDo you want to update the version of the Windows Installer on your system?"
+
+[%USAGE%]
+en-US = "Usage:\n   /? :  Show this dialog.\n   /a :  Perform an administrative install.\n   /j[u|m] :  Perform an advertising install.\n   /q[n] : Don't show any User Interface (silent mode).\n"
+de = "Benutzung:\n   /? :  Zeigt diesen Dialog.\n   /a :  Eine Administrative Installation durchführen.\n   /j[u|m] :  Perform an advertising install.\n   /q[n] : Don't show any User Interface (silent mode).\n"
+
+[%UNKNOWN_ERROR%]
+en-US = "A Unknown Error occured!"
+de = "A Unknown Error occured!"
+
+[%UNKNOWN_LANG%]
+en-US = "Unknown Language: %d"
+de = "Unknown Language: %d"
+
+[%LANGUAGE_ZH_TW%]
+en-US = "Chinese - Taiwan"
+de = "Chinese - Taiwan"
+
+[%LANGUAGE_CS%]
+en-US = "Czech"
+de = "Czech"
+
+[%LANGUAGE_DA%]
+en-US = "Danish"
+de = "Danish"
+
+[%LANGUAGE_DE_DE%]
+en-US = "German - Germany"
+de = "Deutsch - Deutschland"
+
+[%LANGUAGE_EL%]
+en-US = "Greek"
+de = "Griechisch"
+
+[%LANGUAGE_EN_US%]
+en-US = "English - United States"
+de = "Englisch - U.S.A."
+
+[%LANGUAGE_ES%]
+en-US = "Spanish - Spain"
+de = "Spanisch - Spanien"
+
+[%LANGUAGE_FI%]
+en-US = "Finnish"
+de = "Finnisch"
+
+[%LANGUAGE_FR_FR%]
+en-US = "French - France"
+de = "Französisch - Frankreich"
+
+[%LANGUAGE_HE%]
+en-US = "Hebrew"
+de = "Hebrew"
+
+[%LANGUAGE_HU%]
+en-US = "Hungarian"
+de = "Hungarian"
+
+[%LANGUAGE_IT_IT%]
+en-US = "Italian - Italy"
+de = "Italian - Italy"
+
+[%LANGUAGE_JA%]
+en-US = "Japanese"
+de = "Japanese"
+
+[%LANGUAGE_KO%]
+en-US = "Korean"
+de = "Korean"
+
+[%LANGUAGE_NL_NL%]
+en-US = "Dutch - The Netherlands"
+de = "Dutch - The Netherlands"
+
+[%LANGUAGE_NO_NO%]
+en-US = "Norwegian - Bokmål"
+de = "Norwegian - Bokmål"
+
+[%LANGUAGE_PL%]
+en-US = "Polish"
+de = "Polish"
+
+[%LANGUAGE_PT_BR%]
+en-US = "Portuguese - Brazil"
+de = "Portuguese - Brazil"
+
+[%LANGUAGE_RU%]
+en-US = "Russian"
+de = "Russian"
+
+[%LANGUAGE_SK%]
+en-US = "Slovak"
+de = "Slovak"
+
+[%LANGUAGE_SV_SE%]
+en-US = "Swedish - Sweden"
+de = "Swedish - Sweden"
+
+[%LANGUAGE_TH%]
+en-US = "Thai"
+de = "Thai"
+
+[%LANGUAGE_TR%]
+en-US = "Turkish"
+de = "Turkish"
+
+[%LANGUAGE_ET%]
+en-US = "Estonian"
+de = "Estonian"
+
+[%LANGUAGE_ZH_CN%]
+en-US = "Chinese - China"
+de = "Chinese - China"
+
+[%LANGUAGE_PT_PT%]
+en-US = "Portuguese - Portugal"
+de = "Portuguese - Portugal"
+
