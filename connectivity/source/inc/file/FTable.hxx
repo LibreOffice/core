@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:58 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 10:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,8 @@ namespace connectivity
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() throw();
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
 
@@ -147,7 +147,7 @@ namespace connectivity
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
 
-            ::rtl::OUString SAL_CALL getName() { return m_Name; }
+            ::rtl::OUString SAL_CALL getName() throw() { return m_Name; }
 
             ::rtl::OUString getSchema() { return m_SchemaName; }
             sal_Bool isReadOnly() const { return !m_bWriteable; }
