@@ -7850,111 +7850,6 @@
 ! 	return(0);
 ! }
 ! 
-! /**
-!  * Block cipher transform final
-!  */
-! static int 
-! xmlSecNssKeyWrapCtxFinal(
-! 	xmlSecNssKeyWrapCtxPtr		ctx ,
-! 	xmlSecBufferPtr 			in ,
-! 	xmlSecBufferPtr 			out ,
-! 	int 						encrypt ,
-! 	xmlSecTransformCtxPtr 		transformCtx
-! ) {
-! 	PK11SymKey*			targetKey ;
-! 	xmlSecSize			blockSize ;
-! 	xmlSecBufferPtr		result ;
-! 
-! 	xmlSecAssert2( ctx != NULL , -1 ) ;
-! 	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
-! 	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
-! 	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
-! 	xmlSecAssert2( ctx->material != NULL , -1 ) ;
-! 	xmlSecAssert2( in != NULL , -1 ) ;
-! 	xmlSecAssert2( out != NULL , -1 ) ;
-! 	xmlSecAssert2( transformCtx != NULL , -1 ) ;
-! 
-! 	/* read raw key material and append into context */
-! 	if( xmlSecBufferAppend( ctx->material, xmlSecBufferGetData(in), xmlSecBufferGetSize(in) ) < 0 ) {
-! 		xmlSecError( XMLSEC_ERRORS_HERE ,
-! 			NULL ,
-! 			"xmlSecBufferAppend" ,
-! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 		return(-1);    
-! 	}
-! 
-! 	if( xmlSecBufferRemoveHead( in , xmlSecBufferGetSize(in) ) < 0 ) {
-! 		xmlSecError( XMLSEC_ERRORS_HERE ,
-! 			NULL ,
-! 			"xmlSecBufferRemoveHead" ,
-! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 		return(-1);    
-! 	}
-! 
-! 	/* Now we get all of the key materail */
-! 	/* from now on we will wrap or unwrap the key */
-! 	if( ( blockSize = PK11_GetBlockSize( ctx->cipher , NULL ) ) < 0 ) {
-! 		xmlSecError( XMLSEC_ERRORS_HERE ,
-! 			NULL ,
-! 			"PK11_GetBlockSize" ,
-! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 		return(-1);    
-! 	}
-! 
-! 	result = xmlSecBufferCreate( blockSize ) ;
-! 	if( result == NULL ) {
-! 		xmlSecError( XMLSEC_ERRORS_HERE ,
-! 			NULL ,
-! 			"xmlSecBufferCreate" ,
-! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 		return(-1);    
-! 	}
-! 
-! 	switch( ctx->cipher ) {
-! 		case CKM_DES3_CBC :
-! 			if( xmlSecNssKeyWrapDesOp(ctx, encrypt, result) < 0 ) {
-! 				xmlSecError( XMLSEC_ERRORS_HERE ,
-! 					NULL ,
-! 					"xmlSecNssKeyWrapDesOp" ,
-! 					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 					XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 				xmlSecBufferDestroy(result);
-! 				return(-1);    
-! 			}
-! 			break ;
-! 	//	case CKM_NETSCAPE_AES_KEY_WRAP :
-! 		case CKM_AES_CBC :
-! 			if( xmlSecNssKeyWrapAesOp(ctx, encrypt, result) < 0 ) {
-! 				xmlSecError( XMLSEC_ERRORS_HERE ,
-! 					NULL ,
-! 					"xmlSecNssKeyWrapAesOp" ,
-! 					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 					XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 				xmlSecBufferDestroy(result);
-! 				return(-1);    
-! 			}
-! 			break ;
-! 	}
-! 
-! 	/* Write output */
-! 	if( xmlSecBufferAppend( out, xmlSecBufferGetData(result), xmlSecBufferGetSize(result) ) < 0 ) {
-! 		xmlSecError( XMLSEC_ERRORS_HERE ,
-! 			NULL ,
-! 			"xmlSecBufferAppend" ,
-! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
-! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
-! 		xmlSecBufferDestroy(result);
-! 		return(-1);    
-! 	}
-! 	xmlSecBufferDestroy(result);
-! 
-! 	return(0);
-! }
-! 
 ! static int 
 ! xmlSecNssKWDes3BufferReverse(xmlSecByte *buf, xmlSecSize size) {
 !     xmlSecSize s;
@@ -8407,6 +8302,111 @@
 ! 	}
 ! 
 ! 	return 0 ;
+! }
+! 
+! /**
+!  * Block cipher transform final
+!  */
+! static int 
+! xmlSecNssKeyWrapCtxFinal(
+! 	xmlSecNssKeyWrapCtxPtr		ctx ,
+! 	xmlSecBufferPtr 			in ,
+! 	xmlSecBufferPtr 			out ,
+! 	int 						encrypt ,
+! 	xmlSecTransformCtxPtr 		transformCtx
+! ) {
+! 	PK11SymKey*			targetKey ;
+! 	xmlSecSize			blockSize ;
+! 	xmlSecBufferPtr		result ;
+! 
+! 	xmlSecAssert2( ctx != NULL , -1 ) ;
+! 	xmlSecAssert2( ctx->cipher != CKM_INVALID_MECHANISM , -1 ) ;
+! 	xmlSecAssert2( ctx->symkey != NULL , -1 ) ;
+! 	xmlSecAssert2( ctx->keyId != NULL , -1 ) ;
+! 	xmlSecAssert2( ctx->material != NULL , -1 ) ;
+! 	xmlSecAssert2( in != NULL , -1 ) ;
+! 	xmlSecAssert2( out != NULL , -1 ) ;
+! 	xmlSecAssert2( transformCtx != NULL , -1 ) ;
+! 
+! 	/* read raw key material and append into context */
+! 	if( xmlSecBufferAppend( ctx->material, xmlSecBufferGetData(in), xmlSecBufferGetSize(in) ) < 0 ) {
+! 		xmlSecError( XMLSEC_ERRORS_HERE ,
+! 			NULL ,
+! 			"xmlSecBufferAppend" ,
+! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 		return(-1);    
+! 	}
+! 
+! 	if( xmlSecBufferRemoveHead( in , xmlSecBufferGetSize(in) ) < 0 ) {
+! 		xmlSecError( XMLSEC_ERRORS_HERE ,
+! 			NULL ,
+! 			"xmlSecBufferRemoveHead" ,
+! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 		return(-1);    
+! 	}
+! 
+! 	/* Now we get all of the key materail */
+! 	/* from now on we will wrap or unwrap the key */
+! 	if( ( blockSize = PK11_GetBlockSize( ctx->cipher , NULL ) ) < 0 ) {
+! 		xmlSecError( XMLSEC_ERRORS_HERE ,
+! 			NULL ,
+! 			"PK11_GetBlockSize" ,
+! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 		return(-1);    
+! 	}
+! 
+! 	result = xmlSecBufferCreate( blockSize ) ;
+! 	if( result == NULL ) {
+! 		xmlSecError( XMLSEC_ERRORS_HERE ,
+! 			NULL ,
+! 			"xmlSecBufferCreate" ,
+! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 		return(-1);    
+! 	}
+! 
+! 	switch( ctx->cipher ) {
+! 		case CKM_DES3_CBC :
+! 			if( xmlSecNssKeyWrapDesOp(ctx, encrypt, result) < 0 ) {
+! 				xmlSecError( XMLSEC_ERRORS_HERE ,
+! 					NULL ,
+! 					"xmlSecNssKeyWrapDesOp" ,
+! 					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 					XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 				xmlSecBufferDestroy(result);
+! 				return(-1);    
+! 			}
+! 			break ;
+! 	//	case CKM_NETSCAPE_AES_KEY_WRAP :
+! 		case CKM_AES_CBC :
+! 			if( xmlSecNssKeyWrapAesOp(ctx, encrypt, result) < 0 ) {
+! 				xmlSecError( XMLSEC_ERRORS_HERE ,
+! 					NULL ,
+! 					"xmlSecNssKeyWrapAesOp" ,
+! 					XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 					XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 				xmlSecBufferDestroy(result);
+! 				return(-1);    
+! 			}
+! 			break ;
+! 	}
+! 
+! 	/* Write output */
+! 	if( xmlSecBufferAppend( out, xmlSecBufferGetData(result), xmlSecBufferGetSize(result) ) < 0 ) {
+! 		xmlSecError( XMLSEC_ERRORS_HERE ,
+! 			NULL ,
+! 			"xmlSecBufferAppend" ,
+! 			XMLSEC_ERRORS_R_CRYPTO_FAILED ,
+! 			XMLSEC_ERRORS_NO_MESSAGE ) ;
+! 		xmlSecBufferDestroy(result);
+! 		return(-1);    
+! 	}
+! 	xmlSecBufferDestroy(result);
+! 
+! 	return(0);
 ! }
 ! 
 ! static int 
