@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-19 11:39:21 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 15:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,8 +526,10 @@ void SmParser::NextToken()
         CurToken.nLevel     = 5;
         CurToken.aText      = BufferString.Copy( nRealStart, (xub_StrLen) n );
 
-        DBG_ASSERT( IsDelimiter( BufferString, (xub_StrLen) aRes.EndPos ),
-                "number really finished? (compatibility!)" );
+#ifdef DEBUG
+            if (!IsDelimiter( BufferString, aRes.EndPos ))
+                DBG_WARNING( "identifier really finished? (compatibility!)" );
+#endif
     }
     else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
     {
@@ -562,8 +564,10 @@ void SmParser::NextToken()
             CurToken.nLevel     = 5;
             CurToken.aText      = aName;
 
-            DBG_ASSERT( IsDelimiter( BufferString, aRes.EndPos ),
-                    "identifier really finished? (compatibility!)" );
+#ifdef DEBUG
+            if (!IsDelimiter( BufferString, aRes.EndPos ))
+                DBG_WARNING( "identifier really finished? (compatibility!)" );
+#endif
         }
     }
     else if (aRes.TokenType == 0  &&  '_' == BufferString.GetChar( nRealStart ))
