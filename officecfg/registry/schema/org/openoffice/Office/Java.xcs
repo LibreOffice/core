@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-08 11:23:46 $
+ *  last change: $Author: jl $ $Date: 2002-07-15 08:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Java" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: JL -->    
   <component>
     <group oor:name="VirtualMachine">
-      <!-- Responsible: JL -->
       <info>
         <desc xml:lang="en-US">Provides information used to initialize a Java Virtual Machine. </desc>
       </info>
