@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:42:18 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,8 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ polish ] = "Wykresy blokowy";
     Text[ portuguese_brazilian ] = "Flowcharts";
     Text[ japanese ] = "ÌÛ°Á¬°Ä";
-    Text[ chinese_simplified ] = "Á÷¶¯Ê½Í¼±í";
-    Text[ chinese_traditional ] = "¬y°Ê¦¡¹Ïªí";
+    Text[ chinese_simplified ] = "¸÷ÖÖ¶à±ßĞÎ";
+    Text[ chinese_traditional ] = "¦UºØ¦hÃä§Î";
     Text[ arabic ] = "ÊÎØíØÇÊ ÇäÓíÇÈíÉ";
     Text[ greek ] = "ÄéáãñÜììáôá ñïŞò";
     Text[ korean ] = "¼ø¼­µµ";
