@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
+ *  last change: $Author: jb $ $Date: 2002-08-29 11:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class LocalFileLayer : public cppu::WeakImplHelper3<backend::XUpdatableLayer,
                     uno::RuntimeException) ;
         // XTimeStamped
         virtual rtl::OUString SAL_CALL getTimestamp(void)
-            throw (uno::RuntimeException) { return mTimestamp ; }
+            throw (uno::RuntimeException);
 
         /**
           Returns a externally usable layer writer.
@@ -166,14 +166,12 @@ class LocalFileLayer : public cppu::WeakImplHelper3<backend::XUpdatableLayer,
           */
         static rtl::OUString getTimestamp(const rtl::OUString& aFileUrl) ;
 
-    protected :
     private :
+        typedef std::vector<rtl::OUString> SubLayerFiles;
         /** Service factory */
         const uno::Reference<lang::XMultiServiceFactory>& mFactory ;
         /** URL of the file being accessed */
         rtl::OUString mFileUrl ;
-        /** Timestamp of the data at the last read operation */
-        rtl::OUString mTimestamp ;
         /** XLayer implementation used for readData */
         uno::Reference<backend::XLayer> mLayerReader ;
         /** XLayerHandler implementation for getWriteHandler */
@@ -181,7 +179,7 @@ class LocalFileLayer : public cppu::WeakImplHelper3<backend::XUpdatableLayer,
         /** List of available sublayers... */
         uno::Sequence<rtl::OUString> mSubLayers ;
         /** .. and the corresponding file URLs. */
-        std::vector<rtl::OUString> mSubLayerFiles ;
+        SubLayerFiles mSubLayerFiles ;
 
         /**
           Fills the list of available sublayers.

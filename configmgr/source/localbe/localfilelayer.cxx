@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
+ *  last change: $Author: jb $ $Date: 2002-08-29 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,24 @@ void SAL_CALL LocalFileLayer::readSubLayerData(
 }
 //------------------------------------------------------------------------------
 
+rtl::OUString LocalFileLayer::getTimestamp()
+    throw (uno::RuntimeException)
+{
+    rtl::OUString sStamp = getTimestamp(mFileUrl);
+#if 0
+    for (SubLayerFiles::const_iterator it = mSubLayerFiles.begin();
+         it != mSubLayerFiles.end();
+         ++it)
+    {
+        rtl::OUString sSublayerTime = getTimestamp(*it);
+        if (sStamp < sSublayerTime)
+            sStamp = sSublayerTime;
+    }
+#endif
+    return sStamp;
+}
+//------------------------------------------------------------------------------
+
 rtl::OUString LocalFileLayer::getTimestamp(const rtl::OUString& aFileUrl) {
     TimeValue timevalue = FileHelper::getModifyTime(aFileUrl) ;
     oslDateTime fileStamp ;
@@ -212,7 +230,7 @@ void LocalFileLayer::fillSubLayerList(const rtl::OUString& aResDir,
     osl::DirectoryItem item ;
     osl::FileStatus status(osl_FileStatus_Mask_Type |
                            osl_FileStatus_Mask_FileURL) ;
-    std::vector<rtl::OUString> subLayerDirs ;
+    SubLayerFiles subLayerDirs ;
 
     while (directory.getNextItem(item) == osl_File_E_None) {
         if (item.getFileStatus(status) == osl_File_E_None) {
@@ -231,7 +249,7 @@ void LocalFileLayer::fillSubLayerList(const rtl::OUString& aResDir,
     }
     if (subLayerDirs.size() > 0) {
         mSubLayers.realloc(subLayerDirs.size()) ;
-        std::vector<rtl::OUString>::const_iterator subLayer ;
+        SubLayerFiles::const_iterator subLayer ;
         sal_Int32 i = 0 ;
 
         for (subLayer = subLayerDirs.begin() ;
