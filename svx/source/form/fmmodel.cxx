@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 16:27:18 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 08:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
-            ,m_bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
@@ -130,7 +130,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
-            ,m_bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
@@ -172,7 +172,7 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
-            ,m_bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_False)
             ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
