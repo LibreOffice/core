@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:07:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     Text [ french ] = "Enregistrement" ; \
     Text [ dutch ] = "Opslaan" ; \
     Text [ portuguese ] = "Guardar" ; \
-    Text [ finnish ] = "Tallennusasetukset" ; \
+    Text [ finnish ] = "Tallenna" ; \
     Text[ chinese_simplified ] = "´æÅÌ";    \
     Text[ russian ] = "Ñîõğàíèòü";  \
     Text[ polish ] = "Zapisz";  \
@@ -86,7 +86,8 @@
     Text[ arabic ] = "ÍİÙ"; \
     Text[ greek ] = "ÁğïèŞêåõóç";   \
     Text[ korean ] = "ÀúÀå";    \
-    Text[ turkish ] = "Kaydet";
+    Text[ turkish ] = "Kaydet"; \
+    Text[ catalan ] = "Guardar";
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -106,7 +107,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "Salva" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "Guardar" ;
-        Text [ finnish ] = "Tallennus" ;
+        Text [ finnish ] = "Speichern" ;
         Text [ danish ] = "Gem" ;
         Text [ french ] = "Options d'enregistrement" ;
         Text [ swedish ] = "Spara" ;
@@ -122,6 +123,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ÁğïèŞêåõóç";
         Text[ korean ] = "ÀúÀå";
         Text[ turkish ] = "Kaydet";
+        Text[ catalan ] = "Guardar";
     };
     CheckBox BTN_DOCINFO
     {
@@ -133,7 +135,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "~Modifica prima le proprietà" ;
         Text [ portuguese_brazilian ] = "~Gravar com Informações sobre o documento" ;
         Text [ portuguese ] = "~Editar propriedades do documento antes de guardar" ;
-        Text [ finnish ] = "~Tallenna myös asiakirjan tiedot" ;
+        Text [ finnish ] = "~Muokkaa asiakirjan ominaisuuksia ennen tallennusta" ;
         Text [ danish ] = "Rediger egenskaber forinden" ;
         Text [ french ] = "É~diter les propriétés avant l'enregistrement" ;
         Text [ swedish ] = "Redigera egenskaper ~innan" ;
@@ -150,6 +152,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Åğåîåñã. ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
         Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸ »çÀü ÆíÁı(~E)";
         Text[ turkish ] = "Önce özellikleri düzenle";
+        Text[ catalan ] = "Edi~tar propiedades previamente";
     };
     CheckBox BTN_BACKUP
     {
@@ -161,7 +164,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "~Crea sempre copia di backup" ;
         Text [ portuguese_brazilian ] = "~Backup copy always" ;
         Text [ portuguese ] = "Criar sempre ~cópia de segurança" ;
-        Text [ finnish ] = "~Backup copy always" ;
+        Text [ finnish ] = "~Luo aina varmistuskopio" ;
         Text [ danish ] = "Opret altid sikkerhedskopi" ;
         Text [ french ] = "Toujours créer une ~copie de sauvegarde" ;
         Text [ swedish ] = "Skapa alltid ~säkerhetskopia" ;
@@ -177,6 +180,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
         Text[ korean ] = "Ç×»ó ¹é¾÷ º¹»çÇÏ±â(~W)";
         Text[ turkish ] = "~Her zaman yedekle";
+        Text[ catalan ] = "Cre~ar siempre copia de seguridad";
     };
     CheckBox BTN_AUTOSAVE
     {
@@ -188,7 +192,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "~Salva automaticamente ogni" ;
         Text [ portuguese_brazilian ] = "~Automatic save every" ;
         Text [ portuguese ] = "Guardar ~automaticamente cada" ;
-        Text [ finnish ] = "~Automatic save every" ;
+        Text [ finnish ] = "~Automaattinen tallennusväli" ;
         Text [ danish ] = "Gem automatisk alle" ;
         Text [ french ] = "~Enregistrer automat. toutes les " ;
         Text [ swedish ] = "Spara automatiskt var" ;
@@ -204,6 +208,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Áõôüìáôç áğïèŞêåõóç üëùí";
         Text[ korean ] = "¸ğµÎ ÀÚµ¿À¸·Î ÀúÀå(~A)";
         Text[ turkish ] = "Otomatik kaydetme sıklığı";
+        Text[ catalan ] = "~Guardar automáticamente cada";
     };
     NumericField ED_AUTOSAVE
     {
@@ -231,7 +236,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "minuti" ;
         Text [ portuguese_brazilian ] = "minutos" ;
         Text [ portuguese ] = "Minutos" ;
-        Text [ finnish ] = "minuutti" ;
+        Text [ finnish ] = "Pöytäkirja" ;
         Text [ danish ] = "minutter" ;
         Text [ french ] = "minutes" ;
         Text [ swedish ] = "minut" ;
@@ -247,6 +252,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ËåğôÜ";
         Text[ korean ] = "ºĞ";
         Text[ turkish ] = "Dakika";
+        Text[ catalan ] = "Minutos";
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
@@ -258,7 +264,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "~Richiedi conferma" ;
         Text [ portuguese_brazilian ] = "~Aviso para gravar" ;
         Text [ portuguese ] = "~Pronta para guardar" ;
-        Text [ finnish ] = "Tallennukselle va~hvistus" ;
+        Text [ finnish ] = "~Kehota tallentamaan" ;
         Text [ danish ] = "Spørg først" ;
         Text [ french ] = "Avec ~confirmation" ;
         Text [ swedish ] = "Bek~räfta före spara" ;
@@ -274,6 +280,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Ìå å~ñşôçóç äéåõêñßíéóçò";
         Text[ korean ] = "ÀúÀåÇÒ ¶§ È®ÀÎ(~P)";
         Text[ turkish ] = "~Önce sor";
+        Text[ catalan ] = "Con c~onsulta";
     };
     FixedLine GB_RELATIVE
     {
@@ -299,6 +306,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç ôùí URL";
         Text[ korean ] = "URL »ó´ëÀû ÀúÀå";
         Text[ turkish ] = "URL göreceli kayıt yeri";
+        Text[ finnish ] = "URLs relativ speichern";
+        Text[ catalan ] = "Guardar URLs relativamente";
     };
     CheckBox BTN_RELATIVE_FSYS
     {
@@ -326,6 +335,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "ÆÄÀÏ ½Ã½ºÅÛ(~F)";
         Text[ language_user1 ] = "LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
         Text[ turkish ] = "Dosya sistemi";
+        Text[ finnish ] = "~Tiedostojärjestelmä";
+        Text[ catalan ] = "En el ~sistema de archivos";
     };
     CheckBox BTN_RELATIVE_INET
     {
@@ -351,6 +362,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "óôï Internet";
         Text[ korean ] = "ÀÎÅÍ³İ(~I)";
         Text[ turkish ] = "Internet";
+        Text[ finnish ] = "~Internet";
+        Text[ catalan ] = "En ~Internet";
     };
     FixedLine FL_FILTER
     {
@@ -362,20 +375,22 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "Formato de ficheiro padrão";
         Text[ russian ] = "Ñòàíäàğòíûé ôîğìàò ôàéëà";
         Text[ greek ] = "Standard file format";
-        Text[ dutch ] = "Standard file format";
-        Text[ french ] = "Standard file format";
+        Text[ dutch ] = "Standaard bestandsformaat";
+        Text[ french ] = "Format de fichier standard";
         Text[ spanish ] = "Formato de archivo predeterminado";
         Text[ italian ] = "Formato file standard";
         Text[ danish ] = "Standard file format";
         Text[ swedish ] = "Standardfilformat";
         Text[ polish ] = "Standardowy format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
-        Text[ japanese ] = "Standard file format";
+        Text[ japanese ] = "•W€Ì§²ÙŒ`®";
         Text[ korean ] = "Standard file format";
         Text[ chinese_simplified ] = "Standard file format";
-        Text[ chinese_traditional ] = "Standard file format";
+        Text[ chinese_traditional ] = "¼Ğ·ÇÀÉ®×®æ¦¡";
         Text[ turkish ] = "Standard file format";
         Text[ arabic ] = "Standard file format";
+        Text[ finnish ] = "Standard Dateiformat";
+        Text[ catalan ] = "Standard file format";
     };
     FixedText FT_APP
     {
@@ -383,6 +398,26 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Dokumenttyp" ;
         Text [ English ] = "Document type" ;
+        Text[ english_us ] = "Document";
+        Text[ portuguese ] = "Documento";
+        Text[ russian ] = "Äîêóìåíò";
+        Text[ greek ] = "Document";
+        Text[ dutch ] = "Document";
+        Text[ french ] = "Document";
+        Text[ spanish ] = "Documento";
+        Text[ finnish ] = "Dokument";
+        Text[ italian ] = "Documento";
+        Text[ danish ] = "Document";
+        Text[ swedish ] = "Dokumenttyp";
+        Text[ polish ] = "Dokument";
+        Text[ portuguese_brazilian ] = "Document";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ";
+        Text[ korean ] = "Document";
+        Text[ chinese_simplified ] = "Document";
+        Text[ chinese_traditional ] = "¤å¥ó";
+        Text[ turkish ] = "Document";
+        Text[ arabic ] = "Document";
+        Text[ catalan ] = "Document";
     };
     FixedText FT_FILTER
     {
@@ -390,6 +425,26 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Immer speichern als" ;
         Text [ English ] = "Always save as" ;
+        Text[ english_us ] = "File formats";
+        Text[ portuguese ] = "Formatos de ficheiro";
+        Text[ russian ] = "Ôîğìàòû ôàéëà";
+        Text[ greek ] = "File formats";
+        Text[ dutch ] = "Bestandsformaten";
+        Text[ french ] = "Formats de fichier";
+        Text[ spanish ] = "Formatos de archivo";
+        Text[ finnish ] = "Dateiformate";
+        Text[ italian ] = "Formati file";
+        Text[ danish ] = "File formats";
+        Text[ swedish ] = "Spara alltid som";
+        Text[ polish ] = "Formaty pliku";
+        Text[ portuguese_brazilian ] = "File formats";
+        Text[ japanese ] = "Ì§²ÙŒ`®";
+        Text[ korean ] = "File formats";
+        Text[ chinese_simplified ] = "File formats";
+        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
+        Text[ turkish ] = "File formats";
+        Text[ arabic ] = "File formats";
+        Text[ catalan ] = "File formats";
     };
     ListBox LB_APP
     {
@@ -414,6 +469,195 @@ TabPage RID_SFXPAGE_SAVE
             < "Drawing" ;       APP_DRAW      ;> ;
             < "Formula" ;       APP_MATH      ;> ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "Textdokument" ;           APP_MATH      ; > ;
+        < "HTML-Dokument" ;           APP_MATH      ; > ;
+        < "Tabellendokument" ;           APP_MATH      ; > ;
+        < "Präsentation" ;           APP_MATH      ; > ;
+        < "Zeichnung" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Text document" ;           APP_MATH      ; > ;
+        < "HTML document" ;           APP_MATH      ; > ;
+        < "Spreadsheet" ;           APP_MATH      ; > ;
+        < "Presentation" ;           APP_MATH      ; > ;
+        < "Drawing" ;           APP_MATH      ; > ;
+        < "Formula" ;           APP_MATH      ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "Documento de texto" ;           APP_MATH      ; > ;
+        < "Documento HTML" ;           APP_MATH      ; > ;
+        < "Folha de cálculo" ;           APP_MATH      ; > ;
+        < "Apresentação" ;           APP_MATH      ; > ;
+        < "Desenho" ;           APP_MATH      ; > ;
+        < "Fórmula" ;           APP_MATH      ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Òåêñòîâûé äîêóìåíò" ;           APP_MATH      ; > ;
+        < "Äîêóìåíò HTML" ;           APP_MATH      ; > ;
+        < "Äîêóìåíò ıëåêòğîííîé òàáëèöû" ;           APP_MATH      ; > ;
+        < "Ïğåçåíòàöèÿ" ;           APP_MATH      ; > ;
+        < "Ğèñóíîê" ;           APP_MATH      ; > ;
+        < "Ôîğìóëà" ;           APP_MATH      ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "¸ããñáöï êåéìİíïõ" ;           APP_MATH      ; > ;
+        < "¸ããñáöï HTML" ;           APP_MATH      ; > ;
+        < "¸ããñáöï ğßíáêá" ;           APP_MATH      ; > ;
+        < "Ğáñïõóßáóç" ;           APP_MATH      ; > ;
+        < "Ó÷İäéï" ;           APP_MATH      ; > ;
+        < "Ôığïò" ;           APP_MATH      ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Tekstdocument" ;           APP_MATH      ; > ;
+        < "HTML-document" ;           APP_MATH      ; > ;
+        < "Werkbladdocument" ;           APP_MATH      ; > ;
+        < "Presentatie" ;           APP_MATH      ; > ;
+        < "Tekening" ;           APP_MATH      ; > ;
+        < "Formule" ;           APP_MATH      ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "Document texte" ;           APP_MATH      ; > ;
+        < "Document HTML" ;           APP_MATH      ; > ;
+        < "Classeur" ;           APP_MATH      ; > ;
+        < "Présentation" ;           APP_MATH      ; > ;
+        < "Dessin" ;           APP_MATH      ; > ;
+        < "Formule" ;           APP_MATH      ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "Documento de texto" ;           APP_MATH      ; > ;
+        < "Documento HTML" ;           APP_MATH      ; > ;
+        < "Hoja de cálculo" ;           APP_MATH      ; > ;
+        < "Presentación" ;           APP_MATH      ; > ;
+        < "Dibujo" ;           APP_MATH      ; > ;
+        < "Fórmula" ;           APP_MATH      ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Textdokument" ;           APP_MATH      ; > ;
+        < "HTML-Dokument" ;           APP_MATH      ; > ;
+        < "Tabellendokument" ;           APP_MATH      ; > ;
+        < "Präsentation" ;           APP_MATH      ; > ;
+        < "Zeichnung" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "Documento di testo" ;           APP_MATH      ; > ;
+        < "Documento HTML" ;           APP_MATH      ; > ;
+        < "Foglio elettronico" ;           APP_MATH      ; > ;
+        < "Presentazione" ;           APP_MATH      ; > ;
+        < "Disegno" ;           APP_MATH      ; > ;
+        < "Formula" ;           APP_MATH      ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Tekstdokument" ;           APP_MATH      ; > ;
+        < "HTML-Dokument" ;           APP_MATH      ; > ;
+        < "Regneark" ;           APP_MATH      ; > ;
+        < "Præsentation" ;           APP_MATH      ; > ;
+        < "Tegning" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Textdokument" ;           APP_MATH      ; > ;
+        < "HTML-dokument" ;           APP_MATH      ; > ;
+        < "Tabelldokument" ;           APP_MATH      ; > ;
+        < "Presentation" ;           APP_MATH      ; > ;
+        < "Teckning" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Dokument tekstowy" ;           APP_MATH      ; > ;
+        < "Dokument HTML" ;           APP_MATH      ; > ;
+        < "Arkusz kalkulacyjny" ;           APP_MATH      ; > ;
+        < "Prezentacja" ;           APP_MATH      ; > ;
+        < "Rysunek" ;           APP_MATH      ; > ;
+        < "Formu³a" ;           APP_MATH      ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Textdokument" ;           APP_MATH      ; > ;
+        < "HTML-Dokument" ;           APP_MATH      ; > ;
+        < "Tabellendokument" ;           APP_MATH      ; > ;
+        < "Präsentation" ;           APP_MATH      ; > ;
+        < "Zeichnung" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "•¶‘ÄŞ·­ÒİÄ" ;           APP_MATH      ; > ;
+        < "HTML Œ`®ÄŞ·­ÒİÄ" ;           APP_MATH      ; > ;
+        < "•\\ŒvZÄŞ·­ÒİÄ" ;           APP_MATH      ; > ;
+        < "ÌßÚ¾ŞİÃ°¼®İ" ;           APP_MATH      ; > ;
+        < "}Œ`•`‰æ" ;           APP_MATH      ; > ;
+        < "”®" ;           APP_MATH      ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ÅØ½ºÆ®¡¡¹®¼­" ;           APP_MATH      ; > ;
+        < "HTML ¹®¼­" ;           APP_MATH      ; > ;
+        < "½ºÇÁ·¹µå½ÃÆ®t" ;           APP_MATH      ; > ;
+        < "ÇÁ¸®Á¨Å×ÀÌ¼Ç" ;           APP_MATH      ; > ;
+        < "±×¸®±â" ;           APP_MATH      ; > ;
+        < "FORMULA" ;           APP_MATH      ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "ÎÄ×ÖÎÄµµ" ;           APP_MATH      ; > ;
+        < "HTML ÎÄµµ" ;           APP_MATH      ; > ;
+        < "¹¤×÷±íÎÄµµ" ;           APP_MATH      ; > ;
+        < "ÑİÊ¾ÎÄ¸å" ;           APP_MATH      ; > ;
+        < "»æÍ¼" ;           APP_MATH      ; > ;
+        < "FORMULA" ;           APP_MATH      ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¤å¦r¤å¥ó" ;           APP_MATH      ; > ;
+        < "HTML ¤å¥ó" ;           APP_MATH      ; > ;
+        < "¤u§@ªí¤å¥ó" ;           APP_MATH      ; > ;
+        < "Â²³ø" ;           APP_MATH      ; > ;
+        < "Ã¸¹Ï" ;           APP_MATH      ; > ;
+        < "¤½¦¡" ;           APP_MATH      ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Metin belgesi" ;           APP_MATH      ; > ;
+        < "HTML belgesi" ;           APP_MATH      ; > ;
+        < "Hesap tablosu" ;           APP_MATH      ; > ;
+        < "Sunu" ;           APP_MATH      ; > ;
+        < "Çizim" ;           APP_MATH      ; > ;
+        < "Formül" ;           APP_MATH      ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ãÓÊäÏ äÕ" ;           APP_MATH      ; > ;
+        < "HTML ãÓÊäÏ" ;           APP_MATH      ; > ;
+        < "ãÓÊäÏ ÌÏæá" ;           APP_MATH      ; > ;
+        < "ÚÑÖ ÊŞÏíãí" ;           APP_MATH      ; > ;
+        < "ÑÓã" ;           APP_MATH      ; > ;
+        < "ÕíÛÉ" ;           APP_MATH      ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Textdokument" ;           APP_MATH      ; > ;
+        < "HTML-Dokument" ;           APP_MATH      ; > ;
+        < "Tabellendokument" ;           APP_MATH      ; > ;
+        < "Präsentation" ;           APP_MATH      ; > ;
+        < "Zeichnung" ;           APP_MATH      ; > ;
+        < "Formel" ;           APP_MATH      ; > ;
+    };
     };
     ListBox LB_FILTER
     {
