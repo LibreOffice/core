@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-23 14:07:53 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 11:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,11 +390,16 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         {
                             // ueberlappt den akt. komplett
                             // dann muss der neue gesplittet werden
-                            SwRedline* pNew = new SwRedline( *pNewRedl );
-                            pNew->SetStart( *pREnd );
-                            pNewRedl->SetEnd( *pRStt, pEnd );
-                            AppendRedline( pNew, bCallDelete );
-                            n = (USHORT)-1;     // neu Aufsetzen
+                            if( *pEnd != *pREnd )
+                            {
+                                SwRedline* pNew = new SwRedline( *pNewRedl );
+                                pNew->SetStart( *pREnd );
+                                pNewRedl->SetEnd( *pRStt, pEnd );
+                                AppendRedline( pNew, bCallDelete );
+                                n = (USHORT)-1;     // neu Aufsetzen
+                            }
+                            else
+                                pNewRedl->SetEnd( *pRStt, pEnd );
                         }
                         break;
 
