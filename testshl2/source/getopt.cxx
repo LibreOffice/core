@@ -8,16 +8,15 @@
 #*                     (see description in headerfile)
 #*
 #*    Creation Date     Stefan Zimmermann  09/15/2000
-#*    last change       $Author: rt $ $Date: 2004-05-03 08:50:43 $
-#*    $Revision: 1.4 $
+#*    last change       $Author: vg $ $Date: 2005-02-24 14:40:48 $
+#*    $Revision: 1.5 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
 #*************************************************************************
-
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.4 2004-05-03 08:50:43 rt Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.5 2005-02-24 14:40:48 vg Exp $
 
       Source Code Control System - Update
 
@@ -553,11 +552,11 @@ void GetOpt::showUsage() {
 
     cout << "\n\n\n\n\nUsage: prgname param [options]\n\nPRGNAME = [path]";
 
-    if ( nameVec.end() ) {
+    if ( !nameVec.empty() ) {
         cout << (*(nameVec.end()-1)).getStr();
     }
     cout << "\nPARAM   = [path]";
-    if ( paramVec.end() ) {
+    if ( !paramVec.empty() ) {
         cout << (*(paramVec.end()-1)).getStr() << endl;
     }
 
@@ -857,7 +856,7 @@ rtl::OString& GetOpt::getOpt( const rtl::OString& opt )
 {
     if (m_opthash.find( opt ) != m_opthash.end())
     {
-        if (m_opthash[opt].begin())
+        if (!m_opthash[opt].empty())
         {
             return *( m_opthash[opt].begin() );
         }
