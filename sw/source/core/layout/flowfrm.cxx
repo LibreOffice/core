@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:44:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2018,7 +2018,8 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
 
         // First, we move the footnotes.
         BOOL bFtnMoved = FALSE;
-        bool bOldUpperValid = rThis.GetUpper()->IsValid();
+        // #i27145#
+        const bool bOldUpperValid = rThis.GetUpper()->IsValid();
 
         if ( pNewBoss != pOldBoss )
         {
@@ -2046,9 +2047,11 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         {
             // #i27145#
             SwSectionFrm* pOldSct = 0;
-            if ( rThis.GetUpper()->IsSctFrm() && bOldUpperValid &&
-                !rThis.GetUpper()->IsValid() )
+            if ( rThis.GetUpper()->IsSctFrm() &&
+                 bOldUpperValid && !rThis.GetUpper()->IsValid() )
+            {
                 pOldSct = (SwSectionFrm*)rThis.GetUpper();
+            }
 
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
 
@@ -2308,6 +2311,36 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         }
         pNewUpper = 0;
     }
+
+    // OD 2004-05-26 #i21478# - don't move backward, if flow frame wants to
+    // keep with next frame and next frame is locked.
+    if ( pNewUpper && !IsFollow() &&
+         rThis.GetAttrSet()->GetKeep().GetValue() && rThis.GetIndNext() )
+    {
+        SwFrm* pIndNext = rThis.GetIndNext();
+        // get first content of section, while empty sections are skipped
+        while ( pIndNext && pIndNext->IsSctFrm() )
+        {
+            if( static_cast<SwSectionFrm*>(pIndNext)->GetSection() )
+            {
+                SwFrm* pTmp = static_cast<SwSectionFrm*>(pIndNext)->ContainsAny();
+                if ( pTmp )
+                {
+                    pIndNext = pTmp;
+                    break;
+                }
+            }
+            pIndNext = pIndNext->GetIndNext();
+        }
+        ASSERT( pIndNext->ISA(SwTxtFrm) || pIndNext->ISA(SwTabFrm),
+                "<SwFlowFrm::MovedBwd(..)> - incorrect next found." );
+        if ( pIndNext && pIndNext->IsFlowFrm() &&
+             SwFlowFrm::CastFlowFrm(pIndNext)->IsJoinLocked() )
+        {
+            pNewUpper = 0L;
+        }
+    }
+
     if ( pNewUpper )
     {
         PROTOCOL_ENTER( &rThis, PROT_MOVE_BWD, 0, 0 );
