@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 14:24:48 $
+ *  last change: $Author: th $ $Date: 2001-06-15 12:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,9 +1050,6 @@ void PushButton::StateChanged( StateChangedType nType )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
-
-        if ( nType == STATE_CHANGE_STATE )
-            Toggle();
     }
     else if ( nType == STATE_CHANGE_STYLE )
     {
@@ -1192,6 +1189,7 @@ void PushButton::SetState( TriState eState )
         }
 
         StateChanged( STATE_CHANGE_STATE );
+        Toggle();
     }
 }
 
@@ -2109,7 +2107,6 @@ void RadioButton::StateChanged( StateChangedType nType )
             else
                 ImplDrawRadioButtonState();
         }
-        Toggle();
     }
     else if ( (nType == STATE_CHANGE_ENABLE) ||
               (nType == STATE_CHANGE_TEXT) ||
@@ -2197,6 +2194,7 @@ void RadioButton::SetState( BOOL bCheck )
     {
         mbChecked = bCheck;
         StateChanged( STATE_CHANGE_STATE );
+        Toggle();
     }
 }
 
@@ -2218,9 +2216,12 @@ void RadioButton::Check( BOOL bCheck )
         StateChanged( STATE_CHANGE_STATE );
         if ( aDelData.IsDelete() )
             return;
-        ImplRemoveDel( &aDelData );
         if ( bCheck && mbRadioCheck )
             ImplUncheckAllOther();
+        if ( aDelData.IsDelete() )
+            return;
+        Toggle();
+        ImplRemoveDel( &aDelData );
     }
 }
 
@@ -2837,7 +2838,6 @@ void CheckBox::StateChanged( StateChangedType nType )
             else
                 ImplDrawCheckBoxState();
         }
-        Toggle();
     }
     else if ( (nType == STATE_CHANGE_ENABLE) ||
               (nType == STATE_CHANGE_TEXT) ||
@@ -2911,6 +2911,7 @@ void CheckBox::SetState( TriState eState )
     {
         meState = eState;
         StateChanged( STATE_CHANGE_STATE );
+        Toggle();
     }
 }
 
