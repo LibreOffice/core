@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:22:36 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 14:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,13 @@
 #include "fmresids.hrc"
 #endif
 #include "dialmgr.hxx"
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 
 using namespace svxform;
 using namespace ::connectivity;
@@ -82,6 +89,7 @@ DBG_NAME(OSystemParseContext);
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
+    vos::OGuard aGuard( Application::GetSolarMutex() );
     m_aSQLInternationals = ByteString(SVX_RES(RID_STR_SVT_SQL_INTERNATIONAL),RTL_TEXTENCODING_ASCII_US);
 }
 
@@ -101,6 +109,7 @@ OSystemParseContext::~OSystemParseContext()
 ::rtl::OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     String aMsg;
+    vos::OGuard aGuard( Application::GetSolarMutex() );
     switch (_eCode)
     {
         case ERROR_GENERAL:                 aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
