@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-10 21:40:50 $
+#   last change: $Author: pluby $ $Date: 2001-02-10 22:47:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,6 +167,13 @@ APP5STDLIBS= \
 APP5STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+APP5OBJS+=$(OBJ)$/staticmbtest.obj 
+.ENDIF
+
 # --- Application 6 - testitrosp main ------------------------------------
 APP6TARGET= 	$(TARGET6)
 APP6OBJS  = 	$(OBJ)$/testintrosp.obj 
@@ -178,6 +185,13 @@ APP6STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 APP6STDLIBS+=	$(LIBCIMT)
+.ENDIF
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+APP6OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
 # --- Application 7 - testconv main ------------------------------------
@@ -202,6 +216,13 @@ APP8STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 APP8STDLIBS+=	$(LIBCIMT)
+.ENDIF
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+APP8OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
 ALLIDLFILES:=	testcorefl.idl language_binding.idl testintrosp.idl
