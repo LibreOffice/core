@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:33:21 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,49 +90,26 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
 }
 
 //static
-sal_Int32 ChartModelHelper::getDimensionAndFirstChartType( const uno::Reference< XDiagram >& xDiagram, rtl::OUString& rChartType )
+uno::Reference< XChartType > ChartModelHelper::getFirstChartType( const uno::Reference< XDiagram >& xDiagram )
 {
-    sal_Int32 nDimension = 2;
-
-    //@todo maybe get the dimension better from diagram properties ... -> need model change
     if(!xDiagram.is())
-        return nDimension;
+        return 0;
     uno::Reference< XDataSeriesTreeParent > xTree = xDiagram->getTree();
     if(!xTree.is())
-        return nDimension;
+        return 0;
     uno::Sequence< uno::Reference< XDataSeriesTreeNode > >  aChartTypes( xTree->getChildren() );
     for( sal_Int32 i = 0; i < aChartTypes.getLength(); ++i )
     {
         uno::Reference< XChartTypeGroup > xChartTypeGroup( aChartTypes[i], uno::UNO_QUERY );
         DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
-        if( !xChartTypeGroup.is() )
-            continue;
-        uno::Reference< XChartType > xChartType = xChartTypeGroup->getChartType();
-        if( !xChartType.is() )
-            continue;
-        uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-        if( xChartTypeProp.is())
+        if( xChartTypeGroup.is() )
         {
-            try
-            {
-                if( (xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension) )
-                {
-                    rChartType = xChartType->getChartType();
-                    return nDimension;
-                }
-                else
-                {
-                    DBG_ERROR( "Couldn't get Dimension from ChartTypeGroup" );
-                }
-            }
-            catch( beans::UnknownPropertyException ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-            break;
+            uno::Reference< XChartType > xChartType = xChartTypeGroup->getChartType();
+            if( xChartType.is() )
+                return xChartType;
         }
     }
-    return nDimension;
+    return 0;
 }
 
 namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-06 19:38:32 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -713,6 +707,10 @@ uno::Reference<drawing::XShape>
     return xShape;
 }
 
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
+
 void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawing::PolyPolygonBezierCoords& rAdd, sal_Bool bAppendInverse )
 {
     if(!rAdd.Coordinates.getLength())
@@ -733,6 +731,8 @@ void appendBezierCoords( drawing::PolyPolygonBezierCoords& rReturn, const drawin
         rReturn.Flags[0][nOldCount+nN] = rAdd.Flags[0][nAdd];
     }
 }
+
+//------------------------------------------------------------------------------------------------------------
 
 drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
         double fAngleRadian
@@ -815,6 +815,8 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
     return aReturn;
 }
 
+//------------------------------------------------------------------------------------------------------------
+
 drawing::PolyPolygonBezierCoords getRingBezierCoords(
             double fInnerXRadius
             , double fOuterXRadius, double fOuterYRadius
@@ -849,78 +851,16 @@ drawing::PolyPolygonBezierCoords getRingBezierCoords(
 
     return aReturn;
 }
-/*
-XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nStart, long nEnd)
-{
-    long rx=rRect1.GetWidth()/2;  // Da GetWidth()/GetHeight() jeweils 1
-    long ry=rRect1.GetHeight()/2; // draufaddieren wird korrekt gerundet.
-    long a=0,e=3600;
-    {
-        a=nStart/10;
-        e=nEnd/10;
-        {
-            // Drehrichtung umkehren, damit Richtungssinn genauso wie Rechteck
-            rx=-rx;
-            a=1800-a; if (a<0) a+=3600;
-            e=1800-e; if (e<0) e+=3600;
-            long nTmp=a;
-            a=e;
-            e=nTmp;
-        }
-    }
-    FASTBOOL bClose=FALSE;
-    XPolygon aXPoly(rRect1.Center(),rx,ry,USHORT(a),USHORT(e),bClose);
-    if (nStart==nEnd)
-    {
-        Point aMerk(aXPoly[0]);
-        aXPoly=XPolygon(2);
-        aXPoly[0]=rRect1.Center();
-        aXPoly[1]=aMerk;
-    }
-    { // Der Sektor soll Start/Ende im Zentrum haben
-        // Polygon um einen Punkt rotieren (Punkte im Array verschieben)
-        unsigned nPointAnz=aXPoly.GetPointCount();
-        aXPoly.Insert(0,rRect1.Center(),XPOLY_NORMAL);
-        aXPoly[aXPoly.GetPointCount()]=rRect1.Center();
-    }
-     // Die Winkelangaben beziehen sich immer auf die linke obere Ecke von !aRect!
-//  if (aGeo.nShearWink!=0) ShearXPoly(aXPoly,aRect.TopLeft(),aGeo.nTan);
-//  if (aGeo.nDrehWink!=0) RotateXPoly(aXPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-     return aXPoly;
-}
-*/
+
+//------------------------------------------------------------------------------------------------------------
+
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment2D(
                     const uno::Reference< drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry )
+                    , double fStartAngleDegree, double fWidthAngleDegree
+                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
+                    , const drawing::Position3D& rOrigin )
 {
-    /*
-    DataPointGeometry aLogicGeom( drawing::Position3D(0.0,0.0,0.0)
-                                , drawing::Direction3D(fOuterXDiameter,fOuterYDiameter,fDepth)
-                                , drawing::Direction3D(fInnerXDiameter,fStartAngleDegree,fWidthAngleDegree) );
-    */
-
-    double fInnerXRadius      = rGeometry.m_aSize2.DirectionX/2.0;
-    //only test
-    //fInnerXRadius = 0.0;
-    //if( fInnerXRadius > 0.0 ) return NULL;
-
-    double fOuterXRadius      = rGeometry.m_aSize.DirectionX/2.0;
-    double fOuterYRadius      = rGeometry.m_aSize.DirectionY/2.0;
-
-    double fStartAngleDegree = rGeometry.m_aSize2.DirectionY;
-    double fWidthAngleDegree = rGeometry.m_aSize2.DirectionZ;
-
-    /*
-    DBG_ASSERT(fOuterXRadius>0, "The radius of a pie needs to be > 0");
-    DBG_ASSERT(fInnerXRadius>=0, "The inner radius of a pie needs to be >= 0");
-    DBG_ASSERT(fOuterXRadius>fInnerXRadius, "The outer radius needs to be greater than the inner radius of a pie");
-    DBG_ASSERT(fOuterYRadius>0, "The radius of a pie needs to be > 0");
-
-    DBG_ASSERT(fWidthAngleDegree>0, "The angle of a pie needs to be > 0");
-    DBG_ASSERT(fWidthAngleDegree<=360, "The angle of a pie needs to be <= 360 degree");
-    */
-
     while(fWidthAngleDegree>360)
         fWidthAngleDegree -= 360.0;
     while(fWidthAngleDegree<0)
@@ -929,25 +869,8 @@ uno::Reference< drawing::XShape >
     //create shape
     uno::Reference< drawing::XShape > xShape(
             m_xShapeFactory->createInstance(
-//            C2U("com.sun.star.drawing.EllipseShape") ), uno::UNO_QUERY );
-//            C2U("com.sun.star.drawing.PolyPolygonShape") ), uno::UNO_QUERY );
-//            C2U("com.sun.star.drawing.OpenFreeHandShape") ), uno::UNO_QUERY );
                 C2U("com.sun.star.drawing.ClosedBezierShape") ), uno::UNO_QUERY );
-//                C2U("com.sun.star.drawing.LineShape") ), uno::UNO_QUERY );
-//                C2U("com.sun.star.drawing.PolyLineShape") ), uno::UNO_QUERY );
-
-    //need to add the shape before setting of properties
-    xTarget->add(xShape);
-
-    //need left upper corner not the middle of the circle (!! x and y are assumed to scale in the same way here)
-    double fXPos = rGeometry.m_aPosition.PositionX;
-    double fYPos = rGeometry.m_aPosition.PositionY;
-
-    double fXSize = rGeometry.m_aSize.DirectionX;
-    double fYSize = rGeometry.m_aSize.DirectionY;
-
-    fXPos -= fXSize/2.0;
-    fYPos -= fYSize/2.0;
+    xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
@@ -956,171 +879,31 @@ uno::Reference< drawing::XShape >
     {
         try
         {
-            /*
-            Matrix3D aTransformationFromUnitCircle;
-            aTransformationFromUnitCircle.Rotate(fStartAngleDegree*F_PI/180.0);
-            aTransformationFromUnitCircle.ScaleX(fInnerXRadius+fXWidthRadius);
-            aTransformationFromUnitCircle.ScaleY(fInnerXRadius+fXWidthRadius);
-            aTransformationFromUnitCircle.TranslateX(rGeometry.m_aPosition.PositionX);
-            aTransformationFromUnitCircle.TranslateY(rGeometry.m_aPosition.PositionY);
-            drawing::PolyPolygonBezierCoords aCoords = getCircularArcBezierCoords( fWidthAngleDegree * F_PI/180.0
-                , aTransformationFromUnitCircle );
-            */
-
             drawing::PolyPolygonBezierCoords aCoords = getRingBezierCoords(
                 fInnerXRadius, fOuterXRadius, fOuterYRadius
                 , fWidthAngleDegree*F_PI/180.0, fStartAngleDegree*F_PI/180.0
-                , rGeometry.m_aPosition.PositionX, rGeometry.m_aPosition.PositionY);
-            xProp->setPropertyValue( C2U( "PolyPolygonBezier" )
-                , uno::makeAny( aCoords ) );
+                , rOrigin.PositionX, rOrigin.PositionY);
 
-            /*
-            Rectangle aRect(fXPos,fYPos+fYSize,fXPos+fXSize,fYPos);
-            XPolygon aXPolygon = ImpCalcXPoly(aRect
-                , fStartAngleDegree*100.0
-                , (fStartAngleDegree+fWidthAngleDegree)*100.0);
-
-            sal_Int32 nCount = aXPolygon.GetSize();
-            if( nCount > 0 )
-            {
-                */
-                /*
-                drawing::PointSequence aSeq( nCount );
-                awt::Point* pSequence = aSeq.getArray();
-
-                for(sal_Int32 b=0;b<nCount;b++)
-                {
-                    *pSequence = awt::Point( aXPolygon[b].X(), aXPolygon[b].Y() );
-                    pSequence++;
-                }
-                */
-                /*
-
-                drawing::PointSequence aSeq( 4 );
-                awt::Point* pSequence = aSeq.getArray();
-                pSequence[0] = awt::Point( 0, 0 );
-                pSequence[1] = awt::Point( 10000, -10000 );
-                pSequence[2] = awt::Point( 10000, 0 );
-                pSequence[3] = awt::Point( 0, 0 );
-
-
-                //UNO_NAME_POLYGON drawing::PointSequence*
-                xProp->setPropertyValue( C2U( UNO_NAME_POLYGON )
-                , uno::makeAny( aSeq ) );
-            }
-            */
-
-/*
-UNO_NAME_POLYGONKIND "PolygonKind" drawing::PolygonKind* (readonly)
-
-UNO_NAME_POLYPOLYGON "PolyPolygon" drawing::PointSequenceSequence*
-UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
-
-UNO_NAME_POLYPOLYGONBEZIER "PolyPolygonBezier" drawing::PolyPolygonBezierCoords*
-*/
-
-            /*
-            //UNO_NAME_CIRCKIND drawing::CircleKind
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
-                , uno::makeAny(drawing::CircleKind_SECTION) );
-
-            double factor = 100.0;
-
-            //UNO_NAME_CIRCSTARTANGLE sal_Int32
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCSTARTANGLE )
-                , uno::makeAny((sal_Int32)(fStartAngleDegree*factor)) );
-
-            //UNO_NAME_CIRCENDANGLE sal_Int32
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCENDANGLE )
-                , uno::makeAny((sal_Int32)((fStartAngleDegree+fWidthAngleDegree)*factor)) );
-                */
+            xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
         }
         catch( uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
-
-//    xShape->setPosition(awt::Point(rGeometry.m_aPosition.PositionX,rGeometry.m_aPosition.PositionY));
-
-//    xShape->setPosition(awt::Point(fXPos,fYPos));
-//    xShape->setSize(awt::Size(fXSize,fYSize));
-
-    /*
-    xShape->setPosition(awt::Point(100,100));
-    xShape->setSize(awt::Size(10000,10000));
-    */
-
-    /*
-    //create shape
-    uno::Reference< drawing::XShape > xShape(
-            m_xShapeFactory->createInstance(
-            //C2U("com.sun.star.drawing.EllipseShape") ), uno::UNO_QUERY );
-            C2U("com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
-
-    xTarget->add(xShape);
-
-    //set properties
-    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
-    if( xProp.is())
-    {
-        try
-        {
-            //UNO_NAME_CIRCKIND drawing::CircleKind
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
-                , uno::makeAny(drawing::CircleKind_SECTION) );
-
-            double factor = 100.0;
-
-            //UNO_NAME_CIRCSTARTANGLE sal_Int32
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCSTARTANGLE )
-                , uno::makeAny((sal_Int32)(fStartAngleDegree*factor)) );
-
-            //UNO_NAME_CIRCENDANGLE sal_Int32
-            xProp->setPropertyValue( C2U( UNO_NAME_CIRCENDANGLE )
-                , uno::makeAny((sal_Int32)((fStartAngleDegree+fWidthAngleDegree)*factor)) );
-        }
-        catch( uno::Exception& e )
-        {
-            e;
-        }
-    }
-    //need left upper corner not the middle of the circle (!! x and y are assumed to scale in the same way here)
-    double fXPos = rGeometry.m_aPosition.PositionX;
-    double fYPos = rGeometry.m_aPosition.PositionY;
-
-    double fXSize = rGeometry.m_aSize.DirectionX;
-    double fYSize = rGeometry.m_aSize.DirectionY;
-
-    fXPos -= fXSize/2.0;
-    fYPos -= fYSize/2.0;
-
-    xShape->setPosition(awt::Point(fXPos,fYPos));
-    xShape->setSize(awt::Size(fXSize,fYSize));
-    */
     return xShape;
 }
+
+//------------------------------------------------------------------------------------------------------------
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createPieSegment(
                     const uno::Reference< drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry )
+                    , double fStartAngleDegree, double fWidthAngleDegree
+                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
+                    , const drawing::Position3D& rOrigin
+                    , double fDepth )
 {
-    double fInnerXRadius      = rGeometry.m_aSize2.DirectionX/2.0;
-    double fXWidthRadius      = rGeometry.m_aSize.DirectionX/2.0 - fInnerXRadius;
-
-    double fDepth           = rGeometry.m_aSize.DirectionZ;
-
-    double fStartAngleDegree = rGeometry.m_aSize2.DirectionY;
-    double fWidthAngleDegree = rGeometry.m_aSize2.DirectionZ;
-
-    DBG_ASSERT(fDepth>0, "The height of a pie needs to be > 0");
-    DBG_ASSERT(fXWidthRadius>0, "The radius of a pie needs to be > 0");
-    DBG_ASSERT(fInnerXRadius>=0, "The inner radius of a pie needs to be > 0");
-    DBG_ASSERT(fWidthAngleDegree>0, "The angle of a pie needs to be > 0");
-    DBG_ASSERT(fWidthAngleDegree<=360, "The angle of a pie needs to be <= 360 degree");
-
     while(fWidthAngleDegree>360)
         fWidthAngleDegree -= 360.0;
     while(fWidthAngleDegree<0)
@@ -1130,8 +913,7 @@ uno::Reference< drawing::XShape >
     uno::Reference< drawing::XShape > xShape(
             m_xShapeFactory->createInstance(
             C2U("com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
-
-    xTarget->add(xShape);
+    xTarget->add(xShape); //need to add the shape before setting of properties
 
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
@@ -1140,6 +922,8 @@ uno::Reference< drawing::XShape >
     {
         try
         {
+            double fXWidthRadius      = fOuterXRadius - fInnerXRadius;
+
             //PercentDiagonal
             xProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
                 , uno::makeAny((sal_Int16)0) );
@@ -1155,9 +939,9 @@ uno::Reference< drawing::XShape >
             //Matrix for position
             {
                 Matrix4D aM4;
-                aM4.ScaleZ(rGeometry.m_aSize.DirectionY/rGeometry.m_aSize.DirectionX);
+                aM4.ScaleZ(fOuterYRadius/fOuterXRadius);
                 aM4.RotateY( ZDIRECTION*fStartAngleDegree*F_PI/180.0 );
-                aM4.Translate(rGeometry.m_aPosition.PositionX, rGeometry.m_aPosition.PositionZ, rGeometry.m_aPosition.PositionY);
+                aM4.Translate(rOrigin.PositionX, rOrigin.PositionZ, rOrigin.PositionY);
                 drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
@@ -1176,6 +960,10 @@ uno::Reference< drawing::XShape >
     }
     return xShape;
 }
+
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
@@ -1981,66 +1769,6 @@ uno::Reference< drawing::XShape >
         }
     }
     return xShape;
-        /*
-    //create 3D anchor shape
-    uno::Reference< drawing::XShape > xShape3DAnchor = createCube( xTarget3D
-            , DataPointGeometry( rGeometry.m_aPosition,drawing::Direction3D(1000,1000,1000) )
-            , ...);
-    //get 2D position from xShape3DAnchor
-    //the 2D position of the 3D Shape is not correct initially this is a bug in draw @todo
-    //awt::Point aPosition2D( xShape3DAnchor->getPosition() );
-    */
-
-    //--
-    /*
-    uno::Reference< text::XTextRange > xTextRange( xShape2DText, uno::UNO_QUERY );
-    uno::Reference< text::XText > xText11( xShape2DText, uno::UNO_QUERY );
-    if( xTextRange.is() )
-    {
-        uno::Reference< text::XText > xText = xTextRange->getText();
-
-        xText->insertString( xTextRange, C2U( "Hello" ), true );
-        xText->insertControlCharacter( xTextRange,
-            text::ControlCharacter::LINE_BREAK, false );
-        xText->insertString( xTextRange, C2U( "World" ), false );
-
-        rtl::OUString aTmp = xText->getString();
-        int a=1;
-    }
-    */
-
-    //--
-    /*
-    //get the created paragraph and set the character properties there
-    uno::Reference< container::XEnumerationAccess > xEnumerationAccess( xShape, uno::UNO_QUERY );
-    uno::Reference< container::XEnumeration > xEnumeration = xEnumerationAccess->createEnumeration();
-    uno::Any aAParagraph = xEnumeration->nextElement();
-    uno::Reference< text::XTextContent > xTextContent = NULL;
-    aAParagraph >>= xTextContent;
-    uno::Reference< beans::XPropertySet > xParaProp( xTextContent, uno::UNO_QUERY );
-    if(xParaProp.is())
-    {
-        try
-        {
-            //test:
-            //ControlTextEmphasis
-            //FontEmphasisMark
-            //CharEmphasis
-            xParaProp->setPropertyValue( C2U( "CharEmphasize" ),
-                uno::makeAny( text::FontEmphasis::DOT_ABOVE ) );
-
-            xParaProp->setPropertyValue( C2U( "FontEmphasisMark" ),
-                uno::makeAny( sal_Int16(2) ) );
-
-            xParaProp->setPropertyValue( C2U( "ControlTextEmphasis" ),
-                uno::makeAny( sal_Int16(2) ) );
-        }
-        catch( uno::Exception& e )
-        {
-            e;
-        }
-    }
-    */
 }
 
 //static

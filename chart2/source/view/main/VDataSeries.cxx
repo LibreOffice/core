@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-06 19:39:38 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,45 +421,6 @@ DataPointLabel* VDataSeries::getDataPointLabelIfLabel( sal_Int32 index ) const
     return pLabel;
 }
 
-void createTextLabelMultiPropertyListsFromPropertySet(
-            const uno::Reference< beans::XPropertySet >& xSourceProp
-            , ::std::auto_ptr< tNameSequence >& rLabelPropNames
-            , ::std::auto_ptr< tAnySequence >& rLabelPropValues
-            )
-{
-    tPropertyNameValueMap aValueMap;
-
-    //fill character properties into the ValueMap
-    PropertyMapper::getValueMap( aValueMap
-            , PropertyMapper::getPropertyNameMapForCharacterProperties()
-            , uno::Reference< beans::XPropertySet >::query( xSourceProp ) //Text Properties source
-            );
-
-    //-------------------------
-    //some more shape properties apart from character properties, position-matrix and label string
-
-    //@todo get correct horizontal and vertical adjust and writing mode
-    drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-    drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-    //text::WritingMode eWritingMode = text::WritingMode_LR_TB;//@todo get correct one
-
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("LineStyle"), uno::makeAny(drawing::LineStyle_NONE) ) ); // drawing::LineStyle
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-    //aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextWritingMode"), uno::makeAny(eWritingMode) ) ); //text::WritingMode
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny(sal_True) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny(sal_True) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( rtl::OUString() ) ) ); //CID rtl::OUString - needs to be overwritten for each point
-
-    //-------------------------
-    tNameSequence* pPropNames = new tNameSequence();
-    tAnySequence* pPropValues = new tAnySequence();
-    PropertyMapper::getMultiPropertyListsFromValueMap( *pPropNames, *pPropValues, aValueMap );
-
-    rLabelPropNames = ::std::auto_ptr< tNameSequence >(pPropNames);
-    rLabelPropValues = ::std::auto_ptr< tAnySequence >(pPropValues);
-}
-
 bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     , tNameSequence*& pPropNames
     , tAnySequence*& pPropValues ) const
@@ -469,10 +430,13 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     {
         if(!m_apLabelPropValues_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)
         {
-            createTextLabelMultiPropertyListsFromPropertySet(
-                this->getPropertiesOfPoint( index )
-                , m_apLabelPropNames_AttributedPoint
-                , m_apLabelPropValues_AttributedPoint );
+            pPropNames = new tNameSequence();
+            pPropValues = new tAnySequence();
+            PropertyMapper::getTextLabelMultiPropertyLists(
+                this->getPropertiesOfPoint( index ), *pPropNames, *pPropValues );
+            m_apLabelPropNames_AttributedPoint = ::std::auto_ptr< tNameSequence >(pPropNames);
+            m_apLabelPropValues_AttributedPoint = ::std::auto_ptr< tAnySequence >(pPropValues);
+
             m_nCurrentAttributedPoint = index;
         }
         pPropNames = m_apLabelPropNames_AttributedPoint.get();
@@ -482,10 +446,12 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     {
         if(!m_apLabelPropValues_Series.get())
         {
-            createTextLabelMultiPropertyListsFromPropertySet(
-                this->getPropertiesOfPoint( index )
-                , m_apLabelPropNames_Series
-                , m_apLabelPropValues_Series );
+            pPropNames = new tNameSequence();
+            pPropValues = new tAnySequence();
+            PropertyMapper::getTextLabelMultiPropertyLists(
+                this->getPropertiesOfPoint( index ), *pPropNames, *pPropValues );
+            m_apLabelPropNames_Series = ::std::auto_ptr< tNameSequence >(pPropNames);
+            m_apLabelPropValues_Series = ::std::auto_ptr< tAnySequence >(pPropValues);
         }
         pPropNames = m_apLabelPropNames_Series.get();
         pPropValues = m_apLabelPropValues_Series.get();

@@ -2,7 +2,6 @@
 #define _CHART2_PIECHART_HXX
 
 #include "VSeriesPlotter.hxx"
-#include "DatapointGeometry.hxx"
 
 //.............................................................................
 namespace chart
@@ -17,7 +16,8 @@ class PieChart : public VSeriesPlotter
     //-------------------------------------------------------------------------
 public:
     PieChart( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
+            ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+            , double fRadiusOffset=0.0, double fRingDistance=0.0 );
     virtual ~PieChart();
 
     //-------------------------------------------------------------------------
@@ -33,6 +33,10 @@ public:
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 
+    //MinimumAndMaximumSupplier
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX );
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX );
+
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -41,27 +45,13 @@ private: //methods
     PieChart();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createDataPoint3D(
-                          const ::com::sun::star::uno::Reference<
+        createDataPoint(  const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShapes >& xTarget
-                        , const DataPointGeometry& rGeometry
                         , const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::beans::XPropertySet >& xObjectProperties );
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createDataPoint2D(
-                          const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::drawing::XShapes >& xTarget
-                        , const DataPointGeometry& rGeometry
-                        , const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::beans::XPropertySet >& xObjectProperties );
-
-    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
-                        LabelAlignment& rAlignment, bool bCenteredPosition
-                        , double fAngleDegree, double fOuterRadius, double fInnerRadius
-                        , double fLogicZ) const;
-
-    ::com::sun::star::awt::Point transformLogicToScreenPosition(
-            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
+                                ::com::sun::star::beans::XPropertySet >& xObjectProperties
+                        , double fLogicStartAngleValue, double fLogicEndAngleValue
+                        , double fLogicInnerRadius, double fLogicOuterRadius
+                        , double fLogicZ, double fDepth );
 
     bool                isSingleRingChart() const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 10:40:20 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,16 @@ public:
     static sal_Bool isSupportingGeometryProperties(  const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingStatisticProperties( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingRegressionProperties(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
-    static sal_Bool isSupportingSecondaryYAxis(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingMainAxis(            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
+    static sal_Bool isSupportingSecondaryAxis(       const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
     static sal_Bool isSupportingAreaProperties(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
 
     static ::drafts::com::sun::star::chart2::AxisType
                     getAxisType( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
+
+    static sal_Int32 getDimensionCount( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
 };
 
 //.............................................................................

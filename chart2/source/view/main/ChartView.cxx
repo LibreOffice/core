@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-08 10:47:24 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,11 @@
  *
  ************************************************************************/
 #include "ChartViewImpl.hxx"
-#include "PlottingPositionHelper.hxx"
 #include "ViewDefines.hxx"
 #include "VDiagram.hxx"
 #include "VTitle.hxx"
 #include "ShapeFactory.hxx"
-#include "VAxis.hxx"
+#include "VCoordinateSystem.hxx"
 #include "VSeriesPlotter.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
@@ -73,6 +72,7 @@
 #include "VLegend.hxx"
 #include "PropertyMapper.hxx"
 #include "ChartModelHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitSubIncrement.hpp>
@@ -160,6 +160,15 @@ ChartViewImpl::~ChartViewImpl()
 {
     m_xDrawPages->remove( m_xDrawPage );
     m_xDrawPage = NULL;
+
+    //delete all coordinate systems
+    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = m_aVCooSysList.begin();
+    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = m_aVCooSysList.end();
+    for( ; aIter != aEnd; aIter++ )
+    {
+        delete *aIter;
+    }
+    m_aVCooSysList.clear();
 }
 
 Matrix4D createTransformationSceneToScreen(
@@ -208,8 +217,8 @@ void getCoordinateOrigin( double* fCoordinateOrigin, const uno::Reference< XBoun
 
 sal_Int32 getDimension( const uno::Reference< XDiagram >& xDiagram )
 {
-    rtl::OUString aChartType;
-    return ChartModelHelper::getDimensionAndFirstChartType( xDiagram, aChartType );
+    return ChartTypeHelper::getDimensionCount(
+        ChartModelHelper::getFirstChartType( xDiagram ) );
 }
 
 // void getCoordinateSystems( std::vector< VCoordinateSystem >& rVCooSysList, const uno::Reference< XDiagram >& xDiagram )
@@ -237,34 +246,36 @@ sal_Int32 getDimension( const uno::Reference< XDiagram >& xDiagram )
 //     }
 // }
 
-const VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem >& rVCooSysList
+const VCoordinateSystem* findInCooSysList( const std::vector< VCoordinateSystem* >& rVCooSysList
                                     , const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
 {
     for( size_t nC=0; nC < rVCooSysList.size(); nC++)
     {
-        const VCoordinateSystem& rVCooSys = rVCooSysList[nC];
-        if(rVCooSys.getModel()==xCooSys)
-            return &rVCooSys;
+        const VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        if(pVCooSys->getModel()==xCooSys)
+            return pVCooSys;
     }
     return NULL;
 }
 
-void addCooSysToList( std::vector< VCoordinateSystem >& rVCooSysList
+void addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysList
             , const uno::Reference< XBoundedCoordinateSystem >& xCooSys
             , double fCoordinateOrigin [] )
 {
     if( !findInCooSysList( rVCooSysList, xCooSys ) )
     {
-        VCoordinateSystem aVCooSys(xCooSys);
-        aVCooSys.setOrigin(fCoordinateOrigin);
-
-        rVCooSysList.push_back( aVCooSys );
+        VCoordinateSystem* pVCooSys( VCoordinateSystem::createCoordinateSystem(xCooSys ) );
+        if(pVCooSys)
+        {
+            pVCooSys->setOrigin(fCoordinateOrigin);
+            rVCooSysList.push_back( pVCooSys );
+        }
     }
 }
 
 void getAxesAndAddToCooSys( uno::Sequence< uno::Reference< XAxis > >& rAxisList
                              , const uno::Reference< XDiagram >& xDiagram
-                             , std::vector< VCoordinateSystem >& rVCooSysList )
+                             , std::vector< VCoordinateSystem* >& rVCooSysList )
 {
     uno::Reference< XAxisContainer > xAxisContainer( xDiagram, uno::UNO_QUERY );
     if( xAxisContainer.is())
@@ -275,9 +286,9 @@ void getAxesAndAddToCooSys( uno::Sequence< uno::Reference< XAxis > >& rAxisList
             uno::Reference< XAxis > xAxis( rAxisList[nA] );
             for( size_t nC=0; nC < rVCooSysList.size(); nC++)
             {
-                if(xAxis->getCoordinateSystem() == rVCooSysList[nC].getModel() )
+                if(xAxis->getCoordinateSystem() == rVCooSysList[nC]->getModel() )
                 {
-                    rVCooSysList[nC].addAxis( xAxis );
+                    rVCooSysList[nC]->addAxis( xAxis );
                 }
             }
         }
@@ -285,7 +296,7 @@ void getAxesAndAddToCooSys( uno::Sequence< uno::Reference< XAxis > >& rAxisList
 }
 
 void addGridsToCooSys(  const uno::Reference< XDiagram >& xDiagram
-                             , std::vector< VCoordinateSystem >& rVCooSysList )
+                             , std::vector< VCoordinateSystem* >& rVCooSysList )
 {
     uno::Reference< XGridContainer > xGridContainer( xDiagram, uno::UNO_QUERY );
     if( xGridContainer.is())
@@ -297,9 +308,9 @@ void addGridsToCooSys(  const uno::Reference< XDiagram >& xDiagram
             uno::Reference< XGrid > xGrid( aGridList[nA] );
             for( size_t nC=0; nC < rVCooSysList.size(); nC++)
             {
-                if(xGrid->getCoordinateSystem() == rVCooSysList[nC].getModel() )
+                if(xGrid->getCoordinateSystem() == rVCooSysList[nC]->getModel() )
                 {
-                    rVCooSysList[nC].addGrid( xGrid );
+                    rVCooSysList[nC]->addGrid( xGrid );
                 }
             }
         }
@@ -310,6 +321,8 @@ void addSeriesToPlotter( const uno::Sequence< uno::Reference< XDataSeriesTreeNod
                         , VSeriesPlotter* pPlotter
                         , StackMode eYStackMode )
 {
+    if(!pPlotter)
+        return;
     for( sal_Int32 nS = 0; nS < rSeriesList.getLength(); ++nS )
     {
         uno::Reference< XDataSeries > xDataSeries( rSeriesList[nS], uno::UNO_QUERY );
@@ -331,7 +344,7 @@ void addSeriesToPlotter( const uno::Sequence< uno::Reference< XDataSeriesTreeNod
         */
     }
 }
-void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysList
+void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem* >& rVCooSysList
             , const uno::Reference< uno::XComponentContext>& xCC
             , const uno::Reference< drawing::XShapes>& xPageShapes
             , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
@@ -427,61 +440,34 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
         //------------ get all axes from model and add to VCoordinateSystems
         uno::Sequence< uno::Reference< XAxis > > aAxisList;
         getAxesAndAddToCooSys( aAxisList, xDiagram, rVCooSysList );
-
         addGridsToCooSys( xDiagram, rVCooSysList );
-
 
         //------------ iterate through all coordinate systems
         for( size_t nC=0; nC < rVCooSysList.size(); nC++)
         {
             //------------ create explicit scales and increments
-            VCoordinateSystem& rVCooSys = rVCooSysList[nC];
-            rVCooSys.doAutoScale( apPlotter.get() );
-
-            const uno::Sequence< ExplicitScaleData >&     rExplicitScales     = rVCooSys.getExplicitScales();
-            const uno::Sequence< ExplicitIncrementData >& rExplicitIncrements = rVCooSys.getExplicitIncrements();
-
-            double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-            for( sal_Int32 nDim = 0; nDim < 3; nDim++ )
-                fCoordinateOrigin[nDim] = rVCooSys.getOriginByDimension( nDim );
+            VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+            pVCooSys->doAutoScale( apPlotter.get() );
 
             Matrix4D aM4_SceneToScreen( createTransformationSceneToScreen(rPos,rSize) );
             drawing::HomogenMatrix aHM_SceneToScreen( Matrix4DToHomogenMatrix(aM4_SceneToScreen) );
 
-            //------------ create grids
-            rVCooSys.createGridShapes( xShapeFactory, xTarget, aHM_SceneToScreen );
+            pVCooSys->initPlottingTargets(xTarget,xPageShapes,xShapeFactory);
+            pVCooSys->setTransformationSceneToScreen(aHM_SceneToScreen);
 
-            //------------ create axes --- @todo do auto layout / fontscaling
-            for( nDim = 0; nDim < 3; nDim++ )
+            //------------ create axes and grids --- @todo do auto layout / fontscaling
+            pVCooSys->createAxesShapes( rSize, pNumberFormatterWrapper );
+            pVCooSys->createGridShapes();
+
+            //------------ set scale to plotter / create series
+            if(apPlotter.get())
             {
-                uno::Reference< XAxis > xAxis = rVCooSys.getAxisByDimension(nDim);
-                if(xAxis.is()
-                    &&2==nDimension) //@todo remove this restriction if 3D axes are available
-                {
-                    AxisProperties aAxisProperties;
-                    aAxisProperties.m_xAxisModel = xAxis;
-                    aAxisProperties.m_pfExrtaLinePositionAtOtherAxis =
-                        new double(nDim==1?fCoordinateOrigin[0]:fCoordinateOrigin[1]);
-                    aAxisProperties.m_bTESTTEST_HorizontalAdjustmentIsLeft = sal_False;
-                    aAxisProperties.m_aReferenceSize = rSize;
-                    //-------------------
-                    VAxis aAxis(aAxisProperties,pNumberFormatterWrapper);
-                    aAxis.setMeterData( rExplicitScales[nDim], rExplicitIncrements[nDim] );
-
-                    aAxis.init(xTarget,xPageShapes,xShapeFactory);
-                    if(2==nDimension)
-                        aAxis.setTransformationSceneToScreen( aHM_SceneToScreen );
-                    aAxis.setScales( rExplicitScales );
-                    aAxis.createShapes();
-                }
+                apPlotter->init(xTarget,xPageShapes,xShapeFactory);
+                if(2==nDimension)
+                    apPlotter->setTransformationSceneToScreen( aHM_SceneToScreen );
+                apPlotter->setScales( pVCooSys->getExplicitScales() );
+                apPlotter->createShapes();
             }
-
-            //------------ set scale to plotter
-            apPlotter->init(xTarget,xPageShapes,xShapeFactory);
-            if(2==nDimension)
-                apPlotter->setTransformationSceneToScreen( aHM_SceneToScreen );
-            apPlotter->setScales( rExplicitScales );
-            apPlotter->createShapes();
         }
     }
 }

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ChartModelHelper.hxx,v $
+ *  $RCSfile: PolarLabelPositionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,18 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-#define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
-#endif
+#ifndef _CHART2_VIEW_POLARLABELPOSITIONHELPER_HXX
+#define _CHART2_VIEW_POLARLABELPOSITIONHELPER_HXX
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
+#include "LabelPositionHelper.hxx"
 
-#include <vector>
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
+#include <com/sun/star/drawing/Position3D.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -85,38 +79,26 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
+class PolarPlottingPositionHelper;
 
-class ChartModelHelper
+class PolarLabelPositionHelper : public LabelPositionHelper
 {
 public:
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    PolarLabelPositionHelper(
+        PolarPlottingPositionHelper* pPosHelper
+        , sal_Int32 nDimensionCount
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
+        , ShapeFactory* pShapeFactory );
+    virtual ~PolarLabelPositionHelper();
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram );
+    ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
+                        LabelAlignment& rAlignment, bool bCenteredPosition
+                        , double fStartLogicValueOnAngleAxis, double fEndLogicValueOnAngleAxis
+                        , double fLogicInnerRadius, double fLogicOuterRadius
+                        , double fLogicZ) const;
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+private:
+    PolarPlottingPositionHelper*    m_pPosHelper;
 };
 
 //.............................................................................

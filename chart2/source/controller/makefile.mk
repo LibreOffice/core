@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-18 13:54:57 $
+#   last change: $Author: iha $ $Date: 2004-01-17 13:09:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,13 +90,13 @@ LIB1FILES=		\
 SHL1TARGET=		$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 #indicates dependencies:
-# .IF "$(COM)" == "MSC"
-# SHL1DEPN = \
-#         $(SLB)$/charttools.lib \
-# 	    $(SLB)$/chartview.lib
-# .ELSE
-# SHL1DEPN =
-# .ENDIF
+.IF "$(COM)" == "MSC"
+SHL1DEPN = \
+        $(SLB)$/charttools.lib \
+        $(SLB)$/chartview.lib
+.ELSE
+SHL1DEPN =
+.ENDIF
 
 #Specifies an import library to create. For Win32 only.
 SHL1IMPLIB=		i$(TARGET)

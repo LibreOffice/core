@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,21 +96,30 @@ namespace chart
 /**
 */
 class MinimumAndMaximumSupplier;
+class NumberFormatterWrapper;
 
 class VCoordinateSystem
 {
 public:
-    VCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSys );
     virtual ~VCoordinateSystem();
 
-    void addAxis( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis >& xAxis );
-    void setOrigin( double* fCoordinateOrigin );
-    void addGrid( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XGrid >& xGrid );
+    static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
+                                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSysModel );
 
+    virtual void SAL_CALL initPlottingTargets(
+                  const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::drawing::XShapes >& xLogicTarget
+                , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::drawing::XShapes >& xFinalTarget
+                , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+                        throw (::com::sun::star::uno::RuntimeException);
+    void setOrigin( double* fCoordinateOrigin );
+    void addAxis( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis >& xAxis );
+    void addGrid( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XGrid >& xGrid );
     void doAutoScale( MinimumAndMaximumSupplier* pMinMaxSupplier );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis > getAxisByDimension( sal_Int32 nDim  ) const;
+    void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
     const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::chart2::ExplicitScaleData >& getExplicitScales() const {return m_aExplicitScales;}
     const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::chart2::ExplicitIncrementData >& getExplicitIncrements() const {return m_aExplicitIncrements;}
@@ -120,20 +129,19 @@ public:
         ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
         getModel() const;
 
-    void createGridShapes( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>& xShapeFactory
-            , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >& xTarget
-            , const ::com::sun::star::drawing::HomogenMatrix& rHM_SceneToScreen
-        );
+    virtual void createGridShapes();
+    virtual void createAxesShapes( const ::com::sun::star::awt::Size& rReferenceSize, NumberFormatterWrapper* pNumberFormatterWrapper );
 
-private: //methods
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XGrid > >&
+protected: //methods
+    VCoordinateSystem( const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSys );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XGrid > >&
         getGridListByDimension( sal_Int32 nDim );
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis >
+        getAxisByDimension( sal_Int32 nDim  ) const;
 
-private: //member
-
+protected: //member
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > m_xCooSysModel;
 
@@ -155,6 +163,17 @@ private: //member
 
     ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::chart2::ExplicitScaleData >     m_aExplicitScales;
     ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::chart2::ExplicitIncrementData > m_aExplicitIncrements;
+
+    //
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes >                m_xLogicTargetForGrids;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes >                m_xLogicTargetForAxes;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
+    ::com::sun::star::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
 };
 
 //.............................................................................

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: PolarCoordinateSystem.hxx,v $
+ *  $RCSfile: CartesianCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: iha $ $Date: 2004-01-17 13:09:50 $
  *
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART_POLARCOORDINATESYSTEM_HXX
-#define _CHART_POLARCOORDINATESYSTEM_HXX
+#ifndef _CHART_CARTESIANCOORDINATESYSTEM_HXX
+#define _CHART_CARTESIANCOORDINATESYSTEM_HXX
 
 #include "ServiceMacros.hxx"
 
@@ -77,14 +77,14 @@
 namespace chart
 {
 
-class PolarCoordinateSystem : public ::cppu::WeakImplHelper2<
+class CartesianCoordinateSystem : public ::cppu::WeakImplHelper2<
     ::com::sun::star::lang::XServiceInfo,
     ::drafts::com::sun::star::chart2::XCoordinateSystem
     >
 {
 public:
-    explicit PolarCoordinateSystem( sal_Int32 nDim = 2 );
-    virtual ~PolarCoordinateSystem();
+    explicit CartesianCoordinateSystem( sal_Int32 nDim = 2 );
+    virtual ~CartesianCoordinateSystem();
 
     // ____ XCoordinateSystem ____
     // ___________________________
@@ -111,5 +111,5 @@ private:
 
 }  // namespace chart
 
-// _CHART_POLARCOORDINATESYSTEM_HXX
+// _CHART_CARTESIANCOORDINATESYSTEM_HXX
 #endif

@@ -7,6 +7,7 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "StatisticsHelper.hxx"
 #include "PlottingPositionHelper.hxx"
+#include "LabelPositionHelper.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"
@@ -40,13 +41,6 @@
 #endif
 
 #include <algorithm>
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#endif
 
 //.............................................................................
 namespace chart
@@ -365,32 +359,9 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
         rtl::OUString aCID = ObjectIdentifier::createPointCID( rDataSeries.getLabelCID_Stub(),nPointIndex );
         *pCIDAny = uno::makeAny(aCID);
     }
+    LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
-    //HorizontalAdjustment
-    {
-        drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-        if( LABEL_ALIGN_RIGHT==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
-            eHorizontalAdjust = drawing::TextHorizontalAdjust_LEFT;
-        else if( LABEL_ALIGN_LEFT==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
-            eHorizontalAdjust = drawing::TextHorizontalAdjust_RIGHT;
-        uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextHorizontalAdjust"));
-        if(pHorizontalAdjustAny)
-            *pHorizontalAdjustAny = uno::makeAny(eHorizontalAdjust);
-    }
-
-    //VerticalAdjustment
-    {
-        drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-        if( LABEL_ALIGN_TOP==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment )
-            eVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
-        else if( LABEL_ALIGN_BOTTOM==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
-            eVerticalAdjust = drawing::TextVerticalAdjust_TOP;
-        uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextVerticalAdjust"));
-        if(pVerticalAdjustAny)
-            *pVerticalAdjustAny = uno::makeAny(eVerticalAdjust);
-    }
     //------------------------------------------------
-
     //create text shape
     uno::Reference< drawing::XShape > xTextShape = ShapeFactory(m_xShapeFactory).
         createText( xTarget_, aText.makeStringAndClear()
@@ -1063,6 +1034,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const uno::Reference<XChart
         pRet = new AreaChart(xChartTypeModel,false,true);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
         pRet = new PieChart(xChartTypeModel);
+    else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.NetChart")) )
+        pRet = 0;
     else
     {
         //@todo create other charttypes

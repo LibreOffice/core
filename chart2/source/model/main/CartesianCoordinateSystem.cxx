@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CartesianCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "CartesianCoordinateSystem.hxx"
 #include "IdentityTransformation.hxx"
 #include "macros.hxx"
+#include "servicenames_coosystems.hxx"
 
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
@@ -99,6 +100,15 @@ sal_Int32 SAL_CALL CartesianCoordinateSystem::getDimension() throw (RuntimeExcep
     return m_nDim;
 }
 
+::rtl::OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType() throw (RuntimeException)
+{
+    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
+}
+
+::rtl::OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName() throw (RuntimeException)
+{
+    return CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
+}
 
 // ____ XServiceInfo ____
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 16:39:12 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,6 @@ AxisProperties::AxisProperties()
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
     , m_aLineProperties()
-    , m_bTESTTEST_HorizontalAdjustmentIsLeft(true)
 {
 }
 
@@ -217,7 +216,6 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
     , m_aLineProperties( rAxisProperties.m_aLineProperties )
-    , m_bTESTTEST_HorizontalAdjustmentIsLeft( rAxisProperties.m_bTESTTEST_HorizontalAdjustmentIsLeft )
 {
     if( rAxisProperties.m_pfMainLinePositionAtOtherAxis )
         m_pfMainLinePositionAtOtherAxis = new double(*rAxisProperties.m_pfMainLinePositionAtOtherAxis);
@@ -269,62 +267,6 @@ void AxisProperties::init()
              e;
         }
     }
-}
-
-sal_Int32 getAxisScreenPosition( double fCrossOtherAxis
-        , const PlottingPositionHelper& rPosHelper, bool bIsYAxis )
-{
-    double fX = bIsYAxis ? fCrossOtherAxis : rPosHelper.getLogicMinX();
-    double fY = bIsYAxis ? rPosHelper.getLogicMinY() : fCrossOtherAxis;
-
-    rPosHelper.clipLogicValues( &fX,&fY,0 );
-    rPosHelper.doLogicScaling( &fX,&fY,0 );
-    drawing::Position3D aPos( fX, fY, 0);
-
-    uno::Reference< XTransformation > xTransformation =
-        rPosHelper.getTransformationLogicToScene();
-    uno::Sequence< double > aSeq =
-        xTransformation->transform( Position3DToSequence(aPos) );
-
-    return static_cast<sal_Int32>(
-        bIsYAxis ? aSeq[0] : aSeq[1] );
-}
-
-
-
-sal_Int32 AxisProperties::getMainLineScreenPosition(
-            const PlottingPositionHelper& rPosHelper ) const
-{
-    double fMin = m_bIsYAxis ? rPosHelper.getLogicMinX() : rPosHelper.getLogicMinY();
-    double fMax = m_bIsYAxis ? rPosHelper.getLogicMaxX() : rPosHelper.getLogicMaxY();
-
-    double fCrossOtherAxis;
-    if(m_pfMainLinePositionAtOtherAxis)
-        fCrossOtherAxis = *m_pfMainLinePositionAtOtherAxis;
-    else
-    {
-        bool bMinimumForLeftAxis = ( m_bIsYAxis && rPosHelper.isMathematicalOrientationY() )
-                            || ( !m_bIsYAxis && rPosHelper.isMathematicalOrientationX() );
-        fCrossOtherAxis = ( bMinimumForLeftAxis && m_bIsLeftOrBottomAxis ) ? fMin : fMax;
-    }
-    sal_Int32 nRet = getAxisScreenPosition( fCrossOtherAxis, rPosHelper, m_bIsYAxis );
-    return nRet;
-}
-
-bool AxisProperties::getExtraLineScreenPosition(
-            sal_Int32& rnExtraLineScreenPosition, const PlottingPositionHelper& rPosHelper ) const
-{
-    if( !m_pfExrtaLinePositionAtOtherAxis )
-        return false;
-
-    double fMin = m_bIsYAxis ? rPosHelper.getLogicMinX() : rPosHelper.getLogicMinY();
-    double fMax = m_bIsYAxis ? rPosHelper.getLogicMaxX() : rPosHelper.getLogicMaxY();
-    if( *m_pfExrtaLinePositionAtOtherAxis <= fMin
-        || *m_pfExrtaLinePositionAtOtherAxis >= fMax )
-        return false;
-    rnExtraLineScreenPosition = getAxisScreenPosition(
-                    *m_pfExrtaLinePositionAtOtherAxis, rPosHelper, m_bIsYAxis );
-    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -423,50 +365,6 @@ sal_Bool AxisLabelProperties::getIsStaggered() const
     if( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering )
         return sal_True;
     return sal_False;
-}
-
-//------------------------
-
-drawing::TextVerticalAdjust AxisProperties::getVerticalAdjustment() const
-{
-    drawing::TextVerticalAdjust aRet =
-                !m_bIsYAxis && !m_bIsLeftOrBottomAxis
-                ? drawing::TextVerticalAdjust_BOTTOM
-                : drawing::TextVerticalAdjust_TOP;
-    return aRet;
-}
-
-sal_Int16 AxisProperties::getWritingMode()const
-{
-    //@todo get this dependent on the locale ...
-    sal_Int16 nWritingMode( text::WritingMode2::LR_TB );
-    return nWritingMode;
-}
-
-drawing::TextHorizontalAdjust AxisProperties::getHorizontalAdjustment() const
-{
-    return m_bTESTTEST_HorizontalAdjustmentIsLeft
-                        ? drawing::TextHorizontalAdjust_LEFT
-                        : drawing::TextHorizontalAdjust_RIGHT;
-//
-
-    bool bIsYAxis = m_bIsYAxis;
-    bool bIsLeftOrBottomAxis = m_bIsLeftOrBottomAxis;
-    sal_Int16 nWritingMode = getWritingMode();
-
-    switch( nWritingMode )
-    {
-        case text::WritingMode2::RL_TB:
-        case text::WritingMode2::TB_RL:
-            return  bIsYAxis && !bIsLeftOrBottomAxis
-                        ? drawing::TextHorizontalAdjust_LEFT
-                        : drawing::TextHorizontalAdjust_RIGHT;
-        case text::WritingMode2::TB_LR:
-        default:
-            return bIsYAxis && bIsLeftOrBottomAxis
-                        ? drawing::TextHorizontalAdjust_RIGHT
-                        : drawing::TextHorizontalAdjust_LEFT;
-    }
 }
 
 //.............................................................................

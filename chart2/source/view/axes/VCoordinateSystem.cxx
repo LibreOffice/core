@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 19:57:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,17 @@
  *
  ************************************************************************/
 #include "VCoordinateSystem.hxx"
+#include "VCartesianCoordinateSystem.hxx"
+#include "VPolarCoordinateSystem.hxx"
 #include "ScaleAutomatism.hxx"
 #include "VSeriesPlotter.hxx"
-#include "VGrid.hxx"
+#include "ShapeFactory.hxx"
+#include "servicenames_coosystems.hxx"
+
+// header for define DBG_ASSERT
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 //.............................................................................
 namespace chart
@@ -69,6 +77,23 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
+
+//static
+VCoordinateSystem* VCoordinateSystem::createCoordinateSystem( const uno::Reference<
+                                XBoundedCoordinateSystem >& xCooSysModel )
+{
+    rtl::OUString aViewServiceName = xCooSysModel->getViewServiceName();
+
+    //@todo: in future the coordinatesystems should be instanciated via service factory
+    VCoordinateSystem* pRet=NULL;
+    if( aViewServiceName.equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ) )
+        pRet = new VCartesianCoordinateSystem(xCooSysModel);
+    else if( aViewServiceName.equals( CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ) )
+        pRet = new VPolarCoordinateSystem(xCooSysModel);
+    if(!pRet)
+        pRet = new VCoordinateSystem(xCooSysModel);
+    return pRet;
+}
 
 VCoordinateSystem::VCoordinateSystem( const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
@@ -80,11 +105,42 @@ VCoordinateSystem::VCoordinateSystem( const uno::Reference< XBoundedCoordinateSy
     , m_xGridList2()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
+    , m_xLogicTargetForGrids(0)
+    , m_xLogicTargetForAxes(0)
+    , m_xFinalTarget(0)
+    , m_xShapeFactory(0)
+    , m_aMatrixSceneToScreen()
 {
 }
 VCoordinateSystem::~VCoordinateSystem()
 {
+}
 
+void SAL_CALL VCoordinateSystem::initPlottingTargets(  const uno::Reference< drawing::XShapes >& xLogicTarget
+       , const uno::Reference< drawing::XShapes >& xFinalTarget
+       , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory )
+            throw (uno::RuntimeException)
+{
+    DBG_ASSERT(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
+    //is only allowed to be called once
+
+    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
+    //create group shape for grids first thus axes are always painted above grids
+    ShapeFactory aShapeFactory(xShapeFactory);
+    if(nDimensionCount==2)
+    {
+        //create and add to target
+        m_xLogicTargetForGrids = aShapeFactory.createGroup2D( xLogicTarget );
+        m_xLogicTargetForAxes = aShapeFactory.createGroup2D( xLogicTarget );
+    }
+    else
+    {
+        //create and added to target
+        m_xLogicTargetForGrids = aShapeFactory.createGroup3D( xLogicTarget );
+        m_xLogicTargetForAxes = aShapeFactory.createGroup3D( xLogicTarget );
+    }
+    m_xFinalTarget  = xFinalTarget;
+    m_xShapeFactory = xShapeFactory;
 }
 
 void VCoordinateSystem::setOrigin( double* fCoordinateOrigin )
@@ -92,6 +148,12 @@ void VCoordinateSystem::setOrigin( double* fCoordinateOrigin )
     m_fCoordinateOrigin[0]=fCoordinateOrigin[0];
     m_fCoordinateOrigin[1]=fCoordinateOrigin[1];
     m_fCoordinateOrigin[2]=fCoordinateOrigin[2];
+}
+
+void VCoordinateSystem::setTransformationSceneToScreen(
+    const drawing::HomogenMatrix& rMatrix )
+{
+    m_aMatrixSceneToScreen = rMatrix;
 }
 
 uno::Reference< XBoundedCoordinateSystem > VCoordinateSystem::getModel() const
@@ -131,30 +193,6 @@ void VCoordinateSystem::addGrid( const uno::Reference< XGrid >& xGrid )
 
     rGridList.realloc(rGridList.getLength()+1);
     rGridList[rGridList.getLength()-1] = xGrid;
-}
-
-void VCoordinateSystem::createGridShapes(
-              const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
-            , const uno::Reference< drawing::XShapes >& xTarget
-            , const drawing::HomogenMatrix& rHM_SceneToScreen )
-{
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    for( sal_Int32 nDim=0; nDim<3; nDim++)
-    {
-        uno::Sequence< uno::Reference< XGrid > >& rGridList
-            = getGridListByDimension( nDim );
-        for( sal_Int32 nN=0; nN<rGridList.getLength(); nN++ )
-        {
-            VGrid aGrid(rGridList[nN],nDimensionCount);
-            aGrid.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
-
-            aGrid.init(xTarget,xTarget,xShapeFactory);
-            if(2==nDimensionCount)
-                aGrid.setTransformationSceneToScreen( rHM_SceneToScreen );
-            aGrid.setScales( m_aExplicitScales );
-            aGrid.createShapes();
-        }
-    }
 }
 
 uno::Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDim  ) const
@@ -201,28 +239,44 @@ void VCoordinateSystem::doAutoScale( MinimumAndMaximumSupplier* pMinMaxSupplier 
         }
         if(0==nDim)
         {
-            aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumX();
-            aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumX();
+            if(pMinMaxSupplier)
+            {
+                aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumX();
+                aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumX();
+            }
         }
         else if(1==nDim)
         {
-            const ExplicitScaleData& rScale = m_aExplicitScales[0];
-            //@todo iterate through all xSlots which belong to coordinate system dimension in this plotter
-            //and iterate through all plotter for this coordinate system dimension
-            sal_Int32 nXSlotIndex = 0;
-            aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumYInRange(rScale.Minimum,rScale.Maximum);
-            aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumYInRange(rScale.Minimum,rScale.Maximum);
+            if(pMinMaxSupplier)
+            {
+                const ExplicitScaleData& rScale = m_aExplicitScales[0];
+                //@todo iterate through all xSlots which belong to coordinate system dimension in this plotter
+                //and iterate through all plotter for this coordinate system dimension
+                sal_Int32 nXSlotIndex = 0;
+                aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumYInRange(rScale.Minimum,rScale.Maximum);
+                aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumYInRange(rScale.Minimum,rScale.Maximum);
+            }
         }
         else if(2==nDim)
         {
-            aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumZ();
-            aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumZ();
+            if(pMinMaxSupplier)
+            {
+                aScaleAutomatism.m_fValueMinimum = pMinMaxSupplier->getMinimumZ();
+                aScaleAutomatism.m_fValueMaximum = pMinMaxSupplier->getMaximumZ();
+            }
         }
         aScaleAutomatism.calculateExplicitScaleAndIncrement(
                     m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
     }
     if(nDimensionCount<3)
         setExplicitScaleToDefault(m_aExplicitScales[2]);
+}
+
+void VCoordinateSystem::createGridShapes()
+{
+}
+void VCoordinateSystem::createAxesShapes( const ::com::sun::star::awt::Size& rReferenceSize, NumberFormatterWrapper* pNumberFormatterWrapper )
+{
 }
 
 //.............................................................................

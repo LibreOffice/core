@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 10:01:02 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,17 @@ public:
                         , const DataPointGeometry& rGeometry );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createPieSegment( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry );
+        createPieSegment2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , double fStartAngleDegree, double fWidthAngleDegree
+                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
+                    , const ::com::sun::star::drawing::Position3D& rOrigin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        createPieSegment2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
-                    , const DataPointGeometry& rGeometry );
+        createPieSegment( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , double fStartAngleDegree, double fWidthAngleDegree
+                    , double fInnerXRadius, double fOuterXRadius, double fOuterYRadius
+                    , const ::com::sun::star::drawing::Position3D& rOrigin
+                    , double fDepth );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createStripe( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget

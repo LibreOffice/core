@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "PolarCoordinateSystem.hxx"
 #include "PolarTransformation.hxx"
 #include "macros.hxx"
+#include "servicenames_coosystems.hxx"
 
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
@@ -101,6 +102,15 @@ sal_Int32 SAL_CALL PolarCoordinateSystem::getDimension() throw (RuntimeException
     return m_nDim;
 }
 
+::rtl::OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType() throw (RuntimeException)
+{
+    return CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
+}
+
+::rtl::OUString SAL_CALL PolarCoordinateSystem::getViewServiceName() throw (RuntimeException)
+{
+    return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;
+}
 
 // ____ XServiceInfo ____
 

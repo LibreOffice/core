@@ -1,11 +1,11 @@
 #include "PieChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
+#include "PolarLabelPositionHelper.hxx"
 //#include "chartview/servicenames_charttypes.hxx"
-//#include "chartview/servicenames_coosystems.hxx"
+//#include "servicenames_coosystems.hxx"
 
 #include "CommonConverters.hxx"
-#include "Linear3DTransformation.hxx"
 #include "ViewDefines.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 
@@ -15,10 +15,6 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-// header for class Vector2D
-#ifndef _VECTOR2D_HXX
-#include <tools/vector2d.hxx>
-#endif
 
 //.............................................................................
 namespace chart
@@ -27,30 +23,13 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
-class PiePositionHelper : public PlottingPositionHelper
+class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
     PiePositionHelper();
     virtual ~PiePositionHelper();
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
-                        getTransformationLogicToScene( sal_Int32 nDim ) const;
-
-    double              getCatCount() const {
-                            double fMin = getLogicMinX();
-                            double fMax = getLogicMaxX();
-                            //categories are defined to be at positive whole numbers only
-                            if(fMax<0.0)
-                                return 0.0;
-                            if(fMin<0.0)
-                                fMin=0.0;
-                            //don't remove cast
-                            return (long)(fMax - fMin)+1; }
-
-    double              getInnerRadius( double fCategoryX, bool& bIsVisible ) const;
-    double              getOuterRadius( double fCategoryX ) const;
-
-    DataPointGeometry   transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  ) const;
+    bool                getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius ) const;
 
     sal_Int32           getStartCategoryIndex() const {
                             //first category (index 0) matches with real number 1.0
@@ -67,132 +46,53 @@ public:
                             return nEnd;
                         }
 
-private: //member
-    double      m_fDepth;
-
 public:
-    //Radius Offset for all rings in absolute logic values (1.0 == 1 category)
-    double      m_fRingOffset;
-
     //Distance between different category rings, seen relative to width of a ring:
     double      m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
 };
 
 PiePositionHelper::PiePositionHelper()
-        : m_fDepth(1.0)
-        , m_fRingOffset(0.5)
-        , m_fRingDistance(0.2)
+        : PolarPlottingPositionHelper(true)
+        , m_fRingDistance(0.0)
 {
+    m_fRadiusOffset = 0.0;
 }
 
 PiePositionHelper::~PiePositionHelper()
 {
 }
-
-double PiePositionHelper::getInnerRadius( double fCategoryX, bool& bIsVisible ) const
+bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius ) const
 {
-    bIsVisible = true;
-    double fRet = m_fRingOffset + fCategoryX-0.5+m_fRingDistance/(2.0*(1+m_fRingDistance)) - getLogicMinX();
-    if(fRet<m_fRingOffset)
-        fRet=m_fRingOffset;
-    if(fRet>(m_fRingOffset+getLogicMaxX()-getLogicMinX()))
-    {
-        fRet=m_fRingOffset+getLogicMaxX()- getLogicMinX();
-        bIsVisible = false;
-    }
-    doLogicScaling(&fRet,NULL,NULL);
-    return fRet;
+    bool bIsVisible = true;
+    double fLogicInner = fCategoryX -0.5+m_fRingDistance/2.0;
+    double fLogicOuter = fCategoryX +0.5-m_fRingDistance/2.0;
+
+    if( fLogicInner >= getLogicMaxX() )
+        return false;
+    if( fLogicOuter <= getLogicMinX() )
+        return false;
+
+    if( fLogicInner < getLogicMinX() )
+        fLogicInner = getLogicMinX();
+    if( fLogicOuter > getLogicMaxX() )
+        fLogicOuter = getLogicMaxX();
+
+    fLogicInnerRadius = fLogicInner;
+    fLogicOuterRadius = fLogicOuter;
+    return bIsVisible;
 }
-
-double PiePositionHelper::getOuterRadius( double fCategoryX ) const
-{
-    double fRet = m_fRingOffset + fCategoryX+0.5-m_fRingDistance/(2.0*(1+m_fRingDistance)) - getLogicMinX();
-    if(fRet<m_fRingOffset)
-        fRet=m_fRingOffset;
-    if(fRet>(m_fRingOffset+getLogicMaxX()-getLogicMinX()))
-        fRet=m_fRingOffset+getLogicMaxX()- getLogicMinX();
-    doLogicScaling(&fRet,NULL,NULL);
-    return fRet;
-}
-
-
-uno::Reference< XTransformation > PiePositionHelper::getTransformationLogicToScene(
-            sal_Int32 nDim ) const
-{
-    //transformation from 2) to 4) //@todo 2) and 4) need a ink to a document
-
-    //?? need to apply this transformation to each geometric object, or would group be sufficient??
-
-    if( !m_xTransformationLogicToScene.is() )
-    {
-        double fLogicDiameter = 2*(getLogicMaxX() - getLogicMinX() + m_fRingOffset);
-
-        Matrix4D aMatrix;
-        //the middle of the pie circle is the middle of the diagram
-        aMatrix.TranslateX(fLogicDiameter/2.0);
-        aMatrix.ScaleX(FIXED_SIZE_FOR_3D_CHART_VOLUME/fLogicDiameter);
-
-        aMatrix.TranslateY(fLogicDiameter/2.0);
-        aMatrix.ScaleY(FIXED_SIZE_FOR_3D_CHART_VOLUME/fLogicDiameter);
-
-        aMatrix.ScaleZ(FIXED_SIZE_FOR_3D_CHART_VOLUME/m_fDepth);
-
-//        if(nDim==2)
-            aMatrix = m_aMatrixScreenToScene*aMatrix;
-
-        m_xTransformationLogicToScene = new Linear3DTransformation(Matrix4DToHomogenMatrix( aMatrix ));
-    }
-    return m_xTransformationLogicToScene;
-}
-
-DataPointGeometry PiePositionHelper::transformLogicGeom( const DataPointGeometry& rGeom, sal_Int32 nDim  ) const
-{
-    uno::Reference< XTransformation > xTransformation = getTransformationLogicToScene( nDim );
-    DataPointGeometry aTransformedGeom( rGeom );
-
-    /*
-    DataPointGeometry aLogicGeom( drawing::Position3D(0.0,0.0,0.0)
-                                , drawing::Direction3D(fOuterXDiameter,fOuterYDiameter,fDepth)
-                                , drawing::Direction3D(fInnerXDiameter,fStartAngleDegree,fWidthAngleDegree) );
-    */
-    aTransformedGeom.m_aPosition = SequenceToPosition3D( xTransformation->transform( Position3DToSequence(rGeom.m_aPosition) ) );
-
-    drawing::Position3D aLogicPos1;
-    drawing::Position3D aLogicPos2( aLogicPos1 );
-    aLogicPos2.PositionX += rGeom.m_aSize2.DirectionX;//fInnerXDiameter;
-    aLogicPos2.PositionZ += rGeom.m_aSize.DirectionZ;
-    drawing::Position3D aLogicPos3( aLogicPos1 );
-    aLogicPos3.PositionX += rGeom.m_aSize.DirectionX; //fOuterXDiameter;
-    aLogicPos3.PositionY += rGeom.m_aSize.DirectionY; //fOuterYDiameter;
-
-    drawing::Position3D aTransformedPos1( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos1) ) ) );
-    drawing::Position3D aTransformedPos2( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos2) ) ) );
-    drawing::Position3D aTransformedPos3( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos3) ) ) );
-
-
-    double fTransformedInnerXDiameter = aTransformedPos2.PositionX - aTransformedPos1.PositionX;
-    double fTransformedOuterXDiameter = aTransformedPos3.PositionX - aTransformedPos1.PositionX;
-    double fTransformedOuterYDiameter = aTransformedPos3.PositionY - aTransformedPos1.PositionY;
-    double fTransformedDepth = aTransformedPos2.PositionZ - aTransformedPos1.PositionZ;
-
-    aTransformedGeom.m_aSize2.DirectionX = fTransformedInnerXDiameter;
-    aTransformedGeom.m_aSize.DirectionX = fTransformedOuterXDiameter;
-    aTransformedGeom.m_aSize.DirectionY = fTransformedOuterYDiameter;
-    aTransformedGeom.m_aSize.DirectionZ = fTransformedDepth;
-
-    return aTransformedGeom;
-}
-
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel )
+PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel, double fRadiusOffset, double fRingDistance )
         : VSeriesPlotter( xChartTypeModel )
         , m_pPosHelper( new PiePositionHelper() )
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
+    m_pPosHelper->m_fRadiusOffset = fRadiusOffset;
+    m_pPosHelper->m_fRingDistance = fRingDistance;
 }
 
 PieChart::~PieChart()
@@ -215,165 +115,71 @@ APPHELPER_XSERVICEINFO_IMPL(PieChart,CHART2_VIEW_PIECHART_SERVICE_IMPLEMENTATION
 }
 */
 
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL PieChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN2D_SERVICE_NAME;
-}
-
-    void SAL_CALL PieChart
-::setScales( const uno::Sequence< ExplicitScaleData >& rScales ) throw (uno::RuntimeException)
-{
-}
-    void SAL_CALL PieChart
-::setTransformation( const uno::Reference< XTransformation >& xTransformationToLogicTarget, const uno::Reference< XTransformation >& xTransformationToFinalPage ) throw (uno::RuntimeException)
-{
-}
-*/
-
 bool PieChart::isSingleRingChart() const
 {
     return m_pPosHelper->getEndCategoryIndex()==1 ;
 }
 
-awt::Point PieChart::transformLogicToScreenPosition( const drawing::Position3D& rLogicPosition3D ) const
-{
-    drawing::Position3D aScenePosition3D( SequenceToPosition3D(
-        m_pPosHelper->getTransformationLogicToScene( m_nDimension )->transform(
-            Position3DToSequence(rLogicPosition3D) ) ) );
-    if(3==m_nDimension)
-    {
-        drawing::Position3D aScenePosition3D_rotated( aScenePosition3D.PositionX, -aScenePosition3D.PositionZ, aScenePosition3D.PositionY );
-        aScenePosition3D = aScenePosition3D_rotated;
-    }
-    awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
-    return aScreenPosition2D;
-}
-
-awt::Point PieChart::getLabelScreenPositionAndAlignment( LabelAlignment& rAlignment, bool bOutsidePosition
-        , double fAngleDegree, double fOuterRadius, double fInnerRadius, double fLogicZ) const
-{
-    //outer positions only for pure pie chart(one ring only)
-
-    double fAnglePi = fAngleDegree*F_PI/180.0;
-    double fRadius = 0.0;
-    if( bOutsidePosition )
-    {
-        fRadius = fOuterRadius;
-        if(3!=m_nDimension) //for 3D better add 10percent of the 2D distance
-            fRadius += 0.1*fOuterRadius;
-    }
-    else
-        fRadius = fInnerRadius + (fOuterRadius-fInnerRadius)/2.0 ;
-
-    if(3==m_nDimension)
-        fAnglePi *= -1.0;
-    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ+0.5);
-    awt::Point aRet( this->transformLogicToScreenPosition( aLogicPos ) );
-
-    if(3==m_nDimension)
-    {
-        //check wether the upper or the downer edge is more distant from the center
-        //take the farest point to put the label to
-        drawing::Position3D aLogicPos2(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5);
-        drawing::Position3D aLogicCenter(0,0,fLogicZ);
-
-        awt::Point aP0( this->transformLogicToScreenPosition(
-                        drawing::Position3D(0,0,fLogicZ) ) );
-        awt::Point aP1(aRet);
-        awt::Point aP2( this->transformLogicToScreenPosition(
-                        drawing::Position3D(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ-0.5) ) );
-
-        Vector2D aV0( aP0.X, aP0.Y );
-        Vector2D aV1( aP1.X, aP1.Y );
-        Vector2D aV2( aP2.X, aP2.Y );
-
-        double fL1 = (aV1-aV0).GetLength();
-        double fL2 = (aV2-aV0).GetLength();
-
-        if(fL2>fL1)
-            aRet = aP2;
-
-        //calculate new angle for alignment
-        double fDX = aRet.X-aP0.X;
-        double fDY = aRet.Y-aP0.Y;
-        fDY*=-1.0;//drawing layer has inverse y values
-        if( fDX != 0.0 )
-        {
-            fAngleDegree = atan(fDY/fDX)*180.0/F_PI;
-            if(fDX<0.0)
-                fAngleDegree+=180.0;
-        }
-        else
-        {
-            if(fDY>0.0)
-                fAngleDegree = 90.0;
-            else
-                fAngleDegree = 270.0;
-        }
-    }
-    //------------------------------
-    //set LabelAlignment
-    if( bOutsidePosition )
-    {
-        while(fAngleDegree>360.0)
-            fAngleDegree-=360.0;
-        while(fAngleDegree<0.0)
-            fAngleDegree+=360.0;
-
-        if(fAngleDegree==0.0)
-            rAlignment = LABEL_ALIGN_CENTER;
-        else if(fAngleDegree<=22.5)
-            rAlignment = LABEL_ALIGN_RIGHT;
-        else if(fAngleDegree<67.5)
-            rAlignment = LABEL_ALIGN_RIGHT_TOP;
-        else if(fAngleDegree<112.5)
-            rAlignment = LABEL_ALIGN_TOP;
-        else if(fAngleDegree<=157.5)
-            rAlignment = LABEL_ALIGN_LEFT_TOP;
-        else if(fAngleDegree<=202.5)
-            rAlignment = LABEL_ALIGN_LEFT;
-        else if(fAngleDegree<247.5)
-            rAlignment = LABEL_ALIGN_LEFT_BOTTOM;
-        else if(fAngleDegree<292.5)
-            rAlignment = LABEL_ALIGN_BOTTOM;
-        else if(fAngleDegree<337.5)
-            rAlignment = LABEL_ALIGN_RIGHT_BOTTOM;
-        else
-            rAlignment = LABEL_ALIGN_RIGHT;
-    }
-    else
-    {
-        rAlignment = LABEL_ALIGN_CENTER;
-    }
-    return aRet;
-}
-
-uno::Reference< drawing::XShape > PieChart::createDataPoint2D(
+uno::Reference< drawing::XShape > PieChart::createDataPoint(
           const uno::Reference< drawing::XShapes >& xTarget
-        , const DataPointGeometry& rGeometry
-        , const uno::Reference< beans::XPropertySet >& xObjectProperties )
+        , const uno::Reference< beans::XPropertySet >& xObjectProperties
+        , double fLogicStartAngleValue, double fLogicEndAngleValue
+        , double fLogicInnerRadius, double fLogicOuterRadius
+        , double fLogicZ, double fDepth )
 {
-    uno::Reference< drawing::XShape > xShape =
-        m_pShapeFactory->createPieSegment2D( xTarget, rGeometry );
+    //transformation 3) -> 4)
+    uno::Reference< XTransformation > xTransformation = m_pPosHelper->getTransformationLogicToScene();
 
-    this->setMappedProperties( xShape, xObjectProperties, m_aShapePropertyMapForArea );
-    return xShape;
-}
+    //---------------------------
+    //transformed angle:
+    double fWidthAngleDegree = m_pPosHelper->getWidthAngleDegree(fLogicStartAngleValue,fLogicEndAngleValue);
+    double fStartAngleDegree = m_pPosHelper->transformToAngleDegree(fLogicStartAngleValue );
 
-uno::Reference< drawing::XShape > PieChart::createDataPoint3D(
-        const uno::Reference< drawing::XShapes >& xTarget
-        , const DataPointGeometry& rGeometry
-        , const uno::Reference< beans::XPropertySet >& xObjectProperties )
-{
-    uno::Reference< drawing::XShape > xShape =
-        m_pShapeFactory->createPieSegment( xTarget, rGeometry );
+    //---------------------------
+    //transform origin:
+    drawing::Position3D aTransformedOrigin;
+    {
+        drawing::Position3D aLogicOrigin(0.0,0.0,0.0);
+        aTransformedOrigin = SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicOrigin) ) );
+    }
+
+    //---------------------------
+    //transform radii:
+    double fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius;
+    double fTransformedDepth;
+    {
+        double fInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
+        double fOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
+
+        drawing::Position3D aLogicPos1;
+        drawing::Position3D aLogicPos2( aLogicPos1 );
+        aLogicPos2.PositionX += fInnerRadius;
+        aLogicPos2.PositionZ += fDepth;
+        drawing::Position3D aLogicPos3( aLogicPos1 );
+        aLogicPos3.PositionX += fOuterRadius;
+        aLogicPos3.PositionY += fOuterRadius;
+
+        drawing::Position3D aTransformedPos1( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos1) ) ) );
+        drawing::Position3D aTransformedPos2( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos2) ) ) );
+        drawing::Position3D aTransformedPos3( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicPos3) ) ) );
+
+        fTransformedInnerXRadius = aTransformedPos2.PositionX - aTransformedPos1.PositionX;
+        fTransformedOuterXRadius = aTransformedPos3.PositionX - aTransformedPos1.PositionX;
+        fTransformedOuterYRadius = aTransformedPos3.PositionY - aTransformedPos1.PositionY;
+        fTransformedDepth        = aTransformedPos2.PositionZ - aTransformedPos1.PositionZ;
+    }
+
+    uno::Reference< drawing::XShape > xShape(0);
+    if(m_nDimension==3)
+        xShape = m_pShapeFactory->createPieSegment( xTarget
+            , fStartAngleDegree, fWidthAngleDegree
+            , fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius
+            , aTransformedOrigin, fTransformedDepth );
+    else
+        xShape = m_pShapeFactory->createPieSegment2D( xTarget
+            , fStartAngleDegree, fWidthAngleDegree
+            , fTransformedInnerXRadius, fTransformedOuterXRadius, fTransformedOuterYRadius
+            , aTransformedOrigin );
 
     this->setMappedProperties( xShape, xObjectProperties, m_aShapePropertyMapForArea );
     return xShape;
@@ -382,6 +188,16 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint3D(
 void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     VSeriesPlotter::addSeries( pSeries, 0, ySlot );
+}
+
+double PieChart::getMinimumYInRange( double fMinimumX, double fMaximumX )
+{
+    return 0.0;
+}
+
+double PieChart::getMaximumYInRange( double fMinimumX, double fMaximumX )
+{
+    return 1.0;
 }
 
 void PieChart::createShapes()
@@ -398,18 +214,10 @@ void PieChart::createShapes()
     uno::Reference< drawing::XShapes > xTextTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
 
-    if( this->isSingleRingChart() )
-    {
-        m_pPosHelper->m_fRingOffset = 0.0;
-        m_pPosHelper->m_fRingDistance = 0.0;
-    }
-
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = -0.5;//as defined
-
     //(@todo maybe different iteration for breaks in axis ?)
     sal_Int32 nStartCategoryIndex = m_pPosHelper->getStartCategoryIndex(); // inclusive
     sal_Int32 nEndCategoryIndex   = m_pPosHelper->getEndCategoryIndex(); //inclusive
@@ -446,15 +254,13 @@ void PieChart::createShapes()
                 continue;
             aSeriesIter = pSeriesList->begin();
 
-            bool bIsVisible;
-            double fInnerXRadius      = m_pPosHelper->getInnerRadius( (double)nCatIndex+1.0, bIsVisible );
+            double fLogicInnerRadius, fLogicOuterRadius;
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( (double)nCatIndex+1.0, fLogicInnerRadius, fLogicOuterRadius );
             if( !bIsVisible )
                 continue;
-            double fOuterXRadius      = m_pPosHelper->getOuterRadius( (double)nCatIndex+1.0 );
-            double fOuterYRadius      = fOuterXRadius;
-            //the radii are already clipped and had scaling now
 
-            double fDepth           = 1.0;
+            double fLogicZ = -0.5;//as defined
+            double fDepth  = 1.0; //as defined
 //=============================================================================
             //iterate through all series in this x slot (in this ring)
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
@@ -480,46 +286,24 @@ void PieChart::createShapes()
 
                 //iterate through all subsystems to create partial points
                 {
-                    //clip logic coordinates:
-                    //check fLogicX only necessary if we will allow breaks in category axes (see above for-loop)
-                    //check fLogicZ hm ...
-                    //check fLogicYValue    get Y-scale for this series/stack group
-                    //@todo fLogicYValue =... fInnerRadius = ...
+                    //logic values on angle axis:
+                    double fLogicStartAngleValue = fLogicYPos/fLogicYSum;
+                    double fLogicEndAngleValue = (fLogicYPos+fLogicYValue)/fLogicYSum;
 
-                    //----------------------------------
-                    double fStartAngleDegree = fLogicYPos/fLogicYSum*360.0;
-                    double fWidthAngleDegree = fLogicYValue/fLogicYSum*360.0;
+                    //create data point
+                    createDataPoint( xPointGroupShape_Shapes ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex )
+                                        , fLogicStartAngleValue, fLogicEndAngleValue
+                                        , fLogicInnerRadius, fLogicOuterRadius
+                                        , fLogicZ, fDepth );
 
-                    DataPointGeometry aLogicGeom( drawing::Position3D(0.0,0.0,0.0)
-                                , drawing::Direction3D(2.0*fOuterXRadius,2.0*fOuterYRadius,fDepth)
-                                , drawing::Direction3D(2.0*fInnerXRadius,fStartAngleDegree,fWidthAngleDegree) );
-
-                    //@todo: consider scaling here (transformation logic to logic)
-                    //assumed scaling here: linear
-
-                    //transformation 3) -> 4)
-                    DataPointGeometry aTransformedGeom( m_pPosHelper->transformLogicGeom(aLogicGeom, m_nDimension) );
-
-                    if(m_nDimension==3)
-                    {
-                        uno::Reference< drawing::XShape >  xShape = createDataPoint3D(
-                            xPointGroupShape_Shapes
-                            , aTransformedGeom
-                            ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
-                    }
-                    else //m_nDimension!=3
-                    {
-                        uno::Reference< drawing::XShape >  xShape = createDataPoint2D(
-                            xPointGroupShape_Shapes
-                            , aTransformedGeom
-                            ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
-                    }
-                    //create data point label
+                    //create label
                     if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
                     {
                         LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-                        awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
-                            , fStartAngleDegree + fWidthAngleDegree/2.0, fOuterXRadius, fInnerXRadius, fLogicZ ));
+                        awt::Point aScreenPosition2D(
+                            PolarLabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory).getLabelScreenPositionAndAlignment(eAlignment, this->isSingleRingChart()
+                            , fLogicStartAngleValue, fLogicEndAngleValue
+                            , fLogicInnerRadius, fLogicOuterRadius, fLogicZ ));
                         this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
                                         , fLogicYValue, fLogicYSum, aScreenPosition2D, eAlignment );
                     }
@@ -549,73 +333,6 @@ void PieChart::createShapes()
     //... todo
 }
 
-//e.g. for Rectangle
-/*
-uno::Reference< drawing::XShape > PieChart::createPartialPointShape(
-                                    CooPoint + series dependent properties ...(create a special struct for each chart type)
-                                    , uno::Reference< XThinCoordinateSystem > xCoo
-                                    , sal_Bool bIsInBreak
-                                    , PointStyle* pStyle )
-{
-    //create one here; use scaling and transformation to logic target
-
-    //maybe do not show anything in the break //maybe read the behavior out of the configuration
-    //if(bIsInBreak)
-    //  return NULL;
-
-    uno::Reference< drawing::XShape > xNewPartialPointShape(
-        m_xShapeFactory->createInstance(
-        rtl::OUString::createFromAscii( "com.sun.star.drawing.RectangleShape" ) )
-        , uno::UNO_QUERY );
-    //set size and position
-    {
-        //
-    }
-    if(pStyle||bIsInBreak)
-    {
-        //set style properties if any for a single point
-        uno::Reference< beans::XPropertySet > xProp( xNewPartialPointShape, uno::UNO_QUERY );
-        xProp->setPropertyValue( ... );
-
-        //set special properties if point in break (e.g. additional transparency ...)
-    }
-}
-
-//e.g. for PieChart in 2 dim cartesian coordinates:
-sal_Bool ShapeFactory::isShown( const Sequence< ExplicitScaleData >& rScales, const CooPoint& rP, double dLogicalWidthBeforeScaling )
-{
-    ASSERT(rScales.getLength()==2)
-    double dMin_x = rScales[0].Minimum;
-    double dMax_x = rScales[0].Maximum;
-    double dMin_y = rScales[1].Minimum;
-    double dMax_y = rScales[1].Maximum;
-
-    //we know that we have cartesian geometry
-    Rectangle aSysRect( rScales[0].Minimum, rScales[1].Maximum, rScales[0].Maximum, rScales[1].Minimum );
-    Rectangle aPointRect( dLogicalWidthBeforeScaling )
-    if(rP)
-}
-
-//-----------------------------------------------------------------------------
-
-class FatCoordinateSystem
-{
-public:
-    //XCoordinateSystemType getType();
-    Sequence<XThinCoordinateSystem> getCoordinateSystems();
-}
-
-class ThinCoordinateSystem
-{
-private:
-
-public:
-    sal_Bool        isBreak();
-    Sequence< ExplicitScaleData > getScales();//SubScales without beak
-
-
-}
-*/
 //.............................................................................
 } //namespace chart
 //.............................................................................

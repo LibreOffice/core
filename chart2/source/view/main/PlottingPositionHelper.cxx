@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 19:30:38 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,222 @@ DoubleRectangle PlottingPositionHelper::getTransformedClipDoubleRect() const
                   , aMimimum.PositionY );
     return aRet;
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+PolarPlottingPositionHelper::PolarPlottingPositionHelper( bool bRadiusAxisMapsToFirstDimension )
+    : m_fRadiusOffset(0.0)
+    , m_fAngleDegreeOffset(90.0)
+    , m_bRadiusAxisMapsToFirstDimension(bRadiusAxisMapsToFirstDimension)
+{
+}
+
+PolarPlottingPositionHelper::~PolarPlottingPositionHelper()
+{
+}
+
+const uno::Sequence< ExplicitScaleData >& PolarPlottingPositionHelper::getScales() const
+{
+    return m_aScales;
+}
+
+uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformationLogicToScene() const
+{
+    //transformation from 2) to 4) //@todo 2) and 4) need a ink to a document
+
+    //?? need to apply this transformation to each geometric object, or would group be sufficient??
+
+    if( !m_xTransformationLogicToScene.is() )
+    {
+        double MinX = getLogicMinX();
+        double MinY = getLogicMinY();
+        double MinZ = getLogicMinZ();
+        double MaxX = getLogicMaxX();
+        double MaxY = getLogicMaxY();
+        double MaxZ = getLogicMaxZ();
+
+        //apply scaling
+        doLogicScaling( &MinX, &MinY, &MinZ );
+        doLogicScaling( &MaxX, &MaxY, &MaxZ);
+
+        double fLogicDiameter = 2*(fabs(MaxY - MinY) + m_fRadiusOffset);
+        if( m_bRadiusAxisMapsToFirstDimension )
+            fLogicDiameter = 2*(fabs(MaxX - MinX) + m_fRadiusOffset);
+
+        double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? 1.0 : -1.0;
+
+        Matrix4D aMatrix;
+        //the middle of the pie circle is the middle of the diagram
+        aMatrix.TranslateX(fLogicDiameter/2.0);
+        aMatrix.ScaleX(FIXED_SIZE_FOR_3D_CHART_VOLUME/fLogicDiameter);
+
+        aMatrix.TranslateY(fLogicDiameter/2.0);
+        aMatrix.ScaleY(FIXED_SIZE_FOR_3D_CHART_VOLUME/fLogicDiameter);
+
+        aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME);
+
+        aMatrix = m_aMatrixScreenToScene*aMatrix;
+
+        m_xTransformationLogicToScene = new Linear3DTransformation(Matrix4DToHomogenMatrix( aMatrix ));
+    }
+    return m_xTransformationLogicToScene;
+}
+
+double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const
+{
+    if( !this->isMathematicalOrientationY() )
+    {
+        double fHelp = fEndLogicValueOnAngleAxis;
+        fEndLogicValueOnAngleAxis = fStartLogicValueOnAngleAxis;
+        fStartLogicValueOnAngleAxis = fHelp;
+    }
+
+    double fStartAngleDegree = this->transformToAngleDegree( fStartLogicValueOnAngleAxis );
+    double fEndAngleDegree   = this->transformToAngleDegree( fEndLogicValueOnAngleAxis );
+    double fWidthAngleDegree = fEndAngleDegree - fStartAngleDegree;
+
+    while(fWidthAngleDegree<0.0)
+        fWidthAngleDegree+=360.0;
+    while(fWidthAngleDegree>360.0)
+        fWidthAngleDegree-=360.0;
+
+    return fWidthAngleDegree;
+}
+
+double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOnAngleAxis ) const
+{
+    double fRet=0.0;
+
+    double fAxisAngleScaleDirection = 1.0;
+    {
+        const ExplicitScaleData& rScale = m_bRadiusAxisMapsToFirstDimension ? m_aScales[1] : m_aScales[0];
+        if(AxisOrientation_MATHEMATICAL != rScale.Orientation)
+            fAxisAngleScaleDirection *= -1.0;
+    }
+
+    double MinAngleValue = 0.0;
+    double MaxAngleValue = 0.0;
+    {
+        double MinX = getLogicMinX();
+        double MinY = getLogicMinY();
+        double MaxX = getLogicMaxX();
+        double MaxY = getLogicMaxY();
+        double MinZ = getLogicMinZ();
+        double MaxZ = getLogicMaxZ();
+
+        doLogicScaling( &MinX, &MinY, &MinZ );
+        doLogicScaling( &MaxX, &MaxY, &MaxZ);
+
+        MinAngleValue = m_bRadiusAxisMapsToFirstDimension ? MinY : MinX;
+        MaxAngleValue = m_bRadiusAxisMapsToFirstDimension ? MaxY : MaxX;
+    }
+
+    double fScaledLogicAngleValue = 0.0;
+    {
+        double fX = m_bRadiusAxisMapsToFirstDimension ? getLogicMaxX() : fLogicValueOnAngleAxis;
+        double fY = m_bRadiusAxisMapsToFirstDimension ? fLogicValueOnAngleAxis : getLogicMaxY();
+        double fZ = getLogicMaxZ();
+        clipLogicValues( &fX, &fY, &fZ );
+        doLogicScaling( &fX, &fY, &fZ );
+        fScaledLogicAngleValue = m_bRadiusAxisMapsToFirstDimension ? fY : fX;
+    }
+
+    fRet = m_fAngleDegreeOffset
+                  + fAxisAngleScaleDirection*(fScaledLogicAngleValue-MinAngleValue)*360.0
+                    /fabs(MaxAngleValue-MinAngleValue);
+    while(fRet>360.0)
+        fRet-=360.0;
+    while(fRet<0)
+        fRet+=360.0;
+    return fRet;
+}
+
+double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiusAxis ) const
+{
+    double fRet=0.0;
+
+    double fScaledLogicRadiusValue = 0.0;
+    {
+        double fX = m_bRadiusAxisMapsToFirstDimension ? fLogicValueOnRadiusAxis: getLogicMaxX();
+        double fY = m_bRadiusAxisMapsToFirstDimension ? getLogicMaxY() : fLogicValueOnRadiusAxis;
+        doLogicScaling( &fX, &fY, 0 );
+
+        fScaledLogicRadiusValue = m_fRadiusOffset + ( m_bRadiusAxisMapsToFirstDimension ? fX : fY );
+
+        bool bMinIsInnerRadius = true;
+        const ExplicitScaleData& rScale = m_bRadiusAxisMapsToFirstDimension ? m_aScales[0] : m_aScales[1];
+        if(AxisOrientation_MATHEMATICAL != rScale.Orientation)
+            bMinIsInnerRadius = false;
+        if(bMinIsInnerRadius)
+        {
+            double MinX = getLogicMinX();
+            double MinY = getLogicMinY();
+            doLogicScaling( &MinX, &MinY, 0 );
+            fScaledLogicRadiusValue -= ( m_bRadiusAxisMapsToFirstDimension ? MinX : MinY );
+        }
+        else
+        {
+            double MaxX = getLogicMaxX();
+            double MaxY = getLogicMaxY();
+            doLogicScaling( &MaxX, &MaxY, 0 );
+            fScaledLogicRadiusValue -= ( m_bRadiusAxisMapsToFirstDimension ? MaxX : MaxY );
+        }
+    }
+    return fScaledLogicRadiusValue;
+}
+
+drawing::Position3D PolarPlottingPositionHelper::transformLogicToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ ) const
+{
+    double fAngleDegree = this->transformToAngleDegree(fLogicValueOnAngleAxis);
+    double fAnglePi     = fAngleDegree*F_PI/180.0;
+    double fRadius      = this->transformToRadius(fLogicValueOnRadiusAxis);
+    drawing::Position3D aLogicPos(fRadius*cos(fAnglePi),fRadius*sin(fAnglePi),fLogicZ+0.5);
+    drawing::Position3D aScenePosition3D( SequenceToPosition3D(
+        this->getTransformationLogicToScene()->transform(
+            Position3DToSequence(aLogicPos) ) ) );
+    return aScenePosition3D;
+}
+
+double PolarPlottingPositionHelper::getInnerLogicRadius() const
+{
+    const ExplicitScaleData& rScale = m_bRadiusAxisMapsToFirstDimension ? m_aScales[0] : m_aScales[1];
+    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
+        return rScale.Minimum;
+    else
+        return rScale.Maximum;
+}
+
+double PolarPlottingPositionHelper::getOuterLogicRadius() const
+{
+    const ExplicitScaleData& rScale = m_bRadiusAxisMapsToFirstDimension ? m_aScales[0] : m_aScales[1];
+    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
+        return rScale.Maximum;
+    else
+        return rScale.Minimum;
+}
+
+/*
+// ____ XTransformation ____
+uno::Sequence< double > SAL_CALL PolarPlottingPositionHelper::transform(
+                        const uno::Sequence< double >& rSourceValues )
+            throw (uno::RuntimeException, lang::IllegalArgumentException)
+{
+    uno::Sequence< double > aSourceValues(3);
+    return aSourceValues;
+}
+
+sal_Int32 SAL_CALL PolarPlottingPositionHelper::getSourceDimension() throw (uno::RuntimeException)
+{
+    return 3;
+}
+
+sal_Int32 SAL_CALL PolarPlottingPositionHelper::getTargetDimension() throw (uno::RuntimeException)
+{
+    return 3;
+}
+*/
 
 //.............................................................................
 } //namespace chart

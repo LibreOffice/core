@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:27 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,14 @@ public:
 
     static const tMakePropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineSeriesProperties();
+
+    static void getTextLabelMultiPropertyLists(
+                const ::com::sun::star::uno::Reference<
+                      ::com::sun::star::beans::XPropertySet >& xSourceProp
+                , tNameSequence& rPropNames, tAnySequence& rPropValues
+                , bool bName=true
+                , sal_Int32 nLimitedSpace=-1
+                , bool bLimitedHeight=false );
 };
 
 //.............................................................................

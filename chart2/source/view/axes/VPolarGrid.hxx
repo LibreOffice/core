@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ChartModelHelper.hxx,v $
+ *  $RCSfile: VPolarGrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,20 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-#define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
+#ifndef _CHART2_VPOLARGRID_HXX
+#define _CHART2_VPOLARGRID_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#include "VMeterBase.hxx"
+#include "TickmarkHelper.hxx"
+#include "VLineProperties.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRID_HPP_
+#include <drafts/com/sun/star/chart2/XGrid.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #endif
-
-#include <vector>
 
 //.............................................................................
 namespace chart
@@ -85,38 +81,47 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
+class PolarPlottingPositionHelper;
 
-class ChartModelHelper
+class VPolarGrid : public VMeterBase
 {
+//-------------------------------------------------------------------------
+// public methods
+//-------------------------------------------------------------------------
 public:
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    VPolarGrid( const ::com::sun::star::uno::Reference<
+         ::drafts::com::sun::star::chart2::XGrid >& xGrid
+         , sal_Int32 nDimensionCount );
+    virtual ~VPolarGrid();
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram );
+    virtual void SAL_CALL createShapes();
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    void setIncrements( const ::com::sun::star::uno::Sequence<
+                    ::drafts::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
+    static void createLinePointSequence_ForAngleAxis(
+                    ::com::sun::star::drawing::PointSequenceSequence& rPoints
+                    , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
+                    , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+                    , const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
+                    , PolarPlottingPositionHelper* pPosHelper
+                    , double fLogicRadius, double fLogicZ );
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+private: //member
+    PolarPlottingPositionHelper* m_pPosHelper;
+    ::com::sun::star::uno::Sequence<
+            ::drafts::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
+
+    void    getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+
+    void    create2DRadiusGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
+                    , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+                    , const ::std::vector<VLineProperties>& rLinePropertiesList );
+    void    create2DAngleGrid( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
+                    , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
+                    , const ::std::vector<VLineProperties>& rLinePropertiesList );
 };
 
 //.............................................................................

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+#   last change: $Author: iha $ $Date: 2004-01-17 13:10:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,14 @@ SLOFILES = \
     $(SLO)$/VMeterBase.obj \
     $(SLO)$/TickmarkHelper.obj \
     $(SLO)$/ScaleAutomatism.obj \
-    $(SLO)$/VCoordinateSystem.obj \
     $(SLO)$/VAxisProperties.obj \
-    $(SLO)$/VAxis.obj \
-    $(SLO)$/VGrid.obj
+    $(SLO)$/VCartesianAxis.obj \
+    $(SLO)$/VCartesianGrid.obj \
+    $(SLO)$/VCartesianCoordinateSystem.obj \
+    $(SLO)$/VPolarAxis.obj \
+    $(SLO)$/VPolarGrid.obj \
+    $(SLO)$/VPolarCoordinateSystem.obj \
+    $(SLO)$/VCoordinateSystem.obj
 
 # --- Targets -----------------------------------------------------------------
 

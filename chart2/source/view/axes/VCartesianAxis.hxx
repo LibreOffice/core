@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ChartModelHelper.hxx,v $
+ *  $RCSfile: VCartesianAxis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,11 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-#define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
+#ifndef _CHART2_VAXIS_HXX
+#define _CHART2_VAXIS_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#include <vector>
+#include "VMeterBase.hxx"
+#include "VAxisProperties.hxx"
 
 //.............................................................................
 namespace chart
@@ -86,37 +73,54 @@ namespace chart
 /**
 */
 
-class ChartModelHelper
+class NumberFormatterWrapper;
+
+class VAxis : public VMeterBase
 {
+    //-------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------
 public:
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    VAxis( const AxisProperties& rAxisProperties
+           , NumberFormatterWrapper* pNumberFormatterWrapper
+           , sal_Int32 nDimensionCount=2 );
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram );
+    virtual ~VAxis();
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    //-------------------------------------------------------------------------
+    // partly chart2::XPlotter
+    //-------------------------------------------------------------------------
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
+    /*
+    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
+    */
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+    virtual void SAL_CALL createShapes();
+
+    //-------------------------------------------------------------------------
+    //Layout interface for cartesian axes:
+
+    //the returned value describes the minimum size that is necessary
+    //for the text labels in the direction orthogonal to the axis
+    //(for an y-axis a width is returned; in case of an x-axis the value describes a height)
+    //the return value is measured in screen dimension
+    //As an example the MinimumOrthogonalSize of an x-axis equals the
+    //Font Height if the label properties allow for labels parallel to the axis.
+//    sal_Int32 calculateMinimumOrthogonalSize( /*... parallel...*/ );
+    //Minimum->Preferred
+
+    //returns true if the MinimumOrthogonalSize can be calculated
+    //with the creation of at most one text shape
+    //(this is e.g. true if the parameters allow for labels parallel to the axis.)
+//    sal_bool  canQuicklyCalculateMinimumOrthogonalSize();
+
+
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+private: //member
+    AxisProperties              m_aAxisProperties;
+    NumberFormatterWrapper*     m_pNumberFormatterWrapper;
 };
 
 //.............................................................................

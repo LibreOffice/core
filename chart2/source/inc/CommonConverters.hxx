@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:30:30 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,12 @@ void appendPoly( com::sun::star::drawing::PolyPolygonShape3D& rRet
 */
 com::sun::star::drawing::PointSequenceSequence PolyToPointSequence(
                 const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon );
+
+//-----------------------------------------------------------------------------
+/** drawing::PointSequenceSequence + drawing::PointSequenceSequence
+*/
+void appendPointSequence( com::sun::star::drawing::PointSequenceSequence& rTarget
+                        , com::sun::star::drawing::PointSequenceSequence& rAdd );
 
 //-----------------------------------------------------------------------------
 /** PolyPolygonShape3D -> Polygon (2D,integer!)

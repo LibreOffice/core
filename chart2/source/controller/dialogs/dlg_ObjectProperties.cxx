@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 20:23:20 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,10 +127,10 @@ namespace
 
 sal_Int32 lcl_getDimensionCount( const uno::Reference< frame::XModel >& xChartModel )
 {
-    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
-    rtl::OUString aChartType;
-    sal_Int32 nDimension = ChartModelHelper::getDimensionAndFirstChartType(xDiagram,aChartType);
-    return nDimension;
+    sal_Int32 nDimensionCount = ChartTypeHelper::getDimensionCount(
+        ChartModelHelper::getFirstChartType(
+            ChartModelHelper::findDiagram( xChartModel ) ) );
+    return nDimensionCount;
 }
 
 }//end anonymous namespace
@@ -179,7 +179,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     {
         m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType );
         m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType );
-        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryYAxis( xChartType );
+        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, 1 );
     }
 
     if( OBJECTTYPE_AXIS == m_eObjectType )

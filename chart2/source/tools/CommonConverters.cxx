@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:30:48 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,19 @@ drawing::PointSequenceSequence PolyToPointSequence(
         }
     }
     return aRet;
+}
+
+void appendPointSequence( com::sun::star::drawing::PointSequenceSequence& rTarget
+                        , com::sun::star::drawing::PointSequenceSequence& rAdd )
+{
+    sal_Int32 nAddCount = rAdd.getLength();
+    if(!nAddCount)
+        return;
+    sal_Int32 nOldCount = rTarget.getLength();
+
+    rTarget.realloc(nOldCount+nAddCount);
+    for(sal_Int32 nS=0; nS<nAddCount; nS++ )
+        rTarget[nOldCount+nS]=rAdd[nS];
 }
 
 Polygon PolyToToolsPoly( const drawing::PolyPolygonShape3D& rPolyPolygon )

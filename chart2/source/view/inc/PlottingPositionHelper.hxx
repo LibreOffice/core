@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 19:30:05 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,19 @@
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
+#include <com/sun/star/drawing/Position3D.hpp>
+#endif
 
 #ifndef _B3D_HMATRIX_HXX
 #include <goodies/hmatrix.hxx>
 #endif
-
+/*
+//for WeakImplHelper1
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+*/
 //.............................................................................
 namespace chart
 {
@@ -133,6 +141,59 @@ protected: //member
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
     mutable ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XTransformation >     m_xTransformationLogicToScene;
+};
+
+class PolarPlottingPositionHelper : public PlottingPositionHelper
+    /*
+                                  , public ::cppu::WeakImplHelper1<
+                                ::drafts::com::sun::star::chart2::XTransformation >
+                                */
+{
+public:
+    PolarPlottingPositionHelper( bool bRadiusAxisMapsToFirstDimension );
+    virtual ~PolarPlottingPositionHelper();
+
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+                  getTransformationLogicToScene() const;
+
+    //the resulting values should be used for input to the transformation
+    //received with 'getTransformationLogicToScene'
+    double  transformToRadius( double fLogicValueOnRadiusAxis ) const;
+    double  transformToAngleDegree( double fLogicValueOnAngleAxis ) const;
+    double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
+    //
+
+    ::com::sun::star::drawing::Position3D
+            transformLogicToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ ) const;
+
+    double  getInnerLogicRadius() const;
+    double  getOuterLogicRadius() const;
+
+    const ::com::sun::star::uno::Sequence<
+            ::drafts::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
+    /*
+    // ____ XTransformation ____
+    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
+        const ::com::sun::star::uno::Sequence< double >& rSourceValues )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
+    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    virtual sal_Int32 SAL_CALL getSourceDimension()
+        throw (::com::sun::star::uno::RuntimeException);
+    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    virtual sal_Int32 SAL_CALL getTargetDimension()
+        throw (::com::sun::star::uno::RuntimeException);
+        */
+public:
+    //Offset for radius axis in absolute logic scaled values (1.0 == 1 category)
+    double      m_fRadiusOffset;
+    //Offset for angle axis in real degree
+    double      m_fAngleDegreeOffset;
+
+private:
+    PolarPlottingPositionHelper();
+    bool m_bRadiusAxisMapsToFirstDimension;
 };
 
 bool PlottingPositionHelper::isLogicVisible(

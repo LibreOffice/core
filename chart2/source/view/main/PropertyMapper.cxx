@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:28 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,15 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
 
 //.............................................................................
@@ -391,6 +400,49 @@ void PropertyMapper::setMultiProperties(
     {
         ASSERT_EXCEPTION( e );
     }
+}
+
+void PropertyMapper::getTextLabelMultiPropertyLists(
+    const uno::Reference< beans::XPropertySet >& xSourceProp
+    , tNameSequence& rPropNames, tAnySequence& rPropValues
+    , bool bName
+    , sal_Int32 nLimitedSpace
+    , bool bLimitedHeight )
+{
+    //fill character properties into the ValueMap
+    tPropertyNameValueMap aValueMap;
+    PropertyMapper::getValueMap( aValueMap
+            , PropertyMapper::getPropertyNameMapForCharacterProperties()
+            , xSourceProp );
+
+    //some more shape properties apart from character properties, position-matrix and label string
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("LineStyle"), uno::makeAny(drawing::LineStyle_NONE) ) ); // drawing::LineStyle
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
+    //aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextWritingMode"), uno::makeAny(eWritingMode) ) ); //text::WritingMode
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny(sal_True) ) ); // sal_Bool
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny(sal_True) ) ); // sal_Bool
+    if( bName )
+        aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( rtl::OUString() ) ) ); //CID rtl::OUString - needs to be overwritten for each point
+
+    if( nLimitedSpace > 0 )
+    {
+        if(bLimitedHeight)
+            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameHeight"), uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+        else
+            aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameWidth"), uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+    }
+
+    /*
+    //@todo ?: add paragraph properties:
+    //(uno::makeAny(eParaAdjust)) //ParaAdjust - style::ParagraphAdjust
+    //(uno::makeAny( (sal_Bool)rAxisLabelProperties.bLineBreakAllowed )) //ParaIsHyphenation - sal_Bool
+    style::ParagraphAdjust eParaAdjust( style::ParagraphAdjust_LEFT );
+    if( eHorizontalAdjust == drawing::TextHorizontalAdjust_RIGHT )
+        eParaAdjust = style::ParagraphAdjust_RIGHT;
+    */
+
+    PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
 
 //.............................................................................

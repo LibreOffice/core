@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 10:44:39 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,12 +280,16 @@ uno::Reference< chart2::XBoundedCoordinateSystem > PieChartTypeTemplate::createC
         new BoundedCoordinateSystem( xCoordSys ));
 
     chart2::ScaleData aScale;
-    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
     aScale.Scaling = new LinearScaling( 1.0, 0.0 );
 
     for( sal_Int32 i = 0; i < getDimension(); ++i )
+    {
+        aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+        if( i==1 )
+            aScale.Orientation = chart2::AxisOrientation_REVERSE;
         xResult->setScaleByDimension(
             i, uno::Reference< chart2::XScale >( new Scale( GetComponentContext(), aScale ) ));
+    }
 
     try
     {

@@ -2,13 +2,14 @@
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 //#include "chartview/servicenames_charttypes.hxx"
-//#include "chartview/servicenames_coosystems.hxx"
+//#include "servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "Linear3DTransformation.hxx"
 #include "ViewDefines.hxx"
 #include "CategoryPositionHelper.hxx"
 #include "TransformationHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
+#include "LabelPositionHelper.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -175,16 +176,7 @@ APPHELPER_XSERVICEINFO_IMPL(BarChart,CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION
 ::getCoordinateSystemTypeID()
     throw (uno::RuntimeException)
 {
-    return CHART2_COOSYSTEM_CARTESIAN2D_SERVICE_NAME;
-}
-
-    void SAL_CALL BarChart
-::setScales( const uno::Sequence< ExplicitScaleData >& rScales ) throw (uno::RuntimeException)
-{
-}
-    void SAL_CALL BarChart
-::setTransformation( const uno::Reference< XTransformation >& xTransformationToLogicTarget, const uno::Reference< XTransformation >& xTransformationToFinalPage ) throw (uno::RuntimeException)
-{
+    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 */
 
@@ -207,7 +199,8 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         if(bMiddlePosition)
             aScenePosition3D.PositionZ -= rTransformedGeom.m_aSize.DirectionZ/2.0;
     }
-    return this->transformSceneToScreenPosition( aScenePosition3D );
+    return LabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+        .transformSceneToScreenPosition( aScenePosition3D );
 }
 
 uno::Reference< drawing::XShape > BarChart::createDataPoint2D_Bar(

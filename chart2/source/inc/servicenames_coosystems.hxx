@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ChartModelHelper.hxx,v $
+ *  $RCSfile: servicenames_coosystems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,66 +58,18 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-#define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#include <vector>
+#ifndef _CHART2_SERVICENAMES_COOSYSTEMS_HXX
+#define _CHART2_SERVICENAMES_COOSYSTEMS_HXX
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-//-----------------------------------------------------------------------------
-/**
-*/
-
-class ChartModelHelper
-{
-public:
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram );
-
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
-};
+#define CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Cartesian")
+#define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.CartesianView")
+#define CHART2_COOSYSTEM_POLAR_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.Polar")
+#define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.CoordinateSystems.PolarView")
 
 //.............................................................................
 } //namespace chart

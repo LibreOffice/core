@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-06 19:37:12 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "CommonConverters.hxx"
 #include "Rotation.hxx"
 #include "ChartModelHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
 #include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
@@ -415,9 +416,9 @@ bool lcl_isRotateableObject( const rtl::OUString& rSelectedObjectCID, const uno:
     if( rSelectedObjectCID.indexOf(C2U("Diagram"))==-1 )
         return false;
 
-    rtl::OUString aDummy;
-    sal_Int32 nDimensionCount = ChartModelHelper::getDimensionAndFirstChartType(
-        ChartModelHelper::findDiagram( xChartModel ), aDummy );
+    sal_Int32 nDimensionCount = ChartTypeHelper::getDimensionCount(
+        ChartModelHelper::getFirstChartType(
+            ChartModelHelper::findDiagram( xChartModel ) ) );
     if( nDimensionCount == 3 )
         return true;
     return false;

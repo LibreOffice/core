@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-12 14:33:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TEMPLATE_MANAGER_CHART_TEMPLATE_NAME ));
     rOutMap[ PROP_TEMPLATE_MANAGER_CHART_TEMPLATE_NAME ] =
         uno::makeAny(
-            ::rtl::OUString( C2U( "com.sun.star.chart2.template.Column" )));
+            ::rtl::OUString( C2U( "com.sun.star.chart2.template.Pie" )));
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TEMPLATE_MANAGER_SOLID_TYPE ));
     rOutMap[ PROP_TEMPLATE_MANAGER_SOLID_TYPE ] =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-05 20:04:32 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "PlotterBase.hxx"
 #include "VDataSeries.hxx"
 #include "PropertyMapper.hxx"
+#include "LabelAlignment.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <drafts/com/sun/star/chart2/XChartType.hpp>
@@ -131,17 +132,12 @@ private:
     sal_Int32   m_nMaxPointCount;
 };
 
-enum LabelAlignment { LABEL_ALIGN_CENTER, LABEL_ALIGN_LEFT, LABEL_ALIGN_TOP, LABEL_ALIGN_RIGHT, LABEL_ALIGN_BOTTOM, LABEL_ALIGN_LEFT_TOP, LABEL_ALIGN_LEFT_BOTTOM, LABEL_ALIGN_RIGHT_TOP, LABEL_ALIGN_RIGHT_BOTTOM };
-
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier
 {
     //-------------------------------------------------------------------------
     // public methods
     //-------------------------------------------------------------------------
 public:
-    VSeriesPlotter( const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
-                , bool bCategoryXAxis=true );
     virtual ~VSeriesPlotter();
 
     /*
@@ -196,6 +192,11 @@ private: //methods
     VSeriesPlotter();
 
 protected: //methods
+
+    VSeriesPlotter( const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+                , bool bCategoryXAxis=true );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getSeriesGroupShape( VDataSeries* pDataSeries
             , const::com::sun::star:: uno::Reference<

@@ -2,7 +2,6 @@
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 //#include "chartview/servicenames_charttypes.hxx"
-//#include "chartview/servicenames_coosystems.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
@@ -10,6 +9,7 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "Splines.hxx"
 #include "ChartTypeHelper.hxx"
+#include "LabelPositionHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
@@ -168,16 +168,7 @@ APPHELPER_XSERVICEINFO_IMPL(AreaChart,CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATI
 ::getCoordinateSystemTypeID()
     throw (uno::RuntimeException)
 {
-    return CHART2_COOSYSTEM_CARTESIAN2D_SERVICE_NAME;
-}
-
-    void SAL_CALL AreaChart
-::setScales( const uno::Sequence< ExplicitScaleData >& rScales ) throw (uno::RuntimeException)
-{
-}
-    void SAL_CALL AreaChart
-::setTransformation( const uno::Reference< XTransformation >& xTransformationToLogicTarget, const uno::Reference< XTransformation >& xTransformationToFinalPage ) throw (uno::RuntimeException)
-{
+    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 */
 
@@ -647,7 +638,8 @@ void AreaChart::createShapes()
                         drawing::Position3D aScenePosition3D( aTransformedGeom.m_aPosition.PositionX
                                     , aTransformedGeom.m_aPosition.PositionY-aSymbolSize.DirectionY/2-1
                                     , aTransformedGeom.m_aPosition.PositionZ+m_pPosHelper->getTransformedDepth() );
-                        awt::Point aScreenPosition2D( this->transformSceneToScreenPosition( aScenePosition3D ) );
+                        awt::Point aScreenPosition2D( LabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                            .transformSceneToScreenPosition( aScenePosition3D ) );
                         this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
                                         , aUnscaledLogicPosition.PositionY
                                         , fLogicYSum, aScreenPosition2D, eAlignment );

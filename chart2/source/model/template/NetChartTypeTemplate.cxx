@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-12 14:26:00 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,12 @@ Reference< chart2::XBoundedCoordinateSystem > NetChartTypeTemplate::createCoordi
         new BoundedCoordinateSystem( xCoordSys ));
 
     chart2::ScaleData aScale;
-    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
     aScale.Scaling = new LinearScaling( 1.0, 0.0 );
 
+    aScale.Orientation = chart2::AxisOrientation_REVERSE;
     xResult->setScaleByDimension(
         0, Reference< chart2::XScale >( new Scale( GetComponentContext(), aScale ) ));
+    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
     xResult->setScaleByDimension(
         1, Reference< chart2::XScale >( new Scale( GetComponentContext(), aScale ) ));
 

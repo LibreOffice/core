@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ChartModelHelper.hxx,v $
+ *  $RCSfile: LabelPositionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: iha $ $Date: 2004-01-17 13:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,22 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
-#define _CHART2_CONTROLLER_CHARTMODELHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
-#endif
+#ifndef _CHART2_VIEW_LABELPOSITIONHELPER_HXX
+#define _CHART2_VIEW_LABELPOSITIONHELPER_HXX
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
+#include "LabelAlignment.hxx"
+#include "PropertyMapper.hxx"
 
-#include <vector>
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
+#include <com/sun/star/drawing/Position3D.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -85,38 +83,41 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
+class PlottingPositionHelper;
+class ShapeFactory;
 
-class ChartModelHelper
+class LabelPositionHelper
 {
 public:
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
-        findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    LabelPositionHelper(
+        PlottingPositionHelper* pPosHelper
+        , sal_Int32 nDimensionCount
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
+        , ShapeFactory* pShapeFactory );
+    virtual ~LabelPositionHelper();
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getFirstChartType( const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram );
+    ::com::sun::star::awt::Point transformSceneToScreenPosition(
+            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
+    ::com::sun::star::awt::Point transformLogicToScreenPosition(
+            const ::com::sun::star::drawing::Position3D& rScenePosition3D ) const;
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > > getDataSeries(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    static void changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment);
+    static void doDynamicFontResize(  tAnySequence& rPropValues, const tNameSequence& rPropNames
+                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisModelProps
+                    , const ::com::sun::star::awt::Size& rNewReferenceSize );
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >
-        getSeriesByIdentifier(
-            const rtl::OUString& rIdentifier
-            , const ::com::sun::star::uno::Reference<
-              ::com::sun::star::frame::XModel > xModel );
+private:
+    LabelPositionHelper();
 
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >
-        getChartTypeOfSeries(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
+protected:
+    PlottingPositionHelper*  m_pPosHelper;
+    sal_Int32                m_nDimensionCount;
+
+private:
+    //these members are only necessary for transformation from 3D to 2D
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes >    m_xLogicTarget;
+    ShapeFactory*                                           m_pShapeFactory;
 };
 
 //.............................................................................
