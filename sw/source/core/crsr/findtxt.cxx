@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-21 16:39:29 $
+ *  last change: $Author: jp $ $Date: 2001-10-09 17:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,8 +311,9 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 *GetPoint() = *pPam->GetPoint();
                 GetPoint()->nContent = 0;
                 SetMark();
-                if( pSttNd != &rNdIdx.GetNode() &&
+                if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
                     Move( fnMoveForward, fnGoCntnt ) &&
+                    (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
                     1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
                                     GetMark()->nNode.GetIndex()) ) )
                 {
