@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:29:19 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,18 +111,6 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     mrExpData.mpLinkManager.reset( new XclExpLinkManager( GetRoot() ) );
 
     mrExpData.mpXFBuffer->InitDefaults();
-}
-
-XclExpRoot::XclExpRoot( const XclExpRoot& rRoot ) :
-    XclRoot( rRoot ),
-    mrExpData( rRoot.mrExpData )
-{
-}
-
-XclExpRoot& XclExpRoot::operator=( const XclExpRoot& rRoot )
-{
-    XclRoot::operator=( rRoot );
-    return *this;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
