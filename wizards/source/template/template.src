@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 20:38:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String SAMPLES
     Text[ chinese_traditional ] = "­n·Q¥R¤À§Q¥Î³o­Ó¼Ë¦¡ªº¦UºØÉ¬¨q¥\\¯à¡A±z¥²¶·±Ä¥Î³o­Ó¼Ë¦¡¨Ó·s«Ø¤@­Ó¤å¥ó¡C";
     Text[ arabic ] = "áßí ÊÓÊØíÚ ÇÓÊÎÏÇã åĞÇ ÇáãËÇá Úáì ÇáäÍæ ÇáÃãËá¡ Úáíß ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ ÈÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ.";
     Text[ turkish ] = "Bu örneğin tüm işlevlerini kullanabilmek için, bu şablon ile yeni bir belge oluşturun.";
+    Text[ catalan ] = "Para que esté disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
 };
 
 String SAMPLES + 1
@@ -116,6 +117,7 @@ String SAMPLES + 1
     Text[ chinese_traditional ] = "´£¥Ü";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "Bilgi";
+    Text[ catalan ] = "Indicación";
 };
 
 // --------------------------------------------------------------------
@@ -142,6 +144,7 @@ String STYLES
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáãæÇÖíÚ";
     Text[ turkish ] = "Konu seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección de temas";
 };
 
 String STYLES + 1
@@ -166,6 +169,7 @@ String STYLES + 1
     Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº°Ê§@¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
     Text[ turkish ] = "Belgeyi panoya kaydederken hata oluştu! Bir sonraki işlem geri alınamaz.";
+    Text[ catalan ] = "¡Ha ocurrido un error al guardar el documento actual en el portapapeles! No se puede deshacer la siguiente acción.";
 };
 
 String STYLES + 2
@@ -191,6 +195,7 @@ String STYLES + 2
     Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "İptal";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Cancelar";
 };
 
 String STYLES + 3
@@ -216,6 +221,7 @@ String STYLES + 3
     Text[ arabic ] = "ÍÓäÇğ";
     Text[ turkish ] = "Tamam";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Aceptar";
 };
 
 // --------------------------------------------------------------------
@@ -241,6 +247,7 @@ String AgendaDlgName
     Text[ chinese_traditional ] = "¨ó©w¼Ë¦¡";
     Text[ arabic ] = "ŞÇáÈ ÈÑæÊæßæá";
     Text[ turkish ] = "Tutanak şablonu";
+    Text[ catalan ] = "Plantilla de protocolo";
 };
 
 String AgendaDlgNoCancel
@@ -278,6 +285,7 @@ String AgendaDlgFrame
     Text[ chinese_traditional ] = "°O¿ıÃş«¬";
     Text[ arabic ] = "äæÚ ÇáÈÑæÊæßæá";
     Text[ turkish ] = "Tutanak tipi";
+    Text[ catalan ] = "Tipo de protocolo";
 };
 
 String AgendaDlgButton1
@@ -302,6 +310,7 @@ String AgendaDlgButton1
     Text[ chinese_traditional ] = "·|½Íµ²ªG°O¿ı";
     Text[ arabic ] = "ÈÑæÊæßæá ÇáäÊíÌÉ";
     Text[ turkish ] = "Sonuç tutanağı";
+    Text[ catalan ] = "Protocolo de resultado";
 };
 
 String AgendaDlgButton2
@@ -326,6 +335,7 @@ String AgendaDlgButton2
     Text[ chinese_traditional ] = "·|½Í¹Lµ{°O¿ı";
     Text[ arabic ] = "ÈÑæÊæßæá ÎØ ÇáÓíÑ";
     Text[ turkish ] = "Değerlendirme tutanağı";
+    Text[ catalan ] = "Protocolo del transcurso";
 };
 
 // --------------------------------------------------------------------
@@ -351,6 +361,7 @@ String CorrespondenceNoTextmark
     Text[ chinese_traditional ] = "¼Ğ°O 'Recipient' ¤£¦s¦b¡C";
     Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ 'Recipient' äÇŞÕÉ.";
     Text[ turkish ] = "'Alıcı' Belirteci mevcut değil.";
+    Text[ catalan ] = "Falta la marca de texto 'Recipient'.";
 };
 
 String CorrespondenceNoTextmark+1
@@ -375,6 +386,7 @@ String CorrespondenceNoTextmark+1
     Text[ chinese_traditional ] = "µLªk´¡¤J¶l¥ó¦X¨ÖªºÄæ¦ì¡C";
     Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
     Text[ turkish ] = "Standart mektup alanları eklenemiyor.";
+    Text[ catalan ] = "No se pueden insertar campos de cartas en serie.";
 };
 
 String CorrespondenceMsgError
@@ -399,6 +411,7 @@ String CorrespondenceMsgError
     Text[ chinese_traditional ] = "¿ù»~";
     Text[ arabic ] = "ÎØÃ";
     Text[ turkish ] = "Hata";
+    Text[ catalan ] = "Error";
 };
 
 String CorrespondenceDialog
@@ -423,6 +436,7 @@ String CorrespondenceDialog
     Text[ chinese_traditional ] = "­n¶ñ¼gªº¤º®e¡H";
     Text[ arabic ] = "ãÇĞÇ ÊÑíÏ Ãä ÊßÊÈ¿";
     Text[ turkish ] = "Ne yazmak istiyorsunuz?";
+    Text[ catalan ] = "¿Qué desea escribir?";
 };
 
 String CorrespondenceDialog+1
@@ -448,6 +462,7 @@ String CorrespondenceDialog+1
     Text[ arabic ] = "ÎØÇÈ ãİÑÏ";
     Text[ turkish ] = "Tek mektup";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carta individual";
 };
 
 String CorrespondenceDialog+2
@@ -472,6 +487,7 @@ String CorrespondenceDialog+2
     Text[ chinese_traditional ] = "¶l¥ó(«H¥ó)¦X¨Ö";
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
     Text[ turkish ] = "Standart mektup";
+    Text[ catalan ] = "Carta en serie";
 };
 
 String TextField
@@ -498,4 +514,5 @@ String TextField
     Text[ chinese_traditional ] = "ÁÙ¨S¦³©w¸q¨Ï¥ÎªÌ¸ê®ÆÄæ¦ì!";
     Text[ turkish ] = "Textfield is not defined!";
     Text[ arabic ] = "áã íÊã ÊÚííä ÍŞá ÈíÇäÇÊ ÇáãÓÊÎÏã!";
+    Text[ catalan ] = "¡El campo de datos de usuario no está definido!";
 };
