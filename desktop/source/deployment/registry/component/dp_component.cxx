@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:54:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,9 +469,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         // detect exact media-type:
         ::ucb::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv )) {
-            OUString title(
-                extract_throw<OUString>(
-                    ucbContent.getPropertyValue( StrTitle::get() ) ) );
+            const OUString title( ucbContent.getPropertyValue(
+                                      StrTitle::get() ).get<OUString>() );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) ))
             {
@@ -529,10 +528,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         if (type.EqualsIgnoreCaseAscii("application"))
         {
             ::ucb::Content ucbContent( url, xCmdEnv );
-            OUString name(
-                extract_throw<OUString>(
-                    ucbContent.getPropertyValue( StrTitle::get() ) ) );
-
+            const OUString name( ucbContent.getPropertyValue(
+                                     StrTitle::get() ).get<OUString>() );
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))
             {
                 // xxx todo: probe and evaluate component xml description
@@ -1087,7 +1084,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                     xServicesRDB->getRootKey()->openKey(
                         OUSTR("/IMPLEMENTATIONS/") + implName ) ) );
             try {
-                xSet->insert( makeAny(xFactory) );
+                xSet->insert( Any(xFactory) );
             } // ignore if factory has already been inserted:
             catch (container::ElementExistException &) {
                 OSL_ENSURE( 0, "### factory already registered?" );
@@ -1115,10 +1112,10 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                     // used service:
                     try {
                         xRootContext->insertByName(
-                            name + OUSTR("/service"), makeAny(sp.second) );
+                            name + OUSTR("/service"), Any(sp.second) );
                     } catch (container::ElementExistException &) {
                         xRootContext->replaceByName(
-                            name + OUSTR("/service"), makeAny(sp.second) );
+                            name + OUSTR("/service"), Any(sp.second) );
                     }
                     // singleton entry:
                     try {
@@ -1158,7 +1155,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         {
             OUString const & implName = *iPos;
             try {
-                xSet->remove( makeAny(implName) );
+                xSet->remove( Any(implName) );
             } // ignore if factory has not been live deployed:
             catch (container::NoSuchElementException &) {
             }
@@ -1274,7 +1271,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                             xContext ), UNO_QUERY_THROW );
                     xReg->open( expandUnoRcUrl(url),
                                 true /* read-only */, false /* ! create */ );
-                    const Any arg( makeAny(xReg) );
+                    const Any arg(xReg);
                     Reference<container::XHierarchicalNameAccess> xTDprov(
                         xContext->getServiceManager()
                         ->createInstanceWithArgumentsAndContext(
@@ -1293,7 +1290,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                         OUSTR("/singletons/com.sun.star."
                               "reflection.theTypeDescriptionManager") ),
                     UNO_QUERY_THROW );
-                xSet->insert( makeAny(m_xTDprov) );
+                xSet->insert( Any(m_xTDprov) );
             }
         }
 
@@ -1311,7 +1308,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                     OUSTR("/singletons/com.sun.star."
                           "reflection.theTypeDescriptionManager") ),
                 UNO_QUERY_THROW );
-            xSet->remove( makeAny(m_xTDprov) );
+            xSet->remove( Any(m_xTDprov) );
 
             that->releaseObject( url );
             m_xTDprov.clear();
