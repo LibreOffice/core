@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:32:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ public:
 Color   ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle);
 
 // Get size of fly (if 'automatic' in WW) and check if not too small
-void    CalculateFlySize( SfxItemSet& rFlySet, SwNodeIndex& rAnchor,
-                          SwTwips nPageWidth );
+void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
+    SwTwips nPageWidth);
 
 #endif
