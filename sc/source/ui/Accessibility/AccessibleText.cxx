@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-15 10:43:56 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef SC_SCMOD_HXX
 #include "scmod.hxx"
 #endif
+#ifndef SC_PREVWSH_HXX
+#include "prevwsh.hxx"
+#endif
+#ifndef SC_DOCSHELL_HXX
+#include "docsh.hxx"
+#endif
 
 #ifndef _SVX_UNOFORED_HXX
 #include <svx/unofored.hxx>
@@ -81,6 +87,9 @@
 #endif
 #ifndef _SVX_UNOEDHLP_HXX
 #include <svx/unoedhlp.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
 #endif
 
 class ScViewForwarder : public SvxViewForwarder
@@ -378,7 +387,7 @@ void ScEditViewForwarder::GrabFocus()
 
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
                             const ScAddress& rP, ScSplitPos eSplitPos)
-    : ScCellTextData(GetDocShell(pViewShell), rP),
+    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpViewForwarder(NULL),
@@ -408,7 +417,7 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     ScCellTextData::Notify(rBC, rHint);
 }
 
-ScAccessibleCellTextData* ScAccessibleCellTextData::Clone() const
+ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
 {
     return new ScAccessibleCellTextData(mpViewShell, aCellPos, meSplitPos);
 }
@@ -478,15 +487,10 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool b
     return mpEditViewForwarder;
 }
 
-SfxBroadcaster& ScAccessibleCellTextData::GetBroadcaster() const
-{
-    return maBroadcaster;
-}
-
 IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-        maBroadcaster.Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
 
     return 0;
 }
@@ -496,6 +500,173 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
     ScDocShell* pDocSh = NULL;
     if (pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetDocument())
         pDocSh = (ScDocShell*) pViewShell->GetViewData()->GetDocument()->GetDocumentShell();
+    return pDocSh;
+}
+
+//  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
+
+ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
+                            const ScAddress& rP)
+    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
+    mpViewShell(pViewShell),
+    mpViewForwarder(NULL)
+{
+}
+
+ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
+{
+    if (mpViewForwarder)
+        delete mpViewForwarder;
+}
+
+void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            mpViewShell = NULL;                     // invalid now
+        }
+    }
+    ScCellTextData::Notify(rBC, rHint);
+}
+
+ScAccessibleTextData* ScAccessiblePreviewCellTextData::Clone() const
+{
+    return new ScAccessiblePreviewCellTextData(mpViewShell, aCellPos);
+}
+
+SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
+{
+    ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
+
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+
+    return pForwarder;
+}
+
+SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
+{
+//  if (!mpViewForwarder)
+//      mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
+    return mpViewForwarder;
+}
+
+IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
+{
+    if( aNotify )
+        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+    return 0;
+}
+
+ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewShell)
+{
+    ScDocShell* pDocSh = NULL;
+    if (pViewShell && pViewShell->GetDocument())
+        pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    return pDocSh;
+}
+
+//  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
+
+ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
+            const String& rText)
+    : ScAccessibleTextData(GetDocShell(pViewShell), ScAddress()),
+    mpViewShell(pViewShell),
+    mpViewForwarder(NULL),
+    maText(rText)
+{
+}
+
+ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
+{
+    if (mpViewForwarder)
+        delete mpViewForwarder;
+}
+
+void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+        {
+            mpViewShell = NULL;                     // invalid now
+        }
+    }
+    ScCellTextData::Notify(rBC, rHint);
+}
+
+ScAccessibleTextData* ScAccessiblePreviewHeaderCellTextData::Clone() const
+{
+    return new ScAccessiblePreviewHeaderCellTextData(mpViewShell, maText);
+}
+
+SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
+{
+    if (!pEditEngine)
+    {
+        if ( pDocShell )
+        {
+            ScDocument* pDoc = pDocShell->GetDocument();
+            pEditEngine = pDoc->CreateFieldEditEngine();
+        }
+        else
+        {
+            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            pEnginePool->FreezeIdRanges();
+            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+        }
+#if SUPD > 600
+        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  this will be fixed (in EditEngine) by src600
+//      pEditEngine->SetUpdateMode( FALSE );
+#endif
+        pEditEngine->EnableUndo( FALSE );
+        if (pDocShell)
+            pEditEngine->SetRefDevice(pDocShell->GetVirtualDevice_100th_mm());
+        else
+            pEditEngine->SetRefMapMode( MAP_100TH_MM );
+        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+    }
+
+    if (bDataValid)
+        return pForwarder;
+
+    if (maText.Len())
+        pEditEngine->SetText( maText );
+
+    bDataValid = TRUE;
+
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+
+    return pForwarder;
+}
+
+SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
+{
+//  if (!mpViewForwarder)
+//      mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
+    return mpViewForwarder;
+}
+
+IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
+{
+    if( aNotify )
+        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+    return 0;
+}
+
+ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* pViewShell)
+{
+    ScDocShell* pDocSh = NULL;
+    if (pViewShell && pViewShell->GetDocument())
+        pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
     return pDocSh;
 }
 

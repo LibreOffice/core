@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:50:12 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 07:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,28 +76,51 @@ class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
 class ScEditViewForwarder;
+class ScPreviewShell;
+
+class ScAccessibleTextData : public ScCellTextData
+{
+public:
+                        ScAccessibleTextData(ScDocShell* pDocShell,
+                            const ScAddress& rP)
+                            : ScCellTextData(pDocShell, rP) {}
+    virtual             ~ScAccessibleTextData() {}
+
+    virtual ScAccessibleTextData* Clone() const = NULL;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) {}
+
+    virtual SvxTextForwarder* GetTextForwarder() = NULL;
+    virtual SvxViewForwarder* GetViewForwarder() = NULL;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) = NULL;
+    virtual SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
+
+private:
+    mutable SfxBroadcaster maBroadcaster;
+
+    // prevent the using of this method of the base class
+    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+};
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
-class ScAccessibleCellTextData : public ScCellTextData
+class ScAccessibleCellTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleCellTextData(ScTabViewShell* pViewShell,
                             const ScAddress& rP, ScSplitPos eSplitPos);
     virtual             ~ScAccessibleCellTextData();
 
-    virtual ScAccessibleCellTextData* Clone() const;
+    virtual ScAccessibleTextData* Clone() const;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
-    virtual SfxBroadcaster& GetBroadcaster() const;
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
-    mutable SfxBroadcaster maBroadcaster;
     ScViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
     ScTabViewShell* mpViewShell;
@@ -108,6 +131,59 @@ private:
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
+};
+
+class ScAccessiblePreviewCellTextData : public ScAccessibleTextData
+{
+public:
+                        ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
+                            const ScAddress& rP);
+    virtual             ~ScAccessiblePreviewCellTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxViewForwarder* GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+
+    DECL_LINK( NotifyHdl, EENotify* );
+private:
+    ScViewForwarder* mpViewForwarder;
+    ScPreviewShell* mpViewShell;
+
+    // prevent the using of this method of the base class
+    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+
+    ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
+};
+
+class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleTextData
+{
+public:
+                        ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
+                            const String& rText);
+    virtual             ~ScAccessiblePreviewHeaderCellTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxViewForwarder* GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+
+    DECL_LINK( NotifyHdl, EENotify* );
+private:
+    ScViewForwarder* mpViewForwarder;
+    ScPreviewShell* mpViewShell;
+    String          maText;
+
+    // prevent the using of this method of the base class
+    ScSharedCellEditSource* GetOriginalSource() { return NULL; }
+
+    ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
 #endif
