@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-05 12:51:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 MyWindow::MyWindow(Window* pParent, ResMgr *pRes ) :
-            FloatingWindow(pParent, WB_SVLOOK | WB_CLOSEABLE | WB_MOVEABLE ),
+            FloatingWindow(pParent, WB_3DLOOK | WB_CLOSEABLE | WB_MOVEABLE ),
             pRes(pRes),
             pGegner(0L),
             pFighter(0L),
@@ -228,7 +228,7 @@ void MyWindow::Paint(const Rectangle& rRect)
         Point aPoint(0,20);
 
         pVirtualDevice->SetFillColor( COL_WHITE );
-        pVirtualDevice->SetPen(PEN_NULL);
+        pVirtualDevice->SetLineColor();
         pVirtualDevice->DrawRect(Rectangle(Point(0,0), Point(aVSize.Width(),aVSize.Height())));
 
         if(!bStartLevel)
@@ -404,11 +404,11 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
         pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
         PlaceDialog(pBox);
         ProgStatus=FALSE;
-        SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+        SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 
         pBox->Execute();
 
-        SetBackgroundBrush(BRUSH_NULL);
+        SetBackground();
         ProgStatus=TRUE;
         delete pBox;
         nLevel++;
@@ -443,11 +443,11 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
         PlaceDialog(pBox);
         BOOL aDummyStatus = ProgStatus;
         ProgStatus=FALSE;
-        SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+        SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 
         pBox->Execute();
 
-        SetBackgroundBrush(BRUSH_NULL);
+        SetBackground();
         ProgStatus=aDummyStatus;
         delete pBox;
         GrabFocus();
@@ -467,9 +467,9 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
                 pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
                 PlaceDialog(pBox);
                 Paint(Rectangle(Point(0,0),Point(640,480)));
-                SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+                SetBackground(Wallpaper( Color( COL_WHITE ) ) );
                 pBox->Execute();
-                SetBackgroundBrush(BRUSH_NULL);
+                SetBackground();
                 delete pBox;
                 GrabFocus();
             }
