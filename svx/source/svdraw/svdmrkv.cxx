@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:13:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,21 @@ void __EXPORT SdrMarkView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType
             //{
             //  HideMarkHdl(NULL);
             //}
+
+            // #i29181#
+/* removed fix since it does not work for group shapes and for grouping
+            if( eKind == HINT_OBJREMOVED )
+            {
+                SdrObject* pObj = const_cast< SdrObject* >( pSdrHint->GetObject() );
+
+                USHORT nAnz=GetPageViewCount();
+                while(nAnz--)
+                {
+                    SdrPageView* pPV=GetPageViewPvNum(nAnz);
+                    MarkObj(pObj, GetPageViewPvNum(nAnz), TRUE );
+                }
+            }
+*/
 
             bMarkedObjRectDirty=TRUE;
             bMarkedPointsRectsDirty=TRUE;
