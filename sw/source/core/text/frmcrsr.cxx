@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-19 12:29:06 $
+ *  last change: $Author: fme $ $Date: 2002-01-07 10:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
 #ifdef VERTICAL_LAYOUT
         SwFrmSwapper aSwapper( pFrm, sal_True );
+        if ( bVert )
+            nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 #endif
 
         sal_Bool bGoOn = sal_True;
@@ -511,7 +513,8 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 
 #ifdef VERTICAL_LAYOUT
         SwFrmSwapper aSwapper( pFrm, sal_True );
-        nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
+        if ( bVert )
+            nMaxY = pFrm->SwitchVerticalToHorizontal( nMaxY );
 #endif
 
         SwTxtSizeInfo aInf( pFrm );
