@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:41:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,69 +1047,7 @@ SwXFrame*   SwXFrames::GetObject( SwFrmFmt& rFmt, FlyCntType eType )
     }
     return pFrm;
 }
-/*-- 14.01.99 08:25:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXFrame*   SwXFrames::GetFrmByName( const String& rName )
-{
-    SwXFrame* pFrm = 0;
-    if(IsValid())
-    {
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwFrmFmt* pFmt = GetDoc()->GetFlyNum(i, eType);
-            if(rName == pFmt->GetName())
-                pFrm = SwXFrames::GetObject(*pFmt, eType);
-        }
-    }
-    return pFrm;
-}
-/*-- 14.01.99 08:25:49---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXFrame*   SwXFrames::GetFrmByIndex( sal_Int32 nIndex )
-{
-    SwXFrame* pFrm = 0;
-    if(IsValid())
-    {
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(GetType());
-        if((sal_Int32)nCount > nIndex)
-        {
-            SwFrmFmt* pFmt = GetDoc()->GetFlyNum((sal_uInt16)nIndex, GetType());
-            pFrm = SwXFrames::GetObject(*pFmt, eType);
-        }
-    }
-    return pFrm;
-}
-/*-- 14.01.99 08:25:49---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXFrames::RemoveFrame(const OUString& rName, FlyCntType eType)
-{
-    if(IsValid())
-    {
-        String sName(rName);
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwFrmFmt* pFrmFmt = GetDoc()->GetFlyNum(i, eType);
-            if(sName == pFrmFmt->GetName())
-            {
-                if( pFrmFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
-                {
-                    const SwPosition &rPos = *(pFrmFmt->GetAnchor().GetCntntAnchor());
-                    SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                    const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                    pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
-                }
-                else
-                    GetDoc()->DelLayoutFmt(pFrmFmt);
-                break;
-            }
-        }
-    }
-}
 /******************************************************************
  * SwXTextFrames
  ******************************************************************/
