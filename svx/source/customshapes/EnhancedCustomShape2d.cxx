@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:04:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
+#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
