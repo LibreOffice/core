@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:52:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case E3D_LATHEOBJ_ID|E3D_INVENTOR_FLAG:
     case E3D_EXTRUDEOBJ_ID|E3D_INVENTOR_FLAG:
     case E3D_POLYGONOBJ_ID|E3D_INVENTOR_FLAG:
+    case OBJ_MEDIA:
         {
             static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
 
@@ -3101,6 +3102,7 @@ const char* sUNO_service_drawing_MeasureShape               = STAR_NAMESPACE "dr
 const char* sUNO_service_drawing_FrameShape                 = STAR_NAMESPACE "drawing.FrameShape";
 const char* sUNO_service_drawing_ControlShape               = STAR_NAMESPACE "drawing.ControlShape";
 const char* sUNO_service_drawing_ConnectorShape             = STAR_NAMESPACE "drawing.ConnectorShape";
+const char* sUNO_service_drawing_MediaShape                 = STAR_NAMESPACE "drawing.MediaShape";
 
 
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
@@ -3685,6 +3687,25 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_EdgeServices;
+                    }
+                }
+                return *pSeq;
+            }
+        case OBJ_MEDIA:
+            {
+                static uno::Sequence< OUString > *pSeq = 0;
+                if( 0 == pSeq )
+                {
+                    OGuard aGuard( Application::GetSolarMutex() );
+                    if( 0 == pSeq )
+                    {
+                        static uno::Sequence< OUString > SvxShape_MediaServices;
+
+                        SvxServiceInfoHelper::addToSequence( SvxShape_MediaServices, 2,
+                            sUNO_service_drawing_MediaShape,
+                            sUNO_service_drawing_Shape);
+
+                        pSeq = &SvxShape_MediaServices;
                     }
                 }
                 return *pSeq;
