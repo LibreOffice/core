@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-20 11:22:54 $
+ *  last change: $Author: dl $ $Date: 2001-09-13 11:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ SO2_DECL_REF(SvInPlaceObject)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
+void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausser dem Seitenwechsel und dem
     // Sprung zur Bookmark ausgefuehrt!
@@ -493,6 +493,7 @@ void __EXPORT SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OPT_LOCALE_CHANGED:
         {
             pWindow->Invalidate();
+            UpdatePreview( pActualPage );
             rReq.Done();
         }
 
@@ -507,7 +508,7 @@ void __EXPORT SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::ExecRuler(SfxRequest& rReq)
+void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual &&
@@ -686,7 +687,7 @@ void __EXPORT SdDrawViewShell::ExecRuler(SfxRequest& rReq)
 |* Statuswerte der Lineale bestimmen
 |*
 \************************************************************************/
-void __EXPORT SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
+void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
 
@@ -812,7 +813,7 @@ void __EXPORT SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::ExecStatusBar(SfxRequest& rReq)
+void  SdDrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual &&
@@ -845,7 +846,7 @@ void __EXPORT SdDrawViewShell::ExecStatusBar(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetSnapItemState( SfxItemSet &rSet )
+void  SdDrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
     Point   aMPos = pWindow->PixelToLogic(aMousePos);

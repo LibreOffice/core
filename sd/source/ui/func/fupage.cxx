@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-14 11:15:05 $
+ *  last change: $Author: dl $ $Date: 2001-09-13 11:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,20 +579,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     //
     // ggfs. Preview den neuen Kontext mitteilen
     //
-    SfxChildWindow* pPreviewChildWindow =
-        pViewShell->GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-    if (pPreviewChildWindow)
-    {
-        SdPreviewWin* pPreviewWin =
-            (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-        if (pPreviewWin && pPreviewWin->GetDoc() == pDoc && pViewSh->ISA(SdDrawViewShell))
-        {
-            USHORT nSdPageNo = (((SdDrawViewShell*)pViewSh)->GetActualPage()->
-                                        GetPageNum() - 1) / 2;
-            FrameView* pFrameView = pViewSh->GetFrameView();
-            pPreviewWin->SetContext(pDoc, nSdPageNo, pFrameView);
-        }
-    }
+    pViewSh->UpdatePreview( pViewSh->GetActualPage() );
 }
 
 

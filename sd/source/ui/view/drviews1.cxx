@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:28:23 $
+ *  last change: $Author: dl $ $Date: 2001-09-13 11:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,20 +1215,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_EFFECT_STATE, TRUE, FALSE);
         UpdateSlideChangeWindow();
-
-        // ggfs. Preview den neuen Kontext mitteilen
-        SfxChildWindow* pPreviewChildWindow =
-            GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-        if (pPreviewChildWindow)
-        {
-            SdPreviewWin* pPreviewWin =
-                (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-            if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
-            {
-                USHORT nSdPageNo = (pActualPage->GetPageNum() - 1) / 2;
-                pPreviewWin->SetContext(pDoc, nSdPageNo, pFrameView);
-            }
-        }
+        UpdatePreview( pActualPage );
 
         if (pDrView->GetSlideShow())
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-20 11:23:27 $
+ *  last change: $Author: dl $ $Date: 2001-09-13 11:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,7 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
         case SID_OPT_LOCALE_CHANGED:
         {
             pOlView->GetOutliner()->UpdateFields();
+            UpdatePreview( GetActualPage() );
             rReq.Done();
         }
 
@@ -1232,7 +1233,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_STATE ) )
     {
         BOOL bModified = pDoc->IsChanged();
-        UpdatePreview();
+        UpdatePreview( GetActualPage() );
         pDoc->SetChanged( bModified );
     }
 
@@ -2131,7 +2132,7 @@ String SdOutlineViewShell::GetPageRangeString()
 |*
 \************************************************************************/
 
-void SdOutlineViewShell::UpdatePreview()
+void SdOutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
     // vom ShowWindow der DiaShow?
     // ggfs. Preview den neuen Kontext mitteilen
@@ -2141,9 +2142,8 @@ void SdOutlineViewShell::UpdatePreview()
     {
         SdPreviewWin* pPreviewWin =
             (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-        if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
+        if (pPreviewWin && ( bInit || pPreviewWin->GetDoc() == pDoc ) )
         {
-            SdPage* pPage = GetActualPage();
             BOOL bNewObject = FALSE;
 
             OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
@@ -2179,11 +2179,10 @@ void SdOutlineViewShell::UpdatePreview()
                 pPage->SetAutoLayout(pPage->GetAutoLayout());
             }
             // In Preview neu darstellen (nur bei neuer Seite):
-            if( bNewPage || bNewObject )
+            if( bNewPage || bNewObject || bInit )
             {
                 pLastPage = pPage;
-                USHORT  nPage = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
-                pPreviewWin->SetContext( pDoc, nPage, pFrameView );
+                SdViewShell::UpdatePreview( pPage, TRUE );
             }
         }
     }

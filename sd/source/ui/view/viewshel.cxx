@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-12 12:43:12 $
+ *  last change: $Author: dl $ $Date: 2001-09-13 11:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,21 +436,7 @@ void __EXPORT SdViewShell::Activate(BOOL bIsMDIActivate)
         }
 
         if(!pDocSh->IsUIActive())
-        {
-            // ggfs. Preview den neuen Kontext mitteilen
-            SfxChildWindow* pPreviewChildWindow =
-                GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-            if (pPreviewChildWindow)
-            {
-                SdPreviewWin* pPreviewWin =
-                    (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-                if (pPreviewWin)
-                {
-                    USHORT nSdPageNo = (GetActualPage()->GetPageNum() - 1) / 2;
-                    pPreviewWin->SetContext(pDoc, nSdPageNo, pFrameView);
-                }
-            }
-        }
+            UpdatePreview( GetActualPage(), TRUE );
 
         SdView* pView = GetView();
 
@@ -471,7 +457,7 @@ void __EXPORT SdViewShell::Activate(BOOL bIsMDIActivate)
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::Deactivate(BOOL bIsMDIActivate)
+void SdViewShell::Deactivate(BOOL bIsMDIActivate)
 {
     // View-Attribute an der FrameView merken
     WriteFrameViewData();
@@ -735,7 +721,7 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
+void SdViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
     Point rP = rPos;
     Size rS = rSize;
@@ -782,7 +768,7 @@ void __EXPORT SdViewShell::InnerResizePixel(const Point &rPos, const Size &rSize
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+void SdViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
     long nHRulerOfs = 0;
 
@@ -1333,6 +1319,25 @@ USHORT SdViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     }
 
     return nRet;
+}
+
+/*************************************************************************
+|*
+|* Update preview context
+|*
+\************************************************************************/
+void SdViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
+{
+    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
+    if ( pPreviewChildWindow )
+    {
+        SdPreviewWin* pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow();
+        if ( pPreviewWin && ( bInit || pPreviewWin->GetDoc() == pDoc ) )
+        {
+            USHORT nSdPageNo = ( pPage->GetPageNum() - 1 ) / 2;
+            pPreviewWin->SetContext(pDoc, nSdPageNo, pFrameView);
+        }
+    }
 }
 
 
