@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:48:20 $
+ *  last change: $Author: mtg $ $Date: 2001-06-14 17:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,12 +237,20 @@ sal_Int32 ZipFile::findEND( )
             aGrabber >> nTest;
             if (nTest == ENDSIG)
             {
+
+
                 sal_uInt16 nCommentLength;
                 sal_Int32 nEndPos = nPos + i;
                 aGrabber.seek(nEndPos+ENDCOM);
                 aGrabber >> nCommentLength;
+                /*
                 if (nEndPos + ENDHDR + nCommentLength == nLength)
                 {
+                    Since we don't actually use the comment ourselves, we'll just ignore it, and also skip the check
+                    below. Neither WinZip nor InfoZip's unzip perform such checking and happily open files with
+                    garbage bytes on the end, so we should do so too! I will 'assert' however that the file has garbage
+                    at the end, and hope that the file hasn't suffered any other abuse
+
                     if (nCommentLength>0)
                     {
                         aByteSeq.realloc(nCommentLength+1);
@@ -251,8 +259,10 @@ sal_Int32 ZipFile::findEND( )
                         sComment = OUString((sal_Char*)aByteSeq.getConstArray(), nCommentLength+1, RTL_TEXTENCODING_ASCII_US);
 
                     }
-                    return nPos + i;
                 }
+                */
+                VOS_ENSURE ( nEndPos + ENDHDR + nCommentLength == nLength, "This Zip File is potentially corrupt - it has garbage after the END descriptor! Hoping for the best...!");
+                return nPos + i;
             }
         }
     }
