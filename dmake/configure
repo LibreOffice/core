@@ -2330,7 +2330,8 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
-		startup/unix/macosx/Makefile dmakeroot.h  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
+		dmakeroot.h  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2438,7 +2439,8 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
-		startup/unix/macosx/Makefile dmakeroot.h "}
+		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
+		dmakeroot.h "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -2677,7 +2679,7 @@ chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
-###		startup/unix/macosx/Makefile startup/unix/cygwin/Makefile dmakeroot.h )
+###		startup/unix/cygwin/Makefile )
 
 
 
