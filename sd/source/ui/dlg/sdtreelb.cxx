@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,34 +703,28 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
             pStorage = pWorkMedium->GetStorage();
 
         // ist es eine Draw-Datei?
-        if (pStorage &&
-            (pStorage->IsStream(pStarDrawDoc) || pStorage->IsStream(pStarDrawDoc3)))
+        if( pStorage &&
+            ( pStorage->IsStream( pStarDrawDoc ) ||
+              pStorage->IsStream( pStarDrawDoc3 ) ||
+              pStorage->IsStream( pStarDrawXMLContent ) ) )
         {
-            if (pMed)
+            if( pMed )
             {
                 // Da das Medium der SdTreeLb gehoert, gehoert auch die
                 // nun zu erzeugende DocShell der SdTreeLb
-                xBookmarkDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD,
-                                                       TRUE);
+                xBookmarkDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
                 if (xBookmarkDocShRef->DoLoad(pMed))
-                {
                     pBookmarkDoc = xBookmarkDocShRef->GetDoc();
-                }
                 else
-                {
                     pBookmarkDoc = NULL;
-                }
             }
             else
-            {
                 pBookmarkDoc = ((SdDrawDocument*) pDoc)->OpenBookmarkDoc(*pWorkMedium);
-            }
         }
         else             // unbekanntes Storage-Format
         {
-            ErrorBox aErrorBox( this, (WinBits) WB_OK,
-                      String( SdResId( STR_READ_DATA_ERROR ) ) );
+            ErrorBox aErrorBox( this, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
             aErrorBox.Execute();
         }
     }
