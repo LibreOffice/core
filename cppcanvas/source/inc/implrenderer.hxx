@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:29:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace cppcanvas
                                  bool                   bIntersect );
 
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XCanvasFont > createFont( ::basegfx::B2DHomMatrix&     o_rFontMatrix,
+                ::com::sun::star::rendering::XCanvasFont > createFont( ::basegfx::B2DHomMatrix&     o_rFontMatrix,
                                                                                const ::Font&                rFont,
                                                                                const CanvasSharedPtr&       rCanvas,
                                                                                const ::VirtualDevice&       rVDev,
