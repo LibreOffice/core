@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-07-23 06:27:47 $
+#   last change: $Author: pl $ $Date: 2001-10-24 17:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,7 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 .IF "$(GUI)"=="UNX"
 
 SHL1STDLIBS +=\
-    -lX11 -lXt -lXmu
+    -lX11
 
 .ENDIF
 
