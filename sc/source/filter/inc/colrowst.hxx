@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:58 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,10 @@ public:
     void                SetHorizPagebreak( const UINT16 nRow );
     void                SetVertPagebreak( const UINT16 nCol );
 
-    void                Apply( const UINT16 nTab );
+    /** Inserts all column and row settings of the specified sheet, except the hidden flags. */
+    void                Apply( sal_uInt16 nScTab );
+    /** Sets the HIDDEN flags at all hidden columns and rows in the specified sheet. */
+    void                SetHiddenFlags( sal_uInt16 nScTab );
 };
 
 
