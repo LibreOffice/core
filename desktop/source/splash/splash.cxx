@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
     if  ( pImplementationName && pServiceManager )
     {
         // Define variables which are used in following macros.
-        Reference< XSingleServiceFactory > xFactory                                             ;
+        Reference< XSingleServiceFactory > xFactory;
         Reference< XMultiServiceFactory >  xServiceManager(
             reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
 
