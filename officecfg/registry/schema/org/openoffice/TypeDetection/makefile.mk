@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:46:45 $
+#   last change: $Author: rt $ $Date: 2005-01-28 17:22:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ XCSFILES= \
     Types.xcs \
     Filter.xcs \
     GraphicFilter.xcs \
-    Misc.xcs
+    Misc.xcs \
+    UISort.xcs
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/registry$/schema$/localtarget.mk
