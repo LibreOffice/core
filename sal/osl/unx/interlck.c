@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:20:50 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,8 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         "1: lwarx   %0,0,%2\n\t"
         "   addi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
-        "   bne-    1b"
+        "   bne-    1b\n\t"
+        "   isync"
         : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
         : "memory");
@@ -137,7 +138,8 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         "1: lwarx   %0,0,%2\n\t"
         "   subi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
-        "   bne-    1b"
+        "   bne-    1b\n\t"
+        "   isync"
         : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
         : "memory");
