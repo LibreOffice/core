@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:51:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,34 +1422,6 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
         }
     }
     return pRet;
-}
-
-String lcl_GetSelTxt(const SwPaM &rPaM)
-{
-    String aTxt;
-    if (rPaM.GetPoint()->nNode.GetIndex() == rPaM.GetMark()->nNode.GetIndex())
-    {
-        if (SwTxtNode* pTxtNd = rPaM.GetNode()->GetTxtNode())
-        {
-            xub_StrLen nStt = rPaM.Start()->nContent.GetIndex();
-            aTxt = pTxtNd->GetExpandTxt(nStt,
-                rPaM.End()->nContent.GetIndex() - nStt );
-        }
-    }
-    return aTxt;
-}
-
-bool SwWW8FltRefStack::RangeToHidden(SwField* pFld,
-    SwFltStackEntry *pEntry, SwPaM &rPaM)
-{
-    bool bRet = false;
-    if (pFld && RES_HIDDENTXTFLD == pFld->Which())
-    {
-        bRet = true;
-        if (pEntry->MakeRegion(pDoc, rPaM, false))
-            pFld->SetPar2(lcl_GetSelTxt(rPaM));
-    }
-    return bRet;
 }
 
 String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
@@ -3580,60 +3552,6 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     }
     bIgnoreText = true;
     pStrm->Seek( nOldPos );
-}
-
-// Read_Invisible ist fuer das "Unsichtbar"-Zeichenattribut. Mangels
-// entsprechender Funktion im SW evtl. als Tag.
-//
-// ACHTUNG: Methode gelegentlich umstellen: unsichtbaren Text als
-//                  *Feld* integrieren...
-//
-void SwWW8ImplReader::Read_Invisible(USHORT, const BYTE* pData, short nLen)
-{
-    if (pAktItemSet)    //can't do them here.
-        return;
-    if (nLen < 0)
-    {
-        if (pRefStck->GetToggleVisFlag())
-        {
-            pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
-            pRefStck->SetToggleVisFlag(false);
-        }
-    }
-    else
-    {
-        bool bOn = *pData & 1;
-        SwWW8StyInf* pSI = &pCollA[nAktColl];
-        if (pAktColl)
-        {
-            if ((*pData & 0x80) && (pSI->nBase < nColls))
-            {
-                if (*pData == 129)
-                    bOn = !pCollA[pSI->nBase].bInvisFlag;
-                else
-                    bOn = pCollA[pSI->nBase].bInvisFlag;
-            }
-            pSI->bInvisFlag = bOn;
-            return;
-        }
-
-        if (*pData & 0x80)
-        {
-            if (*pData == 129)
-                bOn = !pSI->bInvisFlag;
-            else
-                bOn = pSI->bInvisFlag;
-        }
-
-        if (bOn)
-        {
-            SwHiddenTxtField aFld(
-                (SwHiddenTxtFieldType*)rDoc.GetSysFldType(RES_HIDDENTXTFLD),
-                false, aEmptyStr, aEmptyStr);
-            pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld));
-            pRefStck->SetToggleVisFlag(true);
-        }
-    }
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
