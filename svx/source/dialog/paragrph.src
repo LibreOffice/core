@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:45:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,18 +1081,21 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Hide = TRUE ;
         StringList =
         {
+            < "Standard" ; Default ; > ;
             < "Links" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
         };
         StringList [ ENGLISH ] =
         {
+            < "Default" ; Default ; > ;
             < "Links" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
         };
         stringlist [ english_us ] =
         {
+            < "Default" ; Default ; > ;
             < "Left" ; Default ; > ;
             < "Centered" ; Default ; > ;
             < "Justified" ; Default ; > ;
