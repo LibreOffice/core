@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:51:03 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 08:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,14 @@ namespace dbaui
     Sequence< ::rtl::OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< ::rtl::OUString > aSupported(2);
-        aSupported[0] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessbility.Accessible");
-        aSupported[1] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessbility.AccessibleContext");
+        aSupported[0] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessibility.Accessible");
+        aSupported[1] = ::rtl::OUString::createFromAscii("drafts.com.sun.star.accessibility.AccessibleContext");
         return aSupported;
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.TableWindowAccessbility");
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext

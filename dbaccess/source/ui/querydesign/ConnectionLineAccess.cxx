@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 10:58:02 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 08:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     ::rtl::OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ConnectionLineAccessbility");
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ConnectionLineAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext
