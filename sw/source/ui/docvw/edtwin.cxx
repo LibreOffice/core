@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:10:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,7 +1714,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
-                    if( !rSh.HasReadonlySel() && rSh.GetCurNumRule() )
+                    if( !rSh.HasReadonlySel() && !rSh.IsSttPara() && rSh.GetCurNumRule() )
                         eKeyState = KS_NoNum;
                     else if( rSh.CanSpecialInsert() )
                         eKeyState = KS_SpecialInsert;
