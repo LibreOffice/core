@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:12:17 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 17:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             const short nRet = pDlg->Execute();
-            DBG_ERROR("Notify is missing!");
+//          DBG_ERROR("Notify is missing!");
+
+            for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
+                pFrame->GetDispatcher()->Update_Impl( TRUE );
 
             if ( nRet )
                 bDone = TRUE;

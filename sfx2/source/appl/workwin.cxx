@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-29 11:37:51 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 17:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,7 +1220,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
             {
                 ToolBox& rTbx = rpTbx->GetToolBox();
                 BOOL bWasFloating = rTbx.IsFloatingMode();
-                rpTbx->Reconfigure_Impl( pTbxCfg->GetCfgItem_Impl( n ) );
+                rpTbx->Reconfigure_Impl( pTbxCfg );
                 rTbx.SetText(aObjBars[n].aName);
                 String aNext;
                 rpTbx->GetNextToolBox_Impl( &aNext );
