@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 14:43:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
  ---------------------------------------------------------------------------*/
 class SwAutoCompleteClient : public SwClient
 {
-    SwAutoCompleteWord& rAutoCompleteWord;
-    SwDoc&              rDoc;
+    SwAutoCompleteWord* pAutoCompleteWord;
+    SwDoc*              pDoc;
 #ifdef DBG_UTIL
     static ULONG nSwAutoCompleteClientCount;
 #endif
@@ -132,11 +132,10 @@ public:
     SwAutoCompleteClient(const SwAutoCompleteClient& rClient);
     ~SwAutoCompleteClient();
 
-    BOOL operator=(const SwAutoCompleteClient& rClient)
-        {return this == &rClient;}
+    SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-    const SwDoc& GetDoc(){return rDoc;}
+    const SwDoc& GetDoc(){return *pDoc;}
 #ifdef DBG_UTIL
     static ULONG GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
@@ -187,10 +186,10 @@ class SwAutoCompleteString : public String
 
  ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
-        rAutoCompleteWord(rToTell),
-        rDoc(rSwDoc)
+        pAutoCompleteWord(&rToTell),
+        pDoc(&rSwDoc)
 {
-    rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #ifdef DBG_UTIL
     ++nSwAutoCompleteClientCount;
 #endif
@@ -199,10 +198,10 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
 
  ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
-    rAutoCompleteWord(rClient.rAutoCompleteWord),
-    rDoc(rClient.rDoc)
+    pAutoCompleteWord(rClient.pAutoCompleteWord),
+    pDoc(rClient.pDoc)
 {
-    rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 #ifdef DBG_UTIL
     ++nSwAutoCompleteClientCount;
 #endif
@@ -216,6 +215,19 @@ SwAutoCompleteClient::~SwAutoCompleteClient()
     --nSwAutoCompleteClientCount;
 #endif
 }
+/* -----------------06.03.2003 15:30-----------------
+
+ --------------------------------------------------*/
+SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient& rClient)
+{
+    pAutoCompleteWord = rClient.pAutoCompleteWord;
+    pDoc = rClient.pDoc;
+    if(rClient.GetRegisteredIn())
+        rClient.pRegisteredIn->Add(this);
+    else if(GetRegisteredIn())
+        pRegisteredIn->Remove(this);
+    return *this;
+}
 /* -----------------------------05.08.2002 12:49------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -227,7 +239,7 @@ void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
     case RES_OBJECTDYING:
         if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
             ((SwModify*)GetRegisteredIn())->Remove(this);
-            rAutoCompleteWord.DocumentDying(rDoc);
+            pAutoCompleteWord->DocumentDying(*pDoc);
         break;
 
     }
@@ -345,7 +357,7 @@ BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     while( nWrdLen && '.' == rWord.GetChar( nWrdLen-1 ))
         --nWrdLen;
 
-    if( !bLockWordLst && nWrdLen > nMinWrdLen )
+    if( !bLockWordLst && nWrdLen >= nMinWrdLen )
     {
         SwAutoCompleteString* pAutoString;
         StringPtr pNew = pAutoString = new SwAutoCompleteString( rWord, 0, nWrdLen );
