@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:07:10 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,4 +793,5 @@ TabPage TP_LINENUMBERING
     Text[ catalan ] = "Numeración de líneas";
     Text[ finnish ] = "Rivien numerointi";
 };
+
 
