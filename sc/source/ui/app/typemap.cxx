@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 14:34:49 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 18:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 
 #include <sfx2/msg.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/slstitm.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/hlnkitem.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 14:25:49 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 18:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@
 #include <svx/fntszctl.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/galbrws.hxx>
+#include <svx/clipboardctl.hxx>
+#include <svx/lboxctrl.hxx>
 
 #include "tbinsert.hxx"
 
@@ -217,6 +219,9 @@ void ScDLL::Init()
     SvxFrameToolBoxControl          ::RegisterControl(SID_ATTR_BORDER,          pMod);
     SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
     SvxFrameLineColorToolBoxControl ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
+    SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
+    SvxUndoControl                  ::RegisterControl(SID_UNDO,                 pMod );
+    SvxRedoControl                  ::RegisterControl(SID_REDO,                 pMod );
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);
