@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:15:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,251 @@
 #endif
 
 using namespace ::com::sun::star;
+//#110185# get a part fix for this type of element
+bool SwWW8Writer::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
+{
+    ASSERT(bWrtWW8, "Not allowed");
+    if (!bWrtWW8)
+        return false;
+    bool bHack = false;
+    const SdrObject *pObject = rFrmFmt.FindRealSdrObject();
+    if (pObject && pObject->GetObjInventor() == FmFormInventor)
+    {
+        if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+        {
+            uno::Reference< awt::XControlModel > xControlModel =
+                pFormObj->GetUnoControlModel();
+            uno::Reference< lang::XServiceInfo > xInfo(xControlModel,
+                uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
+            if (xInfo->supportsService(C2U("com.sun.star.form.component.ComboBox")))
+            {
+                DoComboBox(xPropSet);
+                bHack = true;
+            }
+            else if (xInfo->supportsService(C2U("com.sun.star.form.component.CheckBox")))
+            {
+                DoCheckBox(xPropSet);
+                bHack = true;
+            }
+        }
+    }
+    return bHack;
+}
+
+
+void SwWW8Writer::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
+{
+    rtl::OUString sSelected;
+    uno::Sequence<rtl::OUString> aListItems;
+    xPropSet->getPropertyValue(C2U("StringItemList")) >>= aListItems;
+    sal_Int32 nNoStrings = aListItems.getLength();
+    if (nNoStrings)
+    {
+        uno::Any aTmp = xPropSet->getPropertyValue(C2U("DefaultText"));
+        const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+        if (pStr)
+            sSelected = *pStr;
+    }
+
+    rtl::OUString sName;
+    uno::Any aTmp = xPropSet->getPropertyValue(C2U("Name"));
+    const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+    if (pStr)
+        sName = *pStr;
+
+    DoComboBox(sName, sSelected, aListItems);
+}
+
+void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rSelected, uno::Sequence<rtl::OUString> &rListItems)
+{
+    ASSERT(bWrtWW8, "Not allowed");
+    if (!bWrtWW8)
+        return;
+    OutField(0, 83, CREATE_CONST_ASC(" FORMDROPDOWN "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+    // write the refence to the "picture" structure
+    ULONG nDataStt = pDataStrm->Tell();
+    pChpPlc->AppendFkpEntry( Strm().Tell() );
+
+    WriteChar( 0x01 );
+
+    static BYTE aArr1[] =
+    {
+        0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
+        0x06, 0x08, 0x01,       // sprmCFData
+        0x55, 0x08, 0x01,       // sprmCFSpec
+        0x02, 0x08, 0x01        // sprmCFFldVanish
+    };
+    BYTE* pDataAdr = aArr1 + 2;
+    Set_UInt32( pDataAdr, nDataStt );
+
+    pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
+
+    OutField(0, 83, CREATE_CONST_ASC(" FORMDROPDOWN "), WRITEFIELD_CLOSE);
+
+    static BYTE __READONLY_DATA aComboData1[] =
+    {
+        0,0,0,0,        // len of struct
+        0x44,0,         // the start of "next" data
+        0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,                            // /
+    };
+    pDataStrm->Write( aComboData1, sizeof(aComboData1) );
+
+    static BYTE __READONLY_DATA aComboData2[] =
+    {
+        0xFF, 0xFF, 0xFF, 0xFF
+    };
+    pDataStrm->Write( aComboData2, sizeof(aComboData2) );
+
+    sal_uInt8 nHeaderByte = 0x2;
+    sal_uInt32 nNoStrings = rListItems.getLength();
+    if (nNoStrings)
+    {
+        bool bSelectedDone = false;
+        for (sal_uInt32 i = 0; i < nNoStrings; ++i)
+        {
+            if (rSelected == rListItems[i])
+            {
+                bSelectedDone = true;
+                break;
+            }
+        }
+        if (i <= 0x3F) //only 6 bit available for selected item
+            nHeaderByte |= (i << 2);
+    }
+
+    *pDataStrm << nHeaderByte;
+
+    static BYTE __READONLY_DATA aComboData9[] =
+    {
+        0x80, 0x00, 0x00, 0x00, 0x00
+    };
+    pDataStrm->Write( aComboData9, sizeof(aComboData9) );
+
+    sal_uInt16 nLen = rName.getLength();
+    *pDataStrm << nLen;
+    WriteString16(*pDataStrm, rName, true);
+
+    static BYTE __READONLY_DATA aComboData3[] =
+    {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF,
+    };
+
+    pDataStrm->Write( aComboData3, sizeof(aComboData3) );
+
+    *pDataStrm << nNoStrings;
+    if (!nNoStrings)
+        *pDataStrm << sal_uInt16(0);
+    else
+    {
+        for (sal_uInt32 i = 0; i < nNoStrings; ++i)
+        {
+            const rtl::OUString &rItem = rListItems[i];
+            sal_uInt16 nStrLen = rItem.getLength();
+            *pDataStrm << nStrLen;
+            WriteString16(*pDataStrm, rItem, false);
+        }
+    }
+
+    SwWW8Writer::WriteLong( *pDataStrm, nDataStt,
+        pDataStrm->Tell() - nDataStt );
+}
+
+void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
+{
+    OutField(0, 71, CREATE_CONST_ASC(" FORMCHECKBOX "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+    // write the refence to the "picture" structure
+    ULONG nDataStt = pDataStrm->Tell();
+    pChpPlc->AppendFkpEntry( Strm().Tell() );
+
+    WriteChar( 0x01 );
+    static BYTE aArr1[] = {
+        0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
+
+        0x06, 0x08, 0x01,       // sprmCFData
+        0x55, 0x08, 0x01,       // sprmCFSpec
+        0x02, 0x08, 0x01        // sprmCFFldVanish
+    };
+    BYTE* pDataAdr = aArr1 + 2;
+    Set_UInt32( pDataAdr, nDataStt );
+
+    pChpPlc->AppendFkpEntry(Strm().Tell(),
+                sizeof( aArr1 ), aArr1 );
+
+    static BYTE __READONLY_DATA aComboData1[] = {
+        0,0,0,0,        // len of struct
+        0x44,0,         // the start of "next" data
+        0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
+        0,0,0,0,                            // /
+    };
+    pDataStrm->Write( aComboData1, sizeof(aComboData1) );
+
+    static BYTE __READONLY_DATA aComboData2[] = {
+        0xFF, 0xFF, 0xFF, 0xFF
+    };
+    pDataStrm->Write( aComboData2, sizeof(aComboData2) );
+
+    sal_Int16 nTemp;
+    xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
+    sal_uInt32 nIsDefaultChecked(nTemp);
+
+    xPropSet->getPropertyValue(C2U("State")) >>= nTemp;
+    sal_uInt32 nIsChecked(nTemp);
+    sal_uInt8 nHeaderByte = 0x65;
+    if (nIsDefaultChecked != nIsChecked)
+    {
+        switch (nIsChecked)
+        {
+            case false:
+                nHeaderByte = 0x1;
+                break;
+            case true:
+                nHeaderByte = 0x5;
+                break;
+            default:
+                ASSERT(!this, "how did that happen");
+        }
+    }
+    *pDataStrm << nHeaderByte;
+
+    static BYTE __READONLY_DATA aComboData5[] = {
+        0x00, 0x00, 0x00, 0x14, 0x00
+    };
+    pDataStrm->Write( aComboData5, sizeof(aComboData5) );
+
+    uno::Any aTmp = xPropSet->getPropertyValue(C2U("Name"));
+    const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+    sal_uInt16 nLen = pStr ? pStr->getLength() : 0;
+    *pDataStrm << nLen;
+    if (pStr)
+        WriteString16(*pDataStrm, String(*pStr), true);
+    else
+        WriteString16(*pDataStrm, aEmptyStr, true);
+
+    *pDataStrm << nIsDefaultChecked;
+
+    static BYTE __READONLY_DATA aComboData3[] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00
+    };
+
+    pDataStrm->Write( aComboData3, sizeof(aComboData3) );
+
+    SwWW8Writer::WriteLong( *pDataStrm, nDataStt,
+        pDataStrm->Tell() - nDataStt );
+
+    OutField( 0, 0, aEmptyStr, WRITEFIELD_CLOSE );
+}
 
 namespace wwUtility
 {
