@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:34:59 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -987,6 +984,20 @@ void SvtFrameWindow_Impl::ViewNonEmptyWin()
         ViewTextWin();
 }
 
+IMPL_STATIC_LINK( SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo*, pExecuteInfo )
+{
+    try
+    {
+        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, Sequence < PropertyValue >() );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    delete pExecuteInfo;
+    return 0;
+}
+
 void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 {
     try
@@ -1034,7 +1045,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
     pEditWin->Clear();
 
     if ( rURL.Len() > 0 && bPreview && xDocInfo.is() )
-        ShowDocInfo( rURL );
+         ShowDocInfo( rURL );
 
     if ( rURL.Len() == 0 )
     {
@@ -1055,7 +1066,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             aTarget = ASCII_STR("_self");
         else
         {
-            aTarget = ASCII_STR("_default");
+            // can be removed if the database application change its URL
+            String sServiceScheme( RTL_CONSTASCII_STRINGPARAM( "service:" ) );
+            if ( rURL.Match( sServiceScheme ) != sServiceScheme.Len() )
+                // service URL has no default target
+                aTarget = ASCII_STR("_default");
             xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->
                 createInstance( ASCII_STR("com.sun.star.frame.Desktop") ), UNO_QUERY );
         }
@@ -1117,7 +1132,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             }
             else
             {
-                xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+                SvtExecuteInfo* pExecuteInfo = new SvtExecuteInfo;
+                pExecuteInfo->xDispatch = xDisp;
+                pExecuteInfo->aTargetURL = aURL;
+                Application::PostUserEvent(
+                    STATIC_LINK(0, SvtFrameWindow_Impl, ExecuteHdl_Impl), pExecuteInfo );
                 m_aOpenURL = rtl::OUString();
             }
         }
