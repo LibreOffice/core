@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: gh $ $Date: 2001-04-27 08:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,50 +83,61 @@ struct Tag
 
 static Tag __READONLY_DATA aKnownTags[] =
 {
-//  { "GROUP_FORMAT", TAG_GROUP_FORMAT },
-    { "BOLD", TAG_BOLDON },
-    { "/BOLD", TAG_BOLDOFF },
-    { "ITALIC", TAG_ITALICON },
-    { "/ITALIC", TAG_ITALICOFF },
-    { "UNDER", TAG_UNDERLINEON },
-    { "/UNDER", TAG_UNDERLINEOFF },
+//  { "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
+    { "<#BOLD>", TAG_BOLDON },
+    { "<#/BOLD>", TAG_BOLDOFF },
+    { "<#ITALIC>", TAG_ITALICON },
+    { "<#/ITALIC>", TAG_ITALICOFF },
+    { "<#UNDER>", TAG_UNDERLINEON },
+    { "<#/UNDER>", TAG_UNDERLINEOFF },
 
-//  { "GROUP_NOTALLOWED", TAG_GROUP_NOTALLOWED },
-    { "HELPID", TAG_HELPID },
-    { "MODIFY", TAG_MODIFY },
-    { "REFNR", TAG_REFNR },
+//  { "<#GROUP_NOTALLOWED>", TAG_GROUP_NOTALLOWED },
+    { "<#HELPID>", TAG_HELPID },
+    { "<#MODIFY>", TAG_MODIFY },
+    { "<#REFNR>", TAG_REFNR },
 
-//  { "GROUP_STRUCTURE", TAG_GROUP_STRUCTURE },
-    { "NAME", TAG_NAME },
-    { "HREF", TAG_HREF },
-    { "AVIS", TAG_AVIS },
-    { "AHID", TAG_AHID },
-    { "AEND", TAG_AEND },
+//  { "<#GROUP_STRUCTURE>", TAG_GROUP_STRUCTURE },
+    { "<#NAME>", TAG_NAME },
+    { "<#HREF>", TAG_HREF },
+    { "<#AVIS>", TAG_AVIS },
+    { "<#AHID>", TAG_AHID },
+    { "<#AEND>", TAG_AEND },
 
-    { "TITEL", TAG_TITEL },
-    { "KEY", TAG_KEY },
-    { "INDEX", TAG_INDEX },
+    { "<#TITEL>", TAG_TITEL },
+    { "<#KEY>", TAG_KEY },
+    { "<#INDEX>", TAG_INDEX },
 
-//  { "GROUP_SYSSWITCH", TAG_GROUP_SYSSWITCH },
-    { "WIN", TAG_WIN },
-    { "UNIX", TAG_UNIX },
-    { "MAC", TAG_MAC },
-    { "OS2", TAG_OS2 },
+//  { "<#GROUP_SYSSWITCH>", TAG_GROUP_SYSSWITCH },
+    { "<#WIN>", TAG_WIN },
+    { "<#UNIX>", TAG_UNIX },
+    { "<#MAC>", TAG_MAC },
+    { "<#OS2>", TAG_OS2 },
 
-//  { "GROUP_PROGSWITCH", TAG_GROUP_PROGSWITCH },
-    { "WRITER", TAG_WRITER },
-    { "CALC", TAG_CALC },
-    { "DRAW", TAG_DRAW },
-    { "IMPRESS", TAG_IMPRESS },
-    { "SCHEDULE", TAG_SCHEDULE },
-    { "IMAGE", TAG_IMAGE },
-    { "MATH", TAG_MATH },
-    { "CHART", TAG_CHART },
-    { "OFFICE", TAG_OFFICE },
+//  { "<#GROUP_PROGSWITCH>", TAG_GROUP_PROGSWITCH },
+    { "<#WRITER>", TAG_WRITER },
+    { "<#CALC>", TAG_CALC },
+    { "<#DRAW>", TAG_DRAW },
+    { "<#IMPRESS>", TAG_IMPRESS },
+    { "<#SCHEDULE>", TAG_SCHEDULE },
+    { "<#IMAGE>", TAG_IMAGE },
+    { "<#MATH>", TAG_MATH },
+    { "<#CHART>", TAG_CHART },
+    { "<#OFFICE>", TAG_OFFICE },
 
-//  { "GROUP_MULTI", TAG_GROUP_MULTI },
-    { "END", TAG_END },
-    { "ELSE", TAG_ELSE },
+//  { "<#TAG_GROUP_META>", TAG_GROUP_META },
+    { "$[officefullname]", TAG_OFFICEFULLNAME },
+    { "$[officename]", TAG_OFFICENAME },
+    { "$[officepath]", TAG_OFFICEPATH },
+    { "$[officeversion]", TAG_OFFICEVERSION },
+    { "$[portalname]", TAG_PORTALNAME },
+    { "$[portalfullname]", TAG_PORTALFULLNAME },
+    { "$[portalpath]", TAG_PORTALPATH },
+    { "$[portalversion]", TAG_PORTALVERSION },
+    { "$[portalshortname]", TAG_PORTALSHORTNAME },
+
+//  { "<#GROUP_MULTI>", TAG_GROUP_MULTI },
+    { "<#END>", TAG_END },
+    { "<#ELSE>", TAG_ELSE },
     { "", TAG_UNKNOWN_TAG },
 };
 
@@ -168,10 +179,17 @@ ByteString SimpleParser::GetNextTokenString()
 {
     USHORT nStartPos = aSource.Search( "<#", nPos );
     if ( STRING_NOTFOUND == nStartPos )
-        return "";
+    {   // test for $[ ... ] style tokens
+        nStartPos = aSource.Search( "$[", nPos );
+        if ( STRING_NOTFOUND == nStartPos )
+            return "";
+        USHORT nEndPos = aSource.Search( "]", nStartPos );
+        nPos = nEndPos;
+        return aSource.Copy( nStartPos, nEndPos-nStartPos +1 );
+    }
     USHORT nEndPos = aSource.Search( ">", nStartPos );
     nPos = nEndPos;
-    return aSource.Copy( nStartPos+2, nEndPos-nStartPos -2 ).ToUpperAscii();
+    return aSource.Copy( nStartPos, nEndPos-nStartPos +1 ).ToUpperAscii();
 }
 
 ByteString SimpleParser::GetLexem( Token aToken )
@@ -180,10 +198,8 @@ ByteString SimpleParser::GetLexem( Token aToken )
     while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
         aKnownTags[i].nTag != aToken )
         i++;
-    ByteString sReturn( "<#" );
-    sReturn += aKnownTags[i].aName;
-    sReturn += ">";
-    return sReturn;
+
+    return ByteString( aKnownTags[i].aName );
 }
 
 TokenParser::TokenParser()
@@ -223,7 +239,7 @@ void TokenParser::Parse( const ByteString &aCode )
         {
             case TAG_END:
                 {
-                    ParseError( 3, "Switch or <#HREF> or <#NAME> expected." );
+                    ParseError( 3, "Switch or <#HREF> expected." );
                 }
                 break;
             case TAG_BOLDOFF:
@@ -248,7 +264,7 @@ void TokenParser::Parse( const ByteString &aCode )
                 break;*/
             case TAG_AEND:
                 {
-                    ParseError( 5, "Switch or <#HREF> or <#NAME> expected." );
+                    ParseError( 5, "<#AVIS> or <#AHID> expected." );
                 }
                 break;
             case TAG_ELSE:
@@ -273,13 +289,25 @@ void TokenParser::Paragraph()
         case TAG_AVIS:
         case TAG_AHID:
             {
-            //  TagPair();
-            //  Paragraph();
                 TagRef();
                 Paragraph();
             }
             break;
         case TAG_HELPID:
+            {
+                SimpleTag();
+                Paragraph();
+            }
+            break;
+        case TAG_OFFICEFULLNAME:
+        case TAG_OFFICENAME:
+        case TAG_OFFICEPATH:
+        case TAG_OFFICEVERSION:
+        case TAG_PORTALNAME:
+        case TAG_PORTALFULLNAME:
+        case TAG_PORTALPATH:
+        case TAG_PORTALVERSION:
+        case TAG_PORTALSHORTNAME:
             {
                 SimpleTag();
                 Paragraph();
@@ -510,6 +538,19 @@ void TokenParser::SimpleTag()
                 match( nTag, TAG_HELPID );
             }
             break;
+        case TAG_OFFICEFULLNAME:
+        case TAG_OFFICENAME:
+        case TAG_OFFICEPATH:
+        case TAG_OFFICEVERSION:
+        case TAG_PORTALNAME:
+        case TAG_PORTALFULLNAME:
+        case TAG_PORTALPATH:
+        case TAG_PORTALVERSION:
+        case TAG_PORTALSHORTNAME:
+            {
+                match( nTag, nTag );
+            }
+            break;
         default:
             ParseError( 15, "[<#SimpleTag>] expected." );
     }
@@ -581,11 +622,14 @@ void TokenParser::TagRef()
                 if ( !HAS_FLAG( nActiveRefTypes, TAG_NOGROUP( nTag ) ) )
                 {
                     Token aThisToken = nTag;
-                    SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
                     match( nTag, nTag );
-                    Paragraph();
-                    match( nTag, TAG_END );
-                    RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
+                    if ( aThisToken != TAG_NAME )
+                    {   // TAG_NAME has no TAG_END
+                        SET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
+                        Paragraph();
+                        match( nTag, TAG_END );
+                        RESET_FLAG( nActiveRefTypes, TAG_NOGROUP( aThisToken ) );
+                    }
                 }
                 else
                 {
@@ -671,6 +715,7 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
         Token aToken = aReference.GetObject( i );
         Token aTokenGroup = TAG_GROUP( aToken );
         if ( TAG_GROUP_PROGSWITCH == aTokenGroup
+            || TAG_GROUP_META == aTokenGroup
             || TAG_NAME == aToken
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
@@ -686,6 +731,7 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
         Token aToken = aTestee.GetObject( i );
         Token aTokenGroup = TAG_GROUP( aToken );
         if ( TAG_GROUP_PROGSWITCH == aTokenGroup
+            || TAG_GROUP_META == aTokenGroup
             || TAG_NAME == aToken
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
