@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-15 15:51:20 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 14:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,36 +91,44 @@
 //
 //---------------------------------------------
 
-class CAsyncFilePickerEventNotifier
+class CAsyncEventNotifier
 {
 public:
-    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*FilePickerEventListenerMethod_t)(const ::com::sun::star::ui::dialogs::FilePickerEvent&);
+    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)(const ::com::sun::star::ui::dialogs::FilePickerEvent&);
 
 public:
-    CAsyncFilePickerEventNotifier( cppu::OBroadcastHelper& rBroadcastHelper );
-    ~CAsyncFilePickerEventNotifier( );
+    CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper);
 
-    void SAL_CALL notifyEvent( FilePickerEventListenerMethod_t aListenerMethod, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    bool SAL_CALL start();
+    void SAL_CALL stop();
+
+    void SAL_CALL notifyEvent( EventListenerMethod_t aListenerMethod, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
 private:
-    static unsigned int WINAPI ThreadProc( LPVOID pParam );
+    typedef std::pair<EventListenerMethod_t, ::com::sun::star::ui::dialogs::FilePickerEvent> EventRecord_t;
+
+    size_t        SAL_CALL getEventListSize();
+    void          SAL_CALL resetNotifyEvent();
+    EventRecord_t SAL_CALL getNextEventRecord();
+    void          SAL_CALL removeNextEventRecord();
 
     void SAL_CALL run( );
 
-private:
-    typedef std::pair< FilePickerEventListenerMethod_t, ::com::sun::star::ui::dialogs::FilePickerEvent > FilePickerEventRecord_t;
+    static unsigned int WINAPI ThreadProc( LPVOID pParam );
 
-    std::list< FilePickerEventRecord_t >    m_FilePickerEventList;
-    HANDLE                                  m_hFilePickerNotifierThread;
-    osl::Condition                          m_NotifyFilePickerEvent;
-    osl::Mutex                              m_FilePickerEventListMutex;
-    bool                                    m_bRunFilePickerNotifierThread;
-    ::cppu::OBroadcastHelper&               m_rBroadcastHelper;
+private:
+    std::list<EventRecord_t>    m_EventList;
+    HANDLE                      m_hEventNotifierThread;
+    bool                        m_bRun;
+    unsigned                    m_ThreadId;
+    ::cppu::OBroadcastHelper&   m_rBroadcastHelper;
+    osl::Condition              m_NotifyEvent;
+    osl::Mutex                  m_Mutex;
 
 // prevent copy and assignment
 private:
-    CAsyncFilePickerEventNotifier( const CAsyncFilePickerEventNotifier& );
-    CAsyncFilePickerEventNotifier& operator=( const CAsyncFilePickerEventNotifier& );
+    CAsyncEventNotifier( const CAsyncEventNotifier& );
+    CAsyncEventNotifier& operator=( const CAsyncEventNotifier& );
 };
 
 #endif

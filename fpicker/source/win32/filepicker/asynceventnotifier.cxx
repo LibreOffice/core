@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-11 16:35:45 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 14:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,12 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
+#endif
+
 #include <process.h>
+#include <windows.h>
 
 //------------------------------------------------
 //
@@ -88,105 +93,99 @@ const sal_uInt32 MAX_WAIT_SHUTDOWN  = 5000; // msec
 //------------------------------------------------
 
 using namespace osl;
+using namespace com::sun::star::uno;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
+using ::com::sun::star::ui::dialogs::XFilePickerNotifier;
 using ::com::sun::star::ui::dialogs::FilePickerEvent;
 using ::cppu::OBroadcastHelper;
-using ::com::sun::star::uno::RuntimeException;
 
 //------------------------------------------------
 //
 //------------------------------------------------
 
-CAsyncFilePickerEventNotifier::CAsyncFilePickerEventNotifier( cppu::OBroadcastHelper& rBroadcastHelper ) :
-    m_bRunFilePickerNotifierThread( true ),
-    m_rBroadcastHelper( rBroadcastHelper )
+CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
+    m_hEventNotifierThread(0),
+    m_bRun(false),
+    m_ThreadId(0),
+    m_rBroadcastHelper(rBroadcastHelper)
 {
-    unsigned uThreadId;
-    m_hFilePickerNotifierThread = (HANDLE)_beginthreadex(
-        NULL, 0, CAsyncFilePickerEventNotifier::ThreadProc, this, 0, &uThreadId );
-
-    OSL_ASSERT( NULL != m_hFilePickerNotifierThread );
 }
 
 //------------------------------------------------
 //
 //------------------------------------------------
 
-CAsyncFilePickerEventNotifier::~CAsyncFilePickerEventNotifier( )
+bool SAL_CALL CAsyncEventNotifier::start()
 {
-    m_bRunFilePickerNotifierThread = false;
-    m_NotifyFilePickerEvent.set( );
+    MutexGuard aGuard(m_Mutex);
+
+    // m_bRun may already be false because of a
+    // call to stop but the thread did not yet
+    // terminate so m_hEventNotifierThread is
+    // yet a valid thread handle that should
+    // not be overwritten
+    if ( !m_bRun && 0==m_hEventNotifierThread )
+    {
+        m_hEventNotifierThread = (HANDLE)_beginthreadex(
+            NULL, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId);
+
+        OSL_ASSERT(0 != m_hEventNotifierThread);
+
+        if (m_hEventNotifierThread)
+            m_bRun = true;
+    }
+
+    return m_bRun;
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::stop()
+{
+    OSL_ENSURE(GetCurrentThreadId() != m_ThreadId, "Method must not be called from EventNotifierThread context");
+
+    ClearableMutexGuard aGuard(m_Mutex);
+
+    m_bRun = false;
+    m_EventList.clear();
+    m_NotifyEvent.set( );
+
+    // releas the mutex here because the event
+    // notifier thread may need it to finish
+    aGuard.clear();
 
     sal_uInt32 dwResult = WaitForSingleObject(
-        m_hFilePickerNotifierThread, MAX_WAIT_SHUTDOWN );
+        m_hEventNotifierThread, MAX_WAIT_SHUTDOWN );
 
-    OSL_ENSURE( dwResult == WAIT_OBJECT_0, "filepicker event notifier thread could not terminate" );
+    // lock mutex again to reset m_hEventNotifierThread
+    // and prevent a race with start()
+    MutexGuard anotherGuard(m_Mutex);
 
-    if ( WAIT_TIMEOUT == dwResult )
-        TerminateThread( m_hFilePickerNotifierThread, 0 );
+    OSL_ENSURE(WAIT_TIMEOUT != dwResult, "Thread could not end!");
 
-    CloseHandle( m_hFilePickerNotifierThread );
+    if (WAIT_TIMEOUT == dwResult)
+        TerminateThread(m_hEventNotifierThread, 0);
+
+    CloseHandle(m_hEventNotifierThread);
+
+    m_hEventNotifierThread = 0;
 }
 
 //------------------------------------------------
 //
 //------------------------------------------------
 
-void SAL_CALL CAsyncFilePickerEventNotifier::notifyEvent( FilePickerEventListenerMethod_t aListenerMethod, FilePickerEvent aEvent )
+void SAL_CALL CAsyncEventNotifier::notifyEvent(EventListenerMethod_t aListenerMethod, FilePickerEvent aEvent)
 {
-    MutexGuard aGuard( m_FilePickerEventListMutex );
-    m_FilePickerEventList.push_back( std::make_pair( aListenerMethod, aEvent ) );
-    m_NotifyFilePickerEvent.set( );
-}
+    MutexGuard aGuard(m_Mutex);
 
-//------------------------------------------------
-//
-//------------------------------------------------
-
-void SAL_CALL CAsyncFilePickerEventNotifier::run( )
-{
-    while ( m_bRunFilePickerNotifierThread )
+    if ( m_bRun )
     {
-        m_NotifyFilePickerEvent.wait( );
-
-        if ( !m_rBroadcastHelper.bDisposed )
-        {
-            while ( m_FilePickerEventList.size() > 0 )
-            {
-                ClearableMutexGuard aGuard( m_FilePickerEventListMutex );
-
-                FilePickerEventRecord_t nextEventRecord = m_FilePickerEventList.front();
-                m_FilePickerEventList.pop_front();
-
-                aGuard.clear();
-
-                ::cppu::OInterfaceContainerHelper* pICHelper =
-                    m_rBroadcastHelper.aLC.getContainer(getCppuType((Reference<XFilePickerListener>*)0) );
-
-                if ( pICHelper )
-                {
-                    ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
-
-                    while( iter.hasMoreElements() )
-                    {
-                        Reference< XFilePickerListener > xFPListener( iter.next( ), ::com::sun::star::uno::UNO_QUERY );
-
-                        try
-                        {
-                            if ( xFPListener.is() )
-                                (xFPListener.get()->*nextEventRecord.first)(nextEventRecord.second);
-                        }
-                        catch( RuntimeException& )
-                        {
-                            OSL_ENSURE( sal_False, "RuntimeException during event dispatching" );
-                        }
-                    }
-                }
-            }
-        }
-
-        m_NotifyFilePickerEvent.reset( );
+        m_EventList.push_back(std::make_pair(aListenerMethod, aEvent));
+        m_NotifyEvent.set();
     }
 }
 
@@ -194,11 +193,102 @@ void SAL_CALL CAsyncFilePickerEventNotifier::run( )
 //
 //------------------------------------------------
 
-unsigned int WINAPI CAsyncFilePickerEventNotifier::ThreadProc( LPVOID pParam )
+size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 {
-    CAsyncFilePickerEventNotifier* pInst = reinterpret_cast< CAsyncFilePickerEventNotifier* >( pParam );
-    OSL_ASSERT( pInst );
-    pInst->run( );
+    MutexGuard aGuard(m_Mutex);
+    return m_EventList.size();
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
+{
+    MutexGuard aGuard(m_Mutex);
+    if (0 == m_EventList.size())
+        m_NotifyEvent.reset();
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+CAsyncEventNotifier::EventRecord_t SAL_CALL CAsyncEventNotifier::getNextEventRecord()
+{
+    MutexGuard aGuard(m_Mutex);
+    return m_EventList.front();
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
+{
+    MutexGuard aGuard(m_Mutex);
+    m_EventList.pop_front();
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void SAL_CALL CAsyncEventNotifier::run()
+{
+    while (m_bRun)
+    {
+        m_NotifyEvent.wait( );
+
+        if (m_bRun)
+        {
+            while (getEventListSize() > 0)
+            {
+                EventRecord_t aEventRecord = getNextEventRecord();
+                removeNextEventRecord();
+
+                ::cppu::OInterfaceContainerHelper* pICHelper =
+                    m_rBroadcastHelper.aLC.getContainer(getCppuType((Reference<XFilePickerListener>*)0));
+
+                if ( pICHelper )
+                {
+                    ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
+
+                    while( iter.hasMoreElements() )
+                    {
+                        Reference< XFilePickerListener > xFPListener(iter.next( ), UNO_QUERY);
+
+                        try
+                        {
+                            if ( xFPListener.is() )
+                                (xFPListener.get()->*aEventRecord.first)(aEventRecord.second);
+                        }
+                        catch( RuntimeException& )
+                        {
+                            OSL_ENSURE(sal_False, "RuntimeException during event dispatching");
+                        }
+                    }
+                }
+
+            } // while(getEventListSize() > 0)
+
+            resetNotifyEvent();
+
+        } // if (m_bRun)
+
+    } // while(m_bRun)
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)
+{
+    CAsyncEventNotifier* pInst = reinterpret_cast< CAsyncEventNotifier* >(pParam);
+    OSL_ASSERT(pInst);
+
+    pInst->run();
 
     return 0;
 }
