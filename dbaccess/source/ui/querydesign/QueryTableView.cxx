@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:21:16 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
 }
 
 //------------------------------------------------------------------------------
-void OQueryTableView::AddTabWin(const String& strDatabase, const String& strTableName, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     // das ist die aus der Basisklasse geerbte Methode, die fuehre ich auf die an meinem Parent zurueck, die mir eventuell einen
@@ -400,12 +400,12 @@ void OQueryTableView::AddTabWin(const String& strDatabase, const String& strTabl
                                 sCatalog,
                                 sSchema,
                                 sTable);
-    String sRealName(sSchema);
-    if (sRealName.Len())
-        sRealName+= '.';
-    sRealName += sTable.getStr();
+    ::rtl::OUString sRealName(sSchema);
+    if (sRealName.getLength())
+        sRealName+= ::rtl::OUString('.');
+    sRealName += sTable;
 
-    AddTabWin(strDatabase, sRealName, ConvertAlias(sTable.getStr()), bNewTable);
+    AddTabWin(strDatabase, sRealName, ConvertAlias(sTable), bNewTable);
 }
 // -----------------------------------------------------------------------------
 // find the table which has a foreign key with this referencedTable name
@@ -530,16 +530,26 @@ void OQueryTableView::addConnections(const OQueryTableWindow* _pSource,const OQu
     }
 }
 //------------------------------------------------------------------------------
-void OQueryTableView::AddTabWin(const String& _rComposedName, const String& strTableName, const String& strAlias, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(strTableName.Len() || strAlias.Len(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
+    DBG_ASSERT(strTableName.getLength() || strAlias.getLength(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
         // wenn der Tabellenname nicht gesetzt ist, steht das fuer ein Dummy-Fenster, das braucht aber wenigstens einen Alias-Namen
 
-    String strDBName = _rComposedName;
-
     // neue Datenstruktur erzeugen
-    OQueryTableWindowData* pNewTabWinData = new OQueryTableWindowData(strDBName, strTableName, strAlias);
+    // first check if this already hav it's data
+    sal_Bool bAppend = sal_True;
+    OQueryTableWindowData* pNewTabWinData = NULL;
+    ::std::vector< OTableWindowData*>* pWindowData = getDesignView()->getController()->getTableWindowData();
+    ::std::vector< OTableWindowData*>::iterator aWinIter = pWindowData->begin();
+    for(;aWinIter != pWindowData->end();++aWinIter)
+    {
+        pNewTabWinData = static_cast<OQueryTableWindowData*>(*aWinIter);
+        if(pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == strTableName)
+            break;
+    }
+    if(bAppend = (aWinIter == pWindowData->end()))
+        pNewTabWinData = new OQueryTableWindowData(_rComposedName, strTableName, strAlias);
         // die TabWinData brauche ich nicht in die entsprechende Liste der DocShell eintragen, das macht ShowTabWin
 
     // neues Fenster erzeugen
@@ -549,11 +559,11 @@ void OQueryTableView::AddTabWin(const String& _rComposedName, const String& strT
     // Neue UndoAction
     OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
     pUndoAction->SetTabWin(pNewTabWin); // Fenster
-    sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction);
+    sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
 
     // Relationen zwischen den einzelnen Tabellen anzeigen
     OTableWindowMap* pTabWins = GetTabWinMap();
-    if(bNewTable && pTabWins->size() && strTableName.Len())
+    if(bNewTable && pTabWins->size() && strTableName.getLength())
     {
         Reference<XConnection> xCon = m_pView->getController()->getConnection();
         Reference<XTablesSupplier> xSup(xCon,UNO_QUERY);
@@ -987,7 +997,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 }
 
 //------------------------------------------------------------------------
-sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction )
+sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend )
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
 
@@ -1037,7 +1047,8 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
                 InvalidateConnections();
 
             // und die Daten des Fensters ebenfalls in Liste (des Docs)
-            m_pView->getController()->getTableWindowData()->push_back(pTabWin->GetData());
+            if(_bAppend)
+                m_pView->getController()->getTableWindowData()->push_back(pTabWin->GetData());
 
             m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
 

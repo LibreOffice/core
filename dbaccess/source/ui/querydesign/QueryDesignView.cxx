@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:33:45 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,11 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
     {
         long nTest = m_aSplitter.GetPosPixel().Y();
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
-        getController()->setSplitPos(m_aSplitter.GetSplitPosPixel());
+        if(!getController()->isReadOnly())
+        {
+            getController()->setSplitPos(m_aSplitter.GetSplitPosPixel());
+            getController()->setModified();
+        }
         Resize();
     }
     return 0L;
@@ -246,6 +250,7 @@ void OQueryDesignView::resizeControl(Rectangle& _rRect)
     Size    aSplitSize(0,0);
 
     aSplitPos       = m_aSplitter.GetPosPixel();
+    aSplitPos.Y()   = nSplitPos;
     aSplitSize      = m_aSplitter.GetOutputSizePixel();
     aSplitSize.Width() = aSize.Width();
 
@@ -323,7 +328,7 @@ void OQueryDesignView::DeleteFields( const ::rtl::OUString& rAliasName )
 // -----------------------------------------------------------------------------
 void OQueryDesignView::SaveTabWinUIConfig(OQueryTableWindow* pWin)
 {
-    //  getController()->SaveTabWinPosSize(pWin, aHScrollBar.GetThumbPos(), aVScrollBar.GetThumbPos());
+    getController()->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::InsertField( const OTableFieldDesc& rInfo, sal_Bool bVis, sal_Bool bActivate)
@@ -598,11 +603,11 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
                 aTmpStr += ::dbtools::quoteName(aQuote, rFieldAlias);
             }
             aFieldListStr += aTmpStr;
-            aFieldListStr += ::rtl::OUString(',');
+            aFieldListStr += ::rtl::OUString::createFromAscii(", ");
         }
     }
     if(aFieldListStr.getLength())
-        aFieldListStr = aFieldListStr.replaceAt(aFieldListStr.getLength()-1,1, ::rtl::OUString(' ') );
+        aFieldListStr = aFieldListStr.replaceAt(aFieldListStr.getLength()-2,2, ::rtl::OUString() );
     return aFieldListStr;
 }
 //------------------------------------------------------------------------------
@@ -1816,6 +1821,9 @@ void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star
 // -----------------------------------------------------------------------------
 void OQueryDesignView::InitFromParseNode()
 {
+    m_pSelectionBox->ClearAll();
+    m_pSelectionBox->Fill();
+
     ::connectivity::OSQLParseTreeIterator& aIterator = getController()->getParseIterator();
     const ::connectivity::OSQLParseNode* pParseTree = aIterator.getParseTree();
     const ::connectivity::OSQLParseNode* pTableRefCommaList = 0;
@@ -1864,8 +1872,29 @@ void OQueryDesignView::InitFromParseNode()
                     }
                 }
 
+                // now delete the data for which we haven't any tablewindow
+                OJoinTableView::OTableWindowMap* pTableMap = m_pTableView->GetTabWinMap();
+                ::std::vector< OTableWindowData*>::iterator aDataIter = getController()->getTableWindowData()->begin();
+                for(;aDataIter != getController()->getTableWindowData()->end();)
+                {
+                    OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(*aDataIter);
+                    if(pTableMap->find(pData->GetAliasName()) == pTableMap->end())
+                    {
+                        delete *aDataIter;
+                        aDataIter = getController()->getTableWindowData()->erase(aDataIter);
+                    }
+                    else
+                        ++aDataIter;
+                }
+
                 FillOuterJoins(pParseTree->getChild(3)->getChild(0)->getChild(1));
 
+                // check if we have a distinct statement
+                if(SQL_ISTOKEN(pParseTree->getChild(1),DISTINCT))
+                {
+                    getController()->setDistinct(sal_True);
+                    getController()->InvalidateFeature(ID_BROWSER_QUERY_DISTINCT_VALUES);
+                }
                 if (!InstallFields(pParseTree, m_pTableView->GetTabWinMap()))
                 {
                     // GetSelectionCriteria mu"s vor GetHavingCriteria aufgerufen werden
@@ -2298,6 +2327,19 @@ void OQueryDesignView::zoomTableView(const Fraction& _rFraction)
     m_pTableView->SetZoom(_rFraction);
 }
 // -----------------------------------------------------------------------------
+void OQueryDesignView::SaveUIConfig()
+{
+    OQueryController* pCtrl = getController();
+    if (pCtrl)
+    {
+        pCtrl->SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );
+        //  pCtrl->SaveTabFieldsWidth( m_pSelectionBox );
+        pCtrl->setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
+        pCtrl->setSplitPos( m_aSplitter.GetSplitPosPixel() );
+    }
+}
+// -----------------------------------------------------------------------------
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinShowUndoAct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:25:19 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace dbaui
         OQueryTabWinShowUndoAct(OQueryTableView* pOwner) : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW) { }
 
         virtual void    Undo() { m_pOwner->HideTabWin(m_pTabWin, this); SetOwnership(TRUE); }
-        virtual void    Redo() { m_pOwner->ShowTabWin(m_pTabWin, this); SetOwnership(FALSE); }
+        virtual void    Redo() { m_pOwner->ShowTabWin(m_pTabWin, this,sal_True); SetOwnership(FALSE); }
     };
 
     // ================================================================================================
@@ -91,7 +91,7 @@ namespace dbaui
     public:
         OQueryTabWinDelUndoAct(OQueryTableView* pOwner) : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE) { }
 
-        virtual void    Undo() { m_pOwner->ShowTabWin( m_pTabWin, this ); SetOwnership(FALSE); }
+        virtual void    Undo() { m_pOwner->ShowTabWin( m_pTabWin, this,sal_True ); SetOwnership(FALSE); }
         virtual void    Redo() { m_pOwner->HideTabWin( m_pTabWin, this ); SetOwnership(TRUE); }
     };
 }

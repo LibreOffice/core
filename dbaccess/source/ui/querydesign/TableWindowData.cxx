@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:22:00 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ BOOL OTableWindowData::HasSize() const
 void OTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
 {
     OStreamSection aSection(_rxIn.get());
+    _rxIn >> m_sComposedName;
     _rxIn >> m_aTableName;
     _rxIn >> m_aWinName;
     _rxIn >> m_aPosition.X();
@@ -139,6 +140,7 @@ void OTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
 void OTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
 {
     OStreamSection aSection(_rxOut.get());
+    _rxOut << m_sComposedName;
     _rxOut << m_aTableName;
     _rxOut << m_aWinName;
     _rxOut << m_aPosition.X();

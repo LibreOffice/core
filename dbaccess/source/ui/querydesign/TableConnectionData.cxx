@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:41 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,13 +184,22 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
 }
 
 //------------------------------------------------------------------------
-BOOL OTableConnectionData::AppendConnLine( const String& rSourceFieldName, const String& rDestFieldName )
+BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
-    OConnectionLineData* pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-    if (!pNew)
-        return FALSE;
+    ::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();
+    for(;aIter != m_vConnLineData.end();++aIter)
+    {
+        if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)
+            break;
+    }
+    if(aIter == m_vConnLineData.end())
+    {
+        OConnectionLineData* pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
+        if (!pNew)
+            return FALSE;
 
-    m_vConnLineData.push_back(pNew);
+        m_vConnLineData.push_back(pNew);
+    }
     return TRUE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:33:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
 #endif
+#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -160,6 +162,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+#ifndef DBAUI_QUERY_TABLEWINDOW_HXX
+#include "QTableWindow.hxx"
 #endif
 
 
@@ -450,6 +455,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
 
                             // now we save the layout information
                             //  create the output stream
+                            static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
                             Sequence< sal_Int8 > aOutputSeq;
                             {
                                 Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
@@ -521,8 +527,14 @@ void OQueryController::Execute(sal_uInt16 _nId)
             {
                 try
                 {
-                    ::rtl::OUString aErrorMsg;
-                    m_sStatement = getQueryView()->getStatement();
+                    ::rtl::OUString aErrorMsg,sStmt;
+                    sStmt = getQueryView()->getStatement();
+                    if(sStmt != m_sStatement)
+                    {
+                        if(!m_bDesign) //
+                            static_cast<OQueryViewSwitch*>(m_pView)->clear();
+                        m_sStatement = sStmt;
+                    }
                     if(!m_sStatement.getLength())
                     {
                         // change the view of the data
@@ -551,6 +563,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 m_bDesign = !m_bDesign;
                                 m_sStatement = ::rtl::OUString();
                                 pNode->parseNodeToStr(m_sStatement,m_xConnection->getMetaData(),NULL,sal_True,sal_True);
+                                static_cast<OQueryViewSwitch*>(m_pView)->SaveUIConfig();
                                 m_pWindow->switchView();
                             }
                         }
@@ -1016,5 +1029,42 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
         m_vTableFieldDesc.push_back(pData);
     }
 }
+// -----------------------------------------------------------------------------
+void OQueryController::SaveTabWinPosSize(OQueryTableWindow* pTabWin, long nOffsetX, long nOffsetY)
+{
+    // die Daten zum Fenster
+    OTableWindowData* pData = pTabWin->GetData();
+    DBG_ASSERT(pData != NULL, "SbaQueryDocSh::SaveTabWinPosSize : TabWin hat keine Daten !");
+
+    // Position & Size der Daten neu setzen (aus den aktuellen Fenster-Parametern)
+    Point aPos = pTabWin->GetPosPixel();
+    aPos.X() += nOffsetX;
+    aPos.Y() += nOffsetY;
+    pData->SetPosition(aPos);
+    pData->SetSize(pTabWin->GetSizePixel());
+
+}
+// -----------------------------------------------------------------------------
+void OQueryController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
+{
+    // Das Loeschen und Neuanlegen der alten Implementation ist unter dem aktuellen Modell nicht mehr richtig : Die TabWins
+    // habe einen Zeiger auf ihre Daten, verwaltet werden sie aber von mir. Wenn ich die alten loesche, haben die TabWins
+    // ploetzlich Zeiger auf nicht mehr existente Objekte.
+    // Wenn die TabWins ein SetData haetten, koennte ich mir das sparen ... haben sie aber nicht, ausserdem muesste ich dann immer
+    // noch Informationen, die sich eigentlich nicht geaendert haben, auch neu setzen.
+    // Also loesche ich die TabWinDatas nicht, sondern aktualisiere sie nur.
+    DBG_ASSERT(m_vTableData.size() == pTabWinList->size(),
+        "SbaQueryDocSh::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
+
+    OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
+    OQueryTableWindow* pTabWinLoop;// = (QueryTabWin*)pTabWinList->First();
+    for(;aIter != pTabWinList->end();++aIter)
+    {
+        pTabWinLoop = static_cast<OQueryTableWindow*>(aIter->second);
+        SaveTabWinPosSize(pTabWinLoop, nOffsetX, nOffsetY);
+    }
+}
+// -----------------------------------------------------------------------------
+
 
 

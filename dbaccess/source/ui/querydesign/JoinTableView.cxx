@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:23:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,10 +366,10 @@ OTableWindow* OJoinTableView::GetWindow( const String& rName )
 }
 
 //------------------------------------------------------------------------------
-void OJoinTableView::AddTabWin(const String& _rComposedName, const String& rWinName, BOOL bNewTable)
+void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable)
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    OSL_ENSURE(_rComposedName.Len(),"There must be a table name supplied!");
+    OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
@@ -419,7 +419,12 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     if(bRemove)
     {
         pTabWin->Hide();
-        delete *(m_pView->getController()->getTableWindowData()->erase( ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pTabWin->GetData()) ));
+        ::std::vector< OTableWindowData*>::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pTabWin->GetData());
+        if(aFind != m_pView->getController()->getTableWindowData()->end())
+        {
+            delete *aFind;
+            m_pView->getController()->getTableWindowData()->erase(aFind);
+        }
 
         m_aTableMap.erase( aWinName );
         if (pTabWin == m_pLastFocusTabWin)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:21:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,13 +249,18 @@ void OQueryViewSwitch::switchView()
         pToolBox->ShowItem(ID_QUERY_ZOOM_IN);
         pToolBox->ShowItem(ID_QUERY_ZOOM_OUT);
 
-        m_pDesignView->clear();
+        //  m_pDesignView->clear();
         getAddTableDialog()->Update();
         m_pDesignView->InitFromParseNode();
         // only show the view when the data is inserted
         m_pDesignView->Show(!m_pDesignView->IsVisible());
     }
     m_pDesignView->Resize();
+}
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::clearDesignView()
+{
+    m_pDesignView->clear();
 }
 // -----------------------------------------------------------------------------
 OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
@@ -281,5 +286,11 @@ void OQueryViewSwitch::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
 void OQueryViewSwitch::zoomTableView(const Fraction& _rFraction)
 {
     m_pDesignView->zoomTableView(_rFraction);
+}
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::SaveUIConfig()
+{
+    if(m_pDesignView->IsVisible())
+        m_pDesignView->SaveUIConfig();
 }
 // -----------------------------------------------------------------------------
