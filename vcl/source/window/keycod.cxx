@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: sb $ $Date: 2001-12-04 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ XubString KeyCode::GetName( Window* pWindow ) const
     }
     else
     {
-        String* pName = pSVData->mpKeyNames->Get( GetFullCode() );
+        String* pName = pSVData->mpKeyNames->Get( nCode );
         if ( pName )
             aName += *pName;
     }
