@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:06:14 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,16 @@ namespace objectpositioning
 
                 OD 2004-07-22 #i31805# - add 3rd parameter <_bCheckBottom>
 
+                @param _nTopOfAnch
+                input parameter - 'vertical' position, at which the relative
+                position of the object is calculated from.
+
+                @param _bVert
+                input parameter - boolean, indicating, if object is in vertical
+                layout.
+
                 @param _rPageAlignLayFrm
-                input paramter - layout frame, which determines the 'page area'
+                input parameter - layout frame, which determines the 'page area'
                 the object has to be vertical positioned in.
 
                 @param _nProposedRelPosY
@@ -186,7 +194,9 @@ namespace objectpositioning
 
                 @author OD
             */
-            SwTwips _AdjustVertRelPos( const SwFrm&  _rPageAlignLayFrm,
+            SwTwips _AdjustVertRelPos( const SwTwips _nTopOfAnch,
+                                       const bool _bVert,
+                                       const SwFrm&  _rPageAlignLayFrm,
                                        const SwTwips _nProposedRelPosY,
                                        const bool _bCheckBottom = true ) const;
 
