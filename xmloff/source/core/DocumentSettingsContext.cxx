@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:47:41 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,10 +662,19 @@ void XMLConfigItemContext::ManipulateConfigItem()
         rtl::OUString sValue;
         rAny >>= sValue;
 
-        sal_Int16 nTmp =
-            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("disabled"))
-            ? document::PrinterIndependentLayout::DISABLED
-            : document::PrinterIndependentLayout::ENABLED;
+        sal_Int16 nTmp = document::PrinterIndependentLayout::HIGH_RESOLUTION;
+
+        if( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("enabled")) ||
+            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("low-resolution")) )
+        {
+            nTmp = document::PrinterIndependentLayout::LOW_RESOLUTION;
+        }
+        else if( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("disabled")) )
+        {
+            nTmp = document::PrinterIndependentLayout::DISABLED;
+        }
+        // else: default to high_resolution
+
         rAny <<= nTmp;
     }
 }

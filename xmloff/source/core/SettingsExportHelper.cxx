@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:49:09 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,10 +573,12 @@ void lcl_manipulateSetting(
         sal_Int16 nTmp;
         if( rAny >>= nTmp )
         {
-            if( nTmp == document::PrinterIndependentLayout::ENABLED )
-                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("enabled"));
+            if( nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION )
+                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("low-resolution"));
             else if( nTmp == document::PrinterIndependentLayout::DISABLED )
                 rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disabled"));
+            else if( nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION )
+                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("high-resolution"));
         }
     }
 }
