@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:46:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-22 15:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,6 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
 // -----------------------------------------------------------------------------
 void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
-    OGenericUnoController::loadSubToolbar(_xLayoutManager);
 
     static ::rtl::OUString s_sStatusbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"));
     _xLayoutManager->createElement( s_sStatusbar );
