@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:29 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 11:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,6 +1114,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 // -----------------------------------------------------------------------------
 ::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName)
 {
+    if (!_rxContainer->hasByName(_rBaseName))
+        return _rBaseName;
+
     ::rtl::OUString sName(_rBaseName);
     sal_Int32 nPos = 1;
     sName += ::rtl::OUString::valueOf(nPos);
@@ -1239,6 +1242,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/05/25 13:09:29  oj
+ *  #86839# flush scanner buffer
+ *
  *  Revision 1.28  2001/05/23 09:15:42  oj
  *  #86528# disable exception in some files
  *
