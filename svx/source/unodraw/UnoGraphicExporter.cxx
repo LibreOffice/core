@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:06 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
     SdrObject* pObj = pRecord->pObj;
     if( !pObj->IsEmptyPresObj() )
     {
-        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+        pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
     }
     else
     {
@@ -421,7 +421,7 @@ IMPL_LINK( GraphicExporter, PaintProc, SdrPaintProcRec *, pRecord )
         // so we need to check if this is one
         if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
         {
-            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+            pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
         }
     }
 
@@ -814,7 +814,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             while( aIter != aEnd )
             {
                 SdrObject* pObj = (*aIter++);
-                Rectangle aR1(pObj->GetBoundRect());
+                Rectangle aR1(pObj->GetCurrentBoundRect());
                 if (aBound.IsEmpty())
                     aBound=aR1;
                 else
@@ -839,7 +839,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             while( aIter != aEnd )
             {
                 SdrObject* pObj = (*aIter++);
-                pObj->Paint(aXOut,aInfoRec);
+                pObj->SingleObjectPainter(aXOut,aInfoRec); // #110094#-17
             }
 
             aMtf.Stop();
