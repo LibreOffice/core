@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 13:05:49 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 08:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ static sal_Bool readOption( OUString * pValue, sal_Char const * pOpt,
     if (aArg.getLength() < aOpt.getLength())
         return sal_False;
 
-    if (aArg.getLength() == aOpt.getLength() && aOpt.equalsIgnoreCase( aArg ))
+    if (aArg.getLength() == aOpt.getLength() && aOpt.equalsIgnoreAsciiCase( aArg ))
     {
         // take next argument
         ++(*pnIndex);
@@ -172,7 +172,7 @@ static sal_Bool readOption( OUString * pValue, sal_Char const * pOpt,
             return sal_True;
         }
     }
-    else if (aOpt.equalsIgnoreCase( aArg.copy( 0, aOpt.getLength() ) ))
+    else if (aOpt.equalsIgnoreAsciiCase( aArg.copy( 0, aOpt.getLength() ) ))
     {
         *pValue = OUString::createFromAscii( pArg + 1 + aOpt.getLength() );
 #ifdef DEBUG
@@ -191,7 +191,7 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                             sal_Int32 * pnIndex, const sal_Char * argv[], sal_Int32 argc )
 {
     const sal_Char * pArg = argv[ *pnIndex ];
-    if (pArg[0] == '-' && pArg[1] == '-' && rtl_str_equalsIgnoreCase( pArg+2, pOpt ))
+    if (pArg[0] == '-' && pArg[1] == '-' && rtl_str_compareIgnoreAsciiCase( pArg+2, pOpt ) == 0 )
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
@@ -703,13 +703,16 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
         if (aUnoUrl.getLength()) // accepting connections
         {
-            if (aUnoUrl.getTokenCount( ';' ) != 3 || aUnoUrl.getLength() < 10 ||
-                !aUnoUrl.copy( 0, 4 ).equalsIgnoreCase( OUString( RTL_CONSTASCII_USTRINGPARAM("uno:") ) ))
+            sal_Int32 nIndex = 0, nTokens = 0;
+            do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
+            if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
+                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("uno:") ) ))
             {
                 throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("illegal uno url given!" ) ), Reference< XInterface >() );
             }
-            OUString aConnectDescr( aUnoUrl.getToken( 0 ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
-            OUString aInstanceName( aUnoUrl.getToken( 2 ) );
+            nIndex = 0;
+            OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
+            OUString aInstanceName( aUnoUrl.getToken( 1, ';', nIndex ) );
 
             Reference< XAcceptor > xAcceptor;
             createInstance(
@@ -730,6 +733,8 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
                 xContext, aImplName, aLocation, aServiceName, aInitParams,
                 bSingleInstance, aInstanceName ) );
 
+            nIndex = 0;
+            OUString aUnoUrlToken( aUnoUrl.getToken( 1, ';', nIndex ) );
             for (;;)
             {
                 // accepting
@@ -746,7 +751,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
                 // bridge
                 Reference< XBridge > xBridge( xBridgeFactory->createBridge(
-                    OUString(), aUnoUrl.getToken(1),
+                    OUString(), aUnoUrlToken,
                     xConnection, xInstanceProvider ) );
 
                 if (bSingleAccept)
