@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 11:11:00 $
+ *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-//#ifndef _USR_ITERHLP_HXX
-//#include <usr/iterhlp.hxx>
-//#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-//#ifndef _TOOLKIT_UNOIFACE_HXX
-//#include <toolkit/unoiface.hxx>
-//#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -111,6 +105,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include <extensio.hrc>
 #endif
 
 using namespace osl;
@@ -193,6 +190,8 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     pFieldWin(NULL)
 
 {
+    Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+    pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
     pBibMod = OpenBibModul();
     pDatMan = (*pBibMod)->createDataManager();
     xDatman = pDatMan;
@@ -210,6 +209,8 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     pFieldWin(NULL),
     pBibMod(NULL)
 {
+    Window* pParent = VCLUnoHelper::GetWindow( xWindow );
+    pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
     bDisposing=sal_False;
     bHierarchical=sal_True;
     pImp = new BibFrameCtrl_Impl;

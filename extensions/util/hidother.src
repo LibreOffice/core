@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 16:22:11 $
+ *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,5 @@ hidspecial UID_DBIWIZARD_SOURCEFILE             { HelpId = UID_DBIWIZARD_SOURCEF
 hidspecial UID_DBIWIZARD_QUERIES                { HelpId = UID_DBIWIZARD_QUERIES; }
 hidspecial UID_DBIWIZARD_FORMS                  { HelpId = UID_DBIWIZARD_FORMS; }
 hidspecial UID_DBIWIZARD_FORMS_SAVETO           { HelpId = UID_DBIWIZARD_FORMS_SAVETO; }
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 20.03.01 16:53:40  fs
- ************************************************************************/
+hidspecial UID_BIB_FRAME_WINDOW                 { HelpId = UID_BIB_FRAME_WINDOW;}
 

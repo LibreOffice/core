@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 16:08:10 $
+ *  last change: $Author: os $ $Date: 2001-07-09 07:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,5 +142,7 @@
 #define UID_DBIWIZARD_QUERIES                   (HID_EXTENSIONS_START + 59)
 #define UID_DBIWIZARD_FORMS                     (HID_EXTENSIONS_START + 60)
 #define UID_DBIWIZARD_FORMS_SAVETO              (HID_EXTENSIONS_START + 61)
+
+#define UID_BIB_FRAME_WINDOW                    (HID_EXTENSIONS_START + 62)
 
 #endif
