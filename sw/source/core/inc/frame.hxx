@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:41:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,11 +544,13 @@ public:
 
     // If frame is inside a split table row, this function returns
     // the corresponding row frame in the follow table.
-   const SwRowFrm* IsInSplitTableRow() const;
+    const SwRowFrm* IsInSplitTableRow() const;
 
     // If frame is inside a follow flow row, this function returns
     // the corresponding row frame master table
-   const SwRowFrm* IsInFollowFlowRow() const;
+    const SwRowFrm* IsInFollowFlowRow() const;
+
+    bool IsInBalancedSection() const;
 
     inline BOOL IsReverse() const { return bReverse; }
     inline void SetReverse( BOOL bNew ){ bReverse = bNew ? 1 : 0; }
