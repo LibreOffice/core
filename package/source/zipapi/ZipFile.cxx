@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:22:18 $
+ *  last change: $Author: mtg $ $Date: 2001-12-04 17:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _XMEMORY_STREAM_HXX
 #include <XMemoryStream.hxx>
+#endif
+#ifndef _XUNBUFFERED_STREAM_HXX
+#include <XUnbufferedStream.hxx>
 #endif
 #ifndef _XFILE_STREAM_HXX
 #include <XFileStream.hxx>
@@ -411,6 +414,15 @@ Reference < XInputStream > ZipFile::createMemoryStream(
     }
     return Reference < XInputStream > ( new XMemoryStream ( aWriteBuffer ) );
 }
+Reference < XInputStream > ZipFile::createUnbufferedStream(
+            ZipEntry & rEntry,
+            const ORef < EncryptionData > &rData,
+            sal_Bool bRawStream,
+            sal_Bool bIsEncrypted )
+{
+    return new XUnbufferedStream ( rEntry, xStream, rData, bRawStream, bIsEncrypted );
+}
+
 
 ZipEnumeration * SAL_CALL ZipFile::entries(  )
 {
@@ -447,9 +459,12 @@ Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
     if ( bIsEncrypted && !rData.isEmpty() && rData->aDigest.getLength() )
         bNeedRawStream = !hasValidPassword ( rEntry, rData );
 
+    return createUnbufferedStream ( rEntry, rData, bNeedRawStream, bIsEncrypted );
+    /*
     return rEntry.nSize > n_ConstMaxMemoryStreamSize ?
                createFileStream ( rEntry, rData, bNeedRawStream, bIsEncrypted ) :
                createMemoryStream ( rEntry, rData, bNeedRawStream, bIsEncrypted);
+    */
     //return createMemoryStream( rEntry, rData, sal_False );
 
 }
@@ -462,9 +477,12 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
+    return createUnbufferedStream ( rEntry, rData, sal_True, bIsEncrypted );
+    /*
     return ( rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize > n_ConstMaxMemoryStreamSize ) ?
                createFileStream ( rEntry, rData, sal_True, bIsEncrypted ) :
                createMemoryStream ( rEntry, rData, sal_True, bIsEncrypted );
+    */
     //return createMemoryStream( rEntry, rData, sal_True );
 }
 
