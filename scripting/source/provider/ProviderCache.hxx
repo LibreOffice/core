@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:53 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ class ProviderCache
 public:
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext )
         throw ( css::uno::RuntimeException );
+     ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext,
+        const css::uno::Sequence< ::rtl::OUString >& blackList )
+        throw ( css::uno::RuntimeException );
     ~ProviderCache();
      css::uno::Reference< dcsss::provider::XScriptProvider >
          getProvider( const ::rtl::OUString& providerName );
@@ -114,6 +117,21 @@ private:
 
    css::uno::Reference< dcsss::provider::XScriptProvider >
         createProvider( ProviderDetails& details ) throw ( css::uno::RuntimeException );
+    bool isInBlackList( const ::rtl::OUString& serviceName )
+    {
+        if ( m_sBlackList.getLength() > 0 )
+        {
+            for ( sal_Int32 index = 0; index < m_sBlackList.getLength(); index++ )
+            {
+                if ( m_sBlackList[ index ].equals( serviceName ) )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    css::uno::Sequence< ::rtl::OUString >  m_sBlackList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;
     css::uno::Sequence< css::uno::Any >  m_Sctx;
