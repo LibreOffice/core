@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:38:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,50 +259,44 @@ String STR_DESCRIPTION_LOGFILE
 };
 String STR_DESCRIPTION_SMATH_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Formel" ;
-    Text [ en-US ] = "%PRODUCTNAME formula" ;
+    Text = "StarMath 2.0 - 5.0" ;
 };
 String STR_DESCRIPTION_SCHART_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Diagramm" ;
-    Text [ en-US ] = "%PRODUCTNAME chart" ;
+    Text = "StarChart 3.0 - 5.0" ;
 };
 String STR_DESCRIPTION_SDRAW_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Zeichnung" ;
-    Text [ en-US ] = "%PRODUCTNAME drawing" ;
+    Text = "StarDraw 3.0 / 5.0 (StarImpress)" ;
 };
 
 String STR_DESCRIPTION_SDATABASE_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Datenbankdatei" ;
-    Text [ en-US ] = "%PRODUCTNAME database file" ;
+    Text [ de ] = "%STAROFFICE Datenbank" ;
+    Text [ en-US ] = "%STAROFFICE Database" ;
 };
 
 String STR_DESCRIPTION_SCALC_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Tabelle" ;
-    Text [ en-US ] = "%PRODUCTNAME spreadsheet" ;
+    Text = "StarCalc 3.0 - 5.0" ;
 };
 String STR_DESCRIPTION_SIMPRESS_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Präsentation" ;
-    Text [ en-US ] = "%PRODUCTNAME presentation" ;
+    Text = "StarImpress 4.0 / 5.0" ;
 };
 String STR_DESCRIPTION_SWRITER_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Text" ;
-    Text [ en-US ] = "%PRODUCTNAME text" ;
+    Text = "StarWriter 3.0 - 5.0" ;
 };
 String STR_DESCRIPTION_GLOBALDOC
 {
-    Text [ de ] = "%PRODUCTNAME Text Globaldokument" ;
-    Text [ en-US ] = "%PRODUCTNAME text master document" ;
+    Text [ de ] = "StarWriter 4.0 / 5.0 Globaldokument" ;
+    Text [ en-US ] = "StarWriter 4.0 / 5.0 Master Document" ;
 };
 String STR_DESCRIPTION_SIMAGE_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Bild" ;
-    Text [ en-US ] = "%PRODUCTNAME image" ;
+    Text [ de ] = "%STAROFFICE Bild" ;
+    Text [ en-US ] = "%STAROFFICE Image" ;
 };
 String STR_DESCRIPTION_TEXTFILE
 {
@@ -316,8 +310,8 @@ String STR_DESCRIPTION_LINK
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Vorlage" ;
-    Text [ en-US ] = "%PRODUCTNAME Template" ;
+    Text [ de ] = "%STAROFFICE 3.0 - 5.0 Vorlage" ;
+    Text [ en-US ] = "%STAROFFICE 3.0 - 5.0 Template" ;
 };
 String STR_DESCRIPTION_EXCEL_DOC
 {
