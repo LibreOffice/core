@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: er $ $Date: 2001-01-15 16:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ BOOL ScExportBase::TrimDataArea( USHORT nTab, USHORT& nStartCol,
 
 BOOL ScExportBase::IsEmptyTable( USHORT nTab ) const
 {
-    if ( !pDoc->HasTable( nTab ) )
+    if ( !pDoc->HasTable( nTab ) || !pDoc->IsVisible( nTab ) )
         return TRUE;
     USHORT nStartCol, nStartRow, nEndCol, nEndRow;
     return !GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
