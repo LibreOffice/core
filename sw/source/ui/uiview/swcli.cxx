@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 12:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,26 @@
 #include <so3/ipobj.hxx>
 #endif
 
-#include "wrtsh.hxx"
-#include "swtypes.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "swcli.hxx"
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _SWCLI_HXX
+#include <swcli.hxx>
+#endif
 
 
 SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin ) :
-    SfxInPlaceClient( pView, pWin ), bInDoVerb( FALSE )
+    SfxInPlaceClient( pView, pWin ), bInDoVerb( FALSE ),
+    bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
 {
 }
 
@@ -215,6 +226,9 @@ void SwOleClient::MakeViewData()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.28  2000/09/18 16:06:11  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 12:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,13 +812,13 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWin,
                      SwRootFrm *pMaster, const SwViewOption *pOpt )
     : SwEditShell( rDoc, pWin, pMaster, pOpt ),
-    pChainFrom( 0 ), pChainTo( 0 )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWin )
     : SwEditShell( rShell, pWin ),
-    pChainFrom( 0 ), pChainTo( 0 )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
 {
 }
 

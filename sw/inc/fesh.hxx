@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 14:44:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 12:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ class SwFEShell : public SwEditShell
 {
     SdrViewUserMarker *pChainFrom,
                       *pChainTo;
+    BOOL bCheckForOLEInCaption;
 
     SwFlyFrm *FindFlyFrm() const;
     SwFlyFrm *FindFlyFrm( const SvEmbeddedObject *pObj ) const;
@@ -368,6 +369,10 @@ public:
 
     //Sichbaren Bereich auf das Object setzen, wenn es noch nicht sichtbar ist.
     void MakeObjVisible( const SvEmbeddedObject *pIPObj ) const;
+
+    // check resize of OLE-Object
+    BOOL IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
+    void SetCheckForOLEInCaption( BOOL bFlag )  { bCheckForOLEInCaption = bFlag; }
 
     // setze am selektierten FlyFrame einen Namen
     void SetFlyName( const String& rName );
