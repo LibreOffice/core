@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:29:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-02 15:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,14 +416,14 @@ sal_Bool OCopyTable::checkAppendData()
         {
             bNotConvert = sal_True;
             m_pParent->m_vColumnPos.push_back( ODatabaseExport::TPositions::value_type(nPos,nPos) );
-            const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
                 m_pParent->showColumnTypeNotSupported((*aDestIter)->first);
                 return sal_False;
             }
 
-            if(pTypeInfo)
+            if ( pTypeInfo.get() )
                 m_pParent->m_vColumnTypes.push_back(pTypeInfo->nType);
             else
                 m_pParent->m_vColumnTypes.push_back(DataType::VARCHAR);
