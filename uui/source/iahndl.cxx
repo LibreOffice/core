@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-18 13:24:44 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,18 +791,18 @@ UUIInteractionHandler::handle(
 uno::Sequence< rtl::OUString >
 UUIInteractionHandler::getSupportedServiceNames_static()
 {
-    uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString::createFromAscii(
-                    "com.sun.star.uui.InteractionHandler");
+    uno::Sequence< rtl::OUString > aNames(2);
+    aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.task.InteractionHandler"));
+    aNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.uui.InteractionHandler"));
+        // for backwards compatibility
     return aNames;
 }
 
 //============================================================================
 // static
-uno::Reference< uno::XInterface >
-#if SUPD >= 590
-SAL_CALL
-#endif // SUPD
+uno::Reference< uno::XInterface > SAL_CALL
 UUIInteractionHandler::createInstance(
     uno::Reference< lang::XMultiServiceFactory > const &)
 {
