@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:24:12 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,17 +1530,13 @@ ElementBase::~ElementBase()
 
 //______________________________________________________________________________
 void DialogImport::startDocument(
-    Reference< container::XNameAccess > const & xUidMapping )
+    Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (!(xUidMapping->getByName( OUSTR(XMLNS_DIALOGS_URI) ) >>=
-          XMLNS_DIALOGS_UID) ||
-        !(xUidMapping->getByName( OUSTR(XMLNS_SCRIPT_URI) ) >>=
-          XMLNS_SCRIPT_UID))
-    {
-        throw xml::sax::SAXException(
-            OUSTR("cannot get uids!"), Reference< XInterface >(), Any() );
-    }
+    XMLNS_DIALOGS_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_DIALOGS_URI) );
+    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_SCRIPT_URI) );
 }
 //__________________________________________________________________________________________________
 void DialogImport::endDocument()
