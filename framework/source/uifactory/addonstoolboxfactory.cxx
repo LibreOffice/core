@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonstoolboxfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:02:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -128,7 +128,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -140,13 +140,13 @@ DEFINE_XINTERFACE_3                    (    AddonsToolBoxFactory                
                                             OWeakObject                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIElementFactory )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory )
                                         )
 
 DEFINE_XTYPEPROVIDER_3                  (   AddonsToolBoxFactory                            ,
                                             css::lang::XTypeProvider                        ,
                                             css::lang::XServiceInfo                         ,
-                                            drafts::com::sun::star::ui::XUIElementFactory
+                                            ::com::sun::star::ui::XUIElementFactory
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   AddonsToolBoxFactory                            ,
@@ -162,7 +162,7 @@ AddonsToolBoxFactory::AddonsToolBoxFactory(
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
     , m_xModuleManager( xServiceManager->createInstance(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.ModuleManager" ))),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
                         UNO_QUERY )
 {
 }
@@ -264,7 +264,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         }
     }
 
-    Reference< drafts::com::sun::star::ui::XUIElement > xToolBar;
+    Reference< ::com::sun::star::ui::XUIElement > xToolBar;
     if ( xFrame.is() &&
          ( aConfigData.getLength()> 0 ) &&
          hasButtonsInContext( aConfigData, xModel ))
@@ -283,7 +283,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
         vos::OGuard aGuard( Application::GetSolarMutex() );
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xServiceManager );
-        xToolBar = Reference< drafts::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
+        xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
         xInit->initialize( aPropSeq );
     }
