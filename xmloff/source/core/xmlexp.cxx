@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 08:25:04 $
+ *  last change: $Author: obo $ $Date: 2002-06-11 08:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,7 +953,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.document.ExportGraphicObjectResolver"))));
-                    bOwnGraphicResolver = xGraphicResolver.is;
+                    bOwnGraphicResolver = xGraphicResolver.is();
                 }
 
                 if( !xEmbeddedResolver.is() )
@@ -962,7 +962,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "com.sun.star.document.ExportEmbeddedObjectResolver"))));
-                    bOwnEmbeddedResolver = xEmbeddedResolver.is;
+                    bOwnEmbeddedResolver = xEmbeddedResolver.is();
                 }
             }
             catch( com::sun::star::uno::Exception& )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-06 11:11:21 $
+ *  last change: $Author: obo $ $Date: 2002-06-11 08:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 // #99870# Import... instead of Export...
                                 "com.sun.star.document.ImportGraphicObjectResolver"))));
-                    pImpl->mbOwnGraphicResolver = xGraphicResolver.is;
+                    pImpl->mbOwnGraphicResolver = xGraphicResolver.is();
                 }
 
                 if( !xEmbeddedResolver.is() )
@@ -537,7 +537,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 // #99870# Import... instead of Export...
                                 "com.sun.star.document.ImportEmbeddedObjectResolver"))));
-                    pImpl->mbOwnEmbeddedResolver = xEmbeddedResolver.is;
+                    pImpl->mbOwnEmbeddedResolver = xEmbeddedResolver.is();
                 }
             }
             catch( com::sun::star::uno::Exception& )
