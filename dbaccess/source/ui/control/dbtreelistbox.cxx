@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:10:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,10 @@ namespace
                 USHORT nId = _pPopup->GetItemId(i);
                 PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
                 if ( pSubPopUp )
+                {
                     lcl_enableEntries(pSubPopUp,_pController);
+                    _pPopup->EnableItem(nId,pSubPopUp->HasValidEntries());
+                }
                 else
                 {
                     ::com::sun::star::util::URL aCommand;
