@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:26:44 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ModalDialog DLG_PASSWD
         Text[ turkish ] = "~Kullanýcý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usuar~io";
-        Text[ finnish ] = "~Käyttäjä";
+        Text[ finnish ] = "~K?ytt?j?";
     };
     Edit ED_PASSWD_USER
     {
@@ -275,6 +275,7 @@ ModalDialog DLG_PASSWD
 };
 
 // ********************************************************************** EOF
+
 
 
 
