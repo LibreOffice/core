@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,13 @@ public:
 
 class GtkHookedYieldMutex : public GtkYieldMutex
 {
-    virtual int     Grab()              { return 0; };
-    virtual void        Ungrab(int )        {};
+    virtual int      Grab()             { return 0; };
+    virtual void     Ungrab(int )       {};
     std::list<ULONG> aYieldStack;
 public:
     GtkHookedYieldMutex();
-    virtual void      acquire() { SalYieldMutex::acquire(); }
-    virtual void      release() { SalYieldMutex::release(); }
+    virtual void      acquire();
+    virtual void      release();
     virtual sal_Bool  tryToAcquire() { return SalYieldMutex::tryToAcquire(); }
     void ThreadsEnter();
     void ThreadsLeave();
