@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2001-12-06 14:46:11 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:26:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,12 +80,12 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
 
 
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
 UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
@@ -107,7 +107,7 @@ APP1OBJS=
 #			$(OBJ)$/axhost.obj
 
 LIBCMT=msvcrtd.lib
-            
+
 
 APP1STDLIBS= \
     $(SALLIB) \
