@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:33:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,20 +409,22 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             // yet more additionally, we need to care for the ParaAdjust property
             if ( XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType )
             {
-                // this is because:
-                // * if controls shapes have a ParaAdjust property, then this is the Align property of the control model
-                // * control models are allowed to have an Align of "void"
-                // * the Default for control model's Align is TextAlign_LEFT
-                // * defaults for style properties are not written, but we need to write the "left",
-                //   because we need to distiguish this "left" from the case where not align attribute
-                //   is present which means "void"
-                // 102407 - 2002-11-01 - fs@openoffice.org
-                static const ::rtl::OUString s_sParaAdjustPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
                 uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-                if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName ) )
+                uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                if ( xPropSetInfo.is() && xPropState.is() )
                 {
-                    uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-                    if ( xPropState.is() && beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
+                    // this is because:
+                    // * if controls shapes have a ParaAdjust property, then this is the Align property of the control model
+                    // * control models are allowed to have an Align of "void"
+                    // * the Default for control model's Align is TextAlign_LEFT
+                    // * defaults for style properties are not written, but we need to write the "left",
+                    //   because we need to distiguish this "left" from the case where not align attribute
+                    //   is present which means "void"
+                    // 102407 - 2002-11-01 - fs@openoffice.org
+                    static const ::rtl::OUString s_sParaAdjustPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
+                    if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
+                        &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
+                        )
                     {
                         sal_Int32 nIndex = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
                             // TODO : this retrieval of the index should be moved into the ctor, holding the index
