@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:40:18 $
+ *  last change: $Author: fme $ $Date: 2002-11-21 09:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,9 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     const SwTwips nBasePosY  = rInf.Y();
     ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
     SwDropSave aSave( rInf );
+    // for text inside drop portions we let vcl handle the text directions
+    SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+    aLayoutModeModifier.SetAuto();
 
     while ( pCurrPart )
     {
@@ -412,6 +415,9 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
 
         SwFontSave aSave( rInf, pTmpFont );
+        // for text inside drop portions we let vcl handle the text directions
+        SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+        aLayoutModeModifier.SetAuto();
 
         SwTxtPortion::Paint( rInf );
         delete pTmpFont;
@@ -1035,6 +1041,10 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = sal_False;
     Fix( (USHORT)rInf.X() );
+
+    SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
+    aLayoutModeModifier.SetAuto();
+
     if( nDropHeight && pPart && nLines!=1 )
     {
         if( !pDropCapCache )
