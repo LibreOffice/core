@@ -332,5 +332,15 @@ public class Format implements Cloneable {
      public Color getBackground() {
          return new Color(background.getRGB());
      }
+
+     /**
+      *  Get the Foreground <code>Color</code> for this cell
+      *
+      *  @return  Background <code>Color</code> value
+      */
+     public String toString() {
+         return new String("Value : " + getValue() + " Category : " + getCategory());
+     }
+
 }
 
