@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:55:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,44 @@
 #define CTL_FAVORITES   2
 #define BTN_OK          3
 #define BTN_CANCEL      4
-#define BTN_LTR         5
-#define BTN_TTB         6
+#define MF_VALUE        7
+#define FT_VALUE        8
+#define BTN_HELP        9
 
 #define STR_CLICK_TO_ADD_TEXT   1
+
+
+#define STR_ALIGN_LEFT                      1
+#define STR_ALIGN_CENTER                    2
+#define STR_ALIGN_RIGHT                     3
+#define STR_ALIGN_WORD                      4
+#define STR_ALIGN_STRETCH                   5
+#define STR_CHARS_SPACING_VERY_TIGHT        6
+#define STR_CHARS_SPACING_TIGHT             7
+#define STR_CHARS_SPACING_NORMAL            8
+#define STR_CHARS_SPACING_LOOSE             9
+#define STR_CHARS_SPACING_VERY_LOOSE        10
+#define STR_CHARS_SPACING_CUSTOM            11
+#define STR_CHARS_SPACING_KERN_PAIRS        12
+
+#define IMG_FONTWORK_ALIGN_LEFT_16          1
+#define IMG_FONTWORK_ALIGN_LEFT_16_H        2
+#define IMG_FONTWORK_ALIGN_LEFT_26          3
+#define IMG_FONTWORK_ALIGN_LEFT_26_H        4
+#define IMG_FONTWORK_ALIGN_CENTER_16        5
+#define IMG_FONTWORK_ALIGN_CENTER_16_H      6
+#define IMG_FONTWORK_ALIGN_CENTER_26        7
+#define IMG_FONTWORK_ALIGN_CENTER_26_H      8
+#define IMG_FONTWORK_ALIGN_RIGHT_16         9
+#define IMG_FONTWORK_ALIGN_RIGHT_16_H       10
+#define IMG_FONTWORK_ALIGN_RIGHT_26         11
+#define IMG_FONTWORK_ALIGN_RIGHT_26_H       12
+#define IMG_FONTWORK_ALIGN_WORD_16          13
+#define IMG_FONTWORK_ALIGN_WORD_16_H        14
+#define IMG_FONTWORK_ALIGN_WORD_26          15
+#define IMG_FONTWORK_ALIGN_WORD_26_H        16
+#define IMG_FONTWORK_ALIGN_STRETCH_26_H     17
+#define IMG_FONTWORK_ALIGN_STRETCH_16       18
+#define IMG_FONTWORK_ALIGN_STRETCH_16_H     19
+#define IMG_FONTWORK_ALIGN_STRETCH_26       20
+#define IMG_FONTWORK_ALIGN_STRETCH_26_H     21
