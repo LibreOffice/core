@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:05:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3883,15 +3883,18 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex )
 {
     BOOL bCTL = FALSE;
+    BYTE bR2L = FALSE;
     if ( nIndex == 0xFFFF )
     {
         bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
+        bR2L = IsRightToLeft( nPara );
     }
     else
     {
         ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
         short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
+        bR2L = GetRightToLeft( nPara, nIndex );
     }
 
     ULONG nLayoutMode = pOutDev->GetLayoutMode();
@@ -3899,7 +3902,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
     // We always use the left postion for DrawText()
     nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
 
-    if ( !bCTL )
+    if ( !bCTL && !bR2L)
     {
         // No CTL/Bidi checking neccessary
         nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
@@ -3910,7 +3913,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
         // Don't use BIDI_STRONG, VCL must do some checks.
         nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
 
-        if ( GetRightToLeft( nPara, nIndex ) )
+        if ( bR2L )
             nLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
     }
 
