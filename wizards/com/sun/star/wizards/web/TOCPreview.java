@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TOCPreview.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:15:55 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.UCB;
+import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGLayout;
 import com.sun.star.wizards.web.data.CGSettings;
@@ -101,6 +105,7 @@ public class TOCPreview {
     private XDispatch xDispatch;
     private PropertyValue[] loadArgs;
     private UCB ucb;
+    private XFrame xFrame;
 
     /**
      * @param xmsf_
@@ -109,17 +114,17 @@ public class TOCPreview {
      * @param tempDir_ destination
      * @throws Exception
      */
-    public TOCPreview(XMultiServiceFactory xmsf_, CGSettings settings, WebWizardDialogResources res, String tempDir_)
+    public TOCPreview(XMultiServiceFactory xmsf_, CGSettings settings, WebWizardDialogResources res, String tempDir_, XFrame _xFrame)
         throws Exception
     {
+        xFrame = _xFrame;
         xmsf = xmsf_;
         resources = res;
         fileAccess = new FileAccess(xmsf);
         tempDir = tempDir_;
-        loadArgs = loadArgs(
-            FileAccess.connectURLs(tempDir,"/index.html") );
-
-        prepare();
+        loadArgs = loadArgs( FileAccess.connectURLs(tempDir,"/index.html") );
+        openHyperlink = Desktop.getDispatchURL(xmsf, ".uno:OpenHyperlink");
+        xDispatch = Desktop.getDispatcher(xmsf, xFrame, "_top", openHyperlink);
         ucb = new UCB(xmsf);
 
         Process.copyStaticImages(ucb ,settings,tempDir);
@@ -139,52 +144,14 @@ public class TOCPreview {
         Task task = new Task("","",10000);
         Process.generate(xmsf, layout, doc, fileAccess, tempDir,  task);
         Process.copyLayoutFiles(ucb,fileAccess,settings,layout,tempDir);
-        xDispatch.dispatch(openHyperlink, loadArgs);
+        xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);
     }
 
-    /**
-     * copies "static" files to the temporary directory.
-     * The "static" files are images (and other files ?)
-     * which do not change when the layout/style are changed,
-     * and can therefore be copies once per session.
-     * @throws Exception
-     */
-    private void prepare() throws Exception {
-        Object frame = Desktop.getDesktop(xmsf).getCurrentFrame();
-
-        XDispatchProvider dispatchProvider = (XDispatchProvider)
-            UnoRuntime.queryInterface(XDispatchProvider.class,frame);
-
-        XURLTransformer xParser = null;
-            xParser=(XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                    xmsf.createInstance("com.sun.star.util.URLTransformer"));
-            openHyperlink = dispURL(xParser);
-
-        xDispatch = dispatchProvider.queryDispatch(openHyperlink,
-            "_top", FrameSearchFlag.ALL);
-
-    }
-
-    /**
-     * dispatch URL
-     * @param xTrans
-     * @return
-     */
-    private URL dispURL(XURLTransformer xTrans) {
-        URL[] aParseURL = new URL[1];
-        aParseURL[0] = new URL();
-        aParseURL[0].Complete = ".uno:OpenHyperlink";
-        xTrans.parseStrict(aParseURL);
-        return aParseURL[0];
-    }
 
     private PropertyValue[] loadArgs(String url) {
-        //System.out.println(url);
         PropertyValue pv = new PropertyValue();
         pv.Name = "URL";
         pv.Value = url;
         return new PropertyValue[] {pv};
     }
-
 }
