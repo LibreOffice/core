@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-08 17:06:49 $
+ *  last change: $Author: nn $ $Date: 2001-06-20 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 
 #include <tools/debug.hxx>
 #include <svtools/pathoptions.hxx>
@@ -103,6 +106,12 @@ void ScGlobal::InitAddIns()
             String aPath( aMultiPath.GetToken( 0, ';', nIndex ) );
             if ( aPath.Len() > 0 )
             {
+                //  use LocalFileHelper to convert the path to a URL that always points
+                //  to the file on the server
+                String aUrl;
+                if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
+                    aPath = aUrl;
+
                 INetURLObject aObj;
                 aObj.SetSmartURL( aPath );
                 aObj.setFinalSlash();
