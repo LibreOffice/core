@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:32 $
+ *  last change: $Author: hdu $ $Date: 2002-10-01 13:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,11 +591,26 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
+#if 1
+    sal_Int64 n64 = n;
+    n64 *= nDPI * nMapNum;
+    if( nMapDenom == 1 )
+        n = (long)n64;
+    else
+    {
+        if( n >= 0 )
+            n64 += nMapDenom/2;
+        else
+            n64 -= (nMapDenom-1)/2;
+        n = (long)(n64 / nMapDenom);
+    }
+    return n;
+#else
     if ( Abs( n ) < nThres )
     {
         n *= nDPI * nMapNum;
         n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
-        return (n / nMapDenom);
+                return (n / nMapDenom);
     }
     else
     {
@@ -617,6 +632,7 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         aTemp /= BigInt( nMapDenom );
         return (long)aTemp;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -624,6 +640,15 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
+#if 1
+    long nDenom  = nDPI * nMapNum;
+    long nNum    = n * nMapDenom;
+    if( (nNum ^ nDenom) >= 0 )
+        nNum += nDenom/2;
+    else
+        nNum -= (nDenom+1)/2;
+    return (nNum / nDenom);
+#else
     if ( Abs( n ) < nThres )
     {
         long nDenom  = nDPI * nMapNum;
@@ -685,6 +710,7 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
         aNum  /= aDenom;
         return (long)aNum;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
