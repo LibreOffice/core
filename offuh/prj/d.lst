@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\awt
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\bridge
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\chart
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\chart2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\container
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\configuration
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\configuration\backend
@@ -96,6 +97,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\bridge\*.hpp %_DEST%\inc%_EXT%\com\sun\star\bridge\*.hpp
 ..\%__SRC%\inc\com\sun\star\chart\*.hdl %_DEST%\inc%_EXT%\com\sun\star\chart\*.hdl
 ..\%__SRC%\inc\com\sun\star\chart\*.hpp %_DEST%\inc%_EXT%\com\sun\star\chart\*.hpp
+..\%__SRC%\inc\com\sun\star\chart2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\chart2\*.hpp
+..\%__SRC%\inc\com\sun\star\chart2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\chart2\*.hdl
 ..\%__SRC%\inc\com\sun\star\configuration\*.hdl %_DEST%\inc%_EXT%\com\sun\star\configuration\*.hdl
 ..\%__SRC%\inc\com\sun\star\configuration\*.hpp %_DEST%\inc%_EXT%\com\sun\star\configuration\*.hpp
 ..\%__SRC%\inc\com\sun\star\configuration\backend\*.hdl %_DEST%\inc%_EXT%\com\sun\star\configuration\backend\*.hdl
