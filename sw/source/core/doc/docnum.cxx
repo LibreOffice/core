@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:55:26 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2936,19 +2936,6 @@ BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
     }
 
     return bResult;
-}
-
-// #i23726#
-void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
-{
-    if (SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode())
-    {
-        if (SwNumRule * pNumRule = pTxtNode->GetNumRule())
-        {
-            pNumRule->Indent(nAmount);
-            UpdateNumRule();
-        }
-    }
 }
 
 // #106897#
