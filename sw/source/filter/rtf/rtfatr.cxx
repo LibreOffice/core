@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:15:55 $
+ *  last change: $Author: cmc $ $Date: 2002-09-30 12:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,27 +606,26 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
  *      - gebe alle Attribute vom Format aus
  */
 
-Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
+bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
 {
-    SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
-    BOOL bOutItemSet = TRUE;
+    bool bOutItemSet = true;
 
     switch( rFmt.Which() )
     {
     case RES_CONDTXTFMTCOLL:
     case RES_TXTFMTCOLL:
         {
-            USHORT nId = rRTFWrt.GetId( (const SwTxtFmtColl&)rFmt );
-            if( 0 == nId )
-                return rWrt;        // Default-TextStyle nicht ausgeben !!
+            USHORT nId = rWrt.GetId( (const SwTxtFmtColl&)rFmt );
+            if (0 == nId )
+                return false;       // Default-TextStyle nicht ausgeben !!
 
             rWrt.Strm() << sRTF_S;
             rWrt.OutULong( nId );
-            rRTFWrt.bOutFmtAttr = TRUE;
+            rWrt.bOutFmtAttr = TRUE;
             BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
             if( MAXLEVEL > nLvl )
             {
-                USHORT nNumId = rRTFWrt.GetNumRuleId(
+                USHORT nNumId = rWrt.GetNumRuleId(
                                         *rWrt.pDoc->GetOutlineNumRule() );
                 if( USHRT_MAX != nNumId )
                 {
@@ -653,8 +652,8 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
                     aLR.SetTxtLeft( aLR.GetTxtLeft() + pNFmt->GetAbsLSpace() );
                     aLR.SetTxtFirstLineOfst( pNFmt->GetFirstLineOffset() );
 
-                    aSet.Put( aLR );
-                    OutRTF_SfxItemSet( rRTFWrt, aSet, TRUE );
+                    aSet.Put(aLR);
+                    rSet.Put(aSet);
                     bOutItemSet = FALSE;
                 }
             }
@@ -662,13 +661,13 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
         break;
     case RES_CHRFMT:
         {
-            USHORT nId = rRTFWrt.GetId( (const SwCharFmt&)rFmt );
-            if( 0 == nId )
-                return rWrt;        // Default-CharStyle nicht ausgeben !!
+            USHORT nId = rWrt.GetId( (const SwCharFmt&)rFmt );
+            if (0 == nId)
+                return false;       // Default-CharStyle nicht ausgeben !!
 
             rWrt.Strm() << sRTF_IGNORE << sRTF_CS;
             rWrt.OutULong( nId );
-            rRTFWrt.bOutFmtAttr = TRUE;
+            rWrt.bOutFmtAttr = TRUE;
         }
         break;
 
@@ -676,13 +675,23 @@ Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& rFmt )
 // ?????
     }
 
-    if( bOutItemSet )
-        OutRTF_SfxItemSet( rRTFWrt, rFmt.GetAttrSet(), TRUE );
+    if (bOutItemSet)
+        rSet.Put(rFmt.GetAttrSet());
+
+    return bOutItemSet;
+}
+
+Writer& OutRTF_SwFmt(Writer& rWrt, const SwFmt& rFmt)
+{
+    SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
+
+    SfxItemSet aSet(*rFmt.GetAttrSet().GetPool(),
+        rFmt.GetAttrSet().GetRanges() );
+    if (SwFmtToSet(rRTFWrt, rFmt, aSet))
+        OutRTF_SfxItemSet(rRTFWrt, aSet, TRUE);
 
     return rWrt;
 }
-
-
 
 void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
 {
@@ -1021,11 +1030,13 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     switch( nScript )
     {
     case ::com::sun::star::i18n::ScriptType::LATIN:
-        ( sOut += sRTF_LTRCH ) += sRTF_LOCH;
+//      ( sOut += sRTF_LTRCH ) += sRTF_LOCH;
+        sOut += sRTF_LOCH;
         pIdArr = aLatinIds;
         break;
     case ::com::sun::star::i18n::ScriptType::ASIAN:
-        ( sOut += sRTF_LTRCH ) += sRTF_DBCH;
+//      ( sOut += sRTF_LTRCH ) += sRTF_DBCH;
+        sOut += sRTF_DBCH;
         pIdArr = aAsianIds;
         break;
 
@@ -1298,6 +1309,10 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     // den Format-Pointer auf 0 setzen!
     SwFlyFrmFmt* pSaveFmt = rRTFWrt.pFlyFmt;
 
+    SfxItemSet aMergedSet(rRTFWrt.pDoc->GetAttrPool(), POOLATTR_BEGIN,
+        POOLATTR_END-1);
+    bool bDeep = false;
+
     if( bNewFmts && rRTFWrt.bWriteAll )
     {
         rRTFWrt.Strm() << sRTF_PARD << sRTF_PLAIN << ' ';       // alle Attribute zuruecksetzen
@@ -1314,12 +1329,14 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         rRTFWrt.OutListNum( *pNd );
         OutRTF_SwRTL(rRTFWrt, pNd);
-        OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
+        SwFmtToSet(rRTFWrt, pNd->GetAnyFmtColl(), aMergedSet);
+        bDeep = true;
     }
     else if( !rRTFWrt.bWriteAll && rRTFWrt.bFirstLine )
     {
         OutRTF_SwRTL(rRTFWrt, pNd);
-        OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
+        SwFmtToSet(rRTFWrt, pNd->GetAnyFmtColl(), aMergedSet);
+        bDeep = true;
     }
 
     // gibt es harte Attributierung ?
@@ -1351,10 +1368,12 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
             aSet.Put( aLR );
-            OutRTF_SfxItemSet( rRTFWrt, aSet, FALSE );
+            aMergedSet.Put(aSet);
         }
         else
-            OutRTF_SfxItemSet( rRTFWrt, rNdSet, FALSE );
+            aMergedSet.Put(rNdSet);
+
+        OutRTF_SfxItemSet(rRTFWrt, aMergedSet, bDeep);
     }
 
     rRTFWrt.pFlyFmt = pSaveFmt;
