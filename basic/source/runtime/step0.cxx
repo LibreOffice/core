@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2002-08-15 07:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,10 @@ void SbiRuntime::StepARGV()
     else
     {
         SbxVariableRef pVal = PopVar();
-        if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
+
+        // Before fix of #94916:
+        // if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
+        if( pVal->ISA(SbxMethod) )
         {
             // Methoden und Properties evaluieren!
             SbxVariable* pRes = new SbxVariable( *pVal );
