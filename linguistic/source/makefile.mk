@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-27 16:08:27 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:29:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,8 +155,9 @@ SHL1STDLIBS= \
         $(SFXLIB)		\
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
-        $(UNOTOOLSLIB) \
-        $(XMLOFFLIB)
+        $(UNOTOOLSLIB)  \
+        $(XMLOFFLIB)    \
+        $(ICUUCLIB)
         
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
