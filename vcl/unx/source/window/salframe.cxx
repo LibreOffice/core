@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-18 12:47:58 $
+ *  last change: $Author: pl $ $Date: 2002-01-15 18:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2059,13 +2059,8 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
 
     if( LeaveNotify == pEvent->type || EnterNotify == pEvent->type )
     {
-        aMouseEvt.mnX       = pEvent->xcrossing.x;
-        aMouseEvt.mnY       = pEvent->xcrossing.y;
-        aMouseEvt.mnTime    = pEvent->xcrossing.time;
         /*
-         *  #89075# #89335# *sigh*
-         *  commented out:
-         *  aMouseEvt.mnCode    = sal_GetCode( pEvent->xcrossing.state );
+         *  #89075# #89335#
          *
          *  some WMs (and/or) applications  have a passive grab on
          *  mouse buttons (XGrabButton). This leads to enter/leave notifies
@@ -2075,9 +2070,19 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
          *  decides that a pressed button in a MouseMove belongs to
          *  a drag operation which leads to doing things differently.
          *
+         *  #95901#
+         *  ignore Enter/LeaveNotify resulting from grabs so that
+         *  help windows do not disappear just after appearing
+         *
          *  hopefully this workaround will not break anything.
          */
-        aMouseEvt.mnCode    = 0;
+        if( pEvent->xcrossing.mode == NotifyGrab || pEvent->xcrossing.mode == NotifyUngrab  )
+            return 0;
+
+        aMouseEvt.mnX       = pEvent->xcrossing.x;
+        aMouseEvt.mnY       = pEvent->xcrossing.y;
+        aMouseEvt.mnTime    = pEvent->xcrossing.time;
+        aMouseEvt.mnCode    = sal_GetCode( pEvent->xcrossing.state );
         aMouseEvt.mnButton  = 0;
 
         nEvent              = LeaveNotify == pEvent->type
