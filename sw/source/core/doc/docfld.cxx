@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:20:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,7 +1707,45 @@ SwDBData SwDoc::GetDBData()
 
 const SwDBData& SwDoc::GetDBDesc()
 {
-    if (!aDBData.sDataSource.getLength())
+    if(!aDBData.sDataSource.getLength())
+    {
+        const USHORT nSize = pFldTypes->Count();
+        for(USHORT i = 0; i < nSize && !aDBData.sDataSource.getLength(); ++i)
+        {
+            SwFieldType& rFldType = *((*pFldTypes)[i]);
+            USHORT nWhich = rFldType.Which();
+            if(IsUsed(rFldType))
+            {
+                switch(nWhich)
+                {
+                    case RES_DBFLD:
+                    case RES_DBNEXTSETFLD:
+                    case RES_DBNUMSETFLD:
+                    case RES_DBSETNUMBERFLD:
+                    {
+                        SwClientIter aIter( rFldType );
+                        SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                        while(pFld)
+                        {
+                            if(pFld->IsFldInDoc())
+                            {
+                                if(RES_DBFLD == nWhich)
+                                    aDBData =
+                                        (static_cast < SwDBFieldType * > (pFld->GetFld()->GetTyp()))
+                                            ->GetDBData();
+                                else
+                                    aDBData = (static_cast < SwDBNameInfField* > (pFld->GetFld()))->GetRealDBData();
+                                break;
+                            }
+                            pFld = (SwFmtFld*)aIter.Next();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    if(!aDBData.sDataSource.getLength())
         aDBData = GetNewDBMgr()->GetAddressDBName();
     return aDBData;
 }
