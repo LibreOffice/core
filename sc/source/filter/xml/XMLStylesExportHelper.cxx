@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:02 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,13 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_TABLEVALIDATIONVISIBILITY_HPP_
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#endif
+
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 #include <algorithm>
 
@@ -160,6 +167,7 @@ ScMyValidationsContainer::ScMyValidationsContainer()
     sEmptyString(),
     sERRALSTY(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)),
     sIGNOREBL(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)),
+    sSHOWLIST(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)),
     sTYPE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
     sSHOWINP(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)),
     sSHOWERR(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)),
@@ -199,11 +207,9 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
         rtl::OUString sImputTitle;
         aAny >>= sImputTitle;
         aAny = xPropertySet->getPropertyValue(sSHOWERR);
-        sal_Bool bShowErrorMessage;
-        aAny >>= bShowErrorMessage;
+        sal_Bool bShowErrorMessage = ::cppu::any2bool(aAny);
         aAny = xPropertySet->getPropertyValue(sSHOWINP);
-        sal_Bool bShowImputMessage;
-        aAny >>= bShowImputMessage;
+        sal_Bool bShowImputMessage = ::cppu::any2bool(aAny);
         aAny = xPropertySet->getPropertyValue(sTYPE);
         sheet::ValidationType aValidationType;
         aAny >>= aValidationType;
@@ -219,9 +225,9 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             aValidation.bShowImputMessage = bShowImputMessage;
             aValidation.aValidationType = aValidationType;
             aAny = xPropertySet->getPropertyValue(sIGNOREBL);
-            sal_Bool bIgnoreBlanks(sal_False);
-            aAny >>= bIgnoreBlanks;
-            aValidation.bIgnoreBlanks = bIgnoreBlanks;
+            aValidation.bIgnoreBlanks = ::cppu::any2bool(aAny);
+            aAny = xPropertySet->getPropertyValue(sSHOWLIST);
+            aAny >>= aValidation.nShowList;
             aAny = xPropertySet->getPropertyValue(sERRALSTY);
             aAny >>= aValidation.aAlertStyle;
             uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
@@ -274,7 +280,11 @@ rtl::OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aVali
             case sheet::ValidationType_DECIMAL :
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
             break;
-            //case sheet::ValidationType_LIST :
+            case sheet::ValidationType_LIST :
+                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-in-list("));
+                sCondition += aValidation.sFormula1;
+                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+            break;
             case sheet::ValidationType_TEXT_LEN :
                 if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                     aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
@@ -287,10 +297,11 @@ rtl::OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aVali
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
             break;
         }
-        if (aValidation.sFormula1.getLength() ||
+        if (aValidation.aValidationType != sheet::ValidationType_LIST &&
+            (aValidation.sFormula1.getLength() ||
             (aValidation.aOperator == sheet::ConditionOperator_BETWEEN &&
             aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN &&
-            aValidation.sFormula2.getLength()))
+            aValidation.sFormula2.getLength())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" and "));
@@ -418,6 +429,23 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
                 else
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
+                if (aItr->aValidationType == sheet::ValidationType_LIST)
+                {
+                    switch (aItr->nShowList)
+                    {
+                    case sheet::TableValidationVisibility::INVISIBLE:
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_NO);
+                    break;
+                    case sheet::TableValidationVisibility::UNSORTED:
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_UNSORTED);
+                    break;
+                    case sheet::TableValidationVisibility::SORTEDASCENDING:
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_SORTED_ASCENDING);
+                    break;
+                    default:
+                        DBG_ERROR("unknown ListType");
+                    }
+                }
             }
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
             SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, sal_True, sal_True);
