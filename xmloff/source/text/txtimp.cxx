@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 13:29:57 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
+#include <com/sun/star/text/XTextFrame.hpp>
+#endif
+
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
@@ -148,6 +152,9 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLPROPERTYBACKPATCHTER_HXX
+#include "XMLPropertyBackpatcher.hxx"
+#endif
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
@@ -161,6 +168,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
+
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -194,9 +202,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_bookmark, XML_TOK_TEXT_BOOKMARK },
     { XML_NAMESPACE_TEXT, sXML_bookmark_start, XML_TOK_TEXT_BOOKMARK_START },
     { XML_NAMESPACE_TEXT, sXML_bookmark_end, XML_TOK_TEXT_BOOKMARK_END },
-    { XML_NAMESPACE_TEXT, sXML_reference, XML_TOK_TEXT_REFERENCE },
-    { XML_NAMESPACE_TEXT, sXML_reference_start, XML_TOK_TEXT_REFERENCE_START },
-    { XML_NAMESPACE_TEXT, sXML_reference_end, XML_TOK_TEXT_REFERENCE_END },
+    { XML_NAMESPACE_TEXT, sXML_reference_mark, XML_TOK_TEXT_REFERENCE },
+    { XML_NAMESPACE_TEXT, sXML_reference_mark_start,
+      XML_TOK_TEXT_REFERENCE_START },
+    { XML_NAMESPACE_TEXT, sXML_reference_mark_end,
+      XML_TOK_TEXT_REFERENCE_END },
 
     { XML_NAMESPACE_TEXT, sXML_text_box, XML_TOK_TEXT_TEXTBOX },
     { XML_NAMESPACE_OFFICE, sXML_image, XML_TOK_TEXT_IMAGE },
@@ -308,7 +318,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_page_variable_set, XML_TOK_TEXT_SET_PAGE_VAR },
     { XML_NAMESPACE_TEXT, sXML_execute_macro, XML_TOK_TEXT_MACRO },
     { XML_NAMESPACE_TEXT, sXML_dde_connection, XML_TOK_TEXT_DDE },
-    { XML_NAMESPACE_TEXT, sXML_reference_get, XML_TOK_TEXT_REFERENCE_REF },
+    { XML_NAMESPACE_TEXT, sXML_reference_ref, XML_TOK_TEXT_REFERENCE_REF },
     { XML_NAMESPACE_TEXT, sXML_bookmark_ref, XML_TOK_TEXT_BOOKMARK_REF },
     { XML_NAMESPACE_TEXT, sXML_sequence_ref, XML_TOK_TEXT_SEQUENCE_REF },
     { XML_NAMESPACE_TEXT, sXML_footnote_ref, XML_TOK_TEXT_FOOTNOTE_REF },
@@ -388,6 +398,9 @@ XMLTextImportHelper::XMLTextImportHelper(
     pOutlineStyles( 0 ),
     bInsertMode( bInsertM ),
     bStylesOnlyMode( bStylesOnlyM ),
+    pFootnoteBackpatcher(NULL),
+    pSequenceIdBackpatcher(NULL),
+    pSequenceNameBackpatcher(NULL),
     sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
     sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
     sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")),
@@ -395,7 +408,9 @@ XMLTextImportHelper::XMLTextImportHelper(
     sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
     sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")),
     sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
-    sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+    sSequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+    sSourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
+    sCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM("CurrentPresentation")),
     sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber")),
     sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName")),
     sChainPrevName(RTL_CONSTASCII_USTRINGPARAM("ChainPrevName")),
@@ -403,7 +418,8 @@ XMLTextImportHelper::XMLTextImportHelper(
     sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
     sHyperLinkTarget(RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget")),
     sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
-    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName"))
+    sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
+    sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -1017,69 +1033,75 @@ sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     }
 }
 
+XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
+{
+    if (NULL == pFootnoteBackpatcher)
+    {
+        pFootnoteBackpatcher =
+            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber
+//                                                ,sCurrentPresentation,
+//                                                sal_False, 0
+                );
+    }
+    return *pFootnoteBackpatcher;
+}
+
+XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
+{
+    if (NULL == pSequenceIdBackpatcher)
+    {
+        pSequenceIdBackpatcher =
+            new XMLPropertyBackpatcher<sal_Int16>(sSequenceNumber
+//                                                ,sCurrentPresentation,
+//                                                sal_False, 0
+                );
+    }
+    return *pSequenceIdBackpatcher;
+}
+
+XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
+{
+    if (NULL == pSequenceNameBackpatcher)
+    {
+        pSequenceNameBackpatcher =
+            new XMLPropertyBackpatcher<OUString>(sSourceName
+//                                               ,sCurrentPresentation,
+//                                               sal_False, sSequenceNumber
+                );
+                                            // hack: last parameter not used
+    }
+    return *pSequenceNameBackpatcher;
+}
 
 void XMLTextImportHelper::InsertFootnoteID(
-    const OUString sXMLId,
-    sal_Int32 nAPIId)
+    const OUString& sXMLId,
+    sal_Int16 nAPIId)
 {
-/*  // insert ID into ID list
-    aFootnoteIDMap[sXMLId] = nAPIId;
-
-    // backpatch old references, if backpatch list exists
-    if (aFootnoteBackpatchList.count(sXMLId))
-    {
-        // aah, we have a backpatch list for this footnote.
-        BackpatchListType & aBackpatchList = aFootnoteBackpatchList[sXMLId];
-
-        // a) remove list from global list
-        aFootnoteBackpatchList.erase(sXMLId);
-
-        // b) for every item, set SequenceNumber
-        Any aAny;
-        aAny <<= nAPIId;
-        for(BackpatchListType::iterator aIter = aBackpatchList.begin();
-            aIter != aBackpatchList.end();
-            aIter++)
-        {
-            (*aIter)->setPropertyValue(sPropertySequenceNumber, aAny);
-        }
-
-        // c) delete list
-        // delete pBackpatchList;
-    }
-*/  // else: no backpatch list -> do nothing
+    GetFootnoteBP().ResolveId(sXMLId, nAPIId);
 }
 
 void XMLTextImportHelper::ProcessFootnoteReference(
-    const OUString sXMLId,
+    const OUString& sXMLId,
     const Reference<XPropertySet> & xPropSet)
 {
-    if (aFootnoteIDMap.count(sXMLId))
-    {
-        // we know this ID -> set SequenceNumber
-        Any aAny;
-        aAny <<= aFootnoteIDMap[sXMLId];
-        xPropSet->setPropertyValue(sPropertySequenceNumber, aAny);
-    }
-    else
-    {
-/*      // ID unknown -> into backpatch list for later fixup
-         if (aFootnoteBackpatchList.count(sXMLId))
-        {
-            // create backpatch list for this footnote if necessary
-            BackpatchListType* pTmp = new BackpatchListType() ;
-            aFootnoteBackpatchList[sXMLId] = *pTmp;
-        }
-
-        // insert footnote
-        Reference<XPropertySet> xNonConstPropSet(xPropSet);
-        aFootnoteBackpatchList[sXMLId].push_back(xNonConstPropSet);
-*/  }
+    GetFootnoteBP().SetProperty(xPropSet, sXMLId);
 }
 
-void XMLTextImportHelper::ProcessDanglingFootnoteReferences()
+void XMLTextImportHelper::InsertSequenceID(
+    const OUString& sXMLId,
+    const OUString& sName,
+    sal_Int16 nAPIId)
 {
-    // not implemented yet
+    GetSequenceIdBP().ResolveId(sXMLId, nAPIId);
+    GetSequenceNameBP().ResolveId(sXMLId, sName);
+}
+
+void XMLTextImportHelper::ProcessSequenceReference(
+    const OUString& sXMLId,
+    const Reference<XPropertySet> & xPropSet)
+{
+    GetSequenceIdBP().SetProperty(xPropSet, sXMLId);
+    GetSequenceNameBP().SetProperty(xPropSet, sXMLId);
 }
 
 
@@ -1142,3 +1164,27 @@ void XMLTextImportHelper::ConnectFrameChains(
     }
 }
 
+sal_Bool XMLTextImportHelper::IsInFrame()
+{
+    sal_Bool bIsInFrame = sal_False;
+
+    // are we currently in a text frame? yes, if the cursor has a
+    // TextFrame property and it's non-NULL
+    Reference<XPropertySet> xPropSet(GetCursor(), UNO_QUERY);
+    if (xPropSet.is())
+    {
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextFrame))
+        {
+            Any aAny = xPropSet->getPropertyValue(sTextFrame);
+            Reference<XTextFrame> xFrame;
+            aAny >>= xFrame;
+
+            if (xFrame.is())
+            {
+                bIsInFrame = sal_True;
+            }
+        }
+    }
+
+    return bIsInFrame;
+}

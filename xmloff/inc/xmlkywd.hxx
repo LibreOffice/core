@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:09:04 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ XML_CONSTASCII_ACTION( sXML_char, "char" );
 XML_CONSTASCII_ACTION( sXML_character_count, "character-count" );
 XML_CONSTASCII_ACTION( sXML_chart, "chart" );
 XML_CONSTASCII_ACTION( sXML_circle, "circle" );
-XML_CONSTASCII_ACTION( sXML_citation, "citation");
+XML_CONSTASCII_ACTION( sXML_citation_body_style_name, "citation-body-style-name" );
 XML_CONSTASCII_ACTION( sXML_citation_style_name, "citation-style-name" );
 XML_CONSTASCII_ACTION( sXML_class, "class" );
 XML_CONSTASCII_ACTION( sXML_clip, "clip" );
@@ -264,6 +264,7 @@ XML_CONSTASCII_ACTION( sXML_condition_source_range_address, "condition-source-ra
 XML_CONSTASCII_ACTION( sXML_conditional_text, "conditional-text" );
 XML_CONSTASCII_ACTION( sXML_cone, "cone" );
 XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
+XML_CONSTASCII_ACTION( sXML_connection_name, "connection-name" );
 XML_CONSTASCII_ACTION( sXML_connector, "connector" );
 XML_CONSTASCII_ACTION( sXML_consecutive_numbering, "consecutive-numbering" );
 XML_CONSTASCII_ACTION( sXML_constant, "constant" );
@@ -333,8 +334,8 @@ XML_CONSTASCII_ACTION( sXML_dde_command, "dde-command" );
 XML_CONSTASCII_ACTION( sXML_dde_connection, "dde-connection" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decl, "dde-connection-decl" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decls, "dde-connection-decls" );
-XML_CONSTASCII_ACTION( sXML_dde_file, "dde-file" );
-XML_CONSTASCII_ACTION( sXML_dde_target, "dde-target" );
+XML_CONSTASCII_ACTION( sXML_dde_file_name, "dde-file-name" );
+XML_CONSTASCII_ACTION( sXML_dde_target_name, "dde-target-name" );
 XML_CONSTASCII_ACTION( sXML_decimal_places, "decimal-places" );
 XML_CONSTASCII_ACTION( sXML_decimal_replacement, "decimal-replacement" );
 XML_CONSTASCII_ACTION( sXML_decorate_words_only, "decorate-words-only" );
@@ -377,6 +378,8 @@ XML_CONSTASCII_ACTION( sXML_end_color, "end-color" );
 XML_CONSTASCII_ACTION( sXML_end_intensity, "end-intensity" );
 XML_CONSTASCII_ACTION( sXML_end_transparency, "end-transparency" );
 XML_CONSTASCII_ACTION( sXML_endnote, "endnote" );
+XML_CONSTASCII_ACTION( sXML_endnote_body, "endnote-body" );
+XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
@@ -433,6 +436,10 @@ XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_footer, "footer" );
 XML_CONSTASCII_ACTION( sXML_footnote, "footnote" );
+XML_CONSTASCII_ACTION( sXML_footnote_body, "footnote-body" );
+XML_CONSTASCII_ACTION( sXML_footnote_citation, "footnote-citation" );
+XML_CONSTASCII_ACTION( sXML_footnote_continuation_notice_backward, "footnote-continuation-notice-backward" );
+XML_CONSTASCII_ACTION( sXML_footnote_continuation_notice_forward, "footnote-continuation-notice-forward" );
 XML_CONSTASCII_ACTION( sXML_footnote_ref, "footnote-ref" );
 XML_CONSTASCII_ACTION( sXML_footnotes_configuration, "footnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
@@ -751,9 +758,14 @@ XML_CONSTASCII_ACTION( sXML_range_address, "range-address");
 XML_CONSTASCII_ACTION( sXML_range_usable_as, "range-usable-as");
 XML_CONSTASCII_ACTION( sXML_rect , "rect" );
 XML_CONSTASCII_ACTION( sXML_red , "red" );
+XML_CONSTASCII_ACTION( sXML_ref_name, "ref-name" );
 XML_CONSTASCII_ACTION( sXML_reference, "reference" );
 XML_CONSTASCII_ACTION( sXML_reference_end, "reference-end" );
-XML_CONSTASCII_ACTION( sXML_reference_get, "reference-get" );
+XML_CONSTASCII_ACTION( sXML_reference_format, "reference-format" );
+XML_CONSTASCII_ACTION( sXML_reference_mark, "reference-mark" );
+XML_CONSTASCII_ACTION( sXML_reference_mark_end, "reference-mark-end" );
+XML_CONSTASCII_ACTION( sXML_reference_mark_start, "reference-mark-start" );
+XML_CONSTASCII_ACTION( sXML_reference_ref, "reference-ref" );
 XML_CONSTASCII_ACTION( sXML_reference_start, "reference-start" );
 XML_CONSTASCII_ACTION( sXML_reference_type, "reference-type" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );

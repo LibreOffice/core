@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: john.marmion $ $Date: 2000-09-26 14:12:15 $
+#   last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,11 +99,13 @@ CXXFILES = \
         XMLTextListAutoStylePool.cxx \
         XMLTextListBlockContext.cxx \
         XMLFootnoteImportContext.cxx \
+        XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLTextMarkImportContext.cxx \
         XMLTextColumnsContext.cxx \
         XMLTextListItemContext.cxx \
-        XMLTextPropertySetContext.cxx
+        XMLTextPropertySetContext.cxx \
+        XMLPropertyBackpatcher.cxx
 
 SLOFILES =	\
         $(SLO)$/txtdrope.obj \
@@ -128,11 +130,14 @@ SLOFILES =	\
         $(SLO)$/XMLTextListAutoStylePool.obj \
         $(SLO)$/XMLTextListBlockContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
+        $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLTextMarkImportContext.obj \
         $(SLO)$/XMLTextListItemContext.obj \
         $(SLO)$/XMLTextNumRuleInfo.obj \
-        $(SLO)$/XMLTextPropertySetContext.obj
+        $(SLO)$/XMLTextPropertySetContext.obj \
+        $(SLO)$/XMLPropertyBackpatcher.obj
+
 
 # --- Tagets -------------------------------------------------------
 

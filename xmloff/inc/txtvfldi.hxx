@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,10 +465,13 @@ class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 {
     const ::rtl::OUString sPropertyFormula;
     const ::rtl::OUString sPropertyNumberFormat;
+    const ::rtl::OUString sPropertySequenceValue;
     ::rtl::OUString sFormula;
-
     ::rtl::OUString sNumFormat;
     ::rtl::OUString sNumFormatSync;
+    ::rtl::OUString sRefName;
+
+    sal_Bool bRefNameOK;
 
 public:
 

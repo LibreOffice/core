@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,12 +304,14 @@ const sal_Char sAPI_level[]             = "Level";
 const sal_Char sAPI_is_date[]           = "IsDate";
 const sal_Char sAPI_adjust[]            = "Adjust";
 const sal_Char sAPI_on[]                = "On";
-const sal_Char sAPI_dde_command[]       = "DDECommand";
 const sal_Char sAPI_is_automatic_update[] = "IsAutomaticUpdate";
 const sal_Char sAPI_source_name[]       = "SourceName";
 const sal_Char sAPI_current_presentation[] = "CurrentPresentation";
 const sal_Char sAPI_reference_field_part[] = "ReferenceFieldPart";
 const sal_Char sAPI_reference_field_source[] = "ReferenceFieldSource";
+const sal_Char sAPI_dde_command_type[]  = "DDECommandType";
+const sal_Char sAPI_dde_command_file[]  = "DDECommandFile";
+const sal_Char sAPI_dde_command_element[] = "DDECommandElement";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -357,8 +359,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_editing_cycles, XML_TOK_TEXTFIELD_REVISION },
     { XML_NAMESPACE_TEXT, sXML_outline_level, XML_TOK_TEXTFIELD_OUTLINE_LEVEL},
     { XML_NAMESPACE_TEXT, sXML_active, XML_TOK_TEXTFIELD_ACTIVE },
-    { XML_NAMESPACE_TEXT, sXML_reference_type,
-      XML_TOK_TEXTFIELD_REFERENCE_TYPE },
+    { XML_NAMESPACE_TEXT, sXML_reference_format,
+                XML_TOK_TEXTFIELD_REFERENCE_FORMAT },
+    { XML_NAMESPACE_TEXT, sXML_ref_name, XML_TOK_TEXTFIELD_REF_NAME },
+    { XML_NAMESPACE_TEXT, sXML_connection_name,
+      XML_TOK_TEXTFIELD_CONNECTION_NAME },
     XML_TOKEN_MAP_END
 };
 
@@ -2487,6 +2492,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
         sName(),
         bNameOK(sal_False),
         bTypeOK(sal_False),
+        bSeqNumberOK(sal_False),
         nElementToken(nToken),
         sPropertyReferenceFieldPart(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_reference_field_part)),
@@ -2547,11 +2553,11 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_NAME:
+        case XML_TOK_TEXTFIELD_REF_NAME:
             sName = sAttrValue;
             bNameOK = sal_True;
             break;
-        case XML_TOK_TEXTFIELD_REFERENCE_TYPE:
+        case XML_TOK_TEXTFIELD_REFERENCE_FORMAT:
         {
             sal_uInt16 nToken;
             if (SvXMLUnitConverter::convertEnum(nToken, sAttrValue,
@@ -2573,6 +2579,7 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
         }
     }
 
+    // bValid: we need proper element type and name
     bValid = bTypeOK && bNameOK;
 }
 
@@ -2591,7 +2598,6 @@ void XMLReferenceFieldImportContext::PrepareField(
     {
         case XML_TOK_TEXT_REFERENCE_REF:
         case XML_TOK_TEXT_BOOKMARK_REF:
-        case XML_TOK_TEXT_SEQUENCE_REF:
             aAny <<= sName;
             xPropertySet->setPropertyValue(sPropertySourceName, aAny);
             break;
@@ -2599,6 +2605,10 @@ void XMLReferenceFieldImportContext::PrepareField(
         case XML_TOK_TEXT_FOOTNOTE_REF:
         case XML_TOK_TEXT_ENDNOTE_REF:
             GetImportHelper().ProcessFootnoteReference(sName, xPropertySet);
+            break;
+
+        case XML_TOK_TEXT_SEQUENCE_REF:
+            GetImportHelper().ProcessSequenceReference(sName, xPropertySet);
             break;
     }
 
@@ -2615,14 +2625,20 @@ void XMLReferenceFieldImportContext::PrepareField(
 enum DdeFieldDeclAttrs
 {
     XML_TOK_DDEFIELD_NAME,
-    XML_TOK_DDEFIELD_COMMAND,
+    XML_TOK_DDEFIELD_COMMAND_TARGET,
+    XML_TOK_DDEFIELD_COMMAND_FILE,
+    XML_TOK_DDEFIELD_COMMAND_ELEMENT,
     XML_TOK_DDEFIELD_UPDATE
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_DDEFIELD_NAME },
-    { XML_NAMESPACE_TEXT, sXML_command, XML_TOK_DDEFIELD_COMMAND },
+    { XML_NAMESPACE_TEXT, sXML_dde_target_name,
+          XML_TOK_DDEFIELD_COMMAND_TARGET },
+    { XML_NAMESPACE_TEXT, sXML_dde_file_name,
+          XML_TOK_DDEFIELD_COMMAND_FILE },
+    { XML_NAMESPACE_TEXT, sXML_dde_command, XML_TOK_DDEFIELD_COMMAND_ELEMENT },
     { XML_NAMESPACE_TEXT, sXML_automatic_update, XML_TOK_DDEFIELD_UPDATE },
     XML_TOKEN_MAP_END
 };
@@ -2668,8 +2684,10 @@ XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
     const OUString& sLocalName, const SvXMLTokenMap& rMap) :
         SvXMLImportContext(rImport, nPrfx, sLocalName),
         rTokenMap(rMap),
-        sPropertyDDECommand(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command)),
         sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name)),
+        sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_type)),
+        sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_file)),
+        sPropertyDDECommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_dde_command_element)),
         sPropertyIsAutomaticUpdate(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_is_automatic_update))
 {
@@ -2682,10 +2700,15 @@ void XMLDdeFieldDeclImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     OUString sName;
-    OUString sCommand;
+    OUString sCommandTarget;
+    OUString sCommandFile;
+    OUString sCommandElement;
+
     sal_Bool bUpdate = sal_False;
     sal_Bool bNameOK = sal_False;
-    sal_Bool bCommandOK = sal_False;
+    sal_Bool bCommandTargetOK = sal_False;
+    sal_Bool bCommandFileOK = sal_False;
+    sal_Bool bCommandElementOK = sal_False;
 
     // process attributes
     sal_Int32 nLength = xAttrList->getLength();
@@ -2702,9 +2725,17 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 sName = xAttrList->getValueByIndex(i);
                 bNameOK = sal_True;
                 break;
-            case XML_TOK_DDEFIELD_COMMAND:
-                sCommand = xAttrList->getValueByIndex(i);
-                bCommandOK = sal_True;
+            case XML_TOK_DDEFIELD_COMMAND_TARGET:
+                sCommandTarget = xAttrList->getValueByIndex(i);
+                bCommandTargetOK = sal_True;
+                break;
+            case XML_TOK_DDEFIELD_COMMAND_FILE:
+                sCommandFile = xAttrList->getValueByIndex(i);
+                bCommandFileOK = sal_True;
+                break;
+            case XML_TOK_DDEFIELD_COMMAND_ELEMENT:
+                sCommandElement = xAttrList->getValueByIndex(i);
+                bCommandElementOK = sal_True;
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {
@@ -2720,7 +2751,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
     }
 
     // valid data?
-    if (bNameOK && bCommandOK)
+    if (bNameOK && bCommandTargetOK && bCommandFileOK && bCommandElementOK)
     {
         // make service name
         OUStringBuffer sBuf;
@@ -2744,8 +2775,15 @@ void XMLDdeFieldDeclImportContext::StartElement(
                     aAny <<= sName;
                     xPropSet->setPropertyValue(sPropertyName, aAny);
 
-                    aAny <<= sCommand;
-                    xPropSet->setPropertyValue(sPropertyDDECommand, aAny);
+                    aAny <<= sCommandTarget;
+                    xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
+
+                    aAny <<= sCommandFile;
+                    xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
+
+                    aAny <<= sCommandElement;
+                    xPropSet->setPropertyValue(sPropertyDDECommandElement,
+                                               aAny);
 
                     aAny.setValue(&bUpdate, ::getBooleanCppuType());
                     xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
@@ -2781,7 +2819,7 @@ void XMLDdeFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const ::rtl::OUString& sAttrValue )
 {
-    if (XML_TOK_TEXTFIELD_NAME == nAttrToken)
+    if (XML_TOK_TEXTFIELD_CONNECTION_NAME == nAttrToken)
     {
         sName = sAttrValue;
         bValid = sal_True;

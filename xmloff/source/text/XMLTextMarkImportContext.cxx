@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,13 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
 
 static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
 {
-    { sXML_reference,       TypeReference },
-    { sXML_reference_start, TypeReferenceStart },
-    { sXML_reference_end,   TypeReferenceEnd },
-    { sXML_bookmark,        TypeBookmark },
-    { sXML_bookmark_start,  TypeBookmarkStart },
-    { sXML_bookmark_end,    TypeBookmarkEnd },
-    { 0,                0 },
+    { sXML_reference_mark,          TypeReference },
+    { sXML_reference_mark_start,    TypeReferenceStart },
+    { sXML_reference_mark_end,      TypeReferenceEnd },
+    { sXML_bookmark,                TypeBookmark },
+    { sXML_bookmark_start,          TypeBookmarkStart },
+    { sXML_bookmark_end,            TypeBookmarkEnd },
+    { 0,                            0 },
 };
 
 void XMLTextMarkImportContext::StartElement(

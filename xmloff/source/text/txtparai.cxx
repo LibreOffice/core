@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-27 14:44:34 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,8 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
 
 class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
+    const OUString sTextFrame;
+
     XMLHints_Impl&  rHints;
     XMLStyleHint_Impl   *pHint;
 
@@ -593,7 +595,8 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rHints( rHnts ),
     rIgnoreLeadingSpace( rIgnLeadSpace ),
-    pHint( 0  )
+    pHint( 0  ),
+    sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame"))
 {
     OUString aStyleName;
 
@@ -674,9 +677,18 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
 
     case XML_TOK_TEXT_ENDNOTE:
     case XML_TOK_TEXT_FOOTNOTE:
-        pContext = new XMLFootnoteImportContext( rImport,
-                                                 *rImport.GetTextImport().get(),
-                                                 nPrefix, rLocalName );
+        if (rImport.GetTextImport()->IsInFrame())
+        {
+            // we must not insert footnotes into text frames
+            pContext = new SvXMLImportContext( rImport, nPrefix,
+                                               rLocalName );
+        }
+        else
+        {
+            pContext = new XMLFootnoteImportContext( rImport,
+                                                     *rImport.GetTextImport().get(),
+                                                     nPrefix, rLocalName );
+        }
         rIgnoreLeadingSpace = sal_False;
         break;
 

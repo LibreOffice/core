@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 09:49:31 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,12 +232,22 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_label,
                                          sLabel);
             }
+            // else: automatic numbering -> no attribute
+
             SvXMLElementExport aCite(GetExport(), XML_NAMESPACE_TEXT,
-                                     sXML_citation, sal_False, sal_False);
+                                     (bIsEndnote ? sXML_endnote_citation :
+                                                   sXML_footnote_citation),
+                                     sal_False, sal_False);
             GetExport().GetDocHandler()->characters(sText);
         }
 
-        exportText(rText, bAutoStyles);
+        {
+            SvXMLElementExport aBody(GetExport(), XML_NAMESPACE_TEXT,
+                                     (bIsEndnote ? sXML_endnote_body :
+                                                   sXML_footnote_body),
+                                     sal_False, sal_False);
+            exportText(rText, bAutoStyles);
+        }
     }
 }
 
@@ -369,7 +379,8 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
                 sEndNotice);
             aAny >>= sTmp;
             SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_TEXT, sXML_quo_vadis,
+                                     XML_NAMESPACE_TEXT,
+                                     sXML_footnote_continuation_notice_forward,
                                      sal_True, sal_False);
             GetExport().GetDocHandler()->characters(sTmp);
         }
@@ -380,7 +391,8 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
                 sBeginNotice);
             aAny >>= sTmp;
             SvXMLElementExport aElem(GetExport(),
-                                     XML_NAMESPACE_TEXT, sXML_ergo_sum,
+                                     XML_NAMESPACE_TEXT,
+                                    sXML_footnote_continuation_notice_backward,
                                      sal_True, sal_False);
             GetExport().GetDocHandler()->characters(sTmp);
         }

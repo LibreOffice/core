@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,7 @@ void XMLTextParagraphExport::exportParagraph(
 // element names. We use the same method for export and it an array with
 // the proper element names
 static const sal_Char* lcl_XmlReferenceElements[] = {
-    sXML_reference, sXML_reference_start, sXML_reference_end };
+    sXML_reference_mark, sXML_reference_mark_start, sXML_reference_mark_end };
 static const sal_Char* lcl_XmlBookmarkElements[] = {
     sXML_bookmark, sXML_bookmark_start, sXML_bookmark_end };
 
@@ -1045,9 +1045,9 @@ void XMLTextParagraphExport::exportTextMark(
         DBG_ASSERT(pElements != NULL, "illegal element array");
         DBG_ASSERT(nElement >= 0, "illegal element number");
         DBG_ASSERT(nElement <= 2, "illegal element number");
-        SvXMLElementExport(GetExport(),
-                           XML_NAMESPACE_TEXT, pElements[nElement],
-                           sal_False, sal_False);
+        SvXMLElementExport aElem(GetExport(),
+                                 XML_NAMESPACE_TEXT, pElements[nElement],
+                                 sal_False, sal_False);
     }
     // else: no styles. (see above)
 }

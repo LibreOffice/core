@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,9 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_STRING_VALUE_IF_FALSE,
     XML_TOK_TEXTFIELD_REVISION,
 
-    XML_TOK_TEXTFIELD_REFERENCE_TYPE,
+    XML_TOK_TEXTFIELD_REFERENCE_FORMAT,
+    XML_TOK_TEXTFIELD_REF_NAME,
+    XML_TOK_TEXTFIELD_CONNECTION_NAME,
 
     XML_TOK_TEXTFIELD_UNKNOWN
 };
@@ -1094,9 +1096,11 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
     sal_uInt16 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
+    sal_Int16 nSequenceNumber;
 
     sal_Bool bNameOK;
     sal_Bool bTypeOK;
+    sal_Bool bSeqNumberOK;
 
 public:
 
@@ -1155,10 +1159,11 @@ public:
 /** import dde field declaration (<text:dde-connection-decl>) */
 class XMLDdeFieldDeclImportContext : public SvXMLImportContext
 {
-
-    const ::rtl::OUString sPropertyDDECommand;
     const ::rtl::OUString sPropertyIsAutomaticUpdate;
     const ::rtl::OUString sPropertyName;
+    const ::rtl::OUString sPropertyDDECommandType;
+    const ::rtl::OUString sPropertyDDECommandFile;
+    const ::rtl::OUString sPropertyDDECommandElement;
 
     const SvXMLTokenMap& rTokenMap;
 

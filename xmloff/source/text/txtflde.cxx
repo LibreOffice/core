@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -204,6 +208,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::container;
 
 
 static sal_Char __READONLY_DATA FIELD_SERVICE_SENDER[] = "ExtendedUser";
@@ -395,8 +400,8 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp )
           RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldType")),
       sPropertyReferenceFieldSource(
           RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldSource")),
-      sPropertySequenceNumber(
-          RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+      sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
+      sPropertySequenceValue(RTL_CONSTASCII_USTRINGPARAM("SequenceValue")),
       sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
       sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
       sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
@@ -976,16 +981,23 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         break;
 
     case FIELD_ID_SEQUENCE:
+    {
         // sequence field: name, formula, seq-format
-        ProcessString(sXML_name,
-                      GetStringProperty(sPropertyVariableName, xPropSet));
+        OUString sName = GetStringProperty(sPropertyVariableName, xPropSet);
+        // TODO: use reference name only if actually beeing referenced.
+        ProcessString(sXML_ref_name,
+                      MakeSequenceRefName(
+                          GetInt16Property(sPropertySequenceValue, xPropSet),
+                          sName));
+        ProcessString(sXML_name, sName);
         ProcessString(sXML_formula,
                       GetStringProperty(sPropertyContent, xPropSet),
                       sPresentation);
-        ProcessNumberingType(GetInt16Property(
-            sPropertyNumberingType, xPropSet));
+        ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
+                                              xPropSet));
         ExportElement(sXML_sequence, sPresentation);
         break;
+    }
 
     case FIELD_ID_EXPRESSION:
     {
@@ -1269,30 +1281,48 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         ExportElement(sXML_execute_macro, sPresentation);
         break;
 
-    case FIELD_ID_REF_REFERENCE:
     case FIELD_ID_REF_SEQUENCE:
-    case FIELD_ID_REF_BOOKMARK:
-    case FIELD_ID_REF_FOOTNOTE:
-    case FIELD_ID_REF_ENDNOTE:
-        ProcessString(sXML_reference_type,
+        // reference to sequence: format, name, find value (and element)
+        // was: if (nSeqNumber != -1) ...
+        ProcessString(sXML_reference_format,
                       MapReferenceType(GetInt16Property(
                           sPropertyReferenceFieldPart, xPropSet)),
                       sXML_template);
-        if ( (FIELD_ID_REF_FOOTNOTE == nToken) ||
-             (FIELD_ID_REF_ENDNOTE == nToken)     )
-        {
-            OUStringBuffer aBuf;
-            aBuf.appendAscii("ftn");
-            aBuf.append(GetIntProperty(sPropertySequenceNumber, xPropSet));
-            ProcessString(sXML_name,
-                          aBuf.makeStringAndClear());
-        }
-        else
-        {
-            // bookmark, reference, sequence: get name
-            ProcessString(sXML_name,
-                          GetStringProperty(sPropertySourceName, xPropSet));
-        }
+        ProcessString(sXML_ref_name,
+                      MakeSequenceRefName(
+                          GetInt16Property(sPropertySequenceNumber, xPropSet),
+                          GetStringProperty(sPropertySourceName, xPropSet) ) );
+        ExportElement(
+            MapReferenceSource(
+                GetInt16Property(sPropertyReferenceFieldSource, xPropSet)),
+            sPresentation);
+        break;
+
+    case FIELD_ID_REF_REFERENCE:
+    case FIELD_ID_REF_BOOKMARK:
+        // reference to bookmarks, references: format, name (and element)
+        ProcessString(sXML_reference_format,
+                      MapReferenceType(GetInt16Property(
+                          sPropertyReferenceFieldPart, xPropSet)),
+                      sXML_template);
+        ProcessString(sXML_ref_name,
+                      GetStringProperty(sPropertySourceName, xPropSet));
+        ExportElement(
+            MapReferenceSource(GetInt16Property(
+                sPropertyReferenceFieldSource, xPropSet)),
+            sPresentation);
+        break;
+
+    case FIELD_ID_REF_FOOTNOTE:
+    case FIELD_ID_REF_ENDNOTE:
+        // reference to end-/footnote: format, generate name, (and element)
+        ProcessString(sXML_reference_format,
+                      MapReferenceType(GetInt16Property(
+                          sPropertyReferenceFieldPart, xPropSet)),
+                      sXML_template);
+        ProcessString(sXML_ref_name,
+                      MakeFootnoteRefName(GetIntProperty(
+                          sPropertySequenceNumber, xPropSet)));
         ExportElement(
             MapReferenceSource(GetInt16Property(
                 sPropertyReferenceFieldSource, xPropSet)),
@@ -1301,7 +1331,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 
     case FIELD_ID_DDE:
         // name from parent
-         ProcessString(sXML_name,
+         ProcessString(sXML_connection_name,
                        GetStringProperty(sPropertyName,
                                          GetMasterPropertySet(rTextField)));
         ExportElement(sXML_dde_connection, sPresentation);
@@ -1560,9 +1590,9 @@ void XMLTextFieldExport::ExportFieldDeclarations()
             // export element
             ProcessString(sXML_name,
                           GetStringProperty(sPropertyName, xPropSet));
-            ProcessString(sXML_dde_target,
+            ProcessString(sXML_dde_target_name,
                       GetStringProperty(sPropertyDDECommandType, xPropSet));
-            ProcessString(sXML_dde_file,
+            ProcessString(sXML_dde_file_name,
                       GetStringProperty(sPropertyDDECommandFile, xPropSet));
             ProcessString(sXML_dde_command,
                       GetStringProperty(sPropertyDDECommandElement, xPropSet));
@@ -2289,7 +2319,7 @@ const sal_Char* XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
     switch (nType)
     {
         case ReferenceFieldSource::REFERENCE_MARK:
-            pElementName = sXML_reference_get;
+            pElementName = sXML_reference_ref;
             break;
         case ReferenceFieldSource::SEQUENCE_FIELD:
             pElementName = sXML_sequence_ref;
@@ -2449,6 +2479,27 @@ const sal_Char* XMLTextFieldExport::MapDocInfoFieldName(
 }
 
 
+OUString XMLTextFieldExport::MakeFootnoteRefName(
+    sal_Int16 nSeqNo)
+{
+    // generate foot-/endnote ID
+    OUStringBuffer aBuf;
+    aBuf.appendAscii("ftn");
+    aBuf.append((sal_Int32)nSeqNo);
+    return aBuf.makeStringAndClear();
+}
+
+OUString XMLTextFieldExport::MakeSequenceRefName(
+    sal_Int16 nSeqNo,
+    const OUString& rSeqName)
+{
+    // generate foot-/endnote ID
+    OUStringBuffer aBuf;
+    aBuf.appendAscii("ref");
+    aBuf.append(rSeqName);
+    aBuf.append((sal_Int32)nSeqNo);
+    return aBuf.makeStringAndClear();
+}
 
 //
 // Property accessor helper functions

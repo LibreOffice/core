@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,15 +376,17 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     {
         if (XML_NAMESPACE_TEXT == nPrefix)
         {
-            if (rLocalName.equalsAsciiL(sXML_quo_vadis,
-                                        sizeof(sXML_quo_vadis)-1))
+            if (rLocalName.equalsAsciiL(
+                    sXML_footnote_continuation_notice_forward,
+                    sizeof(sXML_footnote_continuation_notice_forward)-1))
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
                                                        *this, sal_False);
             }
-            else if (rLocalName.equalsAsciiL(sXML_ergo_sum,
-                                             sizeof(sXML_ergo_sum)-1))
+            else if (rLocalName.equalsAsciiL(
+                    sXML_footnote_continuation_notice_backward,
+                    sizeof(sXML_footnote_continuation_notice_backward)-1))
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,

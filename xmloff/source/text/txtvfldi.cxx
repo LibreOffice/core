@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ static const sal_Char sAPI_variable_subtype[]   = "VariableSubtype";
 static const sal_Char sAPI_data_column_name[]   = "DataColumnName";
 static const sal_Char sAPI_is_data_base_format[]    = "DataBaseFormat";
 static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
+static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
 
 
 using namespace rtl;
@@ -445,7 +446,11 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     sal_False, sal_False, sal_False, sal_True),
         sNumFormat(sal_Unicode('1')),
         sNumFormatSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format))
+        sRefName(),
+        bRefNameOK(sal_False),
+        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
+        sPropertySequenceValue(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_sequence_value))
 {
 }
 
@@ -460,7 +465,10 @@ void XMLSequenceFieldImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_NUM_LETTER_SYNC:
             sNumFormatSync = sAttrValue;
             break;
-
+        case XML_TOK_TEXTFIELD_REF_NAME:
+            sRefName = sAttrValue;
+            bRefNameOK = sal_True;
+            break;
         default:
             // delegate to super class (name, formula)
             XMLSetVarFieldImportContext::ProcessAttribute(nAttrToken,
@@ -479,6 +487,15 @@ void XMLSequenceFieldImportContext::PrepareField(
     Any aAny;
     aAny <<= SvxXMLListStyleContext::GetNumType(sNumFormat, sNumFormatSync);
     xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+
+    // handle reference name
+    if (bRefNameOK)
+    {
+        aAny = xPropertySet->getPropertyValue(sPropertySequenceValue);
+        sal_Int16 nValue;
+        aAny >>= nValue;
+        GetImportHelper().InsertSequenceID(sRefName, GetName(), nValue);
+    }
 }
 
 

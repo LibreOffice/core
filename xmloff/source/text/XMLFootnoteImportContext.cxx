@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLFOOTNOTEBODYIMPORTCONTEXT_HXX
+#include "XMLFootnoteBodyImportContext.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
@@ -124,6 +128,24 @@ TYPEINIT1(XMLFootnoteImportContext, SvXMLImportContext);
 const sal_Char sAPI_service_footnote[] = "com.sun.star.text.Footnote";
 const sal_Char sAPI_service_endnote[] = "com.sun.star.text.Endnote";
 
+enum XMLFootnoteChildToken {
+    XML_TOK_FTN_FOOTNOTE_CITATION,
+    XML_TOK_FTN_ENDNOTE_CITATION,
+    XML_TOK_FTN_FOOTNOTE_BODY,
+    XML_TOK_FTN_ENDNOTE_BODY
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT, sXML_footnote_citation,
+      XML_TOK_FTN_FOOTNOTE_CITATION },
+    { XML_NAMESPACE_TEXT, sXML_endnote_citation,
+      XML_TOK_FTN_ENDNOTE_CITATION },
+    { XML_NAMESPACE_TEXT, sXML_footnote_body, XML_TOK_FTN_FOOTNOTE_BODY },
+    { XML_NAMESPACE_TEXT, sXML_endnote_body, XML_TOK_FTN_ENDNOTE_BODY },
+    XML_TOKEN_MAP_END
+};
+
 
 XMLFootnoteImportContext::XMLFootnoteImportContext(
     SvXMLImport& rImport,
@@ -141,7 +163,8 @@ void XMLFootnoteImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // create footnote
-    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
+    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
+                                             UNO_QUERY);
     if( xFactory.is() )
     {
         // create endnote or footnote
@@ -213,41 +236,58 @@ void XMLFootnoteImportContext::EndElement()
     rHelper.SetCursor(xOldCursor);
 }
 
+
 SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-         (0 == rLocalName.compareToAscii(sXML_citation)) )
+    SvXMLImportContext* pContext = NULL;
+
+    SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
+
+    switch(aTokenMap.Get(nPrefix, rLocalName))
     {
-        // little hack: we only care for one attribute of the citation
-        //              element. We handle that here, and then return a default
-        //              context.
-        sal_Int32 nLength = xAttrList->getLength();
-        for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
+        case XML_TOK_FTN_FOOTNOTE_CITATION:
+        case XML_TOK_FTN_ENDNOTE_CITATION:
         {
-
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                  &sLocalName );
-
-            if ( (nPrefix == XML_NAMESPACE_TEXT) &&
-                 (0 == sLocalName.compareToAscii(sXML_label)) )
+            // little hack: we only care for one attribute of the citation
+            //              element. We handle that here, and then return a
+            //              default context.
+            sal_Int32 nLength = xAttrList->getLength();
+            for(sal_Int32 nAttr = 0; nAttr < nLength; nAttr++)
             {
-                xFootnote->setLabel(xAttrList->getValueByIndex(nAttr));
+                OUString sLocalName;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                    GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                                      &sLocalName );
+
+                if ( (nPrefix == XML_NAMESPACE_TEXT) &&
+                     (0 == sLocalName.compareToAscii(sXML_label)) )
+                {
+                    xFootnote->setLabel(xAttrList->getValueByIndex(nAttr));
+                }
             }
+
+            // ignore content: return default context
+            pContext = new SvXMLImportContext(GetImport(),
+                                              nPrefix, rLocalName);
+            break;
         }
 
-        // ignore content: return default context
-        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+        case XML_TOK_FTN_FOOTNOTE_BODY:
+        case XML_TOK_FTN_ENDNOTE_BODY:
+            // return footnote body
+            pContext = new XMLFootnoteBodyImportContext(GetImport(),
+                                                        nPrefix, rLocalName);
+            break;
+        default:
+            // default:
+            pContext = SvXMLImportContext::CreateChildContext(nPrefix,
+                                                              rLocalName,
+                                                              xAttrList);
+            break;
     }
-    else
-    {
-        // return text context
-        return rHelper.CreateTextChildContext(GetImport(),
-                                              nPrefix, rLocalName,
-                                              xAttrList);
-    }
+
+    return pContext;
 }
