@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:23:02 $
+ *  last change: $Author: os $ $Date: 2001-12-17 14:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,14 +106,14 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "T~odos" ;
         Text [ english_us ] = "~All" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "È«²¿(~A)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
         Text[ russian ] = "Âñå";
         Text[ polish ] = "Wszystkie";
-        Text[ japanese ] = "‚·‚×‚Ä(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡(~A)";
+        Text[ japanese ] = "ã™ã¹ã¦(~A)";
+        Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
         Text[ arabic ] = "Çáßá";
         Text[ greek ] = "¼ëá";
-        Text[ korean ] = "ÀüÃ¼(~A)";
+        Text[ korean ] = "ì „ì²´(~A)";
         Text[ turkish ] = "Tümü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "T~odos";
@@ -136,14 +136,14 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "~Registros seleccionados" ;
         Text [ english_us ] = "~Selected records" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ñ¡ÖĞµÄÊı¾İÌõÄ¿(~S)";
+        Text[ chinese_simplified ] = "é€‰ä¸­çš„æ•°æ®æ¡ç›®(~S)";
         Text[ russian ] = "Âûäåëåííûå çàïèñè";
         Text[ polish ] = "Zaznaczone rekordy";
-        Text[ japanese ] = "‘I‘ğ‚µ‚½Úº°ÄŞ(~S)";
-        Text[ chinese_traditional ] = "¿ï¨úªº¸ê®Æ±ø¥Ø(~S)";
+        Text[ japanese ] = "é¸æŠã—ãŸãƒ¬ã‚³ãƒ¼ãƒ‰(~S)";
+        Text[ chinese_traditional ] = "é¸å–çš„è³‡æ–™æ¢ç›®(~S)";
         Text[ arabic ] = "ÇáÓÌáÇÊ ÇáãÍÏÏÉ";
         Text[ greek ] = "Åğéëåãìİíåò åããñáöİò";
-        Text[ korean ] = "¸¶Å·Ç¥½ÃµÈ µ¥ÀÌÅÍ ·¹ÄÚµå(~S)";
+        Text[ korean ] = "ì„ íƒ í‘œì‹œëœ ë°ì´í„° ë ˆì½”ë“œ(~S)";
         Text[ turkish ] = "Seçili veri kümeleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Registros seleccionados";
@@ -158,7 +158,7 @@ ModalDialog DLG_MAILMERGE
         Text [ italian ] = "~Da:" ;
         Text [ portuguese_brazilian ] = "~De:" ;
         Text [ portuguese ] = "~De:" ;
-        Text [ finnish ] = "~Kohteesta:" ;
+        Text [ finnish ] = "~Kohde:" ;
         Text [ danish ] = "Fra:" ;
         Text [ french ] = "~De :" ;
         Text [ swedish ] = "~Från:" ;
@@ -166,14 +166,14 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "~Del:" ;
         Text [ english_us ] = "~From:" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "´Ó(~F)£º";
+        Text[ chinese_simplified ] = "ä»(~F)ï¼š";
         Text[ russian ] = "Îò:";
         Text[ polish ] = "Od:";
-        Text[ japanese ] = "n‚ß(~F):";
-        Text[ chinese_traditional ] = "±q(~F)¡G";
+        Text[ japanese ] = "å§‹ã‚(~F):";
+        Text[ chinese_traditional ] = "å¾(~F)ï¼š";
         Text[ arabic ] = "ãä:";
         Text[ greek ] = "Áğü:";
-        Text[ korean ] = "·Î ºÎÅÍ(~F):";
+        Text[ korean ] = "ë¡œ ë¶€í„°(~F):";
         Text[ turkish ] = "İlk:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Del:";
@@ -206,14 +206,14 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "~al:" ;
         Text [ english_us ] = "~To:" ;
         Center = TRUE ;
-        Text[ chinese_simplified ] = "ÖÁ(~T)£º";
+        Text[ chinese_simplified ] = "è‡³(~T)ï¼š";
         Text[ russian ] = "Äî:";
         Text[ polish ] = "Do:";
-        Text[ japanese ] = "I‚è(~T):";
-        Text[ chinese_traditional ] = "¦Ü(~T)¡G";
+        Text[ japanese ] = "çµ‚ã‚Š(~T):";
+        Text[ chinese_traditional ] = "è‡³(~T)ï¼š";
         Text[ arabic ] = "Åáì:";
         Text[ greek ] = "Ğñïò:";
-        Text[ korean ] = "±îÁö(~T):";
+        Text[ korean ] = "ê¹Œì§€(~T):";
         Text[ turkish ] = "Son:";
         Text[ language_user1 ] = "RB: SW Datei - Serienbrief";
         Text[ catalan ] = "~al:";
@@ -231,7 +231,7 @@ ModalDialog DLG_MAILMERGE
     FixedLine FL_RECORD
     {
         Pos = MAP_APPFONT ( 6 , 86 ) ;
-        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
         Text = "Datensätze" ;
         Text [ ENGLISH ] = "Records" ;
         Text [ norwegian ] = "Records" ;
@@ -245,22 +245,22 @@ ModalDialog DLG_MAILMERGE
         Text [ dutch ] = "Records" ;
         Text [ spanish ] = "Registros" ;
         Text [ english_us ] = "Records" ;
-        Text[ chinese_simplified ] = "Êı¾İÌõÄ¿";
+        Text[ chinese_simplified ] = "æ•°æ®æ¡ç›®";
         Text[ russian ] = "Çàïèñè äàííûõ";
         Text[ polish ] = "Rekordy";
-        Text[ japanese ] = "Úº°ÄŞ";
-        Text[ chinese_traditional ] = "¸ê®Æ±ø¥Ø";
+        Text[ japanese ] = "ãƒ¬ã‚³ãƒ¼ãƒ‰";
+        Text[ chinese_traditional ] = "è³‡æ–™æ¢ç›®";
         Text[ arabic ] = "ÇáÓÌáÇÊ";
         Text[ greek ] = "Åããñáöİò";
-        Text[ korean ] = "·¹ÄÚµå";
+        Text[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ";
         Text[ turkish ] = "Veri kümeleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Registros";
     };
     RadioButton RB_PRINTER
     {
-        Pos = MAP_APPFONT ( 148 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 144 , 97 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "Dr~ucker" ;
         Text [ ENGLISH ] = "~Printer" ;
         Check = TRUE ;
@@ -269,19 +269,19 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "~Printer" ;
         Text [ italian ] = "Stampante" ;
         Text [ spanish ] = "~Impresora" ;
-        Text [ french ] = "~Sur l'imprimante" ;
+        Text [ french ] = "Imprimante" ;
         Text [ swedish ] = "S~krivare" ;
         Text [ danish ] = "Printer" ;
         Text [ portuguese ] = "~Impressora" ;
         Text [ portuguese_brazilian ] = "~Drucker" ;
-        Text[ chinese_simplified ] = "´òÓ¡»ú(~P)";
+        Text[ chinese_simplified ] = "æ‰“å°æœº(~P)";
         Text[ russian ] = "Ïğèíòåğ";
         Text[ polish ] = "Drukarka";
-        Text[ japanese ] = "ÌßØİÀ‚Ö(~P)";
-        Text[ chinese_traditional ] = "¦Lªí¾÷(~P)";
+        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ã¸(~P)";
+        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ(~P)";
         Text[ arabic ] = "Åáì ÇáØÇÈÚÉ";
         Text[ greek ] = "ÅêôõğùôŞò";
-        Text[ korean ] = "ÇÁ¸°ÅÍ(~P)";
+        Text[ korean ] = "í”„ë¦°í„°(~P)";
         Text[ turkish ] = "~Yazıcı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Impresora";
@@ -289,8 +289,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_MAILING
     {
-        Pos = MAP_APPFONT ( 203 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 200 , 97 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "~Mailing" ;
         Text [ ENGLISH ] = "~Mailing" ;
         TabStop = TRUE ;
@@ -298,19 +298,19 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "~Electronic" ;
         Text [ italian ] = "~Mailing" ;
         Text [ spanish ] = "~Enviar correo" ;
-        Text [ french ] = "~Par e-mail" ;
+        Text [ french ] = "E-mail" ;
         Text [ swedish ] = "~E-post" ;
         Text [ danish ] = "Mailing" ;
         Text [ portuguese ] = "~Correio-e" ;
         Text [ portuguese_brazilian ] = "~Mailing" ;
-        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş(~E)";
+        Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶(~E)";
         Text[ russian ] = "Ïî÷òà";
         Text[ polish ] = "Po~czta";
-        Text[ japanese ] = "Ò°Ù‚Æ‚µ‚Ä(~E)";
-        Text[ chinese_traditional ] = "¹q¤l¶l¥ó(~E)";
+        Text[ japanese ] = "ãƒ¡ãƒ¼ãƒ«ã¨ã—ã¦(~E)";
+        Text[ chinese_traditional ] = "é›»å­éƒµä»¶(~E)";
         Text[ arabic ] = "ßÈÑíÏ ÅáßÊÑæäí";
         Text[ greek ] = "Áëëçëïãñáößá";
-        Text[ korean ] = "¸ŞÀÏ(~E)";
+        Text[ korean ] = "ë©”ì¼(~E)";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
         Text[ catalan ] = "~Enviar correo";
@@ -318,8 +318,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FILE
     {
-        Pos = MAP_APPFONT ( 258 , 97 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 256 , 97 ) ;
+        Size = MAP_APPFONT ( 56 , 10 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "File" ;
         TabStop = TRUE ;
@@ -330,16 +330,16 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Fil" ;
         Text [ italian ] = "File" ;
         Text [ spanish ] = "Archivo" ;
-        Text [ french ] = "Dans un fichier" ;
+        Text [ french ] = "Fichier" ;
         Text [ dutch ] = "Bestand" ;
-        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ chinese_simplified ] = "æ–‡ä»¶";
         Text[ russian ] = "Ôàéë";
         Text[ polish ] = "Pli~k";
-        Text[ japanese ] = "Ì§²Ù‚Æ‚µ‚Ä";
-        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦";
+        Text[ chinese_traditional ] = "æª”æ¡ˆ";
         Text[ arabic ] = "İí ãáİ";
         Text[ greek ] = "Áñ÷åßï";
-        Text[ korean ] = "ÆÄÀÏ";
+        Text[ korean ] = "íŒŒì¼";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Archivo";
@@ -347,7 +347,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_PATH
     {
-        Pos = MAP_APPFONT ( 148 , 124 ) ;
+        Pos = MAP_APPFONT ( 144 , 124 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
         Hide = TRUE ;
         Text = "Pfad" ;
@@ -361,15 +361,15 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "Chemin" ;
         Text [ dutch ] = "Pad" ;
         Text [ portuguese ] = "Atalho" ;
-        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ russian ] = "Ïóòü";
         Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "Êß½";
+        Text[ japanese ] = "ãƒ‘ã‚¹";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ chinese_traditional ] = "è·¯å¾‘";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "°æ·Î";
+        Text[ korean ] = "ê²½ë¡œ";
         Text[ turkish ] = "Veri yolu";
         Text[ catalan ] = "Ruta";
         Text[ finnish ] = "Polku";
@@ -393,7 +393,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_FILENAME
     {
-        Pos = MAP_APPFONT ( 148 , 142 ) ;
+        Pos = MAP_APPFONT ( 144 , 142 ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
         Hide = TRUE ;
         Text = "Dateiname generiert aus" ;
@@ -407,14 +407,14 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "Génération du nom de fichier :" ;
         Text [ dutch ] = "Bestandsnaam ontnemen aan" ;
         Text [ portuguese ] = "Gerar nome do ficheiro a partir de" ;
-        Text[ chinese_simplified ] = "ÎÄ¼şÃûµÄÉú³É·½Ê½";
+        Text[ chinese_simplified ] = "æ–‡ä»¶åçš„ç”Ÿæˆæ–¹å¼";
         Text[ russian ] = "Ñîçäàòü èìÿ ôàéëà èç:";
         Text[ polish ] = "Generuj nazwê pliku z";
-        Text[ japanese ] = "Ì§²Ù–¼‚Ìw’è‚Í";
-        Text[ chinese_traditional ] = "ÀÉ®×¦W²£¥Í±q";
+        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«åã®æŒ‡å®šã¯";
+        Text[ chinese_traditional ] = "æª”æ¡ˆåç”¢ç”Ÿå¾";
         Text[ arabic ] = "ÅäÔÇÁ ÇÓã Çáãáİ ãä";
         Text[ greek ] = "Äçìéïõñãßá ïíüìáôïò áñ÷åßïõ áğü";
-        Text[ korean ] = "·ÎºÎÅÍ ÆÄÀÏ ÀÌ¸§ »ı¼º";
+        Text[ korean ] = "ë¡œë¶€í„° íŒŒì¼ ì´ë¦„ ìƒì„±";
         Text[ turkish ] = "Dosya adı kaynağı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre de archivo a partir de";
@@ -422,8 +422,8 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_COLUMN
     {
-        Pos = MAP_APPFONT ( 154 , 155 ) ;
-        Size = MAP_APPFONT ( 81 , 10 ) ;
+        Pos = MAP_APPFONT ( 150 , 155 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Datenbankfeld" ;
         Text [ ENGLISH ] = "Database field" ;
         TabStop = TRUE ;
@@ -437,23 +437,23 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "Campo de base de datos" ;
         Text [ french ] = "Champ de BD" ;
         Text [ dutch ] = "Database-veld" ;
-        Text[ chinese_simplified ] = "Êı¾İ¿â×Ö¶Î";
+        Text[ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ";
         Text[ russian ] = "Ïîëå áàçû äàííûõ";
         Text[ polish ] = "Pole bazy danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚©‚ç";
-        Text[ chinese_traditional ] = "¸ê®Æ®wÄæ¦ì";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰";
+        Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½";
         Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
-        Text[ korean ] = "Å×ÀÌÅÍº£ÀÌ½º ÇÊµå";
+        Text[ korean ] = "í…Œì´í„°ë² ì´ìŠ¤ í•„ë“œ";
         Text[ turkish ] = "Veritabanı alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campo de base de datos";
-        Text[ finnish ] = "Tietokantakenttä";
+        Text[ finnish ] = "Tietokannan kenttä";
     };
     RadioButton RB_FILENAME
     {
-        Pos = MAP_APPFONT ( 154 , 170 ) ;
-        Size = MAP_APPFONT ( 81 , 10 ) ;
+        Pos = MAP_APPFONT ( 150 , 170 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Manueller Vorgabe" ;
         Text [ ENGLISH ] = "Custom" ;
         TabStop = TRUE ;
@@ -468,14 +468,14 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "Manualmente" ;
         Text [ french ] = "Saisie manuelle" ;
         Text [ dutch ] = "Handmatige voorgift" ;
-        Text[ chinese_simplified ] = "ÊÖ¹¤Ô¤Éè";
+        Text[ chinese_simplified ] = "æ‰‹å·¥é¢„ç½®";
         Text[ russian ] = "Óñòàíîâêà âğó÷íóş";
         Text[ polish ] = "Ustawienie rêczne";
-        Text[ japanese ] = "”CˆÓİ’è";
-        Text[ chinese_traditional ] = "¤â°Ê¹w³]";
+        Text[ japanese ] = "ä»»æ„è¨­å®š";
+        Text[ chinese_traditional ] = "æ‰‹å‹•é è¨­";
         Text[ arabic ] = "ÇáÅÚÏÇÏ ÇáíÏæí";
         Text[ greek ] = "×åéñïêßíçôç ñıèìéóç";
-        Text[ korean ] = "¼öµ¿ ¼³Á¤";
+        Text[ korean ] = "ìˆ˜ë™ ì„¤ì •";
         Text[ turkish ] = "Manüel giriş";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Manualmente";
@@ -484,8 +484,8 @@ ModalDialog DLG_MAILMERGE
     ListBox LB_COLUMN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 232 , 153 ) ;
-        Size = MAP_APPFONT ( 74 , 84 ) ;
+        Pos = MAP_APPFONT ( 243 , 153 ) ;
+        Size = MAP_APPFONT ( 65 , 84 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
@@ -493,35 +493,35 @@ ModalDialog DLG_MAILMERGE
     Edit ED_FILENAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 232 , 168 ) ;
-        Size = MAP_APPFONT ( 74 , 12 ) ;
+        Pos = MAP_APPFONT ( 243 , 168 ) ;
+        Size = MAP_APPFONT ( 65 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     CheckBox CB_SINGLE_JOBS
     {
-        Pos = MAP_APPFONT ( 148 , 112 ) ;
+        Pos = MAP_APPFONT ( 144 , 112 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text = "~Einzelne Druckjobs erzeugen" ;
         Text [ ENGLISH ] = "Si~ngle print jobs" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Single print jobs" ;
         Text [ portuguese_brazilian ] = "Einzelne Druckjobs erzeugen" ;
-        Text [ swedish ] = "skapa ~enstaka utskriftsjobb" ;
+        Text [ swedish ] = "Skapa ~enstaka utskriftsjobb" ;
         Text [ danish ] = "Opret enkelte printerjob" ;
         Text [ italian ] = "Crea singoli ordini di stampa" ;
         Text [ spanish ] = "~Crear tareas individuales de impresión" ;
         Text [ french ] = "~Travaux d'impression individuels" ;
         Text [ dutch ] = "Af~zonderlijke afdrukjobs" ;
         Text [ portuguese ] = "C~riar tarefas de impressão individuais" ;
-        Text[ chinese_simplified ] = "Éú³Éµ¥¸ö´òÓ¡ÈÎÎñ(~S)";
+        Text[ chinese_simplified ] = "ç”Ÿæˆå•ä¸ªæ‰“å°ä»»åŠ¡(~S)";
         Text[ russian ] = "Ñîçäàòü îòäåëüíîå çàäàíèå ïå÷àòè";
         Text[ polish ] = "Utwórz pojedyncze zadania wydruku";
-        Text[ japanese ] = "ŒÂ•Êˆóü¼Ş®ÌŞ‚Ìì¬(~S)";
-        Text[ chinese_traditional ] = "²£¥Í³æ­Ó¦C¦L¥ô°È(~S)";
+        Text[ japanese ] = "å€‹åˆ¥å°åˆ·ã‚¸ãƒ§ãƒ–ã®ä½œæˆ(~S)";
+        Text[ chinese_traditional ] = "ç”¢ç”Ÿå–®å€‹åˆ—å°ä»»å‹™(~S)";
         Text[ arabic ] = "ÅäÔÇÁ æÙÇÆİ ØÈÇÚÉ İÑÏíÉ";
         Text[ greek ] = "Äçìéïõñãßá ìåìïíùìİíùí åñãáóéşí åêôığùóçò";
-        Text[ korean ] = "°¢ ÀÎ¼â ÀÛ¾÷¡¡¸¸µé±â(~S)";
+        Text[ korean ] = "ê° ì¸ì‡„ ì‘ì—…ã€€ë§Œë“¤ê¸°(~S)";
         Text[ turkish ] = "Bireysel yazdırma işleri oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear tareas individuales de impresión";
@@ -529,7 +529,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_ADDRESS
     {
-        Pos = MAP_APPFONT ( 148 , 112 ) ;
+        Pos = MAP_APPFONT ( 144 , 112 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Hide = TRUE ;
@@ -544,14 +544,14 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Adressefelt" ;
         Text [ portuguese_brazilian ] = "Adressfeld" ;
         Text [ portuguese ] = "~Campo de endereço" ;
-        Text[ chinese_simplified ] = "µØÖ·À¸(~F)";
+        Text[ chinese_simplified ] = "åœ°å€æ (~F)";
         Text[ russian ] = "Àäğåñíîå ïîëå";
         Text[ polish ] = "Pole adresowe";
-        Text[ japanese ] = "ZŠÌ¨°ÙÄŞ(~F)";
-        Text[ chinese_traditional ] = "¦a§}Äæ(~F)";
+        Text[ japanese ] = "ä½æ‰€ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰(~F)";
+        Text[ chinese_traditional ] = "åœ°å€æ¬„(~F)";
         Text[ arabic ] = "ÍŞá ÇáÚäæÇä";
         Text[ greek ] = "Ğåäßï äéåıèõíóçò";
-        Text[ korean ] = "ÁÖ¼Ò ÇÊµå(~F)";
+        Text[ korean ] = "ì£¼ì†Œ í•„ë“œ(~F)";
         Text[ turkish ] = "Adres alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campo dirección";
@@ -569,7 +569,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_SUBJECT
     {
-        Pos = MAP_APPFONT ( 148 , 125 ) ;
+        Pos = MAP_APPFONT ( 144 , 125 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Text = "Be~treff" ;
@@ -583,14 +583,14 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Emne" ;
         Text [ portuguese_brazilian ] = "Betreff" ;
         Text [ portuguese ] = "~Assunto" ;
-        Text[ chinese_simplified ] = "ÊÂÓÉ(~S)";
+        Text[ chinese_simplified ] = "äº‹ç”±(~S)";
         Text[ russian ] = "Òåìà";
         Text[ polish ] = "Temat";
-        Text[ japanese ] = "Œ–¼(~S)";
-        Text[ chinese_traditional ] = "¥D¦®(~S)";
+        Text[ japanese ] = "ä»¶å(~S)";
+        Text[ chinese_traditional ] = "ä¸»æ—¨(~S)";
         Text[ arabic ] = "ÇáãæÖæÚ";
         Text[ greek ] = "Èİìá";
-        Text[ korean ] = "Á¦¸ñ(~S)";
+        Text[ korean ] = "ì œëª©(~S)";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~sunto";
@@ -606,7 +606,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_ATTACH
     {
-        Pos = MAP_APPFONT ( 148 , 140 ) ;
+        Pos = MAP_APPFONT ( 144 , 140 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Text = "Anhänge" ;
@@ -620,14 +620,14 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "Fichiers joints" ;
         Text [ dutch ] = "Aanhangsels" ;
         Text [ portuguese ] = "Anexos" ;
-        Text[ chinese_simplified ] = "¸½¼ş";
+        Text[ chinese_simplified ] = "é™„åŠ æ–‡ä»¶";
         Text[ russian ] = "Âëîæåíèÿ";
         Text[ polish ] = "Za³¹czniki";
-        Text[ japanese ] = "“Y•t";
-        Text[ chinese_traditional ] = "ªş¥[ÀÉ®×";
+        Text[ japanese ] = "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«";
+        Text[ chinese_traditional ] = "é™„åŠ æª”æ¡ˆ";
         Text[ arabic ] = "ÅÑİÇŞÇÊ";
         Text[ greek ] = "Óõíçììİíá";
-        Text[ korean ] = "Ã·ºÎ";
+        Text[ korean ] = "ì²¨ë¶€";
         Text[ turkish ] = "Ekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Anexos";
@@ -653,7 +653,7 @@ ModalDialog DLG_MAILMERGE
     };
     FixedText FT_FORMAT
     {
-        Pos = MAP_APPFONT ( 148 , 157 ) ;
+        Pos = MAP_APPFONT ( 144 , 157 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Disable = TRUE ;
         Text = "Mail-Format" ;
@@ -667,14 +667,14 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "Format de courrier" ;
         Text [ dutch ] = "Mail-formaat" ;
         Text [ portuguese ] = "Formato da mensagem" ;
-        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş¸ñÊ½";
+        Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶æ ¼å¼";
         Text[ russian ] = "Ôîğìàò Mail";
         Text[ polish ] = "Format wiadomoœci";
-        Text[ japanese ] = "Ò°Ù‘®";
-        Text[ chinese_traditional ] = "¶l¥ó®æ¦¡";
+        Text[ japanese ] = "ãƒ¡ãƒ¼ãƒ«æ›¸å¼";
+        Text[ chinese_traditional ] = "éƒµä»¶æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ ÇáÈÑíÏ";
         Text[ greek ] = "ÌïñöŞ ìçíıìáôïò";
-        Text[ korean ] = "¿ìÆí ¼­½Ä";
+        Text[ korean ] = "ìš°í¸ ì„œì‹";
         Text[ turkish ] = "E-posta formatı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato de correo";
@@ -700,7 +700,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_simplified ] = "HTM~L";
         Text[ russian ] = "HTM~L";
         Text[ polish ] = "HTML";
-        Text[ japanese ] = "HTM~LŒ`®";
+        Text[ japanese ] = "HTM~Lå½¢å¼";
         Text[ chinese_traditional ] = "HTM~L";
         Text[ arabic ] = "HTM~L";
         Text[ greek ] = "HTML";
@@ -766,18 +766,18 @@ ModalDialog DLG_MAILMERGE
         Text[ turkish ] = "%PRODUCTNAME Writer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Writer";
-        Text[ finnish ] = "%PRODUCTNAME! Writer";
+        Text[ finnish ] = "%PRODUCTNAME Writer";
     };
     FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 137 , 93 ) ;
+        Pos = MAP_APPFONT ( 133 , 93 ) ;
         Size = MAP_APPFONT ( 4 , 99 ) ;
         Vert = TRUE;
     };
     FixedLine FL_DEST
     {
-        Pos = MAP_APPFONT ( 142 , 86 ) ;
-        Size = MAP_APPFONT ( 170 , 8 ) ;
+        Pos = MAP_APPFONT ( 138 , 86 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
         Text = "Ausgabe" ;
         Text [ ENGLISH ] = "Destination" ;
         Text [ english_us ] = "Output" ;
@@ -789,18 +789,18 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Output" ;
         Text [ portuguese_brazilian ] = "Ausgabe" ;
         Text [ portuguese ] = "Saída" ;
-        Text[ chinese_simplified ] = "Êä³ö";
+        Text[ chinese_simplified ] = "è¾“å‡º";
         Text[ russian ] = "Âûâîä";
         Text[ polish ] = "Wyjœcie";
-        Text[ japanese ] = "o—Í";
-        Text[ chinese_traditional ] = "¶×¥X";
+        Text[ japanese ] = "å‡ºåŠ›";
+        Text[ chinese_traditional ] = "åŒ¯å‡º";
         Text[ arabic ] = "ÇáÅÎÑÇÌ";
         Text[ greek ] = "ÅîáãùãŞ";
-        Text[ korean ] = "Ãâ·Â";
+        Text[ korean ] = "ì¶œë ¥";
         Text[ turkish ] = "Çıktı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Destino";
-        Text[ finnish ] = "Tulostus";
+        Text[ finnish ] = "Tuloste";
     };
     OKButton BTN_OK
     {
@@ -818,14 +818,14 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 318 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢";
+    Text[ chinese_simplified ] = "é‚®ä»¶åˆå¹¶";
     Text[ russian ] = "Öèğêóëÿğíîå ïèñüìî";
     Text[ polish ] = "List seryjny";
-    Text[ japanese ] = "·‚µ‚İˆóü";
-    Text[ chinese_traditional ] = "¦X¨Ö¦C¦L";
+    Text[ japanese ] = "å·®ã—è¾¼ã¿å°åˆ·";
+    Text[ chinese_traditional ] = "åˆä½µåˆ—å°";
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
     Text[ greek ] = "Åãêıêëéïò åğéóôïëŞ";
-    Text[ korean ] = "Æû¡¡·¹ÅÍ";
+    Text[ korean ] = "í¸ì§€ì§€ ì–‘ì‹";
     Text[ turkish ] = "Standart mektup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta en serie";
