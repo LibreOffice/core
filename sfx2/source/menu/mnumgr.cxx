@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:20:43 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "viewfrm.hxx"
 #include "viewsh.hxx"
 #include "objface.hxx"
+#include "topfrm.hxx"
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
@@ -600,15 +601,41 @@ void SfxMenuManager::UseDefault()
 
         if ( bAddClipboardFuncs )
         {
+            BOOL bHasClipboardFunc = FALSE;
+            BOOL bHasFullScreenFunc = FALSE;
             USHORT n, nCount = pSVMenu->GetItemCount();
             for ( n=0; n<nCount; n++ )
             {
                 USHORT nId = pSVMenu->GetItemId( n );
                 if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
-                    break;
+                {
+                    bHasClipboardFunc = TRUE;
+                    if ( bHasFullScreenFunc )
+                        break;
+                }
+                if ( nId == SID_WIN_FULLSCREEN )
+                {
+                    bHasFullScreenFunc = TRUE;
+                    if ( bHasClipboardFunc )
+                        break;
+                }
             }
 
-            if ( n == nCount )
+            if ( !bHasFullScreenFunc )
+            {
+                SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, GetBindings().GetDispatcher_Impl()->GetFrame()->GetTopViewFrame() );
+                if ( pTop )
+                {
+                    WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+                    if ( pWork && pWork->IsFullScreenMode() )
+                    {
+                        pSVMenu->InsertSeparator();
+                        pSVMenu->InsertItem( SID_WIN_FULLSCREEN, GetBindings().GetSlotPool_Impl().GetSlotName_Impl( SID_WIN_FULLSCREEN ) );
+                    }
+                }
+            }
+
+            if ( !bHasClipboardFunc  )
             {
                 PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
                 nCount = aPop.GetItemCount();
@@ -1652,15 +1679,41 @@ SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenu, SfxBindings& rBindin
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
+    BOOL bHasClipboardFunc = FALSE;
+    BOOL bHasFullScreenFunc = FALSE;
     USHORT n, nCount = pSVMenu->GetItemCount();
     for ( n=0; n<nCount; n++ )
     {
         USHORT nId = pSVMenu->GetItemId( n );
         if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
-            break;
+        {
+            bHasClipboardFunc = TRUE;
+            if ( bHasFullScreenFunc )
+                break;
+        }
+        if ( nId == SID_WIN_FULLSCREEN )
+        {
+            bHasFullScreenFunc = TRUE;
+            if ( bHasClipboardFunc )
+                break;
+        }
     }
 
-    if ( n == nCount )
+    if ( !bHasFullScreenFunc )
+    {
+        SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, pFrame->GetTopViewFrame() );
+        if ( pTop )
+        {
+            WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
+            if ( pWork && pWork->IsFullScreenMode() )
+            {
+                pSVMenu->InsertSeparator();
+                pSVMenu->InsertItem( SID_WIN_FULLSCREEN, String( SfxResId(SID_WIN_FULLSCREEN) ) );
+            }
+        }
+    }
+
+    if ( !bHasClipboardFunc  )
     {
         PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
         nCount = aPop.GetItemCount();

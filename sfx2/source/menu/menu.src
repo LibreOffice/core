@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:29:08 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String STR_MENU_CFGITEM
     TEXT[ chinese_simplified ] = "èœå•";
     TEXT[ russian ] = "Ìåíş";
     TEXT[ polish ] = "Menu";
-    TEXT[ japanese ] = "ï¾’ï¾†ï½­ï½°";
+    TEXT[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
     TEXT[ chinese_traditional ] = "åŠŸèƒ½è¡¨";
     TEXT[ arabic ] = "ÇáŞÇÆãÉ";
     TEXT[ dutch ] = "Menu";
@@ -89,6 +89,7 @@ String STR_MENU_CFGITEM
     TEXT[ korean ] = "ë©”ë‰´";
     TEXT[ turkish ] = "Mönü";
     TEXT[ catalan ] = "Menú";
+    TEXT[ thai ] = "à¹€à¸¡à¸™à¸¹à¹‚à¸„à¸£à¸‡à¹à¸šà¸š";
 };
 
 String STR_MENU_ADDONS
@@ -130,7 +131,8 @@ Menu MN_CLIPBOARDFUNCS
             Text[ greek ] = "~ÁğïêïğŞ";
             Text[ korean ] = "ì˜ë¼ ë‚´ê¸°(~T)";
             Text[ turkish ] = "Kes";
-            Text[ catalan ] = "C~ortar";
+            Text[ catalan ] = "Re~talla";
+            Text[ thai ] = "à¸•à¸±~à¸”";
         };
         MenuItem
         {
@@ -152,7 +154,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
             Text[ russian ] = "Êîïèğîâàòü";
             Text[ polish ] = "~Kopiuj";
-            Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°(~C)";
+            Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~C)";
             Text[ chinese_traditional ] = "è¤‡è£½(~C)";
             Text[ arabic ] = "äÓÎ";
             Text[ dutch ] = "~Kopiëren";
@@ -160,7 +162,8 @@ Menu MN_CLIPBOARDFUNCS
             Text[ greek ] = "Áíôé~ãñáöŞ";
             Text[ korean ] = "ë³µì‚¬(~C)";
             Text[ turkish ] = "Kopyala";
-            Text[ catalan ] = "~Copiar";
+            Text[ catalan ] = "~Copia";
+            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸";
         };
         MenuItem
         {
@@ -182,15 +185,16 @@ Menu MN_CLIPBOARDFUNCS
             Text[ russian ] = "Âñòàâèòü";
             Text[ polish ] = "~Wklej";
             Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
-            Text[ chinese_simplified ] = "æ’å…¥(~P)";
-            Text[ chinese_traditional ] = "æ’å…¥(~P)";
+            Text[ chinese_simplified ] = "ç²˜è´´(~P)";
+            Text[ chinese_traditional ] = "è²¼ä¸Š(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ dutch ] = "~Plakken";
-            Text[ chinese_simplified ] = "æ’å…¥(~P)";
+            Text[ chinese_simplified ] = "ç²˜è´´(~P)";
             Text[ greek ] = "Åğ~éêüëëçóç";
-            Text[ korean ] = "ë¶™ì—¬ ë„£ê¸°(~P)";
+            Text[ korean ] = "ë¶™ì—¬ë„£ê¸°(~P)";
             Text[ turkish ] = "Yapıştır";
-            Text[ catalan ] = "~Pegar";
+            Text[ catalan ] = "~Enganxa";
+            Text[ thai ] = "~à¸§à¸²à¸‡";
         };
     };
 };
@@ -358,6 +362,8 @@ String SID_WIN_FULLSCREEN
 };
 
 // ******************************************************************* EOF
+
+
 
 
 
