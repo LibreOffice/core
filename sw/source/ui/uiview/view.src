@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 20:24:24 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ QueryBox DLG_WRAP
     MESSAGE[ korean ] = "¹®¼­ÀÇ ½ÃÀÛºÎºÐ¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Belgenin baþýndan denetime devam etmek istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea continuar la revisión desde el comienzo del documento?";
 };
 QueryBox DLG_BODY
 {
@@ -138,6 +139,7 @@ QueryBox DLG_BODY
     MESSAGE[ korean ] = "ÁÖ ÅØ½ºÆ®¸¦ °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Ana metni denetlemek istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea verificar el texto principal?";
 };
 QueryBox DLG_PRT_FIELDNAME
 {
@@ -166,6 +168,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ korean ] = "¿É¼Ç¡¡ÇÊµåÀÌ¸§ º¸ÀÌ±â°¡ È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.\nÇÊµå ÀÌ¸§°ú ÇÔ²² ¹®¼­¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "\"Alan adýný görüntüle\" seçeneði etkin.\nBelgeyi alan adlarýyla yazdýrmak istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "La opción nombre de campo está activada. \n¿Desea imprimir el archivo con nombres de campo?";
 };
 QueryBox DLG_SPECIAL
 {
@@ -194,6 +197,7 @@ QueryBox DLG_SPECIAL
     MESSAGE[ korean ] = "Æ¯Á¤ÇÑ ¿µ¿ªÀ» °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Özel bölümler denetlensin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¿Desea verificar las áreas especiales?";
 };
 QueryBox DLG_THESAURUS
 {
@@ -222,6 +226,7 @@ QueryBox DLG_THESAURUS
     MESSAGE[ korean ] = "ÀÌ´Ü¾î´Â »ç¿ëÇÏÁö ¾ÊÀ» ´Ü¾î Ç×¸ñ¿¡ ÀÖ´Â ´Ü¾î ÀÔ´Ï´Ù ! µ¿ÀÇ¾î »çÀüÀ» ½ÃÀÛÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Bu sözcük kullanmak istemediðiniz söcükler arasýnda! Eþ anlamlýlar sözlüðüne baþvurmak ister misiniz?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "¡Debería evitar esta palabra! ¿Iniciar búsqueda de sinónimos?";
 };
 QueryBox DLG_SPECIAL_FORCED
 {
@@ -250,6 +255,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ korean ] = "Æ¯Á¤ÇÑ ¿µ¿ªÀÇ °Ë»ç°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù. ±×·¡µµ¡¡°Ë»çÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Özel bölüm denetimi etkin deðil. Yine de denetlensin mi?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "La verificación de las áreas especiales está desactivada, ¿Desea de todas maneras verificar?";
 };
 QueryBox MSG_SEARCH_END
 {
@@ -278,6 +284,7 @@ QueryBox MSG_SEARCH_END
     Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ Ã³À½¿¡¼­ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin sonuna kadar aramayý tamamladý. Belgenin baþýndan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?";
 };
 QueryBox MSG_SEARCH_START
 {
@@ -306,6 +313,7 @@ QueryBox MSG_SEARCH_START
     Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ½ÃÀÛºÎºÐ±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡¿¡¼­ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin baþýna kadar aramayý tamamladý. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?";
 };
 InfoBox MSG_NO_MERGE_ENTRY
 {
@@ -330,6 +338,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ korean ] = "º´ÇÕÀ» ÇÏÁö¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Belgeler birleþtirilemedi.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se pudieron fusionar los documentos.";
 };
 InfoBox MSG_ERR_INSERT_GLOS
 {
@@ -356,6 +365,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ korean ] = "ÀÚµ¿ÅØ½ºÆ®¸¦ ¸¸µé ¼ö ¾ø¾ú½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Otomatik metin yaratýlamadý.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "No se pudo crear el AutoTexto.";
 };
 InfoBox MSG_ERR_SRCSTREAM
 {
@@ -380,6 +390,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message[ korean ] = "¼Ò½ºÅØ½ºÆ®¸¦ ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Kaynak kod yüklenemiyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No es posible cargar el texto fuente.";
 };
 InfoBox MSG_ERR_NO_FAX
 {
@@ -393,7 +404,7 @@ InfoBox MSG_ERR_NO_FAX
     Message [ swedish ] = "Ingen faxskrivare har ställts in under Verktyg/Alternativ/%1/Skriv ut." ;
     Message [ danish ] = "Der er ingen faxprinter indstillet under Funktioner/Indstillinger/Udskriv." ;
     Message [ portuguese_brazilian ] = "Kein Fax-Drucker unter Extras/Optionen/Drucken eingestellt." ;
-    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/Imprimir." ;
+    Message [ portuguese ] = "Não foi configurada nenhuma impressora para fax em Ferramentas/Opções/%1/Imprimir." ;
     Message[ polish ] = "W sekwencji Narzêdzia/Opcje/%1/Drukuj nie ustawiono drukarki faksu.";
     Message[ turkish ] = "Araçlar/Seçenekler/Yazdýrma altýnda faks konfigürasyonu yapýlmadý.";
     Message[ language_user1 ] = " ";
@@ -404,13 +415,14 @@ InfoBox MSG_ERR_NO_FAX
     Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/%1/´òÓ¡»ú´¦Ã»ÓÐÉè¶¨´«Õæ´òÓ¡»ú¡£";
     Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/%1/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Êµ{¦¡¡C";
     Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ ÝÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/%1/ØÈÇÚÉ\".";
+    Message[ catalan ] = "En Herramientas/Opciones/%1/Imprimir no se ha configurado ninguna impresora fax.";
 };
 String STR_WEBOPTIONS
 {
     TEXT = "HTML-Dokument" ;
     TEXT [ English ] = "HTML document" ;
     TEXT[ english_us ] = "HTML document";
-    TEXT[ portuguese ] = "HTML document";
+    TEXT[ portuguese ] = "Documento HTML";
     TEXT[ russian ] = "Äîêóìåíò HTML";
     TEXT[ greek ] = "¸ããñáöï HTML";
     TEXT[ dutch ] = "HTML-document";
@@ -427,13 +439,14 @@ String STR_WEBOPTIONS
     TEXT[ chinese_traditional ] = "HTML ¤å¥ó";
     TEXT[ turkish ] = "HTML document";
     TEXT[ arabic ] = "HTML ãÓÊäÏ";
+    TEXT[ catalan ] = "Documento HTML";
 };
 String STR_TEXTOPTIONS
 {
     TEXT = "Textdokument" ;
     TEXT [ English ] = "Text document" ;
     TEXT[ english_us ] = "Text document";
-    TEXT[ portuguese ] = "Text document";
+    TEXT[ portuguese ] = "Documento de texto";
     TEXT[ russian ] = "Òåêñòîâûé äîêóìåíò";
     TEXT[ greek ] = "¸ããñáöï êåéìÝíïõ";
     TEXT[ dutch ] = "Tekstdocument";
@@ -450,6 +463,7 @@ String STR_TEXTOPTIONS
     TEXT[ chinese_traditional ] = "¤å¦r¤å¥ó";
     TEXT[ turkish ] = "Text document";
     TEXT[ arabic ] = "ãÓÊäÏ äÕ";
+    TEXT[ catalan ] = "Documento de texto";
 };
 InfoBox MSG_NOT_FOUND
 {
@@ -476,6 +490,7 @@ InfoBox MSG_NOT_FOUND
     Message[ korean ] = "°Ë»ö¿ë¾î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Arama terimi bulunamadý.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se encontró la expresión buscada.";
 };
 InfoBox MSG_INDEX_OVERFLOW
 {
@@ -502,6 +517,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message[ korean ] = "Ã£¾ÒÀ½.";
     Message[ turkish ] = "bulundu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "encontrado.";
 };
 InfoBox MSG_SCAN_NOSOURCE
 {
@@ -526,6 +542,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message[ korean ] = "¼Ò½º°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Message[ turkish ] = "Kaynak belirlenmedi.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se especificó la fuente.";
 };
 String STR_NOGLOS1
 {
@@ -552,6 +569,7 @@ String STR_NOGLOS1
     TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â '";
     TEXT[ turkish ] = "Otomatik metin kýsaltmasý '";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "AutoTexto para la abreviatura '";
 };
 String STR_NOGLOS2
 {
@@ -582,6 +600,7 @@ String STR_NOGLOS2
     TEXT[ korean ] = "' Ã£Áö¡¡¸øÇßÀ½.";
     TEXT[ turkish ] = "' bulunamadý.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "' no se encontró.";
 };
 String STR_NUM_LEVEL
 {
@@ -606,6 +625,7 @@ String STR_NUM_LEVEL
     Text[ korean ] = "¼öÁØ ";
     Text[ turkish ] = "Düzey ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nivel  ";
 };
 String STR_ERROR_NOLANG
 {
@@ -632,6 +652,7 @@ String STR_ERROR_NOLANG
     TEXT[ korean ] = "°Ë»öµÈ ±¸¿ª¿¡´Â ¼³Á¤µÈ ¾ð¾î°¡ ¾ø½À´Ï´Ù.";
     TEXT[ turkish ] = "Denetlenen bölümde dil seçilmedi.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "No se ha seleccionado ningún idioma en el área revisada.";
 };
 String STR_EDIT_FOOTNOTE
 {
@@ -658,6 +679,7 @@ String STR_EDIT_FOOTNOTE
     TEXT[ korean ] = "°¢ÁÖ ÆíÁý";
     TEXT[ turkish ] = "Dipnotu düzenle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Editar nota al pie";
 };
 String STR_NB_REPLACED
 {
@@ -684,6 +706,7 @@ String STR_NB_REPLACED
     Text[ korean ] = "°Ë»ö ¿ë¾î°¡  XX¹ø ´ëÃ¼µÊ.";
     Text[ turkish ] = "Arama terimi XX kez deðiþtirildi.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La expresión buscada ha sido reemplazada XX veces.";
 };
 String RID_TOOLS_TOOLBOX
 {
@@ -708,6 +731,7 @@ String RID_TOOLS_TOOLBOX
     Text[ korean ] = "ÁÖ µµ±¸ ¸ðÀ½";
     Text[ turkish ] = "Ana araç çubuðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de herramientas";
 };
 String RID_SRCVIEW_TOOLBOX
 {
@@ -732,6 +756,7 @@ String RID_SRCVIEW_TOOLBOX
     Text[ korean ] = "¼Ò½ºÅØ½ºÆ®";
     Text[ turkish ] = "Kaynak kod";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto fuente";
 };
 String STR_SRCVIEW_ROW
 {
@@ -758,6 +783,7 @@ String STR_SRCVIEW_ROW
     Text[ korean ] = "Çà ";
     Text[ turkish ] = "Satýr ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fila  ";
 };
 String STR_SRCVIEW_COL
 {
@@ -784,6 +810,7 @@ String STR_SRCVIEW_COL
     Text[ korean ] = "¿­ ";
     Text[ turkish ] = "Sütun ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Columna  ";
 };
 String STR_PRINT_TITLE
 {
@@ -808,6 +835,7 @@ String STR_PRINT_TITLE
     Text[ korean ] = "¼±ÅÃ ÀÎ¼â";
     Text[ turkish ] = "Seçimi yazdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir la selección";
 };
 String STR_PRINT_MSG
 {
@@ -832,6 +860,7 @@ String STR_PRINT_MSG
     Text[ korean ] = "¼±ÅÃµÈ ¹®¼­³ª ÀüÃ¼ ¹®¼­¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Seçimi ya da tüm belgeyi yazdýrmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea imprimir solo la selección o todo el documento?";
 };
 String STR_PRINT_ALL
 {
@@ -856,6 +885,7 @@ String STR_PRINT_ALL
     Text[ korean ] = "¸ðµÎ";
     Text[ turkish ] = "Tümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Todo";
 };
 String STR_PRINT_SELECTION
 {
@@ -880,6 +910,7 @@ String STR_PRINT_SELECTION
     Text[ korean ] = "¼±ÅÃ";
     Text[ turkish ] = "Seçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sele~cción";
 };
 String STR_READONLY_SEL
 {
@@ -904,6 +935,7 @@ String STR_READONLY_SEL
     TEXT[ korean ] = "ÀÐ±â Àü¿ë";
     TEXT[ turkish ] = "Salt okunur";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "solo lectura";
 };
 String STR_SAVEAS_SRC
 {
@@ -928,12 +960,13 @@ String STR_SAVEAS_SRC
     Text[ korean ] = "¼Ò½ºÅØ½ºÆ®¡¡³»º¸³»±â(~E)...";
     Text[ turkish ] = "Kaynak kodu dýþa aktar...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Exportar texto fuente...";
 };
 String MN_SRCVIEW_POPUPMENU
 {
     Text = "HTML - Quelltext" ;
     Text [ English ] = "HTML source" ;
-    Text [ portuguese ] = "Texto-fonte HTML" ;
+    Text [ portuguese ] = "Fonte HTML" ;
     Text [ english_us ] = "HTML source" ;
     Text [ portuguese_brazilian ] = "HTML - Quelltext" ;
     Text [ swedish ] = "HTML-källtext" ;
@@ -952,6 +985,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ korean ] = "HTML ¼Ò½ºÅØ½ºÆ®";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto fuente HTML";
 };
 
 ToolBox RID_TOOLS_TOOLBOX
@@ -1175,6 +1209,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ korean ] = "HTML ¼Ò½ºÅØ½ºÆ®";
             Text[ turkish ] = "HTML kaynak kodu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Texto fuente HTML";
         };
     };
 };
