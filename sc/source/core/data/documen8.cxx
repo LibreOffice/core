@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:34:02 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,13 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
 
 #pragma hdrstop
 
+#define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
@@ -351,7 +351,21 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
+    // #b5017505# number format exchange list has to be handled here, too
+
+    SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
+    SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
+    if (pOtherFormatter && pOtherFormatter != pThisFormatter)
+    {
+        SvULONGTable* pExchangeList =
+                pThisFormatter->MergeFormatter(*(pOtherFormatter));
+        if (pExchangeList->Count() > 0)
+            pFormatExchangeList = pExchangeList;
+    }
+
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
+
+    pFormatExchangeList = NULL;
 }
 
 //------------------------------------------------------------------------
