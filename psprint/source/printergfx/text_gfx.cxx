@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.19 $
+  *  $Revision: 1.20 $
   *
-  *  last change: $Author: hr $ $Date: 2003-03-26 14:24:09 $
+  *  last change: $Author: hr $ $Date: 2003-06-30 14:26:57 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -628,6 +628,13 @@ PrinterGfx::drawText(
         && !mrFontMgr.isFontDownloadingAllowed(mnFontID))
     {
         LicenseWarning(rPoint, pStr, nLen, pDeltaArray);
+        return;
+    }
+
+    if( mrFontMgr.getUseOnlyFontEncoding( mnFontID ) )
+    {
+        GlyphSet aGSet( mnFontID, mbTextVertical );
+        aGSet.DrawText( *this, rPoint, pStr, nLen, pDeltaArray );
         return;
     }
 
