@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 00:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public:
     /** Define private new and delete operator because of compiler bug,
         when allocating and deleteing a exported class
     */
-#if defined MACOS || defined MACOSX
+#if defined MACOS || defined MACOSX || defined NETBSD
     void* SAL_CALL operator new(size_t size);
     void* SAL_CALL operator new(size_t size, void* p);
 #else
