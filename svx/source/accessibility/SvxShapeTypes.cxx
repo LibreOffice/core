@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 14:32:17 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,7 @@
 namespace accessibility {
 
 AccessibleShape* CreateSvxAccessibleShape (
-    const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
+    const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     ShapeTypeId nId)
 {
@@ -109,19 +106,19 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_POLY_LINE_PATH:
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
-            return new AccessibleShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_CONTROL:
-            return new AccessibleControlShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessibleControlShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_GRAPHIC_OBJECT:
-            return new AccessibleGraphicShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessibleGraphicShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_APPLET:
         case DRAWING_FRAME:
         case DRAWING_OLE:
         case DRAWING_PLUGIN:
-            return new AccessibleOLEShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessibleOLEShape (rShapeInfo, rShapeTreeInfo);
 
         default:
             return NULL;
