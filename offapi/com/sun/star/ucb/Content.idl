@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: kso $ $Date: 2001-04-24 12:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,12 +593,28 @@ service Content
     //-------------------------------------------------------------------------
     /** can be used to add new properties to the content and to remove
         properties from the content dynamically.
-     *
+
         <p>Note that the dynamic properties must be kept persistent. The
-        service UCB persistence service <type>Store</type> may be used to
+        service <type>Store</type> (UCB persistence service) may be used to
         implement this.
 
-        <p>It is recommended to implement this interface.
+        <p><b>Important:</b> The implementation of
+        <method scope="com::sun::star::beans">XPropertyContainer::addProperty</method>
+        must at least support adding properties of the following basic data
+        types:
+
+        <p>
+        <ul>
+        <li>boolean
+        <li>char
+        <li>byte
+        <li>string
+        <li>short
+        <li>long
+        <li>hyper
+        <li>float
+        <li>double
+        </ul>
      */
     interface com::sun::star::beans::XPropertyContainer;
 
@@ -610,8 +626,6 @@ service Content
         dynamically change it's property set ( e.g. because it implements
         the interface
         <type scope="com::sun::star::beans">XPropertyContainer</type>. )
-
-        <p>It is recommended to implement this interface.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
