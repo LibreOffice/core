@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:20:55 $
+#   last change: $Author: obo $ $Date: 2003-10-20 15:37:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,8 +69,6 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
 PROJECTPCHSOURCE=..$/pch$/ui_pch
-
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
