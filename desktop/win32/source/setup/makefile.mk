@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 12:27:21 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:05:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,6 @@ APP1NOSVRES=	$(RES)$/$(TARGET).res
 
 .INCLUDE :  target.mk
 
-$(RCFILES) : $(ULFFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt lnglist.txt
+$(RCFILES) : $(COMMONMISC)$/$(TARGET)$/setup.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt lnglist.txt
     $(WRAPCMD) lngconvex.exe -ulf $(COMMONMISC)$/$(TARGET)$/setup.ulf -rc $(RCFILES) -c lnglist.txt -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 
