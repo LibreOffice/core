@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-29 11:21:48 $
+ *  last change: $Author: od $ $Date: 2002-09-04 11:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1940,8 +1940,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         switch (eFill)
         {
             case XFILL_NONE:
-//                aBrushItem.SetColor(Color(COL_TRANSPARENT));
-                aBrushItem.GetColor().SetTransparency(0xFE);
+                /// OD 04.09.2002 #99657#
+                /// color "no fill" is still COL_TRANSPARENT
+                aBrushItem.SetColor(Color(COL_TRANSPARENT));
+                //aBrushItem.GetColor().SetTransparency(0xFE);
                 bBrushItemOk = true;
             break;
             case XFILL_SOLID:
