@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:46:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ class SwReader: public SwDocFac
 
     SwPaM* pCrsr;
     String aFileName;
+    String sBaseURL;
 
 public:
     /*
@@ -227,16 +228,15 @@ public:
      * JP 25.04.95: oder falls es mitgegeben wird, in dieses.
      *              Sonderfall fuer Load mit Sw3Reader
      */
-    // SwReader( SvStream&, const String& rFilename, SwDoc *pDoc = 0 );
-    SwReader( SotStorage&, const String& rFilename, SwDoc *pDoc = 0 );
-    SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwDoc *pDoc = 0 );
+    //SwReader( SotStorage&, const String& rFilename, SwDoc *pDoc = 0 );
+    //SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFilename, SwDoc *pDoc = 0 );
     SwReader( SfxMedium&, const String& rFilename, SwDoc *pDoc = 0 );
     /*
      * In ein existierendes Dokument einlesen, Dokument und
      * Position im Dokument werden aus dem SwPaM uebernommen.
      */
-    SwReader( SvStream&, const String& rFilename, SwPaM& );
-    SwReader( SotStorage&, const String& rFilename, SwPaM& );
+    SwReader( SvStream&, const String& rFilename, const String& rBaseURL, SwPaM& );
+    //SwReader( SotStorage&, const String& rFilename, SwPaM& );
     SwReader( SfxMedium&, const String& rFilename, SwPaM& );
 
     /*
@@ -249,6 +249,11 @@ public:
     // ask for glossaries
     BOOL HasGlossaries( const Reader& );
     BOOL ReadGlossaries( const Reader&, SwTextBlocks&, BOOL bSaveRelFiles );
+
+    const String&       GetBaseURL() const { return sBaseURL;}
+
+protected:
+    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
 };
 
 
@@ -265,6 +270,8 @@ class Reader
     friend class SwReader;
     SwDoc* pTemplate;
     String aTemplateNm;
+    //String sBaseURL;
+
     Date aDStamp;
     Time aTStamp;
     DateTime aChkDateTime;
@@ -329,8 +336,9 @@ public:
     // returns the count of it
     virtual USHORT GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const;
+
 private:
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &)=0;
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
 
     // alle die die Streams / Storages nicht geoeffnet brauchen,
     // muessen die Methode ueberladen (W4W!!)
@@ -339,21 +347,21 @@ private:
 
 class RtfReader: public Reader
 {
-    virtual ULONG Read( SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 
 class AsciiReader: public Reader
 {
     friend class SwReader;
-    virtual ULONG Read( SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     AsciiReader(): Reader() {}
 };
 
 class SwgReader: public Reader
 {
-    virtual ULONG Read( SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 class StgReader : public Reader
@@ -373,7 +381,7 @@ public:
 class Sw3Reader : public StgReader
 {
     Sw3Io* pIO;
-    virtual ULONG Read( SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     Sw3Reader() : pIO( 0 ) {}
 
@@ -414,6 +422,9 @@ public:
     const  String& GetName();
     void   SetName( const String& );
     ULONG GetError() const { return nErr; }
+
+    String GetBaseURL() const;
+    void   SetBaseURL( const String& rURL );
 
     BOOL   IsOld() const;
     ULONG  ConvertToNew();              // Textbausteine konvertieren
@@ -482,6 +493,7 @@ extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden s
 class Writer : public SvRefBase
 {
     SwAsciiOptions aAscOpts;
+    String          sBaseURL;
 
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
@@ -501,6 +513,7 @@ protected:
     void PutCJKandCTLFontsInAttrPool();
 
     virtual ULONG WriteStream() = 0;
+    void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
 
 public:
     SwDoc* pDoc;
@@ -537,6 +550,8 @@ public:
 
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
+
+    const String&       GetBaseURL() const { return sBaseURL;}
 
     // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
     USHORT FindPos_Bkmk( const SwPosition& rPos ) const;
@@ -651,6 +666,9 @@ class SwWriter
     SwPaM* pOutPam;
     SwCrsrShell *pShell;
     SwDoc &rDoc;
+
+    //String sBaseURL;
+
     BOOL bWriteAll;
 
 public:
@@ -668,17 +686,19 @@ public:
     SwWriter( SfxMedium&, SwCrsrShell &,BOOL bWriteAll = FALSE );
     SwWriter( SfxMedium&, SwDoc & );
 //  SwWriter( SfxMedium&, SwPaM&, BOOL bWriteAll = FALSE );
+
+    //const String&       GetBaseURL() const { return sBaseURL;}
 };
 
 
 /*  */
 /////////////////////////////////////////////////////////////////////////////
 
-void GetRTFWriter( const String&, WriterRef& );
-void GetASCWriter( const String&, WriterRef& );
-void GetSw3Writer( const String&, WriterRef& );
-void GetHTMLWriter( const String&, WriterRef& );
-void GetXMLWriter( const String&, WriterRef& );
+void GetRTFWriter( const String&, const String&, WriterRef& );
+void GetASCWriter( const String&, const String&, WriterRef& );
+void GetSw3Writer( const String&, const String&, WriterRef& );
+void GetHTMLWriter( const String&, const String&, WriterRef& );
+void GetXMLWriter( const String&, const String&, WriterRef& );
 
 // Die folgende Klasse ist ein Wrappe fuer die Basic-I/O-Funktionen
 // des Writer 3.0. Alles ist statisch. Alle u.a. Filternamen sind die
@@ -718,7 +738,7 @@ public:
     // gebe einen bestimmten Reader zurueck
     static Reader* GetReader( const String& rFltName );
     // gebe einen bestimmten Writer zurueck
-    static void GetWriter( const String& rFltName, WriterRef& xWrt );
+    static void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xWrt );
 
     static const String GetSubStorageName( const SfxFilter& rFltr );
 };
