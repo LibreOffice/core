@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-03 11:09:45 $
+#   last change: $Author: hjs $ $Date: 2001-05-03 16:00:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 %udkversion.mk :
     @+$(COPY) $(PRJ)$/inc$/udkversion.mk $@
 
-.INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/udkversion.mk
+.INCLUDE .IGNORE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/udkversion.mk
 
 # --- reset defined Environments --------------------
 .SUFFIXES:
