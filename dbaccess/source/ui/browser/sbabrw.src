@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text [ english ] = "~refresh connection" ;  \
     Text [ english_us ] = "~Refresh Connection" ;   \
     Text[ portuguese ] = "~Actualizar ligação"; \
-    Text[ russian ] = "~Âîçîáíîâèòü ïîäêëş÷åíèå";   \
+    Text[ russian ] = "~Âîçîáíîâèòü ñîåäèíåíèå";    \
     Text[ greek ] = "Áíáíİùóç óıíäåóçò";    \
     Text[ dutch ] = "~opnieuw verbinden";   \
     Text[ french ] = "~Rétablir la connexion";  \
@@ -1265,7 +1265,7 @@ String STR_CONNECTING_DATASOURCE
     Text [ english ] = "connecting to \"$name$\" ...";
     Text [ english_us ] = "Connecting to \"$name$\" ...";
     Text[ portuguese ] = "A estabelecer ligação com \"$name$\" ...";
-    Text[ russian ] = "Ïîäêëş÷åíèå ê \"$name$\" ...";
+    Text[ russian ] = "Ñîåäèíåíèå ñ \"$name$\" ...";
     Text[ greek ] = "Óıíäåóç ìå ôï \"$name$\" ...";
     Text[ dutch ] = "Bezig met verbinden met \"$name$\" ...";
     Text[ french ] = "Connexion à \"$name$\" ...";
@@ -1343,7 +1343,7 @@ String STR_DSBROWSER_TITLE
     Text [ english ] = "Data source browser" ;
     Text [ english_us ] = "Data sources view" ;
     Text[ portuguese ] = "Ver fontes de dados";
-        Text[ russian ] = "Âèä èñòî÷íèêîâ äàííûõ";
+        Text[ russian ] = "Âèä èñõîäíûõ äàííûõ";
         Text[ greek ] = "Data source browser";
         Text[ dutch ] = "Weergave gegevensbron";
         Text[ french ] = "Vue des sources de données";
@@ -1394,11 +1394,11 @@ String STR_COULDNOTCONNECT_DATASOURCE
     Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
     Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
-    Text[ portuguese ] = "The connection to the data source \"$name$\" could not be established.";
-        Text[ russian ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ portuguese ] = "Foi impossível estabelecer a ligação à fonte de dados \"$name$\".";
+        Text[ russian ] = "Ñîåäèíèòüñÿ ñ èñõîäíûìè äàííûìè \"$name$\" íåâîçìîæíî.";
         Text[ greek ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ dutch ] = "De verbinding met de gegevensbron \"$name$\" kon niet tot stand worden gebracht.";
-        Text[ french ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ french ] = "Impossible d'établir une connexion à la source de données \"$name$\".";
         Text[ spanish ] = "No se pudo realizar la conexión a la fuente de datos \"$name$\".";
         Text[ finnish ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna \"$name$\".";
@@ -1406,10 +1406,10 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ swedish ] = "Det gick inte att skapa förbindelsen till datakällan \"$name$\".";
         Text[ polish ] = "Brak po³¹czenia ze Ÿród³em danych \"$name$\".";
         Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
-        Text[ japanese ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ \"$name$\" ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "The connection to the data source \"$name$\" could not be established.";
-        Text[ chinese_simplified ] = "The connection to the data source \"$name$\" could not be established.";
-        Text[ chinese_traditional ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ chinese_simplified ] = "æ— æ³•ä¸æ•°æ®æº \"$name$\" å»ºç«‹è¿æ¥ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ°è³‡æ–™æº \"$name$\" ã€‚";
         Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
@@ -1430,27 +1430,28 @@ Menu RID_MENU_REFRESH_DATA
             HelpId = HID_BROWSER_REFRESH_REBUILDVIEW;
             Text = "neu aufbauen";
             Text [ english ] = "reconstruct";
-            Text [ english_us ] = "reconstruct";
-            Text[ portuguese ] = "reconstruct";
-                Text[ russian ] = "reconstruct";
+            Text [ english_us ] = "Rebuild";
+            Text[ portuguese ] = "Reconstruir";
+                Text[ russian ] = "Îáíîâèòü";
                 Text[ greek ] = "reconstruct";
                 Text[ dutch ] = "opnieuw opbouwen";
-                Text[ french ] = "reconstruct";
+                Text[ french ] = "Reconstituer";
                 Text[ spanish ] = "reconstruir";
                 Text[ finnish ] = "reconstruct";
                 Text[ italian ] = "Ricostruire";
                 Text[ danish ] = "reconstruct";
-                Text[ swedish ] = "reconstruct";
-                Text[ polish ] = "odœwie¿";
+                Text[ swedish ] = "Rekonstruera";
+                Text[ polish ] = "Odœwie¿";
                 Text[ portuguese_brazilian ] = "reconstruct";
-                Text[ japanese ] = "reconstruct";
+                Text[ japanese ] = "æœ€æ–°ã®æƒ…å ±ã«æ›´æ–°";
                 Text[ korean ] = "reconstruct";
-                Text[ chinese_simplified ] = "reconstruct";
-                Text[ chinese_traditional ] = "reconstruct";
+                Text[ chinese_simplified ] = "é‡å»º";
+                Text[ chinese_traditional ] = "é‡å»º";
                 Text[ turkish ] = "reconstruct";
                 Text[ arabic ] = "reconstruct";
                 Text[ catalan ] = "reconstruct";
             };
     };
 };
+
 
