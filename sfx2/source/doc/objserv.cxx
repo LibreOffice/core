@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-31 15:52:30 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Medium zusammenbauen
             SfxItemSet* pSet = new SfxAllItemSet( *rReq.GetArgs() );
-            SfxMedium aMedium( aFileName, STREAM_STD_READWRITE | STREAM_TRUNC, FALSE, pFilter, pSet);
+            SfxMedium aMedium( aFileName, STREAM_STD_READWRITE, FALSE, pFilter, pSet);
 
             // als Vorlage speichern
             BOOL bModified = IsModified();
@@ -796,7 +796,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( SaveTo_Impl(aMedium,NULL,FALSE) )
             {
                 bOK = TRUE;
-                aMedium.Commit();
                 pTemplates->NewTemplate( nRegion, aTemplateName, aFileName );
             }
 
@@ -811,7 +810,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ErrorHandler::HandleError(lErr);
             ResetError();
             delete pTemplates;
-            DoSaveCompleted( aMedium.GetStorage() );
+            DoSaveCompleted();
             SetTemplateConfig( bHasTemplateConfig );
             SetModified(bModified);
             rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
