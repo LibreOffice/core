@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 14:39:06 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,14 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ italian ] = "Impossibile caricare il componente (%s).\nRiavviate il setup e eseguite la riparazione.";
     Text[ danish ] = "Det var ikke muligt at indlæse en komponent (%s).\nStart venligst installationsprogrammet (Setup) og udfør en reparation.";
     Text[ swedish ] = "Det gick inte att ladda en komponent (%s).\nStarta setupprogrammet och gör en reparation.";
-    Text[ polish ] = "Sk³adnika (%s) nie mo¿na za³adowaæ.\nProszê rozpocznij program instalacyjny i przeprowad? naprawê.";
+    Text[ polish ] = "Sk³adnika (%s) nie mo¿na za³adowaæ.\nProszê rozpocznij program instalacyjny i przeprowadŸ naprawê.";
     Text[ portuguese_brazilian ] = "The component (%s) could not be loaded.\nPlease start setup with the option -repair.";
     Text[ japanese ] = "ºİÎß°ÈİÄ(%s)‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğŠJn‚µ‚ÄC•œ‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò²¿¼ş(%s)¡£\nÇëÄúÑ¡Ôñ°²×°³ÌĞòµÄÑ¡ÏîĞŞ²¹¡£";
     Text[ chinese_traditional ] = "µLªk¸ü¤Jµ{¦¡³¡¥ó(%s)¡C\n½Ğ±z¿ï¾Ü¦w¸Ëµ{¦¡ªº­×½Æ¿ï¶µ¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊÍãíá Çáãßæä (%s).\n ÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ¡ Ëã ÇáŞíÇã ÈÚãáíÉ ÇáÅÕáÇÍ ÇááÇÒãÉ.";
     Text[ greek ] = "Äåí Şôáí äõíáôüí íá öïñôùèåß ôï óôïé÷åßï (%s)\nĞáñáêáëş åêêéíŞóôå îáíÜ ôï ğñüãñáììá åãêáôÜóôáóçò êáé åêôåëİóôå ôçí åğéóêåõŞ.";
-    Text[ korean ] = "±¸¼º¿ä¼Ò (%s)À»£¨¸¦£©·ÎµåÇÏÁö¡¡¸øÇß½À´Ï´Ù.\n¼Â¾÷À»¡¡½ÃÀÛÇÑ´ÙÀ½¡¡¼ö¸®ÇÏ½Ê½Ã¿À.";
+    Text[ korean ] = "±¸¼º¿ä¼Ò (%s)À»£¨¸¦£©·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.\n¼Â¾÷À»¡¡½ÃÀÛÇÑ ´ÙÀ½ ¼ö¸®ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bir bileşen (%s) yüklenemedi.\nSetup programını çalıştırıp onarınız.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Komponenttia (%s) ei voitu ladata.\nKäynnistä asennusohjelma korjausasetuksella.";
@@ -99,14 +99,14 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ english_us ] = "Do not show warning again.";
     Text[ portuguese ] = "Não mostrar mais esta observação.";
     Text[ russian ] = "İòî óêàçàíèå áîëüøå íå ïîêàçûâàòü.";
-    Text[ greek ] = "Do not warn me again.";
+    Text[ greek ] = "Íá ìçí åìöáíéóôåß îáíÜ áõôŞ ç ğëçñïöïñßá.";
     Text[ dutch ] = "Do not warn me again.";
     Text[ french ] = "Ne plus afficher cet avertissement.";
     Text[ spanish ] = "No mostrar más esta advertencia.";
     Text[ italian ] = "Do not warn me again.";
     Text[ danish ] = "Do not warn me again.";
     Text[ swedish ] = "Visa inte den här informationen mer.";
-    Text[ polish ] = "Nie wy?wietlaj wiêcej ostrze¿enia.";
+    Text[ polish ] = "Nie wyœwietlaj wiêcej ostrze¿enia.";
     Text[ portuguese_brazilian ] = "Do not warn me again.";
     Text[ japanese ] = "¡Œã‚±‚Ìw¦‚Í‚à‚¤•\\¦‚µ‚È‚¢B";
     Text[ korean ] = "Do not warn me again.";
