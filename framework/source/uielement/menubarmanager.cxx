@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:27:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,174 +1036,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
         m_xModuleImageManager.clear();
 }
 
-void MenuBarManager::UpdateSpecialFileMenu( Menu* pMenu )
-{
-    // update picklist
-    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
-    ::std::vector< MenuItemHandler* > aNewPickVector;
-    Reference< XStringWidth > xStringLength( new StringLength );
-
-    USHORT  nPickItemId = START_ITEMID_PICKLIST;
-    int     nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
-
-    Reference< XStatusListener > xStatusListener;
-    Reference< XDispatch > xDispatch;
-    for ( int i = 0; i < nPickListMenuItems; i++ )
-    {
-        Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
-
-        MenuItemHandler* pNewMenuItemHandler = new MenuItemHandler(
-                                                    nPickItemId++,
-                                                    xStatusListener,
-                                                    xDispatch );
-
-        for ( int j = 0; j < rPickListEntry.getLength(); j++ )
-        {
-            Any a = rPickListEntry[j].Value;
-
-            if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
-                a >>= pNewMenuItemHandler->aMenuItemURL;
-            else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
-                a >>= pNewMenuItemHandler->aFilter;
-            else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
-                a >>= pNewMenuItemHandler->aTitle;
-            else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
-                a >>= pNewMenuItemHandler->aPassword;
-        }
-
-        aNewPickVector.push_back( pNewMenuItemHandler );
-    }
-
-    if ( aNewPickVector.size() > 0 )
-    {
-        URL aTargetURL;
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        // #110897#
-        // Reference< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-        Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-
-        Reference< XDispatch > xMenuItemDispatch;
-
-        // query for dispatcher
-        std::vector< MenuItemHandler* >::iterator p;
-        for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); p++ )
-        {
-            MenuItemHandler* pMenuItemHandler = *p;
-
-            aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
-            xTrans->parseStrict( aTargetURL );
-
-            if ( !xMenuItemDispatch.is() )
-            {
-                // attention: this code assume that "_blank" can only be consumed by desktop service
-                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
-            }
-
-            if ( xMenuItemDispatch.is() )
-            {
-                pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
-            }
-        }
-
-        {
-            ResetableGuard aGuard( m_aLock );
-
-            int nRemoveItemCount = 0;
-            int nItemCount       = pMenu->GetItemCount();
-
-            if ( nItemCount > 0 )
-            {
-                // remove all old picklist entries from menu
-                sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_PICKLIST );
-                for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
-                {
-                    pMenu->RemoveItem( n );
-                    ++nRemoveItemCount;
-                }
-
-                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
-                    pMenu->RemoveItem( pMenu->GetItemCount()-1 );
-
-                // remove all old picklist entries from menu handler
-                if ( nRemoveItemCount > 0 )
-                {
-                    for( sal_uInt32 nIndex = m_aMenuItemHandlerVector.size() - nRemoveItemCount;
-                         nIndex < m_aMenuItemHandlerVector.size();  )
-                    {
-                        delete m_aMenuItemHandlerVector.at( nIndex );
-                        m_aMenuItemHandlerVector.erase( m_aMenuItemHandlerVector.begin() + nIndex );
-                    }
-                }
-            }
-
-            // append new picklist menu entries
-            pMenu->InsertSeparator();
-            for ( sal_uInt32 i = 0; i < aNewPickVector.size(); i++ )
-            {
-                char menuShortCut[5] = "~n: ";
-
-                ::rtl::OUString aMenuShortCut;
-                if ( i <= 9 )
-                {
-                    if ( i == 9 )
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1~0: " ));
-                    else
-                    {
-                        menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
-                    }
-                }
-                else
-                {
-                    aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ));
-                }
-
-                // Abbreviate URL
-                rtl::OUString   aURLString( aNewPickVector.at( i )->aMenuItemURL );
-                rtl::OUString   aTipHelpText;
-                rtl::OUString   aMenuTitle;
-                INetURLObject   aURL( aURLString );
-
-                if ( aURL.GetProtocol() == INET_PROT_FILE )
-                {
-                    // Do handle file URL differently => convert it to a system
-                    // path and abbreviate it with a special function:
-                    String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-                    ::rtl::OUString aSystemPath( aFileSystemPath );
-                    ::rtl::OUString aCompactedSystemPath;
-
-                    aTipHelpText = aSystemPath;
-                    oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
-                    if ( !nError )
-                        aMenuTitle = String( aCompactedSystemPath );
-                    else
-                        aMenuTitle = aSystemPath;
-                }
-                else
-                {
-                    // Use INetURLObject to abbreviate all other URLs
-                    String  aShortURL;
-                    aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
-                    aMenuTitle += aShortURL;
-                    aTipHelpText = aURLString;
-                }
-
-                ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
-
-                MenuItemHandler* pMenuItemHandler = aNewPickVector.at( i );
-                pMenu->InsertItem( pMenuItemHandler->nItemId, aTitle );
-                pMenu->SetTipHelpText( pMenuItemHandler->nItemId, aTipHelpText );
-                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
-            }
-        }
-    }
-}
-
-
 void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu )
 {
     // update window list
@@ -1275,46 +1107,6 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu )
     }
 }
 
-
-void MenuBarManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList, const MenuItemHandler* pMenuItemHandler )
-{
-    int NUM_OF_PICKLIST_ARGS = 3;
-
-    Any a;
-    aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
-
-    aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
-    a <<= pMenuItemHandler->aMenuItemURL;
-    aArgsList[0].Value = a;
-
-    aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-    a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
-    aArgsList[1].Value = a;
-
-    ::rtl::OUString aFilter( pMenuItemHandler->aFilter );
-
-    sal_Int32 nPos = aFilter.indexOf( '|' );
-    if ( nPos >= 0 )
-    {
-        ::rtl::OUString aFilterOptions;
-
-        if ( nPos < ( aFilter.getLength() - 1 ) )
-            aFilterOptions = aFilter.copy( nPos+1 );
-
-        aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-        a <<= aFilterOptions;
-        aArgsList[2].Value = a;
-
-        aFilter = aFilter.copy( 0, nPos-1 );
-        aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
-    }
-
-    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
-    a <<= aFilter;
-    aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = a;
-}
-
-
 //_________________________________________________________________________________________________________________
 // vcl handler
 //_________________________________________________________________________________________________________________
@@ -1342,11 +1134,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         m_bActive = TRUE;
 
         ::rtl::OUString aCommand( m_aMenuItemCommand );
-        if ( m_aMenuItemCommand == aSpecialFileMenu ||
-             m_aMenuItemCommand == aSlotSpecialFileMenu ||
-             aCommand == aSpecialFileCommand )
-            UpdateSpecialFileMenu( pMenu );
-        else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
+        if ( m_aMenuItemCommand == aSpecialWindowMenu ||
                   m_aMenuItemCommand == aSlotSpecialWindowMenu ||
                   aCommand == aSpecialWindowCommand )
             UpdateSpecialWindowMenu( pMenu );
@@ -1443,9 +1231,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                         // because they are handled directly through XFrame->activate!!!
                         // Don't update dispatches for special file menu items.
                         if ( !(( pMenuItemHandler->nItemId >= START_ITEMID_WINDOWLIST &&
-                                pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST ) ||
-                            ( pMenuItemHandler->nItemId >= START_ITEMID_PICKLIST &&
-                                pMenuItemHandler->nItemId < END_ITEMID_PICKLIST )))
+                                pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST )))
                         {
                             Reference< XDispatch > xMenuItemDispatch;
 
@@ -1623,13 +1409,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
 
-                    if ( nCurItemId >= START_ITEMID_PICKLIST &&
-                         nCurItemId <  START_ITEMID_WINDOWLIST )
-                    {
-                        // picklist menu item selected
-                        CreatePicklistArguments( aArgs, pMenuItemHandler );
-                    }
-                    else if ( m_bIsBookmarkMenu )
+                    if ( m_bIsBookmarkMenu )
                     {
                         // bookmark menu item selected
                         Any a;
