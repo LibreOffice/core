@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:09:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ chinese_traditional ] = "½s¸¹";
                 Text[ arabic ] = "ÇáÊÑŞíã";
                 Text[ greek ] = "Áñßèìçóç";
-                Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+                Text[ korean ] = "¹øÈ£¸Å±â±â";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
             };
@@ -509,7 +509,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ chinese_traditional ] = "®æ¦¡(~F)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ìïñ~öŞ";
-        Text[ korean ] = "¼­½Ä(~F)";
+        Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "Format";
     };
     Menu MN_FORM
@@ -793,7 +793,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ arabic ] = "...ÍİÙ ßÜ";
                 HelpID = HID_NUM_OUTL_NUM_SAVEAS ;
                 Text[ greek ] = "~ÁğïèŞêåõóç ùò...";
-                Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå(~A)...";
+                Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå...";
                 Text[ chinese_traditional ] = "Àx¦s·sÀÉ(~A)...";
                 Text[ turkish ] = "Farklı kaydet...";
                 Text[ language_user1 ] = " ";
@@ -807,7 +807,7 @@ TabDialog DLG_TAB_OUTLINE
     Text[ chinese_traditional ] = "³¹½s¸¹";
     Text[ arabic ] = "ÊÑŞíã ÇáİÕæá";
     Text[ greek ] = "Áñßèìçóç êåöáëáßùí";
-    Text[ korean ] = "Àå ¹øÈ£ ¸Å±â±â";
+    Text[ korean ] = "Àå ¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Bölüm numaralama";
     Text[ language_user1 ] = " ";
 };
@@ -924,7 +924,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "½s¸¹(~N)";
         Text[ arabic ] = "ÑŞã";
         Text[ greek ] = "Áñéèìüò";
-        Text[ korean ] = "¼ö(~N)";
+        Text[ korean ] = "¹øÈ£";
         Text[ turkish ] = "Numara";
         Text[ language_user1 ] = " ";
     };
@@ -994,7 +994,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "§¹¾ãªº(~W)";
         Text[ arabic ] = "ßÇãá";
         Text[ greek ] = "Ïëïêëçñùìİíï";
-        Text[ korean ] = "ÇÏÀ§ ¼öÁØ º¸ÀÌ±â(~W)";
+        Text[ korean ] = "¿Ïº®ÇÏ°Ô";
         Text[ turkish ] = "Tüm düzeyler";
         Text[ language_user1 ] = " ";
     };
@@ -1067,7 +1067,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¤§«e(~B)";
         Text[ arabic ] = "ŞÈáå";
         Text[ greek ] = "ğñéí áğü";
-        Text[ korean ] = "Àü¿¡(~B)";
+        Text[ korean ] = "Àü¿¡";
         Text[ turkish ] = "Baş. ekle";
         Text[ language_user1 ] = " ";
     };
@@ -1105,7 +1105,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¤§«á(~A)";
         Text[ arabic ] = "ÈÚÏå";
         Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ÈÄ¿¡(~A)";
+        Text[ korean ] = "ÈÄ¿¡";
         Text[ turkish ] = "Son. ekle";
         Text[ language_user1 ] = " ";
     };
@@ -1143,7 +1143,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÈÏÁğ ÈÜ";
         Text[ greek ] = "Èİóç åêêßíçóçò";
-        Text[ korean ] = "¿¡¼­ ½ÃÀÛ(~S)";
+        Text[ korean ] = "¿¡¼­ ½ÃÀÛ";
         Text[ turkish ] = "Başlangıç:";
         Text[ language_user1 ] = " ";
     };
@@ -1187,7 +1187,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "½s¸¹";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+        Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
     };
