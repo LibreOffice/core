@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-21 15:08:46 $
+#   last change: $Author: toconnor $ $Date: 2003-01-21 15:45:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,10 +90,12 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
+    <pathelement path="${install.dir}/bsh-1.2b7.jar"/>
   </path>
 
   <path id="openide.class.path">
     <pathelement path="${netbeans.home}/lib/openide.jar"/>
+    <pathelement path="${install.dir}/xerces.jar"/>
   </path>
 
   <path id="jedit.class.path">
@@ -123,6 +125,7 @@
   <target name="idesupport.compile" depends="prepare">
     <javac srcdir="." destdir="${jardir}"
            debug="${debug}" deprecation="on">
+      <classpath refid="openide.class.path"/>
       <exclude name="${idesupport.dir}/**/.*/*"/>
       <exclude name="${idesupport.dir}/localoffice/**/*"/>
       <include name="${idesupport.dir}/*.java"/>
@@ -165,6 +168,19 @@
         <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
     </manifest>
     </jar>
+
+    <jar jarfile="${jardir}/ScriptRuntimeForBeanShell.jar"
+         basedir="${scriptingclasses}">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="RegistrationClassName"
+                       value="BeanShellRuntimeComponentRegistration"/>
+        </manifest>
+        <include name="BeanShellRuntimeComponentRegistration.class"/>
+        <include name="**/ScriptRuntimeForBeanShell.class"/>
+        <include name="**/ScriptContext.class"/>
+    </jar>
+
     <!--<jar jarfile="${jardir}/${storagejarname}"
      basedir="${storageclasses}">
     <manifest>
