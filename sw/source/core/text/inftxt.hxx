@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:01:13 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ class SwAttrIter;
 /* Minimum: Prozentwert fuers kernen */
 #define MINKERNPERCENT 5
 #define ARROW_WIDTH 200
+#define DIR_LEFT2RIGHT 0
+#define DIR_BOTTOM2TOP 1
+#define DIR_RIGHT2LEFT 2
+#define DIR_TOP2BOTTOM 3
 
 #ifndef PRODUCT
 #define OPTCALM( rInf )  (rInf).IsOptCalm()
@@ -196,7 +200,7 @@ protected:
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
     sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
-    sal_Bool bRotated : 1;      // 90 degree rotation
+    sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
     void _NoteAnimation();
@@ -244,8 +248,9 @@ public:
     inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
     inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
     inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
-    inline sal_Bool IsRotated() const { return bRotated; }
-    inline void SetRotated( const sal_Bool bNew ) { bRotated = bNew; }
+    inline sal_uInt8 GetDirection() const { return nDirection; }
+    inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
+    inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:07:10 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,18 +110,18 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
     sal_Bool bFollowFld :1; // Field follow inside
-    sal_Bool bRotation  :1; // Rotation (horizontal <-> vertical)
+    sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
     SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
         bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
-        bFormatted( sal_False ), bFollowFld( sal_False ), bRotation( sal_False )
+        bFormatted( sal_False ), bFollowFld( sal_False ), nDirection( 0 )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
     inline void SetRuby() { bRuby = sal_True; }
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
     inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
     inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
-    inline void SetRotation( sal_Bool bNew ) { bRotation = bNew; }
+    inline void SetDirection( sal_uInt8 nNew ) { nDirection = nNew; }
     inline sal_Bool GetTab1() const { return bTab1; }
     inline sal_Bool GetTab2() const { return bTab2; }
 public:
@@ -149,7 +149,11 @@ public:
 
     inline sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
     inline sal_Bool HasBrackets() const;
-    inline sal_Bool GetRotation() const { return bRotation; }
+    inline sal_Bool HasRotation() const { return 0 != (1 & nDirection); }
+    inline sal_Bool IsRevers() const { return 0 != (2 & nDirection); }
+    inline sal_uInt8 GetDirection() const { return nDirection; }
+    inline USHORT GetFontRotation() const
+        { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
     OUTPUT_OPERATOR
 };
 
@@ -209,8 +213,8 @@ public:
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
-    SwRotatedPortion( xub_StrLen nEnd )
-        : SwMultiPortion( nEnd ) { SetRotation( sal_True ); }
+    SwRotatedPortion( xub_StrLen nEnd, sal_uInt8 nDir = 1 )
+        : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
 };
 
 // For cursor travelling in multiportions

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:00:46 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
-      bRotated( rNew.IsRotated() )
+      nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -363,7 +363,8 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
-        bForbiddenChars = bRotated = sal_False;
+        bForbiddenChars = sal_False;
+    nDirection = DIR_LEFT2RIGHT;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -390,7 +391,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
-      bRotated( rNew.IsRotated() )
+      nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -608,7 +609,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 #ifndef PRODUCT
 #ifdef DEBUG
         if( IsOptDbg() )
-            pWin->DrawRect( aRect );
+            pWin->DrawRect( aRect.SVRect() );
 #endif
 #endif
         pOpt->PaintTab( pWin, aRect );

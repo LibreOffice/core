@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:07:22 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,6 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
     xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
 {
     SetDouble();
-
     pBracket->nStart = *rAttr.GetStart();
 
     if( RES_CHRATR_TWO_LINES == rAttr.Which() )
@@ -927,7 +926,7 @@ class SwSpaceManipulator
     MSHORT nOldSpIdx;
     short nSpaceAdd;
     sal_Bool bSpaceChg  : 1;
-    sal_Bool bRotate    : 1;
+    sal_uInt8 nOldDir   : 2;
 public:
     SwSpaceManipulator( SwTxtPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
@@ -940,8 +939,8 @@ SwSpaceManipulator::SwSpaceManipulator( SwTxtPaintInfo& rInf,
 {
     pOldSpaceAdd = rInfo.GetpSpaceAdd();
     nOldSpIdx = rInfo.GetSpaceIdx();
-    bRotate = rInfo.IsRotated();
-    rInfo.SetRotated( rMulti.GetRotation() );
+    nOldDir = rInfo.GetDirection();
+    rInfo.SetDirection( rMulti.GetDirection() );
     bSpaceChg = sal_False;
     if( rMulti.IsDouble() )
     {
@@ -994,7 +993,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
     }
     rInfo.SetSpaceAdd( pOldSpaceAdd );
     rInfo.SetSpaceIdx( nOldSpIdx);
-    rInfo.SetRotated( bRotate );
+    rInfo.SetDirection( nOldDir );
 }
 
 /*-----------------13.10.00 16:24-------------------
@@ -1020,7 +1019,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwFontSave *pFontSave;
     SwFont* pTmpFnt;
 
-    if( rMulti.IsDouble() || rMulti.GetRotation() )
+    if( rMulti.IsDouble() || rMulti.HasRotation() )
     {
         pTmpFnt = new SwFont( *GetInfo().GetFont() );
         if( rMulti.IsDouble() )
@@ -1028,7 +1027,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             SetPropFont( 50 );
             pTmpFnt->SetProportion( GetPropFont() );
         }
-        pTmpFnt->SetVertical( rMulti.GetRotation() );
+        pTmpFnt->SetVertical( rMulti.GetFontRotation() );
         pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
     }
     else
@@ -1053,10 +1052,18 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     // GetInfo().Y() is the baseline from the surrounding line. We must switch
     // this temporary to the baseline of the inner lines of the multiportion.
-    if( rMulti.GetRotation() )
+    if( rMulti.HasRotation() )
     {
-        GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
-        GetInfo().X( nTmpX + pLay->GetAscent() );
+        if( rMulti.IsRevers() )
+        {
+            GetInfo().Y( nOldY - rMulti.GetAscent() );
+            GetInfo().X( nTmpX - pLay->GetAscent() + rMulti.Width() );
+        }
+        else
+        {
+            GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
+            GetInfo().X( nTmpX + pLay->GetAscent() );
+        }
     }
     else
         GetInfo().Y( nOldY - rMulti.GetAscent() + pLay->GetAscent() );
@@ -1115,11 +1122,19 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
             aManip.SecondLine();
-            if( rMulti.GetRotation() )
+            if( rMulti.HasRotation() )
             {
-                GetInfo().X( nTmpX + rMulti.Width()
-                             - pLay->Height() + pLay->GetAscent() );
-                GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
+                if( rMulti.IsRevers() )
+                {
+                    GetInfo().X( nTmpX + pLay->Height() - pLay->GetAscent() );
+                    GetInfo().Y( nOldY - rMulti.GetAscent() );
+                }
+                else
+                {
+                    GetInfo().X( nTmpX + rMulti.Width()
+                                 - pLay->Height() + pLay->GetAscent() );
+                    GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
+                }
             }
             else
             {
@@ -1198,12 +1213,12 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     SeekAndChg( rInf );
     SwFontSave *pFontSave;
-    if( rMulti.IsDouble() || rMulti.GetRotation() )
+    if( rMulti.IsDouble() || rMulti.HasRotation() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        if( rMulti.GetRotation() )
+        if( rMulti.HasRotation() )
         {
-            pTmpFnt->SetVertical( sal_True );
+            pTmpFnt->SetVertical( rMulti.GetFontRotation() );
             nMaxWidth = GetTxtFrm()->GetUpper()->Prt().Height();
         }
         if( rMulti.IsDouble() )
@@ -1282,7 +1297,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             BuildPortions( aInf );
         rMulti.CalcSize( *this, aInf );
         pCurr->SetRealHeight( pCurr->Height() );
-        if( rMulti.GetRotation() )
+        if( rMulti.HasRotation() && !rMulti.IsDouble() )
             break;
         else if( pCurr->GetLen()<nMultiLen || rMulti.IsRuby() || aInf.GetRest())
         {
@@ -1384,7 +1399,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             ((SwRubyPortion&)rMulti).CalcRubyOffset();
         }
     }
-    if( rMulti.GetRotation() )
+    if( rMulti.HasRotation() )
     {
         SwTwips nH = rMulti.Width();
         rMulti.Width( rMulti.Height() );
@@ -1425,8 +1440,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
             pTmp->SetFollowFld();
         }
-        else if( rMulti.GetRotation() )
-            pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx() );
+        else if( rMulti.HasRotation() )
+            pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
+                                         rMulti.GetDirection() );
         else
             pTmp = NULL;
         if( pNextFirst && pTmp )
@@ -1556,8 +1572,8 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         else if( pMulti->IsRuby() )
             pTmp = new SwRubyPortion( *pHint, *GetInfo().GetFont(), nMultiPos,
                                 ((SwRubyPortion*)pMulti)->GetRubyOffset() );
-        else if( pMulti->GetRotation() )
-            pTmp = new SwRotatedPortion( nMultiPos );
+        else if( pMulti->GetDirection() )
+            pTmp = new SwRotatedPortion( nMultiPos, pMulti->GetDirection() );
         else
             return pRest;
         pTmp->SetFollowFld();

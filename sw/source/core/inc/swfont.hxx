@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-20 15:49:45 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ class SwSubFont : public SvxFont
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const BOOL bOutline );
-    inline void SetVertical( const BOOL bNew );
+    inline void SetVertical( const USHORT nDir );
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
@@ -264,7 +264,7 @@ public:
     inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
-    inline void SetVertical( const BOOL bNew );
+    inline void SetVertical( const USHORT nDir );
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BOOL bAutoKern );
     inline void SetTransparent( const BOOL bTrans );
@@ -818,21 +818,21 @@ inline void SwFont::SetNoCol( const BOOL bNew )
     bNoColReplace = bNew;
 }
 
-inline void SwSubFont::SetVertical( const BOOL bNew )
+inline void SwSubFont::SetVertical( const USHORT nDir )
 {
     pMagic = 0;
-    Font::SetVertical( bNew );
-    Font::SetOrientation( bNew ? 900 : 0 );
+    Font::SetVertical( nDir != 0 );
+    Font::SetOrientation( nDir );
 }
 
-inline void SwFont::SetVertical( const BOOL bNew )
+inline void SwFont::SetVertical( const USHORT nDir )
 {
-    if( bNew != aSub[0].IsVertical() )
+    if( nDir != aSub[0].GetOrientation() )
     {
         bFntChg = TRUE;
-        aSub[0].SetVertical( bNew );
-        aSub[1].SetVertical( bNew );
-        aSub[2].SetVertical( bNew );
+        aSub[0].SetVertical( nDir );
+        aSub[1].SetVertical( nDir );
+        aSub[2].SetVertical( nDir );
     }
 }
 

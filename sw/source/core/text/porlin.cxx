@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 09:09:33 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,11 +377,12 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
+    BOOL bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
     {
         SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
         if( rInf.IsRotated() )
-            rInf.Y( rInf.Y() - nTmp );
+            rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
         else
             rInf.X( rInf.X() + nTmp );
     }
@@ -389,17 +390,18 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
     {
         if( InFixMargGrp() )
         {
-            if( rInf.GetSpaceAdd() < 0 )
+            short nSpAdd = rInf.GetSpaceAdd();
+            if( nSpAdd < 0 )
             {
                 if( rInf.IsRotated() )
-                    rInf.Y( rInf.Y() - rInf.GetSpaceAdd() );
+                    rInf.Y( rInf.Y() + (bB2T ? -nSpAdd : nSpAdd) );
                 else
-                    rInf.X( rInf.X() + rInf.GetSpaceAdd() );
+                    rInf.X( rInf.X() + nSpAdd );
             }
             rInf.IncSpaceIdx();
         }
         if( rInf.IsRotated() )
-            rInf.Y( rInf.Y() - PrtWidth() );
+            rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
         else
             rInf.X( rInf.X() + PrtWidth() );
     }

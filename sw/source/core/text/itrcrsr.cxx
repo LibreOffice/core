@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-21 14:17:09 $
+ *  last change: $Author: ama $ $Date: 2001-01-19 15:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     nPorHeight = pPor->Height();
                     nPorAscent = pPor->GetAscent();
                 }
-                if ( aInf.GetIdx() + pPor->GetLen() <= nOfst )
+                if ( aInf.GetIdx() + pPor->GetLen() < nOfst +
+                     ( pPor->IsMultiPortion() && !bWidth ? 0 : 1 ) )
                 {
                     if ( pPor->InSpaceGrp() && nSpaceAdd )
                         nX += pPor->PrtWidth() +
@@ -515,15 +516,22 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
                         Point aOldPos = pOrig->Pos();
                         bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
-                        if( ((SwMultiPortion*)pPor)->GetRotation() )
+                        if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
                             long nTmp = pOrig->Width();
                             pOrig->Width( pOrig->Height() );
                             pOrig->Height( nTmp );
                             nTmp = pOrig->Left() - aOldPos.X();
                             pOrig->Pos().X() = nX + aOldPos.X();
-                            pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
-                                + pPor->Height() - pPor->GetAscent() - nTmp;
+                            if( ((SwMultiPortion*)pPor)->IsRevers() )
+                                pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
+                                    - pPor->GetAscent() + nTmp;
+                            else
+                                pOrig->Pos().Y() = aOldPos.Y() + nTmpAscent
+                                    + pPor->Height() - pPor->GetAscent() - nTmp
+                                    - pOrig->Height();
+                            if ( pCMS && pCMS->bRealHeight )
+                                pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
                         }
                         else
                         {
@@ -1004,9 +1012,18 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if( pPor->IsMultiPortion() )
         {
             // In a multi-portion we use GetCrsrOfst()-funtion rekursively
+            SwTwips nTmpY = rPoint.Y() - pCurr->GetAscent() + pPor->GetAscent();
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
-                rPoint.Y() - pCurr->GetAscent() + pPor->GetAscent(),
-                nCurrStart, nSpaceAdd );
+                nTmpY,  nCurrStart, nSpaceAdd );
+            if( ((SwMultiPortion*)pPor)->HasRotation() )
+            {
+                nTmpY -= nY;
+                if( !((SwMultiPortion*)pPor)->IsRevers() )
+                    nTmpY = pPor->Height() - nTmpY;
+                if( nTmpY < 0 )
+                    nTmpY = 0;
+                nX = nTmpY;
+            }
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
                 nX -= ((SwDoubleLinePortion*)pPor)->PreWidth();
             return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
