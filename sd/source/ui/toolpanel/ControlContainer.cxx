@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:53:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "ControlContainer.hxx"
 
 #include "TitledControl.hxx"
@@ -126,21 +125,23 @@ void ControlContainer::SetExpansionState (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
+    bool bResizeNecessary (false);
+
     if (mbMultiSelection)
     {
         TreeNode* pControl = GetControl(nIndex);
         switch (aState)
         {
             case ES_TOGGLE:
-                pControl->Expand ( ! pControl->IsExpanded());
+                bResizeNecessary = pControl->Expand( ! pControl->IsExpanded());
                 break;
 
             case ES_EXPAND:
-                pControl->Expand (true);
+                bResizeNecessary = pControl->Expand(true);
                 break;
 
             case ES_COLLAPSE:
-                pControl->Expand (false);
+                bResizeNecessary = pControl->Expand(false);
                 break;
         }
     }
@@ -198,13 +199,13 @@ void ControlContainer::SetExpansionState (
             for (UINT32 i=0; i<GetControlCount(); i=GetNextIndex(i))
             {
                 TreeNode* pControl = GetControl(i);
-                pControl->Expand (i == mnActiveControlIndex);
+                bResizeNecessary |= pControl->Expand(i == mnActiveControlIndex);
             }
         }
         while (false);
     }
 
-    if (mpNode != NULL)
+    if (bResizeNecessary && mpNode != NULL)
         mpNode->RequestResize();
 }
 
