@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-19 13:09:25 $
+ *  last change: $Author: ssa $ $Date: 2002-09-20 10:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3644,6 +3644,11 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
     long            nLeft;
     BOOL            bNormalLines = TRUE;
 
+    // TODO: fix rotated text
+    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+        // --- RTL --- mirror at basex
+        nX = nBaseX - nWidth - (nX - nBaseX - 1);
+
     if ( !IsTextLineColor() )
         aUnderlineColor = GetTextColor();
 
@@ -4097,22 +4102,25 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     if( bWordLine )
     {
         Point aPos, aStartPt;
-        long nWidth = 0;
+        long nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
         {
-            long nGlyphIndex, nAdvance;
+            long nGlyphIndex;
             if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
             if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
             {
                 if( !nWidth )
-                    aStartPt = aPos;
+                {
+                    aStartPt = aPos;//rSalLayout.DrawBase() - (aPos - rSalLayout.DrawOffset());
+                }
+
                 nWidth += nAdvance;
             }
             else if( nWidth > 0 )
             {
-                ImplDrawTextLine( aStartPt.X(), aStartPt.X(), aStartPt.Y(), nWidth,
+                ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
                     eStrikeout, eUnderline, bUnderlineAbove );
                 nWidth = 0;
             }
@@ -4120,15 +4128,15 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 
         if( nWidth > 0 )
         {
-            ImplDrawTextLine( aStartPt.X(), aStartPt.X(), aStartPt.Y(), nWidth,
+            ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
                 eStrikeout, eUnderline, bUnderlineAbove );
         }
     }
     else
     {
-        Point aPos = rSalLayout.GetDrawPosition();
-        int nPixWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-        ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nPixWidth,
+        Point aStartPt = rSalLayout.GetDrawPosition();
+        int nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
+        ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
             eStrikeout, eUnderline, bUnderlineAbove );
     }
 }
@@ -4300,10 +4308,20 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawEmphasisMark( long nX, long nY,
+void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
                                          const PolyPolygon& rPolyPoly, BOOL bPolyLine,
                                          const Rectangle& rRect1, const Rectangle& rRect2 )
 {
+    // TODO: pass nWidth as width of this mark
+    long nWidth = 0;
+
+    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+        // --- RTL --- mirror at basex
+        nX = nBaseX - nWidth - (nX - nBaseX - 1);
+
+    nX -= mnOutOffX;
+    nY -= mnOutOffY;
+
     if ( rPolyPoly.Count() )
     {
         if ( bPolyLine )
@@ -4405,8 +4423,8 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
                 ImplRotatePos( 0, 0, aAdjOffset.X(), aAdjOffset.Y(), mpFontEntry->mnOrientation );
             aOutPoint += aAdjOffset;
             aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
-            aOutPoint -= Point( mnOutOffX, mnOutOffY );
-            ImplDrawEmphasisMark( aOutPoint.X(), aOutPoint.Y(),
+            ImplDrawEmphasisMark( rSalLayout.DrawBase().X(),
+                                  aOutPoint.X(), aOutPoint.Y(),
                                   aPolyPoly, bPolyLine,
                                   aRect1, aRect2 );
         }
@@ -4605,6 +4623,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
         if( ImplDrawRotateText( rSalLayout ) )
             return;
 
+    long oldX = rSalLayout.DrawBase().X();
     if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
     {
         if( ImplHasMirroredGraphics() )
@@ -4623,6 +4642,8 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
 
         rSalLayout.DrawText( *mpGraphics );
     }
+
+    rSalLayout.DrawBase().X() = oldX;
 
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
@@ -6333,6 +6354,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             else if ( (nLen < STRING_LEN) &&
                       (nMnemonicPos >= nIndex) && (nMnemonicPos < (ULONG)(nIndex+nLen)) )
                 nLen--;
+
             Point aTempPos = LogicToPixel( rPos );
             cMnemonic  = aStr.GetChar( nMnemonicPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, 0, nMnemonicPos ) );
