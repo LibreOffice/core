@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:35:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,15 +393,6 @@ void SwCollCondition::SetCondition( ULONG nCond, ULONG nSubCond )
 SwConditionTxtFmtColl::~SwConditionTxtFmtColl()
 {
 }
-
-#ifdef USED
-    // zum "abfischen" von Aenderungen
-void SwConditionTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
-{
-    SwTxtFmtColl::Modify( pOld, pNew );
-}
-#endif
-
 
 const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
                         const SwCollCondition& rCond ) const
