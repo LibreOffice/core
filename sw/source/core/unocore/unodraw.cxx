@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 07:55:06 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,8 +237,7 @@ SwFmDrawPage::SwFmDrawPage( SdrPage* pPage ) :
   -----------------------------------------------------------------------*/
 SwFmDrawPage::~SwFmDrawPage()
 {
-    if(pPageView)
-        pView->HidePage( pPageView );
+    RemovePageView();
 }
 /*-- 22.01.99 11:13:07---------------------------------------------------
 
@@ -278,7 +277,7 @@ SdrPageView*    SwFmDrawPage::GetPageView()
   -----------------------------------------------------------------------*/
 void    SwFmDrawPage::RemovePageView()
 {
-    if(pPageView)
+    if(pPageView && pView)
         pView->HidePage( pPageView );
     pPageView = 0;
 }
