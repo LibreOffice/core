@@ -10981,3 +10981,5 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ??0?$Reference@VX3DDisplay@chart@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4UnoReference_Query@1234@@Z
 ??0XMLBackgroundImageContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@ABUXMLPropertyState@@JJJAAV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@@Z
 ?exportXML@XMLBackgroundImageExport@@QAEXABVAny@uno@star@sun@com@@PBV23456@11GABVOUString@rtl@@@Z
+?ImpGetOrCreatePageMasterInfo@SdXMLExport@@AAEPAVImpXMLEXPPageMasterInfo@@V?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@Z
+?SetPageMaster@SdXMLGenericPageContext@@IAEXAAVOUString@rtl@@@Z
