@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-02 14:49:41 $
+ *  last change: $Author: hr $ $Date: 2004-06-28 14:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,7 +973,10 @@ static string get_environment_string( const char *pEnvName )
 {
     const char *pEnvValue = getenv( pEnvName );
 
-    return pEnvValue ? string(pEnvValue) : string("");
+    if ( pEnvValue )
+        return pEnvValue;
+    else
+        return "";
 }
 
 static string read_from_file( const string& rFileName )
