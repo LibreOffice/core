@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-10-20 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "bibresid.hxx"
 #include "bibmod.hxx"
 #include "sections.hrc"
-#include "viewsect.hxx"
 
 
 #ifndef _SV_SVAPP_HXX
