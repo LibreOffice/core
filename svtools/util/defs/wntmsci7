@@ -7985,3 +7985,4 @@ CreateWindow
 ?DragFinished@SvLBox@@UAEXXZ
 ?ExecuteDrop@SvLBox@@UAECABUExecuteDropEvent@@@Z
 ?StartDrag@SvLBox@@UAEXCABVPoint@@@Z
+?getPropertyState@SfxItemPropertySet@@QAE?AW4PropertyState@beans@star@sun@com@@ABUSfxItemPropertyMap@@ABVSfxItemSet@@@Z
