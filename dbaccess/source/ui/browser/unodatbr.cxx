@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:02 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 19:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,6 +1635,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
     sal_Bool bRebuild = xOldConnection != xConnection || nOldType != nCommandType || aName != aOldName;
 
+    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
+    bRebuild |= !xLoadable->isLoaded();
+
     if(bRebuild)
     {
         WaitObject aWaitCursor(getContent());
@@ -1670,8 +1673,11 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
         // switch the grid to design mode while loading
         getContent()->getGridControl()->setDesignMode(sal_True);
         // load the row set
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
-        xLoadable->reload();
+        if (xLoadable->isLoaded())
+            // reload does not work if not already loaded
+            xLoadable->reload();
+        else
+            xLoadable->load();
 
         // initialize the model
         InitializeGridModel(getFormComponent());
@@ -1771,6 +1777,10 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry)
     DBG_ASSERT(_pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (NULL)!");
     OSL_ENSHURE(m_pTreeView->getListBox()->GetRootLevelParent(_pDSEntry) == _pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
 
+    // if one of the entries of the given DS is displayed currently, unload the form
+    if (m_pCurrentlyLoaded && (m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyLoaded) == _pDSEntry))
+        unloadForm();
+
     // collapse the query/table container
     for (SvLBoxEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers= m_pTreeModel->NextSibling(pContainers))
     {
@@ -1786,10 +1796,6 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry)
     }
     // collapse the entry itself
     m_pTreeView->getListBox()->Collapse(_pDSEntry);
-
-    // if one of the entries of the given DS is displayed currently, unload the form
-    if (m_pCurrentlyLoaded && (m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyLoaded) == _pDSEntry))
-        unloadForm();
 
     // get the connection
     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pDSEntry->GetUserData());
