@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:18:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ using namespace com::sun::star::devtools;
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
