@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:51:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ ModalDialog DLG_ORDERCRIT
         Center = TRUE ;
         Text[ chinese_simplified ] = "Ë³Ğò";
         Text[ russian ] = "Ïîğÿäîê";
-        Text[ polish ] = "Kolejno?æ";
+        Text[ polish ] = "Kolejnoœæ";
         Text[ japanese ] = "•À‚×‘Ö‚¦‡˜";
         Text[ chinese_traditional ] = "¶¶§Ç";
         Text[ arabic ] = "ÇáÊÑÊíÈ";
@@ -670,7 +670,7 @@ ModalDialog DLG_ORDERCRIT
         Center = TRUE ;
         Text[ chinese_simplified ] = "Ë³Ğò";
         Text[ russian ] = "Ïîğÿäîê";
-        Text[ polish ] = "Kolejno?æ";
+        Text[ polish ] = "Kolejnoœæ";
         Text[ japanese ] = "•À‚×‘Ö‚¦‡˜";
         Text[ chinese_traditional ] = "¶¶§Ç";
         Text[ arabic ] = "ÇáÊÑÊíÈ";
