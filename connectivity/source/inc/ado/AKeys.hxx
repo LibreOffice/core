@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace connectivity
         class OConnection;
         class OKeys : public sdbcx::OCollection
         {
-            ADOKeys*        m_pCollection;
+            WpADOKeys       m_aCollection;
             OConnection*    m_pConnection;
 
         protected:
@@ -91,20 +91,12 @@ namespace connectivity
             OKeys(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     ADOKeys* _pCollection,
+                     const WpADOKeys& _rCollection,
                      sal_Bool _bCase,
                      OConnection* _pConnection) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                ,m_pCollection(_pCollection)
+                ,m_aCollection(_rCollection)
                 ,m_pConnection(_pConnection)
             {
-                if(m_pCollection)
-                    m_pCollection->AddRef();
-            }
-
-            ~OKeys()
-            {
-                if(m_pCollection)
-                    m_pCollection->Release();
             }
         };
     }

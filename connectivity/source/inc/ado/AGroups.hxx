@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroups.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace connectivity
         class OAdabasConnection;
         class OGroups : public sdbcx::OCollection
         {
-            ADOGroups*  m_pCollection;
+            WpADOGroups m_aCollection;
             OCatalog*   m_pCatalog;
         protected:
 
@@ -98,18 +98,10 @@ namespace connectivity
             OGroups(OCatalog* _pParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     ADOGroups* _pCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
-                    ,m_pCollection(_pCollection)
+                     const WpADOGroups& _rCollection,sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
+                    ,m_aCollection(_rCollection)
                     ,m_pCatalog(_pParent)
             {
-                if(m_pCollection)
-                    m_pCollection->AddRef();
-            }
-
-            ~OGroups()
-            {
-                if(m_pCollection)
-                    m_pCollection->Release();
             }
         };
     }

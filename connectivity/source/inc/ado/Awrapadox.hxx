@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:24:06 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,14 +248,14 @@ namespace connectivity
             void put_Command(OLEVariant& _rVar);
         };
 
-        class WpADOGroup : public WpOLEBase<_ADOGroup>
+        class WpADOGroup : public WpOLEBase<ADOGroup>
         {
         public:
-            WpADOGroup(_ADOGroup* pInt=NULL)    :   WpOLEBase<_ADOGroup>(pInt){}
+            WpADOGroup(ADOGroup* pInt=NULL) :   WpOLEBase<ADOGroup>(pInt){}
             WpADOGroup(const WpADOGroup& rhs){operator=(rhs);}
 
             inline WpADOGroup& operator=(const WpADOGroup& rhs)
-                {WpOLEBase<_ADOGroup>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOGroup>::operator=(rhs); return *this;}
 
             void Create();
 
@@ -296,6 +296,14 @@ namespace connectivity
                 /* [in] */ ActionEnum Action,
                 /* [in] */ RightsEnum Rights);
         };
+
+        typedef WpOLEAppendCollection<ADOGroups,    ADOGroup,   WpADOGroup>     WpADOGroups;
+        typedef WpOLEAppendCollection<ADOViews,     ADOView,    WpADOView>      WpADOViews;
+        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
+        typedef WpOLEAppendCollection<ADOIndexes,   _ADOIndex,  WpADOIndex>     WpADOIndexes;
+        typedef WpOLEAppendCollection<ADOKeys,      ADOKey,     WpADOKey>       WpADOKeys;
+        typedef WpOLEAppendCollection<ADOColumns,   _ADOColumn, WpADOColumn>    WpADOColumns;
+        typedef WpOLEAppendCollection<ADOUsers,     _ADOUser,   WpADOUser>      WpADOUsers;
     }
 }
 #endif // _CONNECTIVITY_ADO_AWRAPADOX_HXX_

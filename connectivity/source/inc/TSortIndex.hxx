@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:23:24 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace connectivity
         /**
             AddKeyValue appends a new value.
             @param
-                OKeyValue* pKeyValue    the keyvalue to be appended
+                pKeyValue   the keyvalue to be appended
             ATTENTION: when the sortindex is already frozen the parameter will be deleted
         */
         void AddKeyValue(OKeyValue * pKeyValue);

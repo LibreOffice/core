@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:41:33 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
+#include <map>
+#include <vector>
+
+#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
+#include "connectivity/StdTypeDefs.hxx"
+#endif
 
 namespace rtl
 {
@@ -112,15 +118,11 @@ namespace connectivity
         //------------------------------------------------------------------------
         template<class T> class WpOLEBase : public WpBase
         {
-
         protected:
-            //  typename T::ADOType;
             T* pInterface;
 
         public:
-
-            WpOLEBase() : pInterface(NULL){}
-            WpOLEBase(T* pInt) : WpBase(pInt),pInterface(pInt){}
+            WpOLEBase(T* pInt = NULL) : WpBase(pInt),pInterface(pInt){}
 
 
             //inline
@@ -147,7 +149,7 @@ namespace connectivity
             {
             }
 
-            operator T*() { return static_cast<T*>(pInterface); }
+            operator T*() const { return static_cast<T*>(pInterface); }
         };
 
 
@@ -169,34 +171,32 @@ namespace connectivity
         //
 
         //------------------------------------------------------------------------
-        template<class Ts, class T, class WrapT> class WpOLECollection: public WpOLEBase<Ts>
+        template<class Ts, class T, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
         {
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpOLECollection(Ts* pInt):WpOLEBase<Ts>(pInt){}
+            WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
             WpOLECollection(const WpOLECollection& rhs){operator=(rhs);}
             inline WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
             //////////////////////////////////////////////////////////////////////
 
-            inline void Refresh(){pInterface->Refresh();};
+            inline void Refresh(){pInterface->Refresh();}
 
             inline sal_Int32 GetItemCount() const
             {
                 sal_Int32 nCount = 0;
-                pInterface->get_Count(&nCount);
-                return nCount;
-            };
+                return SUCCEEDED(pInterface->get_Count(&nCount)) ? nCount : sal_Int32(0);
+            }
 
             inline WrapT GetItem(sal_Int32 index) const
             {
                 OSL_ENSURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
                 T* pT;
-                if (FAILED(pInterface->get_Item(OLEVariant(index), &pT))) return WrapT(NULL);
-                return WrapT(pT);
-            };
+                return FAILED(pInterface->get_Item(OLEVariant(index), &pT)) ? WrapT(NULL) : WrapT(pT);
+            }
 
             inline WrapT GetItem(const ::rtl::OUString& sStr) const
             {
@@ -210,6 +210,21 @@ namespace connectivity
                 }
                 return WrapT(pT);
             }
+            inline void fillElementNames(TStringVector& _rVector)
+            {
+                if(IsValid())
+                {
+                    Refresh();
+                    sal_Int32 nCount = GetItemCount();
+                    _rVector.reserve(nCount);
+                    for(sal_Int32 i=0;i< nCount;++i)
+                    {
+                        WrapT aElement = GetItem(i);
+                        if(aElement.IsValid())
+                            _rVector.push_back(aElement.get_Name());
+                    }
+                }
+            }
         };
 
         template<class Ts, class T, class WrapT> class WpOLEAppendCollection:
@@ -219,15 +234,15 @@ namespace connectivity
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpOLEAppendCollection(Ts* pInt):WpOLECollection<Ts,T,WrapT>(pInt){}
-            WpOLEAppendCollection(const WpOLEAppendCollection& rhs){operator=(rhs);}
+            WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
+            WpOLEAppendCollection(const WpOLEAppendCollection& rhs){ operator=(rhs); }
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
             //////////////////////////////////////////////////////////////////////
 
-            inline sal_Bool Append(WrapT aWrapT)
+            inline sal_Bool Append(const WrapT& aWrapT)
             {
-                return SUCCEEDED(pInterface->Append(aWrapT.pInterface));
+                return SUCCEEDED(pInterface->Append(OLEVariant((T*)aWrapT)));
             };
 
             inline sal_Bool Delete(const ::rtl::OUString& sName)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace connectivity
         class OConnection;
         class OIndexes : public sdbcx::OCollection
         {
-            ADOIndexes*     m_pCollection;
+            WpADOIndexes    m_aCollection;
             OConnection*    m_pConnection;
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -92,21 +92,13 @@ namespace connectivity
             OIndexes(::cppu::OWeakObject& _rParent,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector,
-                     ADOIndexes*    _pCollection,
+                     const WpADOIndexes&    _rCollection,
                      sal_Bool _bCase,
                      OConnection* _pConnection)
                     : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                    , m_pCollection(_pCollection)
+                    , m_aCollection(_rCollection)
                     , m_pConnection(_pConnection)
             {
-                if(m_pCollection)
-                    m_pCollection->AddRef();
-            }
-
-            ~OIndexes()
-            {
-                if(m_pCollection)
-                    m_pCollection->Release();
             }
         };
     }

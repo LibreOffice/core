@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace connectivity
         class OCatalog;
         class OTables : public sdbcx::OCollection
         {
-            ADOTables*  m_pCollection;
+            WpADOTables m_aCollection;
             OCatalog*   m_pCatalog;
         protected:
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -92,19 +92,12 @@ namespace connectivity
         public:
             OTables(OCatalog* _pParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector,
-                ADOTables* _pCollection,
+                const WpADOTables& _rCollection,
                 sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
-                ,m_pCollection(_pCollection)
                 ,m_pCatalog(_pParent)
+                ,m_aCollection(_rCollection)
             {
-                if(m_pCollection)
-                    m_pCollection->AddRef();
-            }
-
-            ~OTables()
-            {
-                if(m_pCollection)
-                    m_pCollection->Release();
+                OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
             }
         };
     }

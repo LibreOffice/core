@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace connectivity
         class OColumns : public sdbcx::OCollection
         {
         protected:
-            ADOColumns*     m_pCollection;
+            WpADOColumns    m_aCollection;
             OConnection*    m_pConnection;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -97,20 +97,12 @@ namespace connectivity
             OColumns(   ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector,
-                        ADOColumns* _pCollection,
+                        const WpADOColumns& _rCollection,
                         sal_Bool _bCase,
                         OConnection* _pConnection) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                        ,m_pCollection(_pCollection)
+                        ,m_aCollection(_rCollection)
                         ,m_pConnection(_pConnection)
             {
-                if(m_pCollection)
-                    m_pCollection->AddRef();
-            }
-
-            ~OColumns()
-            {
-                if(m_pCollection)
-                    m_pCollection->Release();
             }
 
         };
