@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog DLG_SEL_GLOS
         Text [ portuguese_brazilian ] = "AutoTextos para atalho" ;
         Text [ portuguese ] = "AutoTexto para abreviatura" ;
         Text [ finnish ] = "Pikavalikoiden automaattiset tekstit " ;
-        Text [ danish ] = "AutoTekst til forkortelse " ;
+        Text [ danish ] = "AutoTekster til genvej " ;
         Text [ french ] = "AutoTextes pour raccourci " ;
         Text [ swedish ] = "AutoText till genv�gen " ;
         Text [ dutch ] = "AutoTekst voor afkortingen" ;
@@ -139,6 +139,8 @@ ModalDialog DLG_SEL_GLOS
         Text[ hebrew ] = "AutoTexte zum Kürzel";
         Text[ hindi ] = "सरलविधि केलिए स्वचालित ढंग से टेक्स्ट् ";
         Text[ slovak ] = "Automatické texty pre skratku";
+        Text[ hungarian ] = "Szöveg-o-mata a gyorsbillentyűhöz ";
+        Text[ slovenian ] = "Samobesedilo za bližnjico";
     };
     ListBox LB_GLOS
     {
@@ -164,7 +166,10 @@ ModalDialog DLG_SEL_GLOS
     Text[ hebrew ] = "AutoText einfügen";
     Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् जोड़ो";
     Text[ slovak ] = "Vložiť automatický text";
+    Text[ hungarian ] = "Felvétel szöveg-o-matába";
+    Text[ slovenian ] = "Vstavi samobesedilo";
 };
+
 
 
 
