@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:20:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ chinese_simplified ] = "Æ´Òô»ò×¢Òô·ûºÅµÄ×Ö·ûÑùÊ½";
         Text[ chinese_traditional ] = "ª`­µ²Å¸¹¦r¤¸¼Ë¦¡";
         Text[ turkish ] = "Character style for ruby text";
-        Text[ arabic ] = "äãØ ÇáÃÍÑİ áÜ ruby text";
+        Text[ arabic ] = "äãØ ÇáÃÍÑİ áäÕ \"ÑæÈí\"";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -627,7 +627,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ chinese_simplified ] = "Æ´Òô»ò×¢Òô·ûºÅ";
         Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
         Text[ turkish ] = "Ruby text";
-        Text[ arabic ] = "Ruby text";
+        Text[ arabic ] = "äÕ \"ÑæÈí\"";
     };
     Text[ english_us ] = "Ruby";
     Text[ portuguese ] = "Ruby";
@@ -646,6 +646,6 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
     Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
     Text[ turkish ] = "Ruby";
-    Text[ arabic ] = "Ruby";
+    Text[ arabic ] = "Ïáíá ÕæÊí";
 };
 
