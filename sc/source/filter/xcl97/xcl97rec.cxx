@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ XclSupbookList::XclSupbookList( RootData* pRoot ) :
         pSupbookBuffer( NULL ),
         pTableBuffer( NULL )
 {
-    ExcETabNumBuffer& rTabBuffer = *pRoot->pTabBuffer;
+    XclExpTabNumBuffer& rTabBuffer = *pRoot->pTabBuffer;
 
     UINT16  nScCnt  = rTabBuffer.GetScTabCount();
     UINT16  nExcCnt = rTabBuffer.GetExcTabCount();
@@ -2950,6 +2950,119 @@ void XclExternNameList::Save( XclExpStream& rStrm )
     {
         p->Save( rStrm );
         p = Next();
+    }
+}
+
+
+
+// ---- class XclExpWebQuery -----------------------------------------
+
+XclExpWebQuery::XclExpWebQuery(
+        const String& rRangeName,
+        const String& rURL,
+        const String& rSource,
+        sal_Int32 nRefrSecs ) :
+    aRangeName( rRangeName ),
+    aURL( rURL ),
+    pQryTables( NULL ),
+    bEntireDoc( FALSE )
+{
+    // refresh delay time in minutes
+    nRefresh = (INT16) Min( (sal_Int32)((nRefrSecs + 59) / 60), (sal_Int32) 0x7FFF );
+
+    // comma separated list of HTML table names or indexes
+    xub_StrLen nTokenCnt = rSource.GetTokenCount( ';' );
+    String aNewTables;
+    xub_StrLen nStringIx = 0;
+    for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bEntireDoc; nToken++ )
+    {
+        String aToken( rSource.GetToken( 0, ';', nStringIx ) );
+        bEntireDoc = ScFilterTools::IsHTMLDocName( aToken );
+        if( !bEntireDoc )
+        {
+            String aAppend;
+            if( ScFilterTools::GetHTMLNameFromName( aToken, aAppend ) )
+            {
+                if( aNewTables.Len() )
+                    aNewTables += ',';
+                aNewTables += aAppend;
+            }
+        }
+    }
+
+    if( !bEntireDoc )
+    {
+        if( aNewTables.Len() )
+            pQryTables = new XclExpUniString( aNewTables );
+        else
+            bEntireDoc = TRUE;
+    }
+}
+
+XclExpWebQuery::~XclExpWebQuery()
+{
+    if( pQryTables )
+        delete pQryTables;
+}
+
+void XclExpWebQuery::Save( XclExpStream& rStrm )
+{
+    DBG_ASSERT( !bEntireDoc || !pQryTables, "XclExpWebQuery::Save - illegal mode" );
+
+    // QSI record
+    rStrm.StartRecord( 0x01AD, 10 + aRangeName.GetByteCount() );
+    rStrm   << (UINT16) EXC_QSI_COMMON
+            << (UINT16) 0x0010
+            << (UINT16) 0x0012
+            << (UINT32) 0x00000000;
+    aRangeName.Write( rStrm );
+    rStrm.EndRecord();
+
+    // PARAMQRY record
+    rStrm.StartRecord( 0x00DC, 12 );
+    rStrm   << (UINT16) (EXC_PQRY_COMMON | (bEntireDoc ? 0x0000 : EXC_PQRY_TABLES))
+            << (UINT16) 0x0000
+            << (UINT16) 0x0001;
+    rStrm.WriteZeroBytes( 6 );
+    rStrm.EndRecord();
+
+    // SXSTRING record
+    rStrm.StartRecord( 0x00CD, aURL.GetByteCount() );
+    aURL.Write( rStrm );
+    rStrm.EndRecord();
+
+    // unknown record 0x0802
+    rStrm.StartRecord( 0x0802, 16 + aRangeName.GetByteCount() );
+    rStrm   << (UINT16) 0x0802;         // repeated record id ?!?
+    rStrm.WriteZeroBytes( 6 );
+    rStrm   << (UINT16) 0x0003
+            << (UINT32) 0x00000000
+            << (UINT16) 0x0010;
+    aRangeName.Write( rStrm );
+    rStrm.EndRecord();
+
+    // WEBQRYSETTINGS record
+    rStrm.StartRecord( 0x0803, 28 );
+    rStrm   << (UINT16) 0x0803          // repeated record id ?!?
+            << (UINT16) 0x0000
+            << (UINT16) 0x0004
+            << (UINT16) 0x0000
+            << (UINT16) EXC_WQSETT_COMMON
+            << (UINT16) (pQryTables ? EXC_WQSETT_SPECTABLES : 0x0000);
+    rStrm.WriteZeroBytes( 10 );
+    rStrm   << nRefresh                 // refresh delay in minutes
+            << (UINT16) EXC_WQSETT_FORMATFULL
+            << (UINT16) 0x0000;
+    rStrm.EndRecord();
+
+    // WEBQRYTABLES record
+    if( pQryTables )
+    {
+        rStrm.StartRecord( 0x0804, 4 + pQryTables->GetByteCount() );
+        rStrm   << (UINT16) 0x0804      // repeated record id ?!?
+                << (UINT16) 0x0000;
+        pQryTables->Write( rStrm );     // comma separated list of source tables
+        rStrm.EndRecord();
     }
 }
 

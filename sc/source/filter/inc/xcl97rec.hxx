@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,15 +1245,15 @@ public:
 class XclExpPageBreaks8 : public XclExpPageBreaks
 {
 private:
-    UINT16                  nRangeMax;
+    UINT16                      nRangeMax;
 
-    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                            XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
-    virtual                 ~XclExpPageBreaks8();
+                                XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
+    virtual                     ~XclExpPageBreaks8();
 
-    virtual ULONG           GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -1289,5 +1289,31 @@ public:
     void                        Save( XclExpStream& rStrm );
 };
 
+
+// ---- class XclExpWebQuery -----------------------------------------
+
+class XclExpWebQuery : public ExcEmptyRec
+{
+private:
+    XclExpUniString             aRangeName;
+    XclExpUniString             aURL;
+    XclExpUniString*            pQryTables;
+    INT16                       nRefresh;
+    BOOL                        bEntireDoc;
+
+// mode 1 - entire document:    pQryTables==NULL, bEntireDoc==TRUE
+// mode 2 - all tables:         pQryTables==NULL, bEntireDoc==FALSE
+// mode 3 - range list:         pQryTables!=NULL, bEntireDoc==FALSE
+
+public:
+                                XclExpWebQuery(
+                                    const String& rRangeName,
+                                    const String& rURL,
+                                    const String& rSource,
+                                    sal_Int32 nRefrSecs );
+    virtual                     ~XclExpWebQuery();
+
+    virtual void                Save( XclExpStream& rStrm );
+};
 
 #endif // _XCL97REC_HXX

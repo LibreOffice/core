@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:41:57 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,8 +388,18 @@
 // defines for web queries
 // (0x00DC) SXEXT, PARAMQRY, (0x0803) WEBQRYSETTINGS
 
+#define EXC_WEBQRY_FILTER           "calc_HTML_WebQuery"
+
+#define EXC_QSI_COMMON              0x0349      // common flags for export
+
 #define EXC_PQRY_TABLES             0x0100
+#define EXC_PQRY_COMMON             0x0044      // common flags for export
+
 #define EXC_WQSETT_SPECTABLES       0x0002
+#define EXC_WQSETT_COMMON           0x0023      // common flags for export
+#define EXC_WQSETT_NOFORMAT         0x0001
+#define EXC_WQSETT_FORMATRTF        0x0002
+#define EXC_WQSETT_FORMATFULL       0x0003
 
 //_________________________________________________________
 // defines for change tracking
