@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-01 08:51:25 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:22:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -279,17 +279,7 @@ SRSFILELIST=\
                 $(SRS)$/unodraw.srs \
                 $(SRS)$/svxlink.srs \
                 $(SRS)$/accessibility.srs \
-                $(SRS)$/toolbars.srs
-
-.IF "$(GUI)" != "MAC"
-SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
-.ELSE
-.IF "$(UPDMINOR)" != ""
-SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res.$(UPDMINOREXT)$/sfx.srs
-.ELSE
-SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$/sfx.srs
-.ENDIF
-.ENDIF
+                $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=svx
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw
