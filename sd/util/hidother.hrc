@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:08:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,3 +74,4 @@
 #define SD_IF_SDGRAPHICSTDOBJECTBAR     200 + 12
 #define SD_IF_SDDRAWGRAFOBJECTBAR       200 + 13
 #define SD_IF_SDPRESVIEWSHELL           200 + 14
+#define SD_IF_SDDRAWMEDIAOBJECTBAR      200 + 15
