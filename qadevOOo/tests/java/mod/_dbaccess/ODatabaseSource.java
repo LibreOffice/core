@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseSource.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-08-02 17:56:37 $
+ *  last change:$Date: 2005-03-29 11:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,30 @@
 package mod._dbaccess;
 
 import com.sun.star.beans.PropertyValue;
-import java.io.PrintWriter;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XStorable;
 
+
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XNamingService;
+import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import util.DesktopTools;
 import util.utils;
 
-import com.sun.star.beans.XPropertySet;
+import com.sun.star.io.IOException;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.task.XInteractionHandler;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
-import com.sun.star.frame.XStorable;
 
 /**
 * Test for object which is represented by service
@@ -114,6 +123,7 @@ public class ODatabaseSource extends TestCase {
     private int uniqueSuffix = 0 ;
     private XNamingService xDBContextNameServ = null ;
     private String databaseName = null ;
+    private XOfficeDatabaseDocument xDBDoc = null;
 
     /**
     * Assigns database's name unique suffix for this object depending
@@ -122,6 +132,13 @@ public class ODatabaseSource extends TestCase {
     protected void initialize ( TestParameters Param, PrintWriter log) {
         uniqueSuffix = uniqueSuffixStat++ ;
     }
+
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing not longer needed docs... ");
+        DesktopTools.closeDoc(xDBDoc);
+    }
+
+
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -146,56 +163,96 @@ public class ODatabaseSource extends TestCase {
         Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
 
-        try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
+        xMSF = (XMultiServiceFactory)Param.getMSF();
+        try{
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
-            xDBContextNameServ = (XNamingService)
-                UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
+            if (oInterface == null)
+                throw new StatusException("Could not get service 'com.sun.star.sdb.DatabaseContext'", new Exception());
 
-            // retrieving temp directory for database
-            String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
-
-            tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
-
-            // Creating new DBase data source in the TEMP directory
-            XInterface newSource = (XInterface) xMSF.createInstance
-                ("com.sun.star.sdb.DataSource") ;
-
-            XPropertySet xSrcProp = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, newSource);
-
-            xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
-
-            databaseName = "NewDatabaseSource" + uniqueSuffix ;
-
-            // make sure that the DatabaseContext isn't already registered
-            try {
-                xDBContextNameServ.revokeObject(databaseName) ;
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Nothing to be removed - OK");
-            }
-
-            // registering source in DatabaseContext
-            XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, newSource);
-            String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";
-            store.storeAsURL(aFile,new PropertyValue[]{});
-            xDBContextNameServ.registerObject(databaseName, newSource) ;
-            oInterface = newSource ;
-        }
-        catch( com.sun.star.uno.Exception e ) {
-            log.println("Service not available" );
+        }catch( Exception e ) {
+            log.println("Could not get service 'com.sun.star.sdb.DatabaseContext'" );
             e.printStackTrace ();
             throw new StatusException("Service not available", e) ;
         }
 
-        if (oInterface == null) {
-            log.println("Service wasn't created") ;
-            throw new StatusException("Service wasn't created",
-                new NullPointerException()) ;
+        xDBContextNameServ = (XNamingService)
+            UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
+
+        // retrieving temp directory for database
+        String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
+
+        tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
+
+        try{
+            XInterface oDatabaseDoc = (XInterface) xMSF.createInstance
+                                    ("com.sun.star.sdb.OfficeDatabaseDocument") ;
+
+            if (oDatabaseDoc == null)
+                throw new StatusException("Could not get service 'com.sun.star.sdb.OfficeDatabaseDocument'", new Exception());
+
+            xDBDoc = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
+                                                XOfficeDatabaseDocument.class,
+                                                oDatabaseDoc);
+        }
+        catch( Exception e ) {
+            log.println("Could not get service 'com.sun.star.sdb.OfficeDatabaseDocument'" );
+            e.printStackTrace ();
+            throw new StatusException("Service not available", e) ;
         }
 
-        oObj = (XInterface) oInterface;
+        oObj = (XInterface) xDBDoc.getDataSource();
+        log.println("ImplementationName: " + utils.getImplName(oObj));
+
+        // Creating new DBase data source in the TEMP directory
+
+        XPropertySet xSrcProp = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, oObj);
+
+        try{
+            xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
+        } catch ( UnknownPropertyException e){
+            throw new StatusException("Could not set property 'URL' ", e) ;
+        } catch ( PropertyVetoException e){
+            throw new StatusException("Could not set property 'URL' ", e) ;
+        } catch (  IllegalArgumentException e){
+            throw new StatusException("Could not set property 'URL' ", e) ;
+        } catch ( WrappedTargetException e){
+            throw new StatusException("Could not set property 'URL' ", e) ;
+        }
+
+        databaseName = "NewDatabaseSource" + uniqueSuffix ;
+
+        // make sure that the DatabaseContext isn't already registered
+        try {
+            xDBContextNameServ.revokeObject(databaseName) ;
+        } catch (Exception e) {
+            log.println("Nothing to be removed - OK");
+        }
+
+        // registering source in DatabaseContext
+        XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, xDBDoc);
+        String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";
+        try{
+            store.storeAsURL(aFile,new PropertyValue[]{});
+        } catch (IOException e){
+            log.println("Could not store datasource 'aFile'" );
+            e.printStackTrace ();
+            throw new StatusException("Could not save ", e) ;
+        } catch (Exception e){
+            log.println("Could not store datasource 'aFile'" );
+            e.printStackTrace ();
+            throw new StatusException("Could not save ", e) ;
+        }
+
+
+        try{
+            xDBContextNameServ.registerObject(databaseName, oObj) ;
+        } catch (Exception e){
+            log.println("Could not register data source" );
+            e.printStackTrace ();
+            throw new StatusException("Could not register ", e) ;
+        }
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
@@ -205,7 +262,7 @@ public class ODatabaseSource extends TestCase {
         try {
             handler = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sdb.InteractionHandler") ;
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (Exception e) {
             log.println("Relation for XCompletedConnection wasn't created") ;
             e.printStackTrace(log) ;
         }
@@ -220,4 +277,3 @@ public class ODatabaseSource extends TestCase {
     } // finish method getTestEnvironment
 
 }
-
