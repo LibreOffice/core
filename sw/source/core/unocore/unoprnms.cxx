@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 12:33:15 $
+ *  last change: $Author: dvo $ $Date: 2002-04-04 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0621 UNO_NAME_GRID_MODE */           {MAP_CHAR_LEN("GridMode")},
 /* 0622 UNO_NAME_GRID_RUBY_BELOW */     {MAP_CHAR_LEN("RubyBelow")},
 /* 0623 UNO_NAME_GRID_PRINT */          {MAP_CHAR_LEN("GridPrint")},
-/* 0624 UNO_NAME_GRID_DISPLAY */        {MAP_CHAR_LEN("GridDisplay")}
+/* 0624 UNO_NAME_GRID_DISPLAY */        {MAP_CHAR_LEN("GridDisplay")},
+/* 0625 UNO_NAME_SNAP_TO_GRID */        {MAP_CHAR_LEN("SnapToGrid")},
 };
 
 #ifndef PRODUCT

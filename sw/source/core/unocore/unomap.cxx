@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 08:49:29 $
+ *  last change: $Author: dvo $ $Date: 2002-04-04 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,8 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },  \
         { SW_PROP_NMID(UNO_NAME_RUBY_CHAR_STYLE_NAME), RES_TXTATR_CJK_RUBY, CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
         { SW_PROP_NMID(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    CPPU_E2T(CPPUTYPE_BOOLEAN),  PropertyAttribute::MAYBEVOID,         MID_RUBY_ABOVE },  \
-        { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },
+        { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,      MID_RELIEF }, \
+        { SW_PROP_NMID(UNO_NAME_SNAP_TO_GRID), RES_PARATR_SNAPTOGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0 },
 
 #define TABSTOPS_MAP_ENTRY                { SW_PROP_NMID(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   CPPU_E2T(CPPUTYPE_SEQTABSTOP),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 
