@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
+ *  last change: $Author: os $ $Date: 2001-02-27 09:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,21 +1161,23 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
             case  FN_UNO_ANCHOR_TYPE:
             break;
             default:
-                if(pFmt)
+                if(pMap->nWID <= SFX_WHICH_MAX)
                 {
-                    const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
-                    pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
-                                                pMap->nWID, pMap->nWID, 0);
-                    pNewAttrSet->ClearItem(pMap->nWID);
+                    if(pFmt)
+                    {
+                        const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
+                        pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
+                                                    pMap->nWID, pMap->nWID, 0);
+                        pNewAttrSet->ClearItem(pMap->nWID);
+                    }
+                    else
+                    {
+                        if(RES_COL == pMap->nWID)
+                            DELETEZ(pProps->pColItem);
+                        else if(RES_BACKGROUND == pMap->nWID)
+                            DELETEZ(pProps->pBrushItem);
+                    }
                 }
-                else
-                {
-                    if(RES_COL == pMap->nWID)
-                        DELETEZ(pProps->pColItem);
-                    else //if(RES_BACKGROUND == pMap->nWID)
-                        DELETEZ(pProps->pBrushItem);
-                }
-
         }
         if(pFmt)
         {
@@ -1239,7 +1241,7 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
             SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
         break;
         default:
-        if(pFmt)
+        if(pFmt && pMap->nWID <= SFX_WHICH_MAX)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SfxPoolItem& rDefItem =
