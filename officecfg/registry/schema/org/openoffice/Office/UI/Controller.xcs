@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:52:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,26 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Controller" oor:package="org.openoffice.Office.UI" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains implementation of popup menu controllers.</desc>
+		<desc >Contains implementation of popup menu controllers.</desc>
 	</info>
 	<templates>
 		<group oor:name="ControllerType">
 			<info>
-				<desc xml:lang="en-US">Describes a controller implementation.</desc>
-				<desc xml:lang="zh-CN">Describes a controller implementation.</desc>
+				<desc>Describes a controller implementation.</desc>
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the command name which the controller is bound to.</desc>
-					<desc xml:lang="zh-CN">Specifies the command name which the controller is bound to.</desc>
+					<desc>Specifies the command name which the controller is bound to.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Module" oor:type="xs:string">
 			    <info>
-			        <desc xml:lang="en-US">Specifies the model that the controller is associated with. An empty string matches every module.</desc>
-			    	<desc xml:lang="zh-CN">Specifies the model that the controller is associated with. An empty string matches every module.</desc>
+			        <desc>Specifies the model that the controller is associated with. An empty string matches every module.</desc>
 			    </info>
 			</prop>
 			<prop oor:name="Controller" oor:type="xs:string">
 			    <info>
-			        <desc xml:lang="en-US">Specifies the UNO service to use for the specified tuple Command and Module</desc>
-                	<desc xml:lang="zh-CN">Specifies the UNO service to use for the specified tuple Command and Module</desc>
+			        <desc>Specifies the UNO service to use for the specified tuple Command and Module</desc>
                 </info>
             </prop>
 		</group>
@@ -93,13 +89,11 @@
 	<component>
 		<group oor:name="Registered">
 			<info>
-				<desc xml:lang="en-US">Contains all registered controllers for user interface elements.</desc>
-				<desc xml:lang="zh-CN">Contains all registered controllers for user interface elements.</desc>
+				<desc>Contains all registered controllers for user interface elements.</desc>
 			</info>
 			<set oor:name="PopupMenu" oor:node-type="ControllerType">
 				<info>
-					<desc xml:lang="en-US">Contains UNO component implementation names that implements popup menu controller awhich are bound to a command and module name.</desc>
-					<desc xml:lang="zh-CN">Contains UNO component implementation names that implements popup menu controller awhich are bound to a command and module name.</desc>
+					<desc>Contains UNO component implementation names that implements popup menu controller awhich are bound to a command and module name.</desc>
 				</info>
 			</set>
 		</group>
