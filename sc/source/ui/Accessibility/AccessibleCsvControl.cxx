@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 14:04:27 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 15:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ Reference< XAccessible > ScAccessibleCsvControl::implGetChildByRole(
                     if( xCurrCtxt.is() && (xCurrCtxt->getAccessibleRole() == nRole) )
                         xAccObj = xCurrObj;
                 }
+                ++nIndex;
             }
         }
     }
@@ -490,6 +491,8 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessibleRelationSet()
         throw( RuntimeException )
 {
+    ScUnoGuard aGuard;
+    ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
     Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nGridRole );
     if( xAccObj.is() )
@@ -1005,6 +1008,8 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_I
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleRelationSet()
         throw( RuntimeException )
 {
+    ScUnoGuard aGuard;
+    ensureAlive();
     AccessibleRelationSetHelper* pRelationSet = new AccessibleRelationSetHelper();
     Reference< XAccessible > xAccObj = implGetChildByRole( getAccessibleParent(), nRulerRole );
     if( xAccObj.is() )
@@ -1538,6 +1543,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent() throw( Runt
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvCell::getAccessibleRelationSet()
         throw( RuntimeException )
 {
+    ScUnoGuard aGuard;
     ensureAlive();
     return new AccessibleRelationSetHelper();
 }
