@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:45:40 $
+ *  last change: $Author: mtg $ $Date: 2001-07-11 11:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,38 @@
  *
  *
  ************************************************************************/
+
 #ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
 #include <SwXMLBlockListContext.hxx>
 #endif
-
+#ifndef _XMLOFF_XMLIMP_HXX
+#include <xmloff/xmlimp.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _SW_XMLBLOCKIMPORT_HXX
+#include <SwXMLBlockImport.hxx>
+#endif
+#ifndef _SW_XMLTEXTBLOCKS_HXX
+#include <SwXMLTextBlocks.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 using namespace ::rtl;
 
 SwXMLBlockListContext::SwXMLBlockListContext(
@@ -89,15 +110,13 @@ SwXMLBlockListContext::SwXMLBlockListContext(
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         if (XML_NAMESPACE_BLOCKLIST == nPrefix)
         {
-            if (aLocalName.compareToAscii( sXML_list_name ) == 0)
+            if ( IsXMLToken ( aLocalName, XML_LIST_NAME ) )
             {
                 rImport.getBlockList().SetName(rAttrValue);
                 break;
             }
         }
     }
-
-        //rImport.getBlockList().SetName(xAttrList->getValueByName( OUString::createFromAscii(sXML_list_name) ));
 }
 
 SwXMLBlockListContext::~SwXMLBlockListContext ( void )
@@ -111,7 +130,7 @@ SvXMLImportContext *SwXMLBlockListContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
-        rLocalName.compareToAscii( sXML_block ) == 0)
+        IsXMLToken ( rLocalName, XML_BLOCK ) )
         pContext = new SwXMLBlockContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
         pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
@@ -140,21 +159,21 @@ SwXMLBlockContext::SwXMLBlockContext(
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         if (XML_NAMESPACE_BLOCKLIST == nPrefix)
         {
-            if (aLocalName.compareToAscii( sXML_abbreviated_name ) == 0)
+            if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
                 aShort = rCC.upper(rAttrValue);
             }
-            else if (aLocalName.compareToAscii( sXML_name ) == 0)
+            else if ( IsXMLToken ( aLocalName, XML_NAME ) )
             {
                 aLong = rAttrValue;
             }
-            else if (aLocalName.compareToAscii( sXML_package_name ) == 0)
+            else if ( IsXMLToken ( aLocalName, XML_PACKAGE_NAME ) )
             {
                 aPackageName = rAttrValue;
             }
-            else if (aLocalName.compareToAscii( sXML_unformatted_text ) == 0)
+            else if ( IsXMLToken ( aLocalName, XML_UNFORMATTED_TEXT ) )
             {
-                if (rAttrValue.compareToAscii( sXML_true ) == 0)
+                if ( IsXMLToken ( rAttrValue, XML_TRUE ) )
                     bTextOnly = TRUE;
             }
         }
@@ -186,7 +205,7 @@ SvXMLImportContext *SwXMLTextBlockDocumentContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_OFFICE &&
-        rLocalName.compareToAscii( sXML_body ) == 0)
+        IsXMLToken ( rLocalName, XML_BODY ) )
         pContext = new SwXMLTextBlockBodyContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
         pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
@@ -213,7 +232,7 @@ SvXMLImportContext *SwXMLTextBlockBodyContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     if (nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.compareToAscii( sXML_p ) == 0)
+        IsXMLToken ( rLocalName, XML_P ) )
         pContext = new SwXMLTextBlockParContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
         pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
