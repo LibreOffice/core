@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 10:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,10 @@
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <tools/solmath.hxx>
+#include <unotools/charclass.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "xmlnumfe.hxx"
 #include "xmlnmspe.hxx"
@@ -718,10 +721,11 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
 }
 
 void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
-                                                const International& rIntl )
+                                                const International& rIntl,
+                                                const CharClass& rCharClass )
 {
     String sCurString = rIntl.GetCurrSymbol();
-    String sUpperStr = rIntl.Upper(rString);
+    String sUpperStr = rCharClass.upper(rString);
     xub_StrLen nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos != STRING_NOTFOUND )
     {
@@ -977,7 +981,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
                             International aIntl( nLang );
-                            WriteTextWithCurrency_Impl( *pElemStr, aIntl );
+                            String aLanguage, aCountry, aVariant;
+                            ConvertLanguageToIsoNames( International::GetRealLanguage( nLang ), aLanguage, aCountry );
+                            CharClass aChrCls(  ::comphelper::getProcessServiceFactory(), lang::Locale( aLanguage, aCountry, aVariant ) );
+                            WriteTextWithCurrency_Impl( *pElemStr, aIntl, aChrCls );
                         }
                         else
                             WriteTextElement_Impl( *pElemStr );
