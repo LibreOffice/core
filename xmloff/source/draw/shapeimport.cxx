@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:07:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@
 #ifndef _XIMPGROUP_HXX
 #include "ximpgrp.hxx"
 #endif
+// --> OD 2004-10-28 #i28749#, #i36248#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
+#include <com/sun/star/text/PositionLayoutDir.hpp>
+#endif
+// <--
 
 #include <map>
 #include <vector>
@@ -1037,6 +1042,33 @@ void XMLShapeImportHelper::finishShape(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
 {
+    // --> OD 2004-08-10 #i28749#, #i36248# - set property <PositionLayoutDir>
+    // to <PositionInHoriL2R>, if it exists and the import states that
+    // the shape positioning attributes are in horizontal left-to-right
+    // layout. This is the case for the OpenOffice.org file format.
+    // This setting is done for Writer documents, because the property
+    // only exists at service com::sun::star::text::Shape - the Writer
+    // UNO service for shapes.
+    // The value indicates that the positioning attributes are given
+    // in horizontal left-to-right layout. The property is evaluated
+    // during the first positioning of the shape in order to convert
+    // the shape position given in the OpenOffice.org file format to
+    // the one for the OASIS Open Office file format.
+    uno::Reference< beans::XPropertySet > xPropSet(rShape, uno::UNO_QUERY);
+    if ( xPropSet.is() )
+    {
+        if ( mrImporter.IsShapePositionInHoriL2R() &&
+             xPropSet->getPropertySetInfo()->hasPropertyByName(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir"))) )
+        {
+            uno::Any aPosLayoutDir;
+            aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
+            xPropSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir")),
+                aPosLayoutDir );
+        }
+    }
+    // <--
 }
 
 // helper functions for z-order sorting
