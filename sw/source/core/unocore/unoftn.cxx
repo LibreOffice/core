@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-27 14:22:03 $
+ *  last change: $Author: os $ $Date: 2000-10-20 15:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,10 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
             pFmtFtn = &rFtn;
             pDoc->GetUnoCallBack()->Add(this);
             //force creation of sequence id - is used for references
-            ((SwTxtFtn*)pTxtAttr)->SetSeqRefNo();
+            if(pDoc->IsInReading())
+                ((SwTxtFtn*)pTxtAttr)->SetSeqNo((pDoc->GetFtnIdxs().Count());
+            else
+                ((SwTxtFtn*)pTxtAttr)->SetSeqRefNo();
         }
         m_bIsDescriptor = sal_False;
         SetDoc(pDoc);
@@ -616,6 +619,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/27 14:22:03  os
+    #78714# force creation of seqence id
+
     Revision 1.1.1.1  2000/09/19 00:08:28  hr
     initial import
 
