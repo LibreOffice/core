@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-17 10:32:45 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 11:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,15 +463,16 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
         // ansonsten das Layout der Tabelle kurz "kalkulieren" lassen
         // und nochmals neu aufsetzen
-
+        SwTabFrm *pTable = aUnions[0]->GetTable();
         for( i = 0; i < aUnions.Count(); ++i )
         {
-            SwTabFrm *pTable = aUnions[i]->GetTable();
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
             pTable->SetONECalcLowers();
             pTable->Calc();
             pTable->SetCompletePaint();
+            if( 0 == (pTable = pTable->GetFollow()) )
+                break;
         }
         i = 0;
         rBoxes.Remove( i, rBoxes.Count() );
@@ -689,14 +690,16 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
         // ansonsten das Layout der Tabelle kurz "kalkulieren" lassen
         // und nochmals neu aufsetzen
+        SwTabFrm *pTable = aUnions[0]->GetTable();
         for( i = 0; i < aUnions.Count(); ++i )
         {
-            SwTabFrm *pTable = aUnions[i]->GetTable();
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
             pTable->SetONECalcLowers();
             pTable->Calc();
             pTable->SetCompletePaint();
+            if( 0 == (pTable = pTable->GetFollow()) )
+                break;
         }
         --nLoopMax;
         if( pGetCLines )
