@@ -1,4 +1,4 @@
-ua	udkapi	:	unoidl NULL
+ua	udkapi	:	idlc NULL
 ua	udkapi									usr1	-	all	ua_mkout NULL
 ua	udkapi\com\sun\star\beans				nmake	-	all	ua_bean NULL
 ua	udkapi\com\sun\star\bridge				nmake	-	all	ua_brid NULL
