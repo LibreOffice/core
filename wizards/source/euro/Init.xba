@@ -14,6 +14,7 @@ Public sTEMPLATES as String
 
 Public sSOURCEFILE as String
 Public sSOURCEDIR as String
+Public sTARGETDIR as String
 
 Public sStsPROGRESS as String
 Public sStsCELLPROGRSS as String
@@ -40,6 +41,7 @@ Public sMsgOK as String
 Public sMsgCANCEL as String
 Public sMsgFileInvalid as String
 Public sMsgNODIRECTORY as String
+Public sMsgDOCISREADONLY as String
 
 Public sCurrPORTUGUESE as String
 Public sCurrDUTCH as String
@@ -118,13 +120,20 @@ Public bRecursive as Boolean
 Public bCancelProtection as Boolean
 Public CurrRoundMode as Boolean
 Public bRangeListDefined as Boolean
+Public sGOON as String
+Public sHELP as String
+Public sCANCEL as String
 
 
 Sub InitializeResources()
-	DialogModel.cmdCancel.Label =  GetResText(1000)
-	DialogModel.cmdHelp.Label =  GetResText(1001)
+	&apos; Strings that are also needed by the Password Dialog
+	sGoOn = GetResText(1003)
+	sHelp = GetResText(1001)
+	sCANCEL = GetResText(1000)
+	DialogModel.cmdCancel.Label =  sCANCEL
+	DialogModel.cmdHelp.Label =  sHELP
 	DialogModel.cmdBack.Label =  GetResText(1002)
-	DialogModel.cmdGoOn.Label =  GetResText(1003)
+	DialogModel.cmdGoOn.Label =  sGOON
 	DialogModel.lblHint.Label =  GetResText(1004)
 	DialogModel.lblCurrencies.Label = GetResText(1006)
 &apos; Todo: Dieses Model später am Control unsichtbar machen	
@@ -146,11 +155,11 @@ Sub InitializeResources()
 		sSOURCEDIR = GetResText(1204)
  		DialogModel.lblSource.Label = sSOURCEDIR
  		DialogModel.chkRecursive.Label = GetResText(1205)
- 		DialogModel.lblTarget.Label = GetResText(1206)
+		sTARGETDIR = GetResText(1206)
+ 		DialogModel.lblTarget.Label = STARGETDIR 
 		DialogModel.optWholeDir.State = 1
-		DialogModel.txtSource.Text = GetPathSettings(&quot;Work&quot;)
+		DialogModel.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
 		DialogModel.txtTarget.Text = DialogModel.txtSource.Text
-
 		DialogModel.frmProgress.Label = GetResText(1600)
 		DialogModel.lblConfig.Label = GetResText(1603)
 		sPrgsRETRIEVAL = GetResText(1601)
@@ -190,7 +199,7 @@ Sub InitializeResources()
 	sMsgFILEINVALID = GetResText(1419)
 	sMsgFILEINVALID = ReplaceString(sMsgFILEINVALID,&quot;%PRODUCTNAME&quot;, GetProductname())
 	SMsgNODIRECTORY = GetResText(1420)
-	
+	sMsgDOCISREADONLY = GetResText(1421)
 	sCurrPORTUGUESE = GetResText(1500)
 	sCurrDUTCH = GetResText(1501)
 	sCurrFRENCH = GetResText(1502)
@@ -212,32 +221,32 @@ Sub InitializeLanguages()
 
 &apos; CURRENCIES_PORTUGUESE
 	LangIDValue(0,0,0) = &quot;pt&quot;
-	LangIDValue(0,0,1) = &quot;PT&quot;
+	LangIDValue(0,0,1) = &quot;&quot;
 	LangIDValue(0,0,2) = &quot;-816&quot;
 
 &apos; CURRENCIES_DUTCH
 	LangIDValue(1,0,0) = &quot;nl&quot;
-	LangIDValue(1,0,1) = &quot;NL&quot;
+	LangIDValue(1,0,1) = &quot;&quot;
 	LangIDValue(1,0,2) = &quot;-413&quot;
 
 &apos; CURRENCIES_FRENCH
 	LangIDValue(2,0,0) = &quot;fr&quot;
-	LangIDValue(2,0,1) = &quot;FR&quot;
+	LangIDValue(2,0,1) = &quot;&quot;
 	LangIDValue(2,0,2) = &quot;-40C&quot;
 
 &apos; CURRENCIES_SPANISH
 	LangIDValue(3,0,0) = &quot;es&quot;
-	LangIDValue(3,0,1) = &quot;ES&quot;
+	LangIDValue(3,0,1) = &quot;&quot;
 	LangIDValue(3,0,2) = &quot;-40A&quot;
 	
 	&apos;Spanish modern
 	LangIDValue(3,1,0) = &quot;es&quot;
-	LangIDValue(3,1,1) = &quot;ES&quot;
+	LangIDValue(3,1,1) = &quot;&quot;
 	LangIDValue(3,1,2) = &quot;-C0A&quot;
 
 &apos; CURRENCIES_ITALIAN
 	LangIDValue(4,0,0) = &quot;it&quot;
-	LangIDValue(4,0,1) = &quot;IT&quot;
+	LangIDValue(4,0,1) = &quot;&quot;
 	LangIDValue(4,0,2) = &quot;-410&quot;
 
 &apos; CURRENCIES_GERMAN
@@ -357,8 +366,8 @@ Dim i as Integer
 	CurrValue(7,1) = &quot;0.787564&quot;
 	&apos; Gerundeter Umrechnungskurs
 	CurrValue(7,2) = &quot;0.8&quot;
-	CurrValue(7,3) = &quot;Â£&quot;
-	CurrValue(7,4) = &quot;Â£&quot;
+	CurrValue(7,3) = &quot;£&quot;
+	CurrValue(7,4) = &quot;£&quot;
 	CurrValue(7,5) = &quot;IEP&quot;
 
 	CurrValue(8,0) = sCurrLUXEMBOURG
@@ -391,19 +400,19 @@ Dim i as Integer
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;
 	CurrSymbolList(1) = &quot;&quot;
+	InitializeCurrencyValues(CurrIndex)
+End Sub
 
-	If CurrIndex &lt;&gt; -1 Then
-		&apos; Current language is of the European Currency Union
-		InitializeCurrencyValues(CurrIndex)
-	Else
+
+Sub InitializeControls()
+	If CurrIndex = -1 Then
 		If DialogModel.Step = 1 Then
 			EnableStep1DialogControls(True, False, False)
 		ElseIf DialogModel.Step = 2 Then
 			EnableStep2DialogControls(True)
 		End If
 	End If
-End Sub
-
+End Sub	
 
 Sub InitializeConverter(oLocale, iDialogPage as Integer)
 Dim Isthere as Boolean
@@ -412,18 +421,25 @@ Dim Isthere as Boolean
 	bMacroStopped = False
 	bRangeListDefined = False
 	sDocType = GetDocumentType(StarDesktop.ActiveFrame.Controller.Model)
-	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DialogConvert&quot;)
+	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DlgConvert&quot;)
 	DialogModel = DialogConvert.Model
+	DialogPassword = LoadDialog(&quot;Euro&quot;, &quot;DlgPassword&quot;)
+	PasswordModel = DialogPassword.Model
 	DialogModel.Step = iDialogPage
 	InitializeResources()
 	InitializeLanguages()
 	InitializeLocales(oLocale)
 	InitializeCurrencies()
+	InitializeControls()
+&apos; Todo Mimetypes für XML - Dokumente hinzufügen!	
 	Filterlist(0) = &quot;application/vnd.stardivision.calc&quot;
+&apos;	Filterlist(1) = &quot;application/vnd.stardivision.calc&quot;
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	UnprotectList(0,0) = &quot;0&quot;
 	FillUpCurrencyListbox()
+	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
 	DialogConvert.Title = sMsgDLGTITLE
+	DialogModel.cmdGoOn.DefaultButton = True	
 	ToggleWindow(True)
 End Sub
 
@@ -459,23 +475,4 @@ Dim sLanguage as String, sCountry as String
 	Next n
 	CurrIndex = -1
 	InitializeLocales = False
-End Function
-
-
-Sub LoadLibrary(sLibname as String)
-	Dim oArg(0) as new com.sun.star.beans.PropertyValue
-	Dim oUrl as new com.sun.star.util.URL
-	Dim oTrans as Object
-	Dim oDisp as Object
-
-	oArg(0).Name = &quot;LibraryName&quot;
-	oArg(0).Value = sLibname
-
-	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-	oUrl.Complete = &quot;slot:6517&quot;
-	oTrans.parsestrict( oUrl )
-
-	oDisp = StarDesktop.currentFrame.queryDispatch( oUrl, &quot;_self&quot;, 0)	
-	oDisp.dispatch( oUrl, oArg())
-End Sub
-</script:module>
+End Function</script:module>

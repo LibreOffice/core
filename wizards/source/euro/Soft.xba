@@ -77,13 +77,13 @@ Dim LastIndex as Integer
 			StyleRangeAssignmentList(n,2) = 1
 		
 			If StyleRangeAssignmentList(n,1) &lt;&gt; 1 Then
-				&apos; Die Ranges fÃ¼r diesen Style sind noch nicht definiert
+				&apos; Die Ranges für diesen Style sind noch nicht definiert
 				StyleCellCount = 0
 				For t = 0 To sheetscount - 1
 					oSheet = oSheets.GetbyIndex(t)
 					SheetName = oSheet.Name
 					&apos; Der Listboxeintrag ist frisch selektiert worden und muÃŸ der Ranges - Kollektion 
-					&apos; hinzugefÃ¼gt werden
+					&apos; hinzugefügt werden
 	
 					&apos; Dem Stylenamen sind keine Ranges zugeordnet
 					&apos; Diese holen wir mit der folgenden Schleife nach
@@ -98,7 +98,7 @@ Dim LastIndex as Integer
 								oListSheet = RetrieveSheetoutofRangeName(RangeName)
 								AddRange = UnprotectSheet(oListSheet)
 								If AddRange Then
-									&apos; Jetzt den Index fÃ¼r den Style ermitteln
+									&apos; Jetzt den Index für den Style ermitteln
 									StyleRangeAssignmentList(n,m) =  RangeName
 
 									&apos; Die gesamtZahl der Zellen anpassen
@@ -110,7 +110,7 @@ Dim LastIndex as Integer
 					Wend
 				Next t	
 				TotCellCount = TotCellCount + StyleCellCount
-				&apos; Die Ranges fÃ¼r den Stil sind jetzt definiert
+				&apos; Die Ranges für den Stil sind jetzt definiert
 				StyleRangeAssignmentList(n,1) = &quot;1&quot;
 				StyleRangeAssignmentList(n,3) = cStr(StyleCellCount)
 			End If
@@ -183,7 +183,7 @@ Dim RangeName as String
 Dim OldStatusValue as Integer
 Dim LastIndex as Integer
 	LastIndex = Ubound(StyleList())
-	&apos; Index fÃ¼r die Removelist
+	&apos; Index für die Removelist
 	a = 0
 	OldStatusValue = StatusValue
 	For i = 0 To LastIndex
@@ -191,7 +191,7 @@ Dim LastIndex as Integer
 			CurStyleName = StyleList(i)
 			oStyle = oStyles.GetbyName(CurStyleName)
 
-			&apos; Jetzt die Ranges abarbeiten, die mit der Vorlage verknÃ¼pft sind
+			&apos; Jetzt die Ranges abarbeiten, die mit der Vorlage verknüpft sind
 			&apos; Gibt es den Listboxeintrag schon in der Zuordnungstabelle?
 			n = IndexinArray(CurStyleName, StyleRangeAssignmentList(), 1)
 			m = 4
@@ -221,7 +221,7 @@ Dim LastIndex as Integer
 			&apos; Zuletzt das Währungsformat in den Vorlagen anpassen
 			SwitchNumberFormat( ostyle, oFormats, sEuroSign)
 &apos;			oStatusline.SetValue(100)
-			&apos; Die Vorlage wird aus der Zuordnungstabelle gelÃ¶scht
+			&apos; Die Vorlage wird aus der Zuordnungstabelle gelöscht
 			For s = 0 To m - 1
 				StyleRangeAssignmentList(n,s) = &quot;&quot;
 			Next

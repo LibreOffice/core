@@ -226,7 +226,7 @@ Dim oFormatofObject() as Object
 	On Local Error GoTo 0			
 
 	&apos; Typ und WÃ¤hrungssymbol des Numberformats heraussuchen
-	&apos; Todo: ÃœberprÃ¼fe, ob diese beiden Zeilen nicht eleganter gehen
+	&apos; Todo: Ãœberprüfe, ob diese beiden Zeilen nicht eleganter gehen
 	 CheckIfRangeIsCurrency = INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY
 	Exit Function
 NOKEY:

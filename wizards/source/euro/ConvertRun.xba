@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
-&apos; Todo Den Bug mit der Statuszeilengeschichte Ã¼berprÃ¼fen
+&apos; Todo Den Bug mit der Statuszeilengeschichte überprüfen
 &apos; Todo Vorselektion der Listbox
 &apos; Mauspointer umschalten:
 
 &apos; Todo: Sinnigkeit von &apos;DocDisposed&apos; noch einmal überprüfen
 
 Sub Main()
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		DoUnProtect = 0
 		bPreSelected = True
@@ -217,58 +217,6 @@ Dim s as Integer
 End Sub
 
 
-Sub SelectCurrency()
-Dim AddtoList as Boolean
-Dim UpRangeList as Integer
-Dim OldCurrIndex as Integer
-	OldCurrIndex = CurrIndex
-	CurrIndex = DialogModel.lstCurrencies.SelectedItems(0)
-	InitializeCurrencyValues(CurrIndex)
-	CurExtension(0) = LangIDValue(CurrIndex,0,2)
-	CurExtension(1) = LangIDValue(CurrIndex,1,2)
-	If DialogModel.Step = 1 Then
-		If OldCurrIndex = -1 Then
-			DialogModel.chkComplete.State = 1
-			EnableStep1DialogControls(True,False, True)
-			SetOptionValuestoNull()
-		Else
-			EnableStep1DialogControls(False,False, False)
-			If DialogModel.optCellTemplates.State = 1 Then
-				EnableStep1DialogControls(False, False, False)
-				CreateStyleEnumeration()
-				EnableStep1DialogControls(True, True, True)
-			ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
-				UpRangeList = UBound(RangeList())
-				ReDim RangeList(UpRangeList) &apos;as String
-				CreateRangeEnumeration(False)
-			ElseIf DialogModel.optSelRange.State= 1 Then
-				&apos;Preselected Range
-				CheckRangeSelection()
-			End If
-			EnableStep1DialogControls(True, True, True)
-		End If
-	ElseIf DialogModel.Step = 2 Then
-		EnableStep2DialogControls(True)
-	End If
-End Sub
-
-
-
-Sub FillUpCurrencyListbox()
-Dim i as Integer
-Dim MaxIndex as Integer
-	MaxIndex = Ubound(CurrValue(),1)
-	Dim LocList(MaxIndex) as String
-	For i = 0 To MaxIndex
-		LocList(i) = CurrValue(i,0)
-	Next i
-	DialogModel.lstCurrencies.StringItemList() = LocList()
-	If CurrIndex &gt; -1 Then
-		SelectListboxItem(DialogModel.lstCurrencies, CurrIndex)
-	End If
-End Sub
-
-
 &apos; Alles was selektiert wurde wird deselektiert
 Sub EmptySelection()
 Dim RangeName as String
@@ -343,7 +291,11 @@ Dim OldCurExtension(1) as String
 	End If
 	EnableStep1DialogControls(True, bPreSelected, True)
 &apos; Todo: auf Integer umstellen
-	DialogModel.chkComplete.State = Not bPreSelected
+	If bPreselected Then
+		DialogModel.chkComplete.State = 0 
+	Else
+		DialogModel.chkComplete.State = 1
+	End If
 	DialogModel.optSelRange.Enabled = bPreSelected
 End Sub
 

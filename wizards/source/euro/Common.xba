@@ -3,7 +3,8 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic">REM  *****  BASIC  *****
 Public DialogModel as Object
 Public DialogConvert as Object
-
+Public DialogPassword as Object
+Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
     oSheets = oDocument.Sheets
@@ -18,16 +19,16 @@ End Sub
 Sub CloseDialog
 Dim n, m as Integer
 	If Not bMacroStopped Then
-		&apos; Die Zuordnungstabelle lÃ¶schen
-		If Not IsNull(oStyles) Then
-			Redim StyleRangeAssignmentList(20,50)as String
-		End If
-
-		ReDim RangeList(100) as String
-		ReDim SelRangeList(100) as String
-		Redim RangeBools(100) as Boolean
-		ReDim RemoveList(100) as String
-		ClearArray(ListboxItems())
+		&apos; Die Zuordnungstabelle löschen
+&apos; Todo: Check if Values in the following variables are cleared if the macro is restarted		
+&apos;		If Not IsNull(oStyles) Then
+&apos;			Redim StyleRangeAssignmentList(20,50)as String
+&apos;		End If
+&apos;		ReDim RangeList(100) as String
+&apos;		ReDim SelRangeList(100) as String
+&apos;		Redim RangeBools(100) as Boolean
+&apos;		ReDim RemoveList(100) as String
+&apos;		ClearArray(ListboxItems())
 		&apos; Prevent That this Procedure is called again the second time 
 		&apos; by the Unload Event of the dialog
 		bMacroStopped = True
@@ -81,11 +82,11 @@ Dim AddRange as Boolean
 			End If
 		End If
 	Next
-	If AddRange Then
-		RangeIndex = Val(DummyList(0))
+	RangeIndex = Val(DummyList(0))
+	If AddRange And RangeIndex &gt; 0 Then
 		Dim LocRangeList(RangeIndex-1) as String
-		Dim LocRangeBools(RangeIndex) as String
-		For i = 0 To RangeIndex
+		Dim LocRangeBools(RangeIndex-1) as String
+		For i = 1 To RangeIndex
 			LocRangeList(i-1 ) = DummyList(i)
 			LocRangeBools(i-1) = True
 		Next i
@@ -113,7 +114,7 @@ Dim aNewStr as String
 Dim iNumberFormat as Long
 Dim AddToList as Boolean
 
-	&apos; Numberformat mit dem neuen Symbol als Basis fÃ¼r generateFormat
+	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
 	aSimpleStr = &quot;0 [$&quot;+sNewSymbol+&quot;]&quot;
 	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
 	On Local Error Resume Next
@@ -153,21 +154,6 @@ Dim nRetkey
 	End If
 	Numberformat = nRetKey
 End Function
-
-
-Sub RepaintEuroPreview()
-Dim Twip as integer
-Dim Bitmap As Object
-Dim CurStep as Integer
-Dim PicturePath as String
-	Twip = 425
-&apos;	TODO: Einbinden der Twip-Konstanten
-	CurStep = DialogModel.Step
-	Picturepath = BitmapDir &amp; &quot;euro_&quot; &amp; CurStep &amp; &quot;.bmp&quot;	
-&apos;	Msgbox PicturePath
-	Set Bitmap = LoadPicture(PicturePath)
-	DialogConvert.Preview1.DrawPicture(Bitmap,20,20,6820,760)
-End Sub
 
 
 &apos; Funktion findet den Formattyp einer Vorlage, Zelle oder eines Bereiches heraus und schreibt das Ergebnis
@@ -227,7 +213,7 @@ Sub StartConversion()
 	If DialogModel.Step = 2 Then
 		ConvertDocuments()
 	Else
-		If DialogModel.chkComplete.State = 1Then
+		If DialogModel.chkComplete.State = 1 Then
 			ConvertWholeDocument()
 		Else
 			ConvertRangesorStylesofDocument()
@@ -240,4 +226,58 @@ End Sub
 Sub IncreaseStatusValue(AddStatusValue as Integer)
 	StatusValue = Int(StatusValue + AddStatusValue)
 	oStatusline.SetValue(StatusValue)
-End Sub</script:module>
+End Sub
+
+
+Sub SelectCurrency()
+Dim AddtoList as Boolean
+Dim UpRangeList as Integer
+Dim OldCurrIndex as Integer
+	OldCurrIndex = CurrIndex
+	CurrIndex = DialogModel.lstCurrencies.SelectedItems(0)
+	InitializeCurrencyValues(CurrIndex)
+	CurExtension(0) = LangIDValue(CurrIndex,0,2)
+	CurExtension(1) = LangIDValue(CurrIndex,1,2)
+	If DialogModel.Step = 1 Then
+		If OldCurrIndex = -1 Then
+			DialogModel.chkComplete.State = 1
+			EnableStep1DialogControls(True,False, True)
+			SetOptionValuestoNull()
+		Else
+			EnableStep1DialogControls(False,False, False)
+			If DialogModel.optCellTemplates.State = 1 Then
+				EnableStep1DialogControls(False, False, False)
+				CreateStyleEnumeration()
+				EnableStep1DialogControls(True, True, True)
+			ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
+				UpRangeList = UBound(RangeList())
+				ReDim RangeList(UpRangeList) &apos;as String
+				CreateRangeEnumeration(False)
+			ElseIf DialogModel.optSelRange.State= 1 Then
+				&apos;Preselected Range
+				CheckRangeSelection()
+			End If
+			EnableStep1DialogControls(True, True, True)
+		End If
+	ElseIf DialogModel.Step = 2 Then
+		EnableStep2DialogControls(True)
+	End If
+End Sub
+
+
+Sub FillUpCurrencyListbox()
+Dim i as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(CurrValue(),1)
+	Dim LocList(MaxIndex) as String
+	For i = 0 To MaxIndex
+		LocList(i) = CurrValue(i,0)
+	Next i
+	DialogModel.lstCurrencies.StringItemList() = LocList()
+	If CurrIndex &gt; -1 Then
+		SelectListboxItem(DialogModel.lstCurrencies, CurrIndex)
+	End If
+End Sub
+
+
+</script:module>
