@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:52:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,13 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XBORDERRESIZELISTENER_HPP_
+#include <com/sun/star/frame/XBorderResizeListener.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
 #endif
@@ -178,6 +185,7 @@
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
+#include <toolkit/helper/convert.hxx>
 
 #include "event.hxx"
 
@@ -199,6 +207,8 @@
 #define XMOUSECLICKHANDLER                      ::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
+
+using namespace ::com::sun::star;
 
 sal_uInt32 Get10ThSec()
 {
@@ -426,7 +436,6 @@ struct IMPL_SfxBaseController_DataContainer
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
-    sal_Bool                                m_bGotOwnerShip;
     sal_Bool                                m_bHasKeyListeners;
     sal_Bool                                m_bHasMouseClickListeners;
     /** When this flag is <true/> (the default) then in dispose() the frame
@@ -451,7 +460,6 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
-            ,   m_bGotOwnerShip         ( sal_False                                             )
             ,   m_bHasKeyListeners      ( sal_False                                             )
             ,   m_bHasMouseClickListeners( sal_False                                                )
             ,   m_bIsFrameReleasedWithController( sal_True                                              )
@@ -549,6 +557,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
                                             static_cast< XCOMPONENT*       > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
+                                               static_cast< XCONTROLLERBORDER*      > ( this )  ,
                                                static_cast< XUSERINPUTINTERCEPTION*     > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
@@ -615,6 +624,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
             // Create a static typecollection ...
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
+                                                      ::getCppuType(( const REFERENCE< XCONTROLLERBORDER        >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
@@ -859,48 +869,100 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 SfxShell *pShell=0;
                 USHORT nIdx;
 
-                SfxInPlaceFrame* pIPFrame = pAct->GetIPFrame_Impl();
-                if ( pIPFrame )
-                {
-                    pAct = (SfxViewFrame *)pIPFrame;
-                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
-                    const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
-                    if ( pSlot )
-                    {
-                        FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-                        if ( !bIsContainerSlot )
-                            return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
-                    }
-                }
-
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
-                if ( pSlot )
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL ) );
+                else
+                {
+                    // try to find parent SfxViewFrame
+                    uno::Reference< frame::XFrame > xParentFrame;
+                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                    if ( xOwnFrame.is() )
+                        xParentFrame = uno::Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
+
+                    if ( xParentFrame.is() )
+                    {
+                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
+                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
+
+                        // search the related SfxViewFrame
+                        SfxViewFrame* pParentFrame = NULL;
+                        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
+                                pFrame;
+                                pFrame = SfxViewFrame::GetNext( *pFrame ) )
+                        {
+                            uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                            if ( pFrame->GetFrame()->GetFrameInterface() == xParentFrame )
+                            {
+                                pParentFrame = pFrame;
+                                break;
+                            }
+                        }
+
+                        if ( pParentFrame )
+                        {
+                            SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
+                            const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+                            if ( pSlot )
+                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pParentFrame->GetBindings(), pParentFrame->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                        }
+                    }
+                }
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
                 USHORT nId = (USHORT) aURL.Path.toInt32();
-                SfxInPlaceFrame* pIPFrame = pAct->GetIPFrame_Impl();
-                if ( pIPFrame )
-                {
-                    pAct = (SfxViewFrame *)pIPFrame;
-                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
-                    const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
-                    if ( pSlot )
-                    {
-                        FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-                        if ( !bIsContainerSlot )
-                            return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
-                    }
-                }
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
+                if (nId >= SID_VERB_START && nId <= SID_VERB_END)
+                {
+                    const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
+                    if ( pSlot )
+                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
+                }
+
                 SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
-                if ( pSlot )
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL ) );
+                else
+                {
+                    // try to find parent SfxViewFrame
+                    uno::Reference< frame::XFrame > xParentFrame;
+                    uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                    if ( xOwnFrame.is() )
+                        xParentFrame = uno::Reference< frame::XFrame >( xOwnFrame->getCreator(), uno::UNO_QUERY );
+
+                    if ( xParentFrame.is() )
+                    {
+                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
+                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
+
+                        // search the related SfxViewFrame
+                        SfxViewFrame* pParentFrame = NULL;
+                        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
+                                pFrame;
+                                pFrame = SfxViewFrame::GetNext( *pFrame ) )
+                        {
+                            uno::Reference< frame::XFrame > xOwnFrame = pAct->GetFrame()->GetFrameInterface();
+                            if ( pFrame->GetFrame()->GetFrameInterface() == xParentFrame )
+                            {
+                                pParentFrame = pFrame;
+                                break;
+                            }
+                        }
+
+                        if ( pParentFrame )
+                        {
+                            SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
+                            const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+                            if ( pSlot )
+                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pParentFrame->GetBindings(), pParentFrame->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                        }
+                    }
+                }
             }
             else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
             {
@@ -937,6 +999,80 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( 
     }
 
     return lDispatcher;
+}
+
+//________________________________________________________________________________________________________
+//  SfxBaseController -> XControllerBorder
+//________________________________________________________________________________________________________
+
+frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
+    throw ( uno::RuntimeException )
+{
+    frame::BorderWidths aResult;
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pData->m_pViewShell )
+    {
+        SvBorder aBorder = m_pData->m_pViewShell->GetBorderPixel();
+        aResult.Left = aBorder.Left();
+        aResult.Top = aBorder.Top();
+        aResult.Right = aBorder.Right();
+        aResult.Bottom = aBorder.Bottom();
+    }
+
+    return aResult;
+}
+
+void SAL_CALL SfxBaseController::addBorderResizeListener( const uno::Reference< frame::XBorderResizeListener >& xListener )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< frame::XBorderResizeListener >*)0),
+                                                xListener );
+}
+
+void SAL_CALL SfxBaseController::removeBorderResizeListener( const uno::Reference< frame::XBorderResizeListener >& xListener )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< frame::XBorderResizeListener >*)0),
+                                                xListener );
+}
+
+awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectangle& aPreliminaryRectangle )
+    throw ( uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pData->m_pViewShell )
+    {
+        Rectangle aTmpRect = VCLRectangle( aPreliminaryRectangle );
+        m_pData->m_pViewShell->QueryObjAreaPixel( aTmpRect );
+        return AWTRectangle( aTmpRect );
+    }
+
+    return aPreliminaryRectangle;
+}
+
+void SfxBaseController::BorderWidthsChanged_Impl()
+{
+       ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
+                        ::getCppuType( ( const uno::Reference< frame::XBorderResizeListener >*) NULL ) );
+    if ( pContainer )
+    {
+        frame::BorderWidths aBWidths = getBorder();
+        uno::Reference< uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
+
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
+        {
+            try
+            {
+                ((frame::XBorderResizeListener*)pIterator.next())->borderWidthsChanged( xThis, aBWidths );
+            }
+            catch( uno::RuntimeException& )
+            {
+                pIterator.remove();
+            }
+        }
+    }
 }
 
 //________________________________________________________________________________________________________
