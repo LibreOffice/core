@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,9 +246,9 @@ LotAttrCol::~LotAttrCol()
 }
 
 
-void LotAttrCol::SetAttr( const UINT16 nRow, const ScPatternAttr& rAttr )
+void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
-    DBG_ASSERT( nRow <= MAXROW, "*LotAttrCol::SetAttr(): ... und rums?!" );
+    DBG_ASSERT( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
     ENTRY*      pAkt = ( ENTRY* ) List::Last();
 
@@ -275,7 +275,7 @@ void LotAttrCol::SetAttr( const UINT16 nRow, const ScPatternAttr& rAttr )
 }
 
 
-void LotAttrCol::Apply( const UINT16 nColNum, const UINT16 nTabNum, const BOOL bClear )
+void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL bClear )
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
     ENTRY*          pAkt = ( ENTRY* ) List::First();
@@ -312,20 +312,20 @@ LotAttrTable::~LotAttrTable()
 }
 
 
-void LotAttrTable::SetAttr( const UINT8 nColFirst, const UINT8 nColLast, const UINT16 nRow,
+void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
     const ScPatternAttr&    rPattAttr = aAttrCache.GetPattAttr( rAttr );
-    UINT16                  nColCnt;
+    SCCOL                   nColCnt;
 
     for( nColCnt = nColFirst ; nColCnt <= nColLast ; nColCnt++ )
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
 }
 
 
-void LotAttrTable::Apply( const UINT16 nTabNum )
+void LotAttrTable::Apply( const SCTAB nTabNum )
 {
-    UINT16                  nColCnt;
+    SCCOL                   nColCnt;
     for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
         pCols[ nColCnt ].Apply( nColCnt, nTabNum );     // macht auch gleich ein Clear() am Ende
 }
