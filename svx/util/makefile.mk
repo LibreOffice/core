@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-16 15:12:17 $
+#   last change: $Author: fs $ $Date: 2000-10-20 16:31:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,7 +188,9 @@ SHL2STDLIBS= \
             $(CPPUHELPERLIB) \
             $(RTLLIB) \
             $(UNOTOOLSLIB) \
-            $(UCBHELPERLIB) 
+            $(UCBHELPERLIB) \
+            $(COMPHELPERLIB) \
+            $(DBTOOLSLIB) 
 
 .IF "$(TF_UCB)" == ""
 SHL2STDLIBS+=\
