@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-07 12:43:26 $
+ *  last change: $Author: ab $ $Date: 2001-05-30 10:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace com::sun::star::uno;
 
 // Define activates old file implementation
 // (only in non UCB case)
-#define _OLD_FILE_IMPL
+// #define _OLD_FILE_IMPL
 
 
 //#include <sal/types.h>
@@ -497,7 +497,11 @@ String implGetCurDir( void );
 void implStepRenameUCB( const String& aSource, const String& aDest );
 
 //*** OSL file access ***
-String getFullPathUNC( const String& aRelPath );
+// #87427 OSL need File URLs, so map to getFullPath
+inline String getFullPathUNC( const String& aRelPath )
+{
+    return getFullPath( aRelPath );
+}
 void implStepRenameOSL( const String& aSource, const String& aDest );
 
 #endif
