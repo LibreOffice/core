@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:07:51 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 19:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@ String STR_WIZDLG_FINISH
     Text [ english ] = "~Finish" ;
     Text [ english_us ] = "C~reate" ;
     Text [ language_user1 ] = "This is the 'finish' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
-    Text[ portuguese ] = "~Finish";
+    Text[ portuguese ] = "~Criar";
     Text[ russian ] = "~Ãîòîâî";
     Text[ greek ] = "Äçìéïõñãßá";
     Text[ dutch ] = "~Voltooien";
     Text[ french ] = "~Créer";
     Text[ spanish ] = "~Crear";
-    Text[ italian ] = "~Finish";
+    Text[ italian ] = "~Crea";
     Text[ danish ] = "~Finish";
     Text[ swedish ] = "~Färdigställ";
     Text[ polish ] = "Utwórz";
@@ -94,13 +94,13 @@ String STR_WIZDLG_NEXT
     Text [ ENGLISH ] = "~Next >>" ;
     Text [ english_us ] = "~Next >>";
     Text [ language_user1 ] = "This is the 'next' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
-    Text[ portuguese ] = "~Next >>";
+    Text[ portuguese ] = "~Seguinte >>";
     Text[ russian ] = "~Äàëåå >>";
     Text[ greek ] = "Åðüìåíï >>";
     Text[ dutch ] = "~Next >>";
     Text[ french ] = "~Suivant >>";
     Text[ spanish ] = "~Siguiente >>";
-    Text[ italian ] = "~Next >>";
+    Text[ italian ] = "~Avanti >>";
     Text[ danish ] = "~Next >>";
     Text[ swedish ] = "~Nästa >>";
     Text[ polish ] = "Dalej >>";
@@ -119,13 +119,13 @@ String STR_WIZDLG_PREVIOUS
     Text [ ENGLISH ] = "<< ~Previous" ;
     Text [ english_us ] = "<< Bac~k";
     Text [ language_user1 ] = "This is the 'previous' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
-    Text[ portuguese ] = "<< ~Previous";
+    Text[ portuguese ] = "<< ~Anterior";
     Text[ russian ] = "<<~Íàçàä";
     Text[ greek ] = "<< Ðßóù";
     Text[ dutch ] = "<< ~Vorige";
     Text[ french ] = "<< ~Précédent";
     Text[ spanish ] = "<< ~Regresar";
-    Text[ italian ] = "<< ~Previous";
+    Text[ italian ] = "<<~Indietro";
     Text[ danish ] = "<< ~Previous";
     Text[ swedish ] = "<< T~illbaka";
     Text[ polish ] = "<< Wstecz";
@@ -141,6 +141,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/11 18:07:51  kz
+ *  Merge SRC627: 11.04.01 - 21:07:21
+ *
  *  Revision 1.6  2001/04/09 22:49:46  kz
  *  Merge SRC627: 10.04.01 - 00:49:22
  *
