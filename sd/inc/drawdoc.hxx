@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:35:29 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ private:
     BOOL                bHideSpell;
     BOOL                bCustomShow;
     BOOL                bSummationOfParagraphs;
+    bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
 
     ULONG               nPresFirstPage;
     LanguageType        eLanguage;
@@ -289,6 +290,10 @@ public:
                                         BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
                                         SdDrawDocShell* pBookmarkDocSh, BOOL bCopy,
                                         Point* pObjPos);
+
+    bool IsStartWithPresentation() const;
+    void SetStartWithPresentation( bool bStartWithPresentation );
+
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
