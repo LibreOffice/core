@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:21:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,8 +2210,11 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
     SdrObject* pTopGroupObj = _GetTopGroupObj();
     if ( !pTopGroupObj )
     {
-        // shape isn't a group member. Thus, set positioning attributes
-        _AdjustPositionProperties( aPosition );
+        // --> OD 2005-02-10 #i37877# - no adjustment of position attributes,
+        // if the position also has to be applied at the drawing object and
+        // a contact object is already registered at the drawing object.
+        bool bApplyPosAtDrawObj(false);
+        bool bNoAdjustOfPosProp(false);
         // --> OD 2004-10-19 #i35798# - apply position also to drawing object,
         // if drawing object has no anchor position set.
         if ( mxShape.is() )
@@ -2224,9 +2227,24 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
                      pObj->GetAnchorPos().X() == 0 &&
                      pObj->GetAnchorPos().Y() == 0 )
                 {
-                    mxShape->setPosition( aPosition );
+                    bApplyPosAtDrawObj = true;
+                    if ( pObj->GetUserCall() &&
+                         pObj->GetUserCall()->ISA(SwDrawContact) )
+                    {
+                        bNoAdjustOfPosProp = true;
+                    }
                 }
             }
+        }
+        // <--
+        // shape isn't a group member. Thus, set positioning attributes
+        if ( !bNoAdjustOfPosProp )
+        {
+            _AdjustPositionProperties( aPosition );
+        }
+        if ( bApplyPosAtDrawObj )
+        {
+            mxShape->setPosition( aPosition );
         }
         // <--
     }
