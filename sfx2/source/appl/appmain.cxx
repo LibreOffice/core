@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:56:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _CSTITEM_HXX //autogen
 #include <svtools/cstitem.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
@@ -462,36 +462,4 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
             pAppData_Impl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
     }
     return *pAppData_Impl->pMatcher;
-}
-
-//-------------------------------------------------------------------------
-
-BOOL SfxApplication::IsStandalone() const
-{
-#if SUPD<613//MUSTINI
-    // Wenn ohne UI gestartet, nat"urlich niemals integrierter Desktop
-    if ( pAppData_Impl->bBean )
-        return TRUE;
-
-    String aExt = SFX_INIMANAGER()->Get( String::CreateFromAscii( "Common"), 0, 0, String::CreateFromAscii("FullScreenDesktop") );
-    if ( aExt.Len() )
-    {
-        // INI-Eintrag auswerten
-        return !( (BOOL) (USHORT) aExt.ToInt32() );
-    }
-    else
-    {
-        // Defaults: bei AppServer kein integrierter Desktop, bei FatOffice
-        // unter WNT integriert, ansonsten nicht
-        if ( Application::IsRemoteServer() )
-            return TRUE;
-#ifdef WNT
-        return FALSE;
-#else
-        return TRUE;
-#endif
-    }
-#else//MUSTINI
-    return FALSE;
-#endif
 }
