@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2002-11-28 14:56:06 $ $Revision: 1.11 $
+ // $Author: obo $ $Date: 2003-09-04 08:02:08 $ $Revision: 1.12 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -188,6 +188,20 @@ interface CellMovement : Selection
     ]
 
     SID_PREV_TABLE
+    [
+        ExecMethod = ExecuteMove ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SID_NEXT_TABLE_SEL
+    [
+        ExecMethod = ExecuteMove ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SID_PREV_TABLE_SEL
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
@@ -382,6 +396,12 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11.200.1  2003/08/07 12:32:59  dr
+    #i6330# select multiple tables with keyboard
+
+    Revision 1.11  2002/11/28 14:56:06  nn
+    #104949# new accelerator slot to select array formula
+
     Revision 1.10  2002/08/29 14:19:09  mba
     #98951#: make sure that slot names are unique
 
