@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:34:19 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ chinese_traditional ] = "å·²ç¶“å˜—è©¦éé–‹å•Ÿè¡¨æ ¼ $name$ ã€‚";
     Text[ turkish ] = "Tried to open the table $name$";
     Text[ arabic ] = "Êã ãÍÇæáÉ İÊÍ ÇáÌÏæá $name$.";
-    Text[ finnish ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
+    Text[ finnish ] = "Yritettiin avata taulukkoa $name$.";
     Text[ catalan ] = "S'ha intentat obrir la taula $name$.";
 };
 String RID_STR_CONNECTION_INVALID
@@ -108,7 +108,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é€£ç·š!";
     Text[ turkish ] = "Not possible to create a connection!";
     Text[ arabic ] = "Not possible to create a connection!";
-    Text[ finnish ] = "Es konnte keine Verbindung erstellt werden.";
+    Text[ finnish ] = "Yhteyden muodostaminen ei onnistunut.";
     Text[ catalan ] = "No s'ha pogut establir una connexió";
 };
 
@@ -134,7 +134,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ chinese_traditional ] = "é€™å€‹è¡¨æ ¼ $name$ å·²ç¶“å­˜åœ¨ã€‚å› çˆ²å·²ç¶“ç¯©é¸å®ƒè€Œç„¡æ³•é¡¯ç¤ºã€‚";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
     Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
-    Text[ finnish ] = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
+    Text[ finnish ] = "Taulukko $name$ on jo olemassa. Se on suodatettu.";
     Text[ catalan ] = "La taula $name$ ja existeix i ha estat filtrada.";
 };
 
@@ -149,7 +149,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ dutch ] = "U heeft geen schrijfrechten op de cofiguratiegegevens van het object.";
     Text[ french ] = "Vous n'avez pas d'accès en écriture sur les données de configuration de l'objet.";
     Text[ spanish ] = "No es posible el acceso a los datos de configuración para escribir.";
-    Text[ finnish ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
+    Text[ finnish ] = "Kirjoitusoikeudet objektin perustana oleviin kokoonpanotietoihin puuttuvat.";
     Text[ italian ] = "Non avete accesso ai dati di configurazione dell'oggetto.";
     Text[ danish ] = "You have no write access to the configuration data the object is based on.";
     Text[ swedish ] = "Du har ingen skrivåtkomst till objektets konfigurationsdata.";
@@ -242,6 +242,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ catalan ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
+
 
 
 
