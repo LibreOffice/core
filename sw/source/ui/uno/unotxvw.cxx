@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 06:31:05 $
+ *  last change: $Author: os $ $Date: 2001-07-04 07:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,6 +1192,10 @@ void SwXTextViewCursor::gotoRange(
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView && xRange.is())
     {
+        SwUnoInternalPaM rDestPam(*pView->GetDocShell()->GetDoc());
+        if(!SwXTextRange::XTextRangeToSwPaM( rDestPam, xRange))
+            throw IllegalArgumentException();
+
         ShellModes  eSelMode = pView->GetShellMode();
         // ein interface aus der aktuellen Selektion erzeugen
         SwWrtShell& rSh = pView->GetWrtShell();
@@ -1204,7 +1208,7 @@ void SwXTextViewCursor::gotoRange(
             *aOwnPaM.GetMark() = *pShellCrsr->GetMark();
         }
 
-        Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
+/*        Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
         SwXTextRange* pRange = 0;
         SwXTextCursor* pCursor = 0;
         if(xRangeTunnel.is())
@@ -1214,7 +1218,7 @@ void SwXTextViewCursor::gotoRange(
             pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
                                     SwXTextCursor::getUnoTunnelId());
         }
-
+*/
         const sal_uInt16 nFrmType = rSh.GetFrmType(0,sal_True);
 
         SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1233,17 +1237,17 @@ void SwXTextViewCursor::gotoRange(
                                                 FindSttNodeByType(eSearchNodeType);
 
         const SwNode* pSrcNode = 0;
-        if(pCursor && pCursor->GetCrsr())
-        {
-            pSrcNode = pCursor->GetCrsr()->GetNode();
-        }
-        else if(pRange && pRange->GetBookmark())
-        {
-            SwBookmark* pBkm = pRange->GetBookmark();
-            pSrcNode = &pBkm->GetPos().nNode.GetNode();
-        }
-        else
-            throw RuntimeException();
+//        if(pCursor && pCursor->GetCrsr())
+//        {
+//            pSrcNode = pCursor->GetCrsr()->GetNode();
+//        }
+//        else if(pRange && pRange->GetBookmark())
+//        {
+//            SwBookmark* pBkm = pRange->GetBookmark();
+//            pSrcNode = &pBkm->GetPos().nNode.GetNode();
+//        }
+//        else
+//            throw RuntimeException();
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
         //SectionNodes ueberspringen
@@ -1265,34 +1269,28 @@ void SwXTextViewCursor::gotoRange(
         {
             // der Cursor soll alles einschliessen, was bisher von ihm und dem uebergebenen
             // Range eingeschlossen wurde
-            SwPosition aOwnLeft(*aOwnPaM.GetPoint());
-            SwPosition aOwnRight(aOwnPaM.HasMark() ? *aOwnPaM.GetMark() : aOwnLeft);
-            if(aOwnRight < aOwnLeft)
-            {
-                SwPosition aTmp = aOwnLeft;
-                aOwnLeft = aOwnRight;
-                aOwnRight = aTmp;
-            }
-            SwPosition* pParamLeft;
-            SwPosition* pParamRight;
-            if(pCursor)
-            {
-                const SwUnoCrsr* pTmp = pCursor->GetCrsr();
-                pParamLeft = new SwPosition(*pTmp->GetPoint());
-                pParamRight = new SwPosition(pTmp->HasMark() ? *pTmp->GetMark() : *pParamLeft);
-            }
-            else if(pRange)
-            {
-                SwBookmark* pBkm = pRange->GetBookmark();
-                pParamLeft = new SwPosition(pBkm->GetPos());
-                pParamRight = new SwPosition(pBkm->GetOtherPos() ? *pBkm->GetOtherPos() : *pParamLeft);
-            }
-            if(*pParamRight < *pParamLeft)
-            {
-                SwPosition* pTmp = pParamLeft;
-                pParamLeft = pParamRight;
-                pParamRight = pTmp;
-            }
+            SwPosition aOwnLeft(*aOwnPaM.Start());
+            SwPosition aOwnRight(*aOwnPaM.End());
+            SwPosition* pParamLeft = rDestPam.Start();
+            SwPosition* pParamRight = rDestPam.End();
+//            if(pCursor)
+//            {
+//                const SwUnoCrsr* pTmp = pCursor->GetCrsr();
+//                pParamLeft = new SwPosition(*pTmp->GetPoint());
+//                pParamRight = new SwPosition(pTmp->HasMark() ? *pTmp->GetMark() : *pParamLeft);
+//            }
+//            else if(pRange)
+//            {
+//                SwBookmark* pBkm = pRange->GetBookmark();
+//                pParamLeft = new SwPosition(pBkm->GetPos());
+//                pParamRight = new SwPosition(pBkm->GetOtherPos() ? *pBkm->GetOtherPos() : *pParamLeft);
+//            }
+//            if(*pParamRight < *pParamLeft)
+//            {
+//                SwPosition* pTmp = pParamLeft;
+//                pParamLeft = pParamRight;
+//                pParamRight = pTmp;
+//            }
             // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
             if(aOwnRight < *pParamRight)
                 *aOwnPaM.GetPoint() = aOwnRight;
@@ -1304,36 +1302,44 @@ void SwXTextViewCursor::gotoRange(
             else
                 *aOwnPaM.GetMark() = aOwnLeft;
 
-            delete pParamLeft;
-            delete pParamRight;
+//            delete pParamLeft;
+//            delete pParamRight;
         }
         else
         {
             //der Cursor soll dem uebergebenen Range entsprechen
-            if(pCursor)
+            *aOwnPaM.GetPoint() = *rDestPam.GetPoint();
+            if(rDestPam.HasMark())
             {
-                const SwUnoCrsr* pTmp = pCursor->GetCrsr();
-                *aOwnPaM.GetPoint() = *pTmp->GetPoint();
-                if(pTmp->HasMark())
-                {
-                    aOwnPaM.SetMark();
-                    *aOwnPaM.GetMark() = *pTmp->GetMark();
-                }
-                else
-                    aOwnPaM.DeleteMark();
+                aOwnPaM.SetMark();
+                *aOwnPaM.GetMark() = *rDestPam.GetMark();
             }
             else
-            {
-                SwBookmark* pBkm = pRange->GetBookmark();
-                *aOwnPaM.GetPoint() = pBkm->GetPos();
-                if(pBkm->GetOtherPos())
-                {
-                    aOwnPaM.SetMark();
-                    *aOwnPaM.GetMark() = *pBkm->GetOtherPos();
-                }
-                else
-                    aOwnPaM.DeleteMark();
-            }
+                aOwnPaM.DeleteMark();
+//            if(pCursor)
+//            {
+//                const SwUnoCrsr* pTmp = pCursor->GetCrsr();
+//                *aOwnPaM.GetPoint() = *pTmp->GetPoint();
+//                if(pTmp->HasMark())
+//                {
+//                    aOwnPaM.SetMark();
+//                    *aOwnPaM.GetMark() = *pTmp->GetMark();
+//                }
+//                else
+//                    aOwnPaM.DeleteMark();
+//            }
+//            else
+//            {
+//                SwBookmark* pBkm = pRange->GetBookmark();
+//                *aOwnPaM.GetPoint() = pBkm->GetPos();
+//                if(pBkm->GetOtherPos())
+//                {
+//                    aOwnPaM.SetMark();
+//                    *aOwnPaM.GetMark() = *pBkm->GetOtherPos();
+//                }
+//                else
+//                    aOwnPaM.DeleteMark();
+//            }
         }
         rSh.SetSelection(aOwnPaM);
     }

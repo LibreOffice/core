@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 13:07:25 $
+ *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
@@ -128,7 +131,7 @@ enum SwTextPortionType
     PORTION_RUBY_END
 };
 class SwXRubyPortion;
-class SwXTextPortion : public cppu::WeakImplHelper7
+class SwXTextPortion : public cppu::WeakImplHelper8
 <
     ::com::sun::star::beans::XMultiPropertySet,
     ::com::sun::star::beans::XPropertySet,
@@ -136,6 +139,7 @@ class SwXTextPortion : public cppu::WeakImplHelper7
     ::com::sun::star::text::XTextField,
     ::com::sun::star::beans::XPropertyState,
     ::com::sun::star::container::XContentEnumerationAccess,
+    ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::lang::XServiceInfo
 >,
     public SwClient
@@ -163,7 +167,6 @@ class SwXTextPortion : public cppu::WeakImplHelper7
 
     SwFmtFld*           GetFldFmt(BOOL bInit = sal_False);
 protected:
-    SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
     SfxItemPropertySet& GetPropSet() { return aPropSet; }
 
     void GetPropertyValues( const ::rtl::OUString *pPropertyNames,
@@ -216,6 +219,10 @@ public:
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
+    //XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
@@ -246,8 +253,8 @@ public:
     void                SetCollapsed(BOOL bSet) { bIsCollapsed = bSet;}
 
     SwTextPortionType   GetTextPortionType() const {return ePortionType;}
-    //falls es mal als service erzeugt werden kann
-    //void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+
+    SwUnoCrsr*          GetCrsr() const { return (SwUnoCrsr*)GetRegisteredIn(); }
 };
 /* -----------------------------19.02.01 10:46--------------------------------
 

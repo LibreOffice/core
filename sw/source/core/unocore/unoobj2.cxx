@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 12:38:53 $
+ *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
+#endif
+#ifndef _UNOPORT_HXX
+#include <unoport.hxx>
 #endif
 #ifndef SW_UNOMID_HXX
 #include <unomid.h>
@@ -1541,31 +1544,46 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     SwXTextCursor* pCursor = 0;
+    SwXTextPortion* pPortion = 0;
+    SwXText* pText = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
         pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
                                 SwXTextCursor::getUnoTunnelId());
+        pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
+                                SwXTextPortion::getUnoTunnelId());
+        pText = (SwXText*)xRangeTunnel->getSomething(
+                                SwXText::getUnoTunnelId());
     }
 
+    //if it's a text cursor then create a temporary cursor there and re-use the pCursor variable
+    Reference< XTextCursor > xTextCursor;
+    if(pText)
+    {
+        xTextCursor = pText->createCursor();
+        xTextCursor->gotoEnd(sal_True);
+        Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
+        pCursor = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                                    SwXTextCursor::getUnoTunnelId());
+    }
     if(pRange && pRange->GetDoc() == rToFill.GetDoc())
     {
         bRet = pRange->GetPositions(rToFill);
     }
     else
     {
-        const SwPaM* pPam = 0;
-        if(pCursor && pCursor->GetDoc() == rToFill.GetDoc() &&
-            0 != (pPam = pCursor->GetPaM()))
+        SwUnoCrsr* pUnoCrsr = pCursor? pCursor->GetCrsr() : pPortion ? pPortion->GetCrsr() : 0;
+        if(pUnoCrsr && pUnoCrsr->GetDoc() == rToFill.GetDoc())
             {
-                DBG_ASSERT((SwPaM*)pPam->GetNext() == pPam, "was machen wir mit Ringen?" )
+                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" )
                 bRet = sal_True;
-                *rToFill.GetPoint() = *pPam->GetPoint();
-                if(pPam->HasMark())
+                *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
+                if(pUnoCrsr->HasMark())
                 {
                     rToFill.SetMark();
-                    *rToFill.GetMark() = *pPam->GetMark();
+                    *rToFill.GetMark() = *pUnoCrsr->GetMark();
                 }
                 else
                     rToFill.DeleteMark();

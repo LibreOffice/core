@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 13:08:26 $
+ *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,28 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
     uno::Reference< container::XEnumeration >  xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_CHAR, pFrameFmt);
     return xRet;
 
+}
+/* -----------------------------04.07.01 08:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------04.07.01 08:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return 0;
 }
 /* -----------------24.03.99 13:30-------------------
  *
