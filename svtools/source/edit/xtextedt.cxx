@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:02:12 $
+ *  last change: $Author: mt $ $Date: 2001-12-18 11:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,9 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
         if ( bFound )
         {
             rSel.GetStart().GetPara() = nNode;
-            rSel.GetStart().GetIndex() = bForward ? nStartPos : (nEndPos+1);
+            rSel.GetStart().GetIndex() = nStartPos;
             rSel.GetEnd().GetPara() = nNode;
-            rSel.GetEnd().GetIndex() = bForward ? nEndPos : (nStartPos+1);
+            rSel.GetEnd().GetIndex() = nEndPos;
             // Ueber den Absatz selektieren?
             if( nEndPos == (-1) ) // USHORT fuer 0 und -1 !
             {
