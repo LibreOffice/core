@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:42:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 13:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,4 +404,16 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ catalan ] = "The object must not be NULL.";
 };
 
+String RID_STR_OPEN_GRAPHICS
+{
+    Text = "Grafik einfügen aus...";
+    Text [ english ] = "Insert graphics from...";
+    Text [ english_us ] = "Insert graphics from...";
+};
 
+String RID_STR_CLEAR_GRAPHICS
+{
+    Text = "Grafik entfernen";
+    Text [ english ] = "Remove graphics";
+    Text [ english_us ] = "Remove graphics";
+};
