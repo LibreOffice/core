@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2005-02-24 17:39:22 $
+ *  last change:$Date: 2005-03-29 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,25 +85,13 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import lib.StatusException;
 import util.SOfficeFactory;
+import com.sun.star.sdb.XDocumentDataSource;
 
 public class OQueryDesign extends TestCase {
 
     private XDesktop Desk;
     private XFrame Frame;
     private final String sDataSourceName = "Bibliography";
-
-    /**
-     * Disposes the document, if exists, created in
-     * <code>createTestEnvironment</code> method.
-     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
-        log.println("disposing Query");
-
-        if (Frame != null) {
-            Frame.dispose();
-        }
-    }
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -161,8 +149,8 @@ public class OQueryDesign extends TestCase {
         } catch ( com.sun.star.lang.WrappedTargetException e){
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
         }
-
-        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, oDataSource);
+        XDocumentDataSource xDDS = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
+        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
         Frame = xMod.getCurrentController().getFrame();
 
@@ -177,7 +165,7 @@ public class OQueryDesign extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn�t create document", e );
+            throw new StatusException( "Could not create document", e );
         }
 
         XModel xDocMod = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
@@ -246,7 +234,8 @@ public class OQueryDesign extends TestCase {
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
         }
 
-        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, oDataSource);
+        XDocumentDataSource xDDS = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
+        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
 
         // get an intaces of QueryDesign
         Object oQueryDesign = null;
