@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:22:53 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,9 +721,11 @@ void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
                  pFrm && pFrm->GetFrame() == this;
                  pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) );
             // Keine anderer Frame mehr auf Doc -> Cancel
-            if( !pFrm ) pObj->CancelTransfers();
-
-            GetCurrentViewFrame()->UpdateTitle();
+            if( !pFrm )
+            {
+                pObj->CancelTransfers();
+                pObj->Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+            }
         }
 
         // zuerst Nachladende Frames stoppen
