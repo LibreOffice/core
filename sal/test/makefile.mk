@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-07-06 09:39:53 $
+#   last change: $Author: kr $ $Date: 2001-07-25 08:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,9 +107,33 @@ APP2STDLIBS = $(SALLIB)
 
 
 # --- Targets ------------------------------------------------------
-
 .IF "$(depend)" == ""
-ALL : $(BIN)$/$(BOOTSTRAPSCRIPT) $(BIN)$/$(BOOTSTRAPINI) $(BIN)$/bootstraptest.ini ALLTAR 
+ALL : ALLTAR \
+      $(BIN)$/$(BOOTSTRAPSCRIPT) \
+      $(BIN)$/$(BOOTSTRAPINI)    \
+      $(BIN)$/bootstraptest.ini  \
+      $(BIN)$/testbootstrap.bin  \
+      $(BIN)$/testbootstrap.Bin  \
+      $(BIN)$/testbootstrap.Exe
+
+
+.IF "$(GUI)"=="UNX"
+ALL:  $(BIN)$/testbootstrap.exe
+
+$(BIN)$/testbootstrap.exe : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+.ENDIF
+
+$(BIN)$/testbootstrap.bin : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+$(BIN)$/testbootstrap.Bin : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
+$(BIN)$/testbootstrap.Exe : $(APP2TARGETN)
+    cp $(APP2TARGETN) $@
+
 .ELSE
 ALL: 	ALLDEP
 .ENDIF
@@ -128,6 +152,7 @@ $(BIN)$/$(BOOTSTRAPINI) : testbootstrap.ini
 
 $(BIN)$/bootstraptest.ini : bootstraptest.ini
     $(MY_SCRIPTCAT) bootstraptest.ini > $@	
+
 
 # --- SO2-Filter-Datei ---
 $(MISC)$/tsl$(UPD)$(DLLPOSTFIX).flt:
