@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:01:23 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,8 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
 // \WIN\SOURCE\GDI\SALGDI3.CXX
-void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont, BOOL bReplaceFont );
-void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont, BOOL bReplaceFont );
+void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont );
+void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
 BOOL ImplIsFontAvailable( HDC hDC, const UniString& rName );
 
 // \WIN\SOURCE\APP\SALDATA.CXX
