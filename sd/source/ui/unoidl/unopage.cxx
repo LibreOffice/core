@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-19 09:42:58 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 09:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,7 +924,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  
     return new SdPageLinkTargets( (SdGenericDrawPage*)this );
 }
 
-void SdGenericDrawPage::setBackground( const uno::Any& rValue ) throw()
+void SdGenericDrawPage::setBackground( const uno::Any& rValue ) throw(lang::IllegalArgumentException)
 {
     DBG_ERROR( "Don't call me, I'm useless!" );
 }
@@ -1516,12 +1516,12 @@ uno::Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SdDrawPage::acquire() throw(uno::RuntimeException)
+void SAL_CALL SdDrawPage::acquire() throw()
 {
     SvxDrawPage::acquire();
 }
 
-void SAL_CALL SdDrawPage::release() throw(uno::RuntimeException)
+void SAL_CALL SdDrawPage::release() throw()
 {
     SvxDrawPage::release();
 }
@@ -2004,12 +2004,12 @@ uno::Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SdMasterPage::acquire() throw(uno::RuntimeException)
+void SAL_CALL SdMasterPage::acquire() throw()
 {
     SvxDrawPage::acquire();
 }
 
-void SAL_CALL SdMasterPage::release() throw(uno::RuntimeException)
+void SAL_CALL SdMasterPage::release() throw()
 {
     SvxDrawPage::release();
 }

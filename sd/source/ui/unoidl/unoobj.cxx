@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-30 15:30:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 09:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,14 +553,12 @@ uno::Sequence< sal_Int8 > SAL_CALL SdXShape::getImplementationId()
     }
 }
 
-void SAL_CALL SdXShape::acquire()
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdXShape::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL SdXShape::release()
-    throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SdXShape::release() throw()
 {
     OWeakObject::release();
 }
@@ -1435,9 +1433,10 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
     // check if this is a praesentation object by checking the stylesheet
     SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
 
+    String aEmptyString;
     if( pOldStyleSheet &&
         pOldStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA &&
-        pOldStyleSheet->GetHelpId( String() ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS )
+        pOldStyleSheet->GetHelpId( aEmptyString ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS )
         throw lang::IllegalArgumentException();
 
     pObj->SetStyleSheet( (SfxStyleSheet*)pStyleSheet->getStyleSheet(), sal_False );
