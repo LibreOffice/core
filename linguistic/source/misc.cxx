@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:13:53 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,25 +712,25 @@ osl::Mutex & lcl_GetCharClassMutex()
 }
 
 
-BOOL IsUpper( const String &rText, INT16 nLanguage )
+BOOL IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    sal_Int32 nFlags = rCC.getStringType( rText, 0, rText.Len() );
+    sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
     return      (nFlags & KCharacterType::UPPER)
             && !(nFlags & KCharacterType::LOWER);
 }
 
 
-BOOL IsLower( const String &rText, INT16 nLanguage )
+BOOL IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    sal_Int32 nFlags = rCC.getStringType( rText, 0, rText.Len() );
+    sal_Int32 nFlags = rCC.getStringType( rText, nPos, nLen );
     return      (nFlags & KCharacterType::LOWER)
             && !(nFlags & KCharacterType::UPPER);
 }
@@ -743,6 +743,26 @@ String ToLower( const String &rText, INT16 nLanguage )
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
     return rCC.lower( rText );
+}
+
+
+String ToUpper( const String &rText, INT16 nLanguage )
+{
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    return rCC.upper( rText );
+}
+
+
+String ToTitle( const String &rText, INT16 nLanguage )
+{
+    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+
+    CharClass &rCC = lcl_GetCharClass();
+    rCC.setLocale( CreateLocale( nLanguage ) );
+    return rCC.toTitle( rText, 0, rText.Len() );
 }
 
 
