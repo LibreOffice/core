@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-11 13:59:29 $
+#   last change: $Author: vg $ $Date: 2003-07-14 10:31:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
 SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
 
-$(OBJ)$/main.obj: $(INCCOM)$/_version.h
 OBJFILES=\
     $(OBJ)$/interface.obj            \
     $(OBJ)$/res.obj                  \
@@ -111,6 +110,8 @@ ALL: ALLTAR $(BIN)$/crash_dump.res.01
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+$(OBJ)$/main.obj: $(INCCOM)$/_version.h
 
 $(BIN)$/crash_dump.res.01: ..$/all$/crashrep.lng
     $(BIN)$/unxcrashres ..$/all$/crashrep.lng $(BIN)$/crash_dump.res
