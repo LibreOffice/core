@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 02:05:21 $
+ *  last change: $Author: bc $ $Date: 2001-08-07 11:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #define CorrespondenceDialog    1303
 #define CorrespondenceFields    1350
 #define TextField    1400
+#define Newsletter    1450
 
 // --------------------------------------------------------------------
 String SAMPLES
@@ -1449,6 +1450,60 @@ String TextField
     Text[ finnish ] = "Benutzerdatenfeld ist nicht definiert!";
 };
 
+String Newsletter
+{
+    Text = "Allgemeines Layout";
+    Text[English] = "General Layout";
+    Text[ english_us ] = "General Layout";
+    Text[ language_user1 ] = "Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
+};
 
 
+String Newsletter + 1
+{
+    Text = "Standard Layout";
+    Text[English] = "Standard Layout";
+    Text[ english_us ] = "Standard Layout";
+    Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
+};
+
+String Newsletter + 2
+{
+    Text = "Festschrift";
+    Text[English] = "Party Layout";
+    Text[ english_us ] = "Party Layout";
+    Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
+};
+
+String Newsletter + 3
+{
+    Text = "Prospekt Layout";
+    Text[English] = "Brochure Layout";
+    Text[ english_us ] = "Brochure Layout";
+    Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
+};
+
+String Newsletter + 10
+{
+    Text = "Format";
+    Text[English] = "Format";
+    Text[ english_us ] = "Format";
+    Text[ language_user1 ] = "Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
+};
+
+String Newsletter + 11
+{
+    Text = "Einseitig";
+    Text[English] = "Single sided";
+    Text[ english_us ] = "Single sided";
+    Text[ language_user1 ] = "'Format' Option im Initialdialog für die Zeitungsvorlage";
+};
+
+String Newsletter + 12
+{
+    Text = "Doppelseitig";
+    Text[English] = "double sided";
+    Text[ english_us ] = "double sided";
+    Text[ language_user1 ] = "'Format' Option im Initialdialog für die Zeitungsvorlage";
+};
 
