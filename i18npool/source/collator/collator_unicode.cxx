@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:47:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <assert.h>
 
 #include <collator_unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
