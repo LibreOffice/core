@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 12:38:44 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 13:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    return ((m_nLastColumnIndex != -1) && m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1) && m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
@@ -1230,9 +1230,6 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
 // -----------------------------------------------------------------------------
 ORowSetNotifier::~ORowSetNotifier( )
 {
-#ifdef DBG_UTIL
-    OSL_ENSURE( m_bNotifyCalled, "ORowSetNotifier::~ORowSetNotifier: invalid usage: you need to call fire before desctroying!" );
-#endif
 }
 
 // -----------------------------------------------------------------------------
