@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:13:58 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,3 +1476,4 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas.";
 };
+
