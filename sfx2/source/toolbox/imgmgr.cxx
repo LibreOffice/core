@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-30 09:16:57 $
+ *  last change: $Author: cd $ $Date: 2002-09-12 15:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,15 +1370,14 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
     {
         // Eine neue Bitmap aufnehmen
         Size aSize = pBmp->GetSizePixel();
+        BOOL bBitmapCreated = FALSE;
         if ( aSize.Width() > 208 || aSize.Height() > 208 )
         {
-            // Maximale Gr"o\se, die f"ur 16x16 und 26x26-BMP n"otig ist
-            VirtualDevice aDev;
+            // Use size that fits both toolbar image size (16x16/26x26)
             Size aSz( 208, 208 );
-            aDev.SetOutputSizePixel( aSz );
-            aDev.DrawBitmap( Point(), aSz, *pBmp );
-            delete pBmp;
-            pBmp = new Bitmap( aDev.GetBitmap( Point(), aSz ) );
+            pBmp = new Bitmap( *pBmp );
+            pBmp->Scale( aSz, BMP_SCALE_INTERPOLATE );
+            bBitmapCreated = TRUE;
         }
 
         if ( pUserDefList->GetBitmapPos( nId ) == USHRT_MAX )
@@ -1390,12 +1389,10 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
         Image aImage( *pBmp, aColor );
         if ( pBmp->GetSizePixel() != pImageList->GetImageSize() )
         {
-            // Evtl. Imagegr"o\se anpassen
-            VirtualDevice aDev;
+            // Scale bitmap to fit current toolbar image size
             Size aSize = pImageList->GetImageSize();
-            aDev.SetOutputSizePixel( aSize );
-            aDev.DrawBitmap( Point(), aSize, *pBmp );
-            aImage = Image( aDev.GetBitmap(Point(), aSize), aColor );
+            pBmp->Scale( aSize, BMP_SCALE_INTERPOLATE );
+            aImage = Image( *pBmp, aColor );
         }
 
         // In die User-Liste aufnehmen
@@ -1412,7 +1409,10 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         if ( SfxMacroConfig::IsMacroSlot(nId) )
             SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
+
         bReplaced = TRUE;
+        if ( bBitmapCreated )
+            delete pBmp; // Delete temporary bitmap again!
     }
 
     if ( bReplaced )
