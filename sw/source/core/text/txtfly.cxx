@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ const SwFrm& lcl_TheAnchor( const SdrObject* pObj )
     // OD 03.07.2003 #108784# - adjustments for support of drawing objects in
     // header/footer.
     const SwFrm* pRet = 0L;
-    if ( pObj->IsWriterFlyFrame() )
+    if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
         pRet = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchor();
     }
@@ -1006,7 +1006,7 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
             const SwRect aBound( GetBoundRect( pObj ) );
 
             // Optimierung
-            if( pObj->GetBoundRect().Left() > aRect.Right() )
+            if( pObj->GetCurrentBoundRect().Left() > aRect.Right() )
                 continue;
 
             if( pCurrFly != pObj && aBound.IsOver( aRect ) )
@@ -1080,7 +1080,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         for( MSHORT i = 0; i < nCount; ++i )
         {
             const SdrObject *pTmp = (*pFlyList)[ i ];
-            if( pTmp->IsWriterFlyFrame() && pCurrFly != pTmp )
+            if( pTmp->ISA(SwVirtFlyDrawObj) && pCurrFly != pTmp )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pTmp)->GetFlyFrm();
                 if( aRegion.GetOrigin().IsOver( pFly->Frm() ) )
@@ -1174,7 +1174,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         for( MSHORT i = 0; i < nCount; ++i )
         {
             const SdrObject *pTmp = (*pFlyList)[ i ];
-            if( pCurrFly != pTmp && pTmp->IsWriterFlyFrame() )
+            if( pCurrFly != pTmp && pTmp->ISA(SwVirtFlyDrawObj) )
             {
                 const SwFrmFmt *pFmt =
                     ((SwContact*)GetUserCall(pTmp))->GetFmt();
@@ -1191,7 +1191,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                         !pFly->IsShadowTransparent();
                 if ( bClipFlyArea )
                 {
-                    SwRect aFly( pTmp->GetBoundRect() );
+                    SwRect aFly( pTmp->GetCurrentBoundRect() );
                     // OD 24.01.2003 #106593#
                     ::SwAlignRect( aFly, pPage->GetShell() );
                     if( aFly.Width() > 0 && aFly.Height() > 0 )
@@ -1312,7 +1312,7 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             if( bEvade )
             {
                 SwRect aTmp( GetBoundRect( pNew ) );
-                if( !aTmp.IsOver( pCurrFly->GetBoundRect() ) )
+                if( !aTmp.IsOver( pCurrFly->GetCurrentBoundRect() ) )
                     bEvade = sal_False;
             }
         }
@@ -1335,10 +1335,10 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             if( pTmp->IsTxtFrm() && ( pTmp->IsInFly() || pTmp->IsInFtn() ) )
             {
                 Point aPos;
-                if( pNew->IsWriterFlyFrame() )
+                if( pNew->ISA(SwVirtFlyDrawObj) )
                     aPos = ( (SwVirtFlyDrawObj*)pNew )->GetFlyFrm()->Frm().Pos();
                 else
-                    aPos = pNew->GetBoundRect().TopLeft();
+                    aPos = pNew->GetCurrentBoundRect().TopLeft();
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
             if( pCurrFrm->GetNext() != pTmp &&
@@ -1596,7 +1596,7 @@ const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
     const SwFmt *pFmt =
         ((SwContact*)GetUserCall(pObj))->GetFmt();
     if( pFmt->GetSurround().IsContour() &&
-        ( !pObj->IsWriterFlyFrame() ||
+        ( !pObj->ISA(SwVirtFlyDrawObj) ||
           ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Lower() &&
           ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Lower()->IsNoTxtFrm() ) )
     {
@@ -1637,7 +1637,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         }
         XPolyPolygon aXPoly;
         XPolyPolygon *pXPoly = NULL;
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
             // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
@@ -1808,7 +1808,7 @@ void SwTxtFly::ShowContour( OutputDevice* pOut )
             const SdrObject *pObj = (*pFlyList)[ j ];
             if( !((SwContact*)GetUserCall(pObj))->GetFmt()->GetSurround().IsContour() )
             {
-                Rectangle aRect = pObj->GetBoundRect();
+                Rectangle aRect = pObj->GetCurrentBoundRect();
                 pOut->DrawRect( aRect );
                 continue;
             }
