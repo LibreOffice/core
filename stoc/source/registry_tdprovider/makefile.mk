@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:11:56 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:14:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,16 +89,19 @@ SLOFILES=	\
         $(SLO)$/tdprop.obj \
         $(SLO)$/tdservice.obj \
         $(SLO)$/tdsingleton.obj \
-        $(SLO)$/rdbtdp_tdenumeration.obj
+        $(SLO)$/rdbtdp_tdenumeration.obj \
+        $(SLO)$/functiondescription.obj \
+        $(SLO)$/methoddescription.obj
 
 
 SHL1TARGET=	$(TARGET)
 
-SHL1STDLIBS=	\
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALHELPERLIB) 	\
-        $(SALLIB)
+SHL1STDLIBS = \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(REGLIB) \
+    $(SALLIB) \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1VERSIONMAP = rdbtdp.map
