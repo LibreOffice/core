@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:35:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -266,6 +265,18 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             }
             catch ( NoSuchElementException& )
             {
+                // No settings in our configuration manager. This means we are
+                // a transient toolbar which has no persistent settings.
+                m_bPersistent = sal_False;
+                if ( pToolBar && pToolBarManager )
+                {
+                    pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+                    pToolBar->EnableCustomize( TRUE );
+                    ::Size aActSize( pToolBar->GetSizePixel() );
+                    ::Size aSize( pToolBar->CalcWindowSizePixel() );
+                    aSize.Width() = aActSize.Width();
+                    pToolBar->SetOutputSizePixel( aSize );
+                }
             }
         }
     }
@@ -298,20 +309,25 @@ void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::Run
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_bPersistent &&
-         m_xConfigSource.is() &&
-         m_xToolBarManager.is() )
+    if ( m_xToolBarManager.is() )
     {
-        try
+        if ( m_xConfigSource.is() && m_bPersistent )
         {
-            ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+            try
+            {
+                ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
 
-            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
-            if ( m_xConfigData.is() )
-                pToolBarManager->FillToolbar( m_xConfigData );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                if ( m_xConfigData.is() )
+                    pToolBarManager->FillToolbar( m_xConfigData );
+            }
+            catch ( NoSuchElementException& )
+            {
+            }
         }
-        catch ( NoSuchElementException& )
+        else if ( !m_bPersistent )
         {
+            // Transient toolbar: do nothing
         }
     }
 }
@@ -359,6 +375,13 @@ void SAL_CALL ToolBarWrapper::setSettings( const ::com::sun::star::uno::Referenc
             catch( NoSuchElementException& )
             {
             }
+        }
+        else if ( !m_bPersistent )
+        {
+            // Transient toolbar => Fill toolbar with new data
+            ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+            if ( pToolBarManager )
+                pToolBarManager->FillToolbar( m_xConfigData );
         }
     }
 }
