@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParamMode.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** The parameter mode denotes the transfer between caller and callee
     of a method.
 */
-enum ParamMode
+published enum ParamMode
 {
     /** parameter serves as pure input for a called method
     */
