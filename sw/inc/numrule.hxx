@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:22:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
+#include <hash_map>
+#include <stringhash.hxx>
 
 class Font;
 class SvxBrushItem;
@@ -182,6 +184,12 @@ class SW_DLLPUBLIC SwNumRule
      */
     SwBitArray aMarkedLevels;
 
+    // #i36749#
+    /**
+       hash_map containing "name->rule" relation
+     */
+    std::hash_map<String, SwNumRule *, StringHash> * pNumRuleMap;
+
     String sName;
     SwNumRuleType eRuleType;
     USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte NumRules
@@ -231,6 +239,15 @@ public:
     */
     void SetList(SwTxtNodeTable * _pList);
 
+    // #i36749#
+    /**
+       Register this rule in a "name->numrule" map.
+
+       @param pNumRuleMap      map to register in
+     */
+    void SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
+                       pNumRuleMap);
+
     static const Font& GetDefBulletFont();
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
@@ -257,7 +274,7 @@ public:
 #endif
 
     const String& GetName() const       { return sName; }
-    void SetName( const String& rNm )   { sName = rNm; }
+    void SetName( const String& rNm ); // #i36749#
 
     BOOL IsAutoRule() const             { return bAutoRuleFlag; }
     void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
