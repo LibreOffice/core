@@ -12,7 +12,7 @@ sc	sc\source\ui\inc					get		all	sc_uiinc NULL
 sc	sc\source\filter\inc					get		all	sc_fiinc NULL
 sc	sc\addin\inc						get		all	sc_adinc NULL
 sc	sc\sdi							nmake	-	all	sc_sdi NULL
-sc	sc\source\ui\accessibility				nmake	-	all	sc_accessibility sc_sdi NULL
+sc	sc\source\ui\Accessibility				nmake	-	all	sc_accessibility sc_sdi NULL
 sc	sc\source\ui\pch					get		all	sc_upch sc_sdi NULL
 sc	sc\source\ui\view					nmake	-	all	sc_view sc_sdi NULL
 sc	sc\source\ui\app					nmake	-	all	sc_app sc_sdi NULL
