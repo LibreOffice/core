@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 15:13:34 $
+ *  last change: $Author: fs $ $Date: 2002-11-19 09:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,6 +1269,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
     if ((::com::sun::star::frame::XFrame*)aEvent.Frame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get())
         switch (aEvent.Action)
         {
+            case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED:
             case ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED:
                 m_bFrameUiActive = sal_True;
                 // ensure that the active cell (if any) has the focus
@@ -1280,6 +1281,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                     m_aInvalidateClipboard.Start();
                 }
                 break;
+            case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
             case ::com::sun::star::frame::FrameAction_FRAME_UI_DEACTIVATING:
                 m_bFrameUiActive = sal_False;
                 // stop the clipboard invalidator

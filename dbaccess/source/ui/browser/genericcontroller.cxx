@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: as $ $Date: 2002-10-30 14:00:16 $
+ *  last change: $Author: fs $ $Date: 2002-11-19 09:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,8 @@ void OGenericUnoController::removeEventListener(const Reference< XEventListener 
 void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
 {
     if ((XFrame*)aEvent.Frame.get() == (XFrame*)m_xCurrentFrame.get())
-        m_bFrameUiActive = (aEvent.Action == FrameAction_FRAME_UI_ACTIVATED);
+        m_bFrameUiActive =  ( FrameAction_FRAME_UI_ACTIVATED == aEvent.Action )
+                        ||  ( FrameAction_FRAME_ACTIVATED == aEvent.Action );
 }
 //------------------------------------------------------------------------------
 void OGenericUnoController::EmptyWindow()
