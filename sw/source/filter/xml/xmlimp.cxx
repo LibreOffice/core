@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
+ *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,4 +1104,35 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
+}
+
+
+// XServiceInfo
+// override empty method from parent class
+OUString SAL_CALL SwXMLImport::getImplementationName()
+    throw(RuntimeException)
+{
+    switch( getImportFlags() )
+    {
+        case IMPORT_ALL:
+            return SwXMLImport_getImplementationName();
+            break;
+        case (IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_FONTDECLS):
+            return SwXMLImportStyles_getImplementationName();
+            break;
+        case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
+            return SwXMLImportContent_getImplementationName();
+            break;
+        case IMPORT_META:
+            return SwXMLImportMeta_getImplementationName();
+            break;
+        case IMPORT_SETTINGS:
+            return SwXMLImportSettings_getImplementationName();
+            break;
+        default:
+            // generic name for 'unknown' cases
+            return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.comp.Writer.SwXMLImport" ) );
+            break;
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
+ *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,10 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo (override parent method)
+    ::rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-14 08:07:19 $
+ *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 #ifndef _SVDMODEL_HXX
@@ -731,6 +734,7 @@ void SwXMLExport::_ExportContent()
 }
 
 
+
 //
 // uno component registration
 // helper functions for export service(s)
@@ -862,6 +866,38 @@ sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
     }
     return SvXMLExport::getSomething( rId );
 }
+
+
+// XServiceInfo
+// override empty method from parent class
+OUString SAL_CALL SwXMLExport::getImplementationName()
+    throw(RuntimeException)
+{
+    switch( getExportFlags() )
+    {
+        case EXPORT_ALL:
+            return SwXMLExport_getImplementationName();
+            break;
+        case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS):
+            return SwXMLExportStyles_getImplementationName();
+            break;
+        case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
+            return SwXMLExportContent_getImplementationName();
+            break;
+        case EXPORT_META:
+            return SwXMLExportMeta_getImplementationName();
+            break;
+        case EXPORT_SETTINGS:
+            return SwXMLExportSettings_getImplementationName();
+            break;
+        default:
+            // generic name for 'unknown' cases
+            return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.comp.Writer.SwXMLExport" ) );
+            break;
+    }
+}
+
 
 #ifdef XML_CORE_API
 void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
