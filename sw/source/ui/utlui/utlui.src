@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:43:30 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "ΐβςξμΰςθχερκξε _οξδχεπκθβΰνθε_";
         Text[ polish ] = "Automatyczne _podkrelenie_";
         Text[ japanese ] = "©“®_‰Ίό_";
-        Text[ chinese_traditional ] = "¦Ϋ°Κ_¤UΉΊ½u_";
+        Text[ chinese_traditional ] = "¦Ϋ°Κ¥[©³½u";
         Text[ arabic ] = "_ΞΨ ΚΝΚν_ ΚαήΗΖνΗπ";
         Text[ greek ] = "Αυτόματη _υπογράμμιση_";
         Text[ korean ] = "ΐΪµΏ _ΉΨΑΩ_";
@@ -752,7 +752,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ russian ] = "Ηΰγπσηκΰ γπΰτθκθ σροεψνΰ";
     Text[ polish ] = "Pomylne za³adowanie grafiki";
     Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ“Η‚έ‚έ®—Ή";
-    Text[ chinese_traditional ] = "ΈΛΈόΉΟ¤ω¦¨¥\\";
+    Text[ chinese_traditional ] = "Έό¤JΉΟ¤ω¦¨¥\\";
     Text[ arabic ] = "ΚΝγνα ΗαΥζΡΙ ΘδΜΗΝ";
     Text[ greek ] = "Η φόρτωση των γραφικών πέτυχε";
     Text[ korean ] = "±Χ·΅ΗΘΐ» ΌΊ°ψΐϋΐΈ·Ξ ·ΞµεΗΤ";
@@ -776,7 +776,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ russian ] = "Ηΰγπσηκΰ γπΰτθκθ οπεπβΰνΰ";
     Text[ polish ] = "Przerwane ³adowanie grafiki";
     Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ“Η‚έ‚έ’†~";
-    Text[ chinese_traditional ] = "¤¤Β_ΈΛΈόΉΟ¤ω";
+    Text[ chinese_traditional ] = "¤¤Β_Έό¤JΉΟ¤ω";
     Text[ arabic ] = "ΗδήΨΗΪ ΪγανΙ ΚΝγνα ΗαΥζΡΙ";
     Text[ greek ] = "Διακοπή φόρτωσης γραφικού";
     Text[ korean ] = "±Χ·΅ΗΘ ·Ξµε Αί΄άµΚ";
@@ -800,7 +800,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ russian ] = "Νεοπΰβθλόνΰÿ ηΰγπσηκΰ γπΰτθκθ";
     Text[ polish ] = "B³Ήd w ³adowaniu grafiki";
     Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ“Η‚έ‚έ΄Χ°";
-    Text[ chinese_traditional ] = "ΈΛΈόΉΟ¤ω¤£§ΉΎγ";
+    Text[ chinese_traditional ] = "Έό¤JΉΟ¤ω¤£§ΉΎγ";
     Text[ arabic ] = "ΞΨΓ έν ΪγανΙ ΚΝγνα ΗαΥζΡΙ";
     Text[ greek ] = "Σφάλμα κατά τη φόρτωση γραφικού";
     Text[ korean ] = "±Χ·΅ΗΘ ·Ξµε Ώΐ·ω";
@@ -1186,7 +1186,7 @@ String STR_CONTENT_TYPE_POSTIT
     Text[ russian ] = "Οπθμεχΰνθÿ";
     Text[ polish ] = "Notatki";
     Text[ japanese ] = "ΊÒέΔ";
-    Text[ chinese_traditional ] = "³Ζª`";
+    Text[ chinese_traditional ] = "³Ζµω";
     Text[ arabic ] = "γαΗΝΩΗΚ";
     Text[ greek ] = "Σημειώσεις";
     Text[ korean ] = "ΈήΈπ";
@@ -1349,7 +1349,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text [ dutch ] = "Bereik" ;
     Text [ swedish ] = "Kategori" ;
     Text [ danish ] = "Omrεde" ;
-    Text [ portuguese ] = "Categoria" ;
+    Text [ portuguese ] = "Αrea" ;
     Text [ portuguese_brazilian ] = "Bereich" ;
     Text[ chinese_simplified ] = "ΗψΣς";
     Text[ russian ] = "Ξαλΰρςό";
@@ -1451,7 +1451,7 @@ String STR_CONTENT_TYPE_SINGLE_POSTIT
     Text[ russian ] = "Οπθμεχΰνθε";
     Text[ polish ] = "Notatka";
     Text[ japanese ] = "ΊÒέΔ";
-    Text[ chinese_traditional ] = "³Ζª`";
+    Text[ chinese_traditional ] = "³Ζµω";
     Text[ arabic ] = "γαΗΝΩΙ";
     Text[ greek ] = "Σημείωση";
     Text[ korean ] = "ΈήΈπ";
