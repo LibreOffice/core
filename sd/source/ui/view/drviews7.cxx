@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:26:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,6 +1135,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_FLD_FILE );
 
         rSet.DisableItem( SID_INSERT_GRAPHIC );
+        rSet.DisableItem( SID_INSERT_AVMEDIA );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_INSERT_OBJECT );
         rSet.DisableItem( SID_INSERT_PLUGIN );
