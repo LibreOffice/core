@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:36:20 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:11:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ INCPRE+=	$(OUT)$/inc
 # -----------------------------------------------------------------
 
 PRJNAME=extensions
-TARGET=olebrdg
+TARGET=oleautobridge.uno
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
