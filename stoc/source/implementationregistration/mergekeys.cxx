@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergekeys.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-11 09:27:11 $
+ *  last change: $Author: dbo $ $Date: 2002-06-07 15:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,14 @@ void SAL_CALL mergeKeys(
     Reference< registry::XRegistryKey > const & xSource )
     SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
+    if (xDest->isReadOnly())
+    {
+        throw registry::InvalidRegistryException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "destination registry is read-only!  cannot merge!") ),
+            Reference< XInterface >() );
+    }
+
     t_links links;
     links.reserve( 16 );
     mergeKeys( xDest, xSource, links );
