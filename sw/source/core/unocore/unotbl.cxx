@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:44:44 $
+ *  last change: $Author: tl $ $Date: 2002-08-19 08:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,8 @@ BOOL lcl_IsNumeric(const String&);
 //-----------------------------------------------------------------------------
 //aus unoobj.cxx
 extern void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)    throw (IllegalArgumentException);
+extern void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet) throw (lang::IllegalArgumentException);
+
 #define UNO_TABLE_COLUMN_SUM    10000
 
 /* -----------------17.07.98 15:47-------------------
@@ -3994,6 +3996,15 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 break;
                 case FN_UNO_PARA_STYLE:
                     lcl_SetTxtFmtColl(aValue, *pTblCrsr);
+                break;
+                case RES_TXTATR_CHARFMT:
+                {
+                    SfxItemSet aSet(pDoc->GetAttrPool(),
+                            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT);
+                    lcl_setCharStyle(pDoc, aValue, aSet);
+                    SwUnoTableCrsr* pCrsr = *pTblCrsr;
+                    SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), aSet, sal_True);
+                }
                 break;
                 default:
                 {
