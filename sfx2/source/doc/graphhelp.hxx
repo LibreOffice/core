@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphhelp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:45:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,16 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/uno/XStream.hpp>
+#endif
+
 #include <rtl/ustring.hxx>
 class SvMemoryStream;
-class SvStream;
 class GDIMetaFile;
 class BitmapEx;
 
@@ -87,14 +94,21 @@ public:
 
     static sal_Bool supportsMetaFileHandle_Impl();
 
-    static sal_Bool getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile, sal_Bool bSigned, SvStream* pStream );
+    static sal_Bool getThumbnailFormatFromGDI_Impl(
+            GDIMetaFile* pMetaFile,
+            sal_Bool bSigned,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
-    static sal_Bool getSignedThumbnailFormatFromBitmap_Impl( const BitmapEx& aBitmap, SvStream* pStream );
+    static sal_Bool getSignedThumbnailFormatFromBitmap_Impl(
+            const BitmapEx& aBitmap,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
     static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const ::rtl::OUString& aFactoryShortName,
                                                                     sal_Bool bIsTemplate );
 
-    static sal_Bool getThumbnailReplacement_Impl( sal_Int32 nResID, SvStream* pStream );
+    static sal_Bool getThumbnailReplacement_Impl(
+            sal_Int32 nResID,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
 };
 
