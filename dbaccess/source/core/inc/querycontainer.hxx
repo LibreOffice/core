@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,6 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -124,6 +121,14 @@
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
 #endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
+
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
 
 typedef ::cppu::WeakImplHelper9< ::com::sun::star::container::XEnumerationAccess,
                                  ::com::sun::star::container::XContainerListener,
@@ -149,8 +154,6 @@ protected:
     ::osl::Mutex&               m_rMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                 m_xCommandDefinitions;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-                                m_xConfigRoot;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
 
@@ -194,7 +197,7 @@ public:
         ::cppu::OWeakObject& _rConnection,
         ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxRootConfigNode,
+        const OConfigurationTreeRoot& _rRootConfigNode,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
     ~OQueryContainer();
@@ -255,7 +258,7 @@ public:
 
 protected:
     // OConfigurationFlushable
-    virtual void flush_NoBroadcast();
+    virtual void flush_NoBroadcast_NoCommit();
 
 private:
     // helper
@@ -271,8 +274,12 @@ private:
     sal_Int32 implGetIndex(const ::rtl::OUString& _rName);
 
     /// search the object key for the given name
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool bCreate = sal_False);
+    OConfigurationNode implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool bCreate = sal_False);
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_CORE_QUERYCONTAINER_HXX_
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:37:27 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #include <comphelper/propertycontainer.hxx>
 #endif
 
+//........................................................................
+namespace dbaccess
+{
+//........................................................................
+
+class OConfigurationNode;
 //==========================================================================
 //= ODataSettings_Base - a base class which implements the property member
 //=                 for an object implementing the sdb::DataSettings
@@ -112,14 +118,12 @@ protected:
         scheme for "DefinitionSettings" - which has yet to be defined :)
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    storeTo(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigLocation) const;
+    virtual void    storeTo(const OConfigurationNode& _rConfigLocation) const;
 
     /** load all configuration relevant informations from the given configuration node.
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    loadFrom(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rxConfigLocation);
+    virtual void    loadFrom(const OConfigurationNode& _rConfigLocation);
 
 };
 //==========================================================================
@@ -137,6 +141,10 @@ protected:
 private:
     void registerProperties();
 };
+
+//........................................................................
+}   // namespace dbaccess
+//........................................................................
 
 #endif // _DBA_CORE_DATASETTINGS_HXX_
 
