@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecoll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,9 @@ FileCollector::AddFilesFrom( const char *                 i_sRootDir,
     csv::ploc::Directory aDir(i_sRootDir);
     if (NOT aDir.Exists())
     {
-        Cerr() << "Warning: The path for the files to be parsed could not be found."
-             << Endl();
+        Cerr() << "Warning: The path for the files to be parsed could not be found:\n"
+               << i_sRootDir
+               << Endl();
         return 0;
     }
 
@@ -127,8 +128,9 @@ FileCollector::AddFile( const char * i_sFilePath )
     FILE * pFile = fopen( i_sFilePath, "r" );
     if ( pFile == 0 )
     {
-        Cerr() << "Error: The path for the file to be parsed could not be found."
-             << Endl();
+        Cerr() << "Warning: The path for the file to be parsed could not be found:\n"
+               << i_sFilePath
+               << Endl();
         return 0;
     }
 
