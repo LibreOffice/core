@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:23:10 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,20 @@ public:
         @returns an object of class Color
     */
     const Color GetShapeBackgrd() const;
+
+    /** Is default horizontal text direction for selected drawing object right-to-left
+
+        OD 09.12.2002 #103045#
+        Because drawing objects only painted for each page only, the default
+        horizontal text direction of a drawing object is given by the corresponding
+        page property.
+
+        @author OD
+
+        @returns boolean, indicating, if the horizontal text direction of the
+        page, the selected drawing object is on, is right-to-left.
+    */
+    const bool IsShapeDefaultHoriTextDirR2L() const;
 };
 
 #endif
