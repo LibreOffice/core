@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleRegistry.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-11 09:29:26 $
+ *  last change: $Author: jsc $ $Date: 2001-09-13 15:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,9 @@ module com { module sun { module star { module registry {
 interface XSimpleRegistry: com::sun::star::uno::XInterface
 {
     //---------------------------------------------------------------------
-    /** contains the URL of the data source of the registry.
+    /** returns the URL of the current data source of the registry.
      */
-    [readonly, attribute] string    URL;
+    string  getURL();
 
     //-------------------------------------------------------------------------
     /** connects the registry to a persistent data source represented by
