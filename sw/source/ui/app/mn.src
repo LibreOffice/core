@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:36:25 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ Menu MN_TAB_POPUPMENU
             Text [ ENGLISH ] = "Number recognition" ;
             Text[ english_us ] = "~Number recognition";
             Text[ portuguese ] = "~Reconhecer nъmeros";
-            Text[ russian ] = "Распознание чисел";
+            Text[ russian ] = "Распознавание чисел";
             Text[ greek ] = "Бнбгнюс~йуз бсйимюн";
             Text[ dutch ] = "Getal~herkenning";
             Text[ french ] = "~Reconnaissance des nombres";
@@ -204,7 +204,7 @@ Menu MN_TAB_POPUPMENU
             Text[ arabic ] = "КЪСнЭ ЗбГСЮЗг";
             Text[ turkish ] = "Sayэ tanэma";
             Text[ catalan ] = "~Reconeixement de nъmero";
-            Text[ finnish ] = "~Numeroiden tunnistus";
+            Text[ finnish ] = "~Lukujen tunnistus";
             Text[ thai ] = "аё€аё”аё€аёі~аё•аё±аё§а№ЂаёҐаё‚";
         };
         SEPARATOR ;
@@ -270,7 +270,7 @@ String MN_DRAW_POPUPMENU
     Text [ spanish ] = "Imagen" ;
     Text [ english_us ] = "Graphic" ;
     Text[ chinese_simplified ] = "е›ѕеЅў";
-    Text[ russian ] = "Рисунок";
+    Text[ russian ] = "Графический объект";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "е›і";
     Text[ chinese_traditional ] = "ењ–еЅў";
@@ -326,7 +326,7 @@ String MN_DRAWFORM_POPUPMENU
     Text[ korean ] = "м»ЁнЉёлЎ¤";
     Text[ turkish ] = "Komut alanэ";
     Text[ catalan ] = "Control";
-    Text[ finnish ] = "Ohjain";
+    Text[ finnish ] = "Ohjausobjekti";
     Text[ thai ] = "аё„аё§аёљаё„аёёаёЎ";
 };
 
@@ -363,7 +363,7 @@ String MN_DRWTXT_POPUPMENU
     Text [ portuguese ] = "Texto do objecto de desenho" ;
     Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
     Text[ chinese_simplified ] = "з»е›ѕеЇ№и±Ў ж–‡е­—";
-    Text[ russian ] = "Графический объект Текст";
+    Text[ russian ] = "Текст графического объекта";
     Text[ polish ] = "Tekst w obiekcie graficznym";
     Text[ japanese ] = "е›іеЅўжЏЏз”»г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гЃ®гѓ†г‚­г‚№гѓ€";
     Text[ chinese_traditional ] = "з№Єењ–з‰©д»¶ ж–‡е­—";
@@ -407,7 +407,7 @@ String MN_GRF_POPUPMENU
     Text [ spanish ] = "Imagen" ;
     Text [ english_us ] = "Graphic" ;
     Text[ chinese_simplified ] = "е›ѕеЅў";
-    Text[ russian ] = "Рисунок";
+    Text[ russian ] = "Графический объект";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "е›і";
     Text[ chinese_traditional ] = "ењ–еЅў";
@@ -592,7 +592,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ portuguese ] = "Imprimir Ver pбgina" ;
             Text [ portuguese_brazilian ] = "Drucken Seitenansicht" ;
             Text[ chinese_simplified ] = "ж‰“еЌ°йЎµйќўйў„и§€";
-            Text[ russian ] = "Печать вида страницы";
+            Text[ russian ] = "Печать";
             Text[ polish ] = "Drukuj widok strony";
             Text[ japanese ] = "еЌ°е€·гѓ—гѓ¬гѓ“гѓҐгѓј";
             Text[ chinese_traditional ] = "е€—еЌ°й ЃйќўжЄўи¦–";
