@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptTypeDetector.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:46:19 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module i18n {
     <p> The <em>nScriptDirection</em> parameters are of type
     <type>ScriptDirection</type></p>
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 
 published interface XScriptTypeDetector : ::com::sun::star::uno::XInterface

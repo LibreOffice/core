@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LdapConnectionException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:54:21 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module ldap {
   Indicates failure to connect to an LDAP server, usually because
   of wrong parameters (host/port) or down server.
 
-     @since #107627#
+     @since OOo 1.1.2
   */
 published exception LdapConnectionException : ::com::sun::star::uno::Exception
 {
