@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:04:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,6 +718,11 @@ void SAL_CALL ToolBarManager::elementInserted( const ::drafts::com::sun::star::u
                 {
                     Image aImage( xGraphic );
                     m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+                    if ( pIter->second.aIds.size() > 0 )
+                    {
+                        for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
+                            m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+                    }
                 }
                 pIter->second.nImageInfo = nImageInfo;
             }
@@ -768,6 +773,11 @@ void SAL_CALL ToolBarManager::elementRemoved( const ::drafts::com::sun::star::ui
                 }
 
                 m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+                if ( pIter->second.aIds.size() > 0 )
+                {
+                    for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
+                        m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+                }
             }
         }
     }
@@ -810,6 +820,11 @@ void SAL_CALL ToolBarManager::elementReplaced( const ::drafts::com::sun::star::u
                 {
                     Image aImage( xGraphic );
                     m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+                    if ( pIter->second.aIds.size() > 0 )
+                    {
+                        for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
+                            m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+                    }
                 }
                 pIter->second.nImageInfo = nImageInfo;
             }
@@ -1210,8 +1225,16 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an
                     // image from a notification message.
-                    aCmdInfo.nId = nId;
-                    m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
+                    CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
+                    if ( pIter == m_aCommandMap.end())
+                    {
+                        aCmdInfo.nId = nId;
+                        m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
+                    }
+                    else
+                    {
+                        pIter->second.aIds.push_back( nId );
+                    }
 
                     // Add additional information for the controller to our
                     // params vector. It is given to the CreateControllers method
@@ -1286,12 +1309,23 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             aImage = Image( aDocGraphicSeq[i] );
         if ( !aImage )
         {
-            m_pToolBar->SetItemImage( pIter->second.nId, Image( aModGraphicSeq[i] ));
+            aImage = Image( aModGraphicSeq[i] );
+            m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+            if ( pIter->second.aIds.size() > 0 )
+            {
+                for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
+                    m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+            }
             pIter->second.nImageInfo = 1; // mark image as module based
         }
         else
         {
             m_pToolBar->SetItemImage( pIter->second.nId, aImage );
+            if ( pIter->second.aIds.size() > 0 )
+            {
+                for ( sal_uInt32 j=0; j < pIter->second.aIds.size(); j++ )
+                    m_pToolBar->SetItemImage( pIter->second.aIds[j], aImage );
+            }
             pIter->second.nImageInfo = 0; // mark image as document based
         }
         ++pIter;
