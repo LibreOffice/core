@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:47:31 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,9 +1469,11 @@ IMPL_STATIC_LINK( SwDocShell, IsLoadFinished, void*, EMPTYARG )
     else
     {
         BOOL bIsModifiedEnabled = pThis->IsEnableSetModified();
-        pThis->EnableSetModified( FALSE );
+        if(bIsModifiedEnabled)
+            pThis->EnableSetModified( sal_False );
         pThis->FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
-        pThis->EnableSetModified( bIsModifiedEnabled );
+        if(bIsModifiedEnabled)
+            pThis->EnableSetModified( sal_True );
 
         pThis->GetDoc()->StartIdleTimer();
     }
