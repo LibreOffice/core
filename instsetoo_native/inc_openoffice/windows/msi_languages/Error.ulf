@@ -1,0 +1,390 @@
+[OOO_ERROR_1]
+en-US = "{{Fatal error: }}"
+
+[OOO_ERROR_2]
+en-US = "Error [1]."
+
+[OOO_ERROR_3]
+en-US = "Warning [1]."
+
+[OOO_ERROR_4]
+en-US = "Info [1]."
+
+[OOO_ERROR_5]
+en-US = "Internal Error [1]. [2]{, [3]}{, [4]}"
+
+[OOO_ERROR_6]
+en-US = "{{Disk full: }}"
+
+[OOO_ERROR_7]
+en-US = "Action [Time]: [1]. [2]"
+
+[OOO_ERROR_8]
+en-US = "[ProductName]"
+
+[OOO_ERROR_9]
+en-US = "{[2]}{, [3]}{, [4]}"
+
+[OOO_ERROR_10]
+en-US = "Message type: [1], Argument: [2]"
+
+[OOO_ERROR_11]
+en-US = "=== Logging started: [Date]  [Time] ==="
+
+[OOO_ERROR_12]
+en-US = "=== Logging stopped: [Date]  [Time] ==="
+
+[OOO_ERROR_13]
+en-US = "Action start [Time]: [1]."
+
+[OOO_ERROR_14]
+en-US = "Action ended [Time]: [1]. Return value [2]."
+
+[OOO_ERROR_15]
+en-US = "Time remaining: {[1] minutes }{[2] seconds}"
+
+[OOO_ERROR_16]
+en-US = "Out of memory. Shut down other applications before retrying."
+
+[OOO_ERROR_17]
+en-US = "Installer is no longer responding."
+
+[OOO_ERROR_18]
+en-US = "Installer terminated prematurely."
+
+[OOO_ERROR_19]
+en-US = "Please wait while Windows configures [ProductName]"
+
+[OOO_ERROR_20]
+en-US = "Gathering required information..."
+
+[OOO_ERROR_21]
+en-US = "Removing older versions of this application"
+
+[OOO_ERROR_22]
+en-US = "Preparing to remove older versions of this application"
+
+[OOO_ERROR_23]
+en-US = "{[ProductName] }Setup completed successfully."
+
+[OOO_ERROR_24]
+en-US = "{[ProductName] }Setup failed."
+
+[OOO_ERROR_25]
+en-US = "Error reading from file: [2]. {{ System error [3].}}  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_26]
+en-US = "Cannot create the file [3].  A directory with this name already exists.  Cancel the installation and try installing to a different location."
+
+[OOO_ERROR_27]
+en-US = "Please insert the disk: [2]"
+
+[OOO_ERROR_28]
+en-US = "The installer has insufficient privileges to access this directory: [2].  The installation cannot continue.  Log on as an administrator or contact your system administrator."
+
+[OOO_ERROR_29]
+en-US = "Error writing to file [2].  Verify that you have access to that directory."
+
+[OOO_ERROR_30]
+en-US = "Error reading from file [2].  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_31]
+en-US = "Another application has exclusive access to the file [2].  Please shut down all other applications, then click Retry."
+
+[OOO_ERROR_32]
+en-US = "There is not enough disk space to install the file [2].  Free some disk space and click Retry, or click Cancel to exit."
+
+[OOO_ERROR_33]
+en-US = "Source file not found: [2].  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_34]
+en-US = "Error reading from file: [3]. {{ System error [2].}}  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_35]
+en-US = "Error writing to file: [3]. {{ System error [2].}}  Verify that you have access to that directory."
+
+[OOO_ERROR_36]
+en-US = "Source file not found{{(cabinet)}}: [2].  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_37]
+en-US = "Cannot create the directory [2].  A file with this name already exists.  Please rename or remove the file and click Retry, or click Cancel to exit."
+
+[OOO_ERROR_38]
+en-US = "The volume [2] is currently unavailable.  Please select another."
+
+[OOO_ERROR_39]
+en-US = "The specified path [2] is unavailable."
+
+[OOO_ERROR_40]
+en-US = "Unable to write to the specified folder [2]."
+
+[OOO_ERROR_41]
+en-US = "A network error occurred while attempting to read from the file [2]"
+
+[OOO_ERROR_42]
+en-US = "An error occurred while attempting to create the directory [2]"
+
+[OOO_ERROR_43]
+en-US = "A network error occurred while attempting to create the directory [2]"
+
+[OOO_ERROR_44]
+en-US = "A network error occurred while attempting to open the source file cabinet [2]."
+
+[OOO_ERROR_45]
+en-US = "The specified path is too long [2]."
+
+[OOO_ERROR_46]
+en-US = "The Installer has insufficient privileges to modify the file [2]."
+
+[OOO_ERROR_47]
+en-US = "A portion of the path [2] exceeds the length allowed by the system."
+
+[OOO_ERROR_48]
+en-US = "The path [2] contains words that are not valid in folders."
+
+[OOO_ERROR_49]
+en-US = "The path [2] contains an invalid character."
+
+[OOO_ERROR_50]
+en-US = "[2] is not a valid short file name."
+
+[OOO_ERROR_51]
+en-US = "Error getting file security: [3] GetLastError: [2]"
+
+[OOO_ERROR_52]
+en-US = "Invalid Drive: [2]"
+
+[OOO_ERROR_53]
+en-US = "Error applying patch to file [2].  It has probably been updated by other means, and can no longer be modified by this patch.  For more information contact your patch vendor.  {{System Error: [3]}}"
+
+[OOO_ERROR_54]
+en-US = "Could not create key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_55]
+en-US = "Could not open key: [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_56]
+en-US = "Could not delete value [2] from key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_57]
+en-US = "Could not delete key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_58]
+en-US = "Could not read value [2] from key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_59]
+en-US = "Could not write value [2] to key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_60]
+en-US = "Could not get value names for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_61]
+en-US = "Could not get sub key names for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_62]
+en-US = "Could not read security information for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
+
+[OOO_ERROR_63]
+en-US = "Could not increase the available registry space. [2] KB of free registry space is required for the installation of this application."
+
+[OOO_ERROR_64]
+en-US = "Another installation is in progress. You must complete that installation before continuing this one."
+
+[OOO_ERROR_65]
+en-US = "Error accessing secured data. Please make sure the Windows Installer is configured properly and try the installation again."
+
+[OOO_ERROR_66]
+en-US = "User [2] has previously initiated an installation for product [3].  That user will need to run that installation again before using that product.  Your current installation will now continue."
+
+[OOO_ERROR_67]
+en-US = "User [2] has previously initiated an installation for product [3].  That user will need to run that installation again before using that product."
+
+[OOO_ERROR_68]
+en-US = "Out of disk space -- Volume: '[2]'; required space: [3] KB; available space: [4] KB.  Free some disk space and retry."
+
+[OOO_ERROR_69]
+en-US = "Are you sure you want to cancel?"
+
+[OOO_ERROR_70]
+en-US = "The file [2][3] is being held in use{ by the following process: Name: [4], ID: [5], Window Title: [6]}.  Close that application and retry."
+
+[OOO_ERROR_71]
+en-US = "The product [2] is already installed, preventing the installation of this product.  The two products are incompatible."
+
+[OOO_ERROR_72]
+en-US = "Out of disk space -- Volume: [2]; required space: [3] KB; available space: [4] KB.  If rollback is disabled, enough space is available. Click Cancel to quit, Retry to check available disk space again, or Ignore to continue without rollback."
+
+[OOO_ERROR_73]
+en-US = "Could not access network location [2]."
+
+[OOO_ERROR_74]
+en-US = "The following applications should be closed before continuing the installation:"
+
+[OOO_ERROR_75]
+en-US = "Could not find any previously installed compliant products on the machine for installing this product."
+
+[OOO_ERROR_76]
+en-US = "The key [2] is not valid.  Verify that you entered the correct key."
+
+[OOO_ERROR_77]
+en-US = "The installer must restart your system before configuration of [2] can continue.  Click Yes to restart now or No if you plan to restart later."
+
+[OOO_ERROR_78]
+en-US = "You must restart your system for the configuration changes made to [2] to take effect. Click Yes to restart now or No if you plan to restart later."
+
+[OOO_ERROR_79]
+en-US = "An installation for [2] is currently suspended.  You must undo the changes made by that installation to continue.  Do you want to undo those changes?"
+
+[OOO_ERROR_80]
+en-US = "A previous installation for this product is in progress.  You must undo the changes made by that installation to continue.  Do you want to undo those changes?"
+
+[OOO_ERROR_81]
+en-US = "No valid source could be found for product [2].  The Windows Installer cannot continue."
+
+[OOO_ERROR_82]
+en-US = "Installation operation completed successfully."
+
+[OOO_ERROR_83]
+en-US = "Installation operation failed."
+
+[OOO_ERROR_84]
+en-US = "Product: [2] -- [3]"
+
+[OOO_ERROR_85]
+en-US = "You may either restore your computer to its previous state or continue the installation later. Would you like to restore?"
+
+[OOO_ERROR_86]
+en-US = "An error occurred while writing installation information to disk.  Check to make sure enough disk space is available, and click Retry, or Cancel to end the installation."
+
+[OOO_ERROR_87]
+en-US = "One or more of the files required to restore your computer to its previous state could not be found.  Restoration will not be possible."
+
+[OOO_ERROR_88]
+en-US = "[2] cannot install one of its required products. Contact your technical support group.  {{System Error: [3].}}"
+
+[OOO_ERROR_89]
+en-US = "The older version of [2] cannot be removed.  Contact your technical support group.  {{System Error [3].}}"
+
+[OOO_ERROR_90]
+en-US = "The path [2] is not valid.  Please specify a valid path."
+
+[OOO_ERROR_91]
+en-US = "Out of memory. Shut down other applications before retrying."
+
+[OOO_ERROR_92]
+en-US = "There is no disk in drive [2]. Please insert one and click Retry, or click Cancel to go back to the previously selected volume."
+
+[OOO_ERROR_93]
+en-US = "There is no disk in drive [2]. Please insert one and click Retry, or click Cancel to return to the browse dialog and select a different volume."
+
+[OOO_ERROR_94]
+en-US = "The folder [2] does not exist.  Please enter a path to an existing folder."
+
+[OOO_ERROR_95]
+en-US = "You have insufficient privileges to read this folder."
+
+[OOO_ERROR_96]
+en-US = "A valid destination folder for the installation could not be determined."
+
+[OOO_ERROR_97]
+en-US = "Error attempting to read from the source installation database: [2]."
+
+[OOO_ERROR_98]
+en-US = "Scheduling reboot operation: Renaming file [2] to [3]. Must reboot to complete operation."
+
+[OOO_ERROR_99]
+en-US = "Scheduling reboot operation: Deleting file [2]. Must reboot to complete operation."
+
+[OOO_ERROR_100]
+en-US = "Module [2] failed to register.  HRESULT [3].  Contact your support personnel."
+
+[OOO_ERROR_101]
+en-US = "Module [2] failed to unregister.  HRESULT [3].  Contact your support personnel."
+
+[OOO_ERROR_102]
+en-US = "Failed to cache package [2]. Error: [3]. Contact your support personnel."
+
+[OOO_ERROR_103]
+en-US = "Could not register font [2].  Verify that you have sufficient permissions to install fonts, and that the system supports this font."
+
+[OOO_ERROR_104]
+en-US = "Could not unregister font [2]. Verify that you have sufficient permissions to remove fonts."
+
+[OOO_ERROR_105]
+en-US = "Could not create shortcut [2]. Verify that the destination folder exists and that you can access it."
+
+[OOO_ERROR_106]
+en-US = "Could not remove shortcut [2]. Verify that the shortcut file exists and that you can access it."
+
+[OOO_ERROR_107]
+en-US = "Could not register type library for file [2].  Contact your support personnel."
+
+[OOO_ERROR_108]
+en-US = "Could not unregister type library for file [2].  Contact your support personnel."
+
+[OOO_ERROR_109]
+en-US = "Could not update the INI file [2][3].  Verify that the file exists and that you can access it."
+
+[OOO_ERROR_110]
+en-US = "Could not schedule file [2] to replace file [3] on reboot.  Verify that you have write permissions to file [3]."
+
+[OOO_ERROR_111]
+en-US = "Error removing ODBC driver manager, ODBC error [2]: [3]. Contact your support personnel."
+
+[OOO_ERROR_112]
+en-US = "Error installing ODBC driver manager, ODBC error [2]: [3]. Contact your support personnel."
+
+[OOO_ERROR_113]
+en-US = "Error removing ODBC driver [4], ODBC error [2]: [3]. Verify that you have sufficient privileges to remove ODBC drivers."
+
+[OOO_ERROR_114]
+en-US = "Error installing ODBC driver [4], ODBC error [2]: [3]. Verify that the file [4] exists and that you can access it."
+
+[OOO_ERROR_115]
+en-US = "Error configuring ODBC data source [4], ODBC error [2]: [3]. Verify that the file [4] exists and that you can access it."
+
+[OOO_ERROR_116]
+en-US = "Service [2] ([3]) failed to start.  Verify that you have sufficient privileges to start system services."
+
+[OOO_ERROR_117]
+en-US = "Service [2] ([3]) could not be stopped.  Verify that you have sufficient privileges to stop system services."
+
+[OOO_ERROR_118]
+en-US = "Service [2] ([3]) could not be deleted.  Verify that you have sufficient privileges to remove system services."
+
+[OOO_ERROR_119]
+en-US = "Service [2] ([3]) could not be installed.  Verify that you have sufficient privileges to install system services."
+
+[OOO_ERROR_120]
+en-US = "Could not update environment variable [2].  Verify that you have sufficient privileges to modify environment variables."
+
+[OOO_ERROR_121]
+en-US = "You do not have sufficient privileges to complete this installation for all users of the machine.  Log on as an administrator and then retry this installation."
+
+[OOO_ERROR_122]
+en-US = "Could not set file security for file [3]. Error: [2].  Verify that you have sufficient privileges to modify the security permissions for this file."
+
+[OOO_ERROR_123]
+en-US = "Component Services (COM+ 1.0) are not installed on this computer.  This installation requires Component Services in order to complete successfully.  Component Services are available on Windows 2000."
+
+[OOO_ERROR_124]
+en-US = "Error registering COM+ application.  Contact your support personnel for more information."
+
+[OOO_ERROR_125]
+en-US = "Error unregistering COM+ application.  Contact your support personnel for more information."
+
+[OOO_ERROR_126]
+en-US = "The description for service '[2]' ([3]) could not be changed."
+
+[OOO_ERROR_127]
+en-US = "The Windows Installer service cannot update the system file [2] because the file is protected by Windows.  You may need to update your operating system for this program to work correctly. {{Package version: [3], OS Protected version: [4]}}"
+
+[OOO_ERROR_128]
+en-US = "The Windows Installer service cannot update the protected Windows file [2]. {{Package version: [3], OS Protected version: [4], SFP Error: [5]}}"
+
+[OOO_ERROR_129]
+en-US = "This setup requires Internet Information Server 4.0 or higher for configuring IIS Virtual Roots. Please make sure that you have IIS 4.0 or higher."
+
+[OOO_ERROR_130]
+en-US = "This setup requires Administrator privileges for configuring IIS Virtual Roots."
+

@@ -1,0 +1,147 @@
+[OOO_UITEXT_1]
+en-US = "bytes"
+
+[OOO_UITEXT_2]
+en-US = "GB"
+
+[OOO_UITEXT_3]
+en-US = "KB"
+
+[OOO_UITEXT_4]
+en-US = "MB"
+
+[OOO_UITEXT_5]
+en-US = "This feature will not be available."
+
+[OOO_UITEXT_6]
+en-US = "This feature will be installed when required."
+
+[OOO_UITEXT_7]
+en-US = "This feature, and all subfeatures, will be installed to run from the CD."
+
+[OOO_UITEXT_8]
+en-US = "This feature, and all subfeatures, will be installed on local hard drive."
+
+[OOO_UITEXT_9]
+en-US = "This feature, and all subfeatures, will be installed to run from the network."
+
+[OOO_UITEXT_10]
+en-US = "This feature will be installed to run from CD."
+
+[OOO_UITEXT_11]
+en-US = "This feature will be installed on local hard drive."
+
+[OOO_UITEXT_12]
+en-US = "This feature will be installed to run from network."
+
+[OOO_UITEXT_13]
+en-US = "Fldr|New Folder"
+
+[OOO_UITEXT_14]
+en-US = "This feature will remain uninstalled."
+
+[OOO_UITEXT_15]
+en-US = "This feature will be set to be installed when required."
+
+[OOO_UITEXT_16]
+en-US = "This feature will be installed to run from CD."
+
+[OOO_UITEXT_17]
+en-US = "This feature will be installed on the local hard drive."
+
+[OOO_UITEXT_18]
+en-US = "This feature will be installed to run from the network."
+
+[OOO_UITEXT_19]
+en-US = "This feature will become unavailable."
+
+[OOO_UITEXT_20]
+en-US = "Will be installed when required."
+
+[OOO_UITEXT_21]
+en-US = "This feature will be available to run from CD."
+
+[OOO_UITEXT_22]
+en-US = "This feature will be installed on your local hard drive."
+
+[OOO_UITEXT_23]
+en-US = "This feature will be available to run from the network."
+
+[OOO_UITEXT_24]
+en-US = "This feature will be uninstalled completely, and you won't be able to run it from CD."
+
+[OOO_UITEXT_25]
+en-US = "This feature was run from the CD but will be set to be installed when required."
+
+[OOO_UITEXT_26]
+en-US = "This feature will continue to be run from the CD"
+
+[OOO_UITEXT_27]
+en-US = "This feature was run from the CD but will be installed on the local hard drive."
+
+[OOO_UITEXT_28]
+en-US = "This feature frees up [1] on your hard drive."
+
+[OOO_UITEXT_29]
+en-US = "This feature requires [1] on your hard drive."
+
+[OOO_UITEXT_30]
+en-US = "Compiling cost for this feature..."
+
+[OOO_UITEXT_31]
+en-US = "This feature will be completely removed."
+
+[OOO_UITEXT_32]
+en-US = "This feature will be removed from your local hard drive but will be set to be installed when required."
+
+[OOO_UITEXT_33]
+en-US = "This feature will be removed from your local hard drive but will still be available to run from CD."
+
+[OOO_UITEXT_34]
+en-US = "This feature will remain on your local hard drive."
+
+[OOO_UITEXT_35]
+en-US = "This feature will be removed from your local hard drive, but will be still available to run from the network."
+
+[OOO_UITEXT_36]
+en-US = "This feature will be uninstalled completely, and you won't be able to run it from the network."
+
+[OOO_UITEXT_37]
+en-US = "This feature was run from the network but will be installed when required."
+
+[OOO_UITEXT_38]
+en-US = "This feature was run from the network but will be installed on the local hard drive."
+
+[OOO_UITEXT_39]
+en-US = "This feature will continue to be run from the network"
+
+[OOO_UITEXT_40]
+en-US = "This feature frees up [1] on your hard drive. It has [2] of [3] subfeatures selected. The subfeatures free up [4] on your hard drive."
+
+[OOO_UITEXT_41]
+en-US = "This feature frees up [1] on your hard drive. It has [2] of [3] subfeatures selected. The subfeatures require [4] on your hard drive."
+
+[OOO_UITEXT_42]
+en-US = "This feature requires [1] on your hard drive. It has [2] of [3] subfeatures selected. The subfeatures free up [4] on your hard drive."
+
+[OOO_UITEXT_43]
+en-US = "This feature requires [1] on your hard drive. It has [2] of [3] subfeatures selected. The subfeatures require [4] on your hard drive."
+
+[OOO_UITEXT_44]
+en-US = "Time remaining: {[1] min }[2] sec"
+
+[OOO_UITEXT_45]
+en-US = "Available"
+
+[OOO_UITEXT_46]
+en-US = "Differences"
+
+[OOO_UITEXT_47]
+en-US = "Required"
+
+[OOO_UITEXT_48]
+en-US = "Disk Size"
+
+[OOO_UITEXT_49]
+en-US = "Volume"
+
