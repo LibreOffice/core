@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 11:25:26 $
+ *  last change: $Author: rt $ $Date: 2001-08-27 20:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-08-24 11:25:26 $ $Revision: 1.26 $
+ // $Author: rt $ $Date: 2001-08-27 20:27:03 $ $Revision: 1.27 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1322,7 +1322,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ chinese_simplified ] = "жЏ’е…ҐеЌ•е…ѓж ј";
     Text[ russian ] = "Вставить ячейки";
     Text[ polish ] = "Wstaw komуrki";
-    Text[ japanese ] = "пЅѕпѕ™г‚’жЊїе…Ґ";
+    Text[ japanese ] = "пЅѕпѕ™гЃ®жЊїе…Ґ";
 
     ToolBox RID_TOOLBOX_INSCELLS
     {
@@ -1760,6 +1760,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
