@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,17 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -118,7 +118,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -191,7 +191,7 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
     mbHasSelection = bNewState;
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     if (bNewState)
         aEvent.NewValue = uno::makeAny(AccessibleStateType::SELECTED);
     else
@@ -204,7 +204,7 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
 void ScAccessibleSpreadsheet::LostFocus()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
     uno::Reference< XAccessible > xOld = mpAccCell;
     aEvent.OldValue <<= xOld;
@@ -219,7 +219,7 @@ void ScAccessibleSpreadsheet::GotFocus()
     CommitFocusGained();
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
     uno::Reference< XAccessible > xNew = mpAccCell;
     aEvent.NewValue <<= xNew;
@@ -230,7 +230,7 @@ void ScAccessibleSpreadsheet::GotFocus()
 void ScAccessibleSpreadsheet::BoundingBoxChanged()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT;
+    aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
 
     CommitChange(aEvent);
@@ -239,7 +239,7 @@ void ScAccessibleSpreadsheet::BoundingBoxChanged()
 void ScAccessibleSpreadsheet::VisAreaChanged()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(this);
 
     CommitChange(aEvent);
@@ -271,7 +271,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     if (mpSortedMarkedCells)
                         DELETEZ(mpSortedMarkedCells);
                     AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
+                    aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
                     aEvent.Source = uno::Reference< XAccessible >(this);
 
                     mbHasSelection = bNewMarked;
@@ -282,7 +282,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 if ((aNewCell != maActiveCell) && (aNewCell.Tab() == maActiveCell.Tab()))
                 {
                     AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+                    aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
                     aEvent.Source = uno::Reference< XAccessible >(this);
                     uno::Reference< XAccessible > xOld = mpAccCell;
                     mpAccCell->release();
@@ -310,7 +310,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 /*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
 
             CommitChange(aEvent);*/
@@ -336,7 +336,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 /*        else if (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT;
+            aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
 
             CommitChange(aEvent);
@@ -392,7 +392,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     rRef.GetRange().aStart.Col() + nX, nId);
 
                 AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+                aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
                 aEvent.Source = uno::Reference< XAccessible >(this);
                 uno::Reference< XAccessible > xNew = mpAccCell;
                 aEvent.NewValue <<= xNew;
@@ -551,12 +551,12 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtPoint(
     const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     uno::Reference< XAccessible > xAccessible;
-    if (contains(rPoint))
+    if (containsPoint(rPoint))
     {
         ScUnoGuard aGuard;
         IsObjectValid();
@@ -624,14 +624,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANT);
+        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
         if (IsEditable(xParentStates))
             pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
         if (IsFocused())
             pStateSet->AddState(AccessibleStateType::FOCUSED);
-        pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+        pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
         if (IsCompleteSheetSelected())
@@ -743,7 +743,7 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleSpreadsheet::deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
+        ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -834,7 +834,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleSpreadsheet"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.AccessibleSpreadsheet"));
 
     return aSequence;
 }
@@ -871,7 +871,7 @@ void SAL_CALL ScAccessibleSpreadsheet::addEventListener(const uno::Reference<XAc
         CommitFocusGained();
 
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+        aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
         aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.NewValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
 
