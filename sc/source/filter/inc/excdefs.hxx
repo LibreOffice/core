@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,38 @@
 #define EXC_OUTLINE_COUNT           (EXC_OUTLINE_MAX + 1)
 
 //_________________________________________________________
+// data pilot / pivot tables
+
+// subtotal functions
+#define EXC_PIVOT_SUBT_SUM          0x0000
+#define EXC_PIVOT_SUBT_COUNT        0x0001
+#define EXC_PIVOT_SUBT_AVERAGE      0x0002
+#define EXC_PIVOT_SUBT_MAX          0x0003
+#define EXC_PIVOT_SUBT_MIN          0x0004
+#define EXC_PIVOT_SUBT_PROD         0x0005
+#define EXC_PIVOT_SUBT_COUNTNUM     0x0006
+#define EXC_PIVOT_SUBT_STDDEV       0x0007
+#define EXC_PIVOT_SUBT_STDDEVP      0x0008
+#define EXC_PIVOT_SUBT_VAR          0x0009
+#define EXC_PIVOT_SUBT_VARP         0x000A
+
+// field orientation
+#define EXC_PIVOT_AXIS_NONE         0x0000
+#define EXC_PIVOT_AXIS_ROW          0x0001
+#define EXC_PIVOT_AXIS_COL          0x0002
+#define EXC_PIVOT_AXIS_PAGE         0x0004
+#define EXC_PIVOT_AXIS_DATA         0x0008
+#define EXC_PIVOT_AXIS_RCP_MASK     (EXC_PIVOT_AXIS_ROW|EXC_PIVOT_AXIS_COL|EXC_PIVOT_AXIS_PAGE)
+
+// misc xcl record flags
+#define EXC_SXVIEW_COMMON           0x0208
+#define EXC_SXVIEW_ROWGRAND         0x0001
+#define EXC_SXVIEW_COLGRAND         0x0002
+
+#define EXC_SXVDEX_COMMON           0x0A00141E
+#define EXC_SXVDEX_SHOWALL          0x00000001
+
+//_________________________________________________________
 // defines for change tracking
 
 // opcodes
@@ -304,5 +336,6 @@
 #define EXC_CHTR_3DREF_INT          0x0001
 #define EXC_CHTR_3DREF_EXT          0x0002
 
+//_________________________________________________________
 
 #endif // _EXCDEFS_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class ScExtDocOptions;
 class ScEditEngineDefaulter;
 class XF_Buffer;
 class FilterProgressBar;
-class PivotCacheList;
+class XclImpPivotCacheList;
 
 class XtiBuffer;
 class SupbookBuffer;
@@ -166,7 +166,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclImpTabIdBuffer*  pImpTabIdBuffer;        // table id's for change tracking
 
     SvStorage*          pPivotCacheStorage;
-    PivotCacheList*     pImpPivotCacheList;     // pivot caches for import
+    XclImpPivotCacheList* pImpPivotCacheList;       // pivot caches for import
 
     SvStorageRef        xCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
 //  SvStorage*          pCtrlStorage;           // SvxMSConvertOCXControls compatibel storage

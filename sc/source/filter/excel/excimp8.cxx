@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,7 +1804,7 @@ UINT32 ImportExcel8::Scenario( const UINT16 n )
 
 void ImportExcel8::SXView( void )
 {
-    pCurrPivTab = new PivotTable( aIn, pExcRoot, (UINT8) nTab, nBytesLeft );
+    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8) nTab, nBytesLeft );
     aPivotTabList.Append( pCurrPivTab );
 }
 
@@ -1872,9 +1872,9 @@ void ImportExcel8::SXIdStm( void )
     aIn >> nStrId;
 
     if( !pExcRoot->pImpPivotCacheList )
-        pExcRoot->pImpPivotCacheList = new PivotCacheList;
+        pExcRoot->pImpPivotCacheList = new XclImpPivotCacheList;
 
-    pCurrPivotCache = new PivotCache( pExcRoot, nStrId );
+    pCurrPivotCache = new XclImpPivotCache( pExcRoot, nStrId );
     pExcRoot->pImpPivotCacheList->Append( pCurrPivotCache );
 }
 

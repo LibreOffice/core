@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dr $ $Date: 2000-11-28 11:18:29 $
+#   last change: $Author: dr $ $Date: 2000-11-29 09:19:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,28 +81,32 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        xcl97dum.cxx	\
-        xcl97esc.cxx	\
-        xcl97exp.cxx	\
-        xcl97rch.cxx	\
-        xcl97rec.cxx	\
-        xcl97piv.cxx	\
-        XclImpChangeTrack.cxx
+        xcl97dum.cxx						\
+        xcl97esc.cxx						\
+        xcl97exp.cxx						\
+        xcl97rch.cxx						\
+        xcl97rec.cxx						\
+        XclImpPivotTables.cxx				\
+        XclExpPivotTables.cxx				\
+        XclImpChangeTrack.cxx				\
+        XclExpChangeTrack.cxx
 
 
 SLOFILES =	\
-        $(SLO)$/xcl97dum.obj	\
-        $(SLO)$/xcl97esc.obj	\
-        $(SLO)$/xcl97exp.obj	\
-        $(SLO)$/xcl97rch.obj	\
-        $(SLO)$/xcl97rec.obj	\
-        $(SLO)$/xcl97piv.obj	\
-        $(SLO)$/XclImpChangeTrack.obj
+        $(SLO)$/xcl97dum.obj				\
+        $(SLO)$/xcl97esc.obj				\
+        $(SLO)$/xcl97exp.obj				\
+        $(SLO)$/xcl97rch.obj				\
+        $(SLO)$/xcl97rec.obj				\
+        $(SLO)$/XclImpPivotTables.obj		\
+        $(SLO)$/XclExpPivotTables.obj		\
+        $(SLO)$/XclImpChangeTrack.obj		\
+        $(SLO)$/XclExpChangeTrack.obj
 
 
 EXCEPTIONSFILES = \
-        $(SLO)$/xcl97rch.obj	\
-        $(SLO)$/xcl97piv.obj
+        $(SLO)$/xcl97rch.obj				\
+        $(SLO)$/XclExpPivotTables.obj
 
 
 # --- Targets -------------------------------------------------------

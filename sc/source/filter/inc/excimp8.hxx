@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 10:59:50 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include "excscen.hxx"
 #endif
 #ifndef _EXCPIVOT_HXX
-#include "excpivot.hxx"
+#include "XclImpPivotTables.hxx"
 #endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
@@ -510,9 +510,9 @@ class ImportExcel8 : public ImportExcel
 
         ExcScenarioList         aScenList;
 
-        PivotTableList          aPivotTabList;
-        PivotTable*             pCurrPivTab;
-        PivotCache*             pCurrPivotCache;
+        XclImpPivotTableList    aPivotTabList;
+        XclImpPivotTable*       pCurrPivTab;
+        XclImpPivotCache*       pCurrPivotCache;
 
         ExcCondForm*            pActCondForm;
         ExcCondFormList*        pCondFormList;

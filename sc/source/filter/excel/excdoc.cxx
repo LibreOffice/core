@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,10 @@
 #include "xcl97dum.hxx"
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
-#include "xcl97piv.hxx"
+
+#ifndef _SC_XCLEXPPIVOTTABLES_HXX
+#include "XclExpPivotTables.hxx"
+#endif
 
 
 NameBuffer*     ExcDocument::pTabNames = NULL;
