@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteBodyImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 18:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,13 @@ SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     // return text context
-    return GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
+    SvXMLImportContext *pContext =
+        GetImport().GetTextImport()->CreateTextChildContext(GetImport(),
                                                                nPrefix,
                                                                rLocalName,
                                                                xAttrList);
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
 }
