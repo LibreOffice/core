@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:46:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
-
-class XclImpStream;
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
