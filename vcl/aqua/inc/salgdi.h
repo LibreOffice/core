@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-01 03:20:53 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-06 01:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,20 @@
 #include <VCLWindow.h>
 #endif
 
+const short kClipRegionChanged = 0x01;
+
+enum PortDrawMode
+{
+    eDrawBits,
+    eDrawDone,
+    eDrawFill,
+    eDrawLine,
+    eDrawInvert,
+    eDrawNil,
+    eDrawSetPort,
+    eDrawText
+};
+
 // -------------------
 // - SalGraphicsData -
 // -------------------
@@ -88,12 +102,13 @@ struct SalGraphicsData
     // QuickDraw graph port and GWorld
 
     CGrafPtr        mpCGrafPort;        // QD color graphics port
-    GDHandle        mhDevice;       // GWorld graphics
+    GDHandle        mhGDevice;      // GWorld graphics
 
     // Regions within a current port
 
     RgnHandle       mhClipRgn;      // Clip Region Handle
         RgnHandle       mhGrowRgn;      // Grow Region Handle
+    RgnHandle       mhVisiableRgn;      // Visible Region Handle
 
     // Pen, brush, and text colors
 
@@ -125,6 +140,8 @@ struct SalGraphicsData
 
     // Miscellaneous status flags
 
+    unsigned short      mnCurrStatus;       // What is the current graph port status?
+    PortDrawMode        meCurrDrawMode;     // What is the current drawing mode?
     BOOL            mbPrinter;      // Is a printer available?
     BOOL            mbVirDev;       // Is a virtual device available?
     BOOL            mbWindow;       // Is a window availble?

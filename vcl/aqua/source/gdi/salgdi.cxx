@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.17 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-05 20:59:26 $
+ *  $Revision: 1.18 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-06 01:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,64 +78,165 @@
 
 // =======================================================================
 
-SalGraphics::SalGraphics()
+static void SetWhiteBackColor()
 {
-    RGBColor aRGBBackColor;
-    RGBColor aRGBForeColor;
-
-    maGraphicsData.mnPenMode        = patCopy;
-    maGraphicsData.mbTransparentPen = FALSE;
-
-    maGraphicsData.mhDefBrush         = NULL;
-    maGraphicsData.mbTransparentBrush = FALSE;
+    RGBColor aWhiteBackColor;
 
     // White color
 
-    aRGBBackColor.red   = 0xffff;
-    aRGBBackColor.green = 0xffff;
-    aRGBBackColor.blue  = 0xffff;
+    aWhiteBackColor.red   = 0xffff;
+    aWhiteBackColor.green = 0xffff;
+    aWhiteBackColor.blue  = 0xffff;
 
-    // Black color
+    // Set background color to white
 
-    aRGBForeColor.red   = 0x0000;
-    aRGBForeColor.green = 0x0000;
-    aRGBForeColor.blue  = 0x0000;
-
-    // Set pen and text colors
-
-    maGraphicsData.maPenColor   = aRGBForeColor;
-    maGraphicsData.maBrushColor = aRGBForeColor;
-    maGraphicsData.maTextColor  = aRGBForeColor;
-
-    // Set background and foreground colors
-
-    RGBBackColor( &aRGBBackColor );
-    RGBForeColor( &aRGBForeColor );
-}
+    RGBBackColor( &aWhiteBackColor );
+} // SetWhiteBackColor
 
 // -----------------------------------------------------------------------
 
-SalGraphics::~SalGraphics()
+static void SetBlackForeColor()
 {
-    if ( maGraphicsData.mhClipRgn != NULL )
-    {
-        DisposeRgn( maGraphicsData.mhClipRgn );
-    } // if
+    RGBColor aBlackForeColor;
 
-    if ( maGraphicsData.mhGrowRgn != NULL )
-    {
-        DisposeRgn( maGraphicsData.mhGrowRgn );
-    } // if
+    // Black color
 
-    if ( maGraphicsData.mhDefBrush != NULL )
-    {
-        DisposePixPat( maGraphicsData.mhDefBrush );
-    } // if
-}
+    aBlackForeColor.red   = 0x0000;
+    aBlackForeColor.green = 0x0000;
+    aBlackForeColor.blue  = 0x0000;
+
+    // Set foreground color to black
+
+    RGBForeColor( &aBlackForeColor );
+} // SetBlackForeColor
 
 // =======================================================================
 
-// =======================================================================
+static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
+                                SalGraphicsDataPtr  rSalGraphicsData
+                              )
+{
+    BOOL bDrawModeChecked = FALSE;
+
+    if ( rSalGraphicsData != NULL )
+    {
+        CGrafPtr  pCGrafPort = NULL;
+
+        osl_yieldThread();
+
+        if (    ( eUpdateDrawMode == eDrawFill )
+             && ( rSalGraphicsData->mbTransparentBrush == TRUE )
+           )
+        {
+            return FALSE;
+        } // if
+        else if (    ( eUpdateDrawMode == eDrawLine )
+                  && ( rSalGraphicsData->mbTransparentPen == FALSE )
+                )
+        {
+            return FALSE;
+        } // else if
+
+        GetPort( &pCGrafPort );
+
+        // Is the current graph port the same as the graph port in SalGraphics?
+
+        if ( pCGrafPort != rSalGraphicsData->mpCGrafPort )
+        {
+            SetGWorld( rSalGraphicsData->mpCGrafPort,
+                       rSalGraphicsData->mhGDevice
+                     );
+        } // if
+
+        if ( eUpdateDrawMode == eDrawSetPort )
+        {
+            return TRUE;
+        } // if
+
+        if ( rSalGraphicsData->mnCurrStatus & kClipRegionChanged )
+        {
+            if ( rSalGraphicsData->mhClipRgn != NULL )
+            {
+                SetClip( rSalGraphicsData->mhClipRgn );
+            } // if
+            else
+            {
+                Rect aRect;
+
+                GetPortBounds( rSalGraphicsData->mpCGrafPort, &aRect );
+
+                ClipRect( &aRect );
+            } // else
+
+            rSalGraphicsData->mnCurrStatus &= ~kClipRegionChanged;
+        } // if
+
+        if ( rSalGraphicsData->meCurrDrawMode == eUpdateDrawMode )
+        {
+            return TRUE;
+        } // if
+
+        switch ( eUpdateDrawMode )
+        {
+            case eDrawBits:
+            {
+                PenNormal();
+
+                SetWhiteBackColor();
+                SetBlackForeColor();
+
+                break;
+            } // case eDrawBits
+
+            case eDrawFill:
+            {
+                RGBColor aBrushColor = rSalGraphicsData->maBrushColor;
+                short    aPenMode    = rSalGraphicsData->mnPenMode;
+
+                PenNormal();
+                PenMode( aPenMode );
+
+                RGBForeColor( &aBrushColor );
+
+                break;
+            } // case eDrawFill
+
+            case eDrawLine:
+            {
+                RGBColor aPenColor = rSalGraphicsData->maPenColor;
+                 short    aPenMode  = rSalGraphicsData->mnPenMode;
+
+                PenNormal();
+                PenMode( aPenMode );
+
+                RGBForeColor( &aPenColor );
+
+                break;
+            } // case eDrawLine
+
+            case eDrawText:
+            {
+                RGBColor aTextColor = rSalGraphicsData->maTextColor;
+
+                RGBForeColor( &aTextColor );
+
+                TextFont( rSalGraphicsData->mnFontNum  );
+                TextFace( rSalGraphicsData->mnFontFace );
+                TextSize( rSalGraphicsData->mnFontSize );
+
+                break;
+            } // case eDrawText
+        } // switch
+
+        rSalGraphicsData->meCurrDrawMode = eUpdateDrawMode;
+
+        bDrawModeChecked = TRUE;
+    } // if
+
+    return bDrawModeChecked;
+} // CheckCurrDrawMode
+
+// -----------------------------------------------------------------------
 
 static void CheckRectBounds ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBoundsRect )
 
@@ -196,6 +297,58 @@ static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 
     return aRGBColor;
 } // SALColor2RGBColor
+
+// =======================================================================
+
+// =======================================================================
+
+SalGraphics::SalGraphics()
+{
+    RGBColor aBlackColor;
+
+    maGraphicsData.mnPenMode        = patCopy;
+    maGraphicsData.mbTransparentPen = FALSE;
+
+    maGraphicsData.mhDefBrush         = NULL;
+    maGraphicsData.mbTransparentBrush = FALSE;
+
+    // Black color
+
+    aBlackColor.red   = 0x0000;
+    aBlackColor.green = 0x0000;
+    aBlackColor.blue  = 0x0000;
+
+    // Set pen, brush, and text colors
+
+    maGraphicsData.maBrushColor = aBlackColor;
+    maGraphicsData.maPenColor   = aBlackColor;
+    maGraphicsData.maTextColor  = aBlackColor;
+
+    // Set background and foreground colors
+
+    SetWhiteBackColor();
+    SetBlackForeColor();
+} // SalGraphics Class Constructor
+
+// -----------------------------------------------------------------------
+
+SalGraphics::~SalGraphics()
+{
+    if ( maGraphicsData.mhClipRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhClipRgn );
+    } // if
+
+    if ( maGraphicsData.mhGrowRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhGrowRgn );
+    } // if
+
+    if ( maGraphicsData.mhDefBrush != NULL )
+    {
+        DisposePixPat( maGraphicsData.mhDefBrush );
+    } // if
+} // SalGraphics Class Destructor
 
 // =======================================================================
 
@@ -271,7 +424,7 @@ void SalGraphics::EndSetClipRegion()
 void SalGraphics::SetLineColor()
 {
     maGraphicsData.mbTransparentPen = TRUE;
-}
+} // SalGraphics::SetLineColor
 
 // -----------------------------------------------------------------------
 
@@ -279,14 +432,14 @@ void SalGraphics::SetLineColor( SalColor nSalColor )
 {
     maGraphicsData.mbTransparentPen = FALSE;
     maGraphicsData.maPenColor       = SALColor2RGBColor( nSalColor );
-}
+} // SalGraphics::SetLineColor
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetFillColor()
 {
     maGraphicsData.mbTransparentBrush = TRUE;
-}
+} // SalGraphics::SetFillColor
 
 // -----------------------------------------------------------------------
 
@@ -314,7 +467,7 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
     {
         MakeRGBPat( maGraphicsData.mhDefBrush, &aRGBColor );
     } // if
-}
+} // SalGraphics::SetFillColor
 
 // -----------------------------------------------------------------------
 
@@ -328,7 +481,7 @@ void SalGraphics::SetXORMode( BOOL bSet )
     {
         maGraphicsData.mnPenMode = patCopy;
     } // else
-}
+} // SalGraphics::SetXORMode
 
 // -----------------------------------------------------------------------
 
