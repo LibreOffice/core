@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:25:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ DBG_NAME(FmXUndoEnvironment);
 //------------------------------------------------------------------------------
 FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    :rModel(_rModel)
-                   ,nLocks(0)
+                   ,m_Locks( 0 )
                    ,bReadOnly(sal_False)
                    ,m_pPropertySetCache(NULL)
 {
@@ -500,7 +500,8 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
     if (!IsLocked())
     {
         Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
@@ -636,7 +637,14 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         }
 
         if ( bAddUndoAction )
+        {
+            aGuard.clear();
+            // TODO: this is a potential race condition: two threads here could in theory
+            // add their undo actions out-of-order
+
+            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
             rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
+        }
     }
     else
     {
@@ -655,7 +663,9 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     // neues Object zum lauschen
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
@@ -677,7 +687,9 @@ void FmXUndoEnvironment::implSetModified()
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     Reference< XInterface >  xIface;
     evt.ReplacedElement >>= xIface;
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementReplaced: invalid container notification!");
@@ -692,9 +704,10 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
-    Reference< XInterface >  xIface;
-    evt.Element >>= xIface;
+    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    Reference< XInterface >  xIface( evt.Element, UNO_QUERY );
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementRemoved: invalid container notification!");
     RemoveElement(xIface);
 
@@ -868,7 +881,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement
 void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 {
     OSL_TRACE( "in FmXUndoEnvironment::firing_Impl");
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
 
     SfxObjectShellRef xObjSh = rModel.GetObjectShell();
     if( !xObjSh.Is() )
@@ -878,7 +891,7 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
         Reference< XInterface >  xThis;
         evt.Helper >>= xThis;
 
-        aGuard.clear();
+        aSolarGuard.clear();
         if (xThis.is())
         {
             ::rtl::OUString sScriptType = evt.ScriptType;
@@ -935,7 +948,7 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 
     // Objectshells are not thread safe, so guard the destruction
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         xObjSh = NULL;
     }
     OSL_TRACE( "leaving FmXUndoEnvironment::firing_Impl");
