@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:58:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void SetIllegalArgument();
 void SetNoValue();
 void SetNV();
 //-------------------------------------------------------------------------
-// Funktionen für den Zugriff auf das Document
+// Funktionen fuer den Zugriff auf das Document
 //-------------------------------------------------------------------------
 void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
