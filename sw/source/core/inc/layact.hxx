@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:17:17 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ class SwTabFrm;
 class SwViewImp;
 class SwCntntNode;
 class SwWait;
+// --> OD 2004-06-28 #i28701#
+class SfxProgress;
 
 //Die Verwendung der LayAction laeuft immer gleich ab:
 //
@@ -138,6 +140,11 @@ class SwLayAction
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     sal_Bool    mbFormatCntntOnInterrupt;
+
+    // --> OD 2004-06-14 #i28701# - new flag, indicating, if scrolling is
+    // allowed during page format
+    bool mbScrollingAllowed;
+
 #ifdef _LAYACT_CXX
 
     void _AddScrollRect( const SwCntntFrm *, const SwPageFrm *,
@@ -149,16 +156,8 @@ class SwLayAction
     inline BOOL _PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
                              const SwRect & );
 
-    void ChkFlyAnchor( SwFlyFrm *, const SwPageFrm * );
-
-    void FormatFlyLayout( const SwPageFrm * );
-    BOOL FormatFlyCntnt( const SwPageFrm *, sal_Bool bDontShrink );
-    BOOL _FormatFlyCntnt( const SwFlyFrm * );
-    BOOL __FormatFlyCntnt( const SwCntntFrm * );
-    void FormatFlyInCnt( SwFlyInCntFrm* );
     BOOL FormatLayout( SwLayoutFrm *, BOOL bAddRect = TRUE );
     BOOL FormatLayoutTab( SwTabFrm *, BOOL bAddRect = TRUE );
-    BOOL FormatLayoutFly( SwFlyFrm *, BOOL bAddRect = TRUE );
     BOOL FormatCntnt( const SwPageFrm* pPage );
     void _FormatCntnt( const SwCntntFrm* pCntnt,
                        const SwPageFrm* pPage );
@@ -233,6 +232,13 @@ public:
 
     //Auch andere sollen den Wartecrsr einschalten koennen.
     void CheckWaitCrsr();
+
+    // --> OD 2004-06-09 #i28701# - method is now public;
+    // delete 2nd parameter, because its not used;
+    BOOL FormatLayoutFly( SwFlyFrm * );
+    // --> OD 2004-06-09 #i28701# - method is now public
+    BOOL _FormatFlyCntnt( const SwFlyFrm * );
+
 };
 
 class SwLayIdle
