@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-20 08:24:53 $
+ *  last change: $Author: sj $ $Date: 2000-12-18 16:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
 #include "../ui/inc/docshell.hxx"
 #else
 #include "docshell.hxx"
+#endif
+#ifndef _SD_FRMVIEW_HXX
+#include <../ui/inc/frmview.hxx>
 #endif
 
 #include <offmgr/app.hxx>
@@ -668,7 +671,7 @@ BOOL SdPPTImport::Import()
         }
     }
     SdPage* pMPage;
-    UINT32 i;
+    sal_uInt16 i;
     for ( i = 1; i < pDoc->GetMasterPageCount() && ( pMPage = (SdPage*)pDoc->GetMasterPage( i ) ); i++ )
     {
         SetPageNum( i, PPT_MASTERPAGE );
@@ -706,7 +709,6 @@ BOOL SdPPTImport::Import()
             ImportPageEffect( (SdPage*)pMPage );
             if( pStbMgr )
                 pStbMgr->SetState( nImportedPages++ );
-//              pStbMgr->SetProgressState( nImportedPages++ );
         }
         ///////////////////////
         // background object //
@@ -722,32 +724,23 @@ BOOL SdPPTImport::Import()
                 pObj->SetLayer( nBackgroundLayerID );
 
                 // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
-                SfxItemSet aTempAttr(pDoc->GetPool());
-
-//-/                pObj->TakeAttributes(aTempAttr, FALSE, TRUE);
-                aTempAttr.Put(pObj->GetItemSet());
+                SfxItemSet aTempAttr( pDoc->GetPool() );
+                aTempAttr.Put( pObj->GetItemSet() );
 
                 BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
                 if( bShadowIsOn )
                 {
-                    aTempAttr.Put(SdrShadowItem( FALSE ) );
-
-//-/                    pObj->NbcSetAttributes( aTempAttr, FALSE );
-                    pObj->SetItemSet(aTempAttr);
+                    aTempAttr.Put( SdrShadowItem( FALSE ) );
+                    pObj->SetItemSet( aTempAttr );
                 }
                 SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
                 if ( pSheet )
                 {   // StyleSheet fuellen und dem Objekt zuweisen
                     pSheet->GetItemSet().ClearItem();
-
-//-/                    pObj->TakeAttributes( pSheet->GetItemSet(), TRUE, FALSE );
-                    pSheet->GetItemSet().Put(pObj->GetItemSet());
-
+                    pSheet->GetItemSet().Put( pObj->GetItemSet() );
                     pObj->SetStyleSheet( pSheet, TRUE );
                     SfxItemSet aSet( pDoc->GetPool() );
-
-//-/                    pObj->NbcSetAttributes( aSet, TRUE );
-                    pObj->SetItemSet(aSet);
+                    pObj->SetItemSet( aSet );
                 }
                 pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
             }
@@ -809,7 +802,6 @@ BOOL SdPPTImport::Import()
                 }
                 if( pStbMgr )
                     pStbMgr->SetState( nImportedPages++ );
-//                  pStbMgr->SetProgressState( nImportedPages++ );
             }
         }
         else
@@ -1020,8 +1012,55 @@ BOOL SdPPTImport::Import()
     }
     if ( bDocumentFound )
     {
-        DffRecordHeader aCustomShowHeader;
+        if ( pDocShell )
+        {
+            FrameView* pFrameView = pDoc->GetFrameView( 0 );
+            if ( !pFrameView )
+            {
+                List* pFrameViewList = pDoc->GetFrameViewList();
+                if ( pFrameViewList )
+                {
+                    pFrameView = new FrameView( pDoc );
+                    if ( pFrameView )
+                        pFrameViewList->Insert( pFrameView );
+                }
+            }
+            if ( pFrameView )
+            {
+                sal_uInt16  nSelectedPage = 0;
+                PageKind    ePageKind = PK_STANDARD;
+                EditMode    eEditMode = EM_PAGE;
 
+                switch ( aUserEditAtom.eLastViewType )
+                {
+                    case 7 :    // outliner view
+                    case 8 :    // slide sorter
+                    default :
+                    case 1 :    // normal
+                    break;
+                    case 10 :   // titlemaster
+                        nSelectedPage = 1;
+                    case 2 :    // master
+                    {
+                        ePageKind = PK_STANDARD;
+                        eEditMode = EM_MASTERPAGE;
+                    }
+                    break;
+                    case 5 :    // notes master
+                        eEditMode = EM_MASTERPAGE;
+                    case 3 :    // notes
+                        ePageKind = PK_NOTES;
+                    break;
+                    case 4 :    // handout
+                        ePageKind = PK_HANDOUT;
+                    break;
+                }
+                pFrameView->SetPageKind( ePageKind );
+                pFrameView->SetSelectedPage( nSelectedPage );
+                pFrameView->SetViewShEditMode( eEditMode, ePageKind );
+            }
+        }
+        DffRecordHeader aCustomShowHeader;
         // custom show einlesen und setzen
         rStCtrl.Seek( aDocHd.GetRecBegFilePos() + 8 );
         if ( SeekToRec( rStCtrl, PPT_PST_NamedShows, aDocHd.GetRecEndFilePos(), &aCustomShowHeader ) )
@@ -1078,12 +1117,12 @@ BOOL SdPPTImport::Import()
             }
         }
         // this is defaulted, maybe there is no SSDocInfoAtom
-        String  aCustomShow;
-        UINT32  nPenColor = 0x1000000;
-        INT32   nRestartTime = 0x7fffffff;
-        INT16   nStartSlide = 0;
-        INT16   nEndSlide = 0;
-        UINT32  nFlags = 0;                 // Bit 0:   Auto advance
+        String      aCustomShow;
+        sal_uInt32  nFlags = 0;                 // Bit 0:   Auto advance
+        sal_uInt32  nPenColor = 0x1000000;
+        sal_Int32   nRestartTime = 0x7fffffff;
+        sal_uInt16  nStartSlide = 0;
+        sal_Int16   nEndSlide = 0;
 
         // read the pres. configuration
         rStCtrl.Seek( aDocHd.GetRecBegFilePos() + 8 );
@@ -1404,7 +1443,7 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
 
     // Animationsobjekte der Page in der Reihenfolge abstimmen
     SdrObjListIter aIter( *pPage, IM_FLAT );
-    INT32   i;
+    sal_uInt32  i;
     List    aAnimInfo;
     while ( aIter.IsMore() )
     {
@@ -1972,7 +2011,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInf
                                 {
                                     if ( ByteString( aStringAry[ i ], gsl_getSystemTextEncoding() ).IsNumericAscii() )
                                     {
-                                        for ( INT32 j = 0; j < aStringAry[ i ].Len(); j++ )
+                                        for ( sal_uInt16 j = 0; j < aStringAry[ i ].Len(); j++ )
                                         {
                                             nPageNumber *= 10;
                                             nPageNumber += aString.GetChar( j ) - '0';
@@ -2209,8 +2248,6 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                     aTempAttr.Put( aMinHeight );
                     SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
                     aTempAttr.Put( aAutoGrowHeight );
-
-//-/                    pText->NbcSetAttributes( aTempAttr, FALSE );
                     pText->SetItemSet(aTempAttr);
                 }
                 else
@@ -2297,8 +2334,6 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
                             ApplyAttributes( rStCtrl, aSet, pPresObj );
-
-//-/                            pPresObj->NbcSetAttributes( aSet, FALSE );
                             pPresObj->SetItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != -1 ) )
