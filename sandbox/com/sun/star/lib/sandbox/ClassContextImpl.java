@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: cdt $ $Date: 2000-10-16 15:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,11 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
 
         Class xClass = null;
-
+        try {
+        xClass = Class.forName( className );
+        }
+        catch(ClassNotFoundException en)
+        {
         try {
             xClass = findClass(className);
         }
@@ -239,6 +243,7 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
                                                  + " " + className
                                                  + " " + codeBase);
             }
+        }
         }
         if (xClass != null && resolve)
             resolveClass(xClass);
