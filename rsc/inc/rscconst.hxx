@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:49:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,18 @@ public:
                               RscTypCont * pTC, USHORT nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, USHORT, BOOL bExtra );
+};
+
+class RscNameTable;
+
+USHORT GetLangId( const ByteString& alang);
+
+class RscLangEnum : public RscEnum
+{
+public:
+    RscLangEnum();
+
+    void Init( RscNameTable& rNames );
 };
 
 #endif // _RSCCONST_HXX
