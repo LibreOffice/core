@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-21 09:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "document.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#include "styleuno.hxx"     // ScStyleNameConversion
 
 using namespace com::sun::star;
 
@@ -281,7 +282,8 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
-                aStyle = String( aStrVal );
+                aStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
+                                                aStrVal, SFX_STYLE_FAMILY_PARA );
         }
         else
         {
@@ -531,14 +533,14 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 rtl::OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return aStyle;
+    return ScStyleNameConversion::DisplayToProgrammaticName( aStyle, SFX_STYLE_FAMILY_PARA );
 }
 
 void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyleName )
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aStyle = String( aStyleName );
+    aStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
     if (pParent)
         pParent->DataChanged();
 }
