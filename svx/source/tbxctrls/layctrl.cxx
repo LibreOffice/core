@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-31 10:29:04 $
+ *  last change: $Author: gt $ $Date: 2002-07-31 10:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,13 +411,12 @@ void TableWindow::Paint( const Rectangle& )
     else
         aText = Button::GetStandardText( BUTTON_CANCEL );
     Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
+
     DrawText( Point( (aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2 ), aText );
-    DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2,
-                         (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
-    DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(),
-                         aSize.Height()-nTextHeight+2,
-                         aSize.Width(), aSize.Height() ) );
-    SetLineColor( Color( COL_BLACK ) );
+    DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2, (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
+    DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(), aSize.Height()-nTextHeight+2, aSize.Width(), aSize.Height() ) );
+
+    SetLineColor( aLineColor );
     SetFillColor();
     DrawRect( Rectangle( Point(0,0), aSize ) );
 }
@@ -700,15 +699,12 @@ void ColumnsWindow::Paint( const Rectangle& )
     else
         aText = Button::GetStandardText( BUTTON_CANCEL );
     Size aTextSize(GetTextWidth( aText ), GetTextHeight());
-    DrawText( Point( (aSize.Width()-aTextSize.Width()) / 2,
-                     aSize.Height()-nTextHeight+2 ),
-              aText );
-    DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2,
-                         (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
-    DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(),
-                         aSize.Height()-nTextHeight+2,
-                         aSize.Width(), aSize.Height() ) );
-    SetLineColor( Color( COL_BLACK ) );
+    DrawText( Point( ( aSize.Width() - aTextSize.Width() ) / 2, aSize.Height() - nTextHeight + 2 ), aText );
+
+    DrawRect( Rectangle( 0, aSize.Height()-nTextHeight+2, (aSize.Width()-aTextSize.Width())/2-1, aSize.Height() ) );
+    DrawRect( Rectangle( (aSize.Width()-aTextSize.Width())/2+aTextSize.Width(), aSize.Height()-nTextHeight+2, aSize.Width(), aSize.Height() ) );
+
+    SetLineColor( aLineColor );
     SetFillColor();
     DrawRect( Rectangle( Point(0,0), aSize ) );
 }
