@@ -100,29 +100,6 @@ public class ComboBox extends Container {
             super();
         }
 
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
-            XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            try {
-                if (unoAS != null) {
-                    if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
-                        states.add(AccessibleState.EXPANDABLE);
-
-                        if (unoAS.contains(AccessibleStateType.EXPANDED)) {
-                            states.add(AccessibleState.EXPANDED);
-                        } else {
-                            states.add(AccessibleState.COLLAPSED);
-                        }
-                    }
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-
-            return states;
-        }
-
         /*
         * AccessibleContext
         */
