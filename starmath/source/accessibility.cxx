@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-20 11:07:17 $
+ *  last change: $Author: tl $ $Date: 2002-06-27 13:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,12 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     return 0;
+}
+
+void SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
+    throw (IndexOutOfBoundsException, RuntimeException)
+{
+    // nothing to be done
 }
 
 sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
@@ -1456,7 +1462,8 @@ void SmEditAccessible::Init()
         {
             ::std::auto_ptr< SvxEditSource > pEditSource(
                     new SmEditSource( pWin, *pEditEngine, *pEditView ) );
-            pTextHelper = new accessibility::AccessibleTextHelper( this, pEditSource );
+            pTextHelper = new accessibility::AccessibleTextHelper( pEditSource );
+            pTextHelper->SetEventSource( this );
         }
     }
 }
@@ -1471,6 +1478,11 @@ void SmEditAccessible::ClearWin()
 {
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 
+    //! make TextHelper implicitly release C++ references to some core objects
+    pTextHelper->SetEditSource( ::std::auto_ptr<SvxEditSource>(NULL) );
+    //! make TextHelper release references
+    //! (e.g. the one set by the 'SetEventSource' call)
+    pTextHelper->Dispose();
     delete pTextHelper;     pTextHelper = 0;
 
     EventObject aEvtObj;
