@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-10 12:23:43 $
+ *  last change: $Author: obo $ $Date: 2002-12-12 09:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class SvxLinguConfigUpdate
 
 public:
 
-    static BOOL IsUpdated() const   { return bUpdated; }
+    static BOOL IsUpdated() { return bUpdated; }
     static void UpdateAll();
 };
 
