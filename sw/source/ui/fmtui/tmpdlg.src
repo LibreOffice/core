@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 20:53:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Layout azjatycki";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
@@ -463,7 +463,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Layout azjatycki";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
