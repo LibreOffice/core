@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-14 13:59:01 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 08:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@
 
 #include "app.hrc"
 #include "glob.hrc"
-
+#include "helpids.h"
 #include "sdattr.hxx"
 #include "drawview.hxx"
 #include "sdwindow.hxx"
@@ -200,6 +200,10 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
     maNoBtn(this, SdResId(BTN_UNDO_DELETE_NO))
 {
     FreeResource();
+
+    SetHelpId( HID_SD_UNDODELETEWARNING_DLG );
+    maDisableCB.SetHelpId( HID_SD_UNDODELETEWARNING_CBX );
+
     maYesBtn.SetText(Button::GetStandardText(BUTTON_YES));
     maNoBtn.SetText(Button::GetStandardText(BUTTON_NO));
     maImage.SetImage(WarningBox::GetStandardImage());
@@ -207,6 +211,7 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
     // #93721# Set focus to YES-Button
     maYesBtn.GrabFocus();
 }
+
 
 /*************************************************************************
 |*
