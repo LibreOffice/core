@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 08:42:03 $
+ *  last change: $Author: pb $ $Date: 2002-10-30 07:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,6 +1714,7 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
     m_pColorLB->SaveValue();
 
     SetPrevFontWidthScale( rSet );
+    UpdatePreview_Impl();
 }
 
 // -----------------------------------------------------------------------
