@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:38:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 css::uno::Reference< css::frame::XFrame > axFrame;
                 pFrame->SetFrameInterface_Impl( axFrame );
                 pFrame->DoClose();
+            }
+
+            css::uno::Reference< css::util::XCloseable > xCloseable( xLoadable, css::uno::UNO_QUERY );
+            if ( xCloseable.is() )
+            {
+                try {
+                    xCloseable->close( sal_True );
+                } catch ( css::uno::Exception& )
+                {}
             }
         }
     }
