@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-12 05:24:48 $
+ *  last change: $Author: cd $ $Date: 2001-06-26 08:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
 
 #include <mailmodel.hxx>
 #include "bindings.hxx"
@@ -119,6 +122,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/useroptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/extract.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 
@@ -143,6 +147,55 @@ using namespace ::rtl;
 #define SEND_MAIL_SUBJECT   "MESSAGE_SUBJECT="
 #define SEND_MAIL_FILEURL   "file_1="
 #define SEND_MAIL_SEP       '&'
+
+// class DefaultMailer_Impl ------------------------------------------------
+
+class DefaultMailerConfig_Impl : public utl::ConfigItem
+{
+    public:
+        DefaultMailerConfig_Impl();
+        virtual ~DefaultMailerConfig_Impl();
+
+    sal_Bool    GetUseDefaultMailer();
+};
+
+DefaultMailerConfig_Impl::DefaultMailerConfig_Impl() : ConfigItem( String::CreateFromAscii( "Office.Common/ExternalMailer" ))
+{
+}
+
+DefaultMailerConfig_Impl::~DefaultMailerConfig_Impl()
+{
+}
+
+sal_Bool DefaultMailerConfig_Impl::GetUseDefaultMailer()
+{
+#ifdef UNIX
+    sal_Bool bUseDefaultMailer = sal_False;
+#else
+    sal_Bool bUseDefaultMailer = sal_True;
+#endif
+
+    Sequence< ::rtl::OUString > aPropertyNames( 1 );
+    ::rtl::OUString* pPropertyNames = aPropertyNames.getArray();
+    pPropertyNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDefaultMailer" ));
+    Sequence< Any > aPropertyValues = GetProperties( aPropertyNames );
+
+    const Any* pPropertyValues = aPropertyValues.getConstArray();
+    if ( aPropertyValues.getLength() == 1 &&
+         pPropertyValues[0].hasValue() )
+    {
+
+        try
+        {
+            bUseDefaultMailer = ::cppu::any2bool(pPropertyValues[0]);
+        }
+        catch(const ::com::sun::star::lang::IllegalArgumentException&)
+        {
+        }
+    }
+
+    return bUseDefaultMailer;
+}
 
 // class AddressList_Impl ------------------------------------------------
 
@@ -434,9 +487,19 @@ sal_Bool SfxMailModel_Impl::Send()
             Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
             if ( xMgr.is() )
             {
-                Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier( xMgr->createInstance(
-                                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
-                                                            UNO_QUERY );
+                // read configuration to choose between "SimpleCommandMail" or "SimpleSystemMail"!
+                DefaultMailerConfig_Impl                aMailConfig;
+                Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier;
+
+                if ( aMailConfig.GetUseDefaultMailer() )
+                    xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
+                                                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
+                                                    UNO_QUERY );
+                else
+                    xSimpleMailClientSupplier = Reference< XSimpleMailClientSupplier >(
+                                                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleCommandMail" ))),
+                                                    UNO_QUERY );
+
                 if ( xSimpleMailClientSupplier.is() )
                 {
                     Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
