@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:13:41 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 15:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,56 +312,26 @@ USHORT SchAttribTabDlg::GetResId(ObjectType eObjectType)
     }
     return nRet;
 }
-/*
-USHORT SchAttribTabDlg::GetResId(AttrType eType)
+
+void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
+                Graphic* pAutoSymbolGraphic )
 {
-    switch (eType)
-    {
-        case ATTR_TITLE:            return TAB_TITLE;
-        case ATTR_LEGEND:           return TAB_LEGEND;
-        case ATTR_DATA_ROW:         return TAB_DATA_ROW;
-        case ATTR_DATA_LINE:        return TAB_DATA_LINE;
-        case ATTR_DATA_POINT:       return TAB_DATA_POINT;
-        case ATTR_AXIS:             return TAB_AXIS;
-        case ATTR_X_AXIS_2D:
-        case ATTR_X_AXIS_3D:        return TAB_X_AXIS;
-        case ATTR_Y_AXIS_2D:
-        case ATTR_Y_AXIS_3D:        return TAB_Y_AXIS;
-        case ATTR_Z_AXIS:           return TAB_Z_AXIS;
-        case ATTR_GRID:             return TAB_GRID;
-        case ATTR_LINE:             return TAB_LINE;
-        case ATTR_DIAGRAM_AREA:     return TAB_DIAGRAM_AREA;
-        case ATTR_DIAGRAM_WALL:     return TAB_DIAGRAM_WALL;
-        case ATTR_DIAGRAM_FLOOR:    return TAB_DIAGRAM_FLOOR;
-        case ATTR_DIAGRAM_STOCK_LOSS: return TAB_DIAGRAM_STOCK_LOSS;
-        case ATTR_DIAGRAM_STOCK_PLUS: return TAB_DIAGRAM_STOCK_PLUS;
-        default:                    return 0;
-    }
+    m_pSymbolShapeProperties = pSymbolShapeProperties;
+    m_pAutoSymbolGraphic = pAutoSymbolGraphic;
 }
-*/
 
 SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                                  const SfxItemSet* pAttr,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
-                                 const ViewElementListProvider* pViewElementListProvider,
-                                 const SfxItemSet* pSymbolAttr,
-                                 Graphic aGraphic)
+                                 const ViewElementListProvider* pViewElementListProvider )
     : SfxTabDialog(pParent, SchResId(GetResId(pDialogParameter->getObjectType())), pAttr)
     , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
     , nPageType(0)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
-    , mpSymbolAttr(pSymbolAttr)
-    , maSymbolGraphic(aGraphic)
-/*
-    , pColorTab(pViewElementListProvider->GetColorTable())
-    , pGradientList(pViewElementListProvider->GetGradientList())
-    , pHatchingList(pViewElementListProvider->GetHatchList())
-    , pBitmapList(pViewElementListProvider->GetBitmapList())
-    , pDashList(pViewElementListProvider->GetDashList())
-    , pLineEndList(pViewElementListProvider->GetLineEndList())
-*/
+    , m_pSymbolShapeProperties(NULL)
+    , m_pAutoSymbolGraphic(NULL)
     , nColorTableState(CT_NONE)
     , nGradientListState(CT_NONE)
     , nHatchingListState(CT_NONE)
@@ -515,6 +485,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
 SchAttribTabDlg::~SchAttribTabDlg()
 {
+    delete m_pSymbolShapeProperties;
+    delete m_pAutoSymbolGraphic;
 }
 
 void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
@@ -535,9 +507,10 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             {
                 ((SvxLineTabPage&)rPage).ShowSymbolControls(TRUE);
                 ((SvxLineTabPage&)rPage).SetSymbolList(m_pViewElementListProvider->GetSymbolList());
-                if( mpSymbolAttr )
-                    ((SvxLineTabPage&)rPage).SetSymbolAttr(mpSymbolAttr);
-                ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(&maSymbolGraphic);
+                if( m_pSymbolShapeProperties )
+                    ((SvxLineTabPage&)rPage).SetSymbolAttr(m_pSymbolShapeProperties);
+                if( m_pAutoSymbolGraphic )
+                    ((SvxLineTabPage&)rPage).SetAutoSymbolGraphic(m_pAutoSymbolGraphic);
             }
             break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 22:58:03 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 15:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,30 +76,6 @@ namespace chart
 {
 //.............................................................................
 
-    /*
-enum AttrType
-{
-    ATTR_TITLE,
-    ATTR_LEGEND,
-    ATTR_DATA_ROW,
-    ATTR_DATA_LINE,
-    ATTR_DATA_POINT,
-    ATTR_AXIS,
-    ATTR_X_AXIS_2D,
-    ATTR_X_AXIS_3D,
-    ATTR_Y_AXIS_2D,
-    ATTR_Y_AXIS_3D,
-    ATTR_Z_AXIS,
-    ATTR_GRID,
-    ATTR_DIAGRAM_AREA,
-    ATTR_DIAGRAM_WALL,
-    ATTR_DIAGRAM_FLOOR,
-    ATTR_LINE,
-    ATTR_DIAGRAM_STOCK_LOSS,
-    ATTR_DIAGRAM_STOCK_PLUS
-};
-*/
-
 class ObjectPropertiesDialogParameter
 {
 public:
@@ -133,26 +109,9 @@ private:
     bool m_bCanAxisLabelsBeStaggered;
 };
 
-/*
-#define CHATTR_COUNT    (CHATTR_DIAGRAM_FLOOR + 1)
-
-enum OrderMode
-{
-    CHORDMODE_NONE,
-    CHORDMODE_X_AXIS,
-    CHORDMODE_Y_AXIS
-};
-
-#define CHORDMODE_COUNT (CHORDMODE_Y_AXIS + 1)
-
-#define AxisTypeX 1
-#define AxisTypeY 2
-#define AxisTypeZ 3
-*/
-
 /*************************************************************************
 |*
-|* Attributs-Tab-Dialog
+|* dialog for properties of different chart object
 |*
 \************************************************************************/
 
@@ -169,17 +128,8 @@ private:
     const ObjectPropertiesDialogParameter * const        m_pParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;
 
-    const SfxItemSet*   mpSymbolAttr;
-    Graphic             maSymbolGraphic;
-
-    /*
-    XColorTable*    pColorTab;
-    XGradientList*  pGradientList;
-    XHatchList*     pHatchingList;
-    XBitmapList*    pBitmapList;
-    XDashList*      pDashList;
-    XLineEndList*   pLineEndList;
-    */
+    SfxItemSet*     m_pSymbolShapeProperties;
+    Graphic*        m_pAutoSymbolGraphic;
 
     ChangeType      nColorTableState;
     ChangeType      nGradientListState;
@@ -187,16 +137,18 @@ private:
     ChangeType      nBitmapListState;
 
     static USHORT GetResId(ObjectType eObjectType);
-    ////static USHORT GetResId(AttrType eType);
     virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
 
 public:
     SchAttribTabDlg(Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
-                    const ViewElementListProvider* pViewElementListProvider,
-                    const SfxItemSet* pSymbolAttr=NULL,
-                    Graphic aSymbolGraphic=Graphic());
+                    const ViewElementListProvider* pViewElementListProvider );
     virtual ~SchAttribTabDlg();
+
+    //pSymbolShapeProperties: Properties to be set on the symbollist shapes
+    //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected
+    //this class takes ownership over both parameter
+    void setSymbolInformation( SfxItemSet* pSymbolShapeProperties, Graphic* pAutoSymbolGraphic );
 };
 
 //.............................................................................
