@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:27:20 $
+ *  last change: $Author: cd $ $Date: 2001-06-22 06:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                                                             REFERENCE< XDISPATCH >() );
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
+                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
@@ -264,6 +265,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                                                             REFERENCE< XDISPATCH >() );
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
+                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
