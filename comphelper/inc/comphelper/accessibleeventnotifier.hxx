@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-06 12:55:45 $
+ *  last change: $Author: fs $ $Date: 2002-12-06 16:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ namespace comphelper
         /** registers a client of this class, means a broadcaster of AccessibleEvents
 
             <p>No precaution is taken to care for disposal of this component. When the component
-            dies, it <b>must</b> call <member>revokeClient</member> explicitly itself.</p>
+            dies, it <b>must</b> call <member>revokeClient</member> or <member>revokeClientNotifyDisposing</member>
+            explicitly itself.</p>
         */
         static  TClientId   registerClient( );
 
@@ -162,8 +163,7 @@ namespace comphelper
         /** revokes a client, with additionally notifying a disposing event to all listeners registered for
             this client
 
-            <p>Any other possibly pending events for this client are preserved, means they're still fired and
-            not removed from the queue</p>
+            <p>Any other possibly pending events for this client are removed from the queue</p>
 
             @param _nClient
                 the id of the client which should be revoked
@@ -297,6 +297,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/12/06 12:55:45  fs
+ *  initial checkin - notifying accessible events asynchronously
+ *
  *
  *  Revision 1.0 05.12.2002 11:05:27  fs
  ************************************************************************/
