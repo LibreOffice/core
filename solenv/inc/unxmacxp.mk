@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: pluby $ $Date: 2000-11-17 16:37:19 $
+#   last change: $Author: pluby $ $Date: 2000-12-14 07:24:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,14 +68,12 @@ AFLAGS=
 LINKOUTPUT_FILTER=
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=321 -D_USE_NAMESPACE=1
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
 
 # Temporary settings to enable VCL test code. These should be deleted once
 # VCL development is complete.
-.IF "$(BUILD_SOSL)"!=""
 dbgutil=true
 product=
-.ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -139,6 +137,13 @@ STDLIBGUIMT=
 STDLIBCUIMT=
 STDSHLGUIMT=
 STDSHLCUIMT=
+
+LIBSTLPORT=-lstlport_gcc
+.IF "$(STLPORT4)"!=""
+LIBSTLPORTST=$(STLPORT4)$/lib/libstlport_gcc.a
+.ELSE
+LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib/libstlport_gcc.a
+.ENDIF
 
 LIBMGR=libtool
 LIBFLAGS=-o
