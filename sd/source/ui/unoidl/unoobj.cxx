@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-11 13:15:25 $
+ *  last change: $Author: cl $ $Date: 2001-08-10 11:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,6 +1193,14 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
             {
                 Graphic aEmpty;
                 pGraphicObj->SetGraphic(aEmpty);
+            }
+            else
+            {
+                SdrOle2Obj* pOleObj = PTR_CAST( SdrOle2Obj, pObj );
+                if( pOleObj )
+                {
+                    pOleObj->SetGraphic( NULL );
+                }
             }
         }
         else
