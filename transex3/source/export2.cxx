@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:30:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <stdio.h>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
+#include <iostream>
+
+using namespace std;
 //
 // class ResData();
 //
@@ -225,6 +228,62 @@ void Export::QuotHTML( ByteString &rString )
     rString = sReturn;
 }
 
+void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
+    if( hasUTF8ByteOrderMarker( rString ) )
+        rString.Erase( 0 , 3 );
+}
+
+bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
+    // Byte order marker signature
+    const char bom[ 3 ] = { 0xEF , 0xBB , 0xBF };
+
+    return      rString.Len() >= 3 &&
+                rString.GetChar( 0 ) == bom[ 0 ] &&
+                rString.GetChar( 1 ) == bom[ 1 ] &&
+                rString.GetChar( 2 ) == bom[ 2 ] ;
+}
+bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString ){
+    SvFileStream aFileIn( String( rString , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
+    ByteString sLine;
+    if( !aFileIn.IsEof() ) {
+        aFileIn.ReadLine( sLine );
+        if( aFileIn.IsOpen() ) aFileIn.Close();
+        return hasUTF8ByteOrderMarker( sLine );
+    }
+    if( aFileIn.IsOpen() ) aFileIn.Close();
+    return false;
+}
+void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
+    SvFileStream aFileIn( String( rFilename , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );
+    ByteString sLine;
+    if( !aFileIn.IsEof() ) {
+        aFileIn.ReadLine( sLine );
+        // Test header
+        if( hasUTF8ByteOrderMarker( sLine ) ){
+            //cout << "UTF8 Header found!\n";
+            DirEntry aTempFile = Export::GetTempFile();
+            ByteString sTempFile = ByteString( aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US );
+            SvFileStream aNewFile( String( sTempFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_WRITE );
+            // Remove header
+            RemoveUTF8ByteOrderMarker( sLine );
+            //cout << "Copy stripped stuff to " << sTempFile.GetBuffer() << endl;
+            aNewFile.WriteLine( sLine );
+            // Copy the rest
+            while( !aFileIn.IsEof() ){
+                aFileIn.ReadLine( sLine );
+                aNewFile.WriteLine( sLine );
+            }
+            if( aFileIn.IsOpen() ) aFileIn.Close();
+            if( aNewFile.IsOpen() ) aNewFile.Close();
+            DirEntry aEntry( rFilename.GetBuffer() );
+            //cout << "Removing file " << rFilename.GetBuffer() << "\n";
+            aEntry.Kill();
+            //cout << "Renaming file " << sTempFile.GetBuffer() << " to " << rFilename.GetBuffer() << "\n";
+            DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.GetBuffer() ) );
+        }
+    }
+    if( aFileIn.IsOpen() ) aFileIn.Close();
+}
 /*****************************************************************************/
 void Export::UnquotHTML( ByteString &rString )
 /*****************************************************************************/
@@ -271,17 +330,20 @@ bool Export::isInitialized = false;
 /*****************************************************************************/
 void Export::InitLanguages( bool bMergeMode ){
 /*****************************************************************************/
-    ByteString sTmp;
-    ByteStringBoolHashMap aEnvLangs;
-    for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
-        sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
-        sTmp.EraseLeadingAndTrailingChars();
-        if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
-        else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
-            aLanguages.push_back( sTmp );
+    if( !isInitialized ){
+        ByteString sTmp;
+        ByteStringBoolHashMap aEnvLangs;
+        for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
+            sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
+            sTmp.EraseLeadingAndTrailingChars();
+            if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
+            else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
+                aLanguages.push_back( sTmp );
+            }
+        }
+        InitForcedLanguages( bMergeMode );
+        isInitialized = true;
     }
-    InitForcedLanguages( bMergeMode );
-    isInitialized = true;
 }
 /*****************************************************************************/
 void Export::InitForcedLanguages( bool bMergeMode ){
