@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 14:58:43 $
+ *  last change: $Author: tbe $ $Date: 2001-08-01 09:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,11 +470,17 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
         {
             if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DOCCHANGED )
             {
-                // Wird z.Z. nur gerufen bei "Letzte Version"
-                // Doc bleibt erhalten, BasicManager wird zerstoert.
-                // Die Fenster wurden durch das BasicManager-Dying zerstoert,
-                // muessen evtl. wieder angezeigt werden.
-                UpdateWindows();
+                // If a document is modified, there's no need for any action
+                // within the BasicIDE.
+                //
+                // If a document is reloaded, the old document is destroyed
+                // and a new document is loaded. The BasicIDE is first notified
+                // with a SFX_HINT_DYING and then with a SFX_EVENT_OPENDOC.
+                // The BasicIDE windows are destroyed after the SFX_HINT_DYING
+                // notification and new windows are created after the
+                // SFX_EVENT_OPENDOC notification.
+
+                //UpdateWindows();
             }
             else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
             {
