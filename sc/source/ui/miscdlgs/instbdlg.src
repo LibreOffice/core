@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text [ FRENCH ] = "Insertion de feuilles" ;
     Text [ ITALIAN ] = "Inserisci tabella" ;
     Text [ DUTCH ] = "Werkblad invoegen" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Tabelle einf?en" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Inserir Planilha" ;
     Text [ SWEDISH ] = "Infoga tabell" ;
     Text [ PORTUGUESE ] = "Inserir folha" ;
     Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨";
@@ -114,7 +114,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
         Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Posição" ;
         Text [ swedish ] = "Placering" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
@@ -135,6 +135,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ catalan ] = "Posició";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
     };
     RadioButton RB_BEFORE
     {
@@ -145,7 +148,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         TabStop = TRUE ;
         Text [ portuguese ] = "~Antes da folha seleccionada" ;
         Text [ english_us ] = "B~efore current sheet" ;
-        Text [ portuguese_brazilian ] = "~Vor aktueller Tabelle" ;
+        Text [ portuguese_brazilian ] = "~Antes da planilha atual" ;
         Text [ swedish ] = "~Före aktuell tabell" ;
         Text [ danish ] = "Før aktuelt ark" ;
         Text [ italian ] = "~Prima della tabella corrente" ;
@@ -154,7 +157,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ dutch ] = "~Voor huidige tabel" ;
         Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
         Text[ russian ] = "Ïåğåä òåêóùèì ëèñòîì";
-        Text[ polish ] = "Przed zaz~naczonym arkuszem";
+        Text[ polish ] = "Przed ~bie¿¹cym arkuszem";
         Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å‰ã«(~E)";
         Text[ chinese_traditional ] = "åœ¨ç›®å‰çš„å·¥ä½œè¡¨ä¹‹å‰(~E)";
         Text[ arabic ] = "ŞÈá ÇáÌÏæá ÇáÍÇáí";
@@ -165,6 +168,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ catalan ] = "A~bans del full actual";
         Text[ finnish ] = "~Ennen nykyistä taulukkoa";
         Text[ thai ] = "à¸à¹ˆ~à¸­à¸™à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
+        Text[ czech ] = "PÅ™ed aktivnÃ­ list";
+        Text[ hebrew ] = "~Vor aktueller Tabelle";
+        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¶à¥€à¤Ÿà¥ à¤¸à¥‡ à¤ª~à¤¹à¤¿à¤²à¥‡";
     };
     RadioButton RB_BEHIND
     {
@@ -175,7 +181,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         TabStop = TRUE ;
         Text [ portuguese ] = "~Após folha activa" ;
         Text [ english_us ] = "~After current sheet" ;
-        Text [ portuguese_brazilian ] = "~Nach aktueller Tabelle" ;
+        Text [ portuguese_brazilian ] = "A~pós a planilha selecionada" ;
         Text [ swedish ] = "~Efter aktuell tabell" ;
         Text [ danish ] = "Efter aktuelt ark" ;
         Text [ italian ] = "~Dopo la tabella corrente" ;
@@ -184,7 +190,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ dutch ] = "~Na huidige tabel" ;
         Text[ chinese_simplified ] = "åœ¨å½“å‰çš„å·¥ä½œè¡¨ä¹‹å(~A)";
         Text[ russian ] = "Ïîñëå òåêóùåãî ëèñòà";
-        Text[ polish ] = "Za ~zaznaczonym arkuszem";
+        Text[ polish ] = "P~o bie¿¹cym arkuszu";
         Text[ japanese ] = "è¡¨ç¤ºä¸­ã®è¡¨ã®å¾Œã«(~A)";
         Text[ chinese_traditional ] = "åœ¨ç›®å‰çš„å·¥ä½œè¡¨ä¹‹å¾Œ(~A)";
         Text[ arabic ] = "ÈÚÏ ÇáÌÏæá ÇáÍÇáí";
@@ -195,6 +201,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ catalan ] = "~Després del full actual";
         Text[ finnish ] = "Nykyisen taulukon ~perään";
         Text[ thai ] = "~à¸«à¸¥à¸±à¸‡à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
+        Text[ czech ] = "Za aktivnÃ­ list";
+        Text[ hebrew ] = "~Nach aktueller Tabelle";
+        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¶à¥€à¤Ÿà¥ ~à¤•à¥‡ à¤ªà¤¶à¥à¤šà¤¾à¤¤à¥";
     };
     FixedLine FL_TABLE
     {
@@ -203,7 +212,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text = "Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
         Text [ english_us ] = "Sheet" ;
-        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese_brazilian ] = "Planilha" ;
         Text [ swedish ] = "Tabell" ;
         Text [ danish ] = "Tabel" ;
         Text [ italian ] = "Tabella" ;
@@ -219,11 +228,14 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ arabic ] = "ÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
         Text[ korean ] = "ì‹œíŠ¸";
-        Text[ turkish ] = "Tablo";
+        Text[ turkish ] = "Yaprak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea";
         Text[ finnish ] = "Taulukko";
         Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡";
+        Text[ czech ] = "List";
+        Text[ hebrew ] = "Tabelle";
+        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥";
     };
     RadioButton RB_NEW
     {
@@ -237,22 +249,25 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ FRENCH ] = "Créer" ;
         Text [ ITALIAN ] = "Crea nuovo" ;
         Text [ DUTCH ] = "~Nieuw" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Neu erstellen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Nova planilha" ;
         Text [ SWEDISH ] = "Skapa ~ny" ;
         Text [ PORTUGUESE ] = "~Nova folha" ;
         Text[ chinese_simplified ] = "æ–°å»ºå·¥ä½œè¡¨(~N)";
         Text[ russian ] = "Íîâûé ëèñò";
-        Text[ polish ] = "Utwórz ponownie";
+        Text[ polish ] = "~Nowy arkusz";
         Text[ japanese ] = "æ–°ã—ãä½œæˆ(~N)";
         Text[ chinese_traditional ] = "æ–°å¢å·¥ä½œè¡¨(~N)";
         Text[ arabic ] = "ÅäÔÇÁ ãä ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
         Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-        Text[ turkish ] = "~Yeni tablo";
+        Text[ turkish ] = "~Yeni alan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Full nou";
         Text[ finnish ] = "~Uusi taulukko";
         Text[ thai ] = "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¹ƒ~à¸«à¸¡à¹ˆ";
+        Text[ czech ] = "NovÃ½ list";
+        Text[ hebrew ] = "Neu ~erstellen";
+        Text[ hindi ] = "~à¤¨à¤¯à¤¾ à¤¶à¥€à¤Ÿà¥";
     };
     FixedText FT_COUNT
     {
@@ -262,7 +277,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ ENGLISH ] = "Count" ;
         Text [ portuguese ] = "~N° de folhas" ;
         Text [ english_us ] = "N~o. of sheets" ;
-        Text [ portuguese_brazilian ] = "An~zahl" ;
+        Text [ portuguese_brazilian ] = "~N° de planilhas" ;
         Text [ swedish ] = "An~tal" ;
         Text [ danish ] = "Antal" ;
         Text [ italian ] = "~Numero" ;
@@ -271,17 +286,20 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ dutch ] = "Aan~tal" ;
         Text[ chinese_simplified ] = "æ•°ç›®(~O)";
         Text[ russian ] = "Êîëè÷åñòâî";
-        Text[ polish ] = "Iloœæ";
+        Text[ polish ] = "~Liczba arkuszy";
         Text[ japanese ] = "è¡¨ã®æ•°(~O)";
         Text[ chinese_traditional ] = "æ•¸ç›®(~O)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "Áñé~èìüò";
         Text[ korean ] = "ê°œìˆ˜(~O)";
-        Text[ turkish ] = "A~det";
+        Text[ turkish ] = "Tablo A~deti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nú~m. de fulls";
         Text[ finnish ] = "~Taulukoiden määrä";
         Text[ thai ] = "à¸«~à¸¡à¸²à¸¢à¹€à¸¥à¸‚à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+        Text[ czech ] = "PoÄet listÅ¯";
+        Text[ hebrew ] = "An~zahl";
+        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥‹à¤‚ à¤•à¥€ à¤¸à¤‚~à¤–à¥à¤¯à¤¾";
     };
     NumericField NF_COUNT
     {
@@ -311,8 +329,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ italian ] = "No~me";
         Text[ danish ] = "Navn";
         Text[ swedish ] = "Na~mn";
-        Text[ polish ] = "Nazwa";
-        Text[ portuguese_brazilian ] = "Name";
+        Text[ polish ] = "Naz~wa";
+        Text[ portuguese_brazilian ] = "No~me";
         Text[ japanese ] = "åå‰(~M)";
         Text[ korean ] = "ì´ë¦„(~M)";
         Text[ chinese_simplified ] = "åç§°(~M)";
@@ -322,6 +340,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ catalan ] = "N~om";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
+        Text[ czech ] = "NÃ¡zev";
+        Text[ hebrew ] = "Na~me";
+        Text[ hindi ] = "à¤¨à¤¾~à¤®";
     };
     Edit ED_TABNAME
     {
@@ -341,22 +362,25 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ FRENCH ] = "~Création à partir d'un fichier" ;
         Text [ ITALIAN ] = "Creare da file" ;
         Text [ DUTCH ] = "~Uit bestand vervaardigen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Aus Datei erstellen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Do arquivo" ;
         Text [ SWEDISH ] = "Sk~apa från fil" ;
         Text [ PORTUGUESE ] = "~Criar a partir do ficheiro" ;
         Text[ chinese_simplified ] = "ä»æ–‡ä»¶åˆ›å»º(~F)";
         Text[ russian ] = "Èç ôàéëà";
-        Text[ polish ] = "Utwórz z pliku";
+        Text[ polish ] = "Z plik~u";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ä½œæˆ(~F)";
         Text[ chinese_traditional ] = "å¾æª”æ¡ˆæ–°å¢(~F)";
         Text[ arabic ] = "ÅäÔÇÁ ãä Çáãáİ";
         Text[ greek ] = "Äçìéïõñãß~á áğü áñ÷åßï";
         Text[ korean ] = "íŒŒì¼ë¡œë¶€í„°(~F)";
-        Text[ turkish ] = "~Dosyadan oluştur";
+        Text[ turkish ] = "~Dosyadan ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des d'un fitxer";
         Text[ finnish ] = "~Tiedostosta";
         Text[ thai ] = "~à¸ˆà¸²à¸à¹à¸Ÿà¹‰à¸¡";
+        Text[ czech ] = "Ze souboru";
+        Text[ hebrew ] = "â€®××§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² ~à¤¸à¥‡";
     };
     MultiListBox LB_TABLES
     {
@@ -378,12 +402,12 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ FRENCH ] = "~Parcourir..." ;
         Text [ ITALIAN ] = "~Sfoglia..." ;
         Text [ DUTCH ] = "~Bladeren..." ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Durchsuchen..." ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Navegar..." ;
         Text [ SWEDISH ] = "~Genomsök..." ;
         Text [ PORTUGUESE ] = "~Pesquisar" ;
         Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
         Text[ russian ] = "Îáçîğ...";
-        Text[ polish ] = "Przegl¹d~aj...";
+        Text[ polish ] = "~Przegl¹daj...";
         Text[ japanese ] = "æ¤œç´¢(~B)...";
         Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
@@ -394,6 +418,9 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ catalan ] = "~Navega...";
         Text[ finnish ] = "~Selaa...";
         Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸à¸”à¸¹...";
+        Text[ czech ] = "ProchÃ¡zet...";
+        Text[ hebrew ] = "â€®×¢×™×•×Ÿ...â€¬";
+        Text[ hindi ] = "~à¤¬à¥à¤°à¤‰à¤œà¤¼...";
     };
     CheckBox CB_LINK
     {
@@ -408,22 +435,25 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ FRENCH ] = "~Lier" ;
         Text [ ITALIAN ] = "~Collega" ;
         Text [ DUTCH ] = "~Koppelen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Verknüpfen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Vínculo" ;
         Text [ SWEDISH ] = "Län~ka" ;
         Text [ PORTUGUESE ] = "~Ligar" ;
         Text[ chinese_simplified ] = "é“¾æ¥(~K)";
         Text[ russian ] = "Ñâÿçü ñ ôàéëîì";
-        Text[ polish ] = "Po³¹cz";
+        Text[ polish ] = "£¹c~z z plikiem";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯(~K)";
         Text[ chinese_traditional ] = "æ·å¾‘(~K)";
         Text[ arabic ] = "ÑÈØ";
         Text[ greek ] = "Óıíäåóç";
         Text[ korean ] = "ì—°ê²°(~K)";
-        Text[ turkish ] = "Bağ~la";
+        Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enlla~ç";
         Text[ finnish ] = "Lin~kki";
         Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚~à¸¢à¸‡ ";
+        Text[ czech ] = "Odkaz";
+        Text[ hebrew ] = "Ver~knÃ¼pfen";
+        Text[ hindi ] = "à¤²à¤¿à¤‚~à¤•";
     };
     FixedText FT_PATH
     {
@@ -431,7 +461,23 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 192 , 8 ) ;
     };
     Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+    Text[ czech ] = "VloÅ¾it list";
+    Text[ hebrew ] = "Tabelle einfÃ¼gen";
+    Text[ hindi ] = "Insert Sheet";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
