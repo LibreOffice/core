@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 13:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,6 @@ Any SAL_CALL ODatabaseForm::queryAggregation(const Type& _rType) throw(RuntimeEx
 {
     Any aReturn = ODatabaseForm_BASE1::queryInterface(_rType);
     // our own interfaces
-
     if (!aReturn.hasValue())
     {
         aReturn = ODatabaseForm_BASE2::queryInterface(_rType);
@@ -2781,6 +2780,13 @@ void SAL_CALL ODatabaseForm::getGroupByName(const ::rtl::OUString& Name, Sequenc
 void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( RuntimeException )
 {
     OInterfaceContainer::disposing(Source);
+    // does the disposing come from the aggregate ?
+    if (m_xAggregate.is())
+    {   // no -> forward it
+        com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> xListener;
+        if (query_aggregation(m_xAggregate, xListener))
+            xListener->disposing(Source);
+    }
 }
 
 //==============================================================================
