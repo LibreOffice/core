@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:15:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void PolyPolygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData 
     {
         double      fArea;
         const BOOL  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
-        USHORT      nPercent;
+        USHORT      nPercent = 0;
 
         if( bEdges )
         {
@@ -971,7 +971,7 @@ Rectangle PolyPolygon::GetBoundRect() const
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    long    nXMin, nXMax, nYMin, nYMax;
+    long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
     BOOL    bFirst = TRUE;
     USHORT  nPolyCount = mpImplPolyPolygon->mnCount;
 
