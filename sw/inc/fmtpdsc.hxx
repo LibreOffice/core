@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 13:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,15 @@ public:
     void SetDescNameIdx( USHORT n ) { nDescNameIdx = n;  }
 };
 
+
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
 
 inline const SwFmtPageDesc &SwFmt::GetPageDesc(BOOL bInP) const
     { return aSet.GetPageDesc(bInP); }
-
+#endif
 
 #endif
 
