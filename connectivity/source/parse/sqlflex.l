@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.4 2001-01-26 12:05:56 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.5 2001-01-29 09:25:48 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-01-26 12:05:56 $ $Revision: 1.4 $
+//	$Author: oj $ $Date: 2001-01-29 09:25:48 $ $Revision: 1.5 $
 //
 // Description:
 //
@@ -534,7 +534,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 
 		sal_Char *s = Buffer;
 		sal_Int32 nPos = 1;
-		sal_Int32 ch = SQLyytext ? SQLyytext[0] : ' ';
+		sal_Int32 ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
 		*s++ = ch;
 		while ((ch = yyinput()) != EOF) 
 		{
@@ -574,10 +574,11 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, OParseConte
 	BEGIN(m_nRule);
 
 	m_sErrorMessage = ::rtl::OUString();	
-	m_sStatement = ::rtl::OString(rNewStatement,rNewStatement.getLength(), RTL_TEXTENCODING_UTF8);
-	m_nCurrentPos = 0;
+	m_sStatement	= ::rtl::OString(rNewStatement,rNewStatement.getLength(), RTL_TEXTENCODING_UTF8);
+	m_nCurrentPos	= 0;
 	m_bInternational = bInternational;
-	m_pContext = pContext;
+	m_pContext		= pContext;
+	yy_hold_char	= 32;
 }
 
 //------------------------------------------------------------------------------
