@@ -51,7 +51,22 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:svg="http://www.w3.org/2000/svg" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:text="http://openoffice.org/2000/text" xmlns:style="http://openoffice.org/2000/style" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="draw svg style office fo text">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"  xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+    <xsl:include href="../../common/math.xsl"/>
+    <xsl:template name="test-arc">
+        <xsl:call-template name="svg-arc2vml-arc">
+            <!--  M 125,75 a100,50 0 ?,? 100,50 -->
+            <xsl:with-param name="x0" select="125"/>
+            <xsl:with-param name="y0" select="75"/>
+            <xsl:with-param name="rx" select="100"/>
+            <xsl:with-param name="ry" select="50"/>
+            <xsl:with-param name="x-axis-rotation" select="0"/>
+            <xsl:with-param name="large-arc-flag" select="0"/>
+            <xsl:with-param name="sweep-flag" select="0"/>
+            <xsl:with-param name="x" select="225"/>
+            <xsl:with-param name="y" select="125"/>
+        </xsl:call-template>
+    </xsl:template>
     <xsl:template name="test">
         <xsl:call-template name="svgpath2vmlpath">
             <xsl:with-param name="svg-path" select="'M 36.0 162.0 C 38.0 168.0 39.0-172.0 40.0 176.0 S 42.0 184.0 144.0 188.0'"/>
@@ -688,5 +703,182 @@
                 </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+    <xsl:template name="svg-arc2vml-arc">
+        <xsl:param name="x0"/>
+        <xsl:param name="y0"/>
+        <xsl:param name="rx"/>
+        <xsl:param name="ry"/>
+        <xsl:param name="x-axis-rotation" select="0"/>
+        <xsl:param name="large-arc-flag" select="0"/>
+        <xsl:param name="sweep-flag" select="0"/>
+        <xsl:param name="x"/>
+        <xsl:param name="y"/>
+        <!-- Compute 1/2 distance between current and final point -->
+        <xsl:variable name="dx2" select="($x0 - $x) div 2"/>
+        <xsl:variable name="dy2" select="($y0 - $y) div 2"/>
+        <!--    Convert from degrees to radians -->
+        <xsl:variable name="rotation-radian" select="$x-axis-rotation * $pi div 180"/>
+        <!-- Compute (x1, y1). What are x1,y1?-->
+        <xsl:variable name="cos-rotation">
+            <xsl:call-template name="cos">
+                <xsl:with-param name="x" select="$rotation-radian"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="sin-rotation">
+            <xsl:call-template name="sin">
+                <xsl:with-param name="x" select="$rotation-radian"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="x1" select="$cos-rotation * $dx2 + $sin-rotation * $dy2"/>
+        <xsl:variable name="y1" select="-1 * $sin-rotation  * $dx2 + $cos-rotation * $dy2"/>
+        <!-- Make sure radii are large enough -->
+        <xsl:variable name="rx-abs">
+            <xsl:call-template name="abs">
+                <xsl:with-param name="x" select="$rx"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="ry-abs">
+            <xsl:call-template name="abs">
+                <xsl:with-param name="x" select="$ry"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="rx-sq" select="$rx-abs * $rx-abs"/>
+        <xsl:variable name="ry-sq" select="$ry-abs * $ry-abs"/>
+        <xsl:variable name="x1-sq" select="$x1 * $x1"/>
+        <xsl:variable name="y1-sq" select="$y1 * $y1"/>
+        <xsl:variable name="radius-check" select=" $x1-sq div $rx-sq + $y1-sq div $ry-sq "/>
+        <xsl:variable name="radius-check-sqrt">
+            <xsl:call-template name="sqrt">
+                <xsl:with-param name="x" select="$radius-check"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="new-rx">
+            <xsl:choose>
+                <xsl:when test="$radius-check &gt; 1">
+                    <xsl:value-of select="$rx-abs * $radius-check-sqrt"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$rx-abs"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="new-ry">
+            <xsl:choose>
+                <xsl:when test="$radius-check &gt; 1">
+                    <xsl:value-of select="$ry-abs * $radius-check-sqrt"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$ry-abs"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="new-ry-sq">
+            <xsl:choose>
+                <xsl:when test="$radius-check &gt; 1">
+                    <xsl:value-of select="$new-ry * $new-ry"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$ry-sq"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="new-rx-sq">
+            <xsl:choose>
+                <xsl:when test="$radius-check &gt; 1">
+                    <xsl:value-of select="$new-rx * $new-rx"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$rx-sq"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- Step 2: Compute (cx1, cy1) -->
+        <xsl:variable name="sign">
+            <xsl:choose>
+                <xsl:when test="$large-arc-flag = $sweep-flag">-1</xsl:when>
+                <xsl:otherwise>1</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="unchecked-sq" select=" (($new-rx-sq * $new-ry-sq) - ($new-rx-sq * $y1-sq) - ($new-ry-sq * $x1-sq)) div   (($new-rx-sq * $y1-sq) + ($new-ry-sq * $x1-sq)) "/>
+        <xsl:variable name="sq">
+            <xsl:choose>
+                <xsl:when test=" $unchecked-sq &lt; 0">0</xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$unchecked-sq"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="sq-sqrt">
+            <xsl:call-template name="sqrt">
+                <xsl:with-param name="x" select="$sq"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="coef" select="$sign * $sq-sqrt "/>
+        <xsl:variable name="cx1" select="$coef * $new-rx * $y1 div $new-ry"/>
+        <xsl:variable name="cy1" select=" -1 * $coef * $new-ry * $x1 div $new-rx"/>
+        <!--  Step 3: Compute (cx, cy) from (cx1, cy1) -->
+        <xsl:variable name="sx2" select="($x0 +$x) div 2 "/>
+        <xsl:variable name="sy2" select="($y0 +$y) div 2 "/>
+        <xsl:variable name="tmp1" select="$cos-rotation * $cx1 "/>
+        <xsl:variable name="tmp2" select="$cos-rotation * $cx1 "/>
+        <xsl:variable name="cx" select=" $sx2 + ( $cos-rotation * $cx1 - $sin-rotation * $cy1 ) "/>
+        <xsl:variable name="cy" select=" $sy2 + ( $sin-rotation * $cx1 + $cos-rotation * $cy1 ) "/>
+        <!-- Step 4: Compute angle start and angle extent -->
+        <xsl:variable name="ux" select="( $x1 - $cx1)  div $new-rx"/>
+        <xsl:variable name="uy" select="( $y1 - $cy1)  div $new-ry"/>
+        <xsl:variable name="vx" select="( - 1 *  $x1 - $cx1)  div $new-rx"/>
+        <xsl:variable name="vy" select="(- 1 *  $y1 - $cy1)  div $new-ry"/>
+        <xsl:variable name="n">
+            <xsl:call-template name="sqrt">
+                <xsl:with-param name="x" select="  ($ux * $ux) + ($uy * $uy)  "/>
+            </xsl:call-template>
+        </xsl:variable>
+        <!--  1 * ux + 0 * uy -->
+        <xsl:variable name="p" select="$ux"/>
+        <xsl:variable name="uy-sign">
+            <xsl:choose>
+                <xsl:when test=" $uy &lt; 0 ">-1</xsl:when>
+                <xsl:otherwise>1</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="acos-pn">
+            <xsl:call-template name="acos">
+                <xsl:with-param name="x" select="$p div $n"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="theta" select="( $uy-sign * $acos-pn * 180 div $pi ) mod 360 "/>
+        <xsl:variable name="n-delta">
+            <xsl:call-template name="sqrt">
+                <xsl:with-param name="x" select="($ux * $ux + $uy * $uy) * ($vx * $vx + $vy * $vy)"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="p-delta" select="$ux * $vx + $uy * $vy"/>
+        <xsl:variable name="vy-sign">
+            <xsl:choose>
+                <xsl:when test="($ux * $vy - $uy * $vx)   &lt; 0 ">-1</xsl:when>
+                <xsl:otherwise>1</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="acos-pn-delta">
+            <xsl:call-template name="acos">
+                <xsl:with-param name="x" select="$p-delta div $n-delta"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="unchecked-delta" select="$vy-sign * $acos-pn-delta * 180 div $pi "/>
+        <xsl:variable name="delta">
+            <xsl:choose>
+                <xsl:when test=" $sweep-flag = 0 and $unchecked-delta &gt; 0 ">
+                    <xsl:value-of select=" ($unchecked-delta - 360) mod 360 "/>
+                </xsl:when>
+                <xsl:when test=" $sweep-flag = 1 and $unchecked-delta &lt; 0 ">
+                    <xsl:value-of select=" ($unchecked-delta + 360) mod 360 "/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select=" $unchecked-delta  mod 360 "/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:value-of select="concat ($cx,  ' ' , $cy, ' ' ,  $rx, ' ' ,  $ry, ' ' ,  $theta, ' ' , $delta,  ' ' , $x-axis-rotation) "/>
     </xsl:template>
 </xsl:stylesheet>
