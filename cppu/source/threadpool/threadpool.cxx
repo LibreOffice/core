@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-08 15:55:45 $
+ *  last change: $Author: jbu $ $Date: 2001-05-10 11:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <hash_set>
 #include <stdio.h>
 
 #include <osl/diagnose.h>
@@ -414,13 +414,47 @@ namespace cppu_threadpool
 
 using namespace cppu_threadpool;
 
+struct uno_ThreadPool_Equal
+{
+    sal_Int32 operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
+        {
+            return a == b;
+        }
+};
+
+struct uno_ThreadPool_Hash
+{
+    sal_Int32 operator () ( const uno_ThreadPool &a  )  const
+        {
+            return (sal_Int32) a;
+        }
+};
+
+
+
+typedef ::std::hash_set< uno_ThreadPool, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
+
+static ThreadpoolHashSet *g_pThreadpoolHashSet;
+
+struct _uno_ThreadPool
+{
+    sal_Int32 dummy;
+};
+
 static oslInterlockedCount g_hPool;
 
 extern "C" uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C()
 {
-    // Just ensure that the number is unique in this process
-    uno_ThreadPool h = ( uno_ThreadPool ) osl_incrementInterlockedCount( &g_hPool );
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    if( ! g_pThreadpoolHashSet )
+    {
+        g_pThreadpoolHashSet = new ThreadpoolHashSet();
+    }
+
+    // Just ensure that the handle is unique in the process (via heap)
+    uno_ThreadPool h = new struct _uno_ThreadPool;
+    g_pThreadpoolHashSet->insert( h );
     return h;
 }
 
@@ -473,4 +507,23 @@ extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->stopDisposing( (sal_Int64) hPool );
+
+    if( hPool )
+    {
+        // special treatment for 0 !
+        OSL_ASSERT( g_pThreadpoolHashSet );
+
+        MutexGuard guard( Mutex::getGlobalMutex() );
+
+        ThreadpoolHashSet::iterator ii = g_pThreadpoolHashSet->find( hPool );
+        OSL_ASSERT( ii != g_pThreadpoolHashSet->end() );
+        g_pThreadpoolHashSet->erase( ii );
+        delete hPool;
+
+        if( g_pThreadpoolHashSet->empty() )
+        {
+            delete g_pThreadpoolHashSet;
+            g_pThreadpoolHashSet = 0;
+        }
+    }
 }
