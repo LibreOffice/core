@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 20:49:50 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 20:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,11 +979,11 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text[english_us] = "Screen Beans";
     Text[ language_user1 ] = "EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
     Text[ portuguese ] = "ScreenBeans";
-    Text[ russian ] = "ScreenBeans";
+    Text[ russian ] = "Screen Beans";
     Text[ greek ] = "ScreenBeans";
     Text[ dutch ] = "ScreenBeans";
     Text[ french ] = "ScreenBeans";
-    Text[ spanish ] = "ScreenBeans";
+    Text[ spanish ] = "Screen Beans";
     Text[ finnish ] = "ScreenBeans";
     Text[ italian ] = "Screen Beans";
     Text[ danish ] = "ScreenBeans";
@@ -1006,6 +1006,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
