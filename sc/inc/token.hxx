@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-22 15:19:58 $
+ *  last change: $Author: er $ $Date: 2001-02-28 11:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #endif
 
 
-enum StackVar
+enum StackVarEnum
 {
     svByte,
     svDouble,
@@ -88,6 +88,14 @@ enum StackVar
     svMissing = 0x70,                   // 0 or ""
     svErr                               // unknown StackType
 };
+
+#ifdef PRODUCT
+// save memory since compilers tend to int an enum
+typedef BYTE StackVar;
+#else
+// have enum names in debugger
+typedef StackVarEnum StackVar;
+#endif
 
 
 class ScMatrix;
