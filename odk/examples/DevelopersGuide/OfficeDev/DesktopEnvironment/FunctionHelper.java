@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:34:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,40 +38,11 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// uno types
-import com.sun.star.awt.WindowAttribute;
-import com.sun.star.awt.WindowClass;
-import com.sun.star.awt.WindowDescriptor;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XFramesSupplier;
-import com.sun.star.frame.XModel;
-import com.sun.star.frame.XStorable;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.util.URL;
-import com.sun.star.util.XModifiable;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.container.XIndexAccess;
-
-// exceptions
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
-
-// uno helper
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 
-// own helper
-
-// other classes
 import java.lang.*;
 import java.awt.*;
 import javax.swing.*;
@@ -126,12 +97,15 @@ public class FunctionHelper
 
         try
         {
-            com.sun.star.lang.XMultiServiceFactory xSMGR = OfficeConnect.getSMGR();
+            com.sun.star.uno.XComponentContext xOfficeCtx =
+                OfficeConnect.getOfficeContext();
 
             // Create special service for parsing of given URL.
-            com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
-                com.sun.star.util.XURLTransformer.class,
-                xSMGR.createInstance("com.sun.star.util.URLTransformer"));
+            com.sun.star.util.XURLTransformer xParser =
+                (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
+                    com.sun.star.util.XURLTransformer.class,
+                    xOfficeCtx.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.util.URLTransformer", xOfficeCtx));
 
             // Because it's an in/out parameter we must use an array of URL objects.
             com.sun.star.util.URL[] aParseURL = new com.sun.star.util.URL[1];
@@ -176,14 +150,16 @@ public class FunctionHelper
      * @return [com.sun.star.frame.XFrame]
      *          the new created frame reference in case of success or null otherwhise
      */
-    private static com.sun.star.frame.XFrame impl_createEmptyFrame( com.sun.star.lang.XMultiServiceFactory xSMGR )
+    private static com.sun.star.frame.XFrame impl_createEmptyFrame(
+        com.sun.star.uno.XComponentContext xCtx )
     {
         com.sun.star.frame.XFrame xFrame = null;
 
         try{
             xFrame = (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(
                 com.sun.star.frame.XFrame.class,
-                xSMGR.createInstance("com.sun.star.frame.Task"));
+                xCtx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.frame.Task", xCtx));
         } catch(com.sun.star.uno.Exception ex1) {}
 
         if (xFrame==null)
@@ -191,7 +167,8 @@ public class FunctionHelper
             try{
                 xFrame = (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(
                     com.sun.star.frame.XFrame.class,
-                    xSMGR.createInstance("com.sun.star.frame.Frame"));
+                    xCtx.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.frame.Frame", xCtx));
             } catch(com.sun.star.uno.Exception ex2) {}
         }
 
@@ -203,25 +180,29 @@ public class FunctionHelper
     /**
      * create a new window which can be used as container window of an office frame
      * We know two modes for creation:
-     *      - the office window will be a child of one of our java windows
-     *      - the office will be a normal system window outside this java application
+     *   - the office window will be a child of one of our java windows
+     *   - the office will be a normal system window outside this java application
      * This behaviour will be regulated by the second parameter of this operation.
      * If a parentview is given the first mode will be activated - otherwhise
      * the second one.
      *
-     * Note: First mode (creation of a child window) can be reached by two different ways.
-     *      - pack the required window handle of our java window inside an UNO object
-     *        to transport it to the remote office toolkit and get a child office window.
-     *        This is the old way. It's better to use the second one - but to be future prove
-     *        this old one should be tried too.
-     *      - it's possible to pass the native window handle directly to the toolkit.
-     *        A special interface method was enabled to accept that.
-     * The right way to create an office window should be then:
-     *      - try to use second creation mode (directly using of the window handle)
-     *      - if it failed ... use the old way by packing the handle inside an object
+     * Note: First mode (creation of a child window) can be reached by two different
+     *       ways.
+     *   - pack the required window handle of our java window inside an UNO object
+     *     to transport it to the remote office toolkit and get a child office
+     *     window.
+     *     This is the old way. It's better to use the second one - but to be
+     *     future prove this old one should be tried too.
+     *   - it's possible to pass the native window handle directly to the toolkit.
+     *     A special interface method was enabled to accept that.
+     *
+     *   The right way to create an office window should be then:
+     *   - try to use second creation mode (directly using of the window handle)
+     *   - if it failed ... use the old way by packing the handle inside an object
      *
      * @param xSMGR
-     *          we need a service manager to be able to create remote office services
+     *          we need a service manager to be able to create remote office
+     *          services
      *
      * @param aParentView
      *          the java window as parent for the office window if an inplace office
@@ -232,18 +213,20 @@ public class FunctionHelper
      *          The new created office window which can be used to set it as
      *          a ContainerWindow on an empty office frame.
      */
-    private static com.sun.star.awt.XWindow impl_createWindow( com.sun.star.lang.XMultiServiceFactory xSMGR       ,
-                                                               NativeView                             aParentView )
+    private static com.sun.star.awt.XWindow impl_createWindow(
+        com.sun.star.uno.XComponentContext xCtx, NativeView aParentView )
     {
         com.sun.star.awt.XWindow     xWindow  = null;
         com.sun.star.awt.XWindowPeer xPeer    = null;
         com.sun.star.awt.XToolkit    xToolkit = null;
 
-        // get access to toolkit of remote office to create the container window of new target frame
+        // get access to toolkit of remote office to create the container window of
+        // new target frame
         try{
             xToolkit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
                 com.sun.star.awt.XToolkit.class,
-                xSMGR.createInstance("com.sun.star.awt.Toolkit"));
+                xCtx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.awt.Toolkit", xCtx));
         }
         catch(com.sun.star.uno.Exception ex)
         {
@@ -254,34 +237,38 @@ public class FunctionHelper
         if (aParentView==null)
         {
             // Describe the properties of the container window.
-            com.sun.star.awt.WindowDescriptor aDescriptor = new com.sun.star.awt.WindowDescriptor();
-            aDescriptor.Type                =   com.sun.star.awt.WindowClass.TOP;
-            aDescriptor.WindowServiceName   =   "window";
-            aDescriptor.ParentIndex         =   -1;
-            aDescriptor.Parent              =   null;
-            aDescriptor.Bounds              =   new com.sun.star.awt.Rectangle(0,0,0,0);
-            aDescriptor.WindowAttributes    =   com.sun.star.awt.WindowAttribute.BORDER     |
-                                                com.sun.star.awt.WindowAttribute.MOVEABLE   |
-                                                com.sun.star.awt.WindowAttribute.SIZEABLE   |
-                                                com.sun.star.awt.WindowAttribute.CLOSEABLE  ;
+            com.sun.star.awt.WindowDescriptor aDescriptor =
+                new com.sun.star.awt.WindowDescriptor();
+            aDescriptor.Type =   com.sun.star.awt.WindowClass.TOP;
+            aDescriptor.WindowServiceName = "window";
+            aDescriptor.ParentIndex = -1;
+            aDescriptor.Parent = null;
+            aDescriptor.Bounds = new com.sun.star.awt.Rectangle(0,0,0,0);
+            aDescriptor.WindowAttributes = com.sun.star.awt.WindowAttribute.BORDER |
+                com.sun.star.awt.WindowAttribute.MOVEABLE |
+                com.sun.star.awt.WindowAttribute.SIZEABLE |
+                com.sun.star.awt.WindowAttribute.CLOSEABLE;
 
             try{
                 xPeer = xToolkit.createWindow( aDescriptor );
             } catch(com.sun.star.lang.IllegalArgumentException exIllegal) {}
         }
-        // mode 2) create an internal office window as child of our given java parent window
+        // mode 2) create an internal office window as child of our given java
+        // parent window
         else
         {
-            // try new version of creation first: directly using of the window handle
-            // The old implementation of the corresponding toolkit method requires
-            // a process ID. If this id isn't the right one a null object is returned.
-            // But normaly nobody outside the office knows this id.
-            // New version of this method ignore the id parameter and creation will work.
-            // Note: You must be shure if your window handle can be realy used by the remote office.
-            // Means if this java client and the remote office use the same display!
-            com.sun.star.awt.XSystemChildFactory xChildFactory = (com.sun.star.awt.XSystemChildFactory)UnoRuntime.queryInterface(
-                com.sun.star.awt.XSystemChildFactory.class,
-                xToolkit);
+            // try new version of creation first: directly using of the window
+            // handle. The old implementation of the corresponding toolkit method
+            // requires a process ID. If this id isn't the right one a null object
+            // is returned. But normaly nobody outside the office knows this id.
+            // New version of this method ignore the id parameter and creation will
+            // work.
+            // Note: You must be shure if your window handle can be realy used by
+            // the remote office. Means if this java client and the remote office
+            // use the same display!
+            com.sun.star.awt.XSystemChildFactory xChildFactory =
+                (com.sun.star.awt.XSystemChildFactory)UnoRuntime.queryInterface(
+                    com.sun.star.awt.XSystemChildFactory.class, xToolkit);
 
             try
             {
@@ -289,29 +276,35 @@ public class FunctionHelper
                 short   nSystem = (short)aParentView.getNativeWindowSystemType();
                 byte[]  lProcID = new byte[0];
 
-                xPeer = xChildFactory.createSystemChild((Object)nHandle, lProcID, nSystem);
+                xPeer = xChildFactory.createSystemChild((Object)nHandle,
+                                                        lProcID, nSystem);
 
                 if (xPeer==null)
                 {
-                    // mode 3) OK - new version doesn't work. It requires the process id which we doesn't have.
+                    // mode 3) OK - new version doesn't work. It requires the
+                    // process id which we doesn't have.
                     // So we must use the old way to get the right window peer.
                     // Pack the handle inside a wrapper object.
-                    JavaWindowPeerFake aWrapper = new JavaWindowPeerFake(aParentView);
+                    JavaWindowPeerFake aWrapper = new
+                        JavaWindowPeerFake(aParentView);
 
-                    com.sun.star.awt.XWindowPeer xParentPeer = (com.sun.star.awt.XWindowPeer)UnoRuntime.queryInterface(
-                        com.sun.star.awt.XWindowPeer.class,
-                        aWrapper);
+                    com.sun.star.awt.XWindowPeer xParentPeer =
+                        (com.sun.star.awt.XWindowPeer)UnoRuntime.queryInterface(
+                            com.sun.star.awt.XWindowPeer.class, aWrapper);
 
-                    com.sun.star.awt.WindowDescriptor aDescriptor = new com.sun.star.awt.WindowDescriptor();
-                    aDescriptor.Type                =   com.sun.star.awt.WindowClass.TOP;
-                    aDescriptor.WindowServiceName   =   "workwindow";
-                    aDescriptor.ParentIndex         =   1;
-                    aDescriptor.Parent              =   xParentPeer;
-                    aDescriptor.Bounds              =   new com.sun.star.awt.Rectangle(0,0,0,0);
+                    com.sun.star.awt.WindowDescriptor aDescriptor =
+                        new com.sun.star.awt.WindowDescriptor();
+                    aDescriptor.Type = com.sun.star.awt.WindowClass.TOP;
+                    aDescriptor.WindowServiceName = "workwindow";
+                    aDescriptor.ParentIndex = 1;
+                    aDescriptor.Parent = xParentPeer;
+                    aDescriptor.Bounds = new com.sun.star.awt.Rectangle(0,0,0,0);
                     if (nSystem == com.sun.star.lang.SystemDependent.SYSTEM_WIN32)
-                        aDescriptor.WindowAttributes = com.sun.star.awt.WindowAttribute.SHOW;
+                        aDescriptor.WindowAttributes =
+                            com.sun.star.awt.WindowAttribute.SHOW;
                     else
-                        aDescriptor.WindowAttributes = com.sun.star.awt.WindowAttribute.SYSTEMDEPENDENT;
+                        aDescriptor.WindowAttributes =
+                            com.sun.star.awt.WindowAttribute.SYSTEMDEPENDENT;
 
                     try{
                         xPeer = xToolkit.createWindow( aDescriptor );
@@ -320,11 +313,11 @@ public class FunctionHelper
             }
             catch(java.lang.RuntimeException exJRun)
             {
-                // This exception is thrown by the native JNI code if it try to get the systemw window handle.
-                // A possible reason can be an invisible java window.
-                // In this case it should be enough to set return values to null.
-                // All other ressources (which was created before) will be freed automaticly if
-                // scope wil be leaved.
+                // This exception is thrown by the native JNI code if it try to get
+                // the systemw window handle. A possible reason can be an invisible
+                // java window. In this case it should be enough to set return
+                // values to null. All other ressources (which was created before)
+                // will be freed automaticly if scope wil be leaved.
                 System.out.println("May be the NativeView object wasn't realy visible at calling time of getNativeWindow()?");
                 xPeer   = null;
                 xWindow = null;
@@ -365,10 +358,11 @@ public class FunctionHelper
 
         try
         {
-            com.sun.star.lang.XMultiServiceFactory xSMGR = OfficeConnect.getSMGR();
+            com.sun.star.uno.XComponentContext xCtx =
+                OfficeConnect.getOfficeContext();
 
             // create an empty office frame first
-            xFrame = impl_createEmptyFrame(xSMGR);
+            xFrame = impl_createEmptyFrame(xCtx);
 
             // create an office window then
             // Depending from the given parameter aParentView it will be a child or a top level
@@ -377,7 +371,7 @@ public class FunctionHelper
             // JNI calls to get system window handle of java window can't work without that!
             if (aParentView!=null)
                 aParentView.setVisible(true);
-            com.sun.star.awt.XWindow xWindow = impl_createWindow(xSMGR, aParentView);
+            com.sun.star.awt.XWindow xWindow = impl_createWindow(xCtx, aParentView);
 
             // pass the window the frame as his new container window.
             // It's neccessary to do it first  - before you call anything else there.
@@ -388,7 +382,8 @@ public class FunctionHelper
             // Use XFrames interface to do so. It provides access to the child frame container of that instance.
             com.sun.star.frame.XFramesSupplier xTreeRoot = (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
                 com.sun.star.frame.XFramesSupplier.class,
-                xSMGR.createInstance("com.sun.star.frame.Desktop"));
+                xCtx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", xCtx));
             com.sun.star.frame.XFrames xChildContainer = xTreeRoot.getFrames();
             xChildContainer.append(xFrame);
 
@@ -563,16 +558,17 @@ public class FunctionHelper
      *
      * @return  [XComponent]    the loaded document for success or null if it's failed
      */
-    public static com.sun.star.lang.XComponent loadDocument(com.sun.star.frame.XFrame          xFrame     ,
-                                                            String                             sURL       ,
-                                                            com.sun.star.beans.PropertyValue[] lProperties)
+    public static com.sun.star.lang.XComponent loadDocument(
+        com.sun.star.frame.XFrame xFrame, String sURL,
+        com.sun.star.beans.PropertyValue[] lProperties)
     {
         com.sun.star.lang.XComponent xDocument = null;
         String                       sOldName  = null;
 
         try
         {
-            com.sun.star.lang.XMultiServiceFactory xSMGR = OfficeConnect.getSMGR();
+            com.sun.star.uno.XComponentContext xCtx =
+                OfficeConnect.getOfficeContext();
 
             // First prepare frame for loading
             // We must adress it inside the frame tree without any complications.
@@ -584,11 +580,14 @@ public class FunctionHelper
 
             // Get access to the global component loader of the office
             // for synchronous loading the document.
-            com.sun.star.frame.XComponentLoader xLoader = (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
-                com.sun.star.frame.XComponentLoader.class,
-                xSMGR.createInstance("com.sun.star.frame.Desktop"));
+            com.sun.star.frame.XComponentLoader xLoader =
+                (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class,
+                    xCtx.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.frame.Desktop", xCtx));
 
-            // Load the document into the target frame by using his name and special search flags.
+            // Load the document into the target frame by using his name and
+            // special search flags.
             xDocument = xLoader.loadComponentFromURL(
                 sURL,
                 sTarget,
@@ -709,13 +708,14 @@ public class FunctionHelper
             // If information is available it can be used to find out wich
             // filter exist for HTML export. Normaly this filter should be searched
             // inside the filter configuration but this little demo doesn't do so.
-            // (see service com.sun.star.document.FilterFactory for further informations too)
-            // Well known filter names are used directly. They must exist in current office installation.
-            // Otherwise this code will fail. But to prevent this code against missing filters
-            // it check for existing state of it.
-            com.sun.star.lang.XServiceInfo xInfo = (com.sun.star.lang.XServiceInfo)UnoRuntime.queryInterface(
-                com.sun.star.lang.XServiceInfo.class,
-                xDocument);
+            // (see service com.sun.star.document.FilterFactory for further
+            // informations too)
+            // Well known filter names are used directly. They must exist in current
+            // office installation. Otherwise this code will fail. But to prevent
+            // this code against missing filters it check for existing state of it.
+            com.sun.star.lang.XServiceInfo xInfo = (com.sun.star.lang.XServiceInfo)
+                UnoRuntime.queryInterface(com.sun.star.lang.XServiceInfo.class,
+                                          xDocument);
 
             if(xInfo!=null)
             {
@@ -733,11 +733,15 @@ public class FunctionHelper
                 // Check for existing state of this filter.
                 if(sFilter!=null)
                 {
-                    com.sun.star.lang.XMultiServiceFactory xSMGR = OfficeConnect.getSMGR();
+                    com.sun.star.uno.XComponentContext xCtx =
+                        OfficeConnect.getOfficeContext();
 
-                    com.sun.star.container.XNameAccess xFilterContainer = (com.sun.star.container.XNameAccess)UnoRuntime.queryInterface(
-                        com.sun.star.container.XNameAccess.class,
-                        xSMGR.createInstance("com.sun.star.document.FilterFactory"));
+                    com.sun.star.container.XNameAccess xFilterContainer =
+                        (com.sun.star.container.XNameAccess)
+                        UnoRuntime.queryInterface(
+                            com.sun.star.container.XNameAccess.class,
+                            xCtx.getServiceManager().createInstanceWithContext(
+                                "com.sun.star.document.FilterFactory", xCtx));
 
                     if(xFilterContainer.hasByName(sFilter)==false)
                         sFilter=null;
@@ -746,11 +750,13 @@ public class FunctionHelper
                 // Use this filter for export.
                 if(sFilter!=null)
                 {
-                    // Export can be forced by saving the document and using a special filter name
-                    // which can write needed format. Build neccessary argument list now.
-                    // Use special flag "Overwrite" too, to prevent operation against possible exceptions, if
-                    // file already exist.
-                    com.sun.star.beans.PropertyValue[] lProperties = new com.sun.star.beans.PropertyValue[2];
+                    // Export can be forced by saving the document and using a
+                    // special filter name which can write needed format. Build
+                    // neccessary argument list now.
+                    // Use special flag "Overwrite" too, to prevent operation
+                    // against possible exceptions, if file already exist.
+                    com.sun.star.beans.PropertyValue[] lProperties =
+                        new com.sun.star.beans.PropertyValue[2];
                     lProperties[0] = new com.sun.star.beans.PropertyValue();
                     lProperties[0].Name = "FilterName";
                     lProperties[0].Value = sFilter;
@@ -758,9 +764,9 @@ public class FunctionHelper
                     lProperties[1].Name = "Overwrite";
                     lProperties[1].Value = Boolean.TRUE;
 
-                    com.sun.star.frame.XStorable xStore = (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(
-                        com.sun.star.frame.XStorable.class,
-                        xDocument);
+                    com.sun.star.frame.XStorable xStore =
+                        (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(
+                            com.sun.star.frame.XStorable.class, xDocument);
 
                     xStore.storeAsURL(sURL,lProperties);
                 }
@@ -800,36 +806,37 @@ public class FunctionHelper
         try
         {
             // Check supported functionality of the document (model or controller).
-            com.sun.star.frame.XModel xModel = (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
-                com.sun.star.frame.XModel.class,
-                xDocument);
+            com.sun.star.frame.XModel xModel =
+                (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XModel.class, xDocument);
 
             if(xModel!=null)
             {
                 // It's a full featured office document.
                 // Reset the modify state of it and close it.
                 // Note: Model can disgree by throwing a veto exception.
-                com.sun.star.util.XModifiable xModify = (com.sun.star.util.XModifiable)UnoRuntime.queryInterface(
-                    com.sun.star.util.XModifiable.class,
-                    xModel);
+                com.sun.star.util.XModifiable xModify =
+                    (com.sun.star.util.XModifiable)UnoRuntime.queryInterface(
+                        com.sun.star.util.XModifiable.class, xModel);
 
                 xModify.setModified(false);
                 xDocument.dispose();
             }
             else
             {
-                // It's a document which supports a controller .. or may by a pure window only
-                // If it's at least a controller - we can try to suspend him.
-                // But - he can disagree with that!
-                com.sun.star.frame.XController xController = (com.sun.star.frame.XController)UnoRuntime.queryInterface(
-                    com.sun.star.frame.XController.class,
-                    xDocument);
+                // It's a document which supports a controller .. or may by a pure
+                // window only. If it's at least a controller - we can try to
+                // suspend him. But - he can disagree with that!
+                com.sun.star.frame.XController xController =
+                    (com.sun.star.frame.XController)UnoRuntime.queryInterface(
+                        com.sun.star.frame.XController.class, xDocument);
 
                 if(xController!=null)
                 {
                     if(xController.suspend(true)==true)
                     {
-                        // Note: Don't dispose the controller - destroy the frame to make it right!
+                        // Note: Don't dispose the controller - destroy the frame
+                        // to make it right!
                         com.sun.star.frame.XFrame xFrame = xController.getFrame();
                         xFrame.dispose();
                     }
@@ -840,14 +847,15 @@ public class FunctionHelper
         {
             // Can be thrown by "setModified()" call on model.
             // He disagree with our request.
-            // But there is nothing to do then. Following "dispose()" call wasn't never called
-            // (because we catch it before). Closing failed - that's it.
+            // But there is nothing to do then. Following "dispose()" call wasn't
+            // never called (because we catch it before). Closing failed -that's it.
             exVeto.printStackTrace();
         }
         catch(com.sun.star.lang.DisposedException exDisposed)
         {
-            // If an UNO object was already disposed before - he throw this special runtime exception.
-            // Of course every UNO call must be look for that - but it's a question of error handling.
+            // If an UNO object was already disposed before - he throw this special
+            // runtime exception. Of course every UNO call must be look for that -
+            // but it's a question of error handling.
             // For demonstration this exception is handled here.
             exDisposed.printStackTrace();
         }
@@ -878,14 +886,16 @@ public class FunctionHelper
         try
         {
             // first try the new way: use new interface XCloseable
-            // It replace the deprecated XTask::close() and should be preferred ... if it can be queried.
-            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
-                com.sun.star.util.XCloseable.class,
-                xFrame);
+            // It replace the deprecated XTask::close() and should be preferred ...
+            // if it can be queried.
+            com.sun.star.util.XCloseable xCloseable =
+                (com.sun.star.util.XCloseable)UnoRuntime.queryInterface(
+                    com.sun.star.util.XCloseable.class, xFrame);
             if (xCloseable!=null)
             {
-                // We deliver the owner ship of this frame not to the (possible) source
-                // which throw a CloseVetoException. We whishto have it under our own control.
+                // We deliver the owner ship of this frame not to the (possible)
+                // source which throw a CloseVetoException. We whishto have it
+                // under our own control.
                 try
                 {
                     xCloseable.close(false);
@@ -899,9 +909,9 @@ public class FunctionHelper
             else
             {
                 // OK: the new way isn't possible. Try the old one.
-                com.sun.star.frame.XTask xTask = (com.sun.star.frame.XTask)UnoRuntime.queryInterface(
-                    com.sun.star.frame.XTask.class,
-                    xFrame);
+                com.sun.star.frame.XTask xTask = (com.sun.star.frame.XTask)
+                    UnoRuntime.queryInterface(com.sun.star.frame.XTask.class,
+                                              xFrame);
                 if (xTask!=null)
                 {
                     // return value doesn't interest here. Because
@@ -941,17 +951,20 @@ public class FunctionHelper
     {
         String sName = null;
 
-        com.sun.star.lang.XMultiServiceFactory xSMGR = OfficeConnect.getSMGR();
+        com.sun.star.uno.XComponentContext xCtx = OfficeConnect.getOfficeContext();
 
         try
         {
-            com.sun.star.frame.XFramesSupplier xSupplier = (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
-                com.sun.star.frame.XFramesSupplier.class,
-                xSMGR.createInstance("com.sun.star.frame.Desktop"));
+            com.sun.star.frame.XFramesSupplier xSupplier =
+                (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XFramesSupplier.class,
+                    xCtx.getServiceManager().createInstanceWithContext(
+                        "com.sun.star.frame.Desktop", xCtx));
 
-            com.sun.star.container.XIndexAccess xContainer = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
-                com.sun.star.container.XIndexAccess.class,
-                xSupplier.getFrames());
+            com.sun.star.container.XIndexAccess xContainer =
+                (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+                    com.sun.star.container.XIndexAccess.class,
+                    xSupplier.getFrames());
 
             int nCount = xContainer.getCount();
             for (int i=0; i<nCount; ++i )
