@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:15:25 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,10 @@ using namespace tdoc_ucp;
 
 OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
-            OfficeDocumentsCloseListener * pCloseListener )
+            OfficeDocumentsEventListener * pDocEventListener )
 : m_xSMgr( xSMgr ),
   m_xDocEvtNotifier( createDocumentEventNotifier( xSMgr ) ),
-  m_pCloseListener( pCloseListener )
+  m_pDocEventListener( pDocEventListener )
 {
     if ( m_xDocEvtNotifier.is() )
     {
@@ -326,8 +326,15 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                                 xSupplier,
                                 aDocId,
                                 static_cast< ContentProvider * >(
-                                    m_pCloseListener ) ) ),
+                                    m_pDocEventListener ) ) ),
                         xModel );
+
+                // Propagate document closure.
+                OSL_ENSURE( m_pDocEventListener,
+                    "OnLoad/OnNew event: no owner for insert event propagation!" );
+
+                if ( m_pDocEventListener )
+                    m_pDocEventListener->notifyDocumentOpened( aDocId );
             }
 #else
 
@@ -364,15 +371,14 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 {
                     rtl::OUString aDocId( (*it).first );
 
-                    m_aDocs.erase( it );
-
                     // Propagate document closure.
-                    OSL_ENSURE( m_pCloseListener,
+                    OSL_ENSURE( m_pDocEventListener,
                         "OnUnload event: no owner for close event propagation!" );
 
-                    if ( m_pCloseListener )
-                        m_pCloseListener->notifyDocumentClosed( aDocId );
+                    if ( m_pDocEventListener )
+                        m_pDocEventListener->notifyDocumentClosed( aDocId );
 
+                    m_aDocs.erase( it );
                     break;
                 }
                 ++it;
@@ -586,7 +592,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                                                     aDocId,
                                                     static_cast<
                                                         ContentProvider * >(
-                                                            m_pCloseListener )
+                                                            m_pDocEventListener )
                                                                     ) ),
                                             xModel );
                                 }
