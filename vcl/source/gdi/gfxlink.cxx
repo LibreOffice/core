@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-25 15:50:03 $
+ *  last change: $Author: ka $ $Date: 2001-06-11 13:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,15 +343,15 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
                     }
                     catch( const ::com::sun::star::ucb::ContentCreationException& )
                     {
-                        DBG_ERROR( "ContentCreationException" );
                     }
                     catch( const ::com::sun::star::uno::RuntimeException& )
                     {
-                        DBG_ERROR( "RuntimeException" );
                     }
                     catch( const ::com::sun::star::ucb::CommandAbortedException& )
                     {
-                        DBG_ERROR( "CommandAbortedException" );
+                    }
+                    catch( const ::com::sun::star::uno::Exception& )
+                    {
                     }
 
                     maURL = INetURLObject();
@@ -377,15 +377,15 @@ ImpSwap::~ImpSwap()
         }
         catch( const ::com::sun::star::ucb::ContentCreationException& )
         {
-            DBG_ERROR( "ContentCreationException" );
         }
         catch( const ::com::sun::star::uno::RuntimeException& )
         {
-            DBG_ERROR( "RuntimeException" );
         }
         catch( const ::com::sun::star::ucb::CommandAbortedException& )
         {
-            DBG_ERROR( "CommandAbortedException" );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 11:03:11 $
+ *  last change: $Author: ka $ $Date: 2001-06-11 13:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,15 +405,15 @@ void ImpGraphic::ImplClear()
             }
             catch( const ::com::sun::star::ucb::ContentCreationException& )
             {
-                DBG_ERROR( "ContentCreationException" );
             }
             catch( const ::com::sun::star::uno::RuntimeException& )
             {
-                DBG_ERROR( "RuntimeException" );
             }
             catch( const ::com::sun::star::ucb::CommandAbortedException& )
             {
-                DBG_ERROR( "CommandAbortedException" );
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
             }
 
             delete mpSwapFile;
@@ -1045,16 +1045,16 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                                 }
                                 catch( const ::com::sun::star::ucb::ContentCreationException& )
                                 {
-                                    DBG_ERROR( "ContentCreationException" );
                                 }
                                 catch( const ::com::sun::star::uno::RuntimeException& )
                                 {
-                                    DBG_ERROR( "RuntimeException" );
                                 }
                                 catch( const ::com::sun::star::ucb::CommandAbortedException& )
                                 {
-                                    DBG_ERROR( "CommandAbortedException" );
-                    }
+                                }
+                                catch( const ::com::sun::star::uno::Exception& )
+                                {
+                                }
                             }
                         }
 
@@ -1230,15 +1230,15 @@ BOOL ImpGraphic::ImplSwapOut()
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
                         {
-                            DBG_ERROR( "ContentCreationException" );
                         }
                         catch( const ::com::sun::star::uno::RuntimeException& )
                         {
-                            DBG_ERROR( "RuntimeException" );
                         }
                         catch( const ::com::sun::star::ucb::CommandAbortedException& )
                         {
-                            DBG_ERROR( "CommandAbortedException" );
+                        }
+                        catch( const ::com::sun::star::uno::Exception& )
+                        {
                         }
                     }
 
@@ -1332,15 +1332,15 @@ BOOL ImpGraphic::ImplSwapIn()
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
                         {
-                            DBG_ERROR( "ContentCreationException" );
                         }
                         catch( const ::com::sun::star::uno::RuntimeException& )
                         {
-                            DBG_ERROR( "RuntimeException" );
                         }
                         catch( const ::com::sun::star::ucb::CommandAbortedException& )
                         {
-                            DBG_ERROR( "CommandAbortedException" );
+                        }
+                        catch( const ::com::sun::star::uno::Exception& )
+                        {
                         }
 
                         delete mpSwapFile;
