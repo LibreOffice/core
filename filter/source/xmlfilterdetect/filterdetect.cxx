@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,13 @@ using namespace com::sun::star::beans;
 
 Reference< com::sun::star::frame::XModel > xModel;
 
-::rtl::OUString SAL_CALL supportedByType( const ::com::sun::star::uno::Sequence< ::rtl::OUString > urlPattern ,  const ::rtl::OString resultString, const ::rtl::OUString checkType);
+::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString  clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType);
 
 
 ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
         ::rtl::OUString sTypeName = OUString::createFromAscii("");
-        ::rtl::OUString sUrl;
+        ::rtl::OUString sUrl = OUString::createFromAscii("");
         ::rtl::OUString originalTypeName;
         Sequence<PropertyValue > lProps ;
 
@@ -211,7 +211,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         nLength = aArguments.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-
+              //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(pValue[i].Name,RTL_TEXTENCODING_ASCII_US).getStr() );
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
             {
                   //pValue[i].Value >>= originalTypeName;
@@ -226,19 +226,25 @@ Reference< com::sun::star::frame::XModel > xModel;
                    //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sUrl,RTL_TEXTENCODING_ASCII_US).getStr() );
 
             }
+            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
+            {
+                pValue[i].Value >>= xInStream ;
+            }
 
 
         }
         try{
             Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
-
-            ::ucb::Content aContent(sUrl,xEnv);
-            xInStream = aContent.openStream();
-             com::sun::star::uno::Sequence< sal_Int8 > aData;
-             if (!xInStream.is())
+            if (!xInStream.is())
              {
-                 return sTypeName;
+                ::ucb::Content aContent(sUrl,xEnv);
+                xInStream = aContent.openStream();
+                 if (!xInStream.is())
+                 {
+                         return sTypeName;
+                 }
              }
+        com::sun::star::uno::Sequence< sal_Int8 > aData;
             long nBytesToRead=xInStream->available();
             xInStream->skipBytes (0);
             long bytestRead =xInStream->readBytes (aData,  1000);
@@ -264,15 +270,11 @@ Reference< com::sun::star::frame::XModel > xModel;
                 sal_Int32 j =0;
                 while( j < new_nlength && sTypeName.equalsAscii(""))
                 {
-
-                    Sequence< ::rtl::OUString > tmpStr;
+                    ::rtl::OUString tmpStr =OUString::createFromAscii("");
                     lProps[j].Value >>=tmpStr;
-
-                    if((lProps[j].Name.equalsAscii("URLPattern")) && (tmpStr.getLength()>0) )
+                    if((lProps[j].Name.equalsAscii("ClipboardFormat")) && (!tmpStr.equalsAscii("")) )
                     {
-
                         sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
-
                     }
                  j++;
                 }
@@ -303,19 +305,14 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 
 
-::rtl::OUString SAL_CALL supportedByType( const Sequence< ::rtl::OUString > urlPattern ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
+::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
     sal_Int32 i=0;
     sal_Int32 checked =0;
     ::rtl::OUString sTypeName= OUString::createFromAscii("");
-    while ( (i<urlPattern.getLength()) && (sTypeName.equalsAscii("")))
+    if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
     {
-    //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(myTypes[i],RTL_TEXTENCODING_ASCII_US).getStr() );
-    // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(tmpStr[k].copy(0,7),RTL_TEXTENCODING_ASCII_US).getStr() );
-
-        if((urlPattern[i].match(OUString::createFromAscii("doctype:")))&&(sTypeName.equalsAscii("")))
-        {
-            ::rtl::OString tryStr = ::rtl::OUStringToOString(urlPattern[i].copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
+            ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
             // OSL_ENSURE( sal_False, tryStr);
             while((checked <=resultString.getLength())&& (sTypeName.equalsAscii("")))
             {
@@ -326,13 +323,9 @@ Reference< com::sun::star::frame::XModel > xModel;
                 }
                 checked++;
             }
-        }
-       i++;
-     }
+    }
     return sTypeName;
 }
-
-
 
 // XInitialization
 
