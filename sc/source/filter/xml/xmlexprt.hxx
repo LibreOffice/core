@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,16 +92,7 @@ class ScMyAreaLinksContainer;
 class ScMyDetectiveOpContainer;
 struct ScMyCell;
 class ScDocument;
-
-struct ScMyDrawPage
-{
-    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
-    sal_Bool bHasForms : 1;
-};
-
-typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
-typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
-typedef std::vector<ScMyDrawPage> ScMyDrawPages;
+class ScMySharedData;
 
 class ScXMLExport : public SvXMLExport
 {
@@ -120,6 +111,7 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
+    ScMySharedData*                     pSharedData;
     ScColumnRowStyles*                  pColumnStyles;
     ScColumnRowStyles*                  pRowStyles;
     ScFormatRangeStyles*                pCellStyles;
@@ -128,22 +120,13 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
-    ScMyTableShapes                     aTableShapes;
-    ScMyDrawPages                       aDrawPages;
 
-    std::vector<sal_Int32>      nLastColumns;
-    std::vector<sal_Int32>      nLastRows;
-    ScMyShapesContainer*        pShapesContainer;
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
     ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     sal_Int32                   nOpenRow;
-    sal_Int32                   nProgressReference;
-    sal_Int32                   nProgressValue;
-    sal_Int32                   nProgressObjects;
-    sal_Int32                   nOldProgressValue;
     sal_Int16                   nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;
     sal_Bool                    bRowHeaderOpen : 1;
@@ -151,6 +134,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    bShapeStyles : 1;
 
 
+    void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportViewSettings();
@@ -163,9 +147,6 @@ class ScXMLExport : public SvXMLExport
     virtual void _ExportMeta();
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-
-    void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);
-    void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);
 
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int16 nTable);
@@ -234,7 +215,7 @@ protected:
     virtual XMLShapeExport* CreateShapeExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 public:
-    ScXMLExport();
+    ScXMLExport(const sal_uInt16 nExportFlag);
     virtual ~ScXMLExport();
 
     // XExporter
@@ -248,8 +229,6 @@ public:
     static sal_Int16 GetFieldUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
-    sal_Int32 GetLastColumn(const sal_Int32 nTable);// { return nLastColumns[nTable]; }
-    sal_Int32 GetLastRow(const sal_Int32 nTable);// { return nLastRows[nTable]; }
     sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
         const sal_Int32 nCol, const sal_Int32 nRow,
@@ -257,6 +236,9 @@ public:
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
 
+    void CreateSharedData(const sal_Int32 nTableCount);
+    void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
+    ScMySharedData* GetSharedData() { return pSharedData; }
 };
 
 #endif

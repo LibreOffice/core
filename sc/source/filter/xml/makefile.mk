@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
+#   last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,8 @@ CXXFILES = \
         XMLTrackedChangesContext.cxx \
         XMLChangeViewSettingsContext.cxx \
         XMLViewSettingsExport.cxx \
-        XMLViewSettingsContext.cxx
+        XMLViewSettingsContext.cxx \
+        XMLExportSharedData.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -180,7 +181,8 @@ SLOFILES =  \
         $(SLO)$/XMLTrackedChangesContext.obj \
         $(SLO)$/XMLChangeViewSettingsContext.obj \
         $(SLO)$/XMLViewSettingsExport.obj \
-        $(SLO)$/XMLViewSettingsContext.obj
+        $(SLO)$/XMLViewSettingsContext.obj \
+        $(SLO)$/XMLExportSharedData.obj
 
 
 # --- Tagets -------------------------------------------------------

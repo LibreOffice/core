@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: xmlwrap.hxx,v $
+ *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,52 +59,60 @@
  *
  ************************************************************************/
 
-#ifndef SC_XMLWRAP_HXX
-#define SC_XMLWRAP_HXX
+#ifndef SC_XMLEXPORTSHAREDDATA_HXX
+#define SC_XMLEXPORTSHAREDDATA_HXX
 
-class ScDocument;
-class SfxMedium;
-class SvStorage;
-class ScMySharedData;
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
 
-namespace com { namespace sun { namespace star {
-    namespace uno { template<class X> class Reference; }
-    namespace frame { class XModel; }
-    namespace task { class XStatusIndicator; }
-    namespace lang { class XMultiServiceFactory; }
-    namespace uno { class XInterface; }
-    namespace xml {
-        namespace sax { struct InputSource; } }
-} } }
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 
-class ScXMLImportWrapper
+struct ScMyDrawPage
 {
-    ScDocument&     rDoc;
-    SfxMedium*      pMedium;
-    SvStorage*      pStorage;
+    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
+    sal_Bool bHasForms : 1;
 
-    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
-        com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
+    ScMyDrawPage() : bHasForms(sal_False) {}
+};
 
-    sal_Bool ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
-        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xXMLParser,
-        com::sun::star::xml::sax::InputSource& aParserInput,
-        const rtl::OUString& sComponentName, const rtl::OUString& sDocName, const rtl::OUString& sOldDocName,
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs);
+typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
+typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
+typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
-    sal_Bool ExportToComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
-        com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xWriter,
-        com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
-        const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-        const sal_Bool bCompress, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
-        ScMySharedData*& pSharedData);
+class ScMyShapesContainer;
+struct ScMyShape;
 
+class ScMySharedData
+{
+    std::vector<sal_Int32>      nLastColumns;
+    std::vector<sal_Int32>      nLastRows;
+    ScMyTableShapes*            pTableShapes;
+    ScMyDrawPages*              pDrawPages;
+    ScMyShapesContainer*        pShapesContainer;
+    sal_Int32                   nTableCount;
 public:
-    ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS);
-    BOOL Import();
-    BOOL Export();
+    sal_Int32                   nProgressReference;
+    sal_Int32                   nProgressValue;
+    sal_Int32                   nProgressObjects;
+    sal_Int32                   nOldProgressValue;
+
+    ScMySharedData(const sal_Int32 nTableCount);
+    ~ScMySharedData();
+
+    void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);
+    void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);
+    sal_Int32 GetLastColumn(const sal_Int32 nTable);
+    sal_Int32 GetLastRow(const sal_Int32 nTable);
+    void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
+    sal_Bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
+    void AddNewShape(const ScMyShape& aMyShape);
+    void SortShapesContainer();
+    ScMyShapesContainer* GetShapesContainer() { return pShapesContainer; }
+    void AddTableShape(const sal_Int32 nTable, const sal_Int32 nShape);
+    ScMyTableShapes* GetTableShapes() { return pTableShapes; }
 };
 
 #endif

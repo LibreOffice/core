@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,80 @@ using namespace com::sun::star;
 
 sal_Char __READONLY_DATA sXML_np__text[] = "text";
 sal_Char __READONLY_DATA sXML_np__table[] = "table";
+
+//----------------------------------------------------------------------------
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLImporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaImporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesImporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentImporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
+}
 
 //----------------------------------------------------------------------------
 
@@ -739,27 +813,34 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         pContext = GetScImport().CreateViewSettingsContext(nPrefix, rLocalName, xAttrList);
         break;
     case XML_TOK_DOC_FONTDECLS:
-        pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
+        if (GetScImport().getImportFlags() & IMPORT_FONTDECLS)
+            pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
         break;
     case XML_TOK_DOC_STYLES:
-        pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
+        if (GetScImport().getImportFlags() & IMPORT_STYLES)
+            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
         break;
     case XML_TOK_DOC_AUTOSTYLES:
-        pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_True);
+        if (GetScImport().getImportFlags() & IMPORT_AUTOSTYLES)
+            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_True);
         break;
         break;
     case XML_TOK_DOC_MASTERSTYLES:
-        pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
+        if (GetScImport().getImportFlags() & IMPORT_MASTERSTYLES)
+            pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList );
         break;
     case XML_TOK_DOC_META:
-        pContext = GetScImport().CreateMetaContext( rLocalName );
+        if (GetScImport().getImportFlags() & IMPORT_META)
+            pContext = GetScImport().CreateMetaContext( rLocalName );
         break;
     case XML_TOK_DOC_SCRIPTS:
-        pContext = GetScImport().CreateScriptContext( rLocalName );
+        if (GetScImport().getImportFlags() & IMPORT_SCRIPTS)
+            pContext = GetScImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
-        pContext = GetScImport().CreateBodyContext( rLocalName, xAttrList );
+        if (GetScImport().getImportFlags() & IMPORT_CONTENT)
+            pContext = GetScImport().CreateBodyContext( rLocalName, xAttrList );
         break;
     }
 
@@ -768,28 +849,6 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
 
     return pContext;
 }
-
-//----------------------------------------------------------------------------
-
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Calc" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL ScXMLImport_getImplementationName() throw()
-{
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new ScXMLImport;
-}
-
-//----------------------------------------------------------------------------
 
 const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
 {
@@ -1267,7 +1326,8 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     return pContext;
 }
 
-ScXMLImport::ScXMLImport() :
+ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
+    SvXMLImport(nImportFlag),
     pDoc( NULL ),
     bLoadDoc( sal_True ),
     nStyleFamilyMask( 0 ),
@@ -1495,7 +1555,7 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUStrin
     SvXMLImportContext *pContext = NULL;
     if (!pContext)
     {
-        pContext = new XMLTableStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList);
+        pContext = new XMLTableStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
             //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
@@ -1509,7 +1569,6 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUStrin
 SvXMLImportContext *ScXMLImport::CreateBodyContext(const NAMESPACE_RTL(OUString)& rLocalName,
                                                 const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    GetStyles()->CopyStylesToDoc(sal_True);
     //GetShapeImport()->SetAutoStylesContext((XMLTableStylesContext *)&xAutoStyles);
     //GetChartImport()->SetAutoStylesContext(GetAutoStyles()/*(XMLTableStylesContext *)&xAutoStyles*/);
 
@@ -1589,4 +1648,9 @@ ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
     if (!pChangeTrackingImportHelper)
         pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
     return pChangeTrackingImportHelper;
+}
+
+void ScXMLImport::InsertStyles()
+{
+    GetStyles()->CopyStylesToDoc(sal_True);
 }

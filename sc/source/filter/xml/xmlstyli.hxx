@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:18:35 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     const ::rtl::OUString sColumnStyleServiceName;
     const ::rtl::OUString sRowStyleServiceName;
     const ::rtl::OUString sTableStyleServiceName;
+    sal_Bool bAutoStyles : 1;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
@@ -240,7 +241,8 @@ public:
 
     XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
             const ::rtl::OUString& rLName ,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const sal_Bool bAutoStyles );
     virtual ~XMLTableStylesContext();
 
     // Create child element.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
+#endif
+#ifndef SC_XMLEXPORTSHAREDDATA_HXX
+#include "XMLExportSharedData.hxx"
 #endif
 
 #include <algorithm>
@@ -657,7 +660,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
         if (pCellItr)
             delete pCellItr;
         pCellItr = new ScHorizontalCellIterator(rExport.GetDocument(), nCurrentTable, 0, 0,
-            static_cast<USHORT>(rExport.GetLastColumn(nCurrentTable)), static_cast<USHORT>(rExport.GetLastRow(nCurrentTable)));
+            static_cast<USHORT>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)), static_cast<USHORT>(rExport.GetSharedData()->GetLastRow(nCurrentTable)));
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rExport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {

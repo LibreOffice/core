@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 17:46:39 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
 sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xXMLParser,
     xml::sax::InputSource& aParserInput,
-    const rtl::OUString& sComponentName, const rtl::OUString& sDocName, uno::Sequence<uno::Any>& aArgs)
+    const rtl::OUString& sComponentName, const rtl::OUString& sDocName,
+    const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs)
 {
     SvStorageStreamRef xDocStream;
     if ( !pStorage && pMedium )
@@ -155,8 +156,14 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
 
     if( pStorage )
     {
-        xDocStream = pStorage->OpenStream( sDocName,
+        if (pStorage->IsStream(sDocName))
+            xDocStream = pStorage->OpenStream( sDocName,
                                   STREAM_READ | STREAM_NOCREATE );
+        else if (sOldDocName.getLength() && pStorage->IsStream(sOldDocName))
+            xDocStream = pStorage->OpenStream( sOldDocName,
+                                  STREAM_READ | STREAM_NOCREATE );
+        else
+            return sal_False;
         xDocStream->SetBufferSize( 16*1024 );
         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
@@ -255,14 +262,22 @@ sal_Bool ScXMLImportWrapper::Import()
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh )
     {
+        rtl::OUString sEmpty;
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
         uno::Sequence<uno::Any> aMetaArgs(0);
 
         sal_Bool bMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.sax.importer.MetaInformation")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")), aMetaArgs);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs);
 
+        uno::Sequence<uno::Any> aStylesArgs(0);
+
+        sal_Bool bStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
+            sEmpty, aStylesArgs);
 
         SvXMLGraphicHelper* pGraphicHelper = NULL;
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
@@ -290,8 +305,9 @@ sal_Bool ScXMLImportWrapper::Import()
         pDocArgs[2] <<= xObjectResolver;
 
         sal_Bool bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.sax.importer.Calc")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")), aDocArgs);
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs);
 
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -299,7 +315,7 @@ sal_Bool ScXMLImportWrapper::Import()
         if( pObjectHelper )
             SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
-        return bDocRetval && bMetaRetval;
+        return bDocRetval && bMetaRetval && bStylesRetval;
     }
     return sal_False;
 }
@@ -308,7 +324,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
     const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-    const sal_Bool bCompress, uno::Sequence<uno::Any>& aArgs)
+    const sal_Bool bCompress, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
     sal_Bool bRet(sal_False);
     uno::Reference<io::XOutputStream> xOut;
@@ -345,7 +361,10 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
     if ( xFilter.is() )
     {
+        ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
+        pExport->SetSharedData(pSharedData);
         bRet = xFilter->filter( aDescriptor );
+        pSharedData = pExport->GetSharedData();
 
         if (xStream.Is())
             xStream->Commit();
@@ -387,23 +406,40 @@ sal_Bool ScXMLImportWrapper::Export()
         pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
+        uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator(xModel);
 
-        sal_Bool bMetaRet = sal_False;
-        sal_Bool bDocRet = sal_False;
+        sal_Bool bMetaRet(sal_False);
+        sal_Bool bStylesRet (sal_False);
+        sal_Bool bDocRet(sal_False);
+        ScMySharedData* pSharedData = NULL;
 
         // meta export
 
         {
-            uno::Sequence<uno::Any> aMetaArgs(1);
+            uno::Sequence<uno::Any> aMetaArgs(2);
             uno::Any* pMetaArgs = aMetaArgs.getArray();
             pMetaArgs[0] <<= xHandler;
+            pMetaArgs[1] <<= xStatusIndicator;
             bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
-                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.sax.exporter.MetaInformation")),
-                sal_False, aMetaArgs);
+                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaExporter")),
+                sal_False, aMetaArgs, pSharedData);
         }
 
-        // doc export
+        // styles export
+
+        {
+            uno::Sequence<uno::Any> aStylesArgs(2);
+            uno::Any* pStylesArgs = aStylesArgs.getArray();
+            pStylesArgs[0] <<= xHandler;
+            pStylesArgs[1] <<= xStatusIndicator;
+            bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+                rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
+                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
+                sal_True, aStylesArgs, pSharedData);
+        }
+
+        // content export
 
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -428,14 +464,14 @@ sal_Bool ScXMLImportWrapper::Export()
             uno::Sequence<uno::Any> aDocArgs(4);
             uno::Any* pDocArgs = aDocArgs.getArray();
             pDocArgs[0] <<= xGrfContainer;
-            pDocArgs[1] <<= GetStatusIndicator(xModel);
+            pDocArgs[1] <<= xStatusIndicator;
             pDocArgs[2] <<= xHandler;
             pDocArgs[3] <<= xObjectResolver;
 
             bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("content.xml")),
-                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.sax.exporter.Calc")),
-                sal_True, aDocArgs);
+                sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentExporter")),
+                sal_True, aDocArgs, pSharedData);
 
             if( pGraphicHelper )
                 SvXMLGraphicHelper::Destroy( pGraphicHelper );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-01 13:17:16 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,12 +710,14 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
-        const Reference< XAttributeList > & xAttrList ) :
+        const Reference< XAttributeList > & xAttrList,
+        const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) )),
     sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
     sRowStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
-    sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )))
+    sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
+    bAutoStyles(bTempAutoStyles)
 {
 }
 
@@ -746,7 +748,10 @@ XMLTableStylesContext::~XMLTableStylesContext()
 void XMLTableStylesContext::EndElement()
 {
     SvXMLStylesContext::EndElement();
-    GetImport().GetTextImport()->SetAutoStyles( this );
+    if (bAutoStyles)
+        GetImport().GetTextImport()->SetAutoStyles( this );
+    else
+        ((ScXMLImport&)GetImport()).InsertStyles();
 }
 
 UniReference < SvXMLImportPropertyMapper >
