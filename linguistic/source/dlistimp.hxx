@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 17:33:02 $
+ *  last change: $Author: tl $ $Date: 2001-06-27 10:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,9 @@ public:
         getImplementationName_Static() throw();
     static com::sun::star::uno::Sequence< ::rtl::OUString >
         getSupportedServiceNames_Static() throw();
+
+    // non UNO-specific
+    void    SaveDics();
 };
 
 inline ::rtl::OUString DicList::getImplementationName_Static() throw()

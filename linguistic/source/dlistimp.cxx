@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-18 11:26:05 $
+ *  last change: $Author: tl $ $Date: 2001-06-27 10:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,26 +356,7 @@ INT16 DicEvtListenerHelper::FlushEvents()
 
 void DicList::MyAppExitListener::AtExit()
 {
-    // save (modified) dictionaries
-    Sequence< Reference< XDictionary > > aDics( rMyDicList.getDictionaries() );
-    Reference< XDictionary >    *pDic = aDics.getArray();
-    INT32 nCount = aDics.getLength();
-    for (INT32 i = 0;  i < nCount;  i++)
-    {
-        // save (modified) dictionaries
-        Reference< frame::XStorable >  xStor( pDic[i] , UNO_QUERY );
-        if (xStor.is())
-        {
-            try
-            {
-                if (!xStor->isReadonly() && xStor->hasLocation())
-                    xStor->store();
-            }
-            catch(Exception &)
-            {
-            }
-        }
-    }
+    rMyDicList.SaveDics();
 }
 
 
@@ -686,30 +667,34 @@ void SAL_CALL
         if (pDicEvtLstnrHelper)
             pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
-        ActDicArray& rDicList = GetDicList();
-        INT16 nCount = rDicList.Count();
-        for (INT16 i = 0;  i < nCount;  i++)
+        //! avoid creation of dictionaries if not already done
+        if (pDicList)
         {
-            Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
-
-            // save (modified) dictionaries
-            Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
-            if (xStor.is())
+            ActDicArray& rDicList = GetDicList();
+            INT16 nCount = rDicList.Count();
+            for (INT16 i = 0;  i < nCount;  i++)
             {
-                try
-                {
-                    if (!xStor->isReadonly() && xStor->hasLocation())
-                        xStor->store();
-                }
-                catch(Exception &)
-                {
-                }
-            }
+                Reference< XDictionary > xDic( rDicList.GetObject(i).xDic , UNO_QUERY );
 
-            // release references to (members of) this object hold by
-            // dictionaries
-            if (xDic.is())
-                xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
+                // save (modified) dictionaries
+                Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
+                if (xStor.is())
+                {
+                    try
+                    {
+                        if (!xStor->isReadonly() && xStor->hasLocation())
+                            xStor->store();
+                    }
+                    catch(Exception &)
+                    {
+                    }
+                }
+
+                // release references to (members of) this object hold by
+                // dictionaries
+                if (xDic.is())
+                    xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
+            }
         }
     }
 }
@@ -755,6 +740,8 @@ void DicList::_CreateDicList()
         xIgnAll->setActive( TRUE );
         addDictionary( xIgnAll );
     }
+
+
     // evaluate list of dictionaries to be activated from configuration
     //
     //! to suppress overwriting the list of active dictionaries in the
@@ -776,6 +763,37 @@ void DicList::_CreateDicList()
     }
     pDicEvtLstnrHelper->EndCollectEvents();
 }
+
+
+void DicList::SaveDics()
+{
+    // save dics only if they have already been used/created.
+    //! don't create them just for the purpose of saving them !
+    if (pDicList)
+    {
+        // save (modified) dictionaries
+        ActDicArray& rDicList = GetDicList();
+        INT32 nCount = rDicList.Count();;
+        for (INT32 i = 0;  i < nCount;  i++)
+        {
+            // save (modified) dictionaries
+            Reference< frame::XStorable >  xStor( rDicList.GetObject(i).xDic,
+                                                  UNO_QUERY );
+            if (xStor.is())
+            {
+                try
+                {
+                    if (!xStor->isReadonly() && xStor->hasLocation())
+                        xStor->store();
+                }
+                catch(Exception &)
+                {
+                }
+            }
+        }
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Service specific part
