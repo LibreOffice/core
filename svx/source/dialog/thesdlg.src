@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ chinese_traditional ] = "¬d´M(~S)";
         Text[ arabic ] = "ÈÍË";
         Text[ greek ] = "Á~íáæÞôçóç";
-        Text[ korean ] = "Ã£¾Æ º¸±â(~S)";
+        Text[ korean ] = "Ã£¾Æ º¸±â";
         Text[ turkish ] = "A~ra";
         Text[ language_user1 ] = " ";
     };
