@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:27:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,11 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#endif
+
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -2642,6 +2647,30 @@ sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&      
     return bReturn ;
 }
 
+static rtl::OUString _getTabString()
+{
+    rtl::OUString result;
+    css::uno::Reference < css::beans::XMaterialHolder > xHolder(
+    comphelper::getProcessServiceFactory()->createInstance(
+    rtl::OUString::createFromAscii("com.sun.star.tab.tabreg") ), css::uno::UNO_QUERY );
+    if (xHolder.is())
+    {
+        rtl::OUString aTabString;
+        css::uno::Sequence< css::beans::NamedValue > sMaterial;
+        if (xHolder->getMaterial() >>= sMaterial) {
+            for (int i=0; i < sMaterial.getLength(); i++) {
+                if ((sMaterial[i].Name.equalsAscii("title")) &&
+                    (sMaterial[i].Value >>= aTabString))
+                {
+                    result += rtl::OUString::createFromAscii(" ");
+                    result += aTabString;
+                }
+            }
+        }
+    }
+    return result;
+}
+
 /*-****************************************************************************************************//**
     @short      set value of a transient property
     @descr      This method is calling from helperclass "OPropertySetHelper".
@@ -2672,6 +2701,7 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
                 {
                     ::rtl::OUString sTitle;
                     aValue >>= sTitle;
+                    sTitle += _getTabString();
                     implts_setTitleOnWindow( sTitle );
                 }
                 break;
