@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
@@ -87,38 +90,21 @@ namespace dbaccess
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //=====================================================================
-    Reference< XNumberFormatsSupplier > getDataSourceNumberFormats( Reference< XConnection >& _rxDataSourceConnection )
+//=====================================================================
+void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,sal_Bool _bModified)
+{
+    Reference< XInterface > xParent = _xParent;
+    Reference< XModifiable > xModi;
+    while( xParent.is() )
     {
-        DBG_ASSERT( _rxDataSourceConnection.is(), "::dbaccess::getDataSourceNumberFormats: invalid connection!" );
-
-        Reference< XNumberFormatsSupplier > xReturn;
-        if ( _rxDataSourceConnection.is() )
-        {
-            try
-            {
-                Reference< XChild > xConnAsChild( _rxDataSourceConnection, UNO_QUERY );
-
-                Reference< XPropertySet > xDSProps;
-                if ( xConnAsChild.is() )
-                    xDSProps = xDSProps.query( xConnAsChild->getParent() );
-
-                DBG_ASSERT( xDSProps.is(), "::dbaccess::getDataSourceNumberFormats: invalid connection (no XChild or an invalid parent)!" );
-                if ( xDSProps.is() )
-                {
-                    xDSProps->getPropertyValue( PROPERTY_NUMBERFORMATSSUPPLIER ) >>= xReturn;
-                    DBG_ASSERT( xReturn.is(), "::dbaccess::getDataSourceNumberFormats: could not retrieve the number formatter!" );
-                }
-            }
-            catch ( const Exception& e )
-            {
-                e; // make compiler happy
-            }
-        }
-
-        return xReturn;
+        xModi.set(xParent,UNO_QUERY);
+        Reference<XChild> xChild(xParent,UNO_QUERY);
+        xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
     }
-
+    if ( xModi.is() )
+        xModi->setModified(_bModified);
+}
+// -----------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaccess
 //.........................................................................
