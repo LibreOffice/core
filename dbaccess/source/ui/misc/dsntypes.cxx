@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:49:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,20 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _TOOLS_RC_HXX
+#include <tools/rc.hxx>
+#endif
+// --- needed because of the solar mutex
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+// ---
 //.........................................................................
 namespace dbaui
 {
@@ -84,43 +98,91 @@ namespace dbaui
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
+
+    namespace
+    {
+        void lcl_extractHostAndPort(const String& _sUrl,String& _sHostname,sal_Int32& _nPortNumber)
+        {
+            if ( _sUrl.GetTokenCount(':') >= 2 )
+            {
+                _sHostname      = _sUrl.GetToken(0,':');
+                _nPortNumber    = _sUrl.GetToken(1,':').ToInt32();
+            }
+        }
+        class ODataSourceTypeStringListResource : public Resource
+        {
+            ::std::vector<String>   m_aStrings;
+        public:
+            ODataSourceTypeStringListResource(USHORT _nResId ) : Resource(ModuleRes(_nResId))
+            {
+                m_aStrings.reserve(STR_END);
+                for (int i = STR_MYSQL_ODBC; i < STR_END ; ++i)
+                {
+                    m_aStrings.push_back(String(ResId(i)));
+                }
+
+            }
+            ~ODataSourceTypeStringListResource()
+            {
+                FreeResource();
+            }
+            /** fill the vector with our readed strings
+                @param  _rToFill
+                    Vector to fill.
+            */
+            inline void fill( ::std::vector<String>& _rToFill )
+            {
+                _rToFill = m_aStrings;
+            }
+
+
+            /** returns the String with a given resource id
+                @param  _nResId
+                    The resource id. It will not be checked if this id exists.
+
+                @return String
+                    The string.
+            */
+            String getString(USHORT _nResId)
+            {
+                return String(ResId(_nResId));
+            }
+        };
+    }
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
 DBG_NAME(ODsnTypeCollection)
 //-------------------------------------------------------------------------
 ODsnTypeCollection::ODsnTypeCollection()
-    :Resource(ModuleRes(RSC_DATASOURCE_TYPES))
 #ifdef DBG_UTIL
-    ,m_nLivingIterators(0)
+:m_nLivingIterators(0)
 #endif
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     DBG_CTOR(ODsnTypeCollection,NULL);
-    String sConnectionTypes = String(ResId(STR_CONNTYPES));
-    String sConnectionTypeNames = String(ResId(STR_CONNUINAMES));
-    DBG_ASSERT(sConnectionTypes.GetTokenCount(';') == sConnectionTypeNames.GetTokenCount(';'),
+    ODataSourceTypeStringListResource aTypes(RSC_DATASOURCE_TYPES);
+    aTypes.fill(m_aDsnPrefixes);
+
+    ODataSourceTypeStringListResource aDisplayNames(RSC_DATASOURCE_TYPE_UINAMES);
+    aDisplayNames.fill(m_aDsnTypesDisplayNames);
+
+
+    DBG_ASSERT(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
     String sCurrentType;
-    for (sal_uInt16 i=0; i<sConnectionTypeNames.GetTokenCount(); ++i)
+
+    for (StringVector::iterator aIter = m_aDsnPrefixes.begin();aIter != m_aDsnPrefixes.end();++aIter)
     {
-        m_aDsnTypesDisplayNames.push_back(sConnectionTypeNames.GetToken(i));
-
-        sCurrentType = sConnectionTypes.GetToken(i);
-        m_aDsnPrefixes.push_back(sCurrentType);
-        m_aDsnTypes.push_back(implDetermineType(sCurrentType));
+        m_aDsnTypes.push_back(implDetermineType(*aIter));
     }
-
-    // insert related types here
-    m_aRelatedTypes.insert(TRelatedTypes::value_type(DST_MYSQL_ODBC,DST_MYSQL_JDBC));
-
-    FreeResource();
 }
 
 //-------------------------------------------------------------------------
 ODsnTypeCollection::~ODsnTypeCollection()
 {
-    DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
     DBG_DTOR(ODsnTypeCollection,NULL);
+    DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
 // -----------------------------------------------------------------------------
 void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFactory >& _rxORB)
@@ -162,11 +224,14 @@ DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn)
     StringVector::iterator aEnd = m_aDsnPrefixes.end();
     for (; aIter != aEnd; ++aIter)
     {
-        if ( aIter->EqualsIgnoreCaseAscii(_rDsn,0, ::std::min<sal_Int32>(static_cast<sal_Int32>(_rDsn.Len()),aIter->Len())) )
+        if ( _rDsn.Len() >= aIter->Len() && aIter->EqualsIgnoreCaseAscii(_rDsn,0, aIter->Len()) )
         {
             size_t nPos = (aIter - m_aDsnPrefixes.begin());
             if ( nPos < m_aDsnTypes.size() )
+            {
                 eType = m_aDsnTypes[nPos];
+                break;
+            }
         }
     }
     return eType;
@@ -202,7 +267,52 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn)
     String sPrefix = getDatasourcePrefix(eType);
     return _rDsn.Copy(sPrefix.Len());
 }
+// -----------------------------------------------------------------------------
+void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber)
+{
+    DATASOURCE_TYPE eType = getType(_rDsn);
+    String sUrl = cutPrefix(_rDsn);
+    switch( eType )
+    {
+        case DST_ORACLE_JDBC:
+            lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
+            if ( !_rsHostname.Len() && sUrl.GetTokenCount(':') == 2 )
+            {
+                _nPortNumber = -1;
+                _rsHostname = sUrl.GetToken(0,':');
+            }
+            if ( _rsHostname.Len() )
+                _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
+            _rsHostname = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+            break;
+        case DST_LDAP:
+            lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
+            break;
+        case DST_ADABAS:
+            if ( sUrl.GetTokenCount(':') == 2 )
+                _rsHostname = sUrl.GetToken(0,':');
+            _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+            break;
+        case DST_MYSQL_JDBC:
+            {
+                lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
+                if ( _nPortNumber == -1 && !_rsHostname.Len() && sUrl.GetTokenCount('/') == 2 )
+                    _rsHostname = sUrl.GetToken(0,'/');
+                _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount('/') - 1,'/');
+            }
+            break;
+        case DST_MSACCESS:
+            {
+                ::rtl::OUString sNewFileName;
+                if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
+                {
+                    _sDatabaseName = sNewFileName;
+                }
+            }
+            break;
+    }
+}
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn)
 {
@@ -215,8 +325,9 @@ sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType)
     switch (_eType)
     {
         case DST_DBASE:
-        case DST_TEXT:
+        case DST_FLAT:
         case DST_CALC:
+        case DST_MSACCESS:
             return sal_True;
 
         default:
@@ -242,14 +353,21 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
         case DST_ADABAS:
         case DST_JDBC:
         case DST_MYSQL_ODBC:
+        case DST_ORACLE_JDBC:
         case DST_MYSQL_JDBC:
         case DST_ODBC:
         case DST_ADO:
-        case DST_ADDRESSBOOK:
+        case DST_MSACCESS:
+        case DST_MOZILLA        :
+        case DST_EVOLUTION  :
+        case DST_LDAP       :
+        case DST_OUTLOOK    :
+        case DST_OUTLOOKEXP         :
+        case DST_CALC:
             return sal_True;
             break;
         case DST_DBASE:
-        case DST_TEXT:
+        case DST_FLAT:
         default:
             return sal_False;
     }
@@ -266,6 +384,14 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_UNKNOWN;
     }
     // find first :
+    sal_uInt16 nOracleSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
+    if ( nOracleSeparator != STRING_NOTFOUND )
+    {
+        nOracleSeparator = _rDsn.Search((sal_Unicode)':', nOracleSeparator + 1);
+        if (nOracleSeparator != STRING_NOTFOUND && _rDsn.EqualsIgnoreCaseAscii("jdbc:oracle:thin", 0, nOracleSeparator))
+            return DST_ORACLE_JDBC;
+    }
+
     if (_rDsn.EqualsIgnoreCaseAscii("jdbc", 0, nSeparator))
         return DST_JDBC;
 
@@ -284,14 +410,33 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
         return DST_DBASE;
+
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:ado:", 0, nSeparator))
+    {
+        nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
+        if (STRING_NOTFOUND != nSeparator && _rDsn.EqualsIgnoreCaseAscii("sdbc:ado:access",0, nSeparator) )
+            return DST_MSACCESS;
         return DST_ADO;
+    }
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
-        return DST_TEXT;
+        return DST_FLAT;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
+
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
-        return DST_ADDRESSBOOK;
+    {
+        ++nSeparator;
+        if (_rDsn.EqualsIgnoreCaseAscii("mozilla", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_MOZILLA;
+        if (_rDsn.EqualsIgnoreCaseAscii("ldap:", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_LDAP;
+        if (_rDsn.EqualsIgnoreCaseAscii("outlook", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_OUTLOOK;
+        if (_rDsn.EqualsIgnoreCaseAscii("outlookexp", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_OUTLOOKEXP;
+        if (_rDsn.EqualsIgnoreCaseAscii("evolution", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_EVOLUTION;
+    }
 
     // find third :
     nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
@@ -307,26 +452,11 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_MYSQL_JDBC;
 
 
+
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::areTypesRelated(DATASOURCE_TYPE _eType1,DATASOURCE_TYPE _eType2)
-{
-    OSL_ENSURE(_eType1 != _eType2,"Type are identical!");
-    sal_Bool bRelated = sal_False;
-    TRelatedTypes::iterator aFind = m_aRelatedTypes.find(_eType1);
-    if ( aFind != m_aRelatedTypes.end() )
-        bRelated = aFind->second == _eType2;
-    if ( !bRelated )
-    {
-        aFind = m_aRelatedTypes.find(_eType2);
-        if ( aFind != m_aRelatedTypes.end() )
-            bRelated = aFind->second == _eType1;
-    }
-    return bRelated;
-}
-//-------------------------------------------------------------------------
 sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
 {
     DBG_ASSERT(
@@ -476,43 +606,6 @@ int DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 {
     return new DbuTypeCollectionItem(*this);
-}
-
-//=========================================================================
-//= AddressBookTypes
-//=========================================================================
-//-------------------------------------------------------------------------
-String AddressBookTypes::getAddressURL( ADDRESSBOOK_TYPE _eType )
-{
-    const sal_Char* pURL = "";
-    switch ( _eType )
-    {
-        case ABT_MORK       : pURL = "sdbc:address:mozilla"; break;
-        case ABT_EVOLUTION  : pURL = "sdbc:address:evolution"; break;
-        case ABT_LDAP       : pURL = "sdbc:address:ldap"; break;
-        case ABT_OUTLOOK    : pURL = "sdbc:address:outlook"; break;
-        case ABT_OE         : pURL = "sdbc:address:outlookexp"; break;
-        default:
-            DBG_ERROR("AddressBookTypes::getAddressURL: invalid type!");
-    }
-    return String::CreateFromAscii( pURL );
-}
-
-//-------------------------------------------------------------------------
-ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
-{
-    if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:mozilla" ) )
-        return ABT_MORK;
-    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:evolution" ) )
-        return ABT_EVOLUTION;
-    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:ldap" ) )
-        return ABT_LDAP;
-    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlook" ) )
-        return ABT_OUTLOOK;
-    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlookexp" ) )
-        return ABT_OE;
-
-    return ABT_UNKNOWN;
 }
 
 //.........................................................................
