@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: dl $ $Date: 2001-10-31 08:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2339,6 +2339,9 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
             aFullName += String::CreateFromInt32( (sal_Int32)i );
             pSheet = (SfxStyleSheet*) pStyleSheetPool->Find(aFullName, SD_LT_FAMILY);
             pTO->StartListening( *pSheet );
+
+            if( i == 1 )
+                pTO->SetStyleSheet( pSheet, TRUE );
         }
 
         bNewObject = TRUE;

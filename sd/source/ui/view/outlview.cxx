@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-12 12:16:46 $
+ *  last change: $Author: dl $ $Date: 2001-10-31 08:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,10 +1339,14 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 // als Listener anmelden
                 for (USHORT i = 1; i < 10; i++)
                 {
-                    SfxStyleSheet* pS = (SfxStyleSheet*)pOutlineStyleList->
-                                                                    GetObject(i);
+                    SfxStyleSheet* pS = (SfxStyleSheet*)pOutlineStyleList->GetObject(i);
                     if (pS)
+                    {
                         pTO->StartListening(*pS);
+
+                        if( i == 1 )
+                            pTO->SetStyleSheet( pS, TRUE );
+                    }
                 }
                 AddUndo(new SdrUndoNewObj(*pTO));
             }
