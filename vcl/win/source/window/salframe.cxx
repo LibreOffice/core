@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:36:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYS
 #define UNICODE_NOCHAR      0xFFFF
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString(const char *buffer)
 {
     OutputDebugString( buffer );
@@ -526,7 +526,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, pInst->maInstData.mhInst, (void*)pFrame );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         // set transparency value
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
             lpfnSetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
