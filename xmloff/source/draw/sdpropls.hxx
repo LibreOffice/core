@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define CTF_PAGE_SOUND_URL          1005
 #define CTF_PAGE_VISIBLE            1006
 #define CTF_PAGE_TRANS_TYPE         1007
+#define CTF_PAGE_TRANS_STYLE        1008
 #define CTF_PAGE_TRANS_SPEED        1009
 #define CTF_PAGE_TRANS_DURATION     1010
 #define CTF_PAGE_BACKSIZE           1011
