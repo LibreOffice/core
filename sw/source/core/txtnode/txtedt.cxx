@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-18 13:45:05 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 08:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,8 +540,15 @@ BOOL SwScanner::NextWord( LanguageType aLang )
         xub_StrLen nOldBegin = nBegin;
         nBegin = bReverse ? pWrong->LastWrong( nBegin )
                           : pWrong->NextWrong( nBegin );
+
         if( STRING_LEN == nBegin )
             return FALSE;
+
+        // We make sure that we do not step backwards in order to avoid
+        // endless loops.
+        if ( ( bReverse && nBegin > nOldBegin ) ||
+             ( ! bReverse && nBegin < nOldBegin ) )
+             nBegin = nOldBegin;
 
         // if we jumped over a range marked as valid, we have to adjust
         // the word boundaries
