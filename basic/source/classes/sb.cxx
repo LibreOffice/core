@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 09:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,17 +299,6 @@ StarBASIC::StarBASIC( StarBASIC* p )
     pLibInfo = NULL;
     bNoRtl = bBreak = FALSE;
     pModules = new SbxArray;
-
-#ifdef DBG_UTIL
-    Config LangConfig( String( RTL_CONSTASCII_USTRINGPARAM("d:\\LANGUAGE.INI") ) );
-    LangConfig.SetGroup( "main" );
-    ByteString aStr = LangConfig.ReadKey( "language","basic" );
-    if( aStr == "vbscript" )
-        SetGlobalLanguageMode( SB_LANG_VBSCRIPT );
-    else
-    if( aStr == "javascript" )
-        SetGlobalLanguageMode( SB_LANG_JAVASCRIPT );
-#endif
 
     if( !GetSbData()->nInst++ )
     {
