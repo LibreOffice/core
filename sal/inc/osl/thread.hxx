@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-13 10:39:37 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 11:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@ class Thread
     Thread& operator= ( const Thread& );
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW ()
+    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW (())
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW ()
+    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW (())
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW ()
+    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW (())
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW ()
+    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW (())
         {}
 
     Thread(): m_hThread(0){}
