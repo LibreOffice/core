@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:03:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,26 @@
 #include <rtl/math.hxx>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <ctype.h>
 #if defined( MAC ) || defined( ICC )
 #include <stdlib.h>
 #endif
+
+#include "scitems.hxx"
+#include "patattr.hxx"
+#include "docpool.hxx"
+#include <svx/algitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/wghtitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"
 #include "document.hxx"
 
 #include "op.h"
+#include "optab.h"
 #include "tool.h"
 #include "math.h"
 #include "decl.h"
@@ -105,8 +115,7 @@ extern BYTE*        pFormelBuffer;  // -> memory.cxx, fuer
 
 static UINT16       nDefWidth = ( UINT16 ) ( TWIPS_PER_CHAR * 10 );
 
-
-
+extern std::map<UINT16, ScPatternAttr> aLotusPatternPool;
 
 void NI( SvStream& r, UINT16 n )
 {
@@ -165,23 +174,22 @@ void OP_Label( SvStream& r, UINT16 n )
     BYTE            nFormat;
     UINT16          nCol, nRow;
     SCTAB           nTab = 0;
-    sal_Char        pText[ 256 ];
 
     r >> nFormat >> nCol >> nRow;
     n -= 5;
 
-    r.Read( pText, n );
-    pText[ n + 1 ] = 0;   // zur Sicherheit Nullterminator anhaengen
-    // der Mega-Hack: bei Text wird HART Text als Format eingebrannt!!!!!!!
+     sal_Char* pText = new sal_Char[n + 1];
+      r.Read( pText, n );
+     pText[n] = 0;
+
     nFormat &= 0x80;    // Bit 7 belassen
     nFormat |= 0x75;    // protected egal, special-text gesetzt
-
-    // Sonderzeichenanpassung
-    DosToSystem( pText );
 
     PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText );
 
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezStd );
+
+    delete [] pText;
 }
 
 
@@ -215,7 +223,7 @@ void OP_Formula( SvStream& r, UINT16 n )
     INT32               nBytesLeft = nFormulaSize;
     ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
 
-    LotusToSc           aConv( r, pLotusRoot->eCharsetQ );
+    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, FALSE );
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
@@ -276,8 +284,6 @@ void OP_NamedRange( SvStream& r, UINT16 n )
     else
         strcpy( pAnsi, cPuffer );           // #100211# - checked
 
-    DosToSystem( pAnsi );
-
     String              aTmp( pAnsi, pLotusRoot->eCharsetQ );
 
     ScfTools::ConvertToScDefinedName( aTmp );
@@ -289,7 +295,7 @@ void OP_NamedRange( SvStream& r, UINT16 n )
 void OP_SymphNamedRange( SvStream& r, UINT16 n )
 {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
-    UINT16              nColSt, nRowSt, nColEnd, nRowEnd, nN = 0;
+    UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
     BYTE                nType;
     sal_Char*           pName;
     sal_Char            cPuffer[ 32 ];
@@ -314,8 +320,6 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     }
     else
         strcpy( pAnsi, cPuffer );           // #100211# - checked
-
-    DosToSystem( pAnsi );
 
     String      aTmp( pAnsi, pLotusRoot->eCharsetQ );
     ScfTools::ConvertToScDefinedName( aTmp );
@@ -394,4 +398,277 @@ void OP_Blank( SvStream& r, UINT16 n )
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat );
 }
 
+void OP_BOF123( SvStream& r, UINT16 n )
+{
+    r.SeekRel( 26 );
+}
 
+
+void OP_EOF123( SvStream& r, UINT16 n )
+{
+    bEOF = TRUE;
+}
+
+void OP_Label123( SvStream& r, UINT16 n )
+{
+    BYTE      nTab, nCol;
+    UINT16    nRow;
+    r >> nRow >> nTab >> nCol;
+    n -= 4;
+
+    sal_Char* pText = new sal_Char[n + 1];
+    r.Read( pText, n );
+    pText[ n ] = 0;
+
+    PutFormString( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pText );
+
+    delete []pText;
+}
+
+void OP_Number123( SvStream& r, UINT16 n )
+{
+    BYTE    nCol,nTab;
+    UINT16  nRow;
+    UINT32   nValue;
+
+    r >> nRow >> nTab >> nCol >> nValue;
+    double fValue = Snum32ToDouble( nValue );
+
+    ScValueCell *pCell = new ScValueCell( fValue );
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (BOOL) TRUE );
+}
+
+void OP_Formula123( SvStream& r, UINT16 n )
+{
+    BYTE nCol,nTab;
+    UINT16 nRow;
+
+    r >> nRow >> nTab >> nCol;
+    r.SeekRel( 8 );    // Result- jump over
+
+    const ScTokenArray* pErg;
+    INT32               nBytesLeft = n - 12;
+    ScAddress           aAddress( nCol, nRow, nTab );
+
+    LotusToSc           aConv( r, pLotusRoot->eCharsetQ, TRUE );
+    aConv.Reset( aAddress );
+    aConv.Convert( pErg, nBytesLeft );
+
+    ScFormulaCell*      pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+
+    pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (BOOL) TRUE );
+}
+
+void OP_IEEENumber123( SvStream& r, UINT16 n)
+{
+    BYTE nCol,nTab;
+    UINT16 nRow;
+    double dValue;
+
+    r >> nRow >> nTab >> nCol >> dValue;
+
+    ScValueCell *pCell = new ScValueCell(dValue);
+    pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (BOOL) TRUE );
+}
+
+void OP_Note123( SvStream& r, UINT16 n)
+{
+    BYTE      nTab, nCol;
+    UINT16    nRow;
+    r >> nRow >> nTab >> nCol;
+    n -= 4;
+
+    sal_Char* pText = new sal_Char[n + 1];
+    r.Read( pText, n );
+    pText[ n ] = 0;
+
+    String aTmp(pText,pLotusRoot->eCharsetQ);
+    ScPostIt *pNote = new ScPostIt(aTmp, pLotusRoot->pDoc);
+
+    pDoc->SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), *pNote ) ;
+
+    delete [] pText;
+}
+
+void OP_HorAlign123( BYTE nAlignPattern, SfxItemSet& rPatternItemSet )
+{
+//      pre:  Pattern is stored in the last 3 bites of the 21st byte
+//      post: Appropriate Horizontal Alignement is set in rPattern according to the bit pattern.
+//
+//      LEFT:001, RIGHT:010, CENTER:011, JUSTIFY:110,
+//      LEFT-Text/RIGHT-NUMBER:100, DEFAULT:000
+
+    nAlignPattern = ( nAlignPattern & 0x07);
+
+    switch (nAlignPattern)
+     {
+        case 1:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT ) );
+            break;
+          case 2:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT ) );
+            break;
+        case 3:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER ) );
+            break;
+          case 4:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD ) );
+            break;
+        case 6:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_BLOCK ) );
+            break;
+          default:
+            rPatternItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD ) );
+            break;
+      }
+}
+
+void OP_VerAlign123( BYTE nAlignPattern,SfxItemSet& rPatternItemSet  )
+{
+//      pre:  Pattern is stored in the last 3 bites of the 22nd byte
+//      post: Appropriate Verticle Alignement is set in rPattern according to the bit pattern.
+//
+//      TOP:001, MIDDLE:010, DOWN:100, DEFAULT:000
+
+    nAlignPattern = ( nAlignPattern & 0x07);
+
+    switch (nAlignPattern)
+    {
+        case 0:
+            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD) );
+            break;
+        case 1:
+            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP) );
+            break;
+        case 2:
+            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER) );
+            break;
+        case 4:
+            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM) );
+            break;
+        default:
+            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD) );
+            break;
+    }
+}
+
+void OP_CreatePattern123( SvStream& r, UINT16 n)
+{
+    UINT16 nCode,nPatternId;
+
+    ScPatternAttr aPattern(pDoc->GetPool());
+    SfxItemSet& rItemSet = aPattern.GetItemSet();
+
+    r >> nCode;
+    n = n - 2;
+
+    if ( nCode == 0x0fd2 )
+    {
+        r >> nPatternId;
+
+        BYTE Hor_Align, Ver_Align, temp;
+        BOOL bIsBold,bIsUnderLine,bIsItalics;
+
+        r.SeekRel(12);
+
+        // Read 17th Byte
+        r >> temp;
+
+        bIsBold = (temp & 0x01);
+        bIsItalics = (temp & 0x02);
+        bIsUnderLine = (temp & 0x04);
+
+        if ( bIsBold )
+            rItemSet.Put( SvxWeightItem(WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
+        if ( bIsItalics )
+            rItemSet.Put( SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
+        if ( bIsUnderLine )
+            rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
+
+        r.SeekRel(3);
+
+        // Read 21st Byte
+        r >> Hor_Align;
+        OP_HorAlign123( Hor_Align, rItemSet );
+
+        r >> Ver_Align;
+        OP_VerAlign123( Ver_Align, rItemSet );
+
+        aLotusPatternPool.insert( std::map<UINT16, ScPatternAttr>::value_type( nPatternId, aPattern ) );
+        n = n - 20;
+    }
+    r.SeekRel(n);
+}
+
+void OP_ApplyPatternArea123( SvStream& rStream )
+{
+    UINT16 nOpcode, nLength;
+    UINT16 nCol = 0, nColCount = 0, nRow = 0, nRowCount = 0, nTab = 0, nData, nTabCount = 0, nLevel = 0;
+
+    do
+    {
+        rStream >> nOpcode >> nLength;
+        switch ( nOpcode )
+        {
+            case ROW_FORMAT_MARKER:
+                nLevel++;
+                break;
+            case COL_FORMAT_MARKER:
+                nLevel--;
+                if( nLevel == 1 )
+                {
+                    nTab = nTab + nTabCount;
+                    nCol = 0; nColCount = 0;
+                    nRow = 0; nRowCount = 0;
+                }
+                break;
+            case LOTUS_FORMAT_INDEX:
+                if( nLength >= 2 )
+                {
+                    rStream >> nData;
+                    rStream.SeekRel( nLength - 2 );
+                    if( nLevel == 1 )
+                        nTabCount = nData;
+                    else if( nLevel == 2 )
+                    {
+                        nCol = nCol + nColCount;
+                        nColCount = nData;
+                        if ( nCol > 0xff ) // 256 is the max col size supported by 123
+                            nCol = 0;
+                    }
+                    else if( nLevel == 3 )
+                    {
+                        nRow = nRow + nRowCount;
+                        nRowCount = nData;
+                        if ( nRow > 0x1fff ) // 8192 is the max row size supported by 123
+                            nRow = 0;
+                    }
+                }
+                else
+                    rStream.SeekRel( nLength );
+                break;
+            case LOTUS_FORMAT_INFO:
+                if( nLength >= 2 )
+                {
+                    rStream >> nData;
+                    rStream.SeekRel( nLength - 2 );
+                    for( int i = 0; i < nTabCount; i++)
+                    {
+                        std::map<UINT16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
+                        pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, nTab + i, loc->second );
+                    }
+                }
+                else
+                    rStream.SeekRel( nLength );
+                break;
+            default:
+                rStream.SeekRel( nLength );
+                break;
+        }
+    }
+    while( nLevel && !rStream.IsEof() );
+
+    aLotusPatternPool.clear();
+}
