@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:31:57 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 17:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,10 @@ uno::Any SAL_CALL SdXShape::queryInterface( const ::com::sun::star::uno::Type & 
     {
         aAny <<= uno::Reference< beans::XPropertySet >(this);
     }
+    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
+    {
+        aAny <<= uno::Reference< beans::XPropertyState >(this);
+    }
     else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
     {
         aAny <<= uno::Reference< lang::XTypeProvider >(this);
@@ -333,6 +337,115 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
             *pTypes++ = *pBaseTypes++;
     }
     return aTypeSequence;
+}
+
+// XPropertyState
+beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if(!mxShapeAgg.is())
+        throw uno::RuntimeException();
+
+    uno::Any aRet;
+
+    if( maPropSet.getPropertyMapEntry(PropertyName) )
+    {
+        return beans::PropertyState_DIRECT_VALUE;
+    }
+    else
+    {
+        uno::Reference< beans::XPropertyState >  xPrSet;
+        mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)) >>= xPrSet;
+
+        if(xPrSet.is())
+        {
+            return xPrSet->getPropertyState(PropertyName);
+        }
+        else
+        {
+            return beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+}
+
+uno::Sequence< beans::PropertyState > SAL_CALL SdXShape::getPropertyStates( const uno::Sequence< OUString >& aPropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
+{
+    const sal_Int32 nCount = aPropertyName.getLength();
+    const OUString* pNames = aPropertyName.getConstArray();
+
+    uno::Sequence< beans::PropertyState > aRet( nCount );
+    beans::PropertyState* pState = aRet.getArray();;
+
+    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+        pState[nIdx] = getPropertyState( pNames[nIdx] );
+
+    return aRet;
+}
+
+void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if(!mxShapeAgg.is())
+        throw uno::RuntimeException();
+
+    uno::Any aRet;
+
+    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+
+    if( maPropSet.getPropertyMapEntry(PropertyName) )
+    {
+        return;
+    }
+    else
+    {
+        uno::Reference< beans::XPropertyState > xPrSet;
+        mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)) >>= xPrSet;
+
+        if( xPrSet.is() )
+        {
+            xPrSet->setPropertyToDefault(PropertyName);
+        }
+
+    }
+}
+
+uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if(!mxShapeAgg.is())
+        throw uno::RuntimeException();
+
+    uno::Any aRet;
+
+    if( maPropSet.getPropertyMapEntry(aPropertyName) )
+    {
+        return getPropertyValue( aPropertyName );
+    }
+    else
+    {
+        uno::Reference< beans::XPropertyState >  xPrSet;
+        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)));
+
+        if( aAny >>= xPrSet)
+        {
+            aRet = xPrSet->getPropertyDefault(aPropertyName);
+
+            if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+            {
+                OUString aName;
+                if( aRet >>= aName )
+                {
+                    aName = SdLayer::convertToExternalName( aName );
+                    aRet <<= aName;
+                }
+            }
+        }
+    }
+
+    return aRet;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SdXShape::getImplementationId()
