@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 14:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,17 +300,22 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 }
                             }
                     }
-                    uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                    if (xProperties.is())
+                    if (nCurrentSheet > 0)
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
-                        if (pStyle)
+                        uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+                        if (xProperties.is())
                         {
-                            pStyle->FillPropertySet(xProperties);
+                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
+                            if (pStyle)
+                            {
+                                pStyle->FillPropertySet(xProperties);
+                            }
                         }
                     }
+                    else
+                        rImport.SetFirstTableStyle(sStyleName);
                 }
 
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 14:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "xmlimprt.hxx"
 #include "xmldpimp.hxx"
 #include "xmlcvali.hxx"
+#include "xmlstyli.hxx"
 
 #ifndef SC_XMLLABRI_HXX
 #include "xmllabri.hxx"
@@ -107,6 +108,10 @@
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -251,6 +256,29 @@ void ScXMLBodyContext::EndElement()
         if (sPassword.getLength())
             SvXMLUnitConverter::decodeBase64(aPass, sPassword);
         pDoc->SetDocProtection(bProtected, aPass);
+    }
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
+    if ( xSpreadDoc.is() )
+    {
+        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+        uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+        if ( xIndex.is() )
+        {
+            uno::Any aSheet = xIndex->getByIndex(0);
+            uno::Reference< sheet::XSpreadsheet > xSheet;
+            if ( aSheet >>= xSheet )
+            {
+                uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
+                if (xProperties.is())
+                {
+                    XMLTableStylesContext *pStyles = (XMLTableStylesContext *)GetScImport().GetAutoStyles();
+                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                        XML_STYLE_FAMILY_TABLE_TABLE, GetScImport().GetFirstTableStyle(), sal_True);
+                    if (pStyle)
+                        pStyle->FillPropertySet(xProperties);
+                }
+            }
+        }
     }
 }
 

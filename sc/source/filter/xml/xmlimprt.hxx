@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 14:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,6 +743,8 @@ class ScXMLImport: public SvXMLImport
     ScMyImportValidations   aValidations;
     ScMyImpDetectiveOpArray aDetectiveOpArray;
 
+    rtl::OUString           sFirstTableStyle;
+
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
     sal_Bool                bRemoveLastChar : 1;
@@ -906,6 +908,9 @@ public:
     void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+
+    void SetFirstTableStyle(const rtl::OUString& rValue) { sFirstTableStyle = rValue; }
+    rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
 };
 
 #endif
