@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:24:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,8 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
         {
             if (nMatrixFlag == MM_FORMULA)
             {
-                sal_uInt16 nColumns, nRows;
+                SCCOL nColumns;
+                SCROW nRows;
                 pFormulaCell->GetMatColsRows(nColumns, nRows);
                 rtl::OUStringBuffer sColumns;
                 rtl::OUStringBuffer sRows;
