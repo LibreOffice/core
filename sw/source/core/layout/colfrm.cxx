@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:10:53 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             else
                 GetFmt()->SetAttr( SwFmtFillOrder() );
             if ( pSave )
-                ::RestoreCntnt( pSave, this, 0 );
+                ::RestoreCntnt( pSave, this, 0, true );
             return;
         }
         if ( nOldNum == 1 )
@@ -353,7 +353,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
                 ((SwLayoutFrm*)Lower())->Lower() &&
                 ((SwLayoutFrm*)Lower())->Lower()->IsLayoutFrm(),
                 "Gesucht: Spaltenbody (Tod oder Lebend)." );   // ColumnFrms jetzt mit BodyFrm
-        ::RestoreCntnt( pSave, (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower(), 0 );
+        ::RestoreCntnt( pSave, (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower(), 0, true );
     }
 }
 
