@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 10:18:35 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 12:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.db.*;
+import com.sun.star.lang.XComponent;
 
 
 public class ReportWizard extends WizardDialog implements XTextListener, XCompletion{
@@ -325,14 +326,15 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     }
 
 
-    public void startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
+    public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
+        XComponent[] ret = null;
     try{
         this.xMSF = _xMSF;
         // Check general availability of office paths
         ReportPath = FileAccess.getOfficePath(xMSF, "Template","share");
         ReportPath = FileAccess.combinePaths(xMSF, ReportPath, "/wizard/report");
         if (ReportPath.equals(""))
-            return;
+            return ret;
         DBGPROPERTYVALUE = CurPropertyValue;
         CurReportDocument =  new ReportDocument(xMSF, true, oResource);
         CurDBMetaData = CurReportDocument.CurDBMetaData;
@@ -353,13 +355,13 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                     this.xComponent.dispose();
                     if (bCloseDocument == true){
                         OfficeDocument.dispose(xMSF, CurReportDocument.xComponent);
-                        return;
+                        return ret;
                     }
                     if ((nReportMode == Finalizer.SOCREATETEMPLATE) || (nReportMode == Finalizer.SOUSETEMPLATE)) {
                         bdisposeDialog = false;
                         CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, true);
                         boolean bOpenInDesign = (nReportMode == Finalizer.SOCREATETEMPLATE);
-                        CurDBMetaData.openReportDocument(sReportName, true, bOpenInDesign);
+                        ret = CurDBMetaData.openReportDocument(sReportName, true, bOpenInDesign);
                     }
                     else {
                         bdisposeDialog = false;
@@ -367,9 +369,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                         CurDataimport.CurReportDocument = CurReportDocument;
                         CurDataimport.showProgressDisplay(xMSF, false);
                         importReportData(xMSF, CurDataimport);
-                        CurDBMetaData.openReportDocument(sReportName, false, false);
+                        ret = CurDBMetaData.openReportDocument(sReportName, false, false);
                     }
-                    return;
+                    return ret;
                 case 1:
                     if (bdisposeDialog == true)
                         CurReportDocument.unlockallControllers();
@@ -380,7 +382,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     }
     catch(java.lang.Exception jexception ){
         jexception.printStackTrace(System.out);
-    }}
+    }
+        return ret;
+    }
 
 
     public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
