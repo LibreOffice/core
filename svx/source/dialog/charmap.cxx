@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-08 15:36:37 $
+ *  last change: $Author: hdu $ $Date: 2001-05-03 10:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,10 +885,12 @@ IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
     {
         // no sprintf or hex-formatter around :-(
         char buf[16] = "0x0000";
+        sal_Unicode c_Shifted = c;
         for( int i = 0; i < 4; ++i )
         {
-            char h = (c >> (4*i)) & 0x0F;
+            char h = c_Shifted & 0x0F;
             buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
+            c_Shifted >>= 4;
         }
         if( c < 256 )
             sprintf( buf+6, " (%d)", c );
@@ -969,6 +971,7 @@ void SubsetMap::InitList( void)
     aSubsets[ i++] = new Subset( 0x0041, 0x007A, RID_SUBSETSTR_BASIC_LATIN);
     aSubsets[ i++] = new Subset( 0x00C0, 0x00FF, RID_SUBSETSTR_LATIN_1);
     aSubsets[ i++] = new Subset( 0x0100, 0x017F, RID_SUBSETSTR_LATIN_EXTENDED_A);
+
     aSubsets[ i++] = new Subset( 0x0180, 0x024F, RID_SUBSETSTR_LATIN_EXTENDED_B);
     aSubsets[ i++] = new Subset( 0x0250, 0x02AF, RID_SUBSETSTR_IPA_EXTENSIONS);
     aSubsets[ i++] = new Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS);
