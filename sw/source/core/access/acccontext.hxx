@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:58 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ protected:
 
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
+    const SwAccessibleMap *GetMap() const { return pMap; }
 
     // Notify all children that the vis araea has changed.
     // The SwFrm might belong to the current object or to any other child or
@@ -362,13 +363,16 @@ public:
     //====== thread safe C++ interface ========================================
 
     // The object is not visible an longer and should be destroyed
-    void Dispose( sal_Bool bRecursive = sal_False );
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
+
+    // The child object is not visible an longer and should be destroyed
+    virtual void DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
 
     // The object has been moved by the layout
-    void InvalidatePosOrSize();
+    virtual void InvalidatePosOrSize( const SwRect& rFrm );
 
-    // The object has been moved by the layout
-    void InvalidateChildPosOrSize( const SwFrm *pFrm, const SwRect& rFrm );
+    // The vhild object has been moved by the layout
+    virtual void InvalidateChildPosOrSize( const SwFrm *pFrm, const SwRect& rFrm );
 
     // The content may have changed (but it hasn't tohave changed)
     void InvalidateContent();

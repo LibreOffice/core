@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void SwAccessibleDocument::GetStates(
 SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
     SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
                            pMap->GetShell()->GetDoc()->GetRootFrm() ),
-    xParent( pMap->GetShell()->GetWin()->GetParent()->GetAccessible() ),
+    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     aSelectionHelper( *this )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
@@ -194,7 +194,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocument::getBounds()
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetParent() ) );
+    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
     awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
                          aPixBounds.GetWidth(), aPixBounds.GetHeight() );
 
@@ -211,7 +211,7 @@ awt::Point SAL_CALL SwAccessibleDocument::getLocation()
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Point aPixPos( pWin->GetWindowExtentsRelative( pWin->GetParent() ).TopLeft() );
+    Point aPixPos( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ).TopLeft() );
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;

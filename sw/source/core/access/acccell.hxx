@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:41:58 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
+
+    virtual void InvalidatePosOrSize( const SwRect& rFrm );
 };
 
 

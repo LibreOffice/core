@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,13 +152,13 @@ class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 public:
 
 #ifndef PRODUCT
-    sal_Bool bLocked;
+    sal_Bool mbLocked;
 #endif
-    WeakReference < XAccessible > xCursorContext;
+    WeakReference < XAccessible > mxCursorContext;
 
     SwAccessibleContextMap_Impl()
 #ifndef PRODUCT
-        : bLocked( sal_False )
+        : mbLocked( sal_False )
 #endif
     {}
 
@@ -168,67 +168,69 @@ public:
 struct SwAccessibleEvent_Impl
 {
 public:
-    enum EventType { INVALID_CONTENT, POS_CHANGED, CHILD_POS_CHANGED, DISPOSE,
-                         CARET_OR_STATES };
+    enum EventType { CARET_OR_STATES, INVALID_CONTENT, POS_CHANGED,
+                     CHILD_POS_CHANGED, DISPOSE };
 
 private:
-    SwRect      aOldFrm;                // the old bounds for CHILD_POS_CHANGED
-    WeakReference < XAccessible > xAcc; // The object that fires the event
-    SwFrmOrObj  aFrmOrObj;              // the child for CHILD_POS_CHANGED and
+    SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
+                                        // and POS_CHANGED
+    WeakReference < XAccessible > mxAcc;    // The object that fires the event
+    SwFrmOrObj  maFrmOrObj;             // the child for CHILD_POS_CHANGED and
                                         // the same as xAcc for any other
                                         // event type
-    EventType   eType;                  // The event type
-    sal_uInt8   nStates;                // check states or update caret pos
+    EventType   meType;                 // The event type
+    sal_uInt8   mnStates;               // check states or update caret pos
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                              const SwFrmOrObj& rFrmOrObj ) :
-        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), nStates( 0 )
+        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), mnStates( 0 )
     {}
     SwAccessibleEvent_Impl( EventType eT, const SwFrmOrObj& rFrmOrObj ) :
-        eType( eT ), aFrmOrObj( rFrmOrObj ), nStates( 0 )
+        meType( eT ), maFrmOrObj( rFrmOrObj ), mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::DISPOSE == eType,
+        ASSERT( SwAccessibleEvent_Impl::DISPOSE == meType,
                 "wrong event constructor, DISPOSE only" );
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrmOrObj& rFrmOrObj, const SwRect& rR ) :
-        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), aOldFrm( rR ),
-        nStates( 0 )
+        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), maOldBox( rR ),
+        mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == eType,
+        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
                 "wrong event constructor, CHILD_POS_CHANGED only" );
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrmOrObj& rFrmOrObj, sal_uInt8 nSt  ) :
-        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), nStates( nSt )
+        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), mnStates( nSt )
     {
-        ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == eType,
+        ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
-    inline void SetType( EventType eT ){ eType = eT; }
-    inline EventType    GetType() const { return eType; }
+    inline void SetType( EventType eT ){ meType = eT; }
+    inline EventType    GetType() const { return meType; }
 
     inline ::vos::ORef < SwAccessibleContext > GetContext() const;
 
-    inline const SwRect& GetOldFrm() const { return aOldFrm; }
+    inline const SwRect& GetOldBox() const { return maOldBox; }
+    inline SetOldBox( const SwRect& rOldBox ) { maOldBox = rOldBox; }
 
-    inline const SwFrm *GetFrm() const { return aFrmOrObj.GetSwFrm(); }
+    inline const SwFrm *GetFrm() const { return maFrmOrObj.GetSwFrm(); }
 
-    inline void SetStates( sal_uInt8 nSt ) { nStates |= nSt; }
-    inline sal_Bool IsUpdateCursorPos() const { return (nStates & ACC_STATE_CARET) != 0; }
-    inline sal_Bool IsInvalidateStates() const { return (nStates & ACC_STATE_MASK) != 0; }
-    inline sal_uInt8 GetStates() const { return nStates & ACC_STATE_MASK; }
-    inline sal_uInt8 GetAllStates() const { return nStates; }
+    inline void SetStates( sal_uInt8 nSt ) { mnStates |= nSt; }
+    inline sal_Bool IsUpdateCursorPos() const { return (mnStates & ACC_STATE_CARET) != 0; }
+    inline sal_Bool IsInvalidateStates() const { return (mnStates & ACC_STATE_MASK) != 0; }
+    inline sal_uInt8 GetStates() const { return mnStates & ACC_STATE_MASK; }
+    inline sal_uInt8 GetAllStates() const { return mnStates; }
 };
 
 inline ::vos::ORef < SwAccessibleContext >
     SwAccessibleEvent_Impl::GetContext() const
 {
-    Reference < XAccessible > xTmp( xAcc );
+    Reference < XAccessible > xTmp( mxAcc );
     ::vos::ORef < SwAccessibleContext > xAccImpl(
          static_cast< SwAccessibleContext * >( xTmp.get() ) );
 
@@ -240,14 +242,14 @@ typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
 
 class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
 {
-    sal_Bool bFiring;
+    sal_Bool mbFiring;
 
 public:
 
-    SwAccessibleEventList_Impl() : bFiring( sal_False ) {}
+    SwAccessibleEventList_Impl() : mbFiring( sal_False ) {}
 
-    inline void SetFiring() { bFiring = sal_True; }
-    inline sal_Bool IsFiring() const { return bFiring; }
+    inline void SetFiring() { mbFiring = sal_True; }
+    inline sal_Bool IsFiring() const { return mbFiring; }
 };
 
 //------------------------------------------------------------------------------
@@ -299,11 +301,11 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             xAccImpl->InvalidateContent();
             break;
         case SwAccessibleEvent_Impl::POS_CHANGED:
-            xAccImpl->InvalidatePosOrSize();
+            xAccImpl->InvalidatePosOrSize( rEvent.GetOldBox() );
             break;
         case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
             xAccImpl->InvalidateChildPosOrSize( rEvent.GetFrm(),
-                                       rEvent.GetOldFrm() );
+                                       rEvent.GetOldBox() );
             break;
         case SwAccessibleEvent_Impl::DISPOSE:
             ASSERT( xAccImpl.isValid(),
@@ -322,14 +324,14 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 
 void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 {
-    vos::OGuard aGuard( aEventMutex );
+    vos::OGuard aGuard( maEventMutex );
 
-    if( !pEvents )
-        pEvents = new SwAccessibleEventList_Impl;
-    if( !pEventMap )
-        pEventMap = new SwAccessibleEventMap_Impl;
+    if( !mpEvents )
+        mpEvents = new SwAccessibleEventList_Impl;
+    if( !mpEventMap )
+        mpEventMap = new SwAccessibleEventMap_Impl;
 
-    if( pEvents->IsFiring() )
+    if( mpEvents->IsFiring() )
     {
         // While events are fired new ones are generated. They have to be fired
         // now. This does not work for DISPOSE events!
@@ -341,41 +343,47 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     {
 
         SwAccessibleEventMap_Impl::iterator aIter =
-            pEventMap->find( rEvent.GetFrm() );
-        if( aIter != pEventMap->end() )
+            mpEventMap->find( rEvent.GetFrm() );
+        if( aIter != mpEventMap->end() )
         {
             SwAccessibleEvent_Impl aEvent( *(*aIter).second );
+            ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+                    "dispose events should not be stored" );
             sal_Bool bAppendEvent = sal_True;
             switch( rEvent.GetType() )
             {
             case SwAccessibleEvent_Impl::CARET_OR_STATES:
-                // A CARET_POS or CHECK_STATES event is added to any other
+                // A CARET_OR_STATES event is added to any other
                 // event only. It is broadcasted after any other event, so the
                 // event should be put to the back.
-                ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() !=
+                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
-                        "dispose events should not be stored" );
                 aEvent.SetStates( rEvent.GetAllStates() );
                 break;
             case SwAccessibleEvent_Impl::INVALID_CONTENT:
-                // All events except CARET_OR_STATES include a INVALID_CONTENT,
-                // so the only action that needs to be done is to put the event
-                // to the back. That's done automatically.
-                ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                // An INVALID_CONTENT event overwrites a CARET_OR_STATES
+                // event (but keeps its flags) and it is contained in a
+                // POS_CHANGED event.
+                // Therefor, the event's type has to be adapted and the event
+                // has to be put at the end.
+                ASSERT( aEvent.GetType() !=
+                               SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
-                        "dispose events should not be stored" );
-                if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
+                if( aEvent.GetType() ==
+                        SwAccessibleEvent_Impl::CARET_OR_STATES )
                     aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
                 break;
             case SwAccessibleEvent_Impl::POS_CHANGED:
-                // If the the old event is not a DISPOSE event, the new event
-                // includes the old one.
-                ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                // A pos changed event overwrites CARET_STATES (keeping its
+                // flags) as well as INVALID_CONTENT. The old box position
+                // has to be stored however if the old event is not a
+                // POS_CHANGED itself.
+                ASSERT( aEvent.GetType() !=
+                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
-                        "dispose events should not be stored" );
+                if( aEvent.GetType() != SwAccessibleEvent_Impl::POS_CHANGED )
+                    aEvent.SetOldBox( rEvent.GetOldBox() );
                 aEvent.SetType( SwAccessibleEvent_Impl::POS_CHANGED );
                 break;
             case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
@@ -383,37 +391,37 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // events. The only action that needs to be done again is
                 // to put the old event to the back. The new one cannot be used,
                 // because we are interested in the old frame bounds.
-                ASSERT( aEvent.GetType()==SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                ASSERT( aEvent.GetType() ==
+                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
                 // DISPOSE events overwrite all others. They are not stored
-                // but executed immidiatly to avoid broadcasting of defuntional
-                // objects. So what needs to be done here is to remove all
-                // events for the frame in question.
-                ASSERT( aEvent.GetType()!=SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                // but executed immediatly to avoid broadcasting of
+                // defunctional objects. So what needs to be done here is to
+                // remove all events for the frame in question.
+                ASSERT( aEvent.GetType() !=
+                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
-                        "dispose events should not be stored" );
                 bAppendEvent = sal_False;
                 break;
             }
             if( bAppendEvent )
             {
-                pEvents->erase( (*aIter).second );
-                (*aIter).second = pEvents->insert( pEvents->end(), aEvent );
+                mpEvents->erase( (*aIter).second );
+                (*aIter).second = mpEvents->insert( mpEvents->end(), aEvent );
             }
             else
             {
-                pEvents->erase( (*aIter).second );
-                pEventMap->erase( aIter );
+                mpEvents->erase( (*aIter).second );
+                mpEventMap->erase( aIter );
             }
         }
         else if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
         {
             SwAccessibleEventMap_Impl::value_type aEntry( rEvent.GetFrm(),
-                    pEvents->insert( pEvents->end(), rEvent ) );
-            pEventMap->insert( aEntry );
+                    mpEvents->insert( mpEvents->end(), rEvent ) );
+            mpEventMap->insert( aEntry );
         }
     }
 }
@@ -440,13 +448,13 @@ void SwAccessibleMap::InvalidateCursorPosition(
 
 
 SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
-    pMap( 0  ),
-    pEvents( 0  ),
-    pEventMap( 0  ),
-    pVSh( pSh ),
-    nPara( 1 ),
-    nFootnote( 1 ),
-    nEndnote( 1 )
+    mpMap( 0  ),
+    mpEvents( 0  ),
+    mpEventMap( 0  ),
+    mpVSh( pSh ),
+    mnPara( 1 ),
+    mnFootnote( 1 ),
+    mnEndnote( 1 )
 {
 }
 
@@ -454,12 +462,12 @@ SwAccessibleMap::~SwAccessibleMap()
 {
     Reference < XAccessible > xAcc;
     {
-        vos::OGuard aGuard( aMutex );
-        if( pMap )
+        vos::OGuard aGuard( maMutex );
+        if( mpMap )
         {
             const SwRootFrm *pRootFrm = GetShell()->GetLayout();
-            SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
-            if( aIter != pMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pRootFrm );
+            if( aIter != mpMap->end() )
                 xAcc = (*aIter).second;
             if( !xAcc.is() )
                 xAcc = new SwAccessibleDocument( this );
@@ -471,14 +479,14 @@ SwAccessibleMap::~SwAccessibleMap()
     pAcc->Dispose( sal_True );
 
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aGuard( maMutex );
 #ifndef PRODUCT
-        ASSERT( !pMap || pMap->empty(),
+        ASSERT( !mpMap || mpMap->empty(),
                 "Map should be empty after disposing the root frame" );
-        if( pMap )
+        if( mpMap )
         {
-            SwAccessibleContextMap_Impl::iterator aIter = pMap->begin();
-            while( aIter != pMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpMap->begin();
+            while( aIter != mpMap->end() )
             {
                 Reference < XAccessible > xTmp = (*aIter).second;
                 if( xTmp.is() )
@@ -489,17 +497,17 @@ SwAccessibleMap::~SwAccessibleMap()
             }
         }
 #endif
-        delete pMap;
-        pMap = 0;
+        delete mpMap;
+        mpMap = 0;
     }
 
     {
-        vos::OGuard aGuard( aEventMutex );
-        ASSERT( !(pEvents || pEventMap), "pending events" );
-        delete pEventMap;
-        pEventMap = 0;
-        delete pEvents;
-        pEvents = 0;
+        vos::OGuard aGuard( maEventMutex );
+        ASSERT( !(mpEvents || mpEventMap), "pending events" );
+        delete mpEventMap;
+        mpEventMap = 0;
+        delete mpEvents;
+        mpEvents = 0;
     }
 }
 
@@ -509,24 +517,24 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
     sal_Bool bSetVisArea = sal_False;
 
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aGuard( maMutex );
 
-        if( !pMap )
+        if( !mpMap )
         {
-            pMap = new SwAccessibleContextMap_Impl;
+            mpMap = new SwAccessibleContextMap_Impl;
 #ifndef PRODUCT
-            pMap->bLocked = sal_False;
+            mpMap->mbLocked = sal_False;
 #endif
         }
 
 #ifndef PRODUCT
-        ASSERT( !pMap->bLocked, "Map is locked" );
-        pMap->bLocked = sal_True;
+        ASSERT( !mpMap->mbLocked, "Map is locked" );
+        mpMap->mbLocked = sal_True;
 #endif
 
         const SwRootFrm *pRootFrm = GetShell()->GetLayout();
-        SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
-        if( aIter != pMap->end() )
+        SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pRootFrm );
+        if( aIter != mpMap->end() )
             xAcc = (*aIter).second;
         if( xAcc.is() )
         {
@@ -536,19 +544,19 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
         else
         {
             xAcc = new SwAccessibleDocument( this );
-            if( aIter != pMap->end() )
+            if( aIter != mpMap->end() )
             {
                 (*aIter).second = xAcc;
             }
             else
             {
                 SwAccessibleContextMap_Impl::value_type aEntry( pRootFrm, xAcc );
-                pMap->insert( aEntry );
+                mpMap->insert( aEntry );
             }
         }
 
 #ifndef PRODUCT
-        pMap->bLocked = sal_False;
+        mpMap->mbLocked = sal_False;
 #endif
     }
 
@@ -569,14 +577,14 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     Reference < XAccessible > xOldCursorAcc;
 
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aGuard( maMutex );
 
-        if( !pMap && bCreate )
-            pMap = new SwAccessibleContextMap_Impl;
-        if( pMap )
+        if( !mpMap && bCreate )
+            mpMap = new SwAccessibleContextMap_Impl;
+        if( mpMap )
         {
-            SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pFrm );
-            if( aIter != pMap->end() )
+            SwAccessibleContextMap_Impl::iterator aIter = mpMap->find( pFrm );
+            if( aIter != mpMap->end() )
                 xAcc = (*aIter).second;
 
             if( !xAcc.is() && bCreate )
@@ -585,7 +593,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 switch( pFrm->GetType() )
                 {
                 case FRM_TXT:
-                    pAcc = new SwAccessibleParagraph( this, nPara++,
+                    pAcc = new SwAccessibleParagraph( this, mnPara++,
                                     static_cast< const SwTxtFrm * >( pFrm ) );
                     break;
                 case FRM_HEADER:
@@ -603,7 +611,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         sal_Bool bIsEndnote =
                             SwAccessibleFootnote::IsEndnote( pFtnFrm );
                         pAcc = new SwAccessibleFootnote( this, bIsEndnote,
-                                    (bIsEndnote ? nEndnote++ : nFootnote++),
+                                    (bIsEndnote ? mnEndnote++ : mnFootnote++),
                                     pFtnFrm );
                     }
                     break;
@@ -639,18 +647,18 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 ASSERT( xAcc.is(), "unknown frame type" );
                 if( xAcc.is() )
                 {
-                    if( aIter != pMap->end() )
+                    if( aIter != mpMap->end() )
                     {
                         (*aIter).second = xAcc;
                     }
                     else
                     {
                         SwAccessibleContextMap_Impl::value_type aEntry( pFrm, xAcc );
-                        pMap->insert( aEntry );
+                        mpMap->insert( aEntry );
                     }
 
                     if( pAcc->HasCursor() &&
-                        !AreInSameTable( pMap->xCursorContext, pFrm ) )
+                        !AreInSameTable( mpMap->mxCursorContext, pFrm ) )
                     {
                         // If the new context has the focus, and if we know
                         // another context that had the focus, then the focus
@@ -666,8 +674,8 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // the new context as the one that has the focus
                         // currently.
 
-                        xOldCursorAcc = pMap->xCursorContext;
-                        pMap->xCursorContext = xAcc;
+                        xOldCursorAcc = mpMap->mxCursorContext;
+                        mpMap->mxCursorContext = xAcc;
                     }
                 }
             }
@@ -695,18 +703,18 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 
 void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 {
-    vos::OGuard aGuard( aMutex );
+    vos::OGuard aGuard( maMutex );
 
-    if( pMap )
+    if( mpMap )
     {
         SwAccessibleContextMap_Impl::iterator aIter =
-            pMap->find( pFrm );
-        if( aIter != pMap->end() )
+            mpMap->find( pFrm );
+        if( aIter != mpMap->end() )
         {
-            pMap->erase( aIter );
+            mpMap->erase( aIter );
 
             // Remove reference to old caret object
-            Reference < XAccessible > xOldAcc( pMap->xCursorContext );
+            Reference < XAccessible > xOldAcc( mpMap->mxCursorContext );
             if( xOldAcc.is() )
             {
                 SwAccessibleContext *pOldAccImpl =
@@ -715,14 +723,14 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
                     xOldAcc.clear();    // get an empty ref
-                    pMap->xCursorContext = xOldAcc;
+                    mpMap->mxCursorContext = xOldAcc;
                 }
             }
 
-            if( pMap->empty() )
+            if( mpMap->empty() )
             {
-                delete pMap;
-                pMap = 0;
+                delete mpMap;
+                mpMap = 0;
             }
         }
     }
@@ -740,29 +748,48 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, sal_Bool bRecursive )
 
     SwFrmOrObj aFrmOrObj( pFrm );
     Reference < XAccessible > xAcc;
+    Reference < XAccessible > xParentAcc;
     if( aFrmOrObj.IsAccessible() )
     {
         // get accessible context for frame
         {
-            vos::OGuard aGuard( aMutex );
+            vos::OGuard aGuard( maMutex );
 
-            if( pMap )
+            if( mpMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    pMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != pMap->end() )
+                    mpMap->find( pFrm );
+                if( aIter != mpMap->end() )
+                {
                     xAcc = (*aIter).second;
+                }
+                else
+                {
+                    // Otherwise we look if the parent is accessible.
+                    // If not, there is nothing to do.
+                    const SwFrm *pParent =
+                        SwAccessibleFrame::GetParent( aFrmOrObj.GetSwFrm() );
+
+                    if( pParent )
+                    {
+                        aIter = mpMap->find( pParent );
+                        if( aIter != mpMap->end() )
+                        {
+                            xParentAcc = (*aIter).second;
+                        }
+                    }
+                }
             }
         }
 
         // remove events stored for the frame
         {
-            vos::OGuard aGuard( aEventMutex );
-            if( pEvents )
+            vos::OGuard aGuard( maEventMutex );
+            if( mpEvents )
             {
                 SwAccessibleEventMap_Impl::iterator aIter =
-                    pEventMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != pEventMap->end() )
+                    mpEventMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpEventMap->end() )
                 {
                     SwAccessibleEvent_Impl aEvent(
                             SwAccessibleEvent_Impl::DISPOSE, aFrmOrObj );
@@ -775,19 +802,28 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, sal_Bool bRecursive )
         // the frame. If the frame is no context for it but disposing should
         // take place recursive, the frame's children have to be disposed
         // anyway, so we have to create the context then.
-        if( !xAcc.is() && bRecursive )
-            xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
         if( xAcc.is() )
         {
             SwAccessibleContext *pAccImpl =
                 static_cast< SwAccessibleContext *>( xAcc.get() );
             pAccImpl->Dispose( bRecursive );
         }
+        else if( xParentAcc.is() )
+        {
+            // If the frame is a cell frame, the table must be notified.
+            // If we are in an action, a table model change event will
+            // be broadcasted at the end of the action to give the table
+            // a chance to generate a single table change event.
+
+            SwAccessibleContext *pAccImpl =
+                static_cast< SwAccessibleContext *>( xParentAcc.get() );
+            pAccImpl->DisposeChild( aFrmOrObj.GetSwFrm(), bRecursive );
+        }
     }
 }
 
 void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
-                                           const SwRect& rOldFrm )
+                                           const SwRect& rOldBox )
 {
     SwFrmOrObj aFrmOrObj( pFrm );
     if( aFrmOrObj.IsAccessible() )
@@ -795,13 +831,13 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
         Reference < XAccessible > xAcc;
         Reference < XAccessible > xParentAcc;
         {
-            vos::OGuard aGuard( aMutex );
+            vos::OGuard aGuard( maMutex );
 
-            if( pMap )
+            if( mpMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    pMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != pMap->end() )
+                    mpMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpMap->end() )
                 {
                     // If there is an accesible object already it is
                     // notified directly.
@@ -816,8 +852,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
 
                     if( pParent )
                     {
-                        aIter = pMap->find( pParent );
-                        if( aIter != pMap->end() )
+                        aIter = mpMap->find( pParent );
+                        if( aIter != mpMap->end() )
                         {
                             xParentAcc = (*aIter).second;
                         }
@@ -828,19 +864,19 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
 
         if( xAcc.is() )
         {
-            ASSERT( !rOldFrm.IsEmpty(), "context should have a size" );
+            ASSERT( !rOldBox.IsEmpty(), "context should have a size" );
             SwAccessibleContext *pAccImpl =
                 static_cast< SwAccessibleContext *>( xAcc.get() );
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::POS_CHANGED, pAccImpl,
-                    aFrmOrObj );
+                    aFrmOrObj, rOldBox );
                 AppendEvent( aEvent );
             }
             else
             {
-                pAccImpl->InvalidatePosOrSize();
+                pAccImpl->InvalidatePosOrSize( rOldBox );
             }
         }
         else if( xParentAcc.is() )
@@ -851,13 +887,13 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    pAccImpl, aFrmOrObj, rOldFrm );
+                    pAccImpl, aFrmOrObj, rOldBox );
                 AppendEvent( aEvent );
             }
             else
             {
                 pAccImpl->InvalidateChildPosOrSize( aFrmOrObj.GetSwFrm(),
-                                                    rOldFrm );
+                                                    rOldBox );
             }
         }
     }
@@ -870,13 +906,13 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
     {
         Reference < XAccessible > xAcc;
         {
-            vos::OGuard aGuard( aMutex );
+            vos::OGuard aGuard( maMutex );
 
-            if( pMap )
+            if( mpMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    pMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != pMap->end() )
+                    mpMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpMap->end() )
                     xAcc = (*aIter).second;
             }
         }
@@ -936,18 +972,18 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     Reference < XAccessible > xAcc;
 
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aGuard( maMutex );
 
-        if( pMap )
+        if( mpMap )
         {
-            xOldAcc = pMap->xCursorContext;
-            pMap->xCursorContext = xAcc;    // clear reference
+            xOldAcc = mpMap->mxCursorContext;
+            mpMap->mxCursorContext = xAcc;  // clear reference
 
             if( aFrmOrObj.IsAccessible() )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    pMap->find( aFrmOrObj.GetSwFrm() );
-                if( aIter != pMap->end() )
+                    mpMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpMap->end() )
                     xAcc = (*aIter).second;
 
                 // For cells, some extra thoughts are necessary,
@@ -989,11 +1025,11 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 void SwAccessibleMap::SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext )
 {
-    vos::OGuard aGuard( aMutex );
-    if( pMap )
+    vos::OGuard aGuard( maMutex );
+    if( mpMap )
     {
         Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
-        pMap->xCursorContext = xAcc;
+        mpMap->mxCursorContext = xAcc;
     }
 }
 
@@ -1017,21 +1053,21 @@ void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates )
 
 void SwAccessibleMap::FireEvents()
 {
-    vos::OGuard aGuard( aEventMutex );
-    if( pEvents )
+    vos::OGuard aGuard( maEventMutex );
+    if( mpEvents )
     {
-        pEvents->SetFiring();
-        SwAccessibleEventList_Impl::iterator aIter = pEvents->begin();
-        while( aIter != pEvents->end() )
+        mpEvents->SetFiring();
+        SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
+        while( aIter != mpEvents->end() )
         {
             FireEvent( *aIter );
-            aIter++;
+            ++aIter;
         }
     }
 
-    delete pEventMap;
-    pEventMap = 0;
+    delete mpEventMap;
+    mpEventMap = 0;
 
-    delete pEvents;
-    pEvents = 0;
+    delete mpEvents;
+    mpEvents = 0;
 }

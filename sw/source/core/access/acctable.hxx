@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:42:31 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _ACCTABLE_HXX
 #define _ACCTABLE_HXX
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
+#endif
+
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
@@ -70,9 +74,22 @@
 #endif
 
 class SwTabFrm;
+class SwAccessibleTableData_Impl;
+class SwAccessibleTableEventList_Impl;
 
-class SwAccessibleTable : public    SwAccessibleContext
+class SwAccessibleTable :
+        public  SwAccessibleContext,
+        public  ::drafts::com::sun::star::accessibility::XAccessibleTable
 {
+    SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
+    SwAccessibleTableEventList_Impl *mpEvents;  // the table's data, prot by Sol-Mutex
+    const SwSelBoxes *GetSelBoxes() const;
+
+    void AppendEvent( const SwFrm *pFrm, const SwRect& rBox );
+    inline void AppendDisposeEvent( const SwFrm *pFrm);
+    inline void AppendPosOrSizeEvent( const SwFrm *pFrm, const SwRect& rBox );
+
+    void FireTableChangeEvent( const SwAccessibleTableData_Impl *pTableData=0 );
 
 protected:
 
@@ -82,9 +99,37 @@ protected:
 
     virtual ~SwAccessibleTable();
 
+    // force update of table data
+    void UpdateTableData();
+
+    // remove the current table data
+    void ClearTableData();
+
+    // get table data, update if necessary
+    inline SwAccessibleTableData_Impl& GetTableData();
+
+    // Is table data evailable?
+    sal_Bool HasTableData() const { return (mpTableData != 0); }
+
 public:
 
     SwAccessibleTable( SwAccessibleMap *pMap, const SwTabFrm *pTableFrm );
+
+    //=====  XInterface  ======================================================
+
+    // (XInterface methods need to be implemented to disambigouate
+    // between those inherited through SwAcessibleContext and
+    // XAccessibleTable).
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire(  ) throw ()
+        { SwAccessibleContext::acquire(); };
+
+    virtual void SAL_CALL release(  ) throw ()
+        { SwAccessibleContext::release(); };
 
     //=====  XAccessibleContext  ==============================================
 
@@ -92,6 +137,76 @@ public:
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
+
+    //=====  XAccessibleTable  ================================================
+
+    virtual sal_Int32 SAL_CALL getAccessibleRowCount()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleColumnCount(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription(
+            sal_Int32 nRow )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription(
+            sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt(
+            sal_Int32 nRow, sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt(
+               sal_Int32 nRow, sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleTable >
+        SAL_CALL getAccessibleRowHeaders(  )
+           throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleTable >
+        SAL_CALL getAccessibleColumnHeaders(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
+        getSelectedAccessibleRows(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
+        getSelectedAccessibleColumns(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleCaption(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getAccessibleSummary(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isAccessibleSelected(
+            sal_Int32 nRow, sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndex(
+            sal_Int32 nRow, sal_Int32 nColumn )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
@@ -113,8 +228,35 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    //===== C++ interface ======================================================
+
+    // The object has been moved by the layout
+    virtual void InvalidatePosOrSize( const SwRect& rOldBox );
+
+    virtual void DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
+    virtual void InvalidateChildPosOrSize( const SwFrm *pFrm,
+                                        const SwRect& rFrm );
 };
 
+
+inline void SwAccessibleTable::AppendDisposeEvent( const SwFrm *pFrm )
+{
+    AppendEvent( 0, pFrm->Frm() );
+}
+
+inline void SwAccessibleTable::AppendPosOrSizeEvent( const SwFrm *pFrm,
+                                                     const SwRect& rBox )
+{
+    AppendEvent( pFrm, rBox );
+}
+
+inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
+{
+    if( !mpTableData )
+        UpdateTableData();
+    return *mpTableData;
+}
 
 #endif
 

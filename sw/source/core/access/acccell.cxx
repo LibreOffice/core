@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:41:40 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,4 +304,22 @@ Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     return aRet;
+}
+
+void SwAccessibleCell::Dispose( sal_Bool bRecursive )
+{
+    const SwFrm *pParent = GetParent( GetFrm() );
+    ::vos::ORef< SwAccessibleContext > xAccImpl(
+            GetMap()->GetContextImpl( pParent, sal_False ) );
+    if( xAccImpl.isValid() )
+        xAccImpl->DisposeChild( GetFrm(), bRecursive );
+}
+
+void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
+{
+    const SwFrm *pParent = GetParent( GetFrm() );
+    ::vos::ORef< SwAccessibleContext > xAccImpl(
+            GetMap()->GetContextImpl( pParent, sal_False ) );
+    if( xAccImpl.isValid() )
+        xAccImpl->InvalidateChildPosOrSize( GetFrm(), rOldBox );
 }

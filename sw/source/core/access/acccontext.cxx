@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,18 +788,13 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
     Rectangle aPixBounds( 0, 0, 0, 0 );
     if( !aLogBounds.IsEmpty() )
     {
-        if( pParent->IsRootFrm() )
-        {
-            aPixBounds = pWin->LogicToPixel( aLogBounds.SVRect() );
-        }
-        else
+        aPixBounds = pWin->LogicToPixel( aLogBounds.SVRect() );
+        if( !pParent->IsRootFrm() )
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            MapMode aMapMode( pWin->GetMapMode() );
-            aParentLogPos.X() *= -1;
-            aParentLogPos.Y() *= -1;
-            aMapMode.SetOrigin( aParentLogPos );
-            aPixBounds = pWin->LogicToPixel( aLogBounds.SVRect(), aMapMode );
+            Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+            aPixBounds.Left() -= aParentPixPos.X();
+            aPixBounds.Top() -= aParentPixPos.Y();
         }
     }
 
@@ -827,18 +822,13 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     Point aPixPos( 0, 0 );
     if( !aLogBounds.IsEmpty() )
     {
+        aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
         if( pParent->IsRootFrm() )
         {
-            aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
-        }
-        else
-        {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            MapMode aMapMode( pWin->GetMapMode() );
-            aParentLogPos.X() *= -1;
-            aParentLogPos.Y() *= -1;
-            aMapMode.SetOrigin( aParentLogPos );
-            aPixPos = pWin->LogicToPixel( aLogBounds.Pos(), aMapMode );
+            Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
+            aPixPos.X() -= aParentPixPos.X();
+            aPixPos.Y() -= aParentPixPos.Y();
         }
     }
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
@@ -882,8 +872,11 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
     Size aPixSize( 0, 0 );
+    // The size may differ by one pixel, dependent on the position of
+    // the rectangle. For that reason we first have to do the conversion
+    // into pixel and then have to get the size.
     if( !aLogBounds.IsEmpty() )
-        aPixSize = pWin->LogicToPixel( aLogBounds.SSize() );
+        aPixSize = pWin->LogicToPixel( aLogBounds.SVRect() ).GetSize();
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
 
     return aSize;
@@ -1026,7 +1019,25 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     bDisposing = sal_False;
 }
 
-void SwAccessibleContext::InvalidatePosOrSize()
+void SwAccessibleContext::DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwFrmOrObj aFrm( GetFrm() );
+    if( IsShowing( pFrm ) || !aFrm.IsVisibleChildrenOnly() )
+    {
+        // If the object could have existed before, than there is nothing to do,
+        // because no wrapper exists now and therefor no one is interested to
+        // get notified of the movement.
+        ::vos::ORef< SwAccessibleContext > xAccImpl =
+                GetMap()->GetContextImpl( pFrm, sal_True );
+        xAccImpl->Dispose( bRecursive );
+    }
+    else if( bRecursive )
+        DisposeChildren( GetFrm(), bRecursive );
+}
+
+void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 

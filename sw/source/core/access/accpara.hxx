@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 15:35:10 $
+ *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,10 @@ namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
 } } }
 
-class SwAccessibleParagraph : public    SwAccessibleContext,
-                              public drafts::com::sun::star::accessibility::XAccessibleEditableText,
-                              public drafts::com::sun::star::accessibility::XAccessibleSelection
+class SwAccessibleParagraph :
+        public SwAccessibleContext,
+        public ::drafts::com::sun::star::accessibility::XAccessibleEditableText,
+        public drafts::com::sun::star::accessibility::XAccessibleSelection
 {
     ::rtl::OUString sDesc;  // protected by base classes mutex
 
