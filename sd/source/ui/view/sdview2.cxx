@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:47:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 #include "navigatr.hxx"
 #include "anminfo.hxx"
 #include "strings.hrc"
+#include "glob.hrc"
 #include "sdxfer.hxx"
 #include "sdresid.hxx"
 #include "sdmod.hxx"
