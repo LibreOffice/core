@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-23 12:38:06 $
+ *  last change: $Author: hdu $ $Date: 2002-04-24 17:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4202,9 +4202,10 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 
 void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, xub_Unicode c )
 {
-/* TODO: enable for CTL
-    ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( &c, 1, NULL ), STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
-*/
+    // TODO: use CTL infrastructure for width and position
+    String aStr( &c, 1 );
+    long nWidth = GetTextWidth( aStr, 0, 1 );
+    ImplDrawTextLine( nX, nX, nY, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
 }
 
 // -----------------------------------------------------------------------
