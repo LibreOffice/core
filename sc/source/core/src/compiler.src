@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:14:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,13 +1385,13 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "KOMÓRKA";
         Text[ portuguese_brazilian ] = "CELL";
         Text[ japanese ] = "CELL";
-        Text[ korean ] = "CELL";
+        Text[ korean ] = "¼¿";
         Text[ chinese_simplified ] = "CELL";
         Text[ chinese_traditional ] = "CELL";
         Text[ turkish ] = "CELL";
         Text[ arabic ] = "CELL";
         Text[ catalan ] = "CELDA";
-        Text[ finnish ] = "ZELLE";
+        Text[ finnish ] = "Solu";
     };
     String SC_OPCODE_IS_REF
     {
@@ -2226,13 +2226,13 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "ARABSKIE";
         Text[ portuguese_brazilian ] = "ARABIC";
         Text[ japanese ] = "ARABIC";
-        Text[ korean ] = "ARABIC";
+        Text[ korean ] = "¾Æ¶óºñ¾Æ";
         Text[ chinese_simplified ] = "ARABIC";
         Text[ chinese_traditional ] = "ARABIC";
         Text[ turkish ] = "ARABIC";
         Text[ arabic ] = "ARABIC";
         Text[ catalan ] = "ÁRABE";
-        Text[ finnish ] = "ARABISCH";
+        Text[ finnish ] = "arabia";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -5251,7 +5251,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "EXACT" ;
         Text [ italian ] = "IDENTICO" ;
         Text [ portuguese_brazilian ] = "EXATO" ;
-        Text [ portuguese ] = "EXACTO" ;
+        Text [ portuguese ] = "IDÊNTICO" ;
         Text [ finnish ] = "EXACT" ;
         Text [ danish ] = "EKSAKT" ;
         Text [ french ] = "EXACT" ;
@@ -7429,7 +7429,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ portuguese ] = "DECIMAL";
         Text[ russian ] = "ÄÅÑßÒÈ×ÍÛÉ";
         Text[ dutch ] = "DECIMAAL";
-        Text[ french ] = "DÉCIMAL";
+        Text[ french ] = "DECIMAL";
         Text[ spanish ] = "DECIMAL";
         Text[ italian ] = "DECIMALE";
         Text[ danish ] = "DECIMAL";
@@ -7494,7 +7494,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "RZYMSKIE";
         Text[ portuguese_brazilian ] = "ROMAN";
         Text[ japanese ] = "ROMAN";
-        Text[ korean ] = "ROMAN";
+        Text[ korean ] = "·Î¸¶";
         Text[ chinese_simplified ] = "ROMAN";
         Text[ chinese_traditional ] = "ROMAN";
         Text[ turkish ] = "ROMAN";
