@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OCurrencyModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:41:03 $
+ *  last change:$Date: 2003-09-08 11:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,21 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XBoundComponent;
-import com.sun.star.form.XLoadable;
-import com.sun.star.sdbc.XConnection;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -80,6 +69,19 @@ import lib.TestParameters;
 import util.DBTools;
 import util.FormTools;
 import util.WriterTools;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.form.XBoundComponent;
+import com.sun.star.form.XLoadable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XResultSetUpdate;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
 
 /**
@@ -146,26 +148,32 @@ import util.WriterTools;
 * @see ifc.form.component._CurrencyField
 */
 public class OCurrencyModel extends TestCase {
-
     XTextDocument xTextDoc;
 
     /**
     * Creates Writer document where controls are placed.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a textdocument");
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory) tParam.getMSF());
     }
 
     /**
     * Disposes Writer document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-    }
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
 
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
+    }
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -190,100 +198,113 @@ public class OCurrencyModel extends TestCase {
     * </ul>
     * @see ifc.form._XUpdateBroadcaster
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            DBTools tools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
-            XConnection con = tools.connectToTestDB
-                ((String)Param.get("DOCPTH")) ;
-            tools.initializeTestTable(con, "TestDB") ;
+            DBTools tools = new DBTools(((XMultiServiceFactory) Param.getMSF()));
+            XConnection con = tools.connectToTestDB(
+                                      (String) Param.get("DOCPTH"));
+            tools.initializeTestTable(con, "TestDB");
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log) ;
+            e.printStackTrace(log);
         }
 
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"CurrencyField");
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
+                                                            "CurrencyField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
         oObj = aShape.getControl();
 
         final XLoadable formLoader = FormTools.bindForm(xTextDoc);
-        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface
-            (XPropertySet.class, oObj) ;
+        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+                                        XPropertySet.class, oObj);
 
         // binding control to the "Identifier" field of "biblio" table.
         try {
-            ps.setPropertyValue("DataField", "Identifier") ;
+            ps.setPropertyValue("DataField", "Identifier");
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Can't set DataField property of the control.") ;
-            throw new StatusException
-                ("Can't set DataField property of the control.", e) ;
+            log.println("Can't set DataField property of the control.");
+            throw new StatusException(
+                    "Can't set DataField property of the control.", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Can't set DataField property of the control.") ;
-            throw new StatusException
-                ("Can't set DataField property of the control.", e) ;
+            log.println("Can't set DataField property of the control.");
+            throw new StatusException(
+                    "Can't set DataField property of the control.", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Can't set DataField property of the control.") ;
-            throw new StatusException
-                ("Can't set DataField property of the control.", e) ;
+            log.println("Can't set DataField property of the control.");
+            throw new StatusException(
+                    "Can't set DataField property of the control.", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Can't set DataField property of the control.") ;
-            throw new StatusException
-                ("Can't set DataField property of the control.", e) ;
+            log.println("Can't set DataField property of the control.");
+            throw new StatusException(
+                    "Can't set DataField property of the control.", e);
         }
 
-        log.println( "creating a new environment for OCurrencyModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for OCurrencyModel object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         String objName = "CurrencyField";
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
-        aShape = FormTools.createControlShape(
-                                xTextDoc,6000,4500,15000,10000,"FixedText");
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
+        aShape = FormTools.createControlShape(xTextDoc, 6000, 4500, 15000,
+                                              10000, "FixedText");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
+
         // added LabelControl for 'DataAwareControlModel'
-        tEnv.addObjRelation("LC",aShape.getControl());
+        tEnv.addObjRelation("LC", aShape.getControl());
+
 
         // added FormLoader for 'DataAwareControlModel'
-        tEnv.addObjRelation("FL",formLoader);
+        tEnv.addObjRelation("FL", formLoader);
+
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         // adding relation for XUpdateBroadcaster
-        final XInterface ctrl = oObj ;
+        final XInterface ctrl = oObj;
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
-                private double lastVal = 0 ;
-                public void update() throws com.sun.star.uno.Exception {
-                    formLoader.load() ;
-                    Double val = (Double) ps.getPropertyValue("Value") ;
-                    if (val == null) val = new Double(0) ;
-                    lastVal = val.doubleValue() + 1;
-                    ps.setPropertyValue("Value", new Double(lastVal)) ;
-                }
-                public void commit() throws com.sun.star.sdbc.SQLException {
-                    XBoundComponent bound = (XBoundComponent) UnoRuntime.
-                        queryInterface(XBoundComponent.class, ctrl) ;
-                    XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.
-                        queryInterface(XResultSetUpdate.class, formLoader) ;
+                            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
+            private double lastVal = 0;
 
-                    bound.commit() ;
-                    update.updateRow() ;
-                }
-                public boolean wasCommited() throws com.sun.star.uno.Exception {
-                    formLoader.reload() ;
+            public void update() throws com.sun.star.uno.Exception {
+                formLoader.load();
 
-                    Double getD = (Double) ps.getPropertyValue("Value") ;
-                    return  getD.doubleValue() == lastVal ;
-                }
-            }) ;
+                Double val = (Double) ps.getPropertyValue("Value");
 
+                if (val == null) {
+                    val = new Double(0);
+                }
+
+                lastVal = val.doubleValue() + 1;
+                ps.setPropertyValue("Value", new Double(lastVal));
+            }
+
+            public void commit() throws com.sun.star.sdbc.SQLException {
+                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                                                XBoundComponent.class, ctrl);
+                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                                                  XResultSetUpdate.class,
+                                                  formLoader);
+
+                bound.commit();
+                update.updateRow();
+            }
+
+            public boolean wasCommited() throws com.sun.star.uno.Exception {
+                formLoader.reload();
+
+                Double getD = (Double) ps.getPropertyValue("Value");
+
+                return getD.doubleValue() == lastVal;
+            }
+        });
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OCurrencyModel
-
+} // finish class OCurrencyModel
