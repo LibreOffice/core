@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:00:44 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,7 @@ struct MemberItem
     OUString aName;
 
     // Defines where the member comes from
-    enum { NAMEACCESS, PROPERTYSET, METHOD } eMode;
+    enum Mode { NAMEACCESS, PROPERTYSET, METHOD } eMode;
 
     // Index to respective sequence
     // (Index to NameAccess sequence for eMode==NAMEACCESS etc.)
