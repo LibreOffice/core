@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 16:14:57 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,11 +336,15 @@ XMLTextColumnsContext::XMLTextColumnsContext(
       pColumns( 0 ),
     pColumnSep( 0 ),
     nCount( 0 ),
+    bAutomatic( sal_False ),
+    nAutomaticDistance( 0 ),
     sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")),
     sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth")),
     sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor")),
     sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
-    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
+    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment")),
+    sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic")),
+    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int32 nVal;
@@ -352,13 +356,21 @@ XMLTextColumnsContext::XMLTextColumnsContext(
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         const OUString& rValue = xAttrList->getValueByIndex( i );
-        if( XML_NAMESPACE_FO == nPrefix &&
-            aLocalName.equalsAsciiL( sXML_column_count,
-                                      sizeof(sXML_column_count)-1 ) &&
-            GetImport().GetMM100UnitConverter().
-                                convertNumber( nVal, rValue, 0, SHRT_MAX ) )
+        if( XML_NAMESPACE_FO == nPrefix )
         {
-            nCount = (sal_Int16)nVal;
+            if( aLocalName.equalsAsciiL( sXML_column_count,
+                                         sizeof(sXML_column_count)-1 ) &&
+                GetImport().GetMM100UnitConverter().
+                                convertNumber( nVal, rValue, 0, SHRT_MAX ) )
+            {
+                nCount = (sal_Int16)nVal;
+            }
+            else if( aLocalName.equalsAsciiL( sXML_column_gap,
+                                              sizeof(sXML_column_gap)-1 ) )
+            {
+                bAutomatic = GetImport().GetMM100UnitConverter().
+                    convertMeasure( nAutomaticDistance, rValue );
+            }
         }
     }
 }
@@ -443,8 +455,12 @@ void XMLTextColumnsContext::EndElement( )
         // zero columns = no columns -> 1 column
         xColumns->setColumnCount( 1 );
     }
-    else if( pColumns && pColumns->Count() == (sal_uInt16)nCount )
+    else if( !bAutomatic && pColumns &&
+             pColumns->Count() == (sal_uInt16)nCount )
     {
+        // if we have column descriptions, one per column, and we don't use
+        // automatic width, then set the column widths
+
         sal_Int32 nRelWidth = 0;
         sal_uInt16 nColumnsWithWidth = 0;
         for( sal_Int16 i=0; i < nCount; i++ )
@@ -486,6 +502,9 @@ void XMLTextColumnsContext::EndElement( )
     }
     else
     {
+        // only set column count (and let the columns be distributed
+        // automatically)
+
         xColumns->setColumnCount( nCount );
     }
 
@@ -519,6 +538,13 @@ void XMLTextColumnsContext::EndElement( )
 
             aAny <<= pColumnSep->GetVertAlign();
             xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, aAny );
+        }
+
+        // handle 'automatic columns': column distance
+        if( bAutomatic )
+        {
+            aAny <<= nAutomaticDistance;
+            xPropSet->setPropertyValue( sAutomaticDistance, aAny );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 12:46:46 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ class XMLTextColumnsExport
     const ::rtl::OUString sSeparatorLineColor;
     const ::rtl::OUString sSeparatorLineRelativeHeight;
     const ::rtl::OUString sSeparatorLineVerticalAlignment;
+    const ::rtl::OUString sIsAutomatic;
+    const ::rtl::OUString sAutomaticDistance;
 
 protected:
 

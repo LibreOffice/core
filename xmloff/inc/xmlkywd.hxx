@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 13:54:44 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ XML_CONSTASCII_ACTION( sXML_color_inversion , "color-inversion" );
 XML_CONSTASCII_ACTION( sXML_color_mode , "color-mode" );
 XML_CONSTASCII_ACTION( sXML_column, "column" );
 XML_CONSTASCII_ACTION( sXML_column_count, "column-count" );
+XML_CONSTASCII_ACTION( sXML_column_gap, "column-gap" );
 XML_CONSTASCII_ACTION( sXML_column_name, "column-name" );
 XML_CONSTASCII_ACTION( sXML_column_sep, "column-sep" );
 XML_CONSTASCII_ACTION( sXML_column_width, "column-width" );

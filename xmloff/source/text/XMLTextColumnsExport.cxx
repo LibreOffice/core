@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 12:47:14 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 12:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,9 @@ XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
     sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth")),
     sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor")),
     sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
-    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
+    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment")),
+    sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic")),
+    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
 {
 }
 
@@ -129,10 +131,29 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount );
     GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_column_count,
                               sValue.makeStringAndClear() );
+
+    // handle 'automatic' columns
+    Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
+    if( xPropSet.is() )
+    {
+        Any aAny = xPropSet->getPropertyValue( sIsAutomatic );
+        if ( *(sal_Bool*)aAny.getValue() )
+        {
+            aAny = xPropSet->getPropertyValue( sAutomaticDistance );
+            sal_Int32 nDistance = 0;
+            aAny >>= nDistance;
+            OUStringBuffer aBuffer;
+            GetExport().GetMM100UnitConverter().convertMeasure(
+                aBuffer, nDistance );
+            GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                      sXML_column_gap,
+                                      aBuffer.makeStringAndClear() );
+        }
+    }
+
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_columns,
                               sal_True, sal_True );
 
-    Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
     if( xPropSet.is() )
     {
         Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
