@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 09:00:43 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:55:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -343,11 +343,18 @@ sub replace_setup_variables
 
     # string $buildid, which is used to replace the setup variable <buildid>
 
-    my $localminor = "";
+    my $localminor = "flat";
     if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
     else { $localminor = $installer::globals::minor; }
 
-    my $buildidstring = $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . ")";
+    my $localbuild = $installer::globals::build;
+
+    if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"
+
+    my $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
+
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
 
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
