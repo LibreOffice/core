@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
+ *  last change: $Author: jl $ $Date: 2004-04-28 10:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,17 @@
 namespace {
 JavaVM * g_pJavaVM = NULL;
 
-sal_Bool SAL_CALL areEqualJavaInfo(
+sal_Bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
     return jfw_areEqualJavaInfo(pInfoA, pInfoB);
 }
+
+void freeJavaInfo( JavaInfo * pInfo)
+{
+    jfw_freeJavaInfo(pInfo);
+}
+
 }
 
 javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
@@ -152,18 +158,18 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                                          & versionInfo);
         if (errcode != JFW_E_NONE)
         {   //delete JavaInfo objects
-            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                          jfw_freeJavaInfo);
+                          freeJavaInfo);
             return JFW_E_CONFIG_READWRITE;
         }
         osl::Module pluginLib(library.sPath);
         if (pluginLib.is() == sal_False)
         {
             //delete JavaInfo objects
-            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                          jfw_freeJavaInfo);
+                          freeJavaInfo);
             return JFW_E_NO_PLUGIN;
         }
         getAllJavaInfos_ptr getAllJavaFunc =
@@ -174,9 +180,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         if (getAllJavaFunc == NULL)
         {
             //delete JavaInfo objects
-            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                          jfw_freeJavaInfo);
+                          freeJavaInfo);
             return JFW_E_ERROR;
         }
         //get all installations of one vendor according to minVersion,
@@ -193,9 +199,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 
         if (plerr != JFW_PLUGIN_E_NONE)
         {   //delete JavaInfo objects
-            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                          jfw_freeJavaInfo);
+                          freeJavaInfo);
             return JFW_E_ERROR;
         }
         for (int i = 0; i < cInfos; i++)
@@ -212,9 +218,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         OSL_ASSERT(getJavaInfoByPathFunc);
         if (getJavaInfoByPathFunc == NULL)
         {   //delete JavaInfo objects
-            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                          jfw_freeJavaInfo);
+                          freeJavaInfo);
             return JFW_E_ERROR;
         }
         typedef std::vector<rtl::OString>::const_iterator citLoc;
@@ -237,9 +243,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 continue;
             else if (plerr !=JFW_PLUGIN_E_NONE)
             {   //delete JavaInfo objects
-                std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+                std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
                 std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
-                              jfw_freeJavaInfo);
+                              freeJavaInfo);
                 return JFW_E_ERROR;
             }
             if (pInfo)
@@ -263,8 +269,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         nSize * sizeof(JavaInfo*));
     if (*pparInfo == NULL)
     {   //delete JavaInfo objects
-        std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
-        std::for_each(vecInfoManual.begin(), vecInfoManual.end(), jfw_freeJavaInfo);
+        std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
+        std::for_each(vecInfoManual.begin(), vecInfoManual.end(), freeJavaInfo);
         return JFW_E_ERROR;
     }
     typedef std::vector<JavaInfo*>::iterator it;

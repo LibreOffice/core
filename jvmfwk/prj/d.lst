@@ -2,6 +2,8 @@ mkdir: %_DEST%\inc%_EXT%\jvmaccess
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
+..\%__SRC%\lib\libjvmfwk*.so.*.*.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libjvmfwk*.dylib* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
 ..\source\useatjava.txt %_DEST%\bin%_EXT%\useatjava.txt

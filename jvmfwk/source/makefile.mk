@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-27 15:22:15 $
+#   last change: $Author: jl $ $Date: 2004-04-28 10:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,17 @@ PRJ = ..
 PRJNAME = jvmfwk
 FRAMEWORKLIB=jvmfwk
 TARGET = $(FRAMEWORKLIB)
-#LIBTARGET=NO
 ENABLE_EXCEPTIONS = TRUE
 
+.IF "$(OS)" != "WNT"
+UNIXVERSIONNAMES = UDK
+.ENDIF # WNT
 
 .INCLUDE: settings.mk
-DLLPRE =
 
 .IF "$(SOLAR_JAVA)"==""
 nojava:
-    @echo "Not building jvmaccess because Java is disabled"
+    @echo "Not building jvmfwk  because Java is disabled"
 .ENDIF
 
 
