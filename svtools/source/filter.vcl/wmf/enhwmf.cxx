@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:05:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include "winmtf.hxx"
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 //=========================== GDI-Array ===================================
 
@@ -208,7 +211,7 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
     }
     else
     {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     rXForm.eM11 = GetSwapFloat( rIn );
     rXForm.eM12 = GetSwapFloat( rIn );
     rXForm.eM21 = GetSwapFloat( rIn );
@@ -1025,7 +1028,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     {
                         sal_Unicode* pBuf = new sal_Unicode[ nLen ];
                         pWMF->Read( pBuf, nLen << 1 );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
                         sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
                         while ( pTmp-- != (sal_Char*)pBuf )
                         {
