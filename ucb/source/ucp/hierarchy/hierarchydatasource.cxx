@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:36:01 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 
  *************************************************************************/
 
-#include "osl/getglobalmutex.hxx"
-#include "rtl/instance.hxx"
-
 #ifndef _HIERARCHYDATASOURCE_HXX
 #include "hierarchydatasource.hxx"
 #endif
@@ -78,6 +75,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include "osl/doublecheckedlocking.h"
+
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -747,29 +747,52 @@ uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )
 XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
 
 //=========================================================================
-
-namespace
+// virtual
+uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
+    throw( uno::RuntimeException )
 {
-    struct InitReadOnlyTypes
+    cppu::OTypeCollection * pCollection = 0;
+
+    if ( m_bReadOnly )
     {
-        cppu::OTypeCollection * operator()()
+        static cppu::OTypeCollection* pReadOnlyTypes = 0;
+
+        pCollection = pReadOnlyTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pReadOnlyTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameAccess ),
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pReadOnlyTypes = pCollection;
+            }
         }
-    };
-
-    struct InitWritableTypes
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    else
     {
-        cppu::OTypeCollection * operator()()
+        static cppu::OTypeCollection* pReadWriteTypes = 0;
+
+        pCollection = pReadWriteTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pReadWriteTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -778,34 +801,16 @@ namespace
                     CPPU_TYPE_REF( container::XNameContainer ),
                     CPPU_TYPE_REF( util::XChangesBatch ),
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pReadWriteTypes = pCollection;
+            }
         }
-    };
-}
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
-//=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
-    throw( uno::RuntimeException )
-{
-    if ( m_bReadOnly )
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitReadOnlyTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitReadOnlyTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
-    else
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitWritableTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitWritableTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
+    return (*pCollection).getTypes();
 }
 
 //=========================================================================
