@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: dbo $ $Date: 2001-12-17 12:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ inline Any::Any( const void * pData_, typelib_TypeDescription * pTypeDescr ) SAL
         this, const_cast< void * >( pData_ ), pTypeDescr, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
-inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
+inline Any::Any( const void * pData_, typelib_TypeDescriptionReference * pType_ ) SAL_THROW( () )
 {
     ::uno_type_any_construct(
-        this, const_cast< void * >( pData_ ), pType, (uno_AcquireFunc)cpp_acquire );
+        this, const_cast< void * >( pData_ ), pType_, (uno_AcquireFunc)cpp_acquire );
 }
 //__________________________________________________________________________________________________
 inline Any::~Any() SAL_THROW( () )
@@ -146,10 +146,10 @@ inline void Any::setValue( const void * pData_, const Type & rType ) SAL_THROW( 
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
-inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType ) SAL_THROW( () )
+inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ ) SAL_THROW( () )
 {
     ::uno_type_any_assign(
-        this, const_cast< void * >( pData_ ), pType,
+        this, const_cast< void * >( pData_ ), pType_,
         (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release );
 }
 //__________________________________________________________________________________________________
