@@ -1,0 +1,735 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xeescher.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:34:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef SC_XEESCHER_HXX
+#include "xeescher.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
+
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
+#endif
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
+#endif
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
+#endif
+
+#include "excupn.hxx"
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::awt::XControlModel;
+
+// ============================================================================
+
+XclExpCtrlLinkHelper::XclExpCtrlLinkHelper( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    mnEntryCount( 0 )
+{
+}
+
+XclExpCtrlLinkHelper::~XclExpCtrlLinkHelper()
+{
+}
+
+void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
+{
+    mxCellLink = CreateTokenArray( rCellLink );
+}
+
+void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
+{
+    mxSrcRange = CreateTokenArray( rSrcRange );
+    mnEntryCount = static_cast< sal_uInt16 >( rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1 );
+}
+
+void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
+{
+    sal_uInt16 nFmlaSize = rTokArr.GetLen();
+    rStrm << nFmlaSize << sal_uInt32( 0 );
+    rStrm.Write( rTokArr.GetData(), nFmlaSize );
+    if( nFmlaSize & 1 )
+        rStrm << sal_uInt8( 0 );
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScTokenArray& rScTokArr ) const
+{
+    EC_Codetype eDummy;
+    XclExpTokArrPtr pXclTokArr( new ExcUPN( mpRD, rScTokArr, eDummy ) );
+    if( !pXclTokArr->GetLen() || !pXclTokArr->GetData() )
+        pXclTokArr.reset();
+    return pXclTokArr;
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScAddress& rPos ) const
+{
+    XclExpTokArrPtr pXclTokArr;
+    if( GetTabInfo().IsExportTab( rPos.Tab() ) )
+    {
+        ScTokenArray aScTokArr;
+        SingleRefData aRef;
+        aRef.InitAddress( rPos );
+        aScTokArr.AddSingleReference( aRef );
+        pXclTokArr = CreateTokenArray( aScTokArr );
+    }
+    return pXclTokArr;
+}
+
+::std::auto_ptr< ExcUPN > XclExpCtrlLinkHelper::CreateTokenArray( const ScRange& rRange ) const
+{
+    XclExpTokArrPtr pXclTokArr;
+    if( rRange.aStart == rRange.aEnd )
+    {
+        pXclTokArr = CreateTokenArray( rRange.aStart );
+    }
+    else if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
+    {
+        if( GetTabInfo().IsExportTab( rRange.aStart.Tab() ) )
+        {
+            ScTokenArray aScTokArr;
+            ComplRefData aRef;
+            aRef.InitRange( rRange );
+            aScTokArr.AddDoubleReference( aRef );
+            pXclTokArr = CreateTokenArray( aScTokArr );
+        }
+    }
+    return pXclTokArr;
+}
+
+// ----------------------------------------------------------------------------
+
+#if EXC_EXP_OCX_CTRL
+
+XclExpObjOcxCtrl::XclExpObjOcxCtrl(
+        const XclExpRoot& rRoot,
+        const Reference< XShape >& rxShape,
+        const String& rClassName,
+        sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+    XclObj( rRoot, EXC_OBJ_CMO_PICTURE, true ),
+    XclExpCtrlLinkHelper( rRoot ),
+    maClassName( rClassName ),
+    mnStrmStart( nStrmStart ),
+    mnStrmSize( nStrmSize )
+{
+    SetLocked( TRUE );
+    SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
+    SetAutoFill( FALSE );
+    SetAutoLine( FALSE );
+
+    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    rEscherEx.OpenContainer( ESCHER_SpContainer );
+    rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE );
+    Rectangle aDummyRect;
+    EscherPropertyContainer aPropOpt( rEscherEx, rEscherEx.QueryPicStream(), aDummyRect );
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,    0x00080008 );   // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_lineColor,         0x08000040 );
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,   0x00080000 );   // bool field
+
+    Reference< XPropertySet > xShapePS( rxShape, UNO_QUERY );
+    if( xShapePS.is() )
+    {
+        // meta file
+        if( aPropOpt.CreateGraphicProperties( xShapePS, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+        {
+            sal_uInt32 nBlipId;
+            if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
+                aPropOpt.AddOpt( ESCHER_Prop_pictureId, nBlipId );
+        }
+
+        // name of the control
+        OUString aCtrlName;
+        //! TODO - this does not work - property is empty
+        if( ::getPropValue( aCtrlName, xShapePS, PROPNAME( "Name" ) ) && aCtrlName.getLength() )
+        {
+            XclExpString aCtrlNameEx( aCtrlName, EXC_STR_FORCEUNICODE );
+            sal_uInt32 nBufferSize = aCtrlNameEx.GetBufferSize() + 2;   // plus trailing zero
+            sal_uInt8* pBuffer = new sal_uInt8[ nBufferSize ];
+            aCtrlNameEx.WriteBuffer( pBuffer );
+            pBuffer[ nBufferSize - 2 ] = pBuffer[ nBufferSize - 1 ] = 0;
+            // aPropOpt takes ownership of pBuffer
+            aPropOpt.AddOpt( ESCHER_Prop_wzName, TRUE, nBufferSize, pBuffer, nBufferSize );
+        }
+    }
+
+    aPropOpt.Commit( rEscherEx.GetStream() );
+
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+        XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
+    rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
+    rEscherEx.CloseContainer();  // ESCHER_SpContainer
+
+    pMsodrawing->UpdateStopPos();
+}
+
+void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
+{
+    // ftCf - clipboard format
+    rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
+    rStrm << sal_uInt16( 2 );
+    rStrm.EndRecord();
+
+    // ftPioGrbit
+    rStrm.StartRecord( EXC_ID_OBJ_FTPIOGRBIT, 2 );
+    rStrm << sal_uInt16( 0x0031 );
+    rStrm.EndRecord();
+
+    // ftPictFmla
+    XclExpString aClass( maClassName );
+    sal_uInt16 nClassNameSize = static_cast< sal_uInt16 >( aClass.GetSize() );
+    sal_uInt16 nClassNamePad = nClassNameSize & 1;
+    sal_uInt16 nFirstPartSize = 12 + nClassNameSize + nClassNamePad;
+    sal_uInt16 nPictFmlaSize = nFirstPartSize + 18;
+
+    rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nPictFmlaSize );
+    rStrm   << sal_uInt16( nFirstPartSize )             // size of first part
+            << sal_uInt16( 5 )                          // formula size
+            << sal_uInt32( 0 )                          // unknown ID
+            << sal_uInt8( 0x02 ) << sal_uInt32( 0 )     // tTbl token with unknown ID
+            << sal_uInt8( 3 )                           // pad to word
+            << aClass;                                  // "Forms.***.1"
+    rStrm.WriteZeroBytes( nClassNamePad );              // pad to word
+    rStrm   << mnStrmStart                              // start in 'Ctls' stream
+            << mnStrmSize                               // size in 'Ctls' stream
+            << sal_uInt32( 0 ) << sal_uInt32( 0 );      // unknown
+    rStrm.EndRecord();
+
+    // TODO: writing the sheet link formulas
+    DBG_ERRORFILE( "XclExpObjOcxCtrl::WriteSubRecs - export of sheet links not implemented" );
+}
+
+#else
+
+XclExpObjTbxCtrl::XclExpObjTbxCtrl(
+        const XclExpRoot& rRoot,
+        const Reference< XShape >& rxShape,
+        const Reference< XControlModel >& rxCtrlModel ) :
+    XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN, true ),
+    XclExpCtrlLinkHelper( rRoot ),
+    mnHeight( 0 ),
+    mnState( 0 ),
+    mnLineCount( 0 ),
+    mnSelEntry( 0 ),
+    mnScrollValue( 0 ),
+    mnScrollMin( 0 ),
+    mnScrollMax( 100 ),
+    mnScrollStep( 1 ),
+    mnScrollPage( 10 ),
+    mb3DStyle( false ),
+    mbMultiSel( false ),
+    mbScrollHor( false )
+{
+    namespace FormCompType = ::com::sun::star::form::FormComponentType;
+    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+
+    Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
+    if( !rxShape.is() || !xPropSet.is() )
+        return;
+
+    mnHeight = rxShape->getSize().Height;
+    if( !mnHeight )
+        return;
+
+    // control type
+    sal_Int16 nClassId;
+    if( ::getPropValue( nClassId, xPropSet, PROPNAME( "ClassId" ) ) )
+    {
+        switch( nClassId )
+        {
+            case FormCompType::COMMANDBUTTON:   mnObjType = EXC_OBJ_CMO_BUTTON;         break;
+            case FormCompType::RADIOBUTTON:     mnObjType = EXC_OBJ_CMO_OPTIONBUTTON;   break;
+            case FormCompType::CHECKBOX:        mnObjType = EXC_OBJ_CMO_CHECKBOX;       break;
+            case FormCompType::LISTBOX:         mnObjType = EXC_OBJ_CMO_LISTBOX;        break;
+            case FormCompType::COMBOBOX:        mnObjType = EXC_OBJ_CMO_COMBOBOX;       break;
+            case FormCompType::GROUPBOX:        mnObjType = EXC_OBJ_CMO_GROUPBOX;       break;
+            case FormCompType::FIXEDTEXT:       mnObjType = EXC_OBJ_CMO_LABEL;          break;
+            case FormCompType::SCROLLBAR:       mnObjType = EXC_OBJ_CMO_SCROLLBAR;      break;
+            case FormCompType::SPINBUTTON:      mnObjType = EXC_OBJ_CMO_SPIN;           break;
+        }
+    }
+    if( mnObjType == EXC_OBJ_CMO_UNKNOWN )
+        return;
+
+    // OBJ record flags
+    SetLocked( TRUE );
+    SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
+    SetAutoFill( FALSE );
+    SetAutoLine( FALSE );
+
+    // fill Escher properties
+    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    rEscherEx.OpenContainer( ESCHER_SpContainer );
+    rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01000100 ); // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // Text ID
+    aPropOpt.AddOpt( ESCHER_Prop_WrapText, 0x00000001 );
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x001A0008 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100000 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
+    aPropOpt.Commit( rEscherEx.GetStream() );
+
+    // anchor
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+        XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
+    rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
+    pMsodrawing->UpdateStopPos();
+
+    // control label
+    OUString aString;
+    if( ::getPropValue( aString, xPropSet, PROPNAME( "Label" ) ) )
+    {
+        /*  Be sure to construct the MSODRAWING ClientTextbox record after the
+            base OBJ's MSODRAWING record Escher data is completed. */
+        pClientTextbox = new XclMsodrawing( GetRoot() );
+        pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
+        pClientTextbox->UpdateStopPos();
+
+        sal_uInt16 nXclFont = EXC_FONT_APP;
+        if( aString.getLength() )
+        {
+            XclExpFontData aFontData;
+            OUString aFontName;
+            float fFloatVal;
+            sal_Int16 nShortVal;
+
+            if( ::getPropValue( aFontName, xPropSet, PROPNAME( "FontName" ) ) )
+                aFontData.maName = XclTools::GetXclFontName( aFontName );
+            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontHeight" ) ) )
+                aFontData.SetApiHeight( fFloatVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontFamily" ) ) )
+                aFontData.SetApiFamily( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontCharset" ) ) )
+                aFontData.SetApiCharSet( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontSlant" ) ) )
+                aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
+            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontWeight" ) ) )
+                aFontData.SetApiWeight( fFloatVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontUnderline" ) ) )
+                aFontData.SetApiUnderline( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontStrikeout" ) ) )
+                aFontData.SetApiStrikeout( nShortVal );
+
+            if( aFontData.maName.Len() && aFontData.mnHeight )
+            {
+                sal_Int32 nApiColor;
+                if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
+                {
+                    Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
+                    aFontData.SetColorId( GetRoot(), aColor );
+                }
+                nXclFont = GetFontBuffer().Insert( aFontData );
+            }
+        }
+
+        pTxo = new XclTxo( aString, nXclFont );
+        pTxo->SetHorAlign( (mnObjType == EXC_OBJ_CMO_BUTTON) ? xlTxoHAlignCenter : xlTxoHAlignLeft );
+        pTxo->SetVerAlign( xlTxoVAlignCenter );
+    }
+
+    rEscherEx.CloseContainer();  // ESCHER_SpContainer
+
+    // other properties
+    ::getPropValue( mnLineCount, xPropSet, PROPNAME( "LineCount" ) );
+
+    sal_Int16 nBorder = 0;
+    if( ::getPropValue( nBorder, xPropSet, PROPNAME( "Border" ) ) )
+        mb3DStyle = (nBorder == 2);
+
+    sal_Int16 nApiState = 0;
+    if( ::getPropValue( nApiState, xPropSet, PROPNAME( "State" ) ) )
+    {
+        switch( nApiState )
+        {
+            case 0: mnState = EXC_OBJ_CBLS_STATE_UNCHECK;   break;
+            case 1: mnState = EXC_OBJ_CBLS_STATE_CHECK;     break;
+            case 2: mnState = EXC_OBJ_CBLS_STATE_TRI;       break;
+        }
+    }
+
+    // special control contents
+    switch( nClassId )
+    {
+        case FormCompType::LISTBOX:
+        {
+            mbMultiSel = ::getPropBool( xPropSet, CREATE_OUSTRING( "MultiSelection" ) );
+            Sequence< sal_Int16 > aSelection;
+            if( ::getPropValue( aSelection, xPropSet, PROPNAME( "SelectedItems" ) ) )
+            {
+                sal_Int32 nLen = aSelection.getLength();
+                if( nLen > 0 )
+                {
+                    mnSelEntry = aSelection[ 0 ] + 1;
+                    maMultiSel.resize( nLen );
+                    const sal_Int16* pnBegin = aSelection.getConstArray();
+                    ::std::copy( pnBegin, pnBegin + nLen, maMultiSel.begin() );
+                }
+            }
+
+            // convert listbox with dropdown button to Excel combobox
+            if( ::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+                mnObjType = EXC_OBJ_CMO_COMBOBOX;
+        }
+        break;
+
+        case FormCompType::COMBOBOX:
+        {
+            Sequence< OUString > aStringList;
+            OUString aDefText;
+            if( ::getPropValue( aStringList, xPropSet, PROPNAME( "StringItemList" ) ) &&
+                ::getPropValue( aDefText, xPropSet, PROPNAME( "Text" ) ) &&
+                aStringList.getLength() && aDefText.getLength() )
+            {
+                const OUString* pBegin = aStringList.getConstArray();
+                const OUString* pEnd = pBegin + aStringList.getLength();
+                const OUString* pString = ::std::find( pBegin, pEnd, aDefText );
+                if( pString != pEnd )
+                    mnSelEntry = static_cast< sal_Int16 >( pString - pBegin + 1 );  // 1-based
+                if( mnSelEntry > 0 )
+                    maMultiSel.resize( 1, mnSelEntry - 1 );
+            }
+
+            // convert combobox without dropdown button to Excel listbox
+            if( !::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+                mnObjType = EXC_OBJ_CMO_LISTBOX;
+        }
+        break;
+
+        case FormCompType::SCROLLBAR:
+        {
+            sal_uInt32 nApiValue;
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMin" ) ) )
+                mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValueMax" ) ) )
+                mnScrollMax = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "ScrollValue" ) ) )
+                mnScrollValue = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "LineIncrement" ) ) )
+                mnScrollStep = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "BlockIncrement" ) ) )
+                mnScrollPage = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+                mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
+        }
+        break;
+
+        case FormCompType::SPINBUTTON:
+        {
+            sal_uInt32 nApiValue;
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMin" ) ) )
+                mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValueMax" ) ) )
+                mnScrollMax = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinValue" ) ) )
+                mnScrollValue = limit_cast< sal_Int16 >( nApiValue, mnScrollMin, mnScrollMax );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "SpinIncrement" ) ) )
+                mnScrollStep = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            if( ::getPropValue( nApiValue, xPropSet, CREATE_OUSTRING( "Orientation" ) ) )
+                mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
+        }
+        break;
+    }
+}
+
+void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
+{
+    switch( mnObjType )
+    {
+        // *** Check boxes, option buttons ***
+
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
+        {
+            // ftCbls - box properties
+            sal_uInt16 nStyle = 0;
+            ::set_flag( nStyle, EXC_OBJ_CBLS_3D, mb3DStyle );
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTCBLS, 12 );
+            rStrm << mnState;
+            rStrm.WriteZeroBytes( 8 );
+            rStrm << nStyle;
+            rStrm.EndRecord();
+
+            // ftCblsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTCBLSFMLA );
+        }
+        break;
+
+        // *** List boxes, combo boxes ***
+
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+        {
+            sal_uInt16 nEntryCount = GetSourceEntryCount();
+
+            // ftSbs subrecord - Scroll bars
+            sal_Int32 nLineHeight = XclTools::GetHmmFromTwips( 200 );   // always 10pt
+            if( mnObjType == EXC_OBJ_CMO_LISTBOX )
+                mnLineCount = static_cast< sal_uInt16 >( mnHeight / nLineHeight );
+            mnScrollValue = 0;
+            mnScrollMin = 0;
+            sal_uInt16 nInvisLines = (nEntryCount >= mnLineCount) ? (nEntryCount - mnLineCount) : 0;
+            mnScrollMax = limit_cast< sal_Int16 >( nInvisLines, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            mnScrollStep = 1;
+            mnScrollPage = limit_cast< sal_Int16 >( mnLineCount, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
+            mbScrollHor = false;
+            WriteSbs( rStrm );
+
+            // ftSbsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
+
+            // ftLbsData - source data range and box properties
+            sal_uInt16 nStyle = mbMultiSel ? EXC_OBJ_LBS_SEL_MULTI : EXC_OBJ_LBS_SEL_SIMPLE;
+            ::set_flag( nStyle, EXC_OBJ_LBS_3D, mb3DStyle );
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
+
+            if( const ExcUPN* pSrcRange = GetSourceRangeTokArr() )
+            {
+                rStrm << static_cast< sal_uInt16 >( (pSrcRange->GetLen() + 7) & 0xFFFE );
+                WriteFormula( rStrm, *pSrcRange );
+            }
+            else
+                rStrm << sal_uInt16( 0 );
+
+            rStrm << nEntryCount << mnSelEntry << nStyle << sal_uInt16( 0 );
+            if( mnObjType == EXC_OBJ_CMO_LISTBOX )
+            {
+                if( nEntryCount )
+                {
+                    ScfUInt8Vec aSelEx( nEntryCount, 0 );
+                    for( ScfInt16Vec::const_iterator aIt = maMultiSel.begin(), aEnd = maMultiSel.end(); aIt != aEnd; ++aIt )
+                        if( *aIt < nEntryCount )
+                            aSelEx[ *aIt ] = 1;
+                    rStrm.Write( &aSelEx[ 0 ], aSelEx.size() );
+                }
+            }
+            else if( mnObjType == EXC_OBJ_CMO_COMBOBOX )
+            {
+                rStrm << sal_uInt16( 0 ) << mnLineCount;
+            }
+
+            rStrm.EndRecord();
+        }
+        break;
+
+        // *** Spin buttons, scrollbars ***
+
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
+        {
+            // ftSbs subrecord - scroll bars
+            WriteSbs( rStrm );
+
+            // ftSbsFmla subrecord - cell link
+            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
+        }
+        break;
+    }
+}
+
+void XclExpObjTbxCtrl::WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId )
+{
+    if( const ExcUPN* pCellLink = GetCellLinkTokArr() )
+    {
+        rStrm.StartRecord( nSubRecId, 0 );
+        WriteFormula( rStrm, *pCellLink );
+        rStrm.EndRecord();
+    }
+}
+
+void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
+{
+    sal_uInt16 nOrient = 0;
+    ::set_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL, mbScrollHor );
+
+    rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
+    rStrm   << sal_uInt32( 0 )              // reserved
+            << mnScrollValue                // thumb position
+            << mnScrollMin                  // thumb min pos
+            << mnScrollMax                  // thumb max pos
+            << mnScrollStep                 // line increment
+            << mnScrollPage                 // page increment
+            << nOrient                      // 0 = vertical, 1 = horizontal
+            << sal_uInt16( 15 )             // thumb width
+            << sal_uInt16( 1 );             // reserved
+    rStrm.EndRecord();
+}
+
+#endif
+
+// ============================================================================
+
+XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
+        const ScPostIt* pScNote, const String& rAddText ) :
+    XclExpRecord( EXC_ID_NOTE ),
+    maScPos( rScPos ),
+    mnObjId( 0 ),
+    mbVisible( pScNote && pScNote->IsShown() )
+{
+    // get the main note text
+    String aNoteText;
+    if( pScNote )
+        aNoteText = pScNote->GetText();
+    // append additional text
+    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
+
+    // initialize record dependent on BIFF type
+    switch( rRoot.GetBiff() )
+    {
+        case xlBiff5:
+        case xlBiff7:
+            maNoteText = ByteString( aNoteText, rRoot.GetCharSet() );
+        break;
+
+        case xlBiff8:
+            if( pScNote )
+                maAuthor.Assign( pScNote->GetAuthor() );
+            SetRecSize( 9 + maAuthor.GetSize() );
+            // create the Escher object
+            mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, maScPos, aNoteText, mbVisible ) );
+        break;
+
+        default:    DBG_ERROR_BIFF();
+    }
+}
+
+void XclExpNote::Save( XclExpStream& rStrm )
+{
+    switch( rStrm.GetRoot().GetBiff() )
+    {
+        case xlBiff5:
+        case xlBiff7:
+        {
+            // write the NOTE record directly, there may be the need to create more than one
+            const sal_Char* pcBuffer = maNoteText.GetBuffer();
+            sal_uInt16 nCharsLeft = static_cast< sal_uInt16 >( maNoteText.Len() );
+
+            while( nCharsLeft )
+            {
+                sal_uInt16 nWriteChars = ::std::min( nCharsLeft, EXC_NOTE5_MAXLEN );
+
+                rStrm.StartRecord( EXC_ID_NOTE, 6 + nWriteChars );
+                if( pcBuffer == maNoteText.GetBuffer() )
+                {
+                    // first record: row, col, length of complete text
+                    rStrm   << static_cast< sal_uInt16 >( maScPos.Row() )
+                            << static_cast< sal_uInt16 >( maScPos.Col() )
+                            << nCharsLeft;  // still contains full length
+                }
+                else
+                {
+                    // next records: -1, 0, length of current text segment
+                    rStrm   << sal_uInt16( 0xFFFF )
+                            << sal_uInt16( 0 )
+                            << nWriteChars;
+                }
+                rStrm.Write( pcBuffer, nWriteChars );
+                rStrm.EndRecord();
+
+                pcBuffer += nWriteChars;
+                nCharsLeft -= nWriteChars;
+            }
+        }
+        break;
+
+        case xlBiff8:
+            if( mnObjId != 0 )
+                XclExpRecord::Save( rStrm );
+        break;
+
+        default:    DBG_ERROR_BIFF();
+    }
+}
+
+void XclExpNote::WriteBody( XclExpStream& rStrm )
+{
+    // BIFF5/BIFF7 is written separately
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff8 );
+
+    sal_uInt16 nFlags = 0;
+    ::set_flag( nFlags, EXC_NOTE_VISIBLE, mbVisible );
+
+    rStrm   << static_cast< sal_uInt16 >( maScPos.Row() )
+            << static_cast< sal_uInt16 >( maScPos.Col() )
+            << nFlags
+            << mnObjId
+            << maAuthor
+            << sal_uInt8( 0 );
+}
+
+// ============================================================================
+
