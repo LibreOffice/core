@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-10-15 09:48:01 $
+ *  last change: $Author: os $ $Date: 2002-03-08 10:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,6 @@
 #define AI_LEAVE_GROUP              ACC_CODE( SID_LEAVE_GROUP, KEY_F3, FALSE, TRUE, FALSE )
 #define AI_ATTR_TRANSFORM           ACC_CODE( SID_ATTR_TRANSFORM, KEY_F4, FALSE, FALSE, FALSE )
 #define AI_NAVIGATOR                ACC_CODE( SID_NAVIGATOR, KEY_F5, FALSE, FALSE, FALSE )
-#define AI_NEXTSPLITWIN             ACC_CODE( SID_NEXTWINDOW, KEY_F6, FALSE, FALSE, FALSE )
-#define AI_PREVSPLITWIN             ACC_CODE( SID_PREVWINDOW, KEY_F6, TRUE, FALSE, FALSE )
 #define AI_SPELLING                 ACC_CODE( SID_SPELLING, KEY_F7, FALSE, FALSE, FALSE )
 #define AI_THESAURUS                ACC_CODE( SID_THESAURUS, KEY_F7, FALSE, TRUE, FALSE )
 #define AI_BEZIER_EDIT              ACC_CODE( SID_BEZIER_EDIT, KEY_F8, FALSE, FALSE, FALSE )
