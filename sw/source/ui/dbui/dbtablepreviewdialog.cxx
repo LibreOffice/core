@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbtablepreviewdialog.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:11:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#pragma hdrstop
+
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+
+#ifndef _DBTABLEPREVIEWDIALOG_HXX
+#include <dbtablepreviewdialog.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
+#include <dbui.hrc>
+#include <dbtablepreviewdialog.hrc>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
+using namespace rtl;
+
+#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+/*-- 08.04.2004 15:12:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< PropertyValue>& rValues ) :
+    SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
+#pragma warning (disable : 4355)
+    m_aDescriptionFI( this, ResId(        FI_DESCRIPTION)),
+    m_pBeamerWIN( new Window(this, ResId( WIN_BEAMER ))),
+    m_aOK( this, ResId(                   PB_OK  ))
+#pragma warning (default : 4355)
+{
+    FreeResource();
+    const PropertyValue* pValues = rValues.getConstArray();
+    for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
+    {
+        if(pValues[nValue].Name.equalsAscii("Command"))
+        {
+            String sDescription = m_aDescriptionFI.GetText();
+            OUString sTemp;
+            pValues[nValue].Value >>= sTemp;
+            sDescription.SearchAndReplaceAscii("%1", sTemp);
+            m_aDescriptionFI.SetText(sDescription);
+            break;
+        }
+    }
+
+    try
+    {
+        // create a frame wrapper for myself
+        Reference< XMultiServiceFactory >
+                                    xMgr = comphelper::getProcessServiceFactory();
+        m_xFrame = Reference< XFrame >(xMgr->createInstance(C2U("com.sun.star.frame.Frame")), UNO_QUERY);
+        if(m_xFrame.is())
+        {
+            m_xFrame->initialize( VCLUnoHelper::GetInterface ( m_pBeamerWIN ) );
+        }
+    }
+    catch (Exception&)
+    {
+        m_xFrame.clear();
+    }
+    if(m_xFrame.is())
+    {
+        Reference<XDispatchProvider> xDP(m_xFrame, UNO_QUERY);
+        URL aURL;
+        aURL.Complete = C2U(".component:DB/DataSourceBrowser");
+        Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+                    C2U(""),
+                    0x0C);
+        if(xD.is())
+        {
+            xD->dispatch(aURL, rValues);
+            m_pBeamerWIN->Show();
+        }
+/*        Reference<XController> xController = m_xFrame->getController();
+        pImpl->xFController = Reference<XFormController>(xController, UNO_QUERY);
+        if(pImpl->xFController.is())
+        {
+            Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
+            pImpl->xSelSupp = Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
+            if(pImpl->xSelSupp.is())
+            {
+                pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
+                pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
+            }
+        }
+*/    }
+
+
+}
+/*-- 08.04.2004 15:12:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
+{
+    if(m_xFrame.is())
+    {
+        m_xFrame->setComponent(NULL, NULL);
+        m_xFrame->dispose();
+    }
+    else
+        delete m_pBeamerWIN;
+}
