@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-08 15:12:29 $
+ *  last change: $Author: aw $ $Date: 2001-07-02 10:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                         nEntries++;
                     }
                 }
-                catch(...)
+                catch(const com::sun::star::uno::Exception&)
                 {
                     // insert Displayname into treelist without bitmaps
                     pEntry = maLbTree.InsertEntry ( aStrDisplayname,
@@ -460,7 +460,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 if( xLTS.is() )
                     nEntries += FillTree( xLTS->getLinks(), pEntry );
             }
-            catch(...)
+            catch(const com::sun::star::uno::Exception&)
             {
             }
         }
