@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:17:19 $
+ *  last change: $Author: dl $ $Date: 2001-04-20 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         SvStream* pStream = pMedium->GetInStream();
         DBG_ASSERT( pStream, "Kein InStream!" );
+        pStream->Seek( 0 );
 
         ULONG nErr = pOutliner->Read( *pStream, nFormat, pDocSh->GetHeaderAttributes() );
 
@@ -713,6 +714,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     SvStream* pStream = pMedium->GetInStream();
     DBG_ASSERT( pStream, "Kein InStream!" );
+    pStream->Seek( 0 );
 
     ULONG nErr = pOutliner->Read(*pStream, nFormat, pDocSh->GetHeaderAttributes());
 
