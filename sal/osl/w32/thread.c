@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 14:50:55 $
+ *  last change: $Author: hro $ $Date: 2000-12-15 14:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#define _WIN32_DCOM
 #include "system.h"
 
 #include <osl/diagnose.h>
