@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:54:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #include "global.hxx"
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class ScDocument;
 class ScEEParser;
 class ScTabEditEngine;
@@ -80,9 +84,9 @@ protected:
     ScTabEditEngine*    pEngine;
     Table*              pRowHeights;
 
-    BOOL                GraphicSize( USHORT nCol, USHORT nRow, USHORT nTab,
+    BOOL                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             ScEEParseEntry* );
-    void                InsertGraphic( USHORT nCol, USHORT nRow, USHORT nTab,
+    void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             ScEEParseEntry* );
 
 public:
