@@ -26,6 +26,9 @@ BEGIN {
     sPublic[nPublics++] = "getReservedWords_"
     sPublic[nPublics++] = "getSearchOptions_"
     sPublic[nPublics++] = "getTransliterations_"
+    sPublic[nPublics++] = "getIndexAlgorithm_"
+    sPublic[nPublics++] = "getUnicodeScripts_"
+    sPublic[nPublics++] = "getFollowPageWords_"
 }
 
 file != FILENAME {
