@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DataForm.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:45 $
+ *  last change:$Date: 2003-09-08 10:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,10 @@
 
 package ifc.form.component;
 
+import lib.MultiPropertyTest;
+
 import com.sun.star.form.TabulatorCycle;
 import com.sun.star.uno.Enum;
-import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 
 /**
 * Testing <code>com.sun.star.form.component.DataForm</code>
