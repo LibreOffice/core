@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:05:16 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,103 +69,115 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class BreakIterator_CJK
-//  ----------------------------------------------------;
+//      ----------------------------------------------------
+//      class BreakIterator_CJK
+//      ----------------------------------------------------;
 
 BreakIterator_CJK::BreakIterator_CJK() : dict(NULL)
 {
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
+        cBreakIterator = "com.sun.star.i18n.BreakIterator_CJK";
 }
 
 Boundary SAL_CALL
 BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
+        const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
-    if (dict)
-        return dict->previousWord(text.getStr(), anyPos, text.getLength(), wordType);
-    else
+        if (dict) {
+            result = dict->previousWord(text.getStr(), anyPos, text.getLength(), wordType);
+            // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+            if (result.endPos - result.startPos != 1 ||
+                    getScriptType(text, result.startPos) == ScriptType::ASIAN)
+                return result;
+        }
         return BreakIterator_Unicode::previousWord(text, anyPos, nLocale, wordType);
 }
 
 Boundary SAL_CALL
 BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
+        const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
-    if (dict)
-        return dict->nextWord(text.getStr(), anyPos, text.getLength(), wordType);
-    else
+        if (dict) {
+            result = dict->nextWord(text.getStr(), anyPos, text.getLength(), wordType);
+            // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+            if (result.endPos - result.startPos != 1 ||
+                    getScriptType(text, result.startPos) == ScriptType::ASIAN)
+                return result;
+        }
         return BreakIterator_Unicode::nextWord(text, anyPos, nLocale, wordType);
 }
 
 Boundary SAL_CALL
 BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
-    throw(RuntimeException)
+        const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
+        throw(RuntimeException)
 {
-    if (dict)
-        return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), wordType, bDirection);
-    else
+        if (dict) {
+            result = dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), wordType, bDirection);
+            // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+            if (result.endPos - result.startPos != 1 ||
+                    getScriptType(text, result.startPos) == ScriptType::ASIAN)
+                return result;
+        }
         return BreakIterator_Unicode::getWordBoundary(text, anyPos, nLocale, wordType, bDirection);
 }
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
-    const OUString& Text, sal_Int32 nStartPos,
-    const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
-    const LineBreakHyphenationOptions& hOptions,
-    const LineBreakUserOptions& bOptions ) throw(RuntimeException)
+        const OUString& Text, sal_Int32 nStartPos,
+        const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
+        const LineBreakHyphenationOptions& hOptions,
+        const LineBreakUserOptions& bOptions ) throw(RuntimeException)
 {
-    LineBreakResults result;
+        LineBreakResults result;
 
-    if (bOptions.allowPunctuationOutsideMargin &&
-        bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
-        ++nStartPos == Text.getLength()) {
-        ; // do nothing
-    } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
-        while (nStartPos > 0 &&
-            (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
-            bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
-        nStartPos--;
-    }
+        if (bOptions.allowPunctuationOutsideMargin &&
+                bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
+                ++nStartPos == Text.getLength()) {
+            ; // do nothing
+        } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
+            while (nStartPos > 0 &&
+                    (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
+                    bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
+                nStartPos--;
+        }
 
-    result.breakIndex = nStartPos;
-    result.breakType = BreakType::WORDBOUNDARY;
-    return result;
+        result.breakIndex = nStartPos;
+        result.breakType = BreakType::WORDBOUNDARY;
+        return result;
 }
-//  ----------------------------------------------------
-//  class BreakIterator_zh
-//  ----------------------------------------------------;
+//      ----------------------------------------------------
+//      class BreakIterator_zh
+//      ----------------------------------------------------;
 BreakIterator_zh::BreakIterator_zh()
 {
-    dict = new xdictionary("zh");
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
+        dict = new xdictionary("zh");
+        cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
 }
 
 BreakIterator_zh::~BreakIterator_zh()
 {
-    delete dict;
+        delete dict;
 }
 
-//  ----------------------------------------------------
-//  class BreakIterator_ja
-//  ----------------------------------------------------;
+//      ----------------------------------------------------
+//      class BreakIterator_ja
+//      ----------------------------------------------------;
 BreakIterator_ja::BreakIterator_ja()
 {
-    dict = new xdictionary("ja");
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
+        dict = new xdictionary("ja");
+        cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
 }
 
 BreakIterator_ja::~BreakIterator_ja()
 {
-    delete dict;
+        delete dict;
 }
 
-//  ----------------------------------------------------
-//  class BreakIterator_ko
-//  ----------------------------------------------------;
+//      ----------------------------------------------------
+//      class BreakIterator_ko
+//      ----------------------------------------------------;
 BreakIterator_ko::BreakIterator_ko()
 {
-    cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
+        cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
 }
 
 BreakIterator_ko::~BreakIterator_ko()
