@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:00 $
+ *  last change: $Author: hjs $ $Date: 2000-11-01 18:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,11 +184,11 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 {
 
     aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" == 0 ))
+    if ( aTmpStr.Search( "#" ) == 0 )
         if (bReadComments )
             return aTmpStr;
         else
-            while ( aTmpStr.Search( "#" == 0 ))
+            while ( aTmpStr.Search( "#" ) == 0 )
             {
                 aFileStream.ReadLine ( aTmpStr );
             }
