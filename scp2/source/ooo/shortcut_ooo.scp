@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 14:59:05 $
+*  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -87,7 +87,18 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Cppu
+Shortcut gid_Shortcut_Lib_Cppu_Linker
+    FileID = gid_File_Lib_Cppu;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libuno_cppu,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppu_Old
     FileID = gid_File_Lib_Cppu;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT4(libcppu,UNXSUFFIX,.,UDK_MAJOR));
@@ -98,8 +109,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Cppu_2
-    ShortcutID = gid_Shortcut_Lib_Cppu;
+Shortcut gid_Shortcut_Lib_Cppu_Old_Linker
+    ShortcutID = gid_Shortcut_Lib_Cppu_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libcppu,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -109,7 +120,18 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Cppuhelper
+Shortcut gid_Shortcut_Lib_Cppuhelper_Linker
+    FileID = gid_File_Lib_Cppuhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libuno_cppuhelper,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppuhelper_Old
     FileID = gid_File_Lib_Cppuhelper;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libcppuhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
@@ -120,8 +142,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Cppuhelper_2
-    ShortcutID = gid_Shortcut_Lib_Cppuhelper;
+Shortcut gid_Shortcut_Lib_Cppuhelper_Old_Linker
+    ShortcutID = gid_Shortcut_Lib_Cppuhelper_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT3(libcppuhelper,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -132,7 +154,7 @@ End
 #ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Cppuhelper_3
-    ShortcutID = gid_Shortcut_Lib_Cppuhelper;
+    ShortcutID = gid_Shortcut_Lib_Cppuhelper_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT4(libcppuhelper,UDK_MAJOR,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -232,23 +254,8 @@ End
 
 #ifdef SOLAR_JAVA
 
-Shortcut gid_Shortcut_Lib_Jvmaccess
+Shortcut gid_Shortcut_Lib_Jvmaccess_Linker
     FileID = gid_File_Lib_Jvmaccess;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT5(libjvmaccess,COMID,UNXSUFFIX,.,UDK_MAJOR));
-    Styles = (NETWORK,RELATIVE);
-End
-
-#endif
-
-#endif
-
-#ifdef UNX
-
-#ifdef SOLAR_JAVA
-
-Shortcut gid_Shortcut_Lib_Jvmaccess_2
-    ShortcutID = gid_Shortcut_Lib_Jvmaccess;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT3(libjvmaccess,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -260,19 +267,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Reg
+Shortcut gid_Shortcut_Lib_Reg_Linker
     FileID = gid_File_Lib_Reg;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libreg,UNXSUFFIX,.,UDK_MAJOR));
-    Styles = (NETWORK,RELATIVE);
-End
-
-#endif
-
-#ifdef UNX
-
-Shortcut gid_Shortcut_Lib_Reg_2
-    ShortcutID = gid_Shortcut_Lib_Reg;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libreg,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -282,19 +278,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Rmcxt
+Shortcut gid_Shortcut_Lib_Rmcxt_Linker
     FileID = gid_File_Lib_Rmcxt;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(librmcxt,UNXSUFFIX,.,UDK_MAJOR));
-    Styles = (NETWORK,RELATIVE);
-End
-
-#endif
-
-#ifdef UNX
-
-Shortcut gid_Shortcut_Lib_Rmcxt_2
-    ShortcutID = gid_Shortcut_Lib_Rmcxt;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(librmcxt,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -304,7 +289,18 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Sal
+Shortcut gid_Shortcut_Lib_Sal_Linker
+    FileID = gid_File_Lib_Sal;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libuno_sal,UNXSUFFIX));
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Sal_Old
     FileID = gid_File_Lib_Sal;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT4(libsal,UNXSUFFIX,.,UDK_MAJOR));
@@ -315,8 +311,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Sal_2
-    ShortcutID = gid_Shortcut_Lib_Sal;
+Shortcut gid_Shortcut_Lib_Sal_Old_Linker
+    ShortcutID = gid_Shortcut_Lib_Sal_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libsal,UNXSUFFIX));
     Styles = (NETWORK, RELATIVE);
@@ -326,7 +322,18 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Salhelper
+Shortcut gid_Shortcut_Lib_Salhelper_Linker
+    FileID = gid_File_Lib_Salhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libuno_salhelper,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Salhelper_Old
     FileID = gid_File_Lib_Salhelper;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libsalhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
@@ -337,8 +344,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Salhelper_2
-    ShortcutID = gid_Shortcut_Lib_Salhelper;
+Shortcut gid_Shortcut_Lib_Salhelper_Old_Linker
+    ShortcutID = gid_Shortcut_Lib_Salhelper_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT3(libsalhelper,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -349,7 +356,7 @@ End
 #ifdef UNX
 
 Shortcut gid_Shortcut_Lib_Salhelper_3
-    ShortcutID = gid_Shortcut_Lib_Salhelper;
+    ShortcutID = gid_Shortcut_Lib_Salhelper_Old;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT4(libsalhelper,UDK_MAJOR,COMID,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
@@ -372,19 +379,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Store
+Shortcut gid_Shortcut_Lib_Store_Linker
     FileID = gid_File_Lib_Store;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libstore,UNXSUFFIX,.,UDK_MAJOR));
-    Styles = (NETWORK, RELATIVE);
-End
-
-#endif
-
-#ifdef UNX
-
-Shortcut gid_Shortcut_Lib_Store_2
-    ShortcutID = gid_Shortcut_Lib_Store;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libstore,UNXSUFFIX));
     Styles = (NETWORK, RELATIVE);
@@ -430,15 +426,8 @@ End
 
 #ifdef UNX
 
-Shortcut gid_Shortcut_Lib_Jvmfwk
+Shortcut gid_Shortcut_Lib_Jvmfwk_Linker
     FileID = gid_File_Lib_Jvmfwk;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libjvmfwk,UNXSUFFIX,.,UDK_MAJOR));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Jvmfwk_2
-    ShortcutID = gid_Shortcut_Lib_Jvmfwk;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libjvmfwk,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
