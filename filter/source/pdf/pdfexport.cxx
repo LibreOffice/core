@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-12 12:08:51 $
+ *  last change: $Author: sj $ $Date: 2002-09-13 16:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,19 +740,19 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
             case 0 :
             {
                 nMaxBmpDPI = bIsBW ? 300 : 72;
-                nQuality = 65;
+                nQuality = 30;
             }
             break;
             case 1 :
             {
                 nMaxBmpDPI = bIsBW ? 1200 : 300;
-                nQuality = 80;
+                nQuality = 60;
             }
             break;
             case 2 :
             {
                 nMaxBmpDPI = bIsBW ? 1200 : 300;
-                nQuality = 95;
+                nQuality = 80;
             }
             break;
         }
@@ -793,7 +793,12 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         const Size aSizePixel( aBitmapEx.GetSizePixel() );
         if ( aSizePixel.Width() && aSizePixel.Height() )
         {
-            if ( aBitmapEx.GetBitCount() > 1 )
+            sal_Bool bUseJPGCompression = sal_False;
+            if ( aBitmapEx.GetBitCount() > 8 )
+                bUseJPGCompression = sal_True;
+            if ( ( aBitmapEx.GetBitCount() == 8 ) && aBitmapEx.GetBitmap().HasGreyPalette() )
+                bUseJPGCompression = sal_True;
+            if ( bUseJPGCompression )
             {
                 Bitmap aMask;
                 if ( aBitmapEx.IsTransparent() )
