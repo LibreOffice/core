@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:39:24 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@
 #define REPLACEMENT_SWEDISH                 ASCII_STR("swedish")
 #define REPLACEMENT_TURKISH                 ASCII_STR("turkish")
 #define REPLACEMENT_NORWEGIAN               ASCII_STR("norwegian")
+#define REPLACEMENT_NORWEGIAN_NYNORSK       ASCII_STR("norwegian_nynorsk")
 #define REPLACEMENT_HUNGARIAN               ASCII_STR("hungarian")
 //#define   REPLACEMENT_BULGARIAN           ASCII_STR("bulgarian")
 #define REPLACEMENT_CHINESE_TRADITIONAL     ASCII_STR("chinese_traditional")
@@ -1016,8 +1017,10 @@ rtl::OUString SubstitutePathVariables::GetLanguageString( LanguageType aLanguage
                                                 break ;
 
         case LANGUAGE_NORWEGIAN             :
-        case LANGUAGE_NORWEGIAN_BOKMAL      :
-        case LANGUAGE_NORWEGIAN_NYNORSK     :   aLangStr = REPLACEMENT_NORWEGIAN;
+        case LANGUAGE_NORWEGIAN_BOKMAL      :   aLangStr = REPLACEMENT_NORWEGIAN;
+                                                break;
+
+        case LANGUAGE_NORWEGIAN_NYNORSK     :   aLangStr = REPLACEMENT_NORWEGIAN_NYNORSK;
                                                 break ;
 
         case LANGUAGE_HUNGARIAN             :   aLangStr = REPLACEMENT_HUNGARIAN;
