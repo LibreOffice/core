@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.44 2003-09-04 08:29:30 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.45 2003-12-16 12:28:37 vg Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2003-09-04 08:29:30 $ $Revision: 1.44 $
+//	$Author: vg $ $Date: 2003-12-16 12:28:37 $ $Revision: 1.45 $
 //
 // Description:
 //
@@ -196,7 +196,7 @@ using namespace connectivity;
 %left <pParseNode> SQL_TOKEN_OR
 %left <pParseNode> SQL_TOKEN_AND
 
-%left <pParseNode> LESSEQ GREATEQ NOTEQUAL LESS GREAT EQUAL /* '<' '>' = <> < > <= >= != */
+%left <pParseNode> SQL_LESSEQ SQL_GREATEQ SQL_NOTEQUAL SQL_LESS SQL_GREAT SQL_EQUAL /* '<' '>' = <> < > <= >= != */
 %left <pParseNode> '+' '-'
 %left <pParseNode> '*' '/'
 %left SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT
@@ -836,7 +836,7 @@ assignment_commalist:
 	;
 
 assignment:
-		column EQUAL update_source
+		column SQL_EQUAL update_source
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -1189,12 +1189,12 @@ comparison_predicate:
 		}
 	;
 comparison:
-		LESS
-	  | NOTEQUAL
-	  | EQUAL
-	  | GREAT
-	  | LESSEQ
-	  | GREATEQ
+		SQL_LESS
+	  | SQL_NOTEQUAL
+	  | SQL_EQUAL
+	  | SQL_GREAT
+	  | SQL_LESSEQ
+	  | SQL_GREATEQ
 	;
 between_predicate:
 		row_value_constructor sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
@@ -1914,7 +1914,7 @@ numeric_function:
 	;
 op_parameter:
 		{$$ = SQL_NEW_RULE;}
-	|	'?' EQUAL
+	|	'?' SQL_EQUAL
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode("?", SQL_NODE_PUNCTUATION));
