@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:32:41 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,15 @@ void SbiCodeGen::Save()
     // OPTION EXPLICIT-Flag uebernehmen
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
+    if( pParser->bClassModule )
+    {
+        p->SetFlag( SBIMG_CLASSMODULE );
+        pCLASSFAC->AddClassModule( &rMod );
+    }
+    else
+    {
+        pCLASSFAC->RemoveClassModule( &rMod );
+    }
     if( pParser->bText )
         p->SetFlag( SBIMG_COMPARETEXT );
     // GlobalCode-Flag
@@ -174,6 +183,35 @@ void SbiCodeGen::Save()
         SbiProcDef* pProc = pDef->GetProcDef();
         if( pProc && pProc->IsDefined() )
         {
+            PropertyMode ePropMode = pProc->getPropertyMode();
+            if( ePropMode != PROPERTY_MODE_NONE )
+            {
+                SbxDataType ePropType;
+                switch( ePropMode )
+                {
+                    case PROPERTY_MODE_GET:
+                        ePropType = pProc->GetType();
+                        break;
+                    case PROPERTY_MODE_LET:
+                    {
+                        // type == type of first parameter
+                        ePropType = SbxVARIANT;     // Default
+                        SbiSymPool* pPool = &pProc->GetParams();
+                        if( pPool->GetSize() > 1 )
+                        {
+                            SbiSymDef* pPar = pPool->Get( 1 );
+                            if( pPar )
+                                ePropType = pPar->GetType();
+                        }
+                        break;
+                    }
+                    case PROPERTY_MODE_SET:
+                        ePropType = SbxOBJECT;
+                        break;
+                }
+                SbProcedureProperty* pProcedureProperty =
+                    rMod.GetProcedureProperty( pProc->GetPropName(), ePropType );
+            }
             SbMethod* pMeth = rMod.GetMethod( pProc->GetName(), pProc->GetType() );
 
             // #110004
