@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_calc.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 10:57:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 [STR_NAME_MODULE_PRG_CALC]
 de = "%PRODUCTNAME Calc"
 en-US = "%PRODUCTNAME Calc"
@@ -88,8 +87,6 @@ de = "AddIn"
 en-US = "Add-in"
 
 [STR_DESC_MODULE_OPTIONAL_ADDINS]
-en-US = "Additional %PRODUCTNAME Calc functions that were realised using an add-in interface. These are also available in the source code."
-de = "Zusätzliche %PRODUCTNAME Calc Funktionen, die über eine AddIns Schnittstelle realisiert wurden. Diese sind auch im Sourcecode verfügbar."
-
-
+de = "Add-Ins sind zusätzliche Programme, welche neue Funktionen in %PRODUCTNAME Calc verfügbar machen."
+en-US = "Add-ins are additional programs that make new functions available in %PRODUCTNAME Calc."
 
