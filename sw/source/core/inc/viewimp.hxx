@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:23 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,11 @@ class SwViewImp
     void LockPaint();           //dito, gerufen von ViewShell::ImplLockPaint
     void UnlockPaint();
 
+public:
     void PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
                          const SdrPaintInfoRec& rInfoRec );
+private:
+
 #ifdef ACCESSIBLE_LAYOUT
     SwAccessibleMap *CreateAccessibleMap();
 #endif
@@ -275,7 +278,8 @@ public:
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.
-    DECL_LINK( PaintDispatcher, SdrPaintProcRec * );
+    //#110094#-3
+    //DECL_LINK( PaintDispatcher, SdrPaintProcRec * );
 
     // Interface Drawing
     BOOL IsDragPossible( const Point &rPoint );
