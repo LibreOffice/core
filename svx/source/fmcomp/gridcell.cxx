@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1481,7 +1481,7 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 //------------------------------------------------------------------------------
 sal_Bool DbCheckBox::commitControl()
 {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     Any aVal = makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) );
 #endif
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
