@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 19:30:28 $
+ *  last change: $Author: nn $ $Date: 2001-01-08 16:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,11 @@
 #define SC_UNO_PAGE_RIGHTBORDER     SC_UNONAME_RIGHTBORDER
 #define SC_UNO_PAGE_BOTTBORDER      SC_UNONAME_BOTTBORDER
 #define SC_UNO_PAGE_TOPBORDER       SC_UNONAME_TOPBORDER
+#define SC_UNO_PAGE_LEFTBRDDIST     "LeftBorderDistance"
+#define SC_UNO_PAGE_RIGHTBRDDIST    "RightBorderDistance"
+#define SC_UNO_PAGE_BOTTBRDDIST     "BottomBorderDistance"
+#define SC_UNO_PAGE_TOPBRDDIST      "TopBorderDistance"
+#define SC_UNO_PAGE_BORDERDIST      "BorderDistance"
 #define SC_UNO_PAGE_SHADOWFORM      "ShadowFormat"
 #define SC_UNO_PAGE_LEFTMARGIN      "LeftMargin"
 #define SC_UNO_PAGE_RIGHTMARGIN     "RightMargin"
@@ -342,6 +347,11 @@
 #define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
 #define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
 #define SC_UNO_PAGE_HDRTOPBOR       "HeaderTopBorder"
+#define SC_UNO_PAGE_HDRLEFTBDIS     "HeaderLeftBorderDistance"
+#define SC_UNO_PAGE_HDRRIGHTBDIS    "HeaderRightBorderDistance"
+#define SC_UNO_PAGE_HDRBOTTBDIS     "HeaderBottomBorderDistance"
+#define SC_UNO_PAGE_HDRTOPBDIS      "HeaderTopBorderDistance"
+#define SC_UNO_PAGE_HDRBRDDIST      "HeaderBorderDistance"
 #define SC_UNO_PAGE_HDRSHADOW       "HeaderShadowFormat"
 #define SC_UNO_PAGE_HDRLEFTMAR      "HeaderLeftMargin"
 #define SC_UNO_PAGE_HDRRIGHTMAR     "HeaderRightMargin"
@@ -359,6 +369,11 @@
 #define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
 #define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"
 #define SC_UNO_PAGE_FTRTOPBOR       "FooterTopBorder"
+#define SC_UNO_PAGE_FTRLEFTBDIS     "FooterLeftBorderDistance"
+#define SC_UNO_PAGE_FTRRIGHTBDIS    "FooterRightBorderDistance"
+#define SC_UNO_PAGE_FTRBOTTBDIS     "FooterBottomBorderDistance"
+#define SC_UNO_PAGE_FTRTOPBDIS      "FooterTopBorderDistance"
+#define SC_UNO_PAGE_FTRBRDDIST      "FooterBorderDistance"
 #define SC_UNO_PAGE_FTRSHADOW       "FooterShadowFormat"
 #define SC_UNO_PAGE_FTRLEFTMAR      "FooterLeftMargin"
 #define SC_UNO_PAGE_FTRRIGHTMAR     "FooterRightMargin"
