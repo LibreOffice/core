@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 14:26:00 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,8 +1184,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         }
     }
 
-    OfaAutoCorrCfg* pACfg =  OFF_APP()->GetAutoCorrConfig();
-    SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+    OfaAutoCorrCfg* pACfg = 0;
+    SvxAutoCorrect* pACorr = 0;
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+            rView.GetViewFrame()->GetBindings().GetRecorder();
+    if ( !xRecorder.is() )
+    {
+        pACfg = OFF_APP()->GetAutoCorrConfig();
+        pACorr = pACfg->GetAutoCorrect();
+    }
+
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     /*TblChgWidthHeightType*/int eTblChgMode;
@@ -1681,7 +1690,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                                         bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
                         }
-                        else if((rSh.GetSelectionType() & SwWrtShell::SEL_DRW) &&
+                        else if((rSh.GetSelectionType() & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM|
+                                        SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF)) &&
                                 rSh.GetDrawView()->HasMarkedObj())
                             eKeyState = KS_EnterDrawHandleMode;
                     break;
