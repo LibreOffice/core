@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:05:32 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -118,7 +121,6 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 using namespace ::comphelper;
 using namespace ::rtl;
@@ -866,10 +868,14 @@ void LibPage::InsertLib()
         xFltMgr->setCurrentFilter( String( IDEResId( RID_STR_BASIC ) ) );
     }
 
-    if( xFP->execute() == RET_OK )
+    if ( xFP->execute() == RET_OK )
     {
         IDE_DLL()->GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
         IDE_DLL()->GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
+
+        // library containers for import
+        Reference< script::XLibraryContainer2 > xModLibContImport;
+        Reference< script::XLibraryContainer2 > xDlgLibContImport;
 
         // file URLs
         Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
@@ -880,26 +886,39 @@ void LibPage::InsertLib()
         String aBase = aURLObj.getBase();
         String aModBase = String::CreateFromAscii( "script" );
         String aDlgBase = String::CreateFromAscii( "dialog" );
+
         if ( aBase == aModBase || aBase == aDlgBase )
         {
             aModURLObj.setBase( aModBase );
             aDlgURLObj.setBase( aDlgBase );
-        }
 
-        // create library containers for import
-        Reference< script::XLibraryContainer2 > xModLibContImport;
-        Reference< script::XLibraryContainer2 > xDlgLibContImport;
-        if( xMSF.is() )
-        {
-            Sequence <Any> aSeqModURL(1);
-            aSeqModURL[0] <<= ::rtl::OUString( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
+            ::rtl::OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            ::rtl::OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-            Sequence <Any> aSeqDlgURL(1);
-            aSeqDlgURL[0] <<= ::rtl::OUString( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
+            if ( xMSF.is() )
+            {
+                Reference< XSimpleFileAccess > xSFA( xMSF->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
+
+                if ( xSFA.is() )
+                {
+                    if ( xSFA->exists( aModURL ) )
+                    {
+                        Sequence <Any> aSeqModURL(1);
+                        aSeqModURL[0] <<= aModURL;
+                        xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
+                    }
+
+                    if ( xSFA->exists( aDlgURL ) )
+                    {
+                        Sequence <Any> aSeqDlgURL(1);
+                        aSeqDlgURL[0] <<= aDlgURL;
+                        xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
+                    }
+                }
+            }
         }
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
