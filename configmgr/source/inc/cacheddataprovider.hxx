@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddataprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-12 14:10:33 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,13 @@ namespace configmgr
     namespace backend
     {
 // ---------------------------------------------------------------------------
-    typedef memory::SegmentAddress  CacheLocation;
-    typedef memory::SegmentID       CacheLineID;
+    struct CacheLocation
+    {
+        memory::SegmentAddress          segment;
+        memory::SegmentHeap::Address    address;
+
+        bool isNull() const { return segment.isNull() || address == 0; }
+    };
 // ---------------------------------------------------------------------------
     struct IDirectDataProvider;
     struct ICachedDataNotifier;
@@ -101,7 +106,7 @@ namespace configmgr
     /** Interface providing access to configuration data from some backend,
         which is cached in a shared data cache.
     */
-    struct SAL_NO_VTABLE ICachedDataProvider
+    struct SAL_NO_VTABLE ICachedDataProvider : Refcounted
     {
         /** locates data of a component in the cache.
 
@@ -205,6 +210,14 @@ namespace configmgr
         */
         virtual void saveAndNotify(UpdateRequest const & _anUpdate)
             CFG_UNO_THROW_ALL() = 0;
+
+        /** dispose this object and its cache and close the backend
+
+            <p> discards the cache and flushes the backend.
+            </p>
+        */
+        virtual void dispose()
+            CFG_UNO_THROW_RTE() = 0;
 
        /** @returns
                 an object that can used to broadcast changes done through this object.
