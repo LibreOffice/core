@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-19 15:02:46 $
+ *  last change: $Author: fme $ $Date: 2002-11-01 09:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,27 +292,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         return sal_False;
     }
 
-    sal_Bool bChgLocale = sal_False;
-
-    // if we have to apply the forbidden character rules, we have to check
-    // if we temporarily have to change the language in order to get the
-    // correct forbidden rules
-    const CharClass& rCC = GetAppCharClass();
-    xub_StrLen nLangIndex = nCutPos;
-
-    if ( nCutPos )
-    {
-        // step back until a non-punctuation character is reached
-        while ( nLangIndex && ! rCC.isLetterNumeric( rInf.GetTxt(), nLangIndex ) )
-            --nLangIndex;
-
-        ASSERT( rSI.ScriptType( nLangIndex ), "Script is not between 1 and 4" );
-
-        // compare current script with last script
-        bChgLocale = ( rSI.ScriptType( nLangIndex ) - 1 !=
-                       rInf.GetFont()->GetActual() );
-    }
-
     xub_StrLen nPorLen = 0;
 #ifdef VERTICAL_LAYOUT
     // do not call the break iterator nCutPos is a blank
@@ -411,13 +390,52 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                                 rInf.GetHyphValues(), nHyphPos );
         }
 
+        // Get Language for break iterator.
         // We have to switch the current language if we have a script
         // change at nCutPos. Otherwise LATIN punctuation would never
         // be allowed to be hanging punctuation.
-        LanguageType aLang = bChgLocale ?
-                             rInf.GetTxtFrm()->GetTxtNode()->GetLang(
-                                    nLangIndex - nFieldDiff ) :
-                             rInf.GetFont()->GetLanguage();
+        // NEVER call GetLang if the string has been modified!!!
+        LanguageType aLang = rInf.GetFont()->GetLanguage();
+
+        // If we are inside a field portion, we use a temporar string which
+        // differs from the string at the textnode. Therefore we are not allowed
+        // to call the GetLang function.
+        if ( nCutPos && ! rPor.InFldGrp() )
+        {
+            const CharClass& rCC = GetAppCharClass();
+
+            // step back until a non-punctuation character is reached
+            xub_StrLen nLangIndex = nCutPos;
+
+            // If a field has been expanded right in front of us we do not
+            // step further than the beginning of the expanded field
+            // (which is the position of the field placeholder in our
+            // original string).
+            const xub_StrLen nDoNotStepOver = CH_TXTATR_BREAKWORD == cFldChr ?
+                                              rInf.GetIdx() - nFieldDiff - 1:
+                                              0;
+
+            while ( nLangIndex > nDoNotStepOver &&
+                    ! rCC.isLetterNumeric( rInf.GetTxt(), nLangIndex ) )
+                --nLangIndex;
+
+            // last "real" character is not inside our current portion
+            // we have to check the script type of the last "real" character
+            if ( nLangIndex < rInf.GetIdx() )
+            {
+                USHORT nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
+                                                                nLangIndex );
+                ASSERT( nScript, "Script is not between 1 and 4" );
+
+                // compare current script with script from last "real" character
+                if ( nScript - 1 != rInf.GetFont()->GetActual() )
+                    aLang = rInf.GetTxtFrm()->GetTxtNode()->GetLang(
+                        CH_TXTATR_BREAKWORD == cFldChr ?
+                        nDoNotStepOver :
+                        nLangIndex, 0, nScript );
+            }
+        }
+
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->GetDoc()->
                             GetForbiddenCharacters( aLang, TRUE ));
@@ -574,10 +592,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rOldTxt.Insert( cFldChr, nOldIdx - 1 );
             rInf.SetIdx( nOldIdx );
 
-#ifdef DEBUG
             ASSERT( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
-#endif
         }
     }
 
