@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:14:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@
 #define MSG_NO_RULER               (RC_SHELLS_BEGIN +  47)
 
 #define STR_SHELLNAME_DRAWFORM     (RC_SHELLS_BEGIN +  48)
-#define RID_DRAWFORM_TOOLBOX       (RC_SHELLS_BEGIN +  49)
+    // FREE
 
 #define STR_REDLINE_FORMATED       (RC_SHELLS_BEGIN + 50)
 #define STR_REDLINE_TABLECHG       (RC_SHELLS_BEGIN + 51)
