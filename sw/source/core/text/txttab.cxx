@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: fme $ $Date: 2002-05-27 09:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
             }
             SwTwips nCount = nLineTab;
             nCount -= nTabLeft;
+
             // Bei negativen Werten rundet "/" auf, "%" liefert negative Reste,
             // bei positiven Werten rundet "/" ab, "%" liefert positvie Reste!
-            KSHORT nPlus = nCount < 0 ? 0 : 1;
+            if ( nCount < 0 )
+                nCount = 0;
+
             nCount /= nDefTabDist;
-            nNextPos = ( nCount + nPlus ) * nDefTabDist ;
+            nNextPos = ( nCount + 1 ) * nDefTabDist ;
             if( nNextPos + nTabLeft <= nLineTab + 50 )
                 nNextPos += nDefTabDist;
             cFill = 0;
