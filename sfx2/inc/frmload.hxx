@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:53:22 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,12 +149,8 @@ class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::fr
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
     REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
-    LoadEnvironment_Impl*   pLoader;
-    SfxFilterMatcher*       pMatcher;
     String                  aFilterName;
     SfxMedium*              pMedium;
-    sal_Bool                bLoadDone;
-    sal_Bool                bLoadState;
 
     DECL_LINK( LoadDone_Impl, void* );
 
