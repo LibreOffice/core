@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:02:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,9 +323,6 @@ using namespace ::rtl;
 
 SV_IMPL_PTRARR(SwColumns,SwColumn*)
 
-TYPEINIT1(SwFrmFmt,     SwFmt );  //rtti fuer SwFrmFmt
-TYPEINIT1(SwFlyFrmFmt,  SwFrmFmt);
-TYPEINIT1(SwDrawFrmFmt, SwFrmFmt);
 TYPEINIT1(SwFmtVertOrient, SfxPoolItem);
 TYPEINIT1(SwFmtHoriOrient, SfxPoolItem);
 TYPEINIT2(SwFmtHeader,  SfxPoolItem, SwClient );
@@ -2617,6 +2614,9 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* pPool ) const
 //  class SwFrmFmt
 //  Implementierung teilweise inline im hxx
 
+TYPEINIT1( SwFrmFmt, SwFmt );
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
+
 void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
@@ -2831,6 +2831,9 @@ void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
 // <--
 //  class SwFlyFrmFmt
 //  Implementierung teilweise inline im hxx
+
+TYPEINIT1( SwFlyFrmFmt, SwFrmFmt );
+IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
 {
@@ -3094,6 +3097,9 @@ const sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 
 //  class SwDrawFrmFmt
 //  Implementierung teilweise inline im hxx
+
+TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
+IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 
 #pragma optimize( "e", off )
 
