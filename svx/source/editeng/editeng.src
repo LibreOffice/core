@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:03:50 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,15 +347,15 @@ Menu RID_MENU_SPELL
             Text[ greek ] = "�~���������";
             Text[ dutch ] = "~Spellingcontrole";
             Text[ french ] = "~Orthographe";
-            Text[ spanish ] = "~Ortograf�a";
+            Text[ spanish ] = "Ortogra~f�a...";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
             Text[ italian ] = "Controllo ~ortografico";
             Text[ danish ] = "~Stavekontrol";
             Text[ swedish ] = "~R�ttstavning...";
             Text[ polish ] = "~Pisownia";
             Text[ portuguese_brazilian ] = "~Rechtschreibung";
-            Text[ japanese ] = "文章校正(~S)";
-            Text[ korean ] = "맞춤법(~S)";
+            Text[ japanese ] = "文章校正(~S)...";
+            Text[ korean ] = "맞춤법(~S)...";
             Text[ chinese_simplified ] = "拼写检查(~S)...";
             Text[ chinese_traditional ] = "拼寫檢查(~S)...";
             Text[ turkish ] = "~Yaz�m k�lavuzu";
@@ -474,15 +474,15 @@ String RID_STR_WORD
     Text[ greek ] = "Word is %x";
     Text[ dutch ] = "Word is %x";
     Text[ french ] = "Word is %x";
-    Text[ spanish ] = "Word is %x";
+    Text[ spanish ] = "La palabra es %x";
     Text[ finnish ] = "Word is %x";
     Text[ italian ] = "Word is %x";
     Text[ danish ] = "Word is %x";
     Text[ swedish ] = "Ordet �r %x";
     Text[ polish ] = "Word is %x";
     Text[ portuguese_brazilian ] = "Word is %x";
-    Text[ japanese ] = "Word is %x";
-    Text[ korean ] = "Word is %x";
+    Text[ japanese ] = "単語は %x";
+    Text[ korean ] = "단어는 %x";
     Text[ chinese_simplified ] = "单词是 %x";
     Text[ chinese_traditional ] = "字是 %x";
     Text[ turkish ] = "Word is %x";
@@ -501,15 +501,15 @@ String RID_STR_PARAGRAPH
     Text[ greek ] = "Paragraph is %x";
     Text[ dutch ] = "Paragraph is %x";
     Text[ french ] = "Paragraph is %x";
-    Text[ spanish ] = "Paragraph is %x";
+    Text[ spanish ] = "El p�rrafo es %x";
     Text[ finnish ] = "Paragraph is %x";
     Text[ italian ] = "Paragraph is %x";
     Text[ danish ] = "Paragraph is %x";
     Text[ swedish ] = "Stycket �r %x";
     Text[ polish ] = "Paragraph is %x";
     Text[ portuguese_brazilian ] = "Paragraph is %x";
-    Text[ japanese ] = "Paragraph is %x";
-    Text[ korean ] = "Paragraph is %x";
+    Text[ japanese ] = "段落は %x";
+    Text[ korean ] = "단락은 %x";
     Text[ chinese_simplified ] = "段落是 %x";
     Text[ chinese_traditional ] = "段落是 %x";
     Text[ turkish ] = "Paragraph is %x";
