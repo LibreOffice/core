@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:03:41 $
+#   last change: $Author: vg $ $Date: 2004-04-13 16:35:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.53 $ ';
+$id_str = ' $Revision: 1.54 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -129,6 +129,16 @@ $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
+
+$gcdynstr   = '';
+$strip = '';
+if ($^O eq 'linux') {
+    $gcdynstr   = 'elf-gc-dynstr';
+    $strip      = 'strip';
+};
+$strip      = '/usr/ccs/bin/strip' if ( $^O eq 'solaris' );
+$strip      = 'strip' if ( $^O eq "darwin" );
+$upd           = $ENV{'UPD'};
 
 # zip is default for RE
 $opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && defined($ENV{DELIVER_TO_ZIP}) );
@@ -432,7 +442,6 @@ sub init_globals
     my $outpath       = $ENV{'OUTPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
-    my $upd           = $ENV{'UPD'};
     my $updminor      = $ENV{'UPDMINOR'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
@@ -657,6 +666,58 @@ sub glob_and_copy
     }
 }
 
+sub unstripped {
+    my $file_name = shift;
+
+    -f $file_name
+    &&  (( `file $file_name` ) =~ /not stripped/ ? return '1' : return '');
+}
+
+sub execute_system {
+    my ($command) = shift;
+
+    if ( $is_debug ) {
+        print STDERR "TRACE_SYSTEM: $command\n";
+    }
+    open( COMMAND, "$command 2>&1 |");
+    while( <COMMAND> ) {
+        # bogus error messages
+        print if !/(Permission denied|are the same file|Not owner|preserving times for)/;
+        if ( /No space left on device/ ) {
+            print "\nError: out of disk space while executing $command.\n";
+            cleanup_and_die("");
+        }
+    }
+    close(COMMAND);
+}
+
+sub do_strip {
+    my $file = shift;
+    my $temp_file = shift;
+    my $rc;
+    if ( ($upd >= 641) && $gcdynstr && ($file =~ /\.so/) ) {
+        # remove unneeded symbols from the .dynstr symbol table
+        # do it on a local volume because otherwise a NFS kernel bug
+        # will corrupt files on certain two processor machines
+        my $local_temp_file = '/tmp/' . basename($temp_file);
+        # can't do this copying remotely because target
+        # is /tmp on _this_ machine.
+        $rc = copy($file, $local_temp_file);
+        if ( !$rc ) {
+            die "Error - Could not copy $file to $local_temp_file\n";
+        }
+        execute_system("$gcdynstr $local_temp_file");
+        execute_system("$strip $local_temp_file");
+        $rc = copy($local_temp_file, $temp_file);
+        unlink $local_temp_file;
+        # no need to copy back if garbage collection failed
+    } else {
+        $rc = copy($file, $temp_file);
+        execute_system("$strip $temp_file");
+    };
+    return $rc;
+};
+
 sub copy_if_newer
 {
     # return 0 if file is unchanged ( for whatever reason )
@@ -699,7 +760,12 @@ sub copy_if_newer
     # copy to temporary file first and rename later
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
-    my $rc = copy($from, $temp_file);
+    my $rc = '';
+    if ((defined $ENV{PROEXT}) && (unstripped($from))) {
+        $rc = do_strip($from, $temp_file);
+    } else {
+        $rc = copy($from, $temp_file);
+    };
     if ( $rc) {
         $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
         if ( !$rc ) {
