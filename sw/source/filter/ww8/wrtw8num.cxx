@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:09:17 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,8 @@ void SwWW8Writer::Out_WwNumLvl( BYTE nWwLevel )
 
 void SwWW8Writer::Out_SwNumLvl( BYTE nSwLevel )
 {
-    Out_WwNumLvl( ( nSwLevel == NO_NUM ) ? 0 : nSwLevel + 1 );
+    ASSERT(nSwLevel != NO_NUM, "NO_NUM?");
+    Out_WwNumLvl( nSwLevel + 1 );
 }
 
 void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
@@ -750,19 +751,21 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
     BYTE nSwLevel = pNd->GetNum()->GetLevel();
     const SwNumRule* pRul = pNd->GetNumRule();
-    if (!pRul || nSwLevel == WW8ListManager::nMaxLevel)
+    if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
         return false;
 
     bool bNoNum = false;
-    if (nSwLevel == NO_NUM)
-        nSwLevel = NO_NUMLEVEL;         // alte Codierung...
-    if (nSwLevel & NO_NUMLEVEL)
+
+    ASSERT(NO_NUM != nSwLevel, "NO_NUM?");
+    if( ! IsNum(nSwLevel))
     {
-        nSwLevel &= ~NO_NUMLEVEL;       // 0..WW8ListManager::nMaxLevel
+        SetNoNum(&nSwLevel, FALSE);     // 0..WW8ListManager::nMaxLevel
         bNoNum = true;
     }
 
     bool bRet = true;
+    const SwNumFmt* pFmt = &pRul->Get( nSwLevel );// interessierendes Format
+
     SwNumFmt aFmt(pRul->Get(nSwLevel));
     const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
     aFmt.SetAbsLSpace(writer_cast<short>(aFmt.GetAbsLSpace() + rLR.GetLeft()));
