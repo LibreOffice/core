@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 13:06:24 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 15:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,6 +1170,7 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
     pImpl->aTitle = GetText();
 
+    aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );
     Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
     aEditBtn.SetClickHdl( aLink );
     aOKBtn.SetClickHdl( aLink );
@@ -1249,6 +1250,38 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
         pImpl->pWin->OpenFile( &aEditBtn == pBtn );
         EndDialog( RET_OK );
     }
+    return 0;
+}
+
+IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
+{
+    Window* pOldDefWin = Application::GetDefDialogParent();
+    Application::SetDefDialogParent( this );
+    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
+            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), UNO_QUERY );
+    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+    if ( !xFrame.is() )
+        xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+
+    com::sun::star::util::URL aTargetURL;
+    aTargetURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("slot:5540") );
+    Reference < com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer") ) ), UNO_QUERY );
+    xTrans->parseStrict( aTargetURL );
+
+    Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
+    Reference < ::com::sun::star::frame::XDispatch > xDisp;
+    xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+
+    if ( xDisp.is() )
+    {
+        Sequence<PropertyValue> aArgs(1);
+        PropertyValue* pArg = aArgs.getArray();
+        pArg[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
+        pArg[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:user") );
+        xDisp->dispatch( aTargetURL, aArgs );
+    }
+
+    Application::SetDefDialogParent( pOldDefWin );
     return 0;
 }
 
