@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:11:41 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 10:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ String SV_BUTTONTEXT_YES
     TEXT[ dutch ] = "~Ja";
     TEXT[ chinese_simplified ] = "ÊÇ(~Y)";
     TEXT[ greek ] = "Íáé";
-    TEXT[ korean ] = "³×(~Y)";
+    TEXT[ korean ] = "¿¹";
     TEXT[ turkish ] = "~Evet";
     TEXT[ language_user1 ] = " ";
 };
