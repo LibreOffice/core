@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:22:37 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <tools/urlobj.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::awt;
@@ -119,6 +120,30 @@ using namespace ::com::sun::star::util;
 
 namespace framework
 {
+
+static sal_Bool isEnumCommand( const rtl::OUString& rCommand )
+{
+    INetURLObject aURL( rCommand );
+
+    if (( aURL.GetProtocol() == INET_PROT_UNO ) &&
+        ( aURL.GetURLPath().Search( '.' ) != STRING_NOTFOUND ))
+        return sal_True;
+
+    return sal_False;
+}
+
+static rtl::OUString getEnumCommand( const rtl::OUString& rCommand )
+{
+    INetURLObject aURL( rCommand );
+
+    rtl::OUString   aEnumCommand;
+    String          aURLPath = aURL.GetURLPath();
+    xub_StrLen      nIndex   = aURLPath.Search( '.' );
+    if (( nIndex > 0 ) && ( nIndex < aURLPath.Len() ))
+        aEnumCommand = aURLPath.Copy( nIndex+1 );
+
+    return aEnumCommand;
+}
 
 struct ExecuteInfo
 {
@@ -135,6 +160,8 @@ GenericToolbarController::GenericToolbarController( const Reference< XMultiServi
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
+    ,   m_bEnumCommand( isEnumCommand( aCommand ))
+    ,   m_aEnumCommand( getEnumCommand( aCommand ))
 {
 }
 
@@ -219,7 +246,7 @@ throw ( RuntimeException )
         rtl::OUString   aStrValue;
         ItemStatus      aItemState;
 
-        if ( Event.State >>= bValue )
+        if (( Event.State >>= bValue ) && !m_bEnumCommand )
         {
             // Boolean, treat it as checked/unchecked
             m_pToolbar->SetItemBits( m_nID, nItemBits );
@@ -230,9 +257,23 @@ throw ( RuntimeException )
         }
         else if ( Event.State >>= aStrValue )
         {
-            m_pToolbar->SetItemText( m_nID, aStrValue );
+            if ( m_bEnumCommand )
+            {
+                if ( aStrValue == m_aEnumCommand )
+                    bValue = sal_True;
+                else
+                    bValue = sal_False;
+
+                m_pToolbar->SetItemBits( m_nID, nItemBits );
+                m_pToolbar->CheckItem( m_nID, bValue );
+                if ( bValue )
+                    eTri = STATE_CHECK;
+                nItemBits |= TIB_CHECKABLE;
+            }
+            else
+                m_pToolbar->SetItemText( m_nID, aStrValue );
         }
-        else if ( Event.State >>= aItemState )
+        else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
