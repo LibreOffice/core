@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:48:02 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,22 +134,22 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ ENGLISH ] = "Copy column d~escription" ;
             Text[ english_us ] = "Copy Column D~escription";
             Text[ portuguese ] = "Copy column d~escription";
-            Text[ russian ] = "Copy column d~escription";
-            Text[ greek ] = "Copy column d~escription";
+            Text[ russian ] = "Κξοθπξβΰςό ξοθρΰνθε κξλξνκθ";
+            Text[ greek ] = "Αντιγραφή της π~εριγραφής της στήλης";
             Text[ dutch ] = "Copy column d~escription";
-            Text[ french ] = "Copy column d~escription";
+            Text[ french ] = "Copier la d~escription de la colonne";
             Text[ spanish ] = "Copy column d~escription";
             Text[ italian ] = "Copia la ~descrizione della colonna";
             Text[ danish ] = "Copy column d~escription";
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
-            Text[ polish ] = "Copy column d~escription";
+            Text[ polish ] = "Kopiuj opis kolumny";
             Text[ portuguese_brazilian ] = "Copy column d~escription";
             Text[ japanese ] = "—ρ‚Μ©o‚µ‚πΊΛί°";
             Text[ korean ] = "Copy column d~escription";
-            Text[ chinese_simplified ] = "Copy column d~escription";
+            Text[ chinese_simplified ] = "Έ΄ΦΖΑΠ±κΜβ";
             Text[ chinese_traditional ] = "½Ζ»s¦CΌΠΓD";
             Text[ turkish ] = "Copy column d~escription";
-            Text[ arabic ] = "Copy column d~escription";
+            Text[ arabic ] = "δΣΞ ζΥέ ΗαΪγζΟ";
         };
     };
 };
