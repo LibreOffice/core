@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _CPPU_MACROS_HXX_
 #include <cppu/macros.hxx>
 #endif
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -77,31 +80,44 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+
 typedef struct _typelib_TypeDescription typelib_TypeDescription;
 typedef struct _typelib_InterfaceTypeDescription typelib_InterfaceTypeDescription;
 typedef struct _uno_Interface uno_Interface;
 typedef struct _uno_Environment uno_Environment;
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 
 /** C++ wrapper for C uno_Mapping.
+
+    @see uno_Mapping
 */
 class Mapping
 {
     uno_Mapping * _pMapping;
 
 public:
+    // these are here to force memory de/allocation to sal lib.
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
+        {}
+
     /** Holds a mapping from the specified source to the specified destination by environment
         type names.
 
@@ -310,7 +326,13 @@ inline void * Mapping::mapInterface(
     return pOut;
 }
 
-//--------------------------------------------------------------------------------------------------
+/** Maps an binary C UNO interface to be used in the currently used compiler environment.
+
+    @tplparam C interface type
+    @param ppRet inout returned interface pointer
+    @param pUnoI binary C UNO interface
+    @return true if successful, false otherwise
+*/
 template< class C >
 inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_THROW( () )
 {
@@ -321,7 +343,13 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
     aMapping.mapInterface( (void **)ppRet, pUnoI, ::getCppuType( ppRet ) );
     return (0 != *ppRet);
 }
-//--------------------------------------------------------------------------------------------------
+/** Maps an UNO interface of the currently used compiler environment to binary C UNO.
+
+    @tplparam C interface type
+    @param ppRet inout returned interface pointer
+    @param x interface reference
+    @return true if successful, false otherwise
+*/
 template< class C >
 inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL_THROW( () )
 {

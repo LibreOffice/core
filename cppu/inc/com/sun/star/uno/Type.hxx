@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:36:46 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,16 +70,12 @@
 #endif
 
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 

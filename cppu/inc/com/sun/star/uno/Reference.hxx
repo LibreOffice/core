@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:09:49 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,12 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #endif
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 

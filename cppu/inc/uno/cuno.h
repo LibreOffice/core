@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuno.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,15 @@
 #define CUNO_ERROR_CALL_FAILED          (1 << 31)
 #define CUNO_ERROR_EXCEPTION            (1 | CUNO_ERROR_CALL_FAILED)
 
+/** macro to call on a C interface
+
+    @param interface_pointer interface pointer
+*/
 #define CUNO_CALL( interface_pointer ) (*interface_pointer)
+/** macro to test if an exception was signalled.
+
+    @param return_code return code of call
+*/
 #define CUNO_EXCEPTION_OCCURED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
 
 typedef sal_Int32 cuno_ErrorCode;

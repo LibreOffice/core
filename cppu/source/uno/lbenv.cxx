@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-18 12:39:56 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <typelib/typedescription.h>
-#endif
-#ifndef _UNO_LBNAMES_H_
-#include <uno/lbnames.h>
 #endif
 #ifndef _UNO_DISPATCHER_H_
 #include <uno/dispatcher.h>

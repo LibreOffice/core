@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uik.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #   pragma pack(8)
 #endif
 
-/** Binary typelib uik struct. Currently not used anymore.
+/** Binary typelib uik struct.  Internally not used anymore.
 */
 typedef struct _typelib_Uik
 {

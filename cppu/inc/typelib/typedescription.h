@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 14:53:29 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,19 +683,21 @@ void SAL_CALL typelib_typedescription_revokeCallback(
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-/*  Returns true, if the type description reference may lose the type description. Otherwise
+/** Returns true, if the type description reference may lose the type description. Otherwise
     pType is a valid pointer and cannot be discarded through the lifetime of this reference.
     Remark: If the pWeakObj of the type is set too, you can avoid the call of
     ...getDescription(...) and use the description directly. pWeakObj == 0 means, that the
     description is not initialized.
+    @internal
 */
 #define TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass ) \
     ((eTypeClass) == typelib_TypeClass_INTERFACE_METHOD || \
      (eTypeClass) == typelib_TypeClass_INTERFACE_ATTRIBUTE)
 
-/*  Gets a description from the reference. The description may not be locked by this call.
+/** Gets a description from the reference. The description may not be locked by this call.
     You must use the TYPELIB_DANGER_RELEASE macro to release the description fetched with
     this macro.
+    @internal
 */
 #define TYPELIB_DANGER_GET( ppDescription, pTypeRef ) \
 { \
@@ -717,7 +719,8 @@ void SAL_CALL typelib_typedescription_revokeCallback(
     } \
 }
 
-/*  Releases the description previouse fetched by TYPELIB_DANGER_GET.
+/** Releases the description previouse fetched by TYPELIB_DANGER_GET.
+    @internal
 */
 #define TYPELIB_DANGER_RELEASE( pDescription ) \
 { \

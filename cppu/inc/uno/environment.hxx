@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _UNO_ENVIRONMENT_HXX_
 #define _UNO_ENVIRONMENT_HXX_
 
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -83,6 +86,8 @@ namespace uno
 {
 
 /** C++ wrapper for binary C uno_Environment.
+
+    @see uno_Environment
 */
 class Environment
 {
@@ -91,6 +96,20 @@ class Environment
     uno_Environment * _pEnv;
 
 public:
+    // these are here to force memory de/allocation to sal lib.
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
+        {}
+
     /** Constructor: acquires given environment
 
         @param pEnv environment

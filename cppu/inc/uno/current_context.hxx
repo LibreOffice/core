@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 11:03:23 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,23 @@
 #define _UNO_CURRENT_CONTEXT_HXX_
 
 #include <uno/current_context.h>
-#include <cppu/macros.hxx>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 
 /** Getting the current context.
+    @attention
+    Don't spread the returned interface around to other threads.  Every thread has its own
+    current context.
 
     @return current context or null ref, if none is set
 */
@@ -105,13 +103,18 @@ inline bool SAL_CALL setCurrentContext(
     return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, 0 ) != sal_False);
 }
 
-/** Objects of this class are used for applying a current context until they are destructed,
-    i.e. the ctor of this class saves the previous and sets the given context while the dtor
-    restores the previous one upon destruction.
+/** Objects of this class are used for applying a current context until they are destructed, i.e.
+    the ctor of this class saves the previous and sets the given context while the dtor restores
+    the previous one upon destruction.
 */
 class ContextLayer
 {
+    /** this C++ environment type name.
+        @internal
+    */
+    ::rtl::OUString m_aEnvTypeName;
     /** previous context
+        @internal
     */
     Reference< XCurrentContext > m_xPreviousContext;
 
@@ -137,17 +140,16 @@ public:
 //__________________________________________________________________________________________________
 inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
     SAL_THROW( () )
+    : m_aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) )
 {
-    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    ::uno_getCurrentContext( (void **)&m_xPreviousContext, aEnvTypeName.pData, 0 );
-    ::uno_setCurrentContext( xNewContext.get(), aEnvTypeName.pData, 0 );
+    ::uno_getCurrentContext( (void **)&m_xPreviousContext, m_aEnvTypeName.pData, 0 );
+    ::uno_setCurrentContext( xNewContext.get(), m_aEnvTypeName.pData, 0 );
 }
 //__________________________________________________________________________________________________
 inline ContextLayer::~ContextLayer()
     SAL_THROW( () )
 {
-    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    ::uno_setCurrentContext( m_xPreviousContext.get(), aEnvTypeName.pData, 0 );
+    ::uno_setCurrentContext( m_xPreviousContext.get(), m_aEnvTypeName.pData, 0 );
 }
 
 }

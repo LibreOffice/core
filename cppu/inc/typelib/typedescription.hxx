@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #define _TYPELIB_TYPEDESCRIPTION_HXX_
 
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
@@ -71,21 +74,20 @@
 #include <typelib/typedescription.h>
 #endif
 
-/** */ //for docpp
+
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 
 /** C++ wrapper for typelib_TypeDescription.
     Constructors by name, type, type description reference will get the full type description.
+
+    @see typelib_TypeDescription
 */
 class TypeDescription
 {
@@ -94,6 +96,20 @@ class TypeDescription
     mutable typelib_TypeDescription * _pTypeDescr;
 
 public:
+    // these are here to force memory de/allocation to sal lib.
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+        { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
+        { ::rtl_freeMemory( pMem ); }
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+        { return pMem; }
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
+        {}
+
     /** Constructor:
 
         @param pTypeDescr a type description

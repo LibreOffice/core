@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+#   last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,9 @@ TARGET=cppu_typelib
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/typelib.obj		\
-        $(SLO)$/static_types.obj
+    $(SLO)$/typelib.obj		\
+    $(SLO)$/static_types.obj
 
 .INCLUDE :      ..$/..$/util$/target.pmk
 .INCLUDE :	target.mk
+

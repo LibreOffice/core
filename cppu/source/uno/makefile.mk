@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-14 07:33:56 $
+#   last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,11 +74,11 @@ TARGET=cppu_uno
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/data.obj	\
-        $(SLO)$/sequence.obj	\
-        $(SLO)$/any.obj		\
-        $(SLO)$/lbmap.obj	\
-        $(SLO)$/lbenv.obj
+    $(SLO)$/data.obj	\
+    $(SLO)$/sequence.obj	\
+    $(SLO)$/any.obj		\
+    $(SLO)$/lbmap.obj	\
+    $(SLO)$/lbenv.obj
 
 # --- Targets ------------------------------------------------------
 

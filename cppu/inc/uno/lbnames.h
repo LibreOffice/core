@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-26 08:14:51 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@
 #elif defined (__SUNPRO_CC)
 #if (__SUNPRO_CC < 0x500)
 #error "sunpro cc must be at least 5.x"
-provoking error here, because sunpro PP ignores #error
+provoking error here, because PP ignores #error
 #elif (__SUNPRO_CC < 0x600)
 #define __CPPU_ENV sunpro5
 #else
 #error "sunpro cc version must be 5.x"
-provoking error here, because sunpro PP ignores #error
+provoking error here, because PP ignores #error
 #endif /* defined (__SUNPRO_CC) */
 /* g++ 2.x, 3.0 */
 #elif defined (__GNUC__)
@@ -111,7 +111,7 @@ provoking error here, because sunpro PP ignores #error
 /* test: whether given CPPU_ENV matches expected one */
 #if (CPPU_ENV != __CPPU_ENV)
 #error "CPPU_ENV: unexpected env!"
-provoking error here, because sunpro PP ignores #error
+provoking error here, because PP ignores #error
 #endif
 
 #define CPPU_STRINGIFY_EX( x ) #x
@@ -121,7 +121,7 @@ provoking error here, because sunpro PP ignores #error
 
 #else
 #error "No supported C++ compiler environment."
-provoking error here, because sunpro PP ignores #error
+provoking error here, because PP ignores #error
 #endif /* CPPU_ENV */
 
 #endif /** __cplusplus */

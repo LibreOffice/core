@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:35:39 $
+#   last change: $Author: dbo $ $Date: 2001-11-09 09:14:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,51 +70,30 @@ NO_BSYMBOLIC=TRUE
 UNIXVERSIONNAMES=UDK
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
 
 SHL1LIBS= \
-        $(SLB)$/cppu_typelib.lib	\
-        $(SLB)$/cppu_uno.lib		\
-        $(SLB)$/cppu_threadpool.lib
+    $(SLB)$/cppu_typelib.lib	\
+    $(SLB)$/cppu_uno.lib		\
+    $(SLB)$/cppu_threadpool.lib
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET=$(TARGET)
 
-SHL1STDLIBS=	$(SALLIB)
+SHL1STDLIBS= \
+    $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP=$(TARGET).map
 
-DEF1NAME=	$(SHL1TARGET)
-#DEF1EXPORTFILE=	exports.dxp
+DEF1NAME=$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-DOCPPFILES= \
-        $(INC)$/typelib$/uik.h			\
-        $(INC)$/typelib$/typeclass.h		\
-        $(INC)$/typelib$/typedescription.h	\
-        $(INC)$/typelib$/typedescription.hxx	\
-        $(INC)$/uno$/any2.h			\
-        $(INC)$/uno$/sequence2.h		\
-         $(INC)$/uno$/data.h			\
-         $(INC)$/uno$/environment.h		\
-         $(INC)$/uno$/environment.hxx		\
-         $(INC)$/uno$/mapping.h			\
-         $(INC)$/uno$/mapping.hxx		\
-        $(INC)$/uno$/dispatcher.h		\
-        $(INC)$/uno$/threadpool.h		\
-        $(INC)$/com$/sun$/star$/uno$/genfunc.h	\
-        $(INC)$/com$/sun$/star$/uno$/Reference.h\
-        $(INC)$/com$/sun$/star$/uno$/Type.h	\
-        $(INC)$/com$/sun$/star$/uno$/Any.h	\
-        $(INC)$/com$/sun$/star$/uno$/Sequence.h
-
-docpp: $(DOCPPFILES)
-    +doc++ -H -m -f -u -d $(OUT)$/doc$/$(PRJNAME) $(DOCPPFILES)

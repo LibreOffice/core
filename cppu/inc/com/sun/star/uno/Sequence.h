@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-16 08:33:46 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,12 @@ namespace rtl
 class ByteSequence;
 }
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 
@@ -98,26 +94,36 @@ namespace uno
     C++ Sequences are reference counted and shared, so the sequence keeps a handle to its data.
     To keep value semantics, copies are only generated if the sequence is to be modified
     (new handle).
+
+    @tplparam E element type of sequence
 */
 template< class E >
 class Sequence
 {
     /** sequence handle
+        @internal
     */
     uno_Sequence * _pSequence;
 
 public:
     // these are here to force memory de/allocation to sal lib.
+    /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
+    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
+    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
+    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
-    // static pointer to typelib type
+    /** Static pointer to typelib type of sequence.
+        Don't use directly, call getCppuType().
+        @internal
+    */
     static typelib_TypeDescriptionReference * s_pType;
 
     /** typedefs the element type of the sequence
@@ -254,22 +260,25 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 
 /** Gets the meta type of IDL sequence.
 
+    @tplparam E element type of sequence
     @param dummy typed pointer for function signature
     @return type of IDL sequence
 */
-template< class S >
+template< class E >
 inline const ::com::sun::star::uno::Type &
-SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * ) SAL_THROW( () );
+SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * ) SAL_THROW( () );
 
 /** Gets the meta type of IDL sequence.
-    THE GIVEN ELEMENT TYPE MUST BE THE SAME AS THE CPP_UNO TYPE OF THE TEMPLATE ARGUMENT!
     This function has been introduced, because one cannot get the (templated) cppu type out
-    of C++ array types.  Array types have special getCppuArrayTypeN<>() functions.
+    of C++ array types.  Array types have special getCppuArrayTypeN() functions.
 
+    @attention
+    the given element type must be the same as the template argument type!
+    @tplparam E element type of sequence
     @param rElementType element type of sequence
     @return type of IDL sequence
 */
-template< class S >
+template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType ) SAL_THROW( () );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-07 15:06:56 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _UNO_CURRENT_CONTEXT_H_
 #define _UNO_CURRENT_CONTEXT_H_
 
-#ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h>
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
 #endif
 
 #ifdef __cplusplus
@@ -71,6 +71,9 @@ extern "C"
 #endif
 
 /** Gets the current task's context.
+    @attention
+    Don't spread the returned interface around to other threads.  Every thread has its own
+    current context.
 
     @param ppCurrentContext inout param current context of type com.sun.star.uno.XCurrentContext
     @param pEnvTypeName type name of returned interface's environment

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:09:49 $
+ *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,12 @@
 #endif
 
 
-/** */ //for docpp
 namespace com
 {
-/** */ //for docpp
 namespace sun
 {
-/** */ //for docpp
 namespace star
 {
-/** */ //for docpp
 namespace uno
 {
 
@@ -83,8 +79,9 @@ class RuntimeException;
 class XInterface;
 class Any;
 
-/** DEPRECATED: use SAL_NO_ACQUIRE
-    Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
+/** Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
+    Deprecated, please use SAL_NO_ACQUIRE.
+    @deprecated
 */
 enum __UnoReference_NoAcquire
 {
@@ -155,7 +152,6 @@ public:
 };
 
 /** Enum defining UNO_QUERY and UNO_REF_QUERY for query interface constructor of reference template.
-
 */
 enum __UnoReference_Query
 {
@@ -183,13 +179,17 @@ class Reference : public BaseReference
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
+    /** @internal */
+    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
+    /** @internal */
+    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
 
     /** Destructor: Releases interface if set.
@@ -217,9 +217,10 @@ public:
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
     inline Reference( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
-    /** DEPRECATED: use SAL_NO_ACQUIRE version
-        Constructor: Sets given interface pointer without acquiring it.
+    /** Constructor: Sets given interface pointer without acquiring it.
+        Deprecated, please use SAL_NO_ACQUIRE version.
 
+        @deprecated
         @param pInterface another reference
         @param dummy UNO_REF_NO_ACQUIRE to force obvious distinction to other constructors
     */
@@ -288,9 +289,10 @@ public:
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( interface_type * pInterface, __sal_NoAcquire ) SAL_THROW( () );
-    /** DEPRECATED: use SAL_NO_ACQUIRE version
-        Sets interface pointer without acquiring it. An interface already set will be released.
+    /** Sets interface pointer without acquiring it. An interface already set will be released.
+        Deprecated, please use SAL_NO_ACQUIRE version.
 
+        @deprecated
         @param pInterface an interface pointer
         @return true, if non-null interface was set
     */
