@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-13 10:41:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,11 @@
 #endif
 #define CALLBACK
 #define EXPORT
+#ifdef SYSTEM_ODBC_HEADERS
+#include <sqlext.h>
+#else
 #include <odbc/sqlext.h>
+#endif
 #undef sal_Bool // Ist in qeodbc.h definiert, wird aber von solar.h noch einmal
             // definiert.
 
