@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 11:21:24 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,13 @@
 
 #include "new.hxx"
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#ifndef _GDIMTF_HXX //autogen
+#ifndef _SV_GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
 #endif
-#ifndef _MSGBOX_HXX //autogen
+#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _MOREBTN_HXX //autogen
+#ifndef _SV_MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
