@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:36:49 $
+ *  last change: $Author: sb $ $Date: 2001-08-30 13:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,7 @@ void UniversalContentBroker::globalTransfer(
     {
         ucbhelper::cancelCommandExecution(
             star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any <(
+            uno::Sequence< uno::Any >(
                 &uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
