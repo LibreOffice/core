@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:09:07 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,18 @@ using ::rtl::OUString;
 namespace dp_misc {
 namespace {
 
-struct StrOperatingSystem
-    : public ::rtl::StaticData<OUString, StrOperatingSystem> {
-    OUString operator () () {
+struct StrOperatingSystem :
+        public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
+    const OUString operator () () {
         OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
         ::rtl::Bootstrap::expandMacros( os );
         return os;
     }
 };
 
-struct StrPlatform : public ::rtl::StaticData<OUString, StrPlatform> {
-    OUString operator () () {
+struct StrPlatform : public rtl::StaticWithInit<
+    const OUString, StrPlatform> {
+    const OUString operator () () {
         ::rtl::OUStringBuffer buf;
         buf.append( StrOperatingSystem::get() );
         buf.append( static_cast<sal_Unicode>('_') );
@@ -105,9 +106,9 @@ struct StrPlatform : public ::rtl::StaticData<OUString, StrPlatform> {
     }
 };
 
-struct UnoRc : public ::rtl::StaticData<
-    ::boost::shared_ptr< ::rtl::Bootstrap >, UnoRc > {
-    ::boost::shared_ptr< ::rtl::Bootstrap > operator () () {
+struct UnoRc : public rtl::StaticWithInit<
+    const boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
+    const boost::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
                             "$ORIGIN/" SAL_CONFIGFILE("uno")) );
         ::rtl::Bootstrap::expandMacros( unorc );
@@ -118,11 +119,11 @@ struct UnoRc : public ::rtl::StaticData<
     }
 };
 
-struct OfficePipeId : public ::rtl::StaticData<OUString, OfficePipeId> {
-    OUString operator () ();
+struct OfficePipeId : public rtl::StaticWithInit<const OUString, OfficePipeId> {
+    const OUString operator () ();
 };
 
-OUString OfficePipeId::operator () ()
+const OUString OfficePipeId::operator () ()
 {
     OUString userPath = OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap")
                               ":UserInstallation}");
