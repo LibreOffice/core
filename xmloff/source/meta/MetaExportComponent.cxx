@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 14:48:10 $
+ *  last change: $Author: sab $ $Date: 2001-02-06 15:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,16 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( const sal_Char *pClass )
 {
     GetDocHandler()->startDocument();
     {
+        GetAttrList().AddAttribute(
+            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_DC ),
+            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_DC ) );
+        GetAttrList().AddAttribute(
+            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_META ),
+            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_META ) );
+        GetAttrList().AddAttribute(
+            GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
+            sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
+
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_meta,
                         sal_True, sal_True );
         SfxXMLMetaExport aMeta( GetDocHandler(), GetModel() );
