@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:45:54 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLSTYLE_HXX
 #define SC_XLSTYLE_HXX
+
+#include <map>
 
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -80,11 +80,15 @@
 #ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
 #endif
-
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
+#endif
+
+class XclRoot;
 
 // Constants and Enumerations =================================================
 
@@ -97,7 +101,6 @@ const sal_uInt8 EXC_LINE_THICK              = 0x05;
 const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
 const sal_uInt8 EXC_LINE_HAIR               = 0x07;
 
-
 // Background patterns --------------------------------------------------------
 
 const sal_uInt8 EXC_PATT_NONE               = 0x00;
@@ -108,14 +111,12 @@ const sal_uInt8 EXC_PATT_25_PERC            = 0x04;
 const sal_uInt8 EXC_PATT_12_5_PERC          = 0x11;
 const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
 
-
 // (0x001E, 0x041E) FORMAT ----------------------------------------------------
 
 const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
 
 const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
 const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
-
 
 // (0x0031) FONT --------------------------------------------------------------
 
@@ -173,7 +174,6 @@ const sal_uInt8 EXC_FONTUNDERL_DOUBLE_ACC   = 0x22;
 const sal_uInt16 EXC_FONTESC_NONE           = 0x00;
 const sal_uInt16 EXC_FONTESC_SUPER          = 0x01;
 const sal_uInt16 EXC_FONTESC_SUB            = 0x02;
-
 
 // (0x0043, 0x0243, 0x0443, 0x00E0) XF ----------------------------------------
 
@@ -266,7 +266,6 @@ enum XclTextDirection
     xlTextDir_Default                       = xlTextDirContext
 };
 
-
 // (0x0092) PALETTE -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_PALETTE             = 0x0092;
@@ -309,7 +308,6 @@ const sal_uInt8 EXC_STYLE_USERDEF           = 0xFF;         /// No built-in styl
 const sal_uInt8 EXC_STYLE_LEVELCOUNT        = 7;            /// Number of outline level styles.
 const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value for unused level.
 
-
 // ============================================================================
 
 // Color data =================================================================
@@ -318,10 +316,7 @@ const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value fo
 class XclDefaultPalette
 {
 public:
-    explicit                    XclDefaultPalette( XclBiff eBiff = xlBiffUnknown );
-
-    /** Activates the default colors for the passed BIFF version. */
-    void                        SetDefaultColors( XclBiff eBiff );
+    explicit                    XclDefaultPalette( const XclRoot& rRoot );
 
     /** Returns the color count in the current palette. */
     inline sal_uInt32           GetColorCount() const { return mnTableSize - EXC_COLOR_USEROFFSET; }
@@ -341,7 +336,6 @@ private:
     ColorData                   mnNoteBack;         /// Note background color.
     sal_uInt32                  mnTableSize;        /// The color table size.
 };
-
 
 // Font data ==================================================================
 
@@ -451,6 +445,44 @@ struct XclFontData
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
 
+// Number formats =============================================================
+
+struct XclNumFmt
+{
+    String              maFormat;       /// Format string, may be empty (meOffset used then).
+    NfIndexTableOffset  meOffset;       /// SvNumberFormatter format index, if maFormat is empty.
+    LanguageType        meLanguage;     /// Language type to be set with the number format.
+};
+
+// ----------------------------------------------------------------------------
+
+class XclNumFmtBuffer
+{
+public:
+    explicit            XclNumFmtBuffer( const XclRoot& rRoot );
+
+    /** Returns the core index of the current standard number format. */
+    inline ULONG        GetStdScNumFmt() const { return mnStdScNumFmt; }
+
+protected:
+    typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
+
+    /** Returns the current number format map. */
+    inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
+    /** Returns the number format with the specified Excel format index. */
+    const XclNumFmt*    GetFormat( sal_uInt16 nXclNumFmt ) const;
+
+    /** Inserts a new number format for the specified Excel format index. */
+    void                InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat );
+
+private:
+    /** Inserts built-in number formats for the current system language. */
+    void                InsertBuiltinFormats();
+
+    XclNumFmtMap        maFmtMap;       /// Map containing all default and user-defined formats.
+    LanguageType        meSysLang;      /// Current system language.
+    ULONG               mnStdScNumFmt;  /// Calc format key for standard number format.
+};
 
 // Cell formatting data (XF) ==================================================
 
@@ -464,7 +496,6 @@ struct XclCellProt
 };
 
 bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
-
 
 // ----------------------------------------------------------------------------
 
@@ -483,7 +514,6 @@ struct XclCellAlign
 };
 
 bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight );
-
 
 // ----------------------------------------------------------------------------
 
@@ -504,7 +534,6 @@ struct XclCellBorder
 
 bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight );
 
-
 // ----------------------------------------------------------------------------
 
 /** Contains background colors and pattern for a cell. */
@@ -521,7 +550,6 @@ struct XclCellArea
 };
 
 bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight );
-
 
 // ----------------------------------------------------------------------------
 
@@ -554,7 +582,6 @@ protected:
     bool                        mbBorderUsed;       /// true = border data used.
     bool                        mbAreaUsed;         /// true = area data used.
 };
-
 
 // ============================================================================
 
