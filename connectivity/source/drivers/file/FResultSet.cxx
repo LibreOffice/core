@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:43:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,7 +926,7 @@ again:
         m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData || m_pSQLAnalyzer->hasRestriction());
 
         if ((!m_bShowDeleted && m_aEvaluateRow->isDeleted()) ||
-            (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
+            (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Saetzen
                 !m_pSQLAnalyzer->evaluateRestriction()))         // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
@@ -1063,7 +1063,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     m_nRowPos = 0;
                     break;
                 case IResultSetHelper::LAST:
-                    //  OSL_ENSURE(IsRowCountFinal(), "Fehler im Keyset!"); // muß eingefroren sein, sonst Fehler beim SQLCursor
+                    //  OSL_ENSURE(IsRowCountFinal(), "Fehler im Keyset!"); // muss eingefroren sein, sonst Fehler beim SQLCursor
                     m_nRowPos = m_pFileSet->size() - 1;
                     break;
                 case IResultSetHelper::RELATIVE:
@@ -1076,7 +1076,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
             }
 
             // OffRange?
-            // Der FileCursor ist außerhalb des gueltigen Bereichs, wenn
+            // Der FileCursor ist ausserhalb des gueltigen Bereichs, wenn
             // a.) m_nRowPos < 1
             // b.) Ein KeySet besteht und m_nRowPos > m_pFileSet->size()
             if (m_nRowPos < 0 || (m_pFileSet->isFrozen() && eCursorPosition != IResultSetHelper::BOOKMARK && m_nRowPos >= (INT32)m_pFileSet->size() )) // && m_pFileSet->IsFrozen()
@@ -1094,7 +1094,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     // now set the bookmark for outside
                     *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
                 }
-                else // Index muß weiter aufgebaut werden
+                else // Index muss weiter aufgebaut werden
                 {
                     // Zunaechst auf die letzte bekannte Zeile setzen
                     if (!m_pFileSet->empty())
@@ -1227,7 +1227,7 @@ Error:
         }
     }
     //  delete pGuard;
-    //  rMode = (!bShowDeleted && aStatus.IsSuccessful() && m_aRow->isDeleted()) ?  // keine Anzeige von gelöschten Sätzen
+    //  rMode = (!bShowDeleted && aStatus.IsSuccessful() && m_aRow->isDeleted()) ?  // keine Anzeige von geloeschten Saetzen
                 //  OCursor::SQL_MOD_INVALID : OCursor::SQL_MOD_NONE;
     return sal_False;
 }
@@ -1490,7 +1490,7 @@ BOOL OResultSet::OpenImpl()
                         INT32 nPrev_i;
                         for(INT32 j= nMaxRow-1;j >= 0;j--)
                         {
-                            nPos = (*m_pFileSet)[j]; // aktuell zu löschender Key
+                            nPos = (*m_pFileSet)[j]; // aktuell zu loeschender Key
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
                                 ExecuteRow(IResultSetHelper::BOOKMARK,nPos,TRUE,FALSE);
@@ -1529,7 +1529,7 @@ BOOL OResultSet::OpenImpl()
                                             (*m_pFileSet)[nPrev_i] = 0;
                                             // und altes i merken
                                             nPrev_i = i;
-                                            nPos = nKey; // auf naechste gültige Position setzen
+                                            nPos = nKey; // auf naechste gueltige Position setzen
                                             nWasAllwaysFound[i] = 1;
                                         }
                                     }
