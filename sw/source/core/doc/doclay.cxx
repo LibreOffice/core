@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:49:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,6 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     {
         // bei Controls muss der Name erhalten bleiben
         uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
-        sal_Bool bModel = xModel.is();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
         OUString sName( rtl::OUString::createFromAscii("Name") );
