@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:33:18 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 12:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeExce
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::acquire() throw( RuntimeException )
+void SAL_CALL BaseControl::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -188,7 +188,7 @@ void SAL_CALL BaseControl::acquire() throw( RuntimeException )
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::release() throw( RuntimeException )
+void SAL_CALL BaseControl::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
