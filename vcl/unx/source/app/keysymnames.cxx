@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:29:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,9 @@ namespace vcl_sal {
         { XK_Left, "Esquerda" },
         { XK_Up, "Acima" },
         { XK_Down, "Abaixo" },
-        { XK_BackSpace, "Rückschritt" },
-        { XK_Return, "Eingabe" },
-        { XK_slash, "Schrägstrich" },
+        { XK_BackSpace, "Backspace" },
+        { XK_Return, "Enter" },
+        { XK_slash, "Barra" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Again" },
         { SunXK_Props, "Props" },
