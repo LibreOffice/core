@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 10:10:41 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 
 #ifndef _MANIFEST_WRITER_HXX
 #include "ManifestWriter.hxx"
+#endif
+
+#ifndef _MANIFEST_READER_HXX
+#include "ManifestReader.hxx"
 #endif
 
 #include <vector>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 12:07:00 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,8 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const ::rtl::OUString& aName )
         sName = aName.copy(1, aName.getLength());
     else
         sName = aName;
-    return aContents.find(sName) != aContents.end();
+    //return !(aContents.find(sName) == aContents.end());
+    return aContents.count(sName);
 }
     // XNameReplace
 void SAL_CALL ZipPackageFolder::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
@@ -341,6 +342,8 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             pStream->aEntry.nSize = -1;
             pStream->aEntry.nCompressedSize = -1;
             rZipOut.putNextEntry(pStream->aEntry);
+            if (pStream->aEntry.nMethod == STORED)
+                pStream->aEntry.nSize = 0;
             while (1)
             {
                 uno::Sequence < sal_Int8 > aSeq (65535);
@@ -349,9 +352,13 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 if (nLength < 65535)
                     aSeq.realloc(nLength);
                 rZipOut.write(aSeq, 0, nLength);
+                if (pStream->aEntry.nMethod == STORED)
+                    pStream->aEntry.nSize +=nLength;
                 if (nLength < 65535) // EOF
                     break;
             }
+            if (pStream->aEntry.nMethod == STORED)
+                pStream->aEntry.nCompressedSize = pStream->aEntry.nSize;
             rZipOut.closeEntry();
             ManifestEntry *pMan = new ManifestEntry;
             uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));

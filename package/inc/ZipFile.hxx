@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-24 10:34:26 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef _BYTE_GRABBER_HXX_
 #include "ByteGrabber.hxx"
+#endif
+
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
 #endif
 
 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 13:13:29 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,20 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
             pNonConstEntry->nVersion = 20;
             break;
         case STORED:
+            /*
             if (pNonConstEntry->nSize == -1)
                 pNonConstEntry->nSize = pNonConstEntry->nCompressedSize;
             else if (pNonConstEntry->nCompressedSize == -1 || pNonConstEntry->nCompressedSize == 0)
                 pNonConstEntry->nCompressedSize = pNonConstEntry->nSize;
-            pNonConstEntry->nVersion = 10;
             pNonConstEntry->nFlag = 0;
+            */
+            pNonConstEntry->nVersion = 10;
+            if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
+                pNonConstEntry->nCrc == -1)
+                pNonConstEntry->nFlag = 8;
+            else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
+                pNonConstEntry->nCrc != -1)
+                pNonConstEntry->nFlag = 0;
             break;
     }
     pNonConstEntry->nOffset = aChucker.getPosition();
@@ -185,12 +193,17 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 aDeflater.reset();
                 break;
             case STORED:
+
+                pEntry->nCrc = aCRC.getValue();
+                writeEXT(*pEntry);
+                /*
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
                     // boom
 
                     VOS_DEBUG_ONLY("Invalid entry crc32");
                 }
+                */
                 break;
             default:
                 // boom;

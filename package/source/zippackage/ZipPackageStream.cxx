@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:57:09 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
 {
     xStream = aStream;
     bPackageMember = sal_False;
+    aEntry.nTime = -1;
 }
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         throw(uno::RuntimeException)

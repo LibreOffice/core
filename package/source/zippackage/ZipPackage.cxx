@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 12:07:00 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 16:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,15 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             }
         }
     }
+    if (hasByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml")))
+    {
+        Any aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml"));
+        Reference < XUnoTunnel > xTunnel;
+        aAny >>= xTunnel;
+        Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
+        ManifestReader aReader(*this, xSink->getInputStream(), xFactory);
+        aReader.Read();
+    }
 }
 // XHierarchicalNameAccess
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
@@ -347,10 +356,15 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 aAny >>= xRef;
                 xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
             }
+            else
+                throw (NoSuchElementException());
             nOldIndex = nIndex+1;
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-        aAny <<= xCurrent->getByName(sStreamName);
+        if (xCurrent->hasByName(sStreamName))
+            aAny <<= xCurrent->getByName(sStreamName);
+        else
+            throw (NoSuchElementException());
     }
     else
     {
@@ -366,11 +380,16 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 aAny >>= xChildRef;
                 xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
             }
+            else
+                throw (NoSuchElementException());
+
             nOldIndex = nIndex+1;
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-
-        aAny <<= xCurrent->getByName(sStreamName);
+        if (xCurrent->hasByName(sStreamName))
+            aAny <<= xCurrent->getByName(sStreamName);
+        else
+            throw (NoSuchElementException());
     }
     return aAny;
 }
@@ -402,6 +421,8 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 aAny >>= xRef;
                 xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
             }
+            else
+                return sal_False;
             nOldIndex = nIndex+1;
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
@@ -421,6 +442,8 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 aAny >>= xChildRef;
                 xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
             }
+            else
+                return sal_False;
             nOldIndex = nIndex+1;
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
@@ -458,6 +481,13 @@ void SAL_CALL ZipPackage::commitChanges(  )
     pFoo->closeInput();
 #else
     std::vector < ManifestEntry * > aManList;
+    if (hasByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml")))
+    {
+        Any aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/"));
+        Reference < XNameContainer > xCont;
+        aAny >>= xCont;
+        xCont->removeByName(OUString::createFromAscii("manifest.xml"));
+    }
     pRootFolder->saveContents(OUString::createFromAscii(""), aManList);
 #endif
     ZipEntry *pEntry = new ZipEntry;
@@ -481,6 +511,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
     pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
     pZipOut->closeEntry();
     pZipOut->finish();
+    pZipBuffer->seek(0);
+    pContent->writeStream(Reference < XInputStream > (pZipBuffer), sal_True);
 }
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
         throw(RuntimeException)
