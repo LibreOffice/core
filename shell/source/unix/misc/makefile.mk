@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.3 $
+#	$Revision: 1.4 $
 #
-#	last change: $Author: rt $ $Date: 2004-06-17 15:42:14 $
+#	last change: $Author: rt $ $Date: 2004-10-22 08:17:21 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -82,6 +82,9 @@ SCRIPTFILES = \
     $(BIN)$/gnome-open-url \
     $(BIN)$/kde-open-url
 
+AWKFILES = \
+    $(BIN)$/uri-encode
+
 OBJFILES = \
     $(OBJ)$/gnome-open-url.obj
 
@@ -97,8 +100,11 @@ APP1STDLIBS=-ldl
 
 .INCLUDE : target.mk
 
-ALLTAR : $(SCRIPTFILES)
+ALLTAR : $(SCRIPTFILES) $(AWKFILES)
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
     +@tr -d "\015" < $(@:f:+".sh") > $@
+
+$(AWKFILES) : $$(@:f:+".awk")
+    +@tr -d "\015" < $(@:f:+".awk") > $@
 
