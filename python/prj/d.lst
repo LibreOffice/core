@@ -1,0 +1,72 @@
+mkdir: %_DEST%\inc%_EXT%\python
+mkdir: %_DEST%\lib%_EXT%\python
+mkdir: %_DEST%\lib%_EXT%\python\lib-old
+mkdir: %_DEST%\lib%_EXT%\python\lib-tk
+mkdir: %_DEST%\lib%_EXT%\python\site-packages
+mkdir: %_DEST%\lib%_EXT%\python\test    
+mkdir: %_DEST%\lib%_EXT%\python\test\output
+mkdir: %_DEST%\lib%_EXT%\python\test\data
+mkdir: %_DEST%\lib%_EXT%\python\encodings
+mkdir: %_DEST%\lib%_EXT%\python\email
+mkdir: %_DEST%\lib%_EXT%\python\compiler
+mkdir: %_DEST%\lib%_EXT%\python\hotshot
+mkdir: %_DEST%\lib%_EXT%\python\distutils
+mkdir: %_DEST%\lib%_EXT%\python\distutils\command
+mkdir: %_DEST%\lib%_EXT%\python\xml
+mkdir: %_DEST%\lib%_EXT%\python\xml\dom
+mkdir: %_DEST%\lib%_EXT%\python\xml\parsers
+mkdir: %_DEST%\lib%_EXT%\python\xml\sax
+mkdir: %_DEST%\lib%_EXT%\python\curses
+mkdir: %_DEST%\lib%_EXT%\python\plat-linux2
+mkdir: %_DEST%\lib%_EXT%\python\config
+mkdir: %_DEST%\lib%_EXT%\python\lib-dynload
+
+#..\%__SRC%\misc\build\python-inst\include\python2.2\* %_DEST%\inc%_EXT%\python\*
+..\%__SRC%\misc\build\Python-2.2.2\Include\* %_DEST%\inc%_EXT%\python\*
+
+..\%__SRC%\misc\build\Python-2.2.2\Lib\* %_DEST%\lib%_EXT%\python\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\lib-old\* %_DEST%\lib%_EXT%\python\lib-old\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\lib-tk\* %_DEST%\lib%_EXT%\python\lib-tk\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\site-packages\* %_DEST%\lib%_EXT%\python\site-packages\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\test\* %_DEST%\lib%_EXT%\python\test\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\test\output\* %_DEST%\lib%_EXT%\python\test\output\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\test\data\* %_DEST%\lib%_EXT%\python\test\data\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\encodings\* %_DEST%\lib%_EXT%\python\encodings\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\email\* %_DEST%\lib%_EXT%\python\email\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\compiler\* %_DEST%\lib%_EXT%\python\compiler\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\hotshot\* %_DEST%\lib%_EXT%\python\hotshot\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\distutils\* %_DEST%\lib%_EXT%\python\distutils\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\distutils\command\* %_DEST%\lib%_EXT%\python\distutils\command\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\xml\* %_DEST%\lib%_EXT%\python\xml\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\xml\dom\* %_DEST%\lib%_EXT%\python\xml\dom\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\xml\parsers\* %_DEST%\lib%_EXT%\python\xml\parsers\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\xml\sax\* %_DEST%\lib%_EXT%\python\xml\sax\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\curses\* %_DEST%\lib%_EXT%\python\curses\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\plat-linux2\* %_DEST%\lib%_EXT%\python\plat-linux2\*
+..\%__SRC%\misc\build\Python-2.2.2\Lib\config\* %_DEST%\lib%_EXT%\python\config\*
+..\%__SRC%\misc\pyversion.mk %_DEST%\inc%_EXT%\pyversion.mk
+
+#unix ONLY !
+..\%__SRC%\misc\build\python-inst\include\python2.2\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
+..\%__SRC%\misc\build\python-inst\lib\python2.2\lib-dynload\* %_DEST%\lib%_EXT%\python\lib-dynload\*
+..\%__SRC%\misc\build\python-inst\bin\python %_DEST%\bin%_EXT%\python
+..\%__SRC%\lib\libpython.so.2.2.2 %_DEST%\lib%_EXT%\libpython.so.2.2.2
+
+# WINDOWS ONLY !
+..\%__SRC%\misc\build\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\python.exe %_DEST%\bin%_EXT%\python.exe
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\python.exe %_DEST%\bin%_EXT%\python.exe
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\python22.dll %_DEST%\bin%_EXT%\python22.dll
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\python22.lib %_DEST%\lib%_EXT%\python22.lib
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\_sre.pyd %_DEST%\lib%_EXT%\python\_sre.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\_socket.pyd %_DEST%\lib%_EXT%\python\_socket.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\_symtable.pyd %_DEST%\lib%_EXT%\python\_symtable.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\mmap.pyd %_DEST%\lib%_EXT%\python\mmap.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\parser.pyd %_DEST%\lib%_EXT%\python\parser.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\select.pyd %_DEST%\lib%_EXT%\python\select.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\select.pyd %_DEST%\lib%_EXT%\python\select.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\unicodedata.pyd %_DEST%\lib%_EXT%\python\unicodedata.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\winreg.pyd %_DEST%\lib%_EXT%\python\winreg.pyd
+..\%__SRC%\misc\build\Python-2.2.2\PCBuild\winsound.pyd %_DEST%\lib%_EXT%\python\winsound.pyd
+
+linklib: libpython.so.*.*.*

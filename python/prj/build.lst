@@ -1,0 +1,2 @@
+py	python	:	NULL
+py	python			nmake	-	all	ft_mkout NULL
