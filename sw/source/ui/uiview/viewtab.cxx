@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:39:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,7 +820,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             const SvxTabStopItem&  rTabStops = (const SvxTabStopItem&)aSet.Get(RES_PARATR_TABSTOP);
 
             // Haben wir einen Tab an Stelle Null
-            for ( USHORT i = 0; i < rTabStops.Count(); ++i )
+            USHORT i;
+
+            for ( i = 0; i < rTabStops.Count(); ++i )
                 if ( rTabStops[i].GetTabPos() == 0 )
                     break;
 
