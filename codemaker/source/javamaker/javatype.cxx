@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 15:29:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 11:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "codemaker/options.hxx"
 #include "codemaker/typemanager.hxx"
 #include "codemaker/unotype.hxx"
+#include "codemaker/commonjava.hxx"
 
 #include "osl/diagnose.h"
 #include "registry/reader.hxx"
@@ -96,91 +97,11 @@ using codemaker::javamaker::ClassFile;
 
 namespace {
 
-rtl::OString convertString(rtl::OUString const & string) {
-    rtl::OString s;
-    if (!string.convertToString(
-            &s, RTL_TEXTENCODING_UTF8,
-            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
-    {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Failure converting string from UTF-16 to UTF-8")));
-    }
-    return s;
-}
-
 void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
     if (!arguments.empty()) {
         throw CannotDumpException(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
-    }
-}
-
-codemaker::UnoType::Sort decomposeAndResolve(
-    TypeManager const & manager, rtl::OString const & type,
-    bool resolveTypedefs, bool allowVoid, RTTypeClass * typeClass,
-    rtl::OString * name, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments)
-{
-    OSL_ASSERT(typeClass != 0 && name != 0 && rank != 0 && arguments != 0);
-    *rank = 0;
-    for (rtl::OString t(type);;) {
-        sal_Int32 n;
-        *name = codemaker::UnoType::decompose(t, &n, arguments);
-        if (n > SAL_MAX_INT32 - *rank) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
-        }
-        *rank += n;
-        codemaker::UnoType::Sort sort = codemaker::UnoType::getSort(*name);
-        switch (sort) {
-        case codemaker::UnoType::SORT_VOID:
-            if (!allowVoid) {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-                    //TODO
-            }
-        default:
-            checkNoTypeArguments(*arguments);
-            *typeClass = RT_TYPE_INVALID;
-            return sort;
-
-        case codemaker::UnoType::SORT_COMPLEX:
-            typereg::Reader reader(manager.getTypeReader(*name));
-            *typeClass = reader.getTypeClass();
-            switch (*typeClass) {
-            case RT_TYPE_ENUM:
-            case RT_TYPE_INTERFACE:
-                checkNoTypeArguments(*arguments);
-            case RT_TYPE_STRUCT:
-                return sort;
-
-            case RT_TYPE_TYPEDEF:
-                checkNoTypeArguments(*arguments);
-                if (reader.getSuperTypeCount() == 1
-                    && reader.getFieldCount() == 0
-                    && reader.getMethodCount() == 0
-                    && reader.getReferenceCount() == 0)
-                {
-                    if (resolveTypedefs) {
-                        t = convertString(reader.getSuperTypeName(0));
-                        continue;
-                    } else {
-                        return sort;
-                    }
-                }
-            default:
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-                    //TODO
-            }
-        }
     }
 }
 
@@ -203,9 +124,9 @@ void appendUnoName(
             rtl::OString argNucleus;
             sal_Int32 argRank;
             std::vector< rtl::OString > argArgs;
-            decomposeAndResolve(
-                manager, *i, true, false, &argTypeClass, &argNucleus, &argRank,
-                &argArgs);
+            codemaker::decomposeAndResolve(
+                manager, *i, true, false, false, &argTypeClass, &argNucleus,
+                &argRank, &argArgs);
             appendUnoName(manager, argNucleus, argRank, argArgs, buffer);
         }
         buffer->append('>');
@@ -246,114 +167,12 @@ bool isSpecialType(SpecialType special) {
     return special >= SPECIAL_TYPE_UNSIGNED;
 }
 
-rtl::OString translateUnoToJavaIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix)
-{
-    if (identifier == "abstract"
-        || identifier == "assert" // since Java 1.4
-        || identifier == "boolean"
-        || identifier == "break"
-        || identifier == "byte"
-        || identifier == "case"
-        || identifier == "catch"
-        || identifier == "char"
-        || identifier == "class"
-        || identifier == "const"
-        || identifier == "continue"
-        || identifier == "default"
-        || identifier == "do"
-        || identifier == "double"
-        || identifier == "else"
-        || identifier == "enum" // probable addition in Java 1.5
-        || identifier == "extends"
-        || identifier == "final"
-        || identifier == "finally"
-        || identifier == "float"
-        || identifier == "for"
-        || identifier == "goto"
-        || identifier == "if"
-        || identifier == "implements"
-        || identifier == "import"
-        || identifier == "instanceof"
-        || identifier == "int"
-        || identifier == "interface"
-        || identifier == "long"
-        || identifier == "native"
-        || identifier == "new"
-        || identifier == "package"
-        || identifier == "private"
-        || identifier == "protected"
-        || identifier == "public"
-        || identifier == "return"
-        || identifier == "short"
-        || identifier == "static"
-        || identifier == "strictfp"
-        || identifier == "super"
-        || identifier == "switch"
-        || identifier == "synchronized"
-        || identifier == "this"
-        || identifier == "throw"
-        || identifier == "throws"
-        || identifier == "transient"
-        || identifier == "try"
-        || identifier == "void"
-        || identifier == "volatile"
-        || identifier == "while")
-    {
-        rtl::OStringBuffer buf(prefix);
-        buf.append('_');
-        buf.append(identifier);
-        return buf.makeStringAndClear();
-    } else {
-        return identifier;
-    }
-}
-
 rtl::OString translateUnoTypeToJavaFullyQualifiedName(
     rtl::OString const & type, rtl::OString const & prefix)
 {
     sal_Int32 i = type.lastIndexOf('/') + 1;
-    return type.copy(0, i) + translateUnoToJavaIdentifier(type.copy(i), prefix);
-}
-
-rtl::OString translateUnoToJavaType(
-    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, sal_Int32 rank)
-{
-    OSL_ASSERT(sort != codemaker::UnoType::SORT_VOID && rank >= 0);
-    rtl::OStringBuffer buf;
-    if (sort == codemaker::UnoType::SORT_COMPLEX) {
-        if (typeClass == RT_TYPE_INTERFACE
-            && nucleus == rtl::OString("com/sun/star/uno/XInterface"))
-        {
-            buf.append(RTL_CONSTASCII_STRINGPARAM("java/lang/Object"));
-        } else {
-            //TODO: check that nucleus is a valid (Java-modified UTF-8)
-            // identifier
-            buf.append(nucleus);
-        }
-    } else {
-        rtl::OString const javaTypes[codemaker::UnoType::SORT_ANY] = {
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("boolean")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("byte")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("short")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("short")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("int")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("int")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("long")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("long")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("float")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("double")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("char")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/String")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")) };
-        buf.append(javaTypes[sort - 1]);
-    }
-    for (sal_Int32 i = 0; i < rank; ++i) {
-        buf.append(RTL_CONSTASCII_STRINGPARAM("[]"));
-    }
-    return buf.makeStringAndClear();
+    return type.copy(0, i) +
+        codemaker::java::translateUnoToJavaIdentifier(type.copy(i), prefix);
 }
 
 struct PolymorphicUnoType {
@@ -547,8 +366,8 @@ SpecialType translateUnoTypeToDescriptor(
     rtl::OString nucleus;
     sal_Int32 rank;
     std::vector< rtl::OString > args;
-    codemaker::UnoType::Sort sort = decomposeAndResolve(
-        manager, type, true, true, &typeClass, &nucleus, &rank, &args);
+    codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
+        manager, type, true, true, false, &typeClass, &nucleus, &rank, &args);
     OSL_ASSERT(rank < SAL_MAX_INT32);
     return translateUnoTypeToDescriptor(
         manager, sort, typeClass, nucleus, rank, args, array, classType,
@@ -954,14 +773,6 @@ void writeClassFile(
     rtl::OString filename(
         createFileNameFromType(
             path, type, rtl::OString(RTL_CONSTASCII_STRINGPARAM(".class"))));
-    if (filename.getLength() == 0) {
-        rtl::OStringBuffer msg;
-        msg.append(RTL_CONSTASCII_STRINGPARAM("Cannot dump type '"));
-        msg.append(type);
-        msg.append(RTL_CONSTASCII_STRINGPARAM("', can't create output file"));
-        throw CannotDumpException(msg.makeStringAndClear());
-    }
-
     bool check = false;
     if (fileExists(filename)) {
         if (options.isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-G")))) {
@@ -1078,7 +889,7 @@ void handleEnumType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OString className(convertString(reader.getTypeName()));
+    rtl::OString className(codemaker::convertString(reader.getTypeName()));
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -1092,7 +903,7 @@ void handleEnumType(
     buf.append(className);
     buf.append(';');
     rtl::OString classDescriptor(buf.makeStringAndClear());
-    {for (sal_Int32 i = 0; i < fields; ++i) {
+    {for (sal_uInt16 i = 0; i < fields; ++i) {
         RTConstValue fieldValue(reader.getFieldValue(i));
         if (fieldValue.m_type != RT_TYPE_INT32
             || reader.getFieldFlags(i) != RT_ACCESS_CONST
@@ -1102,7 +913,8 @@ void handleEnumType(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-        rtl::OString fieldName(convertString(reader.getFieldName(i)));
+        rtl::OString fieldName(
+            codemaker::convertString(reader.getFieldName(i)));
         cf->addField(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
@@ -1132,7 +944,8 @@ void handleEnumType(
         std::vector< rtl::OString >(), rtl::OString());
     code.reset(cf->newCode());
     code->instrGetstatic(
-        className, convertString(reader.getFieldName(0)), classDescriptor);
+        className,
+        codemaker::convertString(reader.getFieldName(0)), classDescriptor);
     code->instrAreturn();
     code->setMaxStackAndLocals(1, 0);
     cf->addMethod(
@@ -1146,13 +959,13 @@ void handleEnumType(
     std::map< sal_Int32, rtl::OString > map;
     sal_Int32 min = SAL_MAX_INT32;
     sal_Int32 max = SAL_MIN_INT32;
-    {for (sal_Int32 i = 0; i < fields; ++i) {
+    {for (sal_uInt16 i = 0; i < fields; ++i) {
         sal_Int32 value = reader.getFieldValue(i).m_value.aLong;
         min = std::min(min, value);
         max = std::max(max, value);
         map.insert(
             std::map< sal_Int32, rtl::OString >::value_type(
-                value, convertString(reader.getFieldName(i))));
+                value, codemaker::convertString(reader.getFieldName(i))));
     }}
     sal_uInt64 size = static_cast< sal_uInt64 >(map.size());
     if ((static_cast< sal_uInt64 >(max) - static_cast< sal_uInt64 >(min)
@@ -1218,7 +1031,7 @@ void handleEnumType(
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)")) + classDescriptor,
         code.get(), std::vector< rtl::OString >(), rtl::OString());
     code.reset(cf->newCode());
-    {for (sal_Int32 i = 0; i < fields; ++i) {
+    {for (sal_uInt16 i = 0; i < fields; ++i) {
         code->instrNew(className);
         code->instrDup();
         code->loadIntegerConstant(reader.getFieldValue(i).m_value.aLong);
@@ -1226,7 +1039,9 @@ void handleEnumType(
             className, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")));
         code->instrPutstatic(
-            className, convertString(reader.getFieldName(i)), classDescriptor);
+            className,
+            codemaker::convertString(reader.getFieldName(i)),
+            classDescriptor);
     }}
     code->instrReturn();
     code->setMaxStackAndLocals(3, 0);
@@ -1284,8 +1099,8 @@ sal_uInt16 addFieldInit(
         rtl::OString nucleus;
         sal_Int32 rank;
         std::vector< rtl::OString > args;
-        codemaker::UnoType::Sort sort = decomposeAndResolve(
-            manager, fieldType, true, false, &typeClass, &nucleus, &rank,
+        codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
+            manager, fieldType, true, false, false, &typeClass, &nucleus, &rank,
             &args);
         if (rank == 0) {
             switch (sort) {
@@ -1346,7 +1161,8 @@ sal_uInt16 addFieldInit(
                         rtl::OString desc(descBuf.makeStringAndClear());
                         code->instrGetstatic(
                             nucleus,
-                            convertString(reader.getFieldName(0)), desc);
+                            codemaker::convertString(reader.getFieldName(0)),
+                            desc);
                         code->instrPutfield(className, fieldName, desc);
                         return 2;
                     }
@@ -1388,7 +1204,8 @@ sal_uInt16 addFieldInit(
                     code->instrNewarray(sort);
                 } else {
                     code->instrAnewarray(
-                        translateUnoToJavaType(sort, typeClass, nucleus, 0));
+                        codemaker::java::translateUnoToJavaType(sort, typeClass,
+                                                                nucleus, 0));
                 }
             } else {
                 rtl::OStringBuffer desc;
@@ -1428,8 +1245,8 @@ sal_uInt16 addLoadLocal(
         rtl::OString nucleus;
         sal_Int32 rank;
         std::vector< rtl::OString > args;
-        codemaker::UnoType::Sort sort = decomposeAndResolve(
-            manager, type, true, false, &typeClass, &nucleus, &rank, &args);
+        codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
+            manager, type, true, false, false, &typeClass, &nucleus, &rank, &args);
         if (rank == 0) {
             switch (sort) {
             case codemaker::UnoType::SORT_BOOLEAN:
@@ -2136,7 +1953,7 @@ void addBaseArguments(
         dependencies != 0 && methodDescriptor != 0 && code != 0 && index != 0);
     typereg::Reader reader(manager.getTypeReader(type));
     if (!reader.isValid() || reader.getTypeClass() != typeClass
-        || convertString(reader.getTypeName()) != type
+        || codemaker::convertString(reader.getTypeName()) != type
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
     {
         throw CannotDumpException(
@@ -2167,7 +1984,7 @@ void addBaseArguments(
         if (superTypes == 1) {
             addBaseArguments(
                 manager, dependencies, methodDescriptor, code, typeClass,
-                convertString(reader.getSuperTypeName(0)), index);
+                codemaker::convertString(reader.getSuperTypeName(0)), index);
         }
     }
     for (sal_uInt16 i = firstField; i < fields; ++i) {
@@ -2178,7 +1995,8 @@ void addBaseArguments(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-        rtl::OString fieldType(convertString(reader.getFieldTypeName(i)));
+        rtl::OString fieldType(
+            codemaker::convertString(reader.getFieldTypeName(i)));
         methodDescriptor->addParameter(fieldType, false, true, 0);
         addLoadLocal(
             manager, code, index, false, fieldType, false, dependencies);
@@ -2221,7 +2039,7 @@ void handleAggregatingType(
             //TODO
     }
     RTTypeClass typeClass = reader.getTypeClass();
-    rtl::OString className(convertString(reader.getTypeName()));
+    rtl::OString className(codemaker::convertString(reader.getTypeName()));
     sal_uInt16 superTypes = reader.getSuperTypeCount();
     sal_uInt16 fields = reader.getFieldCount();
     sal_uInt16 firstField = 0;
@@ -2272,7 +2090,7 @@ void handleAggregatingType(
             superClass = rtl::OString(
                 RTL_CONSTASCII_STRINGPARAM("java/lang/Object"));
         } else {
-            superClass = convertString(reader.getSuperTypeName(0));
+            superClass = codemaker::convertString(reader.getSuperTypeName(0));
             dependencies->insert(superClass);
         }
     }
@@ -2290,7 +2108,8 @@ void handleAggregatingType(
                         RTL_CONSTASCII_STRINGPARAM("Bad type information")));
                     //TODO
             }
-            rtl::OString name(convertString(reader.getReferenceTypeName(i)));
+            rtl::OString name(
+                codemaker::convertString(reader.getReferenceTypeName(i)));
             buf.append(name);
             buf.append(RTL_CONSTASCII_STRINGPARAM(":Ljava/lang/Object;"));
             if (!typeParameters.insert(
@@ -2323,7 +2142,8 @@ void handleAggregatingType(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-        rtl::OString type(convertString(reader.getFieldTypeName(i)));
+        rtl::OString type(
+            codemaker::convertString(reader.getFieldTypeName(i)));
         sal_Int32 typeParameterIndex;
         if ((flags & RT_ACCESS_PARAMETERIZED_TYPE) == 0) {
             typeParameterIndex = -1;
@@ -2340,7 +2160,7 @@ void handleAggregatingType(
         }
         addField(
             manager, dependencies, cf.get(), &typeInfo, typeParameterIndex,
-            type, convertString(reader.getFieldName(i)), i - firstField);
+            type, codemaker::convertString(reader.getFieldName(i)), i - firstField);
     }}
     if (runtimeException) {
         addField(
@@ -2359,10 +2179,11 @@ void handleAggregatingType(
         stack = std::max(
             stack,
             addFieldInit(
-                manager, className, convertString(reader.getFieldName(i)),
+                manager, className,
+                codemaker::convertString(reader.getFieldName(i)),
                 (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
-                convertString(reader.getFieldTypeName(i)), dependencies,
-                code.get()));
+                codemaker::convertString(reader.getFieldTypeName(i)),
+                dependencies, code.get()));
     }}
     if (runtimeException) {
         stack = std::max(
@@ -2393,11 +2214,12 @@ void handleAggregatingType(
             stack = std::max(
                 stack,
                 addFieldInit(
-                    manager, className, convertString(reader.getFieldName(i)),
+                    manager, className,
+                    codemaker::convertString(reader.getFieldName(i)),
                     ((reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE)
                      != 0),
-                    convertString(reader.getFieldTypeName(i)), dependencies,
-                    code.get()));
+                    codemaker::convertString(reader.getFieldTypeName(i)),
+                    dependencies, code.get()));
         }
         if (runtimeException) {
             stack = std::max(
@@ -2443,9 +2265,9 @@ void handleAggregatingType(
             maxSize,
             addDirectArgument(
                 manager, dependencies, &desc, code.get(), &index, className,
-                convertString(reader.getFieldName(i)),
+                codemaker::convertString(reader.getFieldName(i)),
                 (reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0,
-                convertString(reader.getFieldTypeName(i))));
+                codemaker::convertString(reader.getFieldTypeName(i))));
     }}
     if (runtimeException) {
         maxSize = std::max(
@@ -2477,7 +2299,8 @@ void createExceptionsAttribute(
     sal_uInt16 n = reader.getMethodExceptionCount(methodIndex);
     for (sal_uInt16 i = 0; i < n; ++i) {
         rtl::OString type(
-            convertString(reader.getMethodExceptionTypeName(methodIndex, i)));
+            codemaker::convertString(
+                reader.getMethodExceptionTypeName(methodIndex, i)));
         dependencies->insert(type);
         exceptions->push_back(type);
         if (tree != 0) {
@@ -2496,7 +2319,7 @@ void handleInterfaceType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OString className(convertString(reader.getTypeName()));
+    rtl::OString className(codemaker::convertString(reader.getTypeName()));
     sal_uInt16 superTypes = reader.getSuperTypeCount();
     sal_uInt16 fields = reader.getFieldCount();
     sal_uInt16 methods = reader.getMethodCount();
@@ -2524,7 +2347,7 @@ void handleInterfaceType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
     {for (sal_uInt16 i = 0; i < superTypes; ++i) {
-        rtl::OString t(convertString(reader.getSuperTypeName(i)));
+        rtl::OString t(codemaker::convertString(reader.getSuperTypeName(i)));
         dependencies->insert(t);
         cf->addInterface(t);
     }}
@@ -2574,7 +2397,8 @@ void handleInterfaceType(
                 (mflags == RT_MODE_ATTRIBUTE_GET ? getter : setter) = j;
             }
         }
-        rtl::OString fieldType(convertString(reader.getFieldTypeName(i)));
+        rtl::OString fieldType(
+            codemaker::convertString(reader.getFieldTypeName(i)));
         SpecialType specialType;
         PolymorphicUnoType polymorphicUnoType;
         MethodDescriptor gdesc(
@@ -2585,7 +2409,7 @@ void handleInterfaceType(
             createExceptionsAttribute(
                 manager, reader, getter, dependencies, &exc, 0);
         }
-        rtl::OString attrName(convertString(attrNameUtf16));
+        rtl::OString attrName(codemaker::convertString(attrNameUtf16));
         cf->addMethod(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
@@ -2624,12 +2448,14 @@ void handleInterfaceType(
         case RT_MODE_ONEWAY:
         case RT_MODE_TWOWAY:
             {
-                rtl::OString methodName(convertString(reader.getMethodName(i)));
+                rtl::OString methodName(
+                    codemaker::convertString(reader.getMethodName(i)));
                 SpecialType specialReturnType;
                 PolymorphicUnoType polymorphicUnoReturnType;
                 MethodDescriptor desc(
                     manager, dependencies,
-                    convertString(reader.getMethodReturnTypeName(i)),
+                    codemaker::convertString(
+                        reader.getMethodReturnTypeName(i)),
                     &specialReturnType, &polymorphicUnoReturnType);
                 typeInfo.push_back(
                     TypeInfo(
@@ -2667,7 +2493,8 @@ void handleInterfaceType(
                     }
                     PolymorphicUnoType polymorphicUnoType;
                     SpecialType specialType = desc.addParameter(
-                        convertString(reader.getMethodParameterTypeName(i, j)),
+                        codemaker::convertString(
+                            reader.getMethodParameterTypeName(i, j)),
                         out, true, &polymorphicUnoType);
                     if (out || isSpecialType(specialType)
                         || (polymorphicUnoType.kind
@@ -2675,7 +2502,7 @@ void handleInterfaceType(
                     {
                         typeInfo.push_back(
                             TypeInfo(
-                                convertString(
+                                codemaker::convertString(
                                     reader.getMethodParameterName(i, j)),
                                 specialType, in, out, methodName, j,
                                 polymorphicUnoType));
@@ -2735,9 +2562,9 @@ void handleTypedef(
     rtl::OString nucleus;
     sal_Int32 rank;
     std::vector< rtl::OString > args;
-    if (decomposeAndResolve(
-            manager, convertString(reader.getSuperTypeName(0)), false, false,
-            &typeClass, &nucleus, &rank, &args)
+    if (codemaker::decomposeAndResolve(
+            manager, codemaker::convertString(reader.getSuperTypeName(0)),
+            false, false, false, &typeClass, &nucleus, &rank, &args)
         == codemaker::UnoType::SORT_COMPLEX)
     {
         switch (typeClass) {
@@ -2781,9 +2608,10 @@ void addConstant(
     rtl::OString nucleus;
     sal_Int32 rank;
     std::vector< rtl::OString > args;
-    switch (decomposeAndResolve(
-                manager, convertString(reader.getFieldTypeName(index)), true,
-                false, &typeClass, &nucleus, &rank, &args))
+    switch (codemaker::decomposeAndResolve(
+                manager,
+                codemaker::convertString(reader.getFieldTypeName(index)),
+                true, false, false, &typeClass, &nucleus, &rank, &args))
     {
     case codemaker::UnoType::SORT_BOOLEAN:
         if (fieldValue.m_type != RT_TYPE_BOOL) {
@@ -2886,13 +2714,15 @@ void addConstant(
     rtl::OString desc;
     rtl::OString sig;
     getFieldDescriptor(
-        manager, dependencies, convertString(reader.getFieldTypeName(index)),
+        manager, dependencies,
+        codemaker::convertString(reader.getFieldTypeName(index)),
         &desc, &sig, 0);
     classFile->addField(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
             | ClassFile::ACC_FINAL),
-        convertString(reader.getFieldName(index)), desc, valueIndex, sig);
+        codemaker::convertString(reader.getFieldName(index)),
+        desc, valueIndex, sig);
 }
 
 void handleConstantGroup(
@@ -2907,7 +2737,7 @@ void handleConstantGroup(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OString className(convertString(reader.getTypeName()));
+    rtl::OString className(codemaker::convertString(reader.getTypeName()));
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -2917,7 +2747,7 @@ void handleConstantGroup(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
     sal_uInt16 fields = reader.getFieldCount();
-    for (sal_Int32 i = 0; i < fields; ++i) {
+    for (sal_uInt16 i = 0; i < fields; ++i) {
         addConstant(manager, reader, false, i, dependencies, cf.get());
     }
     writeClassFile(options, className, *cf.get());
@@ -2935,12 +2765,13 @@ void handleModule(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OStringBuffer buf(convertString(reader.getTypeName()));
+    rtl::OStringBuffer buf(codemaker::convertString(reader.getTypeName()));
     buf.append('/');
     rtl::OString prefix(buf.makeStringAndClear());
     sal_uInt16 fields = reader.getFieldCount();
-    for (sal_Int32 i = 0; i < fields; ++i) {
-        rtl::OString className(prefix + convertString(reader.getFieldName(i)));
+    for (sal_uInt16 i = 0; i < fields; ++i) {
+        rtl::OString className(
+            prefix + codemaker::convertString(reader.getFieldName(i)));
         std::auto_ptr< ClassFile > cf(
             new ClassFile(
                 static_cast< ClassFile::AccessFlags >(
@@ -3050,7 +2881,7 @@ void addConstructor(
                 RTParamMode flags = reader.getMethodParameterFlags(
                     methodIndex, i);
                 rtl::OString paramType(
-                    convertString(
+                    codemaker::convertString(
                         reader.getMethodParameterTypeName(methodIndex, i)));
                 if ((flags != RT_PARAM_IN
                      && flags != (RT_PARAM_IN | RT_PARAM_REST))
@@ -3197,7 +3028,7 @@ void handleService(
     if (superTypes == 0) {
         return;
     }
-    rtl::OString unoName(convertString(reader.getTypeName()));
+    rtl::OString unoName(codemaker::convertString(reader.getTypeName()));
     rtl::OString className(
         translateUnoTypeToJavaFullyQualifiedName(
             unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("service"))));
@@ -3211,7 +3042,8 @@ void handleService(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
     if (methods > 0) {
-        rtl::OString base(convertString(reader.getSuperTypeName(0)));
+        rtl::OString base(codemaker::convertString(
+                              reader.getSuperTypeName(0)));
         rtl::OString realJavaBaseName(base.replace('/', '.'));
         dependencies->insert(base);
         dependencies->insert(
@@ -3230,7 +3062,8 @@ void handleService(
                 RTL_CONSTASCII_STRINGPARAM(
                     "com/sun/star/uno/XComponentContext")));
         for (sal_uInt16 i = 0; i < methods; ++i) {
-            rtl::OString name(convertString(reader.getMethodName(i)));
+            rtl::OString name(codemaker::convertString(
+                                  reader.getMethodName(i)));
             bool defaultCtor = name.getLength() == 0;
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
                 || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
@@ -3247,7 +3080,7 @@ void handleService(
             if (defaultCtor) {
                 name = rtl::OString(RTL_CONSTASCII_STRINGPARAM("create"));
             } else {
-                name = translateUnoToJavaIdentifier(
+                name = codemaker::java::translateUnoToJavaIdentifier(
                     name, rtl::OString(RTL_CONSTASCII_STRINGPARAM("method")));
             }
             addConstructor(
@@ -3415,7 +3248,7 @@ void handleSingleton(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OString base(convertString(reader.getSuperTypeName(0)));
+    rtl::OString base(codemaker::convertString(reader.getSuperTypeName(0)));
     rtl::OString realJavaBaseName(base.replace('/', '.'));
     switch (manager.getTypeReader(base).getTypeClass()) {
     case RT_TYPE_INTERFACE:
@@ -3430,7 +3263,7 @@ void handleSingleton(
             //TODO
     }
     dependencies->insert(base);
-    rtl::OString unoName(convertString(reader.getTypeName()));
+    rtl::OString unoName(codemaker::convertString(reader.getTypeName()));
     rtl::OString className(
         translateUnoTypeToJavaFullyQualifiedName(
             unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("singleton"))));
