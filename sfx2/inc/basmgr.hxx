@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-26 11:38:11 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 10:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,24 @@ com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 
-class SfxDialogContainer;
+// Data to link to old BasicManager
+class SfxScriptLibraryContainer;
+class SfxDialogLibraryContainer;
+class SfxObjectShell;
+
+struct BasicManagerImpl
+{
+    SfxScriptLibraryContainer* pScriptCont;
+    SfxDialogLibraryContainer* pDialogCont;
+    SfxObjectShell* pDocShell;
+
+    BasicManagerImpl( void )
+        : pScriptCont( NULL )
+        , pDialogCont( NULL )
+        , pDocShell( NULL )
+    {}
+};
+
 
 class SfxBasicManager : public BasicManager
 {
@@ -90,7 +107,7 @@ private:
     String              aStorageName;
     BOOL                bBasMgrModified;
 
-    SfxDialogContainer* mpDialogContainer;
+    BasicManagerImpl*   mpImpl;
 
     void                Init();
 
@@ -141,7 +158,7 @@ public:
     BOOL            SetLibName( USHORT nLib, const String& rName );
     String          GetLibName( USHORT nLib );
 
-    void            SetDialogContainer( SfxDialogContainer* pDialogContainer );
+    void            SetImpl( BasicManagerImpl* pImpl );
 
     BOOL            SetLibStorageName( USHORT nLib, const String& rName );
     String          GetLibStorageName( USHORT nLib );
