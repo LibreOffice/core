@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:44:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ FASTBOOL SdrDragMethod::IsMoveOnly() const
     return FALSE;
 }
 
-void SdrDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     FASTBOOL bGlue=IsDraggingGluePoints();
     FASTBOOL bPoints=IsDraggingPoints() || bGlue;
@@ -246,7 +246,8 @@ void SdrDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
                                      rXP[4]     == rXP[0])
                             {
                                 // Rechteck (Drehsinn links)
-                                aRect = rXP.GetBoundRect(pWin);
+//BFS09                             aRect = rXP.GetBoundRect(pWin);
+                                aRect = rXP.GetBoundRect();
                             }
                             else if (nPtAnz == 5              &&
                                      rXP[0].X() == rXP[1].X() &&
@@ -256,7 +257,8 @@ void SdrDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
                                      rXP[4]     == rXP[0])
                             {
                                 // Rechteck (Drehsinn rechts)
-                                aRect = rXP.GetBoundRect(pWin);
+//BFS09                             aRect = rXP.GetBoundRect(pWin);
+                                aRect = rXP.GetBoundRect();
                             }
                         }
 
@@ -266,7 +268,8 @@ void SdrDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
                         }
                         else
                         {
-                            const Polygon aPoly( XOutCreatePolygon(rXP, pWin) );
+//BFS09                         const Polygon aPoly( XOutCreatePolygon(rXP, pWin) );
+                            const Polygon aPoly( XOutCreatePolygon(rXP) );
                             pWin->InvertTracking(aPoly, SHOWTRACK_WINDOW);
                         }
                     }
@@ -583,7 +586,7 @@ void SdrDragObjOwn::Brk()
     SdrDragMethod::Brk();
 }
 
-void SdrDragObjOwn::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragObjOwn::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     SdrPageView* pPV=GetDragPV();
     if (pPV!=NULL) {
@@ -594,7 +597,8 @@ void SdrDragObjOwn::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
         for (USHORT i=0; i<nAnz; i++) {
             if (pOut->GetOutDevType() == OUTDEV_WINDOW)
             {
-                const Polygon aPolygon( XOutCreatePolygon(rXPP[i], pOut) );
+//BFS09             const Polygon aPolygon( XOutCreatePolygon(rXPP[i], pOut) );
+                const Polygon aPolygon( XOutCreatePolygon(rXPP[i]) );
                 ((Window*) pOut)->InvertTracking(aPolygon, SHOWTRACK_WINDOW);
             }
             else
@@ -1966,7 +1970,7 @@ FASTBOOL SdrDragCrook::End(FASTBOOL bCopy)
     return FALSE;
 }
 
-void SdrDragCrook::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragCrook::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     SdrDragMethod::DrawXor(rXOut,bFull);
     if (FALSE) {
@@ -2107,7 +2111,7 @@ FASTBOOL SdrDragDistort::End(FASTBOOL bCopy)
     return FALSE;
 }
 
-void SdrDragDistort::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void SdrDragDistort::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     SdrDragMethod::DrawXor(rXOut,bFull);
 }
