@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 19:01:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,9 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
         }
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
+        // #110680#
+        // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xServiceFactory, *this, aCur, sal_True );
 
         // connect parser and filter
         Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -395,7 +397,9 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         }
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
+        // #110680#
+        // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xServiceFactory, *this, rText, bTextOnly );
 
         // connect parser and filter
         Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -474,7 +478,10 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
         uno::UNO_QUERY);
 
-       SwXMLTextBlockExport aExp(*this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
+    // #110680#
+       // SwXMLTextBlockExport aExp(*this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
+       SwXMLTextBlockExport aExp( xServiceFactory, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
+
     aExp.exportDoc( rText );
 
     xDocStream->Commit();
@@ -532,7 +539,9 @@ void SwXMLTextBlocks::ReadInfo( void )
         }
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
+        // #110680#
+        // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xServiceFactory, *this );
 
         // connect parser and filter
         Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -598,7 +607,10 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        SwXMLBlockListExport aExp(*this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
+        // #110680#
+        // SwXMLBlockListExport aExp(*this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
+        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
+
         aExp.exportDoc( XML_BLOCK_LIST );
         xDocStream->Commit();
         xDocStream.Clear();
