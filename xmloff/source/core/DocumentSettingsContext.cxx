@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 12:18:19 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ protected:
     com::sun::star::uno::Any&   rAny;
     XMLConfigBaseContext*       pBaseContext;
 public:
-    XMLConfigBaseContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     com::sun::star::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigBaseContext();
@@ -216,7 +216,7 @@ class XMLConfigItemContext : public SvXMLImportContext
     XMLConfigBaseContext*       pBaseContext;
 
 public:
-    XMLConfigItemContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
@@ -237,7 +237,7 @@ public:
 class XMLConfigItemSetContext : public XMLConfigBaseContext
 {
 public:
-    XMLConfigItemSetContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemSetContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
@@ -257,7 +257,7 @@ public:
 class XMLConfigItemMapNamedContext : public XMLConfigBaseContext
 {
 public:
-    XMLConfigItemMapNamedContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLConfigItemMapNamedContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
@@ -277,7 +277,7 @@ public:
 class XMLConfigItemMapIndexedContext : public XMLConfigBaseContext
 {
 public:
-    XMLConfigItemMapIndexedContext(SvXMLImport rImport, USHORT nPrfx,
+    XMLConfigItemMapIndexedContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -340,7 +340,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT nPrefix,
 
 //=============================================================================
 
-XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
     : SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -408,7 +408,7 @@ void XMLDocumentSettingsContext::EndElement()
 
 //=============================================================================
 
-XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport rImport, USHORT nPrfx,
+XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx,
         const rtl::OUString& rLName, com::sun::star::uno::Any& rTempAny,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -425,7 +425,7 @@ XMLConfigBaseContext::~XMLConfigBaseContext()
 
 //=============================================================================
 
-XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport rImport, USHORT nPrfx,
+XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -461,7 +461,7 @@ void XMLConfigItemSetContext::EndElement()
 
 //=============================================================================
 
-XMLConfigItemContext::XMLConfigItemContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rTempAny,
@@ -555,7 +555,7 @@ void XMLConfigItemContext::EndElement()
 
 //=============================================================================
 
-XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport rImport, USHORT nPrfx, const rtl::OUString& rLName,
+XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
@@ -589,7 +589,7 @@ void XMLConfigItemMapNamedContext::EndElement()
 
 //=============================================================================
 
-XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport rImport, USHORT nPrfx,
+XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
