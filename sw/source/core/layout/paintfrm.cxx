@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-12 12:07:15 $
+ *  last change: $Author: od $ $Date: 2002-09-25 13:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,6 +1087,27 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
         rRect.Right( aRect.Right() );
 }
 
+/** OD 25.09.2002 #99739# - method to pixel-align rectangle for drawing graphic object
+
+    Because for drawing a graphic left-top-corner and size coordinations are
+    used, these coordinations have to be determined on pixel level.
+    Thus, convert rectangle to pixel and then convert left-top-corner and
+    size of pixel rectangle back to logic.
+    This calculation is necessary, because there exists a different between
+    the convert from logic to pixel of a normal rectangle with its left-top-
+    and right-bottom-corner and the same convert of the same rectangle
+    with left-top-corner and size.
+    Call this method before each <GraphicObject.Draw(...)>
+
+    @author OD
+*/
+void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
+{
+    Rectangle aPxRect = rOut.LogicToPixel( pGrfRect->SVRect() );
+    pGrfRect->Pos( rOut.PixelToLogic( aPxRect.TopLeft() ) );
+    pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
+}
+
 long MA_FASTCALL lcl_AlignWidth( const long nWidth )
 {
     if ( nWidth )
@@ -1383,6 +1404,8 @@ void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
 ///     and is considered in the drawing of the graphic.
 ///     Thus, to provide transparent background graphic for text frames nothing
 ///     has to be coded.
+/// OD 25.09.2002 #99739# - use align rectangle for drawing graphic
+/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
 void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       BOOL bClip, BOOL bGrfNum,
@@ -1391,7 +1414,12 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       /// add parameter <bBackgrdAlreadyDrawn> to indicate
                       /// that the background is already drawn.
 {
-    const FASTBOOL bNotInside = bClip && !rOut.IsInside( rGrf );
+    /// OD 25.09.2002 #99739# - calculate align rectangle from parameter <rGrf>
+    ///     and use aligned rectangle <aAlignedGrfRect> in the following code
+    SwRect aAlignedGrfRect = rGrf;
+    ::SwAlignRect( aAlignedGrfRect, &rSh );
+
+    const FASTBOOL bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
         pOut->Push( PUSH_CLIPREGION );
@@ -1445,11 +1473,6 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
             nTransparencyPercent = (pGrf->GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
         }
 
-        /// OD 02.09.2002 #99657#
-        /// paint aligned rectangle of <rGrf>
-        SwRect aGrfTmp = rGrf;
-        ::SwAlignRect( aGrfTmp, &rSh );
-
         /// OD 23.08.2002 #99657#
         ///     draw background color transparent, if a transparency percent
         ///     value has been calculated - see above.
@@ -1457,21 +1480,25 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
         {
             if( pOut->GetFillColor() != aColor.GetRGBColor() )
                 pOut->SetFillColor( aColor.GetRGBColor() );
-            PolyPolygon aPoly( aGrfTmp.SVRect() );
+            PolyPolygon aPoly( aAlignedGrfRect.SVRect() );
             pOut->DrawTransparent( aPoly, nTransparencyPercent );
         }
         else
         {
             if ( pOut->GetFillColor() != aColor )
                 pOut->SetFillColor( aColor );
-            pOut->DrawRect( aGrfTmp.SVRect() );
+            pOut->DrawRect( aAlignedGrfRect.SVRect() );
         }
     }
-    pGrf->Draw( pOut, rGrf.Pos(), rGrf.SSize() );
+    /// OD 25.09.2002 #99739# -
+    /// Because for drawing a graphic left-top-corner and size coordinations are
+    /// used, these coordinations have to be determined on pixel level.
+    ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
+    pGrf->Draw( pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
 
     if ( bNotInside )
         pOut->Pop();
-}
+} // end of method <lcl_DrawGraphic>
 
 void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
     const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum,

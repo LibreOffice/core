@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-18 09:43:39 $
+ *  last change: $Author: od $ $Date: 2002-09-25 13:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,12 @@
 #endif
 
 #define DEFTEXTSIZE  12
+
+/// OD 25.09.2002 #99739# - insert declaration of global methods <SwAlignRect>
+///     and <SwAlignGrtRect>.
+///     Methods are implemented in /core/layout/paintfrm.cxx
+extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+extern void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 //Zum asynchronen (erstmaligem) anfordern von Grafiken
 class SwRequestGraphic : public SwClient
@@ -545,7 +551,8 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
 
         if ( bClip )
             pOut->IntersectClipRegion( aPaintArea.SVRect() );
-        PaintPicture( pOut, aGrfArea, aNormal );
+        /// OD 25.09.2002 #99739# - delete unused 3rd parameter
+        PaintPicture( pOut, aGrfArea );
     }
     else
         // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
@@ -1033,9 +1040,10 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 // Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
 // eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
 // eine Ersatzdarstellung ausgegeben.
-
-void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
-                               const SwRect &rPaintGrfArea ) const
+/// OD 25.09.2002 #99739# - delete unused 3rd parameter.
+/// OD 25.09.2002 #99739# - use aligned rectangle for drawing graphic.
+/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
+void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = GetShell();
     const FASTBOOL bPrn = pOut == pShell->GetPrt() ||
@@ -1044,6 +1052,16 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
+
+    /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
+    ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
+    ///     the following code.
+    SwRect aAlignedGrfArea = rGrfArea;
+    ::SwAlignRect( aAlignedGrfArea,  pShell );
+    /// OD 25.09.2002 #99739#
+    /// Because for drawing a graphic left-top-corner and size coordinations are
+    /// used, these coordinations have to be determined on pixel level.
+    ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
 
     if( pGrfNd )
     {
@@ -1071,13 +1089,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
                 String aTxt( pGrfNd->GetAlternateText() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
-                ::lcl_PaintReplacement( rGrfArea, aTxt, *pShell, this, FALSE );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, FALSE );
                 bContinue = FALSE;
             }
-            else if( rGrfObj.IsCached( pOut, rGrfArea.Pos(),
-                                    rGrfArea.SSize(), &aGrfAttr ))
+            else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
+                                    aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
-                rGrfObj.Draw( pOut, rGrfArea.Pos(), rGrfArea.SSize(),
+                rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
                                 &aGrfAttr );
                 bContinue = FALSE;
             }
@@ -1106,12 +1124,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
 
                     ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType(),
                             "pOut sollte kein virtuelles Device sein" );
-                    rGrfObj.StartAnimation( pOut, rGrfArea.Pos(),
-                                        rGrfArea.SSize(), long(this),
+                    rGrfObj.StartAnimation( pOut, aAlignedGrfArea.Pos(),
+                                        aAlignedGrfArea.SSize(), long(this),
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.Draw( pOut, rGrfArea.Pos(), rGrfArea.SSize(),
+                    rGrfObj.Draw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
                                     &aGrfAttr );
             }
             else
@@ -1135,7 +1153,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
                 if ( nResId )
                     aText = SW_RESSTR( nResId );
 
-                ::lcl_PaintReplacement( rGrfArea, aText, *pShell, this, TRUE );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, TRUE );
             }
 
             //Beim Drucken duerfen wir nicht die Grafiken sammeln...
@@ -1155,7 +1173,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
         FASTBOOL bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
-        xRef->DoDraw( pOut, rGrfArea.Pos(), rGrfArea.SSize(), *pJobSetup );
+        xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
         if( bDummyJobSetup )
             delete pJobSetup;  // ... und raeumen wieder auf.
 
