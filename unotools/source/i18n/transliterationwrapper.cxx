@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:01:54 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ TransliterationWrapper::~TransliterationWrapper()
 String TransliterationWrapper::transliterate(
                                 const String& rStr, sal_uInt16 nLang,
                                 xub_StrLen nStart, xub_StrLen nLen,
-                                Sequence <long>* pOffset )
+                                Sequence <sal_Int32>* pOffset )
 {
     String sRet;
     if( xTrans.is() )
@@ -166,7 +166,7 @@ String TransliterationWrapper::transliterate(
 String TransliterationWrapper::transliterate(
                                 const String& rStr,
                                 xub_StrLen nStart, xub_StrLen nLen,
-                                Sequence <long>* pOffset ) const
+                                Sequence <sal_Int32>* pOffset ) const
 {
     String sRet( rStr );
     if( xTrans.is() )
