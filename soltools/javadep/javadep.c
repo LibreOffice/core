@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 09:50:15 $
+ *  last change: $Author: hr $ $Date: 2001-04-23 08:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,6 @@
 #define ntohs(x)    ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
 #endif
 
-#ifdef BOOTSTRAPPER
-#include <glibc/posix/getopt.h>
-#else
-#include <glibc/getopt.h>
-#endif
-
 /* max. length of line in response file */
 #define RES_FILE_BUF    65536
 
@@ -175,6 +169,13 @@ void    create_filters(struct growable *pfilt, const struct growable *pinc);
 void    usage(void);
 void    err_quit(const char *, ...);
 void    silent_quit(void);
+
+/* poor man's getopt() */
+int     simple_getopt(int argc, char *pargv[], const char *poptstring);
+char    *optarg = NULL;
+int     optind  = 1;
+int     optopt  = 0;
+int     opterr  = 0;
 
 uint8
 read_uint8(const file_t *pfile)
@@ -785,6 +786,43 @@ usage()
             pprogname);
 }
 
+/* my very simple minded implementation of getopt()
+ * it's to sad that getopt() is not available everywhere
+ * note: this is not a full POSIX conforming getopt()
+ */
+simple_getopt(int nargc, char *pargv[], const char *poptstring)
+{
+    char *parg = pargv[optind];
+
+    /* skip all response file arguments */
+    while ( *parg == '@' )
+        parg = pargv[++optind];
+
+    if ( parg[0] == '-' && parg[1] != '\0' ) {
+        char *popt;
+        int c = parg[1];
+        if ( (popt = strchr(poptstring, c)) == NULL ) {
+            optopt = c;
+            if ( opterr )
+                fprintf("Unknown option character `\\x%x'.\n", optopt);
+            return '?';
+        }
+        if ( *(++popt) == ':') {
+             if ( parg[2] != '\0' ) {
+                 optarg = ++parg;
+             } else {
+                 optarg = pargv[++optind];
+             }
+         } else {
+             optarg = NULL;
+         }
+         ++optind;
+         return c;
+    }
+    return -1;
+}
+
+
 int CDECL
 main(int argc, char *argv[])
 {
@@ -823,9 +861,6 @@ main(int argc, char *argv[])
     /* copy all arguments incl. response file in one array
      * for parsing with getopt
      */
-    /* note: this doesn't seem to work with SOLARIS getopt,
-     * use GNU getopt instead
-     */
     nall_argc = argc + presp->ncur;
     pall_argv = xmalloc((nall_argc+1)*sizeof(char *));
     memcpy(pall_argv, argv, argc*sizeof(char *));
@@ -835,7 +870,7 @@ main(int argc, char *argv[])
     opterr = 0;
     pincs = allocate_growable();
 
-    while( (c = getopt(nall_argc, pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
+    while( (c = simple_getopt(nall_argc, pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
         switch(c) {
             case 'i':
             case 'I':
