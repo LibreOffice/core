@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:19:31 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:36:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ CDD=cd
 COPY*=cp
 COPYRECURSE=-r
 COPYUPDATE=-u
+DELAY=sleep
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
@@ -107,6 +108,7 @@ CDD=cdd
 COPY*=copy
 COPYRECURSE=/s
 COPYUPDATE=/u
+DELAY=delay
 ECHON*=echos
 ECHONL=echo.
 FIND*=$(BUILD_TOOLS)$/find.exe
@@ -168,6 +170,12 @@ RM+=$(RMFLAGS)
 
 .IF "$(GUI)"=="UNX"
 SCP_CHECK_TOOL=checkscp
+.ENDIF
+
+.IF "$(USE_SHELL)"!="4nt"
+CHECKZIPRESULT=|| if ("$$status" != "12") exit $$status && echo "Nothing to update for zip"
+.ELSE
+CHECKZIPRESULT=^ iff errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
 .ENDIF
 
 EXECTEST = $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
