@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 09:46:22 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 10:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ XML_CONSTASCII_ACTION( sXML_background_no_repeat, "no-repeat" );
 XML_CONSTASCII_ACTION( sXML_background_repeat, "repeat" );
 XML_CONSTASCII_ACTION( sXML_background_stretch, "stretch" );
 XML_CONSTASCII_ACTION( sXML_bar, "bar" );
+XML_CONSTASCII_ACTION( sXML_base64Binary, "base64Binary");
 XML_CONSTASCII_ACTION( sXML_base_cell_address, "base-cell-address");
 XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
 XML_CONSTASCII_ACTION( sXML_before_date_time, "before-date-time" );
