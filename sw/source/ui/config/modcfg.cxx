@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:08:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/clsids.hxx>
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -86,9 +84,8 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
-#ifndef _FACTORY_HXX //autogen
-#include <so3/factory.hxx>
-#endif
+
+#include <tools/globname.hxx>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -133,8 +130,7 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
         if (pObj->GetObjType() == eType &&
             (eType != OLE_CAP ||
              (pOleId &&
-              (pObj->GetOleId() == *pOleId ||
-               SvFactory::GetAutoConvertTo(pObj->GetOleId()) == *pOleId))))
+              pObj->GetOleId() == *pOleId)))
             return pObj;
     }
 
