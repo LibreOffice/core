@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 08:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <eetext.hxx>
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
+#define ITEMID_LANGUAGE           EE_CHAR_LANGUAGE
+#define ITEMID_EMPHASISMARK       EE_CHAR_EMPHASISMARK
+#define ITEMID_CHARRELIEF         EE_CHAR_RELIEF
+
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -137,6 +141,9 @@
 #ifndef _SVX_ITEM_HXX //autogen
 #include <svx/cntritem.hxx>
 #endif
+#ifndef _SVX_EMPHITEM_HXX
+#include <svx/emphitem.hxx>
+#endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
 #endif
@@ -169,6 +176,9 @@
 #endif
 #ifndef _SVX_XLNEDIT_HXX //autogen
 #include <svx/xlnedit.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX //autogen
 #include <svx/xlnstit.hxx>
@@ -218,7 +228,6 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#define ITEMID_LANGUAGE           EE_CHAR_LANGUAGE
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -338,6 +347,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxShadowedItem(FALSE));
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE));
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
+    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE));
+    rISet.Put(SvxCharReliefItem(RELIEF_NONE));
     rISet.Put(SvxColorItem(RGB_Color(COL_BLACK)));
 
                     // Absatzattribute (Edit Engine)
