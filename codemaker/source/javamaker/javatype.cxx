@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,11 +373,11 @@ void JavaType::dumpTypeInit(FileStream& o, const OString& name, const OString& t
             o << indent() << name << " = \"\";\n";
             return;
         case BT_TYPE:
-            o << indent() << name << " = new com.sun.star.uno.Type();\n";
+            o << indent() << name << " = com.sun.star.uno.Type.VOID;\n";
             return;
         case BT_ANY:
-//          o << "new java.lang.Object()";
-//          return;
+            o << indent() << name << " = com.sun.star.uno.Any.VOID;\n";
+            return;
         case BT_BOOLEAN:
         case BT_CHAR:
         case BT_FLOAT:
@@ -865,7 +865,7 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     RTUik uik;
     m_reader.getUik(uik);
     sal_Char buffer[67];
-    sprintf(buffer, "0x%.8x, (short)0x%.4x, (short)0x%.4x, 0x%.8x, 0x%.8x",
+    snprintf(buffer, sizeof(buffer), "0x%.8x, (short)0x%.4x, (short)0x%.4x, 0x%.8x, 0x%.8x",
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
     o << buffer << " );\n\n";
 */
@@ -1464,7 +1464,7 @@ sal_Bool StructureType::dumpFile(FileStream& o)
         o << " " << fieldName << ";\n";
     }
 
-    o << "\n" << indent() << "//constructors\n";
+    o << "\n" << indent() << "// constructors\n";
     o << indent() << "public " << m_name << "()\n" << indent() << "{\n";
     inc();
     OString relType;

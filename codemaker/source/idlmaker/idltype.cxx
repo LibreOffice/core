@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idltype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-18 17:24:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ void IdlType::dumpConstantValue(FileStream& o, sal_uInt16 index)
         case RT_TYPE_BYTE:
             {
                 char tmp[16];
-                sprintf(tmp, "0x%x", (sal_Int8)constValue.m_value.aByte);
+                snprintf(tmp, sizeof(tmp), "0x%x", (sal_Int8)constValue.m_value.aByte);
                 o << tmp;
             }
             break;

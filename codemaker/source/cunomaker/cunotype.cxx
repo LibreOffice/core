@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-18 17:23:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ void CunoType::dumpConstantValue(FileStream& o, sal_uInt16 index)
         case RT_TYPE_BYTE:
             {
                 char tmp[16];
-                sprintf(tmp, "0x%x", (sal_Int8)constValue.m_value.aByte);
+                snprintf(tmp, sizeof(tmp), "0x%x", (sal_Int8)constValue.m_value.aByte);
                 o << "(sal_Int8)" << tmp;
             }
             break;
@@ -2060,7 +2060,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
     RTUik uik;
     m_reader.getUik(uik);
     sal_Char buffer[53];
-    sprintf(buffer, "0x%.8x, 0x%.4x, 0x%.4x, 0x%.8x, 0x%.8x,\n",
+    snprintf(buffer, sizeof(buffer), "0x%.8x, 0x%.4x, 0x%.4x, 0x%.8x, 0x%.8x,\n",
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
     o << buffer;
 

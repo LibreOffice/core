@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 15:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
         case RT_TYPE_BYTE:
             {
                 char tmp[16];
-                sprintf(tmp, "0x%x", (sal_Int8)constValue.m_value.aByte);
+                snprintf(tmp, sizeof(tmp), "0x%x", (sal_Int8)constValue.m_value.aByte);
                 o << "(sal_Int8)" << tmp;
             }
             break;
@@ -2024,7 +2024,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
         RTUik uik;
         m_reader.getUik(uik);
         sal_Char buffer[53];
-        sprintf(buffer, "0x%.8x, 0x%.4x, 0x%.4x, 0x%.8x, 0x%.8x,\n",
+        snprintf(buffer, sizeof(buffer), "0x%.8x, 0x%.4x, 0x%.4x, 0x%.8x, 0x%.8x,\n",
                 uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
         o << buffer;
 
