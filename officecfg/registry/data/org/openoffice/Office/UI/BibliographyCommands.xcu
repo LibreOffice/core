@@ -154,7 +154,7 @@
                     <value xml:lang="th">แหล่ง~ข้อมูล...</value>
                     <value xml:lang="tr">~Veri Kaynağını Seç...</value>
                     <value xml:lang="hi">~ड़ॉटा मूल...</value>
-                    <value xml:lang="zh-CN">选择数据源(~C)...</value>
+                    <value xml:lang="zh-CN">选择数据源...</value>
                     <value xml:lang="pt">~Fonte de dados...</value>
                 </prop>
             </node>
