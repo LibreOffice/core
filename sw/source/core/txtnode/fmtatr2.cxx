@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-10-16 09:44:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,9 +410,10 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             // Create hyperlink event descriptor. Then copy events
             // from argument into descriptor. Then copy events from
             // the descriptor into the format.
-            SwHyperlinkEventDescriptor aEvents;
-            aEvents.copyMacrosFromNameReplace(xReplace);
-            aEvents.copyMacrosIntoINetFmt(*this);
+            SwHyperlinkEventDescriptor* pEvents = new SwHyperlinkEventDescriptor();
+            uno::Reference< ::com::sun::star::lang::XServiceInfo> xHold = pEvents;
+            pEvents->copyMacrosFromNameReplace(xReplace);
+            pEvents->copyMacrosIntoINetFmt(*this);
         }
         else
         {
