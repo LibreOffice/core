@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
+ *  last change: $Author: hdu $ $Date: 2001-11-01 16:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,24 +836,22 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
         mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
         if( mpServerSideFont != NULL )
         {
-            if( mpServerSideFont->TestFont() )
-            {
 #ifndef _USE_PRINT_EXTENSION_
-                mpSrvFallbackFont = FontFallback::FallbackFor (pEntry);
-                if ( mpSrvFallbackFont != NULL && ! mpSrvFallbackFont->TestFont() )
-                {
-                    GlyphCache::GetInstance().UncacheFont( *mpSrvFallbackFont );
-                    mpSrvFallbackFont = NULL;
-                }
-#endif
+            mpSrvFallbackFont = FontFallback::FallbackFor (pEntry);
+            if ( mpSrvFallbackFont != NULL && ! mpSrvFallbackFont->TestFont() )
+            {
+                GlyphCache::GetInstance().UncacheFont( *mpSrvFallbackFont );
+                mpSrvFallbackFont = NULL;
             }
-            else
+#endif
+            if( !mpServerSideFont->TestFont() )
             {
                 GlyphCache::GetInstance().UncacheFont( *mpServerSideFont );
-                mpServerSideFont = NULL;
-                xFont_ = mxFallbackFont;
+                mpServerSideFont = mpSrvFallbackFont;
             }
 
+            if( !mpServerSideFont )
+                xFont_ = mxFallbackFont;
             return;
         }
 #endif //USE_BUILTIN_RASTERIZER
