@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  $RCSfile: EnhancedCustomShapeGeometry.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:08:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeGeometry_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapeGeometry_idl__
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValues_idl__
+#include <com/sun/star/beans/PropertyValues.idl>
+#endif
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+#include <com/sun/star/drawing/EnhancedCustomShapeHandle.idl>
+#endif
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeAdjustmentValue_idl__
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+/**
+  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+*/
+
+service EnhancedCustomShapeGeometry
+{
+    /**
+        The Type attribute contains the name of a shape type. This name can be
+        used to offer specialized user interfaces for certain classes of shapes, like
+        for arrows, smileys, etc. The shape type is rendering engine dependent and does
+        not influence the geometry of the shape. If the value of the draw:type
+        attribute is non-primitive, then no shape type is available.
+    */
+    [property] string Type;
+
+    /** This property describes the user space of the shape in its canonical form
+    */
+    [optional, property] ::com::sun::star::awt::Rectangle ViewBox;
+
+    /** This property specifies if the orientation of the shape is horizontal mirrored.
+    */
+    [optional, property] boolean MirroredX;
+
+    /** This property specifies if the orientation of the shape is vertical mirrored.
+    */
+    [optional, property] boolean MirroredY;
+
+    /** This property specifies the text rotation angle in degrees. The text rotation is added
+        to the shape geometry rotation.
+    */
+    [optional, property] double TextRotateAngle;
+
+    /** This property specifies a sequence of Adjustment values.
+    */
+    [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> AdjustmentValues;
+
+    /** This property sequence is including the extrusion description, the properties
+        are as same as specified in the service com::sun::star:drawing::EnhancedCustomShapeExtrusion
+    */
+    [optional, property] sequence<::com::sun::star::beans::PropertyValue> Extrusion;
+
+    /** This property sequence is including the path description, the properties
+        are as same as specified in the service com::sun::star:drawing::EnhancedCustomShapePath
+    */
+    [optional, property] sequence<::com::sun::star::beans::PropertyValue> Path;
+
+    /** This property sequence is including the textpath description, the properties
+        are as same as specified in the service com::sun::star:drawing::EnhancedCustomShapeTextPath
+    */
+    [optional, property] sequence<::com::sun::star::beans::PropertyValue> TextPath;
+
+    /** This property is describing the equations that are used, each equation can be referenced
+        by com::sun::star::drawing::EnhancedCustomShapeParameter which are often used in Path, Extrusion
+        and or Handle descriptions.
+    */
+    [optional, property] sequence<string> Equations;
+
+    /** This property is describing the interaction handles that are used, each inner property sequence
+        is having the same properties as they are specified in the service com::sun::star:drawing::EnhancedCustomShapeHandle
+    */
+    [optional, property] sequence<::com::sun::star::beans::PropertyValues> Handles;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
