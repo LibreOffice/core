@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-01 14:17:27 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 16:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,18 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         delete pNumImport;
         pNumImport = 0;
     }
+}
+
+// XFilter
+sal_Bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+    throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL SvXMLImport::cancel(  )
+    throw (uno::RuntimeException)
+{
 }
 
 // XInitialize
