@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:39:29 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ Resource RID_SW_ERRHDL
         TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚Ν WinWord µΜίΌ®έ‚Μu‚‘¬•Ϋ‘¶v‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord ‚ΜµΜίΌ®έu‚‘¬•Ϋ‘¶‚·‚ιv‚πµΜ‚Ι‚µ‚Δ WinWord ‚ΕΜ§²Ω‚π•Ϋ‘¶‚µ‚Θ‚¨‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ΅u§Φ³tΐx¦s΅v¤θ¦΅΅C½Π±z³]©wΓφ³¬³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­Σ¤ε¥σ΅C";
         TEXT[ arabic ] = "Κγ ΝέΩ εΠΗ Ηαγαέ Ϊδ ΨΡνή ΞνΗΡ 'ΗαΝέΩ ΗαΣΡνΪ' έν WinWord. ΗαΡΜΗΑ ΕνήΗέ ΞΗΥνΙ 'ΗαΣγΗΝ ΘΗαΝέΩ ΗαΣΡνΪ' έν WinWord΅ Λγ ήγ ΘΝέΩ Ηαγαέ γδ ΜΟνΟ ΘζΗΣΨΙ WinWord.";
-        TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ?";
+        TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ? ";
         TEXT[ korean ] = "ΐΜ ΖΔΐΟΐΊ  WinWord ΐΗ  'ΊόΈ¥ ΐϊΐε' Έπµε·Ξ ΐϊΐεµΗΎξ ΐΦ½ΐ΄Ο΄Ω.  ΏΙΌΗ 'ΊόΈ¥ ΐϊΐε ΗγΏλ' Έ¦ ΗΨΑ¦ΗΟ°ν, ΖΔΐΟΐ» ΄Ω½Γ ΐϊΐεΗΟ½Κ½ΓΏΐ .";
         TEXT[ turkish ] = "Bu dosya WinWord seηeneπi 'Hύzlύ kaydet' ile kaydedilmiώ. WinWord'de 'Hύzlύ kaydetmeye olanak saπla' seηeneπini geηersiz kύlύp dosyayύ yeniden WinWord ile kaydedin";
         TEXT[ language_user1 ] = " ";
@@ -1181,7 +1181,7 @@ Resource RID_SW_ERRHDL
         TEXT[ japanese ] = "‚±‚ΜΜ§²Ω‚ΝAWinWord µΜίΌ®έu‚‘¬•Ϋ‘¶v‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚·BWinWord µΜίΌ®έu‚‘¬•Ϋ‘¶v‚πµΜ‚Ι‚µ‚Δ‚©‚ηAΜ§²Ω‚π WinWord ‚Ε•Ϋ‘¶‚µ‚Θ‚¨‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         TEXT[ chinese_traditional ] = "ΐx¦sΐΙ®Χ±Δ¥ΞªΊ¬O WinWord Ώο¶µ΅u§Φ³tΐx¦s΅v¤θ¦΅΅C½Π±z³]©wΓφ³¬³o­ΣΏο¶µ΅MµM«α¦b­«·sΐx¦s³o­ΣΐΙ®Χ΅C";
         TEXT[ arabic ] = "Κγ ΝέΩ εΠΗ Ηαγαέ Ϊδ ΨΡνή ΞνΗύΡ 'ΗαΝέΩ ΗαΣΡνΪ' έν WinWord. ΗαΡΜΗΑ ΕνήΗέ ΞΗΥνΙ 'ΗαΣγΗΝ ΘΗαΝέΩ ΗαΣΡνΪ' έν WinWord΅ Λγ  ήγ ΘΝέΩ Ηαγαέ γδ ΜΟνΟ ΘζΗΣΨΙ WinWord.";
-        TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ?";
+        TEXT[ greek ] = "Το αρχείο αυτό αποθηκεύτηκε με την επιλογή 'Γρήγορη αποθήκευση' του WinWord. Παρακαλώ απενεργοποιήσετε την επιλογή αυτή του WinWord και αποθηκεύσ? ";
         TEXT[ korean ] = "ΐΜ ΖΔΐΟΐΊ  WinWordΐΗ  'ΊόΈ¥ ΐϊΐε' Έπµε·Ξ ΐϊΐεµΗΎξ ΐΦ½ΐ΄Ο΄Ω. ΏΙΌΗ 'ΊόΈ¥ ΐϊΐε ΗγΏλ'ΐ» ΗΨΑ¦ΗΟ½Γ°ν ΖΔΐΟΐ» ΄Ω½Γ ΐϊΐεΗΟ½Κ½ΓΏΐ.";
         TEXT[ turkish ] = "Bu dosya WinWord seηeneπi 'Hύzlύ kaydet' ile kaydedilmiώ. WinWord'de 'Hύzlύ kaydetmeye olanak saπla' seηeneπini geηersiz kύlύp dosyayύ yeniden WinWord ile kaydedin";
         TEXT[ language_user1 ] = " ";
@@ -1424,6 +1424,7 @@ Resource RID_SW_ERRHDL
         TEXT[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
 
 
 
