@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::sdbc;
 using namespace ::ucb;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 static int nOpenFiles=0;
 static int nOpenStreams=0;
@@ -207,7 +207,7 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
     if ( m_pSvStream )
     {
         delete m_pSvStream;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         --nOpenFiles;
 #endif
     }
@@ -299,7 +299,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
     DELETEZ( m_pSvStream );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     --nOpenFiles;
 #endif
     ::utl::UCBContentHelper::Kill( m_aURL );
@@ -353,7 +353,7 @@ void FileStreamWrapper_Impl::checkConnected()
     if ( !m_pSvStream )
     {
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ++nOpenFiles;
 #endif
     }
@@ -833,7 +833,7 @@ BOOL UCBStorageStream_Impl::Init()
             m_aTempURL = ::utl::TempFile().GetURL();
 
         m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ++nOpenFiles;
 #endif
 
@@ -917,7 +917,7 @@ ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary()
                 aResult += m_pStream->Write( aData.getArray(), aReaded );
             } while( aReaded == 32000 );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
             DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -960,7 +960,7 @@ ULONG UCBStorageStream_Impl::ReadSourceWriteTemporary( ULONG aLength )
             if( aResult < aLength )
                 m_bSourceRead = FALSE;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
             DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -1038,7 +1038,7 @@ ULONG UCBStorageStream_Impl::GetData( void* pData, ULONG nSize )
             int p = m_pStream->GetError();
             memcpy( pData, aData.getArray(), aReaded );
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
             DBG_ASSERT( FALSE, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -1338,7 +1338,7 @@ BOOL UCBStorageStream_Impl::Clear()
 
 void UCBStorageStream_Impl::Free()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( m_pStream )
     {
         if ( m_aTempURL.Len() )
@@ -2470,7 +2470,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     }
                     else
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf ( stderr, "Files: %i\n", nOpenFiles );
                         fprintf ( stderr, "Streams: %i\n", nOpenStreams );
 #endif
