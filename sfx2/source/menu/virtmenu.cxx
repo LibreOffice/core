@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 16:56:14 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SfxVirtualMenu::Construct_Impl()
     pSVMenu->SetSelectHdl( LINK(this, SfxVirtualMenu, Select) );
 
     // Accels eintragen
-    InvalidateKeyCodes();
+//  InvalidateKeyCodes();
 
     if ( !pResMgr && pParent )
         pResMgr = pParent->pResMgr;
@@ -390,7 +390,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     else
                     {
                         if ( aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, SFX_IMAGEMANAGER()->SeekImage( nId, pModule ) );
+                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
 
                         pMnuCtrl = SfxMenuControl::CreateControl(nId,
                             *pSVMenu, *pBindings);
@@ -635,6 +635,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( bControllersUnBound )
             BindControllers();
 
+        InvalidateKeyCodes();
         pBindings->GetDispatcher_Impl()->Flush();
         for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
@@ -822,17 +823,17 @@ void SfxVirtualMenu::InvalidateKeyCodes()
     SfxApplication* pSfxApp = SFX_APP();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     SfxAcceleratorManager* pAccMgr = pViewFrame->GetViewShell()->GetAccMgr_Impl();
-    if ( !pAccMgr )
-        return;
-
     SfxAcceleratorManager* pAppAccel = pSfxApp->GetAppAccel_Impl();
+    if ( !pAccMgr )
+        pAccMgr = pAppAccel;
+
     for ( USHORT nPos = 0; nPos < pSVMenu->GetItemCount(); ++nPos )
     {
         USHORT nId = pSVMenu->GetItemId(nPos);
         SfxVirtualMenu *pPopup = GetPopupMenu(nId);
-        if ( pPopup )
-            pPopup->InvalidateKeyCodes();
-        else if ( nId )
+//        if ( pPopup )
+//            pPopup->InvalidateKeyCodes();
+//        else if ( nId )
         {
             KeyCode aCode = pAccMgr->GetKeyCode( nId );
             if ( !aCode.GetCode() && pAccMgr != pAppAccel )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:06:57 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ public:
     BOOL                IsSeparator() const
                         { return MENUITEM_SEPARATOR == GetItemType(); }
 
+    BOOL                IsBinding( SfxModule* pMod ) const;
+
     SfxMenuIter_Impl*   NextItem();
 
     void                RemovePopup()
@@ -226,10 +228,13 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
     _pPopup = _pMenu->GetPopupMenu(_nId);
 
     // nicht alles wird angezeigt
-    if ( _nId >= SID_PICK1 && _nId <= SID_PICK9 )
+    if ( _nId >= START_ITEMID_PICKLIST && _nId <= END_ITEMID_PICKLIST )
         return NextItem();
 
-    // nicht alle Popups werden durchlaufen
+    if ( _nId >= START_ITEMID_WINDOWLIST && _nId <= END_ITEMID_WINDOWLIST )
+        return NextItem();
+
+    // nicht alle Popups werden dur chlaufen
     if ( _nId == SID_OBJECT ||
          ( _nId >= SID_OBJECTMENU0 && _nId <= SID_OBJECTMENU_LAST ) )
         _pPopup = 0;
@@ -238,10 +243,19 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
     return this;
 }
 
+BOOL SfxMenuIter_Impl::IsBinding( SfxModule* pMod ) const
+{
+    if ( GetPopupMenu() && _nId > SID_SFX_START )
+        if ( !SfxMenuControl::IsSpecialControl( _nId, pMod ) )
+            // "Unechtes" Binding: Popup mit SlotId
+            return FALSE;
+    return _nId >= SID_SFX_START;
+}
+
 //--------------------------------------------------------------------
 
-SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings, BOOL bBar )
-:   SfxConfigItem(rResId.GetId()),
+SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr, BOOL bBar )
+:   SfxConfigItem( rResId.GetId(), pMgr ),
     bMenuBar(bBar),
     pMenu(0),
     pOldMenu(0),
@@ -289,64 +303,9 @@ BOOL SfxMenuManager::Initialize( BOOL bOLEServer )
 BOOL SfxMenuManager::Store( SvStream& rStream )
 {
     DBG_MEMTEST();
-    return StreamMenu( pMenu->GetSVMenu(), rStream, FALSE );
-/*
-    LanguageType eLangType = SFX_APP()->GetAppInternational().GetLanguage();
-    if (eLangType == LANGUAGE_SYSTEM)
-    {
-        eLangType = System::GetLanguage();
-    }
-
-    rStream << nVersion
-            << (USHORT) eLangType;
-
-    FirstItem();
-    USHORT nLevel = GetLevel();
-    do
-    {
-        while ( GetLevel() < nLevel )
-        {
-            // Ein Popup wurde verlassen
-            // Ende-Markierung setzen
-            rStream << 'E';
-            nLevel--;
-        }
-
-        nLevel = GetLevel();
-
-        if ( IsSeparator() )
-        {
-            rStream << 'S';
-        }
-        else
-        {
-            USHORT nId = GetItemId();
-            String aTitle = GetTitle();
-            if( !IsPopup() )
-            {
-                rStream << 'I';
-                rStream << nId << aTitle;
-                if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
-                    // MacroInfo speichern
-                    rStream << *(SFX_APP()->GetMacroConfig()->GetMacroInfo(nId));
-            }
-            else
-            {
-                rStream << 'P';
-                rStream << nId << aTitle;
-                if ( !pIterator->GetPopupMenu()->GetItemCount() )
-                    rStream << 'E';
-            }
-        }
-    }
-    while ( NextItem() );
-
-    // Letzte Ende-Markierung setzen
-    rStream << 'E';
-
-    // Ende-Markierung f"ur MenuBar setzen
-    rStream << 'E';
-*/
+    SfxDispatcher* pDisp = pBindings->GetDispatcher_Impl();
+    SfxModule *pMod = pDisp ? SFX_APP()->GetActiveModule( pDisp->GetFrame() ) :0;
+    return StoreMenu( rStream, pMenu->GetSVMenu(), pMod );
 }
 
 //-------------------------------------------------------------------------
@@ -388,7 +347,7 @@ void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 
 //-------------------------------------------------------------------------
 
-BOOL SfxMenuManager::StreamMenu( Menu *pMenu, SvStream& rStream, BOOL bWithHelp )
+BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod )
 {
     LanguageType eLangType = Application::GetAppInternational().GetLanguage();
     if (eLangType == LANGUAGE_SYSTEM)
@@ -399,8 +358,11 @@ BOOL SfxMenuManager::StreamMenu( Menu *pMenu, SvStream& rStream, BOOL bWithHelp 
     rStream << nVersion
             << (USHORT) eLangType;
 
-    if ( !FirstItem() )
+    SfxMenuIter_Impl *pIterator = SfxMenuIter_Impl::Create( pMenu );
+    if ( !pIterator )
         return TRUE;
+
+    rtl_TextEncoding nEnc = osl_getThreadTextEncoding();
 
     SfxMenuIter_Impl *pFirstIter = pIterator;
     USHORT nFirstLevel = pFirstIter->GetLevel();
@@ -425,13 +387,11 @@ BOOL SfxMenuManager::StreamMenu( Menu *pMenu, SvStream& rStream, BOOL bWithHelp 
         {
             USHORT nId = pIterator->GetItemId();
             String aTitle = pIterator->GetItemText();
-            if( IsBinding() )
+            if( pIterator->IsBinding( pMod ) )
             {
                 rStream << 'I';
                 rStream << nId;
-                rStream.WriteByteString(aTitle, RTL_TEXTENCODING_UTF8 );
-                if ( bWithHelp )
-                    rStream.WriteByteString(pIterator->GetItemHelpText(), RTL_TEXTENCODING_UTF8 );
+                rStream.WriteByteString(aTitle, nEnc );
                 if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
                     // MacroInfo speichern
                     rStream << *(SFX_APP()->GetMacroConfig()->GetMacroInfo(nId));
@@ -443,9 +403,7 @@ BOOL SfxMenuManager::StreamMenu( Menu *pMenu, SvStream& rStream, BOOL bWithHelp 
             {
                 rStream << 'P';
                 rStream << nId;
-                rStream.WriteByteString(aTitle, RTL_TEXTENCODING_UTF8 );
-                if ( bWithHelp )
-                    rStream.WriteByteString(pIterator->GetItemHelpText(), RTL_TEXTENCODING_UTF8 );
+                rStream.WriteByteString(aTitle, nEnc );
                 if ( !pIterator->GetPopupMenu()->GetItemCount() )
                     rStream << 'E';
             }
@@ -453,7 +411,7 @@ BOOL SfxMenuManager::StreamMenu( Menu *pMenu, SvStream& rStream, BOOL bWithHelp 
                 DBG_ERROR( "Invalid menu configuration!" );
         }
     }
-    while ( NextItem() );
+    while ( ( pIterator = pIterator->NextItem() ) != 0 );
 
     while ( nLevel > nFirstLevel )
     {
@@ -477,15 +435,13 @@ void SfxMenuManager::SetForceCtrlCreateMode( BOOL bCreate )
 
 //-------------------------------------------------------------------------
 
-int SfxMenuManager::Load( SvStream& rStream )
+Menu* SfxMenuManager::LoadMenu( SvStream& rStream )
 {
-    DBG_MEMTEST();
-
     // Config-Version und Sprache der Menuetexte
     USHORT nFileVersion, nLanguage;
     rStream >> nFileVersion;
     if(nFileVersion < nCompatVersion)
-        return SfxConfigItem::WARNING_VERSION;
+        return NULL;
 
     rStream >> nLanguage;
     LanguageType eLangType = Application::GetAppInternational().GetLanguage();
@@ -495,29 +451,37 @@ int SfxMenuManager::Load( SvStream& rStream )
     }
 
     if ( eLangType != (LanguageType) nLanguage )
-    {
-        // Wenn die Text f"ur eine andere Sprache sind, Default-Config
-        // verwenden. Fehlermeldung ??
-        UseDefault();
-        return SfxConfigItem::ERR_OK;
-    }
+        return NULL;
 
     BOOL bCompat = FALSE;
     if ( nFileVersion == nCompatVersion )
         bCompat = TRUE;
     BOOL bWithHelp = FALSE;
-    if ( bCompat )
-        bWithHelp = TRUE;
+//    if ( bCompat )
+//        bWithHelp = TRUE;
 
-    Menu *pSVMenu;
-    if ( bMenuBar )
-        pSVMenu = new MenuBar;
-    else
-        pSVMenu = new PopupMenu;
-
+    MenuBar* pSVMenu = new MenuBar;
     ConstructSvMenu( pSVMenu, rStream, bWithHelp, bCompat );
+    return pSVMenu;
+}
 
-    Construct_Impl( pSVMenu, bWithHelp );
+int SfxMenuManager::Load( SvStream& rStream )
+{
+    DBG_MEMTEST();
+
+    if ( !bMenuBar )
+    {
+        UseDefault();
+    }
+    else
+    {
+        Menu* pSVMenu = LoadMenu( rStream );
+        if ( pSVMenu )
+            Construct_Impl( pSVMenu, FALSE );
+        else
+            UseDefault();
+    }
+
     return SfxConfigItem::ERR_OK;
 }
 
@@ -623,7 +587,6 @@ void SfxMenuManager::UseDefault()
         MenuBar* pOldBar = (MenuBar*) pOldVirtMenu->GetSVMenu();
         MenuBar* pSvBar = (MenuBar*) GetMenu()->GetSVMenu();
         if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
-            //! jetzt im VirtMenu: InvalidateKeyCodes();
             pBar->GetWindow()->SetMenuBar( pSvBar );
     }
 
@@ -632,13 +595,15 @@ void SfxMenuManager::UseDefault()
         delete pOldVirtMenu;
         pBindings->LEAVEREGISTRATIONS();
     }
+
+    SetDefault( TRUE );
 }
 
 // ------------------------------------------------------------------------
 
-String SfxMenuManager::GetName() const
+String SfxMenuManager::GetStreamName() const
 {
-    return String(SfxResId(STR_MENU_CFGITEM));
+    return SfxConfigItem::GetStreamName( GetType() );
 }
 
 //--------------------------------------------------------------------
@@ -692,6 +657,8 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
         rStream >> nCount;
     }
 
+    rtl_TextEncoding nEnc = osl_getThreadTextEncoding();
+
     char cTag;
     for ( USHORT n=0; n<nCount; n++ )
     {
@@ -708,11 +675,11 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
             case 'I':
             {
                 rStream >> nId;
-                rStream.ReadByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+                rStream.ReadByteString( aTitle, nEnc );
 
                 String aHelpText;
                 if ( bWithHelp )
-                    rStream.ReadByteString( aHelpText, RTL_TEXTENCODING_UTF8 );
+                    rStream.ReadByteString( aHelpText, nEnc );
 
                 if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
                 {
@@ -725,13 +692,23 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
                 pSuper->SetHelpId( nId, (ULONG) nId );
                 if ( bWithHelp )
                     pSuper->SetHelpText( nId, aHelpText );
+
+                if ( nId >= SID_OBJECTMENU0 && nId <= SID_OBJECTMENU_LAST )
+                {
+                    // our new menu configuration must have an empty popupmenu, iut doesn't allow for
+                    // menu entries without popups in the menubar root
+                    PopupMenu *pPopupMenu;
+                    pPopupMenu = new PopupMenu;
+                    pSuper->SetPopupMenu( nId, pPopupMenu );
+                }
+
                 break;
             }
 
             case 'P':
             {
                 rStream >> nId;
-                rStream.ReadByteString( aTitle, RTL_TEXTENCODING_UTF8 );
+                rStream.ReadByteString( aTitle, nEnc );
 
                 if ( nId >= SID_MACRO_START && nId <= SID_MACRO_END ||
                    nId < SID_SFX_START )
@@ -751,7 +728,7 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
 
                 String aHelpText;
                 if ( bWithHelp )
-                    rStream.ReadByteString( aHelpText, RTL_TEXTENCODING_UTF8 );
+                    rStream.ReadByteString( aHelpText, nEnc );
 
                 pSuper->InsertItem( nId, aTitle );
                 pSuper->SetHelpId( nId, (ULONG) nId );
@@ -930,13 +907,9 @@ BOOL SfxMenuManager::NextItem()
 BOOL SfxMenuManager::IsBinding() const
 {
     DBG_ASSERT( pIterator, "invalid iterator state" );
-
-    USHORT nId = pIterator->GetItemId();
-    if ( pIterator->GetPopupMenu() && nId > SID_SFX_START )
-        if ( !SfxMenuControl::IsSpecialControl( nId, *pBindings ) )
-            // "Unechtes" Binding: Popup mit SlotId
-            return FALSE;
-    return nId >= SID_SFX_START;
+    SfxDispatcher* pDisp = pBindings->GetDispatcher_Impl();
+    SfxModule *pMod = pDisp ? SFX_APP()->GetActiveModule( pDisp->GetFrame() ) :0;
+    return pIterator->IsBinding( pMod );
 }
 
 //--------------------------------------------------------------------
@@ -1075,8 +1048,7 @@ void SfxMenuManager::Reconfigure()
         SfxMenuBarManager *pBar = (SfxMenuBarManager*) this;
         MenuBar* pOldBar = (MenuBar*) pOldMenu->GetSVMenu();
         MenuBar* pSvBar = (MenuBar*) GetMenu()->GetSVMenu();
-        if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
-            //! jetzt im VirtMenu: InvalidateKeyCodes();
+        if ( pBar->GetWindow() && pBar->GetWindow()->GetMenuBar() == pOldBar )
             pBar->GetWindow()->SetMenuBar( pSvBar );
     }
 
@@ -1132,12 +1104,10 @@ SfxMenuBarManager::SfxMenuBarManager( SfxBindings& rBindings, BOOL bPlugin ) :
 
 // creates a menu-manager and loads it from a resource
 
-SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBindings ) :
-
-    SfxMenuManager( rResId, rBindings, TRUE ),
-
-    pWindow( rBindings.GetSystemWindow() )
-
+SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr )
+    : SfxMenuManager( rResId, rBindings, pMgr, TRUE )
+    , pWindow( rBindings.GetSystemWindow() )
+    , bDowning( FALSE )
 {
     DBG_MEMTEST();
 
@@ -1148,6 +1118,26 @@ SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBinding
         aObjMenus[n].pPMMgr = NULL;
         aObjMenus[n].pResMgr = NULL;
     }
+
+    Initialize();
+}
+
+SfxMenuBarManager::SfxMenuBarManager( const SfxMenuBarManager& rOther, SfxConfigManager* pMgr )
+    : SfxMenuManager( ResId( rOther.GetType(), rOther.GetResMgr() ), (SfxBindings&) rOther.GetBindings(), pMgr, TRUE )
+    , pWindow( NULL )
+    , bDowning( FALSE )
+{
+    DBG_MEMTEST();
+
+    // initialize ObjectMenus
+    for ( int n = 0; n < 4; ++n )
+    {
+        aObjMenus[n].nId =     rOther.aObjMenus[n].nId;
+        aObjMenus[n].pPMMgr =  0;
+        aObjMenus[n].pResMgr = rOther.aObjMenus[n].pResMgr;
+    }
+
+    Initialize();
 }
 
 SfxMenuBarManager::~SfxMenuBarManager()
@@ -1158,6 +1148,7 @@ SfxMenuBarManager::~SfxMenuBarManager()
                !aObjMenus[2].pPMMgr || !aObjMenus[3].pPMMgr,
                "da sind noch ObjectMenus" );
 
+    bDowning = TRUE;
     ResetObjectMenus();
     UpdateObjectMenus();
 
@@ -1179,36 +1170,41 @@ SvStream* SfxMenuBarManager::GetDefaultStream( StreamMode nMode )
     return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
 }
 
-BOOL SfxMenuBarManager::LoadMenuBar( SvStream& rStream, BOOL bOLEServer )
+BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
 {
-    BOOL bRet = TRUE;
+    SetForceCtrlCreateMode( bOLEServer );
+    Menu *pSVMenu = LoadMenuBar( rStream );
+    if ( pSVMenu )
+        Construct_Impl( pSVMenu, FALSE );
+    return ( pSVMenu != NULL );
+}
+
+MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
+{
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream =
         new ::utl::OInputStreamWrapper( rStream );
+    MenuBar *pSVMenu = NULL;
     try
     {
-        SetForceCtrlCreateMode( bOLEServer );
         ::framework::MenuConfiguration aConfig( ::comphelper::getProcessServiceFactory() );
-        Menu *pSVMenu = aConfig.CreateMenuBarFromConfiguration( xInputStream );
-        if ( pSVMenu )
-            Construct_Impl( pSVMenu, FALSE );
+        pSVMenu = aConfig.CreateMenuBarFromConfiguration( xInputStream );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException&  )
     {
-        bRet = FALSE;
     }
 
-    return bRet;
+    return pSVMenu;
 }
 
-BOOL SfxMenuBarManager::StoreMenuBar( SvStream& rStream )
+BOOL SfxMenuBarManager::StoreMenuBar( SvStream& rStream, MenuBar* pMenuBar )
 {
     BOOL bRet = TRUE;
-    ::utl::OOutputStreamWrapper aHelper( rStream );
-    com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( &aHelper );
+    ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( rStream );
+    com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( pHelper );
     try
     {
         framework::MenuConfiguration aCfg( ::comphelper::getProcessServiceFactory() );
-        aCfg.StoreMenuBar( (MenuBar*)GetMenu()->GetSVMenu(), xOut );
+        aCfg.StoreMenuBar( pMenuBar, xOut );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException&  )
     {
@@ -1266,11 +1262,23 @@ void SfxMenuBarManager::UpdateObjectMenus()
     for ( int n = 0; n < 4; ++n )
     {
         SfxPopupMenuManager *pOldPopup = aObjMenus[n].pPMMgr;
+
+        // check if this object menue is in the menubar at all
+        USHORT nId = n + SID_OBJECTMENU0;
+        BOOL bInMenu = ( pMenu->GetItemPos( nId ) != MENU_ITEM_NOTFOUND );
+        PopupMenu* pOldSVPopup = pMenu->GetPopupMenu( nId );
+
         if ( aObjMenus[n].nId )
         {
-            // Nur ObjectMenues erzeugen, wenn im Menue auch vorhanden!
-            if ( pMenu->GetItemPos( n + SID_OBJECTMENU0 ) != MENU_ITEM_NOTFOUND )
+            if ( bInMenu )
             {
+                if ( !pOldPopup && pOldSVPopup )
+                {
+                    // remove dummy popup
+                    pMenu->SetPopupMenu( nId, 0 );
+                    delete pOldSVPopup;
+                }
+
                 if ( !pOldPopup || ( pOldPopup && pOldPopup->GetType() != aObjMenus[n].nId ) )
                 {
                     ResId aResId( aObjMenus[n].nId, aObjMenus[n].pResMgr );
@@ -1279,28 +1287,46 @@ void SfxMenuBarManager::UpdateObjectMenus()
                     aObjMenus[n].pPMMgr->Initialize();
                 }
                 else
+                    // popups remains the same, prevent deletion
                     pOldPopup = NULL;
 
-                pMenu->SetPopupMenu( n + SID_OBJECTMENU0,
-                    (PopupMenu*) aObjMenus[n].pPMMgr->GetMenu()->GetSVMenu() );
-                pMenu->EnableItem( n + SID_OBJECTMENU0, TRUE );
+                pMenu->SetPopupMenu( nId, (PopupMenu*) aObjMenus[n].pPMMgr->GetMenu()->GetSVMenu() );
+                pMenu->EnableItem( nId, TRUE );
             }
         }
         else if ( pOldPopup )
         {
-            if ( pMenu->GetItemPos( n + SID_OBJECTMENU0 ) != MENU_ITEM_NOTFOUND )
+            if ( pMenu->GetItemPos( nId ) != MENU_ITEM_NOTFOUND )
             {
-                pMenu->EnableItem( n + SID_OBJECTMENU0, FALSE );
-                pMenu->SetPopupMenu( n + SID_OBJECTMENU0, 0 );
+//                pMenu->EnableItem( nId, FALSE );
+                pMenu->SetPopupMenu( nId, 0 );
             }
         }
 
         if ( pOldPopup )
         {
+            // no new popup menu created, so reset pointer before deleting menu
             if ( pOldPopup == aObjMenus[n].pPMMgr )
                 aObjMenus[n].pPMMgr = NULL;
             pOldPopup->StoreConfig();
             delete pOldPopup;
+        }
+
+        if ( bDowning )
+        {
+            // delete possible empty popup menues
+            PopupMenu *pPop = pMenu->GetPopupMenu( nId );
+            if ( pPop )
+            {
+                pMenu->SetPopupMenu( nId, 0 );
+                delete pPop;
+            }
+        }
+        else if ( bInMenu )
+        {
+            // insert an empty popup window
+            if ( !aObjMenus[n].pPMMgr && !pMenu->GetPopupMenu( nId ) )
+                pMenu->SetPopupMenu( nId, new PopupMenu );
         }
     }
 }
@@ -1333,14 +1359,13 @@ void SfxMenuBarManager::ReconfigureObjectMenus()
 }
 //====================================================================
 
-// creates a menu-manager and loads it from a stream
-
+// don't insert Popups into ConfigManager, they are not configurable at the moment !
 SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBindings )
-    : SfxMenuManager( rResId, rBindings, FALSE )
+    : SfxMenuManager( rResId, rBindings, NULL/*rBindings.GetConfigManager( rResId.GetId() )*/, FALSE )
     , pSVMenu( NULL )
 {
     DBG_MEMTEST();
-    SetInternal(TRUE);
+//    SetInternal(TRUE);
 }
 
 //-------------------------------------------------------------------------
@@ -1456,5 +1481,41 @@ void SfxPopupMenuManager::AddClipboardFunctions()
     }
 
     bAddClipboardFuncs = TRUE;
+}
+
+int SfxMenuManager::Load( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxMenuManager::GetStreamName(), STREAM_STD_READ );
+    if ( xStream->GetError() )
+        return SfxConfigItem::ERR_READ;
+    else
+        return Load( *xStream );
+}
+
+BOOL SfxMenuManager::Store( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxMenuManager::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
+    if ( xStream->GetError() )
+        return FALSE;
+    else
+        return Store( *xStream );
+}
+
+int SfxMenuBarManager::Load( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxMenuManager::GetStreamName(), STREAM_STD_READ );
+    if ( xStream->GetError() )
+        return SfxConfigItem::ERR_READ;
+    else
+        return Load( *xStream, bOLE );
+}
+
+BOOL SfxMenuBarManager::Store( SotStorage& rStorage )
+{
+    SotStorageStreamRef xStream = rStorage.OpenSotStream( SfxMenuManager::GetStreamName(), STREAM_STD_READWRITE|STREAM_TRUNC );
+    if ( xStream->GetError() )
+        return FALSE;
+    else
+        return StoreMenuBar( *xStream, (MenuBar*) GetMenu()->GetSVMenu() );
 }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+#   last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ BMP_IN=$(PRJ)$/win/res
 # --- Files --------------------------------------------------------
 
 CXXFILES =  \
-                bmkmenu.cxx \
         mnumgr.cxx \
         virtmenu.cxx \
         mnuitem.cxx \
@@ -94,7 +93,6 @@ CXXFILES =  \
 SRCFILES = menu.src
 
 SLOFILES =	\
-                $(SLO)$/bmkmenu.obj \
         $(SLO)$/mnumgr.obj \
         $(SLO)$/virtmenu.obj \
         $(SLO)$/objmnctl.obj \

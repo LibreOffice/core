@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ public:
 
     virtual BOOL                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
-    void                        Apply();
+    void                        Apply( SfxMenuManager* );
     void                        SetModified( BOOL bSet ) { bModified = bSet; }
     void                        SetDefault( BOOL bSet ) { bDefault = bSet; }
 };
@@ -349,16 +349,17 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        SelectMacro(const SfxMacroInfoItem*);
-    void                        Apply();
+    void                        Apply( SfxAcceleratorManager* );
 };
 
 class SfxConfigDialog : public SfxTabDialog
 {
     const SfxMacroInfoItem*     pMacroInfo;
+    SfxViewFrame*               pViewFrame;
     USHORT                      nObjectBar;
 
 public:
-                                SfxConfigDialog( Window*, const SfxItemSet* );
+                                SfxConfigDialog( Window*, const SfxItemSet*, SfxViewFrame* pFrame );
                                 ~SfxConfigDialog();
 
     void                        ActivateToolBoxConfig( USHORT nId );
@@ -368,7 +369,7 @@ public:
     virtual short               Ok();
 
     static String               FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle );
-    static SfxConfigManager*    MakeCfgMgr_Impl( const String& rName, BOOL& bCreated );
+    static SfxConfigManager*    MakeCfgMgr_Impl( const String& rName, BOOL bWriting, BOOL& bCreated );
 };
 
 class SfxStatusBarManager;
@@ -428,7 +429,7 @@ public:
 
     virtual BOOL                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
-    void                        Apply();
+    void                        Apply( SfxStatusBarManager* );
 };
 
 

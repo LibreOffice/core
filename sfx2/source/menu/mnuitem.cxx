@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 11:01:08 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,14 +402,11 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
 
 
 
-BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxBindings& rBindings  )
+BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
 {
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
     if ( aSlotType )
     {
-        SfxApplication *pApp = SFX_APP();
-        SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-        SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
         if ( pMod )
         {
             SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
@@ -424,7 +421,7 @@ BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxBindings& rBindings  )
             }
         }
 
-        SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
+        SfxMenuCtrlFactArr_Impl &rFactories = SFX_APP()->GetMenuCtrlFactories_Impl();
 
         for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
             if ( rFactories[nFactory]->nTypeId == aSlotType &&
@@ -495,7 +492,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Select, Menu*, pMenu )
     }
 
 
-    return 0;
+    return TRUE;
 }
 
 SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
