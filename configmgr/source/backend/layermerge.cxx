@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:55:46 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,10 +524,47 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
 }
 // -----------------------------------------------------------------------------
 
+static
+void doLogRejection(sal_Int16 loglevel, DataBuilderContext const & aContext,
+                    INode * pNode, bool bMandatory)
+{
+    rtl::OUStringBuffer aMessage;
+    aMessage.appendAscii("Rejecting override: Node/Property ")
+            .append(aContext.getNodePath(pNode->getName()))
+            .appendAscii(" is ").appendAscii(bMandatory ? "mandatory" : "finalized")
+            .appendAscii(" in a prior layer.");
+
+    aContext.getLogger().log(loglevel,aMessage.makeStringAndClear(),
+                              bMandatory ? "addOrReplace/dropNode()" : "startOverride()",
+                              "configmgr::LayerMergeHandler");
+}
+
+static inline
+void logRejection(DataBuilderContext const & aContext, INode * pNode, bool bMandatory=false)
+{
+    const sal_Int16 loglevel = LogLevel::INFO;
+    if (aContext.getLogger().isLogging(loglevel))
+    {
+        doLogRejection(loglevel, aContext, pNode, bMandatory);
+    }
+}
+// -----------------------------------------------------------------------------
+
 bool LayerMergeHandler::startOverride(INode * pNode, sal_Bool bClear) /* ensure writable, mark merged */
     CFG_NOTHROW( )
 {
-    if (!m_aContext.isWritable(pNode)) return false;
+    OSL_PRECOND(pNode,"startOverride: non-NULL base node required");
+    if (!m_aContext.isWritable(pNode))
+    {
+        // #i41700# write-protection is enforced, unless merging localizations
+        if (!m_bSublayer)
+        {
+            logRejection(m_aContext,pNode);
+            return false;
+        }
+        else
+            OSL_ASSERT(m_aLocale.getLength() != 0);
+    }
 
     if (pNode->isDefault()) pNode->modifyState( node::isMerged );
 
@@ -632,6 +669,11 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
 }
 // -----------------------------------------------------------------------------
 
+static inline
+sal_Int16 getOverrideViolationLogLevel(bool bIsSublayer)
+{ return bIsSublayer ? LogLevel::FINER : LogLevel::INFO; }
+// -----------------------------------------------------------------------------
+
 void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 aAttributes, sal_Bool bClear )
     throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -658,13 +700,14 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
     }
     else // ignore non-matched data
     {
-        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        const sal_Int16 loglevel = getOverrideViolationLogLevel(m_bSublayer);
+        if (m_aContext.getLogger().isLogging(loglevel))
         {
             rtl::OUStringBuffer aMessage;
             aMessage.appendAscii("Node ").append(m_aContext.getNodePath(aName))
                     .appendAscii(" to be overridden does not exist - skipping");
 
-            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
+            m_aContext.getLogger().log(loglevel,aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
         }
         // m_aContext.raiseNoSuchElementException("Layer merging: The node to be overridden does not exist.",aName);
         this->skipNode();
@@ -682,6 +725,7 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
 
         if (!m_aContext.isRemovable(pReplacedNode))
         {
+            logRejection(m_aContext,pReplacedNode,true);
             this->skipNode();
             return;
         }
@@ -770,17 +814,21 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
     {
         this->ensureUnchanged(pDropped);
         if (!m_aContext.isRemovable(pDropped))
+        {
+            logRejection(m_aContext,pDropped,true);
             return;
+        }
     }
     else
     {
-        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        const sal_Int16 loglevel = getOverrideViolationLogLevel(m_bSublayer);
+        if (m_aContext.getLogger().isLogging(loglevel))
         {
             rtl::OUStringBuffer aMessage;
             aMessage.appendAscii("Node ").append(m_aContext.getNodePath(aName))
                     .appendAscii(" to be removed does not exist - ignoring");
 
-            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "dropNode()", "configmgr::LayerMergeHandler");
+            m_aContext.getLogger().log(loglevel,aMessage.makeStringAndClear(), "dropNode()", "configmgr::LayerMergeHandler");
         }
         // m_aContext.raiseNoSuchElementException("Layer merging: The node to be removed does not exist.",aName);
     }
@@ -812,13 +860,14 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
     }
     else // ignore non-matched data
     {
-        if (m_aContext.getLogger().isLogging(LogLevel::INFO))
+        const sal_Int16 loglevel = getOverrideViolationLogLevel(m_bSublayer);
+        if (m_aContext.getLogger().isLogging(loglevel))
         {
             rtl::OUStringBuffer aMessage;
             aMessage.appendAscii("Property ").append(m_aContext.getNodePath(aName))
                     .appendAscii(" to be overridden does not exist - skipping");
 
-            m_aContext.getLogger().info(aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
+            m_aContext.getLogger().log(loglevel,aMessage.makeStringAndClear(), "overrideNode()", "configmgr::LayerMergeHandler");
         }
         //   m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
         this->skipNode();
