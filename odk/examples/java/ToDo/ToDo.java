@@ -23,6 +23,7 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XColumnRowRange;
+import com.sun.star.table.XTableRows;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XSimpleText;
@@ -111,10 +112,10 @@ public class ToDo {
         static private final int INT_COLUMN_DUEDATE = 7;
         static private final int INT_COLUMN_STATUS = 8;
 
-        static private final int INT_ROW_FROM = 8;
+        static private final int INT_ROW_FROM = 14; // 8
 
-        static private final int INT_ROW_HOLIDAYS_START = 3;
-        static private final int INT_COLUMN_HOLIDAYS_START = 10;
+        static private final int INT_ROW_HOLIDAYS_START = 4;
+        static private final int INT_COLUMN_HOLIDAYS_START = 7; // 10
 
         static private final String STRING_SEPARATOR = ".";
 
@@ -489,7 +490,8 @@ public class ToDo {
                                         UnoRuntime.queryInterface(
                                             XColumnRowRange.class, xcellrange );
                                     // Inserting one row to the table
-                                    xcolumnrowrange.getRows().insertByIndex( intRowToInsert, 1 );
+                                    XTableRows xTableRows = xcolumnrowrange.getRows();
+                                    xTableRows.insertByIndex( intRowToInsert, 1 );
 
                                     // Querying for the interface XCellRangeMovement on XCellRange
                                     XCellRangeMovement xcellrangemovement = ( XCellRangeMovement )
@@ -538,7 +540,7 @@ public class ToDo {
                 }
             }
             catch( Exception exception ) {
-                this.showExceptionMessage( exception );
+                showExceptionMessage( exception );
             }
         }
 
