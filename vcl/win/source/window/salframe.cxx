@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: th $ $Date: 2001-09-10 11:15:51 $
+ *  last change: $Author: as $ $Date: 2001-10-10 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,7 @@ SalFrame::SalFrame()
     maFrameData.mbSpezIME           = FALSE;
     maFrameData.mbAtCursorIME       = FALSE;
     maFrameData.mbCandidateMode     = FALSE;
+    maFrameData.mbNoIcon            = FALSE;
     memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
     maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
 
