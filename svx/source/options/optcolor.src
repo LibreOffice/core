@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-11-05 09:56:09 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ japanese ] = "パターン";
         Text[ korean ] = "구성표";
         Text[ chinese_simplified ] = "颜色图案";
-        Text[ chinese_traditional ] = "顔色圖案";
+        Text[ chinese_traditional ] = "顏色圖案";
         Text[ turkish ] = "Scheme";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
@@ -215,7 +215,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ japanese ] = "パターン";
         Text[ korean ] = "구성표";
         Text[ chinese_simplified ] = "颜色图案";
-        Text[ chinese_traditional ] = "顔色圖案";
+        Text[ chinese_traditional ] = "顏色圖案";
         Text[ turkish ] = "Scheme";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
@@ -1593,7 +1593,7 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ japanese ] = "このカラーパターンを削除しますか。";
     Message[ korean ] = "색 구성표를 정말로 삭제하시겠습니까?";
     Message[ chinese_simplified ] = "您真的要删除这个颜色图案？";
-    Message[ chinese_traditional ] = "真的要刪除這個顔色圖案？";
+    Message[ chinese_traditional ] = "真的要刪除這個顏色圖案？";
     Message[ turkish ] = "Do you really want to delete the color scheme?";
     Message[ arabic ] = "Do you really want to delete the color scheme?";
     Message[ catalan ] = "Do you really want to delete the color scheme?";
@@ -1668,7 +1668,7 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ japanese ] = "カラーパターンの名前";
     Text[ korean ] = "색 구성표 이름";
     Text[ chinese_simplified ] = "颜色图案的名称";
-    Text[ chinese_traditional ] = "顔色圖案的名稱";
+    Text[ chinese_traditional ] = "顏色圖案的名稱";
     Text[ turkish ] = "Name of color scheme";
     Text[ arabic ] = "Name of color scheme";
     Text[ catalan ] = "Name of color scheme";
