@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 10:00:27 $
+ *  last change: $Author: pl $ $Date: 2001-04-25 16:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ struct SalPrinterData
     String                  m_aFaxNr;
     bool                    m_bFax:1;
     bool                    m_bPdf:1;
+    bool                    m_bSwallowFaxNo:1;
     SalGraphics*            m_pGraphics;
     ::psp::PrinterJob       m_aPrintJob;
     ::psp::JobData          m_aJobData;

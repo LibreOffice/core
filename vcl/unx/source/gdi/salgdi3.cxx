@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-25 13:00:37 $
+ *  last change: $Author: pl $ $Date: 2001-04-25 16:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,65 +145,90 @@ static X11GlyphPeer aX11GlyphPeer;
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) const
+/*
+ *  returns:
+ *  true: cut out positions rStart to rStop from output because fax number was swallowed
+ *  false: do nothing
+ */
+
+bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int& rStart, int& rStop ) const
 {
 #ifdef USE_PSPRINT
     if( ! m_pPhoneNr )
-        return;
+        return false;
 #else
     if( ! bPrinter_ )
-        return;
+        return false;
 #endif
 
 #define FAX_PHONE_TOKEN          "@@#"
 #define FAX_PHONE_TOKEN_LENGTH   3
 #define FAX_END_TOKEN            "@@"
+#define FAX_END_TOKEN_LENGTH     2
 
+    bool bRet = false;
+    bool bStarted = false;
+    bool bStopped = false;
     USHORT nPos;
-    ByteString aPhone( pStr, nLen, gsl_getSystemTextEncoding() );
+    rStart = 0;
+    rStop = nLen-1;
+    String aPhone( pStr, nLen );
 
-    static ByteString aPhoneNumber;
-    static BOOL   bIsCollecting = FALSE;
+    static String aPhoneNumber;
+    static bool bIsCollecting = false;
 
     if( ! bIsCollecting )
     {
-        if( ( nPos = aPhone.Search( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
+        if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
         {
-            aPhone.Erase( 0, nPos + FAX_PHONE_TOKEN_LENGTH );
-            bIsCollecting = TRUE;
+            rStart = nPos;
+            bIsCollecting = true;
             aPhoneNumber.Erase();
+            bRet = true;
+            bStarted = true;
         }
     }
     if( bIsCollecting )
     {
-        if( ( nPos = aPhone.Search( FAX_END_TOKEN ) ) != STRING_NOTFOUND )
+        bRet = true;
+        nPos = bStarted ? rStart + FAX_PHONE_TOKEN_LENGTH : 0;
+        if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
         {
-            aPhone.Erase( nPos );
-            bIsCollecting = FALSE;
+            bIsCollecting = false;
+            rStop = nPos + FAX_END_TOKEN_LENGTH;
+            bStopped = true;
         }
-        aPhoneNumber += aPhone;
+        int nStart = rStart + bStarted ? FAX_PHONE_TOKEN_LENGTH : 0;
+        int nStop = rStop - bStopped ? FAX_END_TOKEN_LENGTH : 0;
+        aPhoneNumber += aPhone.Copy( nStart, nStop - nStart );
         if( ! bIsCollecting )
         {
 #ifndef PRINTER_DUMMY
 #ifndef USE_PSPRINT
-            aPhone = "PhoneNumber(";
-            aPhone += aPhoneNumber;
-            aPhone += ")\n";
+            ByteString aComment( "PhoneNumber(" );
+            aComment += ByteString( aPhoneNumber, gsl_getSystemTextEncoding() );
+            aComment += ")\n";
 #if !defined(_USE_PRINT_EXTENSION_)
-            XpPSComment( GetDisplay()->GetDisplay(), aPhone.GetBuffer() );
+            XpPSComment( GetDisplay()->GetDisplay(), aComment.GetBuffer() );
 #endif
 #else
-            *m_pPhoneNr = String( aPhoneNumber, gsl_getSystemTextEncoding() );
+            *m_pPhoneNr = aPhoneNumber;
 #endif
 #endif
-            aPhoneNumber = ByteString();
+            aPhoneNumber.Erase();
         }
     }
     if( aPhoneNumber.Len() > 1024 )
     {
-        bIsCollecting = FALSE;
-        aPhoneNumber = ByteString();
+        bIsCollecting = false;
+        aPhoneNumber.Erase();
+        bRet = false;
     }
+#ifdef USE_PSPRINT
+    return m_bSwallowFaxNo ? bRet : false;
+#else
+    return false;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1421,7 +1446,35 @@ SalGraphicsData::DrawText( long nX, long nY, const sal_Unicode* pStr, USHORT nLe
 void
 SalGraphics::DrawText( long nX, long nY, const xub_Unicode* pStr, USHORT nLen )
 {
-    maGraphicsData.FaxPhoneComment( pStr, nLen );
+    if( ! pStr || ! nLen )
+        return;
+
+    int nStart, nStop;
+    if( maGraphicsData.FaxPhoneComment( pStr, nLen, nStart, nStop ) )
+    {
+#ifdef USE_PSPRINT
+        // can only happen on printer
+        if( nStart )
+            maGraphicsData.m_pPrinterGfx->DrawText( Point(nX, nY), pStr, nStart );
+        if( nStop < nLen-1 )
+        {
+            long nCharWidth;
+            long nWidth = 0;
+            for( int i = 0; i < nStop; i++ )
+            {
+                maGraphicsData.m_pPrinterGfx->GetCharWidth( pStr[i], pStr[i], &nCharWidth );
+                nWidth += nCharWidth;
+            }
+            nWidth /= 1000;
+            int nAngle = maGraphicsData.m_pPrinterGfx->GetFontAngle();
+            nX += (long)((double)nWidth * cos( (double)nAngle * 2.0 * M_PI / 3600.0 ));
+            nY -= (long)((double)nWidth * sin( (double)nAngle * 2.0 * M_PI / 3600.0 ));
+            maGraphicsData.m_pPrinterGfx->DrawText( Point( nX, nY ), pStr + nStop, nLen - nStop );
+        }
+        return;
+#endif
+    }
+
 #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
          maGraphicsData.m_pPrinterGfx->DrawText( Point(nX, nY), pStr, nLen);
@@ -1538,7 +1591,30 @@ void
 SalGraphics::DrawTextArray( long nX, long nY,
         const xub_Unicode *pStr, USHORT nLen, const long *pDXAry )
 {
-    maGraphicsData.FaxPhoneComment( pStr, nLen );
+    if( ! pStr || ! nLen )
+        return;
+
+    int nStart, nStop;
+    if( maGraphicsData.FaxPhoneComment( pStr, nLen, nStart, nStop ) )
+    {
+#ifdef USE_PSPRINT
+        // can only happen on printer
+        if( nStart )
+            maGraphicsData.m_pPrinterGfx->DrawText( Point(nX, nY), pStr, nStart, pDXAry );
+        if( nStop < nLen-1 )
+        {
+            int nAngle = maGraphicsData.m_pPrinterGfx->GetFontAngle();
+            nX += (long)((double)pDXAry[nStop-1] * cos( (double)nAngle * 2.0 * M_PI / 3600.0 ));
+            nY -= (long)((double)pDXAry[nStop-1] * sin( (double)nAngle * 2.0 * M_PI / 3600.0 ));
+            long* pNewArray = (long*)alloca( sizeof(long)*nLen );
+            for( int i = nStop; i < nLen-1; i++ )
+                pNewArray[i-nStop] = pDXAry[i]-pDXAry[nStop-1];
+            maGraphicsData.m_pPrinterGfx->DrawText( Point( nX, nY ), pStr + nStop, nLen - nStop, pNewArray );
+        }
+        return;
+#endif
+    }
+
 #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
          maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen, pDXAry);

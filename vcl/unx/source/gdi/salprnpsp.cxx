@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-01 18:04:50 $
+ *  last change: $Author: pl $ $Date: 2001-04-25 16:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ ULONG SalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT nTy
             int nTokenCount = aFeatures.GetTokenCount( ',' );
             for( int i = 0; i < nTokenCount; i++ )
             {
-                if( aFeatures.GetToken( i ).EqualsAscii( "fax" ) )
+                if( aFeatures.GetToken( i ).CompareToAscii( "fax", 3 ) )
                     return 1;
             }
             return 0;
@@ -823,7 +823,8 @@ BOOL SalPrinter::StartJob(
     int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
     for( int i = 0; i < nTokens; i++ )
     {
-        if( rInfo.m_aFeatures.getToken( i, ',' ).equalsAsciiL( "fax", 3 ) )
+        OUString aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+        if( ! aToken.compareToAscii( "fax", 3 ) )
         {
             maPrinterData.m_bFax = true;
             maPrinterData.m_aTmpFile = getTmpName();
@@ -832,9 +833,12 @@ BOOL SalPrinter::StartJob(
             it = pJobSetup->maValueMap.find( ::rtl::OUString::createFromAscii( "FAX#" ) );
             if( it != pJobSetup->maValueMap.end() )
                 maPrinterData.m_aFaxNr = it->second;
+
+            maPrinterData.m_bSwallowFaxNo = ! aToken.getToken( 1, '=' ).compareToAscii( "swallow", 7 ) ? true : false;
+
             break;
         }
-        if( ! rInfo.m_aFeatures.getToken( i, ',' ).compareToAscii( "pdf=", 4 ) )
+        if( ! aToken.compareToAscii( "pdf=", 4 ) )
         {
             maPrinterData.m_bPdf = true;
             maPrinterData.m_aTmpFile = getTmpName();
@@ -890,10 +894,11 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, maPrinterData.m_aJobData );
     maPrinterData.m_pGraphics = new SalGraphics();
-    maPrinterData.m_pGraphics->maGraphicsData.m_pJobData    = &maPrinterData.m_aJobData;
-    maPrinterData.m_pGraphics->maGraphicsData.m_pPrinterGfx = &maPrinterData.m_aPrinterGfx;
-    maPrinterData.m_pGraphics->maGraphicsData.bPrinter_     = true;
-    maPrinterData.m_pGraphics->maGraphicsData.m_pPhoneNr    = maPrinterData.m_bFax ? &maPrinterData.m_aFaxNr : NULL;
+    maPrinterData.m_pGraphics->maGraphicsData.m_pJobData        = &maPrinterData.m_aJobData;
+    maPrinterData.m_pGraphics->maGraphicsData.m_pPrinterGfx     = &maPrinterData.m_aPrinterGfx;
+    maPrinterData.m_pGraphics->maGraphicsData.bPrinter_         = true;
+    maPrinterData.m_pGraphics->maGraphicsData.m_pPhoneNr        = maPrinterData.m_bFax ? &maPrinterData.m_aFaxNr : NULL;
+    maPrinterData.m_pGraphics->maGraphicsData.m_bSwallowFaxNo   = maPrinterData.m_bSwallowFaxNo;
 
     maPrinterData.m_aPrintJob.StartPage( maPrinterData.m_aJobData, bNewJobData ? sal_True : sal_False );
     maPrinterData.m_aPrinterGfx.Init( maPrinterData.m_aPrintJob );

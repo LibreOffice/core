@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-10 10:21:17 $
+ *  last change: $Author: pl $ $Date: 2001-04-25 16:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ class SalGraphicsData
             ::psp::JobData*         m_pJobData;
             ::psp::PrinterGfx*      m_pPrinterGfx;
             String*                 m_pPhoneNr;
+            bool                    m_bSwallowFaxNo;
 #endif
 
             SalColormapRef  xColormap_;
@@ -281,7 +282,7 @@ public:
                                           SalColormap *pMap ) const;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
-            void            FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) const;
+            bool            FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int& rStart, int& rStop ) const;
 };
 
 #ifdef _SV_SALDATA_HXX
