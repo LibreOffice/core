@@ -64,7 +64,7 @@ module com { module sun { module star { module auth {
 
 /** Base SSO security context representation
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published interface XSSOContext : ::com::sun::star::uno::XInterface
 {
