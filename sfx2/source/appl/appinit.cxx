@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 13:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@
 #include <svtools/ehdl.hxx>
 #endif
 #include <svtools/inethist.hxx>
-#ifndef _COM_SUN_STAR_INSTALLATION_XINSTALLATIONCHECK_HPP_
-#include <com/sun/star/installation/XInstallationCheck.hpp>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -398,11 +395,6 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
 {
     if ( pAppData_Impl->bBean )
             return 0;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::installation::XInstallationCheck >  xInst( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.installation.FontCheck") ), ::com::sun::star::uno::UNO_QUERY );
-    if ( xInst.is() )
-        xInst->checkWithDialog( sal_False );
 
 #if SUPD<613//MUSTINI
     String aWizard = GetIniManager()->Get( DEFINE_CONST_UNICODE("Common"), 0, 0, DEFINE_CONST_UNICODE("RunWizard") );
