@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-29 11:18:11 $
+ *  last change: $Author: sj $ $Date: 2002-09-11 10:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,62 +168,52 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream,
 
 USHORT DXFGroupReader::Read()
 {
-    USHORT nG;
-
-    if (bStatus==FALSE) goto LErr;
-
-    nGCount++;
-
-    nG=(USHORT)ReadI();
-
-    if (bStatus==FALSE) goto LErr;
-
-    if      (nG<  10) ReadS(S0_9[nG]);
-    else if (nG<  60) F10_59[nG-10]=ReadF();
-    else if (nG<  80) I60_79[nG-60]=ReadI();
-    else if (nG<  90) goto LErr;
-    else if (nG<  99) I90_99[nG-90]=ReadI();
-    else if (nG==100) ReadS(S100);
-    else if (nG==102) ReadS(S102);
-    else if (nG==105)
+    sal_uInt16 nG = 0;
+    if ( bStatus )
     {
-        char aTmp[ DXF_MAX_STRING_LEN + 1 ];
-        ReadS( aTmp );      // hex string
+        nGCount++;
+        nG = (sal_uInt16)ReadI();
+        if ( bStatus )
+        {
+            char aTmp[ DXF_MAX_STRING_LEN + 1 ];
+
+            if      (nG<  10) ReadS(S0_9[nG]);
+            else if (nG<  60) F10_59[nG-10]=ReadF();
+            else if (nG<  80) I60_79[nG-60]=ReadI();
+            else if (nG<  90) ReadS( aTmp );
+            else if (nG<  99) I90_99[nG-90]=ReadI();
+            else if (nG==100) ReadS(S100);
+            else if (nG==102) ReadS(S102);
+            else if (nG==105) ReadS( aTmp );
+            else if (nG< 140) ReadS( aTmp );
+            else if (nG< 148) F140_147[nG-140]=ReadF();
+            else if (nG< 170) ReadS( aTmp );
+            else if (nG< 176) I170_175[nG-175]=ReadI();
+            else if (nG< 180) ReadI();
+            else if (nG< 210) ReadS( aTmp );
+            else if (nG< 240) F210_239[nG-210]=ReadF();
+            else if (nG<=369) ReadS( aTmp );
+            else if (nG< 999) ReadS( aTmp );
+            else if (nG<1010) ReadS(S999_1009[nG-999]);
+            else if (nG<1060) F1010_1059[nG-1010]=ReadF();
+            else if (nG<1080) I1060_1079[nG-1060]=ReadI();
+            else bStatus = sal_False;
+        }
     }
-    else if (nG< 140) goto LErr;
-    else if (nG< 148) F140_147[nG-140]=ReadF();
-    else if (nG< 170) goto LErr;
-    else if (nG< 176) I170_175[nG-175]=ReadI();
-    else if (nG< 180) ReadI();
-    else if (nG< 210) goto LErr;
-    else if (nG< 240) F210_239[nG-210]=ReadF();
-    else if (nG<=369)
+    if ( bStatus )
+        nLastG = nG;
+    else
     {
-        char aTmp[ DXF_MAX_STRING_LEN + 1 ];
-        ReadS( aTmp );      // hex string
+        nG = 0;
+        SetS( 0, "EOF" );
+        if ( nGCount != 0xffffffff )
+        {
+            // InfoBox(NULL,String("Fehler ab Gruppe Nr ")+String(nGCount)).Execute();
+            nGCount=0xffffffff;
+        }
     }
-    else if (nG< 999) goto LErr;
-    else if (nG<1010) ReadS(S999_1009[nG-999]);
-    else if (nG<1060) F1010_1059[nG-1010]=ReadF();
-    else if (nG<1080) I1060_1079[nG-1060]=ReadI();
-    else goto LErr;
-
-    if (bStatus==FALSE) goto LErr;
-
-    nLastG=nG;
+    nLastG = nG;
     return nG;
-
-LErr:
-    bStatus=FALSE;
-    nLastG=0;
-    SetS(0,"EOF");
-
-    if (nGCount!=0xffffffff) {
-        // InfoBox(NULL,String("Fehler ab Gruppe Nr ")+String(nGCount)).Execute();
-        nGCount=0xffffffff;
-    }
-
-    return 0;
 }
 
 
