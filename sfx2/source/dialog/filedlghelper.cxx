@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-01 12:02:12 $
+ *  last change: $Author: mav $ $Date: 2002-10-11 08:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,29 +652,33 @@ void FileDialogHelper_Impl::updateVersions()
         if ( ( aObj.GetProtocol() == INET_PROT_FILE ) &&
             ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) )
         {
-            SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ),
-                            SFX_STREAM_READONLY_MAKECOPY, TRUE );
-            const SfxVersionTableDtor* pVerTable = aMed.GetVersionList();
-
-            if ( pVerTable )
+            SvStorageRef pStor = new SvStorage( FALSE, aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, 0 );
+            if( pStor->GetError() == SVSTREAM_OK )
             {
-                SvStringsDtor* pVersions = pVerTable->GetVersions();
+                SfxVersionTableDtor* pVerTable = SfxMedium::GetVersionList( pStor ); // aMed.GetVersionList();
 
-                aEntries.realloc( pVersions->Count() + 1 );
-                aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
-
-                for ( USHORT i = 0; i < pVersions->Count(); i++ )
-                    aEntries[ i + 1 ] = OUString( *(pVersions->GetObject(i)) );
-
-                delete pVersions;
-            }
-            else if ( aMed.GetStorage() )
-            {
-                SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
-                if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aMed.GetStorage()->GetFormat(), nMust, nDont ) )
+                if ( pVerTable )
                 {
-                    aEntries.realloc( 1 );
+                    SvStringsDtor* pVersions = pVerTable->GetVersions();
+
+                    aEntries.realloc( pVersions->Count() + 1 );
                     aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+
+                    for ( USHORT i = 0; i < pVersions->Count(); i++ )
+                        aEntries[ i + 1 ] = OUString( *(pVersions->GetObject(i)) );
+
+                    delete pVersions;
+                    delete pVerTable;
+                }
+                else
+                {
+                    SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN;
+                    SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+                    if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( pStor->GetFormat(), nMust, nDont ) )
+                    {
+                        aEntries.realloc( 1 );
+                        aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+                    }
                 }
             }
         }
