@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:07:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef SD_TOOLPANEL_CONTROLS_MASTER_PAGES_SELECTOR_HXX
-#define SD_TOOLPANEL_CONTROLS_MASTER_PAGES_SELECTOR_HXX
+#ifndef SD_TASKPANE_CONTROLS_MASTER_PAGES_SELECTOR_HXX
+#define SD_TASKPANE_CONTROLS_MASTER_PAGES_SELECTOR_HXX
 
-#include "../TaskPaneTreeNode.hxx"
+#include "taskpane/TaskPaneTreeNode.hxx"
 #include "MasterPageContainer.hxx"
 
 #ifndef _PRESENTATION_HXX
