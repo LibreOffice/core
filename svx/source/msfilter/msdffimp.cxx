@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:47:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3308,7 +3308,6 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
     return pRet;
 }
 
-
 SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
                                        void* pData,
@@ -3715,7 +3714,33 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                                     DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
         pTextImpRec->nDyWrapDistBottom = GetPropertyValue(
                                     DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
-            // 16.16 fraction times total image width or height, as appropriate.
+        // 16.16 fraction times total image width or height, as appropriate.
+
+        if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
+        {
+            delete pTextImpRec->pWrapPolygon;
+            sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
+            rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            {
+                pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                {
+                    sal_Int32 nX, nY;
+                    if (nElemSizeVert == 8)
+                        rSt >> nX >> nY;
+                    else
+                    {
+                        sal_Int16 nSmallX, nSmallY;
+                        rSt >> nSmallX >> nSmallY;
+                        nX = nSmallX;
+                        nY = nSmallY;
+                    }
+                    (*(pTextImpRec->pWrapPolygon))[i].X() = nX;
+                    (*(pTextImpRec->pWrapPolygon))[i].Y() = nY;
+                }
+            }
+        }
 
         pImpRec->nCropFromTop = GetPropertyValue(
                                     DFF_Prop_cropFromTop, 0 );
@@ -5309,4 +5334,108 @@ sal_Bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Referen
     return bRetValue;
 }
 
+SvxMSDffImportRec::SvxMSDffImportRec()
+    : pObj( 0 ),
+      pWrapPolygon(0),
+      pClientAnchorBuffer( 0 ),
+      nClientAnchorLen(  0 ),
+      pClientDataBuffer( 0 ),
+      nClientDataLen(    0 ),
+      nXAlign( 0 ), // position n cm from left
+      nXRelTo( 2 ), //   relative to column
+      nYAlign( 0 ), // position n cm below
+      nYRelTo( 2 ), //   relative to paragraph
+      nTextRotationAngle( 0 ),
+      nDxTextLeft( 144 ),
+      nDyTextTop( 72 ),
+      nDxTextRight( 144 ),
+      nDyTextBottom( 72 ),
+      nDxWrapDistLeft( 0 ),
+      nDyWrapDistTop( 0 ),
+      nDxWrapDistRight( 0 ),
+      nDyWrapDistBottom(0 ),
+      nCropFromTop( 0 ),
+      nCropFromBottom( 0 ),
+      nCropFromLeft( 0 ),
+      nCropFromRight( 0 ),
+      aTextId( 0, 0 ),
+      nNextShapeId( 0 ),
+      nShapeId( 0 ),
+      eShapeType( mso_sptNil )
+{
+      eLineStyle      = mso_lineSimple; // GPF-Bug #66227#
+      bDrawHell       = FALSE;
+//    bInGroup        = FALSE;
+      bReplaceByFly   = FALSE;
+      bLastBoxInChain = TRUE;
+      bHasUDefProp    = FALSE; // was the DFF_msofbtUDefProp record set?
+}
+
+SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
+    : pObj( rCopy.pObj ),
+      nXAlign( rCopy.nXAlign ),
+      nXRelTo( rCopy.nXRelTo ),
+      nYAlign( rCopy.nYAlign ),
+      nYRelTo( rCopy.nYRelTo ),
+      nTextRotationAngle( rCopy.nTextRotationAngle ),
+      nDxTextLeft( rCopy.nDxTextLeft    ),
+      nDyTextTop( rCopy.nDyTextTop ),
+      nDxTextRight( rCopy.nDxTextRight ),
+      nDyTextBottom( rCopy.nDyTextBottom ),
+      nDxWrapDistLeft( rCopy.nDxWrapDistLeft ),
+      nDyWrapDistTop( rCopy.nDyWrapDistTop ),
+      nDxWrapDistRight( rCopy.nDxWrapDistRight ),
+      nDyWrapDistBottom(rCopy.nDyWrapDistBottom ),
+      nCropFromTop( rCopy.nCropFromTop ),
+      nCropFromBottom( rCopy.nCropFromBottom ),
+      nCropFromLeft( rCopy.nCropFromLeft ),
+      nCropFromRight( rCopy.nCropFromRight ),
+      aTextId( rCopy.aTextId ),
+      nNextShapeId( rCopy.nNextShapeId ),
+      nShapeId( rCopy.nShapeId ),
+      eShapeType( rCopy.eShapeType )
+{
+    eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
+    bDrawHell        = rCopy.bDrawHell;
+//          bInGroup         = rCopy.bInGroup;
+    bReplaceByFly    = rCopy.bReplaceByFly;
+    bLastBoxInChain  = rCopy.bLastBoxInChain;
+    bHasUDefProp     = rCopy.bHasUDefProp;
+    nClientAnchorLen = rCopy.nClientAnchorLen;
+    if( rCopy.nClientAnchorLen )
+    {
+        pClientAnchorBuffer = new char[ nClientAnchorLen ];
+        memcpy( pClientAnchorBuffer,
+                rCopy.pClientAnchorBuffer,
+                nClientAnchorLen );
+    }
+    else
+        pClientAnchorBuffer = 0;
+
+    nClientDataLen = rCopy.nClientDataLen;
+    if( rCopy.nClientDataLen )
+    {
+        pClientDataBuffer = new char[ nClientDataLen ];
+        memcpy( pClientDataBuffer,
+                rCopy.pClientDataBuffer,
+                nClientDataLen );
+    }
+    else
+        pClientDataBuffer = 0;
+
+    if (rCopy.pWrapPolygon)
+        pWrapPolygon = new Polygon(*rCopy.pWrapPolygon);
+    else
+        pWrapPolygon = 0;
+}
+
+SvxMSDffImportRec::~SvxMSDffImportRec()
+{
+    if (pClientAnchorBuffer)
+        delete[] pClientAnchorBuffer;
+    if (pClientDataBuffer)
+        delete[] pClientDataBuffer;
+    if (pWrapPolygon)
+        delete pWrapPolygon;
+}
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
