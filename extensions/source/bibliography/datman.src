@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:05:00 $
+ *  last change: $Author: obo $ $Date: 2001-07-24 20:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-07-20 21:05:00 $ $Revision: 1.19 $
+// $Author: obo $ $Date: 2001-07-24 20:35:20 $ $Revision: 1.20 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -577,6 +577,7 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
+
 
 
 
