@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 13:16:03 $
+ *  last change: $Author: sab $ $Date: 2002-09-05 08:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,6 +771,10 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
             bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, bRemoveStyleRange);
         aLastAddress = aCell.aCellAddress;
         aCell.bIsAutoStyle = bIsAutoStyle;
+
+        //#102799#; if the cell is in a DatabaseRange which should saved empty, the cell should have the type empty
+        if (aCell.bHasEmptyDatabase)
+            aCell.nType = table::CellContentType_EMPTY;
     }
     return bFoundCell;
 }

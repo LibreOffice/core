@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 14:32:57 $
+ *  last change: $Author: sab $ $Date: 2002-09-05 08:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2655,16 +2655,7 @@ void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
 
 sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const
 {
-    if (!aCell1.bHasEmptyDatabase && !aCell2.bHasEmptyDatabase)
-        return (aCell1.nType == aCell2.nType);
-    else
-        if (aCell1.bHasEmptyDatabase == aCell2.bHasEmptyDatabase && aCell1.bHasEmptyDatabase)
-            return sal_True;
-        else
-            if (aCell1.bHasEmptyDatabase)
-                return (aCell2.nType == table::CellContentType_EMPTY);
-            else
-                return (aCell1.nType == table::CellContentType_EMPTY);
+    return (aCell1.nType == aCell2.nType);
 }
 
 sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress) const
