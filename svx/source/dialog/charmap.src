@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.50 $
- *  last change: $Author: vg $ $Date: 2003-12-17 13:58:58 $
+ *  $Revision: 1.51 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ String RID_SUBSETSTR_BASIC_HEBREW
         Text[ portuguese_brazilian ] = "Hebraico Estendido";
         Text[ japanese ] = "基本ヘブライ文字";
         Text[ korean ] = "히브리어(기본)";
-        Text[ chinese_simplified ] = "附加的希伯来语";
+        Text[ chinese_simplified ] = "基本希伯来语";
         Text[ chinese_traditional ] = "基本的希伯來語";
         Text[ turkish ] = "Geni�letilmi� �branice";
         Text[ arabic ] = "���� �����";
@@ -759,7 +759,7 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ portuguese_brazilian ] = "Hebraico B�sico";
         Text[ japanese ] = "ヘブライ拡張文字";
         Text[ korean ] = "히브리어 (확장)";
-        Text[ chinese_simplified ] = "附加的希伯来语";
+        Text[ chinese_simplified ] = "希伯来语扩充";
         Text[ chinese_traditional ] = "附加的希伯來語";
         Text[ turkish ] = "Temel �branice";
         Text[ arabic ] = "���� �����";
