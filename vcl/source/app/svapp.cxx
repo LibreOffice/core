@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-13 09:43:02 $
+ *  last change: $Author: cd $ $Date: 2000-10-23 06:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #define _SV_APP_CXX
 
+#include <stdio.h>
 #ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -76,7 +77,6 @@
 #include <rmwindow.hxx>
 #include <rmevents.hxx>
 #include <vos/thread.hxx>
-#include <unobrok.hxx>
 #ifndef _SV_MSGBOX_HXX
 #include <msgbox.hxx>
 #endif
@@ -146,12 +146,78 @@
 #include <unowrap.hxx>
 #endif
 
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifdef REMOTE_APPSERVER
+#include <osl/signal.h>
+#include <ooffice.hxx>
+#include <cppuhelper/implbase1.hxx>
+
+#include <com/sun/star/connection/XConnectionBroadcaster.hpp>
+#include <com/sun/star/io/XStreamListener.hpp>
+#endif
 
 // #include <usr/refl.hxx>
 class Reflection;
 
 #pragma hdrstop
+
+#ifdef REMOTE_APPSERVER
+class RVPConnectionListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XStreamListener >
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnectionBroadcaster >    m_xBroadcaster;
+public:
+    RVPConnectionListener( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::connection::XConnectionBroadcaster >& xBroadcaster ) :
+        m_xBroadcaster( xBroadcaster ) {}
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& );
+
+    // XStreamListener
+    virtual void SAL_CALL started();
+    virtual void SAL_CALL closed();
+    virtual void SAL_CALL terminated();
+    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& rException );
+};
+
+void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject& rObject )
+{
+    m_xBroadcaster.clear();
+}
+
+void RVPConnectionListener::started()
+{
+#ifdef DEBUG
+    fprintf( stderr, "RVPConnectionListener::started\n" );
+#endif
+}
+void RVPConnectionListener::closed()
+{
+#ifdef DEBUG
+    fprintf( stderr, "RVPConnectionListener::closed\n" );
+#endif
+}
+void RVPConnectionListener::terminated()
+{
+#ifdef DEBUG
+    fprintf( stderr, "RVPConnectionListener::terminated\n" );
+#endif
+}
+void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException )
+{
+#ifdef DEBUG
+    fprintf( stderr, "connection to client lost ... terminating\n" );
+#endif
+    osl_raiseSignal( OSL_SIGNAL_USER_RVPCONNECTIONERROR, NULL );
+}
+
+#endif /* REMOTE_APPSERVER */
 
 // =======================================================================
 
@@ -289,6 +355,12 @@ void Application::DataChanged( const DataChangedEvent& )
 
 // -----------------------------------------------------------------------
 void Application::Init()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void Application::DeInit()
 {
 }
 
@@ -1375,6 +1447,62 @@ void* Application::GetRemoteEnvironment()
 
 // -----------------------------------------------------------------------
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > Application::GetUnoInstance(
+    ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnection > rConnection,
+    const ::rtl::OUString& sObjectName )
+{
+#ifdef REMOTE_APPSERVER
+    static oslInterlockedCount nRvpClientCount = 0;
+#endif
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > r;
+
+#ifdef REMOTE_APPSERVER
+    if ( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.Startup" )))
+    {
+        if ( osl_incrementInterlockedCount( &nRvpClientCount ) == 1 )
+        {
+            // this is the first and only rvp client!
+            r = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_STATIC_CAST(::cppu::OWeakObject *, new CORmStarOffice()));
+
+            // add connection listener for vcl!
+            ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnectionBroadcaster > xBroadcaster(
+                rConnection, ::com::sun::star::uno::UNO_QUERY );
+            if( xBroadcaster.is() )
+                xBroadcaster->addStreamListener( new RVPConnectionListener( xBroadcaster ) );
+        }
+    }
+    else if( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )))
+#else
+    if ( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )))
+#endif
+    {
+        // wait for the office to start ....
+        while( !Application::IsInExecute() )
+        {
+            TimeValue aTimeValue = { 0, 500000000L }; // 50000000ns=500mS=0.5Sec.
+            osl_waitThread( &aTimeValue );
+        }
+        r = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
+            ::comphelper::getProcessServiceFactory(), ::com::sun::star::uno::UNO_QUERY );
+    }
+#ifdef DEBUG
+    else
+    {
+        ::rtl::OString o = "unknown object name : ";
+        o += ::rtl::OUStringToOString( sObjectName, RTL_TEXTENCODING_ASCII_US );
+        OSL_TRACE( o.pData->buffer );
+    }
+
+    ::rtl::OString tmp = ::rtl::OUStringToOString( sObjectName, RTL_TEXTENCODING_ASCII_US );
+    OSL_TRACE("getInstance %s %i\n", tmp.getStr(), (int)r.is());
+#endif
+
+    return r;
+}
+
+// -----------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
@@ -1760,6 +1888,20 @@ void Application::SetAppInternational( const International& rIntn )
 const International& Application::GetAppInternational()
 {
     return GetSettings().GetInternational();
+}
+
+// -----------------------------------------------------------------------
+
+void Application::EnableHeadlessMode( BOOL bEnable )
+{
+    EnableDialogCancel( bEnable );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Application::IsHeadlessModeEnabled()
+{
+    return IsDialogCancelEnabled();
 }
 
 // =======================================================================
