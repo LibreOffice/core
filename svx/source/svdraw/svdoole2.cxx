@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:11:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 17:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,11 +283,11 @@ public:
 
     SdrOle2ObjImpl()
     : pGraphicObject( NULL )
-    , mpObjectLink( NULL )
     // #107645#
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( sal_False )
     , mbConnected( sal_False )
+    , mpObjectLink( NULL )
     {
     }
 };
@@ -901,6 +901,10 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     SdrRectObj::SetModel( pNewModel );
 
+    // #i43086#
+    if( pModel && !pModel->isLocked() )
+        ImpSetVisAreaSize();
+
     if( pDestPers && !IsEmptyPresObj() )
     {
         if ( !pSrcPers || IsEmptyPresObj() )
@@ -1336,6 +1340,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     GetObjRef();
     if (xObjRef.is())
     {
+        OSL_ASSERT( pModel );
         sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
         if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) && svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
         {
@@ -1354,8 +1359,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             if (aVisArea.GetSize() != aAcceptedVisArea.GetSize())
             {
                 // server changed VisArea to its liking
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
-                aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aMapUnit, pModel->GetScaleUnit()));
+                MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
+                aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
             }
 
             xObjRef.UpdateReplacement();
@@ -1407,7 +1412,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         aGeo.nTan=0.0;
         SetRectsDirty();
     }
-    if( (NULL == pModel) || !pModel->isLocked() )
+    if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
 
@@ -1416,7 +1421,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::SetGeoData(rGeo);
-    if( (NULL == pModel) || !pModel->isLocked() )
+    if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
 
@@ -1425,7 +1430,7 @@ void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
-    if( (NULL == pModel) || !pModel->isLocked() )
+    if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
 
@@ -1434,7 +1439,7 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
-    if( (NULL == pModel) || !pModel->isLocked() )
+    if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
 
@@ -1456,7 +1461,7 @@ void SdrOle2Obj::GetNewReplacement()
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
-    if( (NULL == pModel) || !pModel->isLocked() )
+    if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
 
