@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:21:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
 
 #include "viewopt.hxx"  // SwViewOptions
 #include "txtcfg.hxx"
@@ -128,9 +131,9 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nLinePos,
 
 
 
-SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
+SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const
 {
-    SwTabPortion *pTabPor;
+    SwTabPortion *pTabPor = 0;
     SwTabPortion  *pLastTab = rInf.GetLastTab();
     if( pLastTab && pLastTab->IsTabCntPortion() )
         if( pLastTab->PostFormat( rInf ) )
@@ -171,6 +174,12 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
         }
 
         SwTwips nNextPos;
+        //
+        // First, we examine the tab stops set at the paragraph style or
+        // any hard set tab stops:
+        // Note: If there are no user defined tab stops, there is always a
+        // default tab stop.
+        //
         const SvxTabStop* pTabStop =
             aLineInf.GetTabStop( nLineTab, nTabLeft, nRight );
         if( pTabStop )
@@ -204,7 +213,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
 
             nCount /= nDefTabDist;
             nNextPos = ( nCount + 1 ) * nDefTabDist ;
-            if( nNextPos + nTabLeft <= nLineTab + 50 )
+            const SwTwips nMinimumTabWidth = rInf.GetVsh()->IsTabCompat() ? 1 : 50;
+            if( nNextPos + nTabLeft <= nLineTab + nMinimumTabWidth )
                 nNextPos += nDefTabDist;
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
@@ -230,29 +240,37 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
         nNewTabPos = KSHORT(nNextPos);
     }
 
-    switch( eAdj )
+    if ( bAuto )
     {
-        case SVX_TAB_ADJUST_RIGHT :
+        if ( SVX_TAB_ADJUST_DECIMAL == eAdj )
+            pTabPor = new SwAutoTabDecimalPortion( nNewTabPos, cDec, cFill );
+    }
+    else
+    {
+        switch( eAdj )
         {
-            pTabPor = new SwTabRightPortion( nNewTabPos, cFill );
-            break;
-        }
-        case SVX_TAB_ADJUST_CENTER :
-        {
-            pTabPor = new SwTabCenterPortion( nNewTabPos, cFill );
-            break;
-        }
-        case SVX_TAB_ADJUST_DECIMAL :
-        {
-            pTabPor = new SwTabDecimalPortion( nNewTabPos, cDec, cFill );
-            break;
-        }
-        default:
-        {
-            ASSERT( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
-                    "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
-            pTabPor = new SwTabLeftPortion( nNewTabPos, cFill );
-            break;
+            case SVX_TAB_ADJUST_RIGHT :
+               {
+                pTabPor = new SwTabRightPortion( nNewTabPos, cFill );
+                break;
+            }
+            case SVX_TAB_ADJUST_CENTER :
+            {
+                   pTabPor = new SwTabCenterPortion( nNewTabPos, cFill );
+                break;
+            }
+            case SVX_TAB_ADJUST_DECIMAL :
+            {
+                   pTabPor = new SwTabDecimalPortion( nNewTabPos, cDec, cFill );
+                break;
+            }
+            default:
+            {
+                   ASSERT( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
+                        "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
+                pTabPor = new SwTabLeftPortion( nNewTabPos, cFill );
+                break;
+            }
         }
     }
 
@@ -332,8 +350,13 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
         PrtWidth( aInf.GetTxtSize().Width() );
     }
 
-    // 8532: CenterTabs, deren Blankbreite nicht mehr in die Zeile passt
-    sal_Bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
+    const bool bTabCompat = rInf.GetVsh()->IsTabCompat();
+
+    // Break tab stop to next line if:
+    // 1. Minmal width does not fit to line anymore.
+    // 2. An underflow event was called for the tab portion.
+    sal_Bool bFull = ( bTabCompat && rInf.IsUnderFlow() ) ||
+                       rInf.Width() <= rInf.X() + PrtWidth();
 
     // #95477# Rotated tab stops get the width of one blank
     const USHORT nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
@@ -357,6 +380,15 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             {
                 PrtWidth( GetTabPos() - rInf.X() );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
+
+                // In tabulator compatibility mode, we reset the bFull flag
+                // if the tabulator is at the end of the paragraph and the
+                // tab stop position is outside the frame:
+                if ( bFull && bTabCompat &&
+                     rInf.GetIdx() + GetLen() == rInf.GetTxt().Len() &&
+                     GetTabPos() >= rInf.GetTxtFrm()->Frm().Width() )
+                    bFull = sal_False;
+
                 break;
             }
             default: ASSERT( !this, "SwTabPortion::PreFormat: unknown adjustment" );
@@ -450,8 +482,6 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
  * Ex: LineIter::DrawTab()
  *************************************************************************/
 
-
-
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #ifndef PRODUCT
@@ -518,6 +548,14 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             rInf.DrawText( aTxt.Fill( nChar, cFill ), *this, 0, nChar, sal_True );
         }
     }
+}
+
+/*************************************************************************
+ *                virtual SwAutoTabDecimalPortion::Paint()
+ *************************************************************************/
+
+void SwAutoTabDecimalPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
 }
 
 /*************************************************************************
