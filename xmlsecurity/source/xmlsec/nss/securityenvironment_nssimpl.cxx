@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:12:42 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ PK11SlotInfo* SecurityEnvironment_NssImpl :: getCryptoSlot() throw( Exception , 
     return m_pSlot ;
 }
 
-::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInfo() throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
     rtl::OUString result;
 
@@ -802,7 +802,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
         if( status == SECSuccess ) {
             validity = 0x00000000 ;
         } else {
-            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+            validity = ::com::sun::star::security::CertificateValidity::INVALID ;
 #if (  __GNUC__ == 3 && __GNUC_MINOR__ == 4 )
             // Gcc-3.4.1 has a serious bug which prevents compiling this switch construct,
             // if "status" in the switch statement is a signed integer type.
@@ -814,42 +814,42 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
             switch( status ) {
 #endif
                 case SEC_ERROR_BAD_SIGNATURE :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ;
+                    validity |= ::com::sun::star::security::CertificateValidity::SIGNATURE_INVALID ;
                     break ;
                 case SEC_ERROR_EXPIRED_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+                    validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
                     break ;
                 case SEC_ERROR_REVOKED_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+                    validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
                     break ;
                 case SEC_ERROR_UNKNOWN_ISSUER :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_UNKNOWN ;
+                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_UNKNOWN ;
                     break ;
                 case SEC_ERROR_UNTRUSTED_ISSUER :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_UNTRUSTED ;
+                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_UNTRUSTED ;
                     break ;
                 case SEC_ERROR_UNTRUSTED_CERT :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_UNTRUSTED ;
+                    validity |= ::com::sun::star::security::CertificateValidity::UNTRUSTED ;
                     break ;
                 case SEC_ERROR_CERT_VALID :
                 case SEC_ERROR_CERT_NOT_VALID :
                     break ;
                 case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ISSUER_INVALID ;
+                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_INVALID ;
                     break ;
                 case SEC_ERROR_CA_CERT_INVALID :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ROOT_INVALID ;
+                    validity |= ::com::sun::star::security::CertificateValidity::ROOT_INVALID ;
                     break ;
                 case SEC_ERROR_UNKNOWN_CRITICAL_EXTENSION :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ;
+                    validity |= ::com::sun::star::security::CertificateValidity::EXTENSION_INVALID ;
                     break ;
                 case SEC_ERROR_UNKNOWN_CERT :
-                    validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ;
+                    validity |= ::com::sun::star::security::CertificateValidity::CHAIN_INCOMPLETE ;
                     break ;
             }
         }
     } else {
-        validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+        validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
     return validity ;
@@ -876,9 +876,9 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
 
     //Firstly, make sentence whether or not the cert is self-signed.
     if( SECITEM_CompareItem( &(cert->derIssuer), &(cert->derSubject) ) == SECEqual ) {
-        characters |= ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+        characters |= ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     } else {
-        characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+        characters &= ~ ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     }
 
     //Secondly, make sentence whether or not the cert has a private key.
@@ -900,11 +900,11 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
             priKey = PK11_FindPrivateKeyFromCert( m_pSlot, ( CERTCertificate* )cert, NULL ) ;
 
         if( priKey != NULL ) {
-            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+            characters |=  ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
 
             SECKEY_DestroyPrivateKey( priKey ) ;
         } else {
-            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::HAS_PRIVATE_KEY ;
         }
     }
 
@@ -928,10 +928,10 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
             tempCert = NULL ;
 
         if( tempCert != NULL ) {
-            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            characters |=  ::com::sun::star::security::CertificateCharacters::TRUSTED ;
             CERT_DestroyCertificate( tempCert ) ;
         } else {
-            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::TRUSTED ;
         }
     }
     */
@@ -945,10 +945,10 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
             tempCert = NULL ;
 
         if( tempCert != NULL ) {
-            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            characters |=  ::com::sun::star::security::CertificateCharacters::TRUSTED ;
             CERT_DestroyCertificate( tempCert ) ;
         } else {
-            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::TRUSTED ;
         }
     }
 
