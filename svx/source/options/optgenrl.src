@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:15:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ TabPage RID_SFXPAGE_GENERAL
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text [ de ] = "~Vor-/Vaters-/Name/Kürzel" ;
-        Text [ en-US ] = " ";
+        Text [ en-US ] = "First name/Father's name/Last name/Initials";
     };
     Edit ED_FATHERNAME
     {
@@ -152,7 +152,7 @@ TabPage RID_SFXPAGE_GENERAL
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text [ de ] = "~Straße/Wohnungsnummer" ;
-        Text [ en-US ] = " ";
+        Text [ en-US ] = "Street/Apartment number";
     };
     Edit ED_STREET
     {
