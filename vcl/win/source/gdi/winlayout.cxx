@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:06:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,45 +82,73 @@
     #include <algorithm>
 #endif // GCP_KERN_HACK
 
-// #110440# TODO: move GSUBList caching to upper layers
-// for now it is much less riscy to keep it here
-#define GNG_VERT_HACK
-#ifdef GNG_VERT_HACK
-    #include <hash_set>
-    #include <psprint/sft.h>
-    typedef std::hash_set<int> GSUBList;
-#endif // GNG_VERT_HACK
+#include <psprint/sft.h>
+
+#ifdef USE_UNISCRIBE
+#include <Usp10.h>
+#endif // USE_UNISCRIBE
+
+#define DROPPED_OUTGLYPH 0xFFFF
+
+// =======================================================================
+
+// win32 specific physical font instance
+class ImplWinFontEntry : public ImplFontEntry
+{
+public:
+                            ImplWinFontEntry( ImplFontSelectData& );
+                            ~ImplWinFontEntry();
+
+private:
+    // TODO: also add HFONT??? Watch out for issues with too many active fonts...
+
+#ifdef GCP_KERN_HACK
+public:
+    bool                    HasKernData() const;
+    void                    SetKernData( int, const KERNINGPAIR* );
+    int                     GetKerning( sal_Unicode, sal_Unicode ) const;
+private:
+    KERNINGPAIR*            mpKerningPairs;
+    int                     mnKerningPairs;
+#endif // GCP_KERN_HACK
+
+#ifdef USE_UNISCRIBE
+public:
+    SCRIPT_CACHE&           GetScriptCache() const
+                                { return maScriptCache; }
+private:
+    mutable SCRIPT_CACHE    maScriptCache;
+#endif // USE_UNISCRIBE
+};
 
 // =======================================================================
 
 class WinLayout : public SalLayout
 {
 public:
-                    WinLayout( HDC );
-    virtual void    InitFont() const;
+                        WinLayout( HDC, ImplWinFontData&, ImplWinFontEntry& );
+    virtual void        InitFont() const;
+
+#ifdef USE_UNISCRIBE
+    SCRIPT_CACHE&       GetScriptCache() const
+                            { return mrWinFontEntry.GetScriptCache(); }
+#endif // USE_UNISCRIBE
 
 protected:
-    HDC             mhDC;
-    HFONT           mhFont;
-    int             mnBaseAdv;
-};
+    HDC                 mhDC;
+    HFONT               mhFont;
+    int                 mnBaseAdv;
 
-#define DROPPED_OUTGLYPH 0xFFFF
+    ImplWinFontData&    mrWinFontData;
+    ImplWinFontEntry&   mrWinFontEntry;
+};
 
 // =======================================================================
 
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC hDC, BYTE nCharSet
-#ifdef GCP_KERN_HACK
-                      , const KERNINGPAIR* pPairs, int nPairs
-#endif // GCP_KERN_HACK
-#ifdef GNG_VERT_HACK
-                      , GSUBList& rGSUBList
-#endif // GNG_VERT_HACK
-                    );
-
+                    SimpleWinLayout( HDC, BYTE nCharSet, ImplWinFontData&, ImplWinFontEntry& );
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -158,25 +186,16 @@ private:
 
     int             mnNotdefWidth;
     BYTE            mnCharSet;
-
-#ifdef GCP_KERN_HACK
-    const KERNINGPAIR* mpKerningPairs;
-    int             mnKerningPairs;
-#endif // GCP_KERN_HACK
-
-#ifdef GNG_VERT_HACK
-    bool            HasGSUBstitutions() const;
-    bool            IsGSUBstituted( sal_Unicode ) const;
-    GSUBList&       mrGSUBList;
-#endif // GNG_VERT_HACK
 };
 
 // =======================================================================
 
-WinLayout::WinLayout( HDC hDC )
+WinLayout::WinLayout( HDC hDC, ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 :   mhDC( hDC ),
     mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
-    mnBaseAdv( 0 )
+    mnBaseAdv( 0 ),
+    mrWinFontData( rWFD ),
+    mrWinFontEntry( rWFE )
 {}
 
 // -----------------------------------------------------------------------
@@ -188,22 +207,9 @@ void WinLayout::InitFont() const
 
 // =======================================================================
 
-SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet
-#ifdef GCP_KERN_HACK
-        , const KERNINGPAIR* pKerningPairs, int nKerningPairs
-#endif // GCP_KERN_HACK
-#ifdef GNG_VERT_HACK
-        , GSUBList& rGSUBList
-#endif // GNG_VERT_HACK
-    )
-:   WinLayout( hDC ),
-#ifdef GCP_KERN_HACK
-    mpKerningPairs( pKerningPairs ),
-    mnKerningPairs( nKerningPairs ),
-#endif // GCP_KERN_HACK
-#ifdef GNG_VERT_HACK
-    mrGSUBList( rGSUBList ),
-#endif // GNG_VERT_HACK
+SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
+    ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
+:   WinLayout( hDC, rWinFontData, rWinFontEntry ),
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
     mpOutGlyphs( NULL ),
@@ -245,7 +251,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     mbDisableGlyphs |= ((rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) != 0);
     mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
 
-    // TODO: use a cached value for bDisableGlyphs from upper layers font info
     if( !mbDisableGlyphs )
     {
         // Win32 glyph APIs have serious problems with vertical layout
@@ -253,22 +258,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( rArgs.mnFlags & SAL_LAYOUT_VERTICAL )
             mbDisableGlyphs = true;
         else
-        {
-            // #99019# don't use glyph indices for non-TT fonts
-            // also for printer, because the drivers often transparently
-            // replace TTs with builtin fonts
-            TEXTMETRICA aTextMetricA;
-            if( !::GetTextMetricsA( mhDC, &aTextMetricA )
-            ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
-            ||   (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
-                mbDisableGlyphs = true;
-/*
-            // #110548# more important than #107885# => TODO: better solution
-            DWORD nFLI = GetFontLanguageInfo( mhDC );
-            if( !(nFLI & GCP_GLYPHSHAPE) )
-                mbDisableGlyphs = true;
-*/
-        }
+            // use cached value from font face
+            mbDisableGlyphs = mrWinFontData.IsGlyphApiDisabled();
     }
 
     // TODO: use a cached value for bDisableAsianKern from upper layers
@@ -446,8 +437,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             aGCPA.nGlyphs       = mnGlyphCount;
             aGCPA.lpOrder       = NULL;
 
-            aGCPA.lpGlyphs = mpOutGlyphs;
-            aGCPA.lpOutString = NULL;
+            aGCPA.lpGlyphs      = mpOutGlyphs;
+            aGCPA.lpOutString   = NULL;
             nGcpOption |= GCP_GLYPHSHAPE;
 
             nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen, 0, &aGCPA, nGcpOption );
@@ -486,20 +477,27 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         else
         {
             // TODO: improve heuristic below
-            // problem is some fonts seem to have NotDef at glyphids 0,3,4
+            // problem is that some fonts seem to have NotDef at glyphids 0,3,4
             if( (mpGlyphAdvances[i] != 0) || (mpOutGlyphs[i] > 4)  )
                 if( mpOutGlyphs[i] != 0 )
                     continue;
         }
 
-        // request fallback
         bool bRTL = mpGlyphRTLFlags ? mpGlyphRTLFlags[i] : false;
         int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
+
+       // double check with the font face, if it has support for the unicode
+       sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+       if( mrWinFontData.HasChar( cChar ) )
+           continue;
+
+        // request glyph fallback at this position
         rArgs.NeedFallback( nCharPos, bRTL );
 
         if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
         {
-            // for fallbacks a NotDef glyph isn't interesting
+            // when we already are layouting for glyph fallback
+            // then a new unresolved glyph is not interesting
             mpOutGlyphs[i] = DROPPED_OUTGLYPH;
             mnNotdefWidth = 0;
         }
@@ -507,6 +505,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         {
             if( mnNotdefWidth < 0 )
             {
+                // get the width of the NotDef glyph
                 SIZE aExtent;
                 WCHAR cNotDef = rArgs.mpStr[ nCharPos ];
                 mnNotdefWidth = ::GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
@@ -516,6 +515,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 mpOutGlyphs[i] = 0;
         }
 
+        // replace the current glyph with the NotDef glyph
         mnWidth += mnNotdefWidth - mpGlyphAdvances[i];
         mpGlyphAdvances[i] = mnNotdefWidth;
         if( mpGlyphOrigAdvs )
@@ -523,9 +523,11 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
 #ifdef GCP_KERN_HACK
+    // apply kerning if the layout engine has not yet done it
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
     {
 #else // GCP_KERN_HACK
+    // apply just asian kerning
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
     {
         if( !(rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) )
@@ -533,23 +535,18 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             for( i = 0; i < mnGlyphCount; ++i )
                 mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
 
-        // #99658# also do asian kerning one beyond substring
+        // #99658# also apply asian kerning on the substring border
         int nLen = mnGlyphCount;
         if( rArgs.mnMinCharPos + nLen < rArgs.mnLength )
             ++nLen;
         for( i = 1; i < nLen; ++i )
         {
 #ifdef GCP_KERN_HACK
-            if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && mnKerningPairs )
+            if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
             {
-                const KERNINGPAIR aRefPair = {pBidiStr[i-1],pBidiStr[i],0};
-                const KERNINGPAIR* pPair = std::lower_bound( mpKerningPairs,
-                    mpKerningPairs + mnKerningPairs, aRefPair, ImplCmpKernData );
-                if( pPair->wFirst==aRefPair.wFirst && pPair->wSecond==aRefPair.wSecond )
-                {
-                    mpGlyphAdvances[ i-1 ] += pPair->iKernAmount;
-                    mnWidth += pPair->iKernAmount;
-                }
+                int nKernAmount = mrWinFontEntry.GetKerning( pBidiStr[i-1], pBidiStr[i] );
+                mpGlyphAdvances[ i-1 ] += nKernAmount;
+                mnWidth += nKernAmount;
             }
             else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
 #endif // GCP_KERN_HACK
@@ -592,72 +589,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-bool SimpleWinLayout::HasGSUBstitutions() const
-{
-    if( mrGSUBList.find( -1 ) != mrGSUBList.end() ) // no GSUB in font?
-        return false;
-    if( !mrGSUBList.empty() )   // already initialized?
-        return true;
-
-    mrGSUBList.insert( -1 );    // mark as "no GSUB in font"
-
-    // get raw font file data
-    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-    if( nFontSize == GDI_ERROR )
-        return false;
-    std::vector<char> aRawFont( nFontSize+1 );
-    aRawFont[ nFontSize ] = 0;
-    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)&aRawFont[0], nFontSize );
-    if( nFontSize != nFontSize2 )
-        return false;
-
-    // open font file
-    sal_uInt32 nFaceNum = 0;
-    if( !aRawFont[0] )  // TTC candidate
-        nFaceNum = ~0;  // indicate "TTC font extracts only"
-
-    TrueTypeFont* pTTFont = NULL;
-    OpenTTFont( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
-    if( !pTTFont )
-        return false;
-
-    // add vertically substituted characters to list
-    static sal_Unicode aGSUBCandidates[] = {
-        0x0020, 0x0080, // ASCII
-        0x2000, 0x2600, // misc
-        0x3000, 0x3100, // CJK punctutation
-        0x3300, 0x3400, // squared words
-        0xFF00, 0xFFF0, // halfwidth|fullwidth forms
-    0 };
-
-    bool bHasGSUB = false;
-    for( sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
-        for( sal_Unicode c = pPair[0]; c < pPair[1]; ++c )
-            if( MapChar( pTTFont, c, 0 ) != MapChar( pTTFont, c, 1 ) )
-            {
-                if( !bHasGSUB )
-                {
-                    mrGSUBList.erase( -1 ); // remove "no GSUB in font" mark
-                    bHasGSUB = true;
-                }
-                mrGSUBList.insert( c ); // insert GSUBbed unicodes
-            }
-
-    CloseTTFont( pTTFont );
-    return bHasGSUB;
-}
-
-// -----------------------------------------------------------------------
-
-bool SimpleWinLayout::IsGSUBstituted( sal_Unicode aChar ) const
-{
-    if( mrGSUBList.find( aChar ) == mrGSUBList.end() )
-        return false;
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
 int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
 {
@@ -686,7 +617,8 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             {
 #ifdef GNG_VERT_HACK
                 sal_Unicode cChar = (sal_Unicode)(nGlyphIndex & GF_IDXMASK);
-                if( HasGSUBstitutions() && IsGSUBstituted( cChar ) )
+                if( mrWinFontData.HasGSUBstitutions( mhDC )
+                &&  mrWinFontData.IsGSUBstituted( cChar ) )
                     nGlyphIndex |= GF_ROTL | GF_GSUB;
                 else
 #endif // GNG_VERT_HACK
@@ -1121,7 +1053,6 @@ void SimpleWinLayout::Simplify( bool bIsBase )
 // =======================================================================
 
 #ifdef USE_UNISCRIBE
-#include <Usp10.h>
 
 struct VisualItem
 {
@@ -1142,7 +1073,7 @@ public:
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout( HDC hDC, SCRIPT_CACHE& rScriptCache );
+                    UniscribeLayout( HDC, ImplWinFontData&, ImplWinFontEntry& );
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
@@ -1165,7 +1096,7 @@ protected:
     void            Justify( long nNewWidth );
     void            ApplyDXArray( const ImplLayoutArgs& );
 
-    bool            GetItemSubrange( const VisualItem& rVisualItem,
+    bool            GetItemSubrange( const VisualItem&,
                         int& rMinIndex, int& rEndIndex ) const;
 
 private:
@@ -1191,9 +1122,6 @@ private:
     GOFFSET*        mpGlyphOffsets;
     SCRIPT_VISATTR* mpVisualAttrs;
     mutable int*    mpGlyphs2Chars; // map abs glyph pos to abs char pos
-
-    // platform specific info
-    SCRIPT_CACHE&   mrScriptCache;
 };
 
 // -----------------------------------------------------------------------
@@ -1288,8 +1216,9 @@ static bool InitUSP()
 
 // -----------------------------------------------------------------------
 
-UniscribeLayout::UniscribeLayout( HDC hDC, SCRIPT_CACHE& rScriptCache )
-:   WinLayout( hDC ),
+UniscribeLayout::UniscribeLayout( HDC hDC,
+    ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
+:   WinLayout( hDC, rWinFontData, rWinFontEntry ),
     mnItemCount(0),
     mpScriptItems( NULL ),
     mpVisualItems( NULL ),
@@ -1304,8 +1233,7 @@ UniscribeLayout::UniscribeLayout( HDC hDC, SCRIPT_CACHE& rScriptCache )
     mpJustifications( NULL ),
     mpGlyphOffsets( NULL ),
     mpVisualAttrs( NULL ),
-    mpGlyphs2Chars( NULL ),
-    mrScriptCache( rScriptCache )
+    mpGlyphs2Chars( NULL )
 {}
 
 // -----------------------------------------------------------------------
@@ -1479,6 +1407,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     long nXOffset = 0;
 
     // layout script items
+    SCRIPT_CACHE& rScriptCache = GetScriptCache();
     for( nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
@@ -1508,7 +1437,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
-        HRESULT nRC = (*pScriptShape)( mhDC, &mrScriptCache,
+        HRESULT nRC = (*pScriptShape)( mhDC, &rScriptCache,
             rArgs.mpStr + rVisualItem.mnMinCharPos,
             nCharCount,
             mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
@@ -1526,7 +1455,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
             // for now fall back to default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
-            nRC = (*pScriptShape)( mhDC, &mrScriptCache,
+            nRC = (*pScriptShape)( mhDC, &rScriptCache,
                 rArgs.mpStr + rVisualItem.mnMinCharPos,
                 nCharCount,
                 mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
@@ -1579,7 +1508,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             }
         }
 
-        nRC = (*pScriptPlace)( mhDC, &mrScriptCache,
+        nRC = (*pScriptPlace)( mhDC, &rScriptCache,
             mpOutGlyphs + rVisualItem.mnMinGlyphPos,
             nGlyphCount,
             mpVisualAttrs + rVisualItem.mnMinGlyphPos,
@@ -2041,7 +1970,8 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         // now draw the matching glyphs in this item
         Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
-        HRESULT nRC = (*pScriptTextOut)( mhDC, &mrScriptCache,
+        SCRIPT_CACHE& rScriptCache = GetScriptCache();
+        HRESULT nRC = (*pScriptTextOut)( mhDC, &rScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
             &rVisualItem.mpScriptItem->a, NULL, 0,
             mpOutGlyphs + nMinGlyphPos,
@@ -2290,6 +2220,7 @@ void UniscribeLayout::Justify( long nNewWidth )
 
     // justify stretched script items
     long nXOffset = 0;
+    SCRIPT_CACHE& rScriptCache = GetScriptCache();
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
@@ -2306,7 +2237,7 @@ void UniscribeLayout::Justify( long nNewWidth )
 
             SCRIPT_FONTPROPERTIES aFontProperties;
             int nMinKashida = 1;
-            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &mrScriptCache, &aFontProperties );
+            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &rScriptCache, &aFontProperties );
             if( !nRC )
                 nMinKashida = aFontProperties.iKashidaWidth;
 
@@ -2328,75 +2259,20 @@ void UniscribeLayout::Justify( long nNewWidth )
 
 // =======================================================================
 
-// for performance reasons the informations in the
-// class below are so expensive to get that getting
-// them should be avoided if possible. Only when new
-// fonts get involved they get invalidated
-// TODO: move to upper layers font list management
-class WinTextLayoutCache : public ImplTextLayoutCache
-{
-public:
-    WinTextLayoutCache();
-    virtual ~WinTextLayoutCache() { flush( 0 ); }
-    virtual void flush( int nMinLevel );
-
-// public access only visible to WinSalGraphics::GetTextLayout()
-#ifdef GNG_VERT_HACK
-    GSUBList maGSUBLists[ MAX_FALLBACK ];
-#endif // GNG_VERT_HACK
-#ifdef USE_UNISCRIBE
-    SCRIPT_CACHE maScriptCache[ MAX_FALLBACK ];
-#endif // USE_UNISCRIBE
-};
-
-// -----------------------------------------------------------------------
-
-WinTextLayoutCache::WinTextLayoutCache()
-{
-#ifdef USE_UNISCRIBE
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        maScriptCache[ i ] = NULL;
-#endif // USE_UNISCRIBE
-}
-
-// -----------------------------------------------------------------------
-
-void WinTextLayoutCache::flush( int nMinLevel )
-{
-    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
-    {
-#ifdef GNG_VERT_HACK
-        maGSUBLists[i].clear();
-#endif // GNG_VERT_HACK
-#ifdef USE_UNISCRIBE
-        if( maScriptCache[ i ] != NULL )
-            (*pScriptFreeCache)( &maScriptCache[ i ] );
-        maScriptCache[ i ] = NULL;
-#endif // USE_UNISCRIBE
-    }
-}
-
-// =======================================================================
-
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     WinLayout* pWinLayout = NULL;
 
-    WinTextLayoutCache* pCache = (WinTextLayoutCache*)mxTextLayoutCache.get();
-    if( !pCache )
-    {
-        pCache = new WinTextLayoutCache;
-        mxTextLayoutCache.reset( pCache );
-    }
+    ImplWinFontData& rFontFace      = *mpWinFontData[ nFallbackLevel ];
+    ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
 #ifdef USE_UNISCRIBE
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
-    &&   (aUspModule || (bUspEnabled && InitUSP())) ) // CTL layout engine
+    &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
     {
         // script complexity is determined in upper layers
-        SCRIPT_CACHE& rScriptCache = pCache->maScriptCache[ nFallbackLevel ];
-        pWinLayout = new UniscribeLayout( mhDC, rScriptCache );
-        // NOTE: it must be guaranteed that the SalGraphics lives longer than
+        pWinLayout = new UniscribeLayout( mhDC, rFontFace, rFontInstance );
+        // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
         // the created UniscribeLayout, otherwise the data passed into the
         // constructor might become invalid too early
     }
@@ -2404,28 +2280,96 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 #endif // USE_UNISCRIBE
     {
 #ifdef GCP_KERN_HACK
-        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && mbFontKernInit )
+        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && !rFontInstance.HasKernData() )
+        {
+            // TODO: directly cache kerning info in the rFontInstance
+            // TODO: get rid of kerning methods+data in WinSalGraphics object
             GetKernPairs( 0, NULL );
+            rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
+        }
 #endif // GCP_KERN_HACK
-
-#ifdef GNG_VERT_HACK
-        GSUBList& rGSUBList = pCache->maGSUBLists[ nFallbackLevel ];
-#endif // GNG_VERT_HACK
 
         BYTE eCharSet = ANSI_CHARSET;
         if( mpLogFont )
             eCharSet = mpLogFont->lfCharSet;
-        pWinLayout = new SimpleWinLayout( mhDC, eCharSet
-#ifdef GCP_KERN_HACK
-            , mpFontKernPairs, mnFontKernPairCount
-#endif // GCP_KERN_HACK
-#ifdef GNG_VERT_HACK
-            , rGSUBList
-#endif // GNG_VERT_HACK
-            );
+        pWinLayout = new SimpleWinLayout( mhDC, eCharSet, rFontFace, rFontInstance );
     }
 
     return pWinLayout;
+}
+
+// =======================================================================
+
+ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
+:   ImplFontEntry( rFSD ),
+    mpKerningPairs( NULL ),
+    mnKerningPairs( -1 )
+{
+#ifdef USE_UNISCRIBE
+    maScriptCache = NULL;
+#endif // USE_UNISCRIBE
+}
+
+// -----------------------------------------------------------------------
+
+ImplWinFontEntry::~ImplWinFontEntry()
+{
+#ifdef USE_UNISCRIBE
+    if( maScriptCache != NULL )
+        (*pScriptFreeCache)( &maScriptCache );
+#endif // USE_UNISCRIBE
+#ifdef GCP_KERN_HACK
+    delete[] mpKerningPairs;
+#endif // GCP_KERN_HACK
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplWinFontEntry::HasKernData() const
+{
+    return (mnKerningPairs >= 0);
+}
+
+// -----------------------------------------------------------------------
+
+void ImplWinFontEntry::SetKernData( int nPairCount, const KERNINGPAIR* pPairData )
+{
+    mnKerningPairs = nPairCount;
+    mpKerningPairs = new KERNINGPAIR[ mnKerningPairs ];
+    ::memcpy( mpKerningPairs, (const void*)pPairData, nPairCount*sizeof(KERNINGPAIR) );
+}
+
+// -----------------------------------------------------------------------
+
+int ImplWinFontEntry::GetKerning( sal_Unicode cLeft, sal_Unicode cRight ) const
+{
+    int nKernAmount = 0;
+    if( mpKerningPairs )
+    {
+        const KERNINGPAIR aRefPair = { cLeft, cRight, 0 };
+        const KERNINGPAIR* pPair = std::lower_bound( mpKerningPairs,
+            mpKerningPairs + mnKerningPairs, aRefPair, ImplCmpKernData );
+        if( pPair->wFirst==aRefPair.wFirst && pPair->wSecond==aRefPair.wSecond )
+            nKernAmount = pPair->iKernAmount;
+    }
+
+    return nKernAmount;
+}
+
+// =======================================================================
+
+ImplFontData* ImplWinFontData::Clone() const
+{
+    ImplFontData* pClone = new ImplWinFontData( *this );
+    return pClone;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontEntry* ImplWinFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+{
+    ImplFontEntry* pEntry = new ImplWinFontEntry( rFSD );
+    return pEntry;
 }
 
 // =======================================================================
