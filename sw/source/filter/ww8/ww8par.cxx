@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:44:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1872,7 +1872,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x13:
         case 0x2:
             break;                  // Auto-Fussnoten-Nummer
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         default:
             {
                 String sUnknown( '<' );
