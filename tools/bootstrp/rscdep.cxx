@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:28:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 17:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,14 +134,14 @@ main( int argc, char **argv )
     for ( int i=1; i<argc; i++)
     {
         strcpy( aBuf, (const char *)argv[i] );
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' )
+        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
         {
-            strcpy(pOutputFileName, &aBuf[3]);
+            strcpy(pOutputFileName, &aBuf[4]);
             //break;
         }
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' )
+        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
         {
-            strcpy(pSrsFileName, &aBuf[3]);
+            strcpy(pSrsFileName, &aBuf[4]);
             String aName( pSrsFileName, gsl_getSystemTextEncoding());
             USHORT nPos = 0;
             DirEntry aDest( aName );
