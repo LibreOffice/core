@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:31:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,15 +982,35 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
     RETURN_FINITE( fRet );
 }
 
-
+//TODO none of the numeric suffixes to the definitions below make sense.
+//TODO:  Should not use _ as an application prefix, reserved for compiler.
 #define _P      10                  // max. number of places
+
+//              -0x200
 #define _MIN2   -512                // min. val for binary numbers
+
+//              0x1FF
 #define _MAX2   511                 // min. val for binary numbers
+
+//              -0x20000000
 #define _MIN8   -536870912          // min. val for octal numbers
+
+//              0x1FFFFFFF
 #define _MAX8   536870911           // max. val for octal numbers
-#define _MIN16  -1099511627776      // min. val for hexadecimal numbers
-#define _MAX16  1099511627775       // max. val for hexadecimal numbers
+
+//              -0x10000000000
+#define _MIN16  SAL_CONST_INT64(-1099511627776) // min. val for hexadecimal numbers
+
+//              0xFFFFFFFFFF
+#define _MAX16  SAL_CONST_INT64(1099511627775)  // max. val for hexadecimal numbers
+
+
 #define GETPLACES()                 aAnyConv.getInt32(xOpt,rPlaces,sal_Int32(0x80000000))
+
+//   within the following macro takes _MIN and adds the second parameter to
+//   create a second macro call eg:
+//       DOUBLECONV( 2, 8 )  resolves to _MIN8, which resolves to 536870911
+
 #define DOUBLECONV(from,to)         ConvertFromDec(sal_Int64(ConvertToDec(aNum,from,_P)),_MIN##to,_MAX##to,to,GETPLACES(),_P)
 
 
