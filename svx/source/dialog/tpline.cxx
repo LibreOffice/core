@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:54:54 $
+ *  last change: $Author: aw $ $Date: 2001-05-10 11:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,11 +1077,25 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else if( rAttrs.GetItemState( XATTR_LINESTART ) != SFX_ITEM_DONTCARE )
     {
-        String aStr( ( ( const XLineStartItem& ) rAttrs.Get( XATTR_LINESTART ) ).GetName() );
-        if( aStr.Len() == 0 )
+        // #86265# select entry using list and polygon, not string
+        sal_Bool bSelected(FALSE);
+        const XPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetValue();
+
+        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        {
+            XLineEndEntry* pEntry = pLineEndList->Get(a);
+            const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
+
+            if(rItemPolygon == rEntryPolygon)
+            {
+                // select this entry
+                aLbStartStyle.SelectEntryPos(a + 1);
+                bSelected = TRUE;
+            }
+        }
+
+        if(!bSelected)
             aLbStartStyle.SelectEntryPos( 0 );
-        else
-            aLbStartStyle.SelectEntry( aStr );
     }
     else
     {
@@ -1096,11 +1110,25 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else if( rAttrs.GetItemState( XATTR_LINEEND ) != SFX_ITEM_DONTCARE )
     {
-        String aStr( ( ( const XLineEndItem& ) rAttrs.Get( XATTR_LINEEND ) ).GetName() );
-        if( aStr.Len() == 0 )
+        // #86265# select entry using list and polygon, not string
+        sal_Bool bSelected(FALSE);
+        const XPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetValue();
+
+        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        {
+            XLineEndEntry* pEntry = pLineEndList->Get(a);
+            const XPolygon& rEntryPolygon = pEntry->GetLineEnd();
+
+            if(rItemPolygon == rEntryPolygon)
+            {
+                // select this entry
+                aLbEndStyle.SelectEntryPos(a + 1);
+                bSelected = TRUE;
+            }
+        }
+
+        if(!bSelected)
             aLbEndStyle.SelectEntryPos( 0 );
-        else
-            aLbEndStyle.SelectEntry( aStr );
     }
     else
     {
