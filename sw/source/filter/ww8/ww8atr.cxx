@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:25:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,19 +1907,23 @@ bool lcl_IsHyperlinked(const SwForm& rForm, USHORT nTOXLvl)
     {
         // #i21237#
         SwFormTokens aPattern = rForm.GetPattern(nI);
-        SwFormTokens::iterator aIt = aPattern.begin();
 
-        FormTokenType eTType;
-        // #i21237#
-        while ( ++aIt != aPattern.end() )
+        if ( !aPattern.empty() )
         {
-            eTType = aIt->eTokenType;
-            switch (eTType)
+            SwFormTokens::iterator aIt = aPattern.begin();
+
+            FormTokenType eTType;
+            // #i21237#
+            while ( ++aIt != aPattern.end() )
             {
-                case TOKEN_LINK_START:
-                case TOKEN_LINK_END:
-                    return true;
-                    break;
+                eTType = aIt->eTokenType;
+                switch (eTType)
+                {
+                    case TOKEN_LINK_START:
+                    case TOKEN_LINK_END:
+                        return true;
+                        break;
+                }
             }
         }
     }
