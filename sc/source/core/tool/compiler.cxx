@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:33:25 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@
 #include "cell.hxx"
 #include "dociter.hxx"
 #include "docoptio.hxx"
+#include "errorcodes.hxx"
+#include "parclass.hxx"
 
 
 String* ScCompiler::pSymbolTableNative = NULL;
@@ -207,7 +209,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
 
 /////////////////////////////////////////////////////////////////////////
 
-class ScOpCodeList : public Resource        // temp object fuer Resource
+class ScOpCodeList : public Resource        // temp object for resource
 {
 public:
     ScOpCodeList( USHORT, String[], ScOpCodeHashMap& );
@@ -345,7 +347,7 @@ void ScCompiler::SetCompileEnglish( BOOL bCompileEnglish )
     }
 }
 
-//-----------------------Funktionen der Klasse ScCompiler----------------------
+//-----------------------------------------------------------------------------
 
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
                         const ScTokenArray& rArr )
@@ -386,7 +388,7 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
     if (!nAnzStrings)
         Init();
     pDoc = pDocument;
-    nMaxTab = pDoc->GetTableCount() - 1;
+    nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
     pStack = NULL;
     nNumFmt = NUMBERFORMAT_UNDEFINED;
 }
@@ -511,7 +513,8 @@ void ScCompiler::MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRef, B
     if (bCompileXML)
         rBuffer.append(sal_Unicode('['));
     ComplRefData aRef( rRef );
-    // falls abs/rel nicht separat: Relativ- in Abs-Referenzen wandeln!
+    // In case absolute/relative positions weren't separately available:
+    // transform relative to absolute!
 //  AdjustReference( aRef.Ref1 );
 //  if( !bSingleRef )
 //      AdjustReference( aRef.Ref2 );
@@ -803,7 +806,7 @@ xub_StrLen ScCompiler::NextSymbol()
             }
             else
             {
-                aSymbol.Append( pStart + nSrcPos, aRes.EndPos - nSrcPos );
+                aSymbol.Append( pStart + nSrcPos, (xub_StrLen)aRes.EndPos - nSrcPos );
                 nSrcPos = (xub_StrLen) aRes.EndPos;
                 if ( aRes.TokenType & KParseType::SINGLE_QUOTE_NAME )
                 {   // special cases  'sheetname'.  'filename'#
@@ -838,7 +841,7 @@ xub_StrLen ScCompiler::NextSymbol()
 }
 
 //---------------------------------------------------------------------------
-// Symbol in Token Umwandeln
+// Convert symbol to token
 //---------------------------------------------------------------------------
 
 BOOL ScCompiler::IsOpCode( const String& rName )
@@ -876,9 +879,10 @@ BOOL ScCompiler::IsOpCode( const String& rName )
         }
     }
     if ( bFound && pRawToken->GetOpCode() == ocSub &&
-        (eLastOp == ocOpen || eLastOp == ocSep ||
-         (eLastOp > ocEndDiv && eLastOp < ocEndBinOp /*ocEndUnOp*/)))
+            (eLastOp == ocOpen || eLastOp == ocSep ||
+             (eLastOp > ocEndDiv && eLastOp < ocEndBinOp)))
         pRawToken->NewOpCode( ocNegSub );
+        //! if ocNegSub had ForceArray we'd have to set it here
     return bFound;
 }
 
@@ -915,12 +919,12 @@ BOOL ScCompiler::IsValue( const String& rSym )
         if ( *p == '(' && nType == NUMBERFORMAT_LOGICAL)
             return FALSE;
         else if( aFormula.GetChar(nSrcPos) == '.' )
-            // Numerischer Tabellenname?
+            // numerical sheet name?
             return FALSE;
         else
         {
             if( nType == NUMBERFORMAT_TEXT )
-                // HACK: Die Zahl ist zu gross!
+                // HACK: number too big!
                 SetError( errIllegalArgument );
             ScRawToken aToken;
             aToken.SetDouble( fVal );
@@ -1023,8 +1027,8 @@ BOOL ScCompiler::IsReference( const String& rName )
     {
         ScAddress aAddr( aPos );
         nFlags = aAddr.Parse( rName, pDoc );
-        // Irgend etwas muss gueltig sein,
-        // damit Tabelle1.blah oder blah.a1 als (falsche) ref erkannt wird
+        // Something must be valid in order to recognize Sheet1.blah or blah.a1
+        // as a (wrong) reference.
         if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
         {
             ScRawToken aToken;
@@ -1034,7 +1038,7 @@ BOOL ScCompiler::IsReference( const String& rName )
             aRef.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
             aRef.SetTabRel( (nFlags & SCA_TAB_ABSOLUTE) == 0 );
             aRef.SetFlag3D( ( nFlags & SCA_TAB_3D ) != 0 );
-            // Die Referenz ist wirklich ungueltig!
+            // the reference is really invalid
             if( !( nFlags & SCA_VALID ) )
             {
                 if( !( nFlags & SCA_VALID_COL ) )
@@ -1059,7 +1063,7 @@ BOOL ScCompiler::IsMacro( const String& rName )
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
     SfxApplication* pSfxApp = SFX_APP();
-    pSfxApp->EnterBasicCall();              // Dok-Basic anlegen etc.
+    pSfxApp->EnterBasicCall();              // initialize document's BASIC
 
     if( pDocSh )//XXX
         pObj = pDocSh->GetBasic();
@@ -1072,7 +1076,7 @@ BOOL ScCompiler::IsMacro( const String& rName )
         pSfxApp->LeaveBasicCall();
         return FALSE;
     }
-    // Es sollte schon eine BASIC-Function sein!
+    // It really should be a BASIC function!
     if( pMeth->GetType() == SbxVOID
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
      || !pMeth->ISA(SbMethod) )
@@ -1130,7 +1134,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
     DeQuote( aName );
     USHORT nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
-    {   // #50300# zuerst Bereiche auf dieser Tabelle pruefen, falls doppelte Namen
+    {   // #50300# first check ranges on this sheet, in case of duplicated names
         for ( short jRow=0; jRow<2 && !bInList; jRow++ )
         {
             ScRangePairList* pRL;
@@ -1148,11 +1152,11 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                 for ( ScBaseCell* pCell = aIter.GetFirst(); pCell && !bInList;
                         pCell = aIter.GetNext() )
                 {
-                    // GPF wenn Zelle via CompileNameFormula auf Zelle ohne Code
-                    // trifft und HasStringData/Interpret/Compile ausgefuehrt wird
-                    // und das ganze dann auch noch rekursiv..
-                    // ausserdem wird *diese* Zelle hier nicht angefasst, da noch
-                    // kein RPN existiert
+                    // Don't crash if cell (via CompileNameFormula) encounters
+                    // a formula cell without code and
+                    // HasStringData/Interpret/Compile is executed and all that
+                    // recursive..
+                    // Furthermore, *this* cell won't be touched, since no RPN exists yet.
                     CellType eType = pCell->GetCellType();
                     BOOL bOk = (eType == CELLTYPE_FORMULA ?
                         ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
@@ -1192,7 +1196,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         }
     }
     if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
-    {   // in der aktuellen Tabelle suchen
+    {   // search in current sheet
         long nDistance, nMax;
         long nMyCol = (long) aPos.Col();
         long nMyRow = (long) aPos.Row();
@@ -1203,7 +1207,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
         {
             if ( bFound )
-            {   // aufhoeren wenn alles andere weiter liegt
+            {   // stop if everything else is further away
                 if ( nMax < (long)aIter.GetCol() )
                     break;      // aIter
             }
@@ -1239,16 +1243,17 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         if ( nD < nDistance )
                         {
                             if ( nC < 0 || nR < 0 )
-                            {   // rechts oder unterhalb
+                            {   // right or below
                                 bTwo = TRUE;
                                 aTwo.Set( nCol, nRow, aIter.GetTab() );
                                 nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                                 nDistance = nD;
                             }
                             else if ( !(nRow < aOne.Row() && nMyRow >= (long)aOne.Row()) )
-                            {   // links oben, nur wenn nicht weiter oberhalb
-                                // des bisherigen und nMyRow darunter
-                                // (CellIter geht spaltenweise!)
+                            {
+                                // upper left, only if not further up than the
+                                // current entry and nMyRow is below (CellIter
+                                // runs column-wise)
                                 bTwo = FALSE;
                                 aOne.Set( nCol, nRow, aIter.GetTab() );
                                 nMax = Max( nMyCol + nC, nMyRow + nR );
@@ -1272,18 +1277,18 @@ BOOL ScCompiler::IsColRowName( const String& rName )
             if ( bTwo )
             {
                 if ( nMyCol >= (long)aOne.Col() && nMyRow >= (long)aOne.Row() )
-                    aAdr = aOne;        // links oben hat Vorrang
+                    aAdr = aOne;        // upper left takes precedence
                 else
                 {
                     if ( nMyCol < (long)aOne.Col() )
-                    {   // zwei rechts
+                    {   // two to the right
                         if ( nMyRow >= (long)aTwo.Row() )
-                            aAdr = aTwo;        // direkt rechts
+                            aAdr = aTwo;        // directly right
                         else
                             aAdr = aOne;
                     }
                     else
-                    {   // zwei unten oder unten und rechts, der naechstgelegene
+                    {   // two below or below and right, take the nearest
                         long nC1 = nMyCol - aOne.Col();
                         long nR1 = nMyRow - aOne.Row();
                         long nC2 = nMyCol - aTwo.Col();
@@ -1335,14 +1340,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
         sal_Unicode c2 = aCorrectedSymbol.GetChar( nPos );
         if ( c1 == cQuote && c2 != cQuote  )
         {   // "...
-            // was kein Wort bildet gehoert nicht dazu.
+            // What's not a word doesn't belong to it.
             // Don't be pedantic: c < 128 should be sufficient here.
             while ( nPos && ((aCorrectedSymbol.GetChar(nPos) < 128) &&
                     ((GetCharTableFlags( aCorrectedSymbol.GetChar(nPos) ) &
                     (SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_DONTCARE)) == 0)) )
                 nPos--;
             if ( nPos == MAXSTRLEN - 2 )
-                aCorrectedSymbol.SetChar( nPos, cQuote );   // '"' als 255. Zeichen
+                aCorrectedSymbol.SetChar( nPos, cQuote );   // '"' the 255th character
             else
                 aCorrectedSymbol.Insert( cQuote, nPos + 1 );
             bCorrected = TRUE;
@@ -1387,14 +1392,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
             xub_StrLen nPos;
             if ( aSymbol.GetChar(0) == '\''
               && ((nPos = aSymbol.SearchAscii( "'#" )) != STRING_NOTFOUND) )
-            {   // 'Doc'# abspalten, kann d:\... und sonstwas sein
+            {   // Split off 'Doc'#, may be d:\... or whatever
                 aDoc = aSymbol.Copy( 0, nPos + 2 );
                 aSymbol.Erase( 0, nPos + 2 );
             }
             xub_StrLen nRefs = aSymbol.GetTokenCount( ':' );
             BOOL bColons;
             if ( nRefs > 2 )
-            {   // doppelte oder zuviele ':'? B:2::C10 => B2:C10
+            {   // duplicated or too many ':'? B:2::C10 => B2:C10
                 bColons = TRUE;
                 xub_StrLen nIndex = 0;
                 String aTmp1( aSymbol.GetToken( 0, ':', nIndex ) );
@@ -1419,8 +1424,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         {
                             bNextNum = CharClass::isAsciiNumeric( aTmp2 );
                             if ( bLastAlp == bNextNum && nStrip < 1 )
-                            {   // muss abwechselnd nur Zahl/String sein,
-                                // nur innerhalb einer Ref strippen
+                            {
+                                // Must be alternating number/string, only
+                                // strip within a reference.
                                 nRefs--;
                                 nStrip++;
                             }
@@ -1438,7 +1444,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         {   // ::
                             nRefs--;
                             if ( nLen1 )
-                            {   // B10::C10 ? naechste Runde ':' anhaengen
+                            {   // B10::C10 ? append ':' on next round
                                 if ( !bLastAlp && !CharClass::isAsciiNumeric( aTmp1 ) )
                                     nStrip++;
                             }
@@ -1456,7 +1462,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
             else
                 bColons = FALSE;
             if ( nRefs && nRefs <= 2 )
-            {   // Referenzdreher? 4A => A4 etc.
+            {   // reference twisted? 4A => A4 etc.
                 String aTab[2], aRef[2];
                 if ( nRefs == 2 )
                 {
@@ -1474,10 +1480,10 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     xub_StrLen nTmp = 0;
                     xub_StrLen nPos = STRING_NOTFOUND;
                     while ( (nTmp = aRef[j].Search( '.', nTmp )) != STRING_NOTFOUND )
-                        nPos = nTmp++;      // der letzte zaehlt
+                        nPos = nTmp++;      // the last one counts
                     if ( nPos != STRING_NOTFOUND )
                     {
-                        aTab[j] = aRef[j].Copy( 0, nPos + 1 );  // mit '.'
+                        aTab[j] = aRef[j].Copy( 0, nPos + 1 );  // with '.'
                         aRef[j].Erase( 0, nPos + 1 );
                     }
                     String aOld( aRef[j] );
@@ -1521,7 +1527,7 @@ BOOL ScCompiler::NextNewToken()
         if( nSpaces )
         {
             aToken.SetOpCode( ocSpaces );
-            aToken.cByte = (BYTE) ( nSpaces > 255 ? 255 : nSpaces );
+            aToken.sbyte.cByte = (BYTE) ( nSpaces > 255 ? 255 : nSpaces );
             if( !pArr->AddToken( aToken ) )
             {
                 SetError(errCodeOverflow); return FALSE;
@@ -1554,10 +1560,12 @@ BOOL ScCompiler::NextNewToken()
             else
                 bMayBeFuncName = TRUE;      // operators and other opcodes
 
-            String aOrg( cSymbol ); // evtl. Dateinamen in IsReference erhalten
+            String aOrg( cSymbol ); // preserve file names in IsReference()
             String aUpper( ScGlobal::pCharClass->upper( aOrg ) );
-            // Spalte DM konnte nicht referiert werden, IsReference vor IsValue
-            // #42016# italian ARCTAN.2 gab #REF! => IsOpCode vor IsReference
+            // Column 'DM' ("Deutsche Mark", German currency) couldn't be
+            // referred to => IsReference() before IsValue().
+            // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
+            // IsReference().
             if ( !(bMayBeFuncName && IsOpCode( aUpper ))
               && !IsReference( aOrg )
               && !IsValue( aUpper )
@@ -1604,7 +1612,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
         aCorrectedFormula.Erase();
         aCorrectedSymbol.Erase();
     }
-    BYTE nForced = 0;       // ==Formel forciert Recalc auch wenn nicht sichtbar
+    BYTE nForced = 0;   // ==formula forces recalc even if cell is not visible
     if( aFormula.GetChar(nSrcPos) == '=' )
     {
         nSrcPos++;
@@ -1648,8 +1656,9 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
             aCorrectedFormula += aCorrectedSymbol;
     }
     if ( eLastOp != ocBad )
-    {   // bei ocBad ist der Rest der Formel String, es wuerden zuviele
-        // Klammern erscheinen
+    {
+        // With ocBad the remaining formula is a string, too many parentheses
+        // would be shown.
         ScByteToken aToken( ocClose );
         while( nBrackets-- )
         {
@@ -1663,7 +1672,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     }
     if ( nForced >= 2 )
         pArr->SetRecalcModeForced();
-    // pArr merken, falls danach CompileTokenArray() kommt
+    // remember pArr, in case a subsequent CompileTokenArray() is executed.
     return pArr = new ScTokenArray( aArr );
 }
 
@@ -1689,7 +1698,7 @@ void ScCompiler::PopTokenArray()
         ScArrayStack* p = pStack;
         pStack = p->pNext;
         p->pArr->nRefs += pArr->nRefs;
-        // special RecalcMode aus SharedFormula uebernehmen
+        // obtain special RecalcMode from SharedFormula
         if ( pArr->IsRecalcModeAlways() )
             p->pArr->SetRecalcModeAlways();
         else if ( !pArr->IsRecalcModeNormal() && p->pArr->IsRecalcModeNormal() )
@@ -1776,12 +1785,12 @@ BOOL ScCompiler::GetToken()
             else if ( !bCompileForFAP )
             {
                 ScTokenArray* pNew;
-                // #35168# Bereichsformel klammern
-                // #37680# aber nur wenn nicht schon Klammern da,
-                // geklammerte ocSep geht nicht, z.B. SUMME((...;...))
-                // und wenn nicht direkt zwischen ocSep/Klammer,
-                // z.B. SUMME(...;(...;...)) nicht, SUMME(...;(...)*3) ja
-                // kurz: wenn kein eigenstaendiger Ausdruck
+                // #35168# put named formula into parentheses.
+                // #37680# But only if there aren't any yet, parenthetical
+                // ocSep doesn't work, e.g. SUM((...;...))
+                // or if not directly between ocSep/parenthesis,
+                // e.g. SUM(...;(...;...)) no, SUM(...;(...)*3) yes,
+                // in short: if it isn't a self-contained expression.
                 ScToken* p1 = pArr->PeekPrevNoSpaces();
                 ScToken* p2 = pArr->PeekNextNoSpaces();
                 OpCode eOp1 = (p1 ? p1->GetOpCode() : ocSep);
@@ -1858,12 +1867,12 @@ BOOL ScCompiler::GetToken()
             }
         }
         if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
-        {   // automagically oder durch kopieren entstanden und NamePos nicht in Liste
+        {   // automagically or created by copying and NamePos isn't in list
             BOOL bString = pDoc->HasStringData( nCol, nRow, nTab );
             if ( !bString && !pDoc->GetCell( aLook ) )
-                bString = TRUE;     // leere Zelle ist ok
+                bString = TRUE;     // empty cell is ok
             if ( bString )
-            {   //! korrespondiert mit ScInterpreter::ScColRowNameAuto
+            {   //! coresponds with ScInterpreter::ScColRowNameAuto()
                 bValidName = TRUE;
                 if ( bColName )
                 {   // ColName
@@ -1872,23 +1881,23 @@ BOOL ScCompiler::GetToken()
                         nStartRow = MAXROW;
                     USHORT nMaxRow = MAXROW;
                     if ( nMyCol == nCol )
-                    {   // Formelzelle in gleicher Col
+                    {   // formula cell in same column
                         if ( nMyRow == nStartRow )
-                        {   // direkt unter dem Namen den Rest nehmen
+                        {   // take remainder under name cell
                             nStartRow++;
                             if ( nStartRow > MAXROW )
                                 nStartRow = MAXROW;
                         }
                         else if ( nMyRow > nStartRow )
-                        {   // weiter unten vom Namen bis zur Formelzelle
+                        {   // from name cell down to formula cell
                             nMaxRow = nMyRow - 1;
                         }
                     }
                     for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
-                    {   // naechster definierter ColNameRange unten ist Row-Begrenzung
+                    {   // next defined ColNameRange below limits row
                         const ScRange& rRange = pR->GetRange(1);
                         if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
-                        {   // gleicher Col Bereich
+                        {   // identical column range
                             USHORT nTmp = rRange.aStart.Row();
                             if ( nStartRow < nTmp && nTmp <= nMaxRow )
                                 nMaxRow = nTmp - 1;
@@ -1904,20 +1913,20 @@ BOOL ScCompiler::GetToken()
                         nStartCol = MAXCOL;
                     USHORT nMaxCol = MAXCOL;
                     if ( nMyRow == nRow )
-                    {   // Formelzelle in gleicher Row
+                    {   // formula cell in same row
                         if ( nMyCol == nStartCol )
-                        {   // direkt neben dem Namen den Rest nehmen
+                        {   // take remainder right from name cell
                             nStartCol++;
                             if ( nStartCol > MAXCOL )
                                 nStartCol = MAXCOL;
                         }
                         else if ( nMyCol > nStartCol )
-                        {   // weiter rechts vom Namen bis zur Formelzelle
+                        {   // from name cell right to formula cell
                             nMaxCol = nMyCol - 1;
                         }
                     }
                     for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
-                    {   // naechster definierter RowNameRange rechts ist Col-Begrenzung
+                    {   // next defined RowNameRange to the right limits column
                         const ScRange& rRange = pR->GetRange(1);
                         if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                         {   // gleicher Row Bereich
@@ -1933,14 +1942,13 @@ BOOL ScCompiler::GetToken()
         }
         if ( bValidName )
         {
-            // Und nun der Zauber zur Unterscheidung zwischen
-            // Bereich und einer einzelnen Zelle daraus, die
-            // positionsabhaengig von der Formelzelle gewaehlt wird.
-            // Ist ein direkter Nachbar ein binaerer Operator (ocAdd etc.)
-            // so wird eine SingleRef passend zur Col/Row generiert,
-            // ocColRowName bzw. ocIntersect als Nachbar => Range.
-            // Spezialfall: Beschriftung gilt fuer eine einzelne Zelle,
-            // dann wird eine positionsunabhaengige SingleRef generiert.
+            // And now the magic to distinguish between a range and a single
+            // cell thereof, which is picked position-dependent of the formula
+            // cell. If a direct neighbor is a binary operator (ocAdd, ...) a
+            // SingleRef matching the column/row of the formula cell is
+            // generated. A ocColRowName or ocIntersect as a neighbor results
+            // in a range. Special case: if label is valid for a single cell, a
+            // position independent SingleRef is generated.
             BOOL bSingle = (aRange.aStart == aRange.aEnd);
             BOOL bFound;
             if ( bSingle )
@@ -1949,7 +1957,7 @@ BOOL ScCompiler::GetToken()
             {
                 ScToken* p1 = pArr->PeekPrevNoSpaces();
                 ScToken* p2 = pArr->PeekNextNoSpaces();
-                // Anfang/Ende einer Formel => Single
+                // begin/end of a formula => single
                 OpCode eOp1 = p1 ? p1->GetOpCode() : ocAdd;
                 OpCode eOp2 = p2 ? p2->GetOpCode() : ocAdd;
                 if ( eOp1 != ocColRowName && eOp1 != ocIntersect
@@ -1960,7 +1968,7 @@ BOOL ScCompiler::GetToken()
                         bSingle = TRUE;
                 }
                 if ( bSingle )
-                {   // Col bzw. Row muss zum Range passen
+                {   // column and/or row must match range
                     if ( bColName )
                     {
                         bFound = (aRange.aStart.Row() <= nMyRow
@@ -2070,15 +2078,15 @@ OpCode ScCompiler::NextToken()
     if( !GetToken() )
         return ocStop;
     OpCode eOp = pToken->GetOpCode();
-    // #38815# CompileTokenArray mit zurueckgesetztem Fehler gibt wieder Fehler
+    // #38815# CompileTokenArray() with error reset results in error again
     if ( eOp == ocBad )
         SetError( errNoName );
-    // Vor einem Push muss ein Operator kommen
+    // There must be an operator before a push
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
                 ((eLastOp > ocEndDiv) && (eLastOp < ocEndUnOp))) )
         SetError(errOperatorExpected);
-    // Operator und Plus = Operator
+    // Operator and Plus => operator
     BOOL bLastOp = ( eLastOp == ocOpen || eLastOp == ocSep ||
           (eLastOp > ocEndDiv && eLastOp < ocEndUnOp)
         );
@@ -2086,8 +2094,8 @@ OpCode ScCompiler::NextToken()
         eOp = NextToken();
     else
     {
-        // Vor einem Operator darf kein weiterer Operator stehen
-        // Aber AND, OR ist OK
+        // Before an operator there must not be another operator, with the
+        // exception of AND and OR.
         if ( eOp != ocAnd && eOp != ocOr
           && ( eOp > ocEndDiv && eOp < ocEndBinOp )
           && ( eLastOp == ocOpen || eLastOp == ocSep
@@ -2097,7 +2105,7 @@ OpCode ScCompiler::NextToken()
             if ( bAutoCorrect && !pStack )
             {
                 if ( eOp == eLastOp || eLastOp == ocOpen )
-                {   // doppelten Operator verwerfen
+                {   // throw away duplicated operator
                     aCorrectedSymbol.Erase();
                     bCorrected = TRUE;
                 }
@@ -2109,10 +2117,10 @@ OpCode ScCompiler::NextToken()
                         nPos--;
                         sal_Unicode c = aCorrectedFormula.GetChar( nPos );
                         switch ( eOp )
-                        {   // Operatoren vertauschen
+                        {   // swap operators
                             case ocGreater:
                                 if ( c == pSymbolTable[ocEqual].GetChar(0) )
-                                {   // >= ist richtig statt =>
+                                {   // >= instead of =>
                                     aCorrectedFormula.SetChar( nPos,
                                         pSymbolTable[ocGreater].GetChar(0) );
                                     aCorrectedSymbol = c;
@@ -2121,14 +2129,14 @@ OpCode ScCompiler::NextToken()
                             break;
                             case ocLess:
                                 if ( c == pSymbolTable[ocEqual].GetChar(0) )
-                                {   // <= ist richtig statt =<
+                                {   // <= instead of =<
                                     aCorrectedFormula.SetChar( nPos,
                                         pSymbolTable[ocLess].GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = TRUE;
                                 }
                                 else if ( c == pSymbolTable[ocGreater].GetChar(0) )
-                                {   // <> ist richtig statt ><
+                                {   // <> instead of ><
                                     aCorrectedFormula.SetChar( nPos,
                                         pSymbolTable[ocLess].GetChar(0) );
                                     aCorrectedSymbol = c;
@@ -2137,7 +2145,7 @@ OpCode ScCompiler::NextToken()
                             break;
                             case ocMul:
                                 if ( c == pSymbolTable[ocSub].GetChar(0) )
-                                {   // *- statt -*
+                                {   // *- instead of -*
                                     aCorrectedFormula.SetChar( nPos,
                                         pSymbolTable[ocMul].GetChar(0) );
                                     aCorrectedSymbol = c;
@@ -2146,7 +2154,7 @@ OpCode ScCompiler::NextToken()
                             break;
                             case ocDiv:
                                 if ( c == pSymbolTable[ocSub].GetChar(0) )
-                                {   // /- statt -/
+                                {   // /- instead of -/
                                     aCorrectedFormula.SetChar( nPos,
                                         pSymbolTable[ocDiv].GetChar(0) );
                                     aCorrectedSymbol = c;
@@ -2176,7 +2184,7 @@ BOOL ScCompiler::CompileTokenArray()
             aCorrectedFormula.Erase();
             aCorrectedSymbol.Erase();
         }
-        pArr->nRefs = 0;    // wird neu gezaehlt
+        pArr->nRefs = 0;    // count from start
         pArr->DelRPN();
         pStack = NULL;
         ScToken* pData[ MAXCODE ];
@@ -2206,7 +2214,7 @@ BOOL ScCompiler::CompileTokenArray()
         }
 
         if( !pArr->nError && nErrorBeforePop )
-            pArr->nError = nErrorBeforePop;             // einmal Fehler, immer Fehler
+            pArr->nError = nErrorBeforePop;     // once an error, always an error
 
         if( pArr->nError && !bIgnoreErrors )
             pArr->DelRPN();
@@ -2220,43 +2228,42 @@ BOOL ScCompiler::CompileTokenArray()
 }
 
 //---------------------------------------------------------------------------
-// Token in den Code Eintragen
+// Append token to RPN code
 //---------------------------------------------------------------------------
 
-void ScCompiler::PutCode( ScRawToken* p )
-{
-    PutCode( p->CreateToken() );
-}
-
-void ScCompiler::PutCode( ScToken* p )
+void ScCompiler::PutCode( ScTokenRef& p )
 {
     if( pc >= MAXCODE-1 )
     {
         if ( pc == MAXCODE-1 )
         {
             p = new ScByteToken( ocStop );
+            p->IncRef();
             *pCode++ = p;
             ++pc;
-            p->IncRef();
         }
         SetError(errCodeOverflow);
         return;
     }
     if( pArr->GetError() && !bCompileForFAP )
         return;
-    *pCode++ = p; pc++;
+    ForceArrayOperator( p, pCurrentFactorToken);
     p->IncRef();
+    *pCode++ = p;
+    pc++;
 }
 
 //---------------------------------------------------------------------------
-// UPN-Erzeugung (durch Rekursion)
+// RPN creation by recursion
 //---------------------------------------------------------------------------
 
 void ScCompiler::Factor()
 {
     if ( pArr->GetError() && !bIgnoreErrors )
         return;
-    ScTokenRef pFacToken;
+
+    CurrentFactor pFacToken( this );
+
     OpCode eOp = pToken->GetOpCode();
     if( eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef ||
             eOp == ocDBArea
@@ -2268,14 +2275,13 @@ void ScCompiler::Factor()
         eOp = NextToken();
         if( eOp == ocOpen )
         {
-            // PUSH( ist ein Fehler, der durch eine unbekannte
-            // Funktion hervorgerufen wird.
+            // PUSH( is an error that may be caused by an unknown function.
             SetError(
                 ( pToken->GetType() == svString
                || pToken->GetType() == svSingleRef )
                ? errNoName : errOperatorExpected );
             if ( bAutoCorrect && !pStack )
-            {   // Multiplikation annehmen
+            {   // assume multiplication
                 aCorrectedFormula += pSymbolTable[ocMul];
                 bCorrected = TRUE;
                 NextToken();
@@ -2300,17 +2306,40 @@ void ScCompiler::Factor()
     {
         if( nNumFmt == NUMBERFORMAT_UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
+        // Functions that have to be always recalculated
+        switch( eOp )
+        {
+            // no parameters:
+            case ocRandom:
+            case ocGetActDate:
+            case ocGetActTime:
+            // one parameter:
+            case ocFormula:
+            // more than one parameters:
+                // ocIndirect otherwise would have to do StopListening and
+                // StartListening on a reference for every interpreted value.
+            case ocIndirect:
+                // ocOffset and ocIndex result in indirect references.
+            case ocOffset:
+            case ocIndex:
+                pArr->SetRecalcModeAlways();
+            break;
+                // Functions recalculated on every document load.
+                // Don't use SetRecalcModeOnLoad() which would override
+                // ModeAlways.
+            case ocConvert :
+                pArr->AddRecalcMode( RECALCMODE_ONLOAD );
+            break;
+                // If the referred cell is moved the value changes.
+            case ocColumn :
+            case ocRow :
+                // ocCell needs recalc on move for some possible type values.
+            case ocCell :
+                pArr->SetRecalcModeOnRefMove();
+            break;
+        }
         if( eOp > ocEndUnOp && eOp < ocEndNoPar)
         {
-            // Diese Funktionen muessen immer neu berechnet werden
-            switch( eOp )
-            {
-                case ocRandom:
-                case ocGetActDate:
-                case ocGetActTime:
-                    pArr->SetRecalcModeAlways();
-                break;
-            }
             pFacToken = pToken;
             eOp = NextToken();
             if (eOp != ocOpen)
@@ -2327,17 +2356,10 @@ void ScCompiler::Factor()
                 eOp = NextToken();
             }
         }
-        // Spezialfall NICHT() und NEG()
+        // special cases NOT() and NEG()
         else if( eOp == ocNot || eOp == ocNeg
               || ( eOp > ocEndNoPar && eOp < ocEnd1Par) )
         {
-            // Functions that have to be always recalculated
-            switch( eOp )
-            {
-                case ocFormula:
-                    pArr->SetRecalcModeAlways();
-                break;
-            }
             pFacToken = pToken;
             eOp = NextToken();
             if( nNumFmt == NUMBERFORMAT_UNDEFINED && eOp == ocNot )
@@ -2375,7 +2397,7 @@ void ScCompiler::Factor()
             {
                 eOp = NextToken();
                 if ( eFuncOp == ocIndex && eOp == ocOpen )
-                {   // Mehrfachbereiche
+                {   // multiple areas
                     BYTE SepCount = 0;
                     do
                     {
@@ -2401,7 +2423,8 @@ void ScCompiler::Factor()
                     }
                     else
                     {
-                        PutCode( new ScByteToken( ocPush, SepCount ) );
+                        ScTokenRef xTemp = new ScByteToken( ocPush, SepCount );
+                        PutCode( xTemp );
                         if ( eOp != ocClose )
                             eOp = Expression();
                     }
@@ -2446,33 +2469,10 @@ void ScCompiler::Factor()
             else
                 pFacToken->SetByte( SepCount );
             PutCode( pFacToken );
-            // Diese Funktionen muessen immer neu berechnet werden
-            switch( eFuncOp )
-            {
-                // ocIndirect muesste sonst bei jedem Interpret StopListening
-                // und StartListening fuer ein RefTripel ausfuehren
-                case ocIndirect:
-                // ocOffset und ocIndex liefern indirekte Refs
-                case ocOffset:
-                case ocIndex:
-                    pArr->SetRecalcModeAlways();
-                break;
-                // Functions recalculated on every document load.
-                // Don't use SetRecalcModeOnLoad which would override ModeAlways
-                case ocConvert :
-                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
-                break;
-                // wird die referierte verschoben, aendert sich der Wert
-                case ocColumn :
-                case ocRow :
-                case ocCell :   // CELL needs recalc on move for some possible type values
-                    pArr->SetRecalcModeOnRefMove();
-                break;
-            }
         }
         else if (eOp == ocIf || eOp == ocChose)
         {
-            // Die PC-Staende sind -1
+            // the PC counters are -1
             pFacToken = pToken;
             if ( eOp == ocIf )
                 pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
@@ -2488,9 +2488,10 @@ void ScCompiler::Factor()
                 SetError(errPairExpected);
             short nJumpCount = 0;
             PutCode( pFacToken );
-            // #36253# bei AutoCorrect (da pArr->nError ignoriert wird)
-            // unbegrenztes ocIf gibt GPF weil ScRawToken::Clone den JumpBuffer
-            // anhand von nJump[0]*2+2 alloziert, was bei ocIf 3*2+2 ist
+            // #36253# during AutoCorrect (since pArr->nError is ignored) an
+            // unlimited ocIf would crash because ScRawToken::Clone() allocates
+            // the JumpBuffer according to nJump[0]*2+2, which is 3*2+2 on
+            // ocIf.
             const short nJumpMax =
                 (pFacToken->GetOpCode() == ocIf ? 3 : MAXJUMPCOUNT);
             while ( (nJumpCount < (MAXJUMPCOUNT - 1)) && (eOp == ocSep)
@@ -2500,16 +2501,15 @@ void ScCompiler::Factor()
                     pFacToken->GetJump()[nJumpCount] = pc-1;
                 NextToken();
                 eOp = Expression();
-                PutCode( pToken );      // Als Terminator des Teilausdrucks
+                // ocSep or ocClose terminate the subexpression
+                PutCode( pToken );
             }
             if (eOp != ocClose)
                 SetError(errPairExpected);
             else
             {
                 eOp = NextToken();
-                // auch ohne AutoCorrect gibt es hier ohne nJumpMax bei
-                // mehr als 3 Parametern in ocIf einen Ueberschreiber,
-                // das war auch schon in der 312 so (jaja, die Tester..)
+                // always limit to nJumpMax, no arbitrary overwrites
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[ nJumpCount ] = pc-1;
                 if ((pFacToken->GetOpCode() == ocIf && (nJumpCount > 3)) ||
@@ -2692,7 +2692,7 @@ OpCode ScCompiler::Expression()
     if ( nRecursion > nRecursionMax )
     {
         SetError( errStackOverflow );
-        return ocStop;      //! stattdessen Token generieren?
+        return ocStop;      //! generate token instead?
     }
     NotLine();
     while (pToken->GetOpCode() == ocAnd || pToken->GetOpCode() == ocOr)
@@ -2755,7 +2755,7 @@ void ScCompiler::AdjustReference( SingleRefData& r )
         r.nTab = lcl_adjval( r.nTab, aPos.Tab(), nMaxTab,r.IsTabRel() );
 }
 
-// Referenz aus benanntem Bereich mit relativen Angaben
+// reference of named range with relative references
 
 void ScCompiler::SetRelNameReference()
 {
@@ -2775,7 +2775,8 @@ void ScCompiler::SetRelNameReference()
     }
 }
 
-// nur relative aus RangeName mit Wrap an Position anpassen
+// Wrap-adjust relative references of a RangeName to current position,
+// don't call for other token arrays!
 void ScCompiler::MoveRelWrap()
 {
     pArr->Reset();
@@ -2790,7 +2791,8 @@ void ScCompiler::MoveRelWrap()
 }
 
 // static
-// nur relative aus RangeName mit Wrap an Position anpassen
+// Wrap-adjust relative references of a RangeName to current position,
+// don't call for other token arrays!
 void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
             const ScAddress& rPos )
 {
@@ -2864,7 +2866,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 #endif
                 }
             }
-            else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
+            else if( t->GetType() != svIndex )  // it may be a DB area!!!
             {
                 t->CalcAbsIfRel( rOldPos );
                 if ( t->GetType() == svSingleRef )
@@ -2984,7 +2986,7 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      short nDx, short nDy, short nDz,
                                      BOOL& rChanged)
 {
-    BOOL bRet = FALSE;                      // wird gesetzt, wenn rel-Ref
+    BOOL bRet = FALSE;                      // set if relative reference
     rChanged = FALSE;
     pArr->Reset();
     for( ScToken* t = pArr->GetNextReference(); t;
@@ -3022,7 +3024,7 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
         for( t = pArr->GetNextReference(); t;
              t = pArr->GetNextReference() )
         {
-            if( t->GetType() != svIndex )   // es kann ein DB-Bereich sein !!!
+            if( t->GetType() != svIndex )   // it may be a DB area!!!
             {
                 t->CalcAbsIfRel( rOldPos );
                 // Absolute references have been already adjusted in the named
@@ -3083,7 +3085,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
 {
     ScRangeData* pRangeData = NULL;
     short nTab;
-    USHORT nPosTab = aPos.Tab();    // _nach_ evtl. Increment!
+    USHORT nPosTab = aPos.Tab();    // _after_ incremented!
     USHORT nOldPosTab = ((nPosTab > nTable) ? (nPosTab - 1) : nPosTab);
     BOOL bIsRel = FALSE;
     ScToken* t;
@@ -3103,10 +3105,10 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                     pRangeData = pName;
             }
         }
-        else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
+        else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
             if ( !(bIsName && t->GetSingleRef().IsTabRel()) )
-            {   // Namen nur absolute anpassen
+            {   // of names only adjust absolute references
                 SingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
                 {
@@ -3125,7 +3127,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
             if ( t->GetType() == svDoubleRef )
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
-                {   // Namen nur absolute anpassen
+                {   // of names only adjust absolute references
                     SingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
                     {
@@ -3143,7 +3145,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                     bIsRel = TRUE;
             }
             if ( bIsName && bIsRel )
-                pRangeData = (ScRangeData*) this;   // wird in rangenam nicht dereferenziert
+                pRangeData = (ScRangeData*) this;   // not dereferenced in rangenam
         }
         if (bIsName)
             t = pArr->GetNextReference();
@@ -3160,7 +3162,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
             {
                 SingleRefData& rRef1 = t->GetSingleRef();
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
-                {   // Namen nur absolute anpassen
+                {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
                     {
                         nTab = rRef1.nRelTab + nOldPosTab;
@@ -3177,7 +3179,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( USHORT nTable, BOOL bIsName )
                 {
                     SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
-                    {   // Namen nur absolute anpassen
+                    {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
                         {
                             nTab = rRef2.nRelTab + nOldPosTab;
@@ -3202,7 +3204,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
 {
     ScRangeData* pRangeData = NULL;
     USHORT nTab, nTab2;
-    USHORT nPosTab = aPos.Tab();         // _nach_ evtl. Decrement!
+    USHORT nPosTab = aPos.Tab();         // _after_ decremented!
     USHORT nOldPosTab = ((nPosTab >= nTable) ? (nPosTab + 1) : nPosTab);
     rChanged = FALSE;
     BOOL bIsRel = FALSE;
@@ -3224,10 +3226,10 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
             }
             rChanged = TRUE;
         }
-        else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
+        else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
             if ( !(bIsName && t->GetSingleRef().IsTabRel()) )
-            {   // Namen nur absolute anpassen
+            {   // of names only adjust absolute references
                 SingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
                     nTab = rRef.nRelTab + nOldPosTab;
@@ -3253,8 +3255,8 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                             rRef.nTab = MAXTAB+1;
                             rRef.SetTabDeleted( TRUE );
                         }
-                        // else: nTab zeigt spaeter auf jetziges nTable+1
-                        // => Bereich verkleinert
+                        // else: nTab later points to what's nTable+1 now
+                        // => area shrunk
                     }
                     else
                     {
@@ -3270,7 +3272,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
             if ( t->GetType() == svDoubleRef )
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
-                {   // Namen nur absolute anpassen
+                {   // of names only adjust absolute references
                     SingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
                         nTab = rRef.nRelTab + nOldPosTab;
@@ -3284,7 +3286,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                     else if ( nTable == nTab )
                     {
                         if ( !t->GetDoubleRef().Ref1.IsTabDeleted() )
-                            rRef.nTab = nTab - 1;   // Bereich verkleinern
+                            rRef.nTab = nTab - 1;   // shrink area
                         else
                         {
                             rRef.nTab = MAXTAB+1;
@@ -3298,7 +3300,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                     bIsRel = TRUE;
             }
             if ( bIsName && bIsRel )
-                pRangeData = (ScRangeData*) this;   // wird in rangenam nicht dereferenziert
+                pRangeData = (ScRangeData*) this;   // not dereferenced in rangenam
         }
         if (bIsName)
             t = pArr->GetNextReference();
@@ -3315,7 +3317,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
             {
                 SingleRefData& rRef1 = t->GetSingleRef();
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
-                {   // Namen nur absolute anpassen
+                {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
                         nTab = rRef1.nRelTab + nOldPosTab;
                     else
@@ -3340,8 +3342,8 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                                 rRef1.nTab = MAXTAB+1;
                                 rRef1.SetTabDeleted( TRUE );
                             }
-                            // else: nTab zeigt spaeter auf jetziges nTable+1
-                            // => Bereich verkleinert
+                            // else: nTab later points to what's nTable+1 now
+                            // => area shrunk
                         }
                         else
                         {
@@ -3356,7 +3358,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                 {
                     SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
-                    {   // Namen nur absolute anpassen
+                    {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
                             nTab = rRef2.nRelTab + nOldPosTab;
                         else
@@ -3369,7 +3371,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
                         else if ( nTable == nTab )
                         {
                             if ( !rRef1.IsTabDeleted() )
-                                rRef2.nTab = nTab - 1;  // Bereich verkleinern
+                                rRef2.nTab = nTab - 1;  // shrink area
                             else
                             {
                                 rRef2.nTab = MAXTAB+1;
@@ -3386,7 +3388,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsNa
     return pRangeData;
 }
 
-// aPos.Tab() muss bereits angepasst sein!
+// aPos.Tab() must be already adjusted!
 ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
         BOOL bIsName )
 {
@@ -3394,7 +3396,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
     INT16 nTab;
 
     USHORT nStart, nEnd;
-    short nDir;                         // Richtung, die die anderen wandern
+    short nDir;                         // direction in which others move
     if ( nOldTab < nNewTab )
     {
         nDir = -1;
@@ -3407,14 +3409,14 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
         nStart = nNewTab;
         nEnd = nOldTab;
     }
-    USHORT nPosTab = aPos.Tab();        // aktuelle Tabelle
-    USHORT nOldPosTab;                  // vorher war's die
+    USHORT nPosTab = aPos.Tab();        // current sheet
+    USHORT nOldPosTab;                  // previously it was this one
     if ( nPosTab == nNewTab )
         nOldPosTab = nOldTab;           // look, it's me!
     else if ( nPosTab < nStart || nEnd < nPosTab )
-        nOldPosTab = nPosTab;           // wurde nicht bewegt
+        nOldPosTab = nPosTab;           // wasn't moved
     else
-        nOldPosTab = nPosTab - nDir;    // einen verschoben
+        nOldPosTab = nPosTab - nDir;    // moved by one
 
     BOOL bIsRel = FALSE;
     ScToken* t;
@@ -3434,11 +3436,11 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
                     pRangeData = pName;
             }
         }
-        else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
+        else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
             SingleRefData& rRef1 = t->GetSingleRef();
             if ( !(bIsName && rRef1.IsTabRel()) )
-            {   // Namen nur absolute anpassen
+            {   // of names only adjust absolute references
                 if ( rRef1.IsTabRel() )
                     nTab = rRef1.nRelTab + nOldPosTab;
                 else
@@ -3455,7 +3457,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
             {
                 SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                 if ( !(bIsName && rRef2.IsTabRel()) )
-                {   // Namen nur absolute anpassen
+                {   // of names only adjust absolute references
                     if ( rRef2.IsTabRel() )
                         nTab = rRef2.nRelTab + nOldPosTab;
                     else
@@ -3486,7 +3488,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
                 }
             }
             if ( bIsName && bIsRel )
-                pRangeData = (ScRangeData*) this;   // wird in rangenam nicht dereferenziert
+                pRangeData = (ScRangeData*) this;   // not dereferenced in rangenam
         }
         if (bIsName)
             t = pArr->GetNextReference();
@@ -3504,7 +3506,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
             {
                 SingleRefData& rRef1 = t->GetSingleRef();
                 if ( rRef1.IsRelName() && rRef1.IsTabRel() )
-                {   // RelName evtl. wrappen, wie lcl_MoveItWrap in refupdat.cxx
+                {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                     nTab = rRef1.nRelTab + nPosTab;
                     if ( nTab < 0 )
                         nTab += nMaxTabMod;
@@ -3528,7 +3530,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( USHORT nOldTab, USHORT nNewTab,
                 {
                     SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsRelName() && rRef2.IsTabRel() )
-                    {   // RelName evtl. wrappen, wie lcl_MoveItWrap in refupdat.cxx
+                    {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                         nTab = rRef2.nRelTab + nPosTab;
                         if ( nTab < 0 )
                             nTab += nMaxTabMod;
