@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:53:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // include ---------------------------------------------------------------
 
 #ifndef _UNO_LINGU_HXX
@@ -177,6 +176,13 @@
 #endif
 #include "svxdlg.hxx" //CHINA001
 #include "dialogs.hrc" //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _SFXREQUEST_HXX //CHINA001
+#include <sfx2/request.hxx> //CHINA001
+#endif //CHINA001
+#include "flagsdef.hxx" //CHINA001
 using namespace ::com::sun::star;
 
 // define ----------------------------------------------------------------
@@ -1821,6 +1827,27 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
     m_bPreviewBackgroundToCharacter = sal_True;
 }
 
+// -----------------------------------------------------------------------
+void SvxCharNamePage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFontListItem,SvxFontListItem,SID_ATTR_CHAR_FONTLIST,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pDisalbeItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
+    if (pFontListItem)
+        SetFontList(*pFontListItem);
+        //CHINA001 SetFontList(pFontListItem->GetFontList());
+
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SVX_RELATIVE_MODE ) == SVX_RELATIVE_MODE )
+            EnableRelativeMode();
+        if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
+            SetPreviewBackgroundToCharacter();
+    }
+    if (pDisalbeItem)
+        DisableControls(pDisalbeItem->GetValue());
+}
 // class SvxCharEffectsPage ----------------------------------------------
 
 SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSet ) :
@@ -2948,6 +2975,24 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
     m_bPreviewBackgroundToCharacter = TRUE;
 }
 
+// -----------------------------------------------------------------------
+void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pDisableCtlItem,SfxUInt16Item,SID_DISABLE_CTL,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pDisableCtlItem)
+        DisableControls(pDisableCtlItem->GetValue());
+
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
+            EnableFlash();
+        if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
+            SetPreviewBackgroundToCharacter();
+    }
+}
+
 // class SvxCharPositionPage ---------------------------------------------
 
 SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
@@ -3704,6 +3749,17 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
 {
     m_bPreviewBackgroundToCharacter = TRUE;
 }
+// -----------------------------------------------------------------------
+void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
+            SetPreviewBackgroundToCharacter();
+    }
+}
 // class SvxCharTwoLinesPage ------------------------------------------------
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rInSet ) :
@@ -3925,3 +3981,14 @@ void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
     m_bPreviewBackgroundToCharacter = TRUE;
 }
 
+// -----------------------------------------------------------------------
+void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
+            SetPreviewBackgroundToCharacter();
+    }
+}
