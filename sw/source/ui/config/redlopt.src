@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:19:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_REDLINE_OPT
         Text [ danish ] = "Tekstvisning" ;
         Text [ italian ] = "Rappresentazione testo" ;
         Text [ spanish ] = "Ver texto" ;
-        Text [ french ] = "Affichage du texte" ;
+        Text [ french ] = "Représentation du texte" ;
         Text [ dutch ] = "Tekstweergave" ;
         Text[ chinese_simplified ] = "ÎÄ×ÖÏÔÊ¾";
         Text[ russian ] = "Ïîêàç òåêñòà";
@@ -114,7 +114,7 @@ TabPage TP_REDLINE_OPT
         Text = "Einfügen" ;
         Text [ English ] = "Insert" ;
         Text[ english_us ] = "Insertions";
-        Text[ portuguese ] = "Insert";
+        Text[ portuguese ] = "Inserir";
         Text[ russian ] = "Âñòàâèòü";
         Text[ greek ] = "ÅéóáãùãŞ";
         Text[ dutch ] = "Insert";
@@ -127,7 +127,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Wstaw";
         Text[ portuguese_brazilian ] = "Insert";
         Text[ japanese ] = "‘}“ü";
-        Text[ korean ] = "Insert";
+        Text[ korean ] = "»ğÀÔ";
         Text[ chinese_simplified ] = "²åÈë";
         Text[ chinese_traditional ] = "´¡¤J";
         Text[ turkish ] = "Insert";
@@ -398,12 +398,12 @@ TabPage TP_REDLINE_OPT
         < "ÀÌÅÅ¸¯Ã¼" ; > ;
         < "¹ØÁÙ" ; > ;
         < "ÀÌÁß ¹ØÁÙ" ; > ;
+        < "¸»¼Ò" ; > ;
         < "´ë¹®ÀÚ" ; > ;
         < "¼Ò¹®ÀÚ" ; > ;
         < "½º¸ôÄ¸" ; > ;
         < "Á¦¸ñ ±Û²Ã" ; > ;
-        < "¹è°æ»ö" ; > ;
-        < "¹è°æ»ö" ; > ;
+        < "¹è°æ ÄÃ·¯" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -560,7 +560,7 @@ TabPage TP_REDLINE_OPT
         Text = "Löschen" ;
         Text [ English ] = "Delete" ;
         Text[ english_us ] = "Deletions";
-        Text[ portuguese ] = "Delete";
+        Text[ portuguese ] = "Eliminar";
         Text[ russian ] = "Óäàëèòü";
         Text[ greek ] = "ÄéáãñáöŞ";
         Text[ dutch ] = "Delete";
@@ -573,7 +573,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "Delete";
         Text[ japanese ] = "íœ";
-        Text[ korean ] = "Delete";
+        Text[ korean ] = "»èÁ¦";
         Text[ chinese_simplified ] = "É¾³ı";
         Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "Delete";
@@ -599,7 +599,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "‘®«";
-        Text[ korean ] = "¼Ó¼º!";
+        Text[ korean ] = "¾îÆ®¸®ºäÆ®!";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
@@ -633,7 +633,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
         Text[ japanese ] = "F";
-        Text[ korean ] = "»ö»ó";
+        Text[ korean ] = "ÄÃ·¯";
         Text[ chinese_simplified ] = "²ÊÉ«";
         Text[ chinese_traditional ] = "±m¦â";
         Text[ turkish ] = "Color";
@@ -683,7 +683,7 @@ TabPage TP_REDLINE_OPT
         Text = "Attributänderung" ;
         Text [ English ] = "Attributes changed" ;
         Text[ english_us ] = "Changed attributes";
-        Text[ portuguese ] = "Attributes changed";
+        Text[ portuguese ] = "Modificar atributos";
         Text[ russian ] = "Èçìåíåíèå àòğèáóòîâ";
         Text[ greek ] = "Ôñïğïğïßçóç éäéüôçôáò";
         Text[ dutch ] = "Attributes changed";
@@ -696,7 +696,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Modyfikacja atrybutów";
         Text[ portuguese_brazilian ] = "Attributes changed";
         Text[ japanese ] = "‘®«‚Ì•ÏX";
-        Text[ korean ] = "Attributes changed";
+        Text[ korean ] = "¼Ó¼ºÀÌ º¯°æµÇ¾ú½À´Ï´Ù";
         Text[ chinese_simplified ] = "ÊôĞÔ¸ü¸Ä";
         Text[ chinese_traditional ] = "Äİ©ÊÅÜ§ó";
         Text[ turkish ] = "Attributes changed";
@@ -722,7 +722,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "‘®«";
-        Text[ korean ] = "¼Ó¼º";
+        Text[ korean ] = "¾îÆ®¸®ºäÆ®";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
@@ -756,7 +756,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
         Text[ japanese ] = "F";
-        Text[ korean ] = "»ö»ó";
+        Text[ korean ] = "ÄÃ·¯";
         Text[ chinese_simplified ] = "²ÊÉ«";
         Text[ chinese_traditional ] = "±m¦â";
         Text[ turkish ] = "Color";
@@ -849,7 +849,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "¼Ğ°O(~K)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "ÓŞìá~íóç";
-        Text[ korean ] = "¼±ÅÃ Ç¥½Ã";
+        Text[ korean ] = "¸¶Å© Ç¥½Ã(~K)";
         Text[ turkish ] = "İşaret";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marca";
@@ -984,8 +984,8 @@ TabPage TP_REDLINE_OPT
     StringList [ chinese_traditional ] =
     {
             < "[µL]" ; > ;
-        < "¥ª¦VÃä®Ø" ; > ;
-        < "¥k¦VÃä®Ø" ; > ;
+        < "¥ªÃä®Ø" ; > ;
+        < "¥kÃä®Ø" ; > ;
         < "Ãä®Ø¥~°¼" ; > ;
         < "Ãä®Ø¤º°¼" ; > ;
     };
@@ -1138,6 +1138,7 @@ TabPage TP_REDLINE_OPT
         Text[ finnish ] = "[Ei mitään]";
     };
 };
+
 
 
 
