@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 17:09:32 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 18:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,9 +251,9 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
-class SdDrawPagesAccess : public ::cppu::WeakImplHelper1< ::com::sun::star::drawing::XDrawPages >
+class SdDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
 private:
     SdXImpressDocument& rModel;
@@ -273,12 +273,17 @@ public:
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdMasterPagesAccess : public ::cppu::WeakImplHelper1< ::com::sun::star::drawing::XDrawPages >
+class SdMasterPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
 private:
     SdXImpressDocument& rModel;
@@ -298,6 +303,11 @@ public:
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
