@@ -1,0 +1,25 @@
+#! /bin/sh
+
+SDKDIRECTORY=`dirname $0`
+
+# source the prepared environment and start a new shell
+if [ -r $SDKDIRECTORY/setsdkenv_unix.sh ]
+then
+    . $SDKDIRECTORY/setsdkenv_unix.sh
+else
+    echo 
+    echo " *********************************************************************"
+    echo " *"
+    echo " * Error: You have to configure your SDK environment first"
+    echo " *        before you can use it!"
+    echo " *"
+    echo " *********************************************************************"
+    echo 
+    exit 1
+fi
+
+"$SHELL" "$@"
+echo  Shell terminated.
+
+TERMHEAD=`hostname`
+echo "]2;$TERMHEAD"
