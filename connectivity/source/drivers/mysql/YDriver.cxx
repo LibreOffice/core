@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:00:32 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ namespace connectivity
             aProps.push_back( PropertyValue(
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
                                 ,0
-                                ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("select last_id()")))
+                                ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT LAST_INSERT_ID()")))
                                 ,PropertyState_DIRECT_VALUE) );
             aProps.push_back( PropertyValue(
                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
