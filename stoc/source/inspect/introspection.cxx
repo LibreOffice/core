@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 13:38:11 $
+ *  last change: $Author: ab $ $Date: 2002-04-10 15:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,20 +1596,41 @@ struct TypeProviderAccessCache_Impl
         if( rObj1.xPropInfo != rObj2.xPropInfo )
             return sal_False;
 
-        const sal_Int8* pId1 = rObj1.maImpIdSeq.getConstArray();
-        const sal_Int8* pId2 = rObj2.maImpIdSeq.getConstArray();
-        return memcmp( pId1, pId2, 16 * sizeof( sal_Int8 ) ) == 0;
+        bool bEqual = false;
+        sal_Int32 nLen1 = rObj1.maImpIdSeq.getLength();
+        sal_Int32 nLen2 = rObj2.maImpIdSeq.getLength();
+        if( nLen1 == nLen2 && nLen1 > 0 )
+        {
+            const sal_Int8* pId1 = rObj1.maImpIdSeq.getConstArray();
+            const sal_Int8* pId2 = rObj2.maImpIdSeq.getConstArray();
+            bEqual = (memcmp( pId1, pId2, nLen1 * sizeof( sal_Int8 ) ) == 0 );
+        }
+        return bEqual;
     }
 };
 
 size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl & rObj ) const
 {
     const sal_Int32* pBytesAsInt32Array = (const sal_Int32*)rObj.maImpIdSeq.getConstArray();
-    sal_Int32 nId32 =   pBytesAsInt32Array[0] ^
-                        pBytesAsInt32Array[1] ^
-                        pBytesAsInt32Array[2] ^
-                        pBytesAsInt32Array[3];
-    return (size_t)nId32 ^ (size_t)rObj.xPropInfo.get();
+    sal_Int32 nLen = rObj.maImpIdSeq.getLength();
+    sal_Int32 nCount32 = nLen / 4;
+    sal_Int32 nMod32 = nLen % 4;
+
+    // XOR with full 32 bit values
+    sal_Int32 nId32 = 0;
+    for( sal_Int32 i = 0 ; i < nCount32 ; i++ )
+        nId32 ^= *(pBytesAsInt32Array++);
+
+    // XOR with remaining byte values
+    if( nMod32 )
+    {
+        const sal_Int8* pBytes = (const sal_Int8*)pBytesAsInt32Array;
+        sal_Int8* pInt8_Id32 = (sal_Int8*)&nId32;
+        for( i = 0 ; i < nMod32 ; i++ )
+            *(pInt8_Id32++) ^= *(pBytes++);
+    }
+
+    return (size_t)nId32;
 }
 
 
@@ -2056,56 +2077,59 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
     if( xTypeProvider.is() )
     {
         Sequence< sal_Int8 > aImpIdSeq = xTypeProvider->getImplementationId();
+        sal_Int32 nIdLen = aImpIdSeq.getLength();
 
-        // cache only, if the descriptor class is set
-        hashTypeProviderKey_Impl aKeySeq( xPropSetInfo, aImpIdSeq );
-
-        TypeProviderAccessCacheMap::iterator aIt = aTPCache.find( aKeySeq );
-        if( aIt == aTPCache.end() )
+        if( nIdLen )
         {
-            // not found
-            // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
-            pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
+            // cache only, if the descriptor class is set
+            hashTypeProviderKey_Impl aKeySeq( xPropSetInfo, aImpIdSeq );
 
-            // RefCount von Hand erhoehen, muss beim Entfernen
-            // aus der Hashtable wieder released werden
-            pAccess->acquire();
-
-            // Groesse begrenzen, alten Eintrag wieder rausschmeissen
-            if( mnTPCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
+            TypeProviderAccessCacheMap::iterator aIt = aTPCache.find( aKeySeq );
+            if( aIt == aTPCache.end() )
             {
-                // Access mit dem kleinsten HitCount suchen
-                TypeProviderAccessCacheMap::iterator iter = aTPCache.begin();
-                TypeProviderAccessCacheMap::iterator end = aTPCache.end();
-                TypeProviderAccessCacheMap::iterator toDelete = iter;
-                while( iter != end )
-                {
-                    if( (*iter).first.nHitCount < (*toDelete).first.nHitCount )
-                        toDelete = iter;
-                    ++iter;
-                }
+                // not found
+                // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
+                pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
 
-                // Gefundenen Eintrag entfernen
-                if( (*toDelete).second )
-                    (*toDelete).second->release();
-                (*toDelete).second = NULL;
-                aTPCache.erase( toDelete );
+                // RefCount von Hand erhoehen, muss beim Entfernen
+                // aus der Hashtable wieder released werden
+                pAccess->acquire();
+
+                // Groesse begrenzen, alten Eintrag wieder rausschmeissen
+                if( mnTPCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
+                {
+                    // Access mit dem kleinsten HitCount suchen
+                    TypeProviderAccessCacheMap::iterator iter = aTPCache.begin();
+                    TypeProviderAccessCacheMap::iterator end = aTPCache.end();
+                    TypeProviderAccessCacheMap::iterator toDelete = iter;
+                    while( iter != end )
+                    {
+                        if( (*iter).first.nHitCount < (*toDelete).first.nHitCount )
+                            toDelete = iter;
+                        ++iter;
+                    }
+
+                    // Gefundenen Eintrag entfernen
+                    if( (*toDelete).second )
+                        (*toDelete).second->release();
+                    (*toDelete).second = NULL;
+                    aTPCache.erase( toDelete );
+                }
+                else
+                    mnTPCacheEntryCount++;
+
+                // Neuer Eintrage rein in die Table
+                aKeySeq.nHitCount = 1;
+                aTPCache[ aKeySeq ] = pAccess;
+
             }
             else
-                mnTPCacheEntryCount++;
-
-            // Neuer Eintrage rein in die Table
-            aKeySeq.nHitCount = 1;
-            aTPCache[ aKeySeq ] = pAccess;
-
+            {
+                // Hit-Count erhoehen
+                (*aIt).first.IncHitCount();
+                return (*aIt).second;
+            }
         }
-        else
-        {
-            // Hit-Count erhoehen
-            (*aIt).first.IncHitCount();
-            return (*aIt).second;
-        }
-
     }
     else if( xImplClass.is() )
     {
