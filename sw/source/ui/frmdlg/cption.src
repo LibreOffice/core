@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:34:25 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_CAPTION
         Text[ chinese_traditional ] = "¿ï¶µ(~O)";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "¿É¼Ç(~O)";
         Text[ turkish ] = "~Seçenekler";
         Text[ language_user1 ] = " ";
     };
@@ -165,7 +165,7 @@ ModalDialog DLG_CAPTION
         Text[ chinese_traditional ] = "¤ÀÃş(~A)";
         Text[ arabic ] = "ÇáİÆÉ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "¹üÁÖ";
+        Text[ korean ] = "¹üÁÖ(~A)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
     };
@@ -276,7 +276,7 @@ ModalDialog DLG_CAPTION
         Text[ chinese_traditional ] = "¦ì¸m(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "K~onum";
         Text[ language_user1 ] = " ";
     };
@@ -569,7 +569,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ chinese_traditional ] = "¯Å(~L)";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "¼öÁØ";
+        Text[ korean ] = "¼öÁØ(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
     };
@@ -687,7 +687,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ chinese_traditional ] = "³s±µ²Å(~S)";
         Text[ arabic ] = "ÇáİÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞÀÚ";
+        Text[ korean ] = "±¸ºĞÀÚ(~S)";
         Text[ turkish ] = "A~yırma işr.";
         Text[ language_user1 ] = " ";
     };
