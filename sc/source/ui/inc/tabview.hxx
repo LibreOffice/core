@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:41:55 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,10 @@ private:
 
     ScPageBreakData*    pPageBreakData;         // fuer Seitenumbruch-Modus
     ScHighlightRanges*  pHighlightRanges;
+
+    ScDocument*         pBrushDocument;         // cell formats for format paint brush
+    SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
+    BOOL                bLockPaintBrush;        // keep for more than one use?
 
     Timer               aScrollTimer;
     ScGridWindow*       pTimerWindow;
@@ -514,6 +518,14 @@ public:
     void            EnableRefInput(BOOL bFlag=TRUE);
 
     Window*         GetFrameWin() const { return pFrameWin; }
+
+    BOOL            HasPaintBrush() const           { return pBrushDocument || pDrawBrushSet; }
+    ScDocument*     GetBrushDocument() const        { return pBrushDocument; }
+    SfxItemSet*     GetDrawBrushSet() const         { return pDrawBrushSet; }
+    BOOL            IsPaintBrushLocked() const      { return bLockPaintBrush; }
+    void            SetBrushDocument( ScDocument* pNew, BOOL bLock );
+    void            SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock );
+    void            ResetBrushDocument();
 };
 
 
