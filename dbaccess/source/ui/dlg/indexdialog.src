@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:06:11 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,6 @@
 #define LIST_WIDTH          70
 
 #define IL_TOOL \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_INDEX_NEW;\
@@ -99,6 +94,11 @@
 
 ImageList IMG_INDEX_DLG_SC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "sc_idx.bmp";
@@ -107,6 +107,11 @@ ImageList IMG_INDEX_DLG_SC
 };
 ImageList IMG_INDEX_DLG_SCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "sch_idx.bmp";
@@ -115,6 +120,11 @@ ImageList IMG_INDEX_DLG_SCH
 };
 ImageList IMG_INDEX_DLG_LC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "lc_idx.bmp";
@@ -123,6 +133,11 @@ ImageList IMG_INDEX_DLG_LC
 };
 ImageList IMG_INDEX_DLG_LCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "lch_idx.bmp";
@@ -837,6 +852,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2002/05/02 23:06:11  kz
+ *  Merge SRX642: 03.05.02 - 01:05:08
+ *
  *  Revision 1.23  2002/04/29 08:27:33  oj
  *  #98772# impl toolbox hi contrast
  *
