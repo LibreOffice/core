@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:38:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ private:
     static BOOL         mbHaveGLVisual;
 
     static BOOL         ImplInit();
-    static void         ImplFreeLib();
 
     static GLXContext (*pCreateContext)( Display *, XVisualInfo *, GLXContext, Bool );
     static void       (*pDestroyContext)( Display *, GLXContext );
@@ -119,6 +118,7 @@ public:
     ~X11SalOpenGL();
 
     static void     Release();
+    static void     ReleaseLib();
     static void     MakeVisualWeights(
                                       Display *pDisplay,
                                       XVisualInfo* pInfos,
