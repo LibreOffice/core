@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:27:38 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include "rtl/process.h"
 #include "rtl/bootstrap.hxx"
+#include "rtl/random.h"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
@@ -74,6 +75,7 @@
 #include "osl/file.hxx"
 #include "osl/module.hxx"
 #include "osl/security.hxx"
+#include "osl/thread.hxx"
 
 #include "cppuhelper/shlib.hxx"
 #include "cppuhelper/bootstrap.hxx"
@@ -91,8 +93,11 @@
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/io/IOException.hpp"
+#include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+#include "com/sun/star/util/XMacroExpander.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+#define ARLEN(x) sizeof (x) / sizeof *(x)
 
 
 using namespace ::rtl;
@@ -500,5 +505,155 @@ SAL_CALL defaultBootstrap_InitialComponentContext()
     return defaultBootstrap_InitialComponentContext( get_unorc() );
 }
 
-} // namespace cppu
+BootstrapException::BootstrapException()
+{
+}
 
+BootstrapException::BootstrapException( const ::rtl::OUString & rMessage )
+    :m_aMessage( rMessage )
+{
+}
+
+BootstrapException::BootstrapException( const BootstrapException & e )
+{
+    m_aMessage = e.m_aMessage;
+}
+
+BootstrapException::~BootstrapException()
+{
+}
+
+BootstrapException & BootstrapException::operator=( const BootstrapException & e )
+{
+    m_aMessage = e.m_aMessage;
+    return *this;
+}
+
+const ::rtl::OUString & BootstrapException::getMessage() const
+{
+    return m_aMessage;
+}
+
+Reference< XComponentContext > SAL_CALL bootstrap()
+{
+    Reference< XComponentContext > xRemoteContext;
+
+    try
+    {
+        // create default local component context
+        Reference< XComponentContext > xLocalContext(
+            defaultBootstrap_InitialComponentContext() );
+        if ( !xLocalContext.is() )
+            throw BootstrapException( OUSTR( "no local component context!" ) );
+
+        // URL to office executable
+        Reference<util::XMacroExpander> xMacroExpander(
+            xLocalContext->getValueByName(
+            OUSTR( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+            UNO_QUERY_THROW );
+        OUString sOfficeURL( xMacroExpander->expandMacros( OUSTR( "$ORIGIN" ) )
+            + OUSTR( "/soffice" ) );
+
+        // create a random pipe name
+        rtlRandomPool hPool = rtl_random_createPool();
+        if ( hPool == 0 )
+            throw BootstrapException( OUSTR( "cannot create random pool!" ) );
+        sal_uInt8 bytes[ 32 ];
+        if ( rtl_random_getBytes( hPool, bytes, ARLEN( bytes ) )
+            != rtl_Random_E_None )
+            throw BootstrapException( OUSTR( "random pool error!" ) );
+        rtl_random_destroyPool( hPool );
+        ::rtl::OUStringBuffer buf;
+        for ( sal_uInt32 i = 0; i < ARLEN( bytes ); ++i )
+            buf.append( static_cast< sal_Int32 >( bytes[ i ] ), 0x10 );
+        OUString sPipeName( buf.makeStringAndClear() );
+
+        // accept string
+        OSL_ASSERT( buf.getLength() == 0 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "-accept=pipe,name=" ) );
+        buf.append( sPipeName );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
+
+        // arguments
+        OUString args [] = {
+            OUSTR( "-nologo" ), OUSTR( "-nodefault" ), buf.makeStringAndClear()
+        };
+        rtl_uString * ar_args [] = {
+            args[ 0 ].pData, args[ 1 ].pData, args[ 2 ].pData
+        };
+        ::osl::Security sec;
+
+        // start office process
+        oslProcess hProcess = 0;
+        oslProcessError rc = osl_executeProcess(
+            sOfficeURL.pData, ar_args, ARLEN( ar_args ),
+            osl_Process_DETACHED,
+            sec.getHandle(),
+            0, // => current working dir
+            0, 0, // => no env vars
+            &hProcess );
+        switch ( rc )
+        {
+            case osl_Process_E_None:
+                break;
+            case osl_Process_E_NotFound:
+                throw BootstrapException( OUSTR( "image not found!" ) );
+            case osl_Process_E_TimedOut:
+                throw BootstrapException( OUSTR( "timout occured!" ) );
+            case osl_Process_E_NoPermission:
+                throw BootstrapException( OUSTR( "permission denied!" ) );
+            case osl_Process_E_Unknown:
+                throw BootstrapException( OUSTR( "unknown error!" ) );
+            case osl_Process_E_InvalidError:
+            default:
+                throw BootstrapException( OUSTR( "unmapped error!" ) );
+        }
+
+        // initial service manager
+        Reference< lang::XMultiComponentFactory > xLocalServiceManager(
+            xLocalContext->getServiceManager() );
+        if ( !xLocalServiceManager.is() )
+            throw BootstrapException( OUSTR( "no initial service manager!" ) );
+
+        // create a URL resolver
+        Reference< bridge::XUnoUrlResolver > xUrlResolver(
+            xLocalServiceManager->createInstanceWithContext(
+            OUSTR( "com.sun.star.bridge.UnoUrlResolver" ), xLocalContext ),
+            UNO_QUERY_THROW );
+
+        // connection string
+        OSL_ASSERT( buf.getLength() == 0 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
+        buf.append( sPipeName );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+            ";urp;StarOffice.ComponentContext" ) );
+        OUString sConnectString( buf.makeStringAndClear() );
+
+        // wait until office is started
+        for ( ; ; )
+        {
+            try
+            {
+                // try to connect to office
+                xRemoteContext.set(
+                    xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
+                break;
+            }
+            catch ( connection::NoConnectException & )
+            {
+                // wait 500 ms, then try to connect again
+                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
+                ::osl::Thread::wait( tv );
+            }
+        }
+    }
+    catch ( Exception & e )
+    {
+        throw BootstrapException(
+            OUSTR( "unexpected UNO exception caught: " ) + e.Message );
+    }
+
+    return xRemoteContext;
+}
+
+} // namespace cppu
