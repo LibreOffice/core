@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:12:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2139,16 +2139,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                  ( 1 < aExpand.GetTokenCount( '\n' ) ||
                        aExpand.GetTokenCount( '\t' )) )
             {
-                // wo stehen wir ueberhaupt ??
-                // Wir duerfen keine Tabelle in eine Tabelle einfuegen !!
-                if( rWrtShell.IsCrsrInTbl() )
-                {
-                    if(bMsg)
-                        InfoBox(0, String(SW_RES(STR_NO_TABLE))).Execute();
-                    pDDETyp = 0;
-                    break;
-                }
-
                 String sTmp( aExpand );
                 xub_StrLen nRows = sTmp.GetTokenCount( '\n' );
                 if( nRows )
