@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:50:58 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ greek ] = "”мяксхнуз";
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_OPTIONS
     {
