@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-11 05:53:27 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include "hashhelper.hxx"
 #include <vos/ref.hxx>
 
 namespace com { namespace sun { namespace star {
