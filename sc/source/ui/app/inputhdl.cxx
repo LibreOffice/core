@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:01:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2050,6 +2050,22 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
                 if ( pData->DoError( pParent, aString, aCursorPos ) )
                     bForget = TRUE;                 // Eingabe nicht uebernehmen
             }
+        }
+    }
+
+    // check for input into DataPilot table
+
+    if ( bModified && pActiveViewSh && !bForget )
+    {
+        ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
+        ScDPObject* pDPObj = pDoc->GetDPAtCursor( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
+        if ( pDPObj )
+        {
+            // any input within the DataPilot table is either a valid renaming
+            // or an invalid action - normal cell input is always aborted
+
+            pActiveViewSh->DataPilotInput( aCursorPos, aString );
+            bForget = TRUE;
         }
     }
 
