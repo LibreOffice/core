@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:19:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     if ( nStyle & WB_TOP )
         nY = 0;
     else if ( nStyle & WB_BOTTOM )
-        nX = rWinSize.Height()-rObjSize.Height();
+        nY = rWinSize.Height()-rObjSize.Height();
     else
         nY = (rWinSize.Height()-rObjSize.Height())/2;
 
@@ -526,8 +526,8 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         if( !pVector )
         {
-            long nX;
-            long nY;
+            long nX = 0;
+            long nY = 0;
 
             if ( nWinStyle & WB_VERT )
             {
