@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
+ *  last change: $Author: fs $ $Date: 2001-09-06 09:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,20 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
 
-    if(!m_pTables)
-        refreshTables();
+    try
+    {
+        if(!m_pTables)
+            refreshTables();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OCatalog*>(this)->m_pTables;
 }
