@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: jl $ $Date: 2001-06-08 10:29:40 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:03:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,8 @@ SLOFILES= \
         $(SLO)$/component_context.obj	\
         $(SLO)$/component.obj		\
         $(SLO)$/shlib.obj		\
-        $(SLO)$/tdmgr.obj
+        $(SLO)$/tdmgr.obj		\
+        $(SLO)$/implementationentry.obj
 
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COM)
 

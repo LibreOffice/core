@@ -176,7 +176,8 @@ component_getDescriptionFunc
 ?removeInterface@OMultiTypeInterfaceContainerHelperInt32@cppu@@QAAJABJABV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z
 ??0OPropertySetHelper@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@@Z
 ?addListener@?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@cppu@@QAEXABVType@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?component_writeInfoHelper@cppu@@YAEPAX0QBUImplementationEntry@1@@Z
+?component_getFactoryHelper@cppu@@YAPAXPBDPAX1QBUImplementationEntry@1@@Z
     local:
         *;
 };
-
