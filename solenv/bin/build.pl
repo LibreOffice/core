@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-10 14:20:25 $
+#   last change: $Author: vg $ $Date: 2001-08-21 10:45:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.32 $ ';
+$id_str = ' $Revision: 1.33 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -147,7 +147,7 @@ sub GetParentDeps {
             $ParentDepsHash{$Prj} = [];
             next ResolveParentsLoop;
         };
-        @DepsArray = GetDependenciesArray($ParentsString);
+        @DepsArray = GetDependenciesArray($ParentsString, $Prj);
         $ParentDepsHash{$Prj} = [@DepsArray];
         foreach $Parent (@DepsArray) {
             if (!defined($ParentDepsHash{$Parent})) {
@@ -570,11 +570,17 @@ sub IsHashNative {
 # Getting array of dependencies from the string given
 #
 sub GetDependenciesArray {
-    my ($DepString, @Dependencies, $ParentPrj);
+    my ($DepString, @Dependencies, $ParentPrj, $prj, $string);
     @Dependencies = ();
     $DepString = shift;
+    $string = $DepString;
+    $prj = shift;
     while (!($DepString =~ /^NULL/)) {
-        $DepString =~ /(\S+)\s+/;
+        if (!$DepString) {
+            print STDERR "Project $prj has wrong written dependencies string:\n $string\n";
+            exit (1);
+        };
+        $DepString =~ /(\S+)\s*/;
         $ParentPrj = $1;
         $DepString = $';
         if ($ParentPrj =~ /\.(\w+)$/) {
