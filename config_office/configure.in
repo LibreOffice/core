@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-03-17 12:15:54 $
+dnl * Date: $Date: 2005-03-23 08:46:00 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.110 $ )
+AC_REVISION( $Revision: 1.111 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -754,21 +754,17 @@ dnl ===================================================================
 dnl Build options
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable native CUPS support])
-if test "$enable_cups" = "yes" -o "$enable_cups" = "TRUE"; then
-   if test "$test_cups" = "no" ; then
-      AC_MSG_ERROR([cups is not activated for your platform, raise bug report])
-   else
-      ENABLE_CUPS="TRUE"
-      AC_MSG_RESULT([yes])
-   fi
+if test "$test_cups" = "yes" -a \( "$enable_cups" = "yes" -o "$enable_cups" = "TRUE" \) ; then
+   ENABLE_CUPS="TRUE"
+   AC_MSG_RESULT([yes])
 else
    ENABLE_CUPS=""
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_CUPS)
 
-AC_MSG_CHECKING([whether to enable fontconfig supprt])
-if test "$enable_fontconfig" = "yes" -o "$enable_fontconfig" = "TRUE"; then
+AC_MSG_CHECKING([whether to enable fontconfig support])
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a \( "$enable_fontconfig" = "yes" -o "$enable_fontconfig" = "TRUE" \); then
    ENABLE_FONTCONFIG="TRUE"
    AC_MSG_RESULT([yes])
 else
@@ -1276,14 +1272,6 @@ dnl ===================================================================
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
     AC_CHECK_HEADER(cups/cups.h, [],
                     [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev or cups???-devel missing?])], [])
-fi
-
-dnl ===================================================================
-dnl Check if fontconfig/fontconfig.h is available 
-dnl ===================================================================
-if test "$ENABLE_FONTCONFIG" = "TRUE" ; then
-    AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
-                    [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
 fi
 
 dnl ===================================================================
@@ -1982,7 +1970,7 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
-if test "z$enable_epm" = "z" -o "$enable_epm" != "no"; then
+if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \) ; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
    dnl Check for epm - not needed for windows
@@ -2551,6 +2539,14 @@ XLIB="$x_libraries"
 AC_SUBST(XLIB)
 
 dnl ===================================================================
+dnl Check if fontconfig/fontconfig.h is available 
+dnl ===================================================================
+if test "$ENABLE_FONTCONFIG" = "TRUE" ; then
+    AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
+                    [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
+fi
+
+dnl ===================================================================
 dnl Check for system Xrender
 dnl ===================================================================
 AC_MSG_CHECKING([which XRender headers to use])
@@ -2594,7 +2590,7 @@ AC_SUBST(SYSTEM_NAS)
 AC_SUBST(NAS_INCLUDES)
 
 AC_MSG_CHECKING([whether to enable portaudio/sndfile support])
-if test -n "$enable_pasf"; then
+if test "$_os" != "WINNT" -a -n "$enable_pasf"; then
 	AC_MSG_RESULT([yes])
    ENABLE_PASF=YES
   	AC_MSG_CHECKING([which sndfile to use])
@@ -3115,7 +3111,7 @@ dnl ===================================================================
 
 ENABLE_GNOMEVFS=""
 AC_MSG_CHECKING([whether to enable GNOME VFS support])
-if test "$enable_gnome_vfs" = "yes"; then
+if test "$_os" != "WINNT" -a "$enable_gnome_vfs" = "yes"; then
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 )
@@ -3138,9 +3134,6 @@ if test  "$test_gtk" = "yes"; then
         PKG_CHECK_MODULES(GDKPIXBUF, gdk-pixbuf-xlib-2.0 >= 2.2)
         GTK_CFLAGS="$GTK_CFLAGS $GDKPIXBUF_CFLAGS"
         GTK_LIBS="$GTK_LIBS $GDKPIXBUF_LIBS"
-    elif test -n "$ENABLE_CRASHDUMP" ; then
-        pkg_modules="gtk+-2.0 >= 1.3.13"
-        PKG_CHECK_MODULES( GTK, [$pkg_modules] )
     fi
 
 fi
