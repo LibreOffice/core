@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:01:11 $
+ *  last change: $Author: fs $ $Date: 2002-03-19 13:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2419,32 +2419,35 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                     if ( !m_pParameterInfo )
                         createParameterInfo();
 
-                    Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
-
-                    const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                    const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-                    const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
-                    for (pDetailFields; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields)
+                    if ( m_pParameterInfo && m_pParameterInfo->nCount )
                     {
-                        Reference<XPropertySet>  xMasterField, xField;
-                        if (m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
-                        {   // we really have a parameter column with this name
-                            Reference< XPropertySet > xParamColumn;
-                            m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields) >>= xParamColumn;
-                            if (xParamColumn.is())
-                            {   // we really really have it :)
-                                ::rtl::OUString sParamColumnRealName;
-                                xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
-                                if (xCols->hasByName(sParamColumnRealName))
-                                {   // our own columns have a column which's name equals the real name of the param column
-                                    if (xParentCols->hasByName(*pMasterFields))
-                                    {   // and our parent's cols know the master field which is connected to the current detail field
+                        Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
 
-                                        // -> transfer the value property
-                                        xParentCols->getByName(*pMasterFields) >>= xMasterField;
-                                        xCols->getByName(sParamColumnRealName) >>= xField;
-                                        if (xField.is() && xMasterField.is())
-                                            xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                        const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
+                        const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+                        const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
+                        for (pDetailFields; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields)
+                        {
+                            Reference<XPropertySet>  xMasterField, xField;
+                            if (m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
+                            {   // we really have a parameter column with this name
+                                Reference< XPropertySet > xParamColumn;
+                                m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields) >>= xParamColumn;
+                                if (xParamColumn.is())
+                                {   // we really really have it :)
+                                    ::rtl::OUString sParamColumnRealName;
+                                    xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
+                                    if (xCols->hasByName(sParamColumnRealName))
+                                    {   // our own columns have a column which's name equals the real name of the param column
+                                        if (xParentCols->hasByName(*pMasterFields))
+                                        {   // and our parent's cols know the master field which is connected to the current detail field
+
+                                            // -> transfer the value property
+                                            xParentCols->getByName(*pMasterFields) >>= xMasterField;
+                                            xCols->getByName(sParamColumnRealName) >>= xField;
+                                            if (xField.is() && xMasterField.is())
+                                                xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
+                                        }
                                     }
                                 }
                             }
@@ -2453,7 +2456,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 }
                 catch(const Exception&)
                 {
-                    OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the mater-detail-driven parameters!");
+                    OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the master-detail-driven parameters!");
                 }
             }
         }
