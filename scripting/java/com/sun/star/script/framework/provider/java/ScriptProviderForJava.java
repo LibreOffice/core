@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJava.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:04:02 $
+*  last change: $Author: hr $ $Date: 2004-10-11 13:31:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -206,27 +206,21 @@ public class ScriptProviderForJava
      */
     public static boolean __writeRegistryServiceInfo( XRegistryKey regKey )
     {
-        String impl = "com.sun.star.scripting.runtime.java." +
+        String impl = "com.sun.star.script.framework.provider.java." +
             "ScriptProviderForJava$_ScriptProviderForJava";
 
-        String service = "drafts.com.sun.star.script.provider." +
+        String service1 = "drafts.com.sun.star.script.provider." +
+            "ScriptProvider";
+        String service2 = "drafts.com.sun.star.script.provider." +
+            "LanguageScriptProvider";
+        String service3 = "drafts.com.sun.star.script.provider." +
             "ScriptProviderForJava";
 
-        if (FactoryHelper.writeRegistryServiceInfo(impl, service, regKey)) {
+        if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) )
+        {
               return true;
-// code below is commented out because we want this to happen
-// as part of the install, this will have to be done
-// programatically during the install as registration of java components
-// is not fully supported in setup. It should work somewhat like c++ somewhat like c++ registration in install
-/*            try {
-                XRegistryKey newKey = regKey.createKey(impl + "/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theScriptProviderForJava");
-                newKey.setStringValue(service);
-                return true;
-            }
-            catch (Exception ex) {
-                System.err.println(
-                    "Error registering ScriptProviderForJava: " + ex);
-            }*/
         }
         return false;
     }
