@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-14 17:21:23 $
+ *  last change: $Author: obo $ $Date: 2001-02-20 09:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <xmlprmap.hxx>
 
 #include "SchXMLExport.hxx"
 #include "XMLChartPropertySetMapper.hxx"
