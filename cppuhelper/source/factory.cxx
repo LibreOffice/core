@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-04 08:50:23 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 15:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,9 +376,9 @@ public:
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    void SAL_CALL acquire() throw()
         { OComponentHelper::acquire(); }
-    void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    void SAL_CALL release() throw()
         { OComponentHelper::release(); }
 
     // XSingleServiceFactory
