@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:51:53 $
+#   last change: $Author: vg $ $Date: 2003-06-12 11:49:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,22 @@
 #
 #*************************************************************************
 
-PRODUCT_NAME=odk$(UPD)
+.IF "$(BUILD_SPECIAL)"!=""
+PRODUCT_RELEASE=6.1
+OFFICEPRODUCTNAME="StarOffice $(PRODUCT_RELEASE)"
+IDLDOCREFNAME="StarOffice6.1 API Beta"
+TITLE="StarOffice6.1 Beta SDK"
+IDL_CHAPTER_REFS=idl_chapter_refs.txt
+CONVMODE=2
+.ELSE
+PRODUCT_RELEASE=1.1 
+PRODUCT_NAME=OpenOffice.org$(PRODUCT_RELEASE)_RC_SDK
+OFFICEPRODUCTNAME="OpenOffice.org $(PRODUCT_RELEASE) RC"
+IDLDOCREFNAME="OpenOffice.org $(PRODUCT_RELEASE) API RC"
+TITLE="OpenOffice.org$(PRODUCT_RELEASE) RC SDK"
+IDL_CHAPTER_REFS=idl_chapter_refs_oo.txt
+CONVMODE=1
+.ENDIF
 
 PRODUCTZIPFILE=$(PRODUCT_NAME).zip
 PRODUCTTARGZFILE=$(PRODUCT_NAME).tar.gz
@@ -96,8 +111,13 @@ IDLOUT=$(SOLARIDLDIR)
 XMLOUT=$(SOLARXMLDIR)
 LIBOUT=$(SOLARLIBDIR)
 
+.IF "$(OS)"=="FREEBSD"
+MY_COPY=$(GNUCOPY)
+MY_COPY_RECURSIVE=$(GNUCOPY) -r
+.ELSE
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 #--------------------
@@ -155,7 +175,7 @@ DESTPLATFROM=linux
 ###########
 DESTPLATFROM=netbsd
 
-.ELIF "$(OS)"=="IRIX "
+.ELIF "$(OS)"=="IRIX"
 ###########
 # IRIX
 ###########
