@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 09:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 #endif

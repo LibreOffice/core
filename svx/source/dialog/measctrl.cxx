@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 09:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "measctrl.hxx"
 #include "dialmgr.hxx"
+#include "dlgutil.hxx"
 
 /*************************************************************************
 |*
@@ -115,6 +116,8 @@ SvxXMeasurePreview::SvxXMeasurePreview
 //-/    SdrBroadcastItemChange aItemChange(*pMeasureObj);
     pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
 //-/    pMeasureObj->BroadcastItemChange(aItemChange);
+
+    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     Invalidate();
 }
@@ -217,6 +220,18 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
             Invalidate();
         }
         delete pMultFrac;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxXMeasurePreview::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Control::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     }
 }
 
