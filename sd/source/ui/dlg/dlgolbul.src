@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ czech ] = "Odrážky";
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
+                Text[ slovak ] = "Odrážky";
             };
             PageItem
             {
@@ -134,6 +135,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ czech ] = "Typ číslování";
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देना का क्रम";
+                Text[ slovak ] = "Typ číslovania";
             };
             PageItem
             {
@@ -165,6 +167,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ czech ] = "Obrázky";
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
+                Text[ slovak ] = "Obrázky";
             };
             PageItem
             {
@@ -196,6 +199,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -227,6 +231,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ czech ] = "Přizpůsobit";
                 Text[ hebrew ] = "‮התאמה אישית‬";
                 Text[ hindi ] = "व्यवस्था करो";
+                Text[ slovak ] = "Prispôsobiť";
             };
         };
     };
@@ -256,7 +261,10 @@ TabDialog TAB_OUTLINEBULLET
     Text[ czech ] = "Číslování/odrážky";
     Text[ hebrew ] = "‮תבליטים/מיספור‬";
     Text[ hindi ] = "संख्या देना/बुल्लेट्स";
+    Text[ slovak ] = "Číslovanie/odrážky";
 };
+
+
 
 
 

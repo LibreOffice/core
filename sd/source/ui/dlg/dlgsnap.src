@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:59:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     FixedLine FL_POSITION
     {
@@ -168,6 +169,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText FT_X
     {
@@ -247,6 +249,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     ImageRadioButton RB_POINT
     {
@@ -286,6 +289,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Bod";
         Text[ hebrew ] = "~Punkt";
         Text[ hindi ] = "~बिन्दु";
+        Text[ slovak ] = "~Bod";
     };
     ImageRadioButton RB_VERTICAL
     {
@@ -325,6 +329,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Svislý";
         Text[ hebrew ] = "~Vertikal";
         Text[ hindi ] = "~लंबरूप";
+        Text[ slovak ] = "Z~vislý";
     };
     ImageRadioButton RB_HORIZONTAL
     {
@@ -364,6 +369,7 @@ ModalDialog DLG_SNAPLINE
         Text[ czech ] = "Vodorovný";
         Text[ hebrew ] = "~Horizontal";
         Text[ hindi ] = "~समतल";
+        Text[ slovak ] = "~Vodorovný";
     };
     Text[ chinese_simplified ] = "新建坐标";
     Text[ russian ] = "����� ������ ��������";
@@ -398,7 +404,10 @@ ModalDialog DLG_SNAPLINE
     Text[ czech ] = "Nový záchytný objekt";
     Text[ hebrew ] = "Neues Fangobjekt";
     Text[ hindi ] = "नया स्नॉप वस्तु";
+    Text[ slovak ] = "Nový snímok";
 };
+
+
 
 
 
