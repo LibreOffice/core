@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:06:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,10 @@
 #include "PropertySetMerger.hxx"
 #endif
 
+#ifndef _XMLOFF_XFORMSEXPORT_HXX
+#include "xformsexport.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -367,6 +371,12 @@ void SvXMLExport::_InitCtor()
     {
         pNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
         pNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+    }
+    if( (getExportFlags() & EXPORT_CONTENT ) != 0 )
+    {
+        pNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
     }
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
