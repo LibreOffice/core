@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:06:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
     aAddress.Sheet  = aPos.Tab();
     if (pDocShell)
     {
-        USHORT nDocTabs = pDocShell->GetDocument()->GetTableCount();
+        SCTAB nDocTabs = pDocShell->GetDocument()->GetTableCount();
         if ( aAddress.Sheet >= nDocTabs && nDocTabs > 0 )
         {
             //  Even after ValidateTabRefs, the position can be invalid if
@@ -280,7 +280,7 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAddress aPos( (USHORT)aReferencePosition.Column, (USHORT)aReferencePosition.Row, aReferencePosition.Sheet );
+    ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
     Modify_Impl( NULL, NULL, &aPos, NULL );
 }
 
@@ -464,7 +464,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     ScUnoGuard aGuard;
     String aNameStr = aName;
     String aContStr = aContent;
-    ScAddress aPos( (USHORT)aPosition.Column, (USHORT)aPosition.Row, aPosition.Sheet );
+    ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
 
     sal_uInt16 nNewType = RT_NAME;
     if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
@@ -557,7 +557,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAddress aPos( (USHORT)aOutputPosition.Column, (USHORT)aOutputPosition.Row, aOutputPosition.Sheet );
+    ScAddress aPos( (SCCOL)aOutputPosition.Column, (SCROW)aOutputPosition.Row, aOutputPosition.Sheet );
     if (pDocShell)
     {
         ScDocFunc aFunc(*pDocShell);
