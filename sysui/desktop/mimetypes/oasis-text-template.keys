@@ -1,9 +1,9 @@
-application/x-vnd.oasis.openoffice.text-template
-	description=Open Office Text Template
+application/vnd.oasis.opendocument.text-template
+	description=OpenDocument Text Template
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_intermediate_user_level=openoffice,staroffice,starsuite
 	short_list_application_ids_for_advanced_user_level=openoffice,staroffice,starsuite
 	category=Documents/Word Processor
 	use_category_default=yes
-	icon_filename=text-template
+	icon_filename=oasis-text-template
