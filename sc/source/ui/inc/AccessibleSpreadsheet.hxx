@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:37:40 $
+ *  last change: $Author: sab $ $Date: 2002-03-13 08:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ public:
         ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
@@ -237,11 +237,9 @@ private:
     sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsCompleteSheetSelected(
-        const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsCompleteSheetSelected();
 
-    void SelectCell(sal_Int32 nRow, sal_Int32 nCol);
+    void SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Bool bDeselect);
     void CreateSortedMarkedCells();
     void AddMarkedRange(const ScRange& rRange);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:45:02 $
+ *  last change: $Author: sab $ $Date: 2002-03-13 09:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,10 +298,10 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
 {
     ScUnoGuard aGuard;
     sal_Bool bResult(sal_False);
-    if (mpViewShell && mpViewShell->GetViewData())
+    if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
-        bResult = rMarkdata.IsCellMarked((sal_uInt16)nColumn, (sal_uInt16)nRow);
+        bResult = rMarkdata.IsCellMarked(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow));
     }
     return bResult;
 }
@@ -356,7 +356,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
     pStateSet->AddState(AccessibleStateType::OPAQUE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
-    if (IsCompleteSheetSelected(xParentStates))
+    if (IsCompleteSheetSelected())
         pStateSet->AddState(AccessibleStateType::SELECTED);
     if (isShowing())
         pStateSet->AddState(AccessibleStateType::SHOWING);
@@ -377,7 +377,7 @@ void SAL_CALL
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
         sal_Int32 nRow(getAccessibleRow(nChildIndex));
 
-        SelectCell(nRow, nCol);
+        SelectCell(nRow, nCol, sal_False);
     }
 }
 
@@ -454,43 +454,26 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleSpreadsheet::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        ScAccessibleSpreadsheet::deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     if (mpViewShell)
     {
-        if (!mpMarkedRanges)
-        {
-            mpMarkedRanges = new ScRangeList();
-            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
-        }
-        if (mpMarkedRanges)
-        {
-            if (!mpSortedMarkedCells)
-                CreateSortedMarkedCells();
-            if (mpSortedMarkedCells)
-            {
-                if ((nSelectedChildIndex < 0) ||
-                    (mpSortedMarkedCells->size() <= static_cast<sal_uInt32>(nSelectedChildIndex)))
-                    throw lang::IndexOutOfBoundsException();
-                else
-                {
-                    mpViewShell->GetViewData()->GetMarkData().SetMarkNegative(!mpViewShell->GetViewData()->GetMarkData().IsMarkNegative());
-                    SelectCell((*mpSortedMarkedCells)[nSelectedChildIndex].Row(), (*mpSortedMarkedCells)[nSelectedChildIndex].Col());
-                    mpViewShell->GetViewData()->GetMarkData().SetMarkNegative(!mpViewShell->GetViewData()->GetMarkData().IsMarkNegative());
-                }
-            }
-        }
+        sal_Int32 nCol(getAccessibleColumn(nChildIndex));
+        sal_Int32 nRow(getAccessibleRow(nChildIndex));
+
+        if (mpViewShell->GetViewData()->GetMarkData().IsCellMarked(static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow)))
+            SelectCell(nRow, nCol, sal_True);
     }
 }
 
-void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol)
+void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Bool bDeselect)
 {
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
 
     mpViewShell->DoneBlockMode( sal_True ); // continue selecting
-    mpViewShell->InitBlockMode( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), maRange.aStart.Tab() );
+    mpViewShell->InitBlockMode( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), maRange.aStart.Tab(), bDeselect, sal_False, sal_False );
 
     mpViewShell->SelectionChanged();
 }
@@ -622,10 +605,15 @@ sal_Bool ScAccessibleSpreadsheet::IsEditable(
     return !bProtected;
 }
 
-sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 {
-    return sal_False;
+    sal_Bool bResult(sal_False);
+    if(mpViewShell)
+    {
+        if (mpViewShell->GetViewData()->GetMarkData().IsAllMarked(maRange))
+            bResult = sal_True;
+    }
+    return bResult;
 }
 
 ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
