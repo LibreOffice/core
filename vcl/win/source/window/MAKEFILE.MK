@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:02:37 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:17:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ TARGET=salwin
 .INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	sv.mk
+.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 # --- #105371#
 CFLAGS += -DWINVER=0x0400
