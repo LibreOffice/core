@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygontemplate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-04-15 16:02:54 $
+ *  last change: $Author: aw $ $Date: 2003-04-28 12:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ public:
 
     sal_Bool IsBezierNeeded()
     {
-        if(maBackward != Vector::GetEmptyVector() || maForward != Vector::GetEmptyVector())
+        if(!maBackward.EqualZero() || !maForward.EqualZero())
             return sal_True;
         return sal_False;
     }
@@ -342,7 +342,7 @@ public:
         }
         else
         {
-            sal_Bool bEmptyVector(rValue == Vector::GetEmptyVector());
+            sal_Bool bEmptyVector(rValue.EqualZero());
 
             if(bEmptyVector)
                 return;
@@ -380,7 +380,7 @@ public:
         }
         else
         {
-            sal_Bool bEmptyVector(rValue == Vector::GetEmptyVector());
+            sal_Bool bEmptyVector(rValue.EqualZero());
 
             if(bEmptyVector)
                 return;
