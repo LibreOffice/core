@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:25:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,7 @@ void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
         else
         {
             if (pOutlineRule)
-                UpdateNumRule(*pOutlineRule, 0, TRUE);
+                UpdateNumRule(*pOutlineRule, 0); // #115901#
         }
     }
 }
