@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:06:20 $
+ *  last change: $Author: af $ $Date: 2002-06-07 15:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,13 @@
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 
 class SdWindow;
 class SdViewShell;
+class VclSimpleEvent;
 
 namespace accessibility {
 
@@ -113,6 +117,15 @@ namespace accessibility {
     changed than the object representing the document view is
     deleted and replaced by a new instance of the then appropriate
     derived class.
+
+    <p>This base class also manages an optionally active accessible OLE
+    object.  If you overwrite the <member>getAccessibleChildCount</member>
+    and <member>getAccessibleChild</member> methods then make sure to first
+    call the corresponding method of this class and adapt your child count
+    and indices accordingly.  Only one active OLE object is allowed at a
+    time.  This class does not listen for disposing calls at the moment
+    because it does not use the accessible OLE object directly and trusts on
+    getting informed through VCL window events.</p>
 */
 class AccessibleDocumentViewBase
     :   public AccessibleContextBase,
@@ -155,6 +168,11 @@ public:
      */
     virtual void Init (void);
 
+    /** Define callback for listening to window child events of VCL.
+        Listen for creation or destruction of OLE objects.
+    */
+    DECL_LINK (WindowChildEventListener, VclSimpleEvent*);
+
     //=====  IAccessibleViewForwarderListener  ================================
 
     /** A view forwarder change is signalled for instance when any of the
@@ -171,6 +189,22 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** This implementation returns either 1 or 0 depending on whether there
+        is an active accessible OLE object or not.
+    */
+    virtual sal_Int32 SAL_CALL
+        getAccessibleChildCount (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** This implementation either returns the active accessible OLE object
+        if it exists and the given index is 0 or throws an exception.
+    */
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild (long nIndex)
+        throw (::com::sun::star::uno::RuntimeException);
+
 
     //=====  XAccessibleComponent  ============================================
 
@@ -306,7 +340,7 @@ protected:
          mxController;
 
     /// Model of the document.
-    com::sun::star::uno::Reference < ::com::sun::star::frame::XModel>
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel>
         mxModel;
 
     // Bundle of information that is passed down the shape tree.
@@ -315,15 +349,34 @@ protected:
     /// The view forwarder passed to the children manager.
     AccessibleViewForwarder maViewForwarder;
 
-    // This method is called from the component helper base class while disposing.
+    /** Accessible OLE object.  Set or removed by the
+        <member>SetAccessibleOLEObject</member> method.
+    */
+    ::com::sun::star::uno::Reference <
+        ::drafts::com::sun::star::accessibility::XAccessible>
+        mxAccessibleOLEObject;
+
+    // This method is called from the component helper base class while
+    // disposing.
     virtual void SAL_CALL disposing (void);
 
-    /// Set this object's name if is different to the current name.
+    /** Create a name string.  The current name is not modified and,
+        therefore, no events are send.  This method is usually called once
+        by the <member>getAccessibleName</member> method of the base class.
+        @return
+           A name string.
+    */
     virtual ::rtl::OUString
         CreateAccessibleName ()
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Set this object's description if is different to the current description.
+    /** Create a description string.  The current description is not
+        modified and, therefore, no events are send.  This method is usually
+        called once by the <member>getAccessibleDescription</member> method
+        of the base class.
+        @return
+           A description string.
+    */
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
@@ -339,6 +392,20 @@ protected:
         state changes for the currently selected element.
     */
     virtual void Deactivated (void);
+
+    /** Set or remove the currently active accessible OLE object.
+        @param xOLEObject
+            If this is a valid reference then a child event is send that
+            informs the listeners of a new child.  If there has already been
+            an active accessible OLE object then this is removed first and
+            appropriate events are send.
+
+            If this is an empty reference then the currently active
+            accessible OLE object (if there is one) is removed.
+    */
+    virtual void SetAccessibleOLEObject (
+        const ::com::sun::star::uno::Reference <
+        ::drafts::com::sun::star::accessibility::XAccessible>& xOLEObject);
 };
 
 } // end of namespace accessibility
