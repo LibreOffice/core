@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,18 +99,18 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     ScDocument* pDoc = pViewData->GetDocument();
 
     String aString;
-    USHORT nCount = pDoc->GetTableCount();
-    for (USHORT i=0; i<nCount; i++)
+    SCTAB nCount = pDoc->GetTableCount();
+    for (SCTAB i=0; i<nCount; i++)
     {
         if (pDoc->IsVisible(i))
             if (pDoc->GetName(i,aString))
                 if ( pDoc->IsScenario(i) )
-                    InsertPage( i+1, aString, TPB_SPECIAL );
+                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                 else
-                    InsertPage( i+1, aString );
+                    InsertPage( static_cast<sal_uInt16>(i)+1, aString );
     }
 
-    SetCurPageId( pViewData->GetTabNo() + 1 );
+    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 
     SetSizePixel( Size(SC_TABBAR_DEFWIDTH, 0) );
 
@@ -132,28 +132,28 @@ USHORT ScTabControl::GetMaxId() const
     return 0;
 }
 
-USHORT ScTabControl::GetPrivatDropPos(const Point& rPos )
+SCTAB ScTabControl::GetPrivatDropPos(const Point& rPos )
 {
     USHORT nPos = ShowDropPos(rPos);
 
-    USHORT nRealPos = nPos;
+    SCTAB nRealPos = static_cast<SCTAB>(nPos);
 
     if(nPos !=0 )
     {
         ScDocument* pDoc = pViewData->GetDocument();
 
-        USHORT nCount = pDoc->GetTableCount();
+        SCTAB nCount = pDoc->GetTableCount();
 
         USHORT nViewPos=0;
         nRealPos = nCount;
-        for (USHORT i=0; i<nCount; i++)
+        for (SCTAB i=0; i<nCount; i++)
         {
             if (pDoc->IsVisible(i))
             {
                 nViewPos++;
                 if(nViewPos==nPos)
                 {
-                    USHORT j;
+                    SCTAB j;
                     for (j=i+1; j<nCount; j++)
                     {
                         if (pDoc->IsVisible(j))
@@ -222,16 +222,16 @@ void ScTabControl::Select()
     ScModule* pScMod = SC_MOD();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
-    USHORT nCount = pDoc->GetTableCount();
-    USHORT i;
+    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB i;
 
     if ( pScMod->IsTableLocked() )      // darf jetzt nicht umgeschaltet werden ?
     {
         //  den alten Zustand des TabControls wiederherstellen:
 
         for (i=0; i<nCount; i++)
-            SelectPage( i+1, rMark.GetTableSelect(i) );
-        SetCurPageId( pViewData->GetTabNo() + 1 );
+            SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
+        SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 
         Sound::Beep();
         return;
@@ -242,7 +242,7 @@ void ScTabControl::Select()
     USHORT nPage = nCurId - 1;
 
     // OLE-inplace deaktivieren
-    if ( nPage != pViewData->GetTabNo() )
+    if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
         pViewData->GetView()->DrawMarkListHasChanged();
 
     //  InputEnterHandler nur wenn nicht Referenzeingabe
@@ -252,7 +252,7 @@ void ScTabControl::Select()
         pScMod->InputEnterHandler();
 
     for (i=0; i<nCount; i++)
-        rMark.SelectTable( i, IsPageSelected(i+1) );
+        rMark.SelectTable( i, IsPageSelected(static_cast<sal_uInt16>(i)+1) );
 
 /*      Markierungen werden per Default nicht pro Tabelle gehalten
     USHORT nSelCnt = GetSelectPageCount();
@@ -262,7 +262,7 @@ void ScTabControl::Select()
 
     SfxDispatcher& rDisp = pViewData->GetDispatcher();
     if (rDisp.IsLocked())
-        pViewData->GetView()->SetTabNo( nPage );
+        pViewData->GetView()->SetTabNo( static_cast<SCTAB>(nPage) );
     else
     {
         //  Tabelle fuer Basic ist 1-basiert
@@ -303,10 +303,10 @@ void ScTabControl::UpdateStatus()
     ScMarkData& rMark = pViewData->GetMarkData();
     BOOL bActive = pViewData->IsActive();
 
-    USHORT nCount = pDoc->GetTableCount();
-    USHORT i;
+    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB i;
     String aString;
-    USHORT nMaxCnt = Max( nCount, GetMaxId() );
+    SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
 
     BOOL bModified = FALSE;                                     // Tabellen-Namen
     for (i=0; i<nMaxCnt && !bModified; i++)
@@ -316,7 +316,7 @@ void ScTabControl::UpdateStatus()
         else
             aString.Erase();
 
-        if (GetPageText(i+1) != aString)
+        if (GetPageText(static_cast<sal_uInt16>(i)+1) != aString)
             bModified = TRUE;
     }
 
@@ -327,22 +327,22 @@ void ScTabControl::UpdateStatus()
             if (pDoc->IsVisible(i))
                 if (pDoc->GetName(i,aString))
                 if ( pDoc->IsScenario(i) )
-                    InsertPage( i+1, aString, TPB_SPECIAL );
+                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                 else
-                    InsertPage( i+1, aString );
+                    InsertPage( static_cast<sal_uInt16>(i)+1, aString );
     }
-    SetCurPageId( pViewData->GetTabNo() + 1 );
+    SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 
     if (bActive)
     {
         bModified = FALSE;                                          // Selektion
         for (i=0; i<nMaxCnt && !bModified; i++)
-            if ( rMark.GetTableSelect(i) != IsPageSelected(i+1) )
+            if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = TRUE;
 
         if ( bModified )
             for (i=0; i<nCount; i++)
-                SelectPage( i+1, rMark.GetTableSelect(i) );
+                SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
     }
     else
     {
@@ -374,7 +374,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
     if (bActivate)
     {
         SelectPage( nPage+1, TRUE );
-        rMark.SelectTable( nPage, TRUE );
+        rMark.SelectTable( static_cast<SCTAB>(nPage), TRUE );
     }
     Invalidate();
 }
@@ -452,7 +452,7 @@ void ScTabControl::DoDrag( const Region& rRegion )
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
 
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     ScMarkData aTabMark = pViewData->GetMarkData();
     aTabMark.ResetMark();   // doesn't change marked table information
     aTabMark.SetMarkArea( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
@@ -507,7 +507,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             rData.pCellTransfer->GetSourceDocument() == pDoc )
     {
         // moving of tables within the document
-        USHORT nPos = GetPrivatDropPos( rEvt.maPosPixel );
+        SCTAB nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
         if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
         {
@@ -571,7 +571,7 @@ long ScTabControl::AllowRenaming()
     USHORT nId = GetEditPageId();
     if ( nId )
     {
-        USHORT nTab = nId - 1;
+        SCTAB nTab = nId - 1;
         String aNewName = GetEditText();
         BOOL bDone = pViewSh->RenameTable( aNewName, nTab );
         if ( bDone )
