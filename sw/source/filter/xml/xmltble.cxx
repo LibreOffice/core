@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 14:37:44 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 17:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,14 +1094,14 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
             // DDE command
             const String sCmd = pDDEFldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.GetToken(0, cTokenSeperator) );
+                          sCmd.GetToken(0, so3::cTokenSeperator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.GetToken(1, cTokenSeperator) );
+                          sCmd.GetToken(1, so3::cTokenSeperator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.GetToken(2, cTokenSeperator) );
+                          sCmd.GetToken(2, so3::cTokenSeperator) );
 
             // auto update
-            if (pDDEFldType->GetType() == LINKUPDATE_ALWAYS)
+            if (pDDEFldType->GetType() == so3::LINKUPDATE_ALWAYS)
             {
                 AddAttribute( XML_NAMESPACE_OFFICE,
                               XML_AUTOMATIC_UPDATE, XML_TRUE );

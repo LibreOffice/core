@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:33:31 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 17:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@ public:
 
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     ~SwWebDocShell();
-
-    // Anforderung der pIo-Struktur fuer den Zugriff auf Substorages
-    // und Streams
-    virtual void    FillRegInfo( SvEmbeddedRegistryInfo * );
 
     virtual void        FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,

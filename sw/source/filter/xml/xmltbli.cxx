@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 14:37:44 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 17:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,13 +1179,13 @@ SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 {
     // make command string
     String sCommand(pContext->GetDDEApplication());
-    sCommand += cTokenSeperator;
+    sCommand += so3::cTokenSeperator;
     sCommand += String(pContext->GetDDEItem());
-    sCommand += cTokenSeperator;
+    sCommand += so3::cTokenSeperator;
     sCommand += String(pContext->GetDDETopic());
 
-    sal_uInt16 nType = pContext->GetIsAutomaticUpdate() ? LINKUPDATE_ALWAYS
-                                                        : LINKUPDATE_ONCALL;
+    sal_uInt16 nType = pContext->GetIsAutomaticUpdate() ? so3::LINKUPDATE_ALWAYS
+                                                        : so3::LINKUPDATE_ONCALL;
 
     String sName(pContext->GetConnectionName());
 
