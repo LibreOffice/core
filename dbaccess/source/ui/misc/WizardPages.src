@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 07:02:09 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ String STR_HTML_TITLE
     Text[ greek ] = "Αντιγραφή πίνακα HTML";
     Text[ dutch ] = "HTML tabel kopiλren";
     Text[ french ] = "Copier la table HTML";
-    Text[ spanish ] = "Copiar tabla HTML";
+    Text[ spanish ] = "Copiar la tabla HTML";
     Text[ italian ] = "Copia tabella HTML";
     Text[ danish ] = "Kopier HTML-tabel";
     Text[ swedish ] = "Kopiera HTML-tabell";
@@ -116,7 +116,7 @@ String STR_RTF_TITLE
     Text[ greek ] = "Αντιγραφή πίνακα RTF";
     Text[ dutch ] = "RTF tabel kopiλren";
     Text[ french ] = "Copier la table RTF";
-    Text[ spanish ] = "Copiar tabla RTF";
+    Text[ spanish ] = "Copiar la tabla RTF";
     Text[ italian ] = "Copia tabella RTF";
     Text[ danish ] = "Kopier RTF-tabel";
     Text[ swedish ] = "Kopiera RTF-tabell";
@@ -143,7 +143,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ greek ] = "Εφαρμογή στηλών";
     Text[ dutch ] = "Kolom overnemen";
     Text[ french ] = "Application de colonnes";
-    Text[ spanish ] = "Aceptar columnas";
+    Text[ spanish ] = "Aplicaciσn de columnas";
     Text[ italian ] = "Applica colonne";
     Text[ danish ] = "Overtag kolonner";
     Text[ swedish ] = "Φverta kolumner";
@@ -251,7 +251,7 @@ ModalDialog WIZ_RTFCOPYTABLE
     Text [ swedish ]    = "Kopiera RTF-tabell" ;
     Text [ danish ]     = "Kopier ΄RTF-tabel" ;
     Text [ italian ]    = "Copia tabella RTF" ;
-    Text [ spanish ]    = "Copiar tabla RTF" ;
+    Text [ spanish ]    = "Copiar la tabla RTF" ;
     Text [ french ]     = "Copie de table RTF" ;
     Text [ dutch ]      = "RTF tabel kopiλren" ;
     Text [ portuguese ] = "Copiar tabela RTF" ;
@@ -598,7 +598,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ greek ] = "Πληροφορίες για τις στήλες";
         Text[ dutch ] = "Kolomgegevens";
         Text[ french ] = "Information sur les colonnes";
-        Text[ spanish ] = "Informaciσn sobre columnas";
+        Text[ spanish ] = "Informaciσn sobre las columnas";
         Text[ italian ] = "Informazione colonne";
         Text[ danish ] = "Kolonneinformation";
         Text[ swedish ] = "Kolumninformation";
@@ -1226,7 +1226,7 @@ String STR_WIZ_TABLE_COPY
     Text[ greek ] = "Αντιγραφή πίνακα";
     Text[ dutch ] = "Tabel kopiλren";
     Text[ french ] = "Copier la table";
-    Text[ spanish ] = "Copiar tabla";
+    Text[ spanish ] = "Copiar la tabla";
     Text[ italian ] = "Copia tabella";
     Text[ danish ] = "~Kopier tabel";
     Text[ swedish ] = "Kopiera tabell";
@@ -1253,7 +1253,7 @@ String STR_COPYTABLE_TITLE_COPY
     Text [ swedish ] = "Kopiera tabell" ;
     Text [ danish ] = "~Kopier tabel" ;
     Text [ italian ] = "Copia tabella" ;
-    Text [ spanish ] = "Copiar tabla" ;
+    Text [ spanish ] = "Copiar la tabla" ;
     Text [ french ] = "Copier la table" ;
     Text [ dutch ] = "Tabel kopiλren" ;
     Text[ chinese_simplified ] = "ε¤ε¶θ΅¨ζ Ό";
@@ -1280,7 +1280,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text [ swedish ] = "Flytta tabell" ;
     Text [ danish ] = "Flyt tabel" ;
     Text [ italian ] = "Sposta tabella" ;
-    Text [ spanish ] = "Desplazar tabla" ;
+    Text [ spanish ] = "Desplazar la tabla" ;
     Text [ french ] = "Dιplacer la table" ;
     Text [ dutch ] = "Tabel verplaatsen" ;
     Text[ chinese_simplified ] = "η§»ε¨θ΅¨ε•";
