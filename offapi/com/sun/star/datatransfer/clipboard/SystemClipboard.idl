@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemClipboard.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 12:15:01 $
+ *  last change: $Author: pl $ $Date: 2001-06-25 12:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,14 @@ interface XFlushableClipboard;
 //=============================================================================
 /** The system clipboard service builds a bridge to the OS specific clipboard
     interfaces.
+
+    Notes: The Unix implementation needs to be instantiated with 2 Arguments:
+    <ul>
+        <li>a <type scope="com::sun::star::awt">XDisplayConnection</type> that provides the
+        display to be used.</li>
+        <li>a string that names the selection to be used</li>
+    </ul>
+    It is possible to use clipboards for different selections simultaneously.
 
     @see XClipboard
 */
