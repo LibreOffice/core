@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 09:59:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,26 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaDefaultExtPropMapper(S
     pImportMapper->ChainImportMapper( new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls ) );
 
     return pImportMapper;
+}
+
+SvXMLImportPropertyMapper*
+    XMLTextImportHelper::CreateTableDefaultExtPropMapper(
+        SvXMLImport& rImport,
+        XMLFontStylesContext* pFontDecls )
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
+    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+}
+
+SvXMLImportPropertyMapper*
+    XMLTextImportHelper::CreateTableRowDefaultExtPropMapper(
+        SvXMLImport& rImport,
+        XMLFontStylesContext* pFontDecls )
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_ROW_DEFAULTS );
+    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
