@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainablePropertySetInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 17:10:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
 Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
-    PropertyInfoHash::const_iterator aIter = maMap.find( rName );
+    PropertyInfoHash::iterator aIter = maMap.find( rName );
 
     if ( maMap.end() == aIter )
         throw UnknownPropertyException();
