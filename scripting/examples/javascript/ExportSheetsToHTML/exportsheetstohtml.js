@@ -16,13 +16,22 @@ importClass(Packages.com.sun.star.uno.Type);
 
 importClass(java.lang.System);
 
+//get the document object from the scripting context
 oDoc = XSCRIPTCONTEXT.getDocument();
+//get the XSpreadsheetDocument interface from the document
 xSDoc = UnoRuntime.queryInterface(XSpreadsheetDocument, oDoc);
+//get the XModel interface from the document
 xModel = UnoRuntime.queryInterface(XModel,oDoc);
+//get the XIndexAccess interface used to access each sheet 
 xSheetsIndexAccess = UnoRuntime.queryInterface(XIndexAccess, xSDoc.getSheets());
+//get the XStorable interface used to save the document
 xStorable = UnoRuntime.queryInterface(XStorable,xSDoc);
+//get the XModifiable interface used to indicate if the document has been 
+//changed
 xModifiable = UnoRuntime.queryInterface(XModifiable,xSDoc);
 
+//set up an array of PropertyValue objects used to save each sheet in the 
+//document
 storeProps = new Array;//PropertyValue[1];
 storeProps[0] = new PropertyValue();
 storeProps[0].Name = "FilterName";
@@ -47,8 +56,11 @@ for(var i=0;i<xSheetsIndexAccess.getCount();i++)
 
 function setAllButOneHidden(xSheetsIndexAccess,vis) {
 	//System.err.println("count="+xSheetsIndexAccess.getCount());
+    //get an XPropertySet interface for the vis-th sheet
 	xPropSet = AnyConverter.toObject( new Type(XPropertySet), xSheetsIndexAccess.getByIndex(vis));
+    //set the vis-th sheet to be visible
 	xPropSet.setPropertyValue("IsVisible", true);
+    // set all other sheets to be invisible
 	for(var i=0;i<xSheetsIndexAccess.getCount();i++)
 	{
 		xPropSet = AnyConverter.toObject( new Type(XPropertySet), xSheetsIndexAccess.getByIndex(i));
