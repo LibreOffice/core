@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:16:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
 
 void SwHTMLParser::NewScript()
 {
-    ParseScriptOptions( aScriptType, eScriptLang, aScriptURL,
+    ParseScriptOptions( aScriptType, sBaseURL, eScriptLang, aScriptURL,
                         aBasicLib, aBasicModule );
 
     if( aScriptURL.Len() )
@@ -388,7 +388,7 @@ void SwHTMLWriter::OutBasic()
 
             const String& rModName = pModule->GetName();
             Strm() << SwHTMLWriter::sNewLine;   // nicht einruecken!
-            HTMLOutFuncs::OutScript( Strm(), pModule->GetSource(),
+            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,
                                      &rLibName, &rModName,
                                      eDestEnc, &aNonConvertableCharacters );
