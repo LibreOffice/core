@@ -10983,3 +10983,4 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?exportXML@XMLBackgroundImageExport@@QAEXABVAny@uno@star@sun@com@@PBV23456@11GABVOUString@rtl@@@Z
 ?ImpGetOrCreatePageMasterInfo@SdXMLExport@@AAEPAVImpXMLEXPPageMasterInfo@@V?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@Z
 ?SetPageMaster@SdXMLGenericPageContext@@IAEXAAVOUString@rtl@@@Z
+?getRuntimeValuePropertyNames@OValuePropertiesMetaData@xmloff@@SAXW4ElementType@OControlElement@2@FAAPBD1@Z
