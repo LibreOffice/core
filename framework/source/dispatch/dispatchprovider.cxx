@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:49:57 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,18 +301,27 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                             // Search for any registered protocol handler first.
                                             // Note: member "m_aProtocolHandlerCache" use singleton mechanism to implement an internal threadsafe data container
                                             //       and use a ref count member too. On the other side he lives till we die. So we can use it without a lock.
-                                            ProtocolHandler aHandler;
-                                            if (m_aProtocolHandlerCache.search(aURL,&aHandler))
+                                            if (!xReturn.is())
                                             {
-                                                xReturn = css::uno::Reference< css::frame::XDispatch >(
-                                                            xFactory->createInstance(aHandler.m_sUNOName),
-                                                            css::uno::UNO_QUERY);
-                                            }
-                                            // Not for controller - not for protocol handler
-                                            // It should be a loadable content - may be a file. Check it ...
-                                            if( xReturn.is() == sal_False )
-                                            {
-                                                xReturn = implts_searchProtocolHandler( aURL, aInfo );
+                                                ProtocolHandler aHandler;
+                                                if (m_aProtocolHandlerCache.search(aURL,&aHandler))
+                                                {
+                                                    css::uno::Reference< css::frame::XDispatchProvider > xHandler(
+                                                                xFactory->createInstance(aHandler.m_sUNOName),
+                                                                css::uno::UNO_QUERY);
+                                                    if (xHandler.is())
+                                                        xReturn = xHandler->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+                                                }
+                                                // Not for controller - not for protocol handler
+                                                // It should be a loadable content - may be a file. Check it ...
+                                                // This check is neccessary to found out, that
+                                                // support for some protocols isn't installed by user. May be
+                                                // "ftp" isn't available. So we suppress creation of our self dispatcher.
+                                                // The result will be clear. He can't handle it - but he would try it.
+                                                if (!xReturn.is() && implts_isLoadableContent(aURL))
+                                                {
+                                                    xReturn = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
+                                                }
                                             }
                                         }
                                         break;
@@ -335,6 +344,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                             }
                                         }
                                         break;
+                //-----------------------------------------------------------------------------------------------------
                 case E_DEFAULT    :  {
                                             // Check ucb support before you create dispatch helper.
                                             // He could do nothing then ... but it doesnt perform, if we try it!
@@ -573,12 +583,11 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         // Release our internal dispatch helper ... BUT DON'T dispose it!
         // They are listener on our owner frame too. So they will get same event from it and die herself.
         // But we should release our references and stop working on it.
-        m_xMenuDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xHelpAgentDispatcher  = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xDefaultDispatcher    = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
+        m_xMenuDispatcher       = css::uno::Reference< css::frame::XDispatch >();
+        m_xHelpAgentDispatcher  = css::uno::Reference< css::frame::XDispatch >();
+        m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >();
+        m_xDefaultDispatcher    = css::uno::Reference< css::frame::XDispatch >();
+        m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >();
 
         // Forget all other references too.
         m_xFactory              = css::uno::Reference< css::lang::XMultiServiceFactory >();
@@ -587,70 +596,6 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         // Disable object for working ... Do it for ever .-)
         m_aTransactionManager.setWorkingMode( E_CLOSE );
     }
-}
-
-/*-************************************************************************************************************//**
-    @short      search right dispatcher for given protocol/URL
-    @descr      We know different dispatch helper for different types of URLs. So w must decide, which one is required.
-                Thats the reason for this method. We check given URL and return right dispatcher.
-
-    @seealso    method queryDispatch()
-
-    @param      "aURL" , URL with protocol, which must handled
-    @param      "aInfo", informations about environment of owner frame (neccessary to check typ of frame!)
-    @return     A reference to a dispatch helper.
-
-    @onerror    We return a NULL-reference.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL  ,
-                                                                                             const TargetInfo&     aInfo )
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register operation as transaction and reject wrong calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // default value, if operation failed.
-    css::uno::Reference< css::frame::XDispatch > xHandler;
-
-    //-------------------------------------------------------------------------------------------------------------
-    // May be - it's an internal URL ... like "uno/slot"?
-    // But they could be handled by tasks/pluginframes/desktop only.
-    // Normal frames don't know it.
-    // Supported targets don't know it real too ... but they could ask the global
-    // sfx-AppDispatcher!!!
-    if(
-        ( aURL.Complete.compareToAscii( ".uno"  , 4 ) == 0 ) ||
-        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 )
-      )
-    {
-        if(
-            ( aInfo.eFrameType == E_TASK        ) ||
-            ( aInfo.eFrameType == E_PLUGINFRAME ) ||
-            ( aInfo.eFrameType == E_DESKTOP     )
-          )
-        {
-            css::uno::Reference< css::frame::XDispatchProvider > xAppDispatcher = implts_getOrCreateAppDispatchProvider();
-            if( xAppDispatcher.is() == sal_True )
-            {
-                xHandler = xAppDispatcher->queryDispatch( aURL, aInfo.sTargetName, aInfo.nSearchFlags );
-            }
-        }
-    }
-    else
-    //-------------------------------------------------------------------------------------------------------------
-    // We should be last chance for user :-)
-    // But loadable ucb content only!
-    // This check is neccessary to found out, that
-    // support for some protocols isn't installed by user. May be
-    // "ftp" isn't available. So we suppress creation of our self dispatcher.
-    // The result will be clear. He can't handle it - but he would try it.
-    if( implts_isLoadableContent( aURL ) == sal_True )
-    {
-        xHandler = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
-    }
-
-    return xHandler;
 }
 
 /*-************************************************************************************************************//**
@@ -668,23 +613,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     @onerror    We return a NULL-reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XDispatchProvider > DispatchProvider::implts_getOrCreateAppDispatchProvider()
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register operation as transaction and reject wrong calls!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-
-    if( m_xAppDispatchProvider.is() == sal_False )
-    {
-        m_xAppDispatchProvider = css::uno::Reference< css::frame::XDispatchProvider >( m_xFactory->createInstance( SERVICENAME_APPDISPATCHPROVIDER ), css::uno::UNO_QUERY );
-    }
-    return m_xAppDispatchProvider;
-}
-
-//*****************************************************************************************************************
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper eHelper, const css::uno::Any& aParameters )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:44:32 $
+ *  last change: $Author: as $ $Date: 2002-05-03 07:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,6 @@ class DispatchProvider  :   // interfaces
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        css::uno::Reference< css::frame::XDispatch >         implts_searchProtocolHandler         ( const css::util::URL&   aURL                          ,
-                                                                                                    const TargetInfo&       aInfo                         );
-        css::uno::Reference< css::frame::XDispatchProvider > implts_getOrCreateAppDispatchProvider(                                                       );
         css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper         eHelper                       ,
                                                                                                     const css::uno::Any&    aParameters = css::uno::Any() );
         sal_Bool                                             implts_isLoadableContent             ( const css::util::URL&   aURL                          );
@@ -248,7 +245,6 @@ class DispatchProvider  :   // interfaces
     private:
         css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                  ;   /// reference to global service manager to create new services
         css::uno::WeakReference< css::frame::XFrame >               m_xFrame                    ;   /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
-        css::uno::Reference< css::frame::XDispatchProvider >        m_xAppDispatchProvider      ;   /// For some dispatches we should call our global app dispatch provider
         css::uno::Reference< css::frame::XDispatch >                m_xMenuDispatcher           ;   /// different dispatcher to handle special dispatch calls, protocols or URLs
         css::uno::Reference< css::frame::XDispatch >                m_xHelpAgentDispatcher      ;
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
