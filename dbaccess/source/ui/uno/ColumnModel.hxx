@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:57:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
     ::com::sun::star::uno::Any      m_aTabStop;
     sal_Bool                        m_bEnable;
     sal_Int16                       m_nBorder;
+    sal_Int32                       m_nWidth;
 // [properties]
 
     inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> getORB() const { return m_xORB; }
