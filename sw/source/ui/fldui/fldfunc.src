@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:54:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FLD_FUNC
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -119,7 +119,7 @@ TabPage TP_FLD_FUNC
         Text [ italian ] = "~Selezione" ;
         Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "Valinta" ;
+        Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "~Sélection" ;
         Text [ swedish ] = "~Urval" ;
@@ -177,6 +177,7 @@ TabPage TP_FLD_FUNC
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -212,6 +213,7 @@ TabPage TP_FLD_FUNC
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No~mbre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_FUNCNAME
     {
@@ -231,7 +233,7 @@ TabPage TP_FLD_FUNC
         Text [ italian ] = "~Valore" ;
         Text [ portuguese_brazilian ] = "Valor" ;
         Text [ portuguese ] = "Valor" ;
-        Text [ finnish ] = "Arvo" ;
+        Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "Værdi" ;
         Text [ french ] = "~Valeur" ;
         Text [ swedish ] = "~Värde" ;
@@ -287,6 +289,7 @@ TabPage TP_FLD_FUNC
         Text[ turkish ] = "O halde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entonces";
+        Text[ finnish ] = "Sitten";
     };
     Edit ED_FUNCCOND1
     {
@@ -325,6 +328,7 @@ TabPage TP_FLD_FUNC
         Text[ turkish ] = "Yoksa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Si no";
+        Text[ finnish ] = "Muutoin";
     };
     Edit ED_FUNCCOND2
     {
@@ -350,7 +354,7 @@ TabPage TP_FLD_FUNC
         Text [ spanish ] = "M~acro..." ;
         Text [ danish ] = "Makro..." ;
         Text [ swedish ] = "M~akro..." ;
-        Text [ finnish ] = "Macro..." ;
+        Text [ finnish ] = "~Makro" ;
         Text [ english_us ] = "~Macro..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -386,4 +390,5 @@ TabPage TP_FLD_FUNC
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones";
+    Text[ finnish ] = "Toiminnot";
 };
