@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 17:19:16 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:18:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,8 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
+DEF$(TNR)FILTER=$(SOLARENV)$/inc$/dummy.flt
+
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
@@ -147,15 +149,15 @@ EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
 .ENDIF			# "$(MWS_BUILD)"!=""
 
 .IF "$(APP$(TNR)HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
+.IF "$(UPDATER)"=="" || "$(link_always)"==""
 $(DEF$(TNR)TARGETN) : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
+.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
 $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
+.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
@@ -169,30 +171,37 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 #	+-attrib -r defs$/$(OUTPATH)
+    @+-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
-    @echo LIBRARY	  $(SHL$(TNR)TARGET) 								 >$@
-    @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@
-    @echo DATA		  READ WRITE SHARED  							>>$@
-    @echo HEAPSIZE	  0 											>>$@
-    @echo EXPORTS													>>$@
+    @echo LIBRARY	  $(SHL$(TNR)TARGET) 								 >$@.tmpfile
+    @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
+    @echo DATA		  READ WRITE SHARED  							>>$@.tmpfile
+    @echo HEAPSIZE	  0 											>>$@.tmpfile
+    @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
-    @echo GetVersionInfo		>>$@
+    @echo GetVersionInfo		>>$@.tmpfile
 .IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
-    @echo component_getDescriptionFunc	>>$@
+    @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-    @+$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
-.IF "$(USE_LDUMP2)"=!""
+.IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+    @-+$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    @+$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ELSE
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ENDIF
-.ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
-.ENDIF				# "$(USE_LDUMP2)"=!""
-    +$(EXPORT$(TNR)_PROTECT) $(RM) $(SHL$(TNR)TARGET).exp
+    +$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+.ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+    @+$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES $(SLB)$/$(DEFLIB$(TNR)NAME).lib | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
+.IF "$(DEF$(TNR)CEXP)"!=""
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+.ELSE
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -207,68 +216,70 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF			# "$(MWS_BUILD)"!=""
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
-    @echo $(DEF$(TNR)EXPORT1)										>>$@
+    @echo $(DEF$(TNR)EXPORT1)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT2)"!=""
-    @echo $(DEF$(TNR)EXPORT2)										>>$@
+    @echo $(DEF$(TNR)EXPORT2)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT3)"!=""
-    @echo $(DEF$(TNR)EXPORT3)										>>$@
+    @echo $(DEF$(TNR)EXPORT3)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT4)"!=""
-    @echo $(DEF$(TNR)EXPORT4)										>>$@
+    @echo $(DEF$(TNR)EXPORT4)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT5)"!=""
-    @echo $(DEF$(TNR)EXPORT5)										>>$@
+    @echo $(DEF$(TNR)EXPORT5)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT6)"!=""
-    @echo $(DEF$(TNR)EXPORT6)										>>$@
+    @echo $(DEF$(TNR)EXPORT6)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT7)"!=""
-    @echo $(DEF$(TNR)EXPORT7)										>>$@
+    @echo $(DEF$(TNR)EXPORT7)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT8)"!=""
-    @echo $(DEF$(TNR)EXPORT8)										>>$@
+    @echo $(DEF$(TNR)EXPORT8)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT9)"!=""
-    @echo $(DEF$(TNR)EXPORT9)										>>$@
+    @echo $(DEF$(TNR)EXPORT9)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT10)"!=""
-    @echo $(DEF$(TNR)EXPORT10)										>>$@
+    @echo $(DEF$(TNR)EXPORT10)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT11)"!=""
-    @echo $(DEF$(TNR)EXPORT11)										>>$@
+    @echo $(DEF$(TNR)EXPORT11)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT12)"!=""
-    @echo $(DEF$(TNR)EXPORT12)										>>$@
+    @echo $(DEF$(TNR)EXPORT12)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT13)"!=""
-    @echo $(DEF$(TNR)EXPORT13)										>>$@
+    @echo $(DEF$(TNR)EXPORT13)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT14)"!=""
-    @echo $(DEF$(TNR)EXPORT14)										>>$@
+    @echo $(DEF$(TNR)EXPORT14)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT15)"!=""
-    @echo $(DEF$(TNR)EXPORT15)										>>$@
+    @echo $(DEF$(TNR)EXPORT15)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT16)"!=""
-    @echo $(DEF$(TNR)EXPORT16)										>>$@
+    @echo $(DEF$(TNR)EXPORT16)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT17)"!=""
-    @echo $(DEF$(TNR)EXPORT17)										>>$@
+    @echo $(DEF$(TNR)EXPORT17)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT18)"!=""
-    @echo $(DEF$(TNR)EXPORT18)										>>$@
+    @echo $(DEF$(TNR)EXPORT18)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT19)"!=""
-    @echo $(DEF$(TNR)EXPORT19)										>>$@
+    @echo $(DEF$(TNR)EXPORT19)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORT20)"!=""
-    @echo $(DEF$(TNR)EXPORT20)										>>$@
+    @echo $(DEF$(TNR)EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
-    +$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@
+    +$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
 .ENDIF
+    @+-$(RM) $@
+    @+$(RENAME) $@.tmpfile $@
 .ENDIF			# "$(APP$(TNR)HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
