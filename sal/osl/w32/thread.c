@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:37:19 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 14:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,12 +586,15 @@ typedef struct _TLS
     struct _TLS                     *pNext, *pPrev;
 } TLS, *PTLS;
 
-static  PTLS    g_pThreadKeyList = NULL;
+static  PTLS        g_pThreadKeyList = NULL;
+CRITICAL_SECTION    g_ThreadKeyListCS;
 
 static void AddKeyToList( PTLS pTls )
 {
     if ( pTls )
     {
+        EnterCriticalSection( &g_ThreadKeyListCS );
+
         pTls->pNext = g_pThreadKeyList;
         pTls->pPrev = 0;
 
@@ -599,6 +602,8 @@ static void AddKeyToList( PTLS pTls )
             g_pThreadKeyList->pPrev = pTls;
 
         g_pThreadKeyList = pTls;
+
+        LeaveCriticalSection( &g_ThreadKeyListCS );
     }
 }
 
@@ -606,6 +611,7 @@ static void RemoveKeyFromList( PTLS pTls )
 {
     if ( pTls )
     {
+        EnterCriticalSection( &g_ThreadKeyListCS );
         if ( pTls->pPrev )
             pTls->pPrev->pNext = pTls->pNext;
         else
@@ -616,13 +622,17 @@ static void RemoveKeyFromList( PTLS pTls )
 
         if ( pTls->pNext )
             pTls->pNext->pPrev = pTls->pPrev;
+        LeaveCriticalSection( &g_ThreadKeyListCS );
     }
 }
 
 void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach()
 {
-    PTLS    pTls = g_pThreadKeyList;
+    PTLS    pTls;
 
+
+    EnterCriticalSection( &g_ThreadKeyListCS );
+    pTls = g_pThreadKeyList;
     while ( pTls )
     {
         if ( pTls->pfnCallback )
@@ -635,6 +645,7 @@ void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach()
 
         pTls = pTls->pNext;
     }
+    LeaveCriticalSection( &g_ThreadKeyListCS );
 }
 
 /*****************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 13:46:53 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 14:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,9 @@
 extern HRESULT (WINAPI *_CoInitializeEx) (LPVOID pvReserved, DWORD dwCoInit);
 extern LPWSTR *lpArgvW;
 
-extern DWORD    g_dwTLSTextEncodingIndex;
+extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void);
+extern CRITICAL_SECTION     g_ThreadKeyListCS;
 
 /* remember plattform */
 DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
@@ -198,6 +199,7 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                 }
 
                 g_dwTLSTextEncodingIndex = TlsAlloc();
+                InitializeCriticalSection( &g_ThreadKeyListCS );
 
     //          InitDCOM();
 
@@ -215,9 +217,11 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                 WSACleanup();
                 if (lpArgvW)
                     GlobalFree(lpArgvW);
-                break;
 
                 TlsFree( g_dwTLSTextEncodingIndex );
+                DeleteCriticalSection( &g_ThreadKeyListCS );
+
+                break;
             }
         case DLL_THREAD_ATTACH:
             break;
