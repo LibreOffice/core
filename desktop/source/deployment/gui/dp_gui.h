@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:20:43 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,16 @@ struct DialogImpl :
     virtual BOOL Close();
     virtual void Resize();
     DECL_LINK( headbar_dragEnd, HeaderBar * );
+
+    // solar thread functions, because of gtk file/folder picker:
+    css::uno::Sequence<rtl::OUString> solarthread_raiseAddPicker(
+        css::uno::Reference<css::deployment::XPackageManager>
+        const & xPackageManager );
+    bool solarthread_raiseExportPickers(
+        css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+        const & selection,
+        rtl::OUString * pDestFolder, rtl::OUString * pNewTitle,
+        sal_Int32 * pNameClashAction );
 
     void clickClose( USHORT id );
     void clickAdd( USHORT id );
