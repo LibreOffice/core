@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:21 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,8 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             String aAppName, aLongUserName, aUserName;
             SfxObjectShellRef xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
-            xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ) );
+            // the global document can not be a template
+            xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), sal_False );
             xDocSh->DoClose();
         }
 
