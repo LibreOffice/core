@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:32:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_TOOLBOX_CXX
-
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -69,7 +67,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -464,24 +462,6 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
     }
     if ( nObjMask & RSC_TOOLBOXITEM_HELPTEXT )
         aItem.maHelpText = ReadStringRes();
-
-/*
-#ifndef WIN
-    static
-#endif
-        short nHelpMode = -1;
-    if( nHelpMode == -1 ) {
-        SvHelpSettings aHelpSettings;
-
-        GetpApp()->Property( aHelpSettings );
-        nHelpMode = aHelpSettings.nHelpMode;
-    }
-
-    if( (nHelpMode & HELPTEXTMODE_EXTERN) && aItem.aHelpText.Len() )
-        aItem.aHelpText.Erase();
-    if( (nHelpMode & HELPTEXTMODE_DEBUG) && !aItem.nHelpId )
-        aItem.aHelpText = "??? !aItem.nHelpId MP/W.P. ???";
-*/
 
     if ( nObjMask & RSC_TOOLBOXITEM_BITMAP )
     {
