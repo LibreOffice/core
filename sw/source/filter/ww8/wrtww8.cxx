@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
+ *  last change: $Author: cmc $ $Date: 2001-07-23 13:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2021,6 +2021,7 @@ ULONG SwWW8Writer::StoreDoc()
 
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
+    const SwSectionFmt *pFmt=0;
     pAktPageDesc = &pDoc->GetPageDesc( 0 );     // Default: "Standard"
     pSepx = new WW8_WrPlcSepx;      // Sepx
     {
@@ -2051,6 +2052,9 @@ ULONG SwWW8Writer::StoreDoc()
                 pNd = pSectNd;
                 pCurPam->GetPoint()->nNode = *pNd;
             }
+
+            if (CONTENT_SECTION == pSectNd->GetSection().GetType())
+                pFmt = pSectNd->GetSection().GetFmt();
         }
 
         // Hole evtl. Pagedesc des 1. Nodes
@@ -2058,7 +2062,7 @@ ULONG SwWW8Writer::StoreDoc()
             && ((SwFmtPageDesc*)pI)->GetPageDesc() )
             pSepx->AppendSep( 0, *(SwFmtPageDesc*)pI, *pNd, nRstLnNum );
         else
-            pSepx->AppendSep( 0, pAktPageDesc, 0, nRstLnNum );
+            pSepx->AppendSep( 0, pAktPageDesc, pFmt, nRstLnNum );
     }
 
     pFtn = new WW8_WrPlcFtnEdn( TXT_FTN );                      // Ftn
@@ -2300,11 +2304,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.15 2001-06-02 16:06:13 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.16 2001-07-23 13:47:02 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/06/02 16:06:13  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.14  2001/04/10 10:51:11  cmc
       CJK Kerning and Punctionation {im|ex}port
 
