@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-22 14:01:39 $
+ *  last change: $Author: sj $ $Date: 2001-11-28 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #define IMG_RELATION                    (IMAGELIST_START + 163)
 #define IMG_IMPRESSPACKED               (IMAGELIST_START + 165)
 #define IMG_NEWFROMTEMPLATE             (IMAGELIST_START + 166)
+#define IMG_POWERPOINT                  (IMAGELIST_START + 167)
+#define IMG_POWERPOINTTEMPLATE          (IMAGELIST_START + 168)
+
 
 #define RID_DESCRIPTION_START           256
 
@@ -179,6 +182,8 @@
 #define STR_DESCRIPTION_REMOTE_VOLUME               (RID_DESCRIPTION_START + 39)
 #define STR_DESCRIPTION_LOCALE_VOLUME               (RID_DESCRIPTION_START + 40)
 #define STR_DESCRIPTION_CDROM_VOLUME                (RID_DESCRIPTION_START + 41)
-
+#define STR_DESCRIPTION_POWERPOINT                  (RID_DESCRIPTION_START + 42)
+#define STR_DESCRIPTION_POWERPOINT_TEMPLATE         (RID_DESCRIPTION_START + 43)
+#define STR_DESCRIPTION_POWERPOINT_SHOW             (RID_DESCRIPTION_START + 44)
 #endif
 

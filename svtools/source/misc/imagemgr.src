@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-27 23:03:33 $
+ *  last change: $Author: sj $ $Date: 2001-11-28 16:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@
         IMG_APPOINTMENT ; \
         IMG_RELATION ; \
         IMG_IMPRESSPACKED ; \
-        IMG_NEWFROMTEMPLATE ;
+        IMG_NEWFROMTEMPLATE ; \
+        IMG_POWERPOINT ; \
+        IMG_POWERPOINTTEMPLATE ;
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
@@ -145,7 +147,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        68 ;
+        70 ;
     };
 };
 
@@ -159,7 +161,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        68;
+        70;
     };
 };
 
@@ -1264,5 +1266,20 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ catalan ] = "CD-ROM drive";
 };
 
+String STR_DESCRIPTION_POWERPOINT
+{
+    Text = "MS PowerPoint Dokument" ;
+    Text [ English ] = "MS PowerPoint Document" ;
+};
 
+String STR_DESCRIPTION_POWERPOINT_TEMPLATE
+{
+    Text = "MS PowerPoint Vorlage" ;
+    Text [ English ] = "MS PowerPoint Template" ;
+};
 
+String STR_DESCRIPTION_POWERPOINT_SHOW
+{
+    Text = "MS PowerPoint Show" ;
+    Text [ English ] = "MS PowerPoint Show" ;
+};

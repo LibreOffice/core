@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-22 14:06:38 $
+ *  last change: $Author: sj $ $Date: 2001-11-28 16:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "zip",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
     "zoo",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
     "gz",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "ppt",   FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_POWERPOINT,
+    "pot",   FALSE, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_POWERPOINTTEMPLATE,
+    "pps",   FALSE, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_POWERPOINT,
     0, FALSE, 0, 0
 };
 
