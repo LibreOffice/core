@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:41:19 $
+ *  last change: $Author: os $ $Date: 2002-02-15 08:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,9 +343,9 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text = "~Land" ;
-        Text [ ENGLISH ] = "~Country" ;
-        Text[ english_us ] = "Country";
+        Text = "~Land/Region" ;
+        Text [ ENGLISH ] = "~Country/Region" ;
+        Text[ english_us ] = "Country/Region";
         Text[ portuguese ] = "~Paнs";
         Text[ russian ] = "Страна";
         Text[ dutch ] = "~Land";
