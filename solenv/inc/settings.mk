@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.161 $
+#   $Revision: 1.162 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:15:29 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:05:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1171,6 +1171,10 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 .IF "$(GUI)" == "UNX"
 .INCLUDE : unx.mk
 .ENDIF
+
+# for multiprocess building in external modules
+# allow seperate handling
+EXTMAXPROCESS*=$(MAXPROCESS)
 
 IDLC*=idlc
 REGMERGE*=regmerge
