@@ -104,7 +104,6 @@ PKGDEPN = \
 PKGDIR  = $(shell cd $(BIN); pwd)
 
 PKGNAME = `sed -n -e 's/PKG=//p' pkginfo`
-PKGVERSION = `sed -n -e 's/VERSION=//p' pkginfo`
 PKGFLAGFILE = $(MISC)$/$(TARGET)pkg.flag
    
 PKGDATESTRING = `date -u '+%Y.%m.%d'`
@@ -128,7 +127,7 @@ ALLTAR : $(PKGFLAGFILE)
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
+$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
     @$(MKDIRHIER) $(@:db)
     @echo Creating desktop entries ..
     @echo ---------------------------------
@@ -142,7 +141,7 @@ $(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../share/brand.pl ../share/translate.pl $
 
 # --- mime types ---------------------------------------------------
 
-$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
+$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file ..
     @echo ---------------------------------
@@ -150,7 +149,7 @@ $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDE
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
-$(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications : ../mimetypes/openoffice.applications
+$(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
@@ -159,14 +158,14 @@ $(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applicati
 # --- pkginfo & prototype -----------------------------------------
 
 # Copy the pkginfo and prototype file to $(MISC) 
-$(MISC)/$(TARGET)/pkginfo $(MISC)/$(TARGET)/prototype : $$(@:f) 
+$(MISC)/$(TARGET)/pkginfo $(MISC)/$(TARGET)/prototype : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_" > $@
 
 # --- packaging ---------------------------------------------------
     
 $(PKGFLAGFILE) : $(MISC)/$(TARGET)/prototype $(MISC)/$(TARGET)/pkginfo $(PKGDEPN) makefile.mk
-    @pkgmk -o -r . -f $(MISC)$/$(TARGET)/prototype ARCH=$(PKGARCH) VERSION=$(PKGVERSION).$(PKGDATESTRING)
+    @pkgmk -o -r . -f $(MISC)$/$(TARGET)/prototype ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
     @tar -cf - -C /var/spool/pkg $(PKGNAME) | gzip > $(BIN)/$(PKGNAME).tar.gz
     @rm -rf /var/spool/pkg/$(PKGNAME)
     @touch $@

@@ -1,6 +1,5 @@
 PKG=OOOopenoffice-gnome
 NAME=%PRODUCTNAME Solaris
-VERSION=2.0,REV=1
 CATEGORY=application
 BASEDIR=/usr
 VENDOR=OpenOffice.org

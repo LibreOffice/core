@@ -139,7 +139,7 @@ ALLTAR : $(RPMFLAGFILE)
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
+$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
     @$(MKDIRHIER) $(@:db)
     @echo Creating desktop entries ..
     @echo ---------------------------------
@@ -167,7 +167,7 @@ $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f
     
 # --- mime types ---------------------------------------------------
 
-$(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
+$(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file ..
     @echo ---------------------------------
@@ -175,7 +175,7 @@ $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ..
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
-$(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
+$(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:db)
     @echo Creating KDE mimelnk entries ..
     @echo ---------------------------------
@@ -183,7 +183,7 @@ $(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../share/brand.pl ../share/translate.pl $(UL
     @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
     @touch $@    
 
-$(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : ../mimetypes/openoffice.applications
+$(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
@@ -192,7 +192,7 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
 # --- packaging ---------------------------------------------------
     
 $(RPMFLAGFILE) : $(RPMDEPN)
-    @cat $(@:b)-menus.spec | tr -d "\015" | sed "s/%PREFIX/$(UNIXFILENAME)/" > $(@:db)-menus.spec
+    @cat $(@:b)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/" -e "s/Version: .*/Version: $(PKGVERSION)/" -e "s/Release: .*/Release: $(PKGREV)/" > $(@:db)-menus.spec
     @echo "%define _rpmdir $(RPMDIR)" >> $(@:db)-menus.spec
     @$(RPM) -bb $(@:db)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
     @touch $@
