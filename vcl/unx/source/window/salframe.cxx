@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
+ *  last change: $Author: pl $ $Date: 2001-08-10 14:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,10 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         XSetWMProtocols( GetXDisplay(), XtWindow( hShell_ ), a, n );
     }
 
+#ifdef DEBUG
+    XFlush( GetXDisplay() );
+#endif
+
     int nDecoFlags = WMAdaptor::decoration_All;
     if( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
         != (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE) )
@@ -603,6 +607,9 @@ SalFrame::SalFrame() : maFrameData( this ) {}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline SalFrameData::~SalFrameData()
 {
+    if( GetWindow() == hPresentationWindow )
+        hPresentationWindow = None;
+
     if( pIntroBitmap == pFrame_ )
         pIntroBitmap = NULL;
 
@@ -2409,7 +2416,6 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                                 &nLeft_, &nTop_,
                                 &hDummy ) )
     {
-        fprintf( stderr, "SalFramaData::HandleReparentEvent !XTranslateCoordinates\n" );
         nLeft_ = nTop_ = 0;
     }
 
