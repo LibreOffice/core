@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+#   last change: $Author: obr $ $Date: 2000-10-23 09:53:37 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -76,7 +76,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/daemregw.obj \
             $(SLO)$/channel.obj \
             $(SLO)$/util.obj \
-            $(SLO)$/ports.obj \
             $(SLO)$/dir.obj \
             $(SLO)$/dirw9x.obj
 
@@ -101,7 +100,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/daemregw.obj \
             $(OBJ)$/channel.obj \
             $(OBJ)$/util.obj \
-        $(OBJ)$/ports.obj \
             $(OBJ)$/dir.obj \
             $(OBJ)$/dirw9x.obj
 

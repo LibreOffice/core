@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:20 $
+#   last change: $Author: obr $ $Date: 2000-10-23 09:52:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,8 +104,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj   	 \
             $(SLO)$/system.obj	 \
             $(SLO)$/channel.obj	 \
-            $(SLO)$/util.obj	 \
-            $(SLO)$/ports.obj
+            $(SLO)$/util.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -126,8 +125,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj   	 \
             $(OBJ)$/system.obj	 \
             $(OBJ)$/channel.obj	 \
-            $(OBJ)$/util.obj	 \
-            $(OBJ)$/ports.obj
+            $(OBJ)$/util.obj
 #.ENDIF
 
 DEPOBJFILES = $(OBJ)$/sdaemon.obj
