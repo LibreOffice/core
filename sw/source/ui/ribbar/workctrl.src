@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 03:02:13 $
+ *  last change: $Author: jp $ $Date: 2001-09-26 10:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,13 +207,11 @@ FloatingWindow RID_INSERT_OBJ_CTRL
                 Identifier = SID_INSERT_OBJECT ;
                 HelpID = SID_INSERT_OBJECT ;
             };
-#ifdef SOLAR_PLUGIN
             ToolBoxItem
             {
                 Identifier = SID_INSERT_PLUGIN ;
                 HelpID = SID_INSERT_PLUGIN ;
             };
-#endif
 #ifdef SOLAR_JAVA
             ToolBoxItem
             {
