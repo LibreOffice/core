@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-09 05:43:13 $
+ *  last change: $Author: cd $ $Date: 2001-08-09 10:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
             if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
             {
-                aBuffer.appendAscii( ".Should I start 'setup' to check your installation?" );
+                aBuffer.appendAscii( ".Start setup application to check installation?" );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
@@ -604,7 +604,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
                      ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
             {
-                aBuffer.appendAscii( ".Should I start 'setup -repair' to repair your installation?" );
+                aBuffer.appendAscii( ".Start setup application to repair installation?" );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
