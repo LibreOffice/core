@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:49:39 $
+ *  last change: $Author: tv $ $Date: 2000-12-14 11:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 
 String RID_GALLERYSTR_THEME_3D
 {
-    Text = "3D";
-    Text[ENGLISH] = "3D";
-    Text[english_us] = "3D";
+    Text = "3D-Effekte";
+    Text[ENGLISH] = "3D effects";
+    Text[english_us] = "3D effects";
     Text[ portuguese ] = "3D";
     Text[ russian ] = "3-Ì";
     Text[ dutch ] = "3D";
@@ -144,11 +144,11 @@ String RID_GALLERYSTR_THEME_BULLETS
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_CLIPARTS
+String RID_GALLERYSTR_THEME_OFFICE
 {
-    Text = "Clipart";
-    Text[ENGLISH] = "Clipart";
-    Text[english_us] = "Clipart";
+    Text = "Büro";
+    Text[ENGLISH] = "Office";
+    Text[english_us] = "Office";
     Text[ portuguese ] = "Cliparts";
     Text[ russian ] = "Êàğòèíêè Clipart";
     Text[ dutch ] = "Clipart";
@@ -200,7 +200,7 @@ String RID_GALLERYSTR_THEME_FLAGS
 
 String RID_GALLERYSTR_THEME_FLOWCHARTS
 {
-    Text = "Flußdiagramme";
+    Text = "Flussdiagramme";
     Text[ENGLISH] = "Flowcharts";
     Text[english_us] = "Flow Charts";
     Text[ portuguese ] = "Fluxogramas";
@@ -225,11 +225,11 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_FORMS
+String RID_GALLERYSTR_THEME_EMOTICONS
 {
-    Text = "Formen";
-    Text[ENGLISH] = "Forms";
-    Text[english_us] = "Shapes";
+    Text = "Emoticons";
+    Text[ENGLISH] = "Emoticons";
+    Text[english_us] = "Emoticons";
     Text[ portuguese ] = "Formas";
     Text[ russian ] = "Ôèãóğû";
     Text[ dutch ] = "Vormen";
@@ -387,11 +387,11 @@ String RID_GALLERYSTR_THEME_MAPS
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_FURNITURE
+String RID_GALLERYSTR_THEME_PEOPLE
 {
-    Text = "Möbel";
-    Text[ENGLISH] = "Furniture";
-    Text[english_us] = "Furniture";
+    Text = "Personen";
+    Text[ENGLISH] = "People";
+    Text[english_us] = "People";
     Text[ portuguese ] = "Móveis";
     Text[ russian ] = "Ìåáåëü";
     Text[ dutch ] = "Meubels";
@@ -568,6 +568,282 @@ String RID_GALLERYSTR_THEME_USERSOUNDS
 {
     // !!! Don't translate, please !!!
     Text = "private://gallery/hidden/usersounds";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_ARROWS
+{
+    Text = "Pfeile";
+    Text[ENGLISH] = "Arrows";
+    Text[english_us] = "Arrows";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_BALLOONS
+{
+    Text = "Sprechblasen";
+    Text[ENGLISH] = "Balloons";
+    Text[english_us] = "Balloons";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_KEYBOARD
+{
+    Text = "Tastatur";
+    Text[ENGLISH] = "Keyboard";
+    Text[english_us] = "Keyboard";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_TIME
+{
+    Text = "Zeit";
+    Text[ENGLISH] = "Time";
+    Text[english_us] = "Time";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_PRESENTATION
+{
+    Text = "Präsentation";
+    Text[ENGLISH] = "Presentation";
+    Text[english_us] = "Presentation";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_CALENDAR
+{
+    Text = "Kalender";
+    Text[ENGLISH] = "Calendar";
+    Text[english_us] = "Calendar";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_NAVIGATION
+{
+    Text = "Navigation";
+    Text[ENGLISH] = "Navigation";
+    Text[english_us] = "Navigation";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_COMMUNICATION
+{
+    Text = "Kommunikation";
+    Text[ENGLISH] = "Communication";
+    Text[english_us] = "Communication";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_FINANCES
+{
+    Text = "Finanzen";
+    Text[ENGLISH] = "Finances";
+    Text[english_us] = "Finances";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_COMPUTER
+{
+    Text = "Computer";
+    Text[ENGLISH] = "Computer";
+    Text[english_us] = "Computer";
+    Text[ portuguese ] = "Temas próprios";
+    Text[ russian ] = "Ìîÿ òåìà";
+    Text[ greek ] = "Ğñïóùğéêü èİìá";
+    Text[ dutch ] = "Eigen onderwerp";
+    Text[ french ] = "Mon thème";
+    Text[ spanish ] = "Mis temas";
+    Text[ italian ] = "Argomento proprio";
+    Text[ danish ] = "Eget emne";
+    Text[ swedish ] = "Eget tema";
+    Text[ polish ] = "Wlasny temat";
+    Text[ portuguese_brazilian ] = "My theme";
+    Text[ japanese ] = "“Æ©‚ÌÃ°Ï";
+    Text[ korean ] = "°íÀ¯ ÁÖÁ¦";
+    Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
+    Text[ chinese_traditional ] = "¦Û­q¥DÃD";
+    Text[ turkish ] = "Kullanıcı konusu";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_DUMMY1
+{
+    // !!! Don't translate, please !!!
+    Text = "Dummy 1";
+};
+
+// -----------------------------------------------------------------------------
+
+String RID_GALLERYSTR_THEME_DUMMY2
+{
+    // !!! Don't translate, please !!!
+    Text = "Dummy 2";
 };
 
 // -----------------------------------------------------------------------------
