@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 15:55:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ Resource RID_LOCALIZED_NAMES
     ItemList [ danish ] =
     {
              < "Gr�sk" ; > ;
-        < "Special" ; > ;
+        < "Speciel" ; > ;
     };
     ItemList [ swedish ] =
     {
@@ -365,6 +365,16 @@ Resource RID_LOCALIZED_NAMES
          < "Grécky" ; > ;
         < "Špeciálny" ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "Görög" ; > ;
+        < "Speciális" ; > ;
+        };
+    ItemList [ slovenian ] =
+    {
+         < "Grški" ; > ;
+        < "Posebno" ; > ;
+        };
     };
 
     StringArray RID_EXPORT_SYMBOL_NAMES
@@ -948,10 +958,10 @@ Resource RID_LOCALIZED_NAMES
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
         < "omikron" ; > ;
@@ -980,13 +990,13 @@ Resource RID_LOCALIZED_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "geenelement" ; > ;
-        < "kleiner dan" ; > ;
-        < "groter dan" ; > ;
-        < "niet gelijk aan" ; > ;
-        < "gelijk aan" ; > ;
-        < "streeft" ; > ;
+        < "element van" ; > ;
+        < "geen element van" ; > ;
+        < "veel kleiner dan" ; > ;
+        < "veel groter dan" ; > ;
+        < "ongelijk aan" ; > ;
+        < "identiek aan" ; > ;
+        < "nadert tot" ; > ;
         < "oneindig" ; > ;
         < "hoek" ; > ;
         < "promille" ; > ;
@@ -1229,7 +1239,7 @@ Resource RID_LOCALIZED_NAMES
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
-        < "XI " ; > ;
+        < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
         < "pi" ; > ;
@@ -1258,11 +1268,11 @@ Resource RID_LOCALIZED_NAMES
         < "varphi" ; > ;
         < "element" ; > ;
         < "intetelement" ; > ;
-        < "kleingegen" ; > ;
-        < "gro�gegen" ; > ;
-        < "forskellig fra" ; > ;
-        < "EKSAKT" ; > ;
-        < "g�ende mod" ; > ;
+        < "mindreend" ; > ;
+        < "mereend" ; > ;
+        < "forskelligfra" ; > ;
+        < "identisk" ; > ;
+        < "g�endemod" ; > ;
         < "uendelig" ; > ;
         < "Vinkel" ; > ;
         < "promille" ; > ;
@@ -2373,46 +2383,143 @@ Resource RID_LOCALIZED_NAMES
         < "a" ; > ;
         < "alebo" ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "alfa" ; > ;
+        < "ALFA" ; > ;
+        < "béta" ; > ;
+        < "BÉTA" ; > ;
+        < "gamma" ; > ;
+        < "GAMMA" ; > ;
+            < "delta" ; > ;
+            < "DELTA" ; > ;
+            < "epszilon" ; > ;
+            < "EPSZILON" ; > ;
+            < "zéta" ; > ;
+            < "ZÉTA" ; > ;
+            < "éta" ; > ;
+            < "ÉTA" ; > ;
+            < "théta" ; > ;
+            < "THÉTA" ; > ;
+            < "ióta" ; > ;
+            < "IÓTA" ; > ;
+            < "kappa" ; > ;
+            < "KAPPA" ; > ;
+            < "lambda" ; > ;
+            < "LAMBDA" ; > ;
+            < "mű" ; > ;
+            < "MŰ" ; > ;
+            < "nű" ; > ;
+            < "NŰ" ; > ;
+            < "kszí" ; > ;
+            < "KSZÍ" ; > ;
+            < "omikron" ; > ;
+            < "OMIKRON" ; > ;
+            < "pí" ; > ;
+            < "PÍ" ; > ;
+            < "ró" ; > ;
+            < "RÓ" ; > ;
+            < "szigma" ; > ;
+            < "SZIGMA" ; > ;
+            < "tau" ; > ;
+            < "TAU" ; > ;
+            < "üpszilon" ; > ;
+            < "ÜPSZILON" ; > ;
+            < "fí" ; > ;
+            < "FÍ" ; > ;
+            < "khí" ; > ;
+            < "KHÍ" ; > ;
+            < "pszí" ; > ;
+            < "PSZÍ" ; > ;
+            < "ómega" ; > ;
+            < "ÓMEGA" ; > ;
+            < "varepsilon" ; > ;
+            < "vartheta" ; > ;
+            < "varpi" ; > ;
+            < "varrho" ; > ;
+            < "varsigma" ; > ;
+            < "varphi" ; > ;
+            < "eleme" ; > ;
+            < "nem eleme" ; > ;
+            < "sokkal kisebb" ; > ;
+            < "sokkal nagyobb" ; > ;
+            < "nem egyenlő" ; > ;
+            < "azonosan egyenlő" ; > ;
+            < "tart" ; > ;
+            < "végtelen" ; > ;
+            < "szög" ; > ;
+            < "ezrelék" ; > ;
+            < "és" ; > ;
+            < "vagy" ; > ;
+        };
+    ItemList [ slovenian ] =
+    {
+         < "alfa" ; > ;
+        < "ALFA" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gama" ; > ;
+        < "GAMA" ; > ;
+            < "delta" ; > ;
+            < "DELTA" ; > ;
+            < "epsilon" ; > ;
+            < "EPSILON" ; > ;
+            < "zeta" ; > ;
+            < "ZETA" ; > ;
+            < "eta" ; > ;
+            < "ETA" ; > ;
+            < "theta" ; > ;
+            < "THETA" ; > ;
+            < "jota" ; > ;
+            < "JOTA" ; > ;
+            < "kapa" ; > ;
+            < "KAPA" ; > ;
+            < "lambda" ; > ;
+            < "LAMBDA" ; > ;
+            < "mi" ; > ;
+            < "MI" ; > ;
+            < "ni" ; > ;
+            < "NI" ; > ;
+            < "ksi" ; > ;
+            < "KSI" ; > ;
+            < "omikron" ; > ;
+            < "OMIKRON" ; > ;
+            < "pi" ; > ;
+            < "PI" ; > ;
+            < "ro" ; > ;
+            < "RO" ; > ;
+            < "sigma" ; > ;
+            < "SIGMA" ; > ;
+            < "tau" ; > ;
+            < "TAU" ; > ;
+            < "ipsilon" ; > ;
+            < "IPSILON" ; > ;
+            < "fi" ; > ;
+            < "FI" ; > ;
+            < "hi" ; > ;
+            < "HI" ; > ;
+            < "psi" ; > ;
+            < "PSI" ; > ;
+            < "omega" ; > ;
+            < "OMEGA" ; > ;
+            < "varepsilon" ; > ;
+            < "vartheta" ; > ;
+            < "varpi" ; > ;
+            < "varro" ; > ;
+            < "varsigma" ; > ;
+            < "varfi" ; > ;
+            < "je element" ; > ;
+            < "ni element" ; > ;
+            < "strogo manjši od" ; > ;
+            < "strogo večji od" ; > ;
+            < "ni enako" ; > ;
+            < "je enako" ; > ;
+            < "stremi k" ; > ;
+            < "neskončno" ; > ;
+            < "kot" ; > ;
+            < "promil" ; > ;
+            < "in" ; > ;
+            < "ali" ; > ;
+        };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
