@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-22 20:23:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-30 21:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "U~RL";
         Text[ chinese_simplified ] = "~URL";
         Text[ greek ] = "URL";
-        Text[ korean ] = "~URL";
+        Text[ korean ] = "URL";
         Text[ turkish ] = "U~RL";
         Text[ catalan ] = "~URL";
         Text[ finnish ] = "~URL-osoite";
@@ -440,7 +440,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Selecteren...";
         Text[ chinese_simplified ] = "ι€‰ζ‹©(~B)...";
         Text[ greek ] = "~Επιλογή...";
-        Text[ korean ] = "μ„ νƒν•κΈ°(~B)...";
+        Text[ korean ] = "μ„ νƒ(B)...";
         Text[ turkish ] = "A~raώtύr...";
         Text[ catalan ] = "~Seleccionar...";
         Text[ finnish ] = "~Selaa";
@@ -464,7 +464,7 @@ TabPage TP_CHAR_URL
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "H~inweis";
         Text[ japanese ] = "ζ–‡ε­—ε—(~X)";
-        Text[ korean ] = "ν…μ¤νΈ(~X)";
+        Text[ korean ] = "ν…μ¤νΈ(X)";
         Text[ chinese_simplified ] = "ζ–‡ε­—(~X)";
         Text[ chinese_traditional ] = "ζ–‡ε­—(~X)";
         Text[ turkish ] = "B~ilgi";
@@ -504,7 +504,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Naam";
         Text[ chinese_simplified ] = "εη§°(~N)";
         Text[ greek ] = "Όνομα";
-        Text[ korean ] = "μ΄λ¦„(~N)";
+        Text[ korean ] = "μ΄λ¦„(N)";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
         Text[ finnish ] = "~Nimi";
@@ -541,7 +541,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Frame";
         Text[ chinese_simplified ] = "ζ΅†ε―Ήθ±΅(~T)";
         Text[ greek ] = "Πλαίσιο";
-        Text[ korean ] = "ν”„λ μ„(~T)";
+        Text[ korean ] = "ν”„λ μ„(T)";
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "~Frame";
         Text[ finnish ] = "~Kohdekehys";
@@ -580,7 +580,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Gebeurtenissen";
         Text[ chinese_simplified ] = "δΊ‹δ»¶(~E)...";
         Text[ greek ] = "Γεγονότα...";
-        Text[ korean ] = "μ΄λ²¤νΈ(~E)...";
+        Text[ korean ] = "μ΄λ²¤νΈ(E)...";
         Text[ turkish ] = "Olaylar...";
         Text[ catalan ] = "~Acontecimientos...";
         Text[ finnish ] = "~Tapahtumat";
@@ -609,7 +609,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "Tekenopmaakprofielen";
         Text[ chinese_simplified ] = "ε­—η¬¦ζ ·εΌ";
         Text[ greek ] = "Στυλ χαρακτήρων";
-        Text[ korean ] = "λ¬Έμ μ ν•";
+        Text[ korean ] = "λ¬Έμ ν…ν”λ¦Ώ";
         Text[ turkish ] = "Karakter biηimi";
         Text[ catalan ] = "Estilos de caracteres";
         Text[ finnish ] = "Merkistφjen tyylit";
@@ -638,7 +638,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "B~ezochte Link";
         Text[ chinese_simplified ] = "ε·²η»θ®Ώι—®θΏ‡η„ι“Ύζ¥(~V)";
         Text[ greek ] = "Συνδέσεις που έχουν επισκεφθεί";
-        Text[ korean ] = "λ°©λ¬Έν• λ§ν¬(~V)";
+        Text[ korean ] = "λ°©λ¬Έν• λ§ν¬(V)";
         Text[ turkish ] = "~Kullanύlmύώ hyperlink";
         Text[ catalan ] = "Vνnculos ~visitados";
         Text[ finnish ] = "~K?ydyt linkit";
@@ -677,7 +677,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "N~iet-bezochte Link";
         Text[ chinese_simplified ] = "ε°ζªθ®Ώι—®θΏ‡η„ι“Ύζ¥(~L)";
         Text[ greek ] = "Συνδέσεις χωρίς επίσκεψη";
-        Text[ korean ] = "λ°©λ¬Έν•μ§€ μ•μ€ λ§ν¬(~L)";
+        Text[ korean ] = "λ°©λ¬Έν•μ§€ μ•μ€ λ§ν¬(L)";
         Text[ turkish ] = "Kullanύl~mamύώ hyperlink";
         Text[ catalan ] = "Vνnculos no v~isitados";
         Text[ finnish ] = "~K?ym?tt??t linkit";
@@ -693,6 +693,7 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
 
