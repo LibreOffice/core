@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-21 14:59:10 $
+ *  last change: $Author: ka $ $Date: 2000-11-07 17:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,8 @@
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <tools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 #include "graph.hxx"
 #include "gfxlink.hxx"
@@ -90,44 +91,6 @@ GfxLink::GfxLink() :
 GfxLink::GfxLink( const GfxLink& rGfxLink )
 {
     ImplCopy( rGfxLink );
-}
-
-// ------------------------------------------------------------------------
-
-GfxLink::GfxLink( const String& rPath, GfxLinkType nType )
-{
-    sal_Int64 nFileSize = 0;
-
-    try
-    {
-        ::ucb::Content aCnt( INetURLObject( rPath, INET_PROT_FILE ).GetMainURL(),
-                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-
-        aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Size" ) ) >>= nFileSize;
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& rE )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-    }
-
-    meType = nType;
-    mnBufSize = nFileSize;
-    mpSwap = NULL;
-    mnUserId = 0UL;
-
-    if( mnBufSize )
-    {
-        SvFileStream aFileStream( rPath, STREAM_READ );
-
-        mpBuf = new ImpBuffer( mnBufSize );
-        aFileStream.Read( mpBuf->mpBuffer, mnBufSize );
-    }
-    else
-        mpBuf = NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -354,36 +317,41 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
 {
     if( pData && mnDataSize )
     {
-        maFileName = TempFile::CreateTempName();
+        ::utl::TempFile aTempFile;
 
-        if( maFileName.Len() )
+        maURL = aTempFile.GetURL();
+
+        if( maURL.GetMainURL().Len() )
         {
-            SvFileStream aOStm( maFileName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
-            aOStm.Write( pData, mnDataSize );
-
-            if( aOStm.GetError() )
+            if( pOStm )
             {
-                aOStm.Close();
+                pOStm->Write( pData, mnDataSize );
+                sal_Bool bError = ( ERRCODE_NONE != pOStm->GetError() );
+                delete pOStm;
 
-                try
+                if( bError )
                 {
-                    ::ucb::Content aCnt( INetURLObject( maFileName, INET_PROT_FILE ).GetMainURL(),
-                                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                    try
+                    {
+                        ::ucb::Content aCnt( maURL.GetMainURL(),
+                                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
-                                         ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
-                }
-                catch( ::com::sun::star::ucb::CommandAbortedException& rE )
-                {
-                    DBG_ERRORFILE( "CommandAbortedException" );
-                }
-                catch( ... )
-                {
-                    DBG_ERRORFILE( "Any other exception" );
-                }
+                        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                                             ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
+                    }
+                    catch( ::com::sun::star::ucb::CommandAbortedException& )
+                    {
+                        DBG_ERRORFILE( "CommandAbortedException" );
+                    }
+                    catch( ... )
+                    {
+                        DBG_ERRORFILE( "Any other exception" );
+                    }
 
-                maFileName.Erase();
+                    maURL = INetURLObject();
+                }
             }
         }
     }
@@ -397,13 +365,13 @@ ImpSwap::~ImpSwap()
     {
         try
         {
-            ::ucb::Content aCnt( INetURLObject( maFileName, INET_PROT_FILE ).GetMainURL(),
+            ::ucb::Content aCnt( maURL.GetMainURL(),
                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& rE )
+        catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
             DBG_ERRORFILE( "CommandAbortedException" );
         }
@@ -422,17 +390,20 @@ BYTE* ImpSwap::GetData() const
 
     if( IsSwapped() )
     {
-        SvFileStream aIStm( maFileName, STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL(), STREAM_READWRITE );
 
-        pData = new BYTE[ mnDataSize ];
-        aIStm.Read( pData, mnDataSize );
-
-        if( aIStm.GetError() )
+        if( pIStm )
         {
-            aIStm.Close();
-            delete[] pData;
-            pData = NULL;
+            pData = new BYTE[ mnDataSize ];
+            pIStm->Read( pData, mnDataSize );
+            sal_Bool bError = ( ERRCODE_NONE != pIStm->GetError() );
+            delete pIStm;
+
+            if( bError )
+                delete[] pData, pData = NULL;
         }
+        else
+            pData = NULL;
     }
     else
         pData = NULL;

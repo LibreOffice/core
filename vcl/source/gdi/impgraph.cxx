@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-21 14:59:10 $
+ *  last change: $Author: ka $ $Date: 2000-11-07 17:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,14 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
@@ -131,8 +134,8 @@
 
 struct ImpSwapFile
 {
-    String  aSwapFileName;
-    USHORT  nRefCount;
+    INetURLObject   aSwapURL;
+    USHORT          nRefCount;
 };
 
 // -----------------
@@ -168,7 +171,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mpContext       ( NULL ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
-        maDocFileName   ( rImpGraphic.maDocFileName ),
+        maDocFileURL    ( rImpGraphic.maDocFileURL ),
         mnDocFilePos    ( rImpGraphic.mnDocFilePos ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
@@ -292,7 +295,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
         if( !mbSwapUnderway )
         {
-            maDocFileName = rImpGraphic.maDocFileName;
+            maDocFileURL = rImpGraphic.maDocFileURL;
             mnDocFilePos = rImpGraphic.mnDocFilePos;
             mbSwapOut = rImpGraphic.mbSwapOut;
             mpSwapFile = rImpGraphic.mpSwapFile;
@@ -394,13 +397,13 @@ void ImpGraphic::ImplClear()
         {
             try
             {
-                ::ucb::Content aCnt( INetURLObject( mpSwapFile->aSwapFileName, INET_PROT_FILE ).GetMainURL(),
+                ::ucb::Content aCnt( mpSwapFile->aSwapURL.GetMainURL(),
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                 aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
             }
-            catch( ::com::sun::star::ucb::CommandAbortedException& rE )
+            catch( ::com::sun::star::ucb::CommandAbortedException& )
             {
                 DBG_ERRORFILE( "CommandAbortedException" );
             }
@@ -417,7 +420,7 @@ void ImpGraphic::ImplClear()
 
     mbSwapOut = FALSE;
     mnDocFilePos = 0UL;
-    maDocFileName.Erase();
+    maDocFileURL = INetURLObject();
 
     // cleanup
     ImplClearGraphics( FALSE );
@@ -857,15 +860,17 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 
 void ImpGraphic::ImplSetDocFileName( const String& rName, ULONG nFilePos )
 {
-    maDocFileName = rName;
+    maDocFileURL = INetURLObject( rName );
     mnDocFilePos = nFilePos;
+
+    DBG_ASSERT( maDocFileURL.GetProtocol() != INET_PROT_NOT_VALID, "Graphic::SetDocFileName(...): invalid URL" );
 }
 
 // ------------------------------------------------------------------------
 
 const String& ImpGraphic::ImplGetDocFileName() const
 {
-    return maDocFileName;
+    return maDocFileURL.GetMainURL();
 }
 
 // ------------------------------------------------------------------------
@@ -891,12 +896,12 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
     if( !mbSwapUnderway )
     {
-        const String aTempName( maDocFileName );
-        const ULONG  nTempPos = mnDocFilePos;
+        const INetURLObject aTempURL( maDocFileURL );
+        const ULONG         nTempPos = mnDocFilePos;
 
         ImplClear();
 
-        maDocFileName = aTempName;
+        maDocFileURL = aTempURL;
         mnDocFilePos = nTempPos;
     }
 
@@ -974,26 +979,27 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
         if( bSwap )
         {
-            if( maDocFileName.Len() )
+            if( maDocFileURL.GetMainURL().Len() )
             {
                 rIStm.Seek( nStartPos + nHeaderLen + nLen );
                 bRet = mbSwapOut = TRUE;
             }
             else
             {
-                const String aTmpName( TempFile::CreateTempName() );
+                ::utl::TempFile     aTempFile;
+                const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-                if( aTmpName.Len() )
+                if( aTmpURL.GetMainURL().Len() )
                 {
-                    SvFileStream aOStm( aTmpName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
-                      aOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-                    if( !aOStm.GetError() )
+                    if( pOStm )
                     {
                         ULONG   nFullLen = nHeaderLen + nLen;
                         ULONG   nPartLen = Min( nFullLen, (ULONG) GRAPHIC_MAXPARTLEN );
                         BYTE*   pBuffer = (BYTE*) SvMemAlloc( nPartLen );
+
+                          pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
                         if( pBuffer )
                         {
@@ -1002,7 +1008,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                             while( nFullLen )
                             {
                                 rIStm.Read( (char*) pBuffer, nPartLen );
-                                aOStm.Write( (char*) pBuffer, nPartLen );
+                                pOStm->Write( (char*) pBuffer, nPartLen );
 
                                 nFullLen -= nPartLen;
 
@@ -1011,30 +1017,27 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                             }
 
                             SvMemFree( pBuffer );
-
-                            ULONG nReadErr = rIStm.GetError();
-                            ULONG nWriteErr = aOStm.GetError();
-
-                            aOStm.Close();
+                            ULONG nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
+                            delete pOStm, pOStm = NULL;
 
                             if( !nReadErr && !nWriteErr )
                             {
                                 bRet = mbSwapOut = TRUE;
                                 mpSwapFile = new ImpSwapFile;
                                 mpSwapFile->nRefCount = 1;
-                                mpSwapFile->aSwapFileName = aTmpName;
+                                mpSwapFile->aSwapURL = aTmpURL;
                             }
                             else
                             {
                                 try
                                 {
-                                    ::ucb::Content aCnt( INetURLObject( aTmpName, INET_PROT_FILE ).GetMainURL(),
+                                    ::ucb::Content aCnt( aTmpURL.GetMainURL(),
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
                                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                                 }
-                                catch( ::com::sun::star::ucb::CommandAbortedException& rE )
+                                catch( ::com::sun::star::ucb::CommandAbortedException& )
                                 {
                                     DBG_ERRORFILE( "CommandAbortedException" );
                                 }
@@ -1044,6 +1047,8 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                                 }
                             }
                         }
+
+                        delete pOStm;
                     }
                 }
             }
@@ -1181,41 +1186,49 @@ BOOL ImpGraphic::ImplSwapOut()
 
     if( !ImplIsSwapOut() )
     {
-        if( !maDocFileName.Len() )
+        if( !maDocFileURL.GetMainURL().Len() )
         {
-            const String aTmpName( TempFile::CreateTempName() );
+            ::utl::TempFile     aTempFile;
+            const INetURLObject aTmpURL( aTempFile.GetURL() );
 
-            if( aTmpName.Len() )
+            if( aTmpURL.GetMainURL().Len() )
             {
-                SvFileStream aOStm( aTmpName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
 
-                aOStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
-                aOStm.SetCompressMode( COMPRESSMODE_NATIVE );
-
-                if( ( bRet = ImplSwapOut( &aOStm ) ) == TRUE )
+                if( pOStm )
                 {
-                    mpSwapFile = new ImpSwapFile;
-                    mpSwapFile->nRefCount = 1;
-                    mpSwapFile->aSwapFileName = aTmpName;
-                }
-                else
-                {
-                    try
-                    {
-                        ::ucb::Content aCnt( INetURLObject( aTmpName, INET_PROT_FILE ).GetMainURL(),
-                                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                    pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                    pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
-                        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
-                                             ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
-                    }
-                    catch( ::com::sun::star::ucb::CommandAbortedException& rE )
+                    if( ( bRet = ImplSwapOut( pOStm ) ) == TRUE )
                     {
-                        DBG_ERRORFILE( "CommandAbortedException" );
+                        mpSwapFile = new ImpSwapFile;
+                        mpSwapFile->nRefCount = 1;
+                        mpSwapFile->aSwapURL = aTmpURL;
                     }
-                    catch( ... )
+                    else
                     {
-                        DBG_ERRORFILE( "Any other exception" );
+                        delete pOStm, pOStm = NULL;
+
+                        try
+                        {
+                            ::ucb::Content aCnt( aTmpURL.GetMainURL(),
+                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+
+                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                                                 ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
+                        }
+                        catch( ::com::sun::star::ucb::CommandAbortedException& )
+                        {
+                            DBG_ERRORFILE( "CommandAbortedException" );
+                        }
+                        catch( ... )
+                        {
+                            DBG_ERRORFILE( "Any other exception" );
+                        }
                     }
+
+                    delete pOStm;
                 }
             }
         }
@@ -1267,45 +1280,52 @@ BOOL ImpGraphic::ImplSwapIn()
 
     if( ImplIsSwapOut() )
     {
-        const String    aFileName = ( mpSwapFile ? mpSwapFile->aSwapFileName : maDocFileName );
-        SvFileStream    aIStm( aFileName, STREAM_READ | STREAM_SHARE_DENYWRITE );
+        const INetURLObject* pSwapURL = mpSwapFile ? &( mpSwapFile->aSwapURL ) : &maDocFileURL;
 
-        aIStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
-        aIStm.SetCompressMode( COMPRESSMODE_NATIVE );
-
-        if( !mpSwapFile )
-            aIStm.Seek( mnDocFilePos );
-
-        bRet = ImplSwapIn( &aIStm );
-        aIStm.Close();
-
-        if( mpSwapFile )
+        if( pSwapURL->GetMainURL().Len() )
         {
-            if( mpSwapFile->nRefCount > 1 )
-                mpSwapFile->nRefCount--;
-            else
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( pSwapURL->GetMainURL(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+
+            if( pIStm )
             {
-                try
-                {
-                    ::ucb::Content aCnt( INetURLObject( mpSwapFile->aSwapFileName, INET_PROT_FILE ).GetMainURL(),
-                                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                pIStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                pIStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
-                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
-                                         ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
-                }
-                catch( ::com::sun::star::ucb::CommandAbortedException& rE )
-                {
-                    DBG_ERRORFILE( "CommandAbortedException" );
-                }
-                catch( ... )
-                {
-                    DBG_ERRORFILE( "Any other exception" );
-                }
+                if( !mpSwapFile )
+                    pIStm->Seek( mnDocFilePos );
 
-                delete mpSwapFile;
+                bRet = ImplSwapIn( pIStm );
+                delete pIStm;
+
+                if( mpSwapFile )
+                {
+                    if( mpSwapFile->nRefCount > 1 )
+                        mpSwapFile->nRefCount--;
+                    else
+                    {
+                        try
+                        {
+                            ::ucb::Content aCnt( pSwapURL->GetMainURL(),
+                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+
+                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                                                 ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
+                        }
+                        catch( ::com::sun::star::ucb::CommandAbortedException& )
+                        {
+                            DBG_ERRORFILE( "CommandAbortedException" );
+                        }
+                        catch( ... )
+                        {
+                            DBG_ERRORFILE( "Any other exception" );
+                        }
+
+                        delete mpSwapFile;
+                    }
+
+                    mpSwapFile = NULL;
+                }
             }
-
-            mpSwapFile = NULL;
         }
     }
 
