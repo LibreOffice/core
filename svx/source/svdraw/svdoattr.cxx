@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-26 11:31:55 $
+ *  last change: $Author: aw $ $Date: 2001-11-14 10:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,46 +1324,102 @@ BOOL SdrAttrObj::HasLine() const
     return ((XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }
 
-// #91695# back to corrected old version. Have to check new version again for later builds.
+// #94547# Have to re-activate more performant, but corrected version.
+// This is necessary since SetItemSet() of the old implementation calls
+// ItemSetChanged() which replaces in textobjects all text items which
+// is wrong behaviour for BurnInStyleSheet.
 void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
-    SfxItemPool* pPool = GetItemPool();
-    if ( pPool && mpStyleSheet )
+    if(GetStyleSheet() && HAS_BASE(SfxStyleSheet, mpStyleSheet))
     {
-        // Get StyleSheet attributes
-        SfxItemSet aSet(*pPool,
-            SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1,
-            SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
-            EE_ITEMS_START,EE_ITEMS_END,
-            0,0);
+        // prepare copied, new itemset, but WITHOUT parent
+        ImpForceItemSet();
+        SfxItemSet* pDestItemSet = new SfxItemSet(*mpObjectItemSet);
+        pDestItemSet->SetParent(0L);
 
-        SfxWhichIter aIter( mpStyleSheet->GetItemSet() );
-        sal_uInt16 nWhich( aIter.FirstWhich() );
-        const SfxPoolItem* pItem = NULL;
+        // pepare forgetting the current stylesheet like in RemoveStyleSheet()
+        EndListening(*mpStyleSheet);
+        EndListening(mpStyleSheet->GetPool());
 
-        while( nWhich )
+        // get itemset of the stylesheet
+        const SfxItemSet& rSet = mpStyleSheet->GetItemSet();
+
+        // prepare the iter; use the mpObjectItemSet which may have less
+        // WhichIDs than the style.
+        SfxWhichIter aIter(*pDestItemSet);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+        const SfxPoolItem *pItem = NULL;
+
+        // set all attributes of the stylesheet at the new itemset
+        while(nWhich)
         {
-            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, TRUE, &pItem) )
-                aSet.Put( *pItem );
-
+            if(SFX_ITEM_SET == rSet.GetItemState(nWhich, TRUE, &pItem))
+                pDestItemSet->Put(*pItem);
             nWhich = aIter.NextWhich();
         }
 
-        SfxWhichIter aHardAttrIter( GetItemSet() );
-        nWhich = aHardAttrIter.FirstWhich();
+        // prepare 2nd loop
+        nWhich = aIter.FirstWhich();
 
-        while( nWhich )
+        // now set all hard attributes of the current at the new itemset
+        while(nWhich)
         {
-            if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
-                aSet.Put( *pItem );
-
-            nWhich = aHardAttrIter.NextWhich();
+            if(SFX_ITEM_SET == mpObjectItemSet->GetItemState(nWhich, FALSE, &pItem))
+                pDestItemSet->Put(*pItem);
+            nWhich = aIter.NextWhich();
         }
 
-        // Set StyleSheet attributes as hard attributes
-        SetItemSet( aSet );
-      }
+        // replace itemsets
+        delete mpObjectItemSet;
+        mpObjectItemSet = pDestItemSet;
+
+        // set necessary changes like in RemoveStyleSheet()
+        bBoundRectDirty = TRUE;
+        SetRectsDirty(TRUE);
+        mpStyleSheet = NULL;
+    }
 }
+
+// #91695# back to corrected old version. Have to check new version again for later builds.
+//void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
+//{
+//  SfxItemPool* pPool = GetItemPool();
+//  if ( pPool && mpStyleSheet )
+//  {
+//      // Get StyleSheet attributes
+//      SfxItemSet aSet(*pPool,
+//          SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1,
+//          SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
+//          EE_ITEMS_START,EE_ITEMS_END,
+//          0,0);
+//
+//      SfxWhichIter aIter( mpStyleSheet->GetItemSet() );
+//      sal_uInt16 nWhich( aIter.FirstWhich() );
+//      const SfxPoolItem* pItem = NULL;
+//
+//      while( nWhich )
+//      {
+//          if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, TRUE, &pItem) )
+//              aSet.Put( *pItem );
+//
+//          nWhich = aIter.NextWhich();
+//      }
+//
+//      SfxWhichIter aHardAttrIter( GetItemSet() );
+//      nWhich = aHardAttrIter.FirstWhich();
+//
+//      while( nWhich )
+//      {
+//          if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+//              aSet.Put( *pItem );
+//
+//          nWhich = aHardAttrIter.NextWhich();
+//      }
+//
+//      // Set StyleSheet attributes as hard attributes
+//      SetItemSet( aSet );
+//      }
+//}
 
 /*
 void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
