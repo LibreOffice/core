@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 12:09:09 $
+ *  last change: $Author: jl $ $Date: 2001-08-02 12:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ class Desktop : public Application //public SfxApplicationClass
     private:
         void                OpenStartupScreen();
         void                CloseStartupScreen();
-
+        void                EnableOleAutomation();
         DECL_LINK(          AsyncInitFirstRun, void* );
 
         /** checks if the office is run the first time
