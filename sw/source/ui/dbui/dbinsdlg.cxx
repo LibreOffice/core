@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:11:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,11 +1569,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SwCrsrShell::MovePara(
-                            SwuiGetfnParaCurr(), SwuiGetfnParaStart() );
+                            GetfnParaCurr(), GetfnParaStart() );
                         rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, MARK );
                         // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         rSh.SwCrsrShell::MovePara(
-                            SwuiGetfnParaCurr(), SwuiGetfnParaEnd() );
+                            GetfnParaCurr(), GetfnParaEnd() );
                         bSetCrsr = FALSE;
                     }
                 }
