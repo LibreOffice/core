@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:55:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CPPCANVAS_LINEACTION_HXX
 #define _CPPCANVAS_LINEACTION_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -103,7 +103,7 @@ namespace cppcanvas
             Point                                               maStartPoint;
             Point                                               maEndPoint;
             CanvasSharedPtr                                     mpCanvas;
-            ::drafts::com::sun::star::rendering::RenderState    maState;
+            ::com::sun::star::rendering::RenderState    maState;
         };
     }
 }
