@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,12 +209,18 @@ namespace xmloff
         // the value properties (value, current-value, min-value, max-value) require some special
         // handling
 
+        // we fake the attributes our base class gets: we add the attributes of the outer wrapper
+        // element which encloses us
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
+                                        m_xOuterAttributes;
+
     protected:
         // for use by derived classes only
         OControlImport(
             IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer
+            );
 
     public:
         OControlImport(
@@ -234,6 +240,8 @@ namespace xmloff
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 
+        void addOuterAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs);
+
     protected:
         void setElementType(OControlElement::ElementType _eType) { m_eElementType = _eType; }
 
@@ -241,6 +249,38 @@ namespace xmloff
         void implTranslateValueProperty(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
             ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
+    };
+
+    //=====================================================================
+    //= OControlWrapperImport
+    //=====================================================================
+    /** helper class importing a &lt;form:column&gt; or &lt;form:control&gt; element.
+    */
+    class OControlWrapperImport : public SvXMLImportContext
+    {
+    protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
+                                m_xOwnAttributes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                                m_xParentContainer;
+        IFormsImportContext&    m_rFormImport;
+        IEventAttacherManager&  m_rEventManager;
+
+    public:
+        OControlWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
+
+        // SvXMLImportContext overridables
+        virtual SvXMLImportContext* CreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+
+    protected:
+        virtual OControlImport* implCreateChildContext(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            OControlElement::ElementType _eType);
     };
 
     //=====================================================================
@@ -382,12 +422,15 @@ namespace xmloff
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                    m_xMeAsContainer;
+                        m_xMeAsContainer;
+        ::rtl::OUString m_sWrapperElementName;
 
     protected:
         OContainerImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer)
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+                const sal_Char* _pWrapperElementName)
             :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
+            ,m_sWrapperElementName(::rtl::OUString::createFromAscii(_pWrapperElementName))
         {
         }
 
@@ -403,9 +446,8 @@ namespace xmloff
                         createElement();
 
         // create the child context for the given control type
-        virtual SvXMLImportContext* implCreateControlChild(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            OControlElement::ElementType _eType) = 0;
+        virtual SvXMLImportContext* implCreateControlWrapper(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName) = 0;
     };
 
     //=====================================================================
@@ -423,20 +465,11 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridColumnFactory >
                     m_xColumnFactory;
 
-        // we fake the attributes our base class gets: we add the attributes of the <form:column> wrapper
-        // element which encloses us
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
-                    m_xOuterAttributes;
-
     public:
         OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs);
-
-        // SvXMLImportContext overridables
-        virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
     protected:
         // OElementImport overridables
@@ -447,28 +480,15 @@ namespace xmloff
     //=====================================================================
     //= OColumnWrapperImport
     //=====================================================================
-    /** helper class importing a &lt;form:column&gt; element.
-    */
-    class OColumnWrapperImport : public SvXMLImportContext
+    class OColumnWrapperImport : public OControlWrapperImport
     {
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
-                                m_xOwnAttributes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                m_xParentContainer;
-        IFormsImportContext&    m_rFormImport;
-        IEventAttacherManager&  m_rEventManager;
-
     public:
         OColumnWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
-
-        // SvXMLImportContext overridables
-        virtual SvXMLImportContext* CreateChildContext(
+    protected:
+        virtual OControlImport* implCreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+            OControlElement::ElementType _eType);
     };
 
     //=====================================================================
@@ -487,9 +507,8 @@ namespace xmloff
 
     protected:
         // OContainerImport overridables
-        virtual SvXMLImportContext* implCreateControlChild(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            OControlElement::ElementType _eType);
+        virtual SvXMLImportContext* implCreateControlWrapper(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName);
     };
 
     //=====================================================================
@@ -513,9 +532,8 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         // OContainerImport overridables
-        virtual SvXMLImportContext* implCreateControlChild(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            OControlElement::ElementType _eType);
+        virtual SvXMLImportContext* implCreateControlWrapper(
+            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName);
 
         // OPropertyImport overridables
         virtual void    handleAttribute(sal_uInt16 _nNamespaceKey,
@@ -539,6 +557,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/01/02 15:58:21  fs
+ *  event ex- & import
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

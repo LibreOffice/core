@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace xmloff
             case CCA_NAME:              return "name";
             case CCA_SERVICE_NAME:      return "service-name";
             case CCA_BUTTON_TYPE:       return "button-type";
-            case CCA_CONTROL_ID:        return "control-id";
+            case CCA_CONTROL_ID:        return "id";
             case CCA_CURRENT_SELECTED:  return "current-selected";
             case CCA_CURRENT_VALUE:     return "current-value";
             case CCA_DISABLED:          return "disabled";
@@ -207,7 +207,7 @@ namespace xmloff
             case SCA_MIN_VALUE:             return "min-value";
             case SCA_VALIDATION:            return "validation";
             case SCA_MULTI_LINE:            return "multi-line";
-            case SCA_AUTOMATIC_COMPLETION:  return "automatic-completion";
+            case SCA_AUTOMATIC_COMPLETION:  return "auto-complete";
             case SCA_MULTIPLE:              return "multiple";
             case SCA_DEFAULT_BUTTON:        return "default-button";
             case SCA_CURRENT_STATE:         return "current-state";
@@ -320,6 +320,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.3  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

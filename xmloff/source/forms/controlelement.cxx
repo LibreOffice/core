@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:29:46 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,8 @@ namespace xmloff
             case IMAGE_FRAME: return "image-frame";
             case HIDDEN: return "hidden";
             case GRID: return "grid";
-            case COLUMN: return "column";
 
-            default: return "control";
+            default: return "generic-control";
         }
     }
 
@@ -105,6 +104,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:29:46  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 06.12.00 14:02:39  fs
  ************************************************************************/

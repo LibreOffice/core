@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #ifndef _XMLOFF_FORMS_EVENTEXPORT_HXX_
 #include "eventexport.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
+#include <com/sun/star/io/XPersistObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
@@ -136,6 +142,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::script;
+    using namespace ::com::sun::star::io;
 
     //=====================================================================
     //= OElementExport
@@ -211,6 +218,70 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OElementExport::exportServiceNameAttribute()
+    {
+        Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
+        if (!xPersistence.is())
+        {
+            OSL_ENSURE(sal_False, "OElementExport::exportServiceNameAttribute: no XPersistObject!");
+            return;
+        }
+
+        ::rtl::OUString sServiceName = xPersistence->getServiceName();
+        // we don't want to write the old service name directly: it's a name used for compatibility reasons, but
+        // as we start some kind of new file format here (with this xml export), we don't care about
+        // compatibility ...
+        // So we translate the old persistence service name into new ones, if possible
+
+        ::rtl::OUString sToWriteServiceName = sServiceName;
+#define CHECK_N_TRANSLATE( name )   \
+        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name)) \
+            sToWriteServiceName = SERVICE_##name
+
+        if (sal_False)
+            ;
+        CHECK_N_TRANSLATE( FORM );
+        CHECK_N_TRANSLATE( FORM );
+        CHECK_N_TRANSLATE( LISTBOX );
+        CHECK_N_TRANSLATE( COMBOBOX );
+        CHECK_N_TRANSLATE( RADIOBUTTON );
+        CHECK_N_TRANSLATE( GROUPBOX );
+        CHECK_N_TRANSLATE( FIXEDTEXT );
+        CHECK_N_TRANSLATE( COMMANDBUTTON );
+        CHECK_N_TRANSLATE( CHECKBOX );
+        CHECK_N_TRANSLATE( GRID );
+        CHECK_N_TRANSLATE( IMAGEBUTTON );
+        CHECK_N_TRANSLATE( FILECONTROL );
+        CHECK_N_TRANSLATE( TIMEFIELD );
+        CHECK_N_TRANSLATE( DATEFIELD );
+        CHECK_N_TRANSLATE( NUMERICFIELD );
+        CHECK_N_TRANSLATE( CURRENCYFIELD );
+        CHECK_N_TRANSLATE( PATTERNFIELD );
+        CHECK_N_TRANSLATE( HIDDENCONTROL );
+        CHECK_N_TRANSLATE( IMAGECONTROL );
+        CHECK_N_TRANSLATE( FORMATTEDFIELD );
+        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_EDIT))
+        {   // special handling for the edit field: we have to controls using this as persistence service name
+            sToWriteServiceName = SERVICE_EDIT;
+            Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
+            if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
+                sToWriteServiceName = SERVICE_FORMATTEDFIELD;
+        }
+#ifdef DBG_UTIL
+        Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
+        OSL_ENSURE(xSI.is() && xSI->supportsService(sToWriteServiceName),
+            "OElementExport::exportServiceNameAttribute: wrong service name translation!");
+
+#endif
+
+        // now write this
+        AddAttribute(
+            getCommonControlAttributeNamespace(CCA_SERVICE_NAME),
+            getCommonControlAttributeName(CCA_SERVICE_NAME),
+            sToWriteServiceName);
+    }
+
+    //---------------------------------------------------------------------
     void OElementExport::exportEvents()
     {
         if (!m_aEvents.getLength())
@@ -236,12 +307,61 @@ namespace xmloff
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
         ,m_nClassId(FormComponentType::CONTROL)
+        ,m_pOuterElement(NULL)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::exportAttributes()
+    OControlExport::~OControlExport()
+    {
+        implEndElement();
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportOuterAttributes()
+    {
+        // the control id
+        if (CCA_NAME & m_nIncludeCommon)
+        {
+            exportStringPropertyAttribute(
+                getCommonControlAttributeNamespace(CCA_NAME),
+                getCommonControlAttributeName(CCA_NAME),
+                PROPERTY_NAME
+                );
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_NAME;
+        #endif
+        }
+
+        // the service name
+        if (m_nIncludeCommon & CCA_SERVICE_NAME)
+        {
+            exportServiceNameAttribute();
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_SERVICE_NAME;
+        #endif
+        }
+
+        // the control id
+        if (CCA_CONTROL_ID & m_nIncludeCommon)
+        {
+            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportCommonControlAttributes: have no control id for the control!");
+            AddAttribute(
+                getCommonControlAttributeNamespace(CCA_CONTROL_ID),
+                getCommonControlAttributeName(CCA_CONTROL_ID),
+                m_sControlId);
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
+        #endif
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportInnerAttributes()
     {
         // common control attributes
         exportCommonControlAttributes();
@@ -254,8 +374,12 @@ namespace xmloff
 
         // add the style references to the attributes
         implExportStyleReference();
+    }
 
-        // TODO: add the event attributes
+    //---------------------------------------------------------------------
+    void OControlExport::exportAttributes()
+    {
+        exportOuterAttributes();
     }
 
     //---------------------------------------------------------------------
@@ -329,32 +453,18 @@ namespace xmloff
         // the extra indents for the respective blocks are to ensure that there is no copy'n'paste error, using
         // map identifiers from the wrong block
 
-        // the control id
-        if (CCA_CONTROL_ID & m_nIncludeCommon)
-        {
-            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportCommonControlAttributes: have no control id for the control!");
-            AddAttribute(
-                getCommonControlAttributeNamespace(CCA_CONTROL_ID),
-                getCommonControlAttributeName(CCA_CONTROL_ID),
-                m_sControlId);
-        #ifdef DBG_UTIL
-            //  reset the bit for later checking
-            m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
-        #endif
-        }
-
         // --------------------------------------------------------------------
         // some string properties
         {
             // the attribute ids of all properties which are expected to be of type string
             static sal_Int32 nStringPropertyAttributeIds[] =
             {
-                CCA_NAME, CCA_IMAGE_DATA, CCA_LABEL, CCA_TARGET_LOCATION, CCA_TITLE
+                CCA_IMAGE_DATA, CCA_LABEL, CCA_TARGET_LOCATION, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
             static const sal_Char* pStringPropertyNames[] =
             {
-                PROPERTY_NAME, PROPERTY_IMAGEURL, PROPERTY_LABEL, PROPERTY_TARGETURL, PROPERTY_TITLE
+                PROPERTY_IMAGEURL, PROPERTY_LABEL, PROPERTY_TARGETURL, PROPERTY_TITLE
             };
             OSL_ENSURE( sizeof(pStringPropertyNames)/sizeof(pStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
@@ -477,16 +587,6 @@ namespace xmloff
 
         // --------------------------------------------------------------------
         // some properties which require a special handling
-
-        // the service name
-        if (m_nIncludeCommon & CCA_SERVICE_NAME)
-        {
-            exportServiceNameAttribute();
-        #ifdef DBG_UTIL
-            //  reset the bit for later checking
-            m_nIncludeCommon = m_nIncludeCommon & ~CCA_SERVICE_NAME;
-        #endif
-        }
 
         // the target frame
         if (m_nIncludeCommon & CCA_TARGET_FRAME)
@@ -878,6 +978,36 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OControlExport::implStartElement(const sal_Char* _pName)
+    {
+        // before we let the base class start it's outer element, we add a wrapper element
+        m_pOuterElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, getOuterXMLElementName(), sal_True, sal_True);
+
+        // add the attributes for the inner element
+        exportInnerAttributes();
+
+        // and start the inner element
+        OElementExport::implStartElement(_pName);
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::implEndElement()
+    {
+        // end the inner element
+        OElementExport::implEndElement();
+
+        // end the outer element
+        delete m_pOuterElement;
+        m_pOuterElement = NULL;
+    }
+
+    //---------------------------------------------------------------------
+    const sal_Char* OControlExport::getOuterXMLElementName() const
+    {
+        return "control";
+    }
+
+    //---------------------------------------------------------------------
     const sal_Char* OControlExport::getXMLElementName() const
     {
         return getElementName(m_eType);
@@ -1104,7 +1234,7 @@ namespace xmloff
                 break;
 
             case FormComponentType::CONTROL:
-                m_eType = CONTROL;
+                m_eType = GENERIC_CONTROL;
                 // unknown control type
                 m_nIncludeCommon = CCA_NAME | CCA_SERVICE_NAME;
                     // at least a name should be there, 'cause without a name the control could never have been
@@ -1129,56 +1259,18 @@ namespace xmloff
     OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OControlExport(_rContext, _rxControl, ::rtl::OUString(), ::rtl::OUString(), _rEvents)
-        ,m_pColumnXMLElement(NULL)
-        ,m_bExamined(sal_False)
     {
     }
 
     //---------------------------------------------------------------------
     OColumnExport::~OColumnExport()
     {
-        // end the base class element before our own one
         implEndElement();
-
-        delete m_pColumnXMLElement;
     }
 
     //---------------------------------------------------------------------
-    void OColumnExport::examine()
+    void OColumnExport::exportServiceNameAttribute()
     {
-        if (!m_bExamined)
-        {
-            OControlExport::examine();
-
-            // grid columns miss some properties of the controls they're representing
-            m_nIncludeCommon &= ~(CCA_SERVICE_NAME | CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL | CCA_NAME);
-            m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
-
-            if (FormComponentType::DATEFIELD != m_nClassId)
-                // except date fields, no column has the DropDown property
-                m_nIncludeCommon &= ~CCA_DROPDOWN;
-
-            m_bExamined = sal_True;
-        }
-    }
-
-    //---------------------------------------------------------------------
-    void OColumnExport::doExport()
-    {
-        // before the base class can start it's element, start an additional one stating that the following is
-        // a grid column
-
-        // we do the examine here, cause we need the information about the column we're exporting
-        // (though the base class' doExport calls it, again, but we handle this in ::examine ...)
-        examine();
-
-        // the attribute "name"
-        exportStringPropertyAttribute(
-            getCommonControlAttributeNamespace(CCA_NAME),
-            getCommonControlAttributeName(CCA_NAME),
-            PROPERTY_NAME
-            );
-
         // the attribute "service name" (which has a slightly different meaning for columns
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_COLUMNSERVICENAME, ::rtl::OUString);
         ::rtl::OUString sColumnServiceName;
@@ -1194,17 +1286,38 @@ namespace xmloff
         // flag the property as "handled"
         exportedProperty(PROPERTY_COLUMNSERVICENAME);
 
+    }
+
+    //---------------------------------------------------------------------
+    const sal_Char* OColumnExport::getOuterXMLElementName() const
+    {
+        return "column";
+    }
+
+    //---------------------------------------------------------------------
+    void OColumnExport::exportAttributes()
+    {
+        OControlExport::exportAttributes();
+
         // the attribute "label"
         exportStringPropertyAttribute(
             getCommonControlAttributeNamespace(CCA_LABEL),
             getCommonControlAttributeName(CCA_LABEL),
             PROPERTY_LABEL);
+    }
 
-        // start the extra element indicating that we're a column
-        m_pColumnXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "column", sal_True, sal_True);
+    //---------------------------------------------------------------------
+    void OColumnExport::examine()
+    {
+        OControlExport::examine();
 
-        // let the base class do it's handling
-        OControlExport::doExport();
+        // grid columns miss some properties of the controls they're representing
+        m_nIncludeCommon &= ~(CCA_CONTROL_ID | CCA_FOR | CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_LABEL);
+        m_nIncludeSpecial &= ~(SCA_ECHO_CHAR | SCA_AUTOMATIC_COMPLETION | SCA_MULTIPLE | SCA_MULTI_LINE | SCA_IS_TRISTATE);
+
+        if (FormComponentType::DATEFIELD != m_nClassId)
+            // except date fields, no column has the DropDown property
+            m_nIncludeCommon &= ~CCA_DROPDOWN;
     }
 
     //=====================================================================
@@ -1349,9 +1462,6 @@ namespace xmloff
             getFormAttributeNamespace(faDetailFiels),
             getFormAttributeName(faDetailFiels),
             PROPERTY_DETAILFIELDS);
-
-
-        // TODO: the events EA_RESET, EA_SUBMIT
     }
 
 //.........................................................................
@@ -1361,6 +1471,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/02 15:58:21  fs
+ *  event ex- & import
+ *
  *  Revision 1.7  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:30:27 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,7 @@ namespace xmloff
             IMAGE_FRAME,
             HIDDEN,
             GRID,
-            COLUMN,
-            CONTROL,
+            GENERIC_CONTROL,
 
             UNKNOWN // must be the last element
         };
@@ -130,6 +129,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:30:27  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 06.12.00 14:00:25  fs
  ************************************************************************/

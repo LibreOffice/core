@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:08:56 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,6 @@ namespace xmloff
 
         // some very special methods for some very special attribute/property pairs
 
-        /** add the service-name attribute to the export context
-        */
-        void exportServiceNameAttribute();
-
         /** add the hlink:xref attribute to the export context.
 
             <p>The value of this attribute is extracted from the TargetFrame property of the object given.</p>
@@ -400,6 +396,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/03 11:08:56  mib
+ *  syntax
+ *
  *  Revision 1.7  2001/01/02 15:58:22  fs
  *  event ex- & import
  *

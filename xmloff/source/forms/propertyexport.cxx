@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,6 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
-#include <com/sun/star/io/XPersistObject.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -134,7 +128,6 @@ namespace xmloff
 {
 //.........................................................................
 
-    using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -518,67 +511,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::exportServiceNameAttribute()
-    {
-        Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
-        if (!xPersistence.is())
-        {
-            OSL_ENSURE(sal_False, "OPropertyExport::exportServiceNameAttribute: no XPersistObject!");
-            return;
-        }
-
-        ::rtl::OUString sServiceName = xPersistence->getServiceName();
-        // we don't want to write the old service name directly: it's a name used for compatibility reasons, but
-        // as we start some kind of new file format here (with this xml export), we don't care about
-        // compatibility ...
-        // So we translate the old persistence service name into new ones, if possible
-
-        ::rtl::OUString sToWriteServiceName = sServiceName;
-#define CHECK_N_TRANSLATE( name )   \
-        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_##name)) \
-            sToWriteServiceName = SERVICE_##name
-
-        if (sal_False)
-            ;
-        CHECK_N_TRANSLATE( FORM );
-        CHECK_N_TRANSLATE( FORM );
-        CHECK_N_TRANSLATE( LISTBOX );
-        CHECK_N_TRANSLATE( COMBOBOX );
-        CHECK_N_TRANSLATE( RADIOBUTTON );
-        CHECK_N_TRANSLATE( GROUPBOX );
-        CHECK_N_TRANSLATE( FIXEDTEXT );
-        CHECK_N_TRANSLATE( COMMANDBUTTON );
-        CHECK_N_TRANSLATE( CHECKBOX );
-        CHECK_N_TRANSLATE( GRID );
-        CHECK_N_TRANSLATE( IMAGEBUTTON );
-        CHECK_N_TRANSLATE( FILECONTROL );
-        CHECK_N_TRANSLATE( TIMEFIELD );
-        CHECK_N_TRANSLATE( DATEFIELD );
-        CHECK_N_TRANSLATE( NUMERICFIELD );
-        CHECK_N_TRANSLATE( CURRENCYFIELD );
-        CHECK_N_TRANSLATE( PATTERNFIELD );
-        CHECK_N_TRANSLATE( HIDDENCONTROL );
-        CHECK_N_TRANSLATE( IMAGECONTROL );
-        CHECK_N_TRANSLATE( FORMATTEDFIELD );
-        else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_EDIT))
-        {   // special handling for the edit field: we have to controls using this as persistence service name
-            sToWriteServiceName = SERVICE_EDIT;
-            Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
-            if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
-                sToWriteServiceName = SERVICE_FORMATTEDFIELD;
-        }
-#ifdef DBG_UTIL
-        Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
-        OSL_ENSURE(xSI.is() && xSI->supportsService(sToWriteServiceName),
-            "OPropertyExport::exportServiceNameAttribute: wrong service name translation!");
-
-#endif
-
-        // now write this
-        AddAttribute(XML_NAMESPACE_FORM, "service-name", sToWriteServiceName);
-    }
-
-    //---------------------------------------------------------------------
     void OPropertyExport::exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName, const sal_Char* _pPropertyName)
     {
@@ -820,6 +752,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.7  2000/12/18 13:25:01  mib
  *  #82036#: new graphic properties
  *

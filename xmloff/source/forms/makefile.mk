@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-02 15:56:57 $
+#   last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,15 +85,15 @@ CXXFILES = \
         valueproperties.cxx \
         attriblistmerge.cxx \
         controlelement.cxx \
+        formlayerexport.cxx \
+        layerexport.cxx \
+        elementexport.cxx \
+        propertyexport.cxx \
         elementimport.cxx \
         layerimport.cxx \
         propertyimport.cxx \
         formlayerimport.cxx \
-        formlayerexport.cxx \
-        layerexport.cxx \
-        elementexport.cxx \
         formattributes.cxx \
-        propertyexport.cxx \
         formenums.cxx \
         strings.cxx
 
@@ -106,15 +106,15 @@ SLOFILES =	\
         $(SLO)$/valueproperties.obj \
         $(SLO)$/attriblistmerge.obj \
         $(SLO)$/controlelement.obj \
+        $(SLO)$/formlayerexport.obj \
+        $(SLO)$/layerexport.obj \
+        $(SLO)$/elementexport.obj \
+        $(SLO)$/propertyexport.obj \
         $(SLO)$/elementimport.obj \
         $(SLO)$/layerimport.obj \
         $(SLO)$/propertyimport.obj \
         $(SLO)$/formlayerimport.obj \
-        $(SLO)$/formlayerexport.obj \
-        $(SLO)$/layerexport.obj \
-        $(SLO)$/elementexport.obj \
         $(SLO)$/formattributes.obj \
-        $(SLO)$/propertyexport.obj \
         $(SLO)$/formenums.obj \
         $(SLO)$/strings.obj
 

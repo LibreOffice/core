@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,14 @@ SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList)
 {
     // maybe it's a sub control
-    OControlElement::ElementType eType = OElementNameMap::getElementType(_rLocalName);
-    if (OControlElement::UNKNOWN != eType)
-    {
+    if (_rLocalName == m_sWrapperElementName)
         if (m_xMeAsContainer.is())
-            return implCreateControlChild(_nPrefix, _rLocalName, eType);
+            return implCreateControlWrapper(_nPrefix, _rLocalName);
         else
+        {
             OSL_ENSURE(sal_False, "OContainerImport::CreateChildContext: don't have an element!");
-    }
+            return NULL;
+        }
 
     return BASE::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
 }
@@ -134,23 +134,8 @@ OColumnImport< BASE >::OColumnImport(IFormsImportContext& _rImport, IEventAttach
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs)
     :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     ,m_xColumnFactory(_rxParentContainer, ::com::sun::star::uno::UNO_QUERY)
-    ,m_xOuterAttributes(_rxOuterAttribs)
 {
     OSL_ENSURE(m_xColumnFactory.is(), "OColumnImport::OColumnImport: invalid parent container (no factory)!");
-}
-
-//-------------------------------------------------------------------------
-template <class BASE>
-void OColumnImport< BASE >::StartElement(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList)
-{
-    // merge the attribute lists
-    OAttribListMerger* pMerger = new OAttribListMerger;
-    // our own one
-    pMerger->addList(_rxAttrList);
-    // and the ones of our enclosing element
-    pMerger->addList(m_xOuterAttributes);
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xMerger = pMerger;
-    BASE::StartElement(xMerger);
 }
 
 //-------------------------------------------------------------------------
@@ -172,6 +157,9 @@ template <class BASE>
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/02 15:58:21  fs
+ *  event ex- & import
+ *
  *  Revision 1.2  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ namespace xmloff
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents);
         ~OElementExport();
 
-        virtual void doExport();
+        void doExport();
 
     protected:
         /// get the name of the XML element
@@ -123,11 +123,15 @@ namespace xmloff
         */
         void exportEvents();
 
+        /** add the service-name attribute to the export context
+        */
+        virtual void exportServiceNameAttribute();
+
         /// start the XML element
-        void implStartElement(const sal_Char* _pName);
+        virtual void implStartElement(const sal_Char* _pName);
 
         /// ends the XML element
-        void implEndElement();
+        virtual void implEndElement();
     };
 
     //=====================================================================
@@ -153,6 +157,8 @@ namespace xmloff
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
 
+        SvXMLElementExport*     m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
+
     public:
         /** constructs an object capable of exporting controls
 
@@ -170,14 +176,30 @@ namespace xmloff
             const ::rtl::OUString& _rControlId,
             const ::rtl::OUString& _rReferringControls,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
+        ~OControlExport();
 
     protected:
+        /// start the XML element
+        virtual void implStartElement(const sal_Char* _pName);
+
+        /// ends the XML element
+        virtual void implEndElement();
+
+        /// get the name of the outer XML element
+        virtual const sal_Char* getOuterXMLElementName() const;
+
         // get the name of the XML element
         virtual const sal_Char* getXMLElementName() const;
 
         /** examine the control. Some kind of CtorImpl.
         */
         virtual void examine();
+
+        /// exports the attributes for the outer element
+        void exportOuterAttributes();
+
+        /// exports the attributes for the inner element
+        void exportInnerAttributes();
 
         /// export the attributes
         virtual void exportAttributes();
@@ -242,12 +264,6 @@ namespace xmloff
     */
     class OColumnExport : public OControlExport
     {
-    protected:
-        SvXMLElementExport*     m_pColumnXMLElement;
-            // in addition to the element written by the base class, we need another one indicating that we're a
-            // column
-        sal_Bool                m_bExamined;
-
     public:
         /** ctor
             @see OColumnExport::OColumnExport
@@ -258,9 +274,13 @@ namespace xmloff
 
         ~OColumnExport();
 
-        virtual void doExport();
-
     protected:
+        // OControlExport overridables
+        virtual const sal_Char* getOuterXMLElementName() const;
+        virtual void exportServiceNameAttribute();
+        virtual void exportAttributes();
+
+        // OElementExport overridables
         virtual void examine();
     };
 
@@ -299,6 +319,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/02 15:58:21  fs
+ *  event ex- & import
+ *
  *  Revision 1.5  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
