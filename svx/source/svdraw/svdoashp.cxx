@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:20:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,8 +695,9 @@ sal_Bool SdrObjCustomShape::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaint
 {
     sal_Bool bOk = sal_True;
 
-    if( ( rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE ) && bNotVisibleAsMaster )  // maybe this should
-        return sal_True;                                                            // be removed
+    //if( ( rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE ) && bNotVisibleAsMaster )    // maybe this should
+    //  return sal_True;                                                            // be removed
+    // AW: Yes, it should be removed :-)
 
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
     if ( pSdrObject )
