@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: ka $
  *
@@ -71,6 +71,9 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
+#endif
 #ifndef __SGI_STL_VECTOR
 #include <stl/vector>
 #endif
@@ -101,19 +104,30 @@ class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper1< ::com::sun::
 {
 private:
 
-
+    ::osl::Mutex                        maMutex;
     SvStorage*                          mpRootStorage;
     SvStorageRef                        mxGraphicStorage;
-    ::osl::Mutex                        maMutex;
+    ::rtl::OUString                     maCurStorageName;
     ::_STL::vector< ::rtl::OUString >   maVector;
-    ::_STL::set< ::rtl::OUString >      maSet;
+    ::_STL::vector< GraphicObject >     maGrfVector;
+    ::_STL::set< ::rtl::OUString >      maIdSet;
     SvXMLGraphicHelperMode              meCreateMode;
-    BOOL                                mbDirect;
+    void*                               mpDummy1;
+    void*                               mpDummy2;
+    BOOL                                mbDirect : 1;
 
-    SvStorageRef                        ImplGetGraphicStorage();
-    SvStorageStreamRef                  ImplGetGraphicStream( const ::rtl::OUString& rURLStr, BOOL bTruncate );
-    void                                ImplWriteGraphic( const ::rtl::OUString& rURLStr );
-    void                                ImplInsertGraphicURL( const ::rtl::OUString& rURLStr );
+    sal_Bool                            ImplGetStreamNames( const ::rtl::OUString& rURLStr,
+                                                            ::rtl::OUString& rPictureStorageName,
+                                                            ::rtl::OUString& rPictureStreamName );
+    SvStorageRef                        ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
+    SvStorageStreamRef                  ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+                                                              const ::rtl::OUString& rPictureStreamName,
+                                                              BOOL bTruncate );
+    Graphic                             ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
+                                                         const ::rtl::OUString& rPictureStreamName );
+    void                                ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
+                                                          const ::rtl::OUString& rPictureStreamName );
+    void                                ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos );
 
 protected:
 
