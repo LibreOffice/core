@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: cl $ $Date: 2002-05-22 13:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,7 +1479,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
 
     pPage6_User->Check(pDesign->m_bUserAttr);
     m_aBackColor = pDesign->m_aBackColor;
-    m_aBackColor = pDesign->m_aBackColor;
+    m_aTextColor = pDesign->m_aTextColor;
     m_aLinkColor = pDesign->m_aLinkColor;
     m_aVLinkColor = pDesign->m_aVLinkColor;
     m_aALinkColor  = pDesign->m_aALinkColor;
@@ -1531,7 +1531,8 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 
     pDesign->m_bUserAttr = pPage6_User->IsChecked();
     pDesign->m_aBackColor = m_aBackColor;
-    pDesign->m_aBackColor = m_aBackColor;
+    pDesign->m_aTextColor = m_aTextColor;
+    pDesign->m_aLinkColor = m_aLinkColor;
     pDesign->m_aVLinkColor = m_aVLinkColor;
     pDesign->m_aALinkColor  = m_aALinkColor;
     pDesign->m_bUseColor   = pPage6_DocColors->IsChecked();
