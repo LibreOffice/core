@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:22:07 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 16:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ class ScFieldEditEngine;
 struct ScConsolidateParam;
 class ScDPObject;
 class ScDPCollection;
+class ScMatrix;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -620,6 +621,10 @@ public:
     USHORT          GetDdeLinkCount() const;
     BOOL            GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, String& rItem ) const;
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
+
+                    // Fuer XML Export/Import:
+    BOOL            GetDdeLinkResultDimension( USHORT nPos , USHORT& nCol, USHORT& nRow, ScMatrix* pMatrix);
+    BOOL            GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString);
 
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }
