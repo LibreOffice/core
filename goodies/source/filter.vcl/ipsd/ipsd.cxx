@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,15 @@ public:
 //=================== Methoden von PSDReader ==============================
 
 PSDReader::PSDReader() :
+    mpFileHeader    ( NULL ),
+    mnXResFixed     ( 0 ),
+    mnYResFixed     ( 0 ),
+    mbStatus        ( TRUE ),
+    mbTransparent   ( FALSE ),
+    mpReadAcc       ( NULL ),
     mpWriteAcc      ( NULL ),
     mpMaskWriteAcc  ( NULL ),
-    mpReadAcc       ( NULL ),
-    mpFileHeader    ( NULL ),
-    mpPalette       ( NULL ),
-    mbStatus        ( sal_True ),
-    mbTransparent   ( sal_False ),
-    mnXResFixed     ( 0 ),
-    mnYResFixed     ( 0 )
+    mpPalette       ( NULL )
 {
 }
 
@@ -772,8 +772,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
