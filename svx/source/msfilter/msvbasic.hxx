@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:52:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#include<map>
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For
@@ -99,6 +100,17 @@
 
 DECLARE_DYNARRAY(StringArray,String *);
 
+// #117718# define internal types to distinguish between
+// module types, form, class & normal
+//
+enum ModuleType { Unknown = 0, Normal, Class, Form };
+
+// #117718# define map to hold types of module
+//
+
+typedef ::std::map< UniString,
+    ModuleType > ModuleTypeHash;
+
 class VBA_Impl
 {
 public:
@@ -116,6 +128,10 @@ public:
     //I'm the method that would be made virtual to make this class
     //useful elsewhere
     void Output(int len, const sal_uInt8 *data);
+    //
+    // #117718# member map of module names to types of module
+    ModuleType GetModuleType( const UniString& rModuleName );
+
     std::vector<String> maReferences;
 private:
     struct VBAOffset_Impl
@@ -124,6 +140,8 @@ private:
         sal_uInt32 nOffset;
     };
 
+    // #117718# member map of module names to types of module
+    ModuleTypeHash mhModHash;
     SvStorageRef xVBA;
     StringArray aVBAStrings;
     String sComment;
