@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-16 13:33:53 $
+#   last change: $Author: vg $ $Date: 2003-04-10 16:19:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SLOFILES =  \
     $(SLO)$/client.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/scmod2.obj
+    $(SLO)$/scmod2.obj \
+    $(SLO)$/scmod.obj
 
 LIB3TARGET=$(SLB)$/ysclib.lib
 LIB3OBJFILES=$(SLO)$/sclib.obj
