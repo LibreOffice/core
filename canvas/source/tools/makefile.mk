@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 17:08:21 $
+#   last change: $Author: vg $ $Date: 2005-03-10 11:55:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ CDEFS+= -DVERBOSE
 SLOFILES =	\
     $(SLO)$/canvastools.obj \
     $(SLO)$/linepolypolygonbase.obj \
-    $(SLO)$/elapsedtime.obj 
+    $(SLO)$/elapsedtime.obj \
+    $(SLO)$/prioritybooster.obj 
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
