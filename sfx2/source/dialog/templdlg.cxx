@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-27 09:55:09 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2286,7 +2286,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 
     // and set the new images on our toolbox
     USHORT nLoop = pStyleFamilies->Count();
-    for( ; --nLoop; )
+    for( ; nLoop--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
         USHORT nId = SfxFamilyIdToNId( (USHORT) pItem->GetFamily() );
