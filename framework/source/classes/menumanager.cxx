@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-02 14:07:32 $
+ *  last change: $Author: cd $ $Date: 2001-04-04 05:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
 }
 
-
-Any SAL_CALL MenuManager::queryInterface( const ::com::sun::star::uno::Type & rType )
+Any SAL_CALL MenuManager::queryInterface( const ::com::sun::star::uno::Type & rType ) throw ( RuntimeException )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
