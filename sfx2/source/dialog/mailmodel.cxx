@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 16:59:13 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,10 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         const SfxFilter* pFilter = xDocShell->GetMedium()->GetFilter();
         sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
         if ( !pFilter )
-            pFilter = xDocShell->GetFactory().GetFilterContainer()->GetFilter(0);
+        {
+            SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
+            pFilter = aMatcher.GetAnyFilter( SFX_FILTER_EXPORT );
+        }
 
         // create temp file name with leading chars and extension
         sal_Bool    bHasName = xDocShell->HasName();
@@ -415,74 +418,71 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
         SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
         pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
 
-        // Get PDF Filter from container
-        SfxFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
-        if ( pFilterContainer )
+        // Get PDF Filter from document
+        SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
+        String aPDFExtension = String::CreateFromAscii( ".pdf" );
+
+        const SfxFilter*    pFilter     = aMatcher.GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+        sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
+
+        // create temp file name with leading chars and extension
+        sal_Bool    bHasName = xDocShell->HasName();
+        String      aLeadingStr;
+        String*     pExt = NULL;
+
+        if ( !bHasName )
+            aLeadingStr = String( DEFINE_CONST_UNICODE("noname") );
+        else
         {
-            String aPDFExtension = String::CreateFromAscii( ".pdf" );
-
-            const SfxFilter*    pFilter     = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
-            sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
-
-            // create temp file name with leading chars and extension
-            sal_Bool    bHasName = xDocShell->HasName();
-            String      aLeadingStr;
-            String*     pExt = NULL;
-
-            if ( !bHasName )
-                aLeadingStr = String( DEFINE_CONST_UNICODE("noname") );
+            INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+            String aName;
+            if ( aFileObj.hasExtension() )
+            {
+                pExt = new String( aPDFExtension );
+                aFileObj.removeExtension();
+                aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aLeadingStr += String::CreateFromAscii( "_" );
+            }
             else
             {
-                INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
-                String aName;
-                if ( aFileObj.hasExtension() )
-                {
-                    pExt = new String( aPDFExtension );
-                    aFileObj.removeExtension();
-                    aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                    aLeadingStr += String::CreateFromAscii( "_" );
-                }
-                else
-                {
-                    aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                    aLeadingStr += String::CreateFromAscii( "_" );
-                }
+                aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                aLeadingStr += String::CreateFromAscii( "_" );
             }
-
-            if ( pFilter && !pExt )
-            {
-                pExt = new String( pFilter->GetWildcard()().GetToken(0) );
-                // erase the '*' from the extension (e.g. "*.sdw")
-                pExt->Erase( 0, 1 );
-            }
-
-            ::utl::TempFile aTempFile( aLeadingStr, pExt );
-            delete pExt;
-
-            rFileName = aTempFile.GetURL();
-
-            // save document to temp file
-            SfxStringItem aFileName( SID_FILE_NAME, rFileName );
-            const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_EXPORTDOCASPDF, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
-            BOOL bRet = pRet ? pRet->GetValue() : FALSE;
-            eRet = bRet ? SAVE_SUCCESSFULL : SAVE_CANCELLED;
-
-            if ( pFilter )
-            {
-                // detect content type and expand with the file name
-                rType = pFilter->GetMimeType();
-                rType += DEFINE_CONST_UNICODE("; name =\"");
-                INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
-                rType += aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                rType += '\"';
-            }
-
-            // restore old settings
-            if ( !bModified && xDocShell->IsEnableSetModified() )
-                xDocShell->SetModified( FALSE );
-            if ( !bOldDidDangerousSave )
-                xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
         }
+
+        if ( pFilter && !pExt )
+        {
+            pExt = new String( pFilter->GetWildcard()().GetToken(0) );
+            // erase the '*' from the extension (e.g. "*.sdw")
+            pExt->Erase( 0, 1 );
+        }
+
+        ::utl::TempFile aTempFile( aLeadingStr, pExt );
+        delete pExt;
+
+        rFileName = aTempFile.GetURL();
+
+        // save document to temp file
+        SfxStringItem aFileName( SID_FILE_NAME, rFileName );
+        const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute( SID_EXPORTDOCASPDF, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
+        BOOL bRet = pRet ? pRet->GetValue() : FALSE;
+        eRet = bRet ? SAVE_SUCCESSFULL : SAVE_CANCELLED;
+
+        if ( pFilter )
+        {
+            // detect content type and expand with the file name
+            rType = pFilter->GetMimeType();
+            rType += DEFINE_CONST_UNICODE("; name =\"");
+            INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
+            rType += aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            rType += '\"';
+        }
+
+        // restore old settings
+        if ( !bModified && xDocShell->IsEnableSetModified() )
+            xDocShell->SetModified( FALSE );
+        if ( !bOldDidDangerousSave )
+            xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
     }
 
     return eRet;
