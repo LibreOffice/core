@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,24 @@ String RID_EDITUNDO_TRANSLITERATE
 {
     TEXT = "Groﬂ-/Kleinschreibung";
     TEXT[English] = "Change case";
+    TEXT[ english_us ] = "Change case";
+    TEXT[ portuguese ] = "Change case";
+    TEXT[ russian ] = "«‡„Î‡‚Ì‡ˇ/ÒÚÓ˜Ì‡ˇ ·ÛÍ‚‡";
+    TEXT[ greek ] = " Âˆ·Î·ﬂ·/–ÂÊ‹";
+    TEXT[ dutch ] = "Change case";
+    TEXT[ french ] = "Change case";
+    TEXT[ spanish ] = "Change case";
+    TEXT[ italian ] = "Change case";
+    TEXT[ danish ] = "Change case";
+    TEXT[ swedish ] = "Change case";
+    TEXT[ polish ] = "Wielkie i ma≥e litery";
+    TEXT[ portuguese_brazilian ] = "Change case";
+    TEXT[ japanese ] = "Change case";
+    TEXT[ korean ] = "Change case";
+    TEXT[ chinese_simplified ] = "Change case";
+    TEXT[ chinese_traditional ] = "¶r•¿§j§pºg";
+    TEXT[ turkish ] = "Change case";
+    TEXT[ arabic ] = "«·ﬂ «»… »√Õ—› ﬂ»Ì—… √Ê ’€Ì—…";
 };
 
 
