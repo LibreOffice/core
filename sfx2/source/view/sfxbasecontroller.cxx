@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:48:36 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,9 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             m_pData->m_pViewShell = NULL;
             if ( pFrame->GetViewShell() == pShell )
             {
-                pFrame->GetBindings().ENTERREGISTRATIONS();
+                // Enter registrations only allowed if we are the owner!
+                if ( pFrame->GetFrame()->OwnsBindings_Impl() )
+                    pFrame->GetBindings().ENTERREGISTRATIONS();
                 pFrame->GetFrame()->SetFrameInterface_Impl(  aXFrame );
                 pFrame->GetFrame()->DoClose_Impl();
             }
