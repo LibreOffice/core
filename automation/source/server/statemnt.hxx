@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class Dir;
 
 class CommunicationLink;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 class EditWindow;
 #endif
 
@@ -320,7 +320,7 @@ public:
     static BOOL IsIMEWin( Window* pWin );    // Input Window for CJK under Solaris
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static EditWindow *m_pDbgWin;
 #endif
 };
