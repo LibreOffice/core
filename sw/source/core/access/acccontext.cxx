@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-04 07:36:11 $
+ *  last change: $Author: mib $ $Date: 2002-08-06 08:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -766,7 +769,7 @@ Reference< XAccessibleRelationSet> SAL_CALL
         throw (::com::sun::star::uno::RuntimeException)
 {
     // by default there are no relations
-    Reference< XAccessibleRelationSet> xRet;
+    Reference< XAccessibleRelationSet> xRet( new utl::AccessibleRelationSetHelper() );
     return xRet;
 }
 
@@ -792,7 +795,7 @@ Locale SAL_CALL SwAccessibleContext::getLocale (void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    Locale aLoc( Application::GetSettings().GetUILocale() );
+    Locale aLoc( Application::GetSettings().GetLocale() );
     return aLoc;
 }
 
