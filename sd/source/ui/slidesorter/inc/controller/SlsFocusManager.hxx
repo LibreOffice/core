@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:19:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,14 @@ public:
             returned.
     */
     sal_Int32 GetFocusedPageIndex (void) const;
+
+    /** Set the focus to the page with the given index.  This does not make
+        the focus visible.
+        @param nPageIndex
+            Index of a page as it is accepted by the slide sorter model.
+            The index is not checked for validity.
+    */
+    void FocusPage (sal_Int32 nPageIndex);
 
     /** Return <TRUE/> when the focus inidcator is currently shown.  A
         prerequisite is that the window managed by this focus manager has
