@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: svesik $ $Date: 2000-11-16 21:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@ extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined S390
 #include <sys/mntent.h>
 #define mnttab w_mntent
-#elif defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#elif defined(NETBSD)
+#include <sys/mount.h>
+#elif defined(FREEBSD) || defined(MACOSX)
 #elif defined DECUNIX
 struct mnttab
 {
