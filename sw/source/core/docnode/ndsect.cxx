@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 12:58:25 $
+ *  last change: $Author: od $ $Date: 2002-10-10 09:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,9 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
+    /// OD 04.10.2002 #102894#
+    /// remember hidden condition flag of SwSection before changes
+    bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
 
     if( *pSection == rSect )
     {
@@ -689,6 +692,13 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     else
         sSectName.Erase();
 
+    /// OD 04.10.2002 #102894# - NOTE
+    /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to TRUE.
+    /// IMHO this have to be changed, but I can't estimate the consequences:
+    /// Either it is set to TRUE using corresponding method <SwSection.SetCondHidden(..)>,
+    /// or it is set to the value of SwSection which is assigned to it.
+    /// Discussion with AMA results that the adjustment to the assignment operator
+    /// could be very risky -> see notes in bug #102894#.
     *pSection = rSect;
 
     if( pAttr )
@@ -705,7 +715,21 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
         if( !pIdx )
             pIdx = pFmt->GetCntnt().GetCntntIdx();
         FldsToCalc( aCalc, pIdx->GetIndex() );
-        pSection->SetCondHidden( aCalc.Calculate( pSection->GetCondition() ).GetBool() );
+        /// OD 04.10.2002 #102894#
+        /// Because on using SwSection::operator=() to set up <pSection>
+        /// with <rSect> and the above given note, the hidden condition flag
+        /// has to be set to FALSE, if hidden condition flag of <pFmt->GetSection()>
+        /// (SwSection before the changes) is FALSE (already saved in <bOldCondHidden>)
+        /// and new calculated condition is TRUE.
+        /// This is necessary, because otherwise the <SetCondHidden> would have
+        /// no effect.
+        bool bCalculatedCondHidden =
+                aCalc.Calculate( pSection->GetCondition() ).GetBool() ? true : false;
+        if ( bCalculatedCondHidden && !bOldCondHidden )
+        {
+            pSection->SetCondHidden( false );
+        }
+        pSection->SetCondHidden( bCalculatedCondHidden );
     }
 
     if( bUpdate )
