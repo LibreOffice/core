@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLibraryAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,9 @@
     <p>This code is organized in modules and these modules contain
     the functions. It is possible to get just the code from a function,
     but you can also get the whole code of a module with all functions in it.</p>
-
     @deprecated
  */
-interface XLibraryAccess: com::sun::star::uno::XInterface
+published interface XLibraryAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns <TRUE/>, if the function is accessible through this library;
