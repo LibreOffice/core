@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-30 09:08:46 $
+ *  last change: $Author: jbu $ $Date: 2000-11-27 08:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,11 @@ namespace remotebridges_factory
         init();
         OUString sService;
         OUString sProtocolName = sProtocol.toLowerCase();
+        sal_Int32 nIndex = sProtocol.indexOf( (sal_Unicode)',' );
+        if( nIndex > 0 )
+        {
+            sProtocolName = sProtocol.copy( 0 , nIndex );
+        }
         ServiceHashMap::iterator ii = m_mapProtocolToService.find( sProtocolName );
         if( ii != m_mapProtocolToService.end() )
         {
