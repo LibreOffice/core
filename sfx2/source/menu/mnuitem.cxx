@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-20 08:09:15 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 11:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,34 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop includes
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -85,6 +113,12 @@
 #include "arrdecl.hxx"
 #include "module.hxx"
 #include "unoctitm.hxx"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+
 
 //====================================================================
 
@@ -422,7 +456,46 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     SfxAppData_Impl* pImpl = pApp->Get_Impl();
     PopupMenu* pView =  pImpl->GetPopupMenu( nPos );
     if ( pView )
+    {
         rMenu.SetPopupMenu( nPos, pView );
+        pView->SetSelectHdl( LINK( this, SfxAppMenuControl_Impl, Select) );
+    }
+}
+
+IMPL_LINK( SfxAppMenuControl_Impl, Select, Menu*, pMenu )
+{
+    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
+    if( !aURL.Len() )
+        return 0;
+
+    Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
+    if ( !xFrame.is() )
+        xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
+
+    URL aTargetURL;
+    aTargetURL.Complete = aURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    xTrans->parseStrict( aTargetURL );
+
+    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+    Reference < XDispatch > xDisp;
+    if ( xProv.is() )
+        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        else
+            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+    if ( xDisp.is() )
+    {
+        Sequence<PropertyValue> aArgs(1);
+        PropertyValue* pArg = aArgs.getArray();
+        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+        pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+        xDisp->dispatch( aTargetURL, aArgs );
+    }
+
+
+    return 0;
 }
 
 SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
