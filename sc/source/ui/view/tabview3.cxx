@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-01 17:55:04 $
+ *  last change: $Author: nn $ $Date: 2002-10-09 16:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2679,6 +2679,15 @@ void ScTabView::ZoomChanged()
     rBindings.Invalidate( SID_ATTR_ZOOM );
 
     HideNoteMarker();
+
+    if ( pWin && aViewData.HasEditView( aViewData.GetActivePart() ) )
+    {
+        //  #93650# make sure the EditView's position and size are updated
+        //  with the right (logic, not drawing) MapMode
+
+        pWin->SetMapMode( aViewData.GetLogicMode() );
+        UpdateEditView();
+    }
 }
 
 void ScTabView::CheckNeedsRepaint()
