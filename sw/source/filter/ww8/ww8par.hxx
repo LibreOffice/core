@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:12:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,6 @@ public:
     SwWW8FltAnchorStack(SwDoc* pDo, ULONG nFieldFl)
         : SwFltControlStack( pDo, nFieldFl ) {}
     void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
-    void RemoveAnchor(const SwFrmFmt *pFmt);
     void Flush();
 private:
     //No copying
@@ -1124,8 +1123,6 @@ private:
     bool StyleExists(int nColl) const { return (nColl < nColls); }
     SwWW8StyInf *GetStyle(USHORT nColl) const;
     void AppendTxtNode(SwPosition& rPos);
-    void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
-        std::vector<const xub_StrLen*> &rPositions);
 
     void Read_HdFt(bool bIsTitle, int nSect, const SwPageDesc *pPrev,
         const wwSection &rSection);
@@ -1421,9 +1418,6 @@ private:
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);
 public:     // eigentlich private, geht aber leider nur public
-    void ConvertUFName( String& rName );
-
-
     USHORT GetToggleAttrFlags() const;
     USHORT GetToggleBiDiAttrFlags() const;
     void SetToggleAttrFlags(USHORT nFlags);
