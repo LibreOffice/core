@@ -302,6 +302,83 @@ public abstract class OfficeDocument
 
 
     /**
+     *  Read the Office <code>Document</code> from the given
+     *  <code>InputStream</code>.
+     *
+     *  @param  is  Office document <code>InputStream</code>.
+     *  @param  isZip <code>boolean</code> Identifies whether
+     *                 a file is zipped or not
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    public void read(InputStream is,boolean isZip) throws IOException {
+
+        Debug.log(Debug.INFO, "reading Office file");
+
+        DocumentBuilder builder = null;
+
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException ex) {
+            throw new OfficeDocumentException(ex);
+        }
+
+    if (isZip)
+    {
+        // read in Office zip file format
+
+        zip = new OfficeZip();
+        zip.read(is);
+
+        // grab the content.xml and
+        // parse it into contentDoc.
+
+        byte contentBytes[] = zip.getContentXMLBytes();
+
+        if (contentBytes == null) {
+
+        throw new OfficeDocumentException("Entry content.xml not found in file");
+        }
+         try {
+         contentDoc = parse(builder, contentBytes);
+
+         } catch (SAXException ex) {
+
+         throw new OfficeDocumentException(ex);
+         }
+
+         // if style.xml exists, grab the style.xml
+         // parse it into styleDoc.
+
+         byte styleBytes[] = zip.getStyleXMLBytes();
+
+         if (styleBytes != null) {
+
+         try {
+
+             styleDoc = parse(builder, styleBytes);
+
+         } catch (SAXException ex) {
+
+             throw new OfficeDocumentException(ex);
+         }
+         }
+    }
+    else{
+        try{
+        //System.out.println("\nParsing Input stream, validating?: "+builder.isValidating());
+        contentDoc=  builder.parse((InputStream)is);
+        }
+        catch (SAXException ex) {
+        throw new OfficeDocumentException(ex);
+        }
+    }
+
+    }
+
+
+
+    /**
      *  Parse given <code>byte</code> array into a DOM
      *  <code>Document</code> object using the
      *  <code>DocumentBuilder</code> object.
@@ -359,6 +436,50 @@ public abstract class OfficeDocument
         }
 
         zip.write(os);
+    }
+
+
+     /**
+     *  Write out Office ZIP file format.
+     *
+     *  @param  os  XML <code>OutputStream</code>.
+     *  @param  isZip <code>boolean</code>
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    public void write(OutputStream os,boolean isZip) throws IOException {
+
+        // create a OfficeZip object if one does not exist.
+        if (isZip){
+        if (zip == null) {
+
+        zip = new OfficeZip();
+        }
+
+        // set bytes for content.xml in zip
+        byte contentBytes[] = docToBytes(contentDoc);
+        zip.setContentXMLBytes(contentBytes);
+
+        // if there is a styleDoc, set bytes
+        // for it in zip as well
+
+        if (styleDoc != null) {
+
+        byte styleBytes[] = docToBytes(styleDoc);
+        zip.setStyleXMLBytes(styleBytes);
+        }
+
+        zip.write(os);
+    }
+    else{
+        byte contentBytes[] = docToBytes(contentDoc);
+        os.write(contentBytes);
+        if (styleDoc != null) {
+
+        byte styleBytes[] = docToBytes(styleDoc);
+        os.write(styleBytes);
+        }
+    }
     }
 
 

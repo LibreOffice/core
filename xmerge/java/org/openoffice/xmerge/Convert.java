@@ -136,6 +136,32 @@ public class Convert implements Cloneable {
         inputCD.addDocument(inputDoc);
     }
 
+     /**
+     *  Adds an <code>InputStream</code> to be used as input by the
+     *  <code>Convert</code> class.  It is possible that many files
+     *  need to be converted into a single output <code>Documetn</code>,
+     *  so this function may be called more than one time.  It is the
+     *  plug-in's responsibility to know how to handle the input.
+     *
+     *  @param  name  The name corresponding to the <code>InputStream</code>.
+     *  @param  is    <code>InputStream</code> to be used as input.
+     *  @param  isZip <code>boolean</code> to identify that incoming stream is      *                zipped
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    public void addInputStream(String name, InputStream is,boolean isZip)
+        throws IOException {
+
+        Document inputDoc;
+
+        if (toOffice == true) {
+            inputDoc = ci.getPluginFactory().createDeviceDocument(name, is);
+        } else {
+            inputDoc = ci.getPluginFactory().createOfficeDocument(name, is, isZip);
+        }
+        inputCD.addDocument(inputDoc);
+    }
+
 
     /**
      *  Adds the original Document to the Convert Class. This

@@ -165,6 +165,35 @@ public abstract class PluginFactory {
 
     /**
      *  <p>Create a <code>Document</code> object that corresponds to
+     *  the Office data passed in via the <code>InputStream</code>
+     *  object.  This abstract method must be implemented for each
+     *  plug-in.</p>
+     *
+     *  <p>This method will read from the given <code>InputStream</code>
+     *  object.  The returned <code>Document</code> object will contain
+     *  the necessary data for the other objects created by the
+     *  <code>PluginFactory</code> to process, like a
+     *  <code>DocumentSerializer</code> object and a
+     *  <code>DocumentMerger</code> object.</p>
+     *
+     *  @param  name  The <code>Document</code> name.
+     *  @param  is    <code>InputStream</code> object corresponding
+     *                to the <code>Document</code>.
+     *  @param  isZip <code>boolean</code> to show that the created office
+     *                document is to be zipped.
+     *
+     *  @return  A <code>Document</code> object representing the
+     *           particular <code>Document</code> format for the
+     *           <code>PluginFactory</code>.
+     *
+     *  @throws   IOException   If any I/O error occurs.
+     */
+    public abstract Document createOfficeDocument(String name, InputStream is,boolean isZip)
+        throws IOException;
+
+
+    /**
+     *  <p>Create a <code>Document</code> object that corresponds to
      *  the device data passed in via the <code>InputStream</code>
      *  object.  This abstract method must be implemented for each
      *  plug-in.</p>
