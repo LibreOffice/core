@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:35:03 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
