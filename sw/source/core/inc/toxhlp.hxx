@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:31:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ class String;
 class IndexEntrySupplierWrapper
 {
     STAR_NMSPC::lang::Locale aLcl;
-    STAR_NMSPC::uno::Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
+    STAR_NMSPC::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
 
 public:
     IndexEntrySupplierWrapper(
