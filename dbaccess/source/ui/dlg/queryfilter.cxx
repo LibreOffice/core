@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:43:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XMultiServiceFactory >& _rxORB,
                              const Reference< XConnection>& _rxConnection,
                              const Reference< XSQLQueryComposer>& _rxQueryComposer,
-                             const Reference< XNameAccess>& _rxCols,
-                             const String& rFieldName
+                             const Reference< XNameAccess>& _rxCols
                              )
     :ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
     ,aLB_WHEREFIELD1    ( this, ResId( LB_WHEREFIELD1 ) )
@@ -224,16 +223,6 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         aLB_WHEREFIELD1.SelectEntryPos(0);
         aLB_WHEREFIELD2.SelectEntryPos(0);
         aLB_WHEREFIELD3.SelectEntryPos(0);
-
-        // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
-
-        if ( rFieldName.Len() )
-        {
-            ::rtl::OUString sFieldName( rFieldName );
-            xColumn = getColumn( sFieldName );
-            if ( xColumn.is() )
-                m_xQueryComposer->appendFilterByColumn(xColumn);
-        }
 
         // insert the criteria into the dialog
         Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
