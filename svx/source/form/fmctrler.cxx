@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:43:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,9 +923,15 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
     const Reference< ::com::sun::star::awt::XControl > * pControls = m_aControls.getConstArray();
     SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
 
-    sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-    if (nPos == SDRPAGEVIEWWIN_NOTFOUND)
+    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
+    if(!pWindow)
+    {
         return;
+    }
+
+    //sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+    //if (nPos == SDRPAGEVIEWWIN_NOTFOUND)
+    //    return;
 
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
@@ -950,9 +956,10 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
                     if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
                         ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
                     {
-                        const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
+                        //const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
+                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
                         sal_uInt16 nCtrlNum = rControlList.Find(xControl);
+
                         if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
                         {
                             // ok create an autocontrol
@@ -997,8 +1004,9 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
                     if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
                         ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
                     {
-                        const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
+                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
+                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
+                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
                         sal_uInt16 nCtrlNum = rControlList.Find(xControl);
                         if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
                         {
@@ -2594,8 +2602,10 @@ void FmXFormController::startFiltering()
     // structure for storing the field info
     vector<FmFieldInfo> aFieldInfos;
 
-    sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-    if (nPos != SDRPAGEVIEWWIN_NOTFOUND)
+    // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
+
+    if(pWindow)
     {
         for (sal_Int32 i = aControls.getLength(); i > 0;)
         {
@@ -2661,8 +2671,9 @@ void FmXFormController::startFiltering()
                     if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
                         ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                     {
-                        const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
+                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
+                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
+                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
                         sal_uInt16 nCtrlNum = rControlList.Find(xControl);
                         if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
                         {
@@ -2766,7 +2777,9 @@ void FmXFormController::stopFiltering()
     Sequence < Reference< ::com::sun::star::awt::XControl >  > aControls(m_aControls);
     const Reference< ::com::sun::star::awt::XControl > * pControls = m_aControls.getConstArray();
     SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
-    sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+
+    // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+    const SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
 
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
@@ -2778,7 +2791,7 @@ void FmXFormController::stopFiltering()
 
     m_aFilterControls.clear();
 
-    if (nPos != SDRPAGEVIEWWIN_NOTFOUND)
+    if (pWindow)
     {
         for (sal_Int32 i = aControls.getLength(); i > 0;)
         {
@@ -2811,8 +2824,9 @@ void FmXFormController::stopFiltering()
                     if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
                         ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                     {
-                        const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
+                        // const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
+                        // const SdrPageViewWindow& rWindow = pCurPageView->GetPageViewWindows().Get(nPos);
+                        const SdrUnoControlList& rControlList = pWindow->GetControlList();
                         sal_uInt16 nCtrlNum = rControlList.Find(xControl);
                         if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
                         {
