@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 15:01:05 $
+ *  last change: $Author: cl $ $Date: 2002-11-25 18:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,21 +154,25 @@ void OutlinerInfo::SetTextObj( SdDrawDocument* pDoc, SdrRectObj* pObj, OutputDev
         {
             pParagraphs[ 0 ].aRect.Right() = aParaBound.Right();
 
-            for( USHORT i = 0; i < ( nParaCount - 1 ); i++ )
-                if( pParagraphs[ i ].aRect.Left() > pParagraphs[ i + 1 ].aRect.Right() )
-                    pParagraphs[ i ].aRect.Left() = pParagraphs[ i + 1 ].aRect.Right();
+            for( USHORT i = 0; i < nParaCount; i++ )
+            {
+                if( i > 0 )
+                    pParagraphs[i].aRect.Right() = pParagraphs[ i - 1 ].aRect.Left();
 
-            pParagraphs[ nParaCount - 1 ].aRect.Left() = aParaBound.Left();
+                pParagraphs[i].aRect.Left() = pParagraphs[i].aRect.Right() - rOutliner.GetTextHeight( i );
+            }
         }
         else
         {
             pParagraphs[ 0 ].aRect.Top() = aParaBound.Top();
 
-            for( USHORT i = 0; i < ( nParaCount - 1 ); i++ )
-                if( pParagraphs[ i ].aRect.Bottom() < pParagraphs[ i + 1 ].aRect.Top() )
-                    pParagraphs[ i ].aRect.Bottom() = pParagraphs[ i + 1 ].aRect.Top();
+            for( USHORT i = 0; i < nParaCount; i++ )
+            {
+                if( i > 0 )
+                    pParagraphs[ i ].aRect.Top() = pParagraphs[ i - 1 ].aRect.Bottom();
 
-            pParagraphs[ nParaCount - 1 ].aRect.Bottom() = aParaBound.Bottom();
+                pParagraphs[ i ].aRect.Bottom() = pParagraphs[ i ].aRect.Top() + rOutliner.GetTextHeight( i );
+            }
         }
     }
     else
