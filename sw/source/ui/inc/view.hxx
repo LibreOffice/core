@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:11:03 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,10 +331,6 @@ class SwView: public SfxViewShell
     BOOL            UpdateScrollbars();
     void            CalcVisArea( const Size &rPixelSz );
 
-    int             _CreateVLineal();
-    int             _KillVLineal();
-    int             _CreateTab();
-    int             _KillTab();
     void            CreatePageButtons(BOOL bShow);
 
     // Linguistik-Funktionen
@@ -488,22 +484,21 @@ public:
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, BOOL bViewOnly = FALSE);
     virtual void    SetZoomFactor( const Fraction &rX, const Fraction & );
 
-    inline int      StatHScrollbar() const;
-    inline int      CreateHScrollbar();
-    inline int      KillHScrollbar();
+    void            ShowHScrollbar(sal_Bool bShow);
+    sal_Bool        IsHScrollbarVisible()const;
 
-    inline int      CreateVScrollbar();
-    inline int      KillVScrollbar();
-    inline int      StatVScrollbar() const;
+    void            ShowVScrollbar(sal_Bool bShow);
+    sal_Bool        IsVScrollbarVisible()const;
 
-    inline int      CreateVLineal();
-    inline int      KillVLineal();
+    int             CreateVLineal();
+    int             KillVLineal();
+    int             CreateTab();
+    int             KillTab();
+
     int             StatVLineal() const { return ((Window*)pVRuler)->IsVisible(); }
     void            ChangeVLinealMetric(FieldUnit eUnit);
     BOOL            GetVLinealMetric(FieldUnit& rToFill) const;
 
-    inline int      CreateTab();
-    inline int      KillTab();
     int             StatTab() const { return ((Window*)pHRuler)->IsVisible(); }
     SvxRuler&       GetHLineal()    { return *pHRuler; }
     SvxRuler&       GetVLineal()    { return *pVRuler; }
@@ -609,50 +604,6 @@ public:
 };
 
 // ----------------- inline Methoden ----------------------
-
-inline int SwView::StatHScrollbar() const
-{
-    return  0 != pHScrollbar;
-}
-inline int SwView::CreateHScrollbar()
-{
-    return StatHScrollbar() ? 1 : _CreateScrollbar( TRUE );
-}
-inline int SwView::KillHScrollbar()
-{
-    return StatHScrollbar() ? _KillScrollbar( TRUE ) : 1;
-}
-
-inline int SwView::StatVScrollbar() const
-{
-    return  0 != pVScrollbar;
-}
-inline int SwView::CreateVScrollbar()
-{
-    return StatVScrollbar() ? 1 : _CreateScrollbar( FALSE );
-}
-inline int SwView::KillVScrollbar()
-{
-    return StatVScrollbar() ? _KillScrollbar( FALSE ) : 1;
-}
-
-inline int SwView::CreateVLineal()
-{
-    return StatVLineal() ? 1 : _CreateVLineal();
-}
-inline int SwView::KillVLineal()
-{
-    return StatVLineal() ? _KillVLineal() : 1;
-}
-
-inline int SwView::CreateTab()
-{
-    return StatTab() ? 1 : _CreateTab();
-}
-inline int  SwView::KillTab()
-{
-    return StatTab() ? _KillTab() : 1;
-}
 
 inline long SwView::GetXScroll() const
 {

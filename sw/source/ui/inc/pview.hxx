@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:48:43 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,6 @@ class SwPagePreView: public SfxViewShell
     Point           AlignToPixel(const Point& rPt) const;
 
     int             _CreateScrollbar( int bHori );
-    int             _KillScrollbar( int bHori );
     DECL_LINK( ScrollHdl, SwScrollbar * );
     DECL_LINK( EndScrollHdl, SwScrollbar * );
     DECL_LINK( BtnPage, Button * );
@@ -228,16 +227,15 @@ public:
 
     virtual void    SetVisArea( const Rectangle&, BOOL bUpdateScrollbar = TRUE);
 
-    inline int      StatHScrollbar() const;
-    inline int      CreateHScrollbar();
-    inline int      KillHScrollbar();
-    inline int      CreateVScrollbar();
-    inline int      KillVScrollbar();
-    inline int      StatVScrollbar() const;
     inline void     AdjustEditWin();
 
     void            VScrollViewSzChg();
     void            VScrollDocSzChg();
+    void            ShowHScrollbar(sal_Bool bShow);
+    sal_Bool        IsHScrollbarVisible()const;
+
+    void            ShowVScrollbar(sal_Bool bShow);
+    sal_Bool        IsVScrollbarVisible()const;
 
     USHORT          GetPageCount() const        { return nPageCount; }
 
@@ -266,31 +264,6 @@ public:
 
 // ----------------- inline Methoden ----------------------
 
-inline int SwPagePreView::StatHScrollbar() const
-{
-    return  0 != pHScrollbar;
-}
-inline int SwPagePreView::CreateHScrollbar()
-{
-    return StatHScrollbar() ? 1 : _CreateScrollbar( TRUE );
-}
-inline int SwPagePreView::KillHScrollbar()
-{
-    return StatHScrollbar() ? _KillScrollbar( TRUE ) : 1;
-}
-
-inline int SwPagePreView::StatVScrollbar() const
-{
-    return  0 != pVScrollbar;
-}
-inline int SwPagePreView::CreateVScrollbar()
-{
-    return StatVScrollbar() ? 1 : _CreateScrollbar( FALSE );
-}
-inline int SwPagePreView::KillVScrollbar()
-{
-    return StatVScrollbar() ? _KillScrollbar( FALSE ) : 1;
-}
 
 inline void SwPagePreView::AdjustEditWin()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 10:18:06 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,16 +297,6 @@ int SwView::_CreateScrollbar( int bHori )
     if( !bHori )
         CreatePageButtons( !bShowAtResize );
 
-    // wenn beide Scrollbar eingeschaltet werden, dann auch die ScrollbarBox
-    // anlegen
-    if( !pScrollFill && (bHori ? pVScrollbar : pHScrollbar) )
-    {
-        pScrollFill = new ScrollBarBox( pMDI, GetDocShell()->IsInFrame()
-                                                ? 0 : WB_SIZEABLE );
-        if ( !bShowAtResize )
-            pScrollFill->Show();
-    }
-
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
     UpdateScrollbars();
     if(bHori)
@@ -316,8 +306,6 @@ int SwView::_CreateScrollbar( int bHori )
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
     (*ppScrollbar)->EnableDrag( TRUE );
-    (*ppScrollbar)->SetAuto( pWrtShell->IsBrowseMode() &&
-                             !GetDocShell()->GetProtocol().IsInPlaceActive() );
 
     InvalidateBorder();
 
@@ -354,33 +342,6 @@ void SwView::CreatePageButtons(BOOL bShow)
         pNaviBtn->Show();
     }
 };
-
-int SwView::_KillScrollbar( int bHori )
-{
-    SwScrollbar** ppScrBar;
-    if( bHori )
-    {
-        if( 0 == *( ppScrBar = &pHScrollbar ) )
-            return 1;
-    }
-    else
-    {
-        if( 0 == *( ppScrBar = &pVScrollbar ) )
-            return 1;
-        DELETEZ(pNaviBtn);
-        DELETEZ(pPageUpBtn);
-        DELETEZ(pPageDownBtn);
-    }
-    DELETEZ( *ppScrBar );
-
-    // wird einer der Scrollbar ausgeschaltet, muss auch die ScrollbarBox
-    // entfernt werden
-    if( pScrollFill )
-        DELETEZ( pScrollFill );
-
-    InvalidateBorder();
-    return 1;
-}
 
 /*
  * Button-Handler
@@ -541,10 +502,8 @@ void SwView::MoveNavigation(BOOL bNext)
 |*
 *************************************************************************/
 
-int SwView::_CreateTab()
+int SwView::CreateTab()
 {
-    ASSERT( !StatTab(), "vorher abpruefen!" )
-
     pHRuler->SetActive(GetFrame() && IsActive());
 
     pHRuler->Show();
@@ -562,12 +521,9 @@ int SwView::_CreateTab()
 |*
 *************************************************************************/
 
-int SwView::_KillTab()
+int SwView::KillTab()
 {
-    ASSERT( StatTab(), "vorher abpruefen!" )
-
     pHRuler->Hide();
-//  DELETEZ(pHRuler);
     InvalidateBorder();
     return 1;
 }
@@ -614,10 +570,8 @@ BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
 |*
 *************************************************************************/
 
-int SwView::_CreateVLineal()
+int SwView::CreateVLineal()
 {
-    ASSERT( !StatVLineal(), "vorher abpruefen!" )
-
     pHRuler->SetBorderPos( pVRuler->GetSizePixel().Width()-1 );
 
     pVRuler->SetActive(GetFrame() && IsActive());
@@ -636,9 +590,8 @@ int SwView::_CreateVLineal()
 |*
 *************************************************************************/
 
-int SwView::_KillVLineal()
+int SwView::KillVLineal()
 {
-    ASSERT( StatVLineal(), "vorher abpruefen!" )
     pVRuler->Hide();
     pHRuler->SetBorderPos( 0 );
     InvalidateBorder();
@@ -728,6 +681,41 @@ void SwView::SetImageButtonColor(Color& rColor)
         pPageUpBtn->SetControlForeground(rColor);
         pPageDownBtn->SetControlForeground(rColor);
     }
+}
+/* -----------------------------2002/06/26 13:57------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwView::ShowHScrollbar(sal_Bool bShow)
+{
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    pHScrollbar->Show(bShow);
+}
+/* -----------------------------2002/06/26 13:57------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwView::IsHScrollbarVisible()const
+{
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    return pHScrollbar->IsVisible() || pHScrollbar->IsAuto();
+}
+/* -----------------------------2002/06/26 13:57------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwView::ShowVScrollbar(sal_Bool bShow)
+{
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    pVScrollbar->Show(bShow);
+    pPageUpBtn->Show(bShow);
+    pPageDownBtn->Show(bShow);
+    pNaviBtn->Show(bShow);
+}
+/* -----------------------------2002/06/26 13:57------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwView::IsVScrollbarVisible()const
+{
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    return pVScrollbar->IsVisible();
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:37:16 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,9 +428,9 @@ void SwModule::StateViewOptions(SfxItemSet &rSet)
                         nWhich = 0;
                     }
                     else
-                        aBool.SetValue( pActView->StatHScrollbar() ); break;
+                        aBool.SetValue( pActView->IsHScrollbarVisible() ); break;
                 case FN_VSCROLLBAR:
-                    aBool.SetValue( pActView->StatVScrollbar() ); break;
+                    aBool.SetValue( pActView->IsVScrollbarVisible() ); break;
                 case SID_AUTOSPELL_CHECK:
                     aBool.SetValue( pOpt->IsOnlineSpell() );
                 break;

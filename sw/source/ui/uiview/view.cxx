@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2002-05-07 11:31:43 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pFormShell(0),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(0),
+    pScrollFill(new ScrollBarBox( &pFrame->GetWindow(), GetDocShell()->IsInFrame() ? 0 : WB_SIZEABLE )),
     pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
@@ -816,6 +816,10 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nNewPage(USHRT_MAX)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
+
+    _CreateScrollbar( TRUE );
+    _CreateScrollbar( FALSE );
+
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
     bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel =
@@ -974,10 +978,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     const FASTBOOL bBrowse = pWrtShell->GetDoc()->IsBrowseMode();
     SetNewWindowAllowed(!bBrowse);
 
-    if( aUsrPref.IsViewVScrollBar() )
-        CreateVScrollbar();
-    if( aUsrPref.IsViewHScrollBar() || bBrowse )
-        CreateHScrollbar();
+    ShowVScrollbar(aUsrPref.IsViewVScrollBar());
+    ShowHScrollbar(aUsrPref.IsViewHScrollBar());
+    pHScrollbar->SetAuto(bBrowse);
     if( aUsrPref.IsViewTabwin() )
         CreateTab();
     if( aUsrPref.IsViewVLin() )

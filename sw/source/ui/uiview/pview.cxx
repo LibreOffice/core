@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,7 @@ void SwPagePreViewWin::SetPagePreview( BYTE nRow, BYTE nCol )
         pOpt->SetModified();
 
         //VScrollbar updaten!
-        if( rView.StatVScrollbar() )
+        if( rView.IsVScrollbarVisible() )
             rView.VScrollViewSzChg();
     }
 }
@@ -1469,10 +1469,9 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     if( !bIsModified )
         pESh->ResetModified();
 
-    if(pPrefs->IsViewVScrollBar())
-        CreateVScrollbar();
-    if(pPrefs->IsViewHScrollBar())
-        CreateHScrollbar();
+    pVScrollbar->Show(pPrefs->IsViewVScrollBar());
+    pHScrollbar->Show(pPrefs->IsViewHScrollBar());
+    pScrollFill->Show(pPrefs->IsViewVScrollBar() && pPrefs->IsViewHScrollBar());
 }
 
 
@@ -1488,7 +1487,8 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pFrame, SfxViewShell* pOldSh):
     pVScrollbar(0),
     pPageUpBtn(0),
     pPageDownBtn(0),
-    pScrollFill(0),
+    pScrollFill(new ScrollBarBox( &pFrame->GetWindow(),
+        GetDocShell()->IsInFrame()? 0 : WB_SIZEABLE )),
     sPageStr( SW_RES(STR_PAGE) ),
     nPageCount( 0 ),
     nNewPage(USHRT_MAX)
@@ -1496,6 +1496,8 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pFrame, SfxViewShell* pOldSh):
     SetName(String::CreateFromAscii("PageView" ));
     SetWindow( &aViewWin );
     SetHelpId(SW_PAGEPREVIEW);
+    _CreateScrollbar( TRUE );
+    _CreateScrollbar( FALSE );
 
     SfxObjectShell* pObjShell = pFrame->GetObjectShell();
     if ( !pOldSh )
@@ -1611,15 +1613,6 @@ int SwPagePreView::_CreateScrollbar( int bHori )
         pPageDownBtn->Show();
     }
 
-    // wenn beide Scrollbar eingeschaltet werden, dann auch die ScrollbarBox
-    // anlegen
-    if( !pScrollFill && (bHori ? pVScrollbar : pHScrollbar) )
-    {
-        pScrollFill = new ScrollBarBox( pMDI, GetDocShell()->IsInFrame()
-                                                ? 0 : WB_SIZEABLE );
-        pScrollFill->Show();
-    }
-
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
 
     if( !bHori )
@@ -1649,37 +1642,10 @@ int SwPagePreView::_CreateScrollbar( int bHori )
  --------------------------------------------------------------------*/
 
 
-int SwPagePreView::_KillScrollbar( int bHori )
-{
-    SwScrollbar** ppScrBar;
-    if( bHori )
-    {
-        if( 0 == *( ppScrBar = &pHScrollbar ) )
-            return 1;
-    }
-    else
-    {
-        if( 0 == *( ppScrBar = &pVScrollbar ) )
-            return 1;
-        DELETEZ(pPageUpBtn);
-        DELETEZ(pPageDownBtn);
-    }
-
-    DELETEZ( *ppScrBar );
-
-    // wird einer der Scrollbar ausgeschaltet, muss auch die ScrollbarBox
-    // entfernt werden
-    if( pScrollFill )
-        DELETEZ( pScrollFill );
-
-    InvalidateBorder();
-    return 1;
-}
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 
 /*
  * Button-Handler
@@ -1767,8 +1733,8 @@ void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     ViewResizePixel( aViewWin, aRect.TopLeft(), aRect.GetSize(),
                     aViewWin.GetOutputSizePixel(),
                     TRUE,
-                    pVScrollbar, pHScrollbar, pPageUpBtn, pPageDownBtn, 0,
-                    pScrollFill );
+                    *pVScrollbar, *pHScrollbar, pPageUpBtn, pPageDownBtn, 0,
+                    *pScrollFill );
 
     //EditWin niemals einstellen!
     //VisArea niemals einstellen!
@@ -1784,8 +1750,8 @@ void  SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, FALSE );
     ViewResizePixel( aViewWin, rOfst, rSize, aViewWin.GetOutputSizePixel(),
-                        FALSE, pVScrollbar,
-                        pHScrollbar, pPageUpBtn, pPageDownBtn, 0, pScrollFill );
+                        FALSE, *pVScrollbar,
+                        *pHScrollbar, pPageUpBtn, pPageDownBtn, 0, *pScrollFill );
 
     //EditWin niemals einstellen!
 
@@ -2286,5 +2252,33 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 void SwPagePreView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     GetViewShell().ApplyAccessiblityOptions(rAccessibilityOptions);
+}
+/* -----------------------------2002/06/26 14:30------------------------------
+
+ ---------------------------------------------------------------------------*/
+void            SwPagePreView::ShowHScrollbar(sal_Bool bShow)
+{
+    pHScrollbar->Show();
+}
+/* -----------------------------2002/06/26 14:30------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwPagePreView::IsHScrollbarVisible()const
+{
+    return     pVScrollbar->IsVisible();
+}
+/* -----------------------------2002/06/26 14:30------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
+{
+    pVScrollbar->Show();
+}
+/* -----------------------------2002/06/26 14:30------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwPagePreView::IsVScrollbarVisible()const
+{
+    return pVScrollbar->IsVisible();
 }
 

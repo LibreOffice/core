@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:56:33 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,17 +296,11 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     // Scrollbars an / aus
     if(bVScrollChanged)
     {
-        if(pNewPref->IsViewVScrollBar())
-            pView->CreateVScrollbar();
-        else
-            pView->KillVScrollbar();
+        pView->ShowVScrollbar(pNewPref->IsViewVScrollBar());
     }
     if(bHScrollChanged)
     {
-        if ( pNewPref->IsViewHScrollBar() || pSh->IsBrowseMode() )
-            pView->CreateHScrollbar();
-        else
-            pView->KillHScrollbar();
+        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pSh->IsBrowseMode());
     }
     //if only the position of the vertical ruler has been changed initiate an update
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
@@ -468,14 +462,8 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
-        if(pPref->IsViewVScrollBar())
-            pPPView->CreateVScrollbar();
-        else
-            pPPView->KillVScrollbar();
-        if(pPref->IsViewHScrollBar())
-            pPPView->CreateHScrollbar();
-        else
-            pPPView->KillHScrollbar();
+        pPPView->ShowVScrollbar(pPref->IsViewVScrollBar());
+        pPPView->ShowHScrollbar(pPref->IsViewHScrollBar());
         if(!bViewOnly)
         {
             pPref->SetPagePrevRow(rUsrPref.GetPagePrevRow());

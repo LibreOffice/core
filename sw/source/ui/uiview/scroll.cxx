@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scroll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void SwScrollbar::EnableThumbPos( BOOL bEnable, const SwRect &rVisArea )
 void SwScrollbar::Show( BOOL bSet )
 {
     bVisible = bSet;
-    if( (!bSet || bSizeSet) && IsUpdateMode() )
+    if( (!bSet || bSizeSet || !bAuto) && IsUpdateMode() )
         ScrollBar::Show(bSet);
 }
 
@@ -169,7 +169,12 @@ void SwScrollbar::SetUpdateMode( BOOL bUpdate )
     ScrollBar::SetUpdateMode( bUpdate );
     if(bUpdate &&
         bVisible != ScrollBar::IsVisible())
-        Show(bVisible);
+    {
+        if(bAuto)
+            AutoShow();
+        else
+            ScrollBar::Show(bVisible);
+    }
 }
 /*-----------------14.04.98 11:38-------------------
 
@@ -197,91 +202,15 @@ void SwScrollbar::AutoShow()
     {
         if( nVis >= nLen - 1)
         {
-            if(bVisible)
-                Hide();
+            if(ScrollBar::IsVisible())
+                ScrollBar::Show(FALSE);
         }
         else if ( !ScrollBar::IsVisible() &&
                   (!bHori || nVis) )        //Optimierung fuer Browser.
                                             //Horizontaler Scrollbar per
                                             //default aus.
         {
-            Show();
+            ScrollBar::Show(TRUE);
         }
     }
 }
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.63  2000/09/18 16:06:11  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.62  2000/03/03 15:17:04  os
-      StarView remainders removed
-
-      Revision 1.61  1999/03/03 11:52:18  MA
-      #62722# horizontaler Scrollbar bei Auto per default aus
-
-
-      Rev 1.60   03 Mar 1999 12:52:18   MA
-   #62722# horizontaler Scrollbar bei Auto per default aus
-
-      Rev 1.59   14 Apr 1998 12:10:08   OS
-   autom. Scrollbars: SetAuto() muss Sichtbarkeit ueberpruefen #49061#
-
-      Rev 1.58   21 Nov 1997 15:00:12   MA
-   includes
-
-      Rev 1.57   12 Nov 1997 17:09:14   MBA
-   SP3:
-
-      Rev 1.56   03 Nov 1997 13:58:30   MA
-   precomp entfernt
-
-      Rev 1.55   22 Oct 1997 08:12:42   OS
-   eigener UpdateMode zur Verhinderung des Flackerns #43684#
-
-      Rev 1.54   10 Sep 1997 10:12:34   OS
-   Scrollbars mit WB_HIDE erzeugen 43684
-
-      Rev 1.53   17 Jul 1997 16:58:44   HJS
-   includes
-
-      Rev 1.52   16 Jul 1997 18:52:34   MA
-   new: ThumbPos kann disabled werden
-
-      Rev 1.51   29 Jul 1996 15:47:22   MA
-   includes
-
-      Rev 1.50   23 May 1996 17:18:20   OS
-   automatische Scrollbars in Frame-Docs
-
-      Rev 1.49   06 May 1996 17:01:16   MA
-   chg: Scrollbars fuer browse und ole richtig
-
-      Rev 1.48   14 Mar 1996 17:10:48   MA
-   fix#26338#, richtige Reihenfolge der Einstellungen; Opts
-
-      Rev 1.47   03 Mar 1996 18:16:04   MA
-   opt: unuetzer Member vom Scrollbar
-
-      Rev 1.46   29 Nov 1995 12:12:56   OM
-   Scrollbars reaktiviert
-
-      Rev 1.45   27 Nov 1995 21:21:04   JP
-   ueberfluessige Methoden entfernt, optimiert
-
-      Rev 1.44   24 Nov 1995 16:57:54   OM
-   PCH->PRECOMPILED
-
-      Rev 1.43   08 Nov 1995 13:07:40   OS
-   Change => Set
-
-      Rev 1.42   30 Oct 1995 12:06:04   MA
-   chg: Get/Set Page/LineSize entfernt
-
-      Rev 1.41   19 Feb 1995 15:35:58   JP
-   CTOR: setze bHori richtig
-
-*************************************************************************/
-
-

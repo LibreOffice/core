@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: os $ $Date: 2002-06-28 12:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,14 @@ void ViewResizePixel( const Window &rRef,
                     const Size &rSize,
                     const Size &rEditSz,
                     const BOOL bInner,
-                    SwScrollbar* pVScrollbar,
-                    SwScrollbar* pHScrollbar,
+                    SwScrollbar& rVScrollbar,
+                    SwScrollbar& rHScrollbar,
                     ImageButton* pPageUpBtn,
                     ImageButton* pPageDownBtn,
                     ImageButton* pNaviBtn,
-                    Window* pScrollBarBox,
+                    Window& rScrollBarBox,
                     SvxRuler* pVLineal = 0,
                     SvxRuler* pHLineal = 0,
-                    BOOL bIgnoreVisibility = FALSE,
                     BOOL bWebView = FALSE,
                     BOOL bVRulerRight = FALSE );
 
