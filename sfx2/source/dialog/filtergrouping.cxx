@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,7 @@ namespace sfx2
         // the group which we currently work with
         GroupedFilterList::iterator aCurrentGroup = _rAllFilters.end(); // no current group
         // the filter container of the current group - if this changes between two filters, a new group is reached
-        const SfxFilterContainer*   pCurrentGroupsContainer = NULL;
+        String aCurrentServiceName;
 
         String sFilterWildcard;
         ::rtl::OUString sFilterName;
@@ -702,15 +702,11 @@ namespace sfx2
 
             // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
             // check for a change in the group
-            const SfxFilterContainer* pContainer = pFilter->GetFilterContainer();
-            if ( pContainer != pCurrentGroupsContainer )
+            String aServiceName = pFilter->GetServiceName();
+            if ( aServiceName != aCurrentServiceName )
             {   // we reached a new group
 
-                // retrieve the document service name of the new group
-                const SfxFactoryFilterContainer* pFacFilterContainer =
-                    static_cast< const SfxFactoryFilterContainer* >( pContainer );
-                    // an SfxFilterContainer is always an SfxFactoryFilterContainer - according to mba@openoffice.org
-                ::rtl::OUString sDocServName = pFacFilterContainer->GetFactory().GetDocumentServiceName();
+                ::rtl::OUString sDocServName = aServiceName;
 
                 // look for the place in _rAllFilters where this ne group belongs - this is determined
                 // by the order of classes in aGlobalClassNames
@@ -738,8 +734,7 @@ namespace sfx2
                     aCurrentGroup = _rAllFilters.insert( _rAllFilters.end() );
 
                 // remember the container to properly detect the next group
-                pCurrentGroupsContainer = pContainer;
-
+                aCurrentServiceName = aServiceName;
             }
 
             DBG_ASSERT( aCurrentGroup != _rAllFilters.end(), "sfx2::lcl_GroupAndClassify: invalid current group!" );
