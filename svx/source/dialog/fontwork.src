@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text [ czech ] = "Písmomalba";
     Text [ hebrew ] = "‮FontWork‬";
     Text [ hindi ] = "फ़ॉन्टवर्क्";
-    Text [ slovak ] = "Písmomaľba";
+    Text [ slovak ] = "Fontwork";
     Moveable = TRUE ;
     Zoomable = TRUE ;
     Closeable = TRUE ;
@@ -143,6 +143,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮מכובה‬";
                 Text[ hindi ] = "बंद";
                 Text[ slovak ] = "Vypnúť";
+                Text[ hungarian ] = "Ki";
+                Text[ slovenian ] = "Izključeno";
             };
             ToolBoxItem
             {
@@ -182,6 +184,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮סיבוב‬";
                 Text[ hindi ] = "घुमाओ";
                 Text[ slovak ] = "Otočiť";
+                Text[ hungarian ] = "Elforgatott";
+                Text[ slovenian ] = "Zasukaj";
             };
             ToolBoxItem
             {
@@ -197,7 +201,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ spanish ] = "Derecho" ;
                 Text [ french ] = "Debout" ;
                 Text [ swedish ] = "Uppr�tt" ;
-                Text [ danish ] = "Opret" ;
+                Text [ danish ] = "Opretst�ende" ;
                 Text [ portuguese ] = "Direito" ;
                 Text [ portuguese_brazilian ] = "Direito" ;
                 Text[ chinese_simplified ] = "直立";
@@ -217,6 +221,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮זקוף‬";
                 Text[ hindi ] = "सीधा";
                 Text[ slovak ] = "Vzpriamené";
+                Text[ hungarian ] = "Álló";
+                Text[ slovenian ] = "Pokončno";
             };
             ToolBoxItem
             {
@@ -252,6 +258,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮אלכסוני - אופקי‬";
                 Text[ hindi ] = "तिरछा समतल";
                 Text[ slovak ] = "Skosiť vodorovne";
+                Text[ hungarian ] = "Vízszintesen döntött";
+                Text[ slovenian ] = "Nagni vodoravno";
             };
             ToolBoxItem
             {
@@ -287,6 +295,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮אלכסוני - אנכי‬";
                 Text[ hindi ] = "तिरछा लम्ब";
                 Text[ slovak ] = "Skosiť zvisle";
+                Text[ hungarian ] = "Függőlegesen döntött";
+                Text[ slovenian ] = "Nagni navpično";
             };
         };
     };
@@ -330,6 +340,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮כיוון‬";
                 Text[ hindi ] = "अनुस्थापन";
                 Text[ slovak ] = "Orientácia";
+                Text[ hungarian ] = "Tájolás";
+                Text[ slovenian ] = "Usmerjenost";
             };
             ToolBoxItem
             {
@@ -345,7 +357,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 /* ### ACHTUNG: Neuer Text in Resource? Linksb�ndig : Linksb�ndig */
                 Text = "Linksb�ndig" ;
                 Text [ ENGLISH ] = "Left aligned" ;
-                Text [ dutch ] = "Links uitgelijnd" ;
+                Text [ dutch ] = "Links uitlijnen" ;
                 Text [ english_us ] = "Align Left" ;
                 Text [ italian ] = "Allineato a sinistra" ;
                 Text [ spanish ] = "Alinear a la izquierda" ;
@@ -371,6 +383,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮יישור לשמאל‬";
                 Text[ hindi ] = "बायाँ ओर पंक्तिकरण";
                 Text[ slovak ] = "Zarovnať vľavo";
+                Text[ hungarian ] = "Balra igazítás";
+                Text[ slovenian ] = "Poravnaj levo";
             };
             ToolBoxItem
             {
@@ -406,6 +420,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮מירכוז‬";
                 Text[ hindi ] = "मध्य";
                 Text[ slovak ] = "Na stred";
+                Text[ hungarian ] = "Középre igazított";
+                Text[ slovenian ] = "Sredina";
             };
             ToolBoxItem
             {
@@ -421,7 +437,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ italian ] = "Allineato a destra" ;
                 Text [ spanish ] = "Alinear a la derecha" ;
                 Text [ french ] = "Aligner � droite" ;
-                Text [ dutch ] = "Rechtslijnend" ;
+                Text [ dutch ] = "Rechts uitlijnen" ;
                 Text [ swedish ] = "H�gerjusterat" ;
                 Text [ danish ] = "H�jrejusteret" ;
                 Text [ portuguese ] = "� direita" ;
@@ -443,6 +459,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮יישור לימין‬";
                 Text[ hindi ] = "दाहिना ओर पंक्तिकरण";
                 Text[ slovak ] = "Zarovnať vpravo";
+                Text[ hungarian ] = "Jobbra igazítás";
+                Text[ slovenian ] = "Poravnaj desno";
             };
             ToolBoxItem
             {
@@ -454,13 +472,13 @@ DockingWindow RID_SVXDLG_FONTWORK
                 /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgr��e : Auto-Textgr��e */
                 Text = "Auto-Textgr��e" ;
                 Text [ ENGLISH ] = "Autosize" ;
-                Text [ dutch ] = "AutoTekstgrootte" ;
+                Text [ dutch ] = "Tekstgrootte automatisch aanpassen" ;
                 Text [ english_us ] = "AutoSize Text" ;
                 Text [ italian ] = "Dimensione testo automatico" ;
                 Text [ spanish ] = "Texto - Tama�o autom�tico" ;
                 Text [ french ] = "Taille du texte adapt�e" ;
                 Text [ swedish ] = "AutoTextstorlek" ;
-                Text [ danish ] = "AutoTekstst�rrelse" ;
+                Text [ danish ] = "Automatisk tekstst�rrelse" ;
                 Text [ portuguese ] = "Tamanho autom�tico - texto" ;
                 Text [ portuguese_brazilian ] = "Escalonamento Autom�tico do Texto" ;
                 Text[ chinese_simplified ] = "自动调整文字大小";
@@ -480,6 +498,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮התאמת גודל טקסט אוטומטית‬";
                 Text[ hindi ] = "स्वचालित परिमाण टेक्स्ट्";
                 Text[ slovak ] = "Automatická veľkosť textu";
+                Text[ hungarian ] = "Automatikus szövegméret";
+                Text[ slovenian ] = "Samodejno prilagodi velikost besedila";
             };
         };
     };
@@ -543,6 +563,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hindi ] = "दूरी";
         CustomUnitText[ hebrew ] = "‮חג ישראלי‬";
         QuickHelpText[ slovak ] = "Vzdialenosť";
+        QuickHelpText[ hungarian ] = "Távolság";
+        QuickHelpText[ slovenian ] = "Razdalja";
     };
     FixedImage FB_TEXTSTART
     {
@@ -602,6 +624,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hindi ] = "इन्डेन्ट";
         QuickHelpText[ slovak ] = "Odsadenie";
         CustomUnitText[ hebrew ] = "‮-‬";
+        QuickHelpText[ hungarian ] = "Behúzás";
+        QuickHelpText[ slovenian ] = "Odmik";
     };
     ToolBox TBX_SHADOW
     {
@@ -643,6 +667,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮מתאר‬";
                 Text[ hindi ] = "परिवेश";
                 Text[ slovak ] = "Obrys";
+                Text[ hungarian ] = "Körvonal";
+                Text[ slovenian ] = "Obris";
             };
             ToolBoxItem
             {
@@ -658,7 +684,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ spanish ] = "Contorno de caracteres" ;
                 Text [ french ] = "Contour de lettres" ;
                 Text [ swedish ] = "Bokstavskontur" ;
-                Text [ danish ] = "Bogstavramme" ;
+                Text [ danish ] = "Tekstkontur" ;
                 Text [ portuguese ] = "Contorno de caracteres" ;
                 Text [ portuguese_brazilian ] = "Contorno das letras" ;
                 Text[ chinese_simplified ] = "字母轮廓";
@@ -678,6 +704,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮מתאר טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् परिवेश";
                 Text[ slovak ] = "Obrysy textu";
+                Text[ hungarian ] = "Szövegkörvonal";
+                Text[ slovenian ] = "Obris besedila";
             };
             ToolBoxItem
             {
@@ -697,7 +725,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ french ] = "D�sactiv�" ;
                 Text [ dutch ] = "Uit" ;
                 Text [ swedish ] = "Av" ;
-                Text [ danish ] = "Deaktiver" ;
+                Text [ danish ] = "Ingen skygge" ;
                 Text [ portuguese ] = "Desactivar" ;
                 Text [ portuguese_brazilian ] = "Sem Sombras" ;
                 Text[ chinese_simplified ] = "取消阴影";
@@ -717,6 +745,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮ללא הצללה‬";
                 Text[ hindi ] = "कोई छाया नहीं";
                 Text[ slovak ] = "Bez tieňovania";
+                Text[ hungarian ] = "Nincs árnyékolás";
+                Text[ slovenian ] = "Brez senčenja";
             };
             ToolBoxItem
             {
@@ -752,6 +782,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮אנכי‬";
                 Text[ hindi ] = "लम्ब";
                 Text[ slovak ] = "Zvislé";
+                Text[ hungarian ] = "Függőleges";
+                Text[ slovenian ] = "Navpično";
             };
             ToolBoxItem
             {
@@ -767,7 +799,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ french ] = "Basculer" ;
                 Text [ dutch ] = "Kantelen" ;
                 Text [ swedish ] = "Tippa" ;
-                Text [ danish ] = "H�ld" ;
+                Text [ danish ] = "H�ldning" ;
                 Text [ portuguese ] = "Inclinar" ;
                 Text [ portuguese_brazilian ] = "Inclinar" ;
                 Text[ chinese_simplified ] = "倾斜";
@@ -787,6 +819,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ hebrew ] = "‮אלכסוני‬";
                 Text[ hindi ] = "तिरछा";
                 Text[ slovak ] = "Skosenie";
+                Text[ hungarian ] = "Dőlt";
+                Text[ slovenian ] = "Nagnjenost";
             };
         };
     };
@@ -817,7 +851,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText [ french ] = " degr�s" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "Grados" ;
-        CustomUnitText [ danish ] = "grader" ;
+        CustomUnitText [ danish ] = " grader" ;
         CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ finnish ] = "  astetta" ;
         CustomUnitText [ english_us ] = " degrees" ;
@@ -867,6 +901,10 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hindi ] = "दूरी X";
         CustomUnitText[ slovak ] = " stupňov";
         QuickHelpText[ slovak ] = "Vzdialenosť X";
+        CustomUnitText[ hungarian ] = " fok";
+        CustomUnitText[ slovenian ] = " stopinj";
+        QuickHelpText[ hungarian ] = "X távolság";
+        QuickHelpText[ slovenian ] = "Razdalja X";
     };
     FixedImage FB_SHADOW_Y
     {
@@ -941,6 +979,10 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hindi ] = "दूरी Y";
         CustomUnitText[ slovak ] = "%";
         QuickHelpText[ slovak ] = "Vzdialenosť Y";
+        CustomUnitText[ hungarian ] = "%";
+        CustomUnitText[ slovenian ] = "%";
+        QuickHelpText[ hungarian ] = "Y távolság";
+        QuickHelpText[ slovenian ] = "Razdalja Y";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -1041,6 +1083,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hebrew ] = "Schattenfarbe";
         QuickHelpText[ hindi ] = "छाया रंग";
         QuickHelpText[ slovak ] = "Farba tieňa";
+        QuickHelpText[ hungarian ] = "Árnyék színe";
+        QuickHelpText[ slovenian ] = "Barva sence";
     };
     Text[ chinese_simplified ] = "美工字体";
     Text[ russian ] = "�������";
@@ -1081,6 +1125,8 @@ DockingWindow RID_SVXDLG_FONTWORK
             TBI_TEXTSTART ; \
         };                 \
         IdCount = { 21 ; };
+    Text[ hungarian ] = "Betűbűvész";
+    Text[ slovenian ] = "Fontwork";
 
     #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
@@ -1208,7 +1254,7 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text [ french ] = "Demi-cercle sup�rieur" ;
     Text [ dutch ] = "Bovenste halve cirkel" ;
     Text [ spanish ] = "Semic�rculo superior" ;
-    Text [ danish ] = "Halvcirkel" ;
+    Text [ danish ] = "�vre halvcirkel" ;
     Text [ swedish ] = "�vre halvcirkel" ;
     Text [ finnish ] = "Ylempi puoliympyr�" ;
     Text [ english_us ] = "Upper Semicircle" ;
@@ -1228,6 +1274,8 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text[ hebrew ] = "‮חצי עיגול עליון‬";
     Text[ hindi ] = "ऊपरी अर्धवृत्त";
     Text[ slovak ] = "Horný polkruh";
+    Text[ hungarian ] = "Felső félkör";
+    Text[ slovenian ] = "Zgornji polkrog";
 };
 String RID_SVXSTR_FONTWORK_FORM2
 {
@@ -1240,7 +1288,7 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text [ french ] = "Demi-cercle inf�rieur" ;
     Text [ dutch ] = "Onderste halve cirkel" ;
     Text [ spanish ] = "Semic�rculo inferior" ;
-    Text [ danish ] = "Buet nedad" ;
+    Text [ danish ] = "Nedre halvcirkel" ;
     Text [ swedish ] = "Undre halvcirkel" ;
     Text [ finnish ] = "Puoliympyr� (alaosa)" ;
     Text [ english_us ] = "Lower Semicircle" ;
@@ -1260,6 +1308,8 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text[ hebrew ] = "‮חצי עיגול תחתון‬";
     Text[ hindi ] = "नीचे का अर्धवृत्त";
     Text[ slovak ] = "Dolný polkruh";
+    Text[ hungarian ] = "Alsó félkör";
+    Text[ slovenian ] = "Spodnji polkrog";
 };
 String RID_SVXSTR_FONTWORK_FORM3
 {
@@ -1292,6 +1342,8 @@ String RID_SVXSTR_FONTWORK_FORM3
     Text[ hebrew ] = "‮חצי עיגול שמאלי‬";
     Text[ hindi ] = "बायाँ ओर का अर्धवृत्त";
     Text[ slovak ] = "Ľavý polkruh";
+    Text[ hungarian ] = "Bal félkör";
+    Text[ slovenian ] = "Levi polkrog";
 };
 String RID_SVXSTR_FONTWORK_FORM4
 {
@@ -1324,6 +1376,8 @@ String RID_SVXSTR_FONTWORK_FORM4
     Text[ hebrew ] = "‮חצי עיגול ימני‬";
     Text[ hindi ] = "दाहिना ओर का अर्धवृत्त ";
     Text[ slovak ] = "Pravý polkruh";
+    Text[ hungarian ] = "Jobb félkör";
+    Text[ slovenian ] = "Desni polkrog";
 };
 String RID_SVXSTR_FONTWORK_FORM5
 {
@@ -1356,6 +1410,8 @@ String RID_SVXSTR_FONTWORK_FORM5
     Text[ hebrew ] = "‮קשת עליונה‬";
     Text[ hindi ] = "ऊपरी वृत्तखण्ड";
     Text[ slovak ] = "Horný oblúk";
+    Text[ hungarian ] = "Felső körív";
+    Text[ slovenian ] = "Zgornji lok";
 };
 String RID_SVXSTR_FONTWORK_FORM6
 {
@@ -1388,6 +1444,8 @@ String RID_SVXSTR_FONTWORK_FORM6
     Text[ hebrew ] = "‮קשת תחתונה‬";
     Text[ hindi ] = "नीचे का वृत्तखण्ड";
     Text[ slovak ] = "Dolný oblúk";
+    Text[ hungarian ] = "Alsó körív";
+    Text[ slovenian ] = "Spodnji lok";
 };
 String RID_SVXSTR_FONTWORK_FORM7
 {
@@ -1420,6 +1478,8 @@ String RID_SVXSTR_FONTWORK_FORM7
     Text[ hebrew ] = "‮קשת שמאלית‬";
     Text[ hindi ] = "बायाँ ओर का वृत्तखण्ड";
     Text[ slovak ] = "Ľavý oblúk";
+    Text[ hungarian ] = "Bal oldali körív";
+    Text[ slovenian ] = "Levi lok";
 };
 String RID_SVXSTR_FONTWORK_FORM8
 {
@@ -1452,6 +1512,8 @@ String RID_SVXSTR_FONTWORK_FORM8
     Text[ hebrew ] = "‮קשת ימנית‬";
     Text[ hindi ] = "दाहिना ओर का वृत्तखण्ड ";
     Text[ slovak ] = "Pravý oblúk";
+    Text[ hungarian ] = "Jobb oldali körív";
+    Text[ slovenian ] = "Desni lok";
 };
 String RID_SVXSTR_FONTWORK_FORM9
 {
@@ -1484,6 +1546,8 @@ String RID_SVXSTR_FONTWORK_FORM9
     Text[ hebrew ] = "‮עיגול פתוח‬";
     Text[ hindi ] = "खुली वृत्त";
     Text[ slovak ] = "Otvorený kruh";
+    Text[ hungarian ] = "Nyitott kör";
+    Text[ slovenian ] = "Odprti krog";
 };
 String RID_SVXSTR_FONTWORK_FORM10
 {
@@ -1516,6 +1580,8 @@ String RID_SVXSTR_FONTWORK_FORM10
     Text[ hebrew ] = "‮עיגול סגור‬";
     Text[ hindi ] = "छिपाव वृत्त";
     Text[ slovak ] = "Uzavretý kruh";
+    Text[ hungarian ] = "Zárt kör";
+    Text[ slovenian ] = "Zaprti krog";
 };
 String RID_SVXSTR_FONTWORK_FORM11
 {
@@ -1548,6 +1614,8 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text[ hebrew ] = "‮עיגול סגור II‬";
     Text[ hindi ] = "छिपाव वृत्त II";
     Text[ slovak ] = "Uzavretý kruh II";
+    Text[ hungarian ] = "Zárt kör II";
+    Text[ slovenian ] = "Zaprti krog II";
 };
 String RID_SVXSTR_FONTWORK_FORM12
 {
@@ -1580,6 +1648,8 @@ String RID_SVXSTR_FONTWORK_FORM12
     Text[ hebrew ] = "‮עיגול פתוח אנכי‬";
     Text[ hindi ] = "खुली वृत्त लम्ब";
     Text[ slovak ] = "Otvorený kruh zvislý";
+    Text[ hungarian ] = "Függőleges nyitott kör";
+    Text[ slovenian ] = "Odpri krog navpično";
 };
 String RID_SVXSTR_FONTWORK_UNDOCREATE
 {
@@ -1611,8 +1681,11 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ hebrew ] = "‮יצירת עצם Fontwork‬";
     Text[ hindi ] = "फ़ॉन्टवर्क् वस्तु उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť písmomaľbu";
+    Text[ hungarian ] = "Betűbűvész - Objektum létrehozása";
+    Text[ slovenian ] = "Ustvari Fontwork predmet";
 };
  // ********************************************************************** EOF
+
 
 
 
