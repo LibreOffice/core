@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Size = MAP_APPFONT ( 128 , 12 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "Range" ;
-        Text [ portuguese_brazilian ] = "Bereich" ;
+        Text [ portuguese_brazilian ] = "Intervalo" ;
         Text [ swedish ] = "Område" ;
         Text [ danish ] = "Område" ;
         Text [ italian ] = "Area" ;
@@ -118,6 +118,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "Àrea";
         Text[ finnish ] = "Alue";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
+        Text[ czech ] = "Oblast";
+        Text[ hebrew ] = "Bereich";
+        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ";
     };
     Edit ED_ASSIGN
     {
@@ -136,7 +139,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Minimize/Maximize" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Minimizar/Maximizar" ;
         QuickHelpText [ swedish ] = "Förminska/Förstora" ;
         QuickHelpText [ danish ] = "Formindsk/Forstør" ;
         QuickHelpText [ italian ] = "Zoom indietro/avanti" ;
@@ -161,6 +164,9 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText[ catalan ] = "Redueix/Augmenta";
         QuickHelpText[ finnish ] = "Pienennä/suurenna";
         QuickHelpText[ thai ] = "Minimize/Maximize";
+        QuickHelpText[ czech ] = "Minimalizovat/Maximalizovat";
+        QuickHelpText[ hebrew ] = "Verkleinern/VergrÃ¶ÃŸern";
+        QuickHelpText[ hindi ] = "à¤›à¥‹à¤Ÿà¤¾ à¤•à¤°à¥‹/à¤¬à¤¡à¤¼à¤¾ à¤•à¤°à¥‹";
     };
     String STR_INSERT_COLS
     {
@@ -168,7 +174,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Column" ;
         Text [ portuguese ] = "Coluna inserida" ;
         Text [ english_us ] = "Column inserted" ;
-        Text [ portuguese_brazilian ] = "Spalte eingef?t" ;
+        Text [ portuguese_brazilian ] = "Coluna inserida" ;
         Text [ swedish ] = "Kolumn infogad" ;
         Text [ danish ] = "Kolonne indsat" ;
         Text [ italian ] = "Colonna inserita" ;
@@ -177,7 +183,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Kolom ingevoegd" ;
         Text[ chinese_simplified ] = "åŠ å…¥çš„åˆ—";
         Text[ russian ] = "Ñòîëáåö âñòàâëåí";
-        Text[ polish ] = "Wstawiona kolumna";
+        Text[ polish ] = "Wstawiono kolumnê";
         Text[ japanese ] = "åˆ—ãŒæŒ¿å…¥ã•ã‚Œã¾ã—ãŸ";
         Text[ english_us ] = "Column inserted";
     Text[ portuguese ] = "Coluna inserida";
@@ -188,8 +194,8 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ italian ] = "Colonna inserita";
     Text[ danish ] = "Kolonne indsat";
     Text[ swedish ] = "Kolumn infogad";
-    Text[ polish ] = "Wstawiona kolumna";
-    Text[ portuguese_brazilian ] = "Spalte eingef?t";
+    Text[ polish ] = "Wstawiono kolumnê";
+    Text[ portuguese_brazilian ] = "Coluna inserida";
     Text[ japanese ] = "åˆ—ãŒæŒ¿å…¥ã•ã‚Œã¾ã—ãŸ";
     Text[ chinese_simplified ] = "åŠ å…¥çš„åˆ—";
     Text[ chinese_traditional ] = "æ¬„å·²ç¶“æ’å…¥";
@@ -203,6 +209,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha inserit una columna";
         Text[ finnish ] = "Sarake lisätty";
         Text[ thai ] = "à¹à¸—à¸£à¸à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Sloupec byl vloÅ¾en";
+        Text[ hebrew ] = "Spalte eingefÃ¼gt";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¾";
     };
     String STR_INSERT_ROWS
     {
@@ -210,7 +219,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Row" ;
         Text [ portuguese ] = "Linha inserida" ;
         Text [ english_us ] = "Row inserted " ;
-        Text [ portuguese_brazilian ] = "Zeile eingef?t" ;
+        Text [ portuguese_brazilian ] = "Linha inserida" ;
         Text [ swedish ] = "Rad infogad" ;
         Text [ danish ] = "Række indsat" ;
         Text [ italian ] = "Riga inserita" ;
@@ -219,7 +228,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Rij ingevoegd" ;
         Text[ chinese_simplified ] = "è¡Œè¢«æ’å…¥";
         Text[ russian ] = "Ñòğîêà âñòàâëåíà";
-        Text[ polish ] = "Usuniêty wiersz";
+        Text[ polish ] = "Wstawiony wiersz";
         Text[ japanese ] = "è¡ŒãŒæŒ¿å…¥ã•ã‚Œã¾ã—ãŸ";
         Text[ chinese_traditional ] = "åˆ—è¢«æ’å…¥";
         Text[ arabic ] = "ÓØÑ ãÏÑÌ";
@@ -232,6 +241,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha inserit una fila ";
         Text[ finnish ] = "Rivi lisätty ";
         Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸–à¸§ ";
+        Text[ czech ] = "Å˜Ã¡dek byl vloÅ¾en ";
+        Text[ hebrew ] = "Zeile eingefÃ¼gt";
+        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¾";
     };
     String STR_INSERT_TABS
     {
@@ -239,7 +251,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Sheet" ;
         Text [ portuguese ] = "Tabela inserida" ;
         Text [ english_us ] = "Sheet inserted " ;
-        Text [ portuguese_brazilian ] = "Tabelle eingef?t" ;
+        Text [ portuguese_brazilian ] = "Planilha inserida" ;
         Text [ swedish ] = "Tabell infogad" ;
         Text [ danish ] = "Ark indsat" ;
         Text [ italian ] = "Tabella inserita" ;
@@ -261,6 +273,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha inserit un full ";
         Text[ finnish ] = "Taulukko lisätty ";
         Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™ ";
+        Text[ czech ] = "List byl vloÅ¾en ";
+        Text[ hebrew ] = "Tabelle eingefÃ¼gt";
+        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¾ ";
     };
     String STR_DELETE_COLS
     {
@@ -268,7 +283,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Column" ;
         Text [ portuguese ] = "Coluna eliminada" ;
         Text [ english_us ] = "Column deleted" ;
-        Text [ portuguese_brazilian ] = "Spalte gel?cht" ;
+        Text [ portuguese_brazilian ] = "Coluna excluída" ;
         Text [ swedish ] = "Kolumn raderad" ;
         Text [ danish ] = "Kolonne slettet" ;
         Text [ italian ] = "Colonna cancellata" ;
@@ -277,7 +292,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Kolom verwijderd" ;
         Text[ chinese_simplified ] = "åˆ é™¤çš„åˆ—";
         Text[ russian ] = "Ñòîëáåö óäàëåí";
-        Text[ polish ] = "Usuniêta kolumna";
+        Text[ polish ] = "Usuniêto kolumnê";
         Text[ japanese ] = "åˆ—ãŒå‰Šé™¤ã•ã‚Œã¾ã—ãŸ";
         Text[ chinese_traditional ] = "æ¬„å·²ç¶“åˆªé™¤";
         Text[ arabic ] = "ÚãæÏ ãÍĞæİ";
@@ -290,6 +305,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha suprimit la columna";
         Text[ finnish ] = "Sarake poistettu";
         Text[ thai ] = "à¸¥à¸šà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Sloupec byl odstranÄ›n";
+        Text[ hebrew ] = "Spalte gelÃ¶scht";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¯à¤¾";
     };
     String STR_DELETE_ROWS
     {
@@ -297,7 +315,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Row" ;
         Text [ portuguese ] = "Linha eliminada" ;
         Text [ english_us ] = "Row deleted" ;
-        Text [ portuguese_brazilian ] = "Zeile gel?cht" ;
+        Text [ portuguese_brazilian ] = "Linha excluída" ;
         Text [ swedish ] = "Rad raderad" ;
         Text [ danish ] = "Række slettet" ;
         Text [ italian ] = "Riga cancellata" ;
@@ -319,6 +337,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha suprimit la fila";
         Text[ finnish ] = "Rivi poistettu";
         Text[ thai ] = "à¸¥à¸šà¹à¸–à¸§";
+        Text[ czech ] = "Å˜Ã¡dek byl odstranÄ›n";
+        Text[ hebrew ] = "Zeile gelÃ¶scht";
+        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¯à¤¾";
     };
     String STR_DELETE_TABS
     {
@@ -326,7 +347,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Sheet" ;
         Text [ portuguese ] = "Tabela eliminada" ;
         Text [ english_us ] = "Sheet deleted" ;
-        Text [ portuguese_brazilian ] = "Tabelle gel?cht" ;
+        Text [ portuguese_brazilian ] = "Planilha excluída" ;
         Text [ swedish ] = "Tabell raderad" ;
         Text [ danish ] = "Ark slettet" ;
         Text [ italian ] = "Tabella cancellata" ;
@@ -348,6 +369,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha suprimit el full";
         Text[ finnish ] = "Taulukko poistettu";
         Text[ thai ] = "à¸¥à¸šà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
+        Text[ czech ] = "List byl odstranÄ›n";
+        Text[ hebrew ] = "Tabelle gelÃ¶scht";
+        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¯à¤¾";
     };
     String STR_MOVE
     {
@@ -355,7 +379,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Moved Cells" ;
         Text [ portuguese ] = "Área movida" ;
         Text [ english_us ] = "Range moved" ;
-        Text [ portuguese_brazilian ] = "Bereich verschoben" ;
+        Text [ portuguese_brazilian ] = "Intervalo movido" ;
         Text [ swedish ] = "Område förflyttat" ;
         Text [ danish ] = "Område forskudt" ;
         Text [ italian ] = "Area spostata" ;
@@ -364,7 +388,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Bereik verplaatst" ;
         Text[ chinese_simplified ] = "ç§»åŠ¨åŒºåŸŸ";
         Text[ russian ] = "Äèàïàçîí ïåğåìåùåí";
-        Text[ polish ] = "Przesuniêty obszar";
+        Text[ polish ] = "Przeniesiony zakres";
         Text[ japanese ] = "ç¯„å›²ã®ç§»å‹•";
         Text[ chinese_traditional ] = "ç§»å‹•å€åŸŸ";
         Text[ arabic ] = "äØÇŞ ãÍÑß";
@@ -377,6 +401,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha mogut l'àrea";
         Text[ finnish ] = "Aluetta siirretty";
         Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸Šà¹ˆà¸§à¸‡";
+        Text[ czech ] = "Oblast pÅ™esunuta";
+        Text[ hebrew ] = "Bereich verschoben";
+        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾";
     };
     String STR_CONTENT
     {
@@ -384,7 +411,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Changed Cell" ;
         Text [ portuguese ] = "Conteúdo modificado" ;
         Text [ english_us ] = "Changed contents" ;
-        Text [ portuguese_brazilian ] = "Inhalts?nderung" ;
+        Text [ portuguese_brazilian ] = "Conteúdo alterado" ;
         Text [ swedish ] = "Innehållsändring" ;
         Text [ danish ] = "Indholdsændring" ;
         Text [ italian ] = "Modifica contenuto" ;
@@ -393,7 +420,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudswijziging" ;
         Text[ chinese_simplified ] = "å†…å®¹æ›´æ”¹";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ polish ] = "Zmieniona zawartoœæ";
         Text[ japanese ] = "å†…å®¹ã®å¤‰æ›´";
         Text[ chinese_traditional ] = "å…§å®¹è®Šæ›´";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -401,11 +428,14 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "å†…å®¹æ›´æ”¹";
         Text[ greek ] = "Áëëáãİò ğåñéå÷ïìİíùí";
         Text[ korean ] = "ë‚´ìš© ë³€ê²½";
-        Text[ turkish ] = "İçerik değişikliği";
+        Text[ turkish ] = "Değiştirilmiş içerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El contingut ha canviat";
         Text[ finnish ] = "Muutettu sisältö";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+        Text[ czech ] = "Obsah byl zmÄ›nÄ›n";
+        Text[ hebrew ] = "InhaltsÃ¤nderung";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
     };
     String STR_CONTENT_WITH_CHILD
     {
@@ -413,7 +443,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Changed Cell" ;
         Text [ portuguese ] = "Conteúdo modificado" ;
         Text [ english_us ] = "Changed contents" ;
-        Text [ portuguese_brazilian ] = "Inhalts?nderung" ;
+        Text [ portuguese_brazilian ] = "Conteúdo alterado" ;
         Text [ swedish ] = "Innehållsändring" ;
         Text [ danish ] = "Indholdsændring" ;
         Text [ italian ] = "Modifica contenuto" ;
@@ -422,7 +452,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudswijziging" ;
         Text[ chinese_simplified ] = "å†…å®¹æ›´æ”¹";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ polish ] = "Zmieniona zawartoœæ";
         Text[ japanese ] = "å†…å®¹ã®å¤‰æ›´";
         Text[ chinese_traditional ] = "å…§å®¹è®Šæ›´";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -430,11 +460,14 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "å†…å®¹æ›´æ”¹";
         Text[ greek ] = "Áëëáãİò ğåñéå÷ïìİíùí";
         Text[ korean ] = "ë‚´ìš© ë³€ê²½";
-        Text[ turkish ] = "İçerik değişikliği";
+        Text[ turkish ] = "Değiştirilmiş içerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El contingut ha canviat";
         Text[ finnish ] = "Muutettu sisältö";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
+        Text[ czech ] = "Obsah byl zmÄ›nÄ›n";
+        Text[ hebrew ] = "InhaltsÃ¤nderung";
+        Text[ hindi ] = "Changed contents";
     };
     String STR_CHILD_CONTENT
     {
@@ -442,7 +475,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "acceptable Changing to " ;
         Text [ portuguese ] = "Modificado para " ;
         Text [ english_us ] = "Changed to " ;
-        Text [ portuguese_brazilian ] = "?nderung zu " ;
+        Text [ portuguese_brazilian ] = "Alterado para " ;
         Text [ swedish ] = "Ändring till  " ;
         Text [ danish ] = "Ændring til " ;
         Text [ italian ] = "Modificato in " ;
@@ -451,7 +484,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Wijziging bij" ;
         Text[ chinese_simplified ] = "æ›´æ”¹æˆ ";
         Text[ russian ] = "Èçìåíåíèÿ ê ";
-        Text[ polish ] = "Zmieniony na  ";
+        Text[ polish ] = "Zmieniono na";
         Text[ japanese ] = "å¤‰æ›´ ";
         Text[ chinese_traditional ] = "è®Šæ›´è‡³ ";
         Text[ arabic ] = "ÊÛííÑ Åáì ";
@@ -464,6 +497,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "S'ha canviat a ";
         Text[ finnish ] = "Muutos ";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹„à¸›à¸—à¸µà¹ˆ ";
+        Text[ czech ] = "ZmÄ›nÄ›no na ";
+        Text[ hebrew ] = "Ã„nderung zu";
+        Text[ hindi ] = "à¤•à¥‹ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ ";
     };
     String STR_CHILD_ORGCONTENT
     {
@@ -493,6 +529,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "Original";
         Text[ finnish ] = "Alkuperäinen";
         Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
+        Text[ czech ] = "PÅ¯vodnÃ­";
+        Text[ hebrew ] = "Original";
+        Text[ hindi ] = "à¤¯à¤¥à¤¾à¤°à¥à¤¥";
     };
     String STR_REJECT
     {
@@ -500,7 +539,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Reject Changes" ;
         Text [ portuguese ] = "Modificações rejeitadas" ;
         Text [ english_us ] = "Changes rejected" ;
-        Text [ portuguese_brazilian ] = "?nderung verworfen" ;
+        Text [ portuguese_brazilian ] = "Alterações rejeitadas" ;
         Text [ swedish ] = "Ändring tillbakavisad" ;
         Text [ danish ] = "Ændring forkastet" ;
         Text [ italian ] = "Modifiche non salvate" ;
@@ -509,7 +548,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Wijziging verworpen" ;
         Text[ chinese_simplified ] = "å–æ¶ˆæ›´æ”¹";
         Text[ russian ] = "Èçìåíåíèÿ îòêëîíåíû";
-        Text[ polish ] = "Zmiany odrzucono";
+        Text[ polish ] = "Odrzucono zmiany";
         Text[ japanese ] = "å¤‰æ›´ã—ãªã„";
         Text[ chinese_traditional ] = "å–æ¶ˆè®Šæ›´";
         Text[ arabic ] = "ÑİÖ ÇáÊÛííÑÇÊ";
@@ -522,6 +561,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "Els canvis s'han rebutjat";
         Text[ finnish ] = "Muutokset hylätty";
         Text[ thai ] = "à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
+        Text[ czech ] = "ZmÄ›ny zamÃ­tnuty";
+        Text[ hebrew ] = "Ã„nderung verworfen";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤…à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤ à¤•à¤¿à¤¯à¤¾";
     };
     String STR_ACCEPTED
     {
@@ -529,7 +571,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Accepted" ;
         Text [ portuguese ] = "Aceites" ;
         Text [ english_us ] = "Accepted" ;
-        Text [ portuguese_brazilian ] = "Akzeptierte" ;
+        Text [ portuguese_brazilian ] = "Aceita" ;
         Text [ swedish ] = "Accepterade" ;
         Text [ danish ] = "Accepterede" ;
         Text [ italian ] = "Accettate" ;
@@ -546,11 +588,14 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "æ¥å—çš„";
         Text[ greek ] = "Áğïäå÷üìåíá";
         Text[ korean ] = "ì ìš©ë¨";
-        Text[ turkish ] = "Kabul edilenler";
+        Text[ turkish ] = "Kabul edildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acceptat";
         Text[ finnish ] = "Hyväksytty";
         Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¹„à¸”à¹‰";
+        Text[ czech ] = "PÅ™ijato";
+        Text[ hebrew ] = "Akzeptierte";
+        Text[ hindi ] = "à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤";
     };
     String STR_REJECTED
     {
@@ -558,7 +603,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Rejected" ;
         Text [ portuguese ] = "Rejeitados" ;
         Text [ english_us ] = "Rejected" ;
-        Text [ portuguese_brazilian ] = "Abgelehnte" ;
+        Text [ portuguese_brazilian ] = "Rejeitada" ;
         Text [ swedish ] = "Tillbakavisade" ;
         Text [ danish ] = "Forkastede" ;
         Text [ italian ] = "Non salvate" ;
@@ -575,11 +620,14 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "è¢«æ‹’ç»çš„";
         Text[ greek ] = "Áğïññéğôüìåíá";
         Text[ korean ] = "ê±°ë¶€";
-        Text[ turkish ] = "Reddedilenler";
+        Text[ turkish ] = "Reddedildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rebutjat";
         Text[ finnish ] = "Hylätty";
         Text[ thai ] = "à¸›à¸à¸´à¹€à¸ªà¸˜";
+        Text[ czech ] = "OdmÃ­tnuto";
+        Text[ hebrew ] = "Abgelehnte";
+        Text[ hindi ] = "à¤…à¤¸à¥à¤µà¥€à¤•à¥ƒà¤¤";
     };
     String STR_NO_ENTRY
     {
@@ -587,7 +635,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "No Entry" ;
         Text [ portuguese ] = "Nenhum registo" ;
         Text [ english_us ] = "No Entry" ;
-        Text [ portuguese_brazilian ] = "Kein Eintrag" ;
+        Text [ portuguese_brazilian ] = "Nenhuma Entrada" ;
         Text [ swedish ] = "Ingen post" ;
         Text [ danish ] = "Intet element" ;
         Text [ italian ] = "Nessuna voce" ;
@@ -596,7 +644,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Geen item" ;
         Text[ chinese_simplified ] = "æ— æ¡ç›®";
         Text[ russian ] = "Ïóñòî";
-        Text[ polish ] = "Nie ma wpisu";
+        Text[ polish ] = "Brak wpisu";
         Text[ japanese ] = "å…¥åŠ›ãªã—";
         Text[ chinese_traditional ] = "ç„¡æ¢ç›®";
         Text[ arabic ] = "áÇ íæÌÏ ÅÏÎÇá";
@@ -609,6 +657,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "Cap entrada";
         Text[ finnish ] = "Ei merkintää";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸£à¸²à¸¢à¸à¸²à¸£";
+        Text[ czech ] = "Å½Ã¡dnÃ¡ poloÅ¾ka";
+        Text[ hebrew ] = "Kein Eintrag";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¨à¤¹à¥€à¤‚";
     };
     String STR_EMPTY
     {
@@ -616,7 +667,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "<empty>" ;
         Text [ portuguese ] = "<vazio>" ;
         Text [ english_us ] = "<empty>" ;
-        Text [ portuguese_brazilian ] = "<leer>" ;
+        Text [ portuguese_brazilian ] = "<vazio>" ;
         Text [ swedish ] = "<tom>" ;
         Text [ danish ] = "<tom>" ;
         Text [ italian ] = "<vuoto>" ;
@@ -638,6 +689,9 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ catalan ] = "<buit>";
         Text[ finnish ] = "<tyhjä>";
         Text[ thai ] = "<à¸§à¹ˆà¸²à¸‡>";
+        Text[ czech ] = "<prÃ¡zdnÃ©>";
+        Text[ hebrew ] = "<leer>";
+        Text[ hindi ] = "<à¤–à¤¾à¤²à¥€>";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -656,7 +710,7 @@ ModelessDialog RID_SCDLG_CHANGES
         File = "basbrk.bmp" ;
     };
     Text [ english_us ] = "Accept or Reject Changes" ;
-    Text [ portuguese_brazilian ] = "?nderungen akzeptieren" ;
+    Text [ portuguese_brazilian ] = "Aceitar ou Rejeitar Modificações" ;
     Text [ swedish ] = "Acceptera eller ignorera ändringar" ;
     Text [ danish ] = "Accepter eller forkast ændringerne" ;
     Text [ italian ] = "Accetta o annulla modifiche" ;
@@ -666,7 +720,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
     Text[ chinese_simplified ] = "æ¥å—æˆ–èˆå¼ƒæ›´æ”¹å†…å®¹";
     Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
-    Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
+    Text[ polish ] = "Akceptuj albo odrzuæ zmiany";
     Text[ japanese ] = "å¤‰æ›´ç®‡æ‰€ã®ç¢ºèª";
     Text[ chinese_traditional ] = "æ¥å—æˆ–æ¨æ£„è®Šæ›´å…§å®¹";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ";
@@ -674,11 +728,14 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ chinese_simplified ] = "æ¥å—æˆ–èˆå¼ƒæ›´æ”¹å†…å®¹";
     Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
     Text[ korean ] = "ë³€ê²½ ì‚¬í•­  ì ìš© ë˜ëŠ” ì·¨ì†Œ";
-    Text[ turkish ] = "Değişiklikleri kabul/redd et";
+    Text[ turkish ] = "Değişiklikleri kabul/reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta o rebutja els canvis";
     Text[ finnish ] = "Hyväksy tai hylkää muutokset";
     Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
+    Text[ czech ] = "PÅ™ijmout nebo odmÃ­tnout zmÄ›ny";
+    Text[ hebrew ] = "Ã„nderungen akzeptieren oder verwerfen";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤…à¤¥à¤µà¤¾ à¤…à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¥‹";
 };
 Menu RID_POPUP_CHANGES
 {
@@ -691,7 +748,7 @@ Menu RID_POPUP_CHANGES
             Text = "Kommentar bearbeiten..." ;
             Text [ English ] = "Edit Comment..." ;
             Text [ english_us ] = "Edit Comment..." ;
-            Text [ portuguese_brazilian ] = "Kommentar bearbeiten..." ;
+            Text [ portuguese_brazilian ] = "Editar Comentário..." ;
             Text [ swedish ] = "Redigera kommentar..." ;
             Text [ danish ] = "Rediger kommentar..." ;
             Text [ italian ] = "Modifica commento..." ;
@@ -715,6 +772,9 @@ Menu RID_POPUP_CHANGES
             Text[ catalan ] = "Edita el comentari...";
             Text[ finnish ] = "Muuta huomautusta...";
             Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™...";
+            Text[ czech ] = "Upravit poznÃ¡mku...";
+            Text[ hebrew ] = "Kommentar bearbeiten...";
+            Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
         };
         MenuItem
         {
@@ -734,7 +794,7 @@ Menu RID_POPUP_CHANGES
                         Text [ english ] = "Action" ;
                         RadioCheck = TRUE ;
                         Text [ english_us ] = "Action" ;
-                        Text [ portuguese_brazilian ] = "Aktion" ;
+                        Text [ portuguese_brazilian ] = "Ação" ;
                         Text [ swedish ] = "Åtgärd" ;
                         Text [ danish ] = "Handling" ;
                         Text [ italian ] = "Operazione" ;
@@ -757,6 +817,9 @@ Menu RID_POPUP_CHANGES
                         Text[ catalan ] = "Acció";
                         Text[ finnish ] = "Toiminto";
                         Text[ thai ] = "à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
+                        Text[ czech ] = "Akce";
+                        Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
+                        Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯";
                     };
                     MenuItem
                     {
@@ -766,7 +829,7 @@ Menu RID_POPUP_CHANGES
                         Text [ english ] = "Position" ;
                         RadioCheck = TRUE ;
                         Text [ english_us ] = "Position" ;
-                        Text [ portuguese_brazilian ] = "Position" ;
+                        Text [ portuguese_brazilian ] = "Posição" ;
                         Text [ swedish ] = "Position" ;
                         Text [ danish ] = "Placering" ;
                         Text [ italian ] = "Posizione" ;
@@ -789,6 +852,9 @@ Menu RID_POPUP_CHANGES
                         Text[ catalan ] = "Posició";
                         Text[ finnish ] = "Sijainti";
                         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+                        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+                        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+                        Text[ hindi ] = "Position";
                     };
                     MenuItem
                     {
@@ -821,6 +887,9 @@ Menu RID_POPUP_CHANGES
                         Text[ catalan ] = "Autor";
                         Text[ finnish ] = "Tekijä";
                         Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
+                        Text[ czech ] = "Autor";
+                        Text[ hebrew ] = "â€®××‘×¦×¢ ×”×¤×¢×•×œ×”â€¬";
+                        Text[ hindi ] = "à¤²à¥‡à¤–à¤•";
                     };
                     MenuItem
                     {
@@ -830,7 +899,7 @@ Menu RID_POPUP_CHANGES
                         Text [ english ] = "Date" ;
                         RadioCheck = TRUE ;
                         Text [ english_us ] = "Date" ;
-                        Text [ portuguese_brazilian ] = "Datum" ;
+                        Text [ portuguese_brazilian ] = "Data" ;
                         Text [ swedish ] = "Datum" ;
                         Text [ danish ] = "Dato" ;
                         Text [ italian ] = "Data" ;
@@ -853,6 +922,9 @@ Menu RID_POPUP_CHANGES
                         Text[ catalan ] = "Data";
                         Text[ finnish ] = "Päivämäärä";
                         Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆ";
+                        Text[ czech ] = "Datum";
+                        Text[ hebrew ] = "â€®×ª××¨×™×šâ€¬";
+                        Text[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
                     };
                     MenuItem
                     {
@@ -862,7 +934,7 @@ Menu RID_POPUP_CHANGES
                         Text [ english ] = "Comment" ;
                         RadioCheck = TRUE ;
                         Text [ english_us ] = "Description" ;
-                        Text [ portuguese_brazilian ] = "Beschreibung" ;
+                        Text [ portuguese_brazilian ] = "Descrição" ;
                         Text [ swedish ] = "Beskrivning" ;
                         Text [ danish ] = "Beskrivelse" ;
                         Text [ italian ] = "Descrizione" ;
@@ -885,11 +957,14 @@ Menu RID_POPUP_CHANGES
                         Text[ catalan ] = "Descripció";
                         Text[ finnish ] = "Kuvaus";
                         Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
+                        Text[ czech ] = "Popis";
+                        Text[ hebrew ] = "â€®×ª××•×¨â€¬";
+                        Text[ hindi ] = "à¤µà¤¿à¤µà¤°à¤£";
                     };
                 };
             };
             Text [ english_us ] = "Sorting" ;
-            Text [ portuguese_brazilian ] = "Sortiere" ;
+            Text [ portuguese_brazilian ] = "Ordenando" ;
             Text [ swedish ] = "Sortera efter" ;
             Text [ danish ] = "Sorter" ;
             Text [ italian ] = "Ordina" ;
@@ -907,14 +982,30 @@ Menu RID_POPUP_CHANGES
             Text[ chinese_simplified ] = "æ’åº";
             Text[ greek ] = "Ôáîéíüìçóç";
             Text[ korean ] = "ì •ë ¬";
-            Text[ turkish ] = "Sırala";
+            Text[ turkish ] = "Sıralama";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "S'està ordenant";
             Text[ finnish ] = "Lajitellaan";
             Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡";
+            Text[ czech ] = "Å˜azenÃ­";
+            Text[ hebrew ] = "Sortiere";
+            Text[ hindi ] = "à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¤¨à¤¾";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
