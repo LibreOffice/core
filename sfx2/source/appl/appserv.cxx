@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:57:03 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,7 +986,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_BASICIDE_APPEAR:
         {
-            rReq.Done();
             SfxViewFrame* pView = SfxViewFrame::GetFirst();
             ::rtl::OUString aBasicName = ::rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
             while ( pView )
@@ -1006,6 +1005,21 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             else
                 pView->GetFrame()->Appear();
+
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if ( pArgs && pView )
+            {
+                SfxViewShell* pViewShell = pView->GetViewShell();
+                SfxObjectShell* pObjShell = pView->GetObjectShell();
+                if ( pViewShell && pObjShell )
+                {
+                    SfxRequest aReq( SID_BASICIDE_SHOWWINDOW, SFX_CALLMODE_SYNCHRON, pObjShell->GetPool() );
+                    aReq.SetArgs( *pArgs );
+                    pViewShell->ExecuteSlot( aReq );
+                }
+            }
+
+            rReq.Done();
         }
         break;
 
