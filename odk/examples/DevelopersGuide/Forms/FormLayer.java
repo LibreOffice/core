@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormLayer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -255,7 +255,7 @@ public class FormLayer extends Object implements XPropertyChangeListener, XReset
         /** Connect to a running office that is accepting connections
 
             <p>this example assumes that the Office is already started by using following parameter:
-            "-accept=socket,host=localhost,port=8100;urp,ForceSynchronous=1,Negotiate=0;StarOffice.ServiceManager"</p>
+            "-accept=socket,host=localhost,port=2083;urp,ForceSynchronous=1,Negotiate=0;StarOffice.ServiceManager"</p>
 
             <p>Please note the <em>ForceSynchronous=1,Negotiate=0</em>. Due to threading issues, some of the samples
             herein will not work without these parameters.</p>
@@ -269,7 +269,7 @@ public class FormLayer extends Object implements XPropertyChangeListener, XReset
 
         m_xMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(
              XMultiServiceFactory.class,
-             aURLResolver.resolve( "uno:socket,host=localhost,port=8100;urp,ForceSynchronous=1,Negotiate=0;StarOffice.ServiceManager" ) );
+             aURLResolver.resolve( "uno:socket,host=localhost,port=2083;urp,ForceSynchronous=1,Negotiate=0;StarOffice.ServiceManager" ) );
     }
 
     /* ==================================================================
