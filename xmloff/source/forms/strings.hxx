@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 10:18:40 $
+ *  last change: $Author: fs $ $Date: 2002-05-30 08:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_TIME,               "Time");
     XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,      "DefaultValue");
     XMLFORM_CONSTASCII_STRING( PROPERTY_VALUE,              "Value");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,       "HiddenValue");
     XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,       "DefaultText");
     XMLFORM_CONSTASCII_STRING( PROPERTY_TEXT,               "Text");
     XMLFORM_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,    "EffectiveValue");
@@ -285,6 +286,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/09/04 10:18:40  fs
+ *  #91865# some script related strings
+ *
  *  Revision 1.6  2001/05/28 14:57:50  fs
  *  #86712# redesigned ConstAsciiString so that it's reusing an rtl_uString / added some properties constants
  *
