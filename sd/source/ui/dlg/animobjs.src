@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:27:25 $
+ *  last change: $Author: kz $ $Date: 2002-01-24 21:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,15 +1313,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ swedish ] =
         {
-            < "Vänster/överst" ; Default ; > ;
-            < "Vänster" ; Default ; > ;
-            < "Vänster/underst" ; Default ; > ;
-            < "Överst" ; Default ; > ;
+            < "Vänster/uppe" ; Default ; > ;
+            < "Till vänster" ; Default ; > ;
+            < "Vänster/nere" ; Default ; > ;
+            < "Uppe" ; Default ; > ;
             < "Centrerad" ; Default ; > ;
-            < "Underst" ; Default ; > ;
-            < "Höger/Överst" ; Default ; > ;
+            < "Nere" ; Default ; > ;
+            < "Höger/uppe" ; Default ; > ;
             < "Till höger" ; Default ; > ;
-            < "Höger/Ned" ; Default ; > ;
+            < "Höger/nere" ; Default ; > ;
         };
         StringList [ dutch ] =
         {
