@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:14:52 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
 #endif
+#include "fuhhconv.hxx"
 
 namespace sd {
 
@@ -303,6 +304,13 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
             ExecuteSlot( rReq, SfxObjectShell::GetInterface() );
             pDoc->SetSwapGraphicsMode( nOldSwapMode );
+        }
+        break;
+
+        case SID_HANGUL_HANJA_CONVERSION:
+        {
+            FuHangulHanjaConversion aFunc( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq );
+            aFunc.StartConversion( LANGUAGE_KOREAN );
         }
         break;
 
