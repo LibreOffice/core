@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 11:21:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,18 +742,20 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
         {
-            Application::EnterWait();
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xModLibContainer->loadLibrary( aOULibName );
-            Application::LeaveWait();
+            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // load dialog library (if not loaded)
         Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
         {
-            Application::EnterWait();
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xDlgLibContainer->loadLibrary( aOULibName );
-            Application::LeaveWait();
+            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // check, if library is password protected
