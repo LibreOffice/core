@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 12:56:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,15 @@
 #define STR_CHANGED_MOVE_REJECTION_WARNING      401
 #define STR_CHANGED_DELETE_REJECTION_WARNING    402
 
-#define STR_COUNT                   403
+#define STR_HF_NONE_IN_BRACKETS     403
+#define STR_HF_OF                   404
+#define STR_HF_OF_QUESTION          405
+#define STR_HF_CREATED_BY           406
+#define STR_HF_CONFIDENTIAL         407
+#define STR_HF_CUSTOMIZED           408
+#define STR_HF_CUSTOM_FOOTER        409
+
+#define STR_COUNT                   410
 
 
 #endif
