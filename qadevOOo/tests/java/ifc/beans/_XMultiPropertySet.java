@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertySet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:00 $
+ *  last change:$Date: 2003-09-08 10:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package ifc.beans;
 
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import util.ValueChanger;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyChangeEvent;
@@ -68,10 +77,6 @@ import com.sun.star.beans.XMultiPropertySet;
 import com.sun.star.beans.XPropertiesChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.lang.EventObject;
-import java.io.PrintWriter;
-import java.util.*;
-import lib.MultiMethodTest;
-import util.ValueChanger;
 
 
 /**
@@ -207,6 +212,10 @@ public class _XMultiPropertySet extends MultiMethodTest {
         // Creating listener
         oObj.addPropertiesChangeListener(testPropsNames, PClistener);
 
+        if ((testPropsAmount==1) && (testPropsNames[0].equals("none"))) {
+            testPropsAmount = 0;
+        }
+
 
         // Change one of the property to be sure, that this event was cauched.
         //Random rnd = new Random();
@@ -236,7 +245,12 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 e.printStackTrace(log);
             } // end of try-catch
         }
-        tRes.tested("addPropertiesChangeListener()", propertiesChanged);
+        if (testPropsAmount == 0) {
+            log.println("all properties are read only");
+            tRes.tested("addPropertiesChangeListener()", Status.skipped(true));
+        } else {
+            tRes.tested("addPropertiesChangeListener()", propertiesChanged);
+        }
     }
 
     /**
@@ -294,11 +308,17 @@ public class _XMultiPropertySet extends MultiMethodTest {
         requiredMethod("getPropertyValues()");
         boolean bResult = true;
 
+        if ((testPropsNames.length==1)&&(testPropsNames[0].equals("none"))) {
+            log.println("all properties are readOnly");
+            tRes.tested("setPropertyValues()",Status.skipped(true));
+            return;
+        }
+
         log.println("Changing all properties");
         Object[] gValues = oObj.getPropertyValues(testPropsNames);
         for (int i=0; i<testPropsAmount;i++) {
             Object oldValue = gValues[i];
-            Object newValue = ValueChanger.changePValue(gValues[i]);
+            Object newValue = ValueChanger.changePValue(oldValue);
             gValues[i] = newValue;
         }
 
@@ -376,7 +396,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
     * Does nothing.
     */
     protected void after() {
-        //disposeEnvironment();
+        disposeEnvironment();
     }
 }
 

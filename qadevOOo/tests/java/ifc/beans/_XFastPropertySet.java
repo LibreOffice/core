@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFastPropertySet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:01 $
+ *  last change:$Date: 2003-09-08 10:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,20 @@
 
 package ifc.beans;
 
+import java.util.Random;
+import java.util.Set;
+import java.util.Vector;
+
+import lib.MultiMethodTest;
+import lib.StatusException;
+import util.ValueChanger;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XFastPropertySet;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.uno.UnoRuntime;
-import java.util.Random;
-import java.util.Set;
-import java.util.Vector;
-import lib.MultiMethodTest;
-import lib.StatusException;
-import util.ValueChanger;
 
 /**
 * Testing <code>com.sun.star.beans.XFastPropertySet</code>
@@ -176,7 +178,7 @@ public class _XFastPropertySet extends MultiMethodTest {
         getPropsToTest(propertySetInfo);
 
         try {
-            Object gValue = oObj.getFastPropertyValue(handle);
+            oObj.getFastPropertyValue(handle);
             tRes.tested("getFastPropertyValue()",true);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Exception occured while trying to get property '"
@@ -208,10 +210,6 @@ public class _XFastPropertySet extends MultiMethodTest {
                 ((property.Attributes & PropertyAttribute.READONLY) == 0);
             boolean isNotNull =
                 ((property.Attributes & PropertyAttribute.MAYBEVOID) == 0);
-            boolean isBound =
-                ((property.Attributes & PropertyAttribute.BOUND) != 0);
-            boolean isConstr =
-                ((property.Attributes & PropertyAttribute.CONSTRAINED) != 0);
             boolean canChange = false;
             if ( isWritable && isNotNull )
                 canChange = isChangeable(handle);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XIntrospection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:00 $
+ *  last change:$Date: 2003-09-08 10:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.beans;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.XIntrospection;
 import com.sun.star.beans.XIntrospectionAccess;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.beans.XIntrospection</code>
