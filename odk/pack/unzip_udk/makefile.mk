@@ -48,6 +48,7 @@ all: ..$/misc$/deltree.txt
     +-$(RENAME) $(UDKNAME) $(ODKNAME)
     gzip -df < $(ODKDOCNAME).tar.gz | tar -xvf -
 .ENDIF
+    +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/settings$/dk.mk
 .IF "$(BUILD_SOSL)"!=""
 # for OpenOffice build rename to PRODUCT_NAME
     +-$(RENAME) $(ODKNAME) $(PRODUCT_NAME)
@@ -58,5 +59,4 @@ all: ..$/misc$/deltree.txt
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).zip >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar >& $(NULLDEV)
-    +$(MY_DELETE_RECURSIVE) $(ODKNAME)$/settings$/dk.mk
     +@echo "" > ..$/misc$/deltree.txt
