@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSheetAnnotationAnchor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:22 $
+ *  last change:$Date: 2003-09-08 11:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+
+import com.sun.star.sheet.XSheetAnnotation;
+import com.sun.star.sheet.XSheetAnnotationAnchor;
 import com.sun.star.table.CellAddress;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sheet.XSheetAnnotation;
-import com.sun.star.sheet.XSheetAnnotationAnchor;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XSheetAnnotationAnchor</code>
@@ -133,7 +134,6 @@ public class _XSheetAnnotationAnchor extends MultiMethodTest {
     * Returns <b>true</b> if this position is not null.
     */
     protected boolean check_getPosition() {
-      boolean bResult = false;
       CellAddress oCAddr = anno.getPosition();
       return  (oCAddr != null);
     }
