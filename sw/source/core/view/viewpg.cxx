@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:33:34 $
+ *  last change: $Author: ama $ $Date: 2002-04-08 14:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,7 @@ void ViewShell::PreViewPage(
     const StyleSettings& rSettings = GetWin()->GetSettings().GetStyleSettings();
     if(rSettings.GetHighContrastMode())
         aLineColor = rSettings.GetHighlightTextColor();
+    const Color& rColor = rSettings.GetFieldTextColor();
     for( nCntRow = 0; pPage && nCntRow < nRow; ++nCntRow )
     {
         aCalcPt.X() = aFreePt.X();
@@ -418,6 +419,8 @@ void ViewShell::PreViewPage(
                 continue;
             }
 
+            Rectangle aPageRect;
+
             if( pPage->IsEmptyPage() )
             {
                 Rectangle aRect( aCalcPt, rPageSize );
@@ -430,15 +433,7 @@ void ViewShell::PreViewPage(
                 if( GetOut()->GetFillColor() != aRetouche )
                     GetOut()->SetFillColor( aRetouche );
 
-                if(!nSelectedPage)
-                {
-                    Color aLine(GetOut()->GetLineColor());
-                    GetOut()->SetLineColor(aLineColor);
-                    GetOut()->DrawRect( aRect );
-                    GetOut()->SetLineColor(aLine);
-                }
-                else
-                    GetOut()->DrawRect( aRect );
+                GetOut()->DrawRect( aRect );
 
                 if( !pEmptyPgFont )
                 {
@@ -459,6 +454,7 @@ void ViewShell::PreViewPage(
                                     TEXT_DRAW_CENTER |
                                     TEXT_DRAW_CLIP );
                 GetOut()->SetFont( aOldFont );
+                aPageRect = GetOut()->LogicToPixel( aRect );
 
                 aCalcPt.X() += rPageSize.Width()+1 + aFreePt.X();
             }
@@ -473,7 +469,7 @@ void ViewShell::PreViewPage(
                 GetOut()->SetMapMode( aMapMode );
 
                 Rectangle aSVRect( GetOut()->LogicToPixel( aVisArea.SVRect() ) );
-                Rectangle aMarkRect(aSVRect);
+                aPageRect = aSVRect;
                 if( aPixRect.IsOver( aSVRect ) )
                 {
                     aSVRect.Intersection( aPixRect );
@@ -482,18 +478,39 @@ void ViewShell::PreViewPage(
                     Paint( aSVRect );
                 }
                 aCalcPt.X() += pPage->Frm().Width()+1 + aFreePt.X();
-                if(!nSelectedPage)
-                {
-                    aMarkRect = GetOut()->PixelToLogic( aMarkRect );
-                    Color aFill(GetOut()->GetFillColor());
-                    Color aLine(GetOut()->GetLineColor());
-                    GetOut()->SetFillColor(Color(COL_TRANSPARENT));
-                    GetOut()->SetLineColor(aLineColor);
-                    GetOut()->DrawRect(aMarkRect);
-                    GetOut()->SetFillColor(aFill);
-                    GetOut()->SetLineColor(aLine);
-                }
             }
+
+            Rectangle aShadow( aPageRect.Left()+2, aPageRect.Bottom()+1,
+                                aPageRect.Right()+2, aPageRect.Bottom()+2 );
+            Color aFill( GetOut()->GetFillColor() );
+            Color aLine( GetOut()->GetLineColor() );
+            GetOut()->SetFillColor( rColor );
+            GetOut()->SetLineColor( rColor );
+            aShadow = GetOut()->PixelToLogic( aShadow );
+            GetOut()->DrawRect( aShadow );
+            aShadow.Left() = aPageRect.Right() + 1;
+            aShadow.Right() = aShadow.Left() + 1;
+            aShadow.Top() = aPageRect.Top() + 2;
+            aShadow.Bottom() = aPageRect.Bottom();
+            aShadow = GetOut()->PixelToLogic( aShadow );
+            GetOut()->DrawRect( aShadow );
+            aShadow = GetOut()->PixelToLogic( aPageRect );
+            GetOut()->SetFillColor( Color( COL_TRANSPARENT ) );
+            GetOut()->DrawRect( aShadow );
+            if( !nSelectedPage )
+            {
+                aShadow.Left() = aPageRect.Right() - 1;
+                aShadow.Right() = aPageRect.Left() + 1;
+                aShadow.Top() = aPageRect.Top() + 1;
+                aShadow.Bottom() = aPageRect.Bottom() - 1;
+                aShadow = GetOut()->PixelToLogic( aShadow );
+                GetOut()->SetFillColor( Color( COL_TRANSPARENT ) );
+                GetOut()->SetLineColor( aLineColor );
+                GetOut()->DrawRect( aShadow );
+            }
+            GetOut()->SetFillColor( aFill );
+            GetOut()->SetLineColor( aLine );
+
             pPage = (SwPageFrm*)pPage->GetNext();
             nSelectedPage--;
         }
@@ -1300,6 +1317,9 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2002/03/15 07:33:34  os
+      #97978# page preview accessiblity implemented
+
       Revision 1.3  2001/05/10 08:45:09  os
       store print options at the document
 

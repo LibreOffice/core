@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:53:04 $
+ *  last change: $Author: ama $ $Date: 2002-04-08 14:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             const SwTwips nRight  = aBoth.Right();
             SwTwips nMinLeft = LONG_MAX;
             SwTwips nMaxRight= 0;
+            const nShadow = GetOut()->PixelToLogic( Size( 2, 0 ) ).Width();
             while ( pPage &&
                     !((pPage->Frm().Top()  > nBottom) ||
                         (pPage->Frm().Left() > nRight)))
@@ -1053,8 +1054,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                 {
                     if( pPage->Frm().Left() < nMinLeft )
                         nMinLeft = pPage->Frm().Left();
-                    if( pPage->Frm().Right() > nMaxRight )
-                        nMaxRight = pPage->Frm().Right();
+                    long nPageRight = pPage->Frm().Right() + nShadow;
+                    if( nPageRight > nMaxRight )
+                        nMaxRight = nPageRight;
                     //Zus. auf die Zeichenobjekte abgleichen.
                     //Einen Ofst beruecksichtigen, weil die Objekte u.U.
                     //selektiert sind und die Henkel dann hinausstehen.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-08 14:49:20 $
+ *  last change: $Author: ama $ $Date: 2002-04-08 14:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,6 +1360,32 @@ inline FASTBOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
 }
 
 
+void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
+{
+    const Color& rColor = pSh->GetWin()->GetSettings().
+                          GetStyleSettings().GetFieldTextColor();
+    Color aFill( pSh->GetOut()->GetFillColor() );
+    Color aLine( pSh->GetOut()->GetLineColor() );
+    pSh->GetOut()->SetFillColor( Color( COL_TRANSPARENT ) );
+    pSh->GetOut()->SetLineColor( rColor );
+    Rectangle aPageRect( aFrm.SVRect() );
+    pSh->GetOut()->DrawRect( aPageRect );
+    aPageRect = pSh->GetOut()->LogicToPixel( aPageRect );
+    Rectangle aShadow( aPageRect.Left()+2, aPageRect.Bottom()+1,
+                        aPageRect.Right()+2, aPageRect.Bottom()+2 );
+    pSh->GetOut()->SetFillColor( rColor );
+    aShadow = pSh->GetOut()->PixelToLogic( aShadow );
+    pSh->GetOut()->DrawRect( aShadow );
+    aShadow.Left() = aPageRect.Right() + 1;
+    aShadow.Right() = aShadow.Left() + 1;
+    aShadow.Top() = aPageRect.Top() + 2;
+    aShadow.Bottom() = aPageRect.Bottom();
+    aShadow = pSh->GetOut()->PixelToLogic( aShadow );
+    pSh->GetOut()->DrawRect( aShadow );
+    pSh->GetOut()->SetFillColor( aFill );
+    pSh->GetOut()->SetLineColor( aLine );
+}
+
 //---------------- Ausgabe fuer das BrushItem ----------------
 
 void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
@@ -1672,6 +1698,8 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             }
 
             pPage->Paint( aPaintRect );
+            if( pSh->GetWin() )
+                lcl_PaintShadow( pPage->Frm(), pSh );
             pLines->PaintLines( pSh->GetOut() );
 
             BOOL bControlExtra = FALSE;
