@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ using namespace ::com::sun::star::registry;
 
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBrowserController();
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog();
+extern "C" void SAL_CALL createRegistryInfo_OTabOrderDialog();
 
 //---------------------------------------------------------------------------------------
 
@@ -84,6 +85,7 @@ extern "C" void SAL_CALL dbi_initializeModule()
     {
         createRegistryInfo_OPropertyBrowserController();
         createRegistryInfo_OControlFontDialog();
+        createRegistryInfo_OTabOrderDialog();
         ::pcr::OModule::setResourceFilePrefix("pcr");
         s_bInit = sal_True;
     }
