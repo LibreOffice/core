@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AllMasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:42:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,7 @@
 #ifndef SD_TOOLPANEL_CONTROLS_ALL_MASTER_PAGES_SELECTOR_HXX
 #define SD_TOOLPANEL_CONTROLS_ALL_MASTER_PAGES_SELECTOR_HXX
 
-#include "MasterPagesSelector.hxx"
-
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-
-class SdDrawDocument;
+#include "MasterPagesContainerSelector.hxx"
 
 namespace sd { namespace toolpanel { namespace controls {
 
@@ -77,7 +71,7 @@ namespace sd { namespace toolpanel { namespace controls {
     to the document.
 */
 class AllMasterPagesSelector
-    : public MasterPagesSelector
+    : public MasterPagesContainerSelector
 {
 public:
     AllMasterPagesSelector (
