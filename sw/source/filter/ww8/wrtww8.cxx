@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:28:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2550,10 +2550,11 @@ void SwWW8Writer::PrepareStorage()
 
 ULONG SwWW8Writer::WriteStorage()
 {
-    // #i34818
-    SwDocShell *pDocShell = pDoc->GetDocShell();
-    SwEditShell *pEditShell = pDocShell->GetFEShell();
-    pEditShell->CalcLayout();
+    // #i34818# #120099# - update layout (if present), for SwWriteTable
+    ViewShell* pViewShell = NULL;
+    pDoc->GetEditShell( &pViewShell );
+    if( pViewShell != NULL )
+        pViewShell->CalcLayout();
 
     long nMaxNode = pDoc->GetNodes().Count();
     ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, pDoc->GetDocShell() );
