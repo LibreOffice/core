@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mtg $ $Date: 2001-02-08 16:03:21 $
+#   last change: $Author: mtg $ $Date: 2001-02-16 09:29:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=sw
 TARGET=swg
 
 AUTOSEG=true
-ENABLE_EXCEPTIONS=TRUE
+#ENABLE_EXCEPTIONS=TRUE
 
 PROJECTPCH=core_pch
 PDBTARGET=core_pch
@@ -84,26 +84,6 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        rdcont.cxx \
-        rdflds.cxx \
-        rdfmts.cxx \
-        rdhnt.cxx \
-        rdmisc.cxx \
-        rdnds.cxx \
-        rdnum.cxx \
-        rdpage.cxx \
-        rdswg.cxx \
-        rdtox.cxx \
-        swgpar.cxx \
-        swgstr.cxx \
-        sw2block.cxx \
-        swblocks.cxx 	\
-        SwXMLBlockImport.cxx 	\
-        SwXMLBlockExport.cxx 	\
-        SwXMLBlockListContext.cxx 	\
-        SwXMLTextBlocks.cxx
-
 SLOFILES =  \
         $(SLO)$/rdcont.obj \
         $(SLO)$/rdflds.obj \
@@ -120,12 +100,18 @@ SLOFILES =  \
         $(SLO)$/sw2block.obj \
         $(SLO)$/swblocks.obj	\
         $(SLO)$/SwXMLBlockImport.obj	\
+        $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockListContext.obj	\
         $(SLO)$/SwXMLTextBlocks.obj	
 
 EXCEPTIONSFILES = \
-        $(SLO)$/swblocks.obj
+        $(SLO)$/swblocks.obj	\
+        $(SLO)$/SwXMLBlockImport.obj	\
+        $(SLO)$/SwXMLSectionList.obj	\
+        $(SLO)$/SwXMLBlockExport.obj	\
+        $(SLO)$/SwXMLBlockListContext.obj	\
+        $(SLO)$/SwXMLTextBlocks.obj
 
 # --- Tagets -------------------------------------------------------
 
