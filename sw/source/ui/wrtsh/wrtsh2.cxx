@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,9 @@
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-
+#ifndef _SW_DROPDOWNFIELDDIALOG_HXX
+#include <DropDownFieldDialog.hxx>
+#endif
 /*------------------------------------------------------------------------
         Beschreibung:
 ------------------------------------------------------------------------*/
@@ -235,10 +237,15 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
         pTmp->PushCrsr();
 
         BOOL bCancel = FALSE;
+        ByteString aDlgPos;
         for( USHORT i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
-            bCancel = StartInputFldDlg( pTmp->GetField( i ), TRUE );
+            SwField* pField = pTmp->GetField( i );
+            if(pField->GetTyp()->Which() == RES_DROPDOWN)
+                bCancel = StartDropDownFldDlg( pField, TRUE, &aDlgPos );
+            else
+                bCancel = StartInputFldDlg( pField, TRUE, &aDlgPos);
 
             // Sonst Updatefehler bei Multiselektion:
             pTmp->GetField( i )->GetTyp()->UpdateFlds();
@@ -257,21 +264,43 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
 
 
 
-BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton )
+BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton, ByteString* pWindowState )
 {
 //JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
 //              das TopWindow der Application benutzt werden.
 //  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwFldInputDlg* pDlg = new SwFldInputDlg( NULL, *this, pFld, bNextButton );
+    if(pWindowState && pWindowState->Len())
+        pDlg->SetWindowState(*pWindowState);
     BOOL bRet = RET_CANCEL == pDlg->Execute();
+    if(pWindowState)
+        *pWindowState = pDlg->GetWindowState();
 
     delete pDlg;
     GetWin()->Update();
     return bRet;
 }
+/* -----------------17.06.2003 10:18-----------------
 
-
+ --------------------------------------------------*/
+BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
+{
+    sw::DropDownFieldDialog* pDlg = new sw::DropDownFieldDialog( NULL, *this, pFld, bNextButton );
+    if(pWindowState && pWindowState->Len())
+        pDlg->SetWindowState(*pWindowState);
+    USHORT nRet = pDlg->Execute();
+    if(pWindowState)
+        *pWindowState = pDlg->GetWindowState();
+    delete pDlg;
+    BOOL bRet = RET_CANCEL == nRet;
+    GetWin()->Update();
+    if(RET_YES == nRet)
+    {
+        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SFX_CALLMODE_ASYNCHRON);
+    }
+    return bRet;
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: Verzeichnis einfuegen Selektion loeschen
@@ -384,6 +413,9 @@ void SwWrtShell::ClickToField( const SwField& rFld, USHORT nFilter )
         if( ((SwSetExpField&)rFld).GetInputFlag() )
             StartInputFldDlg( (SwField*)&rFld, FALSE );
         break;
+    case RES_DROPDOWN :
+        StartDropDownFldDlg( (SwField*)&rFld, FALSE );
+    break;
     }
 
     bIsInClickToEdit = FALSE;
