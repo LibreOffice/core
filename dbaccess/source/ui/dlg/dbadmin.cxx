@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 09:32:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 10:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_THOUSANDSDELIMITER, ::rtl::OUString::createFromAscii("ThousandDelimiter")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, ::rtl::OUString::createFromAscii("ShowDeleted")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, ::rtl::OUString::createFromAscii("SystemDriverSettings")));
 
     // enable an apply button
     EnableApplyButton(sal_True);
@@ -2284,6 +2285,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/02/07 09:32:15  fs
+ *  renamed JDBCDRV to JavaDriverClass
+ *
  *  Revision 1.33  2001/02/05 14:00:08  fs
  *  #83430# applyChanges / isApplyable
  *
