@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:39:30 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 17:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ package com.sun.star.uno;
  * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
  * In special cases it is necessary to have an explicit any.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2000-11-08 15:39:30 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-01-16 17:49:37 $
  * @author      Kay Ramme
  * @since       UDK1.0
  */
@@ -77,7 +77,7 @@ public class Any {
      * <p>
      * @see #getInterface
      */
-    protected Class  _zInterface;
+    protected Type  _type;
 
     /**
      * The data of the any.
@@ -92,10 +92,42 @@ public class Any {
      * <p>
      * @param   zInterface  the type of the any.
      * @param   object      the data of the any.
+     * @deprecated as of UDK 2.0
      */
     public Any(Class zInterface, Object object) {
-        _zInterface = zInterface;
-        _object     = object;
+        try {
+            _type   = new Type(zInterface);
+        }
+        catch(Throwable throwable) { // can not happen!
+            System.err.println(getClass().getName() + ".<init> - unexpected exception:" + throwable);
+        }
+
+        _object = object;
+    }
+
+    public Any(Type type, Object object) {
+        _type   = type;
+        _object = object;
+    }
+
+    /**
+     * Gets the type of the any.
+     * <p>
+     * @deprecated as of UDK 2.0
+     * <p>
+     * @return   the type of the any.
+     */
+    public Class getInterface() {
+        Class zClass = null;
+
+        try {
+            zClass = _type.getDescription();
+        }
+        catch(ClassNotFoundException classNotFoundException) { // can not happen
+            System.err.println(getClass().getName() + ".getInterface - unexpected exception:" + classNotFoundException);
+        }
+
+        return zClass;
     }
 
     /**
@@ -103,8 +135,8 @@ public class Any {
      * <p>
      * @return   the type of the any.
      */
-    public Class getInterface() {
-        return _zInterface;
+    public Type getType() {
+        return _type;
     }
 
     /**
