@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-26 07:34:29 $
+ *  last change: $Author: cl $ $Date: 2002-10-02 15:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #endif
 #include "exporter.hxx"
 #include "Base64Codec.hxx"
+#include "zip.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -198,19 +199,156 @@ PageEntry::PageEntry()
 }
 
 
-static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, Reference< XInputStream > xInput, OUString aName )
+static void encodeFile( SvStream* pSourceStream, Reference< XOutputStream >& xOutputStream ) throw( ::com::sun::star::uno::Exception )
 {
-    Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
-    Reference< XNamed > xNamed( xSink, UNO_QUERY );
-    Reference< XChild > xChild( xSink, UNO_QUERY );
-
-    if( xSink.is() && xNamed.is() && xChild.is() )
+    if( pSourceStream && xOutputStream.is() )
     {
-        xChild->setParent( xRootFolder );
-        xNamed->setName( aName );
-        xSink->setInputStream( xInput );
+        pSourceStream->Seek(STREAM_SEEK_TO_END);
+        sal_Int32 nLen = pSourceStream->Tell();
+        pSourceStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+        if( 0 != pSourceStream->GetError() )
+            throw IOException();
+
+        sal_Int32 nBufferSize = 3*1024; // !!! buffer size must be a factor of 3 for base64 to work
+        Sequence< sal_Int8 > aInBuffer( nBufferSize < nLen ? nBufferSize : nLen );
+        void* pInBuffer = aInBuffer.getArray();
+
+        Sequence< sal_Int8 > aOutBuffer;
+
+        while( nLen )
+        {
+            sal_Int32 nRead = pSourceStream->Read( pInBuffer, aInBuffer.getLength() );
+
+            if( (0 != pSourceStream->GetError()) || (0 == nRead) )
+                throw IOException();
+
+            if( nRead < aInBuffer.getLength() )
+            {
+                aInBuffer.realloc( nRead );
+                pInBuffer = aInBuffer.getArray();
+            }
+
+            nLen -= nRead;
+
+            rtl::OUStringBuffer aStrBuffer;
+            Base64Codec::encodeBase64( aStrBuffer, aInBuffer );
+
+            sal_Int32 nCount = aStrBuffer.getLength();
+
+            if( aOutBuffer.getLength() != nCount )
+                aOutBuffer.realloc( nCount );
+
+            sal_Int8* pBytes = aOutBuffer.getArray();
+            const sal_Unicode* pUnicode = aStrBuffer.getStr();
+
+            while( nCount-- )
+            {
+                // since base64 is always ascii, we can cast safely
+                *pBytes++ = static_cast<sal_Int8>(*pUnicode++);
+            }
+
+            xOutputStream->writeBytes( aOutBuffer );
+        }
     }
 }
+
+static ByteString convertString( OUString aInput )
+{
+    ByteString aRet( aInput.getStr() , RTL_TEXTENCODING_UTF8 );
+    aRet.SearchAndReplaceAll( '\r', ' ' );
+    aRet.SearchAndReplaceAll( '\n', ' ' );
+
+    return aRet;
+}
+
+static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, const rtl::OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
+{
+    ByteString aInfo;
+
+    const sal_Char* pNewLine = "\r\n";
+    OUString aTemp;
+
+    Reference< XDocumentInfoSupplier > xInfoSup( xDoc, UNO_QUERY );
+    Reference< XPropertySet > xDocInfo( xInfoSup->getDocumentInfo(), UNO_QUERY );
+
+    xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Title"))) >>= aTemp;
+    if( 0 == aTemp.getLength() )
+    {
+        sal_Int32 nPos1 = rURL.lastIndexOf( (sal_Unicode)'/' );
+        if( -1 != nPos1 )
+        {
+            sal_Int32 nPos2 = rURL.lastIndexOf( (sal_Unicode)'.' );
+            if( nPos2 > nPos1 )
+            {
+                aTemp = rURL.copy( nPos1 + 1, nPos2 - nPos1 - 1 );
+            }
+            else
+            {
+                aTemp = rURL.copy( nPos1 + 1 );
+            }
+        }
+        else
+        {
+            aTemp = rURL;
+        }
+    }
+
+    aInfo.Append( "SlideSetName: " );
+    aInfo.Append( convertString( aTemp ) );
+    aInfo.Append( pNewLine );
+
+    xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Author"))) >>= aTemp;
+
+    aInfo.Append( "PresenterName: " );
+    aInfo.Append( convertString( aTemp ) );
+    aInfo.Append( pNewLine );
+
+    vector< PageEntry* >::iterator aIter( rPageEntries.begin() );
+    vector< PageEntry* >::iterator aEnd( rPageEntries.end() );
+    while( aIter != aEnd )
+    {
+        PageEntry* pEntry = (*aIter++);
+
+        aInfo.Append( "slide: " );
+        aInfo.Append( convertString( pEntry->getName() ) );
+        aInfo.Append( pNewLine );
+
+        aInfo.Append( "type: gif");
+        aInfo.Append( pNewLine );
+
+        aInfo.Append( "url: " );
+        aInfo.Append( convertString( pEntry->getURL() ) );
+        aInfo.Append( pNewLine );
+
+        if( pEntry->getTitle().getLength() )
+        {
+            aInfo.Append( "text: " );
+            aInfo.Append( convertString( pEntry->getTitle() ) );
+            aInfo.Append( pNewLine );
+        }
+
+        if( pEntry->getNotes().getLength() )
+        {
+            aInfo.Append( "notes: " );
+            aInfo.Append( convertString( pEntry->getNotes() ) );
+            aInfo.Append( pNewLine );
+        }
+    }
+
+    utl::TempFile aInfoFile;
+    aInfoFile.EnableKillingFile();
+
+    SvStream* pInfoFileStream = aInfoFile.GetStream( STREAM_WRITE );
+
+    pInfoFileStream->Write( aInfo.GetBuffer(), aInfo.Len() );
+    pInfoFileStream->Seek( 0 );
+
+    if(!rZipFile.addFile( *pInfoFileStream, ByteString( RTL_CONSTASCII_STRINGPARAM("slides.txt") ) ))
+        throw IOException();
+}
+
+#define PLACEWARE_DEBUG 1
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
 {
@@ -226,186 +364,67 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
     Reference< XDrawPage > xDrawPage;
 
+#ifndef PLACEWARE_DEBUG
     utl::TempFile aFile;
     aFile.EnableKillingFile();
-
-//  SvFileStream aFile( OUString( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") ), STREAM_TRUNC|STREAM_WRITE|STREAM_READ );
+    SvStream* pZipFileStream = aFile.GetStream( STREAM_WRITE|STREAM_READ );
+    OUString aURL( aFile.GetURL() );
+#else
+    SvFileStream aFile( OUString( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") ), STREAM_TRUNC|STREAM_WRITE|STREAM_READ );
+    SvStream* pZipFileStream = &aFile;
+    OUString aURL( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") );
+#endif
 
     vector< PageEntry* > aPageEntries;
 
     // Create new package...
     try
     {
-        Reference< XInputStream > xInput;
+        ZipFile aZipFile(*pZipFileStream);
 
-        OUString aURL( aFile.GetURL() );
-//      OUString aURL( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") );
-        Sequence< Any > aArguments( 1 );
-        aArguments[ 0 ] <<= aURL;
+        // export slides as gifs and collect information for slides
 
-        Reference< XHierarchicalNameAccess > xIfc(
-            mxMSF->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
-                aArguments ), UNO_QUERY );
-
-        Reference< XSingleServiceFactory > xFactory( xIfc, UNO_QUERY );
-        Reference< XPropertySet > xZipProperties( xFactory, UNO_QUERY );
-
-        if ( xZipProperties.is() )
+        const sal_Int32 nPageCount = xDrawPages->getCount();
+        sal_Int32 nPage;
+        for( nPage = 0; nPage < nPageCount; nPage++)
         {
-            try
-            {
-                xZipProperties->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("UseManifest") ), makeAny( (sal_Bool)sal_False ) );
-            }
-            catch( Exception& )
-            {
-            }
+            xDrawPages->getByIndex(nPage) >>= xDrawPage;
 
-            // get root zip folder
-            Reference< XInterface > xRootFolder;
-            OUString szRootFolder( RTL_CONSTASCII_USTRINGPARAM("/") );
-            xIfc->getByHierarchicalName( szRootFolder ) >>= xRootFolder;
+            if( !xDrawPage.is() )
+                continue;
 
-            // export pages
-            const sal_Int32 nPageCount = xDrawPages->getCount();
-            sal_Int32 nPage;
-            for( nPage = 0; nPage < nPageCount; nPage++)
-            {
-                xDrawPages->getByIndex(nPage) >>= xDrawPage;
+            PageEntry* pEntry = exportPage( xDrawPage );
+            aPageEntries.push_back( pEntry );
 
-                if( !xDrawPage.is() )
-                    continue;
-
-                PageEntry* pEntry = exportPage( xDrawPage );
-                aPageEntries.push_back( pEntry );
-
-                OUString aName( RTL_CONSTASCII_USTRINGPARAM("i") );
-                aName += OUString::valueOf( nPage );
-                aName += OUString( RTL_CONSTASCII_USTRINGPARAM(".gif") );
-                pEntry->setURL( aName );
-                xInput = new utl::OSeekableInputStreamWrapper( new SvFileStream(pEntry->getTempURL(), STREAM_READ ), true );
-
-                addFile( xRootFolder, xFactory, xInput, aName );
-            }
-
-            ByteString aInfo;
-
-            const sal_Char* pNewLine = "\r\n";
-            OUString aTemp;
-
-//
-            Reference< XDocumentInfoSupplier > xInfoSup( xDoc, UNO_QUERY );
-            Reference< XPropertySet > xDocInfo( xInfoSup->getDocumentInfo(), UNO_QUERY );
-
-            xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Title"))) >>= aTemp;
-            if( 0 == aTemp.getLength() )
-            {
-                sal_Int32 nPos1 = rURL.lastIndexOf( (sal_Unicode)'/' );
-                if( -1 != nPos1 )
-                {
-                    sal_Int32 nPos2 = rURL.lastIndexOf( (sal_Unicode)'.' );
-                    if( nPos2 > nPos1 )
-                    {
-                        aTemp = rURL.copy( nPos1 + 1, nPos2 - nPos1 - 1 );
-                    }
-                    else
-                    {
-                        aTemp = rURL.copy( nPos1 + 1 );
-                    }
-                }
-                else
-                {
-                    aTemp = rURL;
-                }
-            }
-
-            aInfo.Append( "SlideSetName: " );
-            aInfo.Append( ByteString( aTemp.getStr() , RTL_TEXTENCODING_UTF8 ) );
-            aInfo.Append( pNewLine );
-
-            xDocInfo->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Author"))) >>= aTemp;
-
-            aInfo.Append( "PresenterName: " );
-            aInfo.Append( ByteString( aTemp.getStr() , RTL_TEXTENCODING_UTF8 ) );
-            aInfo.Append( pNewLine );
-
-            vector< PageEntry* >::iterator aIter = aPageEntries.begin();
-            vector< PageEntry* >::iterator aEnd = aPageEntries.end();
-            while( aIter != aEnd )
-            {
-                PageEntry* pEntry = (*aIter++);
-
-                aInfo.Append( "slide: " );
-
-                {
-                    UniString aTemp( pEntry->getName() );
-                    aInfo.Append( ByteString( aTemp , RTL_TEXTENCODING_UTF8 ) );
-                    aInfo.Append( pNewLine );
-                }
-
-                aInfo.Append( "type: gif");
-                aInfo.Append( pNewLine );
-
-                {
-                    UniString aTemp( pEntry->getURL() );
-                    aInfo.Append( "url: " );
-                    aInfo.Append( ByteString( aTemp, RTL_TEXTENCODING_UTF8 ) );
-                    aInfo.Append( pNewLine );
-                }
-                if( pEntry->getTitle().getLength() )
-                {
-                    aInfo.Append( "text: " );
-                    aInfo.Append( ByteString( UniString( pEntry->getTitle() ), RTL_TEXTENCODING_UTF8 ) );
-                    aInfo.Append( pNewLine );
-                }
-
-                if( pEntry->getNotes().getLength() )
-                {
-                    aInfo.Append( "notes: " );
-                    aInfo.Append( ByteString( UniString( pEntry->getNotes() ), RTL_TEXTENCODING_UTF8 ) );
-                    aInfo.Append( pNewLine );
-                }
-            }
-
-            utl::TempFile aInfoFile;
-            aInfoFile.EnableKillingFile();
-
-            SvStream* pInfoFileStream = aInfoFile.GetStream( STREAM_WRITE );
-
-            pInfoFileStream->Write( aInfo.GetBuffer(), aInfo.Len() );
-
-            xInput = new utl::OSeekableInputStreamWrapper( pInfoFileStream );
-
-            OUString aName( RTL_CONSTASCII_USTRINGPARAM("slides.txt") );
-            addFile( xRootFolder, xFactory, xInput, aName );
-
-            Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
-            if( xBatch.is() )
-                xBatch->commitChanges();
-
-            xInput = new utl::OSeekableInputStreamWrapper( aFile.GetStream( STREAM_READ ) );
-//          xInput = new utl::OSeekableInputStreamWrapper( aFile );
-
-            const sal_Int32 nLen = xInput->available();
-            Sequence< sal_Int8 > aSeq( nLen );
-            xInput->readBytes( aSeq, nLen );
-
-            rtl::OUStringBuffer aStrBuffer;
-            Base64Codec::encodeBase64( aStrBuffer, aSeq );
-
-            sal_Int32 nCount = aStrBuffer.getLength();
-            aSeq.realloc( nCount );
-            sal_Int8* pBytes = aSeq.getArray();
-            const sal_Unicode* pUnicode = aStrBuffer.getStr();
-
-            while( nCount-- )
-            {
-                *pBytes++ = (sal_Int8)(*pUnicode++);
-            }
-
-            xOutputStream->writeBytes( aSeq );
+            OUString aName( RTL_CONSTASCII_USTRINGPARAM("i") );
+            aName += OUString::valueOf( nPage );
+            aName += OUString( RTL_CONSTASCII_USTRINGPARAM(".gif") );
+            pEntry->setURL( aName );
         }
+
+        // create the slide.txt file
+
+        createSlideFile( xDoc, aZipFile, rURL, aPageEntries );
+
+        // add gifs to zip
+        vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
+        vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
+        while( aIter != aEnd )
+        {
+            PageEntry* pEntry = (*aIter++);
+
+            SvFileStream aStream(pEntry->getTempURL(), STREAM_READ );
+            UniString aTemp( pEntry->getURL() );
+
+            if( !aZipFile.addFile( aStream, ByteString( aTemp, RTL_TEXTENCODING_UTF8 ) ) )
+                throw IOException();
+        }
+
+        if(!aZipFile.close())
+            throw IOException();
+
+        encodeFile( pZipFileStream, xOutputStream );
+
     }
     catch ( RuntimeException const & )
     {
@@ -415,7 +434,6 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     {
         return sal_False;
     }
-
 
     return sal_True;
 }
