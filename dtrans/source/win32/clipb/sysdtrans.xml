@@ -33,13 +33,11 @@
 <RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
 
 <Type>   com.sun.star.datatransfer.clipboard.XClipboardEx   </Type>
-<Type>   com.sun.star.datatransfer.clipboard.XFlushableClipboard</Type>
 <Type>   com.sun.star.datatransfer.XTransferable            </Type>
 <Type>   com.sun.star.datatransfer.XTransferableEx          </Type>
 <Type>   com.sun.star.datatransfer.clipboard.XClipboardOwner</Type>
 <Type>   com.sun.star.datatransfer.clipboard.XClipboardListener</Type>
 <Type>   com.sun.star.datatransfer.clipboard.XClipboardNotifier</Type>
-<Type>   com.sun.star.datatransfer.clipboard.RenderingCapabilities </Type>
 <Type>   com.sun.star.datatransfer.XTransferDataAccess      </Type>
 <Type>   com.sun.star.lang.XComponent                       </Type>
 <Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
