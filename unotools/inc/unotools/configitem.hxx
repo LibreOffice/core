@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 16:29:51 $
+ *  last change: $Author: os $ $Date: 2001-02-12 10:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@ namespace com{ namespace sun{ namespace star{
 //-----------------------------------------------------------------------------
 namespace utl
 {
+#define CONFIG_MODE_IMMEDIATE_UPDATE    0x00
+#define CONFIG_MODE_DELAYED_UPDATE      0x01
+
     class ConfigChangeListener_Impl;
     class ConfigManager;
     class ConfigItem
@@ -108,13 +111,14 @@ namespace utl
             sal_Bool                    bHasChangedProperties   : 1; //call XChangesBatch::Commit() if any changes were notified
 
             sal_Int16                   nInValueChange;
+            sal_Int16                   nMode;
             ConfigItem();//
             void                    RemoveListener();
             void                    CallNotify(
                                 const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
         protected:
-            ConfigItem(const rtl::OUString rSubTree);
+            ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
             void                    SetModified() {bIsModified = sal_True;}
@@ -161,6 +165,8 @@ namespace utl
             virtual void            Commit();
 
             sal_Bool                IsInValueChange() const {return nInValueChange > 0;}
+
+            sal_Int16               GetMode() const {return nMode;}
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 16:30:25 $
+ *  last change: $Author: os $ $Date: 2001-02-12 10:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,12 +226,13 @@ void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(Run
 /* -----------------------------29.08.00 12:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-ConfigItem::ConfigItem(const OUString rSubTree ) :
+ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
     pManager(ConfigManager::GetConfigManager()),
     sSubTree(rSubTree),
     bIsModified(sal_False),
     bHasChangedProperties(sal_False),
-    nInValueChange(0)
+    nInValueChange(0),
+    nMode(nSetMode)
 {
     xHierarchyAccess = pManager->AddConfigItem(*this);
 }
@@ -243,7 +244,8 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     sSubTree(rSubTree),
     bIsModified(sal_False),
     nInValueChange(0),
-    bHasChangedProperties(sal_False)
+    bHasChangedProperties(sal_False),
+    nMode(0)
 {
     xHierarchyAccess = pManager->AddConfigItem(*this);
 }
