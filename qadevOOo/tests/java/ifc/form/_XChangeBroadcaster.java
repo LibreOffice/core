@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChangeBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:03 $
+ *  last change:$Date: 2003-02-27 11:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public class _XChangeBroadcaster extends MultiMethodTest {
     */
     private void shortWait() {
         try {
-            Thread.sleep(200) ;
+            Thread.sleep(2000) ;
         } catch (InterruptedException e) {
             log.println("While waiting :" + e) ;
         }
