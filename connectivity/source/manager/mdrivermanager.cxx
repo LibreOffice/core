@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 11:42:41 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,22 +113,18 @@ void throwNoSuchElementException() throw(NoSuchElementException)
 //==========================================================================
 //= ODriverEnumeration
 //==========================================================================
-class ODriverEnumeration : public ::cppu::ImplHelper1< XEnumeration >
+class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
 
     DECLARE_STL_VECTOR(OSDBCDriverManager::SdbcDriver, Drivers);
     Drivers             m_aDrivers;
-    oslInterlockedCount m_refCount;
     sal_Int32           m_nPos;
 
-    ~ODriverEnumeration();
+protected:
+    virtual ~ODriverEnumeration();
 public:
     ODriverEnumeration(const Drivers& _rDriverSequence);
-
-// XInterface
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
 // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements( ) throw(RuntimeException);
@@ -146,19 +142,6 @@ ODriverEnumeration::ODriverEnumeration(const Drivers& _rDriverSequence)
 ODriverEnumeration::~ODriverEnumeration()
 {
 }
-
-//--------------------------------------------------------------------------
-void SAL_CALL ODriverEnumeration::acquire() throw(::com::sun::star::uno::RuntimeException)
-{
-    osl_incrementInterlockedCount(&m_refCount);
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL ODriverEnumeration::release() throw(::com::sun::star::uno::RuntimeException)
-{
-    osl_decrementInterlockedCount(&m_refCount);
-}
-
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  ) throw(RuntimeException)
 {
@@ -322,19 +305,6 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
 }
-
-//--------------------------------------------------------------------------
-void SAL_CALL OSDBCDriverManager::acquire() throw(::com::sun::star::uno::RuntimeException)
-{
-    osl_incrementInterlockedCount(&m_refCount);
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL OSDBCDriverManager::release() throw(::com::sun::star::uno::RuntimeException)
-{
-    osl_decrementInterlockedCount(&m_refCount);
-}
-
 //--------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnection( const ::rtl::OUString& _rURL ) throw(SQLException, RuntimeException)
 {
@@ -401,7 +371,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    return (m_aDriversBS.size() + m_aDriversRT.size()) != 0;
+    return !(m_aDriversBS.empty() && m_aDriversRT.empty());
 }
 
 //--------------------------------------------------------------------------
@@ -468,7 +438,7 @@ void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName,
     {
         Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
         if (xNewDriver.is())
-            m_aDriversRT[_rName] = xNewDriver;
+            m_aDriversRT.insert(RuntimeDrivers::value_type(_rName, xNewDriver));
         else
             throw IllegalArgumentException();
     }
@@ -480,11 +450,11 @@ void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName,
 void SAL_CALL OSDBCDriverManager::revokeObject( const ::rtl::OUString& _rName ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
+    RuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
-    m_aDriversRT.erase(_rName);
+    m_aDriversRT.erase(aSearch); // we already have the iterator so we could use it
 }
 
 //--------------------------------------------------------------------------
