@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-25 14:48:13 $
+ *  last change: $Author: dbo $ $Date: 2000-09-25 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,14 +167,14 @@ inline E * Sequence< E >::getArray()
 template< class E >
 inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 {
-    OSL_ENSURE( nIndex < getLength(), "### illegal index of sequence!" );
+    OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
     return getArray()[ nIndex ];
 }
 //__________________________________________________________________________________________________
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 {
-    OSL_ENSURE( nIndex < getLength(), "### illegal index of sequence!" );
+    OSL_ENSURE( nIndex >= 0 && nIndex < getLength(), "### illegal index of sequence!" );
     return getConstArray()[ nIndex ];
 }
 //__________________________________________________________________________________________________
