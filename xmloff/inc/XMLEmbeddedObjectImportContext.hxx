@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-27 11:04:33 $
+ *  last change: $Author: mib $ $Date: 2002-10-17 09:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ class XMLEmbeddedObjectImportContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler > xHandler;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XComponent > xComp;
 
     ::rtl::OUString sFilterService;
     // #100592#
