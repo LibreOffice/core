@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
+ *  last change: $Author: kso $ $Date: 2001-06-18 08:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,6 +1029,13 @@ Reference< XContent > SAL_CALL Content::createNewContent( const ContentInfo& Inf
 // virtual
 OUString Content::getParentURL()
 {
+    // <scheme>://              -> ""
+    // <scheme>://foo           -> ""
+    // <scheme>://foo/          -> ""
+    // <scheme>://foo/bar       -> <scheme>://foo/
+    // <scheme>://foo/bar/      -> <scheme>://foo/
+    // <scheme>://foo/bar/abc   -> <scheme>://foo/bar/
+
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
@@ -1038,15 +1045,15 @@ OUString Content::getParentURL()
         nPos = aURL.lastIndexOf( '/', nPos );
     }
 
-    if ( nPos != -1 )
-    {
-        OUString aParentURL = aURL.copy( 0, nPos );
-        return aParentURL;
-    }
+    sal_Int32 nPos1 = aURL.lastIndexOf( '/', nPos );
+    if ( nPos1 != -1 )
+        nPos1 = aURL.lastIndexOf( '/', nPos1 );
 
-    return OUString();
+    if ( nPos1 == -1 )
+        return OUString();
+
+    return OUString( aURL.copy( 0, nPos + 1 ) );
 }
-
 
 //=========================================================================
 //
