@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 15:00:15 $
+ *  last change: $Author: os $ $Date: 2001-03-13 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 #include <list>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 class SwView;
 //---------------------------------------------------------------------------------------------------------------------
@@ -86,6 +89,8 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper2
     ::com::sun::star::lang::XEventListener
 >
 {
+    ::osl::Mutex                     m_aMutex;
+
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
 

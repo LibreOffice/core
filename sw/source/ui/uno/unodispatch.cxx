@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 14:58:17 $
+ *  last change: $Author: os $ $Date: 2001-03-13 10:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
         throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     Reference< XDispatch> xResult;
     // create some dispatch ...
     if(!aURL.Complete.compareToAscii(cURLStart, 23))
@@ -163,7 +163,7 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
 Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
     const Sequence< DispatchDescriptor >& aDescripts ) throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     Sequence< Reference< XDispatch> > aReturn(aDescripts.getLength());
     Reference< XDispatch>* pReturn = aReturn.getArray();
     const DispatchDescriptor* pDescripts = aDescripts.getConstArray();
@@ -180,7 +180,7 @@ Sequence< Reference< XDispatch > > SwXDispatchProviderInterceptor::queryDispatch
 Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
         throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     return m_xSlaveDispatcher;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -189,7 +189,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchP
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
     const Reference< XDispatchProvider >& xNewDispatchProvider ) throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -198,7 +198,7 @@ void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
 Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
         throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     return m_xMasterDispatcher;
 }
 /*-- 07.11.00 13:25:52---------------------------------------------------
@@ -207,7 +207,7 @@ Reference< XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatch
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
     const Reference< XDispatchProvider >& xNewSupplier ) throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     m_xMasterDispatcher = xNewSupplier;
 }
 /*-- 07.11.00 13:25:53---------------------------------------------------
@@ -216,7 +216,7 @@ void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
 void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
     throw(RuntimeException)
 {
-    OGuard aGuard(Application::GetSolarMutex());
+    OGuard aGuard(m_aMutex);
     if (m_xIntercepted.is())
     {
         m_xIntercepted->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
