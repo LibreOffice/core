@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:47:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,10 +826,10 @@ bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const Sc
         {
             // *** formula results in a cell range ***
 
-            USHORT nTab = aSource.aStart.Tab();
-            for( USHORT nCol = aSource.aStart.Col(), nEndCol = aSource.aEnd.Col(); nCol <= nEndCol; ++nCol )
+            SCTAB nTab = aSource.aStart.Tab();
+            for( SCCOL nCol = aSource.aStart.Col(), nEndCol = aSource.aEnd.Col(); nCol <= nEndCol; ++nCol )
             {
-                for( USHORT nRow = aSource.aStart.Row(), nEndRow = aSource.aEnd.Row(); nRow <= nEndRow; ++nRow )
+                for( SCROW nRow = aSource.aStart.Row(), nEndRow = aSource.aEnd.Row(); nRow <= nEndRow; ++nRow )
                 {
                     TypedStrData* pData = new TypedStrData( GetDocument(), nCol, nRow, nTab, TRUE );
                     lclInsertStringToCollection( rStrColl, pData, bSortList );
@@ -1027,7 +1027,7 @@ void ScValidationDataList::CompileXML()
 }
 
 void ScValidationDataList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz )
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     DBG_ERROR("ScValidationDataList::UpdateReference");
 }
