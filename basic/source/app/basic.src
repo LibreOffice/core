@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 11:49:22 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,41 +142,30 @@ ModalDialog IDD_ABOUT_DIALOG {
 
 ModalDialog IDD_TT_ABOUT_DIALOG {
     Pos = MAP_APPFONT( 58, 17 );
-    Size = MAP_APPFONT( 155, 106 );
+    Size = MAP_APPFONT( 120, 81 );
     SVLook = TRUE;
+    MOVEABLE = TRUE;
+    TEXT = "About OpenOffice.org TestTool";
     FixedText 1 {
-            Pos = MAP_APPFONT( 40, 5 );
+            Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT = "StarTestTool";
-            CENTER = TRUE;
-    };
-    FixedText 3 {
-            Pos = MAP_APPFONT( 40, 45 );
-            Size = MAP_APPFONT( 110, 10 );
-            TEXT = "Version 1.0";
+            TEXT = "OpenOffice.org TestTool";
             CENTER = TRUE;
     };
     FixedText RID_VERSIONSTRING {
-            Pos = MAP_APPFONT( 40, 55 );
+            Pos = MAP_APPFONT( 5, 25 );
             Size = MAP_APPFONT( 110, 10 );
             Text = UPDVER;
             CENTER = TRUE;
         };
     FixedText 4 {
-            Pos = MAP_APPFONT( 40, 70 );
+            Pos = MAP_APPFONT( 5, 40 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT = "®1995-1998 Sun Microsystems, Inc.";
+            TEXT = "©1995-2004 Sun Microsystems, Inc.";
             CENTER = TRUE;
     };
-//  FixedIcon RID_ICON {
-//          Pos = MAP_APPFONT( 20, 26 );
-//          Size = MAP_APPFONT( 20, 20 );
-//          FIXED = Icon  {
-//              FILE = "basic.ico";
-//          };
-//      };
     OKButton RID_OK {
-            Pos = MAP_APPFONT( 55, 85 );
+            Pos = MAP_APPFONT( 40, 60 );
             Size = MAP_APPFONT( 40, 14 );
             DefButton = TRUE;
         };
@@ -696,10 +685,11 @@ Menu RID_TT_EXTRAS {
             Identifier = RID_OPTIONS;
             TEXT = "~Settings";
         };
+/*  comment out till it gets functionality #i26908
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
             TEXT = "~Record Dialogs";
-        };
+        };*/
     };
 };
 Menu RID_WINDOW {
