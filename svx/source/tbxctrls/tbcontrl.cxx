@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-25 15:05:53 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,7 +1061,7 @@ IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
         EndPopupMode();
 
     if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
-        GetBindings().GetDispatcher()->Execute( theSlotId );
+        GetBindings().Execute( theSlotId );
     else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId) )
     {
         SvxColorItem aColorItem( COL_AUTO, theSlotId );
