@@ -128,6 +128,7 @@ interface TablePrintPreview : View
     SID_REDO            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_REPEAT          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ] // ole() api()
+    SID_PREVIEW_CLOSE   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 }
 
 

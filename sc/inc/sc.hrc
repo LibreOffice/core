@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 15:35:52 $
+ *  last change: $Author: nn $ $Date: 2002-04-18 17:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,6 +863,7 @@
 #define SID_PREVIEW_GOTO        (SID_PREVIEW_START+4)
 #define SID_PREVIEW_ZOOMIN      (SID_PREVIEW_START+5)
 #define SID_PREVIEW_ZOOMOUT     (SID_PREVIEW_START+6)
+#define SID_PREVIEW_CLOSE       (SID_PREVIEW_START+7)
 #define SID_PREVIEW_END         (SID_PREVIEW_START+20)
 
 //aus sfx: #define SID_KEYFUNC_START        (SID_PREVIEW_END+5)

@@ -7307,3 +7307,28 @@ SfxVoidItem FocusInputLine SID_FOCUS_INPUTLINE
     GroupId = GID_APPLICATION;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem ClosePreview SID_PREVIEW_CLOSE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
