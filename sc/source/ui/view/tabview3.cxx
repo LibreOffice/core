@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:55:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/editview.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
 #include <sch/schdll.hxx>       // ChartSelectionInfo
 #include <sch/memchrt.hxx>
