@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-03 11:32:17 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:10:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,13 +81,19 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+    $(SLO)$/attarray.obj \
+    $(SLO)$/attrib.obj \
     $(SLO)$/bcaslot.obj \
-    $(SLO)$/docpool.obj \
-    $(SLO)$/poolhelp.obj \
+    $(SLO)$/cell.obj \
+    $(SLO)$/cell2.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column2.obj \
     $(SLO)$/column3.obj \
-    $(SLO)$/document.obj \
+    $(SLO)$/compressedarray.obj \
+    $(SLO)$/conditio.obj \
+    $(SLO)$/dbdocutl.obj \
+    $(SLO)$/dociter.obj \
+    $(SLO)$/docpool.obj \
     $(SLO)$/documen2.obj \
     $(SLO)$/documen3.obj \
     $(SLO)$/documen4.obj \
@@ -96,48 +102,41 @@ SLOFILES =  \
     $(SLO)$/documen7.obj \
     $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
+    $(SLO)$/document.obj \
+    $(SLO)$/dpobject.obj \
+    $(SLO)$/dpoutput.obj \
+    $(SLO)$/dpsave.obj \
+    $(SLO)$/dpsdbtab.obj \
+    $(SLO)$/dpshttab.obj \
+    $(SLO)$/dptabdat.obj \
+    $(SLO)$/dptabres.obj \
+    $(SLO)$/dptabsrc.obj \
+    $(SLO)$/drawpage.obj \
+    $(SLO)$/drwlayer.obj \
     $(SLO)$/fillinfo.obj \
+    $(SLO)$/global.obj \
+    $(SLO)$/global2.obj \
+    $(SLO)$/globalx.obj \
+    $(SLO)$/markarr.obj \
+    $(SLO)$/markdata.obj \
+    $(SLO)$/olinetab.obj \
+    $(SLO)$/pagepar.obj \
+    $(SLO)$/patattr.obj \
+    $(SLO)$/pivot.obj \
+    $(SLO)$/pivot2.obj \
+    $(SLO)$/poolhelp.obj \
+    $(SLO)$/scimpexpmsg.obj \
+    $(SLO)$/sortparam.obj \
+    $(SLO)$/stlpool.obj \
+    $(SLO)$/stlsheet.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table2.obj \
     $(SLO)$/table3.obj \
     $(SLO)$/table4.obj \
     $(SLO)$/table5.obj \
     $(SLO)$/table6.obj \
-    $(SLO)$/olinetab.obj \
-    $(SLO)$/patattr.obj \
-    $(SLO)$/cell.obj \
-    $(SLO)$/cell2.obj \
-    $(SLO)$/attarray.obj \
-    $(SLO)$/attrib.obj \
-    $(SLO)$/global.obj \
-    $(SLO)$/global2.obj \
-    $(SLO)$/globalx.obj \
-    $(SLO)$/markarr.obj \
-    $(SLO)$/markdata.obj \
-    $(SLO)$/dociter.obj \
-    $(SLO)$/drwlayer.obj \
     $(SLO)$/userdat.obj \
-    $(SLO)$/drawpage.obj \
-    $(SLO)$/stlsheet.obj \
-    $(SLO)$/stlpool.obj \
-    $(SLO)$/dptabsrc.obj \
-    $(SLO)$/dptabres.obj \
-    $(SLO)$/dptabdat.obj \
-    $(SLO)$/dpshttab.obj \
-    $(SLO)$/dpsdbtab.obj \
-    $(SLO)$/dpgroup.obj \
-    $(SLO)$/dpoutput.obj \
-    $(SLO)$/dpobject.obj \
-    $(SLO)$/dpsave.obj \
-    $(SLO)$/dpdimsave.obj \
-    $(SLO)$/pivot.obj \
-    $(SLO)$/pivot2.obj \
-    $(SLO)$/dbdocutl.obj \
-    $(SLO)$/pagepar.obj \
-    $(SLO)$/conditio.obj \
-    $(SLO)$/validat.obj \
-    $(SLO)$/scimpexpmsg.obj \
-    $(SLO)$/sortparam.obj
+    $(SLO)$/validat.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
