@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
+ *  last change: $Author: thb $ $Date: 2001-07-23 12:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,12 +217,12 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         {
             try
             {
+                xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+                xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
+
                 pFilter = pCont->GetFilter( 0 );
                 if( pFilter )
-                {
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
-                    xFilterManager->setCurrentFilter( pFilter->GetUIName() ); // set default-filter (<All>)
-                }
 
                 // Get Draw filter for Impress and Impress filter for Draw as secondary
                 if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
@@ -266,7 +266,6 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 xFilterManager->appendFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
                 xFilterManager->appendFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
                 xFilterManager->appendFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
-                xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
             }
             catch(IllegalArgumentException)
             {
