@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:19:21 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 08:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-#ifndef _CONNECTIVITY_SIMPLEPROPERTYCONTAINER_HXX_
-#include "connectivity/simplepropertycontainer.hxx"
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_FANALYZER_HXX_
 #include "file/fanalyzer.hxx"
@@ -241,7 +241,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
         class OResultSet :  public  OBaseMutex,
                             public  OResultSet_BASE,
-                            public  connectivity::OSimplePropertyContainer,
+                            public  ::comphelper::OPropertyContainer,
                             public  ::utl::OPropertyArrayUsageHelper<OResultSet>
         {
 

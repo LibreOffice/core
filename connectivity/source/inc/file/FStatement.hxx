@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 08:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _CONNECTIVITY_SIMPLEPROPERTYCONTAINER_HXX_
-#include "connectivity/simplepropertycontainer.hxx"
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_FANALYZER_HXX_
 #include "file/fanalyzer.hxx"
@@ -126,7 +126,7 @@ namespace connectivity
         //**************************************************************
         class OStatement_Base       :   public  OBaseMutex,
                                         public  OStatement_BASE,
-                                        public  connectivity::OSimplePropertyContainer,
+                                        public  ::comphelper::OPropertyContainer,
                                         public  ::utl::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
