@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-25 09:59:01 $
+ *  last change: $Author: nn $ $Date: 2002-11-04 15:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2189,19 +2189,18 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
                 aDocument.CalcFormulaTree( TRUE );
             PostDataChanged();
 
-            //  automatisches Detektiv-Update
+            //  Detective AutoUpdate:
+            //  Update if formulas were modified (DetectiveDirty) or the list contains
+            //  "Trace Error" entries (#75362# - Trace Error can look completely different
+            //  after changes to non-formula cells).
 
-            if ( aDocument.IsDetectiveDirty() )
+            ScDetOpList* pList = aDocument.GetDetOpList();
+            if ( pList && ( aDocument.IsDetectiveDirty() || pList->HasAddError() ) &&
+                 pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
             {
-                aDocument.SetDetectiveDirty(FALSE);     // bei jedem Modified
-
-                ScDetOpList* pList = aDocument.GetDetOpList();
-                if ( pList && pList->Count() && !IsInUndo() &&
-                        SC_MOD()->GetAppOptions().GetDetectiveAuto() )
-                {
-                    GetDocFunc().DetectiveRefresh(TRUE);    // TRUE = automatisch erzeugt
-                }
+                GetDocFunc().DetectiveRefresh(TRUE);    // TRUE = caused by automatic update
             }
+            aDocument.SetDetectiveDirty(FALSE);         // always reset, also if not refreshed
         }
     }
 }
