@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-20 12:14:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,13 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace rtl;
+
+namespace
+{
+    osl::Mutex globalContentBrokerMutex;
+    osl::Mutex & getGlobalContentBrokerMutex() { return globalContentBrokerMutex; }
+
+} // namespace
 
 namespace ucb
 {
@@ -230,7 +237,7 @@ sal_Bool ContentBroker::initialize(
 
     if ( !m_pTheBroker )
     {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        osl::Guard< osl::Mutex > aGuard( getGlobalContentBrokerMutex() );
 
         if ( !m_pTheBroker )
         {
@@ -258,7 +265,7 @@ sal_Bool ContentBroker::initialize(
 
     if ( !m_pTheBroker )
     {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        osl::Guard< osl::Mutex > aGuard( getGlobalContentBrokerMutex() );
 
         if ( !m_pTheBroker )
         {
@@ -279,7 +286,7 @@ sal_Bool ContentBroker::initialize(
 // static
 void ContentBroker::deinitialize()
 {
-    osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    osl::MutexGuard aGuard( getGlobalContentBrokerMutex() );
 
     delete m_pTheBroker;
     m_pTheBroker = 0;
