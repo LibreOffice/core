@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:03:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace stoc_rdbtdp
 // static
 rtl::Reference< TypeDescriptionEnumerationImpl >
 TypeDescriptionEnumerationImpl::createInstance(
-        const uno::Reference< uno::XComponentContext > & xContext,
+        const uno::Reference< container::XHierarchicalNameAccess > & xTDMgr,
         const rtl::OUString & rModuleName,
         const uno::Sequence< uno::TypeClass > & rTypes,
         reflection::TypeDescriptionSearchDepth eDepth,
@@ -141,7 +141,7 @@ TypeDescriptionEnumerationImpl::createInstance(
         // Enumeration for root requested.
         return rtl::Reference< TypeDescriptionEnumerationImpl >(
             new TypeDescriptionEnumerationImpl(
-                xContext, rBaseKeys, rTypes, eDepth ) );
+                xTDMgr, rBaseKeys, rTypes, eDepth ) );
     }
 
     RegistryKeyList aModuleKeys;
@@ -220,20 +220,19 @@ TypeDescriptionEnumerationImpl::createInstance(
 
     return rtl::Reference< TypeDescriptionEnumerationImpl >(
         new TypeDescriptionEnumerationImpl(
-                xContext, aModuleKeys, rTypes, eDepth ) );
+                xTDMgr, aModuleKeys, rTypes, eDepth ) );
 }
 
 //=========================================================================
 TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
-                            const uno::Reference<
-                                uno::XComponentContext > & xContext,
-                            const RegistryKeyList & rModuleKeys,
-                            const uno::Sequence< uno::TypeClass > & rTypes,
-                            reflection::TypeDescriptionSearchDepth eDepth )
+    const uno::Reference< container::XHierarchicalNameAccess > & xTDMgr,
+    const RegistryKeyList & rModuleKeys,
+    const uno::Sequence< uno::TypeClass > & rTypes,
+    reflection::TypeDescriptionSearchDepth eDepth )
 : m_aModuleKeys( rModuleKeys ),
   m_aTypes( rTypes ),
   m_eDepth( eDepth ),
-  m_xContext( xContext )
+  m_xTDMgr( xTDMgr )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
@@ -646,7 +645,7 @@ TypeDescriptionEnumerationImpl::queryNext()
                             xKey->getBinaryValue() );
 
                         xTD = createTypeDescription( aBytes,
-                                                     getTDMgr(),
+                                                     m_xTDMgr,
                                                      false );
                         OSL_ENSURE( xTD.is(),
                             "TypeDescriptionEnumerationImpl::queryNext "
@@ -681,30 +680,6 @@ TypeDescriptionEnumerationImpl::queryNext()
     } // for (;;)
 
     return uno::Reference< reflection::XTypeDescription >();
-}
-
-//=========================================================================
-uno::Reference< container::XHierarchicalNameAccess >
-TypeDescriptionEnumerationImpl::getTDMgr()
-{
-    if ( !m_xTDMgr.is() )
-    {
-        uno::Reference< container::XHierarchicalNameAccess > xTDMgr;
-        m_xContext->getValueByName(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ) )
-            >>= xTDMgr;
-
-        OSL_ENSURE( xTDMgr.is(),
-            "TypeDescriptionEnumerationImpl::getTDMgr "
-            "Cannot get singleton \"TypeDescriptionManager\" from context!" );
-        {
-            MutexGuard guard( m_aMutex );
-            if ( !m_xTDMgr.is() )
-                m_xTDMgr = xTDMgr;
-        }
-    }
-    return m_xTDMgr;
 }
 
 } // namespace stoc_rdbtdp
