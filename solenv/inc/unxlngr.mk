@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:17:15 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:30:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,8 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX=
 
+PICSWITCH:=-fpic
+
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
 # Compiler flags for compiling static object in single threaded environment with character user interface
@@ -113,9 +115,9 @@ CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fpic
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fpic
+CFLAGSSLOCUIMT=$(PICSWITCH)
 # Compiler flags for profiling
 CFLAGSPROF=
 # Compiler flags for debugging
