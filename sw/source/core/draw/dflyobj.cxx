@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:57:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,30 +300,13 @@ SdrObject* __EXPORT SwVirtFlyDrawObj::CheckHit( const Point& rPnt, USHORT nTol,
         aHitRect.Right()  += nTol;
         if( aHitRect.IsInside( rPnt ) )
         {
-//          const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
-            if( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm()
-                /*
-                JP 07.08.96: nach Umstellung von JOE zur 330 darf das nicht
-                            mehr sein!
-                && !rURL.GetURL().Len() && !rURL.GetMap()
-                */ )
+            if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm() )
             {
                 // #107513#
                 // This test needs to be done outside, since also drawing layer HitTest
                 // methods are called. Not all drawing objects are derived and the
                 // CheckHit() overloaded. That's an conceptual error here.
                 return (SdrObject*)this;
-
-                //Vor dem Return noch 3a (siehe oben) pruefen.
-                //SdrPage *pPg = GetPage();
-                //for ( UINT32 i = GetOrdNumDirect()+1; i < pPg->GetObjCount(); ++i )
-                //{
-                //  SdrObject *pObj = pPg->GetObj( i );
-                //  if ( pObj->ISA(SwVirtFlyDrawObj) &&
-                //       ((SwVirtFlyDrawObj*)pObj)->GetBoundRect().IsInside( rPnt ) )
-                //      return 0;
-                //}
-                //return (SdrObject*)this;
             }
             else
             {
@@ -504,15 +487,12 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             !GetFlyFrm()->FindPageFrm()->OnRightPage() )
             lXDiff = -lXDiff;
 
-#ifdef BIDI
-        if( GetFlyFrm()->GetAnchor()->IsRightToLeft() &&
+        if( GetFlyFrm()->GetAnchorFrm()->IsRightToLeft() &&
             HORI_NONE == eHori )
             lXDiff = -lXDiff;
-#endif
 
         long lYDiff = aNewPos.Y() - aOldPos.Y();
-#ifdef VERTICAL_LAYOUT
-        if( GetFlyFrm()->GetAnchor()->IsVertical() )
+        if( GetFlyFrm()->GetAnchorFrm()->IsVertical() )
         {
             lXDiff -= rVert.GetPos();
             lYDiff += rHori.GetPos();
@@ -523,18 +503,12 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             lYDiff += rVert.GetPos();
         }
 
-#ifdef BIDI
-        if( GetFlyFrm()->GetAnchor()->IsRightToLeft() &&
+        if( GetFlyFrm()->GetAnchorFrm()->IsRightToLeft() &&
             HORI_NONE != eHori )
-            lXDiff = GetFlyFrm()->GetAnchor()->Frm().Width() -
+            lXDiff = GetFlyFrm()->GetAnchorFrm()->Frm().Width() -
                      aFlyRect.Width() - lXDiff;
-#endif
 
         const Point aTmp( lXDiff, lYDiff );
-#else
-        const Point aTmp( rHori.GetPos() + lXDiff,
-                          rVert.GetPos() + lYDiff );
-#endif
         GetFlyFrm()->ChgRelPos( aTmp );
     }
 
@@ -550,7 +524,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         //Im HTML-Modus sind nur automatische Ausrichtungen erlaubt.
         //Einzig einen Snap auf Links/Rechts bzw. Linker-/Rechter-Rand koennen
         //wir versuchen.
-        SwFrm *pAnch = GetFlyFrm()->GetAnchor();
+        const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
         BOOL bNextLine = FALSE;
 
         if( !GetFlyFrm()->IsAutoPos() || REL_PG_FRAME != aHori.GetRelationOrient() )
@@ -626,7 +600,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     ResizeRect( aOutRect, rRef, xFact, yFact );
 
     SWRECTFN( GetFlyFrm() )
-    SwFrm* pTmpFrm = GetFlyFrm()->GetAnchor();
+    const SwFrm* pTmpFrm = GetFlyFrm()->GetAnchorFrm();
     if( !pTmpFrm )
         pTmpFrm = GetFlyFrm();
     SWRECTFNX( pTmpFrm )
@@ -675,8 +649,8 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         {
             long nRelWidth, nRelHeight;
             const SwFrm *pRel = GetFlyFrm()->IsFlyLayFrm() ?
-                                GetFlyFrm()->GetAnchor() :
-                                GetFlyFrm()->GetAnchor()->GetUpper();
+                                GetFlyFrm()->GetAnchorFrm() :
+                                GetFlyFrm()->GetAnchorFrm()->GetUpper();
             const ViewShell *pSh = GetFlyFrm()->GetShell();
             if ( pSh && pRel->IsBodyFrm() && pFmt->GetDoc()->IsBrowseMode() &&
                  pSh->VisArea().HasArea() )
