@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:52:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
   </node>
   <node oor:name="ExternalMailer">
     <node oor:name="Profiles">
-      <node oor:name="Mozilla 1.0 - 1.2" oor:op="replace">
+      <node oor:name="Netscape 6.x - 7.0 (Option 1)" oor:op="replace">
         <node oor:name="FormatStrings">
           <prop oor:name="base">
             <value>-compose "%s"</value>
@@ -163,6 +163,174 @@
           </prop>
           <prop oor:name="attachment">
             <value>,</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="Netscape 6.x - 7.0 (Option 2)" oor:op="replace">
+        <node oor:name="FormatStrings">
+          <prop oor:name="base">
+            <value>-compose %s</value>
+          </prop>
+          <prop oor:name="from">
+            <value/>
+          </prop>
+          <prop oor:name="to">
+            <value>to='%s'</value>
+          </prop>
+          <prop oor:name="cc">
+            <value>cc='%s'</value>
+          </prop>
+          <prop oor:name="bcc">
+            <value>bcc='%s'</value>
+          </prop>
+          <prop oor:name="subject">
+            <value>subject='%s'</value>
+          </prop>
+          <prop oor:name="attachment">
+            <value>attachment='%s'</value>
+          </prop>
+          <prop oor:name="body">
+            <value>body='%s'</value>
+          </prop>
+        </node>
+        <node oor:name="EnumDelimiters">
+          <prop oor:name="base">
+            <value>,</value>
+          </prop>
+          <prop oor:name="cc">
+            <value>,</value>
+          </prop>
+          <prop oor:name="bcc">
+            <value>,</value>
+          </prop>
+          <prop oor:name="attachment">
+            <value>,</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="Mozilla 1.x (Option 1)" oor:op="replace">
+        <node oor:name="FormatStrings">
+          <prop oor:name="base">
+           <value>-compose "%s"</value>
+         </prop>
+         <prop oor:name="from">
+           <value/>
+         </prop>
+         <prop oor:name="to">
+           <value>to=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="cc">
+           <value>cc=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="bcc">
+           <value>bcc=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="subject">
+           <value>subject=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="attachment">
+           <value>attachment=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="body">
+           <value>body=&apos;%s&apos;</value>
+         </prop>
+        </node>
+        <node oor:name="EnumDelimiters">
+         <prop oor:name="base">
+           <value>,</value>
+         </prop>
+         <prop oor:name="cc">
+           <value>,</value>
+         </prop>
+         <prop oor:name="bcc">
+           <value>,</value>
+         </prop>
+         <prop oor:name="attachment">
+           <value>,</value>
+         </prop>
+        </node>
+      </node>
+      <node oor:name="Mozilla 1.x (Option 2)" oor:op="replace">
+        <node oor:name="FormatStrings">
+          <prop oor:name="base">
+           <value>-compose %s</value>
+         </prop>
+         <prop oor:name="from">
+           <value/>
+         </prop>
+         <prop oor:name="to">
+           <value>to=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="cc">
+           <value>cc=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="bcc">
+           <value>bcc=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="subject">
+           <value>subject=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="attachment">
+           <value>attachment=&apos;%s&apos;</value>
+         </prop>
+         <prop oor:name="body">
+           <value>body=&apos;%s&apos;</value>
+         </prop>
+        </node>
+        <node oor:name="EnumDelimiters">
+         <prop oor:name="base">
+           <value>,</value>
+         </prop>
+         <prop oor:name="cc">
+           <value>,</value>
+         </prop>
+         <prop oor:name="bcc">
+           <value>,</value>
+         </prop>
+         <prop oor:name="attachment">
+           <value>,</value>
+         </prop>
+        </node>
+      </node>
+      <node oor:name="KMail 1.2 or later" oor:op="replace">
+        <node oor:name="FormatStrings">
+          <prop oor:name="base">
+            <value>--composer %s</value>
+          </prop>
+          <prop oor:name="from">
+            <value/>
+          </prop>
+          <prop oor:name="to">
+            <value>%s</value>
+          </prop>
+          <prop oor:name="cc">
+            <value>-c %s</value>
+          </prop>
+          <prop oor:name="bcc">
+            <value>-b %s</value>
+          </prop>
+          <prop oor:name="subject">
+            <value>-s %s</value>
+          </prop>
+          <prop oor:name="attachment">
+            <value>--attach %s</value>
+          </prop>
+          <prop oor:name="body">
+            <value>-b %s</value>
+          </prop>
+        </node>
+        <node oor:name="EnumDelimiters">
+          <prop oor:name="base">
+            <value> </value>
+          </prop>
+          <prop oor:name="cc">
+            <value>,</value>
+          </prop>
+          <prop oor:name="bcc">
+            <value>,</value>
+          </prop>
+          <prop oor:name="attachment">
+            <value> --attach </value>
           </prop>
         </node>
       </node>
