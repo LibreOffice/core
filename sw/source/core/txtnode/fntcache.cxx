@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-02 07:44:48 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@ Color *pWaveCol = 0;
 long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
+
+#ifdef VERTICAL_LAYOUT
+extern USHORT MapDirection( USHORT nDir, const BOOL bVertFormat );
+#endif
 
 #ifdef _RVP_MARK_HXX
 
@@ -710,6 +714,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
+#ifdef VERTICAL_LAYOUT
+    BOOL bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
+#endif
+
     Point aPos( rInf.GetPos() );
     if( !bPrt )
     {
@@ -819,7 +827,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
                 // einer Textausgabe besondere Massnahmen:
 #ifdef VERTICAL_LAYOUT
-                if ( rInf.GetFrm() && rInf.GetFrm()->IsVertical() )
+                if ( bSwitchH2V )
                     rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 #endif
 
@@ -1111,7 +1119,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
 
+#ifdef VERTICAL_LAYOUT
+                        switch ( MapDirection( GetFont()->GetOrientation(),
+                                 bSwitchH2V ) )
+#else
                         switch ( GetFont()->GetOrientation() )
+#endif
                         {
                         case 0 :
                             aEnd.X() = rInf.GetPos().X() + nKernVal;
@@ -1127,7 +1140,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                             break;
                         }
 
+#ifdef VERTICAL_LAYOUT
+                        Point aPos( rInf.GetPos() );
+                        if ( bSwitchH2V )
+                        {
+                            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                            rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
+                        }
+                        rInf.GetOut().DrawWaveLine( aPos, aEnd, nWave );
+#else
                         rInf.GetOut().DrawWaveLine( rInf.GetPos(), aEnd, nWave );
+#endif
 
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( aCol );
@@ -1185,7 +1208,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                                   0;
                                 long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
 
+#ifdef VERTICAL_LAYOUT
+                                switch ( MapDirection( GetFont()->GetOrientation(),
+                                         bSwitchH2V ) )
+#else
                                 switch ( GetFont()->GetOrientation() )
+#endif
                                 {
                                 case 0 :
                                     aStart.X() += nKernStart;
@@ -1204,7 +1232,16 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                     break;
                                 }
 
+#ifdef VERTICAL_LAYOUT
+                                if ( bSwitchH2V )
+                                {
+                                    rInf.GetFrm()->SwitchHorizontalToVertical( aStart );
+                                    rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
+                                }
                                 rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+#else
+                                rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+#endif
                                 nStart = nEnd + rInf.GetIdx();
                                 nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
                             }
@@ -1251,7 +1288,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 register xub_StrLen nTmpIdx = bBullet ? 0 : rInf.GetIdx();
 
 #ifdef VERTICAL_LAYOUT
-                if ( rInf.GetFrm() && rInf.GetFrm()->IsVertical() )
+                if ( bSwitchH2V )
                     rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:51:59 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,11 @@
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#endif
 
 #if defined(WIN) || defined(WNT) || defined(PM2)
 #define FNT_LEADING_HACK
@@ -213,9 +218,9 @@ Color* SwFont::XChgBackColor( Color* pNewColor )
 }
 
 #ifdef VERTICAL_LAYOUT
-void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
+
+USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
 {
-    // map direction if frame has vertical layout
     if ( bVertFormat )
     {
         switch ( nDir )
@@ -229,6 +234,13 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
             break;
         }
     }
+    return nDir;
+}
+
+void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
+{
+    // map direction if frame has vertical layout
+    nDir = MapDirection( nDir, bVertFormat );
 
     if( nDir != aSub[0].GetOrientation() )
     {
@@ -1040,12 +1052,24 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     else
     {
         SV_STAT( nDrawStretchText );
+
+#ifdef VERTICAL_LAYOUT
+        const Point &rOld = rInf.GetPos();
+        rInf.SetPos( aPos );
+        if ( rInf.GetFrm() && rInf.GetFrm()->IsVertical() )
+            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+#endif
+
         if ( !IsCaseMap() )
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(),
                             rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         else
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(), CalcCaseMap(
                             rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
+
+#ifdef VERTICAL_LAYOUT
+        rInf.SetPos( rOld );
+#endif
     }
 
     if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
