@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:03:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ ModalDialog DLG_SEL_GLOS
     Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् जोड़ो";
     Text[ slovak ] = "Vložiť automatický text";
 };
+
+
 
 
 
