@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 15:07:24 $
+ *  last change: $Author: cl $ $Date: 2001-06-25 15:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include "svdstr.hrc"   // Objektname
 
 #include <eeitemid.hxx>
+
+#ifndef _SVX_ASIANCFG_HXX
+#include "asiancfg.hxx"
+#endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
@@ -338,6 +342,9 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = FALSE;
+
+    SvxAsianConfig aAsian;
+    mnCharCompressType = aAsian.GetCharDistanceCompression();
 
 #ifdef __LITTLEENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
@@ -850,6 +857,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit )
 
     pOutliner->SetRefDevice(GetRefDevice());
     pOutliner->SetForbiddenCharsTable(GetForbiddenCharsTable());
+    pOutliner->SetAsianCompressionMode( mnCharCompressType );
 
     if ( !GetRefDevice() )
     {
@@ -2541,6 +2549,15 @@ void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xF
 vos::ORef<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
 {
     return mpForbiddenCharactersTable;
+}
+
+void SdrModel::SetCharCompressType( UINT16 nType )
+{
+    if( nType != mnCharCompressType )
+    {
+        ImpSetOutlinerDefaults( pDrawOutliner );
+        ImpSetOutlinerDefaults( pHitTestOutliner );
+    }
 }
 
 void SdrModel::ReformatAllTextObjects()
