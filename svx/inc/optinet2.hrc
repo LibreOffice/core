@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:06:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,14 +157,14 @@
 #define TP_HEIGHT                   185
 #define OFFS_BUTTON_Y               (-6)
 #define BORDER_OFFSET               8
-#define BUTTON_SPECIAL_WIDTH        60
 #define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)
 #define COL_1                       (COL_0+RSC_SP_FLGR_SPACE_X)
 #define COL_2                       (COL_1+RSC_SP_CHK_TEXTINDENT)
-#define COL_3                       (TP_WIDTH*60/100)
-#define COL_5                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define COL_6                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define COL_5                       (COL_6-RSC_SP_FLGR_SPACE_X)
 #define COL_4                       (COL_5-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL_3a                      (COL_4-RSC_SP_CTRL_X)
+#define COL_3                       (COL_4-RSC_SP_CTRL_X)
+#define CHECKBOX_WIDTH              ((COL_5-COL_2-RSC_SP_CTRL_X)/2)
 
 #define ROW_0                       (RSC_SP_FLGR_INNERBORDER_TOP)
 #define ROW_1                       (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
