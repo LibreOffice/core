@@ -1,6 +1,5 @@
-<!-- edited with XML Spy v3.5 NT beta 3 build Dec 21 2000 (http://www.xmlspy.com) by Martin Gallwey (Sun Microsystems) -->
 <!--
-	$Id: Manifest.dtd,v 1.4 2001-02-07 09:13:56 mtg Exp $
+	$Id: Manifest.dtd,v 1.5 2001-03-19 12:27:07 mtg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,6 +53,7 @@
 
 -->
 <!ELEMENT manifest:manifest (manifest:file-entry+)>
+<!ATTLIST manifest:manifest xmlns:manifest CDATA #FIXED "http://openoffice.org/2001/manifest"> 
 <!ELEMENT manifest:file-entry EMPTY>
 <!ATTLIST manifest:file-entry
 	manifest:full-path CDATA #REQUIRED
