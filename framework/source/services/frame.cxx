@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 11:26:25 $
+ *  last change: $Author: as $ $Date: 2001-06-19 10:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,10 @@
 #include <services.h>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
-#include <classes/droptargetlistener.hxx>
+#if SUPD>633
+    #ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
+    #include <classes/droptargetlistener.hxx>
+    #endif
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -147,12 +149,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
-#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-#endif
+#if SUPD>633
+    #ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
+    #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
+    #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+    #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+    #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+    #endif
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -221,7 +225,6 @@ namespace framework{
 
 #define PROPERTYCOUNT               1
 
-#define SERVICE_TOOLKIT             DECLARE_ASCII("com.sun.star.awt.Toolkit")
 //_________________________________________________________________________________________________________________
 //  non exported definitions
 //_________________________________________________________________________________________________________________
@@ -362,10 +365,12 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
     LOG_ASSERT2( m_xDispatchHelper.is()==sal_False, "Frame::Frame()", "DispatchHelper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not supported!" )
     LOG_ASSERT2( m_xFramesHelper.is  ()==sal_False, "Frame::Frame()", "FramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!"                       )
 
+    #if SUPD>633
     //-------------------------------------------------------------------------------------------------------------
     // Initialize a the drop target listener.
     DropTargetListener* pListener = new DropTargetListener( this );
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pListener), css::uno::UNO_QUERY );
+    #endif
 
     // Don't forget it - or we live for ever!
     --m_refCount;
@@ -554,18 +559,18 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-//    LOG_ASSERT2( impl_cp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
+    LOG_ASSERT2( impl_cp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
     // Look for rejected calls first!
     // It could be that we are called twice ...
     // Use soft exceptions ... because if mode is set to E_INIT our manager don't throw any exception ... otherwise he do it!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
-
     // Set the new window.
     LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occure ..." )
     m_xContainerWindow = xWindow;
@@ -573,18 +578,23 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Now we can use our indicator factory helper to support XStatusIndicatorFactory interface.
     // We have a valid parent window for it!
     // Initialize helper.
-    if ( m_xContainerWindow.is() )
+    if( m_xContainerWindow.is() == sal_True )
     {
         OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
         m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
     }
 
+    // Release lock ... because we call some impl methods, which are threadsafe by himself.
+    // If we hold this lock - we will produce our own deadlock!
+    aWriteLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    // Enable object for real working ... so follow impl methods don't must handle it special! (e.g. E_SOFTEXCEPTIONS for rejected calls)
+    m_aTransactionManager.setWorkingMode( E_WORK );
+
     // Start listening for events after setting it on helper class ...
     // So superflous messages are filtered to NULL :-)
-    impl_startWindowListening( xWindow );
-
-    // Change to working mode.
-    m_aTransactionManager.setWorkingMode( E_WORK );
+    implts_startWindowListening();
 }
 
 /*-****************************************************************************************************//**
@@ -1297,17 +1307,57 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         We must close objet for working BEFORE we dispose it realy ...
         After successful closing all interface calls are rejected by our
         transaction manager automaticly.
+
+        But there exist something to do ... which should be done BEFORE we start realy disposing of this instance!
+        So we should clear listener and window mechanism first.
      */
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // Create an exclusiv access!
+    // It's neccessary for follow transaction check ...
+    // Another reason: We can recylce these write lock at later time ..
+    // and it's superflous to create read- and write- locks in combination.
     WriteGuard aWriteLock( m_aLock );
 
     // Look for multiple calls of this method!
-    // Do it after setting write lock ...
-    // because we must alone after successful call of this transaction helper!
+    // If somewhere call dispose() twice - he will be stopped here realy!!!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // We are alone and its the first call of this method ...
+    // We should hold a reference to ourself ...
+    // because our owner dispose us and release our reference ...
+    // May be we will die before we could finish this method ...
+    // Make snapshot of other neecessary member too.
+    css::uno::Reference< css::frame::XFrame > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+
+    #ifdef ENABLE_EVENTDEBUG
+    // We should be threadsafe in special debug sessions too :-)
+    ::rtl::OUString sName = m_sName;
+    #endif
+
+    aWriteLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    // First operation should be ... "stopp all listening for window events on our container window".
+    // We will die ... this events are superflous! (method is threadsafe by himself)
+    implts_stopWindowListening();
+
+    // Send message to all listener and forget her references.
+    LOG_DISPOSEEVENT( "Frame", sName )
+    css::lang::EventObject aEvent( xThis );
+    m_aListenerContainer.disposeAndClear( aEvent );
+
+    // It's neccessary to forget our component and her window ...
+    // because this mechanism could start different callback mechanism!
+    // And it's not a good idea to disable this object for real working by setting mode to E_BEFORECLOSE here.
+    // Otherwise to much calls must be handle the special "IN-DISPOSING" case.
+    implts_setComponent( css::uno::Reference< css::awt::XWindow >      () ,
+                         css::uno::Reference< css::frame::XController >() );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // Lock it again to disable object for real working!
+    aWriteLock.lock();
+
+    // Now - we are alone and its the first call of this method ...
     // otherwise call before must throw a DisposedException!
     // Don't forget to release this registered transaction here ...
     // because next "setWorkingMode()" call blocks till all current existing one
@@ -1319,36 +1369,19 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // and reject all further requests!
     m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
-    // We should hold a reference to ourself ...
-    // because our owner dispose us and release our reference ...
-    // May be we will die before we could finish this method ...
-    css::uno::Reference< css::frame::XFrame > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-
     // Now we can release our lock!
-    // We should be alone and further dispose calls are rejected by lines before ...
+    // We should be alone for ever and further dispose calls are rejected by lines before ...
     // I hope it :-)
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    // First operation should be ... "stopp all listening for window events on our container window".
-    // We will die ... this events are superflous!
-    impl_stopWindowListening( m_xContainerWindow );
-
-    // Send message to all listener and forget her references.
-    LOG_DISPOSEEVENT( "Frame", m_sName )
-    css::lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
-
-    // Delete current component/window and controller.
     /*ATTENTION
-        It's neccessary to release our StatusIndicatorFactory-helper before!
-        He share our container window as parent for any created status indicator ...
+        It's neccessary to release our StatusIndicatorFactory-helper at first!
+        He share our container window as parent for any created status indicator objects ...
         and if we dispose this container window before we release this helper ...
-        we will get some trouble!
+        we will run into some trouble!
      */
     m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >();
-    implts_setComponent( css::uno::Reference< css::awt::XWindow >      () ,
-                         css::uno::Reference< css::frame::XController >() );
     impl_disposeContainerWindow( m_xContainerWindow );
 
     // Free references of our frame tree.
@@ -1374,8 +1407,11 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     // Release some other references.
     // This calls should be easy ... I hope it :-)
-    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >  ();
-    m_xFactory        = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xDispatchHelper     = css::uno::Reference< css::frame::XDispatchProvider >();
+    m_xFactory            = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    #if SUPD>633
+    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
+    #endif
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -1463,27 +1499,85 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     return xIndicator;
 }
 
-::rtl::OUString SAL_CALL Frame::queryDescription( const ::rtl::OUString& rURL ) throw( css::uno::RuntimeException )
+/*-****************************************************************************************************//**
+    @interface  XDispatchInformationProvider
+    @short      get informations about supported dispatch commands
+    @descr      Use this interface to get informations about possibility to dispatch special commands.
+                ( e.g. "print", "close" ... )
+                In current implmentation we forward requests to our internal controller ...
+                but in following implementaions we could add own infos to returned values.
+
+    @seealso    interface XDispatchInformationProvider
+
+    @param      "sURL"          , queried command
+    @param      "lURLs"         , list of commands for faster access
+    @param      "lDescriptions" , result set if more then one URLs was queried
+    @return     Configuration of dispatch informations at method getConfigurableDispatchInformation().
+
+    @onerror    -
+    @threadsafe yes
+*//*-*****************************************************************************************************/
+::rtl::OUString SAL_CALL Frame::queryDescription( const ::rtl::OUString& sURL ) throw( css::uno::RuntimeException )
 {
-    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
-    if ( xDIP.is() )
-        return xDIP->queryDescription( rURL );
-    return ::rtl::OUString();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+    // Look for rejected calls!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // Declare default return value if method failed.
+    ::rtl::OUString sInfo;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+
+    if( xProvider.is() == sal_True )
+    {
+        sInfo = xProvider->queryDescription( sURL );
+    }
+    return sInfo;
 }
 
-void SAL_CALL Frame::queryDescriptions ( const css::uno::Sequence < ::rtl::OUString >& rURLs, css::uno::Sequence < ::rtl::OUString >& rDescriptions ) throw( css::uno::RuntimeException )
+//*****************************************************************************************************************
+void SAL_CALL Frame::queryDescriptions( const css::uno::Sequence< ::rtl::OUString >& lURLs         ,
+                                              css::uno::Sequence< ::rtl::OUString >& lDescriptions ) throw( css::uno::RuntimeException )
 {
-    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
-    if ( xDIP.is() )
-        xDIP->queryDescriptions( rURLs, rDescriptions );
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+    // Look for rejected calls!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+
+    if( xProvider.is() == sal_True )
+    {
+        xProvider->queryDescriptions( lURLs, lDescriptions );
+    }
 }
 
-css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation() throw( css::uno::RuntimeException )
+//*****************************************************************************************************************
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation() throw( css::uno::RuntimeException )
 {
-    css::uno::Reference < css::frame::XDispatchInformationProvider > xDIP ( m_xController, css::uno::UNO_QUERY );
-    if ( xDIP.is() )
-        return xDIP->getConfigurableDispatchInformation();
-    return css::uno::Sequence < css::frame::DispatchInformation >();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+    // Look for rejected calls!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+
+    css::uno::Sequence< css::frame::DispatchInformation > lInfos;
+    if( xProvider.is() == sal_True )
+    {
+        lInfos = xProvider->getConfigurableDispatchInformation();
+    }
+    return lInfos;
 }
 
 /*-****************************************************************************************************//**
@@ -1737,7 +1831,10 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 
     if( aEvent.Source == m_xContainerWindow )
     {
-        impl_stopWindowListening( m_xContainerWindow );
+        // NECCESSARY: Impl-method is threadsafe by himself!
+        aWriteLock.unlock();
+        implts_stopWindowListening();
+        aWriteLock.lock();
         m_xContainerWindow = css::uno::Reference< css::awt::XWindow >();
     }
 }
@@ -2459,69 +2556,100 @@ void Frame::impl_filterSpecialTargets( ::rtl::OUString& sTarget )
     @seealso    method initialize()
     @seealso    method dispose()
 
-    @param      "xWindow", valid(!) reference to window, which send events
+    @param      -
     @return     -
 
     @onerror    We do nothing!
-    @threadsafe no!
+    @threadsafe yes
 *//*-*************************************************************************************************************/
-void Frame::impl_startWindowListening( const css::uno::Reference< css::awt::XWindow >& xWindow )
+void Frame::implts_startWindowListening()
 {
-    if( xWindow.is() == sal_True )
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // Make snapshot of neccessary member!
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
+    css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
+    #if SUPD>633
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
+    #endif
+    css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    if( xContainerWindow.is() == sal_True )
     {
-        css::uno::Reference< css::awt::XWindowListener >    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        css::uno::Reference< css::awt::XFocusListener >     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        xContainerWindow->addWindowListener( xWindowListener);
+        xContainerWindow->addFocusListener ( xFocusListener );
 
-        xWindow->addWindowListener( xWindowListener);
-        xWindow->addFocusListener ( xFocusListener );
-
-        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xWindow, css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
         if( xTopWindow.is() == sal_True )
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( SERVICE_TOOLKIT ) ), css::uno::UNO_QUERY );
-            if ( xTransfer.is() )
+            #if SUPD>633
+            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
+            if( xTransfer.is() == sal_True )
             {
-                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xWindow );
-                if ( xDropTarget.is() )
+                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xContainerWindow );
+                if( xDropTarget.is() == sal_True )
                 {
-                    xDropTarget->addDropTargetListener( m_xDropTargetListener );
+                    xDropTarget->addDropTargetListener( xDragDropListener );
                     xDropTarget->setActive( sal_True );
                 }
             }
+            #endif
         }
     }
 }
 
 //*****************************************************************************************************************
-void Frame::impl_stopWindowListening( const css::uno::Reference< css::awt::XWindow >& xWindow )
+void Frame::implts_stopWindowListening()
 {
-    if( xWindow.is() == sal_True )
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Sometimes used by dispose() => soft exceptions!
+    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // Make snapshot of neccessary member!
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
+    css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
+    #if SUPD>633
+    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
+    #endif
+    css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    if( xContainerWindow.is() == sal_True )
     {
-        css::uno::Reference< css::awt::XWindowListener >    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        css::uno::Reference< css::awt::XFocusListener >     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        xContainerWindow->removeWindowListener( xWindowListener);
+        xContainerWindow->removeFocusListener ( xFocusListener );
 
-        xWindow->removeWindowListener( xWindowListener);
-        xWindow->removeFocusListener ( xFocusListener );
-
-        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xWindow, css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
         if( xTopWindow.is() == sal_True )
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( SERVICE_TOOLKIT ) ), css::uno::UNO_QUERY );
-            if ( xTransfer.is() )
+            #if SUPD>633
+            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
+            if( xTransfer.is() == sal_True )
             {
-                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xWindow );
-                if ( xDropTarget.is() )
+                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xContainerWindow );
+                if( xDropTarget.is() == sal_True )
                 {
-                    xDropTarget->removeDropTargetListener( m_xDropTargetListener );
+                    xDropTarget->removeDropTargetListener( xDragDropListener );
                     xDropTarget->setActive( sal_False );
                 }
             }
+            #endif
         }
     }
 }
@@ -2566,13 +2694,10 @@ sal_Bool Frame::impl_cp_setActiveFrame( const css::uno::Reference< css::frame::X
 }
 
 //*****************************************************************************************************************
-// We don't accept null pointer or references!
+// We don't accept null pointer ... but NULL-References are allowed!
 sal_Bool Frame::impl_cp_initialize( const css::uno::Reference< css::awt::XWindow >& xWindow )
 {
-    return  (
-                ( &xWindow      ==  NULL        )   ||
-                ( xWindow.is()  ==  sal_False   )
-            );
+    return( &xWindow == NULL );
 }
 
 //*****************************************************************************************************************

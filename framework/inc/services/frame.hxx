@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 09:39:31 $
+ *  last change: $Author: as $ $Date: 2001-06-19 10:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,10 @@
 #include <com/sun/star/awt/FocusEvent.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#if SUPD>633
+    #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
+    #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+    #endif
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -266,6 +268,7 @@ enum EActiveState
                 XComponent
                 XStatusIndicatorFactory
                 XDispatchProvider
+                XDispatchInformationProvider
                 XDispatchProviderInterception
                 XMultiPropertySet
                 XFastPropertySet
@@ -299,8 +302,8 @@ class Frame :   // interfaces
                 public  css::awt::XFocusListener                    ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
-                public ThreadHelpBase                              ,   // helper for own threadsafe code
-                public TransactionBase                             ,   // helper for rejecting calls for wrong object states
+                public  ThreadHelpBase                              ,   // helper for own threadsafe code
+                public  TransactionBase                             ,   // helper for rejecting calls for wrong object states
                 public  ::cppu::OBroadcastHelper                    ,   // helper for propertyset => XPropertySet, XFastPropertySet, XMultiPropertySet
                 public  ::cppu::OPropertySetHelper                  ,
                 public  ::cppu::OWeakObject                             // helper for refcount mechanism
@@ -410,13 +413,17 @@ class Frame :   // interfaces
         virtual void                                                SAL_CALL windowNormalized                   (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
 
         //---------------------------------------------------------------------------------------------------------
-        //   XEventListener
+        //  XEventListener
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL disposing                          (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
 
-        virtual ::rtl::OUString SAL_CALL queryDescription( const ::rtl::OUString& rURL ) throw( css::uno::RuntimeException ) ;
-        virtual void SAL_CALL queryDescriptions ( const css::uno::Sequence < ::rtl::OUString >& rURLs, css::uno::Sequence < ::rtl::OUString >& rDescriptions ) throw( css::uno::RuntimeException ) ;
-        virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation() throw( css::uno::RuntimeException ) ;
+        //---------------------------------------------------------------------------------------------------------
+        //  XDispatchInformationProvider
+        //---------------------------------------------------------------------------------------------------------
+        virtual ::rtl::OUString                                       SAL_CALL queryDescription                  ( const ::rtl::OUString&                       sURL          ) throw( css::uno::RuntimeException );
+        virtual void                                                  SAL_CALL queryDescriptions                 ( const css::uno::Sequence< ::rtl::OUString >& lURLs         ,
+                                                                                                                         css::uno::Sequence< ::rtl::OUString >& lDescriptions ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(                                                            ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -460,10 +467,10 @@ class Frame :   // interfaces
         void                                                    implts_resizeComponentWindow    (                                                                        );
         void                                                    implts_setTitleOnWindow         ( const ::rtl::OUString&                                sTitle           );
         const ::rtl::OUString                                   implts_getTitleFromWindow       (                                                                        ) const;
+        void                                                    implts_startWindowListening     (                                                                        );
+        void                                                    implts_stopWindowListening      (                                                                        );
 
         // non threadsafe
-        void                                                    impl_startWindowListening       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
-        void                                                    impl_stopWindowListening        ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
         sal_Bool                                                impl_tryToChangeProperty        ( const ::rtl::OUString&                                sProperty        ,
                                                                                                   const css::uno::Any&                                  aValue           ,
@@ -526,26 +533,26 @@ class Frame :   // interfaces
     //*************************************************************************************************************
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                          ;   /// reference to factory, which has create this instance
-        css::uno::Reference< css::task::XStatusIndicatorFactory >   m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
-        css::uno::Reference< css::frame::XDispatchProvider >        m_xDispatchHelper                   ;   /// helper for XDispatch/Provider and interception interfaces
-        css::uno::Reference< css::frame::XFrames >                  m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
-        ::cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer                ;   /// container for ALL Listener
-        css::uno::Reference< css::frame::XFramesSupplier >          m_xParent                           ;   /// parent of this frame
-        css::uno::Reference< css::awt::XWindow >                    m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
-        css::uno::Reference< css::awt::XWindow >                    m_xComponentWindow                  ;   /// window of the actual component
-        css::uno::Reference< css::frame::XController >              m_xController                       ;   /// controller of the actual frame
-        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >
-                                                                    m_xDropTargetListener               ;   /// listen to d&d
-
-        EActiveState                                                m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
-        ::rtl::OUString                                             m_sName                             ;   /// name of this frame
-        sal_Bool                                                    m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
-        sal_Bool                                                    m_bConnected                        ;   /// due to FrameActionEvent
+        css::uno::Reference< css::lang::XMultiServiceFactory >                  m_xFactory                          ;   /// reference to factory, which has create this instance
+        css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
+        css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper                   ;   /// helper for XDispatch/Provider and interception interfaces
+        css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
+        ::cppu::OMultiTypeInterfaceContainerHelper                              m_aListenerContainer                ;   /// container for ALL Listener
+        css::uno::Reference< css::frame::XFramesSupplier >                      m_xParent                           ;   /// parent of this frame
+        css::uno::Reference< css::awt::XWindow >                                m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
+        css::uno::Reference< css::awt::XWindow >                                m_xComponentWindow                  ;   /// window of the actual component
+        css::uno::Reference< css::frame::XController >                          m_xController                       ;   /// controller of the actual frame
+        #if SUPD>633
+        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener               ;   /// listen to drag & drop
+        #endif
+        EActiveState                                                            m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
+        ::rtl::OUString                                                         m_sName                             ;   /// name of this frame
+        sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
+        sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
 
     protected:
 
-        FrameContainer                                              m_aChildFrameContainer              ;   /// array of child frames
+        FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
 
         inline css::uno::Reference< css::lang::XMultiServiceFactory > impl_getFactory()
         {
