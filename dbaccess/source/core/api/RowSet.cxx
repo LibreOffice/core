@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 12:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 14:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,15 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_DATASOURCENAME:
+            if(!m_xStatement.is())
+            {
+                Reference< XConnection >  xNewConn;
+                Any aNewConn;
+                aNewConn <<= xNewConn;
+                setFastPropertyValue(PROPERTY_ID_ACTIVECONNECTION, aNewConn);
+            }
+            else
+                m_bRebuildConnOnExecute = sal_True;
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_FETCHSIZE:
@@ -364,6 +373,21 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_URL:
+            // is the connection-to-be-built determined by the url (which is the case if m_aDataSourceName is empty) ?
+            if (!m_aDataSourceName.getLength())
+            {
+                // are we active at the moment ?
+                if (m_xStatement.is())
+                    // yes -> the next execute needs to rebuild our connection because of this new property
+                    m_bRebuildConnOnExecute = sal_True;
+                else
+                {   // no -> drop our active connection (if we have one) as it doesn't correspond to this new property value anymore
+                    Reference< XConnection >  xNewConn;
+                    Any aNewConn;
+                    aNewConn <<= xNewConn;
+                    setFastPropertyValue(PROPERTY_ID_ACTIVECONNECTION, aNewConn);
+                }
+            }
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_USER:
