@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: jl $ $Date: 2002-11-14 15:52:06 $
+ *  last change: $Author: dbo $ $Date: 2002-11-20 15:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,19 +1221,30 @@ static OUString retrieveComponentClassPath( const sal_Char *pVariableName )
                                     sal_Int32 nStart = nIndex;
                                     while( nIndex < nSize && p[nIndex] != ' ' ) nIndex ++;
                                     OUString relativeUrl( &(p[nStart]), nIndex-nStart, RTL_TEXTENCODING_ASCII_US);
-                                    OUString fileurlElement;
-                                    OUString systemPathElement;
-                                    OSL_VERIFY( osl_File_E_None ==
-                                                osl_getAbsoluteFileURL( path.pData, relativeUrl.pData , &(fileurlElement.pData) ) );
-                                    OSL_VERIFY( osl_File_E_None ==
-                                                osl_getSystemPathFromFileURL( fileurlElement.pData, &(systemPathElement.pData) ) );
-                                    if( systemPathElement.getLength() )
+                                    relativeUrl = relativeUrl.trim();
+                                    if (0 < relativeUrl.getLength())
                                     {
-                                        if( bPrepend )
-                                            buf.appendAscii( CLASSPATH_DELIMETER );
-                                        else
-                                            bPrepend = sal_True;
-                                        buf.append( systemPathElement );
+                                        OUString fileurlElement;
+                                        OUString systemPathElement;
+
+                                        OSL_VERIFY(
+                                            osl_File_E_None ==
+                                            osl_getAbsoluteFileURL(
+                                                path.pData, relativeUrl.pData,
+                                                &fileurlElement.pData ) );
+                                        OSL_VERIFY(
+                                            osl_File_E_None ==
+                                            osl_getSystemPathFromFileURL(
+                                                fileurlElement.pData,
+                                                &systemPathElement.pData ) );
+                                        if( systemPathElement.getLength() )
+                                        {
+                                            if( bPrepend )
+                                                buf.appendAscii( CLASSPATH_DELIMETER );
+                                            else
+                                                bPrepend = sal_True;
+                                            buf.append( systemPathElement );
+                                        }
                                     }
                                 }
                                 ret = buf.makeStringAndClear();
