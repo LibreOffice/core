@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:42:59 $
+#   last change: $Author: obo $ $Date: 2004-06-01 09:10:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.72 $$"
+LIBSMKREV!:="$$Revision: 1.73 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -222,6 +222,8 @@ SYSSHELLLIB=-lsysshell
 SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
+XML2LIB = -lxml2
+JVMFWKLIB = -ljvmfwk
 
 # #110743#
 # For BinFilters, some libs were added.
@@ -237,6 +239,7 @@ BFSWLIB=-lbf_swlib
 BFOFALIB=-lbf_ofa$(OFFICEUPD)$(DLLPOSTFIX)
 LEGACYSMGRLIB=-llegacy_binfilters$(OFFICEUPD)$(DLLPOSTFIX)
 BFXMLOFFLIB=-lbf_xo$(OFFICEUPD)$(DLLPOSTFIX)
+
 
 #
 # USED_%NAME%_LIBS
@@ -397,6 +400,8 @@ SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
 JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
+XML2LIB = $(LIBPRE) ixml2.lib
+JVMFWKLIB = $(LIBPRE) ijvmfwk.lib
 
 # #110743#
 # For BinFilters, some libs were added.
