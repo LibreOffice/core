@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:39:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 
 namespace basegfx
 {
+    // predeclarations
+    class B3IRange;
+
     class B3DRange
     {
         typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
@@ -103,10 +106,7 @@ namespace basegfx
                  double z1,
                  double x2,
                  double y2,
-                 double z2,
-                 double x3,
-                 double y3,
-                 double z3)
+                 double z2)
         :   maRangeX(x1),
             maRangeY(y1),
             maRangeZ(z1)
@@ -114,20 +114,15 @@ namespace basegfx
             maRangeX.expand(x2);
             maRangeY.expand(y2);
             maRangeZ.expand(z2);
-            maRangeX.expand(x3);
-            maRangeY.expand(y3);
-            maRangeZ.expand(z3);
         }
 
         B3DRange(const B3DTuple& rTuple1,
-                 const B3DTuple& rTuple2,
-                 const B3DTuple& rTuple3)
+                 const B3DTuple& rTuple2)
         :   maRangeX(rTuple1.getX()),
             maRangeY(rTuple1.getY()),
             maRangeZ(rTuple1.getZ())
         {
             expand(rTuple2);
-            expand(rTuple3);
         }
 
         B3DRange(const B3DRange& rRange)
@@ -303,6 +298,12 @@ namespace basegfx
             maRangeZ.grow(fValue);
         }
     };
+
+    /** Round double to nearest integer for 3D range
+
+        @return the nearest integer for this range
+    */
+    B3IRange fround(const B3DRange& rRange);
 } // end of namespace basegfx
 
 
