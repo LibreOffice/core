@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 18:28:26 $
+ *  last change: $Author: nn $ $Date: 2002-11-28 11:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,8 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
         {
             ScMarkData aMarkData = GetSourceMarkData();
             //  external drag&drop doesn't copy objects, so they also aren't deleted:
-            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, FALSE );
+            //  #105703# bApi=TRUE, don't show error messages from drag&drop
+            pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, TRUE, TRUE );
         }
     }
 
