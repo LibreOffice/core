@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,6 +1180,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+    uno::Any aAny;
 
     if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
@@ -1188,7 +1189,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         drawing::PolyPolygonBezierCoords aRetval;
         ImplSvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
 
-        return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+        aAny <<= aRetval;
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
     {
@@ -1202,18 +1203,19 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
             drawing::PolyPolygonBezierCoords aRetval;
             ImplSvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
 
-            return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+            aAny <<= aRetval;
         }
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {
-        drawing::PolygonKind ePT = GetPolygonKind();
-        return uno::Any( &ePT, ::getCppuType((const drawing::PolygonKind*)0) );
+        aAny <<= (drawing::PolygonKind)GetPolygonKind();
     }
     else
     {
         return SvxShape::getPropertyValue(aPropertyName);
     }
+
+    return aAny;
 }
 
 //----------------------------------------------------------------------

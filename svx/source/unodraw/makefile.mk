@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+#   last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES =				\
+        unopool.cxx \
         XPropertyTable.cxx \
         UnoNameItemTable.cxx \
         unoipset.cxx	\
@@ -100,6 +101,7 @@ CXXFILES =				\
         gluepts.cxx
 
 SLOFILES =	\
+        $(SLO)$/unopool.obj \
         $(SLO)$/XPropertyTable.obj \
         $(SLO)$/UnoNameItemTable.obj \
         $(SLO)$/unoshape.obj	\

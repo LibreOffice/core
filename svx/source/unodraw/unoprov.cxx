@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: avy $ $Date: 2001-02-28 14:21:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,15 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#include <unotools/propertysetinfo.hxx>
 
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
@@ -447,6 +456,25 @@ SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap()
     };
 
     return aPageShapePropertyMap_Impl;
+}
+
+utl::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
+{
+    static utl::PropertyMapEntry aSvxDrawingDefaultsPropertyMap_Impl[] =
+    {
+        SHADOW_PROPERTIES
+        LINE_PROPERTIES_DEFAULTS
+        FILL_PROPERTIES_BMP
+        EDGERADIUS_PROPERTIES
+        TEXT_PROPERTIES_DEFAULTS
+        CONNECTOR_PROPERTIES
+        SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
+        MISC_3D_OBJ_PROPERTIES
+        SPECIAL_3DBACKSCALE_PROPERTIES
+        {0,0,0,0,0}
+    };
+
+    return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
 // ---------------------------------------------------------------------
@@ -982,3 +1010,37 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
 
     rInternalName = rApiName;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+utl::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if( nServiceId > SVXUNO_SERVICEID_LASTID )
+    {
+        DBG_ERROR( "unknown service id!" );
+        return NULL;
+    }
+
+    if( mpInfos[ nServiceId ] == NULL )
+    {
+        mpInfos[nServiceId] = new utl::PropertySetInfo();
+        mpInfos[nServiceId]->acquire();
+
+        switch( nServiceId )
+        {
+        case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS:
+            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+            break;
+
+        default:
+            DBG_ERROR( "unknown service id!" );
+        }
+    }
+
+    return mpInfos[ nServiceId ];
+}
+
+utl::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
+
