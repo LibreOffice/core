@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:57:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,35 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::accessibility;
+using namespace ::comphelper;
+
+//=====================================================================
+//= AccessibleEventNotifier
+//=====================================================================
+//---------------------------------------------------------------------
+namespace
+{
+    struct lclMutex
+        : public rtl::Static< ::osl::Mutex, lclMutex > {};
+    struct Clients
+        : public rtl::Static< AccessibleEventNotifier::ClientMap, Clients > {};
+}
+
 //.........................................................................
 namespace comphelper
 {
 //.........................................................................
-
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::accessibility;
-    using namespace ::comphelper;
-
-    //=====================================================================
-    //= AccessibleEventNotifier
-    //=====================================================================
-    //---------------------------------------------------------------------
-    ::osl::Mutex                        AccessibleEventNotifier::s_aMutex;
-    AccessibleEventNotifier::ClientMap  AccessibleEventNotifier::s_aClients;
 
     //---------------------------------------------------------------------
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::generateId()
@@ -98,9 +106,9 @@ namespace comphelper
 
         // Note that the following relies on the fact the elements in the map are traveled with
         // ascending keys (aka client ids)
-
-        for (   ClientMap::const_iterator aLookup = s_aClients.begin();
-                aLookup != s_aClients.end();
+        AccessibleEventNotifier::ClientMap &rClients = Clients::get();
+        for (   ClientMap::const_iterator aLookup = rClients.begin();
+                aLookup != rClients.end();
                 ++aLookup
             )
         {
@@ -119,7 +127,7 @@ namespace comphelper
         if ( !nFreeId )
             nFreeId = nBiggestUsedId + 1;
 
-        OSL_ENSURE( s_aClients.end() == s_aClients.find( nFreeId ),
+        OSL_ENSURE( rClients.end() == rClients.find( nFreeId ),
             "AccessibleEventNotifier::generateId: algorithm broken!" );
 
         return nFreeId;
@@ -128,20 +136,20 @@ namespace comphelper
     //---------------------------------------------------------------------
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient( )
     {
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         // generate a new client id
         TClientId nNewClientId = generateId( );
 
         // the event listeners for the new client
-        EventListeners* pNewListeners = new EventListeners( s_aMutex );
+        EventListeners* pNewListeners = new EventListeners( lclMutex::get() );
             // note that we're using our own mutex here, so the listener containers for all
             // our clients share this same mutex.
             // this is a reminiscense to the days where the notifier was asynchronous. Today this is
             // completely nonsense, and potentially slowing down the Office me thinks ...
 
         // add the client
-        s_aClients.insert( ClientMap::value_type( nNewClientId, pNewListeners ) );
+        Clients::get().insert( ClientMap::value_type( nNewClientId, pNewListeners ) );
 
         // outta here
         return nNewClientId;
@@ -151,16 +159,17 @@ namespace comphelper
     sal_Bool AccessibleEventNotifier::implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos )
     {
         // look up this client
-        _rPos = s_aClients.find( _nClient );
-        OSL_ENSURE( s_aClients.end() != _rPos, "AccessibleEventNotifier::implLookupClient: invalid client id (did you register your client?)!" );
+        AccessibleEventNotifier::ClientMap &rClients = Clients::get();
+        _rPos = rClients.find( _nClient );
+        OSL_ENSURE( rClients.end() != _rPos, "AccessibleEventNotifier::implLookupClient: invalid client id (did you register your client?)!" );
 
-        return ( s_aClients.end() != _rPos );
+        return ( rClients.end() != _rPos );
     }
 
     //---------------------------------------------------------------------
     void AccessibleEventNotifier::revokeClient( const TClientId _nClient )
     {
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -169,14 +178,14 @@ namespace comphelper
 
         // remove it from the clients map
         delete aClientPos->second;
-        s_aClients.erase( aClientPos );
+        Clients::get().erase( aClientPos );
     }
 
     //---------------------------------------------------------------------
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource ) SAL_THROW( ( ) )
     {
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -193,7 +202,7 @@ namespace comphelper
         // we do not need the entry in the clients map anymore
         // (do this before actually notifying, because some client implementations have re-entrance
         // problems and call into revokeClient while we are notifying from hereing)
-        s_aClients.erase( aClientPos );
+        Clients::get().erase( aClientPos );
 
         // now really do the notification
         pListeners->disposeAndClear( aDisposalEvent );
@@ -205,7 +214,7 @@ namespace comphelper
     sal_Int32 AccessibleEventNotifier::addEventListener(
         const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
     {
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -222,7 +231,7 @@ namespace comphelper
     sal_Int32 AccessibleEventNotifier::removeEventListener(
         const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
     {
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( !implLookupClient( _nClient, aClientPos ) )
@@ -240,7 +249,7 @@ namespace comphelper
     {
         Sequence< Reference< XInterface > > aListeners;
 
-        ::osl::MutexGuard aGuard( s_aMutex );
+        ::osl::MutexGuard aGuard( lclMutex::get() );
 
         ClientMap::iterator aClientPos;
         if ( implLookupClient( _nClient, aClientPos ) )
@@ -256,7 +265,7 @@ namespace comphelper
 
         // --- <mutex lock> -------------------------------
         {
-            ::osl::MutexGuard aGuard( s_aMutex );
+            ::osl::MutexGuard aGuard( lclMutex::get() );
 
             ClientMap::iterator aClientPos;
             if ( !implLookupClient( _nClient, aClientPos ) )
