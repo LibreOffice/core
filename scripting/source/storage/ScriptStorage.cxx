@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.25 $
-*  last change: $Author: dfoster $ $Date: 2003-07-17 08:36:34 $
+*  $Revision: 1.26 $
+*  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -804,7 +804,7 @@ throw ( lang::IllegalArgumentException,
 
     bool checkFuncNeeded = ( queryFunc.getLength() > 0 );
     bool checkLangNeeded = ( queryLang.getLength() > 0 );
-    int scriptsIndex = 0;
+    unsigned int scriptsIndex = 0;
     if ( checkLangNeeded )
         OSL_TRACE("Need to check language");
     if ( checkFuncNeeded )
@@ -814,7 +814,7 @@ throw ( lang::IllegalArgumentException,
     // alone
     results.realloc( h_it->second.size() );
 
-    for ( sal_Int32 count = 0; it_datas != it_datas_end ; ++it_datas )
+    for ( ; it_datas != it_datas_end ; ++it_datas )
     {
         ScriptData scriptData = *it_datas;
         Reference< storage::XScriptInfo > xScriptInfo;

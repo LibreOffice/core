@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-07-17 08:36:34 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ namespace scripting_impl
     the ScriptDataObject
 */
 ScriptElement::ScriptElement( ScriptData & sII ) :
-        m_sII( sII ),
-        XMLElement( OUSTR( "parcel" ) )
+        XMLElement( OUSTR( "parcel" ) ),
+        m_sII( sII )
 {
     OSL_TRACE( "ScriptElement ctor called\n" );
 
@@ -176,7 +176,8 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
 
        if( sm_it != sm_itend )
        {
-           XMLElement* subxel = new XMLElement( OUSTR( "file" ) );
+           // was there a purpose for contstructing this
+           // XMLElement* subxel = new XMLElement( OUSTR( "file" ) );
            xel->addAttribute( OUSTR( "name" ), sm_it->first );
 
        }

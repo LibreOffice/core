@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:20 $
+*  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -388,7 +388,7 @@ throw ( RuntimeException )
 
 ScriptProtocolHandler::ScriptProtocolHandler(
 Reference< css::lang::XMultiServiceFactory > const& rFact ) :
-m_xFactory( rFact ), m_bInitialised( false )
+m_bInitialised( false ), m_xFactory( rFact )
 {
     OSL_TRACE( "ScriptProtocolHandler::ScriptProtocolHandler - ctor" );
 }

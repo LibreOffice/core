@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: npower $ $Date: 2003-03-03 18:39:42 $
+*  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -111,7 +111,7 @@ public:
      * @param scriptURI the URI, which may not be fully qualified, for the
      *  script to be invoked
      *
-    /*************************************************************
+     *************************************************************
       Invoke
         @param scriptUri script uri describing the script
         @param invocationCtx

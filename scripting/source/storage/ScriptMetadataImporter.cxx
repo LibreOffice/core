@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-25 16:16:40 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,11 @@ void ScriptMetadataImporter::startElement(
                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             break;
 
+        // to prevent compiler warnings
+        case PARCEL:
+        case DESCRIPTION:
+        case LANGUAGEDEPPROPS:
+            break;
     }
 }
 
@@ -409,6 +414,17 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
             mm_files[ ms_filename ] = mv_fileprops;
             mv_fileprops.clear();
             break;
+            //
+        // to prevent compiler warnings
+        case DISPLAYNAME:
+        case DESCRIPTION:
+        case FUNCTIONNAME:
+        case LOGICALNAME:
+        case LANGUAGEDEPPROPS:
+        case LANGDEPPROPS:
+        case FILESETPROPS:
+        case FILEPROPS:
+            break;
     }
 }
 
@@ -422,10 +438,21 @@ void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
 
     switch ( m_state )
     {
-    case DESCRIPTION:
-        //Put description into the struct
-        ms_localeDesc->append(aChars);
-        break;
+        case DESCRIPTION:
+            //Put description into the struct
+            ms_localeDesc->append(aChars);
+            break;
+        case PARCEL:
+        case SCRIPT:
+        case LOCALE:
+        case DISPLAYNAME:
+        case FUNCTIONNAME:
+        case LOGICALNAME:
+        case LANGUAGEDEPPROPS:
+        case LANGDEPPROPS:
+        case FILESETPROPS:
+        case FILEPROPS:
+            break;
     }
 }
 
