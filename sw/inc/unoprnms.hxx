@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-01-17 16:19:12 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,11 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TEXT;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_DISPLAY_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FORBIDDEN_CHARACTERS;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST;
+
 #endif
 
 
