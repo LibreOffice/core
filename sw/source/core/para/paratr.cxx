@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:23:36 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
     //Ummelden
     if ( pRegisteredIn )
         pRegisteredIn->Remove( this );
-    pNew->Add( this );
+    if(pNew)
+        pNew->Add( this );
     nReadFmt = USHRT_MAX;
 }
 
@@ -253,8 +254,8 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
-        case MID_DROPCAP_LINES : rVal <<= nLines; break;
-        case MID_DROPCAP_COUNT : rVal <<= nChars; break;
+        case MID_DROPCAP_LINES : rVal <<= (sal_Int16)nLines; break;
+        case MID_DROPCAP_COUNT : rVal <<= (sal_Int16)nChars; break;
         case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) TWIP_TO_MM100(nDistance); break;
         case MID_DROPCAP_FORMAT:
         {
@@ -285,8 +286,22 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
-        case MID_DROPCAP_LINES : rVal >>= nLines; break;
-        case MID_DROPCAP_COUNT : rVal >>= nChars; break;
+        case MID_DROPCAP_LINES :
+        {
+            sal_Int8 nTemp;
+            rVal >>= nTemp;
+            if(nTemp >=1 && nTemp < 0x7f)
+                nLines = (BYTE)nTemp;
+        }
+        break;
+        case MID_DROPCAP_COUNT :
+        {
+            sal_Int16 nTemp;
+            rVal >>= nTemp;
+            if(nTemp >=1 && nTemp < 0x7f)
+                nChars = (BYTE)nTemp;
+        }
+        break;
         case MID_DROPCAP_DISTANCE :
         {
             sal_Int16 nVal;

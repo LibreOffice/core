@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:48:46 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ interface BaseText : Selection
 */
     FN_FORMAT_DROPCAPS
     [
-        ExecMethod = Execute ;
+        ExecMethod = ExecParaAttrArgs ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -1183,8 +1183,18 @@ interface BaseText : Selection
 
     FN_FORMAT_DROPCAPS // status(final|play)
     [
-        ExecMethod = ExecParaAttrArgs ;
+        ExecMethod = Execute ;
         StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_DROP_TEXT
+    [
+        ExecMethod = Execute;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_DROP_CHAR_STYLE_NAME
+    [
+        ExecMethod = ExecParaAttrArgs;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_PARA_HYPHENZONE // status(final|play)

@@ -9469,4 +9469,58 @@ SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem SetDropCapText FN_DROP_TEXT
+(
+    SfxStringItem DropCapText FN_DROP_TEXT
+)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
+(
+    SfxStringItem CharStyleName FN_DROP_CHAR_STYLE_NAME
+)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
 
