@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-15 15:18:26 $
+ *  last change: $Author: dvo $ $Date: 2001-05-16 09:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
                 "called getValue() without calling getValues() before");
     DBG_ASSERT( pSequenceIndex != NULL,
                 "called getValue() without calling hasProperties() before" );
-    DBG_ASSERT( nValueNo < nIndex, "index out of range" );
+    DBG_ASSERT( nValueNo < nLength, "index out of range" );
 
     sal_Int16 nIndex = pSequenceIndex[ nValueNo ];
     return ( nIndex != -1 ) ? pValues[ nIndex ] : aEmptyAny;
@@ -219,7 +219,7 @@ sal_Bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
 {
     DBG_ASSERT( pSequenceIndex != NULL,
                 "called getValue() without calling hasProperties() before" );
-    DBG_ASSERT( nValueNo < nIndex, "index out of range" );
+    DBG_ASSERT( nValueNo < nLength, "index out of range" );
 
     return pSequenceIndex[ nValueNo ] != -1;
 }
