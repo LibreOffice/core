@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolderEnumeration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:16:27 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,24 @@
 #ifndef _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
 #define _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _HASH_MAPS_HXX
 #include <HashMaps.hxx>
 #endif
 
-class ZipPackageFolderEnumeration : public cppu::WeakImplHelper1<
-                        com::sun::star::container::XEnumeration
-                        >
+class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
+<
+    com::sun::star::container::XEnumeration,
+    com::sun::star::lang::XServiceInfo
+>
 {
 protected:
     ContentHash &rContents;
@@ -82,11 +87,20 @@ public:
     //ZipPackageFolderEnumeration (std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration (ContentHash &rInput);
     virtual ~ZipPackageFolderEnumeration( void );
+
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
 };
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolderEnumeration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:17:22 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,14 @@
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
-#include "ZipPackageFolderEnumeration.hxx"
+#include <ZipPackageFolderEnumeration.hxx>
 #endif
 #ifndef _CONTENT_INFO_HXX_
 #include <ContentInfo.hxx>
 #endif
+
 using namespace com::sun::star;
+using rtl::OUString;
 
 ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 : rContents (rInput)
@@ -90,4 +92,23 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
     aAny <<= (*aIterator).second->xTunnel;
     aIterator++;
     return aAny;
+}
+
+OUString ZipPackageFolderEnumeration::getImplementationName()
+    throw (uno::RuntimeException)
+{
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZipPackageFolderEnumeration" ) );
+}
+
+uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames()
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< OUString > aNames(1);
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.PackageFolderEnumeration" ) );
+    return aNames;
+}
+sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService( OUString const & rServiceName )
+    throw (uno::RuntimeException)
+{
+    return rServiceName == getSupportedServiceNames()[0];
 }
