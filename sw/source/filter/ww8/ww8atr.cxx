@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:45:24 $
+ *  last change: $Author: cmc $ $Date: 2001-02-23 09:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,12 @@
 #ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
 #endif
-
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
@@ -1896,14 +1901,18 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         the CJK fontsize even if the text is not in that language, in OOo the
         largest fontsize used in the field is the one we should take, but
         whatever we do, word will actually render using the fontsize set for
-        CJK text, so if we have western characters but a CJK fontsize that is
-        different that the western one, then word will render in the CJK
-        fontsize. Given that, there is no use determing if we have actually
-        placed solely western characters in the field as word will render with
-        CJK fontsize anyway.
+        CJK text. Nevertheless we attempt to guess whether the script is in
+        asian or western text based up on the first character and use the
+        font size of that script as our default.
         */
+        USHORT nScript;
+        if( pBreakIt->xBreak.is() )
+            nScript = pBreakIt->xBreak->getScriptType( pFld->GetPar1(), 0);
+        else
+            nScript = com::sun::star::i18n::ScriptType::ASIAN;
+
         long nHeight = ((SvxFontHeightItem&)(((SwWW8Writer&)rWrt).GetItem(
-            RES_CHRATR_CJK_FONTSIZE))).GetHeight();;
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();;
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 
@@ -3554,11 +3563,11 @@ SwAttrFnTab aWW8AttrFnTab = {
 
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
 /* RES_TXTATR_DUMMY4 */             0,
-/* RES_TXTATR_REFMARK */            0,      // handel by SwAttrIter
-/* RES_TXTATR_TOXMARK   */          0,      // handel by SwAttrIter
+/* RES_TXTATR_REFMARK */            0,      // handled by SwAttrIter
+/* RES_TXTATR_TOXMARK   */          0,      // handled by SwAttrIter
 /* RES_TXTATR_CHARFMT   */          OutWW8_SwTxtCharFmt,
 /* RES_TXTATR_DUMMY5*/              0,
-/* RES_TXTATR_CJK_RUBY */           0,
+/* RES_TXTATR_CJK_RUBY */           0,      // handled by SwAttrIter
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY6 */             0,
 /* RES_TXTATR_DUMMY7 */             0,
@@ -3658,6 +3667,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/21 12:45:24  os
+      use database struct instead of a combined string
+
       Revision 1.9  2001/02/20 19:38:38  cmc
       CJK Combined Characters Word Export
 
