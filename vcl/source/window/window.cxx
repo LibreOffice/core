@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 15:11:18 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 18:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6247,18 +6247,7 @@ void Window::SetPosSizePixel( long nX, long nY,
 
 Point Window::GetPosPixel() const
 {
-    if ( mbFrame )
-    {
-        SalFrameGeometry g = mpFrame->GetGeometry();
-        Point aPos( OutputToScreenPixel( Point(0,0) ) );
-        aPos.X() += g.nX;
-        aPos.Y() += g.nY;
-        if( mpParent )
-            aPos = mpParent->AbsoluteScreenToOutputPixel( aPos );
-        return aPos;
-    }
-    else
-        return maPos;
+    return maPos;
 }
 
 // -----------------------------------------------------------------------
