@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:56:48 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6323,34 +6323,6 @@ SfxSlotInfo FN_PRINT_PAGEPREVIEW
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Imprimir previsualización";
     SlotName[ finnish ] = "Sivun tulostusnäkymä";
-};
-SfxSlotInfo FN_QRY
-{
-    SlotName = "Datenbankmanager aufrufen";
-    SlotName [ english ] =  "Datenbankmanager aufrufen";
-    SlotName[ english_us ] = "Call Database Manager";
-    SlotName[ portuguese ] = "Gestor da Base de Dados";
-    SlotName[ russian ] = "Âûçîâ àäìèíèñòğàòîğà áàçû äàííûõ";
-    SlotName[ dutch ] = "Databasemanager oproepen";
-    SlotName[ french ] = "Gestionnaire de base de données";
-    SlotName[ spanish ] = "Activar administrador de bases de datos";
-    SlotName[ italian ] = "Richiama gestione database";
-    SlotName[ danish ] = "Aktiver databasemanager";
-    SlotName[ swedish ] = "Anropa databas";
-    SlotName[ polish ] = "Wywo³aj mened¿era bazy danych";
-    SlotName[ portuguese_brazilian ] = "InsertDatabase";
-    SlotName[ japanese ] = "ÃŞ°ÀÍŞ°½ÏÈ°¼Ş¬‚ÌÀs";
-    SlotName[ chinese_simplified ] = "Æô¶¯Êı¾İ¿â¹ÜÀí³ÌĞò";
-    SlotName[ chinese_traditional ] = "±Ò°Ê¸ê®Æ®wºŞ²zµ{¦¡";
-    SlotName[ arabic ] = "ãÏíÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    SlotName[ dutch ] = "Databasemanager oproepen";
-    SlotName[ chinese_simplified ] = "Æô¶¯Êı¾İ¿â¹ÜÀí³ÌĞò";
-    SlotName[ greek ] = "Åíåñãïğïßçóç äéá÷åéñéóôŞ âÜóçò äåäïìİíùí";
-    SlotName[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º °ü¸®ÀÚ È£Ãâ";
-    SlotName[ turkish ] = "Veritabanı yöneticisini çalıştır";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Activar administrador de bases de datos";
-    SlotName[ finnish ] = "Kutsutietokannan hallinta";
 };
 SfxSlotInfo FN_QRY_MERGE
 {

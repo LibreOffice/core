@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:27 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 //#define FN_QRY_GET_RECORD_ID  (FN_INSERT + 61)    /* Datensatznummer erfragen (Basic) */
 //#define FN_QRY_GET_COLUMN_NUM (FN_INSERT + 62)    /* Anzahl der Spalten (Basic) */
 
-#define FN_QRY                  (FN_INSERT + 63)    /* Datensatz einfuegen */
+
 #define FN_QRY_MERGE            (FN_INSERT + 64)    /* Datensatz einfuegen (Serienbrief) */
 #define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* Datenbank oeffnen (Basic) */
 #define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* Draw-Objekt am Rahmen verankern */

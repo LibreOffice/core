@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 13:47:58 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,7 @@ public:
     sal_Bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( sal_Bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-    void ShowDBObj( SwWrtShell& rShell, const SwDBData& rData,
-                    sal_Bool bShowError = sal_False );
+    void ShowDBObj( SwView& rView, const SwDBData& rData, BOOL bOnlyIfAvailable = FALSE);
 
     // Tabellenmodi
     sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;

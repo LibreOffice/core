@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:27 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,9 +313,6 @@ public:
     BOOL            ExistsNextRecord()const;
     sal_uInt32      GetSelectedRecordId();
     sal_Bool        ToRecordId(sal_Int32 nSet);
-
-    BOOL            ShowInBeamer(const String& rDBName, const String& rTableName,
-                                                BYTE nType, const String& rStatement);
 
     const SwDBData& GetAddressDBName();
 

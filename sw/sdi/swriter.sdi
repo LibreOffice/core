@@ -5754,29 +5754,6 @@ SfxVoidItem EditRegion FN_EDIT_REGION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem DataBaseBrowser FN_QRY
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem GoToEndOfPrevPageSel FN_END_OF_PREV_PAGE_SEL
 ()
 [
