@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-12 14:49:52 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,8 +566,12 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
                         if(pPickObj->ISA(E3dObject) && pObj->ISA(E3dObject))
                         {
                             // Zusaetzlich 3D Attribute handeln
-                            SfxItemSet aNewSet(pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0);
-                            SfxItemSet aOldSet(pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0);
+                            SfxItemSet aNewSet(pDoc->GetPool(),
+                                SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                0, 0);
+                            SfxItemSet aOldSet(pDoc->GetPool(),
+                                SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                0, 0);
 
 //-/                            pPickObj->TakeAttributes(aOldSet, TRUE, TRUE);
                             aOldSet.Put(pPickObj->GetItemSet());
