@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-08 12:28:31 $
+ *  last change: $Author: sj $ $Date: 2001-10-10 13:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2074,13 +2074,18 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
     }
     else
         pFilter = pApp->GetFilterMatcher().GetFilter4ClipBoardId( nFormat, 0, 0 );
-    if( !pFilter && nFormat )
-    {
-        DBG_ERROR( "No Filter for storage found!" );
-        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->GetFilter( 0 );
-    }
 
     Init_Impl();
+
+    if( !pFilter && nFormat )
+    {
+        pApp->GetFilterMatcher().GetFilter4Content( *this, &pFilter );  // #91292# PowerPoint does not support an OleComp stream,
+        if ( !pFilter )                                                 // so GetFilter4ClipBoardId is not able to detect the format,
+        {                                                               // for such cases we try to get the filter by GetFilter4Content
+            DBG_ERROR( "No Filter for storage found!" );
+            pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->GetFilter( 0 );
+        }
+    }
 }
 
 //------------------------------------------------------------------
