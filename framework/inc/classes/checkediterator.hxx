@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-30 09:54:52 $
+ *  last change: $Author: as $ $Date: 2000-11-30 11:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,11 +168,11 @@ class CheckedIterator
             LOG_ASSERT( !(pContainer==NULL), "CheckedIterator::initialize()\nInvalid parameter detected!\n" )
 
             // Set new container and actualize other member.
-            m_pContainer        = pContainer            ;
-            m_bReverse          = bReverse              ;
-            m_eEndState         = E_BEFOREEND           ;
-            m_nForward          = 0                     ;
-            m_nBackward         = pContainer->size()    ;
+            m_pContainer        = pContainer                ;
+            m_bReverse          = bReverse                  ;
+            m_eEndState         = E_BEFOREEND               ;
+            m_nForward          = 0                         ;
+            m_nBackward         = m_pContainer->size()-1    ;// -1 .. because first index is 0!
         }
 
         /*-****************************************************************************************************//**
@@ -224,7 +224,10 @@ class CheckedIterator
                                         ++m_nForward    ;
                                         --m_nBackward   ;
                                         // If one iterator reaching end ... other iterator must do the same automaticly!
-                                        if( m_nForward >= (sal_Int32)m_pContainer->size() )
+                                        if  (
+                                                ( m_nForward    >=  (sal_Int32)m_pContainer->size() )   ||
+                                                ( m_nBackward   <   0                               )
+                                            )
                                         {
                                             m_eEndState = E_END;
                                         }
@@ -254,7 +257,7 @@ class CheckedIterator
         {
             // Is true if one end state is set!
             return  (
-                        ( m_eEndState == E_END )    ||
+                        ( m_eEndState == E_END      )   ||
                         ( m_eEndState == E_AFTEREND )
                     );
         }
@@ -296,14 +299,20 @@ class CheckedIterator
             // or try to read a non existing element!
             LOG_ASSERT( !(m_eEndState!=E_BEFOREEND) , "CheckedIterator::getEntry()\nWrong using of class detected!\n"   )
 
-            TContainer::const_iterator pEntry;
+            TContainer::const_iterator pEntry = m_pContainer->begin();
             if( m_bReverse == sal_True )
             {
-                pEntry = m_pContainer->end()-m_nBackward;
+                for( sal_Int32 i=0; i<m_nBackward; ++i )
+                {
+                    ++pEntry;
+                }
             }
             else
             {
-                pEntry = m_pContainer->begin()+m_nForward;
+                for( sal_Int32 i=0; i<m_nForward; ++i )
+                {
+                    ++pEntry;
+                }
             }
 
             return pEntry;
