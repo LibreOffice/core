@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: dr $ $Date: 2002-03-07 14:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         String                  aStyleName;
         USHORT                  nRetMask = 0xffff;
-        BOOL                    bGrabFocus = ( SID_STYLE_APPLY == nSlotId );
+//      #96983# only stylist sends focus to sheet
+//        BOOL                    bGrabFocus = ( SID_STYLE_APPLY == nSlotId );
 
         pStylePool->SetSearchMask( eFamily, SFXSTYLEBIT_ALL );
 
@@ -793,8 +794,9 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 //      if ( nRetMask != 0xffff )// Irgendein Wert MUSS geliefert werden JN
             rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 
-        if ( bGrabFocus )
-            pTabViewShell->GetActiveWin()->GrabFocus();
+//      #96983# only stylist sends focus to sheet
+//        if ( bGrabFocus )
+//            pTabViewShell->GetActiveWin()->GrabFocus();
 
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
