@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-28 08:58:31 $
+ *  last change: $Author: gt $ $Date: 2002-08-09 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 
 #ifndef _OFF_OFAIDS_HRC
 #include <offmgr/ofaids.hrc>
+#endif
+#ifndef _OFFAPP_INTERNATIONALOPTIONS_HXX_
+#include <offmgr/internationaloptions.hxx>
 #endif
 
 #define _SD_DLL                 // fuer SD_MOD()
@@ -708,9 +711,9 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
         GetBindings().InvalidateAll( TRUE );
 }
-SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    SfxTabPage* pRet = NULL;
     switch(nId)
     {
         case SID_SD_TP_CONTENTS:
@@ -733,11 +736,15 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
             if(SID_SD_TP_MISC == nId)
                 ( (SdTpOptionsMisc*) pRet )->SetDrawMode();
         break;
+        case RID_OFA_TP_INTERNATIONAL_SD:
+        case RID_OFA_TP_INTERNATIONAL_IMPR:
+            pRet = ::offapp::InternationalOptionsPage::CreateSd( pParent, rSet );
+            break;
     }
-    DBG_ASSERT(pRet, "Id unbekannt");
+
+    DBG_ASSERT( pRet, "SdModule::CreateTabPage(): no valid ID for TabPage!" );
+
     return pRet;
-
-
 }
 
 
