@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:49:34 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°";
