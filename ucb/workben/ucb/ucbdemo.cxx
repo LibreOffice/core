@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:42:18 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,8 @@
 
 #include <stack>
 
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
-#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_PROFILE_HXX_
-#include <vos/profile.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -100,17 +94,11 @@
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
 #include <com/sun/star/ucb/CommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERCONFIGURATIONMANAGER_HPP_
-#include <com/sun/star/ucb/XContentProviderConfigurationManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -124,22 +112,11 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#if 0
-#ifndef _COM_SUN_STAR_REGISTRY_XIMPLEMENTATIONREGISTRATION_HPP_
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-#endif
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_CHAOSPROGRESSSTART_HPP_
 #include <com/sun/star/ucb/CHAOSProgressStart.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_RESULTSETEXCEPTION_HPP_
 #include <com/sun/star/ucb/ResultSetException.hpp>
@@ -147,8 +124,8 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XPROPERTYSETREGISTRYFACTORY_HPP_
-#include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -183,26 +160,17 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BRIDGE_XUNOURLRESOLVER_HPP_
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XPARAMETERIZEDCONTENTPROVIDER_HPP_
-#include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
-#endif
-
-#if 0 /*SB*/
-#ifndef _COM_SUN_STAR_UCB_XREMOTECONTENTPROVIDERACCEPTOR_HPP_
-#include <com/sun/star/ucb/XRemoteContentProviderAcceptor.hpp>
-#endif
-#endif /*SB*/
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
 
+#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
+#include <ucbhelper/configurationkeys.hxx>
+#endif
 #ifndef _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
 #include <ucbhelper/fileidentifierconverter.hxx>
 #endif
@@ -211,22 +179,22 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _SV_WRKWIN_HXX //autogen
+#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SV_TOOLBOX_HXX //autogen
+#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
-#ifndef _SV_EDIT_HXX //autogen
+#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX //autogen
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SV_HELP_HXX //autogen
+#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
 
@@ -234,24 +202,16 @@
 #include <srcharg.hxx>
 #endif
 
-#ifndef _MAX_PATH
-#include <limits.h>
-#define _MAX_PATH PATH_MAX
-#endif
-
 using namespace vos;
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::task;
 using namespace com::sun::star::io;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::connection;
 
 /*========================================================================
  *
@@ -525,21 +485,21 @@ void SAL_CALL ProgressHandler::pop() throw (RuntimeException)
 
 class Ucb : public MessagePrinter
 {
-public:
-    enum Remote { REMOTE_NO, REMOTE_UCB, REMOTE_UCP };
-
 private:
     Reference< XMultiServiceFactory >      m_xFac;
     Reference< XContentProviderManager >   m_xProvMgr;
     Reference< XContentProvider >          m_xProv;
     Reference< XContentIdentifierFactory > m_xIdFac;
-    Remote m_eRemote;
+    rtl::OUString m_aConfigurationKey1;
+    rtl::OUString m_aConfigurationKey2;
     sal_Bool m_bInited : 1;
 
     static OUString getUnoURL();
 
 public:
-    Ucb( Reference< XMultiServiceFactory >& rxFactory, Remote eRemote );
+    Ucb( Reference< XMultiServiceFactory >& rxFactory,
+         rtl::OUString const & rConfigurationKey1,
+         rtl::OUString const & rConfigurationKey2 );
     ~Ucb();
 
     sal_Bool init();
@@ -549,10 +509,6 @@ public:
 
     XContentIdentifierFactory* getContentIdentifierFactory();
     XContentProvider*          getContentProvider();
-
-    static sal_Bool install  ( Reference< XMultiServiceFactory >& rxFactory,
-                               sal_Bool bRemoteUCB );
-    static sal_Bool uninstall( Reference< XMultiServiceFactory >& rxFactory );
 
     static OUString m_aProtocol;
 };
@@ -575,10 +531,13 @@ OUString Ucb::getUnoURL()
 }
 
 //-------------------------------------------------------------------------
-Ucb::Ucb( Reference< XMultiServiceFactory >& rxFactory, Remote eRemote )
+Ucb::Ucb( Reference< XMultiServiceFactory >& rxFactory,
+          rtl::OUString const & rConfigurationKey1,
+          rtl::OUString const & rConfigurationKey2 )
 : m_xFac( rxFactory ),
-  m_bInited( sal_False ),
-  m_eRemote( eRemote )
+  m_aConfigurationKey1( rConfigurationKey1 ),
+  m_aConfigurationKey2( rConfigurationKey2 ),
+  m_bInited( sal_False )
 {
 }
 
@@ -593,198 +552,20 @@ sal_Bool Ucb::init()
     if ( m_bInited )
         return sal_True;
 
-    switch ( m_eRemote )
+    // Create auto configured UCB:
+    if ( m_xFac.is() )
     {
-        case REMOTE_NO:
-            // Create auto configured UCB:
-            if ( m_xFac.is() )
-            {
-                Sequence< Any > aArgs(1);
-                aArgs[0] <<= sal_True;
-                m_xProvMgr = Reference< XContentProviderManager >(
-                    m_xFac->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.ucb.UniversalContentBroker" ),
-                        aArgs ),
-                    UNO_QUERY );
-            }
-            break;
-
-        case REMOTE_UCB:
-        {
-            if (!m_xFac.is())
-            {
-                print("No XMultiServiceFactory");
-                return false;
-            }
-
-            Reference< XUnoUrlResolver > xResolver;
-            try
-            {
-                xResolver
-                    = Reference< XUnoUrlResolver >(
-                          m_xFac->
-                              createInstance(
-                                  OUString::createFromAscii(
-                                      "com.sun.star.bridge.UnoUrlResolver")),
-                          UNO_QUERY);
-            }
-            catch (RuntimeException const &) { throw; }
-            catch (Exception const &) {}
-            if (!xResolver.is())
-            {
-                print("Bad com.sun.star.bridge.UnoUrlResolver");
-                return false;
-            }
-
-            Reference< XMultiServiceFactory > xRemoteFactory;
-            try
-            {
-                xRemoteFactory
-                    = Reference< XMultiServiceFactory >(xResolver->
-                                                            resolve(
-                                                                getUnoURL()),
-                                                        UNO_QUERY);
-            }
-            catch (NoConnectException const &) {}
-            catch (ConnectionSetupException const &) {}
-            catch (IllegalArgumentException const &) {}
-            if (!xRemoteFactory.is())
-            {
-                print("Can't connect to remote UCB");
-                return false;
-            }
-
-            try
-            {
-                xRemoteFactory
-                    = Reference< XMultiServiceFactory >(
-                          xRemoteFactory->
-                              createInstance(
-                                  OUString::createFromAscii(
-                                      "com.sun.star.lang.ServiceManager")),
-                          UNO_QUERY);
-            }
-            catch (RuntimeException const &) { throw; }
-            catch (Exception const &) {}
-            if (!xRemoteFactory.is())
-            {
-                print("Bad remote com.sun.star.lang.ServiceManager");
-                return false;
-            }
-
-            try
-            {
-                //@@@ The remote broker service should be created using
-                // createInstanceWithArguments(), specifing whether and how
-                // the broker should be configured.  Not supplying these
-                // arguments implies that the remote broker service must
-                // already be instantiated and configured when this call is
-                // made:
-                m_xProvMgr
-                    = Reference< XContentProviderManager >(
-                          xRemoteFactory->
-                              createInstance(
-                                  OUString::createFromAscii(
-                                      "com.sun.star.ucb."
-                                          "UniversalContentBroker")),
-                          UNO_QUERY);
-            }
-            catch (RuntimeException const &) { throw; }
-            catch (Exception const &) {}
-            if (!m_xProvMgr.is())
-            {
-                print("Bad remote com.sun.star.ucb.UniversalContentBroker");
-                return false;
-            }
-            break;
-        }
-
-        case REMOTE_UCP:
-        {
-            // Create unconfigured UCB:
-            Sequence< Any > aArgs(1);
-            aArgs[0] <<= sal_False;
-            if ( m_xFac.is() )
-                m_xProvMgr = Reference< XContentProviderManager >(
-                    m_xFac->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.ucb.UniversalContentBroker" ),
-                        aArgs ),
-                    UNO_QUERY );
-
-            if ( m_xProvMgr.is() )
-            {
-                Reference< XContentProvider > xProvider;
-                try
-                {
-                    xProvider
-                        = Reference< XContentProvider >(
-                              m_xFac->
-                                  createInstance(
-                                      OUString::createFromAscii(
-                                          "com.sun.star.ucb."
-                                              "RemoteAccessContentProvider")),
-                              UNO_QUERY);
-                }
-                catch (RuntimeException const &) { throw; }
-                catch (Exception const &) {}
-
-                OUString aTemplate(OUString::createFromAscii(".*"));
-
-                Reference< XParameterizedContentProvider >
-                    xParameterized(xProvider, UNO_QUERY);
-                if (xParameterized.is())
-                {
-                    Reference< XContentProvider > xInstance;
-                    try
-                    {
-                        xInstance
-                            = xParameterized->registerInstance(aTemplate,
-                                                               getUnoURL(),
-                                                               true);
-                            //@@@ if this call replaces an old instance, the
-                            // commit-or-rollback code below will not work
-                    }
-                    catch (IllegalArgumentException const &) {}
-
-                    if (xInstance.is())
-                        xProvider = xInstance;
-                }
-
-                if (xProvider.is())
-                    try
-                    {
-                        m_xProvMgr->registerContentProvider(xProvider,
-                                                            aTemplate,
-                                                            true);
-                    }
-                    catch (DuplicateProviderException const &)
-                    {
-                        if (xParameterized.is())
-                            try
-                            {
-                                xParameterized->
-                                    deregisterInstance(aTemplate,
-                                                       getUnoURL());
-                            }
-                            catch (IllegalArgumentException const &) {}
-                    }
-                    catch (...)
-                    {
-                        if (xParameterized.is())
-                            try
-                            {
-                                xParameterized->
-                                    deregisterInstance(aTemplate,
-                                                       getUnoURL());
-                            }
-                            catch (IllegalArgumentException const &) {}
-                        throw;
-                    }
-            }
-            break;
-        }
+        Sequence< Any > aArgs(2);
+        aArgs[0] <<= m_aConfigurationKey1;
+        aArgs[1] <<= m_aConfigurationKey2;
+        m_xProvMgr
+            = Reference< XContentProviderManager >(
+                  m_xFac->
+                      createInstanceWithArguments(
+                          rtl::OUString::createFromAscii(
+                              "com.sun.star.ucb.UniversalContentBroker" ),
+                          aArgs ),
+                  UNO_QUERY );
     }
 
     m_bInited = m_xProvMgr.is();
@@ -831,355 +612,6 @@ XContentProvider* Ucb::getContentProvider()
     }
 
     return m_xProv.get();
-}
-
-//-------------------------------------------------------------------------
-// static
-sal_Bool Ucb::install( Reference< XMultiServiceFactory >& rxFactory,
-                       sal_Bool bRemoteUCB )
-{
-    if ( !rxFactory.is() )
-        return sal_False;
-
-#if 0
-    Reference< XInterface > xIfc(
-        rxFactory->createInstance (
-            OUString::createFromAscii(
-                "com.sun.star.registry.ImplementationRegistration" ) ) );
-
-    if ( !xIfc.is() )
-        return sal_False;
-
-    Reference< XImplementationRegistration > xReg( xIfc, UNO_QUERY );
-    if ( !xReg.is() )
-        return sal_False;
-
-    OUString aLibName;
-    vos::ORealDynamicLoader::computeLibraryName(
-                OUString::createFromAscii( UCB_MODULE_NAME ), aLibName );
-    try
-    {
-        xReg->registerImplementation(
-                            OUString::createFromAscii(
-                                "com.sun.star.loader.SharedLibrary" ),
-                            aLibName,
-                            Reference< XSimpleRegistry >() );
-    }
-    catch ( CannotRegisterImplementationException& )
-    {
-        DBG_ERROR( "registerImplementation failed!" );
-        return sal_False;
-    }
-#else
-    Reference< XInterface >
-#endif
-
-    //////////////////////////////////////////////////////////////////////
-    // Store CHAOS content provider service information in registry...
-    //////////////////////////////////////////////////////////////////////
-
-    xIfc = rxFactory->createInstance(
-            OUString::createFromAscii( "com.sun.star.ucb.Configuration" ) );
-
-    Reference< XContentProviderConfigurationManager >
-        xManager( xIfc, UNO_QUERY );
-    if ( !xManager.is() )
-    {
-        DBG_ERROR( "Error creating service 'com.sun.star.ucb.Configuration'!" );
-        return sal_False;
-    }
-
-    static sal_Char const * const aKeys[]
-        = { "ContentProviderServices", "LocalContentProviderServices", 0 };
-    for (sal_Char const * const * p = aKeys; *p; ++p)
-    {
-        Reference< XContentProviderConfiguration >
-            xConfig(xManager->queryContentProviderConfiguration(
-                                  OUString::createFromAscii(*p)));
-        if (xConfig.is())
-            if (bRemoteUCB && p == aKeys)
-            {
-#if 1
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( ".*" ),
-                    OUString::createFromAscii(
-                            "com.sun.star.ucb.RemoteAccessContentProvider" ),
-                    getUnoURL(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii(
-                        "\"xfile:\"(.*)->\"file:\"\\1" ),
-                    OUString::createFromAscii(
-                            "com.sun.star.ucb.RemoteAccessContentProvider" ),
-                    getUnoURL(),
-                    sal_False );
-#else
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( ".*" ),
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.RemoteAccessContentProvider" ),
-                    OUString::createFromAscii(
-                        "uno:socket,host=munch,port=8121;urp;UCB.Factory" ),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii(
-                        "\"file://munch\"(([/?#].*)?)->\"file://\"\\1" ),
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.RemoteAccessContentProvider" ),
-                    OUString::createFromAscii(
-                        "uno:socket,host=munch,port=8121;urp;UCB.Factory" ),
-                    sal_False );
-//              xConfig->addContentProviderService(
-//                  OUString::createFromAscii(
-//                      "\"file://\"[^/?#]+([/?#].*)?" ),
-//                  OUString::createFromAscii(
-//                      "com.sun.star.ucb.RemoteAccessContentProvider" ),
-//                  OUString::createFromAscii(
-//                      "uno:socket,host=munch,port=8121;urp;UCB.Factory" ),
-//                  sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "file" ),
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.FileContentProvider" ),
-                    OUString(),
-                    sal_False );
-#endif
-            }
-            else
-            {
-                //////////////////////////////////////////////////////////////
-                //  com.sun.star.ucb.WebDAVContentProvider
-                //////////////////////////////////////////////////////////////
-
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.star.webdav" ),
-                    OUString::createFromAscii(
-                                "com.sun.star.ucb.WebDAVContentProvider" ),
-                    OUString(),
-                    sal_False );
-
-                //////////////////////////////////////////////////////////////
-                //  com.sun.star.ucb.HierarchyContentProvider
-                //////////////////////////////////////////////////////////////
-
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.star.hier" ),
-                    OUString::createFromAscii(
-                                "com.sun.star.ucb.HierarchyContentProvider" ),
-                    OUString(),
-                    sal_False );
-
-                //////////////////////////////////////////////////////////////
-                //  com.sun.star.ucb.RemoteAccessContentProvider
-                //////////////////////////////////////////////////////////////
-
-                if (p == aKeys)
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.star.ucb" ),
-                    OUString::createFromAscii(
-                                "com.sun.star.ucb.RemoteAccessContentProvider" ),
-                    OUString(),
-                    sal_False );
-
-                //////////////////////////////////////////////////////////////
-                //  com.sun.star.ucb.FileContentProvider
-                //////////////////////////////////////////////////////////////
-
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "file" ),
-                    OUString::createFromAscii(
-                                "com.sun.star.ucb.FileContentProvider" ),
-                    OUString(),
-                    sal_False );
-
-                //////////////////////////////////////////////////////////////
-                //  com.sun.star.ucb.ChaosContentProvider
-                //////////////////////////////////////////////////////////////
-
-                static const OUString aProvider(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.ChaosContentProvider" ) );
-
-                // Note: These are the registrations necessary to get
-                //       the services provided by CHAOS working.
-
-                // Official schemes.
-
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "ftp" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "http" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "imap" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "news" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.staroffice.out" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.staroffice.pop3" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.staroffice.searchfolder" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.staroffice.trashcan" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vnd.sun.staroffice.vim" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-
-                // Additional internal schemes.
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "out" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "pop3" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "private" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-                xConfig->addContentProviderService(
-                    OUString::createFromAscii( "vim" ),
-                    aProvider,
-                    OUString(),
-                    sal_False );
-            }
-    }
-
-    return sal_True;
-}
-
-//-------------------------------------------------------------------------
-// static
-sal_Bool Ucb::uninstall( Reference< XMultiServiceFactory >& rxFactory )
-{
-#if 0
-    if ( !rxFactory.is() )
-        return sal_False;
-
-    Reference< XInterface > xIfc(
-        rxFactory->createInstance (
-            OUString::createFromAscii(
-                "com.sun.star.registry.ImplementationRegistration" ) ) );
-
-    if ( !xIfc.is() )
-        return sal_False;
-
-    Reference< XImplementationRegistration > xReg( xIfc, UNO_QUERY );
-    if ( !xReg.is() )
-        return sal_False;
-
-    OUString aLibName;
-    vos::ORealDynamicLoader::computeLibraryName(
-                OUString::createFromAscii( UCB_MODULE_NAME ), aLibName );
-
-    sal_Bool bRet = sal_True;
-
-    try
-    {
-        bRet = xReg->revokeImplementation(
-                                aLibName, Reference< XSimpleRegistry >() );
-    }
-    catch ( ... )
-    {
-        return sal_False;
-    }
-
-    return bRet;
-#else
-    if ( rxFactory.is() )
-    {
-        Reference< XPropertySet > xSet( rxFactory, UNO_QUERY );
-        if ( xSet.is() )
-        {
-            Any aValue;
-
-            try
-            {
-                aValue = xSet->getPropertyValue(
-                                 OUString::createFromAscii( "Registry" ) );
-            }
-            catch ( UnknownPropertyException& ) {}
-            catch ( WrappedTargetException& ) {}
-
-            Reference< XSimpleRegistry > xReg(
-                *(Reference< XInterface >*)aValue.getValue(), UNO_QUERY );
-
-            if ( xReg.is() )
-                try
-                {
-                    Reference< XRegistryKey > xRootKey( xReg->getRootKey() );
-                    if ( xRootKey.is() )
-                    {
-                        Reference< XRegistryKey > xImplKey(
-                            xRootKey->createKey(
-                                OUString::createFromAscii(
-                                    "/IMPLEMENTATIONS/UcbConfiguration" ) ) );
-                        if ( xImplKey.is() )
-                        {
-                            sal_Bool bSuccess = sal_True;
-                            try
-                            {
-                                xImplKey->
-                                    deleteKey(
-                                        OUString::createFromAscii(
-                                            "ContentProviderServices" ) );
-                            }
-                            catch ( InvalidRegistryException& )
-                            {
-                                bSuccess = sal_False;
-                            }
-                            try
-                            {
-                                xImplKey->
-                                    deleteKey(
-                                        OUString::createFromAscii(
-                                            "LocalContentProviderServices" ) );
-                            }
-                            catch ( InvalidRegistryException& )
-                            {
-                                bSuccess = sal_False;
-                            }
-                            return bSuccess;
-                        }
-                    }
-                }
-                catch( InvalidRegistryException& ) {}
-                catch( InvalidValueException& ) {}
-        }
-    }
-
-    return sal_False;
-#endif
 }
 
 /*========================================================================
@@ -1280,18 +712,138 @@ void SAL_CALL UcbTaskEnvironment::release()
 
 /*========================================================================
  *
+ * UcbCommandProcessor.
+ *
+ *=======================================================================*/
+
+class UcbCommandProcessor : public MessagePrinter
+{
+private:
+    Reference< XCommandProcessor > m_xProcessor;
+    sal_Int32                      m_aCommandId;
+
+protected:
+    Ucb&                           m_rUCB;
+
+public:
+    UcbCommandProcessor( Ucb& rUCB,
+                         Reference< XCommandProcessor >& rxProcessor,
+                         MyOutWindow* pOutEdit );
+
+    virtual ~UcbCommandProcessor();
+
+    Any executeCommand( const OUString& rName, const Any& rArgument,
+                        bool bPrint = true );
+};
+
+//-------------------------------------------------------------------------
+UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
+                                          Reference< XCommandProcessor >&
+                                              rxProcessor,
+                                          MyOutWindow* pOutEdit)
+: MessagePrinter( pOutEdit ),
+  m_rUCB( rUCB ),
+  m_xProcessor( rxProcessor ),
+  m_aCommandId( 0 )
+{
+    if ( m_xProcessor.is() )
+    {
+        // Generally, one command identifier per thread is enough. It
+        // can be used for all commands executed by the processor which
+        // created this id.
+        m_aCommandId = m_xProcessor->createCommandIdentifier();
+    }
+}
+
+//----------------------------------------------------------------------------
+// virtual
+UcbCommandProcessor::~UcbCommandProcessor()
+{
+}
+
+//----------------------------------------------------------------------------
+Any UcbCommandProcessor::executeCommand( const OUString& rName,
+                                         const Any& rArgument,
+                                         bool bPrint )
+{
+    if ( m_xProcessor.is() )
+    {
+        Command aCommand;
+        aCommand.Name     = rName;
+        aCommand.Handle   = -1; /* unknown */
+        aCommand.Argument = rArgument;
+
+        Reference< XInteractionHandler > xInteractionHandler;
+        if (m_rUCB.getServiceFactory().is())
+            xInteractionHandler
+                = Reference< XInteractionHandler >(
+                      m_rUCB.getServiceFactory()->
+                          createInstance(
+                              OUString::createFromAscii(
+                                  "com.sun.star.uui.InteractionHandler")),
+                      UNO_QUERY);
+        Reference< XProgressHandler >
+            xProgressHandler(new ProgressHandler(m_rUCB));
+        Reference< XCommandEnvironment > xEnv(
+            new UcbTaskEnvironment( xInteractionHandler, xProgressHandler ) );
+
+        if ( bPrint )
+        {
+            UniString aText( UniString::CreateFromAscii(
+                                RTL_CONSTASCII_STRINGPARAM(
+                                    "Executing command: " ) ) );
+            aText += UniString( rName );
+            print( aText );
+        }
+
+        // Execute command
+        Any aResult;
+        bool bException = false;
+        bool bAborted = false;
+        try
+        {
+            aResult = m_xProcessor->execute( aCommand, m_aCommandId, xEnv );
+        }
+        catch ( CommandAbortedException )
+        {
+            bAborted = true;
+        }
+        catch ( Exception )
+        {
+            bException = true;
+        }
+
+        if ( bPrint )
+        {
+            if ( bException )
+                print( "execute(...) threw an exception!" );
+
+            if ( bAborted )
+                print( "execute(...) aborted!" );
+
+            if ( !bException && !bAborted )
+                print( "execute() finished." );
+        }
+
+        return aResult;
+    }
+
+    print( "executeCommand failed!" );
+    return Any();
+}
+
+/*========================================================================
+ *
  * UcbContent.
  *
  *=======================================================================*/
 
-class UcbContent : public MessagePrinter,
+class UcbContent : public UcbCommandProcessor,
                    public cppu::OWeakObject,
                    public XContentEventListener,
                    public XPropertiesChangeListener
 {
-    Ucb&                  m_rUCB;
     Reference< XContent > m_xContent;
-    sal_Int32             m_aCommandId;
 
     struct OpenStackEntry
     {
@@ -1329,8 +881,6 @@ public:
     Sequence< CommandInfo > getCommands();
     Sequence< Property >    getProperties();
 
-    Any executeCommand   ( const OUString& rName, const Any& rArgument,
-                           bool bPrint = true );
     Any  getPropertyValue( const OUString& rName );
     void setPropertyValue( const OUString& rName, const Any& rValue );
     void addProperty     ( const OUString& rName, const Any& rValue );
@@ -1378,19 +928,11 @@ public:
 
 //-------------------------------------------------------------------------
 UcbContent::UcbContent( Ucb& rUCB, Reference< XContent >& rxContent, MyOutWindow* pOutEdit)
-: MessagePrinter( pOutEdit ),
-  m_rUCB( rUCB ),
-  m_xContent( rxContent ),
-  m_aCommandId( 0 )
+: UcbCommandProcessor( rUCB,
+                       Reference< XCommandProcessor >( rxContent, UNO_QUERY ),
+                       pOutEdit ),
+  m_xContent( rxContent )
 {
-    Reference< XCommandProcessor > xProc( rxContent, UNO_QUERY );
-    if ( xProc.is() )
-    {
-        // Generally, one command identifier per thread is enough. It
-        // can be used for all commands executed by the processor which
-        // created this id.
-        m_aCommandId = xProc->createCommandIdentifier();
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -1479,79 +1021,6 @@ void UcbContent::dispose()
     Reference< XComponent > xComponent( m_xContent, UNO_QUERY );
     if ( xComponent.is() )
         xComponent->dispose();
-}
-
-//----------------------------------------------------------------------------
-Any UcbContent::executeCommand( const OUString& rName,
-                                const Any& rArgument,
-                                bool bPrint )
-{
-    Reference< XCommandProcessor > xProc( m_xContent, UNO_QUERY );
-    if ( xProc.is() )
-    {
-        Command aCommand;
-        aCommand.Name     = rName;
-        aCommand.Handle   = -1; /* unknown */
-        aCommand.Argument = rArgument;
-
-        Reference< XInteractionHandler > xInteractionHandler;
-        if (m_rUCB.getServiceFactory().is())
-            xInteractionHandler
-                = Reference< XInteractionHandler >(
-                      m_rUCB.getServiceFactory()->
-                          createInstance(
-                              OUString::createFromAscii(
-                                  "com.sun.star.uui.InteractionHandler")),
-                      UNO_QUERY);
-        Reference< XProgressHandler >
-            xProgressHandler(new ProgressHandler(m_rUCB));
-        Reference< XCommandEnvironment > xEnv(
-                    new UcbTaskEnvironment( xInteractionHandler,
-                                            xProgressHandler ) );
-
-        if ( bPrint )
-        {
-            UniString aText( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Executing command: " ) ) );
-            aText += UniString( rName );
-            print( aText );
-        }
-
-        // Execute command
-        Any aResult;
-        bool bException = false;
-        bool bAborted = false;
-        try
-        {
-            aResult = xProc->execute( aCommand, m_aCommandId, xEnv );
-        }
-        catch ( CommandAbortedException )
-        {
-            bAborted = true;
-        }
-        catch ( Exception )
-        {
-            bException = true;
-        }
-
-        if ( bPrint )
-        {
-            if ( bException )
-                print( "execute(...) threw an exception!" );
-
-            if ( bAborted )
-                print( "execute(...) aborted!" );
-
-            if ( !bException && !bAborted )
-                print( "execute() finished." );
-        }
-
-        return aResult;
-    }
-
-    print( "executeCommand failed!" );
-    return Any();
 }
 
 //----------------------------------------------------------------------------
@@ -1726,7 +1195,11 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
                     if ( bPrint )
                     {
                         OUString aId( xContentAccess->
+#if SUPD >= 613
                                           queryContentIdentifierString() );
+#else // SUPD, 613
+                                          queryContentIdentfierString() );
+#endif // SUPD, 613
                         aText += UniString::CreateFromInt32( ++n );
                         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
                                                ") " ) );
@@ -1878,7 +1351,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
             print( aText );
         }
 
-        Reference< XContent > xSavedContent( m_xContent );
+        Reference< XContent > xChild;
         if ( aEntry.m_bUseIdentifier )
         {
             Reference< XContentProvider > xProv = rUCB.getContentProvider();
@@ -1888,35 +1361,25 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
                 return;
             }
 
-            Reference< XContent > xChild;
             try
             {
                 xChild = xProv->queryContent( aEntry.m_xIdentifier );
             }
             catch (IllegalIdentifierException const &) {}
-            if ( !xChild.is() )
-            {
-                print( "No content" );
-                return;
-            }
-
-            m_xContent = xChild;
         }
         else
-            m_xContent = aEntry.m_xContent;
-        try
+            xChild = aEntry.m_xContent;
+        if ( !xChild.is() )
         {
+            print( "No content" );
+            return;
+        }
+
+        UcbContent( m_rUCB, xChild, m_pOutEdit ).
             open( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                                   "open" ) ),
                   UniString(), bPrint, false, bSort, &aStack,
                   aEntry.m_nLevel, nFetchSize );
-        }
-        catch ( ... )
-        {
-            m_xContent = xSavedContent;
-            throw;
-        }
-        m_xContent = xSavedContent;
     }
 
     if ( bTiming )
@@ -2352,6 +1815,8 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_FETCHSIZE      20
 #define MYWIN_ITEMID_UNC2URI        21
 #define MYWIN_ITEMID_URI2UNC        22
+#define MYWIN_ITEMID_OFFLINE        23
+#define MYWIN_ITEMID_ONLINE         24
 
 //-------------------------------------------------------------------------
 class MyWin : public WorkWindow
@@ -2368,15 +1833,11 @@ private:
     bool m_bTiming;
     bool m_bSort;
 
-#if 0 /*SB*/
-    Reference< XContentProviderManager > m_xRemoteUCB;
-    Reference< XRemoteContentProviderAcceptor > m_xAcceptor;
-#endif /*SB*/
-
 public:
     MyWin( Window *pParent, WinBits nWinStyle,
            Reference< XMultiServiceFactory >& rxFactory,
-           Ucb::Remote eRemote );
+           rtl::OUString const & rConfigurationKey1,
+           rtl::OUString const & rConfigurationKey2 );
     virtual ~MyWin();
 
     void Resize( void );
@@ -2389,11 +1850,12 @@ public:
 //-------------------------------------------------------------------------
 MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                  Reference< XMultiServiceFactory >& rxFactory,
-              Ucb::Remote eRemote )
+              rtl::OUString const & rConfigurationKey1,
+              rtl::OUString const & rConfigurationKey2 )
 : WorkWindow( pParent, nWinStyle ),
   m_pTool( NULL ),
   m_pOutEdit( NULL ),
-  m_aUCB( rxFactory, eRemote ),
+  m_aUCB( rxFactory, rConfigurationKey1, rConfigurationKey2 ),
   m_pContent( NULL ),
   m_nFetchSize( 0 ),
   m_bTiming( false ),
@@ -2607,6 +2069,24 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                                 "Translate URI to 'Normalized File Path',"
                                     " if possible" ) ) );
 
+    m_pTool->InsertSeparator();
+    m_pTool->InsertItem ( MYWIN_ITEMID_OFFLINE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Offline" ) ) );
+    m_pTool->SetHelpText( MYWIN_ITEMID_OFFLINE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Go offline" ) ) );
+    m_pTool->InsertItem ( MYWIN_ITEMID_ONLINE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Online" ) ) );
+    m_pTool->SetHelpText( MYWIN_ITEMID_ONLINE,
+                          UniString::CreateFromAscii(
+                              RTL_CONSTASCII_STRINGPARAM(
+                                "Go back online" ) ) );
+
     m_pTool->SetSelectHdl( LINK( this, MyWin, ToolBarHandler ) );
     m_pTool->Show();
 
@@ -2623,42 +2103,12 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pOutEdit->Show();
 
     m_aUCB.setOutEdit( m_pOutEdit );
-
-#if 0 /*SB*/
-    Sequence< Any > aArgs(1);
-    aArgs[0] <<= sal_True;
-    m_xRemoteUCB
-        = Reference< XContentProviderManager >(
-              rxFactory->
-                  createInstanceWithArguments(
-                      OUString::createFromAscii(
-                          "com.sun.star.ucb.UniversalContentBroker"),
-                      aArgs),
-              UNO_QUERY);
-    m_xAcceptor
-        = Reference< XRemoteContentProviderAcceptor >(
-              rxFactory->
-                  createInstance(
-                      OUString::createFromAscii(
-                          "com.sun.star.ucb.RemoteContentProviderAcceptor")),
-              UNO_QUERY);
-    m_xAcceptor->addRemoteContentProvider(OUString::createFromAscii("myself"),
-                                          rxFactory,
-                                          Sequence< OUString >());
-#endif /*SB*/
 }
 
 //-------------------------------------------------------------------------
 // virtual
 MyWin::~MyWin()
 {
-#if 0 /*SB*/
-    m_xAcceptor->
-        removeRemoteContentProvider(OUString::createFromAscii("myself"));
-    m_xAcceptor = 0;
-    m_xRemoteUCB = 0;
-#endif /*SB*/
-
     if ( m_pContent )
     {
         m_pContent->dispose();
@@ -2952,6 +2402,47 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
                 break;
             }
 
+        case MYWIN_ITEMID_OFFLINE:
+        case MYWIN_ITEMID_ONLINE:
+        {
+            Reference< XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+            Reference< XCommandProcessor > xProcessor;
+            if (xManager.is())
+                xProcessor
+                    = Reference< XCommandProcessor >(xManager->
+                                                         queryContentProvider(
+                                                             aCmdLine),
+                                                     UNO_QUERY);
+            if (!xProcessor.is())
+            {
+                String aText(RTL_CONSTASCII_USTRINGPARAM(
+                                 "No offline support for URL "));
+                aText += aCmdLine;
+                print(aText);
+                break;
+            }
+
+            OUString aName;
+            Any aArgument;
+            if (nItemId == MYWIN_ITEMID_OFFLINE)
+            {
+                aName = OUString::createFromAscii("goOffline");
+
+                Sequence< Reference< XContentIdentifier > > aIdentifiers(1);
+                aIdentifiers[0]
+                    = m_aUCB.getContentIdentifierFactory()->
+                                 createContentIdentifier(aCmdLine);
+                aArgument <<= aIdentifiers;
+            }
+            else
+                aName = OUString::createFromAscii("goOnline");
+
+            UcbCommandProcessor(m_aUCB, xProcessor, m_pOutEdit).
+                executeCommand(aName, aArgument);
+            break;
+        }
+
         default: // Ignored.
             break;
     }
@@ -2981,51 +2472,35 @@ void MyApp::Main()
     // Read command line params.
     //////////////////////////////////////////////////////////////////////
 
-    sal_Bool bApplicatRdb = sal_False;
-    sal_Bool bInstall   = sal_False;
-    sal_Bool bInstallRemote = sal_False;
-    sal_Bool bUninstall = sal_False;
-    Ucb::Remote eRemote = Ucb::REMOTE_NO;
+    rtl::OUString aConfigurationKey1(rtl::OUString::createFromAscii(
+                                         UCB_CONFIGURATION_KEY1_LOCAL));
+    rtl::OUString aConfigurationKey2(rtl::OUString::createFromAscii(
+                                         UCB_CONFIGURATION_KEY2_OFFICE));
 
     USHORT nParams = Application::GetCommandLineParamCount();
     for ( USHORT n = 0; n < nParams; ++n )
     {
-        XubString aParam( Application::GetCommandLineParam( n ) );
-        if ( aParam.EqualsIgnoreCaseAscii( "-a" ) ||
-             aParam.EqualsIgnoreCaseAscii( "/a" ) )
+        String aParam( Application::GetCommandLineParam( n ) );
+        if (aParam.CompareIgnoreCaseToAscii("-key=",
+                                            RTL_CONSTASCII_LENGTH("-key="))
+                == COMPARE_EQUAL)
         {
-               bApplicatRdb = sal_True;
-        }
-        else if ( aParam.EqualsIgnoreCaseAscii( "-i" ) ||
-                  aParam.EqualsIgnoreCaseAscii( "/i" ) )
-        {
-               bInstall = sal_True;
-        }
-        else if ( aParam.Len() >= 3
-                  && (aParam.GetChar(0) == '-' || aParam.GetChar(0) == '/')
-                  && (aParam.GetChar(1) == 'i' || aParam.GetChar(1) == 'I')
-                  && (aParam.GetChar(2) == 'r' || aParam.GetChar(2) == 'R') )
-        {
-               bInstall = sal_True;
-            bInstallRemote = sal_True;
-            Ucb::m_aProtocol = aParam.Copy(3);
-        }
-        else if ( aParam.EqualsIgnoreCaseAscii( "-u" )  ||
-                  aParam.EqualsIgnoreCaseAscii( "/u" ) )
-        {
-               bUninstall = sal_True;
-        }
-        else if ( aParam.Len() >= 2
-                  && (aParam.GetChar(0) == '-' || aParam.GetChar(0) == '/')
-                  && (aParam.GetChar(1) == 'r' || aParam.GetChar(1) == 'R') )
-        {
-            //////////////////////////////////////////////////////////
-            // Remote UCB/UCP
-            //////////////////////////////////////////////////////////
-
-            eRemote = aParam.GetChar(1) == 'r' ? Ucb::REMOTE_UCB :
-                                                 Ucb::REMOTE_UCP;
-            Ucb::m_aProtocol = aParam.Copy(2);
+            xub_StrLen nSlash
+                = aParam.Search('/', RTL_CONSTASCII_LENGTH("-key="));
+            if (nSlash == STRING_NOTFOUND)
+            {
+                aConfigurationKey1
+                    = aParam.Copy(RTL_CONSTASCII_LENGTH("-key="));
+                aConfigurationKey2 = rtl::OUString();
+            }
+            else
+            {
+                aConfigurationKey1
+                    = aParam.Copy(RTL_CONSTASCII_LENGTH("-key="),
+                                  nSlash - RTL_CONSTASCII_LENGTH("-key="));
+                aConfigurationKey2
+                    = aParam.Copy(nSlash + 1);
+            }
         }
     }
 
@@ -3041,25 +2516,13 @@ void MyApp::Main()
         return;
     }
 
-    OUString aReadOnlyRegFile;
-    OUString aWritableRegFile;
-    aReadOnlyRegFile = aExeName.copy( 0, aExeName.lastIndexOf( '/' ) + 1 );
-    aWritableRegFile
-        = aReadOnlyRegFile;
-    aReadOnlyRegFile += OUString::createFromAscii( "applicat.rdb" );
-    aWritableRegFile += OUString::createFromAscii( "ucbdemo.rdb" );
-
-    if ( bApplicatRdb )
-    {
-        aWritableRegFile = aReadOnlyRegFile;
-        aReadOnlyRegFile = OUString();
-    }
+    OUString aRegFile( aExeName.copy( 0, aExeName.lastIndexOf( '/' ) + 1 ) );
+    aRegFile += OUString::createFromAscii( "applicat.rdb" );
 
     Reference< XMultiServiceFactory > xFac;
     try
     {
-        xFac = cppu::createRegistryServiceFactory(
-                                    aWritableRegFile, aReadOnlyRegFile );
+        xFac = cppu::createRegistryServiceFactory( aRegFile, aRegFile );
     }
     catch ( com::sun::star::uno::Exception )
     {
@@ -3069,28 +2532,7 @@ void MyApp::Main()
 
     comphelper::setProcessServiceFactory( xFac );
 
-    //////////////////////////////////////////////////////////////////////
-    // Process command line params.
-    //////////////////////////////////////////////////////////////////////
-
     Reference< XComponent > xComponent( xFac, UNO_QUERY );
-
-    if ( bUninstall )
-    {
-        //////////////////////////////////////////////////////////
-        // Remove registry entries.
-        //////////////////////////////////////////////////////////
-        Ucb::uninstall( xFac );
-    }
-
-    if ( bInstall )
-    {
-        //////////////////////////////////////////////////////////
-        // Write UCB service info into registry and store CHAOS
-        // content provider service information in registry...
-        //////////////////////////////////////////////////////////
-        Ucb::install( xFac, bInstallRemote );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // Create Application Window...
@@ -3099,38 +2541,13 @@ void MyApp::Main()
     Help::EnableBalloonHelp();
 
     MyWin *pMyWin = new MyWin( NULL, WB_APP | WB_STDWORK, xFac,
-                               eRemote );
+                               aConfigurationKey1, aConfigurationKey2 );
 
-    String aTitle( UniString::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "UCB Demo/Test Application ( " ) ) );
-    switch ( eRemote )
-    {
-        case Ucb::REMOTE_NO:
-            aTitle.AppendAscii(
-                    RTL_CONSTASCII_STRINGPARAM( "Local UCB Client )" ) );
-            break;
-
-        case Ucb::REMOTE_UCB:
-            aTitle.AppendAscii(
-                    RTL_CONSTASCII_STRINGPARAM( "Remote UCB Client )" ) );
-            break;
-
-        case Ucb::REMOTE_UCP:
-            aTitle.AppendAscii(
-                    RTL_CONSTASCII_STRINGPARAM( "Remote UCP Client )" ) );
-            break;
-    }
-
-    pMyWin->SetText( aTitle );
-
-    if ( bUninstall )
-        pMyWin->print(
-            "UCB services and configuration removed from registry." );
-
-    if ( bInstall )
-        pMyWin->print(
-            "UCB services and configuration written to registry." );
+    pMyWin->
+        SetText(
+            UniString::CreateFromAscii(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "UCB Demo/Test Application ( Local UCB Client )" ) ) );
 
     pMyWin->Show();
 
