@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-25 14:19:30 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -345,8 +342,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aMtrFldShadowY.SetModifyHdl( aLink );
 
     // System-Metrik setzen
-    FieldUnit eDlgUnit;
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    const FieldUnit eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldTextStart, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldShadowX, eDlgUnit, TRUE );
@@ -674,8 +670,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             if ( pItem->GetValue() == XFTSHADOW_NORMAL )
             {
                 nId = TBI_SHADOW_NORMAL;
-                FieldUnit eDlgUnit;
-                GET_MODULE_FIELDUNIT( eDlgUnit );
+                 const FieldUnit eDlgUnit = GetModuleFieldUnit();
 
                 aFbShadowX.SetBitmap(
                     Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, pMgr ) ) );
@@ -924,8 +919,7 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     // System-Metrik evtl. neu setzen
     // Dieses sollte mal als Listener passieren, ist aber aus
     // inkompatibilitaetsgruenden z.Z. nicht moeglich
-    FieldUnit eDlgUnit;
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    const FieldUnit eDlgUnit = GetModuleFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
         SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );

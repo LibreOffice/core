@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 09:27:22 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -99,9 +99,6 @@
 #endif
 #ifndef _IODLG_HXX
 #include <sfx2/iodlg.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
@@ -843,12 +840,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
 IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 {
-    String          aStr;
-    FieldUnit       eFieldUnit;
-    const Point&    rMousePos = pWnd->GetMousePos();
-    const sal_Unicode   cSep = International().GetNumDecimalSep();
-
-    GET_MODULE_FIELDUNIT( eFieldUnit );
+    String aStr;
+    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const Point& rMousePos = pWnd->GetMousePos();
+    const sal_Unicode cSep = International().GetNumDecimalSep();
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( DEFINE_CONST_UNICODE( " / " ) );
@@ -867,12 +862,10 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 
 IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 {
-    String      aStr;
-    FieldUnit   eFieldUnit;
+    String aStr;
+    const FieldUnit eFieldUnit = GetModuleFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     const sal_Unicode cSep = International().GetNumDecimalSep();
-
-    GET_MODULE_FIELDUNIT( eFieldUnit );
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( DEFINE_CONST_UNICODE( " x " ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #pragma hdrstop
 
@@ -106,6 +103,7 @@
 #include "contwnd.hxx"
 #include "svdtrans.hxx"
 #include "svdopath.hxx"
+#include "dlgutil.hxx"
 
 /******************************************************************************/
 
@@ -896,10 +894,10 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 {
-    String          aStr;
-    const FieldUnit eFieldUnit = SFX_APP()->GetOptions().GetMetric();
-    const Point&    rMousePos = pWnd->GetMousePos();
-    const sal_Unicode    cSep = International().GetNumDecimalSep();
+    String aStr;
+    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const Point& rMousePos = pWnd->GetMousePos();
+    const sal_Unicode cSep = International().GetNumDecimalSep();
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " / " ) );
@@ -910,7 +908,6 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
-
 /*************************************************************************
 |*
 |*
@@ -919,10 +916,10 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 
 IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 {
-    String          aStr;
-    const FieldUnit eFieldUnit = SFX_APP()->GetOptions().GetMetric();
-    const Size&     rSize = pWnd->GetGraphicSize();
-    const sal_Unicode   cSep = International().GetNumDecimalSep();
+    String aStr;
+    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const Size& rSize = pWnd->GetGraphicSize();
+    const sal_Unicode cSep = International().GetNumDecimalSep();
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " x " ) );
@@ -932,7 +929,6 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 
     return 0L;
 }
-
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 08:29:01 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
@@ -165,15 +162,14 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     SetExchangeSupport();
 
     // set the correct Metrik
-    FieldUnit aMetric;
-    GET_MODULE_FIELDUNIT( aMetric );
+    const FieldUnit eMetric = GetModuleFieldUnit();
 
-    SetFieldUnit( aWidthMF, aMetric );
-    SetFieldUnit( aHeightMF, aMetric );
-    SetFieldUnit( aLeftMF, aMetric );
-    SetFieldUnit( aRightMF, aMetric );
-    SetFieldUnit( aTopMF , aMetric );
-    SetFieldUnit( aBottomMF, aMetric );
+    SetFieldUnit( aWidthMF, eMetric );
+    SetFieldUnit( aHeightMF, eMetric );
+    SetFieldUnit( aLeftMF, eMetric );
+    SetFieldUnit( aRightMF, eMetric );
+    SetFieldUnit( aTopMF , eMetric );
+    SetFieldUnit( aBottomMF, eMetric );
 
     Link aLk = LINK(this, SvxGrfCropPage, SizeHdl);
     aWidthMF.SetModifyHdl( aLk );
@@ -768,11 +764,10 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         aBottomMF.SetSpinSize(nSpin);
 
         //Originalgroesse anzeigen
-        FieldUnit aMetric;
-        GET_MODULE_FIELDUNIT( aMetric );
+        const FieldUnit eMetric = GetModuleFieldUnit();
 
         MetricField aFld(this, WB_HIDE);
-        SetFieldUnit( aFld, aMetric );
+        SetFieldUnit( aFld, eMetric );
         aFld.SetDecimalDigits( aWidthMF.GetDecimalDigits() );
         aFld.SetMax( LONG_MAX - 1 );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -70,9 +70,6 @@
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #pragma hdrstop
 
@@ -173,8 +170,7 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
 
     FillTypeLB();
 
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+    const FieldUnit eFUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrFldHorz1, eFUnit );
     SetFieldUnit( aMtrFldHorz2, eFUnit );
     SetFieldUnit( aMtrFldVert1, eFUnit );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,14 +245,10 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     // Metrik einstellen
     FieldUnit eFUnit;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_ATTR_METRIC))
-    {
-        eFUnit = (FieldUnit)((const SfxUInt16Item&)rCoreSet.Get(SID_ATTR_METRIC)).GetValue();
-    }
+    if( SFX_ITEM_SET == rCoreSet.GetItemState( SID_ATTR_METRIC ) )
+        eFUnit = (FieldUnit)( (const SfxUInt16Item&)rCoreSet.Get( SID_ATTR_METRIC ) ).GetValue();
     else
-    {
-        GET_MODULE_FIELDUNIT( eFUnit );
-    }
+        eFUnit = GetModuleFieldUnit();
 
     long nFirst, nLast, nMin, nMax;
 
