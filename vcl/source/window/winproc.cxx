@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: th $ $Date: 2001-06-11 14:45:39 $
+ *  last change: $Author: th $ $Date: 2001-06-15 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,20 +1898,9 @@ static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
     {
         ImplSVData* pSVData = ImplGetSVData();
         AllSettings aSettings = pApp->GetSettings();
-        // International so umsetzen, das Daten durch
-        // UpdateInternationalSystemTables() nicht geaendert werden,
-        // damit wir feststellen koennen, ob sich Einstellungen
-        // geaendert haben
-        International aIntn = aSettings.GetInternational();
-        aIntn.SetQuotationMarkStart( aIntn.GetQuotationMarkStart() );
-        aIntn.SetDateFormat( aIntn.GetDateFormat() );
-        UpdateInternationalSystemTables();
-        if ( aIntn != aSettings.GetInternational() )
-            pSVData->maAppData.mbIntnChanged = TRUE;
         pApp->MergeSystemSettings( aSettings );
         pApp->SystemSettingsChanging( aSettings, pWindow );
         pApp->SetSettings( aSettings );
-        pSVData->maAppData.mbIntnChanged = FALSE;
     }
     else
     {
