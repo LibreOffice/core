@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:21:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,9 @@ namespace connectivity
                                             { return m_aErrorOccurred; };
 
             const ::rtl::OUString&          getErrorString() const
-                                            { return m_aErrorString; }
+                                            { return m_aErrorString; };
+
+            sal_uInt32 InsertLoginInfo(OConnection* _pCon);
 
         public:
             MQuery();
