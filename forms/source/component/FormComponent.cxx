@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:08:37 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
-#include <com/sun/star/util/XCloneable.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -139,6 +139,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 using namespace ::dbtools;
 using namespace ::comphelper;
 
@@ -576,10 +577,16 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
 //------------------------------------------------------------------
 OControlModel::~OControlModel()
 {
-    DBG_DTOR(OControlModel, NULL);
     // release the aggregate
-    if (m_xAggregate.is())
-        m_xAggregate->setDelegator(InterfaceRef());
+    doResetDelegator( );
+
+    DBG_DTOR(OControlModel, NULL);
+}
+
+//------------------------------------------------------------------
+void OControlModel::clonedFrom( const OControlModel* _pOriginal )
+{
+    // nothing to do in this base class
 }
 
 //------------------------------------------------------------------------------
@@ -927,8 +934,12 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
     if (!aReturn.hasValue())
     {
         aReturn = OBoundControlModel_BASE1::queryInterface(_rType);
-        if (!aReturn.hasValue() && m_bCommitable)
-            aReturn = OBoundControlModel_BASE2::queryInterface(_rType);
+
+        if ( !aReturn.hasValue() && m_bCommitable )
+            aReturn = OBoundControlModel_BASE2::queryInterface( _rType );
+
+        if ( !aReturn.hasValue() && m_bSupportsExternalBinding )
+            aReturn = OBoundControlModel_BASE3::queryInterface( _rType );
     }
 
     return aReturn;
@@ -940,58 +951,195 @@ OBoundControlModel::OBoundControlModel(
         const ::rtl::OUString& _rUnoControlModelTypeName,
         const ::rtl::OUString& _rDefault,
         const sal_Bool _bCommitable,
-        const sal_Bool _bSetDelegator)
-    :OControlModel(_rxFactory, _rUnoControlModelTypeName, _rDefault, _bSetDelegator)
+        const sal_Bool _bSupportExternalBinding)
+    :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
+    ,OPropertyChangeListener( m_aMutex )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
     ,m_bLoaded(sal_False)
     ,m_bRequired(sal_False)
     ,m_bCommitable(_bCommitable)
+    ,m_bSupportsExternalBinding( _bSupportExternalBinding )
     ,m_aLabelServiceName(FRM_SUN_COMPONENT_FIXEDTEXT)
-    ,m_bResetting(sal_False)
     ,m_bForwardValueChanges(sal_True)
+    ,m_bLoadListening( sal_False )
+    ,m_nValuePropertyAggregateHandle( -1 )
+    ,m_pAggPropMultiplexer( NULL )
+    ,m_bSettingAggregateState( sal_False )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
+
+    // start property listening at the aggregate
+    implInitAggMultiplexer( );
 }
 
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
-        const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory,
-        const sal_Bool _bCommitable, const sal_Bool _bSetDelegator )
-    :OControlModel( _pOriginal, _rxFactory, _bSetDelegator )
+        const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
+    :OControlModel( _pOriginal, _rxFactory, sal_False )
+    ,OPropertyChangeListener( m_aMutex )
     ,m_aUpdateListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
     ,m_bLoaded( sal_False )
     ,m_bRequired( sal_False )
-    ,m_bCommitable( _bCommitable )
-    ,m_bResetting( sal_False )
+    ,m_bCommitable( _pOriginal->m_bCommitable )
+    ,m_bSupportsExternalBinding( _pOriginal->m_bSupportsExternalBinding )
     ,m_bForwardValueChanges( sal_True )
+    ,m_bLoadListening( sal_False )
+    ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
+    ,m_pAggPropMultiplexer( NULL )
+    ,m_bSettingAggregateState( sal_False )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
+    // start property listening at the aggregate
+    implInitAggMultiplexer( );
+
     m_aLabelServiceName = _pOriginal->m_aLabelServiceName;
-    m_sDataFieldConnectivityProperty = _pOriginal->m_sDataFieldConnectivityProperty;
+    m_sValuePropertyName = _pOriginal->m_sValuePropertyName;
+    m_nValuePropertyAggregateHandle = _pOriginal->m_nValuePropertyAggregateHandle;
     m_aControlSource = _pOriginal->m_aControlSource;
-    // m_xLabelControl, though bneing a property, is not to be cloned, not even the reference will be transfered.
+    // m_xLabelControl, though being a property, is not to be cloned, not even the reference will be transfered.
     // (the former should be clear - a clone of the object we're only referencing does not make sense)
     // (the second would violate the restriction for label controls that they're part of the
     // same form component hierarchy - we ourself are no part, yet, so we can't have a label control)
-    m_bCommitable = _pOriginal->m_bCommitable;
+
+    // start listening for changes at the value property
+    implInitValuePropertyListening( );
 }
 
 //------------------------------------------------------------------
 OBoundControlModel::~OBoundControlModel()
 {
+    if ( !OComponentHelper::rBHelper.bDisposed )
+    {
+        acquire();
+        dispose();
+    }
+
+    doResetDelegator( );
+
+    OSL_ENSURE( m_pAggPropMultiplexer, "OBoundControlModel::~OBoundControlModel: what about my property multiplexer?" );
+    if ( m_pAggPropMultiplexer )
+    {
+        m_pAggPropMultiplexer->dispose();
+        m_pAggPropMultiplexer->release();
+        m_pAggPropMultiplexer = NULL;
+    }
+
     DBG_DTOR(frm_OBoundControlModel, NULL);
 }
 
-//-----------------------------------------------------------------------------
-Sequence<Type> OBoundControlModel::_getTypes()
+//------------------------------------------------------------------
+void OBoundControlModel::clonedFrom( const OControlModel* _pOriginal )
 {
-    if (m_bCommitable)
-        return concatSequences(OControlModel::_getTypes(),OBoundControlModel_BASE1::getTypes(),OBoundControlModel_BASE2::getTypes());
+    const OBoundControlModel* pBoundOriginal = static_cast< const OBoundControlModel* >( _pOriginal );
+    // the value binding can be handled as if somebody called setValueBinding here
+    // By definition, bindings can be share between bindables
+    if ( pBoundOriginal && pBoundOriginal->m_xExternalBinding.is() )
+        setValueBinding( pBoundOriginal->m_xExternalBinding );
+}
 
-    return concatSequences(OControlModel::_getTypes(),OBoundControlModel_BASE1::getTypes());
+//-----------------------------------------------------------------------------
+void OBoundControlModel::implInitAggMultiplexer( )
+{
+    increment( m_refCount );
+    if ( m_xAggregateSet.is() )
+    {
+        m_pAggPropMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
+        m_pAggPropMultiplexer->acquire();
+    }
+    decrement( m_refCount );
+
+       doSetDelegator();
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::implInitValuePropertyListening( ) const
+{
+    // start listening for changes at the value property
+    // There are two pre-requisites for this to be done:
+    // 1. We support external value bindings. In this case, the changes in the control value need to
+    //    be propagated to the external binding immediately when they happen
+    // 2. We are not committable. In this case, changes in the control value need to be propagated
+    //    to the database column immediately when they happen.
+    if ( m_bSupportsExternalBinding || !m_bCommitable )
+    {
+        OSL_ENSURE( m_pAggPropMultiplexer, "OBoundControlModel::implInitValuePropertyListening: no multiplexer!" );
+        if ( m_pAggPropMultiplexer && m_sValuePropertyName.getLength() )
+            m_pAggPropMultiplexer->addProperty( m_sValuePropertyName );
+    }
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValuePropertyName, sal_Int32 _nValuePropertyExternalHandle )
+{
+    OSL_PRECOND( !m_sValuePropertyName.getLength() && -1 == m_nValuePropertyAggregateHandle,
+        "OBoundControlModel::initValueProperty: already called before!" );
+    OSL_ENSURE( _rValuePropertyName.getLength(), "OBoundControlModel::initValueProperty: invalid property name!" );
+    OSL_ENSURE( _nValuePropertyExternalHandle != -1, "OBoundControlModel::initValueProperty: invalid property handle!" );
+
+    m_sValuePropertyName = _rValuePropertyName;
+    m_nValuePropertyAggregateHandle = getOriginalHandle( _nValuePropertyExternalHandle );
+    OSL_ENSURE( m_nValuePropertyAggregateHandle != -1, "OBoundControlModel::initValueProperty: unable to find the original handle!" );
+
+    // start listening for changes at the value property
+    implInitValuePropertyListening( );
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::suspendValueListening( )
+{
+    OSL_PRECOND( m_sValuePropertyName.getLength(), "OBoundControlModel::suspendValueListening: don't have a value property!" );
+    OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::suspendValueListening: I *am* not listening!" );
+
+    if ( m_pAggPropMultiplexer )
+        m_pAggPropMultiplexer->lock();
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::resumeValueListening( )
+{
+    OSL_PRECOND( m_sValuePropertyName.getLength(), "OBoundControlModel::resumeValueListening: don't have a value property!" );
+    OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::resumeValueListening: I *am* not listening at all!" );
+    OSL_PRECOND( !m_pAggPropMultiplexer || m_pAggPropMultiplexer->locked(), "OBoundControlModel::resumeValueListening: listening not suspended currently!" );
+
+    if ( m_pAggPropMultiplexer )
+        m_pAggPropMultiplexer->unlock();
+}
+
+//-----------------------------------------------------------------------------
+namespace
+{
+    template< class T >
+    void appendSequence( Sequence< T >& _rInOut, const Sequence< T >& _rAppend )
+    {
+        sal_Int32 nLengthBefore = _rInOut.getLength();
+        sal_Int32 nLengthAppend = _rAppend.getLength();
+        _rInOut.realloc( nLengthBefore + nLengthAppend );
+        ::std::copy(
+            _rAppend.getConstArray(),
+            _rAppend.getConstArray() + nLengthAppend,
+            _rInOut.getArray() + nLengthBefore
+        );
+    }
+}
+
+//-----------------------------------------------------------------------------
+Sequence< Type > OBoundControlModel::_getTypes()
+{
+    Sequence< Type > aTypes( concatSequences(
+        OControlModel::_getTypes(),
+        OBoundControlModel_BASE1::getTypes()
+    ) );
+
+    if ( m_bCommitable )
+        appendSequence( aTypes, OBoundControlModel_BASE2::getTypes() );
+
+    if ( m_bSupportsExternalBinding )
+        appendSequence( aTypes, OBoundControlModel_BASE3::getTypes() );
+
+    return aTypes;
 }
 
 // OComponentHelper
@@ -1001,63 +1149,147 @@ void OBoundControlModel::disposing()
     OControlModel::disposing();
 
     osl::MutexGuard aGuard(m_aMutex);
-    com::sun::star::lang::EventObject aEvt(static_cast<XWeak*>(this));
-    m_aResetListeners.disposeAndClear(aEvt);
-    m_aUpdateListeners.disposeAndClear(aEvt);
 
-    if (m_xField.is())
+    if ( m_pAggPropMultiplexer )
+        m_pAggPropMultiplexer->dispose();
+
+    // notify all our listeners
+    com::sun::star::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
+    m_aResetListeners.disposeAndClear( aEvt );
+    m_aUpdateListeners.disposeAndClear( aEvt );
+
+    // disconnect from our database column
+    // TODO: could we replace the following 5 lines with a call to disconnectDatabaseColumn?
+    // The only more thing which it does is calling onDisconnectedDbColumn - could this
+    // cause trouble? At least when we continue to call OControlModel::disposing before, it *may*.
+    if ( m_xField.is() )
     {
-        m_xField->removePropertyChangeListener(PROPERTY_VALUE, this);
+        m_xField->removePropertyChangeListener( PROPERTY_VALUE, this );
         resetField();
     }
     m_xCursor = NULL;
 
-    Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
-    if (xComp.is())
-        xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+    // disconnect from our external value binding
+    if ( hasExternalValueBinding() )
+        disconnectExternalValueBinding();
+
+    Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
+    if ( xComp.is() )
+        xComp->removeEventListener(static_cast< XEventListener* >( static_cast< XPropertyChangeListener* >( this ) ) );
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bSettingAggregateState )
+        // we caused this ourself
+        return;
+
+    OSL_ENSURE( _rEvt.PropertyName == m_sValuePropertyName,
+        "OBoundControlModel::_propertyChanged: where did this come from (1)?" );
+    OSL_ENSURE( m_pAggPropMultiplexer && !m_pAggPropMultiplexer->locked(),
+        "OBoundControlModel::_propertyChanged: where did this come from (2)?" );
+
+    if ( _rEvt.PropertyName == m_sValuePropertyName )
+    {
+        if ( hasExternalValueBinding() )
+        {   // the control value changed, while we have an external value binding
+            // -> forward the value to it
+            transferControlValueToExternal( );
+        }
+        else if ( !m_bCommitable && m_xColumnUpdate.is() )
+        {   // the control value changed, while we have are  bound to a database column,
+            // but not committable (which means changes in the control have to be reflected to
+            // the underlying database column immediately)
+            // -> forward the value to the database column
+            commitControlValueToDbColumn( false );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::startAggregatePropertyListening( const ::rtl::OUString& _rPropertyName )
+{
+    OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::startAggregatePropertyListening: no multiplexer!" );
+    OSL_ENSURE( _rPropertyName.getLength(), "OBoundControlModel::startAggregatePropertyListening: invalid property name!" );
+
+    if ( m_pAggPropMultiplexer && _rPropertyName.getLength() )
+    {
+        m_pAggPropMultiplexer->addProperty( _rPropertyName );
+    }
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::startLoadListening( )
+{
+    OSL_PRECOND( !isLoadListening(), "OBoundControlModel::startLoadListening: already listening!" );
+    OSL_PRECOND( m_xParent.is(), "OBoundControlModel::startLoadListening: no parent to listen at!" );
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::startLoadListening: external value binding should overrule the database binding!" );
+
+    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
+    if ( xLoadable.is() )
+    {
+        RTL_LOGFILE_CONTEXT( aLogger, "forms::OBoundControlModel::startLoadListening" );
+        xLoadable->addLoadListener( this );
+        m_bLoadListening = sal_True;
+    }
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::stopLoadListening( )
+{
+    OSL_PRECOND( isLoadListening(), "OBoundControlModel::stopLoadListening: not listening!" );
+
+    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
+    if ( xLoadable.is() && isLoadListening() )
+    {
+        xLoadable->removeLoadListener( this );
+        m_bLoadListening = sal_False;
+    }
 }
 
 // XChild
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     // log off old listeners
-    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
-    if ( xLoadable.is() )
-        xLoadable->removeLoadListener( this );
-
-    // log on new listeners
-    {
-        xLoadable = xLoadable.query( _rxParent );
-        RTL_LOGFILE_CONTEXT( aLogger, "forms::OBoundControlModel::setParent::logOnLoadListener" );
-        if ( xLoadable.is() )
-            xLoadable->addLoadListener( this );
-    }
+    if ( isLoadListening() )
+        stopLoadListening( );
 
     OControlModel::setParent(_rxParent);
+
+    // log on new listeners - only in case we do not have an external value binding
+    if ( m_xParent.is() && !hasExternalValueBinding() )
+        startLoadListening( );
 }
 
 // XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    if (m_xField == _rEvent.Source)
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( _rEvent.Source == m_xField )
     {
         resetField();
     }
-    else if (m_xLabelControl == _rEvent.Source)
+    else if ( _rEvent.Source == m_xLabelControl )
     {
         Reference<XPropertySet> xOldValue = m_xLabelControl;
         m_xLabelControl = NULL;
 
         // fire a property change event
-                Any aOldValue; aOldValue <<= xOldValue;
-                Any aNewValue; aNewValue <<= m_xLabelControl;
+        Any aOldValue; aOldValue <<= xOldValue;
+        Any aNewValue; aNewValue <<= m_xLabelControl;
         sal_Int32 nHandle = PROPERTY_ID_CONTROLLABEL;
-        OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
+        OPropertySetHelper::fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
+    }
+    else if ( _rEvent.Source == m_xExternalBinding )
+    {
+        disconnectExternalValueBinding( );
     }
     else
         OControlModel::disposing(_rEvent);
@@ -1183,7 +1415,7 @@ void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
     switch (nHandle)
     {
         case PROPERTY_ID_CONTROLSOURCEPROPERTY:
-            rValue <<= m_sDataFieldConnectivityProperty;
+            rValue <<= m_sValuePropertyName;
             break;
         case PROPERTY_ID_CONTROLSOURCE:
             rValue <<= m_aControlSource;
@@ -1327,12 +1559,17 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
+    // TODO: check how this works with external bindings
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::propertyChange: Hey, I have an external binding, so how this?" );
+        // if we have an external value binding, then we should *not* be a property change
+        // listener at an sdb::Column
+
     // Bei Wertaenderung neu initialisieren
-    if (evt.PropertyName.equals(PROPERTY_VALUE))
+    if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
         osl::MutexGuard aGuard(m_aMutex);
-        if (m_bForwardValueChanges && m_xColumn.is())
-            _onValueChanged();
+        if ( m_bForwardValueChanges && m_xColumn.is() )
+            transferDbValueToControl();
     }
 }
 
@@ -1352,26 +1589,42 @@ void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateL
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
 {
-    DBG_ASSERT(m_bCommitable, "OBoundControlModel::commit : invalid call (I'm not commitable !) ");
+    OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
+    if ( hasExternalValueBinding() )
+    {
+        // in most cases, no action is required: For most derivees, we know the value property of
+        // our control (see initValueProperty), and when an external binding is active, we
+        // instantly forward all changes in this property to the external binding.
+        if ( !m_sValuePropertyName.getLength() )
+            // but for those derivees which did not use this feature, we need an
+            // explicit transfer
+            transferControlValueToExternal( );
+        return sal_True;
+    }
+
+    OSL_ENSURE( !hasExternalValueBinding(), "OBoundControlModel::commit: control flow broken!" );
+        // we reach this only if we're not working with an external binding
+
     {
         osl::MutexGuard aGuard(m_aMutex);
-        if (!m_xField.is())
+        if ( !m_xField.is() )
             return sal_True;
     }
 
-    cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
-    com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = static_cast<XWeak*>(this);
+    ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
+    EventObject aEvt;
+    aEvt.Source = static_cast< XWeak* >( this );
     sal_Bool bSucceed = sal_True;
     while (aIter.hasMoreElements() && bSucceed)
-        bSucceed = ((XUpdateListener*)aIter.next())->approveUpdate(aEvt);
+        bSucceed = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvt );
 
-    if (bSucceed)
+    if ( bSucceed )
     {
         osl::MutexGuard aGuard(m_aMutex);
         try
         {
-            bSucceed = _commit();
+            if ( m_xColumnUpdate.is() )
+                bSucceed = commitControlValueToDbColumn( sal_False );
         }
         catch(Exception&)
         {
@@ -1379,19 +1632,29 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
         }
     }
 
-    if (bSucceed)
+    if ( bSucceed )
     {
-        cppu::OInterfaceIteratorHelper aIter(m_aUpdateListeners);
-        while (aIter.hasMoreElements())
-            ((XUpdateListener*)aIter.next())->updated(aEvt);
+        cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
+        while ( aIter.hasMoreElements() )
+            static_cast< XUpdateListener* >( aIter.next() )->updated( aEvt );
     }
 
     return bSucceed;
 }
 
 //------------------------------------------------------------------------------
+void OBoundControlModel::resetField()
+{
+    m_xColumnUpdate.clear();
+    m_xColumn.clear();
+    m_xField.clear();
+}
+
+//------------------------------------------------------------------------------
 sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 {
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectToField: invalid call (have an external binding)!" );
+
     // wenn eine Verbindung zur Datenbank existiert
     if (rForm.is() && getConnection(rForm).is())
     {
@@ -1422,7 +1685,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
         {
             sal_Int32 nFieldType;
             xFieldCandidate->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-            if (_approve(nFieldType))
+            if (approveDbColumnType(nFieldType))
                 setField(xFieldCandidate,sal_False);
         }
         else
@@ -1433,10 +1696,12 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
             if(m_xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
             {
                 // an wertaenderungen horchen
-                m_xField->addPropertyChangeListener(PROPERTY_VALUE, this);
-                                m_xColumnUpdate = Reference<XColumnUpdate>(m_xField, UNO_QUERY);
-                                m_xColumn = Reference<XColumn>(m_xField, UNO_QUERY);
-                INT32 nNullableFlag; m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
+                m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
+                m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
+                m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
+
+                INT32 nNullableFlag = ColumnValue::NO_NULLS;
+                m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                 m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                     // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
             }
@@ -1451,8 +1716,10 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OBoundControlModel::_approve(sal_Int32 _nColumnType)
+sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
 {
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::approveDbColumnType: invalid call (have an external binding)!" );
+
     if ((_nColumnType == DataType::BINARY) || (_nColumnType == DataType::VARBINARY)
         || (_nColumnType == DataType::LONGVARBINARY) || (_nColumnType == DataType::OTHER)
         || (_nColumnType == DataType::OBJECT) || (_nColumnType == DataType::DISTINCT)
@@ -1464,28 +1731,42 @@ sal_Bool OBoundControlModel::_approve(sal_Int32 _nColumnType)
     return sal_True;
 }
 
-// XLoadListener
+//==============================================================================
+// value binding handling
+
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject& _rEvent) throw(RuntimeException)
+void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxRowSet, bool _bFromReload )
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    Reference<XRowSet> xForm(_rEvent.Source, UNO_QUERY);
-    Reference<XPropertySet> xOldField = m_xField;
-    connectToField(xForm);
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectDatabaseColumn: not to be called with an external value binding!" );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_bLoaded = sal_True;
-    _loaded(_rEvent);
+    // consistency checks
+    DBG_ASSERT( !( m_xField.is() && !_bFromReload ),
+        "OBoundControlModel::connectDatabaseColumn: the form is just *loaded*, but we already have a field!" );
 
-    if (m_xField.is())
+    Reference< XPropertySet >   xOldField = m_xField;
+    if ( !m_xField.is() )
     {
-        // initially call _onValueChanged
+        // connect to the column
+        connectToField( _rxRowSet );
+    }
+
+    // now that we're connected (more or less, even if we did not find a column),
+    // we definately want to forward any potentially occuring value changes
+    m_bForwardValueChanges = sal_True;
+
+    // let derived classes react on this new connection
+    m_bLoaded = sal_True;
+    onConnectedDbColumn( _rxRowSet );
+
+    // did we successfully connect to a database column?
+    if ( m_xField.is() )
+    {   // initially transfer the db column value to the control
         // but only if the rowset if posisitioned on a valid record
-        Reference< XRowSet > xRowset( _rEvent.Source, UNO_QUERY );
-        OSL_ENSURE( xRowset.is(), "OBoundControlModel::loaded: invalid event source (no rowset)!" );
-        if ( xRowset.is() )
+        if ( _rxRowSet.is() )
         {
-            if ( !xRowset->isBeforeFirst() && !xRowset->isAfterLast() )
-                _onValueChanged();
+            if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
+                transferDbValueToControl();
         }
     }
 
@@ -1498,15 +1779,54 @@ void SAL_CALL OBoundControlModel::loaded(const com::sun::star::lang::EventObject
     }
 }
 
+//------------------------------------------------------------------------------
+void OBoundControlModel::disconnectDatabaseColumn( )
+{
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::disconnectDatabaseColumn: not to be called with an external value binding!" );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // let derived classes react on this
+    onDisconnectedDbColumn();
+
+    if ( m_xField.is() )
+    {
+        m_xField->removePropertyChangeListener( PROPERTY_VALUE, this );
+        resetField();
+    }
+
+    m_xCursor = NULL;
+    m_bLoaded = sal_False;
+}
+
+//==============================================================================
+// XLoadListener
+//------------------------------------------------------------------------------
+void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(RuntimeException)
+{
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::loaded: we should never reach this with an external value binding!" );
+    if ( hasExternalValueBinding() )
+        return;
+
+    // connect to the database column described by our SQL-binding-related properties
+    Reference< XRowSet > xRowSet( _rEvent.Source, UNO_QUERY );
+    DBG_ASSERT( xRowSet.is(), "OBoundControlModel::loaded: event source is no RowSet?!" );
+    connectDatabaseColumn( xRowSet, false );
+}
+
 
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::unloaded( const com::sun::star::lang::EventObject& aEvent ) throw(RuntimeException)
 {
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloaded: we should never reach this with an external value binding!" );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventObject& aEvent ) throw(RuntimeException)
 {
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloading: we should never reach this with an external value binding!" );
+    if ( hasExternalValueBinding() )
+        return;
+
     osl::MutexGuard aGuard(m_aMutex);
     m_bForwardValueChanges = sal_False;
 }
@@ -1514,60 +1834,86 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& aEvent) throw(RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    _unloaded();
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloading: we should never reach this with an external value binding!" );
+    if ( hasExternalValueBinding() )
+        return;
 
-    if (m_xField.is())
-    {
-        m_xField->removePropertyChangeListener(PROPERTY_VALUE, this);
-        resetField();
-    }
-    m_xCursor = NULL;
-    m_bLoaded = sal_False;
+    // disconnect from the database column described by our SQL-binding-related properties
+    disconnectDatabaseColumn();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OBoundControlModel::reloaded(const com::sun::star::lang::EventObject& aEvent) throw(RuntimeException)
+void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    Reference<XPropertySet> xOldField = m_xField;
-    // did we lost the connection to the field because there was a new created?
-    if (!m_xField.is())
-    {
-        Reference<XRowSet> xForm(aEvent.Source, UNO_QUERY);
-        connectToField(xForm);
-    }
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloaded: we should never reach this with an external value binding!" );
+    if ( hasExternalValueBinding() )
+        return;
 
-    m_bForwardValueChanges = sal_True;
-    _loaded(aEvent);
-
-    // do we have a field, than get the new value
-    if (m_xField.is())
-        _onValueChanged();
-
-    if ( xOldField != m_xField )
-    {
-        Any aNewValue; aNewValue <<= m_xField;
-        Any aOldValue; aOldValue <<= xOldField;
-        sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
-        OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
-    }
+    Reference< XRowSet > xRowSet( _rEvent.Source, UNO_QUERY );
+    DBG_ASSERT( xRowSet.is(), "OBoundControlModel::reloaded: event source is no RowSet?!" );
+    connectDatabaseColumn( xRowSet, true );
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::_loaded(const com::sun::star::lang::EventObject& rEvent)
+void OBoundControlModel::setControlValue( const Any& _rValue )
+{
+    OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
+        "OBoundControlModel::setControlValue: invalid aggregate !" );
+    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
+        "OBoundControlModel::setControlValue: please override if you have own value property handling!" );
+
+    m_bSettingAggregateState = sal_True;
+    {
+        // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
+        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
+        // our own mutex locked
+        // FS - 72451 - 31.01.00
+        MutexRelease aRelease( m_aMutex );
+        if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
+        {
+            m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
+        }
+        else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+        {
+            m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
+        }
+    }
+    m_bSettingAggregateState = sal_False;
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::onConnectedExternalValue( )
 {
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::_unloaded()
+void OBoundControlModel::onDisconnectedExternalValue( )
 {
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
+{
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::onConnectedDbColumn: how this? There's an external value binding!" );
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::onDisconnectedDbColumn()
+{
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::onDisconnectedDbColumn: how this? There's an external value binding!" );
 }
 
 // XReset
 //-----------------------------------------------------------------------------
-void OBoundControlModel::_reset()
+Any OBoundControlModel::getDefaultForReset() const
 {
+    return Any();
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::resetNoBroadcast()
+{
+    setControlValue( getDefaultForReset() );
 }
 
 //-----------------------------------------------------------------------------
@@ -1586,23 +1932,25 @@ void OBoundControlModel::removeResetListener(const Reference<XResetListener>& l)
 void OBoundControlModel::reset() throw (RuntimeException)
 {
     cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-        com::sun::star::lang::EventObject aResetEvent(static_cast<XWeak*>(this));
+    EventObject aResetEvent(static_cast<XWeak*>(this));
     sal_Bool bContinue = sal_True;
-    while (aIter.hasMoreElements() && bContinue)
-        bContinue = reinterpret_cast<XResetListener*>(aIter.next())->approveReset(aResetEvent);
+    while ( aIter.hasMoreElements() && bContinue )
+        bContinue = static_cast< XResetListener* >( aIter.next() )->approveReset( aResetEvent );
 
     if (!bContinue)
         return;
 
     osl::ClearableMutexGuard aGuard(m_aMutex);
-    m_bResetting = sal_True;
 
-    sal_Bool bSimpleReset = !m_xField.is()                      // no connection to a database field
+    sal_Bool bSimpleReset =
+                        (   !m_xColumn.is()                     // no connection to a database column
                         ||  (   m_xCursor.is()                  // OR   we have an improperly positioned cursor
                             &&  (   m_xCursor->isAfterLast()
                                 ||  m_xCursor->isBeforeFirst()
                                 )
-                            );
+                            )
+                        ||  hasExternalValueBinding()           // OR we have an external value binding
+                        );
 
     if ( !bSimpleReset )
     {
@@ -1616,6 +1964,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         // we have to access the field content at least once to get a reliable result by XColumn::wasNull
         try
         {
+            // TODO: this is expensive in the case of binary fields
             m_xColumn->getString();
             bIsNull = m_xColumn->wasNull();
         }
@@ -1624,28 +1973,36 @@ void OBoundControlModel::reset() throw (RuntimeException)
             DBG_ERROR("OBoundControlModel::reset : XColumn::getString and wasNull are expected to always succeed !");
         }
 
-        if (bIsNull)
+        sal_Bool bNeedValueTransfer = sal_True;
+
+        if ( bIsNull )
         {
             sal_Bool bIsNewRecord = sal_False;
-            Reference<XPropertySet> xSet(m_xCursor, UNO_QUERY);
-            if (xSet.is())
-                xSet->getPropertyValue(PROPERTY_ISNEW) >>= bIsNewRecord;
-            if (bIsNewRecord)
+            Reference<XPropertySet> xSet( m_xCursor, UNO_QUERY );
+            if ( xSet.is() )
+                xSet->getPropertyValue( PROPERTY_ISNEW ) >>= bIsNewRecord;
+
+            if ( bIsNewRecord )
             {
-                _reset();   // setzen der Werte,
-                _commit();  // uebertragen der Werte ins Feld
-                            // fuer das zuruecksetzen des modifyflags ist das Formular zuständig
+                // reset the control to it's default
+                resetNoBroadcast();
+                // and immediately commit the changes to the DB column, to keep consistency
+                commitControlValueToDbColumn( sal_True );
+
+                bNeedValueTransfer = sal_False;
             }
-            else
-                _onValueChanged();
         }
-        else
-            _onValueChanged();
+
+        if ( bNeedValueTransfer )
+            transferDbValueToControl();
     }
     else
-        _reset();
+    {
+        resetNoBroadcast();
+        if ( hasExternalValueBinding() )
+            transferControlValueToExternal();
+    }
 
-    m_bResetting = sal_False;
     aGuard.clear();
 
     cppu::OInterfaceIteratorHelper aIterDone(m_aResetListeners);
@@ -1653,8 +2010,10 @@ void OBoundControlModel::reset() throw (RuntimeException)
         reinterpret_cast<XResetListener*>(aIterDone.next())->resetted(aResetEvent);
 }
 // -----------------------------------------------------------------------------
-void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_Bool _bFire)
+void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_Bool _bFire )
 {
+    DBG_ASSERT( !hasExternalValueBinding(), "OBoundControlModel::setField: We have an external value binding!" );
+
     // fire a property change event
     if ( m_xField != _rxField )
     {
@@ -1668,6 +2027,203 @@ void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_
         }
     }
 }
+//--------------------------------------------------------------------
+sal_Bool OBoundControlModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+{
+    // reject everything. Derived classes need to override this if they want to
+    // benefit from this data binding functionality
+    return sal_False;
+}
+
+//--------------------------------------------------------------------
+void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "OBoundControlModel::connectExternalValueBinding: invalid binding instance!" );
+    OSL_PRECOND( approveValueBinding( _rxBinding ), "OBoundControlModel::connectExternalValueBinding: binding is not approved!" );
+    OSL_PRECOND( !hasExternalValueBinding( ), "OBoundControlModel::connectExternalValueBinding: precond not met (currently have a binding)!" );
+
+    // Suspend being a load listener at our parent form. This is because
+    // an external value binding overrules a possible database binding
+    if ( isLoadListening() )
+        stopLoadListening( );
+
+    // TODO: if we're already connected to a db column, we should disconnect from it here,
+    // shouldn't we?
+
+    // remember this new binding
+    m_xExternalBinding = _rxBinding;
+
+    // add as value listener so we get notified when the value changes
+    Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
+    if ( xModifiable.is() )
+        xModifiable->addModifyListener( this );
+
+    // tell the derivee
+    onConnectedExternalValue();
+
+    // propagate our new value
+    transferExternalValueToControl( );
+}
+
+//--------------------------------------------------------------------
+void OBoundControlModel::disconnectExternalValueBinding( )
+{
+    // not listening at the binding anymore
+    Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
+    if ( xModifiable.is() )
+        xModifiable->removeModifyListener( this );
+
+    // no binding anymore
+    m_xExternalBinding.clear();
+
+    // be a load listener at our parent, again. This was suspended while we had
+    // an external value binding in place.
+    if ( m_xParent.is() )
+        startLoadListening( );
+
+    // TODO: anything to care for here? Changing values? Falling back to a
+    // database binding if appropriate?
+
+    // tell the derivee
+    onDisconnectedExternalValue();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
+        // the interface for this method should not have been exposed if we do not
+        // support binding to external data
+
+    if ( _rxBinding.is() && !approveValueBinding( _rxBinding ) )
+    {
+        throw IncompatibleTypesException(
+            ::rtl::OUString::createFromAscii( "The value types supported by the binding cannot be used for exchanging data with this control." ),
+            *this
+        );
+        // TODO: localize this error message
+    }
+
+    // disconnect from the old binding
+    if ( hasExternalValueBinding() )
+        disconnectExternalValueBinding( );
+
+    // connect to the new binding
+    if ( _rxBinding.is() )
+        connectExternalValueBinding( _rxBinding );
+}
+
+//--------------------------------------------------------------------
+Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::getValueBinding: How did you reach this method?" );
+        // the interface for this method should not have been exposed if we do not
+        // support binding to external data
+
+    return m_xExternalBinding;
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw ( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
+    if ( hasExternalValueBinding() && ( m_xExternalBinding == _rEvent.Source ) )
+    {
+        transferExternalValueToControl( );
+    }
+}
+
+//--------------------------------------------------------------------
+void OBoundControlModel::transferDbValueToControl( )
+{
+    setControlValue( translateDbColumnToControlValue() );
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::transferExternalValueToControl( )
+{
+    try
+    {
+        setControlValue( translateExternalValueToControlValue( ) );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OBoundControlModel::transferExternalValueToControl: caught an exception!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::transferControlValueToExternal( )
+{
+    OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
+        "OBoundControlModel::transferControlValueToExternal: precondition not met!" );
+
+    if ( m_xExternalBinding.is() )
+    {
+        try
+        {
+            m_xExternalBinding->setValue( translateControlValueToExternalValue( ) );
+        }
+        catch( const IncompatibleTypesException& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value (incomptible types)!" );
+        }
+        catch( const NoSupportException& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value (no support)!" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+Any OBoundControlModel::translateExternalValueToControlValue( )
+{
+    OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
+        "OBoundControlModel::translateExternalValueToControlValue: precondition not met!" );
+
+    // determine the type of our value property
+    if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+    {
+        Reference< XPropertySetInfo > xPropInfo( m_xAggregateSet->getPropertySetInfo( ) );
+        if ( xPropInfo.is() )
+        {
+            Type aValuePropType = xPropInfo->getPropertyByName( m_sValuePropertyName ).Type;
+            if ( m_xExternalBinding.is() && m_xExternalBinding->supportsType( aValuePropType ) )
+                return m_xExternalBinding->getValue( aValuePropType );
+        }
+    }
+
+    OSL_ENSURE( sal_False, "OBoundControlModel::translateExternalValueToControlValue: no default implementation available!" );
+    return Any();
+}
+
+//------------------------------------------------------------------------------
+Any OBoundControlModel::translateControlValueToExternalValue( )
+{
+    OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
+        "OBoundControlModel::translateControlValueToExternalValue: invalid aggregate !" );
+    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
+        "OBoundControlModel::translateControlValueToExternalValue: please override if you have own value property handling!" );
+
+    // determine the current control value
+    Any aControlValue;
+    if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
+    {
+        aControlValue = m_xAggregateFastSet->getFastPropertyValue( m_nValuePropertyAggregateHandle );
+    }
+    else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+    {
+        aControlValue = m_xAggregateSet->getPropertyValue( m_sValuePropertyName );
+    }
+
+    return aControlValue;
+}
+
 // -----------------------------------------------------------------------------
 
 //.........................................................................
