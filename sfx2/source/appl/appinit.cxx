@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:03:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
 
+#include <svtools/soerr.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/saveopt.hxx>
 #include <svtools/localisationoptions.hxx>
@@ -82,9 +83,6 @@
 #include <tools/resary.hxx>
 #endif
 
-#ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
-#endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
@@ -93,9 +91,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _INETBND_HXX //autogen
-#include <so3/inetbnd.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -146,15 +141,14 @@
 #include "dispatch.hxx"
 #include "docfac.hxx"
 #include "evntconf.hxx"
-#include "frameobj.hxx"
+//#include "frameobj.hxx"
 #include "imgmgr.hxx"
-#include "interno.hxx"
+//#include "interno.hxx"
 #include "intro.hxx"
 #include "macrconf.hxx"
 #include "mnumgr.hxx"
 #include "msgpool.hxx"
 #include "newhdl.hxx"
-#include "plugobj.hxx"
 #include "progress.hxx"
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
@@ -262,16 +256,16 @@ FASTBOOL SfxApplication::Initialize_Impl()
     Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
 
     // StarObjects initialisieren
-    if ( !SvFactory::Init() )
-        ErrorBox( 0, SfxResId(MSG_ERR_SOINIT) ).Execute();
+    //if ( !SvFactory::Init() )
+    //  ErrorBox( 0, SfxResId(MSG_ERR_SOINIT) ).Execute();
 
     // Factory f"ur das SfxFrameObject anlegen; da der Pointer in den AppDaten
     // liegt, dieser aber nicht exportierbar ist, mu\s ein exportierbarer
     // Wrapper angelegt werden
-    pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
-    pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
-    SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
-    INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
+    //pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
+    //pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
+    //SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
+    //INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
 
     pImp->pEventHdl = new UniqueIndex( 1, 4, 4 );
     //InitializeDisplayName_Impl();
@@ -282,6 +276,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     new SimpleErrorHandler;
 #endif
     new SfxErrorHandler(RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
+
     new SfxErrorHandler(
         RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END);
     new SfxErrorHandler(
@@ -345,6 +340,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_VIEWCREATED,         String(), aEventNames.GetString( 16 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEVIEW,    String(), aEventNames.GetString( 17 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEVIEW,           String(), aEventNames.GetString( 18 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_VISAREACHANGED,      String(), aEventNames.GetString( 19 ) );
 
     // Subklasse initialisieren
     bDowning = sal_False;
