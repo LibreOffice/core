@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:35:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Čára";
         Text[ hebrew ] = "Linie";
         Text[ hindi ] = "रेखा";
+        Text[ slovak ] = "Čiara";
     };
     FixedText FT_LINE_DIST
     {
@@ -145,6 +146,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Vzdálenost čáry";
         Text[ hebrew ] = "L~iniendistanz";
         Text[ hindi ] = "~रेखा की दूरी";
+        Text[ slovak ] = "Vz~dialenosť čiary";
     };
     MetricField MTR_LINE_DIST
     {
@@ -193,6 +195,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Převis vodítka";
         Text[ hebrew ] = "Hilfslinien~überhang";
         Text[ hindi ] = "सहायक ~ऊपर लटकाओ";
+        Text[ slovak ] = "Previs v~odítka";
     };
     MetricField MTR_FLD_HELPLINE_OVERHANG
     {
@@ -241,6 +244,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Vzdálenost vodítka";
         Text[ hebrew ] = "Hilfslinien~distanz";
         Text[ hindi ] = "~सहायक दूरी";
+        Text[ slovak ] = "~Vzdialenosť vodítka";
     };
     MetricField MTR_FLD_HELPLINE_DIST
     {
@@ -289,6 +293,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Levé vodítko";
         Text[ hebrew ] = "~Linke Hilfslinie";
         Text[ hindi ] = "~बायाँ सहायक";
+        Text[ slovak ] = "Ľ~avé vodítko";
     };
     MetricField MTR_FLD_HELPLINE1_LEN
     {
@@ -337,6 +342,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Pravé vodítko";
         Text[ hebrew ] = "~Rechte Hilfslinie";
         Text[ hindi ] = "~दाहिना सहायक";
+        Text[ slovak ] = "P~ravé vodítko";
     };
     MetricField MTR_FLD_HELPLINE2_LEN
     {
@@ -385,6 +391,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Měřit pod objektem";
         Text[ hebrew ] = "Maßlinie u~nterhalb des Objekts";
         Text[ hindi ] = "~माप यूनिटों को दिखाओ";
+        Text[ slovak ] = "Merať ~pod objektom";
     };
     FixedText FT_DECIMALPLACES
     {
@@ -417,6 +424,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Desetinná místa";
         Text[ hebrew ] = "Nachkommastellen";
         Text[ hindi ] = "दशांश शुद्धता";
+        Text[ slovak ] = "Desatinné miesta";
     };
     MetricField MTR_FLD_DECIMALPLACES
     {
@@ -468,6 +476,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Legenda";
         Text[ hebrew ] = "Beschriftung";
         Text[ hindi ] = "लेजन्ड";
+        Text[ slovak ] = "Legenda";
     };
     FixedText FT_POSITION
     {
@@ -500,6 +509,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Umístění textu";
         Text[ hebrew ] = "~Textposition";
         Text[ hindi ] = "~टेक्स्ट् स्थान";
+        Text[ slovak ] = "Umiestnenie ~textu";
     };
     Control CTL_POSITION
     {
@@ -541,6 +551,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Automaticky svisle";
         Text[ hebrew ] = "Automatisch ~Vertikal";
         Text[ hindi ] = "स्व~चालित लंबरूप";
+        Text[ slovak ] = "~Automaticky zvisle";
     };
     TriStateBox TSB_AUTOPOSH
     {
@@ -574,6 +585,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Automaticky vodorovně";
         Text[ hebrew ] = "Automatisch ~Horizontal";
         Text[ hindi ] = "स्वचालि~त समतल";
+        Text[ slovak ] = "A~utomaticky vodorovne";
     };
     TriStateBox TSB_SHOW_UNIT
     {
@@ -607,6 +619,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Měrná jednotka";
         Text[ hebrew ] = "~Einheit anzeigen";
         Text[ hindi ] = "~माप यूनिटों को दिखाओ";
+        Text[ slovak ] = "~Merné jednotky";
     };
     ListBox LB_UNIT
     {
@@ -648,6 +661,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Rovnoběžně s čárou";
         Text[ hebrew ] = "~Parallel zur Hilfslinie";
         Text[ hindi ] = "रेखा केलिए समा~नान्तर";
+        Text[ slovak ] = "~Rovnobežne s čiarou";
     };
     Control CTL_PREVIEW
     {
@@ -685,6 +699,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालित";
+        Text[ slovak ] = "Automaticky";
     };
     Text[ chinese_simplified ] = "定尺寸";
     Text[ russian ] = "��������� �����";
@@ -702,8 +717,11 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ czech ] = "Kótování";
     Text[ hebrew ] = "Bemaßung";
     Text[ hindi ] = "परिमाण देना";
+    Text[ slovak ] = "Zmena rozmerov";
 };
  // ********************************************************************** EOF
+
+
 
 
 
