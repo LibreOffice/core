@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:07:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_SVXTBX_FORM_FILTER
     Text[ japanese ] = "Ì¨ÙÀÊÞ°";
     Text[ korean ] = "ÇÊÅÍ µµ±¸¸ðÀ½";
     Text[ chinese_simplified ] = "É¸Ñ¡À¸";
-    Text[ chinese_traditional ] = "¹LÂo¾¹²M³æ";
+    Text[ chinese_traditional ] = "¿z¿ïÄæ";
     Text[ arabic ] = "ÔÑíØ ÇáÝáÊÑ";
     Text[ turkish ] = "Filtre çubuðu";
     Text[ language_user1 ] = " ";
@@ -145,7 +145,7 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ japanese ] = "Ì¨ÙÀÊÞ°";
     Text[ korean ] = "ÇÊÅÍ µµ±¸¸ðÀ½";
     Text[ chinese_simplified ] = "É¸Ñ¡À¸";
-    Text[ chinese_traditional ] = "¹LÂo¾¹²M³æ";
+    Text[ chinese_traditional ] = "¿z¿ïÄæ";
     Text[ arabic ] = "ÔÑíØ ÇáÝáÊÑ";
     Text[ turkish ] = "Filtre çubuðu";
     Text[ language_user1 ] = " ";
@@ -634,5 +634,6 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ catalan ] = "Número de registro";
     Text[ finnish ] = "Tietueen numero";
 };
+
 
 
