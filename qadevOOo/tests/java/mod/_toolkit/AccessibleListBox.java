@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListBox.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2003-09-08 13:00:01 $
+ *  last change: $Date: 2004-01-05 20:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -89,6 +78,18 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Test for object which is represented accessible component
@@ -116,7 +117,6 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleListBox extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -128,52 +128,54 @@ public class AccessibleListBox extends TestCase {
      * Then the TREE component is found and the 'New Document' tab is
      * selected to make list box visible. After that list box is obtained.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
-            queryInterface(XDispatchProvider.class, secondController);
+        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                          XDispatchProvider.class,
+                                          secondController);
 
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer)UnoRuntime.queryInterface
-                (XURLTransformer.class, transf);
+            XInterface transf = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                                        "com.sun.star.util.URLTransformer");
+            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+                                XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
-            throw new StatusException("Couldn't create URLTransformer", e );
+            throw new StatusException("Couldn't create URLTransformer", e);
         }
 
         XDispatch getting = null;
-        log.println( "opening HyperlinkDialog" );
+        log.println("opening HyperlinkDialog");
+
         URL[] url = new URL[1];
         url[0] = new URL();
         url[0].Complete = ".uno:HyperlinkDialog";
         urlTransf.parseStrict(url);
         getting = aProv.queryDispatch(url[0], "", 0);
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
@@ -181,52 +183,58 @@ public class AccessibleListBox extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot);
 
+
         // obtaining 'Close' button
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSH_BUTTON,"Close");
-        action = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+                                             "Close");
+        action = (XAccessibleAction) UnoRuntime.queryInterface(
+                         XAccessibleAction.class, oObj);
 
         // Selecting 'New Document' tab
         try {
             oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
-            XAccessibleSelection xAccSel = (XAccessibleSelection)
-                UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
+
+            XAccessibleSelection xAccSel = (XAccessibleSelection) UnoRuntime.queryInterface(
+                                                   XAccessibleSelection.class,
+                                                   oObj);
             xAccSel.selectAccessibleChild(3);
             shortWait();
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,
-            "", "com.sun.star.comp.toolkit.AccessibleListBox");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+                                             "com.sun.star.comp.toolkit.AccessibleListBox");
+
         Object list = at.getAccessibleObjectForRole(at.SearchedAccessible,
-            AccessibleRole.LIST);
+                                                    AccessibleRole.LIST);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,list) ;
-        final XAccessibleComponent acomp1 = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,action) ;
+        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                   XAccessibleComponent.class,
+                                                   list);
+        final XAccessibleComponent acomp1 = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                    XAccessibleComponent.class,
+                                                    action);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp1.grabFocus();
-                    acomp.grabFocus();
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                System.out.println("Grabbing focus ... ");
+                acomp1.grabFocus();
+                acomp.grabFocus();
+            }
+        });
 
         return tEnv;
     }
@@ -234,8 +242,9 @@ public class AccessibleListBox extends TestCase {
     /**
      * Closes dialog using action of button 'Close'
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    Closing dialog ... " );
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("    Closing dialog ... ");
+
         try {
             action.doAccessibleAction(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
@@ -243,7 +252,9 @@ public class AccessibleListBox extends TestCase {
         } catch (com.sun.star.lang.DisposedException de) {
             log.println("Dialog already disposed");
         }
-        xTextDoc.dispose();
+
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
@@ -251,7 +262,8 @@ public class AccessibleListBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -264,9 +276,9 @@ public class AccessibleListBox extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(1000) ;
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
