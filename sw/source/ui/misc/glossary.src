@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:52:02 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ ModalDialog DLG_GLOSSARY
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ΜίΪΛή­°";
         Text[ korean ] = "ΉΜΈ®ΊΈ±β";
-        Text[ chinese_simplified ] = "Τ¤ΚΣ";
+        Text[ chinese_simplified ] = "Τ¤ΐΐ";
         Text[ chinese_traditional ] = "ΉwΔύ";
         Text[ arabic ] = "ΗαγΪΗνδΙ";
         Text[ turkish ] = "Φnizleme";
@@ -135,7 +135,7 @@ ModalDialog DLG_GLOSSARY
         Text[ portuguese_brazilian ] = "Show ~preview";
         Text[ japanese ] = "ΜίΪΛή­°•\\¦(~P)";
         Text[ korean ] = "ΉΜΈ®ΊΈ±β ΊΈ±β(~W)";
-        Text[ chinese_simplified ] = "ΟΤΚΎΤ¤ΚΣ(~P)";
+        Text[ chinese_simplified ] = "ΟΤΚΎΤ¤ΐΐ(~P)";
         Text[ chinese_traditional ] = "±Δ¥ΞΉwΔύ(~P)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαγΪΗνδΙ";
         Text[ turkish ] = "Φnizlemeyi gφrόntόle";
@@ -217,7 +217,7 @@ ModalDialog DLG_GLOSSARY
         Text [ norwegian ] = "+++~Shortcut" ;
         Text [ italian ] = "Sigla" ;
         Text [ portuguese_brazilian ] = "~Atalho" ;
-        Text [ portuguese ] = "~Atalho" ;
+        Text [ portuguese ] = "~Abreviatura" ;
         Text [ finnish ] = "~Pikatoiminto" ;
         Text [ danish ] = "Genvej" ;
         Text [ french ] = "~Raccourci" ;
@@ -232,7 +232,7 @@ ModalDialog DLG_GLOSSARY
         Text[ japanese ] = "Ό®°Δ¶―Δ·°";
         Text[ chinese_traditional ] = "ΑYΌg(~S)";
         Text[ arabic ] = "ΗαΗΞΚΥΗΡ";
-        Text[ greek ] = "Συντόμευση";
+        Text[ greek ] = "Αρχι~κά";
         Text[ korean ] = "ΉΩ·Ξ°΅±β(~S)";
         Text[ turkish ] = "Kύsaltma";
         Text[ language_user1 ] = " ";
@@ -859,7 +859,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ japanese ] = "‚±‚ΜΌ®°Δ¶―Δ·°‚Ν‚·‚Ε‚Ιg—p‚³‚κ‚Δ‚Ά‚ά‚·B•Κ‚Μ·°‚π‘I‘π‚µ‚Δ‰Ί‚³‚ΆB";
     MESSAGE[ chinese_traditional ] = "¤wΈg¨Ο¥Ξ¤F³o­ΣΑYΌg΅C½Π±zΏι¤J¤@­Σ¤£¦PªΊ¦WΊΩ΅T";
     MESSAGE[ arabic ] = "εΠΗ ΗαΗΞΚΥΗΡ γζΜζΟ ΘΗαέΪα. ΗαΡΜΗΑ ΗΣΚΞΟΗγ ΗΣγ ΜΟνΟ!";
-    MESSAGE[ greek ] = "Το όνομα συντόμευσης υπάρχει ήδη. Παρακαλώ δώστε ένα άλλο όνομα!";
+    MESSAGE[ greek ] = "Τα αρχικά υπάρχουν ήδη. Παρακαλώ εισάγετε κάποιο άλλο όνομα!";
     MESSAGE[ korean ] = "ΉΩ·Ξ°΅±β ΐΜΈ§ΐΜ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω. ΄ΩΈ¥ ΐΜΈ§ΐ» Ό±ΕΓΗΟΏ© ΑΦ½Κ½ΓΏΐ";
     MESSAGE[ turkish ] = "Bu kύsaltma mevcut durumda. Baώka bir ad seηin!";
     MESSAGE[ language_user1 ] = " ";
@@ -1118,7 +1118,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ japanese ] = "Ό®°Δ¶―Δ·°";
         Text[ chinese_traditional ] = "±¶®|(~S)";
         Text[ arabic ] = "ΗαΗΞΚΥΗΡ";
-        Text[ greek ] = "Συντόμευση";
+        Text[ greek ] = "Αρχι~κά";
         Text[ korean ] = "ΉΩ·Ξ°΅±β(~S)";
         Text[ turkish ] = "Kύsaltma";
         Text[ language_user1 ] = " ";

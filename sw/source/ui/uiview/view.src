@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-01-31 09:48:43 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ QueryBox DLG_WRAP
     MESSAGE[ russian ] = "Ïğîäîëæèòü ïğîâåğêó äîêóìåíòà ñ íà÷àëà?";
     MESSAGE[ polish ] = "Kontynuowaæ sprawdzanie na pocz¹tku dokumentu?";
     MESSAGE[ japanese ] = "•¶‘‚Ìn‚ß‚É–ß‚Á‚ÄÁª¯¸‚ğ‘±‚¯‚Ü‚·‚©H";
-    MESSAGE[ chinese_traditional ] = "±qÀÉ®×¶}ºİÄ~Äò·j´M¡S";
+    MESSAGE[ chinese_traditional ] = "±qÀÉ®×°_©l¦ì¸mÄ~Äò·j´M¡S";
     MESSAGE[ arabic ] = "ııåá ÊÑíÏ ãÊÇÈÚÉ ÇáÊÏŞíŞ ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
     MESSAGE[ greek ] = "Èİëåôå íá óõíå÷éóôåß ï İëåã÷ïò áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
     MESSAGE[ korean ] = "¹®¼­ÀÇ ½ÃÀÛºÎºĞ¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
@@ -244,7 +244,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà, Âñå ğàâíî ïğîâåğèòü?";
     MESSAGE[ polish ] = "Sprawdzanie obszarów specjalnych jest wy³¹czone, mimo to sprawdzaæ?";
     MESSAGE[ japanese ] = "“Á•Ê”ÍˆÍ‚ÍµÌ‚É‚È‚Á‚Ä‚¢‚Ü‚·B‚»‚ê‚Å‚àÁª¯¸‚µ‚Ü‚·‚©B";
-    MESSAGE[ chinese_traditional ] = "¯S®í°Ï°ìªºÀË¬d¤w¸g³Q¥¢¬¡¡M±zÁÙ¬O­n°õ¦æ³o­Ó©R¥O¡S";
+    MESSAGE[ chinese_traditional ] = "¯S®í°Ï°ìªºÀË¬d¤w¸g³Q¥¢¬¡¡M±zÁÙ¬O­n°õ¦æ³o­Ó«ü¥O¡S";
     MESSAGE[ arabic ] = "ÊÏŞíŞ ÇáãäÇØŞ ÇáÎÇÕÉ ÛíÑ äÔØ. åá ÊÑíÏ ÇáÊÏŞíŞ ÈÇáÑÛã ãä Ğáß¿";
     MESSAGE[ greek ] = "Ç åğéëïãŞ \"¸ëåã÷ïò åéäéêşí ğåñéï÷şí\" åßíáé áğåíåñãïğïéçìİíç.Èİëåôå íá åëåã÷èïıí êáé áõôİò;";
     MESSAGE[ korean ] = "Æ¯Á¤ÇÑ ¿µ¿ªÀÇ °Ë»ç°¡ ÁßÁöµÇ¾ú½À´Ï´Ù. °Ë»ç¸¦ ÇÏ½Ã°Ú½À´Ï±î?";
@@ -260,19 +260,19 @@ QueryBox MSG_SEARCH_END
     Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til slutten av  dokumentet. Vil du fortsette fra begynnelsen?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?" ;
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o final do documento. Deseja continuar do início?" ;
-    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao fim do documento. Deseja continuar a procura no início do documento?" ;
+    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao fim do documento. Continuar a procura no início do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on etsinyt asiakirjan loppuun asti.Jatketaanko alusta?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint la fin du document. Souhaitez-vous reprendre la recherche au début du document ?" ;
-    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till slutet av dokument. Vill Du fortsätta sökningen i början av dokumentet?" ;
+    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till slutet av dokument. Vill du fortsätta sökningen i början av dokumentet?" ;
     Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het einde van het document gezocht. Wilt u doorgaan met zoeken vanaf het begin?" ;
     Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?" ;
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÎ²¶Ë¡£Òª¼ÌĞø´ÓÎÄµµÊ×¶Ë¿ªÊ¼ËÑÑ°£¿";
-    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê äî êîíöà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê â êîíöå äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
     Message[ polish ] = "%PRODUCTNAME Writer przeszuka³ dokument do koñca. Czy kontynuowaæ wyszukiwanie od pocz¹tku dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ‚ÍA•¶‘––‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘‚Ìn‚ß‚É–ß‚Á‚Ä‘±s‚µ‚Ü‚·‚©B";
-    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªº§Àºİ¡C­nÄ~Äò·j´M¦Ü¤å¥ó­ººİ¡H";
+    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªºµ²§ô¦ì¸m¡C­nÄ~Äò·j´M¦Ü¤å¥óªº°_©l¦ì¸m¡H";
     Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
     Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ Ã³À½ ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
@@ -288,19 +288,19 @@ QueryBox MSG_SEARCH_START
     Message [ norwegian ] = "%PRODUCTNAME Writer har søkt til begynnelsen av dokumentet. Vil du fortsette fra slutten?" ;
     Message [ italian ] = "%PRODUCTNAME Writer ha cercato fino all'inizio del documento. Volete continuare dalla fine del documento?" ;
     Message [ portuguese_brazilian ] = "O %PRODUCTNAME Writer buscou até o início do documento. Deseja continuar no final?" ;
-    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao início do documento. Deseja continuar a procura no fim do documento?" ;
+    Message [ portuguese ] = "O %PRODUCTNAME Writer procurou até ao início do documento. Continuar a procura no fim do documento?" ;
     Message [ finnish ] = "%PRODUCTNAME Writer on etsinyt asiakirjan alkuun asti.Jatketaanko lopusta?" ;
     Message [ danish ] = "%PRODUCTNAME Writer har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
     Message [ french ] = "%PRODUCTNAME Writer a atteint le début du document. Souhaitez-vous reprendre la recherche à la fin du document ?" ;
-    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till början av dokumentet. Vill Du fortsätta sökningen i slutet av dokumentet?" ;
+    Message [ swedish ] = "%PRODUCTNAME Writer har sökt till början av dokumentet. Vill du fortsätta sökningen i slutet av dokumentet?" ;
     Message [ dutch ] = "%PRODUCTNAME Writer heeft tot aan het begin van het document gezocht. Wilt u doorgaan met zoeken vanaf het einde?" ;
     Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?" ;
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer ÒÑ¾­ËÑÑ°ÖÁÎÄµµµÄÊ×¶Ë¡£Òª¼ÌĞø´ÓÎÄ¼şÎ²¶Ë¿ªÊ¼ËÑÑ°£¿";
-    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê äî íà÷àëà äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê â êîíöå äîêóìåíòà?";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê â íà÷àëå äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê â êîíöå äîêóìåíòà?";
     Message[ polish ] = "%PRODUCTNAME Writer przeszuka³ dokument do pocz¹tku. Czy kontynuowaæ wyszukiwanie od koñca dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ‚ÍA•¶‘‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•¶‘––‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªº­ººİ¡C­nÄ~Äò·j´M¤å¥ó¦Ü§Àºİ¡S";
+    Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥ó°_©l¦ì¸m¡C­nÄ~Äò·j´M¦Ü¤å¥óªºµ²§ô¦ì¸m¡S";
     Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
     Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡±îÁö °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
@@ -370,11 +370,11 @@ InfoBox MSG_ERR_SRCSTREAM
     Message [ french ] = "Le texte source ne peut pas être chargé." ;
     Message [ dutch ] = "De brontekst kan niet worden geladen." ;
     Message [ portuguese ] = "É impossível carregar o texto-fonte." ;
-    Message[ chinese_simplified ] = "ÎŞ·¨×°ÔØÔ´ÎÄ±¾¡£";
+    Message[ chinese_simplified ] = "ÎŞ·¨×°ÈëÔ´ÎÄ±¾¡£";
     Message[ russian ] = "Çàãğóçêà èñõîäíîãî òåêñòà íåâîçìîæíà.";
     Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu Ÿród³owego.";
     Message[ japanese ] = "¿°½‚ª“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "µLªk¸Ë¸ü­ì©lÀÉ¡C";
+    Message[ chinese_traditional ] = "µLªk¸ü¤J­ì©lÀÉ¡C";
     Message[ arabic ] = ".áÇ íãßä ÊÍãíá äÕ ÇáãÕÏÑ";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá öïñôùèåß ôï êİéìåíï ğñïİëåõóçò.";
     Message[ korean ] = "¼Ò½º°¡ ·ÎµåµÉ ¼ö ¾ø½À´Ï´Ù.";
@@ -415,7 +415,7 @@ InfoBox MSG_NOT_FOUND
     Message [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Message [ finnish ] = "Hakumallia ei löydy." ;
     Message [ danish ] = "Søgningen gav intet resultat." ;
-    Message [ french ] = "Élément recherché introuvable." ;
+    Message [ french ] = "Terme recherché introuvable !" ;
     Message [ swedish ] = "Sökord hittades inte." ;
     Message [ dutch ] = "Zoekbegrip niet gevonden." ;
     Message [ spanish ] = "No se encontró la expresión buscada." ;
@@ -424,7 +424,7 @@ InfoBox MSG_NOT_FOUND
     Message[ russian ] = "Ñëîâî íå íàéäåíî.";
     Message[ polish ] = "Szukane has³o nie zosta³o znalezione.";
     Message[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "¨S¦³§ä¨ì©Ò­n·j´Mªºª«¥ó¡C";
+    Message[ chinese_traditional ] = "¨S¦³§ä¨ì©Ò­n·j´Mªº¶µ¥Ø¡C";
     Message[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
     Message[ greek ] = "Äåí âñİèçêáí ôá äåäïìİíá ğïõ áíáæçôÜôå.";
     Message[ korean ] = "°Ë»öÅ°°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
@@ -504,7 +504,7 @@ String STR_NOGLOS1
     TEXT[ japanese ] = "“ü—Íx‰‡‚Ì¼®°Ä¶¯Äu";
     TEXT[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ÁY¼g '";
     TEXT[ arabic ] = "äÕ ÇáÊáŞÇÆí ááÇÎÊÕÇÑ '";
-    TEXT[ greek ] = "Ôï ÁõôïÊåßìåíï ãéá ôç óõíôüìåõóç '";
+    TEXT[ greek ] = "ÁõôïÊåßìåíï ãéá ôá áñ÷éêÜ '";
     TEXT[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¹Ù·Î°¡±â '";
     TEXT[ turkish ] = "Otomatik metin kısaltması '";
     TEXT[ language_user1 ] = " ";
@@ -625,7 +625,7 @@ String STR_NB_REPLACED
     Text [ portuguese ] = "Expressão procurada substituída XX vezes." ;
     Text [ finnish ] = "Hakumalli on korvattu XX kertaa." ;
     Text [ danish ] = "Søgeord erstattet XX gange." ;
-    Text [ french ] = "L'élément recherché a été remplacé XX fois." ;
+    Text [ french ] = "Le terme recherché a été remplacé XX fois." ;
     Text [ swedish ] = "Sökord ersatt XX gånger." ;
     Text [ dutch ] = "Het gezochte item is XX keer vervangen." ;
     Text [ spanish ] = "La expresión buscada ha sido reemplazada XX veces." ;
@@ -634,7 +634,7 @@ String STR_NB_REPLACED
     Text[ russian ] = "Èñêîìîå ñëîâî çàìåíåíî XXğàç.";
     Text[ polish ] = "Szukane has³o zosta³o XX razy zast¹pione.";
     Text[ japanese ] = "ŒŸõŒê‹å‚Í XX ‰ñ’uŠ·‚³‚ê‚Ä‚¢‚Ü‚·B";
-    Text[ chinese_traditional ] = "·j´M¤º®e³Q XX ¦¸¥N´À¡C";
+    Text[ chinese_traditional ] = "·j´M¶µ¥Ø³Q XX ¦¸¥N´À¡C";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ.";
     Text[ greek ] = "Æçôïıìåíï óôïé÷åßï áíôéêáôáóôÜèçêå XX öïñİò.";
     Text[ korean ] = "°Ë»ö ´Ü¾î°¡  XX¹è·Î ´ëÃ¼µÊ.";
@@ -901,7 +901,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
     Text[ polish ] = "Tekst Ÿród³owy HTML";
-    Text[ japanese ] = "HTML¿°½";
+    Text[ japanese ] = "HTML ¿°½";
     Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
     Text[ arabic ] = "äÕ ãÕÏÑ HTML";
     Text[ greek ] = "Áñ÷åßï ğñïİëåõóçò HTML";
@@ -1124,7 +1124,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
             Text[ polish ] = "Tekst Ÿród³owy HTML";
-            Text[ japanese ] = "HTML¿°½";
+            Text[ japanese ] = "HTML ¿°½";
             Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
             Text[ arabic ] = "äÕ ãÕÏÑ HTML";
             Text[ greek ] = "Êåßìåíï ğñïİëåõóçò HTML";
