@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2002-03-18 09:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,7 +1657,7 @@ static ImplUniToDBCSHighTab const aGBKDBCSHighTab[256] =
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9C },                   /* 0x9C */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9D },                   /* 0x9D */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9E },                   /* 0x9E */
-    { 0x00, 0x75, aImplUniToDBCSTab_GBK_9F },                   /* 0x9F */
+    { 0x00, 0xA5, aImplUniToDBCSTab_GBK_9F },                   /* 0x9F */
     {    1,    0, NULL },                                       /* 0xA0 */
     {    1,    0, NULL },                                       /* 0xA1 */
     {    1,    0, NULL },                                       /* 0xA2 */
@@ -2214,7 +2214,7 @@ static ImplUniToDBCSHighTab const aMS936DBCSHighTab[256] =
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9C },                   /* 0x9C */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9D },                   /* 0x9D */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_9E },                   /* 0x9E */
-    { 0x00, 0x75, aImplUniToDBCSTab_GBK_9F },                   /* 0x9F */
+    { 0x00, 0xA5, aImplUniToDBCSTab_GBK_9F },                   /* 0x9F */
     {    1,    0, NULL },                                       /* 0xA0 */
     {    1,    0, NULL },                                       /* 0xA1 */
     {    1,    0, NULL },                                       /* 0xA2 */
