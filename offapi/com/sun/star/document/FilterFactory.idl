@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:04:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,12 @@ service FilterFactory
         and create it
 
         <p>
-        After a <type>TypDetection</type> you have an internal name of a type which present
+        After a <type>TypDetection</type> you have an internal name of a type which presents
          your document. Call createInstance() or createInstanceWithArguments() with these
         informations and we create a suitable filter for you.
-        It exist two types of filter: <type>ImportFilter</type> and <type>ExportFilter</type>.
-        A combination of both services in one implementation is possible too.
-        You can regulate search for filter by giving right arguments - like flags for import/export ...
+        There exist two types of filters: <type>ImportFilter</type> and <type>ExportFilter</type>.
+        A combination of both services in one implementation is also possible.
+        You can regulate search for filter by giving correct arguments - like flags for import/export ...
 
         @attention  Don't use getAvailableServiceNames()!
                     Please use XNameAccess to get informations about our configuration of accessible filters.
@@ -101,17 +101,17 @@ service FilterFactory
     /** readonly access to filter configuration
 
         <p>
-        These interface support a readonly access to our internal configuration of all accessible filter.
+        These interfaces support a readonly access to our internal configuration of all accessible filters.
         The return value of XNameAccess::getByName() is a sequence<PropertyValue> packed in an Any!
 
         Supported properties are:
             name of property            value type of property      description
-            "Type"                      [string ]                   filter is registered for these type
-            "UIName"                    [string ]                   localized name of filter to show it at the UI
-            "DocumentService"           [string ]                   service name which present the document
+            "Type"                      [string ]                   filter is registered for this type
+            "UIName"                    [string ]                   localized name of filter to show at the UI
+            "DocumentService"           [string ]                   service name which presents the document
             "FilterService"             [string ]                   service name of filter implementation
             "Flags"                     [integer]                   flags to describe the filter
-            "UserData"                  [string ]                   additional informations with private structure!
+            "UserData"                  [string ]                   additional information with private structure!
             "FileFormatVersion"         [integer]                   version number of file format
             "TemplateName"              [string ]                   name of suitable template
          </p>

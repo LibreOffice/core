@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExportFilter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-16 21:32:48 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@ service ExportFilter
     interface ::com::sun::star::document::XExporter;
 
     //-------------------------------------------------------------------------
-    /** support initialization of filter with his own configuration.
+    /** support initialization of filter with its own configuration.
         <p>
-        A filter must support a readonly access to his own configuration, but
+        A filter must support readonly access to its own configuration, but
         readonly properties couldn't be set.
         That is the reason for this interface.
         All Anys of given sequence are from Type <type>PropertyValue</type>.

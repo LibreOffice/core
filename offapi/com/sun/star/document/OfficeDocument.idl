@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 12:50:25 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,15 +106,15 @@ service OfficeDocument
     /** controls the focus behaviour of the form controls in the document
         <p>If this flag is set to <TRUE/>, any view belonging to the document should focus the
         first control in the document.</p>
-        <p>With this, you may control if your document works primarily as form document.</p>
+        <p>With this, you may control if your document works primarily as a form document.</p>
     */
     [property, optional] boolean AutomaticControlFocus;
 
-    /** controls the initial (on-load) behaviour of the form controls in the document
-        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br/>
-        If set to <FALSE/>, they will be alive (e.g. connected to the data source specified for the form
+    /** controls the initial (on-load) behavior of the form controls in the document
+        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br>
+        If set to <FALSE/>, they will be alive (i.e., connected to the data source specified for the form
         they belong to).</p>
-        <p>With this, you may control if your document works primarily as form document.</p>
+        <p>With this, you may control if your document works primarily as a form document.</p>
     */
     [property, optional] boolean ApplyFormDesignMode;
 };
@@ -126,6 +126,9 @@ service OfficeDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/19 12:50:25  fs
+    #83970# +AutomaticControlFocus / +ApplyFormDesignMode
+
     Revision 1.5  2001/02/05 15:03:45  kz
     XEventSupplier -> XEventsSupplier
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:04:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 07:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 
-/** type detection of a specified ressource (document)
+/** type detection of a specified resource (document)
  */
 service TypeDetection
 {
     //-------------------------------------------------------------------------
-    /** detect ressource
+    /** detect resource
         <p>
         Use XTypeDetection interface to get information about type of given document.
          </p>
@@ -96,11 +96,11 @@ service TypeDetection
 
         Supported properties are:
             name of property            value type of property      description
-            "UIName"                    [string]                    localized name of type to show it at UI elements
+            "UIName"                    [string]                    localized name of type to show at UI elements
             "MediaType"                 [string]                    mime type
             "ClipboardFormat"           [string]                    name of clipboard format
-            "URLPattern"                [sequence<string>]          a list of URl pattern which identify these type
-            "Extensions"                [sequence<string>]          a list of file extensions which identify these type
+            "URLPattern"                [sequence<string>]          a list of URL patterns which identify this type
+            "Extensions"                [sequence<string>]          a list of file extensions which identify this type
             "DocumentIconID"            [integer]                   an ID which present the number of corresponding icon
          </p>
      */
