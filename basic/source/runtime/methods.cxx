@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-07 13:11:07 $
+ *  last change: $Author: ab $ $Date: 2002-08-07 13:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,31 +1051,39 @@ RTLFUNC(InStr)
             bNotCaseSensitive = rPar.Get(4)->GetInteger();
 
         USHORT nPos;
+        const String& rToken = rPar.Get(nFirstStringPos+1)->GetString();
 
-        if( !bNotCaseSensitive )
+        // #97545 Always find empty string
+        if( !rToken.Len() )
         {
-            const String& rStr1 = rPar.Get(nFirstStringPos)->GetString();
-            const String& rToken = rPar.Get(nFirstStringPos+1)->GetString();
-
-            nPos = rStr1.Search( rToken, nStartPos-1 );
-            if ( nPos == STRING_NOTFOUND )
-                nPos = 0;
-            else
-                nPos++;
+            nPos = nStartPos;
         }
         else
         {
-            String aStr1 = rPar.Get(nFirstStringPos)->GetString();
-            String aToken = rPar.Get(nFirstStringPos+1)->GetString();
+            if( !bNotCaseSensitive )
+            {
+                const String& rStr1 = rPar.Get(nFirstStringPos)->GetString();
 
-            aStr1.ToUpperAscii();
-            aToken.ToUpperAscii();
-
-            nPos = aStr1.Search( aToken, nStartPos-1 );
-            if ( nPos == STRING_NOTFOUND )
-                nPos = 0;
+                nPos = rStr1.Search( rToken, nStartPos-1 );
+                if ( nPos == STRING_NOTFOUND )
+                    nPos = 0;
+                else
+                    nPos++;
+            }
             else
-                nPos++;
+            {
+                String aStr1 = rPar.Get(nFirstStringPos)->GetString();
+                String aToken = rToken;
+
+                aStr1.ToUpperAscii();
+                aToken.ToUpperAscii();
+
+                nPos = aStr1.Search( aToken, nStartPos-1 );
+                if ( nPos == STRING_NOTFOUND )
+                    nPos = 0;
+                else
+                    nPos++;
+            }
         }
         rPar.Get(0)->PutInteger( (int)nPos );
     }
