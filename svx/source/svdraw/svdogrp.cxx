@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:54:36 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,18 +769,40 @@ void SdrObjGroup::SetPage(SdrPage* pNewPage)
 
 void SdrObjGroup::SetModel(SdrModel* pNewModel)
 {
-    FASTBOOL bLinked=IsLinkedGroup();
-    FASTBOOL bChg=pNewModel!=pModel;
-    if (bLinked && bChg) {
+    // #i30648#
+    // This method also needs to migrate the used ItemSet
+    // when the destination model uses a different pool
+    // than the current one. Else it is possible to create
+    // SdrObjGroups which reference the old pool which might
+    // be destroyed (as the bug shows).
+    SdrModel* pOldModel = pModel;
+    const sal_Bool bLinked(IsLinkedGroup());
+    const sal_Bool bChg(pNewModel!=pModel);
+
+    if(bLinked && bChg)
+    {
         ImpLinkAbmeldung();
     }
 
+    // test for correct pool in ItemSet; move to new pool if necessary
+    if(pNewModel && GetItemPool() && GetItemPool() != &pNewModel->GetItemPool())
+    {
+        MigrateItemPool(GetItemPool(), &pNewModel->GetItemPool(), pNewModel);
+    }
+
+    // call parent
     SdrObject::SetModel(pNewModel);
+
+    // set new model at content
     pSub->SetModel(pNewModel);
 
-    if (bLinked && bChg) {
+    if(bLinked && bChg)
+    {
         ImpLinkAnmeldung();
     }
+
+    // modify properties
+    GetProperties().SetModel(pOldModel, pNewModel);
 }
 
 
