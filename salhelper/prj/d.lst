@@ -6,7 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\inc\salhelper\monitor.hxx %_DEST%\inc%_EXT%\salhelper\monitor.hxx
 ..\inc\salhelper\queue.hxx %_DEST%\inc%_EXT%\salhelper\queue.hxx
 ..\inc\salhelper\refobj.hxx %_DEST%\inc%_EXT%\salhelper\refobj.hxx
-				
+..\inc\salhelper\simplereferenceobject.hxx %_DEST%\inc%_EXT%\salhelper\simplereferenceobject.hxx
 
 ..\%__SRC%\bin\salhelper*.dll %_DEST%\bin%_EXT%\salhelper*.dll
 ..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib%_EXT%\*
