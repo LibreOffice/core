@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:18:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,17 @@
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XSIMPLETEXT_HPP_
 #include <com/sun/star/text/XSimpleText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #endif
 #ifndef _SV_HATCH_HXX_
 #include <vcl/hatch.hxx>
@@ -642,7 +651,7 @@ void EscherPropertyContainer::CreateTextProperties(
     {
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) ), sal_False ) )
             aAny >>= bWordWrap;
-        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowSize" ) ), sal_True ) )
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) ), sal_True ) )
             aAny >>= bAutoGrowSize;
     }
     else
@@ -2004,8 +2013,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
         uno::Sequence< beans::PropertyValue > aGeoPropSeq;
 
-        awt::Point aCoordinateOrigin( 0, 0 );
-        const beans::PropertyValue* pCoordinateSizeProp = NULL;
         const beans::PropertyValue* pAdjustmentValuesProp = NULL;
 
         sal_Bool bPredefinedHandlesUsed = sal_True;
@@ -2018,10 +2025,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             for ( i = 0; i < nCount; i++ )
             {
                 const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-                const rtl::OUString sCoordinateOrigin   ( RTL_CONSTASCII_USTRINGPARAM( "CoordinateOrigin" ) );
-                const rtl::OUString sCoordinateSize     ( RTL_CONSTASCII_USTRINGPARAM( "CoordinateSize" ) );
+                const rtl::OUString sViewBox            ( RTL_CONSTASCII_USTRINGPARAM( "ViewBox" ) );
                 const rtl::OUString sTextRotateAngle    ( RTL_CONSTASCII_USTRINGPARAM( "TextRotateAngle" ) );
-                const rtl::OUString sCallout            ( RTL_CONSTASCII_USTRINGPARAM( "Callout" ) );
                 const rtl::OUString sExtrusion          ( RTL_CONSTASCII_USTRINGPARAM( "Extrusion" ) );
                 const rtl::OUString sEquations          ( RTL_CONSTASCII_USTRINGPARAM( "Equations" ) );
                 const rtl::OUString sPath               ( RTL_CONSTASCII_USTRINGPARAM( "Path" ) );
@@ -2029,19 +2034,16 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 const rtl::OUString sHandles            ( RTL_CONSTASCII_USTRINGPARAM( "Handles" ) );
                 const rtl::OUString sAdjustmentValues   ( RTL_CONSTASCII_USTRINGPARAM( "AdjustmentValues" ) );
 
-                if ( rProp.Name.equals( sCoordinateOrigin ) )
+                if ( rProp.Name.equals( sViewBox ) )
                 {
-                    if ( rProp.Value >>= aCoordinateOrigin )
+                    awt::Rectangle aViewBox;
+                    if ( rProp.Value >>= aViewBox )
                     {
-                        AddOpt( DFF_Prop_geoLeft, aCoordinateOrigin.X );
-                        AddOpt( DFF_Prop_geoTop,  aCoordinateOrigin.Y );
+                        AddOpt( DFF_Prop_geoLeft,  aViewBox.X );
+                        AddOpt( DFF_Prop_geoTop,   aViewBox.Y );
+                        AddOpt( DFF_Prop_geoRight, aViewBox.X + aViewBox.Width );
+                        AddOpt( DFF_Prop_geoBottom,aViewBox.Y + aViewBox.Height );
                     }
-                }
-                else if ( rProp.Name.equals( sCoordinateSize ) )
-                {
-                    // it is required, that the origin has been already read,
-                    // so we are calculating the size later
-                    pCoordinateSizeProp = &rProp;
                 }
                 else if ( rProp.Name.equals( sTextRotateAngle ) )
                 {
@@ -2059,173 +2061,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( DFF_Prop_cdirFont, mso_cdir270 );
                     }
                 }
-                else if ( rProp.Name.equals( sCallout ) )
-                {
-                    uno::Sequence< beans::PropertyValue > aCalloutPropSeq;
-                    if ( rProp.Value >>= aCalloutPropSeq )
-                    {
-                        sal_uInt32 nCalloutFlagsOrg, nCalloutFlags;
-                        nCalloutFlagsOrg = nCalloutFlags = 0x10;        // default
-                        if ( GetOpt( DFF_Prop_fCalloutLengthSpecified, nCalloutFlags ) )
-                            nCalloutFlagsOrg = nCalloutFlags;
-
-                        sal_Int32 i, nCount = aCalloutPropSeq.getLength();
-                        for ( i = 0; i < nCount; i++ )
-                        {
-                            const beans::PropertyValue& rProp = aCalloutPropSeq[ i ];
-                            const rtl::OUString sCalloutOn              ( RTL_CONSTASCII_USTRINGPARAM( "On" ) );
-                            const rtl::OUString sCalloutAccentBar       ( RTL_CONSTASCII_USTRINGPARAM( "AccentBar" ) );
-                            const rtl::OUString sCalloutAngle           ( RTL_CONSTASCII_USTRINGPARAM( "Angle" ) );
-                            const rtl::OUString sCalloutDistance        ( RTL_CONSTASCII_USTRINGPARAM( "Distance" ) );
-                            const rtl::OUString sCalloutDrop            ( RTL_CONSTASCII_USTRINGPARAM( "Drop" ) );
-                            const rtl::OUString sCalloutDropAuto        ( RTL_CONSTASCII_USTRINGPARAM( "DropAuto" ) );
-                            const rtl::OUString sCalloutGap             ( RTL_CONSTASCII_USTRINGPARAM( "Gap" ) );
-                            const rtl::OUString sCalloutLength          ( RTL_CONSTASCII_USTRINGPARAM( "Length" ) );
-                            const rtl::OUString sCalloutLengthSpecified ( RTL_CONSTASCII_USTRINGPARAM( "LengthSpecified" ) );
-                            const rtl::OUString sCalloutFlipX           ( RTL_CONSTASCII_USTRINGPARAM( "FlipX" ) );
-                            const rtl::OUString sCalloutFlipY           ( RTL_CONSTASCII_USTRINGPARAM( "FlipY" ) );
-                            const rtl::OUString sCalloutTextBorder      ( RTL_CONSTASCII_USTRINGPARAM( "TextBorder" ) );
-                            const rtl::OUString sCalloutType            ( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
-
-                            if ( rProp.Name.equals( sCalloutOn ) )
-                            {
-                                sal_Bool bCalloutOn;
-                                if ( rProp.Value >>= bCalloutOn )
-                                {
-                                    nCalloutFlags |= 0x400000;
-                                    if ( bCalloutOn )
-                                        nCalloutFlags |= 0x40;
-                                    else
-                                        nCalloutFlags &=~0x40;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutAccentBar ) )
-                            {
-                                sal_Bool bAccentBar;
-                                if ( rProp.Value >>= bAccentBar )
-                                {
-                                    nCalloutFlags |= 0x200000;
-                                    if ( bAccentBar )
-                                        nCalloutFlags |= 0x20;
-                                    else
-                                        nCalloutFlags &=~0x20;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutAngle ) )
-                            {
-                                double fAngle;
-                                if ( rProp.Value >>= fAngle )
-                                {
-                                    fAngle *= 65536;
-                                    sal_Int32 nAngle = (sal_Int32)fAngle;
-                                    AddOpt( DFF_Prop_spcoa, nAngle );
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutDistance ) )
-                            {
-                                double fDistance;
-                                if ( rProp.Value >>= fDistance )
-                                {
-                                    fDistance *= 360.0;
-                                    AddOpt( DFF_Prop_dxyCalloutDropSpecified, (sal_Int32)fDistance );
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutDrop ) )
-                            {
-                                sal_Int16 nDrop;
-                                if ( rProp.Value >>= nDrop )
-                                    AddOpt( DFF_Prop_spcod, (sal_uInt16)nDrop );
-                            }
-                            else if ( rProp.Name.equals( sCalloutDropAuto ) )
-                            {
-                                sal_Bool bDropAuto;
-                                if ( rProp.Value >>= bDropAuto )
-                                {
-                                    nCalloutFlags |= 0x20000;
-                                    if ( bDropAuto )
-                                        nCalloutFlags |= 2;
-                                    else
-                                        nCalloutFlags &=~2;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutGap ) )
-                            {
-                                double fGap;
-                                if ( rProp.Value >>= fGap )
-                                {
-                                    fGap *= 360.0;
-                                    AddOpt( DFF_Prop_dxyCalloutGap, (sal_Int32)fGap );
-                                }
-
-                            }
-                            else if ( rProp.Name.equals( sCalloutLength ) )
-                            {
-                                double fLength;
-                                if ( rProp.Value >>= fLength )
-                                {
-                                    fLength *= 360.0;
-                                    AddOpt( DFF_Prop_dxyCalloutLengthSpecified, (sal_Int32)fLength );
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutLengthSpecified ) )
-                            {
-                                sal_Bool bLengthSpecified;
-                                if ( rProp.Value >>= bLengthSpecified )
-                                {
-                                    nCalloutFlags |= 0x10000;
-                                    if ( bLengthSpecified )
-                                        nCalloutFlags |= 1;
-                                    else
-                                        nCalloutFlags &=~1;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutFlipX ) )
-                            {
-                                sal_Bool bFlipX;
-                                if ( rProp.Value >>= bFlipX )
-                                {
-                                    nCalloutFlags |= 0x80000;
-                                    if ( bFlipX )
-                                        nCalloutFlags |= 8;
-                                    else
-                                        nCalloutFlags &=~8;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutFlipY ) )
-                            {
-                                sal_Bool bFlipY;
-                                if ( rProp.Value >>= bFlipY )
-                                {
-                                    nCalloutFlags |= 0x40000;
-                                    if ( bFlipY )
-                                        nCalloutFlags |= 4;
-                                    else
-                                        nCalloutFlags &=~4;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutTextBorder ) )
-                            {
-                                sal_Bool bTextBorder;
-                                if ( rProp.Value >>= bTextBorder )
-                                {
-                                    nCalloutFlags |= 0x100000;
-                                    if ( bTextBorder )
-                                        nCalloutFlags |= 16;
-                                    else
-                                        nCalloutFlags &=~16;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sCalloutType ) )
-                            {
-                                sal_Int16 nType;
-                                if ( rProp.Value >>= nType )
-                                    AddOpt( DFF_Prop_spcot, (sal_uInt16)nType );
-                            }
-                        }
-                        if ( nCalloutFlags != nCalloutFlagsOrg )
-                            AddOpt( DFF_Prop_fCalloutLengthSpecified, nCalloutFlags );
-                    }
-                }
                 else if ( rProp.Name.equals( sExtrusion ) )
                 {
                     uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
@@ -2234,7 +2069,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         sal_uInt32 nLightFaceFlagsOrg, nLightFaceFlags;
                         sal_uInt32 nFillHarshFlagsOrg, nFillHarshFlags;
                         nLightFaceFlagsOrg = nLightFaceFlags = 0x000001;
-                        nFillHarshFlagsOrg = nFillHarshFlags = 0x000016;
+                        nFillHarshFlagsOrg = nFillHarshFlags = 0x00001e;
                         if ( GetOpt( DFF_Prop_fc3DLightFace, nLightFaceFlags ) )
                             nLightFaceFlagsOrg = nLightFaceFlags;
                         if ( GetOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags ) )
@@ -2244,40 +2079,30 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         for ( i = 0; i < nCount; i++ )
                         {
                             const beans::PropertyValue& rProp = aExtrusionPropSeq[ i ];
-                            const rtl::OUString sExtrusionOn                ( RTL_CONSTASCII_USTRINGPARAM( "On" ) );
-                            const rtl::OUString sExtrusionAutoRotationCenter( RTL_CONSTASCII_USTRINGPARAM( "AutoRotationCenter" ) );
-                            const rtl::OUString sExtrusionBackwardDepth     ( RTL_CONSTASCII_USTRINGPARAM( "BackwardDepth" ) );
-                            const rtl::OUString sExtrusionBrightness        ( RTL_CONSTASCII_USTRINGPARAM( "Brightness" ) );
-                            const rtl::OUString sExtrusionDiffusity         ( RTL_CONSTASCII_USTRINGPARAM( "Diffusity" ) );
-                            const rtl::OUString sExtrusionEdge              ( RTL_CONSTASCII_USTRINGPARAM( "Edge" ) );
-                            const rtl::OUString sExtrusionFacet             ( RTL_CONSTASCII_USTRINGPARAM( "Facet" ) );
-                            const rtl::OUString sExtrusionForewardDepth     ( RTL_CONSTASCII_USTRINGPARAM( "ForewardDepth" ) );
-                            const rtl::OUString sExtrusionLightFace         ( RTL_CONSTASCII_USTRINGPARAM( "LightFace" ) );
-                            const rtl::OUString sExtrusionLightHarsh1       ( RTL_CONSTASCII_USTRINGPARAM( "LightHarsh1" ) );
-                            const rtl::OUString sExtrusionLightHarsh2       ( RTL_CONSTASCII_USTRINGPARAM( "LightHarsh2" ) );
-                            const rtl::OUString sExtrusionLightLevel1       ( RTL_CONSTASCII_USTRINGPARAM( "LightLevel1" ) );
-                            const rtl::OUString sExtrusionLightLevel2       ( RTL_CONSTASCII_USTRINGPARAM( "LightLevel2" ) );
-                            const rtl::OUString sExtrusionLightDirection1   ( RTL_CONSTASCII_USTRINGPARAM( "LightDirection1" ) );
-                            const rtl::OUString sExtrusionLightDirection2   ( RTL_CONSTASCII_USTRINGPARAM( "LightDirection2" ) );
-                            const rtl::OUString sExtrusionMetal             ( RTL_CONSTASCII_USTRINGPARAM( "Metal" ) );
-                            const rtl::OUString sExtrusionPlane             ( RTL_CONSTASCII_USTRINGPARAM( "Plane" ) );
-                            const rtl::OUString sExtrusionRenderMode        ( RTL_CONSTASCII_USTRINGPARAM( "RenderMode" ) );
-                            const rtl::OUString sExtrusionAngleX            ( RTL_CONSTASCII_USTRINGPARAM( "AngleX" ) );
-                            const rtl::OUString sExtrusionAngleY            ( RTL_CONSTASCII_USTRINGPARAM( "AngleY" ) );
-                            const rtl::OUString sExtrusionRotationCenterX   ( RTL_CONSTASCII_USTRINGPARAM( "RotationCenterX" ) );
-                            const rtl::OUString sExtrusionRotationCenterY   ( RTL_CONSTASCII_USTRINGPARAM( "RotationCenterY" ) );
-                            const rtl::OUString sExtrusionRotationCenterZ   ( RTL_CONSTASCII_USTRINGPARAM( "RotationCenterZ" ) );
-                            const rtl::OUString sExtrusionShininess         ( RTL_CONSTASCII_USTRINGPARAM( "Shininess" ) );
-                            const rtl::OUString sExtrusionSkew              ( RTL_CONSTASCII_USTRINGPARAM( "Skew" ) );
-                            const rtl::OUString sExtrusionSkewAngle         ( RTL_CONSTASCII_USTRINGPARAM( "SkewAngle" ) );
-                            const rtl::OUString sExtrusionSpecularity       ( RTL_CONSTASCII_USTRINGPARAM( "Specularity" ) );
-                            const rtl::OUString sExtrusionParallel          ( RTL_CONSTASCII_USTRINGPARAM( "Parallel" ) );
-                            const rtl::OUString sExtrusionViewPoint         ( RTL_CONSTASCII_USTRINGPARAM( "ViewPoint" ) );
-                            const rtl::OUString sExtrusionOriginX           ( RTL_CONSTASCII_USTRINGPARAM( "OriginX" ) );
-                            const rtl::OUString sExtrusionOriginY           ( RTL_CONSTASCII_USTRINGPARAM( "OriginY" ) );
-                            const rtl::OUString sExtrusionColor             ( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
+                            const rtl::OUString sExtrusionBrightness            ( RTL_CONSTASCII_USTRINGPARAM( "Brightness" ) );
+                            const rtl::OUString sExtrusionDepth                 ( RTL_CONSTASCII_USTRINGPARAM( "Depth" ) );
+                            const rtl::OUString sExtrusionDiffusion             ( RTL_CONSTASCII_USTRINGPARAM( "Diffusion" ) );
+                            const rtl::OUString sExtrusionNumberOfLineSegments  ( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLineSegments" ) );
+                            const rtl::OUString sExtrusionLightFace             ( RTL_CONSTASCII_USTRINGPARAM( "LightFace" ) );
+                            const rtl::OUString sExtrusionFirstLightHarsh       ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightHarsh" ) );
+                            const rtl::OUString sExtrusionSecondLightHarsh      ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightHarsh" ) );
+                            const rtl::OUString sExtrusionFirstLightLevel       ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightLevel" ) );
+                            const rtl::OUString sExtrusionSecondLightLevel      ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightLevel" ) );
+                            const rtl::OUString sExtrusionFirstLightDirection   ( RTL_CONSTASCII_USTRINGPARAM( "FirstLightDirection" ) );
+                            const rtl::OUString sExtrusionSecondLightDirection  ( RTL_CONSTASCII_USTRINGPARAM( "SecondLightDirection" ) );
+                            const rtl::OUString sExtrusionMetal                 ( RTL_CONSTASCII_USTRINGPARAM( "Metal" ) );
+                            const rtl::OUString sExtrusionShadeMode             ( RTL_CONSTASCII_USTRINGPARAM( "ShadeMode" ) );
+                            const rtl::OUString sExtrusionRotateAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) );
+                            const rtl::OUString sExtrusionRotationCenter        ( RTL_CONSTASCII_USTRINGPARAM( "RotationCenter" ) );
+                            const rtl::OUString sExtrusionShininess             ( RTL_CONSTASCII_USTRINGPARAM( "Shininess" ) );
+                            const rtl::OUString sExtrusionSkew                  ( RTL_CONSTASCII_USTRINGPARAM( "Skew" ) );
+                            const rtl::OUString sExtrusionSpecularity           ( RTL_CONSTASCII_USTRINGPARAM( "Specularity" ) );
+                            const rtl::OUString sExtrusionProjectionMode        ( RTL_CONSTASCII_USTRINGPARAM( "ProjectionMode" ) );
+                            const rtl::OUString sExtrusionViewPoint             ( RTL_CONSTASCII_USTRINGPARAM( "ViewPoint" ) );
+                            const rtl::OUString sExtrusionOrigin                ( RTL_CONSTASCII_USTRINGPARAM( "Origin" ) );
+                            const rtl::OUString sExtrusionColor                 ( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
 
-                            if ( rProp.Name.equals( sExtrusionOn ) )
+                            if ( rProp.Name.equals( sExtrusion ) )
                             {
                                 sal_Bool bExtrusionOn;
                                 if ( rProp.Value >>= bExtrusionOn )
@@ -2289,59 +2114,44 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~8;
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionAutoRotationCenter ) )
-                            {
-                                sal_Bool bExtusionAutoRotationCenter;
-                                if ( rProp.Value >>= bExtusionAutoRotationCenter )
-                                {
-                                    nFillHarshFlags |= 0x80000;
-                                    if ( bExtusionAutoRotationCenter )
-                                        nFillHarshFlags |= 8;
-                                    else
-                                        nFillHarshFlags &=~8;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sExtrusionBackwardDepth ) )
-                            {
-                                double fExtrusionBackwardDepth;
-                                if ( rProp.Value >>= fExtrusionBackwardDepth )
-                                {
-                                    fExtrusionBackwardDepth *= 360.0;
-                                    AddOpt( DFF_Prop_c3DExtrudeBackward, (sal_Int32)fExtrusionBackwardDepth );
-                                }
-                            }
                             else if ( rProp.Name.equals( sExtrusionBrightness ) )
                             {
                                 double fExtrusionBrightness;
                                 if ( rProp.Value >>= fExtrusionBrightness )
                                     AddOpt( DFF_Prop_c3DAmbientIntensity, (sal_Int32)( fExtrusionBrightness * 655.36 ) );
                             }
-                            else if ( rProp.Name.equals( sExtrusionDiffusity ) )
+                            else if ( rProp.Name.equals( sExtrusionDepth ) )
                             {
-                                double fExtrusionDiffusity;
-                                if ( rProp.Value >>= fExtrusionDiffusity )
-                                    AddOpt( DFF_Prop_c3DDiffuseAmt, (sal_Int32)( fExtrusionDiffusity * 655.36 ) );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionEdge ) )
-                            {
-                                sal_Int32 nExtrusionEdge;
-                                if ( rProp.Value >>= nExtrusionEdge )
-                                    AddOpt( DFF_Prop_c3DEdgeThickness, nExtrusionEdge );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionFacet ) )
-                            {
-                                sal_Int32 nExtrusionFacet;
-                                if ( rProp.Value >>= nExtrusionFacet )
-                                    AddOpt( DFF_Prop_c3DTolerance, nExtrusionFacet );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionForewardDepth ) )
-                            {
-                                double fExtrusionForewardDepth;
-                                if ( rProp.Value >>= fExtrusionForewardDepth )
+                                double fDepth;
+                                double fFraction;
+                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+                                if ( ( rProp.Value >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
                                 {
-                                    fExtrusionForewardDepth *= 360.0;
-                                    AddOpt( DFF_Prop_c3DExtrudeForward, (sal_Int32)fExtrusionForewardDepth );
+                                    double fForeDepth = fDepth * fFraction;
+                                    double fBackDepth = fDepth - fForeDepth;
+                                    if ( fBackDepth != 0.0 )
+                                    {
+                                        fBackDepth *= 360.0;
+                                        AddOpt( DFF_Prop_c3DExtrudeBackward, (sal_Int32)fBackDepth );
+                                    }
+                                    if ( fForeDepth != 0.0 )
+                                    {
+                                        fForeDepth *= 360.0;
+                                        AddOpt( DFF_Prop_c3DExtrudeForward, (sal_Int32)fForeDepth );
+                                    }
                                 }
+                            }
+                            else if ( rProp.Name.equals( sExtrusionDiffusion ) )
+                            {
+                                double fExtrusionDiffusion;
+                                if ( rProp.Value >>= fExtrusionDiffusion )
+                                    AddOpt( DFF_Prop_c3DDiffuseAmt, (sal_Int32)( fExtrusionDiffusion * 655.36 ) );
+                            }
+                            else if ( rProp.Name.equals( sExtrusionNumberOfLineSegments ) )
+                            {
+                                sal_Int32 nExtrusionNumberOfLineSegments;
+                                if ( rProp.Value >>= nExtrusionNumberOfLineSegments )
+                                    AddOpt( DFF_Prop_c3DTolerance, nExtrusionNumberOfLineSegments );
                             }
                             else if ( rProp.Name.equals( sExtrusionLightFace ) )
                             {
@@ -2355,60 +2165,60 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~1;
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightHarsh1 ) )
+                            else if ( rProp.Name.equals( sExtrusionFirstLightHarsh ) )
                             {
-                                sal_Bool bExtrusionLightHarsh1;
-                                if ( rProp.Value >>= bExtrusionLightHarsh1 )
+                                sal_Bool bExtrusionFirstLightHarsh;
+                                if ( rProp.Value >>= bExtrusionFirstLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x20000;
-                                    if ( bExtrusionLightHarsh1 )
+                                    if ( bExtrusionFirstLightHarsh )
                                         nFillHarshFlags |= 2;
                                     else
                                         nFillHarshFlags &=~2;
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightHarsh2 ) )
+                            else if ( rProp.Name.equals( sExtrusionSecondLightHarsh ) )
                             {
-                                sal_Bool bExtrusionLightHarsh2;
-                                if ( rProp.Value >>= bExtrusionLightHarsh2 )
+                                sal_Bool bExtrusionSecondLightHarsh;
+                                if ( rProp.Value >>= bExtrusionSecondLightHarsh )
                                 {
                                     nFillHarshFlags |= 0x10000;
-                                    if ( bExtrusionLightHarsh2 )
+                                    if ( bExtrusionSecondLightHarsh )
                                         nFillHarshFlags |= 1;
                                     else
                                         nFillHarshFlags &=~1;
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightLevel1 ) )
+                            else if ( rProp.Name.equals( sExtrusionFirstLightLevel ) )
                             {
-                                double fExtrusionLightLevel1;
-                                if ( rProp.Value >>= fExtrusionLightLevel1 )
-                                    AddOpt( DFF_Prop_c3DKeyIntensity, (sal_Int32)( fExtrusionLightLevel1 * 655.36 ) );
+                                double fExtrusionFirstLightLevel;
+                                if ( rProp.Value >>= fExtrusionFirstLightLevel )
+                                    AddOpt( DFF_Prop_c3DKeyIntensity, (sal_Int32)( fExtrusionFirstLightLevel * 655.36 ) );
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightLevel2 ) )
+                            else if ( rProp.Name.equals( sExtrusionSecondLightLevel ) )
                             {
-                                double fExtrusionLightLevel2;
-                                if ( rProp.Value >>= fExtrusionLightLevel2 )
-                                    AddOpt( DFF_Prop_c3DFillIntensity, (sal_Int32)( fExtrusionLightLevel2 * 655.36 ) );
+                                double fExtrusionSecondLightLevel;
+                                if ( rProp.Value >>= fExtrusionSecondLightLevel )
+                                    AddOpt( DFF_Prop_c3DFillIntensity, (sal_Int32)( fExtrusionSecondLightLevel * 655.36 ) );
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightDirection1 ) )
+                            else if ( rProp.Name.equals( sExtrusionFirstLightDirection ) )
                             {
-                                drawing::Direction3D aExtrusionLightDirection1;
-                                if ( rProp.Value >>= aExtrusionLightDirection1 )
+                                drawing::Direction3D aExtrusionFirstLightDirection;
+                                if ( rProp.Value >>= aExtrusionFirstLightDirection )
                                 {
-                                    AddOpt( DFF_Prop_c3DKeyX, (sal_Int32)aExtrusionLightDirection1.DirectionX  );
-                                    AddOpt( DFF_Prop_c3DKeyY, (sal_Int32)aExtrusionLightDirection1.DirectionY  );
-                                    AddOpt( DFF_Prop_c3DKeyZ, (sal_Int32)aExtrusionLightDirection1.DirectionZ  );
+                                    AddOpt( DFF_Prop_c3DKeyX, (sal_Int32)aExtrusionFirstLightDirection.DirectionX  );
+                                    AddOpt( DFF_Prop_c3DKeyY, (sal_Int32)aExtrusionFirstLightDirection.DirectionY  );
+                                    AddOpt( DFF_Prop_c3DKeyZ, (sal_Int32)aExtrusionFirstLightDirection.DirectionZ  );
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionLightDirection2 ) )
+                            else if ( rProp.Name.equals( sExtrusionSecondLightDirection ) )
                             {
-                                drawing::Direction3D aExtrusionLightPosition2;
-                                if ( rProp.Value >>= aExtrusionLightPosition2 )
+                                drawing::Direction3D aExtrusionSecondLightPosition;
+                                if ( rProp.Value >>= aExtrusionSecondLightPosition )
                                 {
-                                    AddOpt( DFF_Prop_c3DFillX, (sal_Int32)aExtrusionLightPosition2.DirectionX  );
-                                    AddOpt( DFF_Prop_c3DFillY, (sal_Int32)aExtrusionLightPosition2.DirectionY  );
-                                    AddOpt( DFF_Prop_c3DFillZ, (sal_Int32)aExtrusionLightPosition2.DirectionZ  );
+                                    AddOpt( DFF_Prop_c3DFillX, (sal_Int32)aExtrusionSecondLightPosition.DirectionX  );
+                                    AddOpt( DFF_Prop_c3DFillY, (sal_Int32)aExtrusionSecondLightPosition.DirectionY  );
+                                    AddOpt( DFF_Prop_c3DFillZ, (sal_Int32)aExtrusionSecondLightPosition.DirectionZ  );
                                 }
                             }
                             else if ( rProp.Name.equals( sExtrusionMetal ) )
@@ -2423,61 +2233,51 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~4;
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionPlane ) )
+                            else if ( rProp.Name.equals( sExtrusionShadeMode ) )
                             {
-                                sal_Int16 nExtrusionPlane;
-                                if ( rProp.Value >>= nExtrusionPlane )
-                                    AddOpt( DFF_Prop_c3DExtrudePlane, (sal_uInt16)nExtrusionPlane );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionRenderMode ) )
-                            {
-                                sal_Int16 nExtrusionRenderMode;
-                                if ( rProp.Value >>= nExtrusionRenderMode )
-                                    AddOpt( DFF_Prop_c3DRenderMode, (sal_uInt16)nExtrusionRenderMode );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionAngleX ) )
-                            {
-                                double fExtrusionAngleX;
-                                if ( rProp.Value >>= fExtrusionAngleX )
+                                drawing::ShadeMode eExtrusionShadeMode;
+                                if ( rProp.Value >>= eExtrusionShadeMode )
                                 {
-                                    fExtrusionAngleX *= 65536;
-                                    AddOpt( DFF_Prop_c3DXRotationAngle, (sal_Int32)fExtrusionAngleX );
+                                    sal_uInt32 nRenderMode;
+                                    switch( eExtrusionShadeMode )
+                                    {
+                                        default:
+                                        case drawing::ShadeMode_FLAT :
+                                        case drawing::ShadeMode_PHONG :
+                                        case drawing::ShadeMode_SMOOTH :
+                                            nRenderMode = mso_FullRender;
+                                        break;
+                                        case drawing::ShadeMode_DRAFT :
+                                        {
+                                            nRenderMode = mso_Wireframe;
+                                        }
+                                        break;
+                                    }
+                                    AddOpt( DFF_Prop_c3DRenderMode, nRenderMode );
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionAngleY ) )
+                            else if ( rProp.Name.equals( sExtrusionRotateAngle ) )
                             {
+                                double fExtrusionAngleX;
                                 double fExtrusionAngleY;
-                                if ( rProp.Value >>= fExtrusionAngleY )
+                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
+                                if ( ( rProp.Value >>= aRotateAnglePair ) && ( aRotateAnglePair.First.Value >>= fExtrusionAngleX ) && ( aRotateAnglePair.Second.Value >>= fExtrusionAngleY ) )
                                 {
+                                    fExtrusionAngleX *= 65536;
                                     fExtrusionAngleY *= 65536;
+                                    AddOpt( DFF_Prop_c3DXRotationAngle, (sal_Int32)fExtrusionAngleX );
                                     AddOpt( DFF_Prop_c3DYRotationAngle, (sal_Int32)fExtrusionAngleY );
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionRotationCenterX ) )
+                            else if ( rProp.Name.equals( sExtrusionRotationCenter ) )
                             {
-                                double fExtrusionRotationCenterX;
-                                if ( rProp.Value >>= fExtrusionRotationCenterX )
+                                drawing::Direction3D aExtrusionRotationCenter;
+                                if ( rProp.Value >>= aExtrusionRotationCenter )
                                 {
-                                    fExtrusionRotationCenterX *= 360.0;
-                                    AddOpt( DFF_Prop_c3DRotationCenterX, (sal_Int32)fExtrusionRotationCenterX );
-                                }
-                            }
-                            else if ( rProp.Name.equals( sExtrusionRotationCenterY ) )
-                            {
-                                double fExtrusionRotationCenterY;
-                                if ( rProp.Value >>= fExtrusionRotationCenterY )
-                                {
-                                    fExtrusionRotationCenterY *= 360.0;
-                                    AddOpt( DFF_Prop_c3DRotationCenterY, (sal_Int32)fExtrusionRotationCenterY );
-                                }
-                            }
-                            else if ( rProp.Name.equals( sExtrusionRotationCenterZ ) )
-                            {
-                                double fExtrusionRotationCenterZ;
-                                if ( rProp.Value >>= fExtrusionRotationCenterZ )
-                                {
-                                    fExtrusionRotationCenterZ *= 360.0;
-                                    AddOpt( DFF_Prop_c3DRotationCenterZ, (sal_Int32)fExtrusionRotationCenterZ );
+                                    AddOpt( DFF_Prop_c3DRotationCenterX, (sal_Int32)( aExtrusionRotationCenter.DirectionX * 360.0 ) );
+                                    AddOpt( DFF_Prop_c3DRotationCenterY, (sal_Int32)( aExtrusionRotationCenter.DirectionY * 360.0 ) );
+                                    AddOpt( DFF_Prop_c3DRotationCenterZ, (sal_Int32)( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
+                                    nFillHarshFlags &=~8; // don't use AutoRotationCenter;
                                 }
                             }
                             else if ( rProp.Name.equals( sExtrusionShininess ) )
@@ -2488,17 +2288,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             }
                             else if ( rProp.Name.equals( sExtrusionSkew ) )
                             {
-                                double fExtrusionSkew;
-                                if ( rProp.Value >>= fExtrusionSkew )
-                                    AddOpt( DFF_Prop_c3DSkewAmount, (sal_Int32)fExtrusionSkew );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionSkewAngle ) )
-                            {
-                                double fExtrusionSkewAngle;
-                                if ( rProp.Value >>= fExtrusionSkewAngle )
+                                double fSkewAmount;
+                                double fSkewAngle;
+                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+                                if ( ( rProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
                                 {
-                                    fExtrusionSkewAngle *= 65536;
-                                    AddOpt( DFF_Prop_c3DSkewAngle, (sal_Int32)fExtrusionSkewAngle );
+                                    AddOpt( DFF_Prop_c3DSkewAmount, (sal_Int32)fSkewAmount );
+                                    AddOpt( DFF_Prop_c3DSkewAngle, (sal_Int32)( fSkewAngle * 65536 ) );
                                 }
                             }
                             else if ( rProp.Name.equals( sExtrusionSpecularity ) )
@@ -2507,13 +2303,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 if ( rProp.Value >>= fExtrusionSpecularity )
                                     AddOpt( DFF_Prop_c3DSpecularAmt, (sal_Int32)( fExtrusionSpecularity * 1333 ) );
                             }
-                            else if ( rProp.Name.equals( sExtrusionParallel ) )
+                            else if ( rProp.Name.equals( sExtrusionProjectionMode ) )
                             {
-                                sal_Bool bExtrusionParallel;
-                                if ( rProp.Value >>= bExtrusionParallel )
+                                drawing::ProjectionMode eExtrusionProjectionMode;
+                                if ( rProp.Value >>= eExtrusionProjectionMode )
                                 {
                                     nFillHarshFlags |= 0x40000;
-                                    if ( bExtrusionParallel )
+                                    if ( eExtrusionProjectionMode == drawing::ProjectionMode_PARALLEL )
                                         nFillHarshFlags |= 4;
                                     else
                                         nFillHarshFlags &=~4;
@@ -2532,17 +2328,16 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DZViewpoint, (sal_Int32)aExtrusionViewPoint.PositionZ  );
                                 }
                             }
-                            else if ( rProp.Name.equals( sExtrusionOriginX ) )
+                            else if ( rProp.Name.equals( sExtrusionOrigin ) )
                             {
                                 double fExtrusionOriginX;
-                                if ( rProp.Value >>= fExtrusionOriginX )
-                                    AddOpt( DFF_Prop_c3DOriginX, (sal_Int32)( fExtrusionOriginX * 655.36 ) );
-                            }
-                            else if ( rProp.Name.equals( sExtrusionOriginY ) )
-                            {
                                 double fExtrusionOriginY;
-                                if ( rProp.Value >>= fExtrusionOriginY )
-                                    AddOpt( DFF_Prop_c3DOriginY, (sal_Int32)( fExtrusionOriginY * 655.36 ) );
+                                drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginPair;
+                                if ( ( rProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
+                                {
+                                    AddOpt( DFF_Prop_c3DOriginX, (sal_Int32)( fExtrusionOriginX * 65536 ) );
+                                    AddOpt( DFF_Prop_c3DOriginY, (sal_Int32)( fExtrusionOriginY * 65536 ) );
+                                }
                             }
                             else if ( rProp.Name.equals( sExtrusionColor ) )
                             {
@@ -2825,7 +2620,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 break;
                                                 case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
                                                 {
-                                                    nVal |= 0x6000;
+                                                    nVal = 0x6001;
                                                 }
                                                 break;
                                                 case drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
@@ -2950,6 +2745,11 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 }
                             }
                         }
+
+
+                        if ( IsFontWork() ) // SJ: can be removed if we are supporting the TextPathAllowed property in XML
+                            nPathFlags |= 0x40004;
+
                         if ( nPathFlags != nPathFlagsOrg )
                             AddOpt( DFF_Prop_fFillOK, nPathFlags );
                     }
@@ -2960,7 +2760,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     if ( rProp.Value >>= aTextPathPropSeq )
                     {
                         sal_uInt32 nTextPathFlagsOrg, nTextPathFlags;
-                        nTextPathFlagsOrg = nTextPathFlags = 0xffff1200;        // default
+                        nTextPathFlagsOrg = nTextPathFlags = 0xffff1000;        // default
                         if ( GetOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags ) )
                             nTextPathFlagsOrg = nTextPathFlags;
 
@@ -2968,13 +2768,11 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         for ( i = 0; i < nCount; i++ )
                         {
                             const beans::PropertyValue& rProp = aTextPathPropSeq[ i ];
-                            const rtl::OUString sTextPathOn         ( RTL_CONSTASCII_USTRINGPARAM( "On" ) );
-                            const rtl::OUString sTextPathFitPath    ( RTL_CONSTASCII_USTRINGPARAM( "FitPath" ) );
-                            const rtl::OUString sTextPathFitShape   ( RTL_CONSTASCII_USTRINGPARAM( "FitShape" ) );
+                            const rtl::OUString sTextPathMode       ( RTL_CONSTASCII_USTRINGPARAM( "TextPathMode" ) );
                             const rtl::OUString sTextPathScaleX     ( RTL_CONSTASCII_USTRINGPARAM( "ScaleX" ) );
                             const rtl::OUString sSameLetterHeights  ( RTL_CONSTASCII_USTRINGPARAM( "SameLetterHeights" ) );
 
-                            if ( rProp.Name.equals( sTextPathOn ) )
+                            if ( rProp.Name.equals( sTextPath ) )
                             {
                                 sal_Bool bTextPathOn;
                                 if ( rProp.Value >>= bTextPathOn )
@@ -2986,28 +2784,17 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x4000;
                                 }
                             }
-                            else if ( rProp.Name.equals( sTextPathFitPath ) )
+                            else if ( rProp.Name.equals( sTextPathMode ) )
                             {
-                                sal_Bool bTextPathFitPath;
-                                if ( rProp.Value >>= bTextPathFitPath )
+                                drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+                                if ( rProp.Value >>= eTextPathMode )
                                 {
-                                    nTextPathFlags |= 0x01000000;
-                                    if ( bTextPathFitPath )
+                                    nTextPathFlags |= 0x05000000;
+                                    nTextPathFlags &=~0x500;    // TextPathMode_NORMAL
+                                    if ( eTextPathMode == drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_PATH )
                                         nTextPathFlags |= 0x100;
-                                    else
-                                        nTextPathFlags &=~0x100;
-                                }
-                            }
-                            else if ( rProp.Name.equals( sTextPathFitShape ) )
-                            {
-                                sal_Bool bTextPathFitShape;
-                                if ( rProp.Value >>= bTextPathFitShape )
-                                {
-                                    nTextPathFlags |= 0x04000000;
-                                    if ( bTextPathFitShape )
-                                        nTextPathFlags |= 0x400;
-                                    else
-                                        nTextPathFlags &=~0x400;
+                                    else if ( eTextPathMode == drafts::com::sun::star::drawing::EnhancedCustomShapeTextPathMode_SHAPE )
+                                        nTextPathFlags |= 0x500;
                                 }
                             }
                             else if ( rProp.Name.equals( sTextPathScaleX ) )
@@ -3035,9 +2822,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 }
                             }
                         }
-                        if ( nTextPathFlags != nTextPathFlagsOrg )
-                            AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
-
                         if ( nTextPathFlags & 0x4000 )      // Is FontWork ?
                         {
                             // FontWork Text
@@ -3057,7 +2841,34 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( !aFontName.getLength() )
                                 aFontName = ::rtl::OUString::createFromAscii( "Arial Black" );
                             AddOpt( DFF_Prop_gtextFont, aFontName );
+
+                            sal_Int16 nCharScaleWidth = 100;
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharScaleWidth" ) ), sal_True ) )
+                            {
+                                if ( aAny >>= nCharScaleWidth )
+                                {
+                                    if ( nCharScaleWidth != 100 )
+                                    {
+                                        sal_Int32 nVal = nCharScaleWidth * 655;
+                                        AddOpt( DFF_Prop_gtextSpacing, nVal );
+                                    }
+                                }
+                            }
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharKerning" ) ), sal_True ) )
+                            {
+                                sal_Int16 nCharKerning;
+                                if ( aAny >>= nCharKerning )
+                                {
+                                    nTextPathFlags |= 0x10000000;
+                                    if ( nCharKerning )
+                                        nTextPathFlags |= 0x1000;
+                                    else
+                                        nTextPathFlags &=~0x1000;
+                                }
+                            }
                         }
+                        if ( nTextPathFlags != nTextPathFlagsOrg )
+                            AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
                     }
                 }
                 else if ( rProp.Name.equals( sHandles ) )
@@ -3315,15 +3126,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     }
                 }
             }
-            awt::Size aCoordinateSize( 0, 0 );
-            if ( pCoordinateSizeProp )
-            {
-                if ( pCoordinateSizeProp->Value >>= aCoordinateSize )
-                {
-                    AddOpt( DFF_Prop_geoRight,  aCoordinateOrigin.X + aCoordinateSize.Width );
-                    AddOpt( DFF_Prop_geoBottom, aCoordinateOrigin.Y + aCoordinateSize.Height );
-                }
-            }
         }
     }
 }
@@ -3364,13 +3166,13 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     else if ( rProp.Name.equalsAscii( "MirroredX" ) )
                     {
                         sal_Bool bMirroredX;
-                        if ( rProp.Value >>= bMirroredX )
+                        if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
                             nMirrorFlags  |= SHAPEFLAG_FLIPH;
                     }
                     else if ( rProp.Name.equalsAscii( "MirroredY" ) )
                     {
                         sal_Bool bMirroredY;
-                        if ( rProp.Value >>= bMirroredY )
+                        if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )
                             nMirrorFlags  |= SHAPEFLAG_FLIPV;
                     }
                 }
