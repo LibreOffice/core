@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-02 20:09:31 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 20:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,14 +492,14 @@ String STR_RECOVER_QUERY
     Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
     Text [ french ] = "Restaurer le fichier \"$1\" ?" ;
     Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
-    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ chinese_simplified ] = "ÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
     Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
     Text[ polish ] = "Odtworzyæ plik \"$1\"?";
     Text[ japanese ] = "Ì§²Ù \"$1\" ‚ğ•œŒ³‚µ‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "±z­nÁÙ­ìÀÉ®× $1 ?";
+    Text[ chinese_traditional ] = "­nÁÙ­ìÀÉ®× $1 ?";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
-    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ chinese_simplified ] = "ÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
     Text[ greek ] = "Íá ãßíåé åğáíáöïñÜ ôïõ áñ÷åßïõ \"$1\";";
     Text[ korean ] = "ÆÄÀÏ \"$1\"À»(¸¦£©º¹±¸ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$1\" dosyası geri getirilsin mi?";
@@ -573,7 +573,7 @@ String GID_VIEW
     Text = "Ansicht" ;
     Text [ ENGLISH ] = "View" ;
     Text [ norwegian ] = "View" ;
-    Text [ italian ] = "Vista" ;
+    Text [ italian ] = "Visualizza" ;
     Text [ portuguese_brazilian ] = "Ver" ;
     Text [ portuguese ] = "Visualizar" ;
     Text [ finnish ] = "Näytä" ;
@@ -1984,7 +1984,7 @@ String MSG_IOERR_SHARING
     Text [ portuguese ] = "Erro durante o acesso compartilhado ao ficheiro $(FILE)." ;
     Text [ finnish ] = "On ilmennyt virhe tiedoston $(FILE) yhteiskäytössä." ;
     Text [ danish ] = "Fejl under fælles adgang til filen $(FILE)." ;
-    Text [ french ] = "Violation du partage pendant l'accès au $(FILE)." ;
+    Text [ french ] = "Erreur de partage d'accès au fichier $(FILE)." ;
     Text [ swedish ] = "Fel vid gemensam åtkomst till filen $(FILE)." ;
     Text [ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE)." ;
     Text [ spanish ] = "Error durante el acceso compartido al archivo $(FILE)." ;
@@ -2028,14 +2028,14 @@ String MSG_IOERR_GENERAL
     Text [ norwegian ] = "" ;
     Text [ italian ] = "Errore generale di I/O nell'accesso a $(FILE)." ;
     Text [ portuguese_brazilian ] = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(FILE)." ;
-    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès au fichier $(FILE)." ;
+    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès à $(FILE)." ;
     Text [ swedish ] = "Allmänt input/outputfel vid åtkomst av $(FILE)." ;
     Text [ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE)." ;
     Text [ spanish ] = "Error general de entrada/salida al acceder a $(FILE)." ;
     Text [ english_us ] = "General I/O error accessing $(FILE)." ;
     Text [ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE)." ;
     Text [ italian ] = "Errore generale di I/O nell'accesso a $(FILE)." ;
-    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès au fichier $(FILE)." ;
+    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès à $(FILE)." ;
     Text [ danish ] = "Generel I/O fejl ved adgang til $(FILE)." ;
     Text [ portuguese ] = "Erro geral de acesso/saída ao tentar entrar em $(FILE)." ;
     Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡$(FILE)Ê±·¢ÉúÒ»¸öÒ»°ãµÄÊäÈë/Êä³ö´íÎó¡£";
@@ -3641,7 +3641,7 @@ String STR_KEY_TEMPLATE_PATH
     Text [ spanish ] = "Plantillas de documento" ;
     Text [ english_us ] = "Templates" ;
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
-    Text[ russian ] = "Øàáëîíû äîêóìåíòà";
+    Text[ russian ] = "Øàáëîíû";
     Text[ polish ] = "Szablony dokumentu";
     Text[ japanese ] = "ÄŞ·­ÒİÄÃİÌßÚ°Ä";
     Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
@@ -3869,7 +3869,7 @@ String STR_KEY_FILTER_PATH
     Text[ portuguese_brazilian ] = "Filter";
     Text[ japanese ] = "Ì¨ÙÀ";
     Text[ korean ] = "ÇÊÅÍ";
-    Text[ chinese_simplified ] = "¹ıÂËÆ÷";
+    Text[ chinese_simplified ] = "É¸Ñ¡";
     Text[ chinese_traditional ] = "¿z¿ï";
     Text[ arabic ] = "İáÊÑ";
     Text[ turkish ] = "Filtre";
@@ -4010,7 +4010,7 @@ String STR_QUICKSTART_EXIT
 {
     Text = "Schnellstarter beenden" ;
     Text [ English ] = "Exit Quickstarter" ;
-    Text[ english_us ] = "Exit Quickstarter";
+    Text[ english_us ] = "Exit quick launch";
     Text[ portuguese ] = "Terminar início rápido";
     Text[ russian ] = "Âûõîä èç áûñòğîãî çàïóñêà";
     Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
@@ -4035,7 +4035,7 @@ String STR_QUICKSTART_TIP
 {
     Text = "%PRODUCTNAME %PRODUCTVERSION Schnellstarter" ;
     Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter" ;
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Quick Launch";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION Início rápido";
     Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION Áûñòğûé çàïóñê";
     Text[ greek ] = "%PRODUCTNAME QuickStart active";
@@ -4159,6 +4159,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
