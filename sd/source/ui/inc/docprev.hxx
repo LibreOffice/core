@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:21:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include "sddllapi.h"
 #endif
 
+namespace sd {
+    class Slideshow;
+}
+
 class GDIMetaFile;
 
 class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
@@ -99,6 +103,7 @@ protected:
     SfxObjectShell* mpObj;
     sal_uInt16      mnShowPage;
     Color           maDocumentColor;
+    sd::Slideshow*  mpSlideShow;
 
     virtual void    Paint( const Rectangle& rRect );
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
@@ -119,7 +124,7 @@ public:
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     void            SetGDIFile( GDIMetaFile* pFile );
     virtual void    Resize();
-    void            ShowEffect( ::com::sun::star::presentation::FadeEffect eEffect, FadeSpeed eSpeed );
+    void            startPreview();
 
     virtual long    Notify( NotifyEvent& rNEvt );
 
