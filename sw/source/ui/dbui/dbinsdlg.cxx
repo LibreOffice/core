@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:16:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             switch(eDataType)
             {
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
