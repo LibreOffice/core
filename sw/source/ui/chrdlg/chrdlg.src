@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:30:55 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_TEXTCOLL_HEADER
     TEXT [ portuguese ] = "(Estilo de parágrafo: " ;
     TEXT [ finnish ] = "(Kappaleen tyyli: " ;
     TEXT [ danish ] = "(Afsnitstypografi: " ;
-    TEXT [ french ] = "(Style de paragraphe : " ;
+    TEXT [ french ] = " (Style de paragraphe : " ;
     TEXT [ swedish ] = "(Styckeformatmall:  " ;
     TEXT [ dutch ] = "(Alinea-opmaakprofiel:  " ;
     TEXT [ spanish ] = "(Estilo de párrafo:  " ;
@@ -171,6 +171,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares.";
 };
+
 
 
 
