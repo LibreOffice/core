@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:39:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,21 @@
 #include "msocximex.hxx"
 #endif
 
+#include <osl/file.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+//#include <sfx2/docfile.hxx>
+
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+
+#include <comphelper/processfactory.hxx> // shouldn't be needed
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+
+
+#include <algorithm>
+#include <memory>
+
 #ifndef C2S
 #define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 #endif
@@ -171,18 +186,148 @@ using namespace cppu;
 static char sWW8_form[] = "WW-Standard";
 
 
-sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = { 0x00, 0x12, 0x03, 0x00 };
+struct SortOrderByTabPos
+{
+    bool operator()( const OCX_Control* a, const OCX_Control* b )
+    {
+        return a->mnTabPos < b->mnTabPos;
+    }
+};
 
+
+sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = { 0x00, 0x12, 0x03, 0x00 };
 
 long ReadAlign(SvStorageStream *pS, long nPos, int nAmount)
 {
     if (long nAlign = nPos % nAmount)
     {
+
         long nLen = nAmount - nAlign;
         pS->SeekRel(nLen);
         return nLen;
     }
     return 0;
+}
+
+
+// NP - Images in controls in OO2.0/SO8 exist as links, e.g. they are not part of the document so are
+// referenced externally. On import from ms document try to save images for controls here.
+// Images are stored in directory called temp in the user installation directory. Next version of OO/SO
+// hopefully will address this issue and allow a choice e.g. images for controls to be stored as links
+// or embeded in the document.
+
+// [out]location     path to the stream to where the image is to be stored,
+//               if same name exists in folder then this function calcuates a new name
+// [in] data     raw bytes of image to be stored.
+// [in] dataLen  no. byte to be stored
+//
+// returns, true if successful
+
+bool storePictureInFileSystem( OUString& location, sal_uInt8* data, sal_uInt32 dataLen )
+{
+    bool result = true;
+    OUString origPath = location;
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(),
+                                                      uno::UNO_QUERY_THROW );
+        uno::Reference< com::sun::star::ucb::XSimpleFileAccess> xSFA( xMSF->createInstance(
+                                                       S2U("com.sun.star.ucb.SimpleFileAccess" ) ),
+                                                       uno::UNO_QUERY_THROW );
+        OUString ext;
+        sal_Int32 index = 0;
+        while (  xSFA->exists( location ) )
+        {
+            ext = OUString::valueOf( ++index );
+            location = origPath + ext;
+        }
+
+        SvStream*  pStream = ::utl::UcbStreamHelper::CreateStream( location, STREAM_WRITE | STREAM_TRUNC );
+        if ( pStream )
+        {
+            pStream->Write(data, dataLen);
+            delete pStream;
+        }
+        else
+        {
+            result = false;
+        }
+    }
+    catch( uno::Exception& e )
+    {
+        result = false;
+    }
+    return result;
+}
+
+// NP - Images in controls in OO2.0/SO8 exist as links, e.g. they are not part of the document so are
+// referenced externally. On import from ms document try to save images from controls here so this
+// at least a macro programmer has a chance to accessed them manually later. Next version of OO/SO
+// hopefully will address this issue.
+// Images will be stored in a top level folder in the document package, folder is named "MigratedImages"
+
+// [in] pDocSh*  the document shell.
+// [in] name     name of stream image to stored in.
+// [in] data     raw bytes of image to be stored.
+// [in] dataLen  no. byte to be stored
+
+bool storePictureInDoc( SfxObjectShell* pDocSh, OUString& name, sal_uInt8* data, sal_uInt32 dataLen )
+{
+    uno::Reference < embed::XStorage > xStor;
+    if (pDocSh)
+    {
+        xStor = pDocSh->GetStorage();
+        if( xStor.is() )
+        {
+            try
+            {
+                uno::Reference< embed::XStorage > xPictures = xStor->openStorageElement(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "MigratedImages" ) ),
+                    embed::ElementModes::READWRITE );
+                uno::Reference< beans::XPropertySet > xPropSet( xPictures, uno::UNO_QUERY );
+
+                // Set media type of folder MigratedImages to something ( that is unknown ) so that
+                // it will get copied to exported OO/SO format after SaveAs
+                if ( xPropSet.is() )
+                {
+                    OUString aMediaType = C2U("MigrationImages");
+                    uno::Any a;
+                    a <<= aMediaType;
+                    xPropSet->setPropertyValue( C2U("MediaType"), a );
+                }
+
+                uno::Reference< io::XStream > xObjReplStr = xPictures->openStreamElement(
+                        name,
+                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                uno::Reference< io::XOutputStream > xOutStream( xObjReplStr->getOutputStream(), uno::UNO_QUERY_THROW );
+                uno::Sequence< sal_Int8 > imageBytes( (sal_Int8*)data, dataLen );
+                xOutStream->writeBytes( imageBytes );
+                xOutStream->closeOutput();
+
+                uno::Reference< embed::XTransactedObject > xTransact( xPictures, uno::UNO_QUERY );
+                if ( xTransact.is() )
+                {
+                    xTransact->commit();
+                }
+            }
+            catch( uno::Exception& e )
+            {
+                return false;
+            }
+
+        }
+        else
+        {
+            // no storage something wrong
+            return false;
+        }
+    }
+    else
+    {
+        //No doc shell
+        return false;
+    }
+    return true;
 }
 
 long WriteAlign(SvStorageStream *pS, int nAmount)
@@ -467,9 +612,453 @@ void SvxOcxString::WriteCharArray( SvStorageStream& rStrm ) const
     }
 }
 
+//} // namespace
+
+static const ::sal_uInt16 USERFORM = (sal_uInt16)0xFF;
+static const ::sal_uInt16 STDCONTAINER = (sal_uInt16)0xFE;
+
+static const ::sal_uInt16 PAGE = (sal_uInt16)0x07;
+
+static const ::sal_uInt16 IMAGE = (sal_uInt16)0x0C;
+static const ::sal_uInt16 FRAME = (sal_uInt16)0x0E;
+
+static const ::sal_uInt16 SPINBUTTON = (sal_uInt16)0x10;
+static const ::sal_uInt16 CMDBUTTON = (sal_uInt16)0x11;
+static const ::sal_uInt16 TABSTRIP = (sal_uInt16)0x12;
+
+static const ::sal_uInt16 LABEL = (sal_uInt16)0x15;
+
+static const ::sal_uInt16 TEXTBOX = (sal_uInt16)0x17;
+static const ::sal_uInt16 LISTBOX = (sal_uInt16)0x18;
+static const ::sal_uInt16 COMBOBOX = (sal_uInt16)0x19;
+static const ::sal_uInt16 CHECKBOX = (sal_uInt16)0x1A;
+
+static const ::sal_uInt16 OPTIONBUTTON = (sal_uInt16)0x1B;
+static const ::sal_uInt16 TOGGLEBUTTON = (sal_uInt16)0x1C;
+
+static const ::sal_uInt16 SCROLLBAR = (sal_uInt16)0x2F;
+
+static const ::sal_uInt16 MULTIPAGE = (sal_uInt16)0x39;
+
+typedef std::vector< ContainerRecord > ContainerRecordList;
+
+class ContainerRecReader
+{
+    public:
+
+    virtual bool Read( OCX_ContainerControl* pContainerControl, SvStorageStream *pS)
+    {
+        *pS >> nNoRecords;
+        *pS >> nTotalLen;
+
+        if ( isMultiPage )
+        {
+            if ( !handleMultiPageHdr( pS ) )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if ( !handleStandardHdr( pS ) )
+            {
+                return false;
+            }
+        }
+
+        records.clear();
+        bool bOk = true;
+        for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
+        {
+            ContainerRecord rec;
+
+            sal_uInt16 nUnknown12;
+            *pS >> nUnknown12;
+            sal_uInt16 nRecordLen;
+            *pS >> nRecordLen;
+            sal_uInt32 nUnknown13;
+            *pS >> nUnknown13;
+            sal_uInt32 nNameLen;
+            *pS >> nNameLen;
+            /*
+             i.e.  the "i"nSubStorage directory contains the contents if its a
+             frame
+            */
+            *pS >> rec.nSubStorageId;
+            long nCount = 12;
+
+            sal_uInt32 nSkipLen = 0;
+            bool bHasControlTip = false;
+#if 0
+// alternative to below, yet to be proven
+            sal_uInt8* pFlags;
+            pFlags = static_cast<sal_uInt8*>(&nUnknown13);
+            if ( pFlags[0] == 0xf5 )
+            {
+                nSkipLen = 8;
+            }
+            else
+            {
+                nSkipLen = 8;
+            }
+            if ( pFlags[1] != 0x01 )
+            {
+                bHasControlTip = true;
+            }
+#else
+            switch (nUnknown13)
+            {
+                default:
+                    bOk = false;
+                    break;
+                case 0x3E5:
+                case 0x9d5:
+                case 0x9e5:
+                case 0x11e5:
+                case 0x21e5:
+                case 0x41e5:
+                    nSkipLen = 4;
+                    bHasControlTip = true;
+                    break;
+                case 0x1D5:
+                case 0x1E5:
+                    nSkipLen = 4;
+                    break;
+                case 0x3f5:
+                case 0x9f5:
+                case 0x11f5: //
+                case 0x21f5: //  Guess
+                case 0x41f5: //
+                    nSkipLen = 8;
+                    bHasControlTip = true;
+                    break;
+                case 0x1F5:
+                    nSkipLen = 8;
+                    break;
+            }
+#endif
+
+            if (!bOk)
+                break;
+            pS->SeekRel(nSkipLen);
+            nCount += nSkipLen;
+
+            *pS >> rec.nTabPos;
+            *pS >> rec.nTypeIdent;
+            nCount += 4;
+            sal_uInt32 nControlTipLen = 0;
+            if (bHasControlTip)
+            {
+                *pS >> nControlTipLen;
+                nCount += 4;
+            }
+
+            sal_Char *pName = 0;
+            sal_uInt32 nBufSize = lclGetBufferSize(nNameLen);
+            if (nBufSize)
+            {
+                pName = new char[ nBufSize ];
+                pS->Read( pName, nBufSize );
+                nCount += nBufSize;
+            }
+
+            nCount += ReadAlign(pS, nCount, 4);
+
+            if ( !isMultiPage )
+            {
+                *pS >> rec.nLeft;
+                *pS >> rec.nTop;
+                nCount += 8;
+            }
+            pS->SeekRel(nRecordLen - nCount);
+
+            rec.cName = lclCreateOUString(pName, nNameLen);
+            delete pName;
+
+            OCX_Control* pControl = NULL;
+            if( pContainerControl->createFromContainerRecord( rec, pControl ) &&
+                pControl )
+            {
+                // propagate doc shell from parent
+                pControl->pDocSh = pContainerControl->pDocSh;
+                pContainerControl->ProcessControl( pControl, pS, rec );
+            }
+            else
+            {
+                DBG_ERROR("Terminating import, unexpected error");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected:
+    ContainerRecReader() : isMultiPage(false){}
+    bool isMultiPage;
+    sal_uInt32 nNoRecords;
+    sal_uInt32 nTotalLen;
+
+    private:
+    bool handleStandardHdr( SvStorageStream* pS )
+    {
+        sal_uInt8 aUnknown11[4];
+        pS->Read(aUnknown11, sizeof(aUnknown11));
+        return true;
+    }
+
+    bool handleMultiPageHdr( SvStorageStream* pS )
+    {
+        sal_uInt32 nUnknown_32b; // unknown 32 bit structure, flags ?
+        sal_uInt16 nUnknown_16b; // unknown 16 bit structure
+        sal_uInt16 nMysteryLen; // lenght of unknown sub record
+
+        *pS >> nUnknown_32b;
+        *pS >> nUnknown_16b;
+        *pS >> nMysteryLen;
+
+        pS->SeekRel( nMysteryLen );
+        return true;
+    }
+    ContainerRecordList records;
+};
+
+class StdContainerRecReader : public ContainerRecReader
+{
+    public:
+    StdContainerRecReader(){}
+};
+
+class MultiPageContainerRecReader : public ContainerRecReader
+{
+    public:
+    MultiPageContainerRecReader()
+    {
+        // NP ( 27-01-05 )
+        // Strictly speaking this approach shouldn't be necessary.
+        // It should be possible to have a common routine read the
+        // container record array and by examining the flags present in
+        // the record to determine we expect to read or not.
+        // In this case for a MultPage control there is no Top or Left
+        // values in the control record array, however time contraints
+        // and associated risk prevent further investigation of this
+        // at the moment.
+        // similar situation exists for the start of the container record
+        // which in the case of the MultiPage is different from
+        // UserForm & Frame ( the other containers )
+
+        isMultiPage = true; // tell the base class skip
+    }
+};
+
+class ContainerRecordReaderFac
+{
+    public:
+    static ContainerRecReader* instance( sal_uInt32 containerType )
+    {
+        switch( containerType )
+        {
+            case PAGE:
+            case FRAME:
+            case USERFORM:
+            case STDCONTAINER:
+                return new StdContainerRecReader();
+                break;
+            case MULTIPAGE:
+                return new MultiPageContainerRecReader();
+                break;
+            default:
+                DBG_ERROR("Illegal container type for factory");
+                return NULL;
+        }
+    }
+    private:
+    ContainerRecordReaderFac();
+};
+
+
 } // namespace
 
 // ============================================================================
+void RBGroup::add(OCX_Control* pRB)
+{
+    // The tab index for the group is calculated as
+    // the lowest tab index found in the list of RadioButtons
+    if ( pRB->mnTabPos < mRBGroupPos )
+    {
+        mRBGroupPos = pRB->mnTabPos;
+        CtrlIterator aEnd = mpControls.end();
+        for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+        {
+            (*aIter)->mnTabPos = mRBGroupPos;
+        }
+    }
+    mpControls.push_back( pRB );
+}
+
+struct SortGroupByTabPos
+{
+    bool operator()( const RBGroup* a, const RBGroup* b )
+    {
+        return a->tabPos() < b->tabPos();
+    }
+};
+
+RBGroupManager::RBGroupManager( String& defaultName ):mSDefaultName( defaultName ),
+    numRadioButtons(0)
+{
+    groupList.reserve( 8 ); // reserve far more than we expect
+}
+
+RBGroupManager::~RBGroupManager()
+{
+    for ( GroupIterator gIter=groupList.begin(); gIter!=groupList.end(); ++gIter )
+    {
+        delete( *gIter );
+    }
+}
+
+// Loose description of the method below ( I sure there is a better way to do
+// this )
+// In order to "fake" MS grouping behavior for OptionButtons the OptionButtons
+// in the same group need to have consecutive tab indices ( regardless of the
+// imported tab indices of the RadioButtons ). Additionally if two
+// groups of OptionButtons end up having all consecutive indices they
+// will be treated as a single group by OpenOffice. In this case
+// a dummy seperator control needs to be inserted between the groups.
+//
+// This method returns a new list "destinationList" containing the controls
+// passed in "sourceList" and the OptionButtons contained in the various
+// Groups maintained by this  class.
+// Controls are ordered in the destination list by tab index.
+// Each RadioButtonGroup has a tab index associated with it.
+// ( Tab index of a RadioGroup is determined as the tab index of the
+// OptionButton control with the lowest tab index in the group )
+
+
+void RBGroupManager::addRadioButton( OCX_OptionButton* pRButton )
+{
+    if ( pRButton )
+    {
+        OUString groupName = mSDefaultName;
+        if ( pRButton->nGroupNameLen )
+        {
+            groupName =
+                lclCreateOUString(pRButton->pGroupName,
+                    pRButton->nGroupNameLen);
+        }
+        ++numRadioButtons;
+        RBGroupHash::iterator iter = rbGroups.find( groupName );
+        if ( iter != rbGroups.end() )
+        {
+            iter->second->controls().push_back( pRButton );
+        }
+        else
+        {
+            RBGroup* newGroup = new RBGroup(pRButton->mnTabPos);
+            newGroup->controls().push_back( pRButton );
+            rbGroups[ groupName ] = newGroup;
+            groupList.push_back( newGroup );
+        }
+
+    }
+}
+
+CtrlList RBGroupManager::insertGroupsIntoControlList( const CtrlList& sourceList )
+{
+    ::std::sort( groupList.begin(), groupList.end(), SortGroupByTabPos() );
+    std::vector<OCX_Control*> destinationList;
+    if ( groupList.size() )
+    {
+        destinationList.reserve( sourceList.size() + numRadioButtons );
+
+        GroupIterator groupEnd = groupList.end();
+        CtrlIteratorConst sourceEnd = sourceList.end();
+
+        size_t prevGroupListSize = 0;
+
+        CtrlIteratorConst containees = sourceList.begin();
+        GroupIterator groupIter=groupList.begin();
+        while ( containees != sourceEnd ||
+                groupIter != groupEnd )
+        {
+            bool addGroupSeperator = false;
+            if ( containees != sourceEnd )
+            {
+                if ( groupIter != groupEnd )
+                {
+                    sal_Int16 groupTabPos = (*groupIter)->tabPos();
+                    if ( (*containees)->mnTabPos >= groupTabPos )
+                    {
+                       if ( !(destinationList.size() >=  prevGroupListSize ))
+                        {
+                            addGroupSeperator = true;
+                        }
+                        copyList( (*groupIter)->controls(), destinationList, addGroupSeperator );
+                        ++groupIter;
+
+                        prevGroupListSize = destinationList.size();
+                    }
+                }
+                destinationList.push_back(*containees);
+                ++containees;
+            }
+            else
+            {
+               if ( groupIter != groupEnd )
+               {
+                    if ( !(destinationList.size() >  prevGroupListSize ))
+                    {
+                        addGroupSeperator = true;
+                    }
+                    copyList( (*groupIter)->controls(), destinationList, addGroupSeperator );
+                    ++groupIter;
+                    prevGroupListSize = destinationList.size();
+                }
+            }
+        }
+    }
+    else
+    {
+        destinationList = sourceList;
+    }
+    return destinationList;
+
+}
+
+
+void RBGroupManager::addSeperator( std::vector< OCX_Control* >& dest )
+{
+    OCX_Control* seperator = new OCX_CommandButton;
+    seperator->SetInDialog(true);
+    seperator->sName = C2S("GroupSeperator");
+    dest.push_back( seperator );
+}
+
+void RBGroupManager::copyList( std::vector< OCX_Control* >& src,
+    std::vector< OCX_Control* >& dest,
+    bool addGroupSeperator )
+{
+    if ( addGroupSeperator )
+    {
+        addSeperator( dest );
+    }
+
+    for ( CtrlIterator rbIter = src.begin(); rbIter != src.end(); ++rbIter )
+    {
+        dest.push_back( *rbIter );
+    }
+}
+
+class OCX_UserFormLabel : public OCX_Label
+{
+public:
+    OCX_UserFormLabel(OCX_Control* pParent ) : OCX_Label( pParent )
+    {
+        mnForeColor = 0x80000012L;
+        mnBackColor = 0x8000000FL;
+    }
+};
+
 
 sal_uInt16 OCX_Control::nStandardId(0x0200);
 sal_uInt16 OCX_FontData::nStandardId(0x0200);
@@ -623,8 +1212,8 @@ sal_Bool OCX_Control::Import(
     return Import(xPropSet);
 }
 
-sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog,
-    const TypeName& rItem)
+sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
+    )
 {
     uno::Reference<lang::XMultiServiceFactory>
         xFactory(rDialog, uno::UNO_QUERY);
@@ -638,7 +1227,7 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog,
     if (!xModel.is())
         return sal_False;
 
-    rDialog->insertByName(rItem.msName, uno::makeAny(xModel));
+    rDialog->insertByName(sName, uno::makeAny(xModel));
 
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
     if (!xPropSet.is())
@@ -648,14 +1237,20 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog,
         return sal_False;
 
     uno::Any aTmp;
-    aTmp <<= sal_Int32((rItem.mnLeft * 2) / 100);
+    aTmp <<= sal_Int32((mnLeft * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("PositionX"), aTmp);
-    aTmp <<= sal_Int32((rItem.mnTop * 2) / 100);
+    aTmp <<= sal_Int32((mnTop * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("PositionY"), aTmp);
     aTmp <<= sal_Int32((nWidth * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
     aTmp <<= sal_Int32((nHeight * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
+
+    if ( mnStep )
+    {
+        aTmp <<= mnStep;
+        xPropSet->setPropertyValue(WW8_ASCII2STR("Step"), aTmp);
+    }
 
     return sal_True;
 }
@@ -823,13 +1418,13 @@ sal_Bool OCX_CommandButton::Import( com::sun::star::uno::Reference<
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
     rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     // fake transparent push button by setting window background color
     if( !fBackStyle )
-        nBackColor = 0x80000005;
-    aTmp <<= ImportColor(nBackColor);
+        mnBackColor = 0x80000005;
+    aTmp <<= ImportColor(mnBackColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     sal_Bool bTemp;
@@ -885,13 +1480,13 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
@@ -1012,8 +1607,8 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp=rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
@@ -1111,7 +1706,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
 
     // background color: fBackStyle==0 -> transparent
     if( fBackStyle )
-        aTmp <<= ImportColor(nBackColor);
+        aTmp <<= ImportColor(mnBackColor);
     else
         aTmp = uno::Any();
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
@@ -1128,7 +1723,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     aTmp <<= ImportSpecEffect( nSpecialEffect );
@@ -1174,7 +1769,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
+        aTmp >>= mnBackColor;
     else
         fBackStyle = 0;
 
@@ -1194,13 +1789,13 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
-    *rContents << ExportColor(nBackColor);
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     nStyle = 5;
@@ -1333,10 +1928,10 @@ sal_Bool OCX_TextBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any( fHideSelection != 0 );
     rPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
-    aTmp <<= ImportColor(nBackColor);
+    aTmp <<= ImportColor(mnBackColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
@@ -1448,14 +2043,14 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue( WW8_ASCII2STR("MaxTextLen"));
@@ -1627,14 +2222,14 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
@@ -1759,13 +2354,13 @@ sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     // fake transparent toggle button by setting window background color
     if( !fBackStyle )
-        nBackColor = 0x80000005;
-    aTmp <<= ImportColor(nBackColor);
+        mnBackColor = 0x80000005;
+    aTmp <<= ImportColor(mnBackColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     if (pValue)
@@ -1876,14 +2471,14 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     nStyle = 6;
@@ -1947,10 +2542,26 @@ sal_Bool OCX_Label::Import(uno::Reference< beans::XPropertySet > &rPropSet)
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
-    aTmp <<= ImportColor(nBackColor);
+    // background color: fBackStyle==0 -> transparent
+    if( fBackStyle )
+    {
+        aTmp <<= ImportColor(mnBackColor);
+    }
+    else
+    {
+        // try fake transparent by using parents backColor
+        if ( bSetInDialog && mpParent != NULL )
+        {
+            aTmp <<= ImportColor( mpParent->mnBackColor );
+        }
+        else
+        {
+            aTmp = uno::Any(); // use SO default
+        }
+    }
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
@@ -1992,7 +2603,7 @@ sal_Bool OCX_ComboBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any( fHideSelection != 0 );
     rPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     if (pValue)
@@ -2008,7 +2619,7 @@ sal_Bool OCX_ComboBox::Import(com::sun::star::uno::Reference<
         }
     }
 
-    aTmp <<= ImportColor(nBackColor);
+    aTmp <<= ImportColor(mnBackColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
@@ -2067,14 +2678,14 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
@@ -2218,7 +2829,7 @@ sal_Bool OCX_ListBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTmp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     sal_Bool bTemp = nMultiState;
@@ -2233,7 +2844,7 @@ sal_Bool OCX_ListBox::Import(com::sun::star::uno::Reference<
     }
 #endif
 
-    aTmp <<= ImportColor(nBackColor);
+    aTmp <<= ImportColor(mnBackColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
@@ -2282,14 +2893,14 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
@@ -2477,9 +3088,9 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     that with 0's. A standardish word alignment structure*/
 
     if (pBlockFlags[0] & 0x02)
-        *pS >> nBackColor;
+        *pS >> mnBackColor;
     if (pBlockFlags[0] & 0x04)
-        *pS >> nForeColor;
+        *pS >> mnForeColor;
     if (pBlockFlags[0] & 0x08)
         *pS >> nMaxLength;
 
@@ -2637,9 +3248,9 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 
 
     if (pBlockFlags[0] & 0x01)
-        *pS >> nForeColor;
+        *pS >> mnForeColor;
     if (pBlockFlags[0] & 0x02)
-        *pS >> nBackColor;
+        *pS >> mnBackColor;
 
     if (pBlockFlags[0] & 0x04)
     {
@@ -2727,9 +3338,9 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
 
 
     if (pBlockFlags[0] & 0x01)
-        *pS >> nForeColor;
+        *pS >> mnForeColor;
     if (pBlockFlags[0] & 0x02)
-        *pS >> nBackColor;
+        *pS >> mnBackColor;
 
 
     if (pBlockFlags[0] & 0x04)
@@ -2820,13 +3431,656 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
     return sal_True;
 }
 
-TypeName::TypeName(sal_Char *pName, sal_uInt32 nLen, sal_uInt16 nType, sal_Int32 nLeft,
+TypeName::TypeName(sal_Char *pName, sal_uInt32 nStoreId, sal_uInt32 nLen, sal_uInt16 nType, sal_Int32 nLeft,
     sal_Int32 nTop)
-    : msName(lclCreateOUString(pName, nLen)), mnType(nType), mnLeft(nLeft),
+    : msName(lclCreateOUString(pName, nLen)), mnStoreId(nStoreId),mnType(nType), mnLeft(nLeft),
     mnTop(nTop)
 {
 }
 
+OCX_ContainerControl::OCX_ContainerControl( SotStorageRef& parent,
+            const ::rtl::OUString& storageName,
+            const ::rtl::OUString& sN,
+            const uno::Reference< container::XNameContainer >  &rParent,
+            OCX_Control* pParent ) :
+                OCX_Control(sN, pParent), mxParent(rParent), nNoRecords(0), nTotalLen(0), containerType( STDCONTAINER ),rbGroupMgr( sName )
+{
+
+    mContainerStorage = parent->OpenSotStorage(storageName,
+        STREAM_READWRITE |
+        STREAM_NOCREATE |
+        STREAM_SHARE_DENYALL);
+    mContainerStream = mContainerStorage->OpenSotStream(
+        String(RTL_CONSTASCII_STRINGPARAM("f"),
+        RTL_TEXTENCODING_MS_1252),
+        STREAM_STD_READ | STREAM_NOCREATE);
+    mContainedControlsStream = mContainerStorage->OpenSotStream( String(RTL_CONSTASCII_STRINGPARAM("o"),
+        RTL_TEXTENCODING_MS_1252),
+        STREAM_STD_READ | STREAM_NOCREATE);
+}
+OCX_ContainerControl::~OCX_ContainerControl()
+{
+    CtrlIterator aEnd = mpControls.end();
+    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+    {
+        delete *aIter;
+    }
+}
+
+// Really import should receive the parent e.g. a Userform, Frame or Multi Page
+// and call import on its containees with itself  ( up-called from
+// the base class ) but... the reality is we have no containment model
+// so we make sure rPropSet is always the parent Dialog
+
+sal_Bool OCX_ContainerControl::Import(uno::Reference<beans::XPropertySet> &rProps )
+{
+    if ( !mxParent.is() )
+    {
+        return sal_False;
+    }
+    CtrlIterator aEnd = mpControls.end();
+    int count = 0;
+    for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+    {
+        if ( !(*aIter)->Import( mxParent ) )
+        {
+            return sal_False;
+        }
+    }
+    return sal_True;
+}
+
+OUString OCX_ContainerControl::createSubStreamName( const sal_uInt32& subStorageId )
+{
+    static OUString sI = OUString::createFromAscii("i");
+    static OUString sZero = OUString::createFromAscii( "0" );
+    OUStringBuffer buf( 6 );
+    buf.append( sI );
+    // for subStorage id < 10 stream name has leading '0'
+    // eg "i07"
+    if ( subStorageId < 10 )
+    {
+        buf.append( sZero );
+    }
+    buf.append( OUString::valueOf( (sal_Int32)subStorageId ) );
+    return buf.makeStringAndClear();
+}
+
+bool OCX_ContainerControl::createFromContainerRecord( const ContainerRecord& record, OCX_Control*& pControl )
+{
+    pControl = NULL;
+    switch ( record.nTypeIdent)
+        {
+            case CMDBUTTON:
+                pControl = new OCX_CommandButton;
+                break;
+            case LABEL:
+                pControl = new OCX_UserFormLabel(this);
+                break;
+            case TEXTBOX:
+                pControl = new OCX_TextBox;
+                break;
+            case LISTBOX:
+                pControl = new OCX_ListBox;
+                break;
+            case COMBOBOX:
+                pControl = new OCX_ComboBox;
+                break;
+            case CHECKBOX:
+                pControl =  new OCX_CheckBox;
+                break;
+            case OPTIONBUTTON:
+                pControl = new OCX_OptionButton;
+                break;
+            case TOGGLEBUTTON:
+                pControl = new OCX_ToggleButton;
+                break;
+            case IMAGE: //Image
+            {
+                pControl = new OCX_Image;
+                break;
+            }
+            case PAGE: // Page
+            {
+                OUString sMSStore = createSubStreamName( record.nSubStorageId );
+                pControl = new OCX_Page(mContainerStorage, sMSStore,
+                    record.cName, mxParent, this);
+                break;
+            }
+            case MULTIPAGE: // MultiPage
+            {
+                OUString sMSStore = createSubStreamName( record.nSubStorageId );
+                pControl = new OCX_MultiPage( mContainerStorage, sMSStore,
+                    record.cName, mxParent, this);
+                break;
+            }
+            case FRAME:  //Frame
+            {
+                OUString sFrameStore = createSubStreamName( record.nSubStorageId );
+                pControl = new OCX_Frame(mContainerStorage, sFrameStore,
+                    record.cName, mxParent, this);
+
+                break;
+            }
+            case SPINBUTTON: //SpinButton
+            {
+                pControl = new OCX_SpinButton;
+                break;
+            }
+            case TABSTRIP: //TabStrip
+            {
+                pControl = new OCX_TabStrip;
+                break;
+            }
+            case SCROLLBAR: //ScrollBar
+                pControl = new OCX_ScrollBar;
+                break;
+            default:
+                OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
+                DBG_ERROR( "Unknown control");
+                return false;
+                break;
+        }
+        pControl->sName = record.cName;
+        return true;
+}
+
+
+void addSeperator( std::vector< OCX_Control* >& dest )
+{
+    OCX_Control* seperator = new OCX_CommandButton;
+    seperator->SetInDialog(true);
+    seperator->sName = C2S("GroupSeperator");
+    dest.push_back( seperator );
+}
+
+void addRButtons( std::vector< OCX_Control* >& src,
+                  std::vector< OCX_Control* >& dest,
+                  bool addGroupSeperator )
+{
+    if ( addGroupSeperator )
+    {
+        addSeperator( dest );
+    }
+
+    for ( CtrlIterator rbIter = src.begin(); rbIter != src.end(); ++rbIter )
+    {
+        dest.push_back( *rbIter );
+    }
+}
+
+void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream* pS,  ContainerRecord& rec )
+{
+    SotStorageStreamRef oStream = mContainedControlsStream;
+
+    // can insert into OO Dialog (e.g is this a supported dialog control)??
+    if ( rec.nTypeIdent == SPINBUTTON ||
+        rec.nTypeIdent == TABSTRIP)
+    {
+        // need to skip or read the record in the stream
+        // but then discard it
+        pControl->FullRead(oStream);
+        delete pControl;
+    }
+    else
+    {
+        // A container control needs to read the f stream in
+        // the folder ( substorage ) associated with this control
+        if (  rec.nTypeIdent ==  FRAME ||
+            rec.nTypeIdent ==  MULTIPAGE||
+            rec.nTypeIdent ==  PAGE )
+        {
+            OCX_ContainerControl* pContainer =
+               static_cast< OCX_ContainerControl* >( pControl );
+            oStream = pContainer->getContainerStream();
+        }
+
+
+        pControl->sName = rec.cName;
+        // Position of controls is relative to the container
+        pControl->mnTop = rec.nTop + mnTop;
+        pControl->mnLeft = rec.nLeft + mnLeft;
+        // MS tabIndex, pretty useless in OpenOffice land
+        // as tab indexes in MS are relative to parent container.
+        // However we need this value in order to set
+        // OpenOffice tab indices in a sensible way to
+        // reflect the ms tabbing from orig MS UserForm, see below
+        pControl->mnTabPos = rec.nTabPos;
+        pControl->SetInDialog(true);
+        if ( mnStep )
+        {
+            // If the container has a step then it should be
+            // applied to all containees
+            pControl->mnStep = mnStep;
+        }
+        pControl->FullRead(oStream);
+
+        //need to fake grouping behaviour for radio ( option ) buttons
+        if ( rec.nTypeIdent == OPTIONBUTTON )
+        {
+            OCX_OptionButton* pRButton =
+                static_cast< OCX_OptionButton*>(pControl);
+            rbGroupMgr.addRadioButton( pRButton );
+        }
+        else
+        {
+            mpControls.push_back( pControl );
+        }
+    }
+}
+
+sal_Bool OCX_ContainerControl::Read(SvStorageStream *pS)
+{
+
+    if ( mpParent )
+    {
+        mnBackColor = mpParent->mnBackColor;
+    }
+
+    std::auto_ptr< ContainerRecReader > reader (
+        ContainerRecordReaderFac::instance( containerType ) );
+
+    reader->Read( this, pS );
+    // Need to honour the MS Tab Indexes. However MS tab indexes are
+    // relative to parent, this hack sorts the controls in each container
+    // based on the ms tab indexes. When import is called we create the
+    // controls in Open/Star office based on the order of the tab indexes,
+    // this ensures that the default tab index created by Star/Open office
+    // reflects the "flattened" ms tab order.
+    ::std::sort( mpControls.begin(), mpControls.end(), SortOrderByTabPos() );
+    mpControls = rbGroupMgr.insertGroupsIntoControlList( mpControls );
+    return true;
+}
+
+OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
+            const ::rtl::OUString& storageName,
+            const ::rtl::OUString& sN,
+            const uno::Reference< container::XNameContainer >  &rDialog,
+            OCX_Control* pParent):
+        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ), fEnabled(1),
+        fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0),
+        nVertPos(1), nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
+        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
+        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
+        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        pPicture(0),fUnknown1(0)
+{
+    msDialogType = C2U("NotSupported");
+    mnForeColor = 0x80000012L,
+    mnBackColor = 0x8000000FL;
+    bSetInDialog = true;// UserForm control only
+    aFontData.SetHasAlign(TRUE);
+    containerType = MULTIPAGE;
+    mnCurrentPageStep = 0;
+}
+
+void OCX_MultiPage::ProcessControl(OCX_Control* pControl, SvStorageStream* pS,  ContainerRecord& rec )
+{
+    SotStorageStreamRef oStream = mContainedControlsStream;
+
+    OCX_Page *pPage = NULL;
+    if ( rec.nTypeIdent == PAGE &&
+           ( pPage = static_cast< OCX_Page* >( pControl ) ) )
+
+    {
+        pPage->mnStep = ++mnCurrentPageStep;
+
+        pPage->mnTop =  mnTop;// move these to Page::import ?
+        pPage->mnLeft = mnLeft;
+        pPage->mnBackColor = mnBackColor;
+
+        oStream = pPage->getContainerStream();;
+        // Position of controls is relative to pos of this MuliPage
+        // Control
+        pPage->FullRead( oStream );
+
+        mpControls.push_back( pPage );
+    }
+    else
+    {
+        OSL_TRACE("!!!! Unsupported Control 0x%x ", rec.nTypeIdent);
+        DBG_ERROR("MultiPage error expected Page control");
+    }
+
+}
+
+sal_Bool OCX_MultiPage::Read(SvStorageStream *pS)
+{
+    // Unlike the other containers e.g. UserForm & Frame
+    // the o stream is does not contain info for the contained controls
+    // ( e.g. the pages themselves ) but seems to be for the MultiPage
+    // itself - need to check this in more detail
+
+    // For the moment skip read of the MultiPage specific properties
+    // not much point reading these as we can't display the multi page
+    // control or in fact any sort of tabbed layout, best we can do is
+    // import just the contained controls of the individual pages
+    // Note: the record skipped below ( does not contain the expected
+    // info on this control, that seems to be contained in the o stream,
+    // see comment above)
+    OCX_Control skip(C2S("Dummy"));
+    skip.Read( pS );
+    mnCurrentPageStep = mnStep; //( set step of of pages relative to step
+                                //of this MultiPage ( e.g. emulate containment )
+    return OCX_ContainerControl::Read(pS);
+}
+
+
+sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
+{
+    // Calls import on contained controls
+    OCX_ContainerControl::Import( rPropSet );
+    return sal_True;
+}
+
+sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer>
+        &rDialog)
+{
+    uno::Reference<beans::XPropertySet> xPropSet( rDialog, uno::UNO_QUERY );
+
+    // Although MultiPage is not represeted by a "real" control we still
+    // need to propagate the backcolor of this logical parent
+    // ( the dialog or Frame or whatever ) to the children of this control.
+    // For example the controls contained in the Page of a
+    // MultiPage control use the parents backcolor ( e,g,
+    // Pages backcolor ) when trying to fake transparency
+    mnBackColor = mpParent->mnBackColor;
+
+    if ( xPropSet.is() )
+    {
+        // Calls import on contained pages
+        return OCX_ContainerControl::Import( xPropSet );
+    }
+    OSL_TRACE("*** Major problem, no dialog to add controls to ");
+    DBG_ERROR(" Major problem, no dialog to add controls to ");
+    return false;
+}
+
+
+
+OCX_Page::OCX_Page( SotStorageRef& parent,
+            const ::rtl::OUString& storageName,
+            const ::rtl::OUString& sN,
+            const uno::Reference< container::XNameContainer >  &rDialog,
+            OCX_Control* pParent):
+        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),
+        fEnabled(1), fLocked(0),
+        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
+        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
+        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
+        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
+        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        pPicture(0),fUnknown1(0)
+{
+    msDialogType = C2U("NotSupported");
+    mnForeColor = 0x80000012,
+    mnBackColor = 0x8000000F,
+    bSetInDialog = true;// UserForm control only
+    aFontData.SetHasAlign(TRUE);
+}
+
+
+sal_Bool OCX_Page::Read(SvStorageStream *pS)
+{
+    long nStart = pS->Tell();
+    *pS >> nIdentifier;
+    DBG_ASSERT(0x400==nIdentifier,
+            "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+    pS->Read(pBlockFlags,4);
+
+    pS->SeekRel( nFixedAreaLen - sizeof( pBlockFlags ) );
+
+    ReadAlign( pS, pS->Tell() - nStart, 4);
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        //Font Stuff..
+        pS->SeekRel(0x1a);
+        sal_uInt8 nFontLen;
+        *pS >> nFontLen;
+        pS->SeekRel(nFontLen);
+    }
+    return OCX_ContainerControl::Read(pS);
+
+}
+
+sal_Bool OCX_Page::Import(com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer>
+        &rDialog)
+{
+
+    uno::Reference<beans::XPropertySet> xPropSet( rDialog, uno::UNO_QUERY );
+    if ( xPropSet.is() )
+    {
+        // apply Step to contained controls
+        CtrlIterator aEnd = mpControls.end();
+        for (CtrlIterator aIter = mpControls.begin(); aIter != aEnd; ++ aIter )
+        {
+            (*aIter)->mnStep = mnStep;
+        }
+        // Calls import on contained pages
+        return OCX_ContainerControl::Import( xPropSet );
+    }
+    OSL_TRACE("*** Major problem, no dialog to add controls to ");
+    DBG_ERROR("*** Major problem, no dialog to add controls to ");
+    return sal_False;
+}
+
+OCX_Frame::OCX_Frame( SotStorageRef& parent,
+            const ::rtl::OUString& storageName,
+            const ::rtl::OUString& sN,
+            const uno::Reference< container::XNameContainer >  &rDialog, OCX_Control* pParent):
+        OCX_ContainerControl(parent, storageName, sN, rDialog, pParent ),fEnabled(1), fLocked(0),
+        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
+        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012),
+        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
+        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
+        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        pPicture(0),fUnknown1(0)
+{
+    msDialogType = C2U("com.sun.star.awt.UnoControlGroupBoxModel");
+    mnForeColor = 0x80000012;
+    mnBackColor = 0x8000000F;
+    bSetInDialog = true;// UserForm control only
+    aFontData.SetHasAlign(TRUE);
+}
+
+
+sal_Bool OCX_Frame::Read(SvStorageStream *pS)
+{
+    long nStart = pS->Tell();
+    *pS >> nIdentifier;
+    DBG_ASSERT(0x400==nIdentifier,
+            "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+    pS->Read(pBlockFlags,4);
+
+    if (pBlockFlags[0] & 0x01)
+            DBG_ASSERT(!this, "ARSE");
+    if (pBlockFlags[0] & 0x02)
+            *pS >> mnBackColor;
+    if (pBlockFlags[0] & 0x04)
+            *pS >> mnForeColor;
+    if (pBlockFlags[0] & 0x08)
+        *pS >> fUnknown1;
+    if (pBlockFlags[0] & 0x40)
+    {
+        sal_uInt8 nTemp;
+        *pS >> nTemp;
+        fEnabled = (nTemp&0x04)>>2;
+        fBackStyle = (nTemp&0x08)>>3;
+        *pS >> nTemp;
+        *pS >> nTemp;
+        fWordWrap = (nTemp&0x80)>>7;
+        *pS >> nTemp;
+        fAutoSize = (nTemp&0x10)>>4;
+    }
+    if (pBlockFlags[0] & 0x80)
+    {
+        *pS >> nBorderStyle;
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+
+    if (pBlockFlags[1] & 0x01)
+        *pS >> nMousePointer;
+    if (pBlockFlags[1] & 0x02)
+        *pS >> nKeepScrollBarsVisible;
+    if (pBlockFlags[1] & 0x20)
+        *pS >> fUnknown1; // another unknown 32 bit ( or is 8 or 16 bit with padding ? )
+
+    if (pBlockFlags[1] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nIcon;
+        DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
+    }
+
+    bool bCaption = false;
+
+    if (pBlockFlags[2] & 0x01)
+        *pS >> nCycle;
+    if (pBlockFlags[2] & 0x02)
+        *pS >> nSpecialEffect;
+
+    if (pBlockFlags[2] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nBorderColor;
+    }
+
+    if (pBlockFlags[2] & 0x08)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nCaptionLen;
+        bCaption = true;
+    }
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        sal_uInt16 nNoIdea;
+        *pS >> nNoIdea;
+        DBG_ASSERT(nNoIdea == 0xFFFF, "Expected 0xFFFF, (related to font ?)");
+    }
+
+    if (pBlockFlags[2] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nPicture;
+        DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
+    }
+
+    if (pBlockFlags[2] & 0x80)
+        *pS >> nPictureAlignment;
+
+    if (pBlockFlags[3] & 0x01)
+        bPictureTiling = true;
+
+    if (pBlockFlags[3] & 0x02)
+        *pS >> nPictureSizeMode;
+
+    if (pBlockFlags[3] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> fUnknown8;
+    }
+
+    if (pBlockFlags[3] & 0x08)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> fUnknown9;
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    *pS >> nWidth;
+    *pS >> nHeight;
+    *pS >> nScrollWidth;
+    *pS >> nScrollHeight;
+
+    if ( bCaption )
+    {
+        lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
+    }
+
+    OUString tempCaption =  lclCreateOUString( pCaption, nCaptionLen );
+
+    if (nIcon)
+    {
+        pS->Read(pIconHeader,20);
+        *pS >> nIconLen;
+        pIcon = new sal_uInt8[nIconLen];
+        pS->Read(pIcon,nIconLen);
+    }
+
+    if (nPicture)
+    {
+        pS->Read(pPictureHeader,20);
+        *pS >> nPictureLen;
+        pPicture = new sal_uInt8[nPictureLen];
+        pS->Read(pPicture,nPictureLen);
+    }
+
+    ReadAlign( pS, pS->Tell() - nStart, 4);
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        //Font Stuff..
+        pS->SeekRel(0x1a);
+        sal_uInt8 nFontLen;
+        *pS >> nFontLen;
+        pS->SeekRel(nFontLen);
+    }
+
+    return OCX_ContainerControl::Read( pS );
+}
+
+sal_Bool OCX_Frame::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
+{
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp);
+    if ( pCaption )
+    {
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+    }
+
+    // Calls import on contained controls
+    OCX_ContainerControl::Import( rPropSet );
+    return sal_True;
+}
+OCX_UserForm::OCX_UserForm( SotStorageRef& parent,
+            const OUString& storageName,
+            const OUString& sN,
+            const ::uno::Reference< container::XNameContainer >  &rDialog,
+            const ::uno::Reference< lang::XMultiServiceFactory >& rMsf):
+        OCX_ContainerControl(parent, storageName, sN, rDialog),
+        nChildrenA(0), fEnabled(1), fLocked(0),
+        fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1),
+        nHorzPos(7), nMousePointer(0), nBorderColor(0x80000012), nChildrenB(0),
+        nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
+        nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
+        bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
+        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        pPicture(0)
+    {
+            mnForeColor = 0x80000012;
+            mnBackColor = 0x8000000F;
+            uno::Reference< beans::XPropertySet> xProps( rMsf, uno::UNO_QUERY);
+            if ( xProps.is() )
+            {
+                xProps->getPropertyValue(C2S("DefaultContext"))  >>= mxCtx;
+            }
+            aFontData.SetHasAlign(TRUE);
+        }
 sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
 {
     long nStart = pS->Tell();
@@ -2837,12 +4091,11 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
     pS->Read(pBlockFlags,4);
 
     if (pBlockFlags[0] & 0x01)
-        DBG_ASSERT(!this, "ARSE");
-//      *pS >> nForeColor;
+            DBG_ASSERT(!this, "ARSE");
     if (pBlockFlags[0] & 0x02)
-        *pS >> nBackColor;
+        *pS >> mnBackColor;
     if (pBlockFlags[0] & 0x04)
-        *pS >> nForeColor;
+        *pS >> mnForeColor;
     if (pBlockFlags[0] & 0x08)
         *pS >> nChildrenA;
     if (pBlockFlags[0] & 0x40)
@@ -2870,6 +4123,11 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
         *pS >> nMousePointer;
     if (pBlockFlags[1] & 0x02)
         *pS >> nKeepScrollBarsVisible;
+    if (pBlockFlags[1] & 0x20)
+    {
+        sal_uInt32 nUnknown32;
+        *pS >> nUnknown32;
+    }
     if (pBlockFlags[1] & 0x80)
     {
         ReadAlign(pS, pS->Tell() - nStart, 2);
@@ -2942,124 +4200,44 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
         pS->Read(pPicture,nPictureLen);
     }
 
-    //Font Stuff..
+    ReadAlign( pS, pS->Tell() - nStart, 4);
+
     if (pBlockFlags[2] & 0x10)
     {
-        pS->SeekRel(26);
+        //Font Stuff..
+        pS->SeekRel(0x1a);
         sal_uInt8 nFontLen;
         *pS >> nFontLen;
         pS->SeekRel(nFontLen);
     }
 
-    sal_uInt16 nUnknown;
-    *pS >> nUnknown;
-    *pS >> nNoRecords;
-    *pS >> nTotalLen;
-
-    sal_uInt8 aUnknown11[4];
-    pS->Read(aUnknown11, sizeof(aUnknown11));
-
-    bool bOk = true;
-    for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
+    sal_Int16 numTrailingRecs = 0;
+    *pS >> numTrailingRecs;
+    // seems to be no. of trailing records,
+    // before container record starts proper
+    // ( unknown what these trailing records are for)
+    if ( numTrailingRecs )
     {
-        sal_uInt16 nUnknown12;
-        *pS >> nUnknown12;
-        sal_uInt16 nRecordLen;
-        *pS >> nRecordLen;
-        sal_uInt32 nUnknown13;
-        *pS >> nUnknown13;
-        sal_uInt32 nNameLen;
-        *pS >> nNameLen;
-        sal_uInt32 nSubStorageId;
-        /*
-         i.e.  the "i"nSubStorage directory contains the contents if its a
-         frame
-        */
-        *pS >> nSubStorageId;
-        long nCount = 12;
-
-        sal_uInt32 nSkipLen = 0;
-        bool bHasControlTip = false;
-        switch (nUnknown13)
+        for ( ; numTrailingRecs ; --numTrailingRecs )
         {
-            default:
-                bOk = false;
-                break;
-            case 0x9e5:
-                nSkipLen = 6;
-                bHasControlTip = true;
-                break;
-            case 0x1D5:
-            case 0x1E5:
-                nSkipLen = 6;
-                break;
-            case 0x9f5:
-                nSkipLen = 10;
-                bHasControlTip = true;
-                break;
-            case 0x1F5:
-                nSkipLen = 10;
-                break;
+            OCX_Control skip(C2S("dummy")) ;
+            skip.Read( pS );
         }
-
-        if (!bOk)
-            break;
-
-        pS->SeekRel(nSkipLen);
-        nCount += nSkipLen;
-
-        sal_uInt16 nTypeIdent;
-        *pS >> nTypeIdent;
-        nCount += 2;
-
-        sal_uInt32 nControlTipLen = 0;
-        if (bHasControlTip)
-        {
-            *pS >> nControlTipLen;
-            nCount += 4;
-        }
-
-        sal_Char *pName = 0;
-        sal_uInt32 nBufSize = lclGetBufferSize(nNameLen);
-        if (nBufSize)
-        {
-            pName = new char[ nBufSize ];
-            pS->Read( pName, nBufSize );
-            nCount += nBufSize;
-        }
-
-        nCount += ReadAlign(pS, nCount, 4);
-
-        sal_uInt32 nLeft;
-        *pS >> nLeft;
-        sal_uInt32 nTop;
-        *pS >> nTop;
-        nCount += 8;
-        pS->SeekRel(nRecordLen - nCount);
-        maEntries.push_back(TypeName(pName, nNameLen, nTypeIdent, nLeft, nTop));
-        delete pName;
     }
-
-    return bOk;
+    return OCX_ContainerControl::Read( pS );
 }
 
-sal_Bool OCX_UserForm::Import(SvStorageStream *pS,
-    const uno::Reference<lang::XMultiServiceFactory> &rSF,
-    uno::Reference<uno::XComponentContext> &rContext,
-    uno::Reference<container::XNameContainer> &rLib)
+sal_Bool OCX_UserForm::Import(
+    uno::Reference<container::XNameContainer> &rLib )
 {
-    uno::Reference<container::XNameContainer> xDialogModel(rSF->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.UnoControlDialogModel"))), uno::UNO_QUERY);
-
     uno::Reference<beans::XPropertySet>
-        xDialogPropSet(xDialogModel, uno::UNO_QUERY);
-    uno::Any aTmp(&msModName,getCppuType((OUString *)0));
+        xDialogPropSet(mxParent, uno::UNO_QUERY);
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
     xDialogPropSet->setPropertyValue(
         OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp);
     xDialogPropSet->setPropertyValue(
         OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), aTmp);
-    aTmp <<= ImportColor(nBackColor);
+    aTmp <<= ImportColor(mnBackColor);
     xDialogPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= sal_Int32((nWidth * 2) / 100);
@@ -3067,84 +4245,16 @@ sal_Bool OCX_UserForm::Import(SvStorageStream *pS,
     aTmp <<= sal_Int32((nHeight * 2) / 100);
     xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
 
-    typedef std::vector<TypeName>::iterator myEntryIter;
-    myEntryIter aEnd = maEntries.end();
-    for (myEntryIter aEIter = maEntries.begin(); aEIter != aEnd;
-        ++aEIter)
-    {
-        OCX_Control *pControl = 0;
-        switch (aEIter->mnType)
-        {
-        case 0x11:
-            pControl = new OCX_CommandButton;
-            break;
-        case 0x15:
-            pControl = new OCX_Label;
-            break;
-        case 0x17:
-            pControl = new OCX_TextBox;
-            break;
-        case 0x18:
-            pControl = new OCX_ListBox;
-            break;
-        case 0x19:
-            pControl = new OCX_ComboBox;
-            break;
-        case 0x1A:
-            pControl =  new OCX_CheckBox;
-            break;
-        case 0x1B:
-            pControl = new OCX_OptionButton;
-            break;
-        case 0x1C:
-            pControl = new OCX_ToggleButton;
-            break;
-        // np 01-11-04, I've disabled processing of all
-        // unknown/unsupported controls, skipping in these
-        // cases does not seem to work properly. Needs to
-        // be investigated. After a unknown or unsupported
-        // control is encountered code will no longer try
-        // to read and further controls
-        case 0x0C: //Image
-        case 0xe:  //Frame
-        case 0x10: //SpinButton
-        case 0x12: //TabStrip
-        case 0x2F: //ScrollBar
-            {
-                DBG_ASSERT(false, "Unsupported Control");
-            }
-            break;
-        default:
-            break;
-        }
-
-        if (pControl)
-        {
-            pControl->sName = aEIter->msName;
-            if (pControl->FullRead(pS))
-            {
-                pControl->SetInDialog(true);
-                pControl->Import(xDialogModel, *aEIter);
-            }
-            delete pControl;
-        }
-        else
-        {
-            // if unsupported or unknown controls encountered then
-            // stop processing any more controls in the UserForm
-            break;
-        }
-
-    }
+    uno::Reference<beans::XPropertySet> xPropSet( mxParent, uno::UNO_QUERY );
+    OCX_ContainerControl::Import( xPropSet );
 
     uno::Reference<io::XInputStreamProvider> xSource =
-        xmlscript::exportDialogModel(xDialogModel, rContext);
+        xmlscript::exportDialogModel(mxParent, mxCtx);
     uno::Any aSourceAny(uno::makeAny(xSource));
-    if (rLib->hasByName(msModName))
-        rLib->replaceByName(msModName, aSourceAny);
+    if (rLib->hasByName(sName))
+        rLib->replaceByName(sName, aSourceAny);
     else
-        rLib->insertByName(msModName, aSourceAny);
-
+        rLib->insertByName(sName, aSourceAny);
     return sal_True;
 }
 
@@ -3162,14 +4272,14 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x01;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
@@ -3455,6 +4565,8 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
 sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
         uno::Reference < drawing::XShape > *pShapeRef,BOOL bFloatingCtrl)
 {
+
+    SvStorageStreamRef xCrash = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
     sal_Bool bRet=sal_False;
 
     SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("\3OCXNAME") );
@@ -3468,6 +4580,7 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
     pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+
     /*Get Class Id of this object, see if it is one of the types
      *that this importer can handle, call the appropiate handler
      to read that control, and call the appropiate handler to
@@ -3478,7 +4591,7 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     SvGlobalName aTest = rSrc1->GetClassName();
     if (pObj = OCX_Factory(aTest.GetHexName()))
     {
-
+        pObj->pDocSh = pDocSh;
         /* #117832# set imported control name */
         if ( hasCName )
         {
@@ -3635,7 +4748,7 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
 
     // background color: fBackStyle==0 -> transparent
     if( fBackStyle )
-        aTmp <<= ImportColor(nBackColor);
+        aTmp <<= ImportColor(mnBackColor);
     else
         aTmp = uno::Any();
     rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
@@ -3652,7 +4765,7 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
-    aTmp <<= ImportColor(nForeColor);
+    aTmp <<= ImportColor(mnForeColor);
     rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     bTemp = nMultiState;
@@ -3703,7 +4816,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
     fBackStyle = aTmp.hasValue() ? 1 : 0;
     if (fBackStyle)
-        aTmp >>= nBackColor;
+        aTmp >>= mnBackColor;
 
     sal_uInt8 nTemp=fEnabled;
     if (fEnabled)
@@ -3721,13 +4834,13 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nTemp;
     *rContents << sal_uInt8(0x00);
 
-    *rContents << ExportColor(nBackColor);
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
     if (aTmp.hasValue())
-        aTmp >>= nForeColor;
-    *rContents << ExportColor(nForeColor);
+        aTmp >>= mnForeColor;
+    *rContents << ExportColor(mnForeColor);
     pBlockFlags[0] |= 0x04;
 
     nStyle = 4;
@@ -4036,6 +5149,173 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     return sal_True;
 }
 
+// Doesn't really read anything but just skips the
+// record.
+sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
+{
+    const long skipLen = 0x18;
+    *pS >> nIdentifier;
+    DBG_ASSERT(nStandardId==nIdentifier,
+        "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+
+    pS->Read(pBlockFlags, sizeof(pBlockFlags));
+    pS->SeekRel(skipLen);
+    *pS >> nNumTabs;
+    // skip to end of control
+    pS->SeekRel(nFixedAreaLen - sizeof(pBlockFlags) - sizeof(nNumTabs) - skipLen );
+    return sal_True;
+}
+
+sal_Bool OCX_TabStrip::ReadFontData(SotStorageStream *pS)
+{
+    // Seems like there is a real font record followed by
+    // a number of blank records ( e.g. nFixedAreaLen = 0 )
+    // The number of trailing blank records is equal to the number of tabs
+    OCX_Control::ReadFontData(pS);
+    for ( sal_uInt16 index = 0; index < nNumTabs; index++ )
+    {
+        OCX_Control::Read(pS); // read trailing records
+    }
+    return sal_True;
+}
+
+sal_Bool OCX_Image::Read(SotStorageStream *pS)
+{
+    if ( !bSetInDialog )
+    {
+        // preserve the present behavior at the moment.
+        // only import image control for UserForms
+        return sal_False;
+    }
+    long nStart = pS->Tell();
+    *pS >> nIdentifier;
+    DBG_ASSERT(nStandardId==nIdentifier,
+        "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+
+    pS->Read(pBlockFlags, sizeof(pBlockFlags));
+
+    bool hasEmbeddedImage = false;
+
+    if ( pBlockFlags[0] & 0x04 )
+    {
+        bAutoSize = true;
+    }
+    if ( pBlockFlags[0] & 0x08 )
+    {
+        *pS >> nBorderColor;
+    }
+    if ( pBlockFlags[0] & 0x10 )
+    {
+        *pS >> mnBackColor;
+    }
+    if ( pBlockFlags[0] & 0x20 )
+    {
+        *pS >> nBorderStyle;
+    }
+    if ( pBlockFlags[0] & 0x40 )
+    {
+        *pS >> nMousePointer;
+    }
+    if ( pBlockFlags[0] & 0x80 )
+    {
+        *pS >> nPictureSizeMode;
+    }
+
+    if ( pBlockFlags[ 1 ] & 0x1 )
+    {
+        *pS >> nSpecialEffect;
+    }
+    // investigate if valid also for formcontrols, although for controls
+    // images themselves seem to come through from escher ( as shape, think
+    // its probably a preview? )
+
+    // np a bit of a guess ( until proved incorrect )
+    if ( pBlockFlags[ 1 ] & 0x4 )
+    {
+        hasEmbeddedImage = true;
+        sal_uInt16 unknown;
+        *pS >> unknown;
+    }
+
+
+    if ( pBlockFlags[ 1 ] & 0x8 )
+    {
+        *pS >> nPictureAlignment;
+
+    }
+    if ( pBlockFlags[ 1 ] & 0x10 )
+    {
+        bPictureTiling = true;
+    }
+    if ( pBlockFlags[1] & 0x20 )
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        sal_uInt8 nTemp;
+        *pS >> nTemp;
+        fEnabled = (nTemp&0x02)>>1;
+        fBackStyle = (nTemp&0x08)>>3;
+        // padding?
+        *pS >> nTemp;
+        *pS >> nTemp;
+        *pS >> nTemp;
+    }
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    *pS >> nWidth;
+    *pS >> nHeight;
+
+    if ( hasEmbeddedImage )
+    {
+        //image follows this block
+        //len of image is 0x14 relative to end of this block
+        pS->Seek( pS->Tell() + 0x14 );
+
+        sal_uInt32 nImageLen = 0;
+        *pS >> nImageLen;
+
+        long imagePos = pS->Tell();
+
+        pS->Seek( imagePos );
+
+        sImageUrl =  C2U("vnd.sun.star.expand:${$SYSBINDIR/") + C2U( SAL_CONFIGFILE( "bootstrap" ) ) + C2U("::UserInstallation}/user/temp/") + sName;
+
+        sal_uInt8* pImage = new sal_uInt8[ nImageLen ];
+        pS->Read(pImage, nImageLen);
+        bool result = storePictureInFileSystem( sImageUrl, pImage, nImageLen );
+        OUString pictName = sImageUrl.copy( sImageUrl.lastIndexOf('/') + 1 );
+        result = storePictureInDoc( pDocSh, pictName, pImage, nImageLen );
+        delete pImage;
+    }
+    return sal_True;
+}
+
+sal_Bool OCX_Image::Import( uno::Reference< beans::XPropertySet > &rPropSet )
+{
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+
+    if( fBackStyle )
+        aTmp <<= ImportColor(mnBackColor);
+    else
+        aTmp = uno::Any();
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    sal_Bool bTemp;
+    if (fEnabled)
+        bTemp = sal_True;
+    else
+        bTemp = sal_False;
+    aTmp = bool2any(bTemp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    if ( sImageUrl.getLength() )
+    {
+        aTmp <<= sImageUrl;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
+    }
+    return sal_True;
+}
+
 sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     const uno::Reference< beans::XPropertySet > &rPropSet,
     const awt::Size &rSize)
@@ -4052,8 +5332,8 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     uno::Any aTmp = rPropSet->getPropertyValue(
         WW8_ASCII2STR("BackgroundColor"));
     if (aTmp.hasValue())
-        aTmp >>= nBackColor;
-    *rContents << ExportColor(nBackColor);
+        aTmp >>= mnBackColor;
+    *rContents << ExportColor(mnBackColor);
     pBlockFlags[0] |= 0x10;
 
 
@@ -4167,15 +5447,15 @@ OCX_SpinButton::OCX_SpinButton() :
     mnSmallStep( 1 ),
     mnPageStep( 1 ),
     mnOrient( -1 ),
-    mnBackColor( 0x8000000F ),
-    mnForeColor( 0x80000012 ),
     mnDelay( 50 ),
     mbEnabled( true ),
     mbLocked( false ),
     mbPropThumb( true )
 {
     msFormType = C2U("com.sun.star.form.component.SpinButton");
-    //msDialogType = C2U("whats the proper type for a dialog or is there one?");
+    msDialogType = C2U("com.sun.star.awt.UnoControlSpinButtonModel");
+    mnBackColor = 0x8000000F;
+    mnForeColor = 0x80000012;
 }
 
 OCX_Control* OCX_SpinButton::Create()
@@ -4260,7 +5540,14 @@ sal_Bool OCX_SpinButton::Import(com::sun::star::uno::Reference<
     rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp <<= mnValue;
-    rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultSpinValue"), aTmp );
+    if ( bSetInDialog )
+    {
+        rPropSet->setPropertyValue( WW8_ASCII2STR("SpinValue"), aTmp );
+    }
+    else
+    {
+        rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultSpinValue"), aTmp );
+    }
 
     aTmp <<= mnMin;
     rPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMin"), aTmp );
@@ -4484,7 +5771,14 @@ sal_Bool OCX_ScrollBar::Import(com::sun::star::uno::Reference<
     rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp <<= mnValue;
-    rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultScrollValue"), aTmp );
+    if ( bSetInDialog )
+    {
+        rPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValue"), aTmp );
+    }
+    else
+    {
+        rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultScrollValue"), aTmp );
+    }
 
     aTmp <<= mnMin;
     rPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMin"), aTmp );
