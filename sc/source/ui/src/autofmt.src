@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:56:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text [ finnish ] = "Automaattimuoto" ;
     Text [ danish ] = "AutoFormat" ;
     Text [ french ] = "AutoFormat" ;
-    Text [ swedish ] = "AutoFormat" ;
+    Text [ swedish ] = "Autoformat" ;
     Text [ dutch ] = "AutoOpmaak" ;
     Text [ spanish ] = "AutoFormato" ;
     Text [ english_us ] = "AutoFormat" ;
@@ -512,7 +512,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ finnish ] = "Lisää automaattimuoto" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
         Text [ french ] = "Ajouter AutoFormat" ;
-        Text [ swedish ] = "Lägg till AutoFormat" ;
+        Text [ swedish ] = "Lägg till autoformat" ;
         Text [ dutch ] = "AutoOpmaak toevoegen" ;
         Text [ spanish ] = "Añadir AutoFormato" ;
         Text [ english_us ] = "Add AutoFormat" ;
@@ -535,7 +535,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Rename AutoFormat" ;
         Text [ portuguese ] = "Mudar nome do AutoFormato" ;
         Text [ portuguese_brazilian ] = "Autoformat umbenennen" ;
-        Text [ swedish ] = "Byt namn på AutoFormat" ;
+        Text [ swedish ] = "Byt namn på autoformat" ;
         Text [ danish ] = "Omdøb AutoFormat" ;
         Text [ italian ] = "Rinomina formattazione automatica" ;
         Text [ spanish ] = "Cambiar nombre del AutoFormato" ;
@@ -593,7 +593,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ finnish ] = "Poista automaattimuoto" ;
         Text [ danish ] = "Slet AutoFormat" ;
         Text [ french ] = "Supprimer l'AutoFormat" ;
-        Text [ swedish ] = "Radera AutoFormat" ;
+        Text [ swedish ] = "Radera autoformat" ;
         Text [ dutch ] = "AutoOpmaak wissen" ;
         Text [ spanish ] = "Eliminar AutoFormato" ;
         Text [ english_us ] = "Delete AutoFormat" ;
@@ -622,7 +622,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ finnish ] = "Haluatko varmasti poistaa automaattimuodon #?" ;
         Text [ danish ] = "Er du sikker på, at du vil slette AutoFormat #?" ;
         Text [ french ] = "Confirmez-vous la suppression de l'AutoFormat # ?" ;
-        Text [ swedish ] = "Skall AutoFormat # verkligen raderas?" ;
+        Text [ swedish ] = "Skall autoformatet # verkligen raderas?" ;
         Text [ dutch ] = "Wilt u AutoOpmaak # werkelijk verwijderen?" ;
         Text [ spanish ] = "¿Desea realmente eliminar el AutoFormato #?" ;
         Text [ english_us ] = "Do you really want to delete the # AutoFomat?" ;
