@@ -1,4 +1,4 @@
-/* RCS  $Id: extern.h,v 1.4 2002-10-04 13:31:34 waratah Exp $
+/* RCS  $Id: extern.h,v 1.5 2002-10-07 13:36:01 waratah Exp $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -67,6 +67,9 @@
 #endif
 #if HAVE_SYS_STAT_H
 # include <sys/stat.h>
+#endif
+#if HAVE_UTIME_H
+# include <utime.h>
 #endif
 
 #define PVOID void *
