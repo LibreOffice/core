@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,12 +316,15 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
+    ,m_aSystemClipboard( TransferableDataHelper::CreateFromSystemClipboard() )
 {
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
+
+    m_aSystemClipboard.StartClipboardListening( );
 }
 
 //------------------------------------------------------------------------------
@@ -1086,7 +1089,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                     {
                         case ID_BROWSER_CUT : aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
                         case SID_COPY   : aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
-                        case ID_BROWSER_PASTE   : aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly && Clipboard::HasFormat(FORMAT_STRING); break;
+                        case ID_BROWSER_PASTE   : aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly && m_aSystemClipboard.HasFormat(FORMAT_STRING); break;
                     }
                 }
             }
