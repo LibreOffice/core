@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:39:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
         case ViewShell::ST_IMPRESS:
             bServiceIsSupported = ServiceName.equalsAscii(
                 pImplSdUnoDrawViewService );
+            break;
 
         default:
             // Shell type is not handled by this object.
