@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-28 12:16:08 $
+ *  last change:$Date: 2003-05-27 13:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.AccessibleRole;
@@ -87,7 +88,7 @@ public class AccessibleControlShape extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -122,7 +123,7 @@ public class AccessibleControlShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (tParam.getMSF(),aModel);
+        XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
