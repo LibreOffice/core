@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:25:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,9 @@ public:
         @return  true = An RK value could be created. */
     static bool                 GetRKFromDouble( sal_Int32& rnRKValue, double fValue );
 
-    /** Calculates an angle (in 1/100 of degrees) from an Excel angle value. */
-    static sal_Int32            GetScRotation( sal_uInt16 nXclRot );
+    /** Calculates an angle (in 1/100 of degrees) from an Excel angle value.
+        @param nRotForStacked  This value will be returned, if nXclRot contains 'stacked'. */
+    static sal_Int32            GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked );
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
     static sal_uInt8            GetXclRotation( sal_Int32 nScRot );
 
