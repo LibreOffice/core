@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:59:07 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¤ô¥­¶¡¹j(~Z)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
         Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
-        Text[ korean ] = "°¡·Î °£°İ";
+        Text[ korean ] = "°¡·Î °£°İ(~Z)";
         Text[ turkish ] = "~Yatay boşluk";
         Text[ language_user1 ] = " ";
     };
@@ -153,7 +153,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "««ª½¶¡¹j(~V)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
         Text[ greek ] = "Êáôáêüñõöç áğüóôáóç";
-        Text[ korean ] = "¼¼·Î °£°İ";
+        Text[ korean ] = "¼¼·Î °£°İ(~V)";
         Text[ turkish ] = "Dikey boşluk";
         Text[ language_user1 ] = " ";
     };
@@ -195,7 +195,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Ge~nişlik";
         Text[ language_user1 ] = " ";
     };
@@ -237,7 +237,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "°ª(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "~Yükseklik";
         Text[ language_user1 ] = " ";
     };
@@ -279,7 +279,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¥ª¦VÃä®Ø(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-        Text[ korean ] = "¿ŞÂÊ ¿©¹é";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
     };
@@ -323,7 +323,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¤WÃä®Ø(~T)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
         Text[ greek ] = "¢íù ğåñéèşñéï";
-        Text[ korean ] = "À§ ¿©¹é";
+        Text[ korean ] = "À§ ¿©¹é(~T)";
         Text[ turkish ] = "Üst kenar";
         Text[ language_user1 ] = " ";
     };
@@ -367,7 +367,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­";
+        Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -404,11 +404,11 @@ TabPage TP_LAB_FMT
         Text[ chinese_simplified ] = "ĞĞ(~O)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s(~Oj";
+        Text[ japanese ] = "s(~O)";
         Text[ chinese_traditional ] = "¦æ(~O)";
         Text[ arabic ] = "ÇáÕİæİ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà";
+        Text[ korean ] = "Çà(~O)";
         Text[ turkish ] = "~Satır";
         Text[ language_user1 ] = " ";
     };
@@ -442,10 +442,10 @@ TabPage TP_LAB_FMT
         Text[ swedish ] = "~Spara...";
         Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
-        Text[ japanese ] = "•Û‘¶...";
-        Text[ korean ] = "Save...";
-        Text[ chinese_simplified ] = "´æÅÌ...";
-        Text[ chinese_traditional ] = "Àx¦s...";
+        Text[ japanese ] = "•Û‘¶(~S)...";
+        Text[ korean ] = "~Save...";
+        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
+        Text[ chinese_traditional ] = "Àx¦s(~S)...";
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "ÍİÙ...";
     };
@@ -720,14 +720,14 @@ ModalDialog DLG_SAVE_LABEL
         Text [ spanish ] = "~Tipo" ;
         Text [ english_us ] = "T~ype" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ÀàĞÍ(~Y)";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "í—Ş(~Y)";
+        Text[ chinese_traditional ] = "Ãş«¬(~Y)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "À¯Çü(~T)";
+        Text[ korean ] = "À¯Çü(~Y)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
     };
