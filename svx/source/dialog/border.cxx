@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:39:53 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit();
+    FieldUnit eFUnit = GetModuleFieldUnit( &rCoreAttrs );
 
     switch ( eFUnit )
     {

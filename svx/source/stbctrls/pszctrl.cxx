@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:55:00 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@
 String GetMetricStr_Impl( long nVal, SfxMapUnit eUnit )
 {
     // Applikations-Metrik besorgen und setzen
-    FieldUnit eOutUnit = GetModuleFieldUnit();
+    FieldUnit eOutUnit = GetModuleFieldUnit( NULL );
     FieldUnit eInUnit = FUNIT_TWIP;
 
     if ( SFX_MAPUNIT_100TH_MM == eUnit )

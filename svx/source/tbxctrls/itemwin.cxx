@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:54:36 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ SvxMetricField::SvxMetricField( Window* pParent, SfxBindings& rBind, WinBits nBi
     SetLast( 5000 );
     SetFirst( 0 );
 
-    eDlgUnit = GetModuleFieldUnit();
+    eDlgUnit = GetModuleFieldUnit( NULL );
     SetFieldUnit( *this, eDlgUnit, FALSE );
     Show();
 }
@@ -476,7 +476,7 @@ void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 
 void SvxMetricField::RefreshDlgUnit()
 {
-    FieldUnit eTmpUnit = GetModuleFieldUnit();
+    FieldUnit eTmpUnit = GetModuleFieldUnit( NULL );
 
     if ( eDlgUnit != eTmpUnit )
     {

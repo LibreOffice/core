@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:43:59 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,7 +742,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     SetExchangeSupport();
 
     // set Metrics
-    eFUnit = GetModuleFieldUnit();
+    eFUnit = GetModuleFieldUnit( &rInAttrs );
 
     switch ( eFUnit )
     {

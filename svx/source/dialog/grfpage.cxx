@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-12 12:10:35 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     SetExchangeSupport();
 
     // set the correct Metrik
-    const FieldUnit eMetric = GetModuleFieldUnit();
+    const FieldUnit eMetric = GetModuleFieldUnit( &rSet );
 
     SetFieldUnit( aWidthMF, eMetric );
     SetFieldUnit( aHeightMF, eMetric );
@@ -767,7 +767,7 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         aBottomMF.SetSpinSize(nSpin);
 
         //Originalgroesse anzeigen
-        const FieldUnit eMetric = GetModuleFieldUnit();
+        const FieldUnit eMetric = GetModuleFieldUnit( &GetItemSet() );
 
         MetricField aFld(this, WB_HIDE);
         SetFieldUnit( aFld, eMetric );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:39:25 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
     FreeResource();
 
-    const FieldUnit eFUnit = GetModuleFieldUnit();
+    const FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
     SetFieldUnit( aMtrFldLineDist, eFUnit );
     SetFieldUnit( aMtrFldHelplineOverhang, eFUnit );
     SetFieldUnit( aMtrFldHelplineDist, eFUnit );
