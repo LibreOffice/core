@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:05:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,14 @@
 #ifndef _GLOSHDL_HXX
 #define _GLOSHDL_HXX
 
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwWrtShell;
 class SwTextBlocks;
 class SvxMacro;
@@ -72,7 +76,7 @@ class SwGlossaries;
 class SfxViewFrame;
 
 // CLASS -----------------------------------------------------------------
-class SwGlossaryHdl
+class SW_DLLPUBLIC SwGlossaryHdl
 {
 
     SwGlossaries&   rStatGlossaries;
@@ -81,14 +85,15 @@ class SwGlossaryHdl
     SwWrtShell*     pWrtShell;
     SwTextBlocks*   pCurGrp;
 
-    void    _SetMacros(const String &rName,
+    SW_DLLPRIVATE void  _SetMacros(const String &rName,
                        const SvxMacro *pStart,
                        const SvxMacro *pEnd);
 
-    BOOL    Expand( const String& rShortName,
+    SW_DLLPRIVATE BOOL  Expand( const String& rShortName,
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary,
                     BOOL bApi = FALSE );
+
 public:
     BOOL    ConvertToNew(SwTextBlocks& rOld);
     void    GlossaryDlg();
