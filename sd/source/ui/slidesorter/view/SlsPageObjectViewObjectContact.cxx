@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:53:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "view/SlsPageObjectViewContact.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlsFontProvider.hxx"
+#include "view/SlsPageNotificationObjectContact.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "res_bmp.hrc"
@@ -112,9 +113,22 @@ PageObjectViewObjectContact::PageObjectViewObjectContact (
     cache::PageCache* pCache)
     : ViewObjectContact (rObjectContact, rViewContact),
       mbIsValid(true),
-      mpCache(pCache)
+      mpCache(pCache),
+      mpNotifier(NULL)
 {
     GetPageDescriptor().SetViewObjectContact (this);
+}
+
+
+
+
+PageObjectViewObjectContact::~PageObjectViewObjectContact (void)
+{
+    if (mpNotifier.get() != NULL)
+    {
+        mpNotifier->PrepareDelete();
+        mpNotifier.reset();
+    }
 }
 
 
@@ -267,6 +281,15 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
 void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
 {
     bool bIsPainted = false;
+
+    // Make sure that our notification object contact exists...
+    if (mpNotifier.get() == NULL)
+    {
+        SdrPage* pPage = const_cast<SdrPage*>(GetPage());
+        mpNotifier.reset(new PageNotificationObjectContact(*pPage, *this));
+    }
+    // ...and that it has a valid contact object hierarchy.
+    mpNotifier->EnsureValidDrawHierarchy(rDisplayInfo);
 
     OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
     // Check if buffering can and shall be done.
