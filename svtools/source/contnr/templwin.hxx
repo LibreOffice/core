@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } };
 namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } };
 namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } };
+namespace svtools
+{
+    class ODocumentInfoPreview;
+}
 
 // class SvtDummyHeaderBar_Impl ------------------------------------------
 
@@ -224,10 +228,8 @@ public:
 class SvtExtendedMultiLineEdit_Impl : public ExtMultiLineEdit
 {
 public:
-    SvtExtendedMultiLineEdit_Impl( Window* pParent );
+    SvtExtendedMultiLineEdit_Impl( Window* pParent,WinBits _nBits );
     inline ~SvtExtendedMultiLineEdit_Impl() {}
-
-    virtual void        Resize();
 
     inline void         Clear() { SetText( String() ); }
     void                InsertEntry( const String& rTitle, const String& rValue );
@@ -243,7 +245,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                                 xWindow;
 
-    SvtExtendedMultiLineEdit_Impl*  pEditWin;
+    ::svtools::ODocumentInfoPreview*
+                                    pEditWin;
     Window*                         pTextWin;
     Window*                         pEmptyWin;
     ::com::sun::star::lang::Locale  aLocale;
