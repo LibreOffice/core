@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:12:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#include <vector>
-
 #include "SdUnoDrawView.hxx"
+
+#include <vector>
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -74,7 +74,6 @@
 #endif
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
 #ifndef _SVX_ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
@@ -177,7 +176,7 @@ void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
     if ((GetDrawViewShell().GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
         GetDrawViewShell().ChangeEditMode (
             bMasterPageMode ? EM_MASTERPAGE : EM_PAGE,
-            GetDrawViewShell().GetLayerMode());
+            GetDrawViewShell().IsLayerModeActive());
 }
 
 
@@ -186,7 +185,7 @@ void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
 sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 {
     ThrowIfDisposed();
-    return GetDrawViewShell().GetLayerMode();
+    return GetDrawViewShell().IsLayerModeActive();
 }
 
 
@@ -195,7 +194,7 @@ sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 void SdUnoDrawView::setLayerMode (sal_Bool bLayerMode) throw()
 {
     ThrowIfDisposed();
-    if (GetDrawViewShell().GetLayerMode() != bLayerMode)
+    if (GetDrawViewShell().IsLayerModeActive() != (bLayerMode==sal_True))
         GetDrawViewShell().ChangeEditMode (
             GetDrawViewShell().GetEditMode(),
             bLayerMode);
@@ -604,7 +603,7 @@ void SdUnoDrawView::FillPropertyTable (
     DrawController::FillPropertyTable (rProperties);
 
     static const beans::Property aBasicProps[
-        PROPERTY_FIRST_FREE - PROPERTY_FIRST] = {
+        PROPERTY__END - PROPERTY__BEGIN] = {
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,     ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
@@ -613,7 +612,7 @@ void SdUnoDrawView::FillPropertyTable (
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomType") ),           PROPERTY_ZOOMTYPE,      ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
         beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOffset") ),         PROPERTY_VIEWOFFSET,    ::getCppuType((const ::com::sun::star::awt::Point*)0), beans::PropertyAttribute::BOUND ),
     };
-    int n = PROPERTY_FIRST_FREE - PROPERTY_FIRST;
+    int n = PROPERTY__END - PROPERTY__BEGIN;
     for (int i=0; i<n; i++)
         rProperties.push_back (aBasicProps[i]);
 }
@@ -853,14 +852,14 @@ void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
             rRet <<= GetViewOffset();
             break;
 
-        case PROPERTY_WORKAREA:
+            /*      case PROPERTY_WORKAREA:
             rRet <<= awt::Rectangle(
                 maLastVisArea.Left(),
                 maLastVisArea.Top(),
                 maLastVisArea.GetWidth(),
                 maLastVisArea.GetHeight());
             break;
-
+            */
         default:
             DrawController::getFastPropertyValue (rRet, nHandle);
     }
