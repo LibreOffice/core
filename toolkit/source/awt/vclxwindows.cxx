@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:54:44 $
+ *  last change: $Author: mt $ $Date: 2001-10-15 09:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,56 @@ void VCLXImageControl::complete( sal_Int32 Status, const ::com::sun::star::uno::
     if ( aSz.Height < aMinSz.Height )
         aSz.Height = aMinSz.Height;
     return aSz;
+}
+
+void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ImageControl* pImageControl = (ImageControl*)GetWindow();
+    if ( pImageControl )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_SCALEIMAGE:
+            {
+                sal_Bool b;
+                if ( Value >>= b )
+                     pImageControl->SetScaleImage( b );
+            }
+            break;
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXImageControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    ImageControl* pImageControl = (ImageControl*)GetWindow();
+    if ( pImageControl )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_SCALEIMAGE:
+            {
+                 aProp <<= (sal_Bool)pImageControl->IsScaleImage();
+            }
+            break;
+            default:
+            {
+                aProp <<= VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
 }
 
 //  ----------------------------------------------------
