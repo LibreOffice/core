@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:20:17 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,6 +889,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 break;
             default: bError = TRUE;
         }
+        bError |= !aIn.IsValid();
     }
 
     ConvErr eRet;
@@ -1277,6 +1278,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
             default:
                 bError = TRUE;
         }
+        bError |= !aIn.IsValid();
     }
 
     ConvErr eRet;
@@ -1357,7 +1359,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
     ULONG nMaxPos = aIn.GetRecPos() + nLen;
 
-    while( aIn.GetRecPos() < nMaxPos )
+    while( aIn.IsValid() && (aIn.GetRecPos() < nMaxPos) )
     {
         aIn >> nOp;
         nSeek = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 break;
             default: bError = TRUE;
         }
+        bError |= !aIn.IsValid();
     }
 
     ConvErr eRet;
@@ -1388,6 +1389,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 break;
             default: bError = TRUE;
         }
+        bError |= !aIn.IsValid();
 
         aIn.Ignore( nIgnore );
     }
