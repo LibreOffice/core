@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:14:20 $
+ *  last change: $Author: rt $ $Date: 2002-05-23 20:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,6 +1078,27 @@ String SCSTR_CONTENT_DRAWING
 {
     TEXT = "Zeichenobjekte" ;
     TEXT [ English ] = "Drawing objects" ;
+    TEXT[ english_us ] = "Drawing objects";
+    TEXT[ portuguese ] = "Drawing objects";
+    TEXT[ russian ] = "Drawing objects";
+    TEXT[ greek ] = "Drawing objects";
+    TEXT[ dutch ] = "Drawing objects";
+    TEXT[ french ] = "Drawing objects";
+    TEXT[ spanish ] = "Drawing objects";
+    TEXT[ finnish ] = "Drawing objects";
+    TEXT[ italian ] = "Drawing objects";
+    TEXT[ danish ] = "Drawing objects";
+    TEXT[ swedish ] = "Ritobjekt";
+    TEXT[ polish ] = "Drawing objects";
+    TEXT[ portuguese_brazilian ] = "Drawing objects";
+    TEXT[ japanese ] = "Drawing objects";
+    TEXT[ korean ] = "Drawing objects";
+    TEXT[ chinese_simplified ] = "Drawing objects";
+    TEXT[ chinese_traditional ] = "繪圖物件";
+    TEXT[ turkish ] = "Drawing objects";
+    TEXT[ arabic ] = "Drawing objects";
+    TEXT[ catalan ] = "Drawing objects";
+    TEXT[ thai ] = "Drawing objects";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
