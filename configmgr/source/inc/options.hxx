@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-30 15:45:30 $
+ *  last change: $Author: dg $ $Date: 2000-12-04 19:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,37 +96,45 @@ namespace configmgr
         rtl::OUString   m_sLocale;                              // current locale used for data
         rtl::OUString   m_sDefaultLocale;                       // default locale set for a user
         rtl::OUString   m_sUser;                                // user key used (could be empty)
+        rtl::OUString   m_sDefaultUser;                         // user key used (could be empty)
 
     public:
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
             :m_xConverter(_xConverter) {}
 
-        OOptions(const uno::Reference< script::XTypeConverter >& _xConverter,
-            const rtl::OUString& _rLocale, const rtl::OUString& _rDefaultLocale,
-            const rtl::OUString& _rUser)
-            :m_xConverter(_xConverter)
-            ,m_sDefaultLocale(_rDefaultLocale)
-            ,m_sLocale(_rLocale)
-            ,m_sUser(_rUser){}
-
         OOptions(const OOptions& _rOptions)
             :m_xConverter(_rOptions.getTypeConverter())
             ,m_sDefaultLocale(_rOptions.getDefaultLocale())
-            ,m_sLocale(_rOptions.getLocale())
-            ,m_sUser(_rOptions.getUser()){}
+            ,m_sDefaultUser(_rOptions.getDefaultUser())
+            ,m_sLocale(_rOptions.m_sLocale)
+            ,m_sUser(_rOptions.m_sUser){}
 
         uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
-        const rtl::OUString& getUser() const {return m_sUser;}
-        const rtl::OUString& getLocale() const {return m_sLocale;}
-        const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
 
+        rtl::OUString getLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
+        const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
         sal_Bool hasDefaultLocale() const {return !m_sLocale.getLength() || m_sLocale == m_sDefaultLocale;}
-        rtl::OUString getCurrentLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
+
+        rtl::OUString getUser() const {return m_sUser.getLength() ? m_sUser : m_sDefaultUser;}
+        const rtl::OUString& getDefaultUser() const {return m_sDefaultUser;}
+        sal_Bool hasDefaultUser() const {return !m_sUser.getLength() || m_sUser == m_sDefaultUser;}
 
         void setUser(const rtl::OUString& _rUser) {m_sUser = _rUser;}
+        void setDefaultUser(const rtl::OUString& _rUser) {m_sDefaultUser = _rUser;}
         void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
+    };
 
+    struct ltOptions
+    {
+        bool operator()(const ::vos::ORef<OOptions> &o1, const ::vos::ORef<OOptions> &o2) const
+        {
+            sal_Int32 nLt = o1->getUser().compareTo(o2->getUser());
+            if (!nLt)
+                return o1->getLocale().compareTo(o2->getLocale()) < 0 ? true : false;
+            else
+                return nLt < 0 ? true : false;
+        }
     };
 } // namespace
 
