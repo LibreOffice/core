@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:01 $
+ *  last change: $Author: ka $ $Date: 2002-08-21 06:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ SVGFilter::SVGFilter( const Reference< XMultiServiceFactory > &rxMSF ) :
     mpSVGExport( NULL ),
     mpSVGFontExport( NULL ),
     mpSVGWriter( NULL ),
-    mbPresentation( sal_False )
+    mbPresentation( sal_False ),
+    mbMultiPage( sal_False )
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 14:36:30 $
+ *  last change: $Author: ka $ $Date: 2002-08-21 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ private:
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
     sal_Bool                            mbPresentation;
+    sal_Bool                            mbMultiPage;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
@@ -271,8 +272,7 @@ private:
     sal_Bool                            implExportDocumemt( const Reference< XDrawPages >& rxMasterPages,
                                                             const Reference< XDrawPages >& rxDrawPages );
 
-    sal_Bool                            implExportPages( const Reference< XDrawPages >& rxMasterPages,
-                                                         sal_Int32 nVisiblePage, sal_Bool bMaster );
+    sal_Bool                            implExportPages( const Reference< XDrawPages >& rxMasterPages, sal_Bool bMaster );
 
     sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implExportShape( const Reference< XShape >& rxShape );

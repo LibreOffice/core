@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: svgscript.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:22 $
+ *  last change: $Author: ka $ $Date: 2002-08-21 06:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,26 @@
  *
  ************************************************************************/
 
-static const char aSVGScript1[] =
-"<![CDATA[\n\
+static const char aSVGScript1[] = "\n\
+<![CDATA[\n\
     var nCurSlide = 0;\n\
     var nSlides = 0;\n\
-    var aSlides = new Object();\n\
-    var aMasters = new Object();\n\
-    var aMasterVisibilities = new Object();\n\
+    var aSlideDescriptors = new Object();\n\
+\n\
+    function SlideDescriptor( aSlide,\n\
+                              aMaster,\n\
+                              aMasterBackground,\n\
+                              aMasterBackgroundVisibility,\n\
+                              aMasterObjects,\n\
+                              aMasterObjectsVisibility )\n\
+    {\n\
+        this.aSlide = aSlide;\n\
+        this.aMaster = aMaster;\n\
+        this.aMasterBackground = aMasterBackground;\n\
+        this.aMasterBackgroundVisibility = aMasterBackgroundVisibility;\n\
+        this.aMasterObjects = aMasterObjects;\n\
+        this.aMasterObjectsVisibility = aMasterObjectsVisibility;\n\
+    }\n\
 \n\
     function onClick( aEvt )\n\
     {\n\
@@ -80,7 +93,7 @@ static const char aSVGScript1[] =
             switchSlide( aEvt, nOffset );\n\
     }\n\
 \n\
-    function onKeyPress( aEvt ) \n\
+    function onKeyPress( aEvt )\n\
     {\n\
         var nCode = String.fromCharCode( aEvt.getCharCode() );\n\
         var nOffset = 0;\n\
@@ -96,69 +109,95 @@ static const char aSVGScript1[] =
                  ( aEvt.getKeyCode() == aEvt.DOM_VK_PAGE_UP() ||\n\
                    aEvt.getKeyCode() == aEvt.DOM_VK_LEFT() ) )\n\
         {\n\
-            nOffset = -1\n\
+            nOffset = -1;\n\
         }\n\
 \n\
         if( 0 != nOffset )\n\
             switchSlide( aEvt, nOffset );\n\
     }\n\
-\n\
 ";
 
-static const char aSVGScript2[] =
-"   function switchSlide( aEvt, nOffset ) \n\
+static const char aSVGScript2[] = "\n\
+    function switchSlide( aEvt, nOffset )\n\
     {\n\
-        var nNextSlide = nCurSlide + nOffset;\n\
+        var nNxtSlide = nCurSlide + nOffset;\n\
 \n\
-        if( nNextSlide < 0 && nSlides > 0 )\n\
-            nNextSlide = nSlides - 1;\n\
-        else if( nNextSlide >= nSlides ) \n\
-            nNextSlide = 0;\n\
+        if( nNxtSlide < 0 && nSlides > 0 )\n\
+            nNxtSlide = nSlides - 1;\n\
+        else if( nNxtSlide >= nSlides ) \n\
+            nNxtSlide = 0;\n\
 \n\
-        aSlides[ nCurSlide ].setAttributeNS( null, \"visibility\", \"hidden\" );\n\
-        aSlides[ nNextSlide ].setAttributeNS( null, \"visibility\", \"visible\" );\n\
+        var aCurDescriptor = aSlideDescriptors[ nCurSlide ];\n\
+        var aNxtDescriptor = aSlideDescriptors[ nNxtSlide ];\n\
+        var aVisibility = \"visibility\";\n\
 \n\
-        var aCurMaster = aMasters[ nCurSlide ];\n\
-        var aCurMasterVisibility = aMasterVisibilities[ nCurSlide ];\n\
-        \n\
-        var aNextMaster = aMasters[ nNextSlide ];\n\
-        var aNextMasterVisibility = aMasterVisibilities[ nNextSlide ];\n\
+        aCurDescriptor.aSlide.setAttributeNS( null, aVisibility, \"hidden\" );\n\
+        aNxtDescriptor.aSlide.setAttributeNS( null, aVisibility, \"visible\" );\n\
 \n\
-        if( ( aCurMaster != aNextMaster ) || ( aCurMasterVisibility != aNextMasterVisibility ) ) \n\
+        if( ( 0 == nOffset ) || \n\
+            ( aCurDescriptor.aMaster != aNxtDescriptor.aMaster ) ||\n\
+            ( aCurDescriptor.aMasterBackgroundVisibility != aNxtDescriptor.aMasterBackgroundVisibility ) ||\n\
+            ( aCurDescriptor.aMasterObjectsVisibility != aNxtDescriptor.aMasterObjectsVisibility ) )\n\
+\n\
         {\n\
-            if( aCurMaster != aNextMaster )\n\
-                aCurMaster.setAttributeNS( null, \"visibility\", \"hidden\" );\n\
-            \n\
-            aNextMaster.setAttributeNS( null, \"visibility\", aNextMasterVisibility );\n\
+            aCurDescriptor.aMaster.setAttributeNS( null, aVisibility, \"hidden\" );\n\
+            aCurDescriptor.aMasterBackground.setAttributeNS( null, aVisibility, \"hidden\" );\n\
+            aCurDescriptor.aMasterObjects.setAttributeNS( null, aVisibility, \"hidden\" );\n\
+\n\
+            aNxtDescriptor.aMaster.setAttributeNS( null, aVisibility, \"visible\" );\n\
+            aNxtDescriptor.aMasterBackground.setAttributeNS( null, aVisibility, aNxtDescriptor.aMasterBackgroundVisibility );\n\
+            aNxtDescriptor.aMasterObjects.setAttributeNS( null, aVisibility, aNxtDescriptor.aMasterObjectsVisibility );\n\
         }\n\
 \n\
-        nCurSlide = nNextSlide; \n\
+        nCurSlide = nNxtSlide; \n\
     }\n\
-\n\
-    function init() \n\
+";
+
+static const char aSVGScript3[] = "\n\
+    function onLoad() \n\
     {\n\
         nSlides = document.getElementById( \"meta_slides\" ).getAttributeNS( null, \"numberOfSlides\" );\n\
 \n\
         for( i = 0; i < nSlides; i++ )\n\
         {\n\
             var aSlide = document.getElementById( \"meta_slide\" + i );\n\
-            \n\
-            aSlides[ i ] = document.getElementById( aSlide.getAttributeNS( null, \"slide\" ) );\n\
-            aMasters[ i ] = document.getElementById( aSlide.getAttributeNS( null, \"master\" ) );\n\
-            aMasterVisibilities[ i ] = aSlide.getAttributeNS( null, \"master-visibility\" );\n\
-        }\n\
-    }\n\
+            var aSlideName = aSlide.getAttributeNS( null, \"slide\" );\n\
+            var aMasterName = aSlide.getAttributeNS( null, \"master\" );\n\
 \n\
-    init();\n\
-]]>";
+            aSlideDescriptors[ i ] = new SlideDescriptor( \n\
+                document.getElementById( aSlideName ),\n\
+                document.getElementById( aMasterName ),\n\
+                document.getElementById( aMasterName + \"_background\" ),\n\
+                aSlide.getAttributeNS( null, \"master-background-visibility\" ),\n\
+                document.getElementById( aMasterName + \"_objects\" ),\n\
+                aSlide.getAttributeNS( null, \"master-objects-visibility\" ) );\n\
+        }\n\
+\n\
+        switchSlide( 0, 0 );\n\
+    }\n\
+]]>\n\
+";
 
 /*
 <![CDATA[
     var nCurSlide = 0;
     var nSlides = 0;
-    var aSlides = new Object();
-    var aMasters = new Object();
-    var aMasterVisibilities;
+    var aSlideDescriptors = new Object();
+
+    function SlideDescriptor( aSlide,
+                              aMaster,
+                              aMasterBackground,
+                              aMasterBackgroundVisibility,
+                              aMasterObjects,
+                              aMasterObjectsVisibility )
+    {
+        this.aSlide = aSlide;
+        this.aMaster = aMaster;
+        this.aMasterBackground = aMasterBackground;
+        this.aMasterBackgroundVisibility = aMasterBackgroundVisibility;
+        this.aMasterObjects = aMasterObjects;
+        this.aMasterObjectsVisibility = aMasterObjectsVisibility;
+    }
 
     function onClick( aEvt )
     {
@@ -189,7 +228,7 @@ static const char aSVGScript2[] =
                  ( aEvt.getKeyCode() == aEvt.DOM_VK_PAGE_UP() ||
                    aEvt.getKeyCode() == aEvt.DOM_VK_LEFT() ) )
         {
-            nOffset = -1
+            nOffset = -1;
         }
 
         if( 0 != nOffset )
@@ -198,46 +237,57 @@ static const char aSVGScript2[] =
 
     function switchSlide( aEvt, nOffset )
     {
-        var nNextSlide = nCurSlide + nOffset;
+        var nNxtSlide = nCurSlide + nOffset;
 
-        if( nNextSlide < 0 && nSlides > 0 )
-            nNextSlide = nSlides - 1;
-        else if( nNextSlide >= nSlides )
-            nNextSlide = 0;
+        if( nNxtSlide < 0 && nSlides > 0 )
+            nNxtSlide = nSlides - 1;
+        else if( nNxtSlide >= nSlides )
+            nNxtSlide = 0;
 
-        aSlides[ nCurSlide ].setAttributeNS( null, "visibility", "hidden" );
-        aSlides[ nNextSlide ].setAttributeNS( null, "visibility", "visible" );
+        var aCurDescriptor = aSlideDescriptors[ nCurSlide ];
+        var aNxtDescriptor = aSlideDescriptors[ nNxtSlide ];
 
-        var aCurMaster = aMasters[ nCurSlide ];
-        var aCurMasterVisibility = aMasterVisibilities[ nCurSlide ];
+        aCurDescriptor.aSlide.setAttributeNS( null, "visibility", "hidden" );
+        aNxtDescriptor.aSlide.setAttributeNS( null, "visibility", "visible" );
 
-        var aNextMaster = aMasters[ nNextSlide ];
-        var aNextMasterVisibility = aMasterVisibilities[ nNextSlide ];
+        if( ( 0 == nOffset ) ||
+            ( aCurDescriptor.aMaster != aNxtDescriptor.aMaster ) ||
+            ( aCurDescriptor.aMasterBackgroundVisibility != aNxtDescriptor.aMasterBackgroundVisibility ) ||
+            ( aCurDescriptor.aMasterObjectsVisibility != aNxtDescriptor.aMasterObjectsVisibility ) )
 
-        if( ( aCurMaster != aNextMaster ) || ( aCurMasterVisibility != aNextMasterVisibility ) )
         {
-            if( aCurMaster != aNextMaster )
-                aCurMaster.setAttributeNS( null, "visibility", "hidden" );
+            aCurDescriptor.aMaster.setAttributeNS( null, "visibility", "hidden" );
+            aCurDescriptor.aMasterBackground.setAttributeNS( null, "visibility", "hidden" );
+            aCurDescriptor.aMasterObjects.setAttributeNS( null, "visibility", "hidden" );
 
-            aNextMaster.setAttributeNS( null, "visibility", aNextMasterVisibility );
+            aNxtDescriptor.aMaster.setAttributeNS( null, "visibility", "visible" );
+            aNxtDescriptor.aMasterBackground.setAttributeNS( null, "visibility", aNxtDescriptor.aMasterBackgroundVisibility );
+            aNxtDescriptor.aMasterObjects.setAttributeNS( null, "visibility", aNxtDescriptor.aMasterObjectsVisibility );
         }
 
-        nCurSlide = nNextSlide;
+        nCurSlide = nNxtSlide;
     }
 
-    function init()
+    function onLoad()
     {
         nSlides = document.getElementById( "meta_slides" ).getAttributeNS( null, "numberOfSlides" );
 
         for( i = 0; i < nSlides; i++ )
         {
             var aSlide = document.getElementById( "meta_slide" + i );
+            var aSlideName = aSlide.getAttributeNS( null, "slide" );
+            var aMasterName = aSlide.getAttributeNS( null, "master" );
 
-            aSlides[ i ] = document.getElementById( aSlide.getAttributeNS( null, "slide" ) );
-            aMasters[ i ] = document.getElementById( aSlide.getAttributeNS( null, "master" ) );
-            aMasterVisibilities[ i ] = aSlide.getAttributeNS( null, "master-visibility" );
+            aSlideDescriptors[ i ] = new SlideDescriptor(
+                document.getElementById( aSlideName ),
+                document.getElementById( aMasterName ),
+                document.getElementById( aMasterName + "_background" ),
+                aSlide.getAttributeNS( null, "master-background-visibility" ),
+                document.getElementById( aMasterName + "_objects" ),
+                aSlide.getAttributeNS( null, "master-objects-visibility" ) );
         }
-    }
 
-    init();
-]]*/
+        switchSlide( 0, 0 );
+    }
+]]>
+*/
