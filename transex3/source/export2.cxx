@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,41 @@ CharSet Export::GetCharSet( USHORT nLangId )
     return 0;
 }
 
+void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
+    printf( "%s\n", sListName.GetBuffer() );
+    ByteString l("");
+    ExportListEntry* aEntry;
+    for( int x = 0; x < aList.Count() ; x++ ){
+        aEntry = (ExportListEntry*) aList.GetObject( x );
+        Export::DumpMap( l , *aEntry );
+    }
+    printf("\n");
+}
+ByteString Export::DumpMap( ByteString& sMapName , ByteStringHashMap& aMap ){
+    ByteStringHashMap::const_iterator idbg;
+    ByteString sReturn;
+
+    if( sMapName.Len() )
+        printf("MapName %s\n", sMapName.GetBuffer());
+//  sReturn+= ByteString("MapName ") ;
+//  sReturn+= sMapName ;
+//  sReturn+= ByteString("\n") ;
+    if( aMap.size() < 1 ) return ByteString();
+    for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
+        ByteString a( idbg->first );
+        ByteString b( idbg->second );
+        printf("[%s]= %s",a.GetBuffer(),b.GetBuffer());
+/*      sReturn+= ByteString("[") ;
+        sReturn+= a ;
+        sReturn+= ByteString("]= ") ;
+        sReturn+= b ;
+        sReturn+= ByteString("\n") ;*/
+        printf("\n");
+    }
+    printf("\n");
+    //sReturn+= "\n" ;
+    return sReturn;
+}
 /*****************************************************************************/
 USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
 /*****************************************************************************/
@@ -398,6 +433,10 @@ void Export::FillInFallbacks( ResData *pResData )
                     FillInListFallbacks(
                         pResData->pStringList, sCur, nFallbackIndex );
 
+                if ( pResData->pPairedList )
+                    FillInListFallbacks(
+                        pResData->pPairedList, sCur, nFallbackIndex );
+
                 if ( pResData->pFilterList )
                     FillInListFallbacks(
                         pResData->pFilterList, sCur, nFallbackIndex );
@@ -422,8 +461,11 @@ void Export::FillInListFallbacks(
 
     for ( ULONG i = 0; i < pList->Count(); i++ ) {
         ExportListEntry *pEntry = pList->GetObject( i );
-        if ( !( *pEntry )[ nSource ].Len())
+        if ( !( *pEntry )[ nSource ].Len()){
              ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
+            ByteString x = ( *pEntry )[ nSource ];
+            ByteString y = ( *pEntry )[ nFallback ];
+        }
     }
 }
 
