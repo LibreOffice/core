@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:07:53 $
+ *  last change: $Author: vg $ $Date: 2001-03-13 16:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,155 +210,155 @@ ModelessDialog RID_SVXDLG_RUBY
         };
     StringList [ language_user1 ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ english_us ] =
     {
-            < "Left" ;
-        < "Center" ;
-        < "Right" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Left" ;
+            "Center" ;
+            "Right" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ portuguese ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ russian ] =
     {
-            < "Ñëåâà" ;
-        < "Ïî öåíòðó" ;
-        < "Ñïðàâà" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Ñëåâà" ;
+            "Ïî öåíòðó" ;
+            "Ñïðàâà" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ greek ] =
     {
-            < "ÁñéóôåñÜ" ;
-        < "ÊåíôñáñéóìÝíá" ;
-        < "ÄåîéÜ" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "ÁñéóôåñÜ" ;
+            "ÊåíôñáñéóìÝíá" ;
+            "ÄåîéÜ" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ dutch ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ french ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ spanish ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ italian ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ danish ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ swedish ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ polish ] =
     {
-            < "Do lewej" ;
-        < "Wyœrodkuj" ;
-        < "Do prawej" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Do lewej" ;
+            "Wyœrodkuj" ;
+            "Do prawej" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ japanese ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ korean ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¦V¥ª" ;
-        < "¸m¤¤" ;
-        < "¦V¥k" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "¦V¥ª" ;
+            "¸m¤¤" ;
+            "¦V¥k" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ turkish ] =
     {
-            < "Links" ;
-        < "Zentriert" ;
-        < "Rechts" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "Links" ;
+            "Zentriert" ;
+            "Rechts" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     StringList [ arabic ] =
     {
-            < "íÓÇÑ" ;
-        < "ÊæÓíØ" ;
-        < "íãíä" ;
-        < "0 1 0" ;
-        < "1 2 1" ;
+            "íÓÇÑ" ;
+            "ÊæÓíØ" ;
+            "íãíä" ;
+            "0 1 0" ;
+            "1 2 1" ;
     };
     };
     FixedText FT_CHAR_STYLE
