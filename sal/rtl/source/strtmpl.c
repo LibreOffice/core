@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-07-30 17:46:11 $
+ *  last change: $Author: sb $ $Date: 2002-03-28 10:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,9 +1104,7 @@ static double IMPL_RTL_STRNAME( ImplStringToDouble )( const IMPL_RTL_STRCODE* pS
         }
         else if ( *pStr == '+' )
         {
-            if ( bExp && (nExp != 0) )
-                break;
-            if ( fRet != 0.0 )
+            if ( bExp ? nExp != 0 : fRet != 0.0 )
                 break;
         }
         /* Exponent separator */
