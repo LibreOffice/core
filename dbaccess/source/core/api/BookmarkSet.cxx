@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
                     _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIT:
@@ -179,8 +181,6 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                 case DataType::DOUBLE:
                 case DataType::FLOAT:
                 case DataType::REAL:
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
                     _xParameter->updateDouble(nPos,_rValue);
                     break;
                 case DataType::DATE:
@@ -207,6 +207,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/14 13:28:20  oj
+    change for rowset when getRow returns 0
+
     Revision 1.3  2000/10/11 11:18:10  fs
     replace unotools with comphelper
 

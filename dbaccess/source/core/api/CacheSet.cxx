@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 11:24:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,8 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
                 _xParameter->setString(nPos,_rValue);
                 break;
             case DataType::BIT:
@@ -485,8 +487,6 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::DOUBLE:
             case DataType::FLOAT:
             case DataType::REAL:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
                 _xParameter->setDouble(nPos,_rValue);
                 break;
             case DataType::DATE:
@@ -538,13 +538,13 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         {
         case DataType::CHAR:
         case DataType::VARCHAR:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
             (*aIter) = getString(i);
             break;
         case DataType::DOUBLE:
         case DataType::FLOAT:
         case DataType::REAL:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
             (*aIter) = getDouble(i);
             break;
         case DataType::DATE:
@@ -586,6 +586,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.19  2001/04/02 11:24:49  oj
+    changes for character stream
+
     Revision 1.18  2001/03/15 08:19:18  fs
     cppuhelper/extract -> comphelper/extract
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:05:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,13 +820,13 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         {
         case DataType::CHAR:
         case DataType::VARCHAR:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
             xParameter->setString(nPos,*aIter);
             break;
         case DataType::DOUBLE:
         case DataType::FLOAT:
         case DataType::REAL:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
             xParameter->setDouble(nPos,*aIter);
             break;
         case DataType::DATE:
@@ -897,13 +897,13 @@ sal_Bool OKeySet::fetchRow()
             {
             case DataType::CHAR:
             case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
                 (*aIter) = m_xDriverRow->getString(aPosIter->second);
                 break;
             case DataType::DOUBLE:
             case DataType::FLOAT:
             case DataType::REAL:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
                 (*aIter) = m_xDriverRow->getDouble(aPosIter->second);
                 break;
             case DataType::DATE:
@@ -1007,6 +1007,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2001/04/10 08:05:08  oj
+    throw exception when no connection
+
     Revision 1.13  2001/04/02 11:14:53  oj
     changes for character stream
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1849,13 +1849,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             {
                                 case DataType::CHAR:
                                 case DataType::VARCHAR:
+                                case DataType::DECIMAL:
+                                case DataType::NUMERIC:
                                     xParam->setString(i,*aIter);
                                     break;
                                 case DataType::DOUBLE:
                                 case DataType::FLOAT:
                                 case DataType::REAL:
-                                case DataType::DECIMAL:
-                                case DataType::NUMERIC:
                                     xParam->setDouble(i,*aIter);
                                     break;
                                 case DataType::DATE:
