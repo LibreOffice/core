@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 15:05:55 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 11:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
         String sSourceStr( aCellRangeSource.sSourceStr );
         ScDocument* pDoc = GetScImport().GetDocument();
         ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
-            sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange );
+            sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange, aCellRangeSource.nRefresh );
         SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
     }
