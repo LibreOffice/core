@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: khz $ $Date: 2000-10-16 10:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -537,9 +537,17 @@ void SwWW8ImplReader::InsertObj( SdrObject* pObj, short nWwHeight )
             // schneller waere: ImpSetAnchor() statt NbcSetAnchor, allerdings
             // muesste dann die Relative Pos aller Objekte um die Ankerpos
             // korrigiert werden.
-        pObj->NbcSetAnchorPos( Point( USHRT_MAX, USHRT_MAX ) );
 
+/*
+        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        aAnchor.SetAnchor( pPaM->GetPoint() );
+//      aFlySet.Put( aAnchor );
+        pDrawFmt->SetAttr( aAnchor );
+*/
+
+        pObj->NbcSetAnchorPos( Point( USHRT_MAX, USHRT_MAX ) );
         pContact->ConnectToLayout( &pDrawFmt->GetAnchor() );
+
     }
 }
 
@@ -1477,13 +1485,6 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         // (Empfehlung JOE)
         pDrawEditEngine->SetText( aEmptyStr );
         pDrawEditEngine->SetParaAttribs( 0, pDrawEditEngine->GetEmptyItemSet() );
-#if SUPD>600
-#if SUPD>601
-        pDrawEditEngine->SetStyleSheet(  0, 0 );
-#else
-        pDrawEditEngine->SetStyleSheet(  0, aEmptyStr, SFX_STYLE_FAMILY_PARA );
-#endif
-#endif
     }
 
     pStrm->Seek( nOld );
@@ -2122,6 +2123,95 @@ SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
 }
 
 
+void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
+                                          WW8_FSPA&          rFSPA,
+                                          SfxItemSet&        rFlySet )
+{
+    if( pRecord )
+    {
+        UINT32 nXAlign = pRecord->nXAlign; // abs. Position, Left,  Centered,  Right,  Inside, Outside
+        UINT32 nYAlign = pRecord->nYAlign; // abs. Position, Top,   Centered,  Bottom, Inside, Outside
+
+        UINT32 nXRelTo = pRecord->nXRelTo; // Page printable area, Page,  Column,    Character
+        UINT32 nYRelTo = pRecord->nYRelTo; // Page printable area, Page,  Paragraph, Line
+
+/*
+        // our anchor settings
+        RndStdIds __READONLY_DATA aAnchorTab[] = {
+            FLY_AT_CNTNT,   // Frame bound to paragraph
+            FLY_IN_CNTNT,   //             to character
+            FLY_PAGE,       //             to page
+            FLY_AT_FLY,     //             to another fly ( LAYER_IMPL )
+            FLY_AUTO_CNTNT, // automat. positioned frame bound to paragraph
+        };
+*/
+
+        // horizontal Adjustment
+        SwHoriOrient __READONLY_DATA aHoriOriTab[] = {
+            HORI_NONE,      // Value of nXPos defined RelPos directly.
+
+            HORI_LEFT,      // automatical adjustment
+            HORI_CENTER,    // automatical adjustment
+            HORI_RIGHT,     // automatical adjustment
+
+            HORI_LEFT,      // will be converted to HORI_INSIDE when SetPosToggle() called
+            HORI_RIGHT      // will be converted to HORI_OUTSIDE...
+        };
+
+
+        // vertical Adjustment
+        SwVertOrient __READONLY_DATA aVertOriTab[] = {
+            VERT_NONE,          // Value of nXPos defined RelPos directly.
+            VERT_TOP,           // automatical adjustment
+            VERT_CENTER,        // automatical adjustment
+            VERT_BOTTOM,        // automatical adjustment
+            VERT_LINE_TOP,      // automatical adjustment
+            VERT_LINE_BOTTOM    // automatical adjustment
+        };
+
+        // Adjustment is relative to...
+        SwRelationOrient __READONLY_DATA aRelOriTab[] = {
+            REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
+            REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
+//          FRAME,          // Paragraph printable area
+            PRTAREA,        // Paragraph
+            REL_CHAR        // to a Character
+
+//          REL_PG_LEFT,    // in left page-border
+//          REL_PG_RIGHT,   // in right page-border
+//          REL_FRM_LEFT,   // in left paragraph-border
+//          REL_FRM_RIGHT,  // in right paragraph-border
+        };
+
+
+        RndStdIds        eAnchor;
+        SwHoriOrient     eHoriOri;
+        SwVertOrient     eVertOri;
+        SwRelationOrient eHoriRel;
+        SwRelationOrient eVertRel;
+
+        eAnchor = 3 == nXRelTo  ?  FLY_AUTO_CNTNT
+                                :  2 <= nYRelTo  ?  FLY_AT_CNTNT
+                                                 :  FLY_PAGE;
+        eHoriOri = aHoriOriTab[ nXAlign ];
+        eVertOri = aVertOriTab[ nYAlign ];
+
+        eHoriRel = aRelOriTab[  nXRelTo ];
+        eVertRel = FLY_AUTO_CNTNT == eAnchor ? REL_CHAR : aRelOriTab[  nYRelTo ];
+
+        SwFmtAnchor aAnchor( eAnchor );
+        aAnchor.SetAnchor( pPaM->GetPoint() );
+
+        SwFmtHoriOrient aHoriOri( rFSPA.nXaLeft, eHoriOri, eHoriRel );
+        if( 4 <= nXAlign )
+            aHoriOri.SetPosToggle( TRUE );
+
+        rFlySet.Put( aAnchor );
+        rFlySet.Put( aHoriOri );
+        rFlySet.Put( SwFmtVertOrient( rFSPA.nYaTop,  eVertOri, eVertRel ) );
+    }
+}
+
 #pragma optimize("",off)
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 {
@@ -2272,12 +2362,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
             if( bOrgObjectWasReplace )
             {
+                pRecord = (    aData.HasRecords()
+                            && (1 == aData.GetRecCount() ) )
+                        ? aData.GetRecord( 0 ) : 0;
+
                 long nWidthTw  = pF->nXaRight -pF->nXaLeft;
                 if( 0>nWidthTw ) nWidthTw =0;
                 long nHeightTw = pF->nYaBottom - pF->nYaTop;
                 if( 0>nHeightTw) nHeightTw=0;
-
-                aFlySet.Put( SwFmtAnchor( FLY_AT_CNTNT ) );
 
                 if( nbxRelPageBorder == pF->nbx )
                 {
@@ -2285,16 +2377,22 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     if( bTable )
                         pF->nXaLeft -= GetTableLeft();
                 }
+/*
+                RndStdIds        eAnchor;
+                SwHoriOrient     eHori;
+                SwVertOrient     eVert;
+                SwRelationOrient eRel;
+
+                aFlySet.Put( SwFmtAnchor( eAnchor ) );//FLY_AT_CNTNT ) );
+
                 aFlySet.Put(
-                    SwFmtHoriOrient( pF->nXaLeft, HORI_NONE, FRAME ) );
+                    SwFmtHoriOrient( pF->nXaLeft, eHori, eRel ) );//HORI_NONE, FRAME ) );
                 aFlySet.Put(
-                    SwFmtVertOrient( pF->nYaTop,  VERT_NONE, FRAME ) );
+                    SwFmtVertOrient( pF->nYaTop,  eVert, eRel ) );//VERT_NONE, FRAME ) );
+*/
+                ProcessEscherAlign( pRecord, *pF, aFlySet );
 
                 aFlySet.Put( SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw ));
-
-                pRecord = (    aData.HasRecords()
-                            && (1 == aData.GetRecCount() ) )
-                        ? aData.GetRecord( 0 ) : 0;
 
                 if( pRecord )
                 {
@@ -2482,6 +2580,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             {
                 // eingelesenes Objekt (kann eine ganze Gruppe sein)
                 // jetzt korrekt positionieren usw.
+                pRecord = (    aData.HasRecords()
+                            && (1 == aData.GetRecCount() ) )
+                        ? aData.GetRecord( 0 ) : 0;
+
+
                 if( pF->bRcaSimple )
                 {
                     pF->nbx = nbxRelPageBorder;
@@ -2502,36 +2605,46 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     else
                         eAnchor = FLY_PAGE;
                 }
+
+
+/*
+                SwHoriOrient     eHori;
+                SwVertOrient     eVert;
+                SwRelationOrient eRel;
+                ProcessEscherAlign( pRecord, eAnchor, eHori, eVert, eRel );
+*/
+                ProcessEscherAlign( pRecord, *pF, aFlySet );
+/*
+
+
                 SwFmtAnchor aAnchor( eAnchor );
                 aAnchor.SetAnchor( pPaM->GetPoint() );
+
                 aFlySet.Put( aAnchor );
 
 
-                /*
-                    Hilfs-Attribute setzen, damit MA die Werte im Layout umrechnen kann
-                    ( bugdoc:59640 )
-                */
-                static SwRelationOrient __READONLY_DATA aOrientTab[] = {
+
+                //  Hilfs-Attribute setzen, damit MA die Werte im Layout umrechnen kann
+                //  ( bugdoc:59640 )
+
+                static SwRelationOrient __READONLY_DATA aRelOrientTab[] = {
                         REL_PG_PRTAREA,         // == nbxRelPgMargin
                         REL_PG_FRAME,           // == nbxRelPageBorder
                         FRAME                   // == nbxRelText
                 };
 
-                if( 3 > pF->nby )
-                    aFlySet.Put( SwFmtVertOrient( pF->nYaTop, VERT_NONE,
-                                                aOrientTab[ pF->nby ] ) );
-                if( 3 > pF->nbx )
-                    aFlySet.Put( SwFmtHoriOrient( pF->nXaLeft, HORI_NONE,
-                                                aOrientTab[ pF->nbx ] ) );
+                aFlySet.Put( SwFmtVertOrient( pF->nYaTop, eVert, eRel ));
 
+                SwFmtHoriOrient aHoriOri( pF->nXaLeft, eHori, eRel );
+                if( HORI_INSIDE <= eHori )
+                    aHoriOri.SetPosToggle( TRUE );
+                aFlySet.Put( aHoriOri );
+*/
 
 
                 if( !(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX) ) // Wer nicht will, der hat gewollt!
                 {
                     BOOL bTextThere = FALSE;
-                    pRecord = (    aData.HasRecords()
-                                && (1 == aData.GetRecCount() ) )
-                            ? aData.GetRecord( 0 ) : 0;
                     long nStartCpFly;
                     long nEndCpFly;
                     if( pRecord && pRecord->bReplaceByFly )
@@ -2882,11 +2995,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.2 2000-10-16 10:35:05 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.93  2000/09/18 16:04:59  willem.vandorp
       OpenOffice header added.
 
