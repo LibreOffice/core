@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:52:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,11 +42,12 @@ import java.io.*;
 
 import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XComponent;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.*;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
@@ -56,70 +57,54 @@ import com.sun.star.sdb.XRowSetApproveBroadcaster;
 
 public class RowSet
 {
-    public static XMultiServiceFactory rSmgr;
+    private static XComponentContext xContext = null;
+    private static XMultiComponentFactory xMCF = null;
     public static void main(String argv[]) throws java.lang.Exception
     {
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+            xMCF = xContext.getServiceManager();
+        }
+        catch( Exception e) {
+            System.err.println("ERROR: can't get a component context from a running office ...");
+            e.printStackTrace(System.out);
+            System.exit(1);
+        }
+
         try{
-            rSmgr = connect("socket,host=localhost,port=2083");
-            showRowSetEvents(rSmgr);
-            //  showRowSetRowCount(rSmgr);
-            //  showRowSetPrivileges(rSmgr);
-            //  useRowSet(rSmgr);
+            showRowSetEvents();
+            showRowSetRowCount();
+            showRowSetPrivileges();
+            useRowSet();
         }
         catch(com.sun.star.uno.Exception e)
         {
-            System.out.println(e);
+            System.err.println(e);
             e.printStackTrace();
         }
         System.exit(0);
     }
 
-
-    public static XMultiServiceFactory connect( String connectStr )
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException, java.lang.Exception
-    {
-        // initial serviceManager
-        XMultiServiceFactory xLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
-
-        Object rInitialObject = urlResolver.resolve( "uno:" + connectStr + ";urp;StarOffice.NamingService" );
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-            XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-
-            xMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
-
-        return ( xMSF );
-    }
-
-    public static void printDataSources(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void printDataSources() throws com.sun.star.uno.Exception
     {
         // create a DatabaseContext and print all DataSource names
-        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.DatabaseContext",
+                                           xContext));
         String aNames [] = xNameAccess.getElementNames();
         for(int i=0;i<aNames.length;++i)
             System.out.println(aNames[i]);
     }
 
-    public static void useRowSet(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void useRowSet() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
-        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.RowSet"));
+        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(
+            XRowSet.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.RowSet", xContext));
 
         System.out.println("RowSet created!");
         // set the properties needed to connect to a database
@@ -137,11 +122,12 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetPrivileges(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void showRowSetPrivileges() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
-        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.RowSet"));
+        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(
+            XRowSet.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.RowSet", xContext));
 
         System.out.println("RowSet created!");
         // set the properties needed to connect to a database
@@ -170,11 +156,12 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetRowCount(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void showRowSetRowCount() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
-        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.RowSet"));
+        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(
+            XRowSet.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.RowSet", xContext));
 
         System.out.println("RowSet created!");
         // set the properties needed to connect to a database
@@ -201,11 +188,12 @@ public class RowSet
         System.out.println("RowSet destroyed!");
     }
 
-    public static void showRowSetEvents(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void showRowSetEvents() throws com.sun.star.uno.Exception
     {
         // first we create our RowSet object
-        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.RowSet"));
+        XRowSet xRowRes = (XRowSet)UnoRuntime.queryInterface(
+            XRowSet.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.RowSet", xContext));
 
         System.out.println("RowSet created!");
         // add our Listener

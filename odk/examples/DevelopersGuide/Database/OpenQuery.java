@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenQuery.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:51:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -58,8 +58,8 @@ import com.sun.star.beans.XPropertySet;
  */
 public class OpenQuery {
 
-    private XComponentContext xRemoteContext = null;
-    private XMultiComponentFactory xRemoteServiceManager = null;
+    private XComponentContext xContext = null;
+    private XMultiComponentFactory xMCF = null;
 
     /** Creates a new instance of OpenQuery */
     public OpenQuery() {
@@ -82,12 +82,21 @@ public class OpenQuery {
     }
 
     protected void openQuery() throws com.sun.star.uno.Exception, java.lang.Exception {
-        xRemoteServiceManager = this.getRemoteServiceManager(
-        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+            xMCF = xContext.getServiceManager();
+        }
+        catch( Exception e) {
+            System.err.println("ERROR: can't get a component context from a running office ...");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         // first we create our RowSet object and get its XRowSet interface
-        Object rowSet = xRemoteServiceManager.createInstanceWithContext(
-           "com.sun.star.sdb.RowSet", xRemoteContext);
+        Object rowSet = xMCF.createInstanceWithContext(
+            "com.sun.star.sdb.RowSet", xContext);
 
         com.sun.star.sdbc.XRowSet xRowSet = (com.sun.star.sdbc.XRowSet)
             UnoRuntime.queryInterface(com.sun.star.sdbc.XRowSet.class, rowSet);
@@ -154,35 +163,6 @@ public class OpenQuery {
         com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
             com.sun.star.lang.XComponent.class, xRowSet);
         xComp.dispose();
-    }
-
-
-
-    protected XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception {
-        if (xRemoteContext == null) {
-            // First step: create local component context, get local servicemanager and
-            // ask it to create a UnoUrlResolver object with an XUnoUrlResolver interface
-            XComponentContext xLocalContext =
-                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            // query XUnoUrlResolver interface from urlResolver object
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
-
-            // Second step: use xUrlResolver interface to import the remote StarOffice.ServiceManager,
-            // retrieve its property DefaultContext and get the remote servicemanager
-            Object initialObject = xUnoUrlResolver.resolve( unoUrl );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-                XComponentContext.class, context);
-        }
-        return xRemoteContext.getServiceManager();
     }
 
 }
