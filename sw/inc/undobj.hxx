@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:22:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1618,6 +1618,9 @@ class SwUndoInsertLabel : public SwUndo
     };
 
     String sText;
+    // --> PB 2005-01-06 #i39983# - the separator will be drawed with a character style
+    String sSeparator;
+    // <--
     String sCharacterStyle;
     // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
     USHORT nFldId;
@@ -1629,6 +1632,9 @@ class SwUndoInsertLabel : public SwUndo
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
+    // --> PB 2005-01-06 #i39983# - the separator will be drawed with a character style
+                        const String& rSeparator,
+    // <--
                         const BOOL bBefore, const USHORT nId,
                         const String& rCharacterStyle,
                         const BOOL bCpyBrd );
