@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: hjs $ $Date: 2001-06-27 09:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 
 #ifndef __PROPED_HXX__
-#include <svtools/proped.hxx>
+#include <proped.hxx>
 #endif
 #ifndef _UNO_HXX
 #include <usr/uno.hxx>
