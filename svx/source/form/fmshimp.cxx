@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:44:09 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1356,9 +1356,12 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
     {
         // das Control zum Model suchen
         SdrPageView* pPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
-        DBG_ASSERT(pPageView->GetWinList().GetCount() > 0, "FmXFormShell::ConvertControlTo : no SdrPageViewWinRecs");
-        const SdrPageViewWinRec& rViewWinRec = pPageView->GetWinList()[0];
-        Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
+        //DBG_ASSERT(pPageView->GetWinList().GetCount() > 0, "FmXFormShell::ConvertControlTo : no SdrPageViewWinRecs");
+        //const SdrPageViewWinRec& rViewWinRec = pPageView->GetWinList()[0];
+        //Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
+        DBG_ASSERT(pPageView->WindowCount() > 0, "FmXFormShell::ConvertControlTo : no SdrPageViewWindows");
+        const SdrPageViewWindow& rWindow = *pPageView->GetWindow(0);
+        Reference< XControlContainer> xControlContainer(rWindow.GetControlContainerRef());
 
         Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
         const Reference< XControl>* pControls = aControls.getConstArray();
@@ -3475,10 +3478,17 @@ Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControl
     // die View ...
     SdrPageView* pCurPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
     // deren ViewWinRec-Liste, daraus das erste Element
-    DBG_ASSERT(pCurPageView->GetWinList().GetCount() > 0, "FmXFormShell::GetControlFromModel : unexpected : no SdrPageViewWinRecs");
-    const SdrPageViewWinRec& rViewWinRec = pCurPageView->GetWinList()[0];
+
+    DBG_ASSERT(pCurPageView->WindowCount() > 0, "FmXFormShell::GetControlFromModel : unexpected : no SdrPageViewWindows");
+    const SdrPageViewWindow& rWindow = *pCurPageView->GetWindow(0);
     // von dem bekomme ich alle Controls ...
-    Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
+    Reference< XControlContainer> xControlContainer(rWindow.GetControlContainerRef());
+
+    //DBG_ASSERT(pCurPageView->GetWinList().GetCount() > 0, "FmXFormShell::GetControlFromModel : unexpected : no SdrPageViewWinRecs");
+    //const SdrPageViewWinRec& rViewWinRec = pCurPageView->GetWinList()[0];
+    //// von dem bekomme ich alle Controls ...
+    //Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
+
     Sequence< Reference< XControl> > seqControls( xControlContainer->getControls() );
     Reference< XControl>* pControls = seqControls.getArray();
     // ... die ich dann durchsuchen kann
