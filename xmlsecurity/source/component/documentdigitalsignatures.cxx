@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:09 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 09:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,8 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
                 for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
                 {
                     const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];
-                    if ( ( rInf.nType == 2 ) || ( rInf.nType == 3 ) )
+                    // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
+                    if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
                         nRealCount++;
                 }
                 aInfos[n].SignatureIsValid = ( aElementsToBeVerified.size() == nRealCount );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:09 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 09:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
 
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/datetime.hxx>
+
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
 
@@ -79,7 +82,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star;
 
 
 namespace
@@ -224,8 +226,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
     maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ) );
-    maValidFromFI.SetText( XmlSec::GetDateString( xCert->getNotBefore() ) );
-    maValidToFI.SetText( XmlSec::GetDateString( xCert->getNotAfter() ) );
+
+    DateTime aDateTime;
+    utl::typeConvert( xCert->getNotBefore(), aDateTime );
+    maValidFromFI.SetText( GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() ) );
+    utl::typeConvert( xCert->getNotAfter(), aDateTime );
+    maValidToFI.SetText( GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() ) );
 
     // recalc positions for date fields according to real size
     Point   aPos( maValidFromLabelFI.GetPosPixel() );
@@ -268,7 +274,6 @@ void CertificateViewerDetailsTP::Clear( void )
     SvLBoxEntry*    pEntry = maElementsLB.GetEntry( i );
     while( pEntry )
     {
-//      delete ( String* ) pEntry->GetUserData();
         delete ( Details_UserDatat* ) pEntry->GetUserData();
         ++i;
         pEntry = maElementsLB.GetEntry( i );
@@ -289,14 +294,16 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
     ,maElementsLB           ( this, ResId( LB_ELEMENTS ) )
     ,maElementML            ( this, ResId( ML_ELEMENT ) )
-    ,maStdFont              ( maElementML.GetFont() )
+    ,maStdFont              ( maElementML.GetControlFont() )
     ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
 {
-    // HACK! because Font sizes are definitely wrong!
-    maStdFont.SetHeight( 8 );
-    maFixedWidthFont.SetHeight( 8 );
+    WinBits nStyle = maElementsLB.GetStyle();
+    nStyle &= ~WB_HSCROLL;
+    maElementsLB.SetStyle( nStyle );
 
-    static long nTabs[] = { 2, 0, 40*CS_LB_WIDTH/100 };
+    maFixedWidthFont.SetHeight( maStdFont.GetHeight() );
+
+    static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     maElementsLB.SetTabs( &nTabs[ 0 ] );
     maElementsLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
@@ -306,8 +313,9 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
-    aLBEntry = aDetails = String::CreateFromInt32( xCert->getVersion() );
-    InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aDetails );
+    aLBEntry = String::CreateFromAscii( "V" );
+    aLBEntry += String::CreateFromInt32( xCert->getVersion() );
+    InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
@@ -316,23 +324,34 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
     InsertElement( String( ResId( STR_ISSUER ) ), aLBEntry, aDetails );
+    /*
     aSeq = xCert->getIssuerUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( String( ResId( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
+    */
 
-    aLBEntry = aDetails = XmlSec::GetDateTimeString( xCert->getNotBefore() );
-    InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aDetails  );
-    aLBEntry = aDetails = XmlSec::GetDateTimeString( xCert->getNotAfter() );
-    InsertElement( String( ResId( STR_VALIDTO ) ), aLBEntry, aDetails );
+    DateTime aDateTime;
+    utl::typeConvert( xCert->getNotBefore(), aDateTime );
+    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
+    aLBEntry += String::CreateFromAscii( " " );
+    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
+    InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
+    utl::typeConvert( xCert->getNotAfter(), aDateTime );
+    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
+    aLBEntry += String::CreateFromAscii( " " );
+    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
+    InsertElement( String( ResId( STR_VALIDTO ) ), aLBEntry, aLBEntry );
 
     aLBEntry = XmlSec::GetPureContent( xCert->getSubjectName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getSubjectName(), "\n", true );
     InsertElement( String( ResId( STR_SUBJECT ) ), aLBEntry, aDetails );
+    /*
     aSeq = xCert->getSubjectUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( String( ResId( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
+    */
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( String( ResId( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
@@ -343,12 +362,15 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
     InsertElement( String( ResId( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
 
-    aLBEntry = aDetails = xCert->getThumbprintAlgorithm();
-    InsertElement( String( ResId( STR_THUMBPRINT_ALGO ) ), aLBEntry, aDetails );
-    aSeq = xCert->getThumbprint();
+    aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_THUMBPRINT ) ), aLBEntry, aDetails, true );
+    InsertElement( String( ResId( STR_THUMBPRINT_SHA1 ) ), aLBEntry, aDetails, true );
+
+    aSeq = xCert->getMD5Thumbprint();
+    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
+    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
+    InsertElement( String( ResId( STR_THUMBPRINT_MD5 ) ), aLBEntry, aDetails, true );
 
     FreeResource();
 
@@ -398,23 +420,32 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     maCertPathLB.SetNodeDefaultImages();
     maCertPathLB.SetSublistOpenWithLeftRight();
 
-    Sequence< Reference< security::XCertificate > >
-                    aCertPath = _pDlg->mxSecurityEnvironment->buildCertificatePath( _pDlg->mxCert );
-    const Reference< security::XCertificate >*
-                    pCertPath = aCertPath.getConstArray();
+    Sequence< Reference< security::XCertificate > > aCertPath = _pDlg->mxSecurityEnvironment->buildCertificatePath( _pDlg->mxCert );
+    const Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
 
     String          aCN_Id( String::CreateFromAscii( "CN" ) );
     String          aState;
     int             nCnt = aCertPath.getLength();
     SvLBoxEntry*    pParent = NULL;
-    for( int i = 0 ; i < nCnt ; ++i )
-        pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ i ]->getIssuerName(), aCN_Id ), aState );
+    for( int i = nCnt; i; )
+    {
+           pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ --i ]->getIssuerName(), aCN_Id ), aState );
+    }
 
-    InsertCert( pParent, XmlSec::GetContentPart( _pDlg->mxCert->getIssuerName(), aCN_Id ), aState );
+    InsertCert( pParent, XmlSec::GetContentPart( _pDlg->mxCert->getSubjectName(), aCN_Id ), aState );
+
+    while( pParent )
+    {
+        maCertPathLB.Expand( pParent );
+        pParent = maCertPathLB.GetParent( pParent );
+    }
 
     FreeResource();
 
     maCertPathLB.SetSelectHdl( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
+
+    // MT->GT: After EA, please move path stuff to ActivatePage() and asure it's only done once.
+    // Who knows how expensive buildCertificatePath can be, and maybe nobody looks at this page.
 }
 
 CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
