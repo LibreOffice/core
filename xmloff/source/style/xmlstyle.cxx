@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
+#include "PageMasterPropMapper.hxx"
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
@@ -164,6 +167,12 @@
 #ifndef _XMLOFF_XMLFOOTNOTECONFIGURATIONIMPORTCONTEXT_HXX
 #include "XMLFootnoteConfigurationImportContext.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
+#include "PageMasterImportContext.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERIMPORTPROPMAPPER_HXX
+#include "PageMasterImportPropMapper.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -176,6 +185,7 @@ using namespace ::com::sun::star::style;
 static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  sXML_style,         XML_TOK_STYLE_STYLE                },
+    { XML_NAMESPACE_STYLE,  sXML_page_master,   XML_TOK_STYLE_PAGE_MASTER          },
     { XML_NAMESPACE_TEXT,   sXML_list_style,    XML_TOK_TEXT_LIST_STYLE            },
     { XML_NAMESPACE_TEXT,   sXML_outline_style, XML_TOK_TEXT_OUTLINE               },
     { XML_NAMESPACE_DRAW,   sXML_gradient,      XML_TOK_STYLES_GRADIENTSTYLES      },
@@ -532,6 +542,12 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                                                     rLocalName, xAttrList );
             }
             break;
+            case XML_TOK_STYLE_PAGE_MASTER:
+            {
+                pStyle = new PageStyleContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList, *this );
+            }
+            break;
             case XML_TOK_TEXT_LIST_STYLE:
                 pStyle = new SvxXMLListStyleContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList );
@@ -732,6 +748,14 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
             xChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper );
         }
         xMapper = xChartImpPropMapper;
+        break;
+    case XML_STYLE_FAMILY_PAGE_MASTER:
+        if( ! xPageImpPropMapper.is() )
+        {
+            XMLPropertySetMapper *pPropMapper = new XMLPageMasterPropSetMapper();
+            xPageImpPropMapper = new PageMasterImportPropertyMapper( pPropMapper );
+        }
+        xMapper = xPageImpPropMapper;
         break;
     }
 

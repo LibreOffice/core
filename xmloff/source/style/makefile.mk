@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
+#   last change: $Author: sab $ $Date: 2000-10-23 10:26:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,12 @@ CXXFILES = \
         PageMasterPropHdlFactory.cxx	\
         PageMasterStyleMap.cxx			\
         PageMasterPropMapper.cxx		\
-        PageMasterExportPropMapper.cxx
+        PageMasterExportPropMapper.cxx		\
+        PageMasterImportPropMapper.cxx		\
+        PageMasterImportContext.cxx		\
+        PagePropertySetContext.cxx		\
+        PageHeaderFooterContext.cxx
+
 
 SLOFILES =	\
         $(SLO)$/adjushdl.obj	\
@@ -217,7 +222,12 @@ SLOFILES =	\
         $(SLO)$/PageMasterPropHdlFactory.obj	\
         $(SLO)$/PageMasterStyleMap.obj			\
         $(SLO)$/PageMasterPropMapper.obj		\
-        $(SLO)$/PageMasterExportPropMapper.obj
+        $(SLO)$/PageMasterExportPropMapper.obj		\
+        $(SLO)$/PageMasterImportPropMapper.obj		\
+        $(SLO)$/PageMasterImportContext.obj		\
+        $(SLO)$/PagePropertySetContext.obj		\
+        $(SLO)$/PageHeaderFooterContext.obj
+
 
 # --- Tagets -------------------------------------------------------
 
