@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-18 18:13:06 $
+ *  last change: $Author: pl $ $Date: 2002-04-19 14:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,15 +1130,15 @@ void SalFrameData::Center( )
         else
         {
             // center the window relative to the top level frame
-            nX = (nScreenWidth  - pFrame_->maGeometry.nWidth ) / 2 + nScreenX;
-            nY = (nScreenHeight - pFrame_->maGeometry.nHeight) / 2 + nScreenY;
+            nX = (nScreenWidth  - (int)pFrame_->maGeometry.nWidth ) / 2 + nScreenX;
+            nY = (nScreenHeight - (int)pFrame_->maGeometry.nHeight) / 2 + nScreenY;
         }
     }
     else
     {
         // center the window relative to screen
-        nX = (nRealScreenWidth  - pFrame_->maGeometry.nWidth ) / 2;
-        nY = (nRealScreenHeight - pFrame_->maGeometry.nHeight) / 2;
+        nX = (nRealScreenWidth  - (int)pFrame_->maGeometry.nWidth ) / 2;
+        nY = (nRealScreenHeight - (int)pFrame_->maGeometry.nHeight) / 2;
     }
     nX = nX < 0 ? 0 : nX;
     nY = nY < 0 ? 0 : nY;
