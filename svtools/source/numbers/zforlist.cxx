@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 21:46:43 $
+ *  last change: $Author: er $ $Date: 2000-11-28 16:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,14 +805,45 @@ ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
 {
     ChangeIntl(eLnge);
     ULONG CLOffset = ImpGetCLOffset(ActLnge);
-    if (CLOffset > MaxCLOffset)                     // CL noch nicht da
-    {
+    if (CLOffset > MaxCLOffset)
+    {   // new CL combination
 #ifndef PRODUCT
         Locale aLoadedLocale = pLocaleData->getLoadedLocale();
         if ( aLoadedLocale.Language != aLocale.Language || aLoadedLocale.Country != aLocale.Country )
         {
             ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "Locales don't match:" ) );
             DBG_ERRORFILE( pLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
+        }
+        // test XML locale data FormatElement entries
+        {
+            uno::Sequence< i18n::FormatElement > xSeq = pLocaleData->getAllFormats();
+            // A test for completeness of formatindex="0" ... formatindex="47"
+            // is not needed here since it is done in ImpGenerateFormats().
+
+            // Test for dupes of formatindex="..."
+            for ( sal_Int32 j = 0; j < xSeq.getLength(); j++ )
+            {
+                sal_Int16 nIdx = xSeq[j].formatIndex;
+                ByteString aDupes;
+                for ( sal_Int32 i = 0; i < xSeq.getLength(); i++ )
+                {
+                    if ( i != j && xSeq[i].formatIndex == nIdx )
+                    {
+                        aDupes += ByteString::CreateFromInt32( i );
+                        aDupes += ' ';
+                    }
+                }
+                if ( aDupes.Len() )
+                {
+                    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "XML locale data FormatElement formatindex dupe: " ) );
+                    aMsg += ByteString::CreateFromInt32( nIdx );
+                    aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nFormatElements: " ) );
+                    aMsg += ByteString::CreateFromInt32( j );
+                    aMsg += ' ';
+                    aMsg += aDupes;
+                    DBG_ERRORFILE( pLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
+                }
+            }
         }
 #endif
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
