@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 10:37:57 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,7 @@ public:
     USHORT GetCurMouseTabColNum( const Point &rPt ) const;
     USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
     BOOL IsTableRightToLeft()const;
+    BOOL IsMouseTableRightToLeft(const Point &rPt) const;
     // Die Breite des aktuellen Bereichs fuer Spaltendialog
     long GetSectionWidth( SwFmt& rFmt ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 14:47:30 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,11 @@ interface BaseTextEditView : View
     SID_RULER_PAGE_POS // status()
     [
         ExecMethod = NoExec ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_TEXT_RIGHT_TO_LEFT
+    [
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

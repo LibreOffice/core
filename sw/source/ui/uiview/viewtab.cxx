@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:01:46 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 
     if ( rDesc.GetUseOn() == PD_MIRROR && (nPhyPage % 2) == 0 )
     {
-        USHORT nTmp = rLRSpace.GetRight();
+        long nTmp = rLRSpace.GetRight();
         rLRSpace.SetRight( rLRSpace.GetLeft() );
         rLRSpace.SetLeft( nTmp );
     }
@@ -469,7 +469,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                 rPrtRect.Height() :
                                     rFrmSize.GetHeight();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
 
     BOOL bUnlockView = FALSE;
     rSh.StartAllAction();
@@ -649,10 +648,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     long nDiff = nNewColPos - nOldColPos;
 
                     SwColumn* pCol = aCols[bLeftChanged ? nCurFrameCol : nCurFrameCol + 1];
-                    pCol->SetWishWidth(long(pCol->GetWishWidth()) - nDiff );
+                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) - (USHORT)nDiff );
                     //den Nachbarn in umgekehrter Weise veraendern
                     pCol = aCols[bLeftChanged ? nCurFrameCol - 1 : nCurFrameCol ];
-                    pCol->SetWishWidth(long(pCol->GetWishWidth()) + nDiff );
+                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) + (USHORT)nDiff );
                 }
                 aSet.Put( aCol );
                 rSh.StartAction();
@@ -736,10 +735,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     long nDiff = nNewColPos - nOldColPos;
 
                     SwColumn* pCol = aCols[bLeftChanged ? nCurCol : nCurCol + 1];
-                    pCol->SetWishWidth(long(pCol->GetWishWidth()) - nDiff );
+                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) - (USHORT)nDiff );
                     //den Nachbarn in umgekehrter Weise veraendern
                     pCol = aCols[bLeftChanged ? nCurCol - 1 : nCurCol ];
-                    pCol->SetWishWidth(long(pCol->GetWishWidth()) + nDiff );
+                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) + (USHORT)nDiff );
                 }
                 SwPageDesc aDesc( rDesc );
                 aDesc.GetMaster().SetAttr( aCol );
@@ -806,8 +805,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         else if ( nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER ))
         {
             // Seitenraender rausrechnen
-            USHORT nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
-            aLongLR.SetLeft( nOld > (USHORT)aLongLR.GetLeft() ? 0 : aLongLR.GetLeft() - nOld );
+            long nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
+            aLongLR.SetLeft( nOld > aLongLR.GetLeft() ? 0 : aLongLR.GetLeft() - nOld );
 
             nOld = rDesc.GetMaster().GetLRSpace().GetRight();
             aLongLR.SetRight( nOld > (USHORT)aLongLR.GetRight() ? 0 : aLongLR.GetRight() - nOld );
@@ -1122,11 +1121,29 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
             // Tabcols der Reihe nach
             // Die letzte Col wird durch den Rand definiert
-            for ( USHORT i = 0; i < aColItem.Count()-1; ++i )
+            //columns in right-to-left tables need to be mirrored
+            BOOL bIsTableRTL =
+                IsTabColFromDoc() ?
+                      rSh.IsMouseTableRightToLeft(aTabColFromDocPos)
+                    : rSh.IsTableRightToLeft();
+            if(bIsTableRTL)
             {
-                const SvxColumnDescription& rCol = aColItem[i];
-                aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();
-                aTabCols.SetHidden( i, !rCol.bVisible );
+                USHORT nColCount = aColItem.Count() - 1;
+                for ( USHORT i = 0; i < nColCount; ++i )
+                {
+                    const SvxColumnDescription& rCol = aColItem[nColCount - i];
+                    aTabCols[i] = aTabCols.GetRight() - rCol.nStart;
+                    aTabCols.SetHidden( i, !rCol.bVisible );
+                }
+            }
+            else
+            {
+                for ( USHORT i = 0; i < aColItem.Count()-1; ++i )
+                {
+                    const SvxColumnDescription& rCol = aColItem[i];
+                    aTabCols[i] = rCol.nEnd + aTabCols.GetLeft();
+                    aTabCols.SetHidden( i, !rCol.bVisible );
+                }
             }
             DEBUGTABCOLS(aTabCols);
 
@@ -1491,6 +1508,20 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             }
         }
         break;
+        case SID_RULER_TEXT_RIGHT_TO_LEFT:
+        {
+            if ( nSelectionType & SwWrtShell::SEL_GRF ||
+                    nSelectionType & SwWrtShell::SEL_FRM ||
+                    nSelectionType & SwWrtShell::SEL_OLE ||
+                    nFrmType == FRMTYPE_DRAWOBJ)
+                rSet.DisableItem(nWhich);
+            else
+            {
+                BOOL bFlag = rSh.IsInRightToLeftText();
+                rSet.Put(SfxBoolItem(nWhich, bFlag));
+            }
+        }
+        break;
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
@@ -1532,17 +1563,40 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 USHORT nStart = 0,
                        nEnd;
 
-                for ( USHORT i = 0; i < aTabCols.Count(); ++i )
+                //columns in right-to-left tables need to be mirrored
+                BOOL bIsTableRTL =
+                    IsTabColFromDoc() ?
+                          rSh.IsMouseTableRightToLeft(aTabColFromDocPos)
+                        : rSh.IsTableRightToLeft();
+                if(bIsTableRTL)
                 {
-                    nEnd  = aTabCols[i] - aTabCols.GetLeft();
-                    SvxColumnDescription aColDesc( nStart, nEnd,
-                                                   !aTabCols.IsHidden(i) );
+                    for ( USHORT i = aTabCols.Count(); i ; --i )
+                    {
+                        nEnd  = aTabCols.GetRight();
+                        nEnd  -=  aTabCols[i-1];
+                        SvxColumnDescription aColDesc( nStart, nEnd,
+                                                    !aTabCols.IsHidden(i - 1) );
+                        aColItem.Append(aColDesc);
+                        nStart = nEnd;
+                    }
+                    SvxColumnDescription aColDesc(nStart,
+                                    aTabCols.GetRight() - aTabCols.GetLeft(), TRUE);
                     aColItem.Append(aColDesc);
-                    nStart = nEnd;
                 }
-                SvxColumnDescription aColDesc(nStart,
-                                aTabCols.GetRight() - aTabCols.GetLeft(), TRUE);
-                aColItem.Append(aColDesc);
+                else
+                {
+                    for ( USHORT i = 0; i < aTabCols.Count(); ++i )
+                    {
+                        nEnd  = aTabCols[i] - aTabCols.GetLeft();
+                        SvxColumnDescription aColDesc( nStart, nEnd,
+                                                    !aTabCols.IsHidden(i) );
+                        aColItem.Append(aColDesc);
+                        nStart = nEnd;
+                    }
+                    SvxColumnDescription aColDesc(nStart,
+                                    aTabCols.GetRight() - aTabCols.GetLeft(), TRUE);
+                    aColItem.Append(aColDesc);
+                }
                 rSet.Put(aColItem, nWhich);
                 DEBUGCOLITEMS(aColItem);
             }

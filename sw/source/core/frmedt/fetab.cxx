@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 10:40:29 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,4 +1772,14 @@ BOOL SwFEShell::IsTableRightToLeft() const
         return FALSE;
 
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
+}
+/* -----------------------------22.08.2002 12:50------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
+{
+    SwFrm *pFrm = (SwFrm *)GetBox( rPt );
+    const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
+    ASSERT( pTabFrm, "Table not found" );
+    return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }

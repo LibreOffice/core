@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 12:45:41 $
+ *  last change: $Author: os $ $Date: 2002-08-23 09:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ void SwView::InvalidateRulerPos()
     {
         SID_ATTR_PARA_LRSPACE, SID_RULER_BORDERS, SID_RULER_PAGE_POS,
         SID_RULER_LR_MIN_MAX, SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
-        SID_ATTR_PARA_LRSPACE_VERTICAL, SID_RULER_BORDERS_VERTICAL, FN_STAT_PAGE, 0
+        SID_ATTR_PARA_LRSPACE_VERTICAL, SID_RULER_BORDERS_VERTICAL,
+        SID_RULER_TEXT_RIGHT_TO_LEFT, FN_STAT_PAGE, 0
     };
 
     GetViewFrame()->GetBindings().Invalidate(aInval);
