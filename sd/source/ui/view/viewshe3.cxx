@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:17:59 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,8 +844,8 @@ USHORT  SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
             pPrintOpts->SetWarningSize( pMisc->IsPaperSizeWarning() );
             pPrintOpts->SetWarningOrientation( pMisc->IsPaperOrientationWarning() );
 
-            UINT16 nQuality = pPrintOpts->GetOutputQuality();
-            ULONG nMode = DRAWMODE_DEFAULT;
+            UINT16  nQuality = pPrintOpts->GetOutputQuality();
+            ULONG   nMode = DRAWMODE_DEFAULT;
 
             if( nQuality == 1 )
                 nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;

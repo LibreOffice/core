@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:15:31 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,19 +534,16 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
         case SID_PREVIEW_QUALITY_COLOR:
         case SID_PREVIEW_QUALITY_GRAYSCALE:
         case SID_PREVIEW_QUALITY_BLACKWHITE:
+        case SID_PREVIEW_QUALITY_CONTRAST:
         {
-            ULONG nMode;
-            switch(nSlot)
+            ULONG nMode = PREVIEW_DRAWMODE_COLOR;
+
+            switch( nSlot )
             {
-            case SID_PREVIEW_QUALITY_COLOR:
-                nMode = PREVIEW_DRAWMODE_COLOR;
-                break;
-            case SID_PREVIEW_QUALITY_GRAYSCALE:
-                nMode = PREVIEW_DRAWMODE_GRAYSCALE;
-                break;
-            default: //case SID_PREVIEW_QUALITY_BLACKWHITE:
-                nMode = PREVIEW_DRAWMODE_BLACKWHITE;
-                break;
+                case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
+                case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
+                case SID_PREVIEW_QUALITY_BLACKWHITE: nMode = PREVIEW_DRAWMODE_BLACKWHITE; break;
+                case SID_PREVIEW_QUALITY_CONTRAST: nMode = PREVIEW_DRAWMODE_CONTRAST; break;
             }
 
             pFrameView->SetPreviewDrawMode( nMode );
@@ -657,7 +654,8 @@ void SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     // #49150#: Qualitaet des Previewfensters aendern, falls vorhanden
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_COLOR ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) )
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_CONTRAST ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
         if( GetViewFrame()->GetChildWindow( nId ) )
@@ -666,12 +664,14 @@ void SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_GRAYSCALE, (BOOL)(nMode == PREVIEW_DRAWMODE_GRAYSCALE) ) );
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_BLACKWHITE, (BOOL)(nMode == PREVIEW_DRAWMODE_BLACKWHITE) ) );
+            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_CONTRAST, (BOOL)(nMode == PREVIEW_DRAWMODE_CONTRAST) ) );
         }
         else
         {
             rSet.DisableItem( SID_PREVIEW_QUALITY_COLOR );
             rSet.DisableItem( SID_PREVIEW_QUALITY_GRAYSCALE );
             rSet.DisableItem( SID_PREVIEW_QUALITY_BLACKWHITE );
+            rSet.DisableItem( SID_PREVIEW_QUALITY_CONTRAST );
         }
     }
 

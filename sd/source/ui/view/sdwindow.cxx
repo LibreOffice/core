@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 14:49:50 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,13 @@
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
 #endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 
 #pragma hdrstop
 
+#include "app.hrc"
 #include "helpids.h"
 #include "sdwindow.hxx"
 #include "viewshel.hxx"
@@ -110,8 +114,11 @@ SdWindow::SdWindow(Window* pParent) :
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // Damit im Diamodus die Wiese weiss ist
-    SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetWindowColor()));
+    // Damit im Diamodus die WindowColor genommen wird
+    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
+
+    // adjust contrast mode initially
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
@@ -743,7 +750,12 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // den Settings uebernommen werden. Evtl. weitere Daten neu
             // berechnen, da sich auch die Aufloesung hierdurch geaendert
             // haben kann.
+            SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+            if( pViewShell )
+                pViewShell->Invalidate();
         }
+
 
         if ( (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
              ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-09 16:43:39 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,12 +198,11 @@ SfxPrinter* SdDrawDocShell::GetPrinter(BOOL bCreate)
         UINT16 nQuality = aPrintItem.GetOutputQuality();
 
         ULONG nMode = DRAWMODE_DEFAULT;
+
         if( nQuality == 1 )
-            nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT |
-                    DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
+            nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
         else if( nQuality == 2 )
-            nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL |
-                    DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
+            nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
 
         pPrinter->SetDrawMode( nMode );
 

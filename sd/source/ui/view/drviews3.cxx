@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-12-05 09:37:54 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,14 +420,17 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_COLOR:
         case SID_OUTPUT_QUALITY_GRAYSCALE:
         case SID_OUTPUT_QUALITY_BLACKWHITE:
+        case SID_OUTPUT_QUALITY_CONTRAST:
         {
-            ULONG nMode = DRAWMODE_DEFAULT;
-            if( nSlot == SID_OUTPUT_QUALITY_GRAYSCALE )
-                nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT |
-                        DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
-            else if( nSlot == SID_OUTPUT_QUALITY_BLACKWHITE )
-                nMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL |
-                        DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
+            ULONG nMode = OUTPUT_DRAWMODE_COLOR;
+
+            switch(nSlot)
+            {
+                case SID_OUTPUT_QUALITY_COLOR: nMode = OUTPUT_DRAWMODE_COLOR; break;
+                case SID_OUTPUT_QUALITY_GRAYSCALE: nMode = OUTPUT_DRAWMODE_GRAYSCALE; break;
+                case SID_OUTPUT_QUALITY_BLACKWHITE: nMode = OUTPUT_DRAWMODE_BLACKWHITE; break;
+                case SID_OUTPUT_QUALITY_CONTRAST: nMode = OUTPUT_DRAWMODE_CONTRAST; break;
+            }
 
             pWindow->SetDrawMode( nMode );
             pDrView->ReleaseMasterPagePaintCache();
@@ -442,18 +445,14 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_PREVIEW_QUALITY_GRAYSCALE:
         case SID_PREVIEW_QUALITY_BLACKWHITE:
         {
-            ULONG nMode;
+            ULONG nMode = PREVIEW_DRAWMODE_COLOR;
+
             switch(nSlot)
             {
-            case SID_PREVIEW_QUALITY_COLOR:
-                nMode = PREVIEW_DRAWMODE_COLOR;
-                break;
-            case SID_PREVIEW_QUALITY_GRAYSCALE:
-                nMode = PREVIEW_DRAWMODE_GRAYSCALE;
-                break;
-            default: //case SID_PREVIEW_QUALITY_BLACKWHITE:
-                nMode = PREVIEW_DRAWMODE_BLACKWHITE;
-                break;
+                case SID_PREVIEW_QUALITY_COLOR: nMode = PREVIEW_DRAWMODE_COLOR; break;
+                case SID_PREVIEW_QUALITY_GRAYSCALE: nMode = PREVIEW_DRAWMODE_GRAYSCALE; break;
+                case SID_PREVIEW_QUALITY_BLACKWHITE: nMode = PREVIEW_DRAWMODE_BLACKWHITE; break;
+                case SID_PREVIEW_QUALITY_CONTRAST: nMode = PREVIEW_DRAWMODE_CONTRAST; break;
             }
 
             pFrameView->SetPreviewDrawMode( nMode );

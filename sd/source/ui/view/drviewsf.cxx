@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: ka $ $Date: 2002-03-06 16:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,42 +265,49 @@ void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
     // Ausgabequalitaet
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) )
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
-        ULONG nMode = pWindow->GetDrawMode();
-        UINT16 nQuality = 3;
-        if( nMode == DRAWMODE_DEFAULT )
+        ULONG   nMode = pWindow->GetDrawMode();
+        UINT16  nQuality = 0;
+
+        if( OUTPUT_DRAWMODE_COLOR == nMode )
             nQuality = 0;
-        else if( nMode == ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT |
-                            DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) )
+        else if( OUTPUT_DRAWMODE_GRAYSCALE == nMode )
             nQuality = 1;
-        else if( nMode == ( DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL |
-                    DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT ) )
+        else if( OUTPUT_DRAWMODE_BLACKWHITE == nMode )
             nQuality = 2;
+        else if( OUTPUT_DRAWMODE_CONTRAST == nMode )
+            nQuality = 3;
 
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, (BOOL)(nQuality == 0) ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, (BOOL)(nQuality == 1) ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, (BOOL)(nQuality == 2) ) );
+        rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (BOOL)(nQuality == 3) ) );
     }
 
     // Preview-Fenster
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_COLOR ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) )
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_CONTRAST ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
+
         if( GetViewFrame()->GetChildWindow( nId ) )
         {
             ULONG nMode = pFrameView->GetPreviewDrawMode();
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_GRAYSCALE, (BOOL)(nMode == PREVIEW_DRAWMODE_GRAYSCALE) ) );
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_BLACKWHITE, (BOOL)(nMode == PREVIEW_DRAWMODE_BLACKWHITE) ) );
+            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_CONTRAST, (BOOL)(nMode == PREVIEW_DRAWMODE_CONTRAST) ) );
         }
         else
         {
             rSet.DisableItem( SID_PREVIEW_QUALITY_COLOR );
             rSet.DisableItem( SID_PREVIEW_QUALITY_GRAYSCALE );
             rSet.DisableItem( SID_PREVIEW_QUALITY_BLACKWHITE );
+            rSet.DisableItem( SID_PREVIEW_QUALITY_CONTRAST );
         }
     }
 
