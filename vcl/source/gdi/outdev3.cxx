@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: th $ $Date: 2001-04-27 14:29:53 $
+ *  last change: $Author: hdu $ $Date: 2001-05-10 09:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2944,6 +2944,32 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
 
 // -----------------------------------------------------------------------
 
+// returns asian kerning values in quarter of character width units
+// to enable automatic halfwidth substitution for fullwidth punctuation
+// return value is negative for l, positive for r, zero for neutral
+static inline int CalcAsianKerning( sal_Unicode c, bool bLeft )
+{
+    // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
+    static signed char nTable[0x30] =
+    {
+         0, -2, -2,  0,   0,  0,  0,  0,  +2, -2, +2, -2,  +2, -2, +2, -2,
+        +2, -2,  0,  0,  +2, -2, +2, -2,   0,  0,  0,  0,   0, +2, -2, -2,
+         0,  0,  0,  0,   0,  0,  0,  0,   0,  0, -2, -2,  +2, +2, -2, -2
+    };
+
+    int nResult;
+    if( c>=0x3000 && c<0x3030 )
+        nResult = nTable[ c - 0x3000 ];
+    else switch( c )
+    {
+        case ':': case ';': case '!': case 0x30FB:
+            nResult = bLeft ? -1 : +1; break;   // 25% left and right
+        default:
+            nResult = 0; break;
+    }
+    return nResult;
+}
+
 long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
                                     long* pDXAry, xub_StrLen nAryLen ) const
 {
@@ -2956,7 +2982,7 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
     long nWidth                     = 0;
     xub_StrLen i;
 
-    if ( (maFont.GetKerning() & KERNING_FONTSPECIFIC) && nKernPairs )
+    if( (maFont.GetKerning() & KERNING_FONTSPECIFIC) && nKernPairs )
     {
 #ifdef DBG_UTIL
         {
@@ -3008,26 +3034,24 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
         }
     }
 
-    if ( maFont.GetKerning() & KERNING_ASIAN )
+    if( maFont.GetKerning() & KERNING_ASIAN )
     {
-        const sal_Unicode* pTempStr = pStr;
-        for ( i = 0; i < nLen-1; i++ )
+        for( i = 0; i < nLen-1; ++i )
         {
-            USHORT nFirst = (USHORT)*pTempStr;
-            pTempStr++;
-            USHORT nNext = (USHORT)*pTempStr;
-            if ( ((nFirst >= 0x3001) && (nFirst <= 0x301F)) ||
-                 ((nNext >= 0x3001) && (nNext <= 0x301F)) )
+            sal_Unicode nFirst = pStr[i];
+            sal_Unicode nNext  = pStr[i+1];
+
+            long nKernFirst = +CalcAsianKerning( nFirst, true );
+            long nKernNext  = -CalcAsianKerning( nNext, false );
+
+            long nAmount = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
+            if( nAmount<0 && nKernFirst!=0 && nKernNext!=0 )
             {
-/*
-                long nAmount = pKernPairs[j].mnKern;
+                nAmount *= ImplGetCharWidth( nFirst );
+                nAmount /= 4 * mpFontEntry->mnWidthFactor;
                 nWidth += nAmount;
-                if ( pDXAry )
-                {
-                    for ( USHORT n = i; n < nAryLen; n++ )
+                    for( USHORT n = i; n < nAryLen; ++n )
                         pDXAry[n] += nAmount;
-                }
-*/
             }
         }
     }
