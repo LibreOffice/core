@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:44:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2290,6 +2290,33 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
     return 0;
 }
 
+//#109311# Miserable miserable hack to fudge word's graphic layout in
+//RTL mode to ours.
+bool SwWW8ImplReader::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel)
+{
+    bool bRet = false;
+    if (IsRightToLeft() && eHoriOri == HORI_NONE)
+    {
+        if (eHoriRel == REL_PG_FRAME)
+        {
+            rLeft =
+                maSectionManager.GetPageWidth() - rLeft;
+            bRet = true;
+        }
+        else if (eHoriRel == REL_PG_PRTAREA)
+        {
+            rLeft = maSectionManager.GetPageWidth() -
+                maSectionManager.GetPageLeft() -
+                maSectionManager.GetPageRight() - rLeft;
+            bRet = true;
+        }
+    }
+    if (bRet)
+        rLeft -= nWidth;
+    return bRet;
+}
+
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool bOrgObjectWasReplace)
 {
@@ -2427,6 +2454,14 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         eHoriRel = aRelOriTab[  nXRelTo ];
         if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
             eHoriRel = PRTAREA;
+
+        //#109311# Miserable miserable hack.
+        long nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
+        if (MiserableRTLGraphicsHack(pFSPA->nXaLeft, nWidth, eHoriOri,
+            eHoriRel))
+        {
+            pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
+        }
 
         /*
          Absolute positions in winword for graphics are broken when the
@@ -2795,13 +2830,6 @@ SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
     if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
         pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFmt);
     return pFmt;
-}
-
-void SwWW8ImplReader::RemoveAutoAnchor(const SwFrmFmt *pFmt)
-{
-    ASSERT(pFmt,"remove anchor, no fmt");
-    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
-        pAnchorStck->RemoveAnchor(pFmt);
 }
 
 SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
