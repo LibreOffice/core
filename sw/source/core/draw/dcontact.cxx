@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:17:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,10 +712,14 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 
     SwFlyFrm* pFlyFrm = static_cast<SwVirtFlyDrawObj*>(_pDrawObj)->GetFlyFrm();
 
-    // OD 2004-02-12 #110582#-2 - insert columns, if necessary
-    pFlyFrm->InsertColumns();
-    pFlyFrm->Chain( pFlyFrm->AnchorFrm() );
-    pFlyFrm->InsertCnt();
+    // --> OD 2005-03-09 #i44464# - consider, that Writer fly frame content
+    // already exists - (e.g. WW8 document is inserted into a existing document).
+    if ( !pFlyFrm->Lower() )
+    {
+        pFlyFrm->InsertColumns();
+        pFlyFrm->Chain( pFlyFrm->AnchorFrm() );
+        pFlyFrm->InsertCnt();
+    }
     if ( pFlyFrm->GetDrawObjs() )
     {
         for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
@@ -1267,6 +1271,15 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     {
         return;
     }
+
+    // --> OD 2005-03-08 #i44339#
+    // no event handling, if document is in destruction.
+    // Exception: It's the SDRUSERCALL_DELETE event
+    if ( pDoc->IsInDtor() && eType != SDRUSERCALL_DELETE )
+    {
+        return;
+    }
+    // <--
 
     //Action aufsetzen, aber nicht wenn gerade irgendwo eine Action laeuft.
     ViewShell *pSh = 0, *pOrg;
