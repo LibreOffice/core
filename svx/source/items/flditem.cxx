@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:35:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #define ITEMID_FIELD    0
 #include "flditem.hxx"
 #include "adritem.hxx"
+
+#include "svdfield.hxx"
 
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
@@ -1164,4 +1166,23 @@ XubString SvxAuthorField::GetFormatted() const
     return( aString );
 }
 
+static SvClassManager* pClassMgr=0;
+
+SvClassManager& SvxFieldItem::GetClassManager()
+{
+    if ( !pClassMgr )
+    {
+        pClassMgr = new SvClassManager;
+        pClassMgr->SV_CLASS_REGISTER( SvxFieldData );
+        pClassMgr->SV_CLASS_REGISTER( SvxURLField );
+        pClassMgr->SV_CLASS_REGISTER( SvxDateField );
+        pClassMgr->SV_CLASS_REGISTER( SvxPageField );
+        pClassMgr->SV_CLASS_REGISTER( SvxTimeField );
+        pClassMgr->SV_CLASS_REGISTER( SvxExtTimeField );
+        pClassMgr->SV_CLASS_REGISTER( SvxExtFileField );
+        pClassMgr->SV_CLASS_REGISTER( SvxAuthorField );
+    }
+
+    return *pClassMgr;
+}
 
