@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:58:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #include <svx/hyperdlg.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIAPLAYER_HXX
+#include <avmedia/mediaplayer.hxx>
 #endif
 
 #pragma hdrstop
@@ -167,6 +170,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     //AF    SFX_CHILDWINDOW_REGISTRATION(
     //        ::sd::LayerDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
+    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
 
 
@@ -206,6 +210,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
+    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
 
 TYPEINIT1( GraphicViewShell, DrawViewShell );
