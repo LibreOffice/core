@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:24:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             // URL ermitteln
             String aStrURL( aDlg.GetPath() );
-            aStrURL = URIHelper::SmartRelToAbs( aStrURL );
+            aStrURL = URIHelper::SmartRel2Abs(
+                INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
 
             INetURLObject* pURL = new INetURLObject();
             pURL->SetSmartProtocol( INET_PROT_FILE );
@@ -490,7 +491,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             {
                 SwApplet_Impl aApplImpl( rSh.GetAttrPool(),
                                          RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-                aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation);
+                String sBaseURL;
+                SfxMedium* pMedium = GetView().GetDocShell()->GetMedium();
+                if(pMedium)
+                    sBaseURL = pMedium->GetURLObject().GetMainURL(INetURLObject::NO_DECODE);
+
+                aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation, sBaseURL );
                 aApplImpl.FinishApplet();
                 xObj.Assign( aApplImpl.GetApplet() );
                 if( aCommandList.Count() )
@@ -522,7 +528,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     {
                         if ( sClassLocation.Len() )
                             xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
-                                uno::makeAny( ::rtl::OUString( URIHelper::SmartRelToAbs(sClassLocation) ) ) );
+                                uno::makeAny(
+                                    ::rtl::OUString(
+                                        URIHelper::SmartRel2Abs(
+                                            INetURLObject(), sClassLocation,
+                                            URIHelper::GetMaybeFileHdl()) ) ) );
                         uno::Sequence< beans::PropertyValue > aSeq;
                         if ( aCommandList.Count() )
                         {
