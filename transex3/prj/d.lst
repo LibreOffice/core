@@ -6,8 +6,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\transex3 %_DEST%\bin%_EXT%\transex3
 ..\%__SRC%\bin\lngex.exe %_DEST%\bin%_EXT%\lngex.exe
 ..\%__SRC%\bin\lngex %_DEST%\bin%_EXT%\lngex
-..\%__SRC%\bin\localize.exe %_DEST%\bin%_EXT%\localize_sl.exe
-..\%__SRC%\bin\localize %_DEST%\bin%_EXT%\localize_sl
+..\%__SRC%\bin\localize_sl.exe %_DEST%\bin%_EXT%\localize_sl.exe
+..\%__SRC%\bin\localize_sl %_DEST%\bin%_EXT%\localize_sl
 ..\%__SRC%\bin\xrmex.exe %_DEST%\bin%_EXT%\xrmex.exe
 ..\%__SRC%\bin\xrmex %_DEST%\bin%_EXT%\xrmex
 ..\%__SRC%\bin\gsicheck.exe %_DEST%\bin%_EXT%\gsicheck.exe
