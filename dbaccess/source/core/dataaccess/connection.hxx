@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-01 16:44:50 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #define _DBA_CORE_CONNECTION_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -76,26 +73,14 @@
 #ifndef _COM_SUN_STAR_SDB_XCOMMANDPREPARATION_HPP_
 #include <com/sun/star/sdb/XCommandPreparation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
@@ -112,110 +97,48 @@
 #ifndef _DBA_CORE_VIEWCONTAINER_HXX_
 #include "viewcontainer.hxx"
 #endif
+#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
+#include "connectivity/ConnectionWrapper.hxx"
+#endif
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
-typedef ::cppu::ImplHelper3< ::com::sun::star::lang::XServiceInfo
-                            ,::com::sun::star::sdbc::XConnection
-                            ,::com::sun::star::sdbc::XWarningsSupplier
-                            >   OConnectionRerouter_Base;
 //==========================================================================
-//= ODataLinkConnection - the base for sdb connections rerouting a part of
-//=                         their functionallity to sdbc connections
-//==========================================================================
-class OConnectionRerouter : public OConnectionRerouter_Base
-{
-protected:
-        ::osl::Mutex        m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                            m_xMasterConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
-                            m_xMasterTables; // just to avoid the recreation of the catalog
-    OWeakRefArray           m_aStatements;
-
-
-protected:
-    virtual ~OConnectionRerouter();
-
-public:
-    OConnectionRerouter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster);
-
-// ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// XConnection
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getAutoCommit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL commit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL rollback(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isClosed(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCatalog(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbc::XWarningsSupplier
-    virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbc::XCloseable
-    virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-protected:
-    virtual void SAL_CALL disposing(void);
-
-    inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException);
-};
-
-//------------------------------------------------------------------------------
-inline void OConnectionRerouter::checkDisposed() throw (::com::sun::star::lang::DisposedException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xMasterConnection.is())
-        throw ::com::sun::star::lang::DisposedException();
-}
 //==========================================================================
 typedef ::cppu::ImplHelper7< ::com::sun::star::container::XChild
                             ,::com::sun::star::sdbcx::XTablesSupplier
                             ,::com::sun::star::sdbcx::XViewsSupplier
+                            ,::com::sun::star::sdbc::XConnection
                             ,::com::sun::star::sdb::XQueriesSupplier
                             ,::com::sun::star::sdb::XSQLQueryComposerFactory
                             ,::com::sun::star::sdb::XCommandPreparation
-                            ,::com::sun::star::lang::XUnoTunnel
                             >   OConnection_Base;
 
 class ODatabaseSource;
 //==========================================================================
 //= OConnection
 //==========================================================================
-class OConnection           :public OSubComponent
-                            ,public OConnectionRerouter
+class OConnection           :public ::comphelper::OBaseMutex
+                            ,public OSubComponent
+                            ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
                             ,public IWarningsContainer
 {
 protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+                            m_xMasterTables; // just to avoid the recreation of the catalog
+    OWeakRefArray           m_aStatements;
     OQueryContainer         m_aQueries;
     OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >          m_xMasterConnection;
 
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
@@ -227,7 +150,7 @@ protected:
 public:
     OConnection(
         ODatabaseSource& _rDB,  const ::utl::OConfigurationNode& _rTablesConfig,const ::utl::OConfigurationTreeRoot& _rCommitLocation,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
 // com::sun::star::lang::XTypeProvider
@@ -267,6 +190,35 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
+// ::com::sun::star::lang::XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+// XConnection
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getAutoCommit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL commit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rollback(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isClosed(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isReadOnly(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCatalog(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::sdbc::XCloseable
+    virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+
     // flush the tables and queries
     void flushMembers();
     // set the confignode this happens when the datasource was reinserted
@@ -279,6 +231,13 @@ protected:
 
 protected:
     static void implConcatWarnings(::com::sun::star::uno::Any& _rChainLeft, const ::com::sun::star::uno::Any& _rChainRight);
+
+    inline  void checkDisposed() throw (::com::sun::star::lang::DisposedException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if (!m_xConnection.is())
+            throw ::com::sun::star::lang::DisposedException();
+    }
 };
 
 //........................................................................

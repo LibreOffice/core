@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:34:29 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XISOLATEDCONNECTION_HPP_
+#include <com/sun/star/sdbc/XIsolatedConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
@@ -98,8 +101,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -146,12 +149,12 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
+class OSharedConnectionManager;
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
 
@@ -161,13 +164,14 @@ typedef std::vector< OWeakConnection > OWeakConnectionArray;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper7 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper8 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::lang::XUnoTunnel
                             ,   ::com::sun::star::sdbc::XDataSource
                             ,   ::com::sun::star::sdb::XBookmarksSupplier
                             ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
                             ,   ::com::sun::star::sdb::XCompletedConnection
                             ,   ::com::sun::star::lang::XEventListener
+                            ,   ::com::sun::star::sdbc::XIsolatedConnection
                             >   ODatabaseSource_Base;
 
 class ODatabaseSource   :public ::comphelper::OBaseMutex
@@ -180,14 +184,14 @@ class ODatabaseSource   :public ::comphelper::OBaseMutex
 {
     friend class ODatabaseContext;
     friend class OConnection;
+    friend class OSharedConnectionManager;
     friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 protected:
     OWeakConnectionArray        m_aConnections;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                                        m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
 
     OBookmarkContainer              m_aBookmarks;
     OCommandContainer               m_aCommandDefinitions;
@@ -211,17 +215,19 @@ protected:
                                                         m_aInfo;
 // </properties>
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> m_xSharedConnectionManager;
+    OSharedConnectionManager*                           m_pSharedConnectionManager;
 protected:
     ODatabaseSource(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
-
+    virtual ~ODatabaseSource();
 public:
     ODatabaseSource(
         ::cppu::OWeakObject& _rParent,
         const ::utl::OConfigurationNode& _rConfigRoot,
         const ::rtl::OUString& _rRegistrationName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
-    virtual ~ODatabaseSource();
+
 
 // com::sun::star::lang::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -288,6 +294,10 @@ public:
 // :: com::sun::star::sdb::XQueryDefinitionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) throw(::com::sun::star::uno::RuntimeException);
 
+// ::com::sun::star::sdbc::XIsolatedConnection
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
 protected:
     // OConfigurationFlushable
     virtual void flush_NoBroadcast_NoCommit();
@@ -298,10 +308,14 @@ protected:
             getNumberFormatsSupplier();
 
     /** open a connection for the current settings. this is the simple connection we get from the driver
-        manager, so it acn be used as a master for a "high level" sdb connection.
+        manager, so it can be used as a master for a "high level" sdb connection.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > buildLowLevelConnection(
         const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd
+        );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > buildIsolatedConnection(
+        const rtl::OUString& user, const rtl::OUString& password
         );
 
 
@@ -323,9 +337,14 @@ protected:
     void    flushDocuments();
     void    flushTables();
 
-    ::utl::OConfigurationNode getRenameNode() const { return m_aRenameNode; }
-    void setRenameNode(const ::utl::OConfigurationNode& _aOldNode) { m_aRenameNode = _aOldNode; }
-    void clearRenameNode() { m_aRenameNode.clear(); }
+    inline ::utl::OConfigurationNode getRenameNode() const { return m_aRenameNode; }
+    inline void setRenameNode(const ::utl::OConfigurationNode& _aOldNode) { m_aRenameNode = _aOldNode; }
+    inline void clearRenameNode() { m_aRenameNode.clear(); }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void clearConnections();
 };
 
 //........................................................................

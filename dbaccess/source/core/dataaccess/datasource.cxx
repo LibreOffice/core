@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-06 12:50:25 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 08:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
 #include <typelib/typedescription.hxx>
 #endif
@@ -149,7 +152,12 @@
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
 #endif
-
+#ifndef DBA_CORE_SHARED_CONNECTION_HXX
+#include "SharedConnection.hxx"
+#endif
+#ifndef _RTL_DIGEST_H_
+#include <rtl/digest.h>
+#endif
 #include <algorithm>
 
 using namespace ::com::sun::star::sdbc;
@@ -163,6 +171,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::reflection;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
@@ -296,6 +305,127 @@ namespace dbaccess
         DBG_ERROR("OAuthenticationContinuation::setRememberAccount: not supported!");
     }
 
+    /** The class OSharedConnectionManager implements a structure to share connections.
+        It owns the master connections which will be disposed when the last connection proxy is gone.
+    */
+    typedef ::cppu::WeakImplHelper1< XEventListener > OSharedConnectionManager_BASE;
+    class OSharedConnectionManager : public OSharedConnectionManager_BASE
+    {
+
+         // contains the currently used master connections
+        typedef struct
+        {
+            Reference< XConnection >    xMasterConnection;
+            oslInterlockedCount         nALiveCount;
+        } TConnectionHolder;
+
+        // need to hold the digest
+        struct TDigestHolder
+        {
+            sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
+            TDigestHolder()
+            {
+                m_pBuffer[0] = 0;
+            }
+
+        };
+
+        // the less-compare functor, used for the stl::map
+        struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
+        {
+            bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
+            {
+                sal_uInt32 i;
+                for(i=0;i < RTL_DIGEST_LENGTH_SHA1 && (x.m_pBuffer[i] >= y.m_pBuffer[i]); ++i)
+                    ;
+                return i < RTL_DIGEST_LENGTH_SHA1;
+            }
+        };
+
+        typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
+        typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+
+        ::osl::Mutex                m_aMutex;
+        TConnectionMap              m_aConnections;         // remeber the master connection in conjunction with the digest
+        TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
+        Reference< XProxyFactory >  m_xProxyFactory;
+
+    protected:
+        virtual ~OSharedConnectionManager()
+        {
+        }
+
+    public:
+        OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory);
+
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+        Reference<XConnection> getConnection(   const rtl::OUString& url,
+                                                const rtl::OUString& user,
+                                                const rtl::OUString& password,
+                                                Sequence< PropertyValue >& _aInfo,
+                                                ODatabaseSource* _pDataSource);
+        void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
+    };
+
+    OSharedConnectionManager::OSharedConnectionManager(const Reference< XMultiServiceFactory >& _rxServiceFactory)
+    {
+        m_xProxyFactory = Reference< XProxyFactory >(_rxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    }
+
+    void SAL_CALL OSharedConnectionManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        MutexGuard aGuard(m_aMutex);
+        Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
+        TSharedConnectionMap::iterator aFind = m_aSharedConnection.find(xConnection);
+        if ( m_aSharedConnection.end() != aFind )
+        {
+            osl_decrementInterlockedCount(&aFind->second->second.nALiveCount);
+            if ( !aFind->second->second.nALiveCount )
+            {
+                ::comphelper::disposeComponent(aFind->second->second.xMasterConnection);
+                m_aConnections.erase(aFind->second);
+                m_aSharedConnection.erase(aFind);
+            }
+        }
+    }
+
+    Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUString& url,
+                                            const rtl::OUString& user,
+                                            const rtl::OUString& password,
+                                            Sequence< PropertyValue >& _aInfo,
+                                            ODatabaseSource* _pDataSource)
+    {
+        MutexGuard aGuard(m_aMutex);
+        TConnectionMap::key_type nId;
+        ::connectivity::OConnectionWrapper::createUniqueId(url,_aInfo,nId.m_pBuffer,user,password);
+        TConnectionMap::iterator aIter = m_aConnections.find(nId);
+
+        if ( m_aConnections.end() == aIter )
+        {
+            TConnectionHolder aHolder;
+            aHolder.nALiveCount = 0; // will be incremented by addListener
+            aHolder.xMasterConnection = _pDataSource->buildIsolatedConnection(user,password);
+            aIter = m_aConnections.insert(TConnectionMap::value_type(nId,aHolder)).first;
+        }
+
+        Reference<XConnection> xRet;
+        if ( aIter->second.xMasterConnection.is() )
+        {
+            Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(aIter->second.xMasterConnection.get());
+            xRet = new OSharedConnection(xConProxy);
+            m_aSharedConnection.insert(TSharedConnectionMap::value_type(xRet,aIter));
+            addEventListener(xRet,aIter);
+        }
+
+        return xRet;
+    }
+    void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter)
+    {
+        Reference<XComponent> xComp(_rxConnection,UNO_QUERY);
+        xComp->addEventListener(this);
+        OSL_ENSURE( m_aConnections.end() != _rIter , "Iterator is end!");
+        osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
+    }
 //============================================================
 //= ODatabaseContext
 //============================================================
@@ -311,7 +441,6 @@ Reference< XInterface > ODatabaseSource_CreateInstance(const Reference< XMultiSe
 {
     return *(new ODatabaseSource(_rxFactory));
 }
-
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFactory)
             :OSubComponent(m_aMutex, Reference< XInterface >())
@@ -324,6 +453,7 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_bSuppressVersionColumns(sal_True)
             ,m_aBookmarks(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
+            ,m_pSharedConnectionManager(NULL)
 {
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
@@ -349,6 +479,7 @@ ODatabaseSource::ODatabaseSource(
             ,m_bSuppressVersionColumns(sal_True)
             ,m_aBookmarks(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
+            ,m_pSharedConnectionManager(NULL)
 {
     m_aConfigurationNode = _rConfigRoot.cloneAsRoot();
 
@@ -436,7 +567,7 @@ void ODatabaseSource::release() throw ()
     OSubComponent::release();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
     for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
     {
@@ -501,7 +632,21 @@ sal_Int64 ODatabaseSource::getSomething( const Sequence< sal_Int8 > & rId ) thro
 
     return 0;
 }
+// -----------------------------------------------------------------------------
+void ODatabaseSource::clearConnections()
+{
+    Reference< XConnection > xConn;
+    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
+    {
+        xConn = *i;
+        if (xConn.is())
+            xConn->close();
+    }
+    m_aConnections.clear();
 
+    m_pSharedConnectionManager = NULL;
+    m_xSharedConnectionManager = NULL;
+}
 // OComponentHelper
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
@@ -515,14 +660,7 @@ void ODatabaseSource::disposing()
         flush();
         // TODO : we need a mechanism for determining wheter we're modified and need that call or not
 
-    Reference< XConnection > xConn;
-    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; i++)
-    {
-        xConn = *i;
-        if (xConn.is())
-            xConn->close();
-    }
-    m_aConnections.clear();
+    clearConnections();
 
     m_aRenameNode.clear();
 }
@@ -813,6 +951,26 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
 //------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
+    return connectWithCompletion(_rxHandler,sal_False);
+}
+// -----------------------------------------------------------------------------
+Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password) throw( SQLException, RuntimeException )
+{
+    return getConnection(user,password,sal_False);
+}
+// -----------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(SQLException, RuntimeException)
+{
+    return getConnection(user,password,sal_True);
+}
+// -----------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
+{
+    return connectWithCompletion(_rxHandler,sal_True);
+}
+// -----------------------------------------------------------------------------
+Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,sal_Bool _bIsolated ) throw(SQLException, RuntimeException)
+{
     MutexGuard aGuard(m_aMutex);
     if (OComponentHelper::rBHelper.bDisposed)
         throw DisposedException();
@@ -820,7 +978,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     if (!_rxHandler.is())
     {
         DBG_ERROR("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
-        return getConnection(m_sUser, m_aPassword);
+        return getConnection(m_sUser, m_aPassword,_bIsolated);
     }
 
     ::rtl::OUString sUser(m_sUser), sPassword(m_aPassword);
@@ -876,7 +1034,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
 
     try
     {
-        return getConnection(sUser, sPassword);
+        return getConnection(sUser, sPassword,_bIsolated);
     }
     catch(Exception&)
     {
@@ -891,28 +1049,47 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     DBG_ERROR("ODatabaseSource::connectWithCompletion: reached the unreacable!");
     return Reference< XConnection >();
 }
-
+// -----------------------------------------------------------------------------
+Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUString& user, const rtl::OUString& password)
+{
+    Reference< XConnection > xConn;
+    Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
+    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::getConnection: invalid return value of buildLowLevelConnection!" );
+    // buildLowLevelConnection is expected to always succeed
+    if ( xSdbcConn.is() )
+    {
+        // build a connection server and return it (no stubs)
+        xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
+    }
+    return xConn;
+}
 //------------------------------------------------------------------------------
-Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     if (OComponentHelper::rBHelper.bDisposed)
         throw DisposedException();
 
-    Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
-    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::getConnection: invalid return value of buildLowLevelConnection!" );
-        // buildLowLevelConnection is expected to always succeed
-
     Reference< XConnection > xConn;
-    if ( xSdbcConn.is() )
+    if ( _bIsolated )
     {
-        // build a connection server and return it (no stubs)
-        xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
-        Reference< XComponent> xComp(xConn,UNO_QUERY);
-        if(xComp.is())
+        xConn = buildIsolatedConnection(user,password);
+    }
+    else
+    { // create a new proxy for the connection
+        if ( !m_xSharedConnectionManager.is() )
         {
-            xComp->addEventListener(this);
+            m_pSharedConnectionManager = new OSharedConnectionManager(m_xServiceFactory);
+            m_xSharedConnectionManager = m_pSharedConnectionManager;
         }
+        xConn = m_pSharedConnectionManager->getConnection(m_sConnectURL,user,password,m_aInfo,this);
+    }
+
+    if ( xConn.is() )
+    {
+        Reference< XComponent> xComp(xConn,UNO_QUERY);
+        if ( xComp.is() )
+            xComp->addEventListener(this);
         m_aConnections.push_back(OWeakConnection(xConn));
     }
 
@@ -1004,6 +1181,9 @@ void ODatabaseSource::removed()
 {
     MutexGuard aGuard(m_aMutex);
     DBG_ASSERT(m_xParent.is(), "ODatabaseSource::removed : not connected to a parent !");
+
+    // our datasource is removed, so we need to clear our connection
+    clearConnections();
 
     // dispose the document containers so they release the documents and the configuration resources
     m_aBookmarks.dispose();
@@ -1146,6 +1326,7 @@ void ODatabaseSource::flushToConfiguration()
 
     m_aConfigurationNode.commit( );
 }
+// -----------------------------------------------------------------------------
 
 //........................................................................
 }   // namespace dbaccess

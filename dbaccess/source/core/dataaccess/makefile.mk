@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-26 11:24:20 $
+#   last change: $Author: oj $ $Date: 2002-08-12 08:54:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/SharedConnection.obj	\
         $(SLO)$/bookmarkcontainer.obj	\
         $(SLO)$/definitioncontainer.obj	\
         $(SLO)$/commanddefinition.obj	\
