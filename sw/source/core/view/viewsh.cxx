@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 12:05:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,14 @@
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
 #endif
-
+// --> OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _ANCHOREDOBJECT_HXX
+#include <anchoredobject.hxx>
+#endif
+// <--
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
 Window *ViewShell::pCareWindow = 0;
@@ -963,6 +970,23 @@ void ViewShell::SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos 
     }
 }
 
+// OD 2004-05-05 #i28701#
+sal_Bool ViewShell::ConsiderWrapOnObjPos() const
+{
+    return GetDoc()->ConsiderWrapOnObjPos();
+}
+
+// OD 2004-05-05 #i28701#
+void ViewShell::SetConsiderWrapOnObjPos( const sal_Bool _bConsiderWrapOnObjPos )
+{
+    if ( GetDoc()->ConsiderWrapOnObjPos() != _bConsiderWrapOnObjPos )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetConsiderWrapOnObjPos( _bConsiderWrapOnObjPos );
+        lcl_InvalidateAllObjPos( *this );
+    }
+}
+
 // --> FME #108724#
 sal_Bool ViewShell::IsFormerTextWrapping() const
 {
@@ -1236,11 +1260,8 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                         for ( USHORT i = 0;
                               i < pPage->GetSortedObjs()->Count(); ++i )
                         {
-                            SdrObject *pObj = (*pPage->GetSortedObjs())[i];
-//JP 22.12.99: why ignore FlyFrames? The result is Bug 69762 for FlyFrames
-//                          if ( pObj->ISA(SwVirtFlyDrawObj) )
-//                              continue;
-                            const Rectangle &rBound = pObj->GetCurrentBoundRect();
+                            SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+                            const Rectangle &rBound = pObj->GetObjRect().SVRect();
                             // OD 03.03.2003 #107927# - use correct datatype
                             const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
                             if ( nL < nMinLeft )
