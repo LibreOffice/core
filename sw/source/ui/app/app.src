@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:48:58 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 15:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/globlmn.hrc>
-//#include <basctl/basicide.hrc>
 #include <offmgr/sba.hrc>
 #include "cmdid.h"
 #include "globals.hrc"
