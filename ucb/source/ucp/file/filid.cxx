@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,29 +77,15 @@ FileContentIdentifier::FileContentIdentifier(
     : m_pMyShell( pMyShell ),
       m_bNormalized( IsNormalized )
 {
-    rtl::OUString aRedirectedPath;
-
     if( IsNormalized )
     {
-        m_pMyShell->uncheckMountPoint( aUnqPath,aRedirectedPath );
-        if( aRedirectedPath == rtl::OUString() && m_pMyShell->m_vecMountPoint.size() )
-        {
-            m_aProviderScheme = rtl::OUString::createFromAscii( "invalid:" );
-            m_aContentId = m_aProviderScheme;
-        }
-        else
-        {
-            m_pMyShell->getUrlFromUnq( aRedirectedPath,m_aContentId );
-            m_aNormalizedId = aUnqPath;
-            m_pMyShell->getScheme( m_aProviderScheme );
-        }
+        m_pMyShell->getUrlFromUnq( aUnqPath,m_aContentId );
+        m_aNormalizedId = aUnqPath;
+        m_pMyShell->getScheme( m_aProviderScheme );
     }
     else
     {
         m_pMyShell->getUnqFromUrl( aUnqPath,m_aNormalizedId );
-        m_pMyShell->checkMountPoint( m_aNormalizedId,aRedirectedPath );
-
-        m_aNormalizedId = aRedirectedPath;
         m_aContentId = aUnqPath;
         m_pMyShell->getScheme( m_aProviderScheme );
     }
