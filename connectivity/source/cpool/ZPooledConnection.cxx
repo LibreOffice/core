@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPooledConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:04:22 $
+ *  last change: $Author: vg $ $Date: 2002-08-15 15:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ namespace connectivity
         {
             setDelegation(_xConnection,m_refCount);
         }
-        DECLARE_XINTERFACE();
-        DECLARE_XTYPEPROVIDER( );
+        DECLARE_XINTERFACE()
+        DECLARE_XTYPEPROVIDER( )
         // --------------------------------------------------------------------------------
         // XCloseable
         void SAL_CALL close(  ) throw(SQLException, RuntimeException)
