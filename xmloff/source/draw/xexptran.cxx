@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:26:58 $
+ *  last change: $Author: aw $ $Date: 2001-03-08 17:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,29 @@ void SdXMLImExSvgDElement::AddPolygon(
     sal_Int32 nCnt(pPoints->getLength());
     sal_Unicode aLastCommand;
     awt::Point* pPointArray = pPoints->getArray();
-    drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
+
+    // are the flags used at all? If not forget about them
+    if(pFlags)
+    {
+        sal_Int32 nFlagCnt(pFlags->getLength());
+
+        if(nFlagCnt)
+        {
+            sal_Bool bFlagsUsed(sal_False);
+            drawing::PolygonFlags* pFlagArray = pFlags->getArray();
+
+            for(sal_Int32 a(0); !bFlagsUsed && a < nFlagCnt; a++)
+                if(drawing::PolygonFlags_NORMAL != *pFlagArray)
+                    bFlagsUsed = sal_True;
+
+            if(!bFlagsUsed)
+                pFlags = 0L;
+        }
+        else
+        {
+            pFlags = 0L;
+        }
+    }
 
     // object size and ViewBox size different?
     sal_Bool bScale(rObjectSize.Width != mrViewBox.GetWidth()
@@ -1455,6 +1477,7 @@ void SdXMLImExSvgDElement::AddPolygon(
     // points. In that case the last point might be double, but this
     // is necessary. nCnt might NOT be changed to guarantee ring access
     // to single points!
+    drawing::PolygonFlags* pFlagArray = (pFlags) ? pFlags->getArray() : 0L;
     if(!pFlags
         && (pPointArray->X == (pPointArray + (nCnt - 1))->X)
         && (pPointArray->Y == (pPointArray + (nCnt - 1))->Y))
