@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,9 +291,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             bClip = sal_False;
 
 #ifdef VERTICAL_LAYOUT
-            rClip.ChgClip( rPaint, pFrm );
+            rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
 #else
-            rClip.ChgClip( rPaint );
+            rClip.ChgClip( rPaint, pCurr->HasUnderscore() );
 #endif
         }
 #ifdef DEBUG
@@ -438,9 +438,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             bClip = sal_False;
 #ifdef VERTICAL_LAYOUT
-            rClip.ChgClip( rPaint, pFrm );
+            rClip.ChgClip( rPaint, pFrm, pCurr->HasUnderscore() );
 #else
-            rClip.ChgClip( rPaint );
+            rClip.ChgClip( rPaint, pCurr->HasUnderscore() );
 #endif
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:44:27 $
+ *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,21 @@ class SwSaveClip
 protected:
     OutputDevice *pOut;
 #ifdef VERTICAL_LAYOUT
-    void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0 );
+    void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
+                   sal_Bool bEnlargeRect );
 #else
-    void _ChgClip( const SwRect &rRect );
+    void _ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect );
 #endif
 public:
     inline SwSaveClip( OutputDevice *pOut );
     inline ~SwSaveClip();
 #ifdef VERTICAL_LAYOUT
-    inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0 )
-             { if( pOut ) _ChgClip( rRect, pFrm ); }
+    inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0,
+                         sal_Bool bEnlargeRect = sal_False)
+             { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
 #else
-    inline void ChgClip( const SwRect &rRect ) { if( pOut ) _ChgClip( rRect ); }
+    inline void ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect = sal_False )
+             { if( pOut ) _ChgClip( rRect, bEnlargeRect ); }
 #endif
            void Reset();
     inline sal_Bool IsOn()  const { return bOn; }

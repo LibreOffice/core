@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:44:07 $
+ *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,17 @@ void SwSaveClip::Reset()
  *************************************************************************/
 
 #ifdef VERTICAL_LAYOUT
-void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm )
+void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
+                           sal_Bool bEnlargeRect )
 #else
-void SwSaveClip::_ChgClip( const SwRect &rRect )
+void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
 #endif
 {
 #ifdef VERTICAL_LAYOUT
     SwRect aOldRect( rRect );
+    const sal_Bool bVertical = pFrm && pFrm->IsVertical();
 
-    if ( pFrm && pFrm->IsVertical() )
+    if ( bVertical )
         pFrm->SwitchHorizontalToVertical( (SwRect&)rRect );
 #endif
 
@@ -131,11 +133,22 @@ void SwSaveClip::_ChgClip( const SwRect &rRect )
         pOut->SetClipRegion();
     else
     {
-        const Rectangle aRect( rRect.SVRect() );
+        Rectangle aRect( rRect.SVRect() );
+
+#ifdef VERTICAL_LAYOUT
+        // Having underscores in our line, we enlarged the repaint area
+        // (see frmform.cxx) because for some fonts it could be too small.
+        // Consequently, we have to enlarge the clipping rectangle as well.
+        if ( bEnlargeRect && ! bVertical )
+#else
+        if ( bEnlargeRect )
+#endif
+            aRect.Bottom() += 40;
 
         // Wenn das ClipRect identisch ist, passiert nix.
-        if(pOut->IsClipRegion()) // kein && wg Mac
-          if (aRect == pOut->GetClipRegion().GetBoundRect())
+        if( pOut->IsClipRegion() ) // kein && wg Mac
+        {
+            if ( aRect == pOut->GetClipRegion().GetBoundRect() )
 #ifdef VERTICAL_LAYOUT
             {
                 (SwRect&)rRect = aOldRect;
@@ -144,6 +157,7 @@ void SwSaveClip::_ChgClip( const SwRect &rRect )
 #else
                 return;
 #endif
+        }
 
         if( SwRootFrm::HasSameRect( rRect ) )
             pOut->SetClipRegion();
@@ -151,6 +165,9 @@ void SwSaveClip::_ChgClip( const SwRect &rRect )
         {
             const Region aClipRegion( aRect );
             pOut->SetClipRegion( aClipRegion );
+#ifdef DEBUG
+            Rectangle aDbgRect = pOut->GetClipRegion().GetBoundRect();
+#endif
         }
 #ifdef DEBUG
 #ifndef PRODUCT
