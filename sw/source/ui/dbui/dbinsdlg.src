@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-27 16:41:22 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Tabe~l";
         Text[ chinese_simplified ] = "è¡¨æ ¼(~L)";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "ì‹œíŠ¸(~L)";
+        Text[ korean ] = "í‘œì˜ ì—´(~L)";
         Text[ turkish ] = "~Tablo";
         Text[ catalan ] = "Tau~la";
         Text[ finnish ] = "~Taulukko";
@@ -603,7 +603,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ turkish ] = "boş";
         Text[ arabic ] = "İÇÑÛ";
         Text[ catalan ] = "~buit";
-        Text[ language_user1 ] = "(EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
+        Text[ language_user1 ] = "(EM1; (EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle auswählen und mindestens eine Zeile selektieren. Danach den Button “Daten in Text” drücken. Dann erscheint der Dialog “Datenbankspalten einfügen”. Optionsfeld “Tabelle” auswählen.";
         Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸£à¸£à¸—à¸±à¸”à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
     };
     PushButton PB_TBL_FORMAT
