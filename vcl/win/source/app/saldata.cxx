@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: ssa $ $Date: 2002-11-14 09:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
+#include <svapp.hxx>
+
 
 // =======================================================================
 
@@ -229,10 +231,23 @@ WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 
 WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
+    // #102847#, #102978#
+    // release solar mutex if we're calling the main thread
+    // and acquire it again afterwards
+    // otherwise the main thread could currently be blocking while it is trying
+    // to re-acquire the mutex itself
+    // see toolkit:vclxaccessiblecomponent/WindowEventListener
+    ULONG nCount = 0;
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
+        nCount = Application::ReleaseSolarMutex();
+    WIN_BOOL bRet;
     if ( aSalShlData.mbWNT )
-        return SendMessageW( hWnd, nMsg, wParam, lParam );
+        bRet = SendMessageW( hWnd, nMsg, wParam, lParam );
     else
-        return SendMessageA( hWnd, nMsg, wParam, lParam );
+        bRet = SendMessageA( hWnd, nMsg, wParam, lParam );
+    Application::AcquireSolarMutex( nCount );
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------

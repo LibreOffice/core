@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-12 11:00:53 $
+ *  last change: $Author: ssa $ $Date: 2002-11-14 09:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,7 +1357,18 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if( !(maFrameData.mnStyle & SAL_FRAME_STYLE_FLOAT) )
         nPosFlags |= SWP_NOZORDER; // do not change z-order
 
+    // #102847#, #102978#
+    // release solar mutex if we're calling the main thread
+    // and acquire it again afterwards (SetWindowPos switches to the main thread!)
+    // otherwise the main thread could currently be blocking while it is trying
+    // to re-acquire the mutex itself
+    // see toolkit:vclxaccessiblecomponent/WindowEventListener
+    ULONG nCount = 0;
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
+        nCount = Application::ReleaseSolarMutex();
     SetWindowPos( maFrameData.mhWnd, HWND_TOP, nX, nY, (int)nWidth, (int)nHeight, nPosFlags  );
+    Application::AcquireSolarMutex( nCount );
+
     UpdateFrameGeometry( maFrameData.mhWnd, this );
 
     // Notification -- really ???
