@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockSequence.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
+#ifndef NE_XML_H
+#include <neon/ne_xml.h>
+#endif
+
 #ifndef _LOCKSEQUENCE_HXX_
 #include "LockSequence.hxx"
 #endif
@@ -68,146 +74,259 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
-
-#define DAV_ELM_activelock  (DAV_ELM_LOCK_FIRST +  1)
-#define DAV_ELM_lockscope   (DAV_ELM_LOCK_FIRST +  2)
-#define DAV_ELM_locktype    (DAV_ELM_LOCK_FIRST +  3)
-#define DAV_ELM_depth       (DAV_ELM_LOCK_FIRST +  4)
-#define DAV_ELM_owner       (DAV_ELM_LOCK_FIRST +  5)
-#define DAV_ELM_timeout     (DAV_ELM_LOCK_FIRST +  6)
-#define DAV_ELM_locktoken   (DAV_ELM_LOCK_FIRST +  7)
-#define DAV_ELM_exclusive   (DAV_ELM_LOCK_FIRST +  8)
-#define DAV_ELM_shared      (DAV_ELM_LOCK_FIRST +  9)
-#define DAV_ELM_write       (DAV_ELM_LOCK_FIRST + 10)
-#define DAV_ELM_href        (DAV_ELM_LOCK_FIRST + 11)
-
-// static
-const struct ne_xml_elm LockSequence::elements[] =
-{
-    { "", "activelock", DAV_ELM_activelock, 0 },
-    { "", "lockscope",  DAV_ELM_lockscope,  0 },
-    { "", "locktype",   DAV_ELM_locktype,   0 },
-    { "", "depth",      DAV_ELM_depth,      NE_XML_CDATA },
-    { "", "owner",      DAV_ELM_owner,      NE_XML_COLLECT }, // ANY
-    { "", "timeout",    DAV_ELM_timeout,    NE_XML_CDATA },
-    { "", "locktoken",  DAV_ELM_locktoken,  0 },
-    { "", "exclusive",  DAV_ELM_exclusive,  0 }, // leaf
-    { "", "shared",     DAV_ELM_shared,     0 }, // leaf
-    { "", "write",      DAV_ELM_write,      0 }, // leaf
-    { "", "href",       DAV_ELM_href,       NE_XML_CDATA },
-    { 0 }
-};
-
 struct LockSequenceParseContext
 {
     ucb::Lock * pLock;
+    bool hasLockScope;
+    bool hasLockType;
+    bool hasDepth;
+    bool hasHREF;
+    bool hasTimeout;
 
-    LockSequenceParseContext() : pLock( 0 ) {}
+    LockSequenceParseContext()
+    : pLock( 0 ), hasLockScope( false ), hasLockType( false ),
+      hasDepth( false ), hasHREF( false ), hasTimeout( false ) {}
+
     ~LockSequenceParseContext() { delete pLock; }
 };
 
+#define STATE_TOP (1)
+
+#define STATE_ACTIVELOCK    (STATE_TOP)
+#define STATE_LOCKSCOPE     (STATE_TOP + 1)
+#define STATE_LOCKTYPE      (STATE_TOP + 2)
+#define STATE_DEPTH         (STATE_TOP + 3)
+#define STATE_OWNER         (STATE_TOP + 4)
+#define STATE_TIMEOUT       (STATE_TOP + 5)
+#define STATE_LOCKTOKEN     (STATE_TOP + 6)
+#define STATE_EXCLUSIVE     (STATE_TOP + 7)
+#define STATE_SHARED        (STATE_TOP + 8)
+#define STATE_WRITE         (STATE_TOP + 9)
+#define STATE_HREF          (STATE_TOP + 10)
+
 //////////////////////////////////////////////////////////////////////////
-extern "C" int LockSequence_validate_callback( void * userdata,
-                                               ne_xml_elmid parent,
-                                               ne_xml_elmid child )
+extern "C" int LockSequence_startelement_callback(
+    void *userdata,
+    int parent,
+    const char *nspace,
+    const char *name,
+    const char **atts )
 {
-    // @@@
-    return NE_XML_VALID;
+    if ( ( name != 0 ) &&
+         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    {
+        switch ( parent )
+        {
+            case NE_XML_STATEROOT:
+                if ( strcmp( name, "activelock" ) == 0 )
+                    return STATE_ACTIVELOCK;
+                break;
+
+            case STATE_ACTIVELOCK:
+                if ( strcmp( name, "lockscope" ) == 0 )
+                    return STATE_LOCKSCOPE;
+                else if ( strcmp( name, "locktype" ) == 0 )
+                    return STATE_LOCKTYPE;
+                else if ( strcmp( name, "depth" ) == 0 )
+                    return STATE_DEPTH;
+                else if ( strcmp( name, "owner" ) == 0 )
+                    return STATE_OWNER;
+                else if ( strcmp( name, "timeout" ) == 0 )
+                    return STATE_TIMEOUT;
+                else if ( strcmp( name, "locktoken" ) == 0 )
+                    return STATE_LOCKTOKEN;
+                break;
+
+            case STATE_LOCKSCOPE:
+                if ( strcmp( name, "exclusive" ) == 0 )
+                    return STATE_EXCLUSIVE;
+                else if ( strcmp( name, "shared" ) == 0 )
+                    return STATE_SHARED;
+                break;
+
+            case STATE_LOCKTYPE:
+                if ( strcmp( name, "write" ) == 0 )
+                    return STATE_WRITE;
+                break;
+
+            case STATE_LOCKTOKEN:
+                if ( strcmp( name, "href" ) == 0 )
+                    return STATE_HREF;
+                break;
+
+            case STATE_OWNER:
+                // owner elem contains ANY. Accept anything; no state change.
+                return STATE_OWNER;
+        }
+    }
+    return NE_XML_DECLINE;
 }
 
 //////////////////////////////////////////////////////////////////////////
-// static
-extern "C" int LockSequence_endelement_callback( void * userdata,
-                                                 const struct ne_xml_elm * s,
-                                                 const char * cdata )
+extern "C" int LockSequence_chardata_callback(
+    void *userdata,
+    int state,
+    const char *buf,
+    size_t len )
 {
     LockSequenceParseContext * pCtx
                     = static_cast< LockSequenceParseContext * >( userdata );
     if ( !pCtx->pLock )
         pCtx->pLock = new ucb::Lock;
 
-    switch ( s->id )
+    switch ( state )
     {
-        case DAV_ELM_depth:
-            if ( rtl_str_compareIgnoreAsciiCase( cdata, "0" ) == 0 )
-                pCtx->pLock->Depth = ucb::LockDepth_ZERO;
-            else if ( rtl_str_compareIgnoreAsciiCase( cdata, "1" ) == 0 )
-                pCtx->pLock->Depth = ucb::LockDepth_ONE;
-            else if ( rtl_str_compareIgnoreAsciiCase( cdata, "infinity" ) == 0 )
-                pCtx->pLock->Depth = ucb::LockDepth_INFINITY;
-            else
-                OSL_ENSURE( sal_False,
-                            "LockSequence::endelement_callback - "
-                            "Unknown depth!" );
-            break;
-
-        case DAV_ELM_owner:
-            pCtx->pLock->Owner <<= rtl::OUString::createFromAscii( cdata );
-            break;
-
-        case DAV_ELM_timeout:
-            /*
-                RFC2518, RFC2616:
-
-                   TimeType = ("Second-" DAVTimeOutVal | "Infinite" | Other)
-                   DAVTimeOutVal = 1*digit
-                   Other = "Extend" field-value
-                field-value = *( field-content | LWS )
-                field-content = <the OCTETs making up the field-value
-                                and consisting of either *TEXT or combinations
-                                of token, separators, and quoted-string>
-            */
-
-            if ( rtl_str_compareIgnoreAsciiCase( cdata, "Infinite" ) == 0 )
+        case STATE_DEPTH:
+            if ( rtl_str_compareIgnoreAsciiCase_WithLength(
+                    buf, len, "0", 1 ) == 0 )
             {
-                pCtx->pLock->Timeout = sal_Int64( -1 );
+                pCtx->pLock->Depth = ucb::LockDepth_ZERO;
+                pCtx->hasDepth = true;
             }
             else if ( rtl_str_compareIgnoreAsciiCase_WithLength(
-                                            cdata, 7, "Second-", 7 ) == 0 )
+                    buf, len, "1", 1 ) == 0 )
+            {
+                pCtx->pLock->Depth = ucb::LockDepth_ONE;
+                pCtx->hasDepth = true;
+            }
+            else if ( rtl_str_compareIgnoreAsciiCase_WithLength(
+                    buf, len, "infinity", 8 ) == 0 )
+            {
+                pCtx->pLock->Depth = ucb::LockDepth_INFINITY;
+                pCtx->hasDepth = true;
+            }
+            else
+                OSL_ENSURE( sal_False,
+                            "LockSequence_chardata_callback - Unknown depth!" );
+            break;
+
+        case STATE_OWNER:
+        {
+            // collect raw XML data... (owner contains ANY)
+            rtl::OUString aValue;
+            pCtx->pLock->Owner >>= aValue;
+            aValue += rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->pLock->Owner <<= aValue;
+            break;
+        }
+
+        case STATE_TIMEOUT:
+            //
+            //  RFC2518, RFC2616:
+            //
+            //  TimeType = ("Second-" DAVTimeOutVal | "Infinite" | Other)
+            //  DAVTimeOutVal = 1*digit
+            //  Other = "Extend" field-value
+            //  field-value = *( field-content | LWS )
+            //  field-content = <the OCTETs making up the field-value
+            //                  and consisting of either *TEXT or combinations
+            //                  of token, separators, and quoted-string>
+
+            if ( rtl_str_compareIgnoreAsciiCase_WithLength(
+                    buf, len, "Infinite", 8 ) == 0 )
+            {
+                pCtx->pLock->Timeout = sal_Int64( -1 );
+                pCtx->hasTimeout = true;
+            }
+            else if ( rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                                            buf, len, "Second-", 7, 7 ) == 0 )
             {
                 pCtx->pLock->Timeout
-                    = rtl::OUString::createFromAscii( cdata + 7 ).toInt64();
+                    = rtl::OString( buf + 7, len - 7 ).toInt64();
+                pCtx->hasTimeout = true;
             }
-//          else if ( rtl_str_equalsIgnoreCase_WithLength(
-//                                          cdata, 6, "Extend", 6 ) )
+//          else if ( rtl_str_shortenedCompareIgnoreCase_WithLength(
+//                                          buf, len, "Extend", 6, 6 ) == 0 )
 //          {
-//              ???
+//              @@@
 //          }
             else
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
+                pCtx->hasTimeout = true;
                 OSL_ENSURE( sal_False,
-                            "LockSequence::endelement_callback - "
-                            "Unknown timeout!" );
+                        "LockSequence_chardata_callback - Unknown timeout!" );
             }
             break;
 
-        case DAV_ELM_exclusive:
-            pCtx->pLock->Scope = ucb::LockScope_EXCLUSIVE;
-            break;
-
-        case DAV_ELM_shared:
-            pCtx->pLock->Scope = ucb::LockScope_SHARED;
-            break;
-
-        case DAV_ELM_write:
-            pCtx->pLock->Type = ucb::LockType_WRITE;
-            break;
-
-        case DAV_ELM_href:
+        case STATE_HREF:
         {
+            // collect hrefs.
             sal_Int32 nPos = pCtx->pLock->LockTokens.getLength();
             pCtx->pLock->LockTokens.realloc( nPos + 1 );
             pCtx->pLock->LockTokens[ nPos ]
-                    = rtl::OUString::createFromAscii( cdata );
+                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->hasHREF = true;
             break;
         }
+
+    }
+    return 0; // zero to continue, non-zero to abort parsing
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" int LockSequence_endelement_callback(
+    void *userdata,
+    int state,
+    const char *nspace,
+    const char *name )
+{
+    LockSequenceParseContext * pCtx
+                    = static_cast< LockSequenceParseContext * >( userdata );
+    if ( !pCtx->pLock )
+        pCtx->pLock = new ucb::Lock;
+
+    switch ( state )
+    {
+        case STATE_EXCLUSIVE:
+            pCtx->pLock->Scope = ucb::LockScope_EXCLUSIVE;
+            pCtx->hasLockScope = true;
+            break;
+
+        case STATE_SHARED:
+            pCtx->pLock->Scope = ucb::LockScope_SHARED;
+            pCtx->hasLockScope = true;
+            break;
+
+        case STATE_WRITE:
+            pCtx->pLock->Type = ucb::LockType_WRITE;
+            pCtx->hasLockType = true;
+            break;
+
+        case STATE_DEPTH:
+            if ( !pCtx->hasDepth )
+                return 1; // abort
+            break;
+
+        case STATE_HREF:
+            if ( !pCtx->hasHREF )
+                return 1; // abort
+            break;
+
+        case STATE_TIMEOUT:
+            if ( !pCtx->hasTimeout )
+                return 1; // abort
+            break;
+
+        case STATE_LOCKSCOPE:
+            if ( !pCtx->hasLockScope )
+                return 1; // abort
+            break;
+
+        case STATE_LOCKTYPE:
+            if ( !pCtx->hasLockType )
+                return 1; // abort
+            break;
+
+        case STATE_ACTIVELOCK:
+            if ( !pCtx->hasLockType || !pCtx->hasLockType || !pCtx->hasDepth )
+                return 1; // abort
+            break;
 
         default:
             break;
     }
-    return 0;
+    return 0; // zero to continue, non-zero to abort parsing
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -233,15 +352,14 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
 
         LockSequenceParseContext aCtx;
         ne_xml_push_handler( parser,
-                                  elements,
-                                  LockSequence_validate_callback,
-                                  0, // startelement_callback
-                                  LockSequence_endelement_callback,
-                                  &aCtx );
+                             LockSequence_startelement_callback,
+                             LockSequence_chardata_callback,
+                             LockSequence_endelement_callback,
+                             &aCtx );
 
         ne_xml_parse( parser,
-                       rInData.getStr() + nStart,
-                       nEnd - nStart + TOKEN_LENGTH );
+                      rInData.getStr() + nStart,
+                      nEnd - nStart + TOKEN_LENGTH );
 
         success = !!ne_xml_valid( parser );
 
@@ -263,6 +381,5 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
         nEnd   = rInData.indexOf( "</activelock>", nStart );
     }
 
-//  rOutData.realloc( nCount );
     return success;
 }
