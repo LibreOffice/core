@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:46:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,21 +144,21 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText [ dutch ] = "Verkleinen/vergroten" ;
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸/”‚ÂÎË˜ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz/PowiÍksz!";
-        QuickHelpText[ japanese ] = "èkè¨/ägëÂ!";
+        QuickHelpText[ polish ] = "Pomniejsz/PowiÍksz";
+        QuickHelpText[ japanese ] = "èkè¨/ägëÂ";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p/©Ò§j";
         QuickHelpText[ arabic ] = " ’€Ì—/ ﬂ»Ì—";
         QuickHelpText[ dutch ] = "Verkleinen/vergroten";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ/ÃÂ„›ËıÌÛÁ";
-        QuickHelpText[ korean ] = "√‡º“£Ø»Æ¥Î!";
+        QuickHelpText[ korean ] = "√‡º“£Ø»Æ¥Î";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrˆﬂern";
         QuickHelpText[ catalan ] = "Reducir/Aumentar";
-        QuickHelpText[ finnish ] = "Pienenn‰/Suurenna!";
+        QuickHelpText[ finnish ] = "Pienenn‰/Suurenna";
     };
     String STR_INSERT_COLS
     {
@@ -641,7 +641,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text [ portuguese_brazilian ] = "?nderungen akzeptieren" ;
     Text [ swedish ] = "Acceptera eller avslÂ ‰ndringar" ;
     Text [ danish ] = "Accepter eller forkast Êndringerne" ;
-    Text [ italian ] = "Accetta o rifiuta modifiche" ;
+    Text [ italian ] = "Accetta o annulla modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
     Text [ french ] = "Accepter ou rejeter les modifications" ;
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
@@ -889,5 +889,6 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
 
 
