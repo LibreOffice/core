@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:14:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,6 +610,33 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
 
     return aTmpStr;
 }
+
+/*-- 24.11.2004 16:11:21---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwDoc::RestoreInvisibleContent()
+{
+    sal_Bool bRet = sal_False;
+    if(nUndoPos > 0 )
+    {
+        SwUndo * pUndo = (*pUndos)[ nUndoPos - 1 ];
+        if( ( pUndo->GetId() == UNDO_END &&
+            static_cast<SwUndoEnd *>(pUndo)->GetUserId() == UIUNDO_DELETE_INVISIBLECNTNT) )
+        {
+            SwPaM aPam( GetNodes().GetEndOfPostIts() );
+            SwUndoIter aUndoIter( &aPam );
+            do
+            {
+                Undo( aUndoIter );
+            }
+            while ( aUndoIter.IsNextUndo() );
+            ClearRedo();
+            bRet = sal_True;
+        }
+    }
+    return bRet;
+}
+
 
 /**
    Returns id and comment for a certain undo object in an undo stack.
