@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,7 +798,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
     // Der Ofst hat sich verschoben.
     if( GetFollow() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         static sal_Bool bTest = sal_False;
         if( !bTest || ( nMode & 1 ) )
 #endif
@@ -1994,7 +1994,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
     DBG_LOOP;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     const SwPageFrm *pDbgPage = FindPageFrm();
@@ -2110,7 +2110,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             // Waehrend wir formatieren, wollen wir nicht gestoert werden.
             SwTxtFrmLocker aLock(this);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     //MA 25. Jan. 94 Das Flag stimmt sehr haufig beim Eintritt nicht. Das muss
     //             bei naechster Gelegenheit geprueft und gefixt werden.
             const sal_Bool bOldFtnFlag = HasFtn();
@@ -2338,7 +2338,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if ( pPara )
            pPara->SetPrepMustFit( sal_False );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // Hier ein Instrumentarium, um ungewoehnlichen Master/Follow-Kombinationen,
     // insbesondere bei Fussnoten, auf die Schliche zu kommen
     if( IsFollow() || GetFollow() )
@@ -2379,7 +2379,7 @@ sal_Bool SwTxtFrm::FormatQuick()
 #endif
 
     DBG_LOOP;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
 #ifndef PRODUCT
@@ -2442,7 +2442,7 @@ sal_Bool SwTxtFrm::FormatQuick()
     const SwTwips nOldHeight = aTopLeft.Y() + Prt().Height();
     if( nNewHeight != nOldHeight && !IsUndersized() )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //  Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
 //      ASSERT( nNewHeight == nOldHeight, "!FormatQuick: rosebud" );
 #endif
