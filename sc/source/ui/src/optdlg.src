@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:08:29 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,24 +60,6 @@
  ************************************************************************/
 
 #include "optdlg.hrc"
-
-/*#define LB_OBJECTMODE \
-    Size = MAP_APPFONT ( 40 , 46 ) ; \
-    Border = TRUE ; \
-    DropDown = TRUE ; \
-    StringList [ de ] = \
-    {\
-        < "Anzeigen" ; Default ; > ; \
-        < "Ausblenden" ; Default ; > ; \
-        < "Platzhalter" ; Default ; > ; \
-    };\
-    StringList [ en-US ] = \
-    {\
-        < "Show" ; Default ; > ; \
-        < "Hide" ; Default ; > ; \
-        < "Placeholders" ; Default ; > ; \
-    };\
-*/
 
 /**************************************************************************/
 /*                                                                        */
@@ -540,7 +522,9 @@ TabPage RID_SCPAGE_CONTENT
     ListBox LB_OBJGRF
     {
         Pos = MAP_APPFONT ( 84 , 119 ) ;
-//      LB_OBJECTMODE
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
         StringList [ de ] =
         {
             < "Anzeigen" ; Default ; > ;
@@ -565,7 +549,9 @@ TabPage RID_SCPAGE_CONTENT
     ListBox LB_DIAGRAM
     {
         Pos = MAP_APPFONT ( 84 , 135 ) ;
-//      LB_OBJECTMODE
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
         StringList [ de ] =
         {
             < "Anzeigen" ; Default ; > ;
@@ -591,7 +577,9 @@ TabPage RID_SCPAGE_CONTENT
     ListBox LB_DRAW
     {
         Pos = MAP_APPFONT ( 84 , 151 ) ;
-//      LB_OBJECTMODE
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
         StringList [ de ] =
         {
             < "Anzeigen" ; Default ; > ;
