@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:02:17 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,7 +1144,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_UNBINOPS_TBX ;
             Text = "~Unäre/Binäre Operatoren" ;
             Text [ ENGLISH ] = "Unary/binary operators" ;
-            Text [ english_us ] = "Unary/Binary Operators" ;
+            Text [ english_us ] = "~Unary/Binary Operators" ;
             Text [ portuguese_brazilian ] = "Unäre/Binäre Operatoren" ;
             Text [ swedish ] = "~Unära/binära operatorer" ;
             Text [ danish ] = "Monadiske/binære operatorer" ;
@@ -1298,7 +1298,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_RELATIONS_TBX ;
             Text = "~Relationen" ;
             Text [ ENGLISH ] = "Relations" ;
-            Text [ english_us ] = "Relations" ;
+            Text [ english_us ] = "~Relations" ;
             Text [ portuguese_brazilian ] = "Relationen" ;
             Text [ swedish ] = "~Relationer" ;
             Text [ danish ] = "Relationer" ;
@@ -1448,7 +1448,7 @@ Menu RID_COMMANDMENU
                 };
             };
             Text[ chinese_simplified ] = "¹ØÏµ";
-            Text[ russian ] = "Ñâÿçè";
+            Text[ russian ] = "Îòíîøåíèÿ";
             Text[ polish ] = "Relacje";
             Text[ japanese ] = "ØÚ°¼®Ý";
             Text[ chinese_traditional ] = "Ãö«Y";
@@ -1466,7 +1466,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_SETOPERATIONS_TBX ;
             Text = "~Mengenoperationen" ;
             Text [ ENGLISH ] = "Set operations" ;
-            Text [ english_us ] = "Set Operations" ;
+            Text [ english_us ] = "~Set Operations" ;
             Text [ portuguese_brazilian ] = "Mengenoperationen" ;
             Text [ swedish ] = "~Mängdoperationer" ;
             Text [ danish ] = "Mængdeoperationer" ;
@@ -1640,7 +1640,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_FUNCTIONS_TBX ;
             Text = "~Funktionen" ;
             Text [ ENGLISH ] = "Functions" ;
-            Text [ english_us ] = "Functions" ;
+            Text [ english_us ] = "~Functions" ;
             Text [ portuguese_brazilian ] = "Funktionen" ;
             Text [ swedish ] = "~Funktioner" ;
             Text [ danish ] = "Funktioner" ;
@@ -1777,7 +1777,7 @@ Menu RID_COMMANDMENU
                         TEXT[ swedish ] = "andra";
                         TEXT[ dutch ] = "andere";
                         TEXT[ spanish ] = "otros";
-                        TEXT[ english_us ] = "Other";
+                        TEXT[ english_us ] = "More";
                         SubMenu = Menu
                         {
                             ItemList =
@@ -1866,7 +1866,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_OPERATORS_TBX ;
             Text = "~Operatoren" ;
             Text [ ENGLISH ] = "Operators" ;
-            Text [ english_us ] = "Operators" ;
+            Text [ english_us ] = "O~perators" ;
             Text [ portuguese_brazilian ] = "Operatoren" ;
             Text [ swedish ] = "~Operatorer" ;
             Text [ danish ] = "Operatorer" ;
@@ -1983,7 +1983,7 @@ Menu RID_COMMANDMENU
             Text = "~Attribute" ;
             Text [ ENGLISH ] = "Attributes" ;
             Text [ portuguese ] = "~Atributos" ;
-            Text [ english_us ] = "Attributes" ;
+            Text [ english_us ] = "~Attributes" ;
             Text [ portuguese_brazilian ] = "Attribute" ;
             Text [ swedish ] = "~Attribut" ;
             Text [ danish ] = "Attributter" ;
@@ -2162,7 +2162,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_BRACKETS_TBX ;
             Text = "~Klammern" ;
             Text [ ENGLISH ] = "Parentheses" ;
-            Text [ english_us ] = "Brackets" ;
+            Text [ english_us ] = "~Brackets" ;
             Text [ portuguese_brazilian ] = "Klammern" ;
             Text [ swedish ] = "~Parenteser" ;
             Text [ danish ] = "Parenteser" ;
@@ -2346,7 +2346,7 @@ Menu RID_COMMANDMENU
             HelpId = HID_SMA_FORMAT_TBX ;
             Text = "Formatieru~ngen" ;
             Text [ ENGLISH ] = "Format" ;
-            Text [ english_us ] = "F~ormat" ;
+            Text [ english_us ] = "For~mats" ;
             Text [ portuguese_brazilian ] = "Formatierungen" ;
             Text [ swedish ] = "~Formateringar" ;
             Text [ danish ] = "Formateringer" ;
@@ -2438,7 +2438,7 @@ Menu RID_COMMANDMENU
                         Text[ portuguese ] = "espaçamento pequeno";
                         Text[ danish ] = "lille mellemrum";
                         Text[ french ] = "Petit espace";
-                        Text[ swedish ] = "litet mellanrum";
+                        Text[ swedish ] = "Litet mellanrum";
                         Text[ dutch ] = "kleine spatie";
                         Text[ spanish ] = "espacio pequeño";
                         Text[ english_us ] = "Small Gap";
