@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-07 14:18:41 $
+ *  last change: $Author: aw $ $Date: 2002-02-27 13:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,9 +557,18 @@ void SdrUndoGeoObj::Undo()
     // #94278# Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
-    if (pUndoGroup!=NULL) {
+    if(pUndoGroup)
+    {
+        // #97172#
+        pObj->SendRepaintBroadcast();
+
         pUndoGroup->Undo();
-    } else {
+
+        // #97172#
+        pObj->SendRepaintBroadcast();
+    }
+    else
+    {
         if (pRedoGeo!=NULL) delete pRedoGeo;
         pRedoGeo=pObj->GetGeoData();
         pObj->SetGeoData(*pUndoGeo);
@@ -568,9 +577,18 @@ void SdrUndoGeoObj::Undo()
 
 void SdrUndoGeoObj::Redo()
 {
-    if (pUndoGroup!=NULL) {
+    if(pUndoGroup)
+    {
+        // #97172#
+        pObj->SendRepaintBroadcast();
+
         pUndoGroup->Redo();
-    } else {
+
+        // #97172#
+        pObj->SendRepaintBroadcast();
+    }
+    else
+    {
         if (pUndoGeo!=NULL) delete pUndoGeo;
         pUndoGeo=pObj->GetGeoData();
         pObj->SetGeoData(*pRedoGeo);
