@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:27:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ english_us ] = "Curve";
                 Text[ portuguese ] = "Curva";
                 Text[ russian ] = "Κπθβΰÿ";
-                Text[ greek ] = "Bιzier";
+                Text[ greek ] = "Καμπύλη";
                 Text[ dutch ] = "Boog";
                 Text[ french ] = "Courbe";
                 Text[ spanish ] = "Curva";
@@ -301,7 +301,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ english_us ] = "Freeform Line";
                 Text[ portuguese ] = "Curva livre";
                 Text[ russian ] = "Οξλθλθνθÿ";
-                Text[ greek ] = "Ελεύθερη σχεδίαση";
+                Text[ greek ] = "Γραμμή ελεύθερης σχεδίασης";
                 Text[ dutch ] = "Vrije-hand-lijn";
                 Text[ french ] = "Ligne ΰ main levιe";
                 Text[ spanish ] = "Lνnea a mano alzada";
@@ -709,7 +709,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ polish ] = "Do rodka";
                 Text[ japanese ] = "δΈ­ε¤®ζƒγ";
                 Text[ chinese_traditional ] = "η½®δΈ­";
-                Text[ greek ] = "Κεντραρισμένα";
+                Text[ greek ] = "Στο κέντρο";
                 Text[ korean ] = "κ°€μ΄λ°";
                 Text[ arabic ] = "ΚζΣνΨ";
                 Text[ turkish ] = "Ortala";
@@ -877,6 +877,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ slovak ] = "Zarovnanie";
 };
  // ********************************************************************** EOF
+
 
 
 
