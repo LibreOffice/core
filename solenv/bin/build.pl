@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.129 $
+#   $Revision: 1.130 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-03 16:42:11 $
+#   last change: $Author: vg $ $Date: 2004-12-06 14:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.129 $ ';
+    $id_str = ' $Revision: 1.130 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -183,6 +183,8 @@
     $pre_job = ' announce'; # job to add for not-single module build
     $post_job = ' deliver'; # -"-
     %windows_procs = ();
+    @warnings = (); # array of warnings to be shown at the end of the process
+
 ### main ###
 
     &get_options;
@@ -216,7 +218,7 @@
     $echo = '';
     $new_line = "\n";
 
-    &get_commands();
+    get_commands();
     unlink ($cmd_file);
     if ($cmd_file) {
         if (open (CMD_FILE, ">>$cmd_file")) {
@@ -233,8 +235,11 @@
 
     print $new_line;
 
-    &BuildAll();
+    BuildAll();
     cancel_build() if (scalar keys %broken_build);
+    if (scalar @warnings) {
+        print STDERR $_ foreach (@warnings);
+    };
     @TotenEltern = keys %dead_parents;
     if ($#TotenEltern != -1) {
         my ($DeadPrj);
@@ -263,7 +268,7 @@
         print STDERR "\nERROR: please check these directories and build the corresponding module(s) anew!!\n\n";
         do_exit(1);
     };
-    &finish_logging;
+    finish_logging();
     do_exit(0);
 
 
@@ -1813,21 +1818,28 @@ sub prepare_incompatible_build {
             ensure_clear_module($prj);
         } else {
             next if ($show);
-            my $message;
             if ($modules_types{$prj} ne 'mod') {
-                $message = "$prj is not a complete module!";
+                push(@warnings, $prj);
             } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
                 $old_output_tree++;
             };
-            &print_error("$message Prepare workspace with --prepare switch!") if ($message);
         };
+    };
+    if (scalar @warnings) {
+        my $warning_string = "\nAttention: Following modules are inconsistent/missing: " . "@warnings" . ". If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
+        @warnings = ();
+        push(@warnings, $warning_string);
     };
     if ($build_from_opt) {
         $$deps_hash{$build_from_opt} = ();
         $build_from_opt = '';
     };
     if ($old_output_tree) {
-        print STDERR "\nAttention: Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
+        my $warning_string = "\nAttention: Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
+        push(@warnings, $warning_string);
+    };
+    if (scalar @warnings) {
+        print STDERR $_ foreach (@warnings);
         sleep(10);
     };
     print "\nPreparation finished\n\n" and    do_exit(0) if ($prepare);
