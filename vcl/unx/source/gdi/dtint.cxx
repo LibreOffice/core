@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-14 15:48:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ void DtIntegrator::GetSystemLook( AllSettings& rSettings )
 {
 }
 
-static Color parseColor( const ByteString& rLine )
+Color DtIntegrator::parseColor( const ByteString& rLine )
 {
     Color aColor;
 
@@ -214,7 +214,7 @@ static Color parseColor( const ByteString& rLine )
     return aColor;
 }
 
-static Font parseFont( const ByteString& rLine )
+Font DtIntegrator::parseFont( const ByteString& rLine )
 {
     Font aFont;
 
@@ -228,9 +228,17 @@ static Font parseFont( const ByteString& rLine )
         ByteString aToken = rLine.GetToken( 1, ',', nIndex );
         if( aToken.Len() )
         {
-            int nHeight = aToken.ToInt32();
-            if( nHeight > 5 )
-                aFont.SetHeight( nHeight );
+            int nPixelHeight = aToken.ToInt32();
+            long nDPIX, nDPIY;
+            long nDispDPIY = mpSalDisplay->GetResolution().B();
+            mpSalDisplay->GetScreenFontResolution( nDPIX, nDPIY );
+            int nHeight = nPixelHeight * nDispDPIY / nDPIY;
+            // allow for rounding in back conversion (at SetFont)
+            while( (nHeight * nDPIY / nDispDPIY) > nPixelHeight )
+                nHeight--;
+            while( (nHeight * nDPIY / nDispDPIY) < nPixelHeight )
+                nHeight++;
+            aFont.SetHeight( nHeight );
         }
         while( nIndex != STRING_NOTFOUND )
         {
@@ -572,6 +580,14 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
                     aStyleSettings.SetIconFont( aFont );
                     aStyleSettings.SetGroupFont( aFont );
                 }
+                break;
+            case ToolbarIconSize:
+                if( aLine.EqualsIgnoreCaseAscii( "large" ) )
+                    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
+                else if( aLine.EqualsIgnoreCaseAscii( "small" ) )
+                    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
+                else
+                    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_UNKNOWN );
                 break;
 #ifdef DEBUG
             default:

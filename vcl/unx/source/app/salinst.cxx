@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mhu $ $Date: 2003-02-11 11:30:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

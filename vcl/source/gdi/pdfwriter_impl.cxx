@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-20 14:37:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,11 +292,33 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     return m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+namespace vcl
+{
+template < class GEOMETRY >
+GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
+{
+    GEOMETRY aPoint;
+    if ( MAP_PIXEL == _rSource.GetMapUnit() )
+    {
+        aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
+    }
+    else
+    {
+        aPoint = OutputDevice::LogicToLogic( _rObject, _rSource, _rDest );
+    }
+    return aPoint;
+}
+}
+
 void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg )
 {
-    Point aPoint = OutputDevice::LogicToLogic( rPoint,
-                                               m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                                               m_pWriter->m_aMapMode );
+    Point aPoint( lcl_convert(
+                        m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                        m_pWriter->m_aMapMode,
+                        m_pWriter->getReferenceDevice(),
+                        rPoint
+                    ) );
+
     sal_Int32 nValue    = aPoint.X();
     if( bNeg )
         nValue = -nValue;
@@ -348,9 +370,11 @@ void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& 
 
 void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect )
 {
-    Rectangle aConvertRect = OutputDevice::LogicToLogic( rRect,
-                                                         m_pWriter->getMapMode(),
-                                                         m_pWriter->m_aMapMode );
+    Rectangle aConvertRect( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                                         m_pWriter->m_aMapMode,
+                                         m_pWriter->getReferenceDevice(),
+                                         rRect
+                                         ) );
     sal_Int32 nMirror = m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight;
     rRect = Rectangle( Point( aConvertRect.BottomLeft().X(), 10*nMirror-aConvertRect.BottomLeft().Y() ),
                        aConvertRect.GetSize() );
@@ -386,9 +410,10 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
         nLength = -nLength;
     }
 
-    Size aSize = OutputDevice::LogicToLogic( Size( nLength, nLength ),
-                                             m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                                             m_pWriter->m_aMapMode );
+    Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                             m_pWriter->m_aMapMode,
+                             m_pWriter->getReferenceDevice(),
+                             Size( nLength, nLength ) ) );
     sal_Int32 nInt      = ( bVertical ? aSize.Height() : aSize.Width() ) / 10;
     sal_Int32 nDecimal  = ( bVertical ? aSize.Height() : aSize.Width() ) % 10;
 
@@ -402,10 +427,10 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
 
 void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical )
 {
-    Size aSize = OutputDevice::LogicToLogic( Size( 1000, 1000 ),
-                                             m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                                             m_pWriter->m_aMapMode );
-
+    Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                             m_pWriter->m_aMapMode,
+                             m_pWriter->getReferenceDevice(),
+                             Size( 1000, 1000 ) ) );
     fLength *= (double)(bVertical ? aSize.Height() : aSize.Width()) / 10000.0;
     appendDouble( fLength, rBuffer );
 }
@@ -676,7 +701,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
         pNewData->meWidthType   = m_aBuiltinFonts[i].m_eWidthType;
         pNewData->meType        = TYPE_SCALABLE;
         pNewData->mnVerticalOrientation = 0;
-        pNewData->mbOrientation = FALSE;
+        pNewData->mbOrientation = TRUE;
         pNewData->mbDevice      = TRUE;
         pNewData->mnQuality     = 50000;
         pNewData->mbSubsettable = FALSE;
@@ -724,48 +749,62 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
 
 // -----------------------------------------------------------------------
 
+namespace vcl {
+
 class PDFSalLayout : public GenericSalLayout
 {
-    const String    maText;
+    PDFWriterImpl&  mrPDFWriterImpl;
+    const PDFWriterImpl::BuiltinFont& mrBuiltinFont;
+    bool            mbIsSymbolFont;
     long            mnPixelPerEM;
-    const PDFWriterImpl::BuiltinFont& mrFont;
+    String          maOrigText;
 
 public:
-                    PDFSalLayout( ImplLayoutArgs&, const String&,
-                        const PDFWriterImpl::BuiltinFont&, long nPixelPerEM );
+                    PDFSalLayout( PDFWriterImpl&,
+                                  const PDFWriterImpl::BuiltinFont&,
+                                  long nPixelPerEM, int nOrientation );
 
-    virtual bool    LayoutText( ImplLayoutArgs& rArgs );
+    void            SetText( const String& rText )  { maOrigText = rText; }
+    virtual bool    LayoutText( ImplLayoutArgs& );
+    virtual void    InitFont() const;
     virtual void    DrawText( SalGraphics& ) const;
 };
 
+}
+
 // -----------------------------------------------------------------------
 
-PDFSalLayout::PDFSalLayout( ImplLayoutArgs& rArgs, const String& rStr,
-    const PDFWriterImpl::BuiltinFont& rFont, long nPixelPerEM )
-:   GenericSalLayout( rArgs ),
-    maText( rStr ),
-    mrFont( rFont ),
+PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
+    const PDFWriterImpl::BuiltinFont& rBuiltinFont,
+    long nPixelPerEM, int nOrientation )
+:   mrPDFWriterImpl( rPDFWriterImpl ),
+    mrBuiltinFont( rBuiltinFont ),
     mnPixelPerEM( nPixelPerEM )
-{}
+{
+    mbIsSymbolFont = (rBuiltinFont.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    SetOrientation( nOrientation );
+}
 
 // -----------------------------------------------------------------------
 
 bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
+    SetText( aText );
     SetUnitsPerPixel( 1000 );
 
     Point aNewPos( 0, 0 );
-    for( int nGlyphCount = 0;; ++nGlyphCount )
+    for(;;)
     {
-        int nLogicalIndex;
+        int nCharPos;
         bool bRightToLeft;
-        if( !rArgs.GetNextPos( &nLogicalIndex, &bRightToLeft ) )
+        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
             break;
-        sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+        sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( cChar & 0xff00 )
         {
             // some characters can be used by conversion
-            if( mrFont.m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
+            if( (cChar >= 0xf000) && mbIsSymbolFont  )
                 cChar -= 0xf000;
             else
             {
@@ -775,105 +814,57 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
             }
         }
         DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
-        if( cChar & 0xff00 ) // not so good
-            cChar = 0;
-#if 0
-        // TODO: find out if builtin font contains the char
-        // update fallback_runs if needed
-        if( mrFont.HasGlyph( cChar ) )
+        if( cChar & 0xff00 )
+        {
+            cChar = 0;   // NotDef glyph
             rArgs.NeedFallback( nCharPos, bRightToLeft );
-#endif
+        }
 
-        long nGlyphWidth = (long)mrFont.m_aWidths[cChar] * mnPixelPerEM;
+        long nGlyphWidth = (long)mrBuiltinFont.m_aWidths[cChar] * mnPixelPerEM;
         long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-        GlyphItem aGI( nLogicalIndex, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
+        GlyphItem aGI( nCharPos, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
         AppendGlyph( aGI );
 
         aNewPos.X() += nGlyphWidth;
     }
 
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
-    return false;
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+void PDFSalLayout::InitFont() const
+{
+    // TODO: recreate font with all its attributes
 }
 
 // -----------------------------------------------------------------------
 
 void PDFSalLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
-    // TODO
-    DBG_ASSERT( false, "PDFSalLayout::DrawText() not implemented yet" );
+    mrPDFWriterImpl.drawLayout( *const_cast<PDFSalLayout*>(this), maOrigText, true );
 }
 
 // -----------------------------------------------------------------------
 
-SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayoutArgs& rArgs ) const
+SalLayout* PDFWriterImpl::GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectData* pSelect )
 {
+    DBG_ASSERT( (pSelect->mpFontData != NULL),
+        "PDFWriterImpl::GetTextLayout mpFontData is NULL" );
+
     for( unsigned int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
     {
         if( pSelect->mpFontData->mpSysData != (void*)&m_aBuiltinFonts[n] )
             continue;
 
-        const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
         long nPixelPerEM = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
-        PDFSalLayout& rLayout = *new PDFSalLayout( rArgs, aText, m_aBuiltinFonts[n], nPixelPerEM );
-
-#if 1
-        rLayout.SetOrientation( pSelect->mnOrientation );
-        rLayout.LayoutText( rArgs );
-#else
-        Point aNewPos( 0, 0 );
-        for( int nGlyphCount = 0;; ++nGlyphCount )
-        {
-            int nLogicalIndex;
-            bool bRightToLeft;
-            if( !rArgs.GetNextPos( &nLogicalIndex, &bRightToLeft ) )
-                break;
-            sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
-            if( cChar & 0xff00 )
-            {
-                // some characters can be used by conversion
-                if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
-                    cChar -= 0xf000;
-                else
-                {
-                    String aString( cChar);
-                    ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                    cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
-                }
-            }
-            DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
-            if( cChar & 0xff00 ) // not so good
-                cChar = 0;
-#if 0
-            // TODO: find out if builtin font contains the char
-            // update fallback_runs if needed
-            if( m_aBuiltinFonts[n].HasGlyph( cChar ) )
-                rArgs.NeedFallback( nCharPos, bRightToLeft );
-#endif
-
-            long nGlyphWidth = (long)m_aBuiltinFonts[n].m_aWidths[cChar] * nPixelPerEM;
-            long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
-            if( bRightToLeft )
-                nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-            GlyphItem aGI( nLogicalIndex, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
-            rLayout.AppendGlyph( aGI );
-
-            aNewPos.X() += nGlyphWidth;
-        }
-
-        rLayout.SetUnitsPerPixel( 1000 );
-        rLayout.SetOrientation( pSelect->mnOrientation );
-        if( rArgs.mpDXArray )
-            rLayout.ApplyDXArray( rArgs.mpDXArray );
-        if( rArgs.mnLayoutWidth )
-            rLayout.Justify( rArgs.mnLayoutWidth );
-#endif
-        return &rLayout;
+        int nOrientation = pSelect->mnOrientation;
+        PDFSalLayout* pLayout = new PDFSalLayout( *this, m_aBuiltinFonts[n],
+            nPixelPerEM, nOrientation );
+        pLayout->SetText( rArgs.mpStr );
+        return pLayout;
     }
 
     return NULL;
@@ -891,14 +882,14 @@ void PDFWriterImpl::endPage()
 {
     if( m_aPages.begin() != m_aPages.end() )
     {
-        if( m_pCodec )
-            endCompression();
-
         m_aGraphicsStack.clear();
         m_aGraphicsStack.push_back( GraphicsState() );
 
         // this should pop the PDF graphics stack if necessary
         updateGraphicsState();
+
+        if( m_pCodec )
+            endCompression();
 
         m_aPages.back().endStream();
 
@@ -1140,7 +1131,10 @@ bool PDFWriterImpl::emitHatches()
         // prepare matrix
         const double theta = (double)rHatch.GetAngle() * M_PI / 1800.0;
         Size aSize( rHatch.GetDistance(), 0 );
-        aSize = OutputDevice::LogicToLogic( aSize, it->m_aMapMode, MapMode( MAP_POINT ) );
+        aSize = lcl_convert( it->m_aMapMode,
+                             MapMode( MAP_POINT ),
+                             getReferenceDevice(),
+                             aSize );
         const double scale = (double)aSize.Width();
         appendDouble( scale*cos( theta ), aHatchObj );
         aHatchObj.append( ' ' );
@@ -1244,10 +1238,10 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
                           "   /Subtype /Type1\r\n"
                           "   /BaseFont /" );
             aLine.append( m_aBuiltinFonts[i].m_pPSName );
-            aLine.append( "\r\n"
-                          "   /Encoding /WinAnsiEncoding\r\n"
-                          ">>\r\n"
-                          "endobj\r\n\r\n" );
+            aLine.append( "\r\n" );
+            if( m_aBuiltinFonts[i].m_eCharSet != RTL_TEXTENCODING_SYMBOL )
+                aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
+            aLine.append( ">>\r\nendobj\r\n\r\n" );
             CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
             break;
@@ -1374,13 +1368,13 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
         // if the first four bytes are all ascii hex characters, then binary data
         // has to be converted to real binary data
         for( nIndex = 0; nIndex < 4 &&
-                 ! ( ( pFontData[ nBeginBinaryIndex+nIndex ] >= '0' && pFontData[ nBeginBinaryIndex+nIndex ] <= '9' ) ||
-                     ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'a' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'f' ) ||
-                     ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'A' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'F' )
-                     ); ++nIndex )
+                 ( ( pFontData[ nBeginBinaryIndex+nIndex ] >= '0' && pFontData[ nBeginBinaryIndex+nIndex ] <= '9' ) ||
+                   ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'a' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'f' ) ||
+                   ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'A' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'F' )
+                   ); ++nIndex )
             ;
         bool bConvertHexData = true;
-        if( nIndex > 3 )
+        if( nIndex < 4 )
         {
             bConvertHexData = false;
             nLength2 = nEndBinaryIndex - nBeginBinaryIndex + 1; // include the last byte
@@ -1586,9 +1580,10 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
                       "   /Subtype /Type1\r\n"
                       "   /BaseFont /" );
         aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
-        aLine.append( "\r\n"
-                      "   /Encoding /WinAnsiEncoding\r\n"
-                      "   /FirstChar 0\r\n"
+        aLine.append( "\r\n" );
+        if( pFont->meCharSet != RTL_TEXTENCODING_SYMBOL )
+            aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
+        aLine.append( "   /FirstChar 0\r\n"
                       "   /LastChar 255\r\n"
                       "   /Widths [ " );
         for( int i = 0; i < 256; i++ )
@@ -2957,12 +2952,6 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
             else if ( nStyle & TEXT_DRAW_VCENTER )
                 aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
 
-            // font alignment
-            if ( eAlign == ALIGN_BOTTOM )
-                aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
-            else if ( eAlign == ALIGN_TOP )
-                aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
-
             // draw all lines excluding the last
             for ( i = 0; i < nFormatLines; i++ )
             {
@@ -3007,12 +2996,6 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
             aPos.X() += nWidth-nTextWidth;
         else if ( nStyle & TEXT_DRAW_CENTER )
             aPos.X() += (nWidth-nTextWidth)/2;
-
-        // font alignment
-        if ( eAlign == ALIGN_BOTTOM )
-            aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
-        else if ( eAlign == ALIGN_TOP )
-            aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
 
         if ( nStyle & TEXT_DRAW_BOTTOM )
             aPos.Y() += nHeight-nTextHeight;
@@ -4587,7 +4570,10 @@ void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, co
 
 sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& rSize )
 {
-    Size aPtSize = OutputDevice::LogicToLogic( rSize, m_aGraphicsStack.front().m_aMapMode, MapMode( MAP_POINT ) );
+    Size aPtSize( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                               MapMode( MAP_POINT ),
+                               getReferenceDevice(),
+                               rSize ) );
     // check if we already have this gradient
     for( std::list<GradientEmit>::iterator it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
     {
@@ -4746,9 +4732,10 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
     if( rWall.IsBitmap() )
     {
         aBitmap = rWall.GetBitmap();
-        aBmpSize = OutputDevice::LogicToLogic( aBitmap.GetPrefSize(),
-                                               aBitmap.GetPrefMapMode(),
-                                               getMapMode() );
+        aBmpSize = lcl_convert( aBitmap.GetPrefMapMode(),
+                                getMapMode(),
+                                getReferenceDevice(),
+                                aBitmap.GetPrefSize() );
         Rectangle aRect( rRect );
         if( rWall.IsRect() )
         {
@@ -5030,14 +5017,24 @@ void PDFWriterImpl::setClipRegion( const Region& rRegion )
 
 void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 {
-    Point aPoint = OutputDevice::LogicToLogic( Point( nX, nY ), m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
-    aPoint -= OutputDevice::LogicToLogic( Point(), m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
+    Point aPoint( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                               m_aMapMode,
+                               getReferenceDevice(),
+                               Point( nX, nY ) ) );
+    aPoint -= lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                           m_aMapMode,
+                           getReferenceDevice(),
+                           Point() );
     m_aGraphicsStack.front().m_aClipRegion.Move( nX, nY );
 }
 
 bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
 {
-    Rectangle aRect = OutputDevice::LogicToLogic( rRect, m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
+    Rectangle aRect( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
+                                  m_aMapMode,
+                                  getReferenceDevice(),
+                                  rRect ) );
+
     return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRect );
 }
 

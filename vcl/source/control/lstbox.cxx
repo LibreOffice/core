@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-12-12 16:26:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,7 +809,11 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                 break;
 
                 default:
+                {
+                    if( mpFloatWin )
+                        mpImplLB->GetMainWindow()->CalcMaxVisibleEntries( mpFloatWin->CalcFloatSize() );
                     nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
+                }
             }
         }
         else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-14 09:56:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,8 @@
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
@@ -161,7 +158,7 @@ void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pCl
         if ( nPoints < 2 )
             return;
 
-        const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
+        const SalPoint* pPtAry = (const SalPoint*)rPoly.GetConstPointAry();
         mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
@@ -187,7 +184,7 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
 
         if( nSize >= 2 )
         {
-            const SalPoint* pPtAry = (const SalPoint*)rPoly.ImplGetConstPointAry();
+            const SalPoint* pPtAry = (const SalPoint*)rPoly.GetConstPointAry();
             mpGraphics->DrawPolygon( nSize, pPtAry, this );
         }
     }
@@ -204,7 +201,7 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
             if ( nSize )
             {
                 pPointAry[i]    = nSize;
-                pPointAryAry[i] = (PCONSTSALPOINT)rPoly.ImplGetConstPointAry();
+                pPointAryAry[i] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
                 i++;
             }
             else
@@ -332,9 +329,14 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         long nInc;
 
         if ( meOutDevType != OUTDEV_PRINTER && !bMtf )
+        {
             nInc = (nMinRect < 50) ? 2 : 4;
+        }
         else
-            nInc = ((nMinRect >> 9) + 1) << 3;
+        {
+            // #105998# Use display-equivalent step size calculation
+            nInc = (nMinRect < 800) ? 10 : 20;
+        }
 
         if ( !nInc )
             nInc = 1;
@@ -450,7 +452,10 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         {
             // fuer axiale FV muss die letzte Farbe der ersten
             // Farbe entsprechen
-            if ( i > nSteps )
+            // #107350# Setting end color one step earlier, as the
+            // last time we get here, we drop out of the loop later
+            // on.
+            if ( i >= nSteps )
             {
                 nRed    = (UINT8)nEndRed;
                 nGreen  = (UINT8)nEndGreen;
@@ -582,10 +587,14 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         long nInc;
 
         if ( meOutDevType != OUTDEV_PRINTER && !bMtf )
+        {
             nInc = ( nMinRect < 50 ) ? 2 : 4;
-
+        }
         else
-            nInc = ( ( nMinRect >> 9 ) + 1 ) << 3;
+        {
+            // #105998# Use display-equivalent step size calculation
+            nInc = (nMinRect < 800) ? 10 : 20;
+        }
 
         if( !nInc )
             nInc = 1;
@@ -615,6 +624,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     double  fScanBottom = aRect.Bottom();
     double  fScanInc = (double) nMinRect / (double) nSteps * 0.5;
     UINT8   nRed = (UINT8) nStartRed, nGreen = (UINT8) nStartGreen, nBlue = (UINT8) nStartBlue;
+    bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
     if( bMtf )
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
@@ -668,16 +678,11 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         nGreen = ImplGetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = ImplGetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
-        if( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
-#ifndef REMOTE_APPSERVER
-        else
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-#endif
-
         // entweder langsame PolyPolygon-Ausgaben oder schnelles Polygon-Painting
         if( pPolyPoly )
         {
+            bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
+
             pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
             pPolyPoly->Replace( aPoly, 1 );
 
@@ -687,10 +692,30 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             else
                 ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
 #endif
+
+            // #107349# Set fill color _after_ geometry painting:
+            // pPolyPoly's geometry is the band from last iteration's
+            // aPoly to current iteration's aPoly. The window outdev
+            // path (see else below), on the other hand, paints the
+            // full aPoly. Thus, here, we're painting the band before
+            // the one painted in the window outdev path below. To get
+            // matching colors, have to delay color setting here.
+            if( bMtf )
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
+            else
+                mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
         }
 #ifndef REMOTE_APPSERVER
         else
+        {
+            // #107349# Set fill color _before_ geometry painting
+            if( bMtf )
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), TRUE ) );
+            else
+                mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+
             ImplDrawPolygon( aPoly, pClipPolyPoly );
+        }
 #endif
     }
 
@@ -701,9 +726,15 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
         if( !rPoly.GetBoundRect().IsEmpty() )
         {
-            nRed = ImplGetGradientColorValue( nEndRed );
-            nGreen = ImplGetGradientColorValue( nEndGreen );
-            nBlue = ImplGetGradientColorValue( nEndBlue );
+            // #107349# Paint last polygon with end color only if loop
+            // has generated output. Otherwise, the current
+            // (i.e. start) color is taken, to generate _any_ output.
+            if( bPaintLastPolygon )
+            {
+                nRed = ImplGetGradientColorValue( nEndRed );
+                nGreen = ImplGetGradientColorValue( nEndGreen );
+                nBlue = ImplGetGradientColorValue( nEndBlue );
+            }
 
             if( bMtf )
             {
@@ -792,7 +823,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaGradientAction( rRect, aGradient ) );
 
-    if( !IsDeviceOutputNecessary() )
+    if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     // Rechteck in Pixel umrechnen
@@ -925,7 +956,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
         }
 
-        if( !IsDeviceOutputNecessary() )
+        if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
 
         Gradient aGradient( rGradient );
@@ -1128,7 +1159,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         }
         else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
         {
-            aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+            aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDLINE )
@@ -1144,7 +1175,7 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaHatchAction( rPolyPoly, aHatch ) );
 
-    if( !IsDeviceOutputNecessary() )
+    if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER

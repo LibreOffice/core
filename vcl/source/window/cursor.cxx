@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-26 17:12:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ struct ImplCursorData
     Size            maPixSize;          // Pixel-Size
     long            mnPixSlant;         // Pixel-Slant
     short           mnOrientation;      // Pixel-Orientation
+    unsigned char   mnDirection;        // indicates writing direction
     USHORT          mnStyle;            // Cursor-Style
     BOOL            mbCurVisible;       // Ist Cursor aktuell sichtbar
     Window*         mpWindow;           // Zugeordnetes Windows
@@ -116,10 +117,13 @@ static void ImplCursorInvert( ImplCursorData* pData )
         nInvertStyle = INVERT_50;
     else
         nInvertStyle = 0;
+
     Rectangle aRect( pData->maPixPos, pData->maPixSize );
-    if ( pData->mnOrientation || pData->mnPixSlant )
+    if ( pData->mnDirection || pData->mnOrientation || pData->mnPixSlant )
     {
         Polygon aPoly( aRect );
+        aPoly[1].X() += 1;  // include the right border
+        aPoly[2].X() += 1;
         if ( pData->mnPixSlant )
         {
             Point aPoint = aPoly.GetPoint( 0 );
@@ -130,6 +134,41 @@ static void ImplCursorInvert( ImplCursorData* pData )
             aPoint.X() += pData->mnPixSlant;
             aPoly.SetPoint( aPoint, 1 );
         }
+
+        // apply direction flag after slant to use the correct shape
+        if ( pData->mnDirection )
+        {
+            Point pAry[7];
+            int delta = 3*aRect.getWidth()+1;
+            if( pData->mnDirection == CURSOR_DIRECTION_LTR )
+            {
+                // left-to-right
+                pAry[0] = aPoly.GetPoint( 0 );
+                pAry[1] = aPoly.GetPoint( 1 );
+                pAry[2] = pAry[1];
+                pAry[2].X() += delta;
+                pAry[3] =  pAry[1];
+                pAry[3].Y() += delta;
+                pAry[4] = aPoly.GetPoint( 2 );
+                pAry[5] = aPoly.GetPoint( 3 );
+                pAry[6] = aPoly.GetPoint( 4 );
+            }
+            else if( pData->mnDirection == CURSOR_DIRECTION_RTL )
+            {
+                // right-to-left
+                pAry[0] = aPoly.GetPoint( 0 );
+                pAry[1] = aPoly.GetPoint( 1 );
+                pAry[2] = aPoly.GetPoint( 2 );
+                pAry[3] = aPoly.GetPoint( 3 );
+                pAry[4] = pAry[0];
+                pAry[4].Y() += delta;
+                pAry[5] =  pAry[0];
+                pAry[5].X() -= delta;
+                pAry[6] = aPoly.GetPoint( 4 );
+            }
+            aPoly = Polygon( 7, pAry);
+        }
+
         if ( pData->mnOrientation )
             aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
         pWindow->Invert( aPoly, nInvertStyle );
@@ -150,6 +189,7 @@ void Cursor::ImplDraw()
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
         mpData->mnPixSlant      = pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
         mpData->mnOrientation   = mnOrientation;
+        mpData->mnDirection     = mnDirection;
         long nOffsetY           = pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
 
         // Position um den Offset korrigieren
@@ -280,6 +320,7 @@ Cursor::Cursor()
     mnSlant         = 0;
     mnOffsetY       = 0;
     mnOrientation   = 0;
+    mnDirection     = 0;
     mnStyle         = 0;
     mbVisible       = FALSE;
 }
@@ -294,6 +335,7 @@ Cursor::Cursor( const Cursor& rCursor ) :
     mpWindow        = NULL;
     mnSlant         = rCursor.mnSlant;
     mnOrientation   = rCursor.mnOrientation;
+    mnDirection     = rCursor.mnDirection;
     mnStyle         = 0;
     mbVisible       = rCursor.mbVisible;
 }
@@ -434,12 +476,24 @@ void Cursor::SetOrientation( short nNewOrientation )
 
 // -----------------------------------------------------------------------
 
+void Cursor::SetDirection( unsigned char nNewDirection )
+{
+    if ( mnDirection != nNewDirection )
+    {
+        mnDirection = nNewDirection;
+        ImplNew();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Cursor& Cursor::operator=( const Cursor& rCursor )
 {
     maPos           = rCursor.maPos;
     maSize          = rCursor.maSize;
     mnSlant         = rCursor.mnSlant;
     mnOrientation   = rCursor.mnOrientation;
+    mnDirection     = rCursor.mnDirection;
     mbVisible       = rCursor.mbVisible;
     ImplNew();
 
@@ -454,6 +508,7 @@ BOOL Cursor::operator==( const Cursor& rCursor ) const
          (maSize        == rCursor.maSize)          &&
          (mnSlant       == rCursor.mnSlant)         &&
          (mnOrientation == rCursor.mnOrientation)   &&
+         (mnDirection   == rCursor.mnDirection)     &&
          (mbVisible     == rCursor.mbVisible) )
         return TRUE;
     else

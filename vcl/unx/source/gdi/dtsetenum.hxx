@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtsetenum.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,10 @@ enum DtSetEnum
     RadioButtonStyle,
     CheckBoxStyle,
     PushButtonStyle,
-    TabControlStyle
+    TabControlStyle,
+    /* toolbar style */
+    ToolbarIconSize
+
 };
 
 #endif // _VCL_DTSETENUM_HXX

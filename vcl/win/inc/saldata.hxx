@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-05 13:41:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class SalVirtualDevice;
 class SalPrinter;
 class Font;
 struct HDCCache;
+struct TempFontItem;
 
 // --------------------
 // - Standard-Defines -
@@ -139,7 +140,7 @@ struct SalData
     ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
     UINT                    mnTimerId;              // windows timer id
     SALTIMERPROC            mpTimerProc;            // timer callback proc
-    HHOOK                   mhSalObjMsgHook;        // hook um SalObject relevante Message mitzubekommen
+    HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
     SalInstance*            mpFirstInstance;        // pointer of first instance
@@ -154,18 +155,19 @@ struct SalData
     COLORREF                maStockBrushColorAry[MAX_STOCKBRUSH];
     HPEN                    mhStockPenAry[MAX_STOCKPEN];
     HBRUSH                  mhStockBrushAry[MAX_STOCKBRUSH];
-    USHORT                  mnStockPenCount;        // Anzahl statischer Pens
-    USHORT                  mnStockBrushCount;      // Anzahl statischer Brushes
+    USHORT                  mnStockPenCount;        // count of static pens
+    USHORT                  mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
-    BOOL                    mbObjClassInit;         // Ist SALOBJECTCLASS initialised
+    BOOL                    mbObjClassInit;         // is SALOBJECTCLASS initialised
     BOOL                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
     WIN_BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
-    int                     mnSageStatus;           // Status der Sage-DLL (DISABLE_AGENT == nicht vorhanden)
-    HINSTANCE               mhSageInst;             // Instance-Handle zur Sage-DLL
-    SysAgt_Enable_PROC      mpSageEnableProc;       // Funktion zum deaktivieren des Systemagenten
-    SalIcon*                mpFirstIcon;            // Iconcache, points to first icon, NULL if no icons loaded
+    int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
+    HINSTANCE               mhSageInst;             // instance handle for the Sage-DLL
+    SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
+    SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
+    TempFontItem*           mpTempFontItem;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
@@ -221,9 +223,12 @@ void ImplClearHDCCache( SalData* pData );
 HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp = 0 );
 void ImplReleaseCachedDC( ULONG nID );
 
-// ------------------------------------------------------
-// - SALSHL.CXX - Funktionen fuer DLL-Resource-Zugriffe -
-// ------------------------------------------------------
+bool ImplAddTempFont( SalData&, const String& rFontFileURL );
+void ImplReleaseTempFonts( SalData& );
+
+// --------------------------------------------
+// - SALSHL.CXX - for accessing DLL resources -
+// --------------------------------------------
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
@@ -285,6 +290,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_FRAME_CLASSNAMEW        L"SALFRAME"
 #define SAL_SUBFRAME_CLASSNAMEA     "SALSUBFRAME"
 #define SAL_SUBFRAME_CLASSNAMEW     L"SALSUBFRAME"
+#define SAL_TMPSUBFRAME_CLASSNAMEW  L"SALTMPSUBFRAME"
 #define SAL_OBJECT_WNDEXTRA         sizeof( DWORD )
 #define SAL_OBJECT_THIS             0
 #define SAL_OBJECT_CLASSNAMEA       "SALOBJECT"

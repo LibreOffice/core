@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-28 09:13:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ static void ImplDeleteSet( ImplSplitSet* pSet )
     if ( pSet->mpBitmap )
         delete pSet->mpBitmap;
 
-    delete pItems;
+    delete [] pItems;
     delete pSet;
 }
 
@@ -1472,6 +1472,73 @@ void SplitWindow::ImplSetWindowSize( long nDelta )
     }
 
     SplitResize();
+}
+
+// -----------------------------------------------------------------------
+
+Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
+{
+    Size aSize( aNewSize );
+    long nSplitSize = mpMainSet->mnSplitSize-2;
+
+    if ( mbAutoHide || mbFadeOut )
+        nSplitSize += SPLITWIN_SPLITSIZEEX;
+
+    // Wenn Fenster sizeable ist, wird die groesse automatisch nach
+    // dem MainSet festgelegt, wenn kein relatives Fenster enthalten
+    // ist
+    if ( mnWinStyle & WB_SIZEABLE )
+    {
+        long    nCurSize;
+        long    nCalcSize = 0;
+        USHORT  i;
+
+        for ( i = 0; i < mpMainSet->mnItems; i++ )
+        {
+            if ( mpMainSet->mpItems[i].mnBits & (SWIB_RELATIVESIZE | SWIB_PERCENTSIZE) )
+                break;
+            else
+                nCalcSize += mpMainSet->mpItems[i].mnSize;
+        }
+
+        if ( i == mpMainSet->mnItems )
+        {
+            long    nDelta = 0;
+            Point   aPos = GetPosPixel();
+
+            if ( mbHorz )
+                nCurSize = aNewSize.Height()-mnTopBorder-mnBottomBorder;
+            else
+                nCurSize = aNewSize.Width()-mnLeftBorder-mnRightBorder;
+            nCurSize -= nSplitSize;
+            nCurSize -= (mpMainSet->mnItems-1)*mpMainSet->mnSplitSize;
+
+            nDelta = nCalcSize-nCurSize;
+            if ( !nDelta )
+                return aSize;
+
+            if ( meAlign == WINDOWALIGN_TOP )
+            {
+                aSize.Height() += nDelta;
+            }
+            else if ( meAlign == WINDOWALIGN_BOTTOM )
+            {
+                aPos.Y() -= nDelta;
+                aSize.Height() += nDelta;
+            }
+            else if ( meAlign == WINDOWALIGN_LEFT )
+            {
+                aSize.Width() += nDelta;
+            }
+            else // meAlign == WINDOWALIGN_RIGHT
+            {
+                aPos.X() -= nDelta;
+                aSize.Width() += nDelta;
+            }
+        }
+    }
+
+    return aSize;
 }
 
 // -----------------------------------------------------------------------
@@ -2641,7 +2708,7 @@ void SplitWindow::InsertItem( USHORT nId, Window* pWindow, long nSize,
         memcpy( pNewItems, pSet->mpItems, sizeof( ImplSplitItem )*nPos );
     if ( nPos < pSet->mnItems )
         memcpy( pNewItems+nPos+1, pSet->mpItems+nPos, sizeof( ImplSplitItem )*(pSet->mnItems-nPos) );
-    delete pSet->mpItems;
+    delete[] pSet->mpItems;
     pSet->mpItems = pNewItems;
     pSet->mnItems++;
     pSet->mbCalcPix = TRUE;
@@ -2740,7 +2807,7 @@ void SplitWindow::MoveItem( USHORT nId, USHORT nNewPos, USHORT nNewSetId )
         }
         else
         {
-            delete pSet->mpItems;
+            delete[] pSet->mpItems;
             pSet->mpItems = NULL;
         }
         ImplSplitItem* pNewItems = new ImplSplitItem[pNewSet->mnItems+1];
@@ -2751,7 +2818,7 @@ void SplitWindow::MoveItem( USHORT nId, USHORT nNewPos, USHORT nNewSetId )
             memcpy( pNewItems+nNewPos+1, pNewSet->mpItems+nNewPos,
                     sizeof( ImplSplitItem )*(pNewSet->mnItems-nNewPos) );
         }
-        delete pNewSet->mpItems;
+        delete[] pNewSet->mpItems;
         pNewSet->mpItems = pNewItems;
         pNewSet->mnItems++;
         pNewSet->mbCalcPix = TRUE;
@@ -2790,7 +2857,7 @@ void SplitWindow::RemoveItem( USHORT nId, BOOL bHide )
     }
     else
     {
-        delete pSet->mpItems;
+        delete[] pSet->mpItems;
         pSet->mpItems = NULL;
     }
 

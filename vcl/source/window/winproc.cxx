@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-12 16:46:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,9 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
 static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pChild != pSVData->maHelpData.mpHelpWin )
+    if ( !pSVData->maHelpData.mpHelpWin ||
+         !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
+           pChild->IsWindowOrChild( pSVData->maHelpData.mpHelpWin ) ) )
     {
         USHORT nHelpMode = 0;
         if ( pSVData->maHelpData.mbQuickHelp )
@@ -511,7 +513,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 #endif
 
         // no mouse messages to disabled windows
-        if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() )
+        // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
+        if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled()) )
         {
             ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
             if ( nSVEvent == EVENT_MOUSEMOVE )
@@ -1626,7 +1629,10 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 
     pWindow->mpFrameData->mbNeedSysWindow = (nNewWidth < IMPL_MIN_NEEDSYSWIN) ||
                                             (nNewHeight < IMPL_MIN_NEEDSYSWIN);
-    pWindow->mpFrameData->mbMinimized = (nNewWidth <= 0) || (nNewHeight <= 0);
+    BOOL bMinimized = (nNewWidth <= 0) || (nNewHeight <= 0);
+    if( bMinimized != pWindow->mpFrameData->mbMinimized )
+        pWindow->mpFrameWindow->ImplNotifyIconifiedState( bMinimized );
+    pWindow->mpFrameData->mbMinimized = bMinimized;
 }
 
 // -----------------------------------------------------------------------
@@ -1709,7 +1715,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 ImplSVData* pSVData = ImplGetSVData();
                 Window*     pTopLevelWindow = mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow();
                 if ( !pTopLevelWindow->IsInputEnabled() && pSVData->maWinData.mpLastExecuteDlg )
-                    pSVData->maWinData.mpLastExecuteDlg->ToTop( TOTOP_RESTOREWHENMIN );
+                    pSVData->maWinData.mpLastExecuteDlg->ToTop( TOTOP_RESTOREWHENMIN | TOTOP_GRABFOCUSONLY);
                 else
                     pTopLevelWindow->GrabFocus();
             }

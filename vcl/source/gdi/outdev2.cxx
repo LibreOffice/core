@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-15 10:48:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,9 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
+    if( ImplIsRecordLayout() )
+        return;
+
     if ( meOutDevType == OUTDEV_PRINTER )
         return;
 
@@ -412,7 +415,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
     DBG_ASSERT( rOutDev.meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
-    if ( (meOutDevType == OUTDEV_PRINTER) || (rOutDev.meOutDevType == OUTDEV_PRINTER) )
+    if ( (meOutDevType == OUTDEV_PRINTER) || (rOutDev.meOutDevType == OUTDEV_PRINTER) || ImplIsRecordLayout() )
         return;
 
     if ( ROP_INVERT == meRasterOp )
@@ -452,7 +455,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 
-    if ( meOutDevType == OUTDEV_PRINTER )
+    if ( meOutDevType == OUTDEV_PRINTER || ImplIsRecordLayout() )
         return;
 
     RasterOp eOldRop = GetRasterOp();
@@ -596,6 +599,10 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
     DBG_TRACE( "OutputDevice::DrawBitmap()" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     const Size aSizePix( rBitmap.GetSizePixel() );
     ImplDrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, META_BMP_ACTION );
 }
@@ -605,6 +612,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
     DBG_TRACE( "OutputDevice::DrawBitmap( Size )" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     ImplDrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, META_BMPSCALE_ACTION );
 }
 
@@ -615,6 +626,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                const Bitmap& rBitmap )
 {
     DBG_TRACE( "OutputDevice::DrawBitmap( Point, Size )" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     ImplDrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, META_BMPSCALEPART_ACTION );
 }
 
@@ -726,6 +741,9 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
 {
     DBG_TRACE( "OutputDevice::DrawBitmapEx()" );
 
+    if( ImplIsRecordLayout() )
+        return;
+
     if( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
         DrawBitmap( rDestPt, rBitmapEx.GetBitmap() );
     else
@@ -742,6 +760,9 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 {
     DBG_TRACE( "OutputDevice::DrawBitmapEx( Size )" );
 
+    if( ImplIsRecordLayout() )
+        return;
+
     if ( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
         DrawBitmap( rDestPt, rDestSize, rBitmapEx.GetBitmap() );
     else
@@ -755,6 +776,9 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const BitmapEx& rBitmapEx )
 {
     DBG_TRACE( "OutputDevice::DrawBitmapEx( Point, Size )" );
+
+    if( ImplIsRecordLayout() )
+        return;
 
     if( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap() );
@@ -897,6 +921,10 @@ void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
     DBG_TRACE( "OutputDevice::DrawMask()" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     const Size aSizePix( rBitmap.GetSizePixel() );
     ImplDrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, META_MASK_ACTION );
 }
@@ -907,6 +935,10 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
     DBG_TRACE( "OutputDevice::DrawMask( Size )" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     ImplDrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, META_MASKSCALE_ACTION );
 }
 
@@ -917,6 +949,10 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
     DBG_TRACE( "OutputDevice::DrawMask( Point, Size )" );
+
+    if( ImplIsRecordLayout() )
+        return;
+
     ImplDrawMask( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor, META_MASKSCALEPART_ACTION );
 }
 
@@ -1239,7 +1275,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPointAction( rPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1302,7 +1338,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
             }
             else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
             {
-                aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+                aColor = GetSettings().GetStyleSettings().GetFontColor();
             }
 
             if( mnDrawMode & DRAWMODE_GHOSTEDLINE )
@@ -1317,7 +1353,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
 
-    if ( !IsDeviceOutputNecessary() || ImplIsColorTransparent( aColor ) )
+    if ( !IsDeviceOutputNecessary() || ImplIsColorTransparent( aColor ) || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1363,7 +1399,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
                 for ( USHORT i = 0; i < nSize; i++ )
                     mpMetaFile->AddAction( new MetaPixelAction( rPts[ i ], pColors[ i ] ) );
 
-            if ( !IsDeviceOutputNecessary() )
+            if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
                 return;
 
 #ifndef REMOTE_APPSERVER
@@ -1397,7 +1433,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
 
 void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 {
-    if( rColor != COL_TRANSPARENT )
+    if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {
         const USHORT    nSize = rPts.GetSize();
         Color*          pColArray = new Color[ nSize ];

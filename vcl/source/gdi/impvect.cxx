@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impvect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,7 @@ inline const Point& ImplPointArray::operator[]( ULONG nPos ) const
 
 void ImplPointArray::ImplCreatePoly( Polygon& rPoly ) const
 {
-    rPoly.SetSize( (USHORT) mnRealSize );
-    HMEMCPY( rPoly.ImplGetPointAry(), mpArray, mnRealSize * sizeof( Point ) );
+    rPoly = Polygon( mnRealSize, mpArray );
 }
 
 // ---------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-15 10:49:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,8 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
 #include <region.hxx>
@@ -416,178 +413,6 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetMapMode()
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaMapModeAction( MapMode() ) );
-
-    if ( mbMap || !maMapMode.IsDefault() )
-    {
-        mbMap       = FALSE;
-        maMapMode   = MapMode();
-
-        // create new objects (clip region werden nicht neu skaliert)
-        mbNewFont   = TRUE;
-        mbInitFont  = TRUE;
-        if ( GetOutDevType() == OUTDEV_WINDOW )
-        {
-            if ( ((Window*)this)->mpCursor )
-                ((Window*)this)->mpCursor->ImplNew();
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    BOOL bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
-
-    if ( mpMetaFile )
-    {
-        mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
-#ifdef DBG_UTIL
-        if ( GetOutDevType() != OUTDEV_PRINTER )
-            DBG_ASSERTWARNING( bRelMap, "Please record only relative MapModes!" );
-#endif
-    }
-
-    // Ist der MapMode der gleiche wie vorher, dann mache nichts
-    if ( maMapMode == rNewMapMode )
-        return;
-
-    // Ist Default-MapMode, dann bereche nichts
-    BOOL bOldMap = mbMap;
-    mbMap = !rNewMapMode.IsDefault();
-    if ( mbMap )
-    {
-        // Falls nur der Orign umgesetzt wird, dann scaliere nichts neu
-        if ( (rNewMapMode.GetMapUnit() == maMapMode.GetMapUnit()) &&
-             (rNewMapMode.GetScaleX()  == maMapMode.GetScaleX())  &&
-             (rNewMapMode.GetScaleY()  == maMapMode.GetScaleY())  &&
-             (bOldMap                  == mbMap) )
-        {
-            // Offset setzen
-            Point aOrigin = rNewMapMode.GetOrigin();
-            maMapRes.mnMapOfsX = aOrigin.X();
-            maMapRes.mnMapOfsY = aOrigin.Y();
-            maMapMode = rNewMapMode;
-            return;
-        }
-        if ( !bOldMap && bRelMap )
-        {
-            maMapRes.mnMapScNumX    = 1;
-            maMapRes.mnMapScNumY    = 1;
-            maMapRes.mnMapScDenomX  = mnDPIX;
-            maMapRes.mnMapScDenomY  = mnDPIY;
-            maMapRes.mnMapOfsX      = 0;
-            maMapRes.mnMapOfsY      = 0;
-        }
-
-        // Neue MapMode-Aufloesung berechnen
-        ImplCalcMapResolution( rNewMapMode, mnDPIX, mnDPIY, maMapRes, maThresRes );
-    }
-
-    // Neuen MapMode setzen
-    if ( bRelMap )
-    {
-        Point aOrigin( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
-        // aScale? = maMapMode.GetScale?() * rNewMapMode.GetScale?()
-        Fraction aScaleX = ImplMakeFraction( maMapMode.GetScaleX().GetNumerator(),
-                                             rNewMapMode.GetScaleX().GetNumerator(),
-                                             maMapMode.GetScaleX().GetDenominator(),
-                                             rNewMapMode.GetScaleX().GetDenominator() );
-        Fraction aScaleY = ImplMakeFraction( maMapMode.GetScaleY().GetNumerator(),
-                                             rNewMapMode.GetScaleY().GetNumerator(),
-                                             maMapMode.GetScaleY().GetDenominator(),
-                                             rNewMapMode.GetScaleY().GetDenominator() );
-        maMapMode.SetOrigin( aOrigin );
-        maMapMode.SetScaleX( aScaleX );
-        maMapMode.SetScaleY( aScaleY );
-    }
-    else
-        maMapMode = rNewMapMode;
-
-    // create new objects (clip region werden nicht neu skaliert)
-    mbNewFont   = TRUE;
-    mbInitFont  = TRUE;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        if ( ((Window*)this)->mpCursor )
-            ((Window*)this)->mpCursor->ImplNew();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    // Ist der MapMode der gleiche wie vorher, dann mache nichts
-    if ( maMapMode == rNewMapMode )
-        return;
-
-    MapUnit eOld = maMapMode.GetMapUnit();
-    MapUnit eNew = rNewMapMode.GetMapUnit();
-
-    // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    Fraction aXF = ImplMakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
-                                     maMapMode.GetScaleX().GetDenominator(),
-                                     rNewMapMode.GetScaleX().GetDenominator(),
-                                     maMapMode.GetScaleX().GetNumerator() );
-    Fraction aYF = ImplMakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
-                                     maMapMode.GetScaleY().GetDenominator(),
-                                     rNewMapMode.GetScaleY().GetDenominator(),
-                                     maMapMode.GetScaleY().GetNumerator() );
-
-    Point aPt( LogicToLogic( Point(), NULL, &rNewMapMode ) );
-    if ( eNew != eOld )
-    {
-        if ( eOld > MAP_PIXEL )
-        {
-            DBG_ERRORFILE( "Not implemented MapUnit" )
-        }
-        else if ( eNew > MAP_PIXEL )
-        {
-            DBG_ERRORFILE( "Not implemented MapUnit" )
-        }
-        else
-        {
-            Fraction aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
-                         aImplNumeratorAry[eOld] * aImplDenominatorAry[eNew] );
-
-            // a?F =  a?F * aF
-            aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
-                                    aXF.GetDenominator(), aF.GetDenominator() );
-            aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
-                                    aYF.GetDenominator(), aF.GetDenominator() );
-            if ( eOld == MAP_PIXEL )
-            {
-                aXF *= Fraction( mnDPIX, 1 );
-                aYF *= Fraction( mnDPIY, 1 );
-            }
-            else if ( eNew == MAP_PIXEL )
-            {
-                aXF *= Fraction( 1, mnDPIX );
-                aYF *= Fraction( 1, mnDPIY );
-            }
-        }
-    }
-
-    MapMode aNewMapMode( MAP_RELATIVE, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
-    SetMapMode( aNewMapMode );
-
-    if ( eNew != eOld )
-        maMapMode = rNewMapMode;
-}
-
-// -----------------------------------------------------------------------
-
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
@@ -860,32 +685,31 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
-#ifdef WIN
-    Point huge* pPointAry = (Point huge*)aPoly.ImplGetPointAry();
-#else
-    Point* pPointAry = aPoly.ImplGetPointAry();
-#endif
+    const Point* pPointAry = aPoly.GetConstPointAry();
 
     if ( mbMap )
     {
         for ( i = 0; i < nPoints; i++ )
         {
-            Point* pPt = &(pPointAry[i]);
-            pPt->X() = ImplLogicToPixel( pPt->X()+maMapRes.mnMapOfsX, mnDPIX,
-                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                         maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
-            pPt->Y() = ImplLogicToPixel( pPt->Y()+maMapRes.mnMapOfsY, mnDPIY,
-                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                         maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
+            const Point* pPt = &(pPointAry[i]);
+            Point aPt;
+            aPt.X() = ImplLogicToPixel( pPt->X()+maMapRes.mnMapOfsX, mnDPIX,
+                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                        maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
+            aPt.Y() = ImplLogicToPixel( pPt->Y()+maMapRes.mnMapOfsY, mnDPIY,
+                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                        maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
+            aPoly[i] = aPt;
         }
     }
     else
     {
         for ( i = 0; i < nPoints; i++ )
         {
-            Point* pPt = &(pPointAry[i]);
-            pPt->X() += mnOutOffX;
-            pPt->Y() += mnOutOffY;
+            Point aPt = pPointAry[i];
+            aPt.X() += mnOutOffX;
+            aPt.Y() += mnOutOffY;
+            aPoly[i] = aPt;
         }
     }
 
@@ -981,6 +805,198 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::SetMapMode()
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaMapModeAction( MapMode() ) );
+
+    if ( mbMap || !maMapMode.IsDefault() )
+    {
+        mbMap       = FALSE;
+        maMapMode   = MapMode();
+
+        // create new objects (clip region werden nicht neu skaliert)
+        mbNewFont   = TRUE;
+        mbInitFont  = TRUE;
+        if ( GetOutDevType() == OUTDEV_WINDOW )
+        {
+            if ( ((Window*)this)->mpCursor )
+                ((Window*)this)->mpCursor->ImplNew();
+        }
+
+        // #106426# Adapt logical offset when changing mapmode
+        mnOutOffLogicX = mnOutOffOrigX; // no mapping -> equal offsets
+        mnOutOffLogicY = mnOutOffOrigY;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    BOOL bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
+
+    if ( mpMetaFile )
+    {
+        mpMetaFile->AddAction( new MetaMapModeAction( rNewMapMode ) );
+#ifdef DBG_UTIL
+        if ( GetOutDevType() != OUTDEV_PRINTER )
+            DBG_ASSERTWARNING( bRelMap, "Please record only relative MapModes!" );
+#endif
+    }
+
+    // Ist der MapMode der gleiche wie vorher, dann mache nichts
+    if ( maMapMode == rNewMapMode )
+        return;
+
+    // Ist Default-MapMode, dann bereche nichts
+    BOOL bOldMap = mbMap;
+    mbMap = !rNewMapMode.IsDefault();
+    if ( mbMap )
+    {
+        // Falls nur der Orign umgesetzt wird, dann scaliere nichts neu
+        if ( (rNewMapMode.GetMapUnit() == maMapMode.GetMapUnit()) &&
+             (rNewMapMode.GetScaleX()  == maMapMode.GetScaleX())  &&
+             (rNewMapMode.GetScaleY()  == maMapMode.GetScaleY())  &&
+             (bOldMap                  == mbMap) )
+        {
+            // Offset setzen
+            Point aOrigin = rNewMapMode.GetOrigin();
+            maMapRes.mnMapOfsX = aOrigin.X();
+            maMapRes.mnMapOfsY = aOrigin.Y();
+            maMapMode = rNewMapMode;
+            return;
+        }
+        if ( !bOldMap && bRelMap )
+        {
+            maMapRes.mnMapScNumX    = 1;
+            maMapRes.mnMapScNumY    = 1;
+            maMapRes.mnMapScDenomX  = mnDPIX;
+            maMapRes.mnMapScDenomY  = mnDPIY;
+            maMapRes.mnMapOfsX      = 0;
+            maMapRes.mnMapOfsY      = 0;
+        }
+
+        // Neue MapMode-Aufloesung berechnen
+        ImplCalcMapResolution( rNewMapMode, mnDPIX, mnDPIY, maMapRes, maThresRes );
+    }
+
+    // Neuen MapMode setzen
+    if ( bRelMap )
+    {
+        Point aOrigin( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
+        // aScale? = maMapMode.GetScale?() * rNewMapMode.GetScale?()
+        Fraction aScaleX = ImplMakeFraction( maMapMode.GetScaleX().GetNumerator(),
+                                             rNewMapMode.GetScaleX().GetNumerator(),
+                                             maMapMode.GetScaleX().GetDenominator(),
+                                             rNewMapMode.GetScaleX().GetDenominator() );
+        Fraction aScaleY = ImplMakeFraction( maMapMode.GetScaleY().GetNumerator(),
+                                             rNewMapMode.GetScaleY().GetNumerator(),
+                                             maMapMode.GetScaleY().GetDenominator(),
+                                             rNewMapMode.GetScaleY().GetDenominator() );
+        maMapMode.SetOrigin( aOrigin );
+        maMapMode.SetScaleX( aScaleX );
+        maMapMode.SetScaleY( aScaleY );
+    }
+    else
+        maMapMode = rNewMapMode;
+
+    // create new objects (clip region werden nicht neu skaliert)
+    mbNewFont   = TRUE;
+    mbInitFont  = TRUE;
+    if ( GetOutDevType() == OUTDEV_WINDOW )
+    {
+        if ( ((Window*)this)->mpCursor )
+            ((Window*)this)->mpCursor->ImplNew();
+    }
+
+    // #106426# Adapt logical offset when changing mapmode
+    mnOutOffLogicX = ImplPixelToLogic( mnOutOffOrigX, mnDPIX,
+                                       maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                       maThresRes.mnThresPixToLogX );
+    mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
+                                       maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                       maThresRes.mnThresPixToLogY );
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    // Ist der MapMode der gleiche wie vorher, dann mache nichts
+    if ( maMapMode == rNewMapMode )
+        return;
+
+    MapUnit eOld = maMapMode.GetMapUnit();
+    MapUnit eNew = rNewMapMode.GetMapUnit();
+
+    // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
+    Fraction aXF = ImplMakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
+                                     maMapMode.GetScaleX().GetDenominator(),
+                                     rNewMapMode.GetScaleX().GetDenominator(),
+                                     maMapMode.GetScaleX().GetNumerator() );
+    Fraction aYF = ImplMakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
+                                     maMapMode.GetScaleY().GetDenominator(),
+                                     rNewMapMode.GetScaleY().GetDenominator(),
+                                     maMapMode.GetScaleY().GetNumerator() );
+
+    Point aPt( LogicToLogic( Point(), NULL, &rNewMapMode ) );
+    if ( eNew != eOld )
+    {
+        if ( eOld > MAP_PIXEL )
+        {
+            DBG_ERRORFILE( "Not implemented MapUnit" )
+        }
+        else if ( eNew > MAP_PIXEL )
+        {
+            DBG_ERRORFILE( "Not implemented MapUnit" )
+        }
+        else
+        {
+            Fraction aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
+                         aImplNumeratorAry[eOld] * aImplDenominatorAry[eNew] );
+
+            // a?F =  a?F * aF
+            aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
+                                    aXF.GetDenominator(), aF.GetDenominator() );
+            aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
+                                    aYF.GetDenominator(), aF.GetDenominator() );
+            if ( eOld == MAP_PIXEL )
+            {
+                aXF *= Fraction( mnDPIX, 1 );
+                aYF *= Fraction( mnDPIY, 1 );
+            }
+            else if ( eNew == MAP_PIXEL )
+            {
+                aXF *= Fraction( 1, mnDPIX );
+                aYF *= Fraction( 1, mnDPIY );
+            }
+        }
+    }
+
+    MapMode aNewMapMode( MAP_RELATIVE, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
+    SetMapMode( aNewMapMode );
+
+    if ( eNew != eOld )
+        maMapMode = rNewMapMode;
+
+    // #106426# Adapt logical offset when changing mapmode
+    mnOutOffLogicX = ImplPixelToLogic( mnOutOffOrigX, mnDPIX,
+                                       maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                       maThresRes.mnThresPixToLogX );
+    mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
+                                       maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                       maThresRes.mnThresPixToLogY );
+}
+
+// -----------------------------------------------------------------------
+
 Point OutputDevice::LogicToPixel( const Point& rLogicPt ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1051,21 +1067,19 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
-#ifdef WIN
-    Point huge* pPointAry = (Point huge*)aPoly.ImplGetPointAry();
-#else
-    Point* pPointAry = aPoly.ImplGetPointAry();
-#endif
+    const Point* pPointAry = aPoly.GetConstPointAry();
 
     for ( i = 0; i < nPoints; i++ )
     {
-        Point* pPt = &(pPointAry[i]);
-        pPt->X() = ImplLogicToPixel( pPt->X() + maMapRes.mnMapOfsX, mnDPIX,
-                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                     maThresRes.mnThresLogToPixX )+mnOutOffOrigX;
-        pPt->Y() = ImplLogicToPixel( pPt->Y() + maMapRes.mnMapOfsY, mnDPIY,
-                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                     maThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+        const Point* pPt = &(pPointAry[i]);
+        Point aPt;
+        aPt.X() = ImplLogicToPixel( pPt->X() + maMapRes.mnMapOfsX, mnDPIX,
+                                    maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                    maThresRes.mnThresLogToPixX )+mnOutOffOrigX;
+        aPt.Y() = ImplLogicToPixel( pPt->Y() + maMapRes.mnMapOfsY, mnDPIY,
+                                    maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                    maThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+        aPoly[i] = aPt;
     }
 
     return aPoly;
@@ -1227,21 +1241,19 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
-#ifdef WIN
-    Point huge* pPointAry = (Point huge*)aPoly.ImplGetPointAry();
-#else
-    Point* pPointAry = aPoly.ImplGetPointAry();
-#endif
+    const Point* pPointAry = aPoly.GetConstPointAry();
 
     for ( i = 0; i < nPoints; i++ )
     {
-        Point* pPt = &(pPointAry[i]);
-        pPt->X() = ImplLogicToPixel( pPt->X() + aMapRes.mnMapOfsX, mnDPIX,
-                                     aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                     aThresRes.mnThresLogToPixX )+mnOutOffOrigX;
-        pPt->Y() = ImplLogicToPixel( pPt->Y() + aMapRes.mnMapOfsY, mnDPIY,
-                                     aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                     aThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+        const Point* pPt = &(pPointAry[i]);
+        Point aPt;
+        aPt.X() = ImplLogicToPixel( pPt->X() + aMapRes.mnMapOfsX, mnDPIX,
+                                    aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
+                                    aThresRes.mnThresLogToPixX )+mnOutOffOrigX;
+        aPt.Y() = ImplLogicToPixel( pPt->Y() + aMapRes.mnMapOfsY, mnDPIY,
+                                    aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
+                                    aThresRes.mnThresLogToPixY )+mnOutOffOrigY;
+        aPoly[i] = aPt;
     }
 
     return aPoly;
@@ -1318,12 +1330,12 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
     if ( !mbMap )
         return rDevicePt;
 
-    return Point( ImplPixelToLogic( rDevicePt.X()-mnOutOffOrigX, mnDPIX,
+    return Point( ImplPixelToLogic( rDevicePt.X(), mnDPIX,
                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                    maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX,
-                  ImplPixelToLogic( rDevicePt.Y()-mnOutOffOrigY, mnDPIY,
+                                    maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                  ImplPixelToLogic( rDevicePt.Y(), mnDPIY,
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                    maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY );
+                                    maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
 // -----------------------------------------------------------------------
@@ -1352,18 +1364,18 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect ) const
     if ( !mbMap || rDeviceRect.IsEmpty() )
         return rDeviceRect;
 
-    return Rectangle( ImplPixelToLogic( rDeviceRect.Left()-mnOutOffOrigX, mnDPIX,
+    return Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                        maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rDeviceRect.Top()-mnOutOffOrigY, mnDPIY,
+                                        maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                      ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                        maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY,
-                      ImplPixelToLogic( rDeviceRect.Right()-mnOutOffOrigX, mnDPIX,
+                                        maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY,
+                      ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
                                         maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                        maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rDeviceRect.Bottom()-mnOutOffOrigY, mnDPIY,
+                                        maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                      ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
                                         maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                        maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY );
+                                        maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
 // -----------------------------------------------------------------------
@@ -1381,21 +1393,19 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
-#ifdef WIN
-    Point huge* pPointAry = (Point huge*)aPoly.ImplGetPointAry();
-#else
-    Point* pPointAry = aPoly.ImplGetPointAry();
-#endif
+    const Point* pPointAry = aPoly.GetConstPointAry();
 
     for ( i = 0; i < nPoints; i++ )
     {
-        Point* pPt = &(pPointAry[i]);
-        pPt->X() = ImplPixelToLogic( pPt->X()-mnOutOffOrigX, mnDPIX,
-                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
-                                     maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX;
-        pPt->Y() = ImplPixelToLogic( pPt->Y()-mnOutOffOrigY, mnDPIY,
-                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                                     maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY;
+        const Point* pPt = &(pPointAry[i]);
+        Point aPt;
+        aPt.X() = ImplPixelToLogic( pPt->X(), mnDPIX,
+                                    maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                    maThresRes.mnThresPixToLogX ) - maMapRes.mnMapOfsX - mnOutOffLogicX;
+        aPt.Y() = ImplPixelToLogic( pPt->Y(), mnDPIY,
+                                    maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                    maThresRes.mnThresPixToLogY ) - maMapRes.mnMapOfsY - mnOutOffLogicY;
+        aPoly[i] = aPt;
     }
 
     return aPoly;
@@ -1477,12 +1487,12 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return Point( ImplPixelToLogic( rDevicePt.X()-mnOutOffOrigX, mnDPIX,
+    return Point( ImplPixelToLogic( rDevicePt.X(), mnDPIX,
                                     aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                    aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX,
-                  ImplPixelToLogic( rDevicePt.Y()-mnOutOffOrigY, mnDPIY,
+                                    aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
+                  ImplPixelToLogic( rDevicePt.Y(), mnDPIY,
                                     aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                    aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY );
+                                    aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
 // -----------------------------------------------------------------------
@@ -1525,18 +1535,18 @@ Rectangle OutputDevice::PixelToLogic( const Rectangle& rDeviceRect,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    return Rectangle( ImplPixelToLogic( rDeviceRect.Left()-mnOutOffOrigX, mnDPIX,
+    return Rectangle( ImplPixelToLogic( rDeviceRect.Left(), mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                        aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rDeviceRect.Top()-mnOutOffOrigY, mnDPIY,
+                                        aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
+                      ImplPixelToLogic( rDeviceRect.Top(), mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                        aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY,
-                      ImplPixelToLogic( rDeviceRect.Right()-mnOutOffOrigX, mnDPIX,
+                                        aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY,
+                      ImplPixelToLogic( rDeviceRect.Right(), mnDPIX,
                                         aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                        aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX,
-                      ImplPixelToLogic( rDeviceRect.Bottom()-mnOutOffOrigY, mnDPIY,
+                                        aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX,
+                      ImplPixelToLogic( rDeviceRect.Bottom(), mnDPIY,
                                         aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                        aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY );
+                                        aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
 // -----------------------------------------------------------------------
@@ -1561,21 +1571,19 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
-#ifdef WIN
-    Point huge* pPointAry = (Point huge*)aPoly.ImplGetPointAry();
-#else
-    Point* pPointAry = aPoly.ImplGetPointAry();
-#endif
+    const Point* pPointAry = aPoly.GetConstPointAry();
 
     for ( i = 0; i < nPoints; i++ )
     {
-        Point* pPt = &(pPointAry[i]);
-        pPt->X() = ImplPixelToLogic( pPt->X()-mnOutOffOrigX, mnDPIX,
-                                     aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
-                                     aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX;
-        pPt->Y() = ImplPixelToLogic( pPt->Y()-mnOutOffOrigY, mnDPIY,
-                                     aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
-                                     aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY;
+        const Point* pPt = &(pPointAry[i]);
+        Point aPt;
+        aPt.X() = ImplPixelToLogic( pPt->X(), mnDPIX,
+                                    aMapRes.mnMapScNumX, aMapRes.mnMapScDenomX,
+                                    aThresRes.mnThresPixToLogX ) - aMapRes.mnMapOfsX - mnOutOffLogicX;
+        aPt.Y() = ImplPixelToLogic( pPt->Y(), mnDPIY,
+                                    aMapRes.mnMapScNumY, aMapRes.mnMapScDenomY,
+                                    aThresRes.mnThresPixToLogY ) - aMapRes.mnMapOfsY - mnOutOffLogicY;
+        aPoly[i] = aPt;
     }
 
     return aPoly;
@@ -2090,8 +2098,15 @@ long OutputDevice::LogicToLogic( long nLongSource,
 
 void OutputDevice::SetPixelOffset( const Size& rOffset )
 {
-    mnOutOffOrigX = rOffset.Width();
-    mnOutOffOrigY = rOffset.Height();
+    mnOutOffOrigX  = rOffset.Width();
+    mnOutOffOrigY  = rOffset.Height();
+
+    mnOutOffLogicX = ImplPixelToLogic( mnOutOffOrigX, mnDPIX,
+                                       maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
+                                       maThresRes.mnThresPixToLogX );
+    mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
+                                       maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
+                                       maThresRes.mnThresPixToLogY );
 }
 
 // -----------------------------------------------------------------------

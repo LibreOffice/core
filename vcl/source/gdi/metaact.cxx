@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-25 12:30:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define _SV_METAACT_CXX
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
+#include <algorithm>
 #include <string.h>
 
 #ifndef _STREAM_HXX
@@ -1464,7 +1465,9 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if( nAryLen )
     {
-        mpDXAry = new long[ nAryLen ];
+        // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
+        const ULONG nIntAryLen( ::std::max(nAryLen, static_cast<ULONG>(mnLen)) );
+        mpDXAry = new long[ nIntAryLen ];
 
         for( ULONG i = 0UL; i < nAryLen; i++ )
             rIStm >> mpDXAry[ i ];

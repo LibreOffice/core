@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-06 12:57:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,6 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
 
     // min. Groesse berechnen
     long            nCalcSize = pThis->mnItemWidth;
-    ImplToolItem*   pItem;
 
     std::vector< ImplToolItem >::const_iterator it;
     it = pThis->mpData->m_aItems.begin();
@@ -1657,7 +1656,7 @@ ToolBox::~ToolBox()
 
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
-        delete mpFloatSizeAry;
+        delete[] mpFloatSizeAry;
 
     // Wenn keine ToolBox-Referenzen mehr auf die Listen bestehen, dann
     // Listen mit wegloeschen
@@ -2076,7 +2075,7 @@ void ToolBox::ImplFormat( BOOL bResize )
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
     {
-        delete mpFloatSizeAry;
+        delete[] mpFloatSizeAry;
         mpFloatSizeAry = NULL;
     }
 
@@ -3548,6 +3547,8 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->mbToolBox && pWin != this )
         bDrawHotSpot = FALSE;
+    else if( !HasFocus() && HasChildPathFocus() )   // focus is in our childwindow: no highlight
+        bDrawHotSpot = FALSE;
     /*
     else
         if( pWin && !pWin->mbToolBox )
@@ -3714,7 +3715,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
 
         // only clear highlight when focus is not in toolbar
-        if ( bClearHigh && mnHighItemId && !HasFocus() )
+        if ( bClearHigh && mnHighItemId && !HasChildPathFocus() )
         {
             USHORT nClearPos = GetItemPos( mnHighItemId );
             if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
@@ -4757,7 +4758,15 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
             mbDummy2_KeyEvt = TRUE;
             Activate();
             Click();
+
+            // #107776# we might be destroyed in the selecthandler
+            ImplDelData aDelData;
+            ImplAddDel( &aDelData );
             Select();
+            if ( aDelData.IsDelete() )
+                return bRet;
+            ImplRemoveDel( &aDelData );
+
             Deactivate();
             mbDummy2_KeyEvt = FALSE;
             mnMouseModifier = 0;
@@ -4831,6 +4840,11 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     USHORT nCode = aKeyCode.GetCode();
     BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
     BOOL bForwardKey = FALSE;
+
+    // #107776# we might be destroyed in the keyhandler
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     switch ( nCode )
     {
         case KEY_UP:
@@ -4981,11 +4995,24 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         {
             // do nothing to avoid key presses going into the document
             // while the toolbox has the focus
-            // just forward function and special keys
+            // just forward function and special keys and combinations with Alt-key
             USHORT aKeyGroup = aKeyCode.GetGroup();
-            if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC )
+            if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2() )
                 bForwardKey = TRUE;
         }
+    }
+
+    if ( aDelData.IsDelete() )
+        return;
+    ImplRemoveDel( &aDelData );
+
+    // #107251# move focus away if this toolbox was disabled during keyinput
+    if( HasFocus() && mbInputDisabled && (ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL)
+    {
+        USHORT n = 0;
+        Window *pFocusControl = ImplGetParent()->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
+        if ( pFocusControl && pFocusControl != this )
+            pFocusControl->ImplControlFocus( GETFOCUS_INIT );
     }
 
     mnKeyModifier = 0;
@@ -5260,7 +5287,11 @@ void ToolBox::ImplShowFocus()
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
-            DrawSelectionBackground( pItem->maRect, 2, FALSE, TRUE, pItem->mpWindow ? TRUE : FALSE );
+        {
+            Window *pWin = pItem->mpWindow->mpBorderWindow ? pItem->mpWindow->mpBorderWindow : pItem->mpWindow;
+            pWin->mbDrawSelectionBackground = TRUE;
+            pWin->Invalidate( 0 );
+        }
     }
 }
 
@@ -5273,14 +5304,9 @@ void ToolBox::ImplHideFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Rectangle aRect( pItem->maRect );
-            // increase rect a little to get rid of selection border
-            // see DrawSelectionBackground(...)
-            aRect.nLeft     -= 1;
-            aRect.nTop      -= 1;
-            aRect.nRight    += 1;
-            aRect.nBottom   += 1;
-            Invalidate( aRect, 0);
+            Window *pWin = pItem->mpWindow->mpBorderWindow ? pItem->mpWindow->mpBorderWindow : pItem->mpWindow;
+            pWin->mbDrawSelectionBackground = FALSE;
+            pWin->Invalidate( 0 );
         }
     }
 }

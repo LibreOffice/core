@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-11 13:36:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ extern "C" { int gethostname(char*,int); }
 #include "vertcurs_mask.h"
 
 #include "invert50.h"
-#if !(defined S390 || defined AIX)
+#if !(defined AIX)
 #include <X11/extensions/XShm.h>
 #endif
 #include <X11/keysym.h>
@@ -956,156 +956,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         if( getenv( "SAL_SYNCHRONIZE" ) )
             XSynchronize( pDisp_, True );
 
-        // - - - - - - - - - - Window Manager  - - - - - - - - - - -
-        const char *pWM = getenv( "SAL_WM" );
-        if( pWM )
-            sscanf( pWM, "%li", &eWindowManager_ );
-        else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
-            eWindowManager_ = FourDwm;
-        else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
-            eWindowManager_ = mwm; // naja, eigentlich kwm ...
-        else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
-            eWindowManager_ = olwm;
-
-        // - - - - - - - - - - Properties  - - - - - - - - - - - - -
-        const char *pProperties = getenv( "SAL_PROPERTIES" );
-        if( pProperties )
-            sscanf( pProperties, "%li", &nProperties_ );
-        else
-        {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
-            nProperties_ |= PROPERTY_FEATURE_Maximize;
-#endif
-            // Server Bugs & Properties
-            if( GetServerVendor() == vendor_excursion )
-            {
-                nProperties_ |= PROPERTY_BUG_Stipple;
-                nProperties_ |= PROPERTY_BUG_DrawLine;
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-            }
-            else
-            if( GetServerVendor() == vendor_attachmate )
-            {
-                nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-            }
-            else
-            if( GetServerVendor() == vendor_ibm )
-            {
-                nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
-
-                if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
-            }
-            else
-            if( GetServerVendor() == vendor_xfree )
-            {
-                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#ifdef ARM32 // ??? Server! nicht Client ???
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-#endif
-#if defined LINUX || defined FREEBSD
-                // otherwm and olwm are a kind of default, which are not detected
-                // carefully. if we are running linux (i.e. not netbsd) on an xfree
-                // display, fvwm is most probable the wm to choose, confusing with mwm
-                // doesn't harm. #57791# start maximized if possible
-                if(    (otherwm == eWindowManager_)
-                    || (olwm    == eWindowManager_ ))
-                {
-                    eWindowManager_ = fvwm; // ???
-                    nProperties_ |= PROPERTY_FEATURE_Maximize;
-                }
-#else
-                if( otherwm == eWindowManager_ ) eWindowManager_ = winmgr;
-#endif
-#if defined SOLARIS && defined SPARC
-                nProperties_ |= PROPERTY_BUG_Bitmap_Bit_Order;
-                // solaris xlib seems to have problems with putting images
-                // in correct bit order to xfree 8 bit displays
-#endif
-            }
-            else
-            if( GetServerVendor() == vendor_sun )
-            {
-                // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-
-                // trusted solaris doesn't allow to change properties on the
-                // wm decoration window
-                if (sal_IsTrustedSolaris (pDisp_))
-                    nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
-
-                // Fehler im Sun-Solaris X86 Server !
-                if (ImageByteOrder(GetDisplay()) == LSBFirst)
-                {
-                    nProperties_ |= PROPERTY_BUG_Tile;
-                    nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
-                }
-                else // MSBFirst Sun-Solaris Sparc Server
-                {
-                    // XCopyPlane reverts black and white for 1bit bitmaps
-                    // only sun, only 8bit pseudocolor target
-                    if (   (pVisual_->GetDepth() == 8)
-                        && (pVisual_->GetClass() == PseudoColor))
-                        nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-                    // Fehler in Solaris 2.5.1
-                    if (VendorRelease ( GetDisplay() ) < 3600)
-                        nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
-                }
-
-                if( otherwm == eWindowManager_ )
-                    if( XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
-                        eWindowManager_ = dtwm;
-                    else
-                        eWindowManager_ = olwm;
-            }
-            else
-            if( GetServerVendor() == vendor_sco )
-            {
-                if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
-            }
-            else
-            if( GetServerVendor() == vendor_sgi )
-            {
-                if( pVisual_->GetDepth() > 8 && pVisual_->GetDepth() <= 16 )
-                    nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-                nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
-
-                if( otherwm == eWindowManager_ ) eWindowManager_ = FourDwm;
-            }
-            else
-            if( GetServerVendor() == vendor_hp )
-            {
-                if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
-            }
-            else
-            if( GetServerVendor() == vendor_hummingbird )
-            {
-                if (pVisual_->GetDepth() == 24)
-                    nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
-            }
-
-            if( otherwm == eWindowManager_ )
-            {
-                if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
-                    eWindowManager_ = olwm;
-                // ???
-            }
-
-            if( winmgr == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
-                nProperties_ |= PROPERTY_FEATURE_Maximize;
-            }
-            else if( dtwm == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
-            }
-            else if( pmwm == eWindowManager_ )
-            {
-                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
-            }
-        }
-
         // - - - - - - - - - - Shared Images - - - - - - - - - - - -
 #if defined _XSHM_H_ // && defined DBG_UTIL
         // SharedMem wird nur noch ueber SalProperties enabled
@@ -1277,9 +1127,158 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
 
         ModifierMapping();
+
+        m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
+        // - - - - - - - - - - Window Manager  - - - - - - - - - - -
+        const char *pWM = getenv( "SAL_WM" );
+        if( pWM )
+            sscanf( pWM, "%li", &eWindowManager_ );
+        else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
+            eWindowManager_ = FourDwm;
+        else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
+            eWindowManager_ = mwm; // naja, eigentlich kwm ...
+        else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
+            eWindowManager_ = olwm;
+        else if( m_pWMAdaptor->getWindowManagerName().EqualsAscii( "Dtwm" ) )
+            eWindowManager_ = dtwm;
+
+        // - - - - - - - - - - Properties  - - - - - - - - - - - - -
+        const char *pProperties = getenv( "SAL_PROPERTIES" );
+        if( pProperties )
+            sscanf( pProperties, "%li", &nProperties_ );
+        else
+        {
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
+            nProperties_ |= PROPERTY_FEATURE_Maximize;
+#endif
+            // Server Bugs & Properties
+            if( GetServerVendor() == vendor_excursion )
+            {
+                nProperties_ |= PROPERTY_BUG_Stipple;
+                nProperties_ |= PROPERTY_BUG_DrawLine;
+                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+            }
+            else
+            if( GetServerVendor() == vendor_attachmate )
+            {
+                nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
+            }
+            else
+            if( GetServerVendor() == vendor_ibm )
+            {
+                nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
+
+                if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
+            }
+            else
+            if( GetServerVendor() == vendor_xfree )
+            {
+                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
+#ifdef ARM32 // ??? Server! nicht Client ???
+                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+#endif
+#if defined LINUX || defined FREEBSD
+                // otherwm and olwm are a kind of default, which are not detected
+                // carefully. if we are running linux (i.e. not netbsd) on an xfree
+                // display, fvwm is most probable the wm to choose, confusing with mwm
+                // doesn't harm. #57791# start maximized if possible
+                if(    (otherwm == eWindowManager_)
+                    || (olwm    == eWindowManager_ ))
+                {
+                    eWindowManager_ = fvwm; // ???
+                    nProperties_ |= PROPERTY_FEATURE_Maximize;
+                }
+#else
+                if( otherwm == eWindowManager_ ) eWindowManager_ = winmgr;
+#endif
+#if defined SOLARIS && defined SPARC
+                nProperties_ |= PROPERTY_BUG_Bitmap_Bit_Order;
+                // solaris xlib seems to have problems with putting images
+                // in correct bit order to xfree 8 bit displays
+#endif
+            }
+            else
+            if( GetServerVendor() == vendor_sun )
+            {
+                // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
+                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
+
+                // trusted solaris doesn't allow to change properties on the
+                // wm decoration window
+                if (sal_IsTrustedSolaris (pDisp_))
+                    nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
+
+                // Fehler im Sun-Solaris X86 Server !
+                if (ImageByteOrder(GetDisplay()) == LSBFirst)
+                {
+                    nProperties_ |= PROPERTY_BUG_Tile;
+                    nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
+                }
+                else // MSBFirst Sun-Solaris Sparc Server
+                {
+                    // XCopyPlane reverts black and white for 1bit bitmaps
+                    // only sun, only 8bit pseudocolor target
+                    if (   (pVisual_->GetDepth() == 8)
+                        && (pVisual_->GetClass() == PseudoColor))
+                        nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
+                    // Fehler in Solaris 2.5.1
+                    if (VendorRelease ( GetDisplay() ) < 3600)
+                        nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
+                }
+
+                if( otherwm == eWindowManager_ )
+                    eWindowManager_ = olwm;
+            }
+            else
+            if( GetServerVendor() == vendor_sco )
+            {
+                if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
+            }
+            else
+            if( GetServerVendor() == vendor_sgi )
+            {
+                if( pVisual_->GetDepth() > 8 && pVisual_->GetDepth() <= 16 )
+                    nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
+                nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
+
+                if( otherwm == eWindowManager_ ) eWindowManager_ = FourDwm;
+            }
+            else
+            if( GetServerVendor() == vendor_hp )
+            {
+                if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
+            }
+            else
+            if( GetServerVendor() == vendor_hummingbird )
+            {
+                if (pVisual_->GetDepth() == 24)
+                    nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
+            }
+
+            if( otherwm == eWindowManager_ )
+            {
+                if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
+                    eWindowManager_ = olwm;
+                // ???
+            }
+
+            if( winmgr == eWindowManager_ )
+            {
+                nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
+                nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
+                nProperties_ |= PROPERTY_FEATURE_Maximize;
+            }
+            else if( dtwm == eWindowManager_ )
+            {
+                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
+            }
+            else if( pmwm == eWindowManager_ )
+            {
+                nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
+            }
+        }
     }
 
-    m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
 #ifdef DBG_UTIL
     PrintInfo();
 #endif
@@ -2499,6 +2498,9 @@ void SalDisplay::SendEvent( Atom          aEvent,
             pEventQueue_->pNext_                = NULL;
         }
 
+        // Notify SalXLib::Yield() of a pending event.
+        pXLib_->Wakeup();
+
         osl_releaseMutex( hEventGuard_ );
     }
     else
@@ -2632,9 +2634,9 @@ long SalDisplay::Dispatch( XEvent *pEvent )
                     pFrame->maFrameData.Call( SALEVENT_SETTINGSCHANGED, NULL );
                     pFrame = pFrame->maFrameData.GetNextFrame();
                 }
+                return 0;
             }
-            return 0;
-
+            break;
         case MappingNotify:
             if( MappingKeyboard == pEvent->xmapping.request )
                 XRefreshKeyboardMapping( &pEvent->xmapping );
@@ -2939,6 +2941,27 @@ void SalDisplay::PrintInfo() const
             PrintEvent( "\t\x08\x08", &pEvent->event_ );
             pEvent = pEvent->pNext_;
         }
+    }
+}
+
+void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
+{
+    int   nThreshold;
+
+    if (aSize_.Height() <= 600)
+        nThreshold =  96;
+    else if (aSize_.Height() <= 768)
+        nThreshold = 108;
+    else
+        nThreshold = 120;
+
+    rDPIX = aResolution_.A();
+    rDPIY = aResolution_.B();
+
+    if( rDPIY < nThreshold )
+    {
+        rDPIX = Divide( rDPIX * nThreshold, rDPIY );
+        rDPIY = nThreshold;
     }
 }
 

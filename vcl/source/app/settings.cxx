@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-13 07:32:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
 
 #ifdef UNX
 #include <prex.h>
@@ -100,6 +103,14 @@
 #include <dtint.hxx>
 #include <stdio.h>
 #endif
+
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+
+using namespace rtl;
 
 #pragma hdrstop
 
@@ -480,6 +491,7 @@ ImplStyleData::ImplStyleData()
     mnDisplayOptions            = 0;
     mnOptions                   = 0;
     mnAutoMnemonic              = 1;
+    mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
 
     SetStandardStyles();
 }
@@ -515,6 +527,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maDeactiveBorderColor( rData.maDeactiveBorderColor ),
     maMenuColor( rData.maMenuColor ),
     maMenuBarColor( rData.maMenuBarColor ),
+    maMenuBorderColor( rData.maMenuBorderColor ),
     maMenuTextColor( rData.maMenuTextColor ),
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
@@ -538,7 +551,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maRadioCheckFont( rData.maRadioCheckFont ),
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
-    maIconFont( rData.maIconFont )
+    maIconFont( rData.maIconFont ),
+    maFontColor( rData.maFontColor )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -568,8 +582,10 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
+    mnUseFlatMenues             = rData.mnUseFlatMenues;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
+    mnToolbarIconSize           = rData.mnToolbarIconSize;
 }
 
 // -----------------------------------------------------------------------
@@ -624,6 +640,7 @@ void ImplStyleData::SetStandardStyles()
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
     maMenuBarColor              = Color( COL_LIGHTGRAY );
+    maMenuBorderColor           = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -635,6 +652,7 @@ void ImplStyleData::SetStandardStyles()
     maLinkColor                 = Color( COL_BLUE );
     maVisitedLinkColor          = Color( COL_RED );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
+    maFontColor                 = Color( COL_BLACK );
 
     mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
     mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
@@ -649,6 +667,7 @@ void ImplStyleData::SetStandardStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
@@ -722,6 +741,7 @@ void ImplStyleData::SetStandardOS2Styles()
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
     maMenuBarColor              = Color( COL_LIGHTGRAY );
+    maMenuBorderColor           = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -749,6 +769,7 @@ void ImplStyleData::SetStandardOS2Styles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
@@ -807,6 +828,7 @@ void ImplStyleData::SetStandardMacStyles()
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
     maMenuBarColor              = Color( COL_LIGHTGRAY );
+    maMenuBorderColor           = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -833,6 +855,7 @@ void ImplStyleData::SetStandardMacStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
+    mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
 }
 
@@ -901,6 +924,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
     CopyData();
     mpData->maFaceColor         = rColor;
     mpData->maLightBorderColor  = rColor;
+    mpData->maMenuBorderColor   = rColor;
     mpData->maDarkShadowColor   = Color( COL_BLACK );
     if ( rColor != Color( COL_LIGHTGRAY ) )
     {
@@ -1032,6 +1056,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
+         (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -1060,6 +1085,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maDeactiveBorderColor     == rSet.mpData->maDeactiveBorderColor)      &&
          (mpData->maMenuColor               == rSet.mpData->maMenuColor)                &&
          (mpData->maMenuBarColor            == rSet.mpData->maMenuBarColor)             &&
+         (mpData->maMenuBorderColor         == rSet.mpData->maMenuBorderColor)          &&
          (mpData->maMenuTextColor           == rSet.mpData->maMenuTextColor)            &&
          (mpData->maMenuHighlightColor      == rSet.mpData->maMenuHighlightColor)       &&
          (mpData->maMenuHighlightTextColor  == rSet.mpData->maMenuHighlightTextColor)   &&
@@ -1084,7 +1110,8 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
-         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus) )
+         (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return TRUE;
     else
         return FALSE;
@@ -1187,19 +1214,16 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
 
 BOOL MiscSettings::GetEnableATToolSupport() const
 {
+#ifndef REMOTE_APPSERVER
     if( mpData->mnEnableATT == (USHORT)~0 )
     {
 #ifdef UNX
         mpData->mnEnableATT = 0;
 
-#ifndef REMOTE_APPSERVER
         DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( ( pIntegrator && pIntegrator->GetDtType() == DtGNOME ) ||
             ( pEnv && *pEnv ) )
-#else
-        if( 0 )
-#endif
         {
             char buf[16];
             // use 2 shells to suppress the eventual "gcontool-2 not found" message
@@ -1219,17 +1243,66 @@ BOOL MiscSettings::GetEnableATToolSupport() const
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
         {
+#ifdef WNT
+            // Check in the Windows registry if an AT tool wants Accessibility support to
+            // be activated ..
+            HKEY hkey;
+
+            if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
+                "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+                &hkey) )
+            {
+                DWORD dwType;
+                WIN_BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
+                DWORD cbData = sizeof(Data);
+
+                if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
+                    NULL, &dwType, Data, &cbData) )
+                {
+                    switch (dwType)
+                    {
+                        case REG_SZ:
+                            mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true")));
+                            break;
+                        case REG_DWORD:
+                            mpData->mnEnableATT = (USHORT) (((DWORD *) Data)[0]);
+                            break;
+                        default:
+                            // Unsupported registry type
+                            mpData->mnEnableATT = 0;
+                            break;
+                    }
+                }
+
+                RegCloseKey(hkey);
+            }
+
+            // Registry does not exist ..
+            if( mpData->mnEnableATT == (USHORT)~0 )
+            {
+                rtl::OUString aEnable =
+                    vcl::SettingsConfigItem::get()->
+                    getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
+                mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+            }
+#else
             rtl::OUString aEnable =
                 vcl::SettingsConfigItem::get()->
                 getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
             mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+#endif
         }
         else
             mpData->mnEnableATT = 1;
 #endif
     }
     return (BOOL)mpData->mnEnableATT;
+
+#else // REMOTE_APPSERVER
+    return FALSE;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1238,9 +1311,47 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        if( bEnable && !ImplInitAccessBridge() )
-            bEnable = FALSE;
+        if( bEnable && !ImplInitAccessBridge(false) )
+            return;
 
+#ifdef WNT
+        HKEY hkey;
+
+        // If the accessibility key in the Windows registry exists, change it synchronously
+        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
+            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            &hkey) )
+        {
+            DWORD dwType;
+            WIN_BYTE Data[6]; // possible values: "true", "false", 1, 0
+            DWORD cbData = sizeof(Data);
+
+            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
+                NULL,   &dwType, Data, &cbData) )
+            {
+                switch (dwType)
+                {
+                    case REG_SZ:
+                        RegSetValueEx(hkey, "SupportAssistiveTechnology",
+                            NULL, dwType,
+                            bEnable ? (WIN_BYTE *) "true" : (WIN_BYTE *) "false",
+                            bEnable ? sizeof("true") : sizeof("false"));
+                        break;
+                    case REG_DWORD:
+                        ((DWORD *) Data)[0] = bEnable ? 1 : 0;
+                        RegSetValueEx(hkey, "SupportAssistiveTechnology",
+                            NULL, dwType, Data, sizeof(DWORD));
+                        break;
+                    default:
+                        // Unsupported registry type
+                        break;
+                }
+            }
+
+            RegCloseKey(hkey);
+        }
+
+#endif
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
@@ -1998,42 +2109,71 @@ void AllSettings::SetUILanguage( LanguageType eLang  )
 BOOL AllSettings::GetLayoutRTL() const
 {
     static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+    static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
 
-    LanguageType aLang = LANGUAGE_DONTKNOW;
+    // environment always overrides
+    if( pEnv )
+        return true;
+
     BOOL bRTL = FALSE;
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpSettings )
-        aLang = pSVData->maAppData.mpSettings->GetUILanguage();
-
-    switch( aLang )
+    if( nUIMirroring == -1 )
     {
-        // languages with right-to-left UI
-        case LANGUAGE_ARABIC:
-        case LANGUAGE_ARABIC_SAUDI_ARABIA:
-        case LANGUAGE_ARABIC_IRAQ:
-        case LANGUAGE_ARABIC_EGYPT:
-        case LANGUAGE_ARABIC_LIBYA:
-        case LANGUAGE_ARABIC_ALGERIA:
-        case LANGUAGE_ARABIC_MOROCCO:
-        case LANGUAGE_ARABIC_TUNISIA:
-        case LANGUAGE_ARABIC_OMAN:
-        case LANGUAGE_ARABIC_YEMEN:
-        case LANGUAGE_ARABIC_SYRIA:
-        case LANGUAGE_ARABIC_JORDAN:
-        case LANGUAGE_ARABIC_LEBANON:
-        case LANGUAGE_ARABIC_KUWAIT:
-        case LANGUAGE_ARABIC_UAE:
-        case LANGUAGE_ARABIC_BAHRAIN:
-        case LANGUAGE_ARABIC_QATAR:
-        case LANGUAGE_HEBREW:
-            bRTL = TRUE;
-            break;
-
-        default:
-            break;
+        nUIMirroring = 0; // ask configuration only once
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+            vcl::unohelper::GetMultiServiceFactory(),
+            OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensisitive !
+        if ( aNode.isValid() )
+        {
+            BOOL bTmp;
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "UIMirroring" ) );
+            if( aValue >>= bTmp )
+            {
+                // found true or false; if it was nil, nothing is changed
+                nUIMirroring = bTmp ? 1 : 2;
+            }
+        }
     }
-    return (bRTL || pEnv);
+
+    if( nUIMirroring == 0 )  // no config found (eg, setup) or default (nil) was set: check language
+    {
+        LanguageType aLang = LANGUAGE_DONTKNOW;
+        ImplSVData* pSVData = ImplGetSVData();
+        if ( pSVData->maAppData.mpSettings )
+            aLang = pSVData->maAppData.mpSettings->GetUILanguage();
+
+        switch( aLang )
+        {
+            // languages with right-to-left UI
+            case LANGUAGE_ARABIC:
+            case LANGUAGE_ARABIC_SAUDI_ARABIA:
+            case LANGUAGE_ARABIC_IRAQ:
+            case LANGUAGE_ARABIC_EGYPT:
+            case LANGUAGE_ARABIC_LIBYA:
+            case LANGUAGE_ARABIC_ALGERIA:
+            case LANGUAGE_ARABIC_MOROCCO:
+            case LANGUAGE_ARABIC_TUNISIA:
+            case LANGUAGE_ARABIC_OMAN:
+            case LANGUAGE_ARABIC_YEMEN:
+            case LANGUAGE_ARABIC_SYRIA:
+            case LANGUAGE_ARABIC_JORDAN:
+            case LANGUAGE_ARABIC_LEBANON:
+            case LANGUAGE_ARABIC_KUWAIT:
+            case LANGUAGE_ARABIC_UAE:
+            case LANGUAGE_ARABIC_BAHRAIN:
+            case LANGUAGE_ARABIC_QATAR:
+            case LANGUAGE_HEBREW:
+                bRTL = TRUE;
+                break;
+
+            default:
+                break;
+        }
+    }
+    else
+        bRTL = (nUIMirroring == 1);
+
+    return bRTL;
 }
 
 // -----------------------------------------------------------------------

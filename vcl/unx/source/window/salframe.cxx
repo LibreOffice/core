@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-26 17:27:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,11 +185,11 @@ using namespace vcl;
 #define _GetPaintRegion()   maFrameData.GetPaintRegion()
 #define _IsMapped()         maFrameData.bMapped_
 
-static XLIB_Window  hPresentationWindow = None;
+static XLIB_Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< XLIB_Window > aPresentationReparentList;
-static SalFrame*    pIntroBitmap        = NULL;
-static bool     bWasIntroBitmap     = false;
 static int          nVisibleFloats      = 0;
+
+SalFrame* SalFrameData::s_pSaveYourselfFrame = NULL;
 
 // -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -224,6 +224,8 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
                          x, y );
         aPresentationReparentList.pop_front();
     }
+    if( hPresFocusWindow )
+        XSetInputFocus( pDisplay->GetDisplay(), hPresFocusWindow, PointerRoot, CurrentTime );
     XSync( pDisplay->GetDisplay(), False );
     pDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
 }
@@ -337,7 +339,13 @@ void SalGraphicsData::Init( SalFrame *pFrame )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool SalFrameData::IsOverrideRedirect() const
-{ return  ! ( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ); }
+{
+    return
+        ((nStyle_ & SAL_FRAME_STYLE_INTRO) && !pDisplay_->getWMAdaptor()->supportsSplash())
+        ||
+        (!( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ) && !pDisplay_->getWMAdaptor()->supportsFullScreen())
+        ;
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -447,7 +455,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             SalFrame* pFrame = pNextFrame_;
             while( pFrame &&
                    ( pFrame->maFrameData.mpParent
-                     || pFrame->maFrameData.IsOverrideRedirect()
+                     || pFrame->maFrameData.mbFullScreen
                      || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
                      || ! pFrame->GetUnmirroredGeometry().nWidth
                      || ! pFrame->GetUnmirroredGeometry().nHeight
@@ -477,7 +485,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                 }
             }
         }
-        Attributes.win_gravity = NorthWestGravity;
+        Attributes.win_gravity = StaticGravity;
         nAttrMask |= CWWinGravity;
         if( mpParent )
         {
@@ -519,6 +527,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     pFrame_->maGeometry.nWidth  = w;
     pFrame_->maGeometry.nHeight = h;
 
+    XSync( GetXDisplay(), False );
+
     if( ! pParentData && ! (nSalFrameStyle & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD)) )
     {
         XSetWMHints( GetXDisplay(), mhWindow, &Hints );
@@ -526,14 +536,27 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         Atom a[4];
         int  n = 0;
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
-        a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
-        XSetWMProtocols( GetXDisplay(), mhWindow, a, n );
+        if( ! s_pSaveYourselfFrame && ! mpParent)
+        {
+            // at all times have only one frame with SaveYourself
+            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
+            s_pSaveYourselfFrame = pFrame_;
+        }
+        XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
         XClassHint* pClass = XAllocClassHint();
         pClass->res_name  = getFrameResName();
         pClass->res_class = getFrameClassName();
         XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
         XFree( pClass );
+
+        XSizeHints* pHints = XAllocSizeHints();
+        pHints->flags       = PWinGravity;
+        pHints->win_gravity = GetDisplay()->getWMAdaptor()->getPositionWinGravity();
+        XSetWMNormalHints( GetXDisplay(),
+                           GetShellWindow(),
+                           pHints );
+        XFree (pHints);
 
         // set client leader
         XLIB_Window aLeader = GetDisplay()->GetDrawable();
@@ -546,37 +569,43 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                          (unsigned char*)&aLeader,
                          1
                          );
-    }
-
-    XSync( GetXDisplay(), False );
-
-    int nDecoFlags = WMAdaptor::decoration_All;
-    if( ( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) != (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE) )
-        || ( nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
-        )
-    {
-        nDecoFlags = WMAdaptor::decoration_Border;
-        if( ! mpParent )
-            nDecoFlags |= WMAdaptor::decoration_MinimizeBtn;
-        if( nStyle_ & SAL_FRAME_STYLE_CLOSEABLE )
-            nDecoFlags |= WMAdaptor::decoration_CloseBtn;
-        if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+#define DECOFLAGS (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
+        int nDecoFlags = WMAdaptor::decoration_All;
+        if( (nStyle_ & DECOFLAGS ) != DECOFLAGS || (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
         {
-            nDecoFlags |= WMAdaptor::decoration_Resize;
-            if( ! nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
-                nDecoFlags |= WMAdaptor::decoration_MaximizeBtn;
-        }
-        if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
-            nDecoFlags |= WMAdaptor::decoration_Title;
-    }
+            if( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) )
+                // if any decoration, then show a border
+                nDecoFlags = WMAdaptor::decoration_Border;
+            else
+                nDecoFlags = 0;
 
-    GetDisplay()->getWMAdaptor()->
-        setFrameTypeAndDecoration( pFrame_,
-                                   (mpParent && hPresentationWindow == None) ?
-                                   WMAdaptor::windowType_ModelessDialogue
-                                   : WMAdaptor::windowType_Normal,
-                                   nDecoFlags,
-                                   hPresentationWindow ? NULL : mpParent );
+            if( ! mpParent && (nStyle_ & DECOFLAGS) )
+                // don't add a min button if window should be decorationless
+                nDecoFlags |= WMAdaptor::decoration_MinimizeBtn;
+            if( nStyle_ & SAL_FRAME_STYLE_CLOSEABLE )
+                nDecoFlags |= WMAdaptor::decoration_CloseBtn;
+            if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+            {
+                nDecoFlags |= WMAdaptor::decoration_Resize;
+                if( ! nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+                    nDecoFlags |= WMAdaptor::decoration_MaximizeBtn;
+            }
+            if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
+                nDecoFlags |= WMAdaptor::decoration_Title;
+        }
+
+        WMAdaptor::WMWindowType eType = WMAdaptor::windowType_Normal;
+        if( nStyle_ & SAL_FRAME_STYLE_INTRO )
+            eType = WMAdaptor::windowType_Splash;
+        if( mpParent && hPresentationWindow == None )
+            eType = WMAdaptor::windowType_ModelessDialogue;
+
+        GetDisplay()->getWMAdaptor()->
+            setFrameTypeAndDecoration( pFrame_,
+                                       eType,
+                                       nDecoFlags,
+                                       hPresentationWindow ? NULL : mpParent );
+    }
 
     if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
         pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
@@ -615,10 +644,11 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     nKeyCode_                   = 0;
     nKeyState_                  = 0;
     nCompose_                   = -1;
+    mbKeyMenu                   = false;
+    mbSendExtKeyModChange       = false;
+    mnExtKeyMod                 = 0;
 
     nShowState_                 = SHOWSTATE_UNKNOWN;
-    nMaxWidth_                  = 0;
-    nMaxHeight_                 = 0;
     nWidth_                     = 0;
     nHeight_                    = 0;
     nStyle_                     = 0;
@@ -651,6 +681,10 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     mnDecorationFlags           = WMAdaptor::decoration_All;
     mbMaximizedVert             = false;
     mbMaximizedHorz             = false;
+    mbShaded                    = false;
+    mbFullScreen                = false;
+    mbMoved                     = false;
+    mbSized                     = false;
 
     mnIconID                    = 0; // ICON_DEFAULT
 }
@@ -676,9 +710,6 @@ inline SalFrameData::~SalFrameData()
         hPresentationWindow = None;
         doReparentPresentationDialogues( GetDisplay() );
     }
-
-    if( pIntroBitmap == pFrame_ )
-        pIntroBitmap = NULL;
 
     NotifyDeleteData ();
 
@@ -718,6 +749,23 @@ inline SalFrameData::~SalFrameData()
         && pSalData->pFirstFrame_ == pStatusFrame
         && pSalData->pFirstFrame_->maFrameData.GetNextFrame() == NULL )
         ::vcl::I18NStatus::free();
+
+    if( pFrame_ == s_pSaveYourselfFrame )
+    {
+        // pass on SaveYourself
+        SalFrame* pFrame = pSalData->pFirstFrame_;
+        while( pFrame && ( ( pFrame->maFrameData.nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) ) || pFrame->maFrameData.mpParent  ) )
+            pFrame->maFrameData.GetNextFrame();
+        s_pSaveYourselfFrame = pFrame;
+        if( pFrame )
+        {
+            Atom a[4];
+            int  n = 0;
+            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
+            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
+            XSetWMProtocols( GetXDisplay(), pFrame->maFrameData.GetShellWindow(), a, n );
+        }
+    }
 }
 
 SalFrame::~SalFrame()
@@ -923,19 +971,17 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
     if( bVisible )
     {
         maFrameData.mbInShow = TRUE;
-        if( ! bWasIntroBitmap && maFrameData.IsOverrideRedirect() )
+        if( ! (maFrameData.nStyle_ & SAL_FRAME_STYLE_INTRO) )
         {
-            const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
-            if( (int)maGeometry.nWidth < rScreenSize.Width()-30 ||
-                (int)maGeometry.nHeight < rScreenSize.Height()-30 )
+            SalFrame* pFrame = GetSalData()->pFirstFrame_;
+            while( pFrame )
             {
-                bWasIntroBitmap = true;
-                pIntroBitmap = this;
+                // look for intro bit map; if present, hide it
+                if( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_INTRO )
+                    pFrame->Show( FALSE );
+                pFrame = pFrame->maFrameData.pNextFrame_;
             }
         }
-        // look for intro bit map; if present, hide it
-        if( pIntroBitmap && pIntroBitmap != this )
-            pIntroBitmap->Show( FALSE );
 
         /*
          *  #95097#
@@ -954,6 +1000,8 @@ void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         {
             _GetDisplay()->getWMAdaptor()->changeReferenceFrame( this, maFrameData.mpParent );
         }
+
+        // actually map the window
         if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
         {
             XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
@@ -1082,12 +1130,16 @@ void SalFrame::ToTop( USHORT nFlags )
         XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
     }
 
-    XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
-    for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
-        it != maFrameData.maChildren.end(); ++it )
-        (*it)->ToTop( nFlags & ~SAL_FRAME_TOTOP_GRABFOCUS );
+    if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
+    {
+        XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
+        for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
+             it != maFrameData.maChildren.end(); ++it )
+            (*it)->ToTop( nFlags & ~SAL_FRAME_TOTOP_GRABFOCUS );
+    }
 
-    if( ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS ) && maFrameData.bMapped_ )
+    if( ( ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS ) || ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY ) )
+        && maFrameData.bMapped_ )
         XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToParent, CurrentTime );
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1120,16 +1172,14 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalFrameData::SetWindowGravity (int nGravity, const Point& rPosition) const
+void SalFrameData::SetWindowGravity (int nGravity) const
 {
     XSizeHints* pHint = XAllocSizeHints();
     long        nFlag;
 
     XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
-    pHint->flags       |= PWinGravity | PPosition;
+    pHint->flags       |= PWinGravity;
     pHint->win_gravity  = nGravity;
-    pHint->x            = rPosition.X();
-    pHint->y            = rPosition.Y();
 
     XSetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint);
     XSync (GetXDisplay(), False);
@@ -1216,10 +1266,6 @@ void SalFrameData::Center( )
     }
 
     Point aPoint(nX, nY);
-    const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
-    int nGravity         = pWM->getPositionWinGravity();
-
-    SetWindowGravity (nGravity, aPoint);
     SetPosSize( Rectangle( aPoint, Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) ) );
 }
 
@@ -1322,6 +1368,7 @@ SalFrame::SetWindowState( const SalFrameState *pState )
         const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
         const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
         int nGravity = pWM->getPositionWinGravity();
+
         bool bAdjusted = false;
         if( pState->mnMask & ( SAL_FRAMESTATE_MASK_HEIGHT | SAL_FRAMESTATE_MASK_WIDTH )
             && aPosSize.GetWidth() <= rScreenSize.Width()
@@ -1375,7 +1422,9 @@ SalFrame::SetWindowState( const SalFrameState *pState )
         }
 
          // demand correct positioning from the WM
-         maFrameData.SetWindowGravity (nGravity, Point(aPosSize.getX(), aPosSize.getY()));
+        if( bAdjusted )
+            maFrameData.SetWindowGravity ( nGravity );
+
          // resize with new args
          if (pWM->supportsICCCMPos())
          {
@@ -1395,8 +1444,18 @@ SalFrame::SetWindowState( const SalFrameState *pState )
         if (pState->mnState & SAL_FRAMESTATE_MAXIMIZED)
         {
             maFrameData.nShowState_ = SHOWSTATE_NORMAL;
-            maFrameData.Maximize();
+            if( ! (pState->mnMask & (SAL_FRAMESTATE_MAXIMIZED_HORZ|SAL_FRAMESTATE_MAXIMIZED_VERT) ) )
+                maFrameData.Maximize();
+            else
+            {
+                bool bHorz = (pState->mnState & SAL_FRAMESTATE_MAXIMIZED_HORZ) ? true : false;
+                bool bVert = (pState->mnState & SAL_FRAMESTATE_MAXIMIZED_VERT) ? true : false;
+                _GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
+            }
         }
+        else if( maFrameData.mbMaximizedHorz || maFrameData.mbMaximizedVert )
+            _GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
+
         if (pState->mnState & SAL_FRAMESTATE_MINIMIZED)
         {
             if (maFrameData.nShowState_ == SHOWSTATE_UNKNOWN)
@@ -1409,9 +1468,7 @@ SalFrame::SetWindowState( const SalFrameState *pState )
                 maFrameData.Restore();
         }
         if (pState->mnState & SAL_FRAMESTATE_ROLLUP)
-        {
-            /* not implemented */
-        }
+            _GetDisplay()->getWMAdaptor()->shade( this, true );
     }
 }
 
@@ -1424,15 +1481,21 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnState = SAL_FRAMESTATE_NORMAL;
 
     Rectangle aPosSize;
-    if (! maFrameData.aRestoreFullScreen_.IsEmpty() )
+    if (! maFrameData.maRestorePosSize.IsEmpty() )
     {
-        aPosSize = maFrameData.aRestoreFullScreen_;
+        aPosSize = maFrameData.maRestorePosSize;
         pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
     }
     else
     {
         maFrameData.GetPosSize( aPosSize );
     }
+    if( maFrameData.mbMaximizedHorz )
+        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED_HORZ;
+    if( maFrameData.mbMaximizedVert )
+        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED_VERT;
+    if( maFrameData.mbShaded )
+        pState->mnState |= SAL_FRAMESTATE_ROLLUP;
 
     pState->mnX      = aPosSize.Left();
     pState->mnY      = aPosSize.Top();
@@ -1454,8 +1517,7 @@ SalFrame::SnapShot()
     // make sure the frame has been reparented and all paint timer have been
     // expired
     maFrameData.maResizeTimer.Stop();
-    if (   maFrameData.maResizeBuffer.GetWidth()  != 0
-        || maFrameData.maResizeBuffer.GetHeight() != 0)
+    if ( maFrameData.mbMoved || maFrameData.mbSized )
     {
         maFrameData.HandleResizeTimer (&maFrameData.maResizeTimer);
     }
@@ -1502,12 +1564,8 @@ void SalFrameData::GetPosSize( Rectangle &rPosSize )
 {
     if( pFrame_->maGeometry.nWidth < 1 || pFrame_->maGeometry.nHeight < 1 )
     {
-        long w = nMaxWidth_
-                 ? nMaxWidth_
-                 : pDisplay_->GetScreenSize().Width()  - pFrame_->maGeometry.nLeftDecoration - pFrame_->maGeometry.nRightDecoration;
-        long h = nMaxHeight_
-                 ? nMaxHeight_
-                 : pDisplay_->GetScreenSize().Height() - pFrame_->maGeometry.nTopDecoration - pFrame_->maGeometry.nBottomDecoration;
+        long w = pDisplay_->GetScreenSize().Width()  - pFrame_->maGeometry.nLeftDecoration - pFrame_->maGeometry.nRightDecoration;
+        long h = pDisplay_->GetScreenSize().Height() - pFrame_->maGeometry.nTopDecoration - pFrame_->maGeometry.nBottomDecoration;
 
         rPosSize = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ), Size( w, h ) );
     }
@@ -1567,13 +1625,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     values.width    = rPosSize.GetWidth();
     values.height   = rPosSize.GetHeight();
 
-    if ( !values.width
-         || !values.height
-         || ( pFrame_->maGeometry.nX == rPosSize.Left()
-              && pFrame_->maGeometry.nY == rPosSize.Top()
-              && (int)pFrame_->maGeometry.nWidth == rPosSize.GetWidth()
-              && (int)pFrame_->maGeometry.nHeight == rPosSize.GetHeight() )
-         )
+    if( !values.width || !values.height )
         return;
 
      if( mpParent )
@@ -1606,9 +1658,13 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
         values.y    -= pFrame_->maGeometry.nTopDecoration;
     }
 
-    if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-        && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
-        && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+    if( ( ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+          && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+        && ( nShowState_ == SHOWSTATE_UNKNOWN ||
+             nShowState_ == SHOWSTATE_HIDDEN ||
+             ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+             )
+        )
     {
         XSizeHints* pHints = XAllocSizeHints();
         long nSupplied = 0;
@@ -1617,16 +1673,27 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
                            pHints,
                            &nSupplied
                            );
-        pHints->min_width   = rPosSize.GetWidth();
-        pHints->min_height  = rPosSize.GetHeight();
-        pHints->max_width   = rPosSize.GetWidth();
-        pHints->max_height  = rPosSize.GetHeight();
-        pHints->flags |= PMinSize | PMaxSize;
+        if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+        {
+            pHints->min_width   = rPosSize.GetWidth();
+            pHints->min_height  = rPosSize.GetHeight();
+            pHints->max_width   = rPosSize.GetWidth();
+            pHints->max_height  = rPosSize.GetHeight();
+            pHints->flags |= PMinSize | PMaxSize;
+        }
+        if( nShowState_ == SHOWSTATE_UNKNOWN || nShowState_ == SHOWSTATE_HIDDEN )
+        {
+            pHints->flags |= PPosition | PWinGravity;
+            pHints->x           = values.x;
+            pHints->y           = values.y;
+            pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
+        }
         XSetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints );
         XFree( pHints );
     }
+
     XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
     if( GetShellWindow() != GetWindow() )
         XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
@@ -1650,9 +1717,9 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrameData::Minimize()
 {
-    if( SHOWSTATE_UNKNOWN == nShowState_ )
+    if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
-        stderr0( "SalFrameData::Minimize SHOWSTATE_UNKNOWN\n" );
+        stderr0( "SalFrameData::Minimize on withdrawn window\n" );
         return;
     }
 
@@ -1677,9 +1744,9 @@ void SalFrameData::Maximize()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrameData::Restore()
 {
-    if( SHOWSTATE_UNKNOWN == nShowState_ )
+    if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
-        stderr0( "SalFrameData::Restore SHOWSTATE_UNKNOWN\n" );
+        stderr0( "SalFrameData::Restore on withdrawn window\n" );
         return;
     }
 
@@ -1696,9 +1763,10 @@ void SalFrameData::Restore()
 
 void SalFrame::ShowFullScreen( BOOL bFullScreen )
 {
-    if( maFrameData.aRestoreFullScreen_.IsEmpty() == !bFullScreen )
+    if( maFrameData.mbFullScreen == (bool)bFullScreen )
         return;
-    maFrameData.pDisplay_->getWMAdaptor()->maximizeFrame( this, bFullScreen, bFullScreen );
+
+    maFrameData.pDisplay_->getWMAdaptor()->showFullScreen( this, bFullScreen );
     if( maFrameData.IsOverrideRedirect()
         && WMSupportsFWS( maFrameData.GetXDisplay(), maFrameData.GetDisplay()->GetRootWindow()) )
     {
@@ -1787,9 +1855,17 @@ void SalFrame::StartPresentation( BOOL bStart )
 
     if( ! bStart && hPresentationWindow != None )
         doReparentPresentationDialogues( _GetDisplay() );
-    hPresentationWindow = bStart ? maFrameData.GetWindow() : None;
+    hPresentationWindow = (bStart && maFrameData.IsOverrideRedirect() ) ? maFrameData.GetWindow() : None;
     if( bStart || maFrameData.nScreenSaversTimeout_ )
     {
+        if( hPresentationWindow )
+        {
+            /*  #i10559# workaround for WindowMaker: try to restore
+             *  current focus after presentation window is gone
+             */
+            int revert_to = 0;
+            XGetInputFocus( _GetXDisplay(), &hPresFocusWindow, &revert_to );
+        }
         int timeout, interval, prefer_blanking, allow_exposures;
         XGetScreenSaver( _GetXDisplay(),
                          &timeout,
@@ -1926,7 +2002,9 @@ BOOL SalFrame::PostEvent( void *pData )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetTitle( const XubString& rTitle )
 {
-    _GetDisplay()->getWMAdaptor()->setWMName( this, rTitle );
+    if( ! ( (maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD ) ||
+            (maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
+        _GetDisplay()->getWMAdaptor()->setWMName( this, rTitle );
 }
 
 // -----------------------------------------------------------------------
@@ -2227,6 +2305,12 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
                 // because XUngrabPointer does not produce errors if pointer
                 // is not grabbed
                 XUngrabPointer( GetXDisplay(), CurrentTime );
+                ImplSVData* pSVData = ImplGetSVData();
+                if ( pSVData->maWinData.mpFirstFloat )
+                {
+                    if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+                        pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                }
             }
         }
 
@@ -2391,8 +2475,6 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     USHORT      nKeyCode;
     USHORT nModCode = 0;
     char        aDummy;
-    static USHORT nLastModKeyCode = 0;
-    static BOOL   bWaitForModKeyRelease = FALSE;
 
     if( pEvent->state & ShiftMask )
         nModCode |= KEY_SHIFT;
@@ -2412,98 +2494,86 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     {
         SalKeyModEvent aModEvt;
         aModEvt.mnModKeyCode = 0;
+        if( pEvent->type == XLIB_KeyPress && mnExtKeyMod == 0 )
+            mbSendExtKeyModChange = true;
+        else if( pEvent->type == KeyRelease && mbSendExtKeyModChange )
+        {
+            aModEvt.mnModKeyCode = mnExtKeyMod;
+            mnExtKeyMod = 0;
+        }
 
         // pressing just the ctrl key leads to a keysym of XK_Control but
         // the event state does not contain ControlMask. In the release
         // event its the other way round: it does contain the Control mask.
-        // The modifier mode therefor has to be adapted manually.
-        if (pEvent->type == KeyRelease)
+        // The modifier mode therefore has to be adapted manually.
+        USHORT nExtModMask = 0;
+        USHORT nModMask = 0;
+        switch( nKeySym )
         {
-            if ( (nKeySym == XK_Control_L) || (nKeySym == XK_Control_R) )
-                nModCode &= ~KEY_MOD1;
-            if ( (nKeySym == XK_Shift_L)   || (nKeySym == XK_Shift_R) )
-                nModCode &= ~KEY_SHIFT;
-            if ( (nKeySym == XK_Alt_L)     || (nKeySym == XK_Alt_R) )
-                nModCode &= ~(KEY_MOD2|KEY_CONTROLMOD);
+            case XK_Control_L:
+                nExtModMask = MODKEY_LMOD1;
+                nModMask = KEY_MOD1;
+                break;
+            case XK_Control_R:
+                nExtModMask = MODKEY_RMOD1;
+                nModMask = KEY_MOD1;
+                break;
+            case XK_Alt_L:
+                nExtModMask = MODKEY_LMOD2;
+                nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_CONTROLMOD : 0);
+                break;
+            case XK_Alt_R:
+                nExtModMask = MODKEY_RMOD2;
+                nModMask = KEY_MOD2 | (pEvent->type==KeyRelease ? KEY_CONTROLMOD : 0);
+                break;
+            case XK_Shift_L:
+                nExtModMask = MODKEY_LSHIFT;
+                nModMask = KEY_SHIFT;
+                break;
+            case XK_Shift_R:
+                nExtModMask = MODKEY_RSHIFT;
+                nModMask = KEY_SHIFT;
+                break;
         }
-        else
-        {
-            if ( (nKeySym == XK_Control_L) || (nKeySym == XK_Control_R) )
-                nModCode |= KEY_MOD1;
-            if ( (nKeySym == XK_Shift_L)   || (nKeySym == XK_Shift_R) )
-                nModCode |= KEY_SHIFT;
-            if ( (nKeySym == XK_Alt_L)     || (nKeySym == XK_Alt_R) )
-                nModCode |= KEY_MOD2;
-        }
-
-        // #105224# extended modkey event to distinguish right/left modifiers
-        static USHORT tmpCode = 0;
         if( pEvent->type == KeyRelease )
         {
-            if ( nKeySym == XK_Control_L )
-                tmpCode &= ~MODKEY_LMOD1;
-            if ( nKeySym == XK_Control_R )
-                tmpCode &= ~MODKEY_RMOD1;
-            if ( nKeySym == XK_Alt_L )
-                tmpCode &= ~MODKEY_LMOD2;
-            if ( nKeySym == XK_Alt_R )
-                tmpCode &= ~MODKEY_RMOD2;
-            if ( nKeySym == XK_Shift_L )
-                tmpCode &= ~MODKEY_LSHIFT;
-            if ( nKeySym == XK_Shift_R )
-                tmpCode &= ~MODKEY_RSHIFT;
+            nModCode &= ~nModMask;
+            mnExtKeyMod &= ~nExtModMask;
         }
         else
         {
-            if ( nKeySym == XK_Control_L )
-                tmpCode |= MODKEY_LMOD1;
-            if ( nKeySym == XK_Control_R )
-                tmpCode |= MODKEY_RMOD1;
-            if ( nKeySym == XK_Alt_L )
-                tmpCode |= MODKEY_LMOD2;
-            if ( nKeySym == XK_Alt_R )
-                tmpCode |= MODKEY_RMOD2;
-            if ( nKeySym == XK_Shift_L )
-                tmpCode |= MODKEY_LSHIFT;
-            if ( nKeySym == XK_Shift_R )
-                tmpCode |= MODKEY_RSHIFT;
+            nModCode |= nModMask;
+            mnExtKeyMod |= nExtModMask;
         }
-
-        if( tmpCode < nLastModKeyCode )
-        {
-            aModEvt.mnModKeyCode = nLastModKeyCode;
-            nLastModKeyCode = 0;
-            bWaitForModKeyRelease = true;
-        }
-        else
-        {
-            if( !bWaitForModKeyRelease )
-                nLastModKeyCode = tmpCode;
-        }
-
-        if( !tmpCode )
-            bWaitForModKeyRelease = false;
 
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
 
         int nRet = Call( SALEVENT_KEYMODCHANGE, &aModEvt );
 
+        // emulate KEY_MENU
         if ( ( (nKeySym == XK_Alt_L) || (nKeySym == XK_Alt_R) ) &&
              ( (nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 ) )
         {
-            // simulate KEY_MENU
-            aKeyEvt.mnCode     = KEY_MENU | nModCode;
-            aKeyEvt.mnRepeat   = 0;
-            aKeyEvt.mnTime     = pEvent->time;
-            aKeyEvt.mnCharCode = 0;
-            nRet = Call( pEvent->type == KeyRelease ? SALEVENT_KEYUP : SALEVENT_KEYINPUT, &aKeyEvt );
+            if( pEvent->type == XLIB_KeyPress )
+                mbKeyMenu = true;
+            else if( mbKeyMenu )
+            {
+                // simulate KEY_MENU
+                aKeyEvt.mnCode     = KEY_MENU | nModCode;
+                aKeyEvt.mnRepeat   = 0;
+                aKeyEvt.mnTime     = pEvent->time;
+                aKeyEvt.mnCharCode = 0;
+                nRet = Call( SALEVENT_KEYINPUT, &aKeyEvt );
+                nRet = Call( SALEVENT_KEYUP, &aKeyEvt );
+            }
         }
+        else
+            mbKeyMenu = false;
         return nRet;
     }
 
-    nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
-    bWaitForModKeyRelease = TRUE;
+    mbSendExtKeyModChange = mbKeyMenu = false;
 
     // try to figure out the vcl code for the keysym
     nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
@@ -2699,6 +2769,8 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
         else
         {
             mbInputFocus = False;
+            mbSendExtKeyModChange = mbKeyMenu = false;
+            mnExtKeyMod = 0;
             return Call( SALEVENT_LOSEFOCUS, 0 );
         }
     }
@@ -2729,8 +2801,8 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         nCount          = pEvent->xgraphicsexpose.count;
     }
 
-    if( IsOverrideRedirect() && ! aRestoreFullScreen_.IsEmpty()
-        && aPresentationReparentList.begin() == aPresentationReparentList.end() )
+    if( IsOverrideRedirect() && mbFullScreen &&
+        aPresentationReparentList.begin() == aPresentationReparentList.end() )
         // we are in fullscreen mode -> override redirect
          // focus is possibly lost, so reget it
          XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToNone, CurrentTime );
@@ -2865,39 +2937,16 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 
     // check size hints in first time SalFrame::Show
     if( SHOWSTATE_UNKNOWN == nShowState_ && bMapped_ )
-    {
         nShowState_ = SHOWSTATE_NORMAL;
-
-        XSizeHints* pHints = XAllocSizeHints ();
-        long        nSuppliedFlags;
-        if( XGetWMNormalHints( pEvent->display,
-                               pEvent->window,
-                               pHints,
-                               &nSuppliedFlags ) )
-        {
-            if( pHints->flags & PMaxSize ) // supplied
-            {
-                nMaxWidth_  = pHints->max_width;
-                nMaxHeight_ = pHints->max_height;
-                DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
-            }
-            pHints->flags       = pHints->flags | PWinGravity;
-            pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
-            XSetWMNormalHints( pEvent->display,
-                               GetShellWindow(),
-                               pHints );
-            XSync( pEvent->display, False );
-        }
-
-        XFree (pHints);
-    }
 
     nWidth_     = pEvent->width;
     nHeight_    = pEvent->height;
 
-    if( maResizeBuffer.IsEmpty() )
-        maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
-                                    Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
+    if( !mbMoved )
+        mbMoved = ( pEvent->x != pFrame_->maGeometry.nX || pEvent->y != pFrame_->maGeometry.nY );
+    if( !mbSized )
+        mbSized = ( pEvent->width != pFrame_->maGeometry.nWidth || pEvent->height != pFrame_->maGeometry.nHeight );
+
     maResizeTimer.Start();
 
     pFrame_->maGeometry.nX      = pEvent->x;
@@ -2917,26 +2966,17 @@ IMPL_LINK( SalFrameData, HandleAlwaysOnTopRaise, void*, pDummy )
 
 IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
-    bool bMoved = false;
-    bool bSized = false;
-    if( maResizeBuffer.Left() != pFrame_->maGeometry.nX ||
-        maResizeBuffer.Top() != pFrame_->maGeometry.nY )
-        bMoved = true;
-    if( maResizeBuffer.GetWidth() != (int)pFrame_->maGeometry.nWidth ||
-        maResizeBuffer.GetHeight() != (int)pFrame_->maGeometry.nHeight )
-        bSized = true;
-
-    maResizeBuffer = Rectangle();
-
     // update children's position
     RestackChildren();
 
-    if( bSized && ! bMoved )
+    if( mbSized && ! mbMoved )
         Call ( SALEVENT_RESIZE, NULL );
-    else if( bMoved && ! bSized )
+    else if( mbMoved && ! mbSized )
         Call ( SALEVENT_MOVE, NULL );
-    else if( bMoved && bSized )
+    else if( mbMoved && mbSized )
         Call ( SALEVENT_MOVERESIZE, NULL );
+
+    mbMoved = mbSized = false;
 
     SalPaintEvent aPEvt;
 
@@ -2984,6 +3024,11 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                     &hDummy,
                     &Children,
                     &nChildren );
+        /* #107048# this sometimes happens if a Show(TRUE) is
+         *  immediately followed by Show(FALSE) (which is braindead anyway)
+         */
+        if(  hDummy == hWM_Parent )
+            hDummy = hRoot;
         if( hDummy != hRoot )
         {
             hWM_Parent = hDummy;
@@ -3098,28 +3143,6 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     bool bResized = w != pFrame_->maGeometry.nWidth || h != pFrame_->maGeometry.nHeight;
     pFrame_->maGeometry.nWidth  = w;
     pFrame_->maGeometry.nHeight = h;
-    XSizeHints* pHints = XAllocSizeHints();
-    long nSuppliedFlags;
-    if( XGetWMNormalHints( pEvent->display,
-                           GetShellWindow(),
-                           pHints,
-                           &nSuppliedFlags ) )
-    {
-        if( pHints->flags & PMaxSize ) // supplied
-        {
-            nMaxWidth_  = pHints->max_width;
-            nMaxHeight_ = pHints->max_height;
-            DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
-        }
-        pHints->flags       = pHints->flags | PWinGravity;
-        pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
-        XSetWMNormalHints( pEvent->display,
-                GetShellWindow(),
-                pHints );
-        XSync( pEvent->display, False );
-    }
-
-    XFree (pHints);
 
     // limit width and height if we are too large: #47757
     // olwm and fvwm need this, it doesnt harm the rest
@@ -3231,10 +3254,7 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
         }
         else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
         {
-            SalFrame* pLast = GetSalData()->pFirstFrame_;
-            while( pLast->maFrameData.pNextFrame_ )
-                pLast = pLast->maFrameData.pNextFrame_;
-            if( pLast == pFrame_ )
+            if( pFrame_ == s_pSaveYourselfFrame && ! rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
             {
                 ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
                 char* argv[2];
@@ -3245,8 +3265,17 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
 #endif
                 XSetCommand( GetXDisplay(), GetShellWindow(), argv, 2 );
             }
-            else
-                XDeleteProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ) );
+            else // can only happen in race between WM and window closing
+                XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
+
+            if( rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
+            {
+#ifdef DEBUG
+                fprintf( stderr, "sending ShutDown message\n" );
+#endif
+                Application::EnableDialogCancel( TRUE );
+                ShutDown();
+            }
         }
     }
     return 0;
@@ -3357,10 +3386,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                         maPaintRegion.Union( Rectangle( Point( 0, 0 ), Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) ) );
                         if( ! maResizeTimer.IsActive() )
                         {
-                            maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX,
-                                                               pFrame_->maGeometry.nY ),
-                                                        Size( pFrame_->maGeometry.nWidth,
-                                                              pFrame_->maGeometry.nHeight ) );
+                            mbSized = mbMoved = true;
                             maResizeTimer.Start();
                         }
                     }
@@ -3447,7 +3473,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xproperty.atom == pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_STATE ) )
                     nRet = HandleStateEvent( &pEvent->xproperty );
                 else
-                    nRet = 1;
+                    nRet = pDisplay_->getWMAdaptor()->handlePropertyNotify( pFrame_, &pEvent->xproperty );
                 break;
             }
 

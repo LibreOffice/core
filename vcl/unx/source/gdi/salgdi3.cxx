@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-12 18:11:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #include <psprint/printergfx.hxx>
 #include <psprint/fontmanager.hxx>
 #include <psprint/jobdata.hxx>
+#include <psprint/printerinfomanager.hxx>
 #include <svapp.hxx>
 #endif
 
@@ -1173,27 +1174,36 @@ void SalGraphicsData::DrawServerSimpleFontString( const ServerFontLayout& rSalLa
 // TODO: move into psp project
 class PspFontLayout : public GenericSalLayout
 {
+public:
+                        PspFontLayout( ::psp::PrinterGfx& );
+    virtual bool        LayoutText( ImplLayoutArgs& );
+    virtual void        InitFont() const;
+    virtual void        DrawText( SalGraphics& ) const;
 private:
     ::psp::PrinterGfx&  mrPrinterGfx;
-public:
-                        PspFontLayout( ImplLayoutArgs&, ::psp::PrinterGfx& );
-    virtual bool        LayoutText( ImplLayoutArgs& );
-    virtual void        DrawText( SalGraphics& ) const;
+    int                 mnFontID;
+    int                 mnFontHeight;
+    int                 mnFontWidth;
+    bool                mbVertical;
 };
 
 //--------------------------------------------------------------------------
 
-PspFontLayout::PspFontLayout( ImplLayoutArgs& rArgs, ::psp::PrinterGfx& rGfx )
-:   GenericSalLayout( rArgs ),
-    mrPrinterGfx( rGfx )
+PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
+:   mrPrinterGfx( rGfx )
 {
-    LayoutText( rArgs );
+    mnFontID     = mrPrinterGfx.GetFontID();
+    mnFontHeight = mrPrinterGfx.GetFontHeight();
+    mnFontWidth  = mrPrinterGfx.GetFontWidth();
+    mbVertical   = false;
 }
 
 //--------------------------------------------------------------------------
 
 bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    mbVertical = ((rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0);
+
     long nUnitsPerPixel = 1;
     long nWidth = 0;
     int nOldGlyphId = -1;
@@ -1235,18 +1245,14 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     SetOrientation( mrPrinterGfx.GetFontAngle() );
     SetUnitsPerPixel( nUnitsPerPixel );
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
-    return (nOldGlyphId >= 0);
+    return (nWidth >= 0);
 }
 
 //--------------------------------------------------------------------------
 
 void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
 {
-    const int nMaxGlyphs = 160;
+    const int nMaxGlyphs = 200;
     long        aGlyphAry[ nMaxGlyphs ];
     long        aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
@@ -1271,6 +1277,14 @@ void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
 
         rGfx.DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
     }
+}
+
+//--------------------------------------------------------------------------
+
+void PspFontLayout::InitFont() const
+{
+    mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
+        mnOrientation, mbVertical );
 }
 
 //--------------------------------------------------------------------------
@@ -1780,6 +1794,23 @@ void SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
 // ----------------------------------------------------------------------------
 
+void SalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
+{
+#ifndef _USE_PRINT_EXTENSION_
+    if( maGraphicsData.m_pPrinterGfx != NULL )
+    {
+        const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( maGraphicsData.m_pJobData->m_aPrinterName );
+        if( rInfo.m_bPerformFontSubstitution )
+        {
+            for( std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
+                pOutDev->ImplAddDevFontSubstitute( it->first, it->second, FONT_SUBSTITUTE_ALWAYS );
+        }
+    }
+#endif
+}
+
+// ----------------------------------------------------------------------------
+
 inline long
 sal_DivideNeg( long n1, long n2 )
 {
@@ -1932,7 +1963,7 @@ ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 
 // ---------------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool /*bIsGlyphIndex*/, Rectangle& rRect, const OutputDevice* )
+BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect, const OutputDevice* )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -1950,7 +1981,7 @@ BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, bool /*bIsGlyphIndex*/, R
 
 // ---------------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool /*bIsGlyphIndex*/, PolyPolygon& rPolyPoly, const OutputDevice* )
+BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -1969,7 +2000,7 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, bool /*bIsGlyphIndex*/, Pol
 
 //--------------------------------------------------------------------------
 
-SalLayout* SalGraphicsData::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* SalGraphicsData::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
 #if !defined(_USE_PRINT_EXTENSION_)
     // workaround for printers not handling glyph indexing for non-TT fonts
@@ -1985,27 +2016,24 @@ SalLayout* SalGraphicsData::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLeve
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-    {
-        // layout in selected font
-        pLayout = new ServerFontLayout( rArgs, *mpServerFont[ nFallbackLevel ] );
-    }
+        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
 #if !defined(_USE_PRINT_EXTENSION_)
     else if( m_pPrinterGfx != NULL )
-    {
-        pLayout = new PspFontLayout( rArgs, *m_pPrinterGfx );
-    }
+        pLayout = new PspFontLayout( *m_pPrinterGfx );
 #endif // !defined(_USE_PRINT_EXTENSION_)
     else if( mXFont[ nFallbackLevel ] )
-        pLayout = new X11FontLayout( rArgs, *mXFont[ nFallbackLevel ] );
+        pLayout = new X11FontLayout( *mXFont[ nFallbackLevel ] );
+    else
+        pLayout = NULL;
 
     return pLayout;
 }
 
 //--------------------------------------------------------------------------
 
-SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    SalLayout* pSalLayout = maGraphicsData.LayoutText( rArgs, nFallbackLevel );
+    SalLayout* pSalLayout = maGraphicsData.GetTextLayout( rArgs, nFallbackLevel );
     return pSalLayout;
 }
 

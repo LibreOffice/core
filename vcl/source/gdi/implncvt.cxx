@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implncvt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,8 @@ const Polygon* ImplLineConverter::ImplGetNext()
                     ImplFloatPoint aN2Vec( aPointB.GetNVec( aPointC ) );
                     aN2Vec *= mfWidthHalf;
 
-                    f2D = ( aN2Vec.fX == 0 ) ? 1 : ( aN2Vec.fY / aN2Vec.fX );
-                    if ( f1D == f2D )
+                    f2D = ( fabs( aN2Vec.fX ) < 0.00000001 ) ? 1 : ( aN2Vec.fY / aN2Vec.fX );
+                    if ( fabs( f1D - f2D ) < 0.00000001 )
                         nDirection = CURVE_STRAIGHTON;
                     else
                     {
@@ -413,7 +413,7 @@ const Polygon* ImplLineConverter::ImplGetNext()
 
                             int nValid = 0;
 
-                            if ( ( aN2Vec.fX ) == 0 )
+                            if ( fabs( aN2Vec.fX ) < 0.00000001 )
                             {
                                 fX = aDestPoint.fX;
                                 nValid = 1;
@@ -421,7 +421,7 @@ const Polygon* ImplLineConverter::ImplGetNext()
                             else
                                 fBDest = aDestPoint.fY - ( aN2Vec.fY / aN2Vec.fX * aDestPoint.fX );
 
-                            if ( ( aN1Vec.fX ) == 0 )
+                            if ( fabs( aN1Vec.fX ) < 0.000000001 )
                             {
                                 fX = aSourcePoint.fX;
                                 nValid = 2;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-05 17:46:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,6 @@ using namespace rtl;
 #include <gcach_xpeer.hxx>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <dlfcn.h>
 
 // ---------------------------------------------------------------------------
 
@@ -139,7 +137,6 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
 #ifdef MACOSX
-    // [ed] 7/22/02 Use osl loading on OS X.
     OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.dylib" ));
 #else
     OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.so.1" ));
@@ -147,7 +144,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     oslModule pRenderLib=osl_loadModule(xrenderLibraryName.pData, SAL_LOADMODULE_DEFAULT);
     if( !pRenderLib ) {
         fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", xrenderLibraryName.pData );
+            "Please install for improved display performance\n", xrenderLibraryName.getStr() );
         return;
     }
 
@@ -192,10 +189,17 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( !pFunc ) return;
     pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
 
+#ifdef MACOSX
+    OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString16"));
+    pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
+#else // MACOSX
     OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString32"));
     pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
     if( !pFunc ) return;
     pXRenderCompositeString32       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int))pFunc;
+#endif // MACOSX
 
     OUString creatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
     pFunc=osl_getSymbol(pRenderLib, creatPicFuncName.pData);

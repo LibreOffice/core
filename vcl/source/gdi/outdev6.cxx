@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
     aDstRect.Intersection( rRect );
 
-    if( aDstRect.IsEmpty() )
+    if( aDstRect.IsEmpty() || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -241,7 +241,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         if( mpMetaFile )
             mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
 
-        if( !IsDeviceOutputNecessary() || ( !mbLineColor && !mbFillColor ) )
+        if( !IsDeviceOutputNecessary() || ( !mbLineColor && !mbFillColor ) || ImplIsRecordLayout() )
             return;
 
         GDIMetaFile* pOldMetaFile = mpMetaFile;
@@ -912,7 +912,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaWallpaperAction( rRect, rWallpaper ) );
 
-    if ( !IsDeviceOutputNecessary() )
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
@@ -932,7 +932,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
 
 void OutputDevice::Erase()
 {
-    if ( !IsDeviceOutputNecessary() )
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     if ( mbBackground )
@@ -1003,7 +1003,7 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         mpMetaFile->AddAction( new MetaEPSAction( rPoint, rSize, rGfxLink, aSubst ) );
     }
 
-    if ( !IsDeviceOutputNecessary() )
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     Rectangle   aRect( ImplLogicToDevicePixel( Rectangle( rPoint, rSize ) ) );

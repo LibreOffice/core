@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-22 17:25:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1927,6 +1927,11 @@ BOOL Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
     ReleaseAccess( pAcc );
 
     return bRet;
+}
+
+BOOL Bitmap::MakeMono( BYTE cThreshold )
+{
+    return ImplMakeMono( cThreshold );
 }
 
 // ------------------------------------------------------------------

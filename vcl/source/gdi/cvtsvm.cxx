@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-12-10 17:28:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define _SV_CVTSVM_CXX
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
+#include <algorithm>
 #include <string.h>
 
 #ifndef _STACK_HXX //autogen
@@ -445,6 +446,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     const USHORT        nOldFormat = rIStm.GetNumberFormatInt();
     rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
     BOOL                bFatLine = FALSE;
+    VirtualDevice       aFontVDev;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -695,6 +697,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
                     rMtf.AddAction( new MetaTextColorAction( aFont.GetColor() ) );
                     rMtf.AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
+
+                    // #106172# Track font relevant data in shadow VDev
+                    aFontVDev.SetFont( aFont );
                 }
                 break;
 
@@ -724,10 +729,41 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     if( nAryLen > 0L )
                     {
-                        pDXAry = new long[ nAryLen ];
+                        INT32 nStrLen( aStr.Len() );
+
+                        pDXAry = new long[ ::std::max( nAryLen, nStrLen ) ];
 
                         for( long i = 0L; i < nAryLen; i++ )
                             rIStm >> nTmp, pDXAry[ i ] = nTmp;
+
+                        // #106172# Add last DX array elem, if missing
+                        if( nAryLen != nStrLen )
+                        {
+                            if( nAryLen+1 == nStrLen )
+                            {
+                                long* pTmpAry = new long[nStrLen];
+
+                                aFontVDev.GetTextArray( aStr, pTmpAry, (USHORT) nIndex, (USHORT) nLen );
+
+                                // now, the difference between the
+                                // last and the second last DX array
+                                // is the advancement for the last
+                                // glyph. Thus, to complete our meta
+                                // action's DX array, just add that
+                                // difference to last elem and store
+                                // in very last.
+                                if( nStrLen > 1 )
+                                    pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
+                                else
+                                    pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+
+                                delete pTmpAry;
+                            }
+#ifdef DBG_UTIL
+                            else
+                                DBG_ERROR("More than one DX array element missing on SVM import");
+#endif
+                        }
                     }
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
@@ -812,6 +848,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     ImplReadMapMode( rIStm, aMapMode );
                     rMtf.AddAction( new MetaMapModeAction( aMapMode ) );
+
+                    // #106172# Track font relevant data in shadow VDev
+                    aFontVDev.SetMapMode( aMapMode );
                 }
                 break;
 
@@ -919,6 +958,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     aLIStack.Push( new LineInfo( aLineInfo ) );
                     rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
+
+                    // #106172# Track font relevant data in shadow VDev
+                    aFontVDev.Push();
                 }
                 break;
 
@@ -936,6 +978,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
 
                     rMtf.AddAction( new MetaPopAction() );
+
+                    // #106172# Track font relevant data in shadow VDev
+                    aFontVDev.Pop();
                 }
                 break;
 
@@ -1032,6 +1077,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
 #endif
+
+                    // #106172# Track font relevant data in shadow VDev
+                    if( bSet )
+                        aFontVDev.SetRefPoint( aRefPoint );
+                    else
+                        aFontVDev.SetRefPoint();
                 }
                 break;
 

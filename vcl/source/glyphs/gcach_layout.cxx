@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.19 $
- *  last change: $Author: hdu $ $Date: 2002-12-12 13:49:17 $
+ *  $Revision: 1.20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #endif
 
 #ifndef _SV_GCACHFTYP_HXX
+#include <freetype/freetype.h>
 #include <gcach_ftyp.hxx>
 #endif
 
@@ -92,25 +93,52 @@ static ServerFontLayoutEngine aSimpleLayoutEngine;
 // layout implementation for ServerFont
 // =======================================================================
 
-ServerFontLayout::ServerFontLayout( ImplLayoutArgs& rArgs, ServerFont& rFont )
-:   GenericSalLayout( rArgs ),
-    mrServerFont( rFont )
-{
-    LayoutText( rArgs );
-}
+ServerFontLayout::ServerFontLayout( ServerFont& rFont )
+:   mrServerFont( rFont )
+{}
 
 // -----------------------------------------------------------------------
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     ServerFontLayoutEngine* pLE = NULL;
-    if( ~rArgs.mnFlags & (SAL_LAYOUT_COMPLEX_DISABLED|SAL_LAYOUT_BIDI_STRONG) )
+    if( ~rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED )
         pLE = mrServerFont.GetLayoutEngine();
     if( !pLE )
         pLE = &aSimpleLayoutEngine;
 
     bool bRet = (*pLE)( *this, rArgs );
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+{
+    SalLayout::AdjustLayout( rArgs );
+
+    // general justification
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs );
+    else if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
+
+    // asian kerning
+    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
+    && !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL) )
+        ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
+
+    // kashida justification
+    if( rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON )
+    {
+        int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
+        if( nKashidaIndex != 0 )
+        {
+            const GlyphMetric& rGM = mrServerFont.GetGlyphMetric( nKashidaIndex );
+            KashidaJustify( nKashidaIndex, rGM.GetCharWidth() );
+            // TODO: kashida-GSUB/GPOS
+        }
+    }
 }
 
 // =======================================================================
@@ -132,9 +160,10 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
         int nGlyphIndex = rFont.GetGlyphIndex( cChar );
-        // update fallback_runs if needed
+        // when glyph fallback is needed update LayoutArgs
         if( !nGlyphIndex )
-            rArgs.NeedFallback( nCharPos, bRightToLeft );
+            if( !rArgs.NeedFallback( nCharPos, bRightToLeft ) )
+                continue;
 
         // apply pair kerning if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
@@ -154,17 +183,6 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
         rLayout.AppendGlyph( aGI );
     }
 
-    // apply asian kerning if requested
-    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
-    && !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL)
-    &&  !rArgs.mpDXArray
-    &&  !rArgs.mnLayoutWidth )
-        rLayout.ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
-
-    if( rArgs.mpDXArray )
-        rLayout.ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        rLayout.Justify( rArgs.mnLayoutWidth );
     return true;
 }
 
@@ -220,7 +238,6 @@ public:
     virtual void            transformFunits( float xFunits, float yFunits, LEPoint &pixels ) const;
 };
 
-
 // -----------------------------------------------------------------------
 
 const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
@@ -267,7 +284,6 @@ void IcuFontFromServerFont::mapCharsToGlyphs( const LEUnicode pChars[],
     if( !bReverse )
         pMapper = NULL;
     for( int i = 0; i < nCount; ++i )
-
         pGlyphs[i] = mapCharToGlyph( pChars[nOffset+i], pMapper );
 
     if( bReverse )
@@ -461,12 +477,13 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             pIcuChars[ic] = static_cast<LEUnicode>( rArgs.mpStr[ic] );
     }
 
-    // allocate temporary arrays
-    int nGlyphCapacity = 3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos ) + 16;
+    // allocate temporary arrays, note: round to even
+    int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos ) | 15) + 1;
+
     struct IcuPosition{ float fX, fY; };
     const int nAllocSize = sizeof(LEGlyphID) + sizeof(le_int32) + sizeof(IcuPosition);
     LEGlyphID* pIcuGlyphs = (LEGlyphID*)alloca( nGlyphCapacity * nAllocSize + sizeof(IcuPosition) );
-    le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(le_int32) );
+    le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(LEGlyphID) );
     IcuPosition* pGlyphPositions = (IcuPosition*)((char*)pCharIndices + nGlyphCapacity * sizeof(le_int32) );
 
     UErrorCode rcI18n = U_ZERO_ERROR;
@@ -515,7 +532,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         mpIcuLE->getGlyphs( pIcuGlyphs, rcIcu );
         mpIcuLE->getCharIndices( pCharIndices, rcIcu );
         mpIcuLE->getGlyphPositions( &pGlyphPositions->fX, rcIcu );
-        mpIcuLE->reset();
+        mpIcuLE->reset(); // TODO: get rid of this, PROBLEM: crash at exit when removed
         if( LE_FAILURE(rcIcu) )
             return false;
 
@@ -527,9 +544,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         {
             int nCharPos = pCharIndices[i] + nMinRunPos;
             int nGlyphIndex = pIcuGlyphs[i];
-            // update fallback_runs if needed
+            // when glyph fallback is needed update LayoutArgs
             if( !nGlyphIndex )
-                rArgs.NeedFallback( nCharPos, bRightToLeft );
+                if( !rArgs.NeedFallback( nCharPos, bRightToLeft ) )
+                    continue;
 
             // apply vertical flags, etc.
             sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
@@ -548,25 +566,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         nGlyphCount += nRunGlyphCount;
     }
 
-    // general justification
-    if( rArgs.mpDXArray )
-        rLayout.ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        rLayout.Justify( rArgs.mnLayoutWidth );
-
-    // kashida justification
+    // determine need for kashida justification
     if( (rArgs.mpDXArray || rArgs.mnLayoutWidth)
     &&  ((meScriptCode == arabScriptCode) || (meScriptCode == syrcScriptCode)) )
-    {
-        LEGlyphID nKashidaIndex = maIcuFont.mapCharToGlyph( 0x0640, NULL );
-        if( nKashidaIndex != 0 )
-        {
-            LEPoint aAdvance;
-            maIcuFont.getGlyphAdvance( nKashidaIndex, aAdvance );
-            rLayout.KashidaJustify( nKashidaIndex, (long)aAdvance.fX );
-            // TODO: kashida-GSUB/GPOS
-        }
-    }
+        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
 
     return true;
 }
@@ -579,7 +582,7 @@ ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
 #ifdef ENABLE_ICU_LAYOUT
-    if( !mpLayoutEngine )
+    if( !mpLayoutEngine && FT_IS_SFNT( maFaceFT ) )
         mpLayoutEngine = new IcuLayoutEngine( *this );
 #endif // ENABLE_ICU_LAYOUT
 

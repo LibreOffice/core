@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ public:
         NET_WM_STATE_SKIP_TASKBAR,
         NET_WM_STATE_STAYS_ON_TOP,
         NET_WM_STATE_STICKY,
+        NET_WM_STATE_FULLSCREEN,
         NET_WM_WINDOW_TYPE,
         NET_WM_WINDOW_TYPE_DESKTOP,
         NET_WM_WINDOW_TYPE_DIALOG,
@@ -108,6 +109,8 @@ public:
         NET_WM_WINDOW_TYPE_MENU,
         NET_WM_WINDOW_TYPE_NORMAL,
         NET_WM_WINDOW_TYPE_TOOLBAR,
+        NET_WM_WINDOW_TYPE_SPLASH,
+        NET_WM_WINDOW_TYPE_UTILITY,
         NET_NUMBER_OF_DESKTOPS,
         NET_CURRENT_DESKTOP,
         NET_WORKAREA,
@@ -165,7 +168,8 @@ public:
         windowType_Normal,
         windowType_ModalDialogue,
         windowType_ModelessDialogue,
-        windowType_OverrideRedirect
+        windowType_OverrideRedirect,
+        windowType_Splash
     };
 
 protected:
@@ -230,12 +234,31 @@ public:
      *  use maximizeFrame( pFrame, false, false )
      */
     virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    /*
+     *  start/stop fullscreen mode on a frame
+     */
+    virtual void showFullScreen( SalFrame* pFrame, bool bFullScreen ) const;
+
+    /*
+     *  tells whether fullscreen mode is supported by WM
+     */
+    bool supportsFullScreen() const { return m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] != 0; }
+
+    /*
+     *  shade/unshade frame
+     */
+    virtual void shade( SalFrame* pFrame, bool bToShaded ) const;
 
     /*
      *  set hints what decoration is needed;
      *  must be called before showing the frame
      */
     virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
+
+    /*
+     *  tells whether there is WM support for splash screens
+     */
+    bool supportsSplash() const { return m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] != 0; }
 
     /*
      *  enables always on top or equivalent if possible
@@ -246,6 +269,11 @@ public:
      *  tells whether enableAlwaysOnTop actually works with this WM
      */
     bool isAlwaysOnTopOK() const { return m_bEnableAlwaysOnTopWorks; }
+
+    /*
+     *  handle WM messages (especially WM state changes)
+     */
+    virtual int handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const;
 
     /*
      *  gets a WM atom

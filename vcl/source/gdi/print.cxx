@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-20 12:04:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,9 +174,10 @@ int nImplSysDialog = 0;
 
 // =======================================================================
 
-#define PAPER_SLOPPY    20
+#define PAPER_SLOPPY    50  // Bigger sloppy value as PaperInfo uses only mm accuracy!
 #define PAPER_COUNT     9
 
+// Use more accurate metric values for Letter/Legal/Tabloid paper formats
 static long ImplPaperFormats[PAPER_COUNT*2] =
 {
     29700, 42000,   // A3
@@ -184,9 +185,9 @@ static long ImplPaperFormats[PAPER_COUNT*2] =
     14800, 21000,   // A5
     25000, 35300,   // B4
     17600, 25000,   // B5
-    21600, 27900,   // Letter
-    21600, 35600,   // Legal
-    27900, 43100,   // Tabloid
+    21590, 27940,   // Letter
+    21590, 35570,   // Legal
+    27960, 43130,   // Tabloid
     0,     0        // USER
 };
 
@@ -1340,6 +1341,72 @@ USHORT Printer::GetPaperBin() const
 
 // -----------------------------------------------------------------------
 
+static BOOL ImplPaperSizeEqual( unsigned long nPaperWidth1, unsigned long nPaperHeight1,
+                                unsigned long nPaperWidth2, unsigned long nPaperHeight2 )
+{
+    const unsigned long PAPER_ACCURACY = 1; // 1.0 mm accuracy
+
+    return ( (Abs( (short)(nPaperWidth1-nPaperWidth2) ) <= PAPER_ACCURACY ) &&
+             (Abs( (short)(nPaperHeight1-nPaperHeight2) ) <= PAPER_ACCURACY ) );
+}
+
+// -----------------------------------------------------------------------
+
+// Map user paper format to a available printer paper formats
+void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
+{
+    ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
+
+    int     nLandscapeAngle = GetLandscapeAngle();
+    int     nPaperCount     = GetPaperInfoCount();
+
+    unsigned long nPaperWidth   = pSetupData->mnPaperWidth/100;
+    unsigned long nPaperHeight  = pSetupData->mnPaperHeight/100;
+
+    // Alle Papierformate vergleichen und ein passendes raussuchen
+    for ( int i = 0; i < nPaperCount; i++ )
+    {
+        const vcl::PaperInfo& rPaperInfo = GetPaperInfo( i );
+
+        if ( ImplPaperSizeEqual( rPaperInfo.m_nPaperWidth,
+                                 rPaperInfo.m_nPaperHeight,
+                                 nPaperWidth,
+                                 nPaperHeight ) )
+        {
+            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
+            pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
+                                                            rPaperInfo.m_nPaperHeight*100 );
+            break;
+        }
+    }
+
+    // If the printer supports landscape orientation, check paper sizes again
+    // with landscape orientation. This is necessary as a printer driver provides
+    // all paper sizes with portrait orientation only!!
+    if ( pSetupData->mePaperFormat == PAPER_USER &&
+         nLandscapeAngle != 0 &&
+         HasSupport( SUPPORT_SET_ORIENTATION ))
+    {
+        for ( int i = 0; i < nPaperCount; i++ )
+        {
+            const vcl::PaperInfo& rPaperInfo = GetPaperInfo( i );
+
+            if ( ImplPaperSizeEqual( rPaperInfo.m_nPaperWidth,
+                                     rPaperInfo.m_nPaperHeight,
+                                     nPaperHeight,
+                                     nPaperWidth ))
+            {
+                pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
+                pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
+                                                                rPaperInfo.m_nPaperHeight*100 );
+                break;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 BOOL Printer::SetPaper( Paper ePaper )
 {
     if ( mbInPrintPage )
@@ -1365,7 +1432,9 @@ BOOL Printer::SetPaper( Paper ePaper )
 
 #ifndef REMOTE_APPSERVER
         ImplReleaseGraphics();
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE, pSetupData ) )
+        if ( ePaper == PAPER_USER )
+            ImplFindPaperFormatForUserSize( aJobSetup );
+        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
@@ -1417,7 +1486,10 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
 
 #ifndef REMOTE_APPSERVER
         ImplReleaseGraphics();
-        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE, pSetupData ) )
+        ImplFindPaperFormatForUserSize( aJobSetup );
+
+        // Changing the paper size can also change the orientation!
+        if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
@@ -1439,6 +1511,7 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
 
     return TRUE;
 }
+
 
 // -----------------------------------------------------------------------
 

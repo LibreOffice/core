@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: dtint.hxx,v $
+ *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,101 +58,75 @@
  *
  *
  ************************************************************************/
-#ifndef _SV_DTINT_HXX
-#define _SV_DTINT_HXX
 
-#include <cstdio>
+#define _SV_INTROWIN_CXX
 
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
+#ifndef REMOTE_APPSERVER
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
 #endif
-#ifndef _LINK_HXX
-#include <tools/link.hxx>
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
 #endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#include <tools/color.hxx>
-#include <font.hxx>
-
-class SalFrame;
-class SalBitmap;
-class SalDisplay;
-class AllSettings;
-
-#ifndef _XLIB_H_
-// forwards from X
-struct Display;
-struct XEvent;
-#define Atom UINT32
-#define XLIB_Window UINT32
+#else
+#include <rmwindow.hxx>
 #endif
 
-class DtIntegrator;
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
-DECLARE_LIST( DtIntegratorList, DtIntegrator* );
+#ifndef _SV_RC_H
+#include <rc.h>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
+#endif
+#ifndef _SV_BRDWIN_HXX
+#include <brdwin.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
+#endif
+#ifndef _SV_WRKWIN_HXX
+#include <wrkwin.hxx>
+#endif
+#ifndef _SV_OPENGL_HXX
+#include <opengl.hxx>
+#endif
 
-enum DtType {
-    DtGeneric,
-    DtCDE,
-    DtKDE,
-    DtGNOME,
-    DtSCO,
-    DtIRIX
-};
+#include <introwin.hxx>
 
-class DtIntegrator
+#pragma hdrstop
+
+
+// =======================================================================
+
+void IntroWindow::ImplInitData()
 {
-protected:
-    DtType              meType;
-    Display*            mpDisplay;
-    SalDisplay*         mpSalDisplay;
-    SalFrame*           mpSalFrame;
-    int                 mnRefCount;
-    int                 mnSystemLookCommandProcess;
-
-
-    DtIntegrator( SalFrame* );
-
-    static DtIntegratorList aIntegratorList;
-    static String           aHomeDir;
-
-    // executes pCommand and parses its output
-    // to get system look information
-    // different DtIntegrators can rely
-    // on native programs to query system settings
-    // pass NULL as command to read the VCL_SYSTEM_SETTINGS property
-    void GetSystemLook( const char* pCommand, AllSettings& rSettings );
-    bool StartSystemLookProcess( const char* pCommand );
-
-    Color parseColor( const ByteString& );
-    Font parseFont( const ByteString& );
-
-public:
-    static DtIntegrator* CreateDtIntegrator( SalFrame* );
-
-    virtual ~DtIntegrator();
-
-    // SystemLook
-    virtual void GetSystemLook( AllSettings& rSettings );
-
-    DtType          GetDtType() { return meType; }
-    SalFrame*       GetFrame() { return mpSalFrame; }
-    SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
-    Display*        GetDisplay() { return mpDisplay; }
-
-    void Acquire() { mnRefCount++; }
-    inline void Release();
-};
-
-inline void DtIntegrator::Release()
-{
-    mnRefCount--;
-    if( ! mnRefCount )
-    {
-        aIntegratorList.Remove( this );
-        delete this;
-    }
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpIntroWindow = this;
 }
 
-#endif
+// -----------------------------------------------------------------------
+
+IntroWindow::IntroWindow( ) :
+    WorkWindow( WINDOW_INTROWINDOW )
+{
+    ImplInitData();
+    WorkWindow::ImplInit( 0, WB_INTROWIN, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+IntroWindow::~IntroWindow()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->mpIntroWindow == this )
+        pSVData->mpIntroWindow = NULL;
+}
+
+

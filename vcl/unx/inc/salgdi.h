@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-14 15:57:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ protected:
     void                    DrawServerAAFontString( const ServerFontLayout& );
     bool                    DrawServerAAForcedString( const ServerFontLayout& );
 
-    SalLayout*              LayoutText( ImplLayoutArgs&, int nFallbackLevel );
+    SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
 public:
                             SalGraphicsData();
                             ~SalGraphicsData();

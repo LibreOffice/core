@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-12 18:04:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1864,20 +1864,24 @@ Size Menu::ImplCalcSize( Window* pWin )
     Size aMaxImgSz;
     long nMaxTextWidth = 0;
     long nMaxAccWidth = 0;
+    long nMinMenuItemHeight = nFontHeight;
 
-    static long nMinMenuItemHeight = 16;
-
-    for ( USHORT i = (USHORT)pItemList->Count(); i; )
+    const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
+    if ( rSettings.GetUseImagesInMenus() )
     {
-        MenuItemData* pData = pItemList->GetDataFromPos( --i );
-        if ( ImplIsVisible( i ) && ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ))
+        nMinMenuItemHeight = 16;
+        for ( USHORT i = (USHORT)pItemList->Count(); i; )
         {
-            Size aImgSz = pData->aImage.GetSizePixel();
-            if ( aImgSz.Height() > aMaxImgSz.Height() )
-                aMaxImgSz.Height() = aImgSz.Height();
-            if ( aImgSz.Height() > nMinMenuItemHeight )
-                nMinMenuItemHeight = aImgSz.Height();
-            break;
+            MenuItemData* pData = pItemList->GetDataFromPos( --i );
+            if ( ImplIsVisible( i ) && ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ))
+            {
+                Size aImgSz = pData->aImage.GetSizePixel();
+                if ( aImgSz.Height() > aMaxImgSz.Height() )
+                    aMaxImgSz.Height() = aImgSz.Height();
+                if ( aImgSz.Height() > nMinMenuItemHeight )
+                    nMinMenuItemHeight = aImgSz.Height();
+                break;
+            }
         }
     }
 
@@ -1918,16 +1922,19 @@ Size Menu::ImplCalcSize( Window* pWin )
                     nMaxTextWidth = nTextWidth;
                 long nTextHeight = pWin->GetTextHeight();
 
-                pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
-
 //                if ( nTextHeight > pData->aSz.Height() )
 //                    pData->aSz.Height() = nTextHeight;
 
                 if ( bIsMenuBar )
                 {
+                    if ( nTextHeight > pData->aSz.Height() )
+                        pData->aSz.Height() = nTextHeight;
+
                     pData->aSz.Width() = nTextWidth + 4*nExtra;
                     aSz.Width() += pData->aSz.Width();
                 }
+                else
+                    pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
             }
 
             // Accel
@@ -1961,11 +1968,12 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
+        USHORT gfxExtra = std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
-        nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + nExtra );
+        nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
         nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
         if ( aMaxImgSz.Width() )
-            nTextPos += (USHORT)nExtra;
+            nTextPos += gfxExtra;
 
         aSz.Width() = nTextPos + nMaxTextWidth + nExtra + nMaxAccWidth;
         aSz.Width() += 10*nExtra;   // etwas mehr...
@@ -2016,6 +2024,8 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
             if ( aPos.Y() >= 0 )
             {
                 long    nTextOffsetY = ((pData->aSz.Height()-nFontHeight)/2);
+                if( bIsMenuBar )
+                    nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
                 USHORT  nTextStyle   = 0;
                 USHORT  nSymbolStyle = 0;
                 USHORT  nImageStyle  = 0;
@@ -2034,12 +2044,12 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
                     aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
-                    aTmpPos.X() = aPos.X() + 1;
+                    aTmpPos.X() = aPos.X() + 2;
                     pWin->SetLineColor( rSettings.GetShadowColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 1, aTmpPos.Y() ) );
+                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3, aTmpPos.Y() ) );
                     aTmpPos.Y()++;
                     pWin->SetLineColor( rSettings.GetLightColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 1, aTmpPos.Y() ) );
+                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3, aTmpPos.Y() ) );
                     pWin->SetLineColor();
                 }
 
@@ -2512,6 +2522,7 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     pMenu->pWindow = pWindow;
     ((MenuBarWindow*)pWindow)->SetMenu( pMenu );
     long nHeight = pMenu->ImplCalcSize( pWindow ).Height();
+    if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
     pWindow->SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
     return pWindow;
 }
@@ -2741,6 +2752,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     }
 
     MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
+    pWin->SetBorderStyle( pWin->GetBorderStyle() | WINDOW_BORDER_MENU );
     pWindow = pWin;
 
     Size aSz = ImplCalcSize( pWin );
@@ -4169,7 +4181,10 @@ void MenuBarWindow::ImplCreatePopup( BOOL bPreSelectFirst )
             // Im Vollbild-Modus hat die MenuBar ggf. die Hoehe 0:
             // Nicht immer einfach die Window-Hoehe nehmen, weil ItemHeight < WindowHeight.
             if ( GetSizePixel().Height() )
-                aItemBottomRight.Y() += pData->aSz.Height();
+            {
+                // #107747# give menuitems the height of the menubar
+                aItemBottomRight.Y() += GetOutputSizePixel().Height()-1;
+            }
 
             // ImplExecute ist doch nicht modal...
             // #99071# do not grab the focus, otherwise it will be restored to the menubar
@@ -4355,7 +4370,8 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                 else
                     SetFillColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
 
-                DrawRect( Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), pData->aSz.Height()-2 ) ) );
+                // #107747# give menuitems the height of the menubar
+                DrawRect( Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) ) );
                 pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
             }
             return;
@@ -4376,7 +4392,8 @@ Rectangle MenuBarWindow::ImplGetItemRect( USHORT nPos )
         if ( n == nPos )
         {
             if ( pData->eType != MENUITEM_SEPARATOR )
-                aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), pData->aSz.Height()-2 ) );
+                // #107747# give menuitems the height of the menubar
+                aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
             break;
         }
 
@@ -4681,6 +4698,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitMenuWindow( this, TRUE, TRUE );
         // Falls sich der Font geaendert hat.
         long nHeight = pMenu->ImplCalcSize( this ).Height();
+        if( nHeight < 20 ) nHeight = 20;   // leave enough space for closer
         SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
         GetParent()->Resize();
         Invalidate();

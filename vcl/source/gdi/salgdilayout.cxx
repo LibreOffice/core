@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 16:28:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
 #include <region.hxx>
@@ -194,7 +191,12 @@ SalGraphicsLayout::~SalGraphicsLayout()
 
 void SalGraphicsLayout::mirror( long& x, const OutputDevice *pOutDev )
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->meOutDevType == OUTDEV_VIRDEV )
+        w = pOutDev->mnOutWidth;
+    else
+        w = GetGraphicsWidth();
+
     if( w )
     {
         x = w-1-x;
@@ -210,7 +212,12 @@ void SalGraphicsLayout::mirror( long& x, const OutputDevice *pOutDev )
 
 void SalGraphicsLayout::mirror( long& x, long& nWidth, const OutputDevice *pOutDev )
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->meOutDevType == OUTDEV_VIRDEV )
+        w = pOutDev->mnOutWidth;
+    else
+        w = GetGraphicsWidth();
+
     if( w )
     {
         x = w-nWidth-x;
@@ -226,7 +233,12 @@ void SalGraphicsLayout::mirror( long& x, long& nWidth, const OutputDevice *pOutD
 
 BOOL SalGraphicsLayout::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev )
 {
-    long w = GetGraphicsWidth();
+    long w;
+    if( pOutDev && pOutDev->meOutDevType == OUTDEV_VIRDEV )
+        w = pOutDev->mnOutWidth;
+    else
+        w = GetGraphicsWidth();
+
     if( w )
     {
         sal_uInt32 i, j;

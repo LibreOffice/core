@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-20 08:43:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ struct ImplStatusItem
     ULONG               mnHelpId;
     void*               mpUserData;
     BOOL                mbVisible;
+    XubString           maAccessibleName;
 };
 
 DECLARE_LIST( ImplStatusItemList, ImplStatusItem* );
@@ -489,6 +490,9 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         DecorationView aDecoView( this );
         aDecoView.DrawFrame( aRect, nStyle );
     }
+
+    if ( !ImplIsRecordLayout() )
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) pItem->mnId );
 }
 
 // -----------------------------------------------------------------------
@@ -904,6 +908,8 @@ void StatusBar::InsertItem( USHORT nItemId, ULONG nWidth,
     mbFormat = TRUE;
     if ( ImplIsItemUpdate() )
         Invalidate();
+
+    ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, (void*) nItemId );
 }
 
 // -----------------------------------------------------------------------
@@ -919,6 +925,8 @@ void StatusBar::RemoveItem( USHORT nItemId )
         mbFormat = TRUE;
         if ( ImplIsItemUpdate() )
             Invalidate();
+
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, (void*) nItemId );
     }
 }
 
@@ -938,6 +946,8 @@ void StatusBar::ShowItem( USHORT nItemId )
             mbFormat = TRUE;
             if ( ImplIsItemUpdate() )
                 Invalidate();
+
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, (void*) nItemId );
         }
     }
 }
@@ -958,6 +968,8 @@ void StatusBar::HideItem( USHORT nItemId )
             mbFormat = TRUE;
             if ( ImplIsItemUpdate() )
                 Invalidate();
+
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, (void*) nItemId );
         }
     }
 }
@@ -983,6 +995,8 @@ void StatusBar::ShowItems()
         mbVisibleItems = TRUE;
         if ( !mbProgressMode )
             Invalidate();
+
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWALLITEMS );
     }
 }
 
@@ -995,6 +1009,8 @@ void StatusBar::HideItems()
         mbVisibleItems = FALSE;
         if ( !mbProgressMode )
             Invalidate();
+
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEALLITEMS );
     }
 }
 
@@ -1046,6 +1062,8 @@ void StatusBar::Clear()
     mbFormat = TRUE;
     if ( ImplIsItemUpdate() )
         Invalidate();
+
+    ImplCallEventListeners( VCLEVENT_STATUSBAR_ALLITEMSREMOVED );
 }
 
 // -----------------------------------------------------------------------
@@ -1469,3 +1487,36 @@ Size StatusBar::CalcWindowSizePixel() const
 
     return Size( nCalcWidth, nCalcHeight );
 }
+
+
+// -----------------------------------------------------------------------
+
+void StatusBar::SetAccessibleName( USHORT nItemId, const XubString& rName )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    {
+        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+
+        if ( pItem->maAccessibleName != rName )
+        {
+            pItem->maAccessibleName = rName;
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, (void*) pItem->mnId );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+const XubString& StatusBar::GetAccessibleName( USHORT nItemId ) const
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+        return mpItemList->GetObject( nPos )->maAccessibleName;
+    else
+        return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------

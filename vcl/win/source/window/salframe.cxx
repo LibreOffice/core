@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-12 17:14:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@ extern "C" {
 #define ULW_OPAQUE              0x00000004
 #define WS_EX_LAYERED           0x00080000
 
+// =======================================================================
+
+const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
 // =======================================================================
 
@@ -495,9 +498,19 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     {
         LPCWSTR pClassName;
         if ( bSubFrame )
-            pClassName = SAL_SUBFRAME_CLASSNAMEW;
+        {
+            if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
+                pClassName = SAL_SUBFRAME_CLASSNAMEW;
+            else
+                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
+        }
         else
-            pClassName = SAL_FRAME_CLASSNAMEW;
+        {
+            if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+                pClassName = SAL_FRAME_CLASSNAMEW;
+            else
+                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
+        }
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, pInst->maInstData.mhInst, (void*)pFrame );
@@ -1141,13 +1154,13 @@ void SalFrame::SetIcon( USHORT nIcon )
 
     // 0 means default (class) icon
     HICON hIcon = NULL, hSmIcon = NULL;
-    if ( nIcon )
-    {
-        ImplLoadSalIcon( nIcon, hIcon, hSmIcon );
+    if ( !nIcon )
+        nIcon = 1;
 
-        DBG_ASSERT( hIcon ,   "SalFrame::SetIcon(): Could not load large icon !" );
-        DBG_ASSERT( hSmIcon , "SalFrame::SetIcon(): Could not load small icon !" );
-    }
+    ImplLoadSalIcon( nIcon, hIcon, hSmIcon );
+
+    DBG_ASSERT( hIcon ,   "SalFrame::SetIcon(): Could not load large icon !" );
+    DBG_ASSERT( hSmIcon , "SalFrame::SetIcon(): Could not load small icon !" );
 
     ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
     ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
@@ -1200,6 +1213,18 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
             ShowWindow( hWnd, SW_SHOWNOACTIVATE );
         else
             ShowWindow( hWnd, pFrame->maFrameData.mnShowState );
+
+        if ( aSalShlData.mbWXP && pFrame->maFrameData.mbFloatWin && !(pFrame->maFrameData.mnStyle & SAL_FRAME_STYLE_NOSHADOW))
+        {
+            // erase the window immediately to improve XP shadow effect
+            // otherwise the shadow may appears long time before the rest of the window
+            // especially when accessibility is on
+            HDC dc = GetDC( hWnd );
+            RECT aRect;
+            GetClientRect( hWnd, &aRect );
+            FillRect( dc, &aRect, (HBRUSH) (COLOR_MENU+1) ); // choose the menucolor, because its mostly noticeable for menues
+            ReleaseDC( hWnd, dc );
+        }
 
         // #i4715, matrox centerpopup might have changed our position
         // reposition popups without caption (menues, dropdowns, tooltips)
@@ -1371,6 +1396,10 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             nY = aPt.y;
     }
 
+    // #i3338# to be conformant to UNIX we must position the client window, ie without the decoration
+    nX += aWinRect.left;
+    nY += aWinRect.top;
+
     int     nScreenX;
     int     nScreenY;
     int     nScreenWidth;
@@ -1527,6 +1556,7 @@ void SalFrame::SetParent( SalFrame* pNewParent )
             HDC hDC = (HDC)ImplSendMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd,
                                             SAL_MSG_GETDC,
                                             (WPARAM) hWnd, 0 );
+            maFrameData.mpGraphics2->maGraphicsData.mhWnd = hWnd;
             if ( hDC )
             {
                 maFrameData.mpGraphics2->maGraphicsData.mhDC = hDC;
@@ -1553,6 +1583,7 @@ void SalFrame::SetParent( SalFrame* pNewParent )
         if( maFrameData.mpGraphics )
         {
             // re-create DC
+            maFrameData.mpGraphics->maGraphicsData.mhWnd = hWnd;
             maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
             if ( GetSalData()->mhDitherPal )
             {
@@ -2643,8 +2674,13 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
+#if (_MSC_VER < 1300)
     aStyleSettings.SetScrollBarSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
     aStyleSettings.SetSpinSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
+#else
+    aStyleSettings.SetScrollBarSize( min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
+    aStyleSettings.SetSpinSize( min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
+#endif
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
     if ( bCompBorder )
     {
@@ -2685,6 +2721,8 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
     {
         aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
         aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
+        aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
+        aStyleSettings.SetUseFlatMenues( FALSE );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
         aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
@@ -2697,8 +2735,10 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
             SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
             if( bFlatMenues )
             {
+                aStyleSettings.SetUseFlatMenues( TRUE );
                 aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
                 aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+                aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
             }
         }
     }
@@ -2771,7 +2811,15 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
                 ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont, bReplaceFont );
         }
     }
+
+    // get screen font resolution to calculate toolbox item size
+    long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+
     ReleaseDC( 0, hDC );
+
+    long nHeightPx = aMenuFont.GetHeight() * nDPIY / 72;
+    aStyleSettings.SetToolbarIconSize( (((nHeightPx-1)*2) >= 28) ? STYLE_TOOLBAR_ICONSIZE_LARGE : STYLE_TOOLBAR_ICONSIZE_SMALL );
+
     aStyleSettings.SetMenuFont( aMenuFont );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aFloatTitleFont );
@@ -3732,6 +3780,9 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
     memset(&pFrame->maGeometry, 0, sizeof(SalFrameGeometry) );
+
+    if ( IsIconic( hWnd ) )
+        return;
 
     POINT aPt;
     aPt.x=0;
@@ -4801,6 +4852,15 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         return 0;
     }
 
+    if ( WM_USER_SYSTEM_WINDOW_ACTIVATED == nMsg )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        if (pSVData->mpIntroWindow)
+            pSVData->mpIntroWindow->Hide();
+
+        return 0;
+    }
+
     switch( nMsg )
     {
         case WM_MOUSEMOVE:
@@ -4938,15 +4998,27 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                 if( !wParam )
                 {
-                    ImplGetSVData()->maAppData.mnModalMode++;
+                    ImplSVData* pSVData = ImplGetSVData();
+                    pSVData->maAppData.mnModalMode++;
+
+                    // #106431#, hide SplashScreen
+                    if( pSVData->mpIntroWindow )
+                        pSVData->mpIntroWindow->Hide();
+
                     if( pWin )
+                    {
                         pWin->EnableInput( FALSE, TRUE, TRUE, NULL );
+                        pWin->ImplIncModalCount();  // #106303# support frame based modal count
+                    }
                 }
                 else
                 {
                     ImplGetSVData()->maAppData.mnModalMode--;
                     if( pWin )
+                    {
                         pWin->EnableInput( TRUE, TRUE, TRUE, NULL );
+                        pWin->ImplDecModalCount();  // #106303# support frame based modal count
+                    }
                 }
             }
             break;
@@ -5177,13 +5249,18 @@ int ImplShowNativeMessageBox(const String& rTitle, const String& rMessage, int n
                 nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
                 nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, "Invalid arguments!" );
 
-    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | nButtonCombination;
+    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | nButtonCombination;
 
     if (nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
         nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
         nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
         nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
         nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
+
+    //#107209 hide the splash screen if active
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mpIntroWindow)
+        pSVData->mpIntroWindow->Hide();
 
     return MessageBoxW(
         0,

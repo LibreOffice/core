@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base14.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 12:47:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_FIXED, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NONE, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -117,7 +117,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_FIXED, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NORMAL, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -252,7 +252,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NONE, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -297,7 +297,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NORMAL, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -432,7 +432,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NONE, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -477,7 +477,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_MS_1252, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NORMAL, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -612,7 +612,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_SYMBOL, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NONE, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15
@@ -657,7 +657,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   RTL_TEXTENCODING_SYMBOL, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
-  WEIGHT_NORMAL, // weight type
+  WEIGHT_MEDIUM, // weight type
   ITALIC_NONE, // italic type
   { 0, 0, 0, 0, 0, 0, 0, 0, // 0 - 7
     0, 0, 0, 0, 0, 0, 0, 0, // 8 - 15

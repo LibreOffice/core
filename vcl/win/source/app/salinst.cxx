@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-15 12:29:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
+#endif
+
+#ifndef CS_DROPSHADOW
+#define CS_DROPSHADOW       0x00020000
 #endif
 
 // =======================================================================
@@ -493,6 +497,13 @@ SalInstance* CreateSalInstance()
             aWndClassEx.hIconSm         = 0;
             aWndClassEx.style          |= CS_SAVEBITS;
             aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEW;
+            if ( !RegisterClassExW( &aWndClassEx ) )
+                return NULL;
+
+            // shadow effect for popups on XP
+            if( aSalShlData.mbWXP )
+                aWndClassEx.style       |= CS_DROPSHADOW;
+            aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
             if ( !RegisterClassExW( &aWndClassEx ) )
                 return NULL;
 

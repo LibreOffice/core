@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: svesik $ $Date: 2002-07-21 21:20:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include <string.h>
 #ifdef LINUX
 #define __USE_XOPEN
 #endif
@@ -88,7 +87,9 @@ using namespace vcl;
 #ifndef _SAL_I18N_CALLBACK_HXX
 #include "i18n_cb.hxx"
 #endif
+#ifdef SOLARIS
 extern "C" char * XSetIMValues(XIM im, ...);
+#endif
 
 // ------------------------------------------------------------------------------------
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-09 09:23:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,22 @@ ImplReservedKey ImplReservedKeys[] = {
     ImplReservedKey(KeyCode(KEY_F6,0),                  SV_SHORTCUT_NEXTSUBWINDOW),
     ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1),           SV_SHORTCUT_TODOCUMENT),
     ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT),          SV_SHORTCUT_PREVSUBWINDOW),
+    ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), 0),         // activate splitter (string is missing!)
     ImplReservedKey(KeyCode(KEY_F10,0),                 SV_SHORTCUT_MENUBAR)
+#ifdef UNX
+    ,
+    ImplReservedKey(KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1), 0),
+    ImplReservedKey(KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1), 0)
+#endif
 };
 
 
@@ -531,7 +546,7 @@ const KeyCode*  Application::GetReservedKeyCode( ULONG i )
 
 String Application::GetReservedKeyCodeDescription( ULONG i )
 {
-    if( i >= GetReservedKeyCodeCount() )
+    if( i >= GetReservedKeyCodeCount() || ! ImplReservedKeys[i].mnResId )
         return String();
     else
         return String( ResId( ImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
@@ -1015,6 +1030,11 @@ void Application::SetSettings( const AllSettings& rSettings )
     else
     {
         AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
+        if( aOldSettings.GetUILanguage() != rSettings.GetUILanguage() && pSVData->mpResMgr )
+        {
+            delete pSVData->mpResMgr;
+            pSVData->mpResMgr = NULL;
+        }
         *pSVData->maAppData.mpSettings = rSettings;
         ULONG nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( nChangeFlags )

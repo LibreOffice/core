@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2003-01-09 12:01:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,27 +551,37 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             break;
         case SYMBOL_CHECKMARK:
             {
-                Point aPos1( rRect.Left(), rRect.Bottom() - rRect.GetHeight() / 3 );
-                Point aPos2( rRect.Left() + rRect.GetWidth()/3, rRect.Bottom() );
-                Point aPos3( rRect.TopRight() );
+                // #106953# never mirror checkmarks
+                BOOL bRTL = pDev->ImplHasMirroredGraphics() && pDev->IsRTLEnabled();
+                Point aPos1( bRTL ? rRect.Right() : rRect.Left(),
+                    rRect.Bottom() - rRect.GetHeight() / 3 );
+                Point aPos2( bRTL ? rRect.Right() - rRect.GetWidth()/3 : rRect.Left() + rRect.GetWidth()/3,
+                    rRect.Bottom() );
+                Point aPos3( bRTL ? rRect.TopLeft() : rRect.TopRight() );
                 Size aRectSize( 1, 2 );
                 long nStepsY = aPos2.Y()-aPos1.Y();
                 long nX = aPos1.X();
                 long nY = aPos1.Y();
                 for ( long n = 0; n <= nStepsY; n++ )
                 {
+                    if( bRTL )
+                        nX--;
                     pDev->DrawRect( Rectangle( Point( nX, nY++ ), aRectSize ) );
-                    nX++;
+                    if( !bRTL )
+                        nX++;
                 }
                 nStepsY = aPos2.Y()-aPos3.Y();
                 nX = aPos2.X();
                 nY = aPos2.Y();
                 for ( n = 0; n <= nStepsY; n++ )
                 {
+                    if( bRTL )
+                        if ( --nX < rRect.Left() )
+                            break;
                     pDev->DrawRect( Rectangle( Point( nX, nY-- ), aRectSize ) );
-                    nX++;
-                    if ( nX > rRect.Right() )
-                        break;
+                    if( !bRTL )
+                        if ( ++nX > rRect.Right() )
+                            break;
                 }
             }
             break;
@@ -862,6 +872,10 @@ static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
 static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                            const StyleSettings& rStyleSettings, USHORT nStyle )
 {
+    // mask menu style
+    BOOL bMenuStyle = nStyle & FRAME_DRAW_MENU;
+    nStyle &= ~FRAME_DRAW_MENU;
+
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (pDev->GetOutDevType() == OUTDEV_PRINTER) )
         nStyle |= FRAME_DRAW_MONO;
@@ -962,6 +976,8 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     else
                     {
                         pDev->ImplDraw2ColorFrame( rRect,
+                                                   bMenuStyle ?
+                                                   rStyleSettings.GetMenuBorderColor() :
                                                    rStyleSettings.GetLightBorderColor(),
                                                    rStyleSettings.GetDarkShadowColor() );
                     }
@@ -979,9 +995,11 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     }
                     else
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetLightColor(),
-                                                   rStyleSettings.GetShadowColor() );
+                        // flat menues have no shadow border
+                        if( !bMenuStyle || !rStyleSettings.GetUseFlatMenues() )
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                    rStyleSettings.GetLightColor(),
+                                                    rStyleSettings.GetShadowColor() );
                     }
 
                     rRect.Left()++;

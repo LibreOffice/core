@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salatsuifontutils.hxx,v $
  *
- *  $Revision: 1.3 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:15 $
+ *  $Revision: 1.4 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

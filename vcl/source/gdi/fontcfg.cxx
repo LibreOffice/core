@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-11 13:28:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,7 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
     #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
     #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
     #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
+    #define FALLBACKFONT_UI_SANS_KOREAN "SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Andale Sans UI"
 
     if( nLanguage == LANGUAGE_SYSTEM )
         nLanguage = Application::GetSettings().GetUILanguage();
@@ -420,6 +421,14 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
         static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
         static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
         static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
+
+        // we need localized names for korean fonts
+        static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
+        String aFallBackKoreanLocalized( aSunGulim );
+        aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+        aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
+        static const OUString aFallBackKorean( aFallBackKoreanLocalized );
+
         // optimize font list for some locales, as long as Andale Sans UI does not support them
         switch( nLanguage )
         {
@@ -445,6 +454,10 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
                 break;
             case LANGUAGE_THAI:
                 return aFallBackThai;
+                break;
+            case LANGUAGE_KOREAN:
+            case LANGUAGE_KOREAN_JOHAB:
+                return aFallBackKorean;
                 break;
             default:
                 break;

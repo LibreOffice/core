@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: dtint.hxx,v $
+ *  $RCSfile: strhelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,101 +58,20 @@
  *
  *
  ************************************************************************/
-#ifndef _SV_DTINT_HXX
-#define _SV_DTINT_HXX
-
-#include <cstdio>
-
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
-#ifndef _LINK_HXX
-#include <tools/link.hxx>
-#endif
+#ifndef _SV_STRHELPER_HXX
+#define _SV_STRHELPER_HXX
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#include <tools/color.hxx>
-#include <font.hxx>
 
-class SalFrame;
-class SalBitmap;
-class SalDisplay;
-class AllSettings;
+String GetCommandLineToken( int, const String& );
+// gets one token of a unix command line style string
+// doublequote, singlequote and singleleftquote protect their respective
+// contents
 
-#ifndef _XLIB_H_
-// forwards from X
-struct Display;
-struct XEvent;
-#define Atom UINT32
-#define XLIB_Window UINT32
-#endif
+int GetCommandLineTokenCount( const String& );
+// returns number of tokens (zero if empty or whitespace only)
 
-class DtIntegrator;
-
-DECLARE_LIST( DtIntegratorList, DtIntegrator* );
-
-enum DtType {
-    DtGeneric,
-    DtCDE,
-    DtKDE,
-    DtGNOME,
-    DtSCO,
-    DtIRIX
-};
-
-class DtIntegrator
-{
-protected:
-    DtType              meType;
-    Display*            mpDisplay;
-    SalDisplay*         mpSalDisplay;
-    SalFrame*           mpSalFrame;
-    int                 mnRefCount;
-    int                 mnSystemLookCommandProcess;
-
-
-    DtIntegrator( SalFrame* );
-
-    static DtIntegratorList aIntegratorList;
-    static String           aHomeDir;
-
-    // executes pCommand and parses its output
-    // to get system look information
-    // different DtIntegrators can rely
-    // on native programs to query system settings
-    // pass NULL as command to read the VCL_SYSTEM_SETTINGS property
-    void GetSystemLook( const char* pCommand, AllSettings& rSettings );
-    bool StartSystemLookProcess( const char* pCommand );
-
-    Color parseColor( const ByteString& );
-    Font parseFont( const ByteString& );
-
-public:
-    static DtIntegrator* CreateDtIntegrator( SalFrame* );
-
-    virtual ~DtIntegrator();
-
-    // SystemLook
-    virtual void GetSystemLook( AllSettings& rSettings );
-
-    DtType          GetDtType() { return meType; }
-    SalFrame*       GetFrame() { return mpSalFrame; }
-    SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
-    Display*        GetDisplay() { return mpDisplay; }
-
-    void Acquire() { mnRefCount++; }
-    inline void Release();
-};
-
-inline void DtIntegrator::Release()
-{
-    mnRefCount--;
-    if( ! mnRefCount )
-    {
-        aIntegratorList.Remove( this );
-        delete this;
-    }
-}
+String WhitespaceToSpace( const String&, BOOL bProtect = TRUE );
 
 #endif

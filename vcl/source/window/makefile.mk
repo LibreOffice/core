@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.9 $
+#	$Revision: 1.10 $
 #
-#	last change: $Author: obr $ $Date: 2002-11-21 08:18:50 $
+#	last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -105,6 +105,7 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/window2.obj 	\
             $(SLO)$/winproc.obj 	\
             $(SLO)$/wrkwin.obj		\
+            $(SLO)$/introwin.obj	\
             $(SLO)$/scrwnd.obj		\
             $(SLO)$/dndevdis.obj	\
             $(SLO)$/dndlcon.obj     \
@@ -117,6 +118,7 @@ EXCEPTIONSFILES=					\
             $(SLO)$/window.obj		\
             $(SLO)$/winproc.obj 	\
             $(SLO)$/wrkwin.obj		\
+            $(SLO)$/introwin.obj	\
             $(SLO)$/accel.obj		\
             $(SLO)$/cursor.obj		\
             $(SLO)$/dlgctrl.obj 	\

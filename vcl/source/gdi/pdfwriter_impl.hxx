@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-23 18:30:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,11 @@ class SvMemoryStream;
 namespace vcl
 {
 
+class PDFSalLayout;
+
 class PDFWriterImpl
 {
+    friend class PDFSalLayout;
 public:
     // definition of structs
     struct BuiltinFont
@@ -479,7 +482,7 @@ public:
     /*  for OutputDevice: get layout for builtin fonts
      */
     bool isBuiltinFont( ImplFontData* pFont ) const;
-    SalLayout* createSalLayout( ImplFontSelectData* pFont, ImplLayoutArgs& rArgs ) const;
+    SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectData* pFont );
     void getFontMetric( ImplFontSelectData* pFont, ImplFontMetricData* pMetric ) const;
 
 

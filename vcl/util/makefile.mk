@@ -1,10 +1,10 @@
-#*************************************************************************
+##*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hdu $ $Date: 2002-10-29 13:18:54 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:59:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -216,8 +216,7 @@ SHL1STDLIBS+=\
             $(UCBHELPERLIB)     \
             $(CPPULIB)          \
             $(UNOTOOLSLIB)      \
-            $(COMPHELPERLIB)    \
-            $(GPC3RDLIB)
+            $(COMPHELPERLIB)
 
 .IF "$(remote)" != ""
 SHL1STDLIBS+=   $(UNOLIB)
@@ -301,9 +300,9 @@ SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(OS)"=="SOLARIS"
 .ENDIF          # "$(GUIBASE)"=="unx"
 
-.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL1STDLIBS += -laudio
-.ENDIF          # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
+.ENDIF          # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 
 .ENDIF          # "$(GUI)"=="UNX"
 

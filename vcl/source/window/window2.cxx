@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-03 14:36:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,8 @@
 #ifndef _SV_ACCESS_HXX
 #include <access.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <virdev.hxx>
@@ -550,7 +547,7 @@ void Window::Invert( const Polygon& rPoly, USHORT nFlags )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
     if ( nFlags & INVERT_50 )
         nSalFlags |= SAL_INVERT_50;
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -747,7 +744,7 @@ void Window::InvertTracking( const Polygon& rPoly, USHORT nFlags )
         }
     }
 
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 #else
     ImplServerGraphics* pGraphics;

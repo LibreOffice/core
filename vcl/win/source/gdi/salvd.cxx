@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     {
         SalVirtualDevice*   pVDev = new SalVirtualDevice;
         SalData*            pSalData = GetSalData();
-        SalGraphics*        pVirGraphics = new SalGraphics;
+        SalGraphics*        pVirGraphics = new SalGraphicsLayout;
+        pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
         pVirGraphics->maGraphicsData.mhDC      = hDC;
         pVirGraphics->maGraphicsData.mhWnd     = 0;
         pVirGraphics->maGraphicsData.mbPrinter = FALSE;

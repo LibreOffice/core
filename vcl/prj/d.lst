@@ -6,8 +6,6 @@ mkdir: %_DEST%\inc%_EXT%\uno
 mkdir: %_DEST%\inc%_EXT%\uno\awt
 mkdir: %_DEST%\inc%_EXT%\vcl
 mkdir: %_DEST%\inc%_EXT%\vcl\unx
-mkdir: %_DEST%\ucr%_EXT%
-mkdir: %_DEST%\ucr%_EXT%\vcl
 
 ..\%__SRC%\bin\remote\vcl?????.dll %_DEST%\bin%_EXT%\remote\vcl?????.dll
 ..\%__SRC%\bin\vcl?????.res %_DEST%\bin%_EXT%\vcl?????.res
@@ -34,7 +32,6 @@ mkdir: %_DEST%\ucr%_EXT%\vcl
 ..\%__SRC%\slb\sv.lib %_DEST%\lib%_EXT%\xsv.lib
 ..\%__SRC%\slo\salmain.o %_DEST%\lib%_EXT%\salmain.o
 ..\%__SRC%\slo\svdll.obj %_DEST%\lib%_EXT%\xsvdll.obj
-..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\vcl\*.ucr
 
 hedabu: ..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\vcl\*.h
 hedabu: ..\%__SRC%\inc\*.hxx %_DEST%\inc%_EXT%\vcl\*.hxx
@@ -187,6 +184,7 @@ hedabu: ..\inc\i18nhelp.hxx %_DEST%\inc%_EXT%\vcl\i18nhelp.hxx
 hedabu: ..\inc\dndhelp.hxx %_DEST%\inc%_EXT%\vcl\dndhelp.hxx
 hedabu: ..\inc\pdfwriter.hxx %_DEST%\inc%_EXT%\vcl\pdfwriter.hxx
 hedabu: ..\inc\controllayout.hxx %_DEST%\inc%_EXT%\vcl\controllayout.hxx
+hedabu: ..\inc\introwin.hxx %_DEST%\inc%_EXT%\vcl\introwin.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

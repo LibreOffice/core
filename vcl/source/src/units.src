@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 14:29:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "S_population" ; FUNIT_M ; > ;
+        < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
@@ -260,7 +260,7 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "pobl_�xito" ; FUNIT_M ; > ;
+        < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
@@ -302,12 +302,12 @@ ItemList [ language_user1 ] =
     {
          < "mm" ; FUNIT_MM ; > ;
         < "cm" ; FUNIT_CM ; > ;
-        < "Successi popolazione" ; FUNIT_M ; > ;
+        < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "PI.GRECO" ; FUNIT_PICA ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
@@ -405,23 +405,23 @@ ItemList [ language_user1 ] =
     };
     ItemList [ japanese ] =
     {
-         < "mm" ; FUNIT_MM ; > ;
-        < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
-        < "km" ; FUNIT_KM ; > ;
-        < "twips" ; FUNIT_TWIP ; > ;
+         < "ミリ" ; FUNIT_MM ; > ;
+        < "センチ" ; FUNIT_CM ; > ;
+        < "メートル" ; FUNIT_M ; > ;
+        < "キロメートル" ; FUNIT_KM ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
-        < "pt" ; FUNIT_POINT ; > ;
-        < "pi" ; FUNIT_PICA ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "ポイント" ; FUNIT_POINT ; > ;
+        < "ピクセル" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
-        < "inch" ; FUNIT_INCH ; > ;
+        < "インチ" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
         < "ft" ; FUNIT_FOOT ; > ;
-        < "foot" ; FUNIT_FOOT ; > ;
-        < "feet" ; FUNIT_FOOT ; > ;
-        < "miles" ; FUNIT_MILE ; > ;
-        < "mile" ; FUNIT_MILE ; > ;
+        < "フィート" ; FUNIT_FOOT ; > ;
+        < "フィート" ; FUNIT_FOOT ; > ;
+        < "マイル" ; FUNIT_MILE ; > ;
+        < "マイル" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
     ItemList [ korean ] =
@@ -433,7 +433,7 @@ ItemList [ language_user1 ] =
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "파이" ; FUNIT_PICA ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
@@ -468,23 +468,23 @@ ItemList [ language_user1 ] =
     };
     ItemList [ chinese_traditional ] =
     {
-         < "mm" ; FUNIT_MM ; > ;
-        < "cm" ; FUNIT_CM ; > ;
-        < "m" ; FUNIT_M ; > ;
-        < "km" ; FUNIT_KM ; > ;
-        < "twips" ; FUNIT_TWIP ; > ;
+         < "公厘" ; FUNIT_MM ; > ;
+        < "公分" ; FUNIT_CM ; > ;
+        < "公尺" ; FUNIT_M ; > ;
+        < "公里" ; FUNIT_KM ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
-        < "inch" ; FUNIT_INCH ; > ;
+        < "英吋" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
-        < "ft" ; FUNIT_FOOT ; > ;
-        < "foot" ; FUNIT_FOOT ; > ;
-        < "feet" ; FUNIT_FOOT ; > ;
-        < "miles" ; FUNIT_MILE ; > ;
-        < "mile" ; FUNIT_MILE ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英尺" ; FUNIT_FOOT ; > ;
+        < "英里" ; FUNIT_MILE ; > ;
+        < "英里" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
     ItemList [ turkish ] =
@@ -572,4 +572,9 @@ ItemList [ language_user1 ] =
         < "%" ; FUNIT_PERCENT ; > ;
     };
     };
+
+
+
+
+
 

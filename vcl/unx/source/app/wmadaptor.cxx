@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 16:28:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,12 @@ public:
 
     virtual void setWMName( SalFrame* pFrame, const String& rWMName ) const;
     virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void shade( SalFrame* pFrame, bool bToShaded ) const;
     virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
     virtual bool supportsICCCMPos() const;
     virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
+    virtual int handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const;
+    virtual void showFullScreen( SalFrame* pFrame, bool bFullScreen ) const;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -128,7 +131,9 @@ public:
     virtual ~GnomeWMAdaptor();
 
     virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void shade( SalFrame* pFrame, bool bToShaded ) const;
     virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
+    virtual int handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const;
 };
 
 }
@@ -152,6 +157,8 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
+    { "_NET_WM_STATE_ABOVE", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
+    { "_NET_WM_STATE_FULLSCREEN", WMAdaptor::NET_WM_STATE_FULLSCREEN },
     { "_NET_WM_STATE_MAXIMIZED_HORIZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ }, // common bug in e.g. older kwin and sawfish implementations
     { "_NET_WM_STATE_MAXIMIZED_HORZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ },
     { "_NET_WM_STATE_MAXIMIZED_VERT", WMAdaptor::NET_WM_STATE_MAXIMIZED_VERT },
@@ -167,7 +174,10 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_WINDOW_TYPE_DOCK", WMAdaptor::NET_WM_WINDOW_TYPE_DOCK },
     { "_NET_WM_WINDOW_TYPE_MENU", WMAdaptor::NET_WM_WINDOW_TYPE_MENU },
     { "_NET_WM_WINDOW_TYPE_NORMAL", WMAdaptor::NET_WM_WINDOW_TYPE_NORMAL },
+    { "_NET_WM_WINDOW_TYPE_SPLASH", WMAdaptor::NET_WM_WINDOW_TYPE_SPLASH },
+    { "_NET_WM_WINDOW_TYPE_SPLASHSCREEN", WMAdaptor::NET_WM_WINDOW_TYPE_SPLASH }, // bug in Metacity 2.4.1
     { "_NET_WM_WINDOW_TYPE_TOOLBAR", WMAdaptor::NET_WM_WINDOW_TYPE_TOOLBAR },
+    { "_NET_WM_WINDOW_TYPE_UTILITY", WMAdaptor::NET_WM_WINDOW_TYPE_UTILITY },
     { "_NET_WORKAREA", WMAdaptor::NET_WORKAREA },
     { "_WIN_APP_STATE", WMAdaptor::WIN_APP_STATE },
     { "_WIN_CLIENT_LIST", WMAdaptor::WIN_CLIENT_LIST },
@@ -887,6 +897,9 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
 {
     ByteString aTitle( rWMName, osl_getThreadTextEncoding() );
 
+    if( ! rWMName.Len() && m_aWMName.EqualsAscii( "Dtwm" ) )
+        aTitle = " ";
+
     ::rtl::OString aWMLocale;
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale( &pLocale );
@@ -995,7 +1008,7 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
 {
     if( m_aWMAtoms[ NET_WM_STATE ] )
     {
-        Atom aStateAtoms[ 5 ];
+        Atom aStateAtoms[ 10 ];
         int nStateAtoms = 0;
 
         // set NET_WM_STATE_MODAL
@@ -1017,7 +1030,12 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
             && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
         if( pFrame->maFrameData.bAlwaysOnTop_ && m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
-            aStateAtoms[nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
+        if( pFrame->maFrameData.mbShaded && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
+            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
+        if( pFrame->maFrameData.mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
+            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
+
         if( nStateAtoms )
         {
             XChangeProperty( m_pDisplay,
@@ -1030,6 +1048,10 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
                              nStateAtoms
                              );
         }
+        else
+            XDeleteProperty( m_pDisplay,
+                             pFrame->maFrameData.GetShellWindow(),
+                             m_aWMAtoms[ NET_WM_STATE ] );
         if( pFrame->maFrameData.mbMaximizedHorz
            && pFrame->maFrameData.mbMaximizedVert
            && ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
@@ -1129,6 +1151,8 @@ void GnomeWMAdaptor::setGnomeWMState( SalFrame* pFrame ) const
             nWinWMState |= 1 << 2;
         if( pFrame->maFrameData.mbMaximizedHorz )
             nWinWMState |= 1 << 3;
+        if( pFrame->maFrameData.mbShaded )
+            nWinWMState |= 1 << 5;
 
         XChangeProperty( m_pDisplay,
                          pFrame->maFrameData.GetShellWindow(),
@@ -1324,8 +1348,12 @@ void NetWMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eTy
         WMAtom eWMType;
         switch( eType )
         {
+            case windowType_ModelessDialogue:
             case windowType_ModalDialogue:
                 eWMType = NET_WM_WINDOW_TYPE_DIALOG;
+                break;
+            case windowType_Splash:
+                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] ? NET_WM_WINDOW_TYPE_SPLASH : NET_WM_WINDOW_TYPE_NORMAL;
                 break;
             default:
                 eWMType = NET_WM_WINDOW_TYPE_NORMAL;
@@ -1387,27 +1415,27 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
         {
             aTarget.SetSize(
                             Size(
-                                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                 rGeom.nWidth : pFrame->maFrameData.aRestoreFullScreen_.GetWidth(),
+                                 pFrame->maFrameData.maRestorePosSize.IsEmpty() ?
+                                 rGeom.nWidth : pFrame->maFrameData.maRestorePosSize.GetWidth(),
                                  aTarget.GetHeight()
                                  )
                             );
             aTarget.Left() =
-                pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                rGeom.nX : pFrame->maFrameData.aRestoreFullScreen_.Left();
+                pFrame->maFrameData.maRestorePosSize.IsEmpty() ?
+                rGeom.nX : pFrame->maFrameData.maRestorePosSize.Left();
         }
         else if( ! bVertical )
         {
             aTarget.SetSize(
                             Size(
                                  aTarget.GetWidth(),
-                                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                                 rGeom.nHeight : pFrame->maFrameData.aRestoreFullScreen_.GetHeight()
+                                 pFrame->maFrameData.maRestorePosSize.IsEmpty() ?
+                                 rGeom.nHeight : pFrame->maFrameData.maRestorePosSize.GetHeight()
                                  )
                             );
             aTarget.Top() =
-                pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
-                rGeom.nY : pFrame->maFrameData.aRestoreFullScreen_.Top();
+                pFrame->maFrameData.maRestorePosSize.IsEmpty() ?
+                rGeom.nY : pFrame->maFrameData.maRestorePosSize.Top();
         }
         delete pFrame->maFrameData.pFreeGraphics_;
         pFrame->maFrameData.pFreeGraphics_ = NULL;
@@ -1432,8 +1460,8 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
             }
         }
 
-        if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-            pFrame->maFrameData.aRestoreFullScreen_ = aRestore;
+        if( pFrame->maFrameData.maRestorePosSize.IsEmpty() )
+            pFrame->maFrameData.maRestorePosSize = aRestore;
 
         pFrame->maFrameData.SetPosSize( aTarget );
         pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
@@ -1452,8 +1480,8 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
         delete pFrame->maFrameData.pFreeGraphics_;
         pFrame->maFrameData.pFreeGraphics_ = NULL;
 
-        pFrame->maFrameData.SetPosSize( pFrame->maFrameData.aRestoreFullScreen_ );
-        pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
+        pFrame->maFrameData.SetPosSize( pFrame->maFrameData.maRestorePosSize );
+        pFrame->maFrameData.maRestorePosSize = Rectangle();
         pFrame->maFrameData.nWidth_             = rGeom.nWidth;
         pFrame->maFrameData.nHeight_            = rGeom.nHeight;
         if( m_aWMName.EqualsAscii( "Dtwm" ) && pFrame->maFrameData.bMapped_ )
@@ -1519,11 +1547,11 @@ void NetWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVert
             setNetWMState( pFrame );
         }
         if( !bHorizontal && !bVertical )
-            pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
-        else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
+            pFrame->maFrameData.maRestorePosSize = Rectangle();
+        else if( pFrame->maFrameData.maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            pFrame->maFrameData.aRestoreFullScreen_ =
+            pFrame->maFrameData.maRestorePosSize =
                 Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
@@ -1569,16 +1597,15 @@ void GnomeWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVe
                         );
         }
         else
-        {
-            // window not mapped yet, set _NET_WM_STATE directly
+            // window not mapped yet, set _WIN_STATE directly
             setGnomeWMState( pFrame );
-        }
+
         if( !bHorizontal && !bVertical )
-            pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
-        else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
+            pFrame->maFrameData.maRestorePosSize = Rectangle();
+        else if( pFrame->maFrameData.maRestorePosSize.IsEmpty() )
         {
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            pFrame->maFrameData.aRestoreFullScreen_ =
+            pFrame->maFrameData.maRestorePosSize =
                 Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
@@ -1715,4 +1742,269 @@ void WMAdaptor::changeReferenceFrame( SalFrame* pFrame, SalFrame* pReferenceFram
                               rData.GetShellWindow(),
                               aTransient );
     }
+}
+
+/*
+ *  WMAdaptor::handlePropertyNotify
+ */
+int WMAdaptor::handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const
+{
+    return 0;
+}
+
+/*
+ *  NetWMAdaptor::handlePropertyNotify
+ */
+int NetWMAdaptor::handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const
+{
+    int nHandled = 1;
+    if( pEvent->atom == m_aWMAtoms[ NET_WM_STATE ] )
+    {
+        pFrame->maFrameData.mbMaximizedHorz = pFrame->maFrameData.mbMaximizedVert = false;
+        pFrame->maFrameData.mbShaded = false;
+
+        if( pEvent->state == PropertyNewValue )
+        {
+            Atom nType, *pStates;
+            int nFormat;
+            unsigned long nItems, nBytesLeft;
+            unsigned char* pData;
+            long nOffset = 0;
+            do
+            {
+                XGetWindowProperty( m_pDisplay,
+                                    pEvent->window,
+                                    m_aWMAtoms[ NET_WM_STATE ],
+                                    nOffset, 64,
+                                    False,
+                                    XA_ATOM,
+                                    &nType,
+                                    &nFormat,
+                                    &nItems, &nBytesLeft,
+                                    &pData );
+                if( pData )
+                {
+                    if( nType == XA_ATOM && nFormat == 32 && nItems > 0 )
+                    {
+                        pStates = (Atom*)pData;
+                        for( unsigned long i = 0; i < nItems; i++ )
+                        {
+                            if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
+                                pFrame->maFrameData.mbMaximizedVert = true;
+                            else if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
+                                pFrame->maFrameData.mbMaximizedHorz = true;
+                            else if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_SHADED ] && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
+                                pFrame->maFrameData.mbShaded = true;
+                        }
+                    }
+                    XFree( pData );
+                }
+            } while( nBytesLeft > 0 );
+        }
+
+        if( ! (pFrame->maFrameData.mbMaximizedHorz || pFrame->maFrameData.mbMaximizedVert ) )
+            pFrame->maFrameData.maRestorePosSize = Rectangle();
+        else
+        {
+            const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
+            // the current geometry may already be changed by the corresponding
+            // ConfigureNotify, but this cannot be helped
+            pFrame->maFrameData.maRestorePosSize =
+                Rectangle( Point( rGeom.nX, rGeom.nY ),
+                           Size( rGeom.nWidth, rGeom.nHeight ) );
+        }
+    }
+    else
+        nHandled = 0;
+
+    return nHandled;
+}
+
+/*
+ *  GnomeWMAdaptor::handlePropertyNotify
+ */
+int GnomeWMAdaptor::handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const
+{
+    int nHandled = 1;
+    if( pEvent->atom == m_aWMAtoms[ WIN_STATE ] )
+    {
+        pFrame->maFrameData.mbMaximizedHorz = pFrame->maFrameData.mbMaximizedVert = false;
+        pFrame->maFrameData.mbShaded = false;
+
+        if( pEvent->state == PropertyNewValue )
+        {
+            Atom nType;
+            int nFormat;
+            unsigned long nItems, nBytesLeft;
+            unsigned char* pData;
+            XGetWindowProperty( m_pDisplay,
+                                pEvent->window,
+                                m_aWMAtoms[ WIN_STATE ],
+                                0, 1,
+                                False,
+                                XA_CARDINAL,
+                                &nType,
+                                &nFormat,
+                                &nItems, &nBytesLeft,
+                                &pData );
+            if( pData )
+            {
+                if( nType == XA_CARDINAL && nFormat == 32 && nItems == 1 )
+                {
+                    sal_uInt32 nWinState = *(sal_uInt32*)pData;
+                    if( nWinState & (1<<2) )
+                        pFrame->maFrameData.mbMaximizedVert = true;
+                    if( nWinState & (1<<3) )
+                        pFrame->maFrameData.mbMaximizedHorz = true;
+                    if( nWinState & (1<<5) )
+                        pFrame->maFrameData.mbShaded = true;
+                }
+                XFree( pData );
+            }
+        }
+
+        if( ! (pFrame->maFrameData.mbMaximizedHorz || pFrame->maFrameData.mbMaximizedVert ) )
+            pFrame->maFrameData.maRestorePosSize = Rectangle();
+        else
+        {
+            const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
+            // the current geometry may already be changed by the corresponding
+            // ConfigureNotify, but this cannot be helped
+            pFrame->maFrameData.maRestorePosSize =
+                Rectangle( Point( rGeom.nX, rGeom.nY ),
+                           Size( rGeom.nWidth, rGeom.nHeight ) );
+        }
+    }
+    else
+        nHandled = 0;
+
+    return nHandled;
+}
+
+/*
+ * WMAdaptor::shade
+ */
+void WMAdaptor::shade( SalFrame* pFrame, bool bToShaded ) const
+{
+}
+
+/*
+ * NetWMAdaptor::shade
+ */
+void NetWMAdaptor::shade( SalFrame* pFrame, bool bToShaded ) const
+{
+    if( m_aWMAtoms[ NET_WM_STATE ]
+        && m_aWMAtoms[ NET_WM_STATE_SHADED ]
+        && ( pFrame->maFrameData.nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+        )
+    {
+        pFrame->maFrameData.mbShaded = bToShaded;
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = bToShaded ? 1 : 0;
+            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_SHADED ];
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask | SubstructureRedirectMask,
+                        &aEvent
+                        );
+        }
+        else
+        {
+            // window not mapped yet, set _NET_WM_STATE directly
+            setNetWMState( pFrame );
+        }
+    }
+}
+
+/*
+ *  GnomeWMAdaptor::shade
+ */
+void GnomeWMAdaptor::shade( SalFrame* pFrame, bool bToShaded ) const
+{
+    if( m_aWMAtoms[ WIN_STATE ] )
+    {
+        pFrame->maFrameData.mbShaded = bToShaded;
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = (1<<5);
+            aEvent.xclient.data.l[1]    = bToShaded ? (1<<5) : 0;
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask | SubstructureRedirectMask,
+                        &aEvent
+                        );
+        }
+        else
+            setGnomeWMState( pFrame );
+    }
+}
+
+/*
+ *  WMAdaptor::showFullScreen
+ */
+void WMAdaptor::showFullScreen( SalFrame* pFrame, bool bFullScreen ) const
+{
+    pFrame->maFrameData.mbFullScreen = bFullScreen;
+    maximizeFrame( pFrame, bFullScreen, bFullScreen );
+}
+
+/*
+ *  NetWMAdaptor::showFullScreen
+ */
+void NetWMAdaptor::showFullScreen( SalFrame* pFrame, bool bFullScreen ) const
+{
+    if( m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
+    {
+        pFrame->maFrameData.mbFullScreen = bFullScreen;
+        if( pFrame->maFrameData.bMapped_ )
+        {
+            // window already mapped, send WM a message
+            XEvent aEvent;
+            aEvent.type                 = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = pFrame->maFrameData.GetShellWindow();
+            aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = bFullScreen ? 1 : 0;
+            aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
+            aEvent.xclient.data.l[2]    = 0;
+            aEvent.xclient.data.l[3]    = 0;
+            aEvent.xclient.data.l[4]    = 0;
+            XSendEvent( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        False,
+                        SubstructureNotifyMask | SubstructureRedirectMask,
+                        &aEvent
+                        );
+        }
+        else
+        {
+            // window not mapped yet, set _NET_WM_STATE directly
+            setNetWMState( pFrame );
+        }
+    }
+    else WMAdaptor::showFullScreen( pFrame, bFullScreen );
 }

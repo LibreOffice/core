@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-22 11:26:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,6 +927,7 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
                     delete mpLayoutData, mpLayoutData = NULL;
                     if ( !mnMaxVisibleEntries || !IsReallyVisible() || ( nPos < GetTopEntry() ) )
                     {
+                        Resize();
                         SetTopEntry( nPos );
                     }
                     else
@@ -1522,6 +1523,10 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
          ((nSelect != mnCurrentPos ) || ( eLET == LET_KEYSPACE)) )
     {
         DBG_ASSERT( (nSelect != mnCurrentPos) || mbMulti, "ImplListBox: Selecting same Entry" );
+        if( nSelect >= mpEntryList->GetEntryCount() )
+            nSelect = mpEntryList->GetEntryCount()-1;
+        else if (nSelect < 0 )
+            nSelect = 0;
         mnCurrentPos = nSelect;
         if ( SelectEntries( nSelect, eLET, bShift, bCtrl ) )
         {
@@ -1732,6 +1737,14 @@ void ImplListBoxWindow::Resize()
 
     if ( bShowFocusRect )
         ImplShowFocusRect();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::CalcMaxVisibleEntries( const Size& rFloatSize )
+{
+    if( mnMaxHeight )
+        mnMaxVisibleEntries = (USHORT) ( (rFloatSize.Height()-4) / mnMaxHeight );
 }
 
 // -----------------------------------------------------------------------
@@ -2203,7 +2216,8 @@ void ImplListBox::ImplResizeControls()
     else
     {
         mpVScrollBar->Hide();
-        SetTopEntry( 0 );
+        // #107254# Don't reset top entry after resize, but check for max top entry
+        SetTopEntry( GetTopEntry() );
     }
 
     // horz. ScrollBar
@@ -2610,7 +2624,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& rMEvt )
 // =======================================================================
 
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
-    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW )
+    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes
 {
     mpImplLB = NULL;
     mnDDLineCount = 0;

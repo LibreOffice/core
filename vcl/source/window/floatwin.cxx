@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-09 11:07:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         if( ( (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_DOWN)  ||
               (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_RIGHT) )
             && ( nFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE ) )
-            aPos.X() += 1;
+            aPos.X() += 2;
 
         // Evt. noch anpassen
         if ( bBreak && !(nFlags & FLOATWIN_POPUPMODE_NOAUTOARRANGE) )
@@ -448,21 +448,28 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
 FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, USHORT& rHitTest )
 {
-    // compare coordinates in absolute screen coordinates
     FloatingWindow* pWin = this;
-    Point aAbsolute( pReference->OutputToAbsoluteScreenPixel(
-        pReference->ScreenToOutputPixel(rPos) ) );
 
-    if( pReference->ImplHasMirroredGraphics() && !pReference->IsRTLEnabled() )
+    Point aAbsolute( rPos );
+
+    // compare coordinates in absolute screen coordinates
+    if( pReference->ImplHasMirroredGraphics()  )
     {
-        // --- RTL --- re-mirror back to get device coordiantes
-        pReference->ImplReMirror( aAbsolute );
+        if(!pReference->IsRTLEnabled() )
+            // --- RTL --- re-mirror back to get device coordiantes
+            pReference->ImplReMirror( aAbsolute );
+
+        Rectangle aRect( pReference->ScreenToOutputPixel(aAbsolute), Size(1,1) ) ;
+        aRect = pReference->ImplOutputToUnmirroredAbsoluteScreenPixel( aRect );
+        aAbsolute = aRect.TopLeft();
     }
+    else
+        aAbsolute = Point( pReference->OutputToAbsoluteScreenPixel(
+            pReference->ScreenToOutputPixel(rPos) ) );
 
     do
     {
-        //Rectangle devRect( OutputToAbsoluteScreenPixel( ScreenToOutputPixel(pWin->GetPosPixel()) ), pWin->GetSizePixel() ) ;
-        Rectangle devRect( pWin->GetWindowExtentsRelative( NULL ) );
+        Rectangle devRect( pWin->ImplOutputToUnmirroredAbsoluteScreenPixel( Rectangle( pWin->ScreenToOutputPixel(pWin->GetPosPixel()), pWin->GetSizePixel()) ) ) ;
         if ( devRect.IsInside( aAbsolute ) )
         {
             rHitTest = IMPL_FLOATWIN_HITTEST_WINDOW;

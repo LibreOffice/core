@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-13 13:27:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#include <unistd.h>
+#include <fcntl.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -78,6 +82,11 @@
 #endif
 #ifdef AIX
 #include <strings.h>
+#endif
+#ifdef FREEBSD
+#include <sys/types.h>
+#include <sys/time.h>
+#include <unistd.h>
 #endif
 
 #ifndef _VOS_MUTEX_HXX
@@ -149,9 +158,9 @@
 #endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const struct timeval noyield = { 0, 0 };
-static const struct timeval yield   = { 0, 10000 };
-static const struct fd_set  ZeroFDS = { 0 };
+static const struct timeval noyield__ = { 0, 0 };
+static const struct timeval yield__   = { 0, 10000 };
+
 static const char* XRequest[] = {
     // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
     NULL,
@@ -318,19 +327,28 @@ static int sal_XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 
 static int sal_XIOErrorHdl( Display *pDisplay )
 {
+    /*  #106197# hack: until a real shutdown procedure exists
+     *  _exit ASAP
+     */
+    if( ImplGetSVData()->maAppData.mbAppQuit )
+        _exit(1);
+
     SalData    *pSalData    = GetSalData();
     SalDisplay *pSalDisplay = pSalData->GetDisplay( pDisplay );
-    if ( pDisplay && pSalDisplay->IsDisplay() )
+    if ( pDisplay && pSalDisplay && pSalDisplay->IsDisplay() )
         pSalData->GetLib()->Remove( ConnectionNumber( pDisplay ) );
 
     oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
-    // einen XIOError kann man nicht ignorieren. Die Connection ist
-    // zusammengebrochen, hier kann man nur noch halbwegs sinnvoll runterfahren
 
     fprintf( stderr, "X IO Error\n" );
     fflush( stdout );
     fflush( stderr );
-    exit(0);
+
+    /*  #106197# the same reasons to use _exit instead of exit in salmain
+     *  do apply here. Since there is nothing to be done after an XIO
+     *  error we have to _exit immediately.
+     */
+    _exit(0);
     return 0;
 }
 
@@ -431,7 +449,6 @@ void SalData::Init( int *pArgc, char *ppArgv[] )
     argv_           = ppArgv;
 }
 
-
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalXLib::SalXLib()
@@ -439,20 +456,56 @@ SalXLib::SalXLib()
     Timeout_.tv_sec         = 0;
     Timeout_.tv_usec        = 0;
     nTimeoutMS_             = 0;
+
+    nFDs_                   = 0;
+    FD_ZERO( &aReadFDS_ );
+    FD_ZERO( &aExceptionFDS_ );
+
+    pTimeoutFDS_[0] = pTimeoutFDS_[1] = -1;
+    if (pipe (pTimeoutFDS_) != -1)
+    {
+        // initialize 'wakeup' pipe.
+        int flags;
+
+        // set close-on-exec descriptor flag.
+        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFD)) != 1)
+        {
+            flags |= FD_CLOEXEC;
+            fcntl (pTimeoutFDS_[0], F_SETFD, flags);
+        }
+        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFD)) != 1)
+        {
+            flags |= FD_CLOEXEC;
+            fcntl (pTimeoutFDS_[1], F_SETFD, flags);
+        }
+
+        // set non-blocking I/O flag.
+        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFL)) != 1)
+        {
+            flags |= O_NONBLOCK;
+            fcntl (pTimeoutFDS_[0], F_SETFL, flags);
+        }
+        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFL)) != 1)
+        {
+            flags |= O_NONBLOCK;
+            fcntl (pTimeoutFDS_[1], F_SETFL, flags);
+        }
+
+        // insert [0] into read descriptor set.
+        FD_SET( pTimeoutFDS_[0], &aReadFDS_ );
+        nFDs_ = pTimeoutFDS_[0] + 1;
+    }
+
     bWasXError_             = FALSE;
     bIgnoreXErrors_         = !!getenv( "SAL_IGNOREXERRORS" );
     nStateOfYield_          = 0;
-    nFDs_                   = 0;
-    pReadFDS_               = new fd_set;
-    pExceptionFDS_          = new fd_set;
-    FD_ZERO( pReadFDS_ );
-    FD_ZERO( pExceptionFDS_ );
 }
 
 SalXLib::~SalXLib()
 {
-    delete pReadFDS_;
-    delete pExceptionFDS_;
+    // close 'wakeup' pipe.
+    close (pTimeoutFDS_[0]);
+    close (pTimeoutFDS_[1]);
 
 // completetly disabled Bug Nr. #47319 -> segv while using xsuntransport=shmem
 // #ifdef SAL_XT
@@ -609,6 +662,9 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         fflush( stdout );
         fflush( stderr );
 #endif
+        if( pDisplay != GetSalData()->GetDefDisp()->GetDisplay() )
+            return;
+
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
         switch (eToDo)
         {
@@ -628,8 +684,6 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
     bWasXError_ = TRUE;
 }
-
-#define MAX_NUM_DESCRIPTORS 128
 
 struct YieldEntry
 {
@@ -654,17 +708,17 @@ void SalXLib::Insert( int nFD, void* data,
                       YieldFunc     queued,
                       YieldFunc     handle )
 {
-    DBG_ASSERT( nFD, "can not insert stdin descriptor" )
-        DBG_ASSERT( !yieldTable[nFD].fd, "SalXLib::Insert fd twice" )
+    DBG_ASSERT( nFD, "can not insert stdin descriptor" );
+    DBG_ASSERT( !yieldTable[nFD].fd, "SalXLib::Insert fd twice" );
 
-        yieldTable[nFD].fd      = nFD;
-    yieldTable[nFD].data        = data;
+    yieldTable[nFD].fd      = nFD;
+    yieldTable[nFD].data    = data;
     yieldTable[nFD].pending = pending;
     yieldTable[nFD].queued  = queued;
     yieldTable[nFD].handle  = handle;
 
-    FD_SET( nFD, pReadFDS_ );
-    FD_SET( nFD, pExceptionFDS_ );
+    FD_SET( nFD, &aReadFDS_ );
+    FD_SET( nFD, &aExceptionFDS_ );
 
     if( nFD >= nFDs_ )
         nFDs_ = nFD + 1;
@@ -672,8 +726,8 @@ void SalXLib::Insert( int nFD, void* data,
 
 void SalXLib::Remove( int nFD )
 {
-    FD_CLR( nFD, pReadFDS_ );
-    FD_CLR( nFD, pExceptionFDS_ );
+    FD_CLR( nFD, &aReadFDS_ );
+    FD_CLR( nFD, &aExceptionFDS_ );
 
     yieldTable[nFD].fd = 0;
 
@@ -686,58 +740,31 @@ void SalXLib::Remove( int nFD )
         nFDs_ = nFD + 1;
     }
 }
-#if 0
-class YieldMutexReleaser
-{
-    ULONG               m_nYieldCount;
-    SalYieldMutex*      m_pSalInstYieldMutex;
-public:
-    YieldMutexReleaser();
-    ~YieldMutexReleaser();
-};
 
-YieldMutexReleaser::YieldMutexReleaser()
+bool SalXLib::CheckTimeout( bool bExecuteTimers )
 {
-    SalData *pSalData       = GetSalData();
-    m_pSalInstYieldMutex    =
-        pSalData->pFirstInstance_->maInstData.mpSalYieldMutex;
-
-    ULONG i;
-    if ( m_pSalInstYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
-    {
-        m_nYieldCount = m_pSalInstYieldMutex->GetAcquireCount();
-        for ( i = 0; i < m_nYieldCount; i++ )
-            m_pSalInstYieldMutex->release();
-    }
-    else
-        m_nYieldCount = 0;
-}
-
-YieldMutexReleaser::~YieldMutexReleaser()
-{
-    // Yield-Semaphore wieder holen
-    while ( m_nYieldCount )
-    {
-        m_pSalInstYieldMutex->acquire();
-        m_nYieldCount--;
-    }
-}
-#endif
-
-void SalXLib::CheckTimeout()
-{
-    struct timeval aTimeOfDay;
+    bool bRet = false;
     if( Timeout_.tv_sec ) // timer is started
     {
-        gettimeofday( &aTimeOfDay, NULL );
-
+        timeval aTimeOfDay;
+        gettimeofday( &aTimeOfDay, 0 );
         if( aTimeOfDay >= Timeout_ )
         {
-            Timeout_ = aTimeOfDay + nTimeoutMS_;
-            GetSalData()->Timeout();
+            bRet = true;
+            if( bExecuteTimers )
+            {
+                // timed out, notify.
+                Timeout_ = aTimeOfDay;
+                GetSalData()->Timeout();
+                if (aTimeOfDay == Timeout_)
+                {
+                    // still timed out, auto restart.
+                    Timeout_ += nTimeoutMS_;
+                }
+            }
         }
     }
+    return bRet;
 }
 
 void SalXLib::Yield( BOOL bWait )
@@ -747,21 +774,15 @@ void SalXLib::Yield( BOOL bWait )
     if (p_prioritize_timer != NULL)
         CheckTimeout();
 
-    // check for events already queued
-    fd_set   ReadFDS;
-    fd_set   ExceptionFDS;
-    int      nFound = 0;
-
     nStateOfYield_ = 0; // is not 0 if we are recursive called
 
-    // first look for queued events
+    // first, check for already queued events.
     for ( int nFD = 0; nFD < nFDs_; nFD++ )
     {
         YieldEntry* pEntry = &(yieldTable[nFD]);
         if ( pEntry->fd )
         {
             DBG_ASSERT( nFD == pEntry->fd, "wrong fd in Yield()" );
-
             if ( pEntry->HasPendingEvent() )
             {
                 pEntry->HandleNextEvent();
@@ -776,26 +797,39 @@ void SalXLib::Yield( BOOL bWait )
         }
     }
 
-    // next select with or without timeout according to bWait
+    // next, select with or without timeout according to bWait.
+    int      nFDs         = nFDs_;
+    fd_set   ReadFDS      = aReadFDS_;
+    fd_set   ExceptionFDS = aExceptionFDS_;
+    int      nFound       = 0;
 
-    ReadFDS         = *pReadFDS_;
-    ExceptionFDS    = *pExceptionFDS_;
+    timeval  Timeout      = noyield__;
+    timeval *pTimeout     = &Timeout;
 
-    struct timeval Timeout = bWait ? yield : noyield;
+    if (bWait)
+    {
+        pTimeout = 0;
+        if (Timeout_.tv_sec) // Timer is started.
+        {
+            // determine remaining timeout.
+            gettimeofday (&Timeout, 0);
+            Timeout = Timeout_ - Timeout;
+            if (yield__ >= Timeout)
+            {
+                // guard against micro timeout.
+                Timeout = yield__;
+            }
+            pTimeout = &Timeout;
+        }
+    }
 
     nStateOfYield_ = 1;
-
     {
-        // Yield-Semaphore freigeben
+        // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
-        if( bWait )
+        if( !bWait )
             osl_yieldThread();
-#if defined (HPUX) && defined (CMA_UX)
-        nFound = select( nFDs_, (int*)&ReadFDS, (int*)NULL,
-                         (int*)&ExceptionFDS, &Timeout );
-#else
-        nFound = select( nFDs_, &ReadFDS, NULL, &ExceptionFDS, &Timeout );
-#endif
+        nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
     }
     if( nFound < 0 ) // error
     {
@@ -814,7 +848,16 @@ void SalXLib::Yield( BOOL bWait )
     if (p_prioritize_timer == NULL)
         CheckTimeout();
 
-    // handle events
+    // handle wakeup events.
+    if ((nFound > 0) && (FD_ISSET(pTimeoutFDS_[0], &ReadFDS)))
+    {
+        int buffer;
+        while (read (pTimeoutFDS_[0], &buffer, sizeof(buffer)) > 0)
+            continue;
+        nFound -= 1;
+    }
+
+    // handle other events.
     if( nFound > 0 )
     {
         // now we are in the protected section !
@@ -828,8 +871,6 @@ void SalXLib::Yield( BOOL bWait )
         if (nFound == 0)
         {
             nStateOfYield_ = 0;
-            //if ( !pthread_equal (pthread_self(),
-            //                   pSalData->GetMainThread()))
             return;
         }
 
@@ -864,3 +905,7 @@ void SalXLib::Yield( BOOL bWait )
     nStateOfYield_ = 0;
 }
 
+void SalXLib::Wakeup()
+{
+    write (pTimeoutFDS_[1], "", 1);
+}

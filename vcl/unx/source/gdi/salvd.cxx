@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-18 11:27:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ BOOL SalVirDevData::Init( SalDisplay *pDisplay,
                                 USHORT nBitCount )
 {
     pDisplay_               = pDisplay;
-    pGraphics_              = new SalGraphics();
+    pGraphics_              = new SalGraphicsLayout();
+    pGraphics_->SetLayout( 0 ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     nDX_                    = nDX;
     nDY_                    = nDY;
     nDepth_                 = nBitCount;

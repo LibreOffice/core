@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 11:47:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void Sound::Notify()
 
 BOOL Sound::SetSoundName( const XubString& rSoundName )
 {
-    BOOL bRet;
+    BOOL bRet( FALSE );
 
     if( !rSoundName.Len() )
     {
@@ -225,27 +225,37 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
     {
         INetURLObject   aSoundURL( rSoundName );
         String          aSoundName, aTmp;
+        BOOL            bValidName( FALSE );
 
-        if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
+        // #106654# Accept only local sound files
+        if( aSoundURL.GetProtocol() == INET_PROT_FILE )
         {
 #ifdef REMOTE_APPSERVER
             aSoundName = aSoundURL.GetMainURL( INetURLObject::NO_DECODE );
 #else
             ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL( INetURLObject::NO_DECODE ), aSoundName );
 #endif
+            bValidName = TRUE;
         }
-        else if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundName, aTmp ) )
+        else if( aSoundURL.GetProtocol() == INET_PROT_NOT_VALID &&
+                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundName, aTmp ) )
+        {
             aSoundName = rSoundName;
+            bValidName = TRUE;
+        }
         else
         {
-            DBG_ERROR( "invalid sound file name" );
+            // no valid sound file name
             aSoundName = String();
+
+            // #106654# Don't set bRet to true for invalid sound file
+            // names, but init with empty string, anyway
+            mpSound->Init( NULL, aSoundName, mnSoundLen );
         }
 
-        bRet = mpSound->Init( NULL, aSoundName, mnSoundLen );
+        if( bValidName )
+            bRet = mpSound->Init( NULL, aSoundName, mnSoundLen );
     }
-    else
-        bRet = FALSE;
 
     maSoundName = rSoundName;
 

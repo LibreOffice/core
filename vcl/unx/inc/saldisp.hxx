@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 14:24:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,15 +263,16 @@ class SalXLib
 
     timeval         Timeout_;
     ULONG           nTimeoutMS_;
+    int             pTimeoutFDS_[2];
+
     int             nStateOfYield_;
     BOOL            bWasXError_;
     BOOL            bIgnoreXErrors_;
-    int             nFDs_;
-    fd_set          *pReadFDS_;
-    fd_set          *pExceptionFDS_;
-    YieldEntry      *pYieldEntries_;
 
-    void            CheckTimeout();
+    int             nFDs_;
+    fd_set          aReadFDS_;
+    fd_set          aExceptionFDS_;
+    YieldEntry      *pYieldEntries_;
 
 public:
     SalXLib();
@@ -279,6 +280,7 @@ public:
     void            Init( int *pArgc, char *ppArgv[] );
 
     void            Yield( BOOL bWait );
+    void            Wakeup();
 
     void            Insert( int fd, void* data,
                             YieldFunc   pending,
@@ -294,6 +296,8 @@ public:
 
     inline  void            StartTimer( ULONG nMS );
     inline  void            StopTimer();
+
+    bool            CheckTimeout( bool bExecuteTimers = true );
 };
 
 // -=-= SalXEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -478,6 +482,7 @@ public:
     ULONG           GetImageDepths() const { return nImageDepths_; }
     ULONG           SupportsShm() const { return nSharedImages_; }
     void            DisableShm() { nSharedImages_ /= 2; } // = 0
+    void            GetScreenFontResolution( long& rDPIX, long& rDPIY ) const;
 
     BOOL            MouseCaptured( const SalFrameData *pFrameData ) const
     { return pCapture_ == pFrameData; }

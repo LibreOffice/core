@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-22 17:08:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,11 +210,14 @@ void ImplInitSalGDI()
     pSalData->mhStockBrushAry[3]        = CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
     pSalData->mnStockBrushCount = 4;
 
-    // DC-Cache aufbauen
+    // initialize cache of device contexts
     pSalData->mpHDCCache = new HDCCache[ CACHESIZE_HDC ];
     memset( pSalData->mpHDCCache, 0, CACHESIZE_HDC * sizeof( HDCCache ) );
 
-    // Nur bei 256 Farben Displays, die Paletten unterstuetzen
+    // initialize temporary font list
+    pSalData->mpTempFontItem = NULL;
+
+    // support palettes for 256 color displays
     HDC hDC = GetDC( 0 );
     int nBitsPixel = GetDeviceCaps( hDC, BITSPIXEL );
     int nPlanes = GetDeviceCaps( hDC, PLANES );
@@ -364,9 +367,9 @@ void ImplInitSalGDI()
 void ImplFreeSalGDI()
 {
     SalData*    pSalData = GetSalData();
-    USHORT      i;
 
     // destroy stock objects
+    int i;
     for ( i = 0; i < pSalData->mnStockPenCount; i++ )
         DeletePen( pSalData->mhStockPenAry[i] );
     for ( i = 0; i < pSalData->mnStockBrushCount; i++ )
@@ -427,6 +430,9 @@ void ImplFreeSalGDI()
         delete pIcon;
         pIcon = pTmp;
     }
+
+    // delete temporary font list
+    ImplReleaseTempFonts( *pSalData );
 }
 
 // -----------------------------------------------------------------------
@@ -846,19 +852,23 @@ USHORT SalGraphics::GetBitCount()
 
 long SalGraphics::GetGraphicsWidth()
 {
-    SalFrame* pFrame = GetWindowPtr( maGraphicsData.mhWnd );
-    if( pFrame )
+    if( maGraphicsData.mhWnd && IsWindow( maGraphicsData.mhWnd ) )
     {
-        if( pFrame->maGeometry.nWidth )
-            return pFrame->maGeometry.nWidth;
-        else
+        SalFrame* pFrame = GetWindowPtr( maGraphicsData.mhWnd );
+        if( pFrame )
         {
-            // TODO: perhaps not needed, maGeometry should always be up-to-date
-            RECT aRect;
-            GetClientRect( maGraphicsData.mhWnd, &aRect );
-            return aRect.right;
+            if( pFrame->maGeometry.nWidth )
+                return pFrame->maGeometry.nWidth;
+            else
+            {
+                // TODO: perhaps not needed, maGeometry should always be up-to-date
+                RECT aRect;
+                GetClientRect( maGraphicsData.mhWnd, &aRect );
+                return aRect.right;
+            }
         }
     }
+
     return 0;
 }
 

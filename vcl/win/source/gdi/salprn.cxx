@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-04 17:23:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     while ( nRead >= nSize-2 )
     {
         nSize += 2048;
-        delete pBuf;
+        delete []pBuf;
         pBuf = new char[nSize];
         nRead = GetProfileStringA( aImplDevices, NULL, "", pBuf, nSize );
     }
@@ -349,7 +349,7 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pName += nNameLen + 1;
     }
 
-    delete pBuf;
+    delete []pBuf;
     rtl_freeMemory( pWinInfo2 );
 }
 
@@ -451,7 +451,7 @@ static BOOL ImplTestSalJobSetup( SalInfoPrinter* pPrinter,
             return TRUE;
         else if ( bDelete )
         {
-            delete pSetupData->mpDriverData;
+            rtl_freeMemory( pSetupData->mpDriverData );
             pSetupData->mpDriverData = NULL;
             pSetupData->mnDriverDataLen = 0;
         }
@@ -548,7 +548,7 @@ static BOOL ImplUpdateSalJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
     // Daten updaten
     if ( pSetupData->mpDriverData )
-        delete pSetupData->mpDriverData;
+        rtl_freeMemory( pSetupData->mpDriverData );
     pSetupData->mnDriverDataLen = nDriverDataLen;
     pSetupData->mpDriverData    = (BYTE*)pOutBuffer;
     pSetupData->mnSystem        = JOBSETUP_SYSTEM_WINDOWS;
@@ -643,8 +643,10 @@ static void ImplDevModeToJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 static BOOL ImplPaperSizeEqual( short nPaperWidth1, short nPaperHeight1,
                                 short nPaperWidth2, short nPaperHeight2 )
 {
-    return (((nPaperWidth1 >= nPaperWidth2-1) && (nPaperWidth1 <= nPaperWidth2+1)) &&
-            ((nPaperHeight1 >= nPaperHeight2-1) && (nPaperHeight1 <= nPaperHeight2+1)));
+    const short PAPER_SLOPPY = 1; // 0.1 mm accuracy
+
+    return ( (Abs( nPaperWidth1-nPaperWidth2 ) <= PAPER_SLOPPY) &&
+             (Abs( nPaperHeight1-nPaperHeight2 ) <= PAPER_SLOPPY) );
 }
 
 // -----------------------------------------------------------------------
@@ -689,7 +691,7 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
         pDevMode->dmPaperWidth   = 0;
         pDevMode->dmPaperLength  = 0;
 
-        switch( pDevMode->dmPaperSize )
+        switch( pSetupData->mePaperFormat )
         {
             case( PAPER_A3 ):
                 pDevMode->dmPaperSize = DMPAPER_A3;
@@ -722,6 +724,7 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
                 WORD*   pPapers = NULL;
                 ULONG   nPaperSizeCount = ImplDeviceCaps( pPrinter, DC_PAPERSIZE, NULL, pSetupData );
                 POINT*  pPaperSizes = NULL;
+                DWORD   nLandscapeAngle = ImplDeviceCaps( pPrinter, DC_ORIENTATION, NULL, pSetupData );
                 if ( nPaperCount && (nPaperCount != ((ULONG)-1)) )
                 {
                     pPapers = new WORD[nPaperCount];
@@ -745,44 +748,36 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
                                                 (short)pPaperSizes[i].x,
                                                 (short)pPaperSizes[i].y ) )
                         {
+                            pDevMode->dmFields |= DM_ORIENTATION;
+                            pDevMode->dmOrientation = DMORIENT_PORTRAIT;
                             nPaper = pPapers[i];
                             break;
                         }
                     }
 
-                    if ( nPaper )
-                        pDevMode->dmPaperSize = nPaper;
-                    else
+                    // If the printer supports landscape orientation, check paper sizes again
+                    // with landscape orientation. This is necessary as a printer driver provides
+                    // all paper sizes with portrait orientation only!!
+                    if ( !nPaper && nLandscapeAngle != 0 )
                     {
-                        // Fallback solution:
-                        // Use the paper format that matches best with our user format. Prefer bigger
-                        // formats to formats that would better fit but are smaller. This is needed
-                        // because of the strange printer driver handling of DMPAPER_USER in some cases!
-                        long nDelta = 0;
-                        BOOL bCurrSelPrnPaperFits = FALSE;
-                        for( ULONG i = 0; i < nPaperCount; i++ )
+                        for ( ULONG i = 0; i < nPaperCount; i++ )
                         {
-                            long nSW = pSetupData->mnPaperWidth/10;
-                            long nSH = pSetupData->mnPaperHeight/10;
-                            long nPW = pPaperSizes[i].x;
-                            long nPH = pPaperSizes[i].y;
-                            BOOL bPrnPaperSmaller = (( nPW < nSW ) || ( nPH < nSH ));
-                            long nCurDelta = ((nPW - nSW)*(nPW - nSW) + (nPH - nSH)*(nPH - nSH));
-
-                            if (( nPaper == 0 ) ||
-                                ( !bCurrSelPrnPaperFits && !bPrnPaperSmaller ) ||
-                                ( !bCurrSelPrnPaperFits && ( nCurDelta < nDelta ) ) ||
-                                ( bCurrSelPrnPaperFits && !bPrnPaperSmaller && ( nCurDelta < nDelta ) ))
+                            if ( ImplPaperSizeEqual( (short)(pSetupData->mnPaperWidth/10),
+                                                    (short)(pSetupData->mnPaperHeight/10),
+                                                    (short)pPaperSizes[i].y,
+                                                    (short)pPaperSizes[i].x ) )
                             {
+
+                                pDevMode->dmFields |= DM_ORIENTATION;
+                                pDevMode->dmOrientation = DMORIENT_LANDSCAPE;
                                 nPaper = pPapers[i];
-                                nDelta = nCurDelta;
-                                bCurrSelPrnPaperFits = !bPrnPaperSmaller;
+                                break;
                             }
                         }
-
-                        if ( nPaper >= 0 )
-                            pDevMode->dmPaperSize = nPaper;
                     }
+
+                    if ( nPaper )
+                        pDevMode->dmPaperSize = nPaper;
                 }
 
                 if ( !nPaper )
@@ -1310,7 +1305,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     delete [] lpszDeviceName;
 
     if ( pDevMode != pOrgDevMode )
-        delete pDevMode;
+        rtl_freeMemory( pDevMode );
 
     if ( !hDC )
     {
@@ -1479,7 +1474,7 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData )
         pDevMode = ImplSalSetCopies( pOrgDevMode, maPrinterData.mnCopies, maPrinterData.mbCollate );
         ResetDC( hDC, pDevMode );
         if ( pDevMode != pOrgDevMode )
-            delete pDevMode;
+            rtl_freeMemory( pDevMode );
     }
     int nRet = ::StartPage( hDC );
     if ( nRet <= 0 )

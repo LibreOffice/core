@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-31 15:14:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <dtint.hxx>
 #include <msgbox.hxx>
 #include <button.hxx>
+#include <svdata.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -130,6 +131,10 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
 int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
 {
     int nRet = -1;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpIntroWindow )
+        pSVData->mpIntroWindow->Hide();
 
     DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
     if( pIntegrator->GetDtType() == DtGNOME )

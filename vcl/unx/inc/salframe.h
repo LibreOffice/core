@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-18 11:56:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ class SalFrameData
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pSalFrameData );
     STDAPI( SalFrameData );
 
+    static SalFrame* s_pSaveYourselfFrame;
+
     SalFrame       *pNextFrame_;        // pointer to next frame
     SalFrame       *pFrame_;
 
@@ -160,13 +162,14 @@ class SalFrameData
     USHORT          nKeyCode_;          // last key code
     USHORT          nKeyState_;         // last key state
     int             nCompose_;          // compose state
+    bool            mbKeyMenu;
+    bool            mbSendExtKeyModChange;
+    USHORT          mnExtKeyMod;
 
     int             nShowState_;        // show state
-    int             nMaxWidth_;         // client max width
-    int             nMaxHeight_;        // client max height
     int             nWidth_;            // client width
     int             nHeight_;           // client height
-    Rectangle       aRestoreFullScreen_;
+    Rectangle       maRestorePosSize;
     ULONG           nStyle_;
     BOOL            bAlwaysOnTop_;
     BOOL            bViewable_;
@@ -177,7 +180,8 @@ class SalFrameData
 
     int             nScreenSaversTimeout_;
     Timer           maResizeTimer;
-    Rectangle       maResizeBuffer;
+    bool            mbMoved;
+    bool            mbSized;
     Rectangle       maPaintRegion;
 
     Timer           maAlwaysOnTopRaiseTimer;
@@ -187,6 +191,8 @@ class SalFrameData
     int             mnDecorationFlags;
     bool            mbMaximizedVert;
     bool            mbMaximizedHorz;
+    bool            mbShaded;
+    bool            mbFullScreen;
 
     // icon id
     int             mnIconID;
@@ -210,7 +216,7 @@ class SalFrameData
     void            Minimize();
     void            Maximize();
     void            Restore();
-    void            SetWindowGravity (int nGravity, const Point& rPosition) const;
+    void            SetWindowGravity (int nGravity ) const;
 
     void            RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
     void            RestackChildren();

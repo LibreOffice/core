@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-28 13:19:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
 {
     // Der Text wird dadurch geloescht das der alte Text komplett 'selektiert'
     // wird, dann InsertText, damit flackerfrei.
-    if ( (rText != maText) || (pNewSelection && (*pNewSelection != maSelection)) )
+    if ( ( rText.Len() <= mnMaxTextLen ) && ( (rText != maText) || (pNewSelection && (*pNewSelection != maSelection)) ) )
     {
         delete mpLayoutData, mpLayoutData = NULL;
         maSelection.Min() = 0;
@@ -1083,6 +1083,15 @@ void Edit::ImplLoadRes( const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
+void Edit::ImplCopyToSelectionClipboard()
+{
+    if ( GetSelection().Len() )
+    {
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+        ImplCopy( aSelection );
+    }
+}
+
 void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
     if ( rxClipboard.is() )
@@ -1163,12 +1172,17 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
     {
         mbClickedInSelection = FALSE;
         if ( rMEvt.GetClicks() == 3 )
+        {
             ImplSetSelection( Selection( 0, 0xFFFF ) );
+            ImplCopyToSelectionClipboard();
+
+        }
         else if ( rMEvt.GetClicks() == 2 )
         {
             uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
              i18n::Boundary aBoundary = xBI->getWordBoundary( maText, aSelection.Max(), GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
+            ImplCopyToSelectionClipboard();
         }
         else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nChar ) )
             mbClickedInSelection = TRUE;
@@ -1214,10 +1228,9 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
             ImplSetCursorPos( nChar, FALSE );
             mbClickedInSelection = FALSE;
         }
-        else if ( rTEvt.GetMouseEvent().IsLeft() && GetSelection().Len() )
+        else if ( rTEvt.GetMouseEvent().IsLeft() )
         {
-            ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
-            ImplCopy( aSelection );
+            ImplCopyToSelectionClipboard();
         }
     }
     else
@@ -1346,10 +1359,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     if ( aSel != GetSelection() )
                     {
                         ImplSetSelection( aSel );
-                        if ( aSel.Len() ) {
-                            ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
-                            ImplCopy( aSelection );
-                        }
+                        ImplCopyToSelectionClipboard();
                     }
 
                     if ( (nCode == KEY_END) && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-20 12:42:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <salunx.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #ifndef _SV_JOBSET_H
 #include <jobset.h>
@@ -136,7 +137,7 @@ static String getPdfDir( const PrinterInfo& rInfo )
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );
             if( ! aDir.Len() )
-                aDir = String( ByteString( getenv( "HOME" ) ), gsl_getSystemTextEncoding() );
+                aDir = String( ByteString( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
             break;
         }
     }
@@ -234,7 +235,6 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
         }
     }
 
-
     // copy input slot
     const PPDKey* pKey;
     const PPDValue* pValue;
@@ -274,26 +274,25 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 {
     bool bSuccess = false;
 
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     ByteString aCmdLine( rCommandLine, aEncoding );
     ByteString aFilename( rFilename, aEncoding );
-    ByteString aPSFilename( aFilename );
-    aPSFilename.Append( ".ps" );
 
-    BOOL bPS = link( aFilename.GetBuffer(), aPSFilename.GetBuffer() ) ? FALSE : TRUE;
-
-    const ByteString& rUseFilename( bPS ? aPSFilename : aFilename );
     bool bPipe = aCmdLine.Search( "(TMP)" ) != STRING_NOTFOUND ? false : true;
 
     // setup command line for exec
     if( ! bPipe )
-        while( aCmdLine.SearchAndReplace( "(TMP)", rUseFilename ) != STRING_NOTFOUND )
+        while( aCmdLine.SearchAndReplace( "(TMP)", aFilename ) != STRING_NOTFOUND )
             ;
 
 #ifdef DEBUG
     fprintf( stderr, "%s commandline: \"%s\"\n",
              bPipe ? "piping to" : "executing",
              aCmdLine.GetBuffer() );
+    struct stat aStat;
+    if( stat( aFilename.GetBuffer(), &aStat ) )
+        fprintf( stderr, "stat( %s ) failed\n", aFilename.GetBuffer() );
+    fprintf( stderr, "Tmp file %s has modes: %o\n", aFilename.GetBuffer(), aStat.st_mode );
 #endif
     const char* argv[4];
     if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
@@ -345,14 +344,13 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 
     // clean up the mess
     unlink( aFilename.GetBuffer() );
-    if( bPS )
-        unlink( aPSFilename.GetBuffer() );
+
     return bSuccess;
 }
 
 static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
 {
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     String aFaxNumber( rFaxNumber );
     String aCmdLine( rCommand );
     if( ! aFaxNumber.Len() )
@@ -886,9 +884,9 @@ SalPrinter::~SalPrinter()
 
 // -----------------------------------------------------------------------
 
-static inline String getTmpName()
+static String getTmpName()
 {
-    char tmpNam[ L_tmpnam ];
+    char tmpNam[ L_tmpnam + 4 ];
 #if defined( FREEBSD ) || defined (IRIX)
     mkstemp ( tmpNam );
 #elif defined( MACOSX )
@@ -896,12 +894,17 @@ static inline String getTmpName()
         char    *tempFileName;
         tempFileName = macxp_tempnam( NULL, NULL );
         strncpy( tmpNam, tempFileName, L_tmpnam );
+        strcat( tmpNam, ".ps" );
         free( tempFileName );
     }
 #else
-    tmpnam_r( tmpNam );
+    do
+    {
+        tmpnam_r( tmpNam );
+        strcat( tmpNam, ".ps" );
+    } while( ! access( tmpNam, F_OK ) );
 #endif
-    return String( ByteString( tmpNam ), gsl_getSystemTextEncoding() );
+    return String( ByteString( tmpNam ), osl_getThreadTextEncoding() );
 }
 
 BOOL SalPrinter::StartJob(
@@ -926,6 +929,7 @@ BOOL SalPrinter::StartJob(
         maPrinterData.m_aJobData.m_nCopies = maPrinterData.m_nCopies;
 
     // check wether this printer is configured as fax
+    int nMode = 0;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
@@ -935,6 +939,7 @@ BOOL SalPrinter::StartJob(
         {
             maPrinterData.m_bFax = true;
             maPrinterData.m_aTmpFile = getTmpName();
+            nMode = S_IRUSR | S_IWUSR;
 
             ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             it = pJobSetup->maValueMap.find( ::rtl::OUString::createFromAscii( "FAX#" ) );
@@ -950,6 +955,8 @@ BOOL SalPrinter::StartJob(
         {
             maPrinterData.m_bPdf = true;
             maPrinterData.m_aTmpFile = getTmpName();
+            nMode = S_IRUSR | S_IWUSR;
+
             if( ! maPrinterData.m_aFileName.Len() )
             {
                 maPrinterData.m_aFileName = getPdfDir( rInfo );
@@ -961,7 +968,7 @@ BOOL SalPrinter::StartJob(
         }
     }
     maPrinterData.m_aPrinterGfx.Init( maPrinterData.m_aJobData );
-    return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aTmpFile.Len() ? maPrinterData.m_aTmpFile : maPrinterData.m_aFileName, rJobName, rAppName, maPrinterData.m_aJobData ) ? TRUE : FALSE;
+    return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aTmpFile.Len() ? maPrinterData.m_aTmpFile : maPrinterData.m_aFileName, nMode, rJobName, rAppName, maPrinterData.m_aJobData, &maPrinterData.m_aPrinterGfx ) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1025,7 +1032,6 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
 
 BOOL SalPrinter::EndPage()
 {
-    maPrinterData.m_aPrinterGfx.OnEndPage();
     sal_Bool bResult = maPrinterData.m_aPrintJob.EndPage();
     maPrinterData.m_aPrinterGfx.Clear();
     return bResult ? TRUE : FALSE;

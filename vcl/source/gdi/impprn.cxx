@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 11:28:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,33 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
         }
         else if( nType == META_TRANSPARENT_ACTION )
         {
-            DrawPolyPolygon( ( (MetaTransparentAction*) pAct )->GetPolyPolygon() );
+            MetaTransparentAction*  pTransAct = static_cast<MetaTransparentAction*>(pAct);
+            USHORT                  nTransparency( pTransAct->GetTransparence() );
+
+            // #i10613# Respect transparency for draw color
+            if( nTransparency )
+            {
+                Push( PUSH_LINECOLOR|PUSH_FILLCOLOR );
+
+                // assume white background for alpha blending
+                Color aLineColor( GetLineColor() );
+                aLineColor.SetRed( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetRed()) / 100L ) );
+                aLineColor.SetGreen( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetGreen()) / 100L ) );
+                aLineColor.SetBlue( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetBlue()) / 100L ) );
+                SetLineColor( aLineColor );
+
+                Color aFillColor( GetFillColor() );
+                aFillColor.SetRed( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetRed()) / 100L ) );
+                aFillColor.SetGreen( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetGreen()) / 100L ) );
+                aFillColor.SetBlue( static_cast<UINT8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetBlue()) / 100L ) );
+                SetFillColor( aFillColor );
+            }
+
+            DrawPolyPolygon( pTransAct->GetPolyPolygon() );
+
+            if( nTransparency )
+                Pop();
+
             bExecuted = sal_True;
         }
         else if( nType == META_FLOATTRANSPARENT_ACTION )

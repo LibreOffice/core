@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-28 14:06:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1737,7 +1737,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage,
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER,
                 "DrawImage(): Images can't be drawn on any mprinter" );
 
-    if( !rImage.mpImplData )
+    if( !rImage.mpImplData || ImplIsRecordLayout() )
         return;
 
     switch( rImage.mpImplData->meType )
@@ -1784,7 +1784,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
     DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER,
                 "DrawImage(): Images can't be drawn on any mprinter" );
 
-    if( !rImage.mpImplData )
+    if( !rImage.mpImplData || ImplIsRecordLayout() )
         return;
 
     switch( rImage.mpImplData->meType )

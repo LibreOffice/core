@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:04:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,9 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text[ chinese_traditional ] = "<ç„¡æ³•é¸æ“‡>";
     Text[ arabic ] = "<áÇ íãßä ÇáÊÍÏíÏ>";
     Text[ turkish ] = "<Seçim yapılamaz>";
-    Text[ catalan ] = "<Ninguna selección posible>";
+    Text[ catalan ] = "<Cap selecció possible>";
     Text[ finnish ] = "<Valinta ei mahdollinen >";
+    Text[ thai ] = "<à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰>";
 };
 
 Menu SV_RESID_MENU_EDIT
@@ -113,12 +114,13 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤(~U)";
             Text[ chinese_traditional ] = "å¾©åŸ(~U)";
             Text[ greek ] = "Áíáß~ñåóç";
-            Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ(~U)";
+            Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ(~U)";
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ turkish ] = "Geri al";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Deshacer";
-            Text[ finnish ] = "~Peruuta";
+            Text[ catalan ] = "~Desfés";
+            Text[ finnish ] = "~Kumoa";
+            Text[ thai ] = "à¹€~à¸¥à¸´à¸à¸—à¸³";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -130,7 +132,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Taglia" ;
             Text [ portuguese_brazilian ] = "Co~rtar" ;
             Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "L~eikkaa" ;
+            Text [ finnish ] = "~Leikkaa" ;
             Text [ danish ] = "~Klip" ;
             Text [ french ] = "~Couper" ;
             Text [ swedish ] = "~Klipp ut" ;
@@ -147,7 +149,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ŞÕ";
             Text[ turkish ] = "~Kes";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "C~ortar";
+            Text[ catalan ] = "~Retalla";
+            Text[ thai ] = "à¸•à¸±~à¸”";
         };
         MenuItem
         {
@@ -158,7 +161,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Copia" ;
             Text [ portuguese_brazilian ] = "~Copiar" ;
             Text [ portuguese ] = "~Copiar" ;
-            Text [ finnish ] = "~Kopioi" ;
+            Text [ finnish ] = "K~opioi" ;
             Text [ danish ] = "K~opier" ;
             Text [ french ] = "Co~pier" ;
             Text [ swedish ] = "K~opiera" ;
@@ -167,7 +170,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ english_us ] = "~Copy" ;
             Text[ russian ] = "~Êîïèğîâàòü";
             Text[ polish ] = "Kopiuj";
-            Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°(~C)";
+            Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~C)";
             Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
             Text[ chinese_traditional ] = "è¤‡è£½(~C)";
             Text[ greek ] = "Áíôé~ãñáöŞ";
@@ -175,7 +178,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "äÓÎ";
             Text[ turkish ] = "K~opyala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Copiar";
+            Text[ catalan ] = "~Copia";
+            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸";
         };
         MenuItem
         {
@@ -186,24 +190,25 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "~Colar" ;
             Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "L~iit?" ;
+            Text [ finnish ] = "Lii~tä" ;
             Text [ danish ] = "~Indsæt" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "K~listra in" ;
             Text [ dutch ] = "~Plakken" ;
             Text [ spanish ] = "~Pegar" ;
             Text [ english_us ] = "~Paste" ;
-            Text[ russian ] = "Âñò~àâêà";
+            Text[ russian ] = "Âñò~àâèòü";
             Text[ polish ] = "W~staw";
             Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
-            Text[ chinese_simplified ] = "æ’å…¥(~P)";
-            Text[ chinese_traditional ] = "æ’å…¥(~P)";
+            Text[ chinese_simplified ] = "ç²˜è´´(~P)";
+            Text[ chinese_traditional ] = "è²¼ä¸Š(~P)";
             Text[ greek ] = "~Åğéêüëëçóç";
             Text[ korean ] = "ë¶™ì—¬ë„£ê¸°(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ turkish ] = "~Yapıştır";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Pegar";
+            Text[ catalan ] = "Engan~xa";
+            Text[ thai ] = "~à¸§à¸²à¸‡";
         };
         MenuItem
         {
@@ -219,7 +224,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ french ] = "~Supprimer" ;
             Text [ swedish ] = "~Radera" ;
             Text [ dutch ] = "~Wissen" ;
-            Text [ spanish ] = "~Eliminar" ;
+            Text [ spanish ] = "~Borrar" ;
             Text [ english_us ] = "~Delete" ;
             Text[ russian ] = "~Óäàëèòü";
             Text[ polish ] = "Usuñ";
@@ -231,7 +236,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÍĞİ";
             Text[ turkish ] = "~Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
+            Text[ thai ] = "~à¸¥à¸š";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -243,7 +249,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "Seleziona tutto" ;
             Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
             Text [ portuguese ] = "Seleccionar ~tudo" ;
-            Text [ finnish ] = "Valitse ~kaikki" ;
+            Text [ finnish ] = "~Valitse kaikki" ;
             Text [ danish ] = "~Marker alt" ;
             Text [ french ] = "~Sélectionner tout" ;
             Text [ swedish ] = "Markera ~allt" ;
@@ -260,7 +266,8 @@ Menu SV_RESID_MENU_EDIT
             Text[ arabic ] = "ÊÍÏíÏ Çáßá";
             Text[ turkish ] = "Tümünü seç";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Seleccionar ~todo";
+            Text[ catalan ] = "Selecciona-ho ~tot";
+            Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -277,7 +284,7 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ dutch ] = "~Speciaal teken invoegen...";
             TEXT[ spanish ] = "Insertar ~símbolo...";
             TEXT[ english_us ] = "~Special Character...";
-    TEXT[ russian ] = "~Âñòàâèòü ñïåöèàëüíûå ñèìâîëû...";
+    TEXT[ russian ] = "Ñèìâîëû...";
             TEXT[ polish ] = "Wstaw znaki specjalne...";
             TEXT[ japanese ] = "è¨˜å·ã¨ç‰¹æ®Šæ–‡å­—ã®æŒ¿å…¥(~S)...";
 
@@ -288,11 +295,16 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
             TEXT[ turkish ] = "Özel karakter ekle...";
             TEXT[ language_user1 ] = " ";
-            TEXT[ catalan ] = "Insertar ~símbolo...";
-            TEXT[ finnish ] = "~Erikoismerkki...";
+            TEXT[ catalan ] = "Insereix ~símbol...";
+            TEXT[ finnish ] = "Merkk~i...";
+            TEXT[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°~à¸à¸´à¹€à¸¨à¸©...";
         };
     };
 };
+
+
+
+
 
 
 

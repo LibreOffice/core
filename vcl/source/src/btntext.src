@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:22:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ dutch ] = "H~erhalen";
     TEXT[ chinese_simplified ] = "ÈáçËØï(~R)";
     TEXT[ greek ] = "≈·Ì‹ÎÁ¯Á";
-    TEXT[ korean ] = "Î∞òÎ≥µ(~R)";
+    TEXT[ korean ] = "Îã§Ïãú ÏãúÎèÑ(~R)";
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Reintenta";
@@ -311,18 +311,18 @@ String SV_BUTTONTEXT_ABORT
     Text[ russian ] = "~Abort";
     Text[ greek ] = "~Abort";
     Text[ dutch ] = "~Abort";
-    Text[ french ] = "~Abort";
-    Text[ spanish ] = "~Abort";
+    Text[ french ] = "~Interrompre";
+    Text[ spanish ] = "~Cancelar";
     Text[ finnish ] = "~Abort";
-    Text[ italian ] = "~Abort";
+    Text[ italian ] = "~Annulla";
     Text[ danish ] = "~Abort";
-    Text[ swedish ] = "~Abort";
+    Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "~Abort";
     Text[ portuguese_brazilian ] = "~Abort";
-    Text[ japanese ] = "~Abort";
-    Text[ korean ] = "~Abort";
-    Text[ chinese_simplified ] = "~Abort";
-    Text[ chinese_traditional ] = "~Abort";
+    Text[ japanese ] = "‰∏≠Ê≠¢(~A)";
+    Text[ korean ] = "Ï§ëÎã®(~A)";
+    Text[ chinese_simplified ] = "ÂèñÊ∂à(~A)";
+    Text[ chinese_traditional ] = "‰∏≠Ê≠¢(~A)";
     Text[ turkish ] = "~Abort";
     Text[ arabic ] = "~Abort";
     Text[ catalan ] = "~Abort";
@@ -363,6 +363,11 @@ YES         ~Kyll‰
 NO          ~Ei
 RETRY       ~Yrit‰uudelleen
 */
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2003-02-10 20:40:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-01 08:23:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,6 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 
-#include "soicons.inc"
-
 using namespace psp;
 
 typedef struct {
@@ -111,52 +109,6 @@ typedef struct {
     char **xpmdata[4];      // 4 resolutions
     Pixmap mPixmap[4], mMask[4];    // caches
     } SOICON;
-
-static SOICON soicons[] = {
-    {1, _001_star_butterfly_l_xpm, _001_star_butterfly_m_xpm, _001_star_butterfly_s_xpm, _001_star_butterfly_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {2, _002_text_document_l_xpm, _002_text_document_m_xpm, _002_text_document_s_xpm, _002_text_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {3, _003_text_template_l_xpm, _003_text_template_m_xpm, _003_text_template_s_xpm, _003_text_template_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {4, _004_spreadsheet_document_l_xpm, _004_spreadsheet_document_m_xpm, _004_spreadsheet_document_s_xpm, _004_spreadsheet_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {5, _005_spreadsheet_template_l_xpm, _005_spreadsheet_template_m_xpm, _005_spreadsheet_template_s_xpm, _005_spreadsheet_template_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {6, _006_drawing_document_l_xpm, _006_drawing_document_m_xpm, _006_drawing_document_s_xpm, _006_drawing_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {7, _007_drawing_template_l_xpm, _007_drawing_template_m_xpm, _007_drawing_template_s_xpm, _007_drawing_template_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {8, _008_presentation_document_l_xpm, _008_presentation_document_m_xpm, _008_presentation_document_s_xpm, _008_presentation_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {9, _009_presentation_template_l_xpm, _009_presentation_template_m_xpm, _009_presentation_template_s_xpm, _009_presentation_template_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {10, _010_presentation_compressed_l_xpm, _010_presentation_compressed_m_xpm, _010_presentation_compressed_s_xpm, _010_presentation_compressed_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {11, _011_global_document_l_xpm, _011_global_document_m_xpm, _011_global_document_s_xpm, _011_global_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {12, _012_html_document_l_xpm, _012_html_document_m_xpm, _012_html_document_s_xpm, _012_html_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {13, _013_chart_document_l_xpm, _013_chart_document_m_xpm, _013_chart_document_s_xpm, _013_chart_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {14, _014_database_document_l_xpm, _014_database_document_m_xpm, _014_database_document_s_xpm, _014_database_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {15, _015_math_document_l_xpm, _015_math_document_m_xpm, _015_math_document_s_xpm, _015_math_document_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {16, _016_template_l_xpm, _016_template_m_xpm, _016_template_s_xpm, _016_template_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {17, _017_macrolibrary_l_xpm, _017_macrolibrary_m_xpm, _017_macrolibrary_s_xpm, _017_macrolibrary_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {100, _100_player_l_xpm, _100_player_m_xpm, _100_player_s_xpm, _100_player_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {500, _500_setup_l_xpm, _500_setup_m_xpm, _500_setup_s_xpm, _500_setup_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {501, _501_printeradmin_l_xpm, _501_printeradmin_m_xpm, _501_printeradmin_s_xpm, _501_printeradmin_t_xpm,
-        0, 0, 0, 0, 0, 0, 0, 0},
-    {0, NULL, NULL, NULL,
-        0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
 
 static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixmap& aMask, int nSize )
 {
@@ -288,35 +240,26 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
     if( nIcon == 0 )    // 0 means default icon which is icon #1 actually
         nIcon = 1;
 
-    SOICON *pIcon = soicons;
-    while( pIcon->id )
+    SOICON *pIcon = NULL;
+
+    // call custom function to read icon
+    char customIconFn[256];
+
+    sprintf( customIconFn, "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
+    static void* pAppHdl = dlopen( NULL, RTLD_LAZY );
+    if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( pAppHdl, customIconFn ) )
+             != NULL )
     {
-        if( pIcon->id == nIcon )
-            break;
-           pIcon++;
+        pIcon = new SOICON[2];  // 2nd entry is terminator
+        memset( pIcon, 0, 2*sizeof( SOICON ) );
+        pIcon->id = nIcon;
+        pCustomIcon( pIcon->xpmdata[0], pIcon->xpmdata[1], pIcon->xpmdata[2], pIcon->xpmdata[3] );
     }
-
-    if( !pIcon->id || pIcon->id == 1 ) // overwrite default icon
+    else
     {
-        // call custom function to read icon
-        char customIconFn[256];
-
-        sprintf( customIconFn, "%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
-        static void* pAppHdl = dlopen( NULL, RTLD_LAZY );
-        if ( ( pCustomIcon = ( VCL_CUSTOM_ICON_FN* ) dlsym( pAppHdl, customIconFn ) )
-                 != NULL )
-        {
-            pIcon = new SOICON[2];  // 2nd entry is terminator
-            memset( pIcon, 0, 2*sizeof( SOICON ) );
-            pIcon->id = nIcon;
-            pCustomIcon( pIcon->xpmdata[0], pIcon->xpmdata[1], pIcon->xpmdata[2], pIcon->xpmdata[3] );
-        }
-    }
-
-    DBG_ASSERT( pIcon->id, "SelectAppIconPixmap: Icon not found!");
-
-    if( !pIcon->id )
+        DBG_ERROR( "SelectAppIconPixmap: Icon not found!");
         return FALSE;
+    }
 
     // search optimal size
     int i, maxSize = 0, iIcon=-1;

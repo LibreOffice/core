@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-10 16:50:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ static ByteString ImplGetDialogText( Dialog* pDialog )
 
 static BOOL ImplIsMnemonicCtrl( Window* pWindow )
 {
+    if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
+        return FALSE;
+
     if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
          (pWindow->GetType() == WINDOW_CHECKBOX) ||
          (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
@@ -193,7 +196,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
 
         if ( (pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
         {
-            pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+            pGetChild = pParent->GetWindow( WINDOW_FIRSTCHILD );
             while ( pGetChild )
             {
                 pChild = pGetChild->ImplGetWindow();
@@ -531,7 +534,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        if ( Application::IsAutoMnemonicEnabled() )
+        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
         //if ( IsDefaultPos() && !mbFrame )
@@ -695,9 +698,14 @@ short Dialog::Execute()
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     pSVData->maAppData.mnModalMode++;
+    //DBG_ASSERT( mpDialogParent, "Dialog::Execute() - no Parent: cannot set modal count!" );
+    if( mpDialogParent )
+        mpDialogParent->ImplIncModalCount();        // #106303# support frame based modal count
     while ( !aDelData.IsDelete() && mbInExecute )
         Application::Yield();
     pSVData->maAppData.mnModalMode--;
+    if( mpDialogParent )
+        mpDialogParent->ImplDecModalCount();        // #106303# support frame based modal count
     if ( !aDelData.IsDelete() )
         ImplRemoveDel( &aDelData );
 #ifdef DBG_UTIL

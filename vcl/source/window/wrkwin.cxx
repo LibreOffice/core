@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 18:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,31 +267,6 @@ WorkWindow::~WorkWindow()
         pSVData->maWinData.mpAppWin = NULL;
         Application::Quit();
     }
-}
-
-// -----------------------------------------------------------------------
-
-void WorkWindow::SetIcon( USHORT nIcon )
-{
-    // Should be removed in the next top level update - now in SystemWindow
-    mnIcon = nIcon;
-    SystemWindow::SetIcon( nIcon );
-}
-
-// -----------------------------------------------------------------------
-
-void WorkWindow::SetWindowState( const ByteString& rStr )
-{
-    // Should be removed in the next top level update - now in SystemWindow
-    SystemWindow::SetWindowState( rStr );
-}
-
-// -----------------------------------------------------------------------
-
-ByteString WorkWindow::GetWindowState() const
-{
-    // Should be removed in the next top level update - now in SystemWindow
-    return SystemWindow::GetWindowState();
 }
 
 // -----------------------------------------------------------------------

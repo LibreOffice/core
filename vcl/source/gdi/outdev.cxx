@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:22:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
 #include <region.hxx>
@@ -339,8 +336,8 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         if ( nSize )
         {
             pPointAry[i]    = nSize;
-            pPointAryAry[i] = (PCONSTSALPOINT)rPoly.ImplGetConstPointAry();
-            pFlagAryAry[i]  = rPoly.ImplGetConstFlagAry();
+            pPointAryAry[i] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
+            pFlagAryAry[i]  = rPoly.GetConstFlagAry();
             last            = i;
 
             if( pFlagAryAry[i] )
@@ -361,7 +358,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
             if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
             {
                 Polygon aPoly = ImplSubdivideBezier( rPolyPoly.GetObject( last ) );
-                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.ImplGetConstPointAry(), this );
+                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.GetConstPointAry(), this );
             }
         }
         else
@@ -436,6 +433,7 @@ OutputDevice::OutputDevice() :
     mnDrawMode          = 0;
     mnTextLayoutMode    = 0;
     meOutDevType        = OUTDEV_DONTKNOW;
+    meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
     mbMap               = FALSE;
     mbMapIsDefault      = TRUE;
     mbClipRegion        = FALSE;
@@ -525,6 +523,21 @@ OutputDevice::~OutputDevice()
 }
 
 // -----------------------------------------------------------------------
+
+void OutputDevice::EnableRTL( BOOL bEnable )
+{
+    mbEnableRTL = (bEnable != 0);
+    if( meOutDevType == OUTDEV_VIRDEV )
+    {
+        // virdevs default to not mirroring, they will only be set to mirroring
+        // under rare circumstances in the UI, eg the valueset control
+        // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
+        // ...hopefully
+        if( Application::GetSettings().GetLayoutRTL() ) // allow mirroring only in BiDi Office
+            if( ImplGetGraphics() )
+                mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
+    }
+}
 
 BOOL OutputDevice::ImplHasMirroredGraphics()
 {
@@ -818,7 +831,16 @@ void OutputDevice::ImplInitOutDevData()
     {
         mpOutDevData = new ImplOutDevData;
         mpOutDevData->mpRotateDev = NULL;
+        mpOutDevData->mpRecordLayout = NULL;
+        mpOutDevData->mpFirstFontSubstEntry = NULL;
     }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::ImplIsRecordLayout() const
+{
+    return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
 
 // -----------------------------------------------------------------------
@@ -829,6 +851,13 @@ void OutputDevice::ImplDeInitOutDevData()
     {
         if ( mpOutDevData->mpRotateDev )
             delete mpOutDevData->mpRotateDev;
+        ImplFontSubstEntry* pEntry = mpOutDevData->mpFirstFontSubstEntry;
+        while( pEntry )
+        {
+            ImplFontSubstEntry* pNext = pEntry->mpNext;
+            delete pEntry;
+            pEntry = pNext;
+        }
         delete mpOutDevData;
     }
 }
@@ -1193,7 +1222,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
             }
             else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
             {
-                aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+                aColor = GetSettings().GetStyleSettings().GetFontColor();
             }
 
             if( mnDrawMode & DRAWMODE_GHOSTEDLINE )
@@ -1379,7 +1408,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1430,7 +1459,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineAction( rStartPt, rEndPt, rLineInfo ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LINE_NONE == rLineInfo.GetStyle() ) )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1465,7 +1494,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
             ImplInitFillColor();
 
             for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry(), this );
+                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->GetConstPointAry(), this );
 
             SetFillColor( aOldFillColor );
             SetLineColor( aOldLineColor );
@@ -1557,7 +1586,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRectAction( rRect ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -1610,7 +1639,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
     USHORT nPoints = rPoly.GetSize();
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1630,16 +1659,16 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         ImplInitLineColor();
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
 
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
     {
-        const BYTE* pFlgAry = aPoly.ImplGetConstFlagAry();
+        const BYTE* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
-            pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+            pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
             mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
         }
     }
@@ -1684,7 +1713,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
     USHORT nPoints = rPoly.GetSize();
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -1723,7 +1752,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         ImplInitFillColor();
 
         for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-            mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->ImplGetConstPointAry(), this );
+            mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->GetConstPointAry(), this );
 
         SetLineColor( aOldLineColor );
         SetFillColor( aOldFillColor );
@@ -1737,10 +1766,10 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         {
             ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
             for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolyLine( pPoly->GetSize(), (const SalPoint*)pPoly->ImplGetConstPointAry(), this );
+                mpGraphics->DrawPolyLine( pPoly->GetSize(), (const SalPoint*)pPoly->GetConstPointAry(), this );
         }
         else
-            mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.ImplGetConstPointAry(), this );
+            mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.GetConstPointAry(), this );
     }
 #else
     ImplServerGraphics* pGraphics = ImplGetServerGraphics();
@@ -1799,7 +1828,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
     USHORT nPoints = rPoly.GetSize();
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER
@@ -1821,16 +1850,16 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitFillColor();
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
 
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
     {
-        const BYTE* pFlgAry = aPoly.ImplGetConstFlagAry();
+        const BYTE* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
-            pPtAry = (const SalPoint*)aPoly.ImplGetConstPointAry();
+            pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
             mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
         }
     }
@@ -1871,7 +1900,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
     USHORT nPoly = rPolyPoly.Count();
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly || ImplIsRecordLayout() )
         return;
 
 #ifndef REMOTE_APPSERVER

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-05 16:59:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,29 +172,6 @@ struct ImplEnumInfo
     BOOL                mbImplSalCourierNew;
     BOOL                mbPrinter;
 };
-
-// =======================================================================
-
-class TempFontList
-{
-public:
-    TempFontList() : mpFirstItem( NULL ) {}
-    ~TempFontList();
-    bool AddFont( const String& rFontFilePath );
-
-private:
-    struct TempFontItem
-    {
-        ::rtl::OUString maFontFilePath;
-        ::rtl::OString maResourcePath;
-        TempFontItem* mpNextItem;
-    };
-
-    TempFontItem*   mpFirstItem;
-};
-
-// this gets cleaned up at program exit
-static TempFontList aTempFontList;
 
 // =======================================================================
 
@@ -1213,57 +1190,84 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
+static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
     int nRangeCount = 0;
 
-    DWORD CmapTag = 'c' + ('m'<<8) + ('a'<<16)  + ('p'<<24);
-    DWORD rc = GetFontData( maGraphicsData.mhDC, CmapTag, 0, NULL, 0 );
-    if( rc != GDI_ERROR )
+    // get SFNT font's CMAP table
+    const DWORD CmapTag = CalcTag( "cmap" );
+    DWORD nRC = GetFontData( maGraphicsData.mhDC, CmapTag, 0, NULL, 0 );
+    if( nRC == GDI_ERROR )
+        return 0;
+
+    int nLength = nRC;
+    std::vector<unsigned char> aCmap( nLength );
+    unsigned char* pCmap = &aCmap[0];
+    nRC = GetFontData( maGraphicsData.mhDC, CmapTag, 0, pCmap, nLength );
+    if( nRC == GDI_ERROR )
+        return 0;
+    // check for the CMAP table corruption
+    if( GetUShort( pCmap ) != 0 )
+        return 0;
+
+    int nOffset = 0;
+    int nFormat = -1;
+
+    // find suitable subtable
+    int nSubTables = GetUShort( pCmap + 2 );
+    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
     {
-        // we have a truetype font
-        int nLength = rc;
-        unsigned char* pCmap = new unsigned char[ nLength ];
-        rc = GetFontData( maGraphicsData.mhDC, CmapTag, 0, pCmap, nLength );
+        int nPlatform = GetUShort( p );
+        int nEncoding = GetUShort( p+2 );
+        // ignore non-unicode encodings
+        if( nEncoding!=0 && nEncoding!=1 )
+            continue;
+        nOffset = GetUInt( p+4 );
+        nFormat = GetUShort( pCmap + nOffset );
+        if( (nFormat == 4) || (nFormat == 12) )
+            break;
+    }
 
-        if( (rc != GDI_ERROR) && GetUShort( pCmap )==0 )
+    sal_uInt32* pCP = pCodePairs;
+
+    // format 4, the most common 16bit unicode mapping table
+    if( (nFormat == 4) && ((nOffset+16) < nLength) )
+    {
+        int nSegCount = GetUShort( pCmap + nOffset + 6 );
+        nRangeCount = nSegCount/2 - 1;
+        if( pCP )
         {
-            int nSubTables  = GetUShort( pCmap + 2 );
-            const unsigned char* p = pCmap + 4;
-            int nOffset = 0;
-            int nFormat = -1;
-            for( ; --nSubTables>=0; p+=8 )
+            const unsigned char* pLimit = pCmap + nOffset + 14;
+            const unsigned char* pBegin = pLimit + 2 + nSegCount;
+            for( int i = 0; i < nRangeCount; ++i )
             {
-                int nPlatform = GetUShort( p );
-                int nEncoding = GetUShort( p+2 );
-                if( nEncoding!=0 && nEncoding!=1 )  // unicode encodings?
+                sal_uInt32 cMinChar = GetUShort( pBegin + 2*i );
+                sal_uInt32 cMaxChar = GetUShort( pLimit + 2*i );
+                if( cMaxChar == 0xFFFF )
                     continue;
-                nOffset       = GetUInt( p+4 );
-                nFormat       = GetUShort( pCmap + nOffset );
-                if( nFormat==4 )
-                    break;
+                *(pCP++) = cMinChar;
+                *(pCP++) = cMaxChar + 1;
             }
+            nRangeCount = (pCP - pCodePairs) / 2;
+        }
+    }
 
-            if( nFormat==4 && (nOffset+16)<nLength )
+    // format 12, the most common 32bit unicode mapping table
+    if( (nFormat == 12) && ((nOffset+16) < nLength) )
+    {
+        nRangeCount = GetUInt( pCmap + nOffset + 12 ) / 12;
+        if( pCP )
+        {
+            const unsigned char* pGroup = pCmap + nOffset + 16;
+            for( int i = 0; i < nRangeCount; ++i )
             {
-                // analyze most common unicode mapping table
-                int nSegCount = GetUShort( pCmap + nOffset + 6 );
-                nRangeCount = nSegCount/2 - 1;
-                if( pCodePairs )
-                {
-                    const unsigned char* pLimit = pCmap + nOffset + 14;
-                    const unsigned char* pBegin = pLimit + 2 + nSegCount;
-                    for( int i = 0; i < nRangeCount; ++i )
-                    {
-                        *(pCodePairs++) = GetUShort( pBegin + 2*i );
-                        *(pCodePairs++) = GetUShort( pLimit + 2*i ) + 1;
-                    }
-                }
+                *(pCP++) = GetUShort( pGroup + 0 );
+                *(pCP++) = GetUShort( pGroup + 4 ) + 1;
+                pGroup += 12;
             }
-         }
-
-         delete[] pCmap;
+        }
     }
 
     return nRangeCount;
@@ -1453,11 +1457,15 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
 
 // -----------------------------------------------------------------------
 
-bool TempFontList::AddFont( const String& rFontFileURL )
+struct TempFontItem
 {
-    TempFontItem *pNewItem = new TempFontItem;
-    pNewItem->mpNextItem = mpFirstItem;
+    ::rtl::OUString maFontFilePath;
+    ::rtl::OString maResourcePath;
+    TempFontItem* mpNextItem;
+};
 
+bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
+{
     int nRet = 0;
     ::rtl::OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
@@ -1488,34 +1496,29 @@ bool TempFontList::AddFont( const String& rFontFileURL )
         if( !::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), NULL ) )
             return false;
         ++nCounter;
-        pNewItem->maResourcePath = rtl::OString( aResourceName );
+
         nRet = ::AddFontResourceA( aResourceName );
-#if 0       // TODO: improve ImplFontData using "FONTRES:" from *.fot file
-        pFontData->maSearchName = // using "FONTRES:" from file
-        if( rFontName != pFontData->maName )
-            pFontData->maMapName = rFontName;
-#endif
+        if( nRet > 0 )
+        {
+            TempFontItem* pNewItem = new TempFontItem;
+            pNewItem->maResourcePath = rtl::OString( aResourceName );
+            pNewItem->maFontFilePath = aUSytemPath.getStr();
+            pNewItem->mpNextItem = rSalData.mpTempFontItem;
+            rSalData.mpTempFontItem = pNewItem;
+        }
     }
 
     if( nRet > 0 )
-    {
-        pNewItem->maFontFilePath = aUSytemPath.getStr();
-        mpFirstItem = pNewItem;
         return true;
-    }
-
-    delete pNewItem;
     return false;
 }
 
 // -----------------------------------------------------------------------
 
-TempFontList::~TempFontList()
+void ImplReleaseTempFonts( SalData& rSalData )
 {
-    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-
     int nCount = 0;
-    while( TempFontItem* p = mpFirstItem )
+    while( TempFontItem* p = rSalData.mpTempFontItem )
     {
         ++nCount;
         if( p->maResourcePath.getLength() )
@@ -1530,18 +1533,24 @@ TempFontList::~TempFontList()
                 ::RemoveFontResourceW( p->maFontFilePath.getStr() );
             else
             {
-                ::rtl::OString aCFileName = rtl::OUStringToOString( p->maFontFilePath, theEncoding );
-                ::RemoveFontResourceA( aCFileName.getStr() );
+                // poor man's string conversion because converter is gone
+                int nLen = p->maFontFilePath.getLength();
+                char* pNameA = new char[ nLen + 1 ];
+                for( int i = 0; i < nLen; ++i )
+                    pNameA[i] = (char)(p->maFontFilePath.getStr())[i];
+                pNameA[ nLen ] = 0;
+                ::RemoveFontResourceA( pNameA );
+                delete[] pNameA;
             }
         }
 
-        mpFirstItem = p->mpNextItem;
+        rSalData.mpTempFontItem = p->mpNextItem;
         delete p;
     }
 
     // notify everybody
     if( nCount )
-        ::SendMessage( HWND_BROADCAST, WM_FONTCHANGE ,0 ,NULL );
+        ::SendMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -1552,15 +1561,28 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
         return NULL;
     if( ::ImplIsFontAvailable( maGraphicsData.mhDC, rFontName ) )
         return NULL;
-    if( !aTempFontList.AddFont( rFontFileURL ) )
+
+    // remember temp font for cleanup later
+    if( !ImplAddTempFont( *GetSalData(), rFontFileURL ) )
         return NULL;
 
+    UINT nPreferedCharSet = DEFAULT_CHARSET;
+    if ( !aSalShlData.mbWNT )
+    {
+        // for W98 assume prefered charset capability of temp font
+        CHARSETINFO aCharSetInfo;
+        DWORD nCP = GetACP();
+        if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
+            nPreferedCharSet = aCharSetInfo.ciCharset;
+    }
+
+    // create matching FontData struct
     ImplFontData* pFontData = new ImplFontData;
     pFontData->maName       = rFontName;
     pFontData->mnQuality    = 1000;
     pFontData->mbDevice     = TRUE;
-    pFontData->mpSysData    = (void*)DEFAULT_CHARSET;
-    pFontData->meCharSet    = DEFAULT_CHARSET;
+    pFontData->mpSysData    = (void*)nPreferedCharSet;
+    pFontData->meCharSet    = nPreferedCharSet;
     pFontData->meFamily     = FAMILY_DONTKNOW;
     pFontData->meWidthType  = WIDTH_DONTKNOW;
     pFontData->meWeight     = WEIGHT_DONTKNOW;
@@ -1571,6 +1593,12 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
     pFontData->mnHeight     = 0;
     pFontData->mbSubsettable= FALSE;
     pFontData->mbEmbeddable = FALSE;
+
+#if 0   // TODO: improve ImplFontData using "FONTRES:" from *.fot file
+    pFontData->maSearchName = // using "FONTRES:" from file
+    if( rFontName != pFontData->maName )
+        pFontData->maMapName = rFontName;
+#endif
 
     return pFontData;
 }
@@ -1665,9 +1693,14 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
     }
 }
 
+// ----------------------------------------------------------------------------
+
+void SalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
+{}
+
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool /*bIsGlyphIndex*/, Rectangle& rRect, const OutputDevice* )
+BOOL SalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect, const OutputDevice* )
 {
     HDC hDC = maGraphicsData.mhDC;
 
@@ -1688,20 +1721,17 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool /*bIsGlyphIndex*/, Rectan
     else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
         nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
 
-    if( !nSize )    // blank glyphs are ok
-        rRect.SetEmpty();
-    else if( nSize != GDI_ERROR )
-        rRect = Rectangle( Point( aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
-            Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    else
+    if( nSize == GDI_ERROR )
         return false;
 
+    rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
+        Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
     return true;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nIndex, bool /*bIsGlyphIndex*/, PolyPolygon& rPolyPoly, const OutputDevice* )
+BOOL SalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
     rPolyPoly.Clear();
 

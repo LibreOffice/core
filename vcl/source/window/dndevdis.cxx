@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2002-04-30 15:45:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // because those coordinates come from outside, they must be mirrored if RTL layout is active
+    if( Application::GetSettings().GetLayoutRTL() )
+        m_pTopWindow->ImplMirrorFramePos( location );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
     if( NULL == pChildWindow )
@@ -112,6 +116,9 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+        pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
 
@@ -135,7 +142,6 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     if( nListeners == 0 ) {
         OSL_TRACE( "rejecting drop due to missing listeners." );
         dtde.Context->rejectDrop();
-        dtde.Context->dropComplete(sal_False);
     }
 
     // this is a drop -> no further drag overs
@@ -155,6 +161,10 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // because those coordinates come from outside, they must be mirrored if RTL layout is active
+    if( Application::GetSettings().GetLayoutRTL() )
+        m_pTopWindow->ImplMirrorFramePos( location );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
     if( NULL == pChildWindow )
@@ -162,6 +172,9 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+        pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
 
@@ -211,6 +224,10 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // because those coordinates come from outside, they must be mirrored if RTL layout is active
+    if( Application::GetSettings().GetLayoutRTL() )
+        m_pTopWindow->ImplMirrorFramePos( location );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
     if( NULL == pChildWindow )
@@ -218,6 +235,9 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+        pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
 
@@ -262,6 +282,10 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // because those coordinates come from outside, they must be mirrored if RTL layout is active
+    if( Application::GetSettings().GetLayoutRTL() )
+        m_pTopWindow->ImplMirrorFramePos( location );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
 
     if( NULL == pChildWindow )
@@ -269,6 +293,9 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+        pChildWindow->ImplReMirror( location );
 
     aSolarGuard.clear();
 
@@ -313,6 +340,10 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+    // because those coordinates come from outside, they must be mirrored if RTL layout is active
+    if( Application::GetSettings().GetLayoutRTL() )
+        m_pTopWindow->ImplMirrorFramePos( origin );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( origin );
 
     if( NULL == pChildWindow )
@@ -320,6 +351,9 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 
     while( pChildWindow->ImplGetClientWindow() )
         pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    if( pChildWindow->ImplHasMirroredGraphics() && !pChildWindow->IsRTLEnabled() )
+        pChildWindow->ImplReMirror( origin );
 
     aSolarGuard.clear();
 

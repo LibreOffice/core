@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:24:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ inline SalPolyLine::SalPolyLine( ULONG nPoints, const SalPoint *p )
 }
 
 inline SalPolyLine::~SalPolyLine()
-{ if( pFirst_ != Points_ ) delete pFirst_; }
+{ if( pFirst_ != Points_ ) delete [] pFirst_; }
 
 #undef STATIC_POINTS
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -522,34 +522,8 @@ void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
     if (maGraphicsData.m_pPrinterGfx != NULL)
         maGraphicsData.m_pPrinterGfx->GetScreenFontResolution (rDPIX, rDPIY);
     else
-    {
 #endif
-
-        SalDisplay *pDisplay = _GetDisplay();
-
-        const Size aSize = pDisplay->GetScreenSize();
-        int   nThreshold;
-
-        if (aSize.Height() <= 600)
-            nThreshold =  96;
-        else
-            if (aSize.Height() <= 768)
-                nThreshold = 108;
-            else
-                nThreshold = 120;
-
-        rDPIX = pDisplay->GetResolution().A();
-        rDPIY = pDisplay->GetResolution().B();
-
-        if( rDPIY < nThreshold )
-        {
-            rDPIX = Divide( rDPIX * nThreshold, rDPIY );
-            rDPIY = nThreshold;
-        }
-
-#ifndef _USE_PRINT_EXTENSION_
-    }
-#endif
+        _GetDisplay()->GetScreenFontResolution( rDPIX, rDPIY );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1174,6 +1148,13 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
 sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
+#ifndef _USE_PRINT_EXTENSION_
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        maGraphicsData.m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
+        return sal_True;
+    }
+#endif
     return sal_False;
 }
 
@@ -1181,6 +1162,13 @@ sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry,
 
 sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
+#ifndef _USE_PRINT_EXTENSION_
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        maGraphicsData.m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
+        return sal_True;
+    }
+#endif
     return sal_False;
 }
 
@@ -1189,6 +1177,14 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
 {
+#ifndef _USE_PRINT_EXTENSION_
+    // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
+    if (maGraphicsData.m_pPrinterGfx != NULL)
+    {
+        maGraphicsData.m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, (Point**)pPtAry, (BYTE**)pFlgAry);
+        return sal_True;
+    }
+#endif
     return sal_False;
 }
 
@@ -1220,7 +1216,14 @@ void SalGraphics::Invert( ULONG nPoints,
             else
                 pGC = maGraphicsData.GetInvertGC();
 
-        maGraphicsData.DrawLines ( nPoints, Points, pGC );
+        if( SAL_INVERT_TRACKFRAME & nFlags )
+            maGraphicsData.DrawLines ( nPoints, Points, pGC );
+        else
+            XFillPolygon( _GetXDisplay(),
+                          _GetDrawable(),
+                          pGC,
+                          &Points[0], nPoints,
+                          Complex, CoordModeOrigin );
 
 #ifndef _USE_PRINT_EXTENSION_
     }

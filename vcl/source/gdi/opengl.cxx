@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-15 17:10:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #ifndef _SV_OPENGL_HXX
 #include <opengl.hxx>
 #endif
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
+
 
 #include <svapp.hxx>
 #include <vos/mutex.hxx>
@@ -616,6 +620,14 @@ void OpenGL::Viewport( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
 
         mpOGL->OGLEntry( PGRAPHICS );
 
+        // --- RTL --- mirror viewport coordinates
+        if( mpOutDev->ImplHasMirroredGraphics() )
+        {
+            long lx = nX + mpOutDev->mnOutOffX;
+            long lwidth = nWidth;
+            ((SalGraphicsLayout*)mpOutDev->mpGraphics)->mirror( lx, lwidth, mpOutDev );
+            nX = lx - mpOutDev->mnOutOffX;
+        }
         pImplOpenGLFncViewport( nX + mpOutDev->mnOutOffX,
                       nOutHeight - nY - nHeight - mpOutDev->mnOutOffY,
                       nWidth, nHeight );
@@ -1505,6 +1517,15 @@ void OpenGL::Scissor( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
             nOutHeight = mpOutDev->mnOutHeight;
 
         mpOGL->OGLEntry( PGRAPHICS );
+
+        // --- RTL --- mirror scissor coordinates
+        if( mpOutDev->ImplHasMirroredGraphics() )
+        {
+            long lx = nX + mpOutDev->mnOutOffX;
+            long lwidth = nWidth;
+            ((SalGraphicsLayout*)mpOutDev->mpGraphics)->mirror( lx, lwidth, mpOutDev );
+            nX = lx - mpOutDev->mnOutOffX;
+        }
         pImplOpenGLFncScissor( nX + mpOutDev->mnOutOffX,
                      nOutHeight - nY - nHeight - mpOutDev->mnOutOffY,
                      nWidth, nHeight );

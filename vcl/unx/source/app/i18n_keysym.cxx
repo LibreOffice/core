@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_keysym.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-18 15:04:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,25 +360,37 @@ const keymap_t* p_keymap[INITIAL_KEYMAPS] = {
 sal_Unicode
 KeysymToUnicode (KeySym nKeySym)
 {
-    unsigned char n_byte1 = (nKeySym & 0xff000000) >> 24;
-    unsigned char n_byte2 = (nKeySym & 0x00ff0000) >> 16;
-    unsigned char n_byte3 = (nKeySym & 0x0000ff00) >>  8;
-    unsigned char n_byte4 = (nKeySym & 0x000000ff);
-
-    if (n_byte1 != 0)
-        return 0;
-    if (n_byte2 != 0)
-        return 0;
-
-    keymap_t const* p_map = NULL;
-    if (n_byte3 < INITIAL_KEYMAPS)
-        p_map = p_keymap[n_byte3];
+    // keysym is already unicode
+    if ((nKeySym & 0xff000000) == 0x01000000)
+    {
+        // strip off group indicator and iso10646 plane
+        // FIXME can't handle chars from surrogate area.
+        if (! (nKeySym & 0x00ff0000) )
+            return (sal_Unicode)(nKeySym & 0x0000ffff);
+    }
+    // legacy keysyms, switch to appropriate codeset
     else
-    if (n_byte3 == 255)
-        p_map = &keymap255;
+    {
+        unsigned char n_byte1 = (nKeySym & 0xff000000) >> 24;
+        unsigned char n_byte2 = (nKeySym & 0x00ff0000) >> 16;
+        unsigned char n_byte3 = (nKeySym & 0x0000ff00) >>  8;
+        unsigned char n_byte4 = (nKeySym & 0x000000ff);
 
-    if ((p_map != NULL) && (n_byte4 >= p_map->first) && (n_byte4 <= p_map->last) )
-        return p_map->map[n_byte4 - p_map->first];
+        if (n_byte1 != 0)
+            return 0;
+        if (n_byte2 != 0)
+            return 0;
+
+        keymap_t const* p_map = NULL;
+        if (n_byte3 < INITIAL_KEYMAPS)
+            p_map = p_keymap[n_byte3];
+        else
+        if (n_byte3 == 255)
+            p_map = &keymap255;
+
+        if ((p_map != NULL) && (n_byte4 >= p_map->first) && (n_byte4 <= p_map->last) )
+            return p_map->map[n_byte4 - p_map->first];
+    }
 
     return 0;
 }

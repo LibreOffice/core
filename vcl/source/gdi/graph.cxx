@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-24 14:10:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 #include <graph.hxx>
 
@@ -495,6 +498,20 @@ void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     ImplTestRefCount();
     mpImpGraphic->ImplSetPrefMapMode( rPrefMapMode );
+}
+
+// ------------------------------------------------------------------
+
+Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
+{
+    Size aRet;
+
+    if( GRAPHIC_BITMAP == mpImpGraphic->ImplGetType() )
+        aRet = mpImpGraphic->ImplGetBitmapEx( NULL ).GetSizePixel();
+    else
+        aRet = ( pRefDevice ? pRefDevice : Application::GetDefaultDevice() )->LogicToPixel( GetPrefSize(), GetPrefMapMode() );
+
+    return aRet;
 }
 
 // ------------------------------------------------------------------

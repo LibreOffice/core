@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,8 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _SV_POLY_H
-#include <poly.h>
-#endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
 #include <metaact.hxx>
@@ -121,7 +118,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaRoundRectAction( rRect, nHorzRound, nVertRound ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     const Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -158,7 +155,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
-            const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.ImplGetConstPointAry();
+            const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.GetConstPointAry();
 
             if ( !mbFillColor )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
@@ -192,7 +189,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaEllipseAction( rRect ) );
 
-    if  ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) )
+    if  ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -218,7 +215,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     Polygon aRectPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
     if ( aRectPoly.GetSize() >= 2 )
     {
-        const SalPoint* pPtAry = (const SalPoint*)aRectPoly.ImplGetConstPointAry();
+        const SalPoint* pPtAry = (const SalPoint*)aRectPoly.GetConstPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
         else
@@ -252,7 +249,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaArcAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || !mbLineColor )
+    if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -281,7 +278,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
 
     if ( aArcPoly.GetSize() >= 2 )
     {
-        const SalPoint* pPtAry = (const SalPoint*)aArcPoly.ImplGetConstPointAry();
+        const SalPoint* pPtAry = (const SalPoint*)aArcPoly.GetConstPointAry();
         mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
     }
 #else
@@ -310,7 +307,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPieAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -339,7 +336,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
 
     if ( aPiePoly.GetSize() >= 2 )
     {
-        const SalPoint* pPtAry = (const SalPoint*)aPiePoly.ImplGetConstPointAry();
+        const SalPoint* pPtAry = (const SalPoint*)aPiePoly.GetConstPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, this );
         else
@@ -375,7 +372,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaChordAction( rRect, rStartPt, rEndPt ) );
 
-    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) )
+    if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
     Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
@@ -404,7 +401,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
 
     if ( aChordPoly.GetSize() >= 2 )
     {
-        const SalPoint* pPtAry = (const SalPoint*)aChordPoly.ImplGetConstPointAry();
+        const SalPoint* pPtAry = (const SalPoint*)aChordPoly.GetConstPointAry();
         if ( !mbFillColor )
             mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
         else

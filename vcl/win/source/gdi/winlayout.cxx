@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-06 17:27:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,46 +87,49 @@
 class WinLayout : public SalLayout
 {
 public:
-                    WinLayout( HDC, const ImplLayoutArgs& );
+                    WinLayout( HDC );
     virtual void    InitFont() const;
 
 protected:
     HDC             mhDC;
     HFONT           mhFont;
+    int             mnBaseAdv;
 };
+
+#define DROPPED_OUTGLYPH 0xFFFF
 
 // =======================================================================
 
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC, const ImplLayoutArgs&
+                    SimpleWinLayout( HDC hDC, BYTE nCharSet
 #ifdef GCP_KERN_HACK
-                        , const KERNINGPAIR* pPairs, int nPairs
+                      , const KERNINGPAIR* pPairs, int nPairs
 #endif // GCP_KERN_HACK
                     );
 
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
+    virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
 
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
-    virtual Point   GetCharPosition( int nCharPos, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
-    virtual void    GetCaretPositions( long* ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
-    virtual bool    ApplyFallback( SalLayout& rFallback );
-    virtual void    UpdateGlyphPos( int nStart, int nNewXPos );
-    virtual void    RemoveNotdefs();
+    virtual void    MoveGlyph( int nStart, long nNewXPos );
+    virtual void    DropGlyph( int nStart );
+    virtual void    Simplify( bool bIsBase );
 
 protected:
     void            Justify( long nNewWidth );
-    void            ApplyDXArray( const long* pDXArray );
+    void            ApplyDXArray( const ImplLayoutArgs& );
 
 private:
     int             mnGlyphCount;
@@ -134,10 +137,14 @@ private:
     WCHAR*          mpOutGlyphs;
     int*            mpGlyphAdvances;
     int*            mpGlyphOrigAdvs;
-    int*            mpChars2Glyphs; // rel char pos, abs glyph pos
-    int*            mpGlyphs2Chars; // abs glyph pos, abs char pos
+    int*            mpCharWidths;   // map rel char pos to char width
+    int*            mpChars2Glyphs; // map rel char pos to abs glyph pos
+    int*            mpGlyphs2Chars; // map abs glyph pos to abs char pos
+    mutable long    mnWidth;
+    bool            mbDisableGlyphs;
+
     int             mnNotdefWidth;
-    long            mnWidth;
+    BYTE            mnCharSet;
 
 #ifdef GCP_KERN_HACK
     const KERNINGPAIR* mpKerningPairs;
@@ -147,10 +154,10 @@ private:
 
 // =======================================================================
 
-WinLayout::WinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
-:   SalLayout( rArgs ),
-    mhDC( hDC ),
-    mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) )
+WinLayout::WinLayout( HDC hDC )
+:   mhDC( hDC ),
+    mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
+    mnBaseAdv( 0 )
 {}
 
 // -----------------------------------------------------------------------
@@ -162,12 +169,12 @@ void WinLayout::InitFont() const
 
 // =======================================================================
 
-SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
+SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet
 #ifdef GCP_KERN_HACK
-        const KERNINGPAIR* pKerningPairs, int nKerningPairs
+        , const KERNINGPAIR* pKerningPairs, int nKerningPairs
 #endif // GCP_KERN_HACK
     )
-:   WinLayout( hDC, rArgs ),
+:   WinLayout( hDC ),
 #ifdef GCP_KERN_HACK
     mpKerningPairs( pKerningPairs ),
     mnKerningPairs( nKerningPairs ),
@@ -177,44 +184,16 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
     mpGlyphOrigAdvs( NULL ),
+    mpCharWidths( NULL ),
     mpChars2Glyphs( NULL ),
     mpGlyphs2Chars( NULL ),
+    mnWidth( 0 ),
     mnNotdefWidth( -1 ),
-    mnWidth( 0 )
+    mnCharSet( nCharSet ),
+    mbDisableGlyphs( false )
 {
-    // TODO: use a cached value for bDisableGlyphs from upper layers
-    if( (mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) == 0 )
-    {
-        // Win32 glyph APIs have serious problems with vertical layout
-        // => workaround is to use the unicode methods then
-        bool bDisableGlyphs = false;
-
-        if( rArgs.mnFlags & SAL_LAYOUT_VERTICAL )
-            bDisableGlyphs = true;
-        else
-        {
-            // #99019# don't use glyph indices for non-TT fonts
-            // also for printer, because the drivers often transparently
-            // replace TTs with builtin fonts
-            TEXTMETRICA aTextMetricA;
-            if( !::GetTextMetricsA( mhDC, &aTextMetricA )
-            ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
-            || (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
-                    bDisableGlyphs = true;
-        }
-
-        if( bDisableGlyphs )
-            mnLayoutFlags |= SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
-    }
-
-    // TODO: use a cached value for bDisableAsianKern from upper layers
-    if( mnLayoutFlags & SAL_LAYOUT_KERNING_ASIAN )
-    {
-        TEXTMETRICA aTextMetricA;
-        if( ::GetTextMetricsA( mhDC, &aTextMetricA )
-        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) )
-            mnLayoutFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
-    }
+    if( !aSalShlData.mbWNT )
+        mbDisableGlyphs = true;
 }
 
 // -----------------------------------------------------------------------
@@ -223,6 +202,8 @@ SimpleWinLayout::~SimpleWinLayout()
 {
     delete[] mpGlyphs2Chars;
     delete[] mpChars2Glyphs;
+    if( mpCharWidths != mpGlyphAdvances )
+        delete[] mpCharWidths;
     delete[] mpGlyphOrigAdvs;
     delete[] mpGlyphAdvances;
     delete[] mpOutGlyphs;
@@ -232,11 +213,43 @@ SimpleWinLayout::~SimpleWinLayout()
 
 bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    // prepare layout
+    // TODO: fix case when reusing object
+    mbDisableGlyphs |= ((rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) != 0);
+
+    // TODO: use a cached value for bDisableGlyphs from upper layers font info
+    if( !mbDisableGlyphs )
+    {
+        // Win32 glyph APIs have serious problems with vertical layout
+        // => workaround is to use the unicode methods then
+        if( rArgs.mnFlags & SAL_LAYOUT_VERTICAL )
+            mbDisableGlyphs = true;
+        else
+        {
+            // #99019# don't use glyph indices for non-TT fonts
+            // also for printer, because the drivers often transparently
+            // replace TTs with builtin fonts
+            TEXTMETRICA aTextMetricA;
+            if( !::GetTextMetricsA( mhDC, &aTextMetricA )
+            ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
+            || (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
+                mbDisableGlyphs = true;
+        }
+    }
+
+    // TODO: use a cached value for bDisableAsianKern from upper layers
+    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
+    {
+        TEXTMETRICA aTextMetricA;
+        if( ::GetTextMetricsA( mhDC, &aTextMetricA )
+        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) )
+            rArgs.mnFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
+    }
+
     // layout text
-    mnGlyphCount = 0;
-    int nMaxGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     int i, j;
 
+    mnGlyphCount = 0;
     bool bVertical = (rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0;
     if( !bVertical )
     {
@@ -246,17 +259,18 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     const sal_Unicode* pBidiStr;
-    if( mnGlyphCount == nMaxGlyphCount )
+    mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+    if( mnGlyphCount == mnCharCount )
         pBidiStr = rArgs.mpStr + rArgs.mnMinCharPos;
     else
     {
         // rewrite pBidiStr when right to left/partial fallback runs/vertical layout
-        sal_Unicode* pStr = (sal_Unicode*)alloca( nMaxGlyphCount * sizeof(sal_Unicode) );
+        sal_Unicode* pStr = (sal_Unicode*)alloca( mnCharCount * sizeof(sal_Unicode) );
         // note: glyph to char mapping is relative to first character
-        mpChars2Glyphs = new int[ nMaxGlyphCount ];
-        mpGlyphs2Chars = new int[ nMaxGlyphCount ];
+        mpChars2Glyphs = new int[ mnCharCount ];
+        mpGlyphs2Chars = new int[ mnCharCount ];
 
-        for( i = 0; i < nMaxGlyphCount; ++i )
+        for( i = 0; i < mnCharCount; ++i )
             mpChars2Glyphs[i] = mpGlyphs2Chars[i] = -1;
 
         mnGlyphCount = 0;
@@ -296,17 +310,15 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             }
         }
         pBidiStr = pStr;
-        nMaxGlyphCount = mnGlyphCount;
     }
 
-    DWORD nGcpOption = 0;
-
-    mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
-    mpGlyphAdvances = new int[ nMaxGlyphCount ];
+    mpOutGlyphs     = new WCHAR[ mnGlyphCount ];
+    mpGlyphAdvances = new int[ mnGlyphCount ];
 
     if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
-        mpGlyphOrigAdvs = new int[ nMaxGlyphCount ];
+        mpGlyphOrigAdvs = new int[ mnGlyphCount ];
 
+    DWORD nGcpOption = 0;
 #ifndef GCP_KERN_HACK
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
@@ -321,12 +333,12 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         aGCPW.lpDx          = mpGlyphAdvances;
         aGCPW.lpCaretPos    = NULL;
         aGCPW.lpClass       = NULL;
-        aGCPW.nGlyphs       = nMaxGlyphCount;
+        aGCPW.nGlyphs       = mnGlyphCount;
         aGCPW.nMaxFit       = 0;
         aGCPW.lpOrder       = NULL;
 
         // get glyphs/outstring and kerned placement
-        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+        if( mbDisableGlyphs )
         {
             aGCPW.lpOutString = mpOutGlyphs;
             aGCPW.lpGlyphs = NULL;
@@ -336,7 +348,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             aGCPW.lpOutString = NULL;
             aGCPW.lpGlyphs = mpOutGlyphs;
         }
-        nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, nMaxGlyphCount,
+        nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, mnGlyphCount,
             0, &aGCPW, nGcpOption );
         mnGlyphCount = aGCPW.lpGlyphs ? aGCPW.nGlyphs : aGCPW.nMaxFit;
 
@@ -345,75 +357,57 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
             aGCPW.lpDx = mpGlyphOrigAdvs;
-            nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, nMaxGlyphCount,
+            nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, mnGlyphCount,
                 0, &aGCPW, (nGcpOption & ~GCP_USEKERNING) );
         }
 #endif // GCP_KERN_HACK
     }
     else
     {
-        // TODO: emulate full GetCharacterPlacementW on non-unicode OS
-        // TODO: move into uwinapi.dll
-        // convert into ANSI code page
-        int nMBLen = ::WideCharToMultiByte( CP_ACP,
-            WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-            pBidiStr, nMaxGlyphCount, NULL, 0, NULL, NULL );
-        if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
-            return false;
-        char* const pMBStr = (char*)alloca( nMBLen+1 );
-        ::WideCharToMultiByte( CP_ACP,
-            WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-            pBidiStr, nMaxGlyphCount, pMBStr, nMBLen, NULL, NULL );
-
-        // resize arrays if needed
-        int nArraySize = nMaxGlyphCount;
-        if( nArraySize < nMBLen )
-            nArraySize = nMBLen;
-
-        if( nArraySize > nMaxGlyphCount )
+        if( mbDisableGlyphs )
         {
-            delete[] mpGlyphAdvances;
-            delete[] mpOutGlyphs;
-            mpGlyphAdvances = new int[ nArraySize ];
-            mpOutGlyphs = new WCHAR[ nArraySize ];
-            if( mpGlyphOrigAdvs )
+            // GetCharacterPlacementW replacement on non-W platforms:
+            // in no-glyphs case unicode chars are interpreted as glyphs
+            nRC = 0;
+            for( i = 0; i < mnGlyphCount; ++i )
             {
-                delete[] mpGlyphOrigAdvs;
-                mpGlyphOrigAdvs = new int[ nArraySize ];
+                WCHAR cChar = pBidiStr[ i ];
+                mpOutGlyphs[ i ] = cChar;
+                ::GetCharWidthW( mhDC, cChar, cChar, &mpGlyphAdvances[i] );
+                nRC += mpGlyphAdvances[i];
             }
         }
-
-        // get glyphs/outstring and placement
-        GCP_RESULTSA aGCPA;
-        aGCPA.lStructSize   = sizeof(aGCPA);
-        aGCPA.lpDx          = mpGlyphAdvances;
-        aGCPA.lpCaretPos    = NULL;
-        aGCPA.lpClass       = NULL;
-        aGCPA.nMaxFit       = 0;
-        aGCPA.nGlyphs       = nArraySize;
-        aGCPA.lpOrder       = NULL;
-
-        // resize arrays if needed
-        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
-        {
-            aGCPA.lpGlyphs = NULL;
-            aGCPA.lpOutString = reinterpret_cast<char*>(mpOutGlyphs);
-        }
         else
         {
+            // TODO: emulate full GetCharacterPlacementW on non-unicode OS
+            // TODO: move into uwinapi.dll
+            // convert into ANSI code page
+            int nMBLen = ::WideCharToMultiByte( mnCharSet,
+                WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
+                pBidiStr, mnGlyphCount, NULL, 0, NULL, NULL );
+            if( (nMBLen <= 0) || (nMBLen >= 8 * mnGlyphCount) )
+                return false;
+            char* const pMBStr = (char*)alloca( nMBLen+1 );
+            ::WideCharToMultiByte( mnCharSet,
+                WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
+                pBidiStr, mnGlyphCount, pMBStr, nMBLen, NULL, NULL );
+
+            // get glyphs/outstring and placement
+            GCP_RESULTSA aGCPA;
+            aGCPA.lStructSize   = sizeof(aGCPA);
+            aGCPA.lpDx          = mpGlyphAdvances;
+            aGCPA.lpCaretPos    = NULL;
+            aGCPA.lpClass       = NULL;
+            aGCPA.nMaxFit       = 0;
+            aGCPA.nGlyphs       = mnGlyphCount;
+            aGCPA.lpOrder       = NULL;
+
             aGCPA.lpGlyphs = mpOutGlyphs;
             aGCPA.lpOutString = NULL;
-        }
 
-        nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
-            0, &aGCPA, nGcpOption );
-        // TODO: check lpDxA->lpDxW mapping
-        if( aGCPA.lpGlyphs )
+            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen, 0, &aGCPA, nGcpOption );
+
             mnGlyphCount = aGCPA.nGlyphs;
-        else
-        {
-            mnCharCount = aGCPA.nMaxFit;
-            mnGlyphCount = nMaxGlyphCount;
         }
 
 #ifndef GCP_KERN_HACK
@@ -424,23 +418,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 0, &aGCPA, (nGcpOption & ~GCP_USEKERNING) );
         }
 #endif // GCP_KERN_HACK
-
-        if( aGCPA.lpOutString && (mnGlyphCount != mnCharCount) )
-        {
-            const char* pAnsiStr = aGCPA.lpOutString;
-
-            // adjust advance widths when DBCS present
-            int* pAnsiAdv = new int[ mnCharCount ];
-            for( int i = 0, j = 0; i < mnCharCount; ++j, ++i )
-            {
-                pAnsiAdv[i] = mpGlyphAdvances[j];
-                if( (pAnsiStr[i] & 0x80) && ::IsDBCSLeadByte( pAnsiStr[i] ) )
-                    pAnsiAdv[ ++i ] = 0;    // trailing byte advance width
-            }
-            DBG_ASSERT( (j==mnGlyphCount), "SimpleWinLayout::DrawTextA DBCS mismatch" );
-            delete[] mpGlyphAdvances;
-            mpGlyphAdvances = pAnsiAdv;
-        }
     }
 
     // cache essential layout properties
@@ -454,40 +431,56 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     for( i = 0; i < mnGlyphCount; ++i )
     {
         // we are only interested in notdef candidates
-        if( (mpGlyphAdvances[i] != 0) && (mpOutGlyphs[i] != 0) )
-            continue;
+        if( mbDisableGlyphs )
+        {
+            // TODO: improve heurisitics for non-GlyphIndexing NotDef detection
+            if( mpGlyphAdvances[i] != 0 )
+                continue;
+        }
+        else
+        {
+            // TODO: improve heuristic below
+            // problem is some fonts seem to have NotDef at glyphids 0,3,4
+            if( (mpGlyphAdvances[i] != 0) || (mpOutGlyphs[i] > 4)  )
+                if( mpOutGlyphs[i] != 0 )
+                    continue;
+        }
 
         // request fallback
         bool bRTL = false;  // TODO: get from run
-        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: rArgs.mnMinCharPos+i;
+        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
         rArgs.NeedFallback( nCharPos, bRTL );
 
-        // insert a dummy in the meantime
-        if( mnNotdefWidth < 0 )
+        if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
         {
-            SIZE aExtent;
-            WCHAR cNotDef = pBidiStr[ nCharPos ];
-            mnNotdefWidth = GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
+            // for fallbacks a NotDef glyph isn't interesting
+            mpOutGlyphs[i] = DROPPED_OUTGLYPH;
+            mnNotdefWidth = 0;
+        }
+        else
+        {
+            if( mnNotdefWidth < 0 )
+            {
+                SIZE aExtent;
+                WCHAR cNotDef = rArgs.mpStr[ nCharPos ];
+                mnNotdefWidth = ::GetTextExtentPoint32W(mhDC,&cNotDef,1,&aExtent) ? aExtent.cx : 0;
+            }
+            // use a better NotDef glyph
+            if( !mbDisableGlyphs )
+                mpOutGlyphs[i] = 0;
         }
 
-        if( !(mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-            mpOutGlyphs[i] = 0;
         mnWidth += mnNotdefWidth - mpGlyphAdvances[i];
         mpGlyphAdvances[i] = mnNotdefWidth;
         if( mpGlyphOrigAdvs )
             mpGlyphOrigAdvs[i] = mnNotdefWidth;
     }
 
-    // adjust positions if requested
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
 #ifdef GCP_KERN_HACK
-    else if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
+    if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
     {
 #else // GCP_KERN_HACK
-    else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
+    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
     {
         if( !(rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) )
 #endif // GCP_KERN_HACK
@@ -532,6 +525,22 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
     }
 
+    // calculate virtual char widths
+    if( !mpGlyphs2Chars )
+        mpCharWidths = mpGlyphAdvances;
+    else
+    {
+        mpCharWidths = new int[ mnCharCount ];
+        for( i = 0; i < mnCharCount; ++i )
+            mpCharWidths[ i ] = 0;
+        for( i = 0; i < mnGlyphCount; ++i )
+        {
+            int j = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
+            if( j >= 0 )
+                mpCharWidths[ j ] += mpGlyphAdvances[ i ];
+        }
+    }
+
     return true;
 }
 
@@ -559,7 +568,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
     {
         // update returned values
         long nGlyphIndex = mpOutGlyphs[ nStart ];
-        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+        if( mbDisableGlyphs )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
                 nGlyphIndex |= GetVerticalFlags( nGlyphIndex & GF_IDXMASK );
@@ -571,7 +580,11 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
         if( pCharIndexes )
         {
-            int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
+            int nCharPos;
+            if( !mpGlyphs2Chars )
+                nCharPos = nStart + mnMinCharPos;
+            else
+                nCharPos = mpGlyphs2Chars[nStart];
             *(pCharIndexes++) = nCharPos;
         }
         // stop at last glyph
@@ -595,11 +608,11 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
         return;
 
     UINT mnDrawOptions = ETO_GLYPH_INDEX;
-    if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+    if( mbDisableGlyphs )
         mnDrawOptions = 0;
 
 #ifndef DEBUG_GETNEXTGLYPHS
-    Point aPos = GetDrawPosition();
+    Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
     if( mnDrawOptions || aSalShlData.mbWNT )
     {
@@ -608,9 +621,21 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
     }
     else
     {
-        const char* pAnsiStr = (char*)mpOutGlyphs;
-        ::ExtTextOutA( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            pAnsiStr, mnCharCount, mpGlyphAdvances );
+        if( !mpGlyphOrigAdvs )
+            ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), 0, NULL,
+                mpOutGlyphs, mnGlyphCount, NULL );
+        else
+        {
+            // workaround for problem in #106259#
+            long nXPos = mnBaseAdv;
+            for( int i = 0; i < mnGlyphCount; ++i )
+            {
+                ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), 0, NULL,
+                    mpOutGlyphs+i, 1, NULL );
+                nXPos += mpGlyphAdvances[ i ];
+                aPos = GetDrawPosition( Point( nXPos, 0 ) );
+            }
+        }
     }
 #else // DEBUG_GETNEXTGLYPHS
     #define MAXGLYPHCOUNT 8
@@ -642,35 +667,43 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
 
 long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 {
-    if( mnWidth && !pDXArray )
-        return mnWidth;
-
-    long nWidth = 0;
-
-    for( int i = 0; i < mnGlyphCount; ++i )
+    if( !mnWidth )
     {
-        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-        nWidth += mpGlyphAdvances[j];
-        if( pDXArray )
-            pDXArray[i] = nWidth;
+        long mnWidth = mnBaseAdv;
+        for( int i = 0; i < mnGlyphCount; ++i )
+            mnWidth += mpGlyphAdvances[ i ];
     }
 
-    return nWidth;
+    if( pDXArray != NULL )
+    {
+        for( int i = 0; i < mnCharCount; ++i )
+             pDXArray[ i ] = mpCharWidths[ i ];
+    }
+
+    return mnWidth;
 }
 
 // -----------------------------------------------------------------------
 
 int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    long nWidth = 0;
+    // NOTE: the factor prevents rounding errors for small nCharExtra values
+    if( mnWidth )
+        if( mnWidth * nFactor <= nMaxWidth )
+            return STRING_LEN;
 
-    for( int i = 0; i < mnGlyphCount; ++i )
+    long nExtraWidth = mnBaseAdv * nFactor;
+    for( int i = 0; i < mnCharCount; ++i )
     {
-        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-        nWidth += mpGlyphAdvances[j] * nFactor;
-        if( nWidth >= nMaxWidth )
-            return (mnMinCharPos + i);
-        nWidth += nCharExtra;
+        nExtraWidth += mpCharWidths[ i ] * nFactor;
+        if( nExtraWidth >= nMaxWidth )
+        {
+            if( mpGlyphs2Chars )
+                return mpGlyphs2Chars[ i ];
+            else
+                return (mnMinCharPos + i);
+        }
+        nExtraWidth += nCharExtra;
     }
 
     return STRING_LEN;
@@ -678,14 +711,13 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
 
 // -----------------------------------------------------------------------
 
-void SimpleWinLayout::GetCaretPositions( long* pCaretXArray ) const
+void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
     long nXPos = 0;
-    int nMaxIdx = 2 * (mnEndCharPos - mnMinCharPos), i;
 
     if( !mpGlyphs2Chars )
     {
-        for( i = 0; i < nMaxIdx; i += 2 )
+        for( int i = 0; i < nMaxIdx; i += 2 )
         {
             pCaretXArray[ i ] = nXPos;
             nXPos += mpGlyphAdvances[ i>>1 ];
@@ -694,6 +726,7 @@ void SimpleWinLayout::GetCaretPositions( long* pCaretXArray ) const
     }
     else
     {
+        int  i;
         for( i = 0; i < nMaxIdx; ++i )
             pCaretXArray[ i ] = -1;
 
@@ -732,46 +765,6 @@ void SimpleWinLayout::GetCaretPositions( long* pCaretXArray ) const
 
 // -----------------------------------------------------------------------
 
-Point SimpleWinLayout::GetCharPosition( int nCharPos, bool bRTL ) const
-{
-    //TODO: implement reordering using mpChars2Glyphs[i]
-    long nXPos = 0;
-
-    if( mnGlyphCount <= 0 )
-        return Point( nXPos, 0 );
-
-    if( !bRTL ) // relative to left edge
-    {
-        int nCharLimit = mnEndCharPos;
-        if( nCharLimit > nCharPos )
-            nCharLimit = nCharPos;
-        nCharLimit -= mnMinCharPos;
-        for( int i = 0; i < nCharLimit; ++i )
-        {
-            int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-            if( j >= 0 )
-                nXPos += mpGlyphAdvances[j];
-        }
-    }
-    else        // relative to right edge?
-    {
-        int nCharStart = nCharPos - mnMinCharPos;
-        if( nCharStart < 0 )
-            nCharStart = 0;
-        int nCharLimit = mnEndCharPos - mnMinCharPos;
-        for( int i = nCharStart; i < nCharLimit; ++i )
-        {
-            int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-            if( j >= 0 )
-                nXPos -= mpGlyphAdvances[j];
-        }
-    }
-
-    return Point( nXPos, 0 );
-}
-
-// -----------------------------------------------------------------------
-
 void SimpleWinLayout::Justify( long nNewWidth )
 {
     long nOldWidth = mnWidth;
@@ -802,11 +795,46 @@ void SimpleWinLayout::Justify( long nNewWidth )
 
 // -----------------------------------------------------------------------
 
-void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
+void SimpleWinLayout::AdjustLayout( ImplLayoutArgs& rArgs )
+{
+    SalLayout::AdjustLayout( rArgs );
+
+    // adjust positions if requested
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs );
+    else if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
+
+    // recalculate virtual char widths
+    if( mpCharWidths != mpGlyphAdvances )
+    {
+        int i;
+        if( mpGlyphs2Chars )
+            for( i = 0; i < mnGlyphCount; ++i )
+                 mpCharWidths[ i ] = mpGlyphAdvances[ i ];
+        else
+        {
+            for( i = 0; i < mnCharCount; ++i )
+                mpCharWidths[ i ] = 0;
+            for( i = 0; i < mnGlyphCount; ++i )
+            {
+                int j = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
+                if( j >= 0 )
+                    mpCharWidths[ j ] += mpGlyphAdvances[ i ];
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
     // try to avoid disturbance of text flow for LSB rounding case;
+    const long* pDXArray = rArgs.mpDXArray;
+
     int i = 0;
-    long nOldWidth = 0;
+    long nOldWidth = mnBaseAdv;
     for(; i < mnGlyphCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
@@ -834,7 +862,7 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
             mpGlyphOrigAdvs[ i ] = mpGlyphAdvances[ i ];
     }
 
-    mnWidth = 0;
+    mnWidth = mnBaseAdv;
     for( i = 0; i < mnGlyphCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
@@ -846,47 +874,117 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
 
 // -----------------------------------------------------------------------
 
-bool SimpleWinLayout::ApplyFallback( SalLayout& rFallback )
-{
-    // TODO: implement
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-void SimpleWinLayout::UpdateGlyphPos( int nStart, int nNewXPos )
+void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 {
     if( nStart >= mnGlyphCount )
         return;
-
-    int nCurXPos = 0, i;
-    for( i = 0; i < nStart; ++i )
-        nCurXPos += mpGlyphAdvances[ i ];
-    if( i > 0 )
-        mpGlyphAdvances[ i-1 ] += nNewXPos - nCurXPos;
-    // TODO: change offset when first glyph gets removed
+    // TODO: cache absolute positions
+    int nDelta = mnBaseAdv;
+    for( int i = 0; i < nStart; ++i )
+        nDelta += mpGlyphAdvances[ i ];
+    nDelta = nNewXPos - nDelta;
+    if( mnWidth )
+    {
+        // when width is cached it needs to be adjusted
+        mnWidth += nDelta;
+    }
+    if( nStart > 0 )
+    {
+        // adjust virtual width when inbetween
+        mpGlyphAdvances[ nStart-1 ] += nDelta;
+    }
+    else
+    {
+        // change offset when first glyph has fallback
+        mnBaseAdv = nNewXPos;
+    }
 }
 
 // -----------------------------------------------------------------------
 
-void SimpleWinLayout::RemoveNotdefs()
+void SimpleWinLayout::DropGlyph( int nStart )
 {
-    // TODO: change offset when first glyph gets removed
-    for( int i = 0, j = 0; i < mnGlyphCount; ++i )
+    mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
+}
+
+// -----------------------------------------------------------------------
+
+void SimpleWinLayout::Simplify( bool bIsBase )
+{
+    // return early if no glyph is dropped
+    int i = mnGlyphCount;
+    while( (--i >= 0) && (mpOutGlyphs[ i ] != DROPPED_OUTGLYPH) );
+    if( i < 0 )
+        return;
+
+    // convert to sparse layout when glyphs are dropped
+    if( !mpGlyphs2Chars )
     {
-        if( i != j )
+        mpGlyphs2Chars = new int[ mnGlyphCount ];
+        mpCharWidths = new int[ mnCharCount ];
+        // assertion: mnGlyphCount == mnCharCount
+        for( int k = 0; k < mnGlyphCount; ++k )
         {
-            mpOutGlyphs[ j ]    = mpOutGlyphs[ i ];
-            mpGlyphAdvances[ j ] = mpGlyphAdvances[ i ];
-            mpGlyphOrigAdvs[ j ] = mpGlyphOrigAdvs[ i ];
+            mpGlyphs2Chars[ k ] = k + mnMinCharPos;
+            mpCharWidths[ k ] = mpGlyphAdvances[ k ];
+        }
+    }
+
+    // when glyphs at end have been removed => reduce width
+    for( i = mnGlyphCount; --i >= 0; )
+    {
+        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
+            break;
+        mnWidth -= mpGlyphAdvances[ i ];
+        int c = mpGlyphs2Chars[ i ] - mnMinCharPos;
+        if( c >= 0 )
+            mpCharWidths[ c ] = 0;
+    }
+    mnGlyphCount = i + 1;
+
+    // keep original widths around
+    if( !mpGlyphOrigAdvs )
+    {
+        mpGlyphOrigAdvs = new int[ mnGlyphCount ];
+        for( int k = 0; k < mnGlyphCount; ++k )
+            mpGlyphOrigAdvs[ k ] = mpGlyphAdvances[ k ];
+    }
+
+    // skip to first dropped glyph
+    for( i = 0; i < mnGlyphCount; ++i )
+        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
+            break;
+
+    // remove dropped glyphs inbetween
+    int nNewGC = i;
+    for(; i < mnGlyphCount; ++i )
+    {
+        mpOutGlyphs[ nNewGC ]     = mpOutGlyphs[ i ];
+        mpGlyphAdvances[ nNewGC ] = mpGlyphAdvances[ i ];
+        mpGlyphOrigAdvs[ nNewGC ] = mpGlyphOrigAdvs[ i ];
+        mpGlyphs2Chars[ nNewGC ]  = mpGlyphs2Chars[ i ];
+
+        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
+        {
+            ++nNewGC;
+            continue;
         }
 
-        // we are only interested in NotDef candidates
-        if( mpOutGlyphs[ i ] == 0 )
-            mpGlyphAdvances[ j ] += mpGlyphAdvances[ i ];
+        // zero virtual char width for fallback char
+        int c = mpGlyphs2Chars[ i ] - mnMinCharPos;
+        if( c >= 0 )
+            mpCharWidths[ c ] = 0;
+
+        // adjust positions for dropped glyph
+        if( nNewGC > 0 )
+            mpGlyphAdvances[ nNewGC-1 ] += mpGlyphAdvances[ i ];
         else
-            ++j;
+            mnBaseAdv += mpGlyphAdvances[ i ];
     }
+
+    mnGlyphCount = nNewGC;
+    if( mnGlyphCount <= 0 )
+        mnWidth = mnBaseAdv = 0;
 }
 
 // =======================================================================
@@ -896,39 +994,45 @@ void SimpleWinLayout::RemoveNotdefs()
 
 struct VisualItem
 {
+public:
     SCRIPT_ITEM*    mpScriptItem;
     int             mnMinGlyphPos;
     int             mnEndGlyphPos;
     int             mnMinCharPos;
     int             mnEndCharPos;
-    long            mnPixelWidth;
+    //long          mnPixelWidth;
+    int             mnXOffset;
     ABC             maABCWidths;
+
+public:
+    bool            IsEmpty() const { return (mnEndGlyphPos <= 0); }
 };
 
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout( HDC hDC, const ImplLayoutArgs& );
-    virtual         ~UniscribeLayout();
+                    UniscribeLayout( HDC );
 
     virtual bool    LayoutText( ImplLayoutArgs& );
+    virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharPosAry ) const;
 
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
-    virtual void    GetCaretPositions( long* ) const;
-    virtual Point   GetCharPosition( int nCharPos, bool bRTL ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
-    virtual bool    ApplyFallback( SalLayout& rFallback );
-    virtual void    UpdateGlyphPos( int nStart, int nNewXPos );
-    virtual void    RemoveNotdefs();
+    virtual void    MoveGlyph( int nStart, long nNewXPos );
+    virtual void    DropGlyph( int nStart );
+    virtual void    Simplify( bool bIsBase );
 
 protected:
+    virtual         ~UniscribeLayout();
+
     void            Justify( long nNewWidth );
-    void            ApplyDXArray( const long* pDXArray );
+    void            ApplyDXArray( const ImplLayoutArgs& );
 
     bool            GetItemSubrange( const VisualItem& rVisualItem,
                         int& rMinIndex, int& rEndIndex ) const;
@@ -942,8 +1046,8 @@ private:
     // string specific info
     // everything is in logical order
     int             mnCharCapacity;
-    WORD*           mpLogClusters;
-    int*            mpCharWidths;
+    WORD*           mpLogClusters;  // mapping relative to script items
+    int*            mpCharWidths;   // map abs char pos to char width
     int             mnSubStringMin;
 
     // glyph specific info
@@ -955,7 +1059,7 @@ private:
     WORD*           mpOutGlyphs;
     GOFFSET*        mpGlyphOffsets;
     SCRIPT_VISATTR* mpVisualAttrs;
-    int*            mpGlyphs2Chars;
+    mutable int*    mpGlyphs2Chars; // map abs glyph pos to abs char pos
 
     // platform specific info
     mutable SCRIPT_CACHE    maScriptCache;
@@ -1053,8 +1157,8 @@ static bool InitUSP()
 
 // -----------------------------------------------------------------------
 
-UniscribeLayout::UniscribeLayout( HDC hDC, const ImplLayoutArgs& rArgs )
-:   WinLayout( hDC, rArgs ),
+UniscribeLayout::UniscribeLayout( HDC hDC )
+:   WinLayout( hDC ),
     maScriptCache( NULL ),
     mnItemCount(0),
     mpScriptItems( NULL ),
@@ -1077,7 +1181,8 @@ UniscribeLayout::UniscribeLayout( HDC hDC, const ImplLayoutArgs& rArgs )
 
 UniscribeLayout::~UniscribeLayout()
 {
-    (*pScriptFreeCache)( &maScriptCache );
+    if( maScriptCache )
+        (*pScriptFreeCache)( &maScriptCache );
 
     delete[] mpScriptItems;
     delete[] mpVisualItems;
@@ -1095,6 +1200,29 @@ UniscribeLayout::~UniscribeLayout()
 
 bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
+    // for fallback layout prepare to drop unneeded glyphs
+    typedef std::vector<int> TIntVector;
+    TIntVector aDropChars;
+    if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+    {
+        // calculate superfluous context char positions
+        aDropChars.push_back( 0 );
+        aDropChars.push_back( rArgs.mnLength );
+        int nMin, nEnd;
+        for( bool bRTL; rArgs.GetNextRun( &nMin, &nEnd, &bRTL ); )
+        {
+            aDropChars.push_back( nMin );
+            aDropChars.push_back( nEnd );
+        }
+        // prepare aDropChars for binary search
+        std::sort( aDropChars.begin(), aDropChars.end() );
+    }
+
+    // prepare layout
+    // TODO: fix case when reusing object
+    mnMinCharPos = rArgs.mnMinCharPos;
+    mnEndCharPos = rArgs.mnEndCharPos;
+
     // determine script items from string
     // TODO: try to avoid itemization since it costs a lot of performance
     SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
@@ -1103,7 +1231,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
     aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
     DWORD nLangId = 0;  // TODO: get language from font
-    SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,true,false,false,0};
+    SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
+    aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
@@ -1111,8 +1240,14 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     int nSubStringEnd = rArgs.mnLength;
     if( aScriptState.fOverrideDirection )
     {
+#if (_MSC_VER < 1300)
+        // TODO: limit substring to portion limits
         mnSubStringMin = std::max( rArgs.mnMinCharPos - 8, 0 );
         nSubStringEnd = std::min( rArgs.mnEndCharPos + 8, rArgs.mnLength );
+#else
+        mnSubStringMin = max( rArgs.mnMinCharPos - 8, 0 );
+        nSubStringEnd = min( rArgs.mnEndCharPos + 8, rArgs.mnLength );
+#endif
     }
     for( int nItemCapacity = 8; /*FOREVER*/; nItemCapacity *= 2 )
     {
@@ -1129,18 +1264,24 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // calculate visual items order
-    mpVisualItems = new VisualItem[ mnItemCount ];
+    int nItem, i;
 
-    // default item ordering and adding substring offset
-    int nItem;
+    // adjust char positions by substring offset
+    for( nItem = 0; nItem <= mnItemCount; ++nItem )
+        mpScriptItems[ nItem ].iCharPos += mnSubStringMin;
+    // default visual item ordering
+    mpVisualItems = new VisualItem[ mnItemCount ];
     for( nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        mpScriptItems[ nItem ].iCharPos += mnSubStringMin;
-        mpVisualItems[ nItem ].mpScriptItem = &mpScriptItems[ nItem ];
+        // initialize char specific item info
+        VisualItem& rVisualItem = mpVisualItems[ nItem ];
+        SCRIPT_ITEM* pScriptItem = &mpScriptItems[ nItem ];
+        rVisualItem.mpScriptItem = pScriptItem;
+        rVisualItem.mnMinCharPos = pScriptItem[0].iCharPos;
+        rVisualItem.mnEndCharPos = pScriptItem[1].iCharPos;
     }
-    mpScriptItems[ mnItemCount ].iCharPos += mnSubStringMin;
 
-    // calculate visual item order
+    // reorder visual item order if needed
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
     {
         // override item ordering if requested
@@ -1148,7 +1289,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         {
             VisualItem*  pVI = &mpVisualItems[0];
             SCRIPT_ITEM* pSI = &mpScriptItems[mnItemCount];
-            for( nItem = mnItemCount; --nItem >= 0;)
+            for( nItem = mnItemCount; --nItem >= 0; )
                 (pVI++)->mpScriptItem = --pSI;
         }
     }
@@ -1202,24 +1343,25 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     mpGlyphOffsets  = new GOFFSET[ mnGlyphCapacity ];
     mpVisualAttrs   = new SCRIPT_VISATTR[ mnGlyphCapacity ];
 
+    long nXOffset = 0;
+
     // layout script items
     for( nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
 
-        // intitialize visual item info
+        // initialize glyph specific item info
         rVisualItem.mnMinGlyphPos = mnGlyphCount;
         rVisualItem.mnEndGlyphPos = 0;
-        rVisualItem.mnMinCharPos  = rVisualItem.mpScriptItem[0].iCharPos;
-        rVisualItem.mnEndCharPos  = rVisualItem.mpScriptItem[1].iCharPos;
-        rVisualItem.mnPixelWidth  = 0;
+        rVisualItem.mnXOffset     = nXOffset;
+        //rVisualItem.mnPixelWidth  = 0;
 
-        // shortcut for skipped items
+        // shortcut ignorable items
         if( (rArgs.mnEndCharPos <= rVisualItem.mnMinCharPos)
          || (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos) )
         {
             for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-                mpLogClusters[ i ] = 0;
+                mpLogClusters[ i ] = -1;
             continue;
         }
 
@@ -1245,9 +1387,9 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         if( nRC == USP_E_SCRIPT_NOT_IN_FONT )
         {
-            // request fallback using different font
+            // request fallback for whole item
             rArgs.NeedFallback( rVisualItem.mnMinCharPos, rVisualItem.mnEndCharPos,
-                rVisualItem.mpScriptItem->a.fRTL);
+                rVisualItem.mpScriptItem->a.fRTL );
 
             // for now fall back to default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
@@ -1260,24 +1402,48 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                 mpLogClusters + rVisualItem.mnMinCharPos,
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 &nGlyphCount );
-        }
 
-        if( nRC != 0 )
-            continue;
-
-        // request fallback for notdef glyphs
-        for( int i = 0; i < nGlyphCount; ++i )
-        {
-            if( mpOutGlyphs[i] != 0 )
+            if( nRC != 0 )
                 continue;
 
-            // TODO: optimize calculation of nCharPos
-            int nCharPos = rVisualItem.mnMinCharPos;
-            for( int j = nCharCount; --j >= 0; ++nCharPos )
-                if( mpLogClusters[ nCharPos ] == i )
+            // mark as NotDef glyphs
+            for( i = 0; i < nGlyphCount; ++i )
+                mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 0;
+        }
+        else if( nRC != 0 )
+            // something undefined happened => give up
+            continue;
+        else
+        {
+            // check if there are any NotDef glyphs
+            for( i = 0; i < nGlyphCount; ++i )
+                if( 0 == mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] )
                     break;
-
-            rArgs.NeedFallback( nCharPos, rVisualItem.mpScriptItem->a.fRTL);
+            if( i < nGlyphCount )
+            {
+                // calculate proper charpos limits
+                int nMinCharPos = rVisualItem.mnMinCharPos;
+                if( nMinCharPos < rArgs.mnMinCharPos )
+                    nMinCharPos = rArgs.mnMinCharPos;
+                int nEndCharPos = rVisualItem.mnEndCharPos;
+                if( nEndCharPos > rArgs.mnEndCharPos )
+                    nEndCharPos = rArgs.mnEndCharPos;
+                // request fallback for individual NotDef glyphs
+                do
+                {
+                    if( 0 != mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] )
+                        continue;
+                    // find matching nCharPos
+                    // TODO: optimize algorithm
+                    for( int j = nMinCharPos; j < nEndCharPos; ++j )
+                    {
+                        if( mpLogClusters[ j ] != i )
+                            continue;
+                        rArgs.NeedFallback( j, rVisualItem.mpScriptItem->a.fRTL );
+                        break;
+                    }
+                } while( ++i < nGlyphCount );
+            }
         }
 
         nRC = (*pScriptPlace)( mhDC, &maScriptCache,
@@ -1292,9 +1458,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( nRC != 0 )
             continue;
 
-        const ABC& rABC = rVisualItem.maABCWidths;
-        rVisualItem.mnPixelWidth = rABC.abcA + rABC.abcB + rABC.abcC;
-
         nRC = (*pScriptGetLogicalWidths)(
             &rVisualItem.mpScriptItem->a,
             nCharCount, nGlyphCount,
@@ -1306,13 +1469,55 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         // update glyphcount only when we didn't run into a problem
         mnGlyphCount += nGlyphCount;
         rVisualItem.mnEndGlyphPos = mnGlyphCount;
-    }
 
-    // adjust positions if requested
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
+        // update nXOffset
+        int nEndGlyphPos;
+        if( GetItemSubrange( rVisualItem, i, nEndGlyphPos ) )
+            for(; i < nEndGlyphPos; ++i )
+                nXOffset += mpGlyphAdvances[ i ];
+
+        // for fallback layout unneeded context glyphs are dropped
+        if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+        {
+            TIntVector::const_iterator it = aDropChars.begin();
+            while( it != aDropChars.end() )
+            {
+                // find matching "drop range"
+                int nMinDropPos = *(it++); // begin of drop range
+                if( nMinDropPos >= rVisualItem.mnEndCharPos )
+                    break;
+                int nEndDropPos = *(it++); // end of drop range
+                if( nEndDropPos <= rVisualItem.mnMinCharPos )
+                    continue;
+                // match "drop range" to visual item
+                if( nMinDropPos <= rVisualItem.mnMinCharPos )
+                {
+                    nMinDropPos = rVisualItem.mnMinCharPos;
+                    // drop whole visual item if possible
+                    if( nEndDropPos >= rVisualItem.mnEndCharPos )
+                    {
+                        rVisualItem.mnEndGlyphPos = 0;
+                        // recycle those glyphs immediately
+                        mnGlyphCount -= nGlyphCount;
+                        break;
+                    }
+                }
+                if( nEndDropPos > rVisualItem.mnEndCharPos )
+                    nEndDropPos = rVisualItem.mnEndCharPos;
+                // drop those glyphs
+                for( int j = nMinDropPos; j < nEndDropPos; ++j )
+                {
+                    int nGlyphPos = rVisualItem.mnMinGlyphPos;
+                    nGlyphPos += mpLogClusters[ j ];
+                    mpOutGlyphs[ nGlyphPos ] = DROPPED_OUTGLYPH;
+                }
+            }
+        }
+
+        // TODO: shrink glyphpos limits to match charpos/fallback limits
+        //pVI->mnMinGlyphPos = nMinGlyphPos;
+        //pVI->mnEndGlyphPos = nEndGlyphPos;
+    }
 
     return true;
 }
@@ -1322,8 +1527,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
 bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
     int& rMinGlyphPos, int& rEndGlyphPos ) const
 {
-    // return early when nothing of interst in this item
-    if( (rVisualItem.mnEndCharPos <= mnMinCharPos) || (mnEndCharPos <= rVisualItem.mnMinCharPos) )
+    // return early when nothing of interest in this item
+    if( rVisualItem.IsEmpty()
+     || (rVisualItem.mnEndCharPos <= mnMinCharPos)
+     || (mnEndCharPos <= rVisualItem.mnMinCharPos) )
         return false;
 
     // default: subrange is complete range
@@ -1331,7 +1538,8 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
     rEndGlyphPos = rVisualItem.mnEndGlyphPos;
 
     // return early when the whole item is of interest
-    if( (mnMinCharPos <= rVisualItem.mnMinCharPos) && (rVisualItem.mnEndCharPos <= mnEndCharPos ) )
+    if( (mnMinCharPos <= rVisualItem.mnMinCharPos)
+     && (rVisualItem.mnEndCharPos <= mnEndCharPos ) )
         return true;
 
     // get glyph range from char range by looking at cluster boundries
@@ -1378,109 +1586,284 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 // -----------------------------------------------------------------------
 
 int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nVisualStart, long* pGlyphAdvances, int* pCharPosAry ) const
+    int& nStart, long* pGlyphAdvances, int* pCharPosAry ) const
 {
-    // return zero if no more glyph found
-    if( nVisualStart >= mnGlyphCount )
+    if( nStart > mnGlyphCount )        // nStart>MAX means no more glyphs
         return 0;
 
-    // calculate glyph position relative to layout base
-    // TODO: avoid for nStart!=0 case by reusing rPos
-    long nXOffset = 0;
-    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
-
-    int nVisualMinGlyphPos = 0;
-    int nNextVisualStart = 0;
-    int nMinGlyphPos = 0;
-    int nCurrGlyphPos = 0;
-    int nEndGlyphPos = mnGlyphCount;
-
-    // search item with the visual starting glyph,
-    // update position in items with visible glyphs
     int i;
-    const VisualItem* pVisualItem = NULL;
-    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    const VisualItem* pVI = mpVisualItems;
+    if( nStart == 0 )                 // nStart==0 for first visible glyph
     {
-        // skip invisible items
-        pVisualItem = &mpVisualItems[ nItem ];
-        if( !GetItemSubrange( *pVisualItem, nMinGlyphPos, nEndGlyphPos ) )
-            continue;
+        // find first visible item
+        for( i = 0; i < mnItemCount; ++i, ++pVI )
+            if( !pVI->IsEmpty() )
+            {
+                nStart = pVI->mnMinGlyphPos;
+                break;
+            }
+    }
+    else //if( nStart > 0 )           // nStart>0 means absolute glyph pos +1
+    {
+        --nStart;
 
-        nVisualMinGlyphPos = nNextVisualStart;
-        nNextVisualStart += pVisualItem->mnEndGlyphPos - pVisualItem->mnMinGlyphPos;
-        if( nNextVisualStart > nVisualStart )
-            break;
-
-        // advance to next visual position by using adjusted glyph widths
-        // TODO: shortcut addition with cached ABC width if possible
-        for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
-            nXOffset += pGlyphWidths[ i ];
+        // find matching item
+        for( i = 0; i < mnItemCount; ++i, ++pVI )
+            if( (nStart >= pVI->mnMinGlyphPos) && (nStart < pVI->mnEndGlyphPos) )
+                break;
     }
 
-    // adjust visual glyph pos to first visible glyph in item
-    if( nVisualStart == nVisualMinGlyphPos )
-        nVisualStart += nMinGlyphPos - pVisualItem->mnMinGlyphPos;
+    if( i >= mnItemCount )
+    {
+        // everything has been read
+        nStart = mnGlyphCount;
+        return 0;
+    }
 
-    nCurrGlyphPos = pVisualItem->mnMinGlyphPos + (nVisualStart - nVisualMinGlyphPos);
+    // calculate start of next visible item
+    int nNextItemStart = mnGlyphCount;
+    while( ++i < mnItemCount )
+    {
+        if( mpVisualItems[i].IsEmpty() )
+            continue;
+        nNextItemStart = mpVisualItems[i].mnMinGlyphPos;
+        break;
+    }
 
+    int nMinGlyphPos, nEndGlyphPos;
+    bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
+    DBG_ASSERT( bRC, "USPLayout::GNG GISR() returned false" );
+
+    if( nStart < nMinGlyphPos )
+        nStart = nMinGlyphPos;
+
+    // calculate glyph position relative to layout base
     // advance to next visual position by using adjusted glyph widths
-    for( i = nMinGlyphPos; i < nCurrGlyphPos; ++i )
+    // TODO: avoid for nStart!=0 case by reusing rPos
+    long nXOffset = pVI->mnXOffset;
+    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
+    for( i = nMinGlyphPos; i < nStart; ++i )
         nXOffset += pGlyphWidths[ i ];
 
     // adjust nXOffset relative to cluster start
     i = mnMinCharPos;
-    if( !pVisualItem->mpScriptItem->a.fRTL )
+    if( !pVI->mpScriptItem->a.fRTL )
     {
         int nTmpIndex = mpLogClusters[ i ];
-        while( (--i >= pVisualItem->mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
+        while( (--i >= pVI->mnMinCharPos)
+            && (nTmpIndex == mpLogClusters[i]) )
             nXOffset -= mpCharWidths[i];
     }
     else
     {
-        int nTmpIndex = mpLogClusters[ pVisualItem->mnEndCharPos - 1 ];
-        while( (--i >= pVisualItem->mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
+        int nTmpIndex = mpLogClusters[ pVI->mnEndCharPos - 1 ];
+        while( (--i >= pVI->mnMinCharPos)
+            && (nTmpIndex == mpLogClusters[i]) )
             nXOffset += mpCharWidths[i];
     }
 
+    // for usage below create mpGlyphs2Chars if needed
+    if( pCharPosAry && !mpGlyphs2Chars )
+    {
+        mpGlyphs2Chars = new int[ mnGlyphCapacity ];
+        for( i = 0; i < mnGlyphCount; ++i )
+            mpGlyphs2Chars[ i ] = -1;
+        for( int nItem = 0; nItem < mnItemCount; ++nItem )
+        {
+            // skip invisible items
+            VisualItem& rVI = mpVisualItems[ nItem ];
+            if( rVI.IsEmpty() )
+                continue;
+            for( i = rVI.mnEndCharPos; --i >= rVI.mnMinCharPos; )
+            {
+                int j = mpLogClusters[ i ] + rVI.mnMinGlyphPos;
+                mpGlyphs2Chars[ j ] = i;
+            }
+        }
+    }
+
     // calculate absolute position in pixel units
-    const GOFFSET aGOffset = mpGlyphOffsets[ nCurrGlyphPos ];
+    const GOFFSET aGOffset = mpGlyphOffsets[ nStart ];
     Point aRelativePos( nXOffset + aGOffset.du, aGOffset.dv );
     rPos = GetDrawPosition( aRelativePos );
-
-    if( pCharPosAry && !mpGlyphs2Chars )
-        {} //TODO: implement, also see usage below
 
     int nCount = 0;
     while( nCount < nLen )
     {
         // update returned values
-        *(pGlyphs++) = mpOutGlyphs[ nCurrGlyphPos ];
+        *(pGlyphs++) = mpOutGlyphs[ nStart ];
         if( pGlyphAdvances )
-            *(pGlyphAdvances++) = pGlyphWidths[ nCurrGlyphPos ];
+            *(pGlyphAdvances++) = pGlyphWidths[ nStart ];
         if( pCharPosAry )
-            *(pCharPosAry++) = -1; // TODO: use mpGlyphs2Chars[nGI];
+            *(pCharPosAry++) = mpGlyphs2Chars[ nStart ];
 
         ++nCount;
-        ++nVisualStart;
         // stop aftert last visible glyph in item
-        if( ++nCurrGlyphPos >= nEndGlyphPos )
+        if( ++nStart >= nEndGlyphPos )
         {
-            nVisualStart = nNextVisualStart;
+            nStart = nNextItemStart;
             break;
         }
 
         // stop when next x-position is unexpected
         if( !pGlyphAdvances  )
-            if( (mpGlyphOffsets && (mpGlyphOffsets[nCurrGlyphPos].du != aGOffset.du) )
-             || (mpJustifications && (mpJustifications[nCurrGlyphPos] != mpGlyphAdvances[nCurrGlyphPos]) ) )
+            if( (mpGlyphOffsets && (mpGlyphOffsets[nStart].du != aGOffset.du) )
+             || (mpJustifications && (mpJustifications[nStart] != mpGlyphAdvances[nStart]) ) )
                 break;
 
         // stop when next y-position is unexpected
-        if( mpGlyphOffsets && (mpGlyphOffsets[nCurrGlyphPos].dv != aGOffset.dv) )
+        if( mpGlyphOffsets && (mpGlyphOffsets[nStart].dv != aGOffset.dv) )
             break;
     }
 
+    ++nStart;
     return nCount;
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayout::MoveGlyph( int nStart, long nNewXPos )
+{
+    if( nStart > mnGlyphCount )
+        return;
+
+    VisualItem* pVI = mpVisualItems;
+    int nMinGlyphPos, nEndGlyphPos;
+    if( nStart == 0 )               // nStart==0 for first visible glyph
+    {
+        for( int i = mnItemCount; --i >= 0; ++pVI )
+            if( GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos ) )
+                break;
+        nStart = nMinGlyphPos;
+        DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::MoveG overflow" );
+    }
+    else //if( nStart > 0 )         // nStart>0 means absolute glyph pos +1
+    {
+        --nStart;
+        for( int i = mnItemCount; --i >= 0; ++pVI )
+            if( (nStart >= pVI->mnMinGlyphPos) && (nStart < pVI->mnEndGlyphPos) )
+                break;
+        bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
+        DBG_ASSERT( bRC, "USPLayout::MoveG GISR() returned false" );
+    }
+
+    long nDelta = nNewXPos - pVI->mnXOffset;
+    if( nStart > nMinGlyphPos )
+    {
+        for( int i = nMinGlyphPos; i < nStart; ++i )
+            nDelta -= mpGlyphAdvances[ i ];
+        mpGlyphAdvances[ i-1 ] += nDelta;
+    }
+    else
+        pVI->mnXOffset += nDelta;
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayout::DropGlyph( int nStart )
+{
+    DBG_ASSERT( nStart<=mnGlyphCount, "USPLayout::MoveG nStart overflow" );
+
+    if( nStart > 0 )        // nStart>0 means absolute glyph pos + 1
+        --nStart;
+    else // if( !nStart )   // nStart==0 for first visible glyph
+    {
+        const VisualItem* pVI = mpVisualItems;
+        for( int i = mnItemCount, nDummy; --i >= 0; ++pVI )
+            if( GetItemSubrange( *pVI, nStart, nDummy ) )
+                break;
+        DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
+    }
+
+    mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
+}
+
+// -----------------------------------------------------------------------
+
+void UniscribeLayout::Simplify( bool bIsBase )
+{
+    const WCHAR cDroppedGlyph = bIsBase ? DROPPED_OUTGLYPH : 0;
+    int i;
+    // if there are no dropped glyphs don't bother
+    for( i = 0; i < mnGlyphCount; ++i )
+        if( mpOutGlyphs[ i ] == cDroppedGlyph )
+            break;
+    if( i >= mnGlyphCount )
+        return;
+
+    // prepare for sparse layout
+    if( !mpGlyphs2Chars )
+    {
+        mpGlyphs2Chars = new int[ mnGlyphCapacity ];
+        for( i = 0; i < mnGlyphCount; ++i )
+            mpGlyphs2Chars[ i ] = -1;
+        for( int nItem = 0; nItem < mnItemCount; ++nItem )
+        {
+            // skip invisible items
+            VisualItem& rVI = mpVisualItems[ nItem ];
+            if( rVI.IsEmpty() )
+                continue;
+            for( i = rVI.mnEndCharPos; --i >= rVI.mnMinCharPos; )
+            {
+                int j = mpLogClusters[ i ] + rVI.mnMinGlyphPos;
+                mpGlyphs2Chars[ j ] = i;
+            }
+        }
+    }
+
+    // remove the dropped glyphs
+    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        VisualItem& rVI = mpVisualItems[ nItem ];
+        if( rVI.IsEmpty() )
+            continue;
+
+        // mark replaced character widths
+        for( i = rVI.mnMinCharPos; i < rVI.mnEndCharPos; ++i )
+        {
+            int j = mpLogClusters[ i ] + rVI.mnMinGlyphPos;
+            if( mpOutGlyphs[ j ] == cDroppedGlyph )
+                mpCharWidths[ i ] = 0;
+        }
+
+        // dropped glyphs at start of visual item
+        int nEndGlyphPos;
+        GetItemSubrange( rVI, i, nEndGlyphPos );
+        while( (mpOutGlyphs[i] == cDroppedGlyph) && (i < nEndGlyphPos) )
+        {
+            rVI.mnXOffset += pGlyphWidths[ i ];
+            rVI.mnMinGlyphPos = ++i;
+        }
+
+        // when whole item got dropped mark as empty
+        if( i >= nEndGlyphPos )
+        {
+            rVI.mnEndGlyphPos = 0;
+            continue;
+        }
+
+        // dropped glyphs in the middle of visual item
+        for(; i < nEndGlyphPos; ++i )
+            if( mpOutGlyphs[ i ] == cDroppedGlyph )
+                break;
+        int j = i;
+        while( ++i < nEndGlyphPos )
+        {
+            if( mpOutGlyphs[ i ] == cDroppedGlyph )
+                continue;
+            mpOutGlyphs[ j ]      = mpOutGlyphs[ i ];
+            mpGlyphOffsets[ j ]   = mpGlyphOffsets[ i ];
+            mpVisualAttrs[ j ]    = mpVisualAttrs[ i ];
+            mpGlyphAdvances[ j ]  = mpGlyphAdvances[ i ];
+            if( mpJustifications )
+                mpJustifications[ j ] = mpJustifications[ i ];
+            int k = mpGlyphs2Chars[ i ];
+            mpGlyphs2Chars[ j ]   = k;
+            mpLogClusters[ k ]    = j;
+            rVI.mnEndGlyphPos = ++j;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1488,8 +1871,6 @@ int UniscribeLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 void UniscribeLayout::DrawText( SalGraphics& ) const
 {
 #ifndef DEBUG_GETNEXTGLYPHS
-    Point aRelPos = Point(0,0);
-
     const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
@@ -1499,6 +1880,8 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         int nMinGlyphPos, nEndGlyphPos;
         if( !GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
             continue;
+
+        Point aRelPos( rVisualItem.mnXOffset, 0 );
 
         // adjust draw position relative to cluster start
         int i = mnMinCharPos;
@@ -1525,9 +1908,6 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
             mpGlyphAdvances + nMinGlyphPos,
             mpJustifications ? mpJustifications + nMinGlyphPos : NULL,
             mpGlyphOffsets + nMinGlyphPos );
-
-        for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
-            aRelPos.X() += pGlyphWidths[ i ];
     }
 #else
     #define MAXGLYPHCOUNT 4
@@ -1567,14 +1947,28 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
 
 long UniscribeLayout::FillDXArray( long* pDXArray ) const
 {
-    long nWidth = 0;
+    long nWidth = mnBaseAdv;
 
-    for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
+    for( int nItem = mnItemCount; --nItem >= 0; )
     {
-        nWidth += mpCharWidths[ i ];
-        if( pDXArray )
-            pDXArray[ i - mnMinCharPos ] = nWidth;
+        const VisualItem& rVI = mpVisualItems[ nItem ];
+
+        // skip if there is nothing to display
+        int nMinGlyphPos, nEndGlyphPos;
+        if( !GetItemSubrange( rVI, nMinGlyphPos, nEndGlyphPos ) )
+            continue;
+
+        // width = xoffset + width of last item
+        nWidth = rVI.mnXOffset;
+        const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
+        for( int i = nMinGlyphPos; i < nEndGlyphPos; ++i )
+            nWidth += pGlyphWidths[i];
+        break;
     }
+
+    if( pDXArray )
+        for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
+            pDXArray[ i - mnMinCharPos ] = mpCharWidths[ i ];
 
     return nWidth;
 }
@@ -1602,9 +1996,8 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
 
 // -----------------------------------------------------------------------
 
-void UniscribeLayout::GetCaretPositions( long* pCaretXArray ) const
+void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
-    const int nMaxIdx = 2 * (mnEndCharPos - mnMinCharPos);
     int i;
     for( i = 0; i < nMaxIdx; ++i )
         pCaretXArray[ i ] = -1;
@@ -1616,7 +2009,7 @@ void UniscribeLayout::GetCaretPositions( long* pCaretXArray ) const
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( rVisualItem.mnEndGlyphPos <= 0 )
+        if( rVisualItem.IsEmpty() )
             continue;
 
         // get glyph positions
@@ -1664,61 +2057,23 @@ void UniscribeLayout::GetCaretPositions( long* pCaretXArray ) const
 
 // -----------------------------------------------------------------------
 
-Point UniscribeLayout::GetCharPosition( int nCharPos, bool bRTL ) const
+void UniscribeLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
-    int nStartIndex = mnGlyphCapacity;  // mark as untouched
-    int nGlyphIndex = 0;
-    int nEndIndex = -1;                 // mark as untouched
+    SalLayout::AdjustLayout( rArgs );
 
-    for( int nItem = 0; nItem < mnItemCount; ++nItem )
-    {
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( rVisualItem.mnEndGlyphPos <= 0 )
-            continue;
-
-        if( (rVisualItem.mnMinCharPos <= nCharPos) && (nCharPos < rVisualItem.mnEndCharPos) )
-            nGlyphIndex = mpLogClusters[ nCharPos ] + rVisualItem.mnMinGlyphPos;
-
-        // find the corresponding glyphs
-        int nMinIndex, nMaxIndex;
-        if( GetItemSubrange( rVisualItem, nMinIndex, nMaxIndex ) )
-        {
-            if( nStartIndex > nMinIndex )
-                nStartIndex = nMinIndex;
-
-            if( nEndIndex < nMaxIndex )
-                nEndIndex = nMaxIndex;
-        }
-    }
-
-    // set StartIndex and EndIndex to defaults when not touched
-    if( nStartIndex >= mnGlyphCapacity )
-        nStartIndex = 0;
-    if( nEndIndex < 0 )
-        nEndIndex = mnGlyphCount;
-
-    long nXPos = 0;
-
-    if( !bRTL ) // relative to left edge
-    {
-        for( int i = nStartIndex; i < nGlyphIndex; ++i )
-            nXPos += mpGlyphAdvances[ i ];
-    }
-    else        // relative to right edge?
-    {
-        if( nGlyphIndex < nStartIndex )
-            nGlyphIndex = nStartIndex;
-        for( int i = nGlyphIndex; i < nEndIndex; ++i )
-            nXPos -= mpGlyphAdvances[ i ];
-    }
-
-    return Point( nXPos, 0 );
+    // adjust positions if requested
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs );
+    else if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
 }
 
 // -----------------------------------------------------------------------
 
-void UniscribeLayout::ApplyDXArray( const long* pDXArray )
+void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 {
+    const long* pDXArray = rArgs.mpDXArray;
+
     // increase char widths in string range to desired values
     bool bModified = false;
     int nOldWidth = 0;
@@ -1744,10 +2099,11 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
         mpJustifications[ i ] = mpGlyphAdvances[ i ];
 
     // apply new widths to script items
+    long nXOffset = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( rVisualItem.mnEndGlyphPos <= 0 )
+        if( rVisualItem.IsEmpty() )
             continue;
 
         if( (rVisualItem.mnMinCharPos < mnEndCharPos)
@@ -1780,8 +2136,12 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
                 break;
             }
 
-            const ABC& rABC = rVisualItem.maABCWidths;
-            rVisualItem.mnPixelWidth = rABC.abcA + rABC.abcB + rABC.abcC;
+            rVisualItem.mnXOffset = nXOffset;
+            // update nXOffset
+            int nEndGlyphPos;
+            if( GetItemSubrange( rVisualItem, i, nEndGlyphPos ) )
+                for(; i < nEndGlyphPos; ++i )
+                    nXOffset += mpJustifications[ i ];
 
             if( rVisualItem.mpScriptItem->a.fRTL )
             {
@@ -1819,10 +2179,11 @@ void UniscribeLayout::Justify( long nNewWidth )
         mpJustifications[ i ] = mpGlyphAdvances[ i ];
 
     // justify stretched script items
+    long nXOffset = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( rVisualItem.mnEndGlyphPos <= 0 )
+        VisualItem& rVisualItem = mpVisualItems[ nItem ];
+        if( rVisualItem.IsEmpty() )
             continue;
 
         if( (rVisualItem.mnMinCharPos < mnEndCharPos)
@@ -1831,6 +2192,7 @@ void UniscribeLayout::Justify( long nNewWidth )
             long nItemWidth = 0;
             for( i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
                 nItemWidth += mpCharWidths[ i ];
+            nItemWidth = (int)((fStretch - 1.0) * nItemWidth + 0.5);
 
             SCRIPT_FONTPROPERTIES aFontProperties;
             int nMinKashida = 1;
@@ -1842,49 +2204,30 @@ void UniscribeLayout::Justify( long nNewWidth )
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,
-                (int)((fStretch-1.0) * nItemWidth + 0.5),
+                nItemWidth,
                 nMinKashida,
                 mpJustifications + rVisualItem.mnMinGlyphPos );
+
+            rVisualItem.mnXOffset = nXOffset;
+            nXOffset += nItemWidth;
         }
     }
-}
-
-// -----------------------------------------------------------------------
-
-bool UniscribeLayout::ApplyFallback( SalLayout& rFallback )
-{
-    // TODO: implement
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-void UniscribeLayout::UpdateGlyphPos( int nStart, int nNewXPos )
-{
-    // TODO: implement
-}
-
-// -----------------------------------------------------------------------
-
-void UniscribeLayout::RemoveNotdefs()
-{
-    // TODO: implement
 }
 
 #endif // USE_UNISCRIBE
 
 // =======================================================================
 
-SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     WinLayout* pWinLayout = NULL;
 
 #ifdef USE_UNISCRIBE
-    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
-    &&  bUspEnabled && (aUspModule || InitUSP()) )
+    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
+    &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
     {
         // script complexity is determined in upper layers
-        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
+        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC );
     }
     else
 #endif // USE_UNISCRIBE
@@ -1894,17 +2237,14 @@ SalLayout* SalGraphics::LayoutText( ImplLayoutArgs& rArgs, int nFallbackLevel )
             GetKernPairs( 0, NULL );
 #endif // GCP_KERN_HACK
 
-        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs
+        BYTE eCharSet = ANSI_CHARSET;
+        if( maGraphicsData.mpLogFont )
+            eCharSet = maGraphicsData.mpLogFont->lfCharSet;
+        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, eCharSet
 #ifdef GCP_KERN_HACK
             , maGraphicsData.mpFontKernPairs, maGraphicsData.mnFontKernPairCount
 #endif // GCP_KERN_HACK
             );
-    }
-
-    if( !pWinLayout->LayoutText( rArgs ) )
-    {
-        pWinLayout->Release();
-        pWinLayout = NULL;
     }
 
     return pWinLayout;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2002-08-22 12:47:16 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:57:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/impvect.obj 	\
             $(SLO)$/implncvt.obj	\
             $(SLO)$/jobset.obj		\
-            $(SLO)$/line.obj		\
             $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
@@ -123,8 +122,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
             $(SLO)$/fontcvt.obj		\
-            $(SLO)$/poly.obj		\
-            $(SLO)$/poly2.obj		\
             $(SLO)$/print.obj		\
             $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
@@ -135,7 +132,8 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/fontcfg.obj		\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
-            $(SLO)$/pdfwriter_impl.obj
+            $(SLO)$/pdfwriter_impl.obj\
+            $(SLO)$/bmpconv.obj
 
 .IF "$(remote)"==""
     SLOFILES += $(SLO)$/salgdilayout.obj
@@ -154,7 +152,6 @@ EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
                     $(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
                     $(SLO)$/outdev6.obj		\
-                    $(SLO)$/poly.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
                     $(SLO)$/virdev.obj		
@@ -162,9 +159,9 @@ EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
 .ELSE
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/gfxlink.obj		\
-                    $(SLO)$/poly.obj		\
                     $(SLO)$/print.obj		\
-                    $(SLO)$/impgraph.obj	
+                    $(SLO)$/impgraph.obj	\
+                    $(SLO)$/bmpconv.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------

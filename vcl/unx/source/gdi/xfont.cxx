@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-13 15:18:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,12 +650,9 @@ GetVerticalClass( sal_Unicode nChar )
 
 // =======================================================================
 
-X11FontLayout::X11FontLayout( ImplLayoutArgs& rArgs, ExtendedFontStruct& rFont )
-:   GenericSalLayout( rArgs ),
-    mrFont( rFont )
-{
-    LayoutText( rArgs );
-}
+X11FontLayout::X11FontLayout( ExtendedFontStruct& rFont )
+:    mrFont( rFont )
+{}
 
 // -----------------------------------------------------------------------
 
@@ -690,11 +687,6 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         aNewPos.X() += nGlyphWidth;
     }
-
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    else if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
 
     return (nGlyphCount > 0);
 }

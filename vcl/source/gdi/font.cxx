@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-01 12:32:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ BOOL Font::operator==( const Font& rFont ) const
          (mpImplFont->maFillColor       == rFont.mpImplFont->maFillColor        ) &&
          (mpImplFont->maSize            == rFont.mpImplFont->maSize             ) &&
          (mpImplFont->mnOrientation     == rFont.mpImplFont->mnOrientation      ) &&
+         (mpImplFont->mbVertical        == rFont.mpImplFont->mbVertical         ) &&
          (mpImplFont->meUnderline       == rFont.mpImplFont->meUnderline        ) &&
          (mpImplFont->meStrikeout       == rFont.mpImplFont->meStrikeout        ) &&
          (mpImplFont->meRelief          == rFont.mpImplFont->meRelief           ) &&

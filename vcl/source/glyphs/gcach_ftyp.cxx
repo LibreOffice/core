@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.87 $
- *  last change: $Author: hdu $ $Date: 2002-12-12 18:12:50 $
+ *  $Revision: 1.88 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,12 @@ static FontFileList aFontFileList;
 // -----------------------------------------------------------------------
 
 // TODO: remove when the priorities are selected by UI
-// if (AH prio == AA prio) => antialias + autohint
-// if AH<AA => do not autohint when antialiasing
+// if (AH==0) => disable autohinting
+// if (AA==0) => disable antialiasing
+// if (EB==0) => disable embedded bitmaps
+// if (AA prio <= AH prio) => antialias + autohint
+// if (AH<AA) => do not autohint when antialiasing
+// if (EB<AH) => do not autohint for monochrome
 static int nPrioEmbedded    = 2;
 static int nPrioAutoHint    = 1;
 static int nPrioAntiAlias   = 1;
@@ -392,7 +396,6 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
         OSL_VERIFY(  osl_File_E_None
             == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
         ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
-
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;
@@ -601,6 +604,9 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     if( nPrioAutoHint <= 0 )
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
+
+    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= 0) )
+        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 // -----------------------------------------------------------------------
@@ -644,6 +650,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
 #if (FTVERSION < 2000)
+
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
 #else
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
@@ -843,11 +850,12 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
         nGlyphFlags |= GF_UNHINTED;
 #endif
 
-    if( nGlyphIndex !=0 )
+    if( nGlyphIndex != 0 )
         nGlyphIndex |= nGlyphFlags;
 
     return nGlyphIndex;
 }
+
 
 // -----------------------------------------------------------------------
 
@@ -951,7 +959,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
-    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAutoHint) )
+    if( nPrioEmbedded <= nPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
@@ -1043,7 +1051,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
-    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAntiAlias) )
+    if( nPrioEmbedded <= nPrioAntiAlias )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
@@ -1495,7 +1503,6 @@ void PolyArgs::ClosePolygon()
 
     Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : NULL) );
     mrPolyPoly.Insert( aPoly );
-
     mnPoints = 0;
     bHasOffline = false;
 }
@@ -1652,6 +1659,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         const USHORT nCntLangSystem     = GetUShort( pScriptTable+2 );
         pScriptTable += 4;
         USHORT nLangsysOffset = 0;
+
         for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
             const ULONG nTag    = GetUInt( pScriptTable+0 );    // e.g. KOR/ZHS/ZHT/JAN

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2002-12-12 16:26:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,11 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                     nDone = 1;
                 }
                 else
+                {
+                    if( mpFloatWin )
+                        mpImplLB->GetMainWindow()->CalcMaxVisibleEntries( mpFloatWin->CalcFloatSize() );
                     nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
+                }
             }
             break;
 
@@ -1399,3 +1403,46 @@ const Wallpaper& ComboBox::GetDisplayBackground() const
         return Control::GetDisplayBackground();
     return rBack;
 }
+// -----------------------------------------------------------------------------
+USHORT ComboBox::GetSelectEntryCount() const
+{
+    return mpImplLB->GetEntryList()->GetSelectEntryCount();
+}
+// -----------------------------------------------------------------------------
+USHORT ComboBox::GetSelectEntryPos( USHORT nIndex ) const
+{
+    USHORT nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
+            nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ) );
+        nPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    }
+    return nPos;
+}
+// -----------------------------------------------------------------------------
+BOOL ComboBox::IsEntryPosSelected( USHORT nPos ) const
+{
+    return mpImplLB->GetEntryList()->IsEntryPosSelected( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+// -----------------------------------------------------------------------------
+void ComboBox::SelectEntryPos( USHORT nPos, BOOL bSelect)
+{
+    if ( nPos < mpImplLB->GetEntryList()->GetEntryCount() )
+        mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
+}
+// -----------------------------------------------------------------------------
+void ComboBox::SetNoSelection()
+{
+    mpImplLB->SetNoSelection();
+    mpSubEdit->SetText( String() );
+}
+// -----------------------------------------------------------------------------
+Rectangle ComboBox::GetBoundingRectangle( USHORT nItem ) const
+{
+    Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
+    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( (Window*)this );
+    aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
+    return aRect;
+}
+// -----------------------------------------------------------------------------
