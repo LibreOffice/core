@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-14 13:04:53 $
+ *  last change: $Author: dvo $ $Date: 2001-05-15 15:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class MultiPropertySetHelper
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
-    ::com::sun::star::uno::Sequence<::rtl::OUString> aPropertySequence;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertySequence;
 
 #ifndef PRODUCT
     /// name of the implementation for which hasProperties() was called
