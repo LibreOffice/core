@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
+#   last change: $Author: pluby $ $Date: 2001-03-15 21:20:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,11 +85,13 @@ dummy:
 
 .INCLUDE : ..$/cppumaker.mk
 
+SYMBOLPREFIX=$(TARGET)$(UPD)$(DLLPOSTFIX)
+
 SLOFILES= \
         $(SLO)$/aqua_service.obj	\
         $(SLO)$/aqua_clipboard.obj
 
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SALLIB)	\
