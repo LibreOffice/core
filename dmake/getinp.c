@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.4 2004-01-28 13:21:11 hjs Exp $
+/* RCS  $Id: getinp.c,v 1.5 2004-04-21 14:10:17 svesik Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -86,8 +86,9 @@ FILE *fil;
       while( (p = Rule_tab[ rule_ind++ ]) != NIL(char) )
      /* The last test in this if *p != '~', handles the environment
       * passing conventions used by MKS to pass arguments.  We want to
-      * skip those environment entries. */
-     if( !Readenv || (Readenv && (strchr(p,'=') != NIL(char)) && *p!='~')){
+      * skip those environment entries. Also CYGWIN likes to export '!'
+      * prefixed environment variables that cause severe pain, axe them too */
+     if( !Readenv || (Readenv && (strchr(p,'=') != NIL(char)) && *p!='~' && *p!='!')){
         strcpy( buf, p );
 
         DB_PRINT( "io", ("Returning [%s]", buf) );
