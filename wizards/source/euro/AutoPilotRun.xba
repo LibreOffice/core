@@ -310,7 +310,7 @@ Dim sNoDirMessage as String
 						bIsValid = False						
 					End If				
 				Else
-					If Instr(1, sLocMimeType, &quot;spreadsheet&quot;) = 0 Then
+					If (Instr(1, sLocMimeType, &quot;spreadsheet&quot;) = 0) And (Instr(1, sLocMimeType, &quot;calc&quot;)) = 0 Then
 						Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
 						bIsValid = False
 					End If
@@ -377,7 +377,7 @@ Sub CallFilePicker()
 			FilterNames(9,0) = oUIKey.Classes.GetByName(&quot;sw3to5templ&quot;).DisplayName
 			Filternames(9,1) = &quot;*.vor&quot;
 			FilterNames(10,0) = oTypes.GetByName(&quot;writer8&quot;).UIName
-			FilterNames(10,1) = &quot;*.oot&quot;
+			FilterNames(10,1) = &quot;*.odt&quot;
 			FilterNames(11,0) = oTypes.GetByName(&quot;writer8_template&quot;).UIName
 			FilterNames(11,1) = &quot;*.ott&quot;
 		Else
@@ -392,7 +392,7 @@ Sub CallFilePicker()
 		FilterNames(3,0) = oUIKey.Classes.GetByName(&quot;sc345templ&quot;).DisplayName
 		Filternames(3,1) = &quot;*.vor&quot;
 		FilterNames(4,0) = oTypes.GetByName(&quot;calc8&quot;).UIName	
-		Filternames(4,1) = &quot;*.oos&quot;
+		Filternames(4,1) = &quot;*.ods&quot;
 		FilterNames(5,0) = oTypes.GetByName(&quot;calc8_template&quot;).UIName	
 		Filternames(5,1) = &quot;*.ots&quot;
 		GetFileName(DialogModel.txtSource, Filternames())
