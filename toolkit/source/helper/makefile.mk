@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tbe $ $Date: 2002-06-03 17:13:20 $
+#   last change: $Author: vg $ $Date: 2003-04-17 10:06:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/listboxhelper.obj 				\
             $(SLO)$/listenermultiplexer.obj 		\
             $(SLO)$/property.obj 					\
             $(SLO)$/registerservices.obj 			\
