@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:58:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "Please enter the name of the object to be created:";
         Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáßÇÆä ÇáãÑÇÏ ÅäÔÇÄå:";
         Text[ catalan ] = "Please enter the name of the object to be created:";
+        Text[ finnish ] = "Bitte geben Sie einen Namen für das anzulegende Object an:";
     };
 
     FixedText FT_CATALOG
@@ -133,6 +134,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "~Catalog";
         Text[ arabic ] = "ßÊÇáæÌ";
         Text[ catalan ] = "~Catálogo";
+        Text[ finnish ] = "~Catalog";
     };
     Edit ET_CATALOG
     {
@@ -167,6 +169,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "~Schema";
         Text[ arabic ] = "äãæÐÌ";
         Text[ catalan ] = "~Esquema";
+        Text[ finnish ] = "~Schema";
     };
     Edit ET_SCHEMA
     {
@@ -233,6 +236,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
         Text[ turkish ] = "Tablo adý";
         Text[ catalan ] = "~Nombre de la tabla";
+        Text[ finnish ] = "~Name der Tabelle";
     };
     String STR_VW_LABEL
     {
@@ -257,6 +261,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§(~N)";
         Text[ turkish ] = "Tablo görünümü adý";
         Text[ catalan ] = "Nombre del ~modo tabla";
+        Text[ finnish ] = "~Name der Tabellensicht";
     };
     String STR_QRY_LABEL
     {
@@ -281,6 +286,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "ÁúÀÇ ÀÌ¸§(~Q)";
         Text[ turkish ] = "Sorgu adý";
         Text[ catalan ] = "Nombre de la ~consulta";
+        Text[ finnish ] = "~Name der Abfrage";
     };
     String STR_FRM_LABEL
     {
@@ -305,6 +311,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "¾ç½Ä ÀÌ¸§(~O)";
         Text[ turkish ] = "Form adý";
         Text[ catalan ] = "Nombre del form~ulario";
+        Text[ finnish ] = "~Name des Formulars";
     };
     String STR_RPT_LABEL
     {
@@ -329,6 +336,7 @@ ModalDialog DLG_SAVE_AS
         Text[ korean ] = "º¸°í¼­ ÀÌ¸§(~R)";
         Text[ turkish ] = "Rapor adý";
         Text[ catalan ] = "Nombre del inform~e";
+        Text[ finnish ] = "~Name des Berichts";
     };
     String STR_OBJECT_EXISTS_ALREADY
     {
@@ -354,6 +362,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
         Text[ arabic ] = "ÇáÇÓã'$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáÝÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
         Text[ catalan ] = "Ya existe el nombre '$Name: not supported by cvs2svn $'.\nIntroduzca otro.";
+        Text[ finnish ] = "Der Name '$Name: not supported by cvs2svn $' existiert bereits.\nBitte geben Sie einen neuen Namen an.";
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
     {
@@ -379,6 +388,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
         Text[ arabic ] = "ÇáÇÓã '$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáÝÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ ÝæÞå¿";
         Text[ catalan ] = "El nombre '$Name: not supported by cvs2svn $' existe ya.\n¿Desea sobrescribirlo?";
+        Text[ finnish ] = "Der Name '$Name: not supported by cvs2svn $' existiert bereits.\nWollen Sie es überschreiben?";
     };
     String STR_TITLE_PASTE_AS
     {
@@ -403,6 +413,7 @@ ModalDialog DLG_SAVE_AS
         Text[ turkish ] = "Paste as";
         Text[ arabic ] = "ÅÏÑÇÌ ßÜ";
         Text[ catalan ] = "Paste as";
+        Text[ finnish ] = "Einfügen als";
     };
     Text [ portuguese_brazilian ] = "Speichern unter" ;
     Text [ swedish ] = "Spara som" ;
@@ -422,4 +433,5 @@ ModalDialog DLG_SAVE_AS
     Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
     Text[ turkish ] = "Farklý kaydet";
     Text[ catalan ] = "Guardar como";
+    Text[ finnish ] = "Speichern unter";
 };
