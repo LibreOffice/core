@@ -6,9 +6,9 @@
 '*
 '*  $RCSfile: text_BaseFrameProperties.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:53:45 $ 
+'*  last change:$Date: 2003-10-06 13:24:03 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -120,12 +120,6 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("BackTransparent")
 
     PropertyTester.TestProperty("ContentProtected")
-
-    Dim aNames(1) As String
-    aNames(0) = "Graphics"
-    aNames(1) = "Watermark"
-' ### The following property was not found in correspond IDL file! ###
-    PropertyTester.TestProperty("FrameStyleName", aNames())
 
     PropertyTester.TestProperty("LeftMargin")
 
