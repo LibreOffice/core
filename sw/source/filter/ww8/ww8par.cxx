@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:50:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,6 +1556,9 @@ void SwWW8ImplReader::ImportDop()
     //      'Use former object positioning' to <FALSE>
     rDoc.SetUseFormerObjectPositioning( false );
 
+    // OD 2004-05-10 #i27767# - set new compatibility option
+    //      'Conder Wrapping mode when positioning object' to <TRUE>
+    rDoc.SetConsiderWrapOnObjPos( true );
 
     // --> FME 2004-04-22 # #108724#, #i13832#, #i24135#
     rDoc.SetUseFormerTextWrapping( false );
