@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:20:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1890,7 +1890,7 @@ String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
             break;
         }
 
-    __DELETE( nFlagSize ) pSetFlags;
+    delete [] pSetFlags;
     return aName += String::CreateFromInt32( ++nNum );
 }
 
