@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-29 13:34:25 $
+ *  last change: $Author: ssa $ $Date: 2002-12-10 16:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,6 @@ inline BOOL ImplIsMouseFollow()
 {
     return ( Application::GetSettings().GetMouseSettings().GetFollow() & MOUSE_FOLLOW_MENU ) ? TRUE : FALSE;
 }
-
 
 struct MenuItemData
 {
@@ -585,7 +584,7 @@ private:
     PushButton      aHideBtn;
 
     void            HighlightItem( USHORT nPos, BOOL bHighlight );
-    void            ChangeHighlightItem( USHORT n, BOOL bSelectPopupEntry, BOOL bAllowRestoreFocus = TRUE );
+    void            ChangeHighlightItem( USHORT n, BOOL bSelectPopupEntry, BOOL bAllowRestoreFocus = TRUE, BOOL bDefaultToDocument = TRUE );
 
     USHORT          ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( BOOL bPreSelectFirst );
@@ -4236,7 +4235,7 @@ void MenuBarWindow::PopupClosed( Menu* pPopup )
     if ( pPopup == pActivePopup )
     {
         KillActivePopup();
-        ChangeHighlightItem( ITEMPOS_INVALID, FALSE, ImplGetFrameWindow()->ImplGetFrameData()->mbHasFocus );
+        ChangeHighlightItem( ITEMPOS_INVALID, FALSE, ImplGetFrameWindow()->ImplGetFrameData()->mbHasFocus, FALSE );
     }
 }
 
@@ -4277,7 +4276,7 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
         ChangeHighlightItem( nEntry, FALSE );
 }
 
-void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllowRestoreFocus )
+void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllowRestoreFocus, BOOL bDefaultToDocument)
 {
     // #57934# ggf. das aktive Popup sofort schliessen, damit TH's Hintergrundsicherung funktioniert.
     MenuItemData* pNextData = pMenu->pItemList->GetDataFromPos( n );
@@ -4332,7 +4331,7 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
             nSaveFocusId = 0;
             Window::EndSaveFocus( nTempFocusId, bAllowRestoreFocus );
             // #105406# restore focus to document if we could not save focus before
-            if( !nTempFocusId && bAllowRestoreFocus )
+            if( bDefaultToDocument && !nTempFocusId && bAllowRestoreFocus )
                 GrabFocusToDocument();
         }
     }
