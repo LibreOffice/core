@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     const ::rtl::OUString* pReqProps = _rPropNames.getConstArray();
     sal_Int32 nReqLen = _rPropNames.getLength();
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // assure that the sequence is sorted
     {
         const ::rtl::OUString* pLookup = _rPropNames.getConstArray();
