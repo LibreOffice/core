@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:50:17 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,6 +1125,7 @@ namespace pcr
             aProperty.bHasBrowseButton = sal_False;
             aProperty.bIsHyperlink = sal_False;
             aProperty.bIsLocked = sal_False;
+
             aProperty.nHelpId = m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_COMMAND);
             if ( _bInit )
                 aProperty.sValue = sCommand;
@@ -1144,6 +1145,8 @@ namespace pcr
                     SetTables(aProperty);
                 else if (1 == nPos)
                     SetQueries(aProperty);
+                else
+                    aProperty.eControlType = BCT_MEDIT;
             }
 
             getPropertyBox()->ChangeEntry(aProperty, getPropertyBox()->GetPropertyPos(aProperty.sName));
@@ -1867,21 +1870,25 @@ namespace pcr
                 }
                 //////////////////////////////////////////////////////////////////////
                 // Color
-                else if (nPropId== PROPERTY_ID_BACKGROUNDCOLOR )
+                else if (  ( nPropId == PROPERTY_ID_BACKGROUNDCOLOR )
+                        || ( nPropId == PROPERTY_ID_FILLCOLOR )
+                        || ( nPropId == PROPERTY_ID_SYMBOLCOLOR )
+                        )
                 {
                     bFilter = sal_False;
                     pProperty->eControlType = BCT_COLORBOX;  //@ new ColorListbox
                     pProperty->bIsLocked = sal_True;
                     pProperty->bHasBrowseButton = sal_True;
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_BACKGROUNDCOLOR;
-                }
-                else if (nPropId== PROPERTY_ID_FILLCOLOR )
-                {
-                    bFilter = sal_False;
-                    pProperty->eControlType = BCT_COLORBOX;  //@ new ColorListbox
-                    pProperty->bIsLocked = sal_True;
-                    pProperty->bHasBrowseButton = sal_True;
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_FILLCOLOR;
+
+                    switch( nPropId )
+                    {
+                    case PROPERTY_ID_BACKGROUNDCOLOR:
+                        pProperty->nUniqueButtonId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
+                    case PROPERTY_ID_FILLCOLOR:
+                        pProperty->nUniqueButtonId = UID_PROP_DLG_FILLCOLOR; break;
+                    case PROPERTY_ID_SYMBOLCOLOR:
+                        pProperty->nUniqueButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
+                    }
                 }
                 else if (nPropId == PROPERTY_ID_LABEL)
                 {
@@ -2193,14 +2200,20 @@ namespace pcr
                     case PROPERTY_ID_MAXTEXTLEN:
                     case PROPERTY_ID_TABINDEX:
                     case PROPERTY_ID_BOUNDCOLUMN:
+                    case PROPERTY_ID_VISIBLESIZE:
+                    case PROPERTY_ID_REPEAT_DELAY:
+                    case PROPERTY_ID_LINEINCREMENT:
+                    case PROPERTY_ID_BLOCKINCREMENT:
+                    case PROPERTY_ID_SPININCREMENT:
                         pProperty->nMaxValue = 0x7FFFFFFF;
                         pProperty->bHaveMinMax = sal_True;
-                        switch (nPropId)
-                        {
-                            case PROPERTY_ID_MAXTEXTLEN:    pProperty->nMinValue = -1; break;
-                            case PROPERTY_ID_TABINDEX:      pProperty->nMinValue = 0; break;
-                            case PROPERTY_ID_BOUNDCOLUMN:   pProperty->nMinValue = 1; break;
-                        }
+
+                        if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
+                            pProperty->nMinValue = -1;
+                        else if ( ( nPropId == PROPERTY_ID_BOUNDCOLUMN ) || ( nPropId == PROPERTY_ID_VISIBLESIZE ) )
+                            pProperty->nMinValue = 1;
+                        else
+                            pProperty->nMinValue = 0;
                         break;
 
                     case PROPERTY_ID_DECIMAL_ACCURACY:
@@ -2441,7 +2454,10 @@ namespace pcr
 
             //////////////////////////////////////////////////////////////////////
             // Color
-            else if (nPropId == PROPERTY_ID_BACKGROUNDCOLOR || nPropId == PROPERTY_ID_FILLCOLOR )
+            else if (  ( nPropId == PROPERTY_ID_BACKGROUNDCOLOR )
+                    || ( nPropId == PROPERTY_ID_FILLCOLOR )
+                    || ( nPropId == PROPERTY_ID_SYMBOLCOLOR )
+                    )
             {
                 sal_uInt32 nColor = aVal.ToInt32();
                 Color aColor( nColor );
