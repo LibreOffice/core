@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:58:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 #include "dpsave.hxx"
 #include "viewuno.hxx"
 #include "compiler.hxx"
+#include "editable.hxx"
 
 using namespace com::sun::star;
 
@@ -1549,20 +1550,23 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
     BOOL bRefMode = pViewData->IsRefMode();                 // Referenz angefangen
     BOOL bFormulaMode = pScMod->IsFormulaMode();            // naechster Klick -> Referenz
     BOOL bEditMode = pViewData->HasEditView(eWhich);        // auch bei Mode==SC_INPUT_TYPE
+    BOOL bDouble = (rMEvt.GetClicks() == 2);
 
     //  DeactivateIP passiert nur noch bei MarkListHasChanged
 
     //  im GrabFocus Aufruf kann eine Fehlermeldung hochkommen
     //  (z.B. beim Umbenennen von Tabellen per Tab-Reiter)
 
-    if (!nButtonDown)
-        nButtonDown = rMEvt.GetButtons();       // vorher, damit StopMarking klappt
+    if ( !nButtonDown || !bDouble )             // single (first) click is always valid
+        nButtonDown = rMEvt.GetButtons();       // set nButtonDown first, so StopMarking works
 
 //  pViewData->GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
     if ( ( bEditMode && pViewData->GetActivePart() == eWhich ) || !bFormulaMode )
         GrabFocus();
 
-    if ( nMouseStatus == SC_GM_IGNORE )
+    // #i31846# need to cancel a double click if the first click has set the "ignore" state,
+    // but a single (first) click is always valid
+    if ( nMouseStatus == SC_GM_IGNORE && bDouble )
     {
         nButtonDown = 0;
         nMouseStatus = SC_GM_NONE;
@@ -1589,7 +1593,6 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    BOOL bDouble = (rMEvt.GetClicks() == 2);
     if (!bDouble)
         nMouseStatus = SC_GM_NONE;
 
@@ -3424,6 +3427,26 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                         }
                         break;
                 }
+
+                if ( nRet )
+                {
+                    // Simple check for protection: It's not known here if the drop will result
+                    // in cells or drawing objects (some formats can be both) and how many cells
+                    // the result will be. But if IsFormatEditable for the drop cell position
+                    // is FALSE (ignores matrix formulas), nothing can be pasted, so the drop
+                    // can already be rejected here.
+
+                    Point aPos = rEvt.maPosPixel;
+                    SCsCOL nPosX;
+                    SCsROW nPosY;
+                    pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+                    SCTAB nTab = pViewData->GetTabNo();
+                    ScDocument* pDoc = pViewData->GetDocument();
+
+                    ScEditableTester aTester( pDoc, nTab, nPosX,nPosY, nPosX,nPosY );
+                    if ( !aTester.IsFormatEditable() )
+                        nRet = DND_ACTION_NONE;             // forbidden
+                }
             }
         }
 
@@ -3822,10 +3845,12 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                         lcl_GetDropFormatId( rEvt.maDropEvent.Transferable );
     if ( nFormatId )
     {
+        pScMod->SetInExecuteDrop( TRUE );   // #i28468# prevent error messages from PasteDataFormat
         bPasteIsDrop = TRUE;
         bDone = pViewData->GetView()->PasteDataFormat(
                     nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos, bIsLink );
         bPasteIsDrop = FALSE;
+        pScMod->SetInExecuteDrop( FALSE );
     }
 
     sal_Int8 nRet = bDone ? rEvt.mnAction : DND_ACTION_NONE;
