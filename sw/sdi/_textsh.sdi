@@ -2,7 +2,7 @@
 
     $Workfile:   _textsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.2 2000-10-05 11:58:51 jp Exp $
 
     Beschreibung:   Basis-interfaces fuer Text
 
@@ -141,12 +141,6 @@ interface BaseText : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_INSERT_SMA // status(final|play)
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-    FN_INSERT_SIM // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = StateInsert ;
@@ -1191,6 +1185,9 @@ interface BaseText : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:30  hr
+    initial import
+
     Revision 1.76  2000/06/20 14:47:51  os
     #70060# less occurences of columns in HTML
 

@@ -2,7 +2,7 @@
 
     $Workfile:   _grfsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_grfsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_grfsh.sdi,v 1.2 2000-10-05 11:58:51 jp Exp $
 
     Beschreibung:   interface _Graphic
 
@@ -40,13 +40,6 @@ interface BaseTextGraphic : Selection
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_SIM_START   // status(final|play)
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -115,6 +108,9 @@ interface BaseTextGraphic : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:30  hr
+    initial import
+
     Revision 1.10  2000/07/31 19:23:40  jp
     new attributes for CJK/CTL and graphic
 

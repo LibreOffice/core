@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:03:02 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 11:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3929,32 +3929,6 @@ SfxSlotInfo FN_INSERT_REGION
     SlotName[ greek ] = "ÅéóáãùãŞ åíüôçôáò";
     SlotName[ korean ] = "±¸¿ª »ğÀÔ";
     SlotName[ turkish ] = "Bölüm ekle";
-    SlotName[ language_user1 ] = " ";
-};
-SfxSlotInfo FN_INSERT_SIM
-{
-    SlotName = "Aus Bildbearbeitung einfügen";
-    SlotName [ english ] =  "Aus Bildbearbeitung einfügen";
-    SlotName[ english_us ] = "Insert from Image Editor";
-    SlotName[ portuguese ] = "Inserir imagem";
-    SlotName[ russian ] = "Âñòàâèòü èç ğåäàêòîğà èçîáğàæåíèÿ";
-    SlotName[ dutch ] = "Uit afbeeldingsbewerking invoegen";
-    SlotName[ french ] = "Insérer à partir de l'éditeur d'image";
-    SlotName[ spanish ] = "Insertar desde la edición de imágenes";
-    SlotName[ italian ] = "Inserisci da elaboratore immagini";
-    SlotName[ danish ] = "Indsæt fra billedredigeringen";
-    SlotName[ swedish ] = "Infoga från bildredigering";
-    SlotName[ polish ] = "Wstaw z edytora obrazów";
-    SlotName[ portuguese_brazilian ] = "InsertObjectStarOffice Image";
-    SlotName[ japanese ] = "²Ò°¼Ş´ÃŞ¨À‚©‚ç‘}“ü";
-    SlotName[ chinese_simplified ] = "´ÓÍ¼Ïñ±à¼­Æ÷²åÈë";
-    SlotName[ chinese_traditional ] = "±q¤pµe®a´¡¤J";
-    SlotName[ arabic ] = "ÅÏÑÇÌ ãä ãÍÑÑ ÇáÕæÑ";
-    SlotName[ dutch ] = "Uit afbeeldingsbewerking invoegen";
-    SlotName[ chinese_simplified ] = "´ÓÍ¼Ïñ±à¼­Æ÷²åÈë";
-    SlotName[ greek ] = "ÅéóáãùãŞ áğü ôçí åğåîåñãáóßá åéêüíáò";
-    SlotName[ korean ] = "ÀÌ¹ÌÁö ÆíÁı±â·ÎºÎÅÍ °¡Á®¿À±â";
-    SlotName[ turkish ] = "Görüntü düzenleyiciden ekle";
     SlotName[ language_user1 ] = " ";
 };
 SfxSlotInfo FN_INSERT_SMA

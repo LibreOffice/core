@@ -6917,29 +6917,6 @@ SfxStringItem InsertRegion FN_INSERT_REGION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertObjectStarImage FN_INSERT_SIM
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem LineDownSel FN_LINE_DOWN_SEL
 ()
 [
