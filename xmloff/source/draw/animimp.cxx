@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:56 $
+ *  last change: $Author: cl $ $Date: 2001-05-23 08:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,13 @@ AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirecti
             case ED_from_lowerleft:     return AnimationEffect_MOVE_FROM_LOWERLEFT;
             case ED_from_lowerright:    return AnimationEffect_MOVE_FROM_LOWERRIGHT;
             case ED_path:               return AnimationEffect_PATH;
+            case ED_to_top:             return AnimationEffect_MOVE_TO_TOP;
+            case ED_to_right:           return AnimationEffect_MOVE_TO_RIGHT;
+            case ED_to_bottom:          return AnimationEffect_MOVE_TO_BOTTOM;
+            case ED_to_upperleft:       return AnimationEffect_MOVE_TO_UPPERLEFT;
+            case ED_to_upperright:      return AnimationEffect_MOVE_TO_UPPERRIGHT;
+            case ED_to_lowerright:      return AnimationEffect_MOVE_TO_LOWERRIGHT;
+            case ED_to_lowerleft:       return AnimationEffect_MOVE_TO_LOWERLEFT;
             }
         }
         return AnimationEffect_MOVE_FROM_LEFT;
