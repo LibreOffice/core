@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:15:37 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,10 +815,10 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncInvalidateAll.CancelCall();
 
-    sal_Bool bReturn = SaveData(sal_True, sal_False);
+    sal_uInt16 nReturn = SaveData(sal_True, sal_False);
 
     m_bSuspending = sal_False;
-    return bReturn;
+    return nReturn != 0;
 }
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::disposing()

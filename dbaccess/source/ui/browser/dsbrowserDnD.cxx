@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,6 +793,17 @@ namespace dbaui
 
         return NULL != pTransfer;
     }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::isTableFormat()
+    {
+        sal_Bool bTableFormat = sal_False;
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+        bTableFormat    =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
+                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
+                    ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
+                    ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_HTML);
+        return bTableFormat;
+    }
 
 // .........................................................................
 }   // namespace dbaui
@@ -801,6 +812,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/04/03 14:15:53  fs
+ *  corrected some wrong OSL_ASSERTs
+ *
  *  Revision 1.5  2001/03/30 13:42:02  oj
  *  remove <:
  *
