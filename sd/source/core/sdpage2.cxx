@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:28:24 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@
 #include <tools/tenccvt.hxx>
 #endif
 
+using namespace ::sd;
 using namespace ::com::sun::star;
 
 /*************************************************************************
@@ -407,23 +408,25 @@ void SdPage::WriteData(SvStream& rOut) const
 
     // Liste der Praesentationsobjekt abspeichern
     UINT32 nUserCallCount = 0;
-    UINT32 nCount = (UINT32)aPresObjList.Count();
+    UINT32 nCount = (UINT32)maPresObjList.size();
     UINT32 nValidCount = nCount;
     UINT32 nObj;
 
     // NULL-Pointer rauszaehlen. Eigentlich haben die nichts in der Liste
     // verloren, aber es gibt leider Kundenfiles, in denen so was vorkommt.
-    for ( nObj = 0; nObj < nCount; nObj++)
+    PresentationObjectList::const_iterator aIter = maPresObjList.begin();
+    for (nObj = 0; nObj < nCount; nObj++)
     {
-        SdrObject* pObj = (SdrObject*)aPresObjList.GetObject(nObj);
+        SdrObject* pObj = (*aIter++).mpObject;
         if (!pObj)
             nValidCount--;
     }
     rOut << nValidCount;
 
+    aIter = maPresObjList.begin();
     for (nObj = 0; nObj < nCount; nObj++)
     {
-        SdrObject* pObj = (SdrObject*)aPresObjList.GetObject(nObj);
+        SdrObject* pObj = (*aIter++).mpObject;
         if (pObj)
         {
            rOut << pObj->GetOrdNum();
@@ -441,9 +444,11 @@ void SdPage::WriteData(SvStream& rOut) const
     // Liste der Praesentationsobjekt abspeichern,
     // welche einen UserCall auf die Seite haben
     rOut << nUserCallCount;
+
+    aIter = maPresObjList.begin();
     for (nObj = 0; nObj < nCount; nObj++)
     {
-        SdrObject* pObj = (SdrObject*)aPresObjList.GetObject(nObj);
+        SdrObject* pObj = (*aIter++).mpObject;
 
         if ( pObj && ( (SdPage*) pObj->GetUserCall() ) == this)
         {
@@ -524,12 +529,17 @@ void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 
     UINT32 nCount;
     UINT32 nOrdNum;
+    UINT32 nObj;
+
     rIn >> nCount;
-    for (UINT32 nObj = 0; nObj < nCount; nObj++)
+    std::vector< SdrObject* > aPresObjList;
+
+    for(nObj = 0; nObj < nCount; nObj++)
     {
         rIn >> nOrdNum;
         SdrObject* pObj = GetObj(nOrdNum);
-        aPresObjList.Insert(pObj, LIST_APPEND);
+
+        aPresObjList.push_back(pObj);
     }
 
     // ab hier werden Daten der Versionen >=1 eingelesen
@@ -538,6 +548,45 @@ void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         UINT16 nPageKind;
         rIn >> nPageKind;
         ePageKind = (PageKind) nPageKind;
+    }
+
+    for(nObj = 0; nObj < aPresObjList.size(); nObj++ )
+    {
+        PresObjKind ePresKind = PRESOBJ_NONE;
+
+        SdrObject* pObj = aPresObjList[nObj];
+        SdrObjKind eSdrObjKind = (SdrObjKind) pObj->GetObjIdentifier();
+
+        switch( eSdrObjKind )
+        {
+        case OBJ_TITLETEXT:
+            ePresKind = PRESOBJ_TITLE;
+            break;
+        case OBJ_OUTLINETEXT:
+            ePresKind = PRESOBJ_OUTLINE;
+        case OBJ_TEXT:
+            if( ePageKind == PK_NOTES )
+                ePresKind = PRESOBJ_NOTES;
+            else
+                ePresKind = PRESOBJ_TEXT;
+            break;
+        case OBJ_RECT:
+            ePresKind = PRESOBJ_BACKGROUND;
+            break;
+        case OBJ_GRAF:
+            ePresKind = PRESOBJ_GRAPHIC;
+            break;
+        case OBJ_OLE2:
+            ePresKind = PRESOBJ_OBJECT;
+            break;
+        case OBJ_PAGE:
+            if( ePageKind == PK_NOTES )
+                ePresKind = PRESOBJ_PAGE;
+            else
+                ePresKind = PRESOBJ_HANDOUT;
+            break;
+        }
+        InsertPresObj( pObj, ePresKind );
     }
 
     // ab hier werden Daten der Versionen >=2 eingelesen
@@ -740,17 +789,12 @@ SdPage::SdPage(const SdPage& rSrcPage) :
     eAutoLayout         = rSrcPage.eAutoLayout;
     bOwnArrangement     = FALSE;
 
-    UINT32 nCount = (UINT32) rSrcPage.aPresObjList.Count();
+    PresentationObjectList::const_iterator aIter( rSrcPage.maPresObjList.begin() );
+    const PresentationObjectList::const_iterator aEnd( rSrcPage.maPresObjList.end() );
 
-    for (UINT32 nObj = 0; nObj < nCount; nObj++)
+    for(; aIter != aEnd; aIter++)
     {
-        // Liste der Praesenationsobjekte fuellen
-        SdrObject* pSrcObj = (SdrObject*) rSrcPage.aPresObjList.GetObject(nObj);
-
-        if (pSrcObj)
-        {
-            aPresObjList.Insert(GetObj(pSrcObj->GetOrdNum()), LIST_APPEND);
-        }
+        InsertPresObj(GetObj((*aIter).mpObject->GetOrdNum()), (*aIter).meKind);
     }
 
     bSelected           = FALSE;
