@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 08:44:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 using namespace utl;
 using namespace rtl;
@@ -565,9 +568,15 @@ SvtHelpOptions::SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( getInitMutex() );
-    if ( !pOptions )
-        pOptions = new SvtHelpOptions_Impl;
     ++nRefCount;
+    if ( !pOptions )
+    {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHelpOptions_Impl::ctor()");
+        pOptions = new SvtHelpOptions_Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_HELPOPTIONS);
+    }
     pImp = pOptions;
 }
 
