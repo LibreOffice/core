@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateextension_xmlsecimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@ sal_Bool SAL_CALL CertificateExtension_XmlSecImpl :: isCritical() throw( ::com::
     return m_critical ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl :: getExtnId() throw( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl :: getExtensionId() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_xExtnId ;
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl :: getExtnValue() throw( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CertificateExtension_XmlSecImpl :: getExtensionValue() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_xExtnValue ;
 }
 

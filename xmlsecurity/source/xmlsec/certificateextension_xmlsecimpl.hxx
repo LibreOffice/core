@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateextension_xmlsecimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper1<
         //Methods from XCertificateExtension
         virtual sal_Bool SAL_CALL isCritical() throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtnId() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtnValue() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( ::com::sun::star::uno::RuntimeException ) ;
 
         //Helper method
         void setCertExtn( ::com::sun::star::uno::Sequence< sal_Int8 > extnId, ::com::sun::star::uno::Sequence< sal_Int8 > extnValue, sal_Bool critical ) ;
