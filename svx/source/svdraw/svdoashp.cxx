@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:13:28 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,21 +242,6 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
                 xComponent->dispose();
             }
         }
-
-/* glue point support currently disabled:
-        if ( pRet )
-        {
-            // todo: general rework of gluepoint handling:
-            // we are just making a copy if mxCustomShape is containing a gluepoint list,
-            const SdrGluePointList* pSource = pRet->GetGluePointList();
-            if ( pSource )
-            {
-                SdrGluePointList* pDest = ((SdrObjCustomShape*)this)->ForceGluePointList();
-                pDest->Clear();
-                *pDest = *pSource;
-            }
-        }
-*/
     }
     return pRenderedCustomShape;
 }
@@ -728,6 +713,48 @@ sal_Bool SdrObjCustomShape::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaint
             SdrTextObj::DoPaintObject( rXOut, rInfoRec );
     }
     return bOk;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const SdrGluePointList* SdrObjCustomShape::GetGluePointList() const
+{
+    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+    if ( pSdrObject )
+    {
+        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+        if ( pSource )
+            ((SdrObjCustomShape*)this)->ForceGluePointList();
+    }
+    return pPlusData ? pPlusData->pGluePoints : NULL;
+}
+
+SdrGluePointList* SdrObjCustomShape::GetGluePointList()
+{
+    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+    if ( pSdrObject )
+    {
+        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+        if ( pSource )
+            ((SdrObjCustomShape*)this)->ForceGluePointList();
+    }
+    return pPlusData ? pPlusData->pGluePoints : NULL;
+}
+
+SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
+{
+    SdrGluePointList* pRet = SdrTextObj::ForceGluePointList();
+    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+    if ( pSdrObject )
+    {
+        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+        if ( pSource )
+        {
+            pRet->Clear();
+            *pRet = *pSource;
+        }
+    }
+    return pRet;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
