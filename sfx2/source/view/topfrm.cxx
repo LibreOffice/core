@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:55:09 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,31 +1019,6 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_BROWSE_HOME:
-        {
-            // Anzeige Homepage
-#if SUPD<613//MUSTINI
-            String aHome = pIniMgr->Get( SFX_KEY_INET_HOME );
-#else
-            String aHome;
-#endif
-            if( aHome.Len() )
-            {
-                SfxStringItem aUrl( SID_FILE_NAME,
-                    URIHelper::SmartRelToAbs( aHome ) );
-                SfxFrameItem aView( SID_DOCFRAME, this );
-                SfxBoolItem aBrowsing( SID_BROWSING, sal_True );
-                SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE( "_blank" ) );
-                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
-                GetDispatcher()->Execute( SID_OPENURL, SFX_CALLMODE_RECORD,
-                        &aUrl, &aView, &aBrowsing, &aReferer,
-                        ( rRequest.GetModifier() & KEY_MOD1 ) ? &aTarget : 0L,
-                        0L );
-            }
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_CREATELINK:
         {
 /*! (pb) we need new implementation to create a link
@@ -1051,6 +1026,7 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
             break;
         }
     }
+
     // Recording
     rRequest.Done();
 }

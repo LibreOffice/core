@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:01:28 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,12 +441,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         SFX_ITEMSET_ARG(
             pSet, pTemplateItem, SfxBoolItem,
             SID_TEMPLATE, sal_False);
-        SFX_ITEMSET_ARG(
-            pSet, pBrowsingItem, SfxBoolItem, SID_BROWSING, sal_False );
         SetActivateEvent_Impl(
             ( pTemplateItem && pTemplateItem->GetValue() )
-            ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC,
-            pBrowsingItem && pBrowsingItem->GetValue() );
+            ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
     }
 
 

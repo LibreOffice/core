@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-11 09:14:35 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,6 @@ void SfxURLBox::OpenURL( const String& rName, BOOL bNew ) const
         SfxAllItemSet aSet( pViewFrame->GetPool() );
         aSet.Put( SfxStringItem( SID_FILE_NAME, aName ) );
         aSet.Put( SfxFrameItem( SID_DOCFRAME , pViewFrame ? pViewFrame->GetFrame() : 0 ) );
-        aSet.Put( SfxBoolItem( SID_BROWSING, TRUE ) );
         aSet.Put( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_USER) ) );
         if ( bNew )
             aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );

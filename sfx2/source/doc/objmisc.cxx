@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,7 +854,7 @@ void SfxObjectShell::PostActivateEvent_Impl()
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
             if ( !pSalvageItem )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, this, pImp->bAddToHistory), sal_False);
+                pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
 
         if ( GetFrame() )
@@ -864,13 +864,10 @@ void SfxObjectShell::PostActivateEvent_Impl()
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId, sal_Bool bAddToHistory)
+void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId )
 {
     if ( GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
-    {
         pImp->nEventId = nId;
-        pImp->bAddToHistory = bAddToHistory;
-    }
 }
 
 //--------------------------------------------------------------------
@@ -1021,14 +1018,14 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     {
         // Falls noch kein OnLoad ausgel"ost wurde, weil beim Erzeugen der ::com::sun::star::sdbcx::View der Frame nicht aktiv war,
         // mu\s das jetzt nachgeholt werden, indem der Frame benachrichtigt wird.
-        Broadcast( SfxEventHint( SFX_EVENT_LOADFINISHED, this, sal_False ) );
+        Broadcast( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
 
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
         if ( pHiddenItem && pHiddenItem->GetValue() )
         {
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
-            SFX_APP()->NotifyEvent(SfxEventHint( nId, this, pImp->bAddToHistory), sal_False);
+            SFX_APP()->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
     }
 }
