@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-25 14:21:06 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 09:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ struct Impl_IMEInfos
     xub_StrLen  nPos;
     xub_StrLen  nLen;
     BOOL        bCursor;
+    BOOL        bWasCursorOverwrite;
 
                 Impl_IMEInfos( xub_StrLen nPos );
                 ~Impl_IMEInfos();
@@ -200,6 +201,7 @@ Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP )
     nLen = 0;
     bCursor = TRUE;
     pAttribs = NULL;
+    bWasCursorOverwrite = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1285,7 +1287,7 @@ void Edit::GetFocus()
                 Invalidate();
         }
 
-        SetInputContext( InputContext( GetFont(), TRUE ) );
+        SetInputContext( InputContext( GetFont(), !IsReadOnly() ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
     }
 
     Control::GetFocus();
@@ -1485,15 +1487,18 @@ void Edit::Command( const CommandEvent& rCEvt )
         DeleteSelected();
         delete mpIMEInfos;
         mpIMEInfos = new Impl_IMEInfos( (xub_StrLen)maSelection.Max() );
+        mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
+        BOOL bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
         mpIMEInfos = NULL;
         // Font wieder ohne Attribute einstellen, wird jetzt im Repaint nicht
         // mehr neu initialisiert
         ImplInitSettings( TRUE, FALSE, FALSE );
-        ImplModified();
+
+        SetInsertMode( bInsertMode );
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
     {
@@ -1501,6 +1506,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         maText.Erase( mpIMEInfos->nPos, mpIMEInfos->nLen );
         maText.Insert( pData->GetText(), mpIMEInfos->nPos );
+        ImplModified();
 
         if ( pData->GetTextAttr() )
         {
@@ -1515,39 +1521,16 @@ void Edit::Command( const CommandEvent& rCEvt )
         Invalidate();   // Erstmal einfach zum Testen
         xub_StrLen nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
         SetSelection( Selection( nCursorPos, nCursorPos ) );
+        SetInsertMode( !pData->IsCursorOverwrite() );
     }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
+    else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
-        XubString aText( maText, mpIMEInfos->nPos, mpIMEInfos->nLen );
-        if ( aText.Len() )
+        if ( mpIMEInfos )
         {
-            const CommandExtTextInputPosData* pData = rCEvt.GetExtTextInputPosData();
-
-            xub_StrLen  nChars = aText.Len();
-            Rectangle*  pRects = new Rectangle[nChars];
-            long*       pDXArr = new long[nChars];
-            long        nTextHeight = GetTextHeight();
-            long        nTop = (GetOutputSize().Height()-nTextHeight)/2;
-            long        nBottom = nTop + nTextHeight;
-            long        nX = mnXOffset;
-
-            GetTextArray( aText, pDXArr );
-            if ( mpIMEInfos->nPos )
-                nX += GetTextWidth( XubString( maText, 0, mpIMEInfos->nPos ) );
-
-            for ( xub_StrLen n = 0; n < nChars; n++ )
-            {
-                pRects[n].Top()     = nTop;
-                pRects[n].Bottom()  = nBottom;
-                pRects[n].Left()    = nX + (n ? pDXArr[ n-1 ] : 0);
-                pRects[n].Right()   = nX + pDXArr[n];
-            }
-            SetExtTextInputPos( 0, nChars, pRects );
-            delete pRects;
-            delete pDXArr;
+            xub_StrLen nCursorPos = GetSelection().Max();
+            SetCursorRect( NULL, GetTextWidth(
+                maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
-        else
-            SetExtTextInputPos( 0, 0, NULL );
     }
     else
         Control::Command( rCEvt );
