@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:11:52 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,7 @@
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return nEncoding > RTL_TEXTENCODING_DONTKNOW
-           && nEncoding <= RTL_TEXTENCODING_ISCII_DEVANAGARI
-                              /* always update this! */
+           && nEncoding <= RTL_TEXTENCODING_JAVA_UTF8 /* always update this! */
            && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
 }
 
