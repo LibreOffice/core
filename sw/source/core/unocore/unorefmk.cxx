@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,13 +218,13 @@ void SwXReferenceMark::attachToRange(const uno::Reference< text::XTextRange > & 
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
     }
     SwDoc* pDocument = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     if(pDocument)
