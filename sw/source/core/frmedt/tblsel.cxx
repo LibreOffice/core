@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:18:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                         if ( pCell->GetNext() )
                         {
                             pCell = (const SwLayoutFrm*)pCell->GetNext();
-                            if ( pCell->Lower()->IsRowFrm() )
+                            if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -473,7 +473,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         // ansonsten das Layout der Tabelle kurz "kalkulieren" lassen
         // und nochmals neu aufsetzen
         SwTabFrm *pTable = aUnions[0]->GetTable();
-        for( i = 0; i < aUnions.Count(); ++i )
+        while( pTable )
         {
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
@@ -643,7 +643,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                         if ( pCell->GetNext() )
                         {
                             pCell = (const SwLayoutFrm*)pCell->GetNext();
-                            if ( pCell->Lower()->IsRowFrm() )
+                            if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -1826,13 +1826,36 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         rpStart = pTmp;
 
     pTab = pOrg;
+
+    const SwTabFrm* pLastValidTab = pTab;
     while ( pTab->GetFollow() )
-        pTab = pTab->GetFollow();
+    {
+        //
+        // Check if pTab->GetFollow() is a valid follow table:
+        // Only follow tables with at least on non-FollowFlowLine
+        // should be considered.
+        //
+        if ( pTab->HasFollowFlowLine() )
+        {
+            pTab = pTab->GetFollow();
+            const SwFrm* pTmpRow = pTab->Lower();
+            if ( pTab->GetTable()->IsHeadlineRepeat() )
+                pTmpRow = pTmpRow->GetNext();
+
+            if ( pTmpRow && pTmpRow->GetNext() )
+                pLastValidTab = pTab;
+        }
+        else
+            pLastValidTab = pTab = pTab->GetFollow();
+    }
+    pTab = pLastValidTab;
 
     nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
     const SwTwips nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) +
                           (pTab->*fnRect->fnGetPrtLeft)();
+
     rpEnd = pTab->FindLastCntnt()->GetUpper();
+
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
 
@@ -2055,6 +2078,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             const SwLayoutFrm *pRow = (SwLayoutFrm*)pTable->Lower();
             if ( bRepeat && pRow && pTable->IsFollow() )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
+            if ( pRow && pTable->IsFollow() && pRow->IsInFollowFlowRow() )
+                pRow = (SwLayoutFrm*)pRow->GetNext();
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
             const SwLayoutFrm *pFirst = pRow ? pRow->FirstCell() : 0;
@@ -2063,27 +2088,25 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                 if ( pFirst->GetNext() )
                 {
                     pFirst = (const SwLayoutFrm*)pFirst->GetNext();
-                    if ( pFirst->Lower()->IsRowFrm() )
+                    if ( pFirst->Lower() && pFirst->Lower()->IsRowFrm() )
                         pFirst = pFirst->FirstCell();
                 }
                 else
                     pFirst = ::lcl_FindNextCellFrm( pFirst );
             }
-            const SwLayoutFrm *pLast = ::lcl_FindCellFrm( pTable->FindLastCntnt()->GetUpper());
+            const SwLayoutFrm* pLast = 0;
+            const SwFrm* pLastCntnt = pTable->FindLastCntnt();
+            if ( pLastCntnt )
+                pLast = ::lcl_FindCellFrm( pLastCntnt->GetUpper() );
+
             while ( pLast && !::IsFrmInTblSel( aUnion, pLast ) )
                 pLast = ::lcl_FindCellFrm( pLast->GetPrevLayoutLeaf() );
 
             if ( pFirst && pLast ) //Robust
-#ifdef VERTICAL_LAYOUT
             {
                 aUnion = pFirst->Frm();
                 aUnion.Union( pLast->Frm() );
             }
-#else
-                aUnion = SwRect( pFirst->Frm().Pos(),
-                                 Point( pLast->Frm().Right(),
-                                         pLast->Frm().Bottom() ) );
-#endif
             else
                 aUnion.Width( 0 );
         }
@@ -2174,7 +2197,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
                     if ( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        if ( pCell->Lower()->IsRowFrm() )
+                        if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
                     else
@@ -2319,6 +2342,7 @@ inline void UnsetFollow( SwFlowFrm *pTab )
     pTab->bIsFollow = FALSE;
 }
 
+
 void _FndBox::DelFrms( SwTable &rTable )
 {
     //Alle Lines zwischen pLineBefore und pLineBehind muessen aus dem
@@ -2382,7 +2406,10 @@ void _FndBox::DelFrms( SwTable &rTable )
                             pPrev = (SwTabFrm*)pTmp;
                         }
                         if ( pPrev )
+                        {
                             pPrev->SetFollow( pFollow );
+                            pPrev->SetFollowFlowLine( pUp->HasFollowFlowLine() );
+                        }
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
 
@@ -2412,6 +2439,12 @@ void _FndBox::DelFrms( SwTable &rTable )
                     }
                     if ( bDel )
                     {
+                        if ( pFrm->IsInSplitTableRow() ||
+                             pFrm->IsInFollowFlowRow() )
+                        {
+                            SwTabFrm* pTab = pFrm->FindTabFrm();
+                            pTab->SetFollowFlowLine( FALSE );
+                        }
                         pFrm->Cut();
                         delete pFrm;
                     }
@@ -2424,8 +2457,13 @@ void _FndBox::DelFrms( SwTable &rTable )
 BOOL lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
+#ifdef FRANK_TEST
+    if( pTblFrm->IsFollow() )
+        pTblFrm->FindMaster( true );
+#else
     while( pTblFrm->IsFollow() )
         pTblFrm = pTblFrm->FindMaster();
+#endif
     return &rTable == pTblFrm;
 }
 
@@ -2468,12 +2506,12 @@ void _FndBox::MakeFrms( SwTable &rTable )
                 SwTableLine *pLine = pLineBehind ? pLineBehind :
                                                     rTable.GetTabLines()[i];
                 SwClientIter aIter( *pLine->GetFrmFmt() );
-                for ( pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                      pSibling && (
-                        ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
-                        !lcl_IsLineOfTblFrm( *pTable, *pSibling ) );
-                      pSibling = (SwFrm*)aIter.Next() )
-                    /* do nothing */;
+                pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                while ( pSibling &&
+                        ( ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
+                          !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                           pSibling->IsInFollowFlowRow() ) )
+                      pSibling = (SwFrm*)aIter.Next();
             }
             if ( pSibling )
             {
@@ -2537,12 +2575,12 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                 if ( pLineBehind )
                 {
                     SwClientIter aIter( *pLineBehind->GetFrmFmt() );
-                    for ( pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                          pSibling && (
-                            ((SwRowFrm*)pSibling)->GetTabLine() != pLineBehind ||
-                            !lcl_IsLineOfTblFrm( *pTable, *pSibling ) );
-                          pSibling = (SwFrm*)aIter.Next() )
-                        /* do nothing */;
+                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    while ( pSibling &&
+                            ( ((SwRowFrm*)pSibling)->GetTabLine() != pLineBehind ||
+                              !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                              pSibling->IsInFollowFlowRow() ) )
+                          pSibling = (SwFrm*)aIter.Next();
                 }
                 if ( pSibling )
                     pUpper = pSibling->GetUpper();
@@ -2571,14 +2609,15 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                                                     rTable.GetTabLines()[i];
 
                     SwClientIter aIter( *pLine->GetFrmFmt() );
-                    for ( pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                          pSibling && (
-                            ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
-                            !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                            ((!pLineBefore || pLine == rTable.GetTabLines()[0]) &&
-                             pSibling->FindTabFrm() != pTable)); // Master finden!
-                          pSibling = (SwFrm*)aIter.Next() )
-                        /* do nothing */;
+                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+
+                    while ( pSibling &&
+                            ( ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
+                              !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                               pSibling->IsInSplitTableRow() ||
+                              ( ( !pLineBefore || pLine == rTable.GetTabLines()[0]) &&
+                                   pSibling->FindTabFrm() != pTable ) ) ) // Master finden!
+                        pSibling = (SwFrm*)aIter.Next();
                 }
                 pUpper = pSibling->GetUpper();
                 if ( pLineBefore )
