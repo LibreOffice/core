@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:20:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "View.hxx"
+
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
@@ -112,18 +114,27 @@
 #endif
 
 #include "app.hrc"
-#include "sdwindow.hxx"
-#include "docshell.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#include "DrawDocShell.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "graphpro.hxx"
+#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "imapinfo.hxx"
 #include "sdpage.hxx"
-#include "sdview.hxx"
-#include "slidview.hxx"
+#ifndef SD_SLIDE_VIEW_HXX
+#include "SlideView.hxx"
+#endif
+
+namespace sd {
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -139,7 +150,7 @@
 |*
 \************************************************************************/
 
-SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
+SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                    const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
     EndTextEdit();
@@ -150,7 +161,7 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrPageView*    pPV = GetPageViewPvNum(0);
     SdrObject*      pPickObj = pObj;
 
-    if( this->ISA( SdSlideView ) )
+    if( this->ISA(SlideView))
         pPV = HitPage( rPos );
 
     if( !pPickObj && pPV )
@@ -232,7 +243,11 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         ULONG   nOptions = SDRINSERT_SETDEFLAYER;
         BOOL    bIsPresTarget = FALSE;
 
-        if ((pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive()) || this->ISA(SdSlideView))
+        if ((pViewSh
+                && pViewSh->GetViewShell()!=NULL
+                && pViewSh->GetViewShell()->GetIPClient()
+                && pViewSh->GetViewShell()->GetIPClient()->IsInPlaceActive())
+            || this->ISA(SlideView))
             nOptions |= SDRINSERT_DONTMARK;
 
         if( ( nAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
@@ -291,7 +306,7 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 |*
 \************************************************************************/
 
-IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
+IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 {
     ::std::vector< String >::const_iterator aIter( aDropFileVector.begin() );
 
@@ -360,7 +375,7 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
                         aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
                         aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
                     {
-                        SdWindow*       pWin = pViewSh->GetActiveWindow();
+                        ::sd::Window* pWin = pViewSh->GetActiveWindow();
                         SfxRequest      aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
                         SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
@@ -376,7 +391,7 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
         if( !bOK )
         {
             if( Sound::IsSoundFile( aCurrentDropFile ) || ( nAction & DND_ACTION_LINK ) )
-                static_cast< SdDrawViewShell* >( pViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &aDropPos );
+                static_cast< DrawViewShell* >( pViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &aDropPos );
             else
             {
                 if( pViewSh )
@@ -402,8 +417,14 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
                         SdrOle2Obj* pOleObj = new SdrOle2Obj( aIPObj, aName, aRect );
                         ULONG       nOptions = SDRINSERT_SETDEFLAYER;
 
-                        if (pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive())
-                            nOptions |= SDRINSERT_DONTMARK;
+                        if (pViewSh != NULL)
+                        {
+                            OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                            SfxInPlaceClient* pIpClient =
+                                pViewSh->GetViewShell()->GetIPClient();
+                            if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
+                                nOptions |= SDRINSERT_DONTMARK;
+                        }
 
                         InsertObject( pOleObj, *GetPageViewPvNum(0), nOptions );
                         pOleObj->SetLogicRect( aRect );
@@ -425,7 +446,7 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-IMPL_LINK( SdView, DropErrorHdl, Timer*, pTimer )
+IMPL_LINK( View, DropErrorHdl, Timer*, pTimer )
 {
     InfoBox( pViewSh->GetActiveWindow(), String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
@@ -441,7 +462,7 @@ IMPL_LINK( SdView, DropErrorHdl, Timer*, pTimer )
 |*
 \************************************************************************/
 
-void SdView::LockRedraw(BOOL bLock)
+void View::LockRedraw(BOOL bLock)
 {
     if (bLock)
     {
@@ -494,7 +515,9 @@ void SdView::LockRedraw(BOOL bLock)
 |*
 \************************************************************************/
 
-SfxStyleSheet* SdView::GetStyleSheet() const
+SfxStyleSheet* View::GetStyleSheet() const
 {
     return SdrView::GetStyleSheet();
 }
+
+} // end of namespace sd
