@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-16 12:13:04 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 08:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,7 @@ __EXPORT ColumnEdit::~ColumnEdit()
 
 long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
-    SpinField::Notify( rNEvt );
-    long nHandled = 0;
+    long nHandled = SpinField::Notify( rNEvt );
 
     USHORT nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT )
@@ -369,8 +368,7 @@ __EXPORT RowEdit::~RowEdit()
 
 long __EXPORT RowEdit::Notify( NotifyEvent& rNEvt )
 {
-    NumericField::Notify( rNEvt );
-    long nHandled = 0;
+    long nHandled = NumericField::Notify( rNEvt );
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
