@@ -118,6 +118,7 @@ hedabu: ..\inc\stream.hxx %_DEST%\inc%_EXT%\tools\stream.hxx
 hedabu: ..\inc\string.hxx %_DEST%\inc%_EXT%\tools\string.hxx
 hedabu: ..\inc\svwin.h %_DEST%\inc%_EXT%\tools\svwin.h
 hedabu: ..\inc\table.hxx %_DEST%\inc%_EXT%\tools\table.hxx
+hedabu: ..\inc\tenccvt.hxx %_DEST%\inc%_EXT%\tools\tenccvt.hxx
 hedabu: ..\inc\time.hxx %_DEST%\inc%_EXT%\tools\time.hxx
 hedabu: ..\inc\tools.h %_DEST%\inc%_EXT%\tools\tools.h
 hedabu: ..\inc\unqid.hxx %_DEST%\inc%_EXT%\tools\unqid.hxx
