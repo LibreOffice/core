@@ -2649,7 +2649,7 @@ SfxBoolItem DateField SID_FM_DATEFIELD
 
 //--------------------------------------------------------------------------
 SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
-()
+( SfxBoolItem On FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5642,8 +5642,8 @@ SfxBoolItem InsertMode SID_ATTR_INSERT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertNumbering FN_NUM_NUMBERING_ON
-()
+SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
+( SfxBoolItem On FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
