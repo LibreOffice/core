@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:14:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-06 13:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,13 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
     while( nKeys-- )
     {
         String aCommand( rConfig.ReadKey( ByteString::CreateFromInt32( nKeys ), RTL_TEXTENCODING_UTF8 ) );
-        for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
-            ;
-        if( it == rCommands.end() )
-            rCommands.push_back( aCommand );
+        if( aCommand.Len() )
+        {
+            for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
+                ;
+            if( it == rCommands.end() )
+                rCommands.push_back( aCommand );
+        }
     }
 }
 
@@ -192,12 +195,15 @@ void CommandStore::setCommands(
     int nWritten = 0;
     for( it = rCommands.begin(); it != rCommands.end(); ++it )
     {
-        for( loop = rSysCommands.begin(); loop != rSysCommands.end() && *loop != *it; ++loop )
-            ;
-        if( loop == rSysCommands.end() )
+        if( it->Len() )
         {
-            aWriteList.push_back( *it );
-            nWritten++;
+            for( loop = rSysCommands.begin(); loop != rSysCommands.end() && *loop != *it; ++loop )
+                ;
+            if( loop == rSysCommands.end() )
+            {
+                aWriteList.push_back( *it );
+                nWritten++;
+            }
         }
     }
     while( nWritten > MAX_COMMANDS )
