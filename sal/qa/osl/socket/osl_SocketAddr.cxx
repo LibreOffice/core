@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_SocketAddr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 21:22:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ namespace osl_SocketAddr
         void getHostname_000()
             {
                 ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.107"), IP_PORT_FTP );
+                rtl::OUString suResult = saSocketAddr.getHostname( 0 );
 
             }
 
@@ -418,7 +419,7 @@ namespace osl_SocketAddr
         {
             ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_INVAL );
 
-            //printf("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
+            //t_print("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
 
             CPPUNIT_ASSERT_MESSAGE( "test for getPort( ) function: give an invalid port to a SocketAddr, get the port to see if it can detect. it did not pass in (W32).",
                                     saSocketAddr.getPort( )>=1 && saSocketAddr.getPort( ) <= 65535 );
@@ -482,7 +483,7 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( "bind SocketAddr failed", bOK1 == sal_True );
 
             sal_Int32 newPort = sSocket.getLocalPort();
-            //printf("#new port is %d\n", newPort );
+            //t_print("#new port is %d\n", newPort );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort() function: port number should be in 1 ~ 65535, set port 0, it should be converted to a port number between 1024~65535.",
                                     ( 1024 <= newPort ) && ( 65535 >= newPort ) && ( bOK == sal_True ) );
@@ -494,7 +495,7 @@ namespace osl_SocketAddr
             ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP);
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_INVAL );
             //on Linux, getPort return 34463
-            //printf("#Port number is %d \n", saSocketAddr.getPort( ));
+            //t_print("#Port number is %d \n", saSocketAddr.getPort( ));
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort( ) function: set an address with invalid port. it should return error or convert it to a valid port.",
                                      ( ( 1 <= saSocketAddr.getPort( ) ) && ( 65535 >= saSocketAddr.getPort( ) ) &&( bOK == sal_True ) ) ||
@@ -739,7 +740,7 @@ namespace osl_SocketAddr
             oslSocketAddr poslSocketAddr = saSocketAddr.getHandle( );
 
             sal_Bool bOK = ( saSocketAddr == poslSocketAddr );
-            //printf("getSocketAddrHandle_002\n");
+            //t_print("getSocketAddrHandle_002\n");
             CPPUNIT_ASSERT_MESSAGE( "test for getHandle() function: use getHandle() function as an intermediate way to create identical address.",
                                       sal_True == bOK );
         }
