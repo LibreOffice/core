@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FormHandler.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-17 11:20:30 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:55:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -88,6 +88,7 @@ import com.sun.star.form.XFormsSupplier;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.container.XNamed;
@@ -110,6 +111,8 @@ public class FormHandler {
     public final static int SONUMERICCONTROL = 5;
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
+    public final static int SODATETIMECONTROL = 8;
+
     int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
     int iXPixelFactor = -1;
@@ -433,9 +436,10 @@ public class FormHandler {
     public void removeAllShapes() throws Exception{
         for (int i = this.xDrawPage.getCount(); i >-1; i--){
             XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-            xDrawPage.remove(xShape);
+            removeShape(xShape);
         }
     }
+
 
     /**
      * By removing the shape the whole control is disposed too
@@ -443,6 +447,8 @@ public class FormHandler {
      */
     public void removeShape(XShape _xShape){
         xDrawPage.remove(_xShape);
+        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, _xShape);
+        xComponent.dispose();
     }
 
 
