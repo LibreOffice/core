@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:55:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,12 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #define _DBA_CORE_TABLECONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
@@ -93,14 +92,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
 #include "FilteredContainer.hxx"
@@ -114,29 +110,27 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
-#include "FilteredContainer.hxx"
-#endif
+
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper2< ::com::sun::star::util::XFlushable,
-                                 ::com::sun::star::container::XContainerListener> OTableContainer_Base;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OTableContainer_Base;
 
     //==========================================================================
     //= OTableContainer
     //==========================================================================
     class OTable;
+    class OTableContainer;
+    class OContainerMediator;
 
     class OTableContainer :  public OFilteredContainer,
                              public OTableContainer_Base
     {
     protected:
-
-        ::utl::OConfigurationTreeRoot   m_aCommitLocation; // need to commit new table nodes
-        ::utl::OConfigurationNode       m_aTablesConfig;
-
-        sal_Bool m_bInAppend;               // true when we are in append mode
-        sal_Bool m_bInDrop;                 // set when we are in the drop method
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xTableMediator;
+        OContainerMediator*     m_pMediator;
+        sal_Bool                m_bInAppend;                // true when we are in append mode
+        sal_Bool                m_bInDrop;                  // set when we are in the drop method
 
 
         // OFilteredContainer
@@ -154,6 +148,7 @@ namespace dbaccess
                                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
                                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
                                     const ::std::vector< WildCard >& _rWCSearch) const;
+        virtual void SAL_CALL disposing();
 
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
@@ -165,25 +160,21 @@ namespace dbaccess
             @param          _rTableTypeFilter   restricts the visible tables by type
             @see            construct
         */
-        OTableContainer( const ::utl::OConfigurationNode& _rTablesConfig,const ::utl::OConfigurationTreeRoot& _rCommitLocation,
-            ::cppu::OWeakObject& _rParent,
+        OTableContainer( ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
             sal_Bool _bCase,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener = NULL,
             IWarningsContainer* _pWarningsContainer = NULL
             );
+
         virtual ~OTableContainer();
 
         inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
         inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
-
-        // ::com::sun::star::util::XFlushable
-        virtual void SAL_CALL flush(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
-        virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -192,8 +183,6 @@ namespace dbaccess
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
-        // sets the new confignodes
-        void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_
