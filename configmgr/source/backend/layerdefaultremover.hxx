@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerdefaultremover.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-11-08 14:33:46 $
+ *  last change: $Author: ssmith $ $Date: 2002-11-11 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,9 @@
 #include <cppuhelper/implbase1.hxx>
 #endif // _CPPUHELPER_IMPLBASE1_HXX_
 
-#ifndef CONFIGMGR_STACK_HXX_
-#include "stack.hxx"
-#endif
-
-#ifndef INCLUDED_DEQUE
-#include <deque>
-#define INCLUDED_DEQUE
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
 #endif
 
 #include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>

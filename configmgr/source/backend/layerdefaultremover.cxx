@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerdefaultremover.cxx,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: ssmith $ $Date: 2002-11-08 14:38:55 $
+*  last change: $Author: ssmith $ $Date: 2002-11-11 13:18:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -83,9 +83,22 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
+        bool LayerDefaultRemover::hasPendingProperty()
+        {
+            return m_aPropName.Name.getLength()!=0;
+        }
+        // -----------------------------------------------------------------------------
+
+        void LayerDefaultRemover::clearPendingProperty()
+        {
+            m_aPropName = PropertyStruct();
+        }
+        // -----------------------------------------------------------------------------
+
         void SAL_CALL LayerDefaultRemover::startLayer(  )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
+            clearPendingProperty();
             m_xResultHandler->startLayer();
         }
         // -----------------------------------------------------------------------------
@@ -93,6 +106,18 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::endLayer(  )
             throw (backenduno::MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
         {
+            if (hasPendingProperty())
+            {
+                sal_Char const * pMsg =
+                "LayerDefaultRemover: Illegal property started operation";
+                raiseMalformedDataException(pMsg);
+            }
+            if (!m_aNodeStack.empty())
+            {
+                sal_Char const * pMsg =
+                "LayerDefaultRemover: Illegal node started operation";
+                raiseMalformedDataException(pMsg);
+            }
             m_xResultHandler->endLayer();
         }
         // -----------------------------------------------------------------------------
@@ -100,6 +125,12 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::overrideNode( const OUString& aName, sal_Int16 aAttributes )
             throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
         {
+            if (hasPendingProperty())
+            {
+                sal_Char const * pMsg =
+                "LayerDefaultRemover: Illegal property started operation";
+                raiseMalformedDataException(pMsg);
+            }
             if (aAttributes == 0)
             {
                 m_aNodeStack.push_back(aName);
@@ -131,6 +162,12 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::endNode(  )
             throw (backenduno::MalformedDataException, uno::RuntimeException)
         {
+            if (hasPendingProperty())
+            {
+                sal_Char const * pMsg =
+                "LayerDefaultRemover: Illegal property started operation";
+                raiseMalformedDataException(pMsg);
+            }
             if (m_aNodeStack.empty())
             {
                 m_xResultHandler->endNode();
@@ -169,6 +206,12 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
             throw (backenduno::MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
         {
+            if (hasPendingProperty())
+            {
+                sal_Char const * pMsg =
+                "LayerDefaultRemover: Illegal property started operation";
+                raiseMalformedDataException(pMsg);
+            }
             if (aAttributes != 0)
             {
                 m_aPropName.Name=OUString();
@@ -198,8 +241,7 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::setPropertyValue( const uno::Any& aValue )
             throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
         {
-            bool bPlayProperty = true;
-            playBackNodeStack(bPlayProperty);
+            playBackNodeStack(true);
             m_xResultHandler->setPropertyValue(aValue);
         }
         // -----------------------------------------------------------------------------
@@ -207,8 +249,7 @@ namespace configmgr
         void SAL_CALL LayerDefaultRemover::setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
             throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
         {
-            bool bPlayProperty = true;
-            playBackNodeStack(bPlayProperty);
+            playBackNodeStack(true);
             m_xResultHandler->setPropertyValueForLocale(aValue,aLocale);
         }
         // -----------------------------------------------------------------------------
@@ -218,7 +259,7 @@ namespace configmgr
             if (!bPlayProperty && hasPendingProperty())
             {
                 sal_Char const * pMsg =
-                "LayerDefaultRemover: Illegal propery started operation";
+                "LayerDefaultRemover: Illegal property started operation";
                 raiseMalformedDataException(pMsg);
             }
             if ( !hasPendingProperty() && bPlayProperty && !m_aNodeStack.empty() )
@@ -236,7 +277,6 @@ namespace configmgr
                 }
                 m_aNodeStack.clear();
             }
-
             if (bPlayProperty)
             {
                 if (hasPendingProperty())
@@ -255,18 +295,7 @@ namespace configmgr
 
             throw backenduno::MalformedDataException( sMsg, *this );
         }
-        // -----------------------------------------------------------------------------
 
-        bool LayerDefaultRemover::hasPendingProperty()
-        {
-            return m_aPropName.Name.getLength()!=0;
-        }
-         // -----------------------------------------------------------------------------
-
-        void LayerDefaultRemover::clearPendingProperty()
-        {
-            m_aPropName.Name = OUString();
-        }
         // -----------------------------------------------------------------------------
         // -----------------------------------------------------------------------------
         // -----------------------------------------------------------------------------
