@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtrowsplt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:35:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual USHORT           GetVersion( USHORT nFFVer ) const;
 };
 
 inline const SwFmtRowSplit &SwAttrSet::GetRowSplit(BOOL bInP) const
