@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-10 14:34:20 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 /** typedefs for functions from vendorplugin.h
  */
 typedef javaPluginError (*jfw_plugin_getAllJavaInfos_ptr)(
+    rtl_uString * sVendor,
     rtl_uString * sMinVersion,
     rtl_uString * sMaxVersion,
     rtl_uString * * arExcludeList,
