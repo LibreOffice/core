@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:02:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <hash_map>
 
 #include "rtl/uuid.h"
 #include "osl/thread.h"
