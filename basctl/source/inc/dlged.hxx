@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:14:57 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
 #endif
+
+
+#define DLGED_PAGE_WIDTH_MIN    1280
+#define DLGED_PAGE_HEIGHT_MIN   1024
 
 
 //============================================================================
@@ -182,6 +186,7 @@ public:
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }
 
     void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
+    void            InitScrollBars();
     ScrollBar*      GetHScroll() const { return pHScroll; }
     ScrollBar*      GetVScroll() const { return pVScroll; }
     void            DoScroll( ScrollBar* pActScroll );
@@ -232,6 +237,8 @@ public:
     void            UpdatePropertyBrowserDelayed();
 
     void            PrintData( Printer*, const String& rTitle );    // not working yet
+
+    bool            AdjustPageSize();
 };
 
 #endif //_BASCTL_DLGED_HXX
