@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-18 07:05:39 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,9 +1118,8 @@ BOOL SfxTabDialog::PrepareLeaveCurrentPage()
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
-// #68015 change not appropriate because of to much changes in dependend files
-//          else
-//              nRet = pPage->DeactivatePage( NULL );
+            else
+                nRet = pPage->DeactivatePage( NULL );
 
             if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
                  && aTmp.Count() )
@@ -1169,9 +1168,8 @@ IMPL_LINK( SfxTabDialog, UserHdl, Button *, EMPTYARG )
 
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
-// #68015 change not appropriate because of to much changes in dependend files
-//          else
-//              nRet = pPage->DeactivatePage( NULL );
+            else
+                nRet = pPage->DeactivatePage( NULL );
 
             if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
                  && aTmp.Count() )
@@ -1419,9 +1417,8 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
         if ( pPage->HasExchangeSupport() )
             nRet = pPage->DeactivatePage( &aTmp );
-// #68015 change not appropriate because of to much changes in dependend files
-//      else
-//          nRet = pPage->DeactivatePage( NULL );
+        else
+            nRet = pPage->DeactivatePage( NULL );
 //!     else
 //!         pPage->FillItemSet( aTmp );
 
