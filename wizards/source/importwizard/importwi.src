@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:21:14 $
+ *  last change: $Author: vg $ $Date: 2002-02-05 21:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ String sCancelButton
     Text = "~Abbrechen";
     Text[English] = "~Cancel";
     Text[ English_us ] = "~Cancel";
-    Text[ french ] = "~Annuler";
+    Text[ french ] = "Annuler";
     Text[ italian ] = "~Annulla";
     Text[ spanish ] = "~Cancelar";
     Text[ portuguese ] = "Ca~ncelar";
@@ -210,7 +210,7 @@ String sBackButton
     Text = "<< ~Zurück";
     Text[English] = "<< ~Back";
     Text[ English_us ] = "<< ~Back";
-    Text[ french ] = "<< ~Précédent";
+    Text[ french ] = "<< Précédent";
     Text[ italian ] = "<< ~Indietro";
     Text[ spanish ] = "<< ~Regresar";
     Text[ portuguese ] = "<< ~Anterior";
@@ -238,7 +238,7 @@ String sNextButton
     Text = "~Weiter >>";
     Text[English] = "C~ontinue >>";
     Text[ English_us ] = "Ne~xt >>";
-    Text[ french ] = "~Suivant >>";
+    Text[ french ] = "Suivant >>";
     Text[ italian ] = "A~vanti >>";
     Text[ spanish ] = "~Continuar >>";
     Text[ portuguese ] = "~Continuar >>";
