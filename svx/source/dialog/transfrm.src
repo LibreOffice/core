@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:41:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ catalan ] = "~Adapta l'amplada al text";
         Text[ finnish ] = "~Sovita leveys tekstiin";
         Text[ thai ] = "~จัดความกว้างพอดีข้อความ";
-        Text[ czech ] = "Přizpůsobit šířku textu";
+        Text[ czech ] = "Přizpůsobit šířce textu";
         Text[ hebrew ] = "Br~eite an Text anpassen";
         Text[ hindi ] = "~Fit width to text";
         Text[ slovak ] = "~Prispôsobiť šírku na text";
@@ -718,7 +718,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ catalan ] = "Fit ~height to text";
         Text[ finnish ] = "~Sovita korkeus tekstiin";
         Text[ thai ] = "จัดความ~สูงพอดีข้อความ";
-        Text[ czech ] = "Přizpůsobit výšku textu";
+        Text[ czech ] = "Přizpůsobit výšce textu";
         Text[ hebrew ] = "Höhe a~n Text anpassen";
         Text[ hindi ] = "Fit ~height to text";
         Text[ slovak ] = "Prispôsobiť ~výšku na text";
@@ -1809,7 +1809,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ english_us ] = "Rotation Angle";
         QuickHelpText[ portuguese ] = "�ngulo de rota��o";
         QuickHelpText[ russian ] = "���� ��������";
-        QuickHelpText[ greek ] = "Angle";
+        QuickHelpText[ greek ] = "Rotation Angle";
         QuickHelpText[ dutch ] = "Draaihoek";
         QuickHelpText[ french ] = "Angle de rotation";
         QuickHelpText[ spanish ] = "�ngulo de rotaci�n";
@@ -2224,6 +2224,44 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ slovak ] = "Umiestnenie a veľkosť";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
