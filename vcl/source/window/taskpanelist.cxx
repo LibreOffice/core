@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-23 09:43:15 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 14:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
-                if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() )
+                if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() && (*p)->GetParent()->HasChildPathFocus() )
                 {
                     pWindow = *p;
                     break;
