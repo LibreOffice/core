@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:18:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public final class NativeLibraryLoader_Test extends ComplexTestCase {
-    public String getTestObjectName() {
-        return getClass().getName();
-    }
-
     public String[] getTestMethodNames() {
-        return new String[] { "test" };
+        return new String[] { "testEncoded", "testUnencoded" };
     }
 
-    public void test() throws MalformedURLException {
+    public void testEncoded() throws MalformedURLException {
         File dir = new File(System.getProperty("user.dir"));
         File subdir = new File(dir, "with space");
         File file1 = new File(subdir, "file");
@@ -85,6 +81,28 @@ public final class NativeLibraryLoader_Test extends ComplexTestCase {
             fileUrl += "/";
         }
         fileUrl += "with%20space/file";
+        final URL url = new URL(fileUrl);
+
+        File file2 = NativeLibraryLoader.getResource(
+            new ClassLoader() {
+                public URL getResource(String name) {
+                    return url;
+                }
+            },
+            "dummy");
+        assure("Files are equal", file2.equals(file1));
+    }
+
+    public void testUnencoded() throws MalformedURLException {
+        File dir = new File(System.getProperty("user.dir"));
+        File subdir = new File(dir, "with space");
+        File file1 = new File(subdir, "file");
+
+        String fileUrl = dir.toURL().toString();
+        if (!fileUrl.endsWith("/")) {
+            fileUrl += "/";
+        }
+        fileUrl += "with space/file";
         final URL url = new URL(fileUrl);
 
         File file2 = NativeLibraryLoader.getResource(
