@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -158,6 +155,9 @@
 #ifndef _SV_POLY_HXX //autogen
 #include <vcl/poly.hxx>
 #endif
+#ifndef _SWUNDO_HXX //autogen
+#include <swundo.hxx>
+#endif
 #ifndef SW_UNOMID_HXX
 #include <unomid.h>
 #endif
@@ -232,6 +232,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -684,7 +687,9 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
 
 class SwFrameProperties_Impl : public BaseFrameProperties_Impl
 {
-
+protected:
+    SwFrameProperties_Impl(const SfxItemPropertyMap* pMap) :
+        BaseFrameProperties_Impl(pMap){}
 public:
     SwFrameProperties_Impl();
     ~SwFrameProperties_Impl(){}
@@ -857,7 +862,33 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
 
     return bRet;
 }
+/* -----------------4/1/2003 13:54-------------------
 
+ --------------------------------------------------*/
+
+class SwOLEProperties_Impl : public SwFrameProperties_Impl
+{
+public:
+    SwOLEProperties_Impl() :
+        SwFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT) ){}
+    ~SwOLEProperties_Impl(){}
+
+    virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
+};
+/* -----------------4/1/2003 15:32-------------------
+
+ --------------------------------------------------*/
+
+sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
+        SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound)
+{
+    uno::Any* pCLSID;
+    if(!GetProperty(FN_UNO_CLSID, 0, pCLSID))
+        return FALSE;
+    SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
+    //
+    return TRUE;
+}
 
 /******************************************************************
  *  SwXFrame
@@ -975,6 +1006,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc 
             Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
             aAny >>= mxStyleData;
             pProps = 0;
+            pProps = new SwOLEProperties_Impl( );
         }
         break;
     }
@@ -1425,6 +1457,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
+            else if(FN_UNO_CLSID == pCur->nWID)
+            {
+                throw lang::IllegalArgumentException();
+            }
             else
                 pFmt->SetAttr(aSet);
         }
@@ -1600,6 +1636,40 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             {
                 aAny <<= (sal_Int32)pObj->GetOrdNum();
             }
+        }
+        else if(FN_UNO_CLSID == pCur->nWID || FN_UNO_MODEL == pCur->nWID||
+                FN_UNO_COMPONENT == pCur->nWID)
+        {
+            SwDoc* pDoc = pFmt->GetDoc();
+            const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
+            DBG_ASSERT( pCnt->GetCntntIdx() &&
+                           pDoc->GetNodes()[ pCnt->GetCntntIdx()->
+                                            GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?")
+
+            SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
+                                            ->GetIndex() + 1 ]->GetOLENode();
+            SvInPlaceObjectRef xIP( pOleNode->GetOLEObj().GetOleRef() );
+            OUString aHexCLSID;
+            if(xIP.Is())
+            {
+                SvOutPlaceObjectRef xOut(xIP);
+                SvGlobalName aClassName = xOut.Is() ? xOut->GetObjectCLSID() : xIP->GetClassName();
+                aHexCLSID = aClassName.GetHexName();
+                if(FN_UNO_CLSID != pCur->nWID)
+                {
+                    SfxInPlaceObjectRef xIPO( xIP );
+                    SfxObjectShell* pShell = xIPO.Is() ? xIPO->GetObjectShell() : 0;
+                    //in both cases the XModel is returned for internal components
+                    //external components provide their XComponent for
+                    //the "Component" property, only
+                    if( pShell )
+                        aAny <<= pShell->GetModel();
+                    else if(xOut.Is() && FN_UNO_COMPONENT == pCur->nWID)
+                         aAny <<= xOut->GetUnoComponent();
+                }
+            }
+            if(FN_UNO_CLSID == pCur->nWID)
+                aAny <<= aHexCLSID;
         }
         else
         {
@@ -2095,8 +2165,74 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         }
         else
         {
-            DBG_ERROR("EmbeddedObject: not implemented")
-            throw RuntimeException();
+            uno::Any* pCLSID;
+            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID))
+                throw RuntimeException();
+            OUString aCLSID;
+            SvGlobalName aClassName;
+            SvInPlaceObjectRef xIPObj;
+            if( (*pCLSID) >>= aCLSID )
+            {
+                sal_Bool bInternal = sal_True;
+                if( !aClassName.MakeId( aCLSID ) )
+                {
+                    IllegalArgumentException aExcept;
+                    aExcept.Message = OUString::createFromAscii("CLSID invalid");
+                    throw aExcept;
+                }
+                const SotFactory* pFact = SvFactory::Find( aClassName );
+                if ( pFact )
+                {
+                    SvStorageRef aStor = new SvStorage( aEmptyStr );
+                    xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor );
+                }
+                else
+                {
+                    SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
+                    String aFileName;
+                    BOOL bOk;
+                    xIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aClassName, aFileName );
+                }
+            }
+            if ( xIPObj.Is() )
+            {
+                if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->GetPrt() )
+                    xIPObj->OnDocumentPrinterChanged( pDoc->GetPrt() );
+
+                UnoActionContext aAction(pDoc);
+                pDoc->StartUndo(UNDO_INSERT);
+                ULONG lDummy;
+                String aDummy;
+                // determine source CLSID
+                xIPObj->SvPseudoObject::FillClass( &aClassName, &lDummy, &aDummy, &aDummy, &aDummy);
+
+                if(!bSizeFound)
+                {
+                    //The Size should be suggested by the OLE server if not manually set
+                    MapMode aRefMap( xIPObj->GetMapUnit() );
+                    Size aSz( xIPObj->GetVisArea().GetSize() );
+                    if ( !aSz.Width() || !aSz.Height() )
+                    {
+                        aSz.Width() = aSz.Height() = 5000;
+                        aSz = OutputDevice::LogicToLogic
+                                                ( aSz, MapMode( MAP_100TH_MM ), aRefMap );
+                    }
+                    MapMode aMyMap( MAP_TWIP );
+                    aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
+                    SwFmtFrmSize aFrmSz;
+                    aFrmSz.SetSize(aSz);
+                    aFrmSet.Put(aFrmSz);
+                }
+                SwFlyFrmFmt* pFmt = 0;
+
+                pFmt = pDoc->Insert(aPam, &xIPObj, &aFrmSet );
+                ASSERT( pFmt, "Doc->Insert(notxt) failed." );
+
+                pDoc->EndUndo(UNDO_INSERT);
+                pFmt->Add(this);
+                if(sName.Len())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
+            }
         }
 
         if( pFmt && pDoc->GetDrawModel() )
