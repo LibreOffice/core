@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jumpmatrix.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $  $Date: 2004-03-08 11:45:55 $
+ *  last change: $Author: obo $  $Date: 2004-06-04 10:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@ class ScJumpMatrix
             ScJumpMatrixEntry*  pJump;      // the jumps
             ScMatrixRef         pMat;       // the results
             ScTokenVec*         pParams;    // parameter stack
-            USHORT              nCols;
-            USHORT              nRows;
-            USHORT              nCurCol;
-            USHORT              nCurRow;
+            SCSIZE              nCols;
+            SCSIZE              nRows;
+            SCSIZE              nCurCol;
+            SCSIZE              nCurRow;
             bool                bStarted;
 
                                 // not implemented, prevent usage
@@ -119,7 +119,7 @@ class ScJumpMatrix
             ScJumpMatrix&       operator=( const ScJumpMatrix& );
 
 public:
-                                ScJumpMatrix( USHORT nColsP, USHORT nRowsP )
+                                ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP )
                                         : pJump( new ScJumpMatrixEntry[ nColsP * nRowsP ] )
                                         , pMat( new ScMatrix( nColsP, nRowsP) )
                                         , pParams( NULL )
@@ -151,19 +151,19 @@ public:
                                         }
                                         delete [] pJump;
                                     }
-            void                GetDimensions( USHORT& rCols, USHORT& rRows ) const
+            void                GetDimensions( SCSIZE& rCols, SCSIZE& rRows ) const
                                     {
                                         rCols = nCols;
                                         rRows = nRows;
                                     }
-            void                SetJump( USHORT nCol, USHORT nRow, double fBool,
+            void                SetJump( SCSIZE nCol, SCSIZE nRow, double fBool,
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
                                         pJump[ (ULONG)nCol * nRows + nRow ].
                                             SetJump( fBool, nStart, nNext, nStop);
                                     }
-            void                GetJump( USHORT nCol, USHORT nRow, double& rBool,
+            void                GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool,
                                             short& rStart, short& rNext,
                                             short& rStop ) const
                                     {
@@ -185,12 +185,12 @@ public:
                                     { pParams = p; }
             const ScTokenVec*   GetJumpParameters() const { return pParams; }
             ScMatrix*           GetResultMatrix() const { return pMat; }
-            void                GetPos( USHORT& rCol, USHORT& rRow ) const
+            void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
                                     {
                                         rCol = nCurCol;
                                         rRow = nCurRow;
                                     }
-            bool                Next( USHORT& rCol, USHORT& rRow )
+            bool                Next( SCSIZE& rCol, SCSIZE& rRow )
                                     {
                                         if ( !bStarted )
                                         {
