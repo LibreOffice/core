@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleFontMetric.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:51:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** describes the general metrics of a certain font.
  */
-struct SimpleFontMetric
+published struct SimpleFontMetric
 {
     /** specifies the portion of a lower case character that
         rises above the height of the character "x" of the font.
