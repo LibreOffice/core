@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:04:51 $
+#   last change: $Author: obo $ $Date: 2005-03-15 08:52:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,9 @@ PRJ=..
 
 PRJNAME=tools
 TARGET=bootstrp
+TARGET1=bootstrp2
 TARGETTYPE=CUI
-#NO_DEFAULT_STL=TRUE
-
+LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -86,8 +86,8 @@ OBJFILES= \
           $(OBJ)$/cppdep.obj\
           $(OBJ)$/inimgr.obj\
           $(OBJ)$/mkcreate.obj \
-          $(OBJ)$/prj.obj \
-          $(OBJ)$/sstring.obj
+          $(OBJ)$/sstring.obj \
+          $(OBJ)$/prj.obj
 
 SLOFILES= \
           $(SLO)$/appdef.obj \
@@ -95,26 +95,33 @@ SLOFILES= \
           $(SLO)$/cppdep.obj \
           $(SLO)$/inimgr.obj \
           $(SLO)$/mkcreate.obj \
-          $(SLO)$/prj.obj \
-          $(SLO)$/sstring.obj
+          $(SLO)$/sstring.obj \
+          $(SLO)$/prj.obj
 
-LIB1TARGET= $(LB)$/btstrp.lib
-LIB1ARCHIV= $(LB)$/libbtstrp.a
-LIB1FILES=  $(LB)$/bootstrp.lib
 
-LIB2TARGET= $(SLB)$/btstrpsh.lib
-LIB2ARCHIV= $(SLB)$/libbtstrpsh.a
-LIB2FILES=  $(SLB)$/bootstrp.lib
+LIB1TARGET= $(LB)$/$(TARGET).lib
+LIB1ARCHIV= $(LB)$/lib$(TARGET).a
+LIB1OBJFILES=\
+          $(OBJ)$/appdef.obj \
+          $(OBJ)$/command.obj \
+          $(OBJ)$/cppdep.obj \
+          $(OBJ)$/inimgr.obj \
+          $(OBJ)$/mkcreate.obj \
+          $(OBJ)$/sstring.obj
+
+LIB2TARGET= $(LB)$/$(TARGET1).lib
+LIB2ARCHIV= $(LB)$/lib$(TARGET1).a
+LIB2OBJFILES=\
+        $(OBJ)$/prj.obj
 
 APP1TARGET= sspretty
-APP1OBJS=	$(OBJ)$/sspretty.obj
-APP1LIBS=	$(LB)$/bootstrp.lib
-APP1STDLIBS=$(STATIC_LIBS) 
-APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
+APP1OBJS=   $(OBJ)$/sspretty.obj
+APP1LIBS=   $(LB)$/$(TARGET).lib $(LB)$/$(TARGET1).lib
+APP1STDLIBS=$(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 APP2TARGET= rscdep
 APP2OBJS=	$(OBJ)$/rscdep.obj
-APP2LIBS=	$(LB)$/bootstrp.lib
+APP2LIBS=   $(LB)$/$(TARGET).lib $(LB)$/$(TARGET1).lib
 APP2STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 APP3TARGET=  so_checksum
