@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_INS_FOOTNOTE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 145 , 100 ) ;
+    Size = MAP_APPFONT ( 160 , 100 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Fußnote einfügen : Fu˜note einf³gen */
     Text = "Fußnote einfügen" ;
     Text [ ENGLISH ] = "Insert footnote" ;
@@ -87,7 +87,7 @@ ModalDialog DLG_INS_FOOTNOTE
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 27 ) ;
+        Pos = MAP_APPFONT ( 69 , 27 ) ;
         Size = MAP_APPFONT ( 23 , 12 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -95,7 +95,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     OKButton BT_OK
     {
-        Pos = MAP_APPFONT ( 89 , 6 ) ;
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -103,21 +103,21 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 89 , 23 ) ;
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
     };
     HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT ( 89 , 43 ) ;
+        Pos = MAP_APPFONT ( 104 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
     };
     ImageButton BT_PREV
     {
-        Pos = MAP_APPFONT ( 89 , 82 ) ;
+        Pos = MAP_APPFONT ( 104 , 82 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -125,7 +125,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     ImageButton BT_NEXT
     {
-        Pos = MAP_APPFONT ( 115 , 82 ) ;
+        Pos = MAP_APPFONT ( 130 , 82 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -134,7 +134,7 @@ ModalDialog DLG_INS_FOOTNOTE
     RadioButton RB_NUMBER_AUTO
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
@@ -170,7 +170,7 @@ ModalDialog DLG_INS_FOOTNOTE
     RadioButton RB_NUMBER_CHAR
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "~Zeichen" ;
         Text [ ENGLISH ] = "~Char" ;
         Text [ norwegian ] = "~Tegn" ;
@@ -203,7 +203,7 @@ ModalDialog DLG_INS_FOOTNOTE
     FixedLine FL_NUMBER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 77 , 8 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Nummerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
         Text [ norwegian ] = "Nummering" ;
@@ -235,14 +235,14 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     PushButton BT_NUMBER_CHAR
     {
-        Pos = MAP_APPFONT ( 54 , 42 ) ;
+        Pos = MAP_APPFONT ( 69 , 42 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
     };
     RadioButton RB_TYPE_FTN
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
-        Size = MAP_APPFONT ( 64 , 10 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "~Fußnote" ;
         Text [ ENGLISH ] = "~Footnote" ;
         TabStop = TRUE ;
@@ -277,7 +277,7 @@ ModalDialog DLG_INS_FOOTNOTE
     RadioButton RB_TYPE_ENDNOTE
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 64 , 10 ) ;
+        Size = MAP_APPFONT ( 79 , 10 ) ;
         Text = "~Endnote" ;
         Text [ ENGLISH ] = "~Endnote" ;
         Text [ portuguese ] = "~Nota final" ;
@@ -309,7 +309,7 @@ ModalDialog DLG_INS_FOOTNOTE
     FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
-        Size = MAP_APPFONT ( 77 , 8 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ english_us ] = "Type" ;
