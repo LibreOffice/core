@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:29:28 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,6 +1896,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
         case EXC_OBJ_CMO_CHART:
             ReplaceEscherObj( new XclImpEscherChart( *pEscherObj ) );
         break;
+        case EXC_OBJ_CMO_EDIT:          // only in dialogs
         case EXC_OBJ_CMO_DIALOG:        // not supported in Calc
         case EXC_OBJ_CMO_SPIN:          // not supported in Calc
         case EXC_OBJ_CMO_SCROLLBAR:     // not supported in Calc
