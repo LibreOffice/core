@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-12 12:53:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kso $ $Date: 2001-07-12 12:53:38 $ $Revision: 1.14 $
+// $Author: kz $ $Date: 2001-07-17 20:11:17 $ $Revision: 1.15 $
 //============================================================================
 
 #define __RSC
@@ -186,24 +186,104 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Die auf $(ARG1) ausgef¸hrte Aktion wurde abgebrochen" ;
         Text [ ENGLISH ] = "The operation executed on $(ARG1) was aborted" ;
+        Text[ english_us ] = "The operation executed on $(ARG1) was aborted";
+        Text[ portuguese ] = "The operation executed on $(ARG1) was aborted";
+        Text[ russian ] = "The operation executed on $(ARG1) was aborted";
+        Text[ greek ] = "The operation executed on $(ARG1) was aborted";
+        Text[ dutch ] = "The operation executed on $(ARG1) was aborted";
+        Text[ french ] = "The operation executed on $(ARG1) was aborted";
+        Text[ spanish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ finnish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ italian ] = "The operation executed on $(ARG1) was aborted";
+        Text[ danish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ swedish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ polish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ portuguese_brazilian ] = "The operation executed on $(ARG1) was aborted";
+        Text[ japanese ] = "$(ARG1) Ç≈é¿çsÇµÇΩ±∏ºÆ›ÇÕíÜé~Ç≥ÇÍÇ‹ÇµÇΩÅB";
+        Text[ korean ] = "The operation executed on $(ARG1) was aborted";
+        Text[ chinese_simplified ] = "“—æ≠»°œ˚÷¥–– $(ARG1) µƒ≤Ÿ◊˜°£";
+        Text[ chinese_traditional ] = "The operation executed on $(ARG1) was aborted";
+        Text[ turkish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ arabic ] = "The operation executed on $(ARG1) was aborted";
+        Text[ catalan ] = "The operation executed on $(ARG1) was aborted";
     };
     // IOErrorCode_ACCESS_DENIED = 1,
     String ( ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK )
     {
         Text = "Der Zugriff auf $(ARG1) wurde verweigert" ;
         Text [ ENGLISH ] = "The access to $(ARG1) was denied" ;
+        Text[ english_us ] = "Access to $(ARG1) was denied";
+        Text[ portuguese ] = "The access to $(ARG1) was denied";
+        Text[ russian ] = "The access to $(ARG1) was denied";
+        Text[ greek ] = "The access to $(ARG1) was denied";
+        Text[ dutch ] = "The access to $(ARG1) was denied";
+        Text[ french ] = "The access to $(ARG1) was denied";
+        Text[ spanish ] = "The access to $(ARG1) was denied";
+        Text[ finnish ] = "The access to $(ARG1) was denied";
+        Text[ italian ] = "The access to $(ARG1) was denied";
+        Text[ danish ] = "The access to $(ARG1) was denied";
+        Text[ swedish ] = "≈tkomst till $(ARG1) nekad";
+        Text[ polish ] = "The access to $(ARG1) was denied";
+        Text[ portuguese_brazilian ] = "The access to $(ARG1) was denied";
+        Text[ japanese ] = "$(ARG1) Ç÷ÇÃ±∏æΩÇÕãëî€Ç≥ÇÍÇ‹ÇµÇΩÅB";
+        Text[ korean ] = "The access to $(ARG1) was denied";
+        Text[ chinese_simplified ] = "“—æ≠æ‹æ¯∂¡»° $(ARG1) °£";
+        Text[ chinese_traditional ] = "The access to $(ARG1) was denied";
+        Text[ turkish ] = "The access to $(ARG1) was denied";
+        Text[ arabic ] = "The access to $(ARG1) was denied";
+        Text[ catalan ] = "The access to $(ARG1) was denied";
     };
     // IOErrorCode_ALREADY_EXISTING = 2,
     String ( ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) existiert bereits" ;
         Text [ ENGLISH ] = "$(ARG1) does already exist" ;
+        Text[ english_us ] = "$(ARG1) already exists";
+        Text[ portuguese ] = "$(ARG1) does already exist";
+        Text[ russian ] = "$(ARG1) does already exist";
+        Text[ greek ] = "$(ARG1) does already exist";
+        Text[ dutch ] = "$(ARG1) does already exist";
+        Text[ french ] = "$(ARG1) does already exist";
+        Text[ spanish ] = "$(ARG1) does already exist";
+        Text[ finnish ] = "$(ARG1) does already exist";
+        Text[ italian ] = "$(ARG1) does already exist";
+        Text[ danish ] = "$(ARG1) does already exist";
+        Text[ swedish ] = "$(ARG1) finns redan";
+        Text[ polish ] = "$(ARG1) does already exist";
+        Text[ portuguese_brazilian ] = "$(ARG1) does already exist";
+        Text[ japanese ] = "$(ARG1) ÇÕÇ∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅB";
+        Text[ korean ] = "$(ARG1) does already exist";
+        Text[ chinese_simplified ] = "$(ARG1) “—æ≠¥Ê‘⁄°£";
+        Text[ chinese_traditional ] = "$(ARG1) does already exist";
+        Text[ turkish ] = "$(ARG1) does already exist";
+        Text[ arabic ] = "$(ARG1) does already exist";
+        Text[ catalan ] = "$(ARG1) does already exist";
     };
     // IOErrorCode_BAD_CRC = 3,
     String ( ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK )
     {
         Text = "Die Daten von $(ARG1) haben eine inkorrekte Pr¸fsumme" ;
         Text [ english ] = "The data of $(ARG1) have an incorrect checksum" ;
+        Text[ english_us ] = "The data from $(ARG1) has an incorrect checksum";
+        Text[ portuguese ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ russian ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ greek ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ dutch ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ french ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ spanish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ finnish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ italian ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ danish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ swedish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ polish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ portuguese_brazilian ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ japanese ] = "$(ARG1) ÇÃ√ﬁ∞¿ÇÕ¡™Ø∏ª—Ç™ê≥ÇµÇ≠Ç†ÇËÇ‹ÇπÇÒÅB";
+        Text[ korean ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ chinese_simplified ] = "$(ARG1)  ˝æ›µƒºÏ—È ˝ƒø≤ª’˝»∑°£";
+        Text[ chinese_traditional ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ turkish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ arabic ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ catalan ] = "The data of $(ARG1) have an incorrect checksum";
     };
     // IOErrorCode_CANT_CREATE = 4,
     String ( ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK )
@@ -211,191 +291,832 @@ Resource RID_UUI_ERRHDL
         // !!! $(ARG1) can be empty!
         Text = "Das Objekt $(ARG1) kann im Verzeichnis $(ARG2) nicht angelegt werden" ;
         Text [ ENGLISH ] = "The object $(ARG1) could not be created in directory $(ARG2)" ;
+        Text[ english_us ] = "The object $(ARG1) cannot be created in directory $(ARG2)";
+        Text[ portuguese ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ russian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ greek ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ dutch ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ french ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ spanish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ finnish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ italian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ danish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ swedish ] = "Det gÂr inte att skapa objektet $(ARG1) i katalogen $(ARG2)";
+        Text[ polish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ portuguese_brazilian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ japanese ] = "µÃﬁºﬁ™∏ƒ $(ARG1) ÇÕÃ´Ÿ¿ﬁ $(ARG2) Ç…äiî[Ç≈Ç´Ç‹ÇπÇÒÅB";
+        Text[ korean ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ chinese_simplified ] = "Œﬁ∑®‘⁄ƒø¬º $(ARG2) ƒ⁄–¬Ω®∂‘œÛ $(ARG1) °£";
+        Text[ chinese_traditional ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ turkish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ arabic ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ catalan ] = "The object $(ARG1) could not be created in directory $(ARG2)";
     };
     // IOErrorCode_CANT_READ = 5,
     String ( ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK )
     {
         Text = "Daten von $(ARG1) konnten nicht gelesen werden" ;
         Text [ ENGLISH ] = "Data of $(ARG1) could not be read" ;
+        Text[ english_us ] = "Data of $(ARG1) could not be read";
+        Text[ portuguese ] = "Data of $(ARG1) could not be read";
+        Text[ russian ] = "Data of $(ARG1) could not be read";
+        Text[ greek ] = "Data of $(ARG1) could not be read";
+        Text[ dutch ] = "Data of $(ARG1) could not be read";
+        Text[ french ] = "Data of $(ARG1) could not be read";
+        Text[ spanish ] = "Data of $(ARG1) could not be read";
+        Text[ finnish ] = "Data of $(ARG1) could not be read";
+        Text[ italian ] = "Data of $(ARG1) could not be read";
+        Text[ danish ] = "Data of $(ARG1) could not be read";
+        Text[ swedish ] = "Det gick inte att l‰sa data frÂn $(ARG1)";
+        Text[ polish ] = "Data of $(ARG1) could not be read";
+        Text[ portuguese_brazilian ] = "Data of $(ARG1) could not be read";
+        Text[ japanese ] = "$(ARG1) ÇÃ√ﬁ∞¿ÇÕì«Ç›éÊÇÍÇ‹ÇπÇÒÇ≈ÇµÇΩÅB";
+        Text[ korean ] = "Data of $(ARG1) could not be read";
+        Text[ chinese_simplified ] = "Œﬁ∑®∂¡»° ˝æ› $(ARG1) °£";
+        Text[ chinese_traditional ] = "Data of $(ARG1) could not be read";
+        Text[ turkish ] = "Data of $(ARG1) could not be read";
+        Text[ arabic ] = "Data of $(ARG1) could not be read";
+        Text[ catalan ] = "Data of $(ARG1) could not be read";
     };
     // IOErrorCode_CANT_SEEK = 6,
     String ( ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK )
     {
         Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgef¸hrt werden" ;
         Text [ ENGLISH ] = "The seek operation on $(ARG1) could not be completed" ;
+        Text[ english_us ] = "The seek operation on $(ARG1) could not be performed";
+        Text[ portuguese ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ russian ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ greek ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ dutch ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ french ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ spanish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ finnish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ italian ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ danish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ swedish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ polish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ portuguese_brazilian ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ japanese ] = "$(ARG1) Ç÷ÇÃ seek ëÄçÏÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
+        Text[ korean ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ chinese_simplified ] = "$(ARG1) µƒ seek √¸¡ÓŒﬁ∑®ÕÍ≥…÷¥––°£";
+        Text[ chinese_traditional ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ turkish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ arabic ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ catalan ] = "The seek operation on $(ARG1) could not be completed";
     };
     // IOErrorCode_CANT_TELL = 7,
     String ( ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK )
     {
         Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgef¸hrt werden" ;
         Text [ ENGLISH ] = "The tell operation on $(ARG1) could not be completed" ;
+        Text[ english_us ] = "The tell operation on $(ARG1) could not be performed";
+        Text[ portuguese ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ russian ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ greek ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ dutch ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ french ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ spanish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ finnish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ italian ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ danish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ swedish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ polish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ portuguese_brazilian ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ japanese ] = "$(ARG1) Ç÷ÇÃ tell ëÄçÏÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
+        Text[ korean ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ chinese_simplified ] = "$(ARG1) µƒ tell √¸¡ÓŒﬁ∑®ÕÍ≥…÷¥––°£";
+        Text[ chinese_traditional ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ turkish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ arabic ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ catalan ] = "The tell operation on $(ARG1) could not be completed";
     };
     // IOErrorCode_CANT_WRITE = 8,
     String ( ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK )
     {
         Text = "Daten f¸r $(ARG1) konnten nicht geschrieben werden" ;
         Text [ ENGLISH ] = "Data for $(ARG1) could not be written" ;
+        Text[ english_us ] = "Data for $(ARG1) could not be written";
+        Text[ portuguese ] = "Data for $(ARG1) could not be written";
+        Text[ russian ] = "Data for $(ARG1) could not be written";
+        Text[ greek ] = "Data for $(ARG1) could not be written";
+        Text[ dutch ] = "Data for $(ARG1) could not be written";
+        Text[ french ] = "Data for $(ARG1) could not be written";
+        Text[ spanish ] = "Data for $(ARG1) could not be written";
+        Text[ finnish ] = "Data for $(ARG1) could not be written";
+        Text[ italian ] = "Data for $(ARG1) could not be written";
+        Text[ danish ] = "Data for $(ARG1) could not be written";
+        Text[ swedish ] = "Data for $(ARG1) could not be written";
+        Text[ polish ] = "Data for $(ARG1) could not be written";
+        Text[ portuguese_brazilian ] = "Data for $(ARG1) could not be written";
+        Text[ japanese ] = "$(ARG1) ÇÃ√ﬁ∞¿ÇÕèëÇ´çûÇ›Ç≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
+        Text[ korean ] = "Data for $(ARG1) could not be written";
+        Text[ chinese_simplified ] = "Œﬁ∑®∏ƒ–¥ $(ARG1) µƒ ˝æ›°£";
+        Text[ chinese_traditional ] = "Data for $(ARG1) could not be written";
+        Text[ turkish ] = "Data for $(ARG1) could not be written";
+        Text[ arabic ] = "Data for $(ARG1) could not be written";
+        Text[ catalan ] = "Data for $(ARG1) could not be written";
     };
     // IOErrorCode_CURRENT_DIRECTORY = 9,
     String ( ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK )
     {
         Text = "Aktion unmˆglich: $(ARG1) ist das aktuelle Verzeichnis" ;
         Text [ english ] = "Action not allowed: $(ARG1) is the current directory" ;
+        Text[ english_us ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ portuguese ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ russian ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ greek ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ dutch ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ french ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ spanish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ finnish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ italian ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ danish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ swedish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ polish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ japanese ] = "±∏ºÆ›Ç≈Ç´Ç‹ÇπÇÒ: $(ARG1) ÇÕåªç›ÇÃ√ﬁ®⁄∏ƒÿÇ≈Ç∑ÅB";
+        Text[ korean ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ chinese_simplified ] = "Œﬁ∑®÷¥––£∫$(ARG1)  «µ±«∞µƒƒø¬º°£";
+        Text[ chinese_traditional ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ turkish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ arabic ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ catalan ] = "Action not allowed: $(ARG1) is the current directory";
     };
     // IOErrorCode_DEVICE_NOT_READY = 10,
     String ( ERRCODE_UUI_IO_DEVICENOTREADY & ERRCODE_RES_MASK )
     {
         Text = "Das Ger‰t (Laufwerk) $(ARG1) ist nicht bereit" ;
         Text [ english ] = "The Device (drive) $(ARG1) is not ready" ;
+        Text[ english_us ] = "The device (drive) $(ARG1) is not ready";
+        Text[ portuguese ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ russian ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ greek ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ dutch ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ french ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ spanish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ finnish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ italian ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ danish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ swedish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ polish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ portuguese_brazilian ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ japanese ] = "√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ) $(ARG1) ÇÃèÄîıÇ™Ç≈Ç´ÇƒÇ¢Ç‹ÇπÇÒÅB";
+        Text[ korean ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ chinese_simplified ] = "”≤≈Ã $(ARG1) …–Œ¥◊º±∏æÕ–˜°£";
+        Text[ chinese_traditional ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ turkish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ arabic ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ catalan ] = "The Device (drive) $(ARG1) is not ready";
     };
     // IOErrorCode_DIFFERENT_DEVICES = 11,
     String ( ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK )
     {
         Text = "Aktion unmˆglich: $(ARG1) und $(ARG2) sind verschiedene Ger‰te (Laufwerke)" ;
         Text [ english ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)" ;
+        Text[ english_us ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ portuguese ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ russian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ greek ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ dutch ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ french ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ spanish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ finnish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ italian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ danish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ swedish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ polish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ japanese ] = "±∏ºÆ›Ç≈Ç´Ç‹ÇπÇÒ: $(ARG1) Ç∆ $(ARG2) ÇÕàŸÇ»Ç¡ÇΩ√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ)Ç≈Ç∑ÅB";
+        Text[ korean ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ chinese_simplified ] = "Œﬁ∑®÷¥––≤Ÿ◊˜£∫$(ARG1) ∫Õ $(ARG2)  «≤ªÕ¨µƒ”≤≈Ã°£";
+        Text[ chinese_traditional ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ turkish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ arabic ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ catalan ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
     };
     // IOErrorCode_GENERAL = 12,
     String ( ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK )
     {
         Text = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(ARG1)" ;
         Text [ ENGLISH ] = "General input/output error while accessing $(ARG1)" ;
+        Text[ english_us ] = "General input/output error while accessing $(ARG1)";
+        Text[ portuguese ] = "General input/output error while accessing $(ARG1)";
+        Text[ russian ] = "General input/output error while accessing $(ARG1)";
+        Text[ greek ] = "General input/output error while accessing $(ARG1)";
+        Text[ dutch ] = "General input/output error while accessing $(ARG1)";
+        Text[ french ] = "General input/output error while accessing $(ARG1)";
+        Text[ spanish ] = "General input/output error while accessing $(ARG1)";
+        Text[ finnish ] = "General input/output error while accessing $(ARG1)";
+        Text[ italian ] = "General input/output error while accessing $(ARG1)";
+        Text[ danish ] = "General input/output error while accessing $(ARG1)";
+        Text[ swedish ] = "Allm‰nt input/outputfel vid Âtkomst till $(ARG1)";
+        Text[ polish ] = "General input/output error while accessing $(ARG1)";
+        Text[ portuguese_brazilian ] = "General input/output error while accessing $(ARG1)";
+        Text[ japanese ] = "$(ARG1) Ç÷±∏æΩÇ∑ÇÈç€ÇÃàÍî ìIÇ»ì¸óÕ/èoóÕÇÃ¥◊∞ÅB";
+        Text[ korean ] = "General input/output error while accessing $(ARG1)";
+        Text[ chinese_simplified ] = "‘⁄∂¡»° $(ARG1)  ±∑¢…˙“ª∞„µƒ ‰»Î/ ‰≥ˆ¥ÌŒÛ";
+        Text[ chinese_traditional ] = "General input/output error while accessing $(ARG1)";
+        Text[ turkish ] = "General input/output error while accessing $(ARG1)";
+        Text[ arabic ] = "General input/output error while accessing $(ARG1)";
+        Text[ catalan ] = "General input/output error while accessing $(ARG1)";
     };
     // IOErrorCode_INVALID_ACCESS = 13,
     String ( ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK )
     {
         Text = "Es wurde versucht, in ung¸ltiger Weise auf $(ARG1) zuzugreifen" ;
         Text [ ENGLISH ] = "An invalid attempt was made to access $(ARG1)" ;
+        Text[ english_us ] = "An attempt was made to access $(ARG1) in an invalid way";
+        Text[ portuguese ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ russian ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ greek ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ dutch ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ french ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ spanish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ finnish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ italian ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ danish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ swedish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ polish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ portuguese_brazilian ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ japanese ] = "$(ARG1) Ç÷ÇÃñ≥å¯Ç»±∏æΩÇ™ééÇ›ÇÁÇÍÇ‹ÇµÇΩÅB";
+        Text[ korean ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ chinese_simplified ] = "≥¢ ‘”√Œﬁ–ßµƒ∑Ω Ω∂¡»° $(ARG1) °£";
+        Text[ chinese_traditional ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ turkish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ arabic ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ catalan ] = "An invalid attempt was made to access $(ARG1)";
     };
     // IOErrorCode_INVALID_CHARACTER = 14,
     String ( ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) enth‰lt unzul‰ssige Zeichen" ;
         Text [ ENGLISH ] = "$(ARG1) contains invalid characters" ;
+        Text[ english_us ] = "$(ARG1) contains invalid characters";
+        Text[ portuguese ] = "$(ARG1) contains invalid characters";
+        Text[ russian ] = "$(ARG1) contains invalid characters";
+        Text[ greek ] = "$(ARG1) contains invalid characters";
+        Text[ dutch ] = "$(ARG1) contains invalid characters";
+        Text[ french ] = "$(ARG1) contains invalid characters";
+        Text[ spanish ] = "$(ARG1) contains invalid characters";
+        Text[ finnish ] = "$(ARG1) contains invalid characters";
+        Text[ italian ] = "$(ARG1) contains invalid characters";
+        Text[ danish ] = "$(ARG1) contains invalid characters";
+        Text[ swedish ] = "$(ARG1) contains invalid characters";
+        Text[ polish ] = "$(ARG1) contains invalid characters";
+        Text[ portuguese_brazilian ] = "$(ARG1) contains invalid characters";
+        Text[ japanese ] = "$(ARG1) Ç…ñ≥å¯Ç»ï∂éöÇ™ä‹Ç‹ÇÍÇƒÇ¢Ç‹Ç∑ÅB";
+        Text[ korean ] = "$(ARG1) contains invalid characters";
+        Text[ chinese_simplified ] = "$(ARG1) ∫¨”–Œﬁ–ßµƒ◊÷∑˚°£";
+        Text[ chinese_traditional ] = "$(ARG1) contains invalid characters";
+        Text[ turkish ] = "$(ARG1) contains invalid characters";
+        Text[ arabic ] = "$(ARG1) contains invalid characters";
+        Text[ catalan ] = "$(ARG1) contains invalid characters";
     };
     // IOErrorCode_INVALID_DEVICE = 15,
     String ( ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK )
     {
         Text = "Das Ger‰t (Laufwerk) $(ARG1) ist ung¸ltig" ;
         Text [ ENGLISH ] = "The device (drive) $(ARG1) is invalid" ;
+        Text[ english_us ] = "The device (drive) $(ARG1) is invalid";
+        Text[ portuguese ] = "The device (drive) $(ARG1) is invalid";
+        Text[ russian ] = "The device (drive) $(ARG1) is invalid";
+        Text[ greek ] = "The device (drive) $(ARG1) is invalid";
+        Text[ dutch ] = "The device (drive) $(ARG1) is invalid";
+        Text[ french ] = "The device (drive) $(ARG1) is invalid";
+        Text[ spanish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ finnish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ italian ] = "The device (drive) $(ARG1) is invalid";
+        Text[ danish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ swedish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ polish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ portuguese_brazilian ] = "The device (drive) $(ARG1) is invalid";
+        Text[ japanese ] = "√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ) $(ARG1) ÇÕñ≥å¯Ç≈Ç∑ÅB";
+        Text[ korean ] = "The device (drive) $(ARG1) is invalid";
+        Text[ chinese_simplified ] = "’‚∏ˆ”≤≈Ã $(ARG1) Œﬁ–ß°£";
+        Text[ chinese_traditional ] = "The device (drive) $(ARG1) is invalid";
+        Text[ turkish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ arabic ] = "The device (drive) $(ARG1) is invalid";
+        Text[ catalan ] = "The device (drive) $(ARG1) is invalid";
     };
     // IOErrorCode_INVALID_LENGTH = 16,
     String ( ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK )
     {
         Text = "Die Daten von $(ARG1) haben eine ung¸ltige L‰nge" ;
         Text [ english ] = "The data of $(ARG1) have an invalid length" ;
+        Text[ english_us ] = "The data from $(ARG1) has an invalid length";
+        Text[ portuguese ] = "The data of $(ARG1) have an invalid length";
+        Text[ russian ] = "The data of $(ARG1) have an invalid length";
+        Text[ greek ] = "The data of $(ARG1) have an invalid length";
+        Text[ dutch ] = "The data of $(ARG1) have an invalid length";
+        Text[ french ] = "The data of $(ARG1) have an invalid length";
+        Text[ spanish ] = "The data of $(ARG1) have an invalid length";
+        Text[ finnish ] = "The data of $(ARG1) have an invalid length";
+        Text[ italian ] = "The data of $(ARG1) have an invalid length";
+        Text[ danish ] = "The data of $(ARG1) have an invalid length";
+        Text[ swedish ] = "The data of $(ARG1) have an invalid length";
+        Text[ polish ] = "The data of $(ARG1) have an invalid length";
+        Text[ portuguese_brazilian ] = "The data of $(ARG1) have an invalid length";
+        Text[ japanese ] = "The data of $(ARG1) have an invalid length";
+        Text[ korean ] = "The data of $(ARG1) have an invalid length";
+        Text[ chinese_simplified ] = "$(ARG1)  ˝æ›µƒ≥§∂»Œﬁ–ß°£";
+        Text[ chinese_traditional ] = "The data of $(ARG1) have an invalid length";
+        Text[ turkish ] = "The data of $(ARG1) have an invalid length";
+        Text[ arabic ] = "The data of $(ARG1) have an invalid length";
+        Text[ catalan ] = "The data of $(ARG1) have an invalid length";
     };
     // IOErrorCode_INVALID_PARAMETER = 17,
     String ( ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK )
     {
         Text = "Die Operation auf $(ARG1) wurde mit einem ung¸ltigen Parameter gestartet" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) was started with an invalid parameter" ;
+        Text[ english_us ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ portuguese ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ russian ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ greek ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ dutch ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ french ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ spanish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ finnish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ italian ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ danish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ swedish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ polish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ portuguese_brazilian ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ japanese ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ korean ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ chinese_simplified ] = "÷¥–– $(ARG1) √¸¡Ó ± π”√¡À“ª∏ˆŒﬁ–ßµƒ≤Œ ˝°£";
+        Text[ chinese_traditional ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ turkish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ arabic ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ catalan ] = "The operation on $(ARG1) was started with an invalid parameter";
     };
     // IOErrorCode_IS_WILDCARD = 18,
     String ( ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK )
     {
         Text = "Die Operation kann nicht ausgef¸hrt werden, weil $(ARG1) Wildcards enth‰lt";
         Text [ ENGLISH ] = "The operation cannot be run, because $(ARG1) contains wildcards" ;
+        Text[ english_us ] = "The operation cannot be run because $(ARG1) contains wildcards";
+        Text[ portuguese ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ russian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ greek ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ dutch ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ french ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ spanish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ finnish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ italian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ danish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ swedish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ polish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ portuguese_brazilian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ japanese ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ korean ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ chinese_simplified ] = "Œﬁ∑®÷¥––’‚∏ˆ√¸¡Ó£¨“ÚŒ™ $(ARG1) ∫¨”–Õ®≈‰∑˚°£";
+        Text[ chinese_traditional ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ turkish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ arabic ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ catalan ] = "The operation cannot be run, because $(ARG1) contains wildcards";
     };
     // IOErrorCode_LOCKING_VIOLATION = 19,
     String ( ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK )
     {
         Text = "Fehler beim gemeinsamen Zugriff auf $(ARG1)" ;
         Text [ ENGLISH ] = "Sharing violation while accessing $(ARG1)" ;
+        Text[ english_us ] = "Error during shared access to $(ARG1).";
+        Text[ portuguese ] = "Sharing violation while accessing $(ARG1)";
+        Text[ russian ] = "Sharing violation while accessing $(ARG1)";
+        Text[ greek ] = "Sharing violation while accessing $(ARG1)";
+        Text[ dutch ] = "Sharing violation while accessing $(ARG1)";
+        Text[ french ] = "Sharing violation while accessing $(ARG1)";
+        Text[ spanish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ finnish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ italian ] = "Sharing violation while accessing $(ARG1)";
+        Text[ danish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ swedish ] = "Fel vid gemensam Âtkomst till $(ARG1)";
+        Text[ polish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ portuguese_brazilian ] = "Sharing violation while accessing $(ARG1)";
+        Text[ japanese ] = "Sharing violation while accessing $(ARG1)";
+        Text[ korean ] = "Sharing violation while accessing $(ARG1)";
+        Text[ chinese_simplified ] = "π≤œÌ $(ARG1)  ±∑¢…˙∂¡»°¥ÌŒÛ°£";
+        Text[ chinese_traditional ] = "Sharing violation while accessing $(ARG1)";
+        Text[ turkish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ arabic ] = "Sharing violation while accessing $(ARG1)";
+        Text[ catalan ] = "Sharing violation while accessing $(ARG1)";
     };
     // IOErrorCode_MISPLACED_CHARACTER = 20,
     String ( ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) enth‰lt Zeichen an unzul‰ssiger Position" ;
         Text [ ENGLISH ] = "$(ARG1) contains misplaced characters" ;
+        Text[ english_us ] = "$(ARG1) contains misplaced characters";
+        Text[ portuguese ] = "$(ARG1) contains misplaced characters";
+        Text[ russian ] = "$(ARG1) contains misplaced characters";
+        Text[ greek ] = "$(ARG1) contains misplaced characters";
+        Text[ dutch ] = "$(ARG1) contains misplaced characters";
+        Text[ french ] = "$(ARG1) contains misplaced characters";
+        Text[ spanish ] = "$(ARG1) contains misplaced characters";
+        Text[ finnish ] = "$(ARG1) contains misplaced characters";
+        Text[ italian ] = "$(ARG1) contains misplaced characters";
+        Text[ danish ] = "$(ARG1) contains misplaced characters";
+        Text[ swedish ] = "$(ARG1) contains misplaced characters";
+        Text[ polish ] = "$(ARG1) contains misplaced characters";
+        Text[ portuguese_brazilian ] = "$(ARG1) contains misplaced characters";
+        Text[ japanese ] = "$(ARG1) contains misplaced characters";
+        Text[ korean ] = "$(ARG1) contains misplaced characters";
+        Text[ chinese_simplified ] = "$(ARG1) ∫¨”–“ª–©Œª÷√Œﬁ–ßµƒ◊÷∑˚°£";
+        Text[ chinese_traditional ] = "$(ARG1) contains misplaced characters";
+        Text[ turkish ] = "$(ARG1) contains misplaced characters";
+        Text[ arabic ] = "$(ARG1) contains misplaced characters";
+        Text[ catalan ] = "$(ARG1) contains misplaced characters";
     };
     // IOErrorCode_NAME_TOO_LONG = 21,
     String ( ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK )
     {
         Text = "Der Name $(ARG1) enth‰lt zu viele Zeichen" ;
         Text [ ENGLISH ] = "The name $(ARG1) contains to many characters" ;
+        Text[ english_us ] = "The name $(ARG1) contains too many characters";
+        Text[ portuguese ] = "The name $(ARG1) contains to many characters";
+        Text[ russian ] = "The name $(ARG1) contains to many characters";
+        Text[ greek ] = "The name $(ARG1) contains to many characters";
+        Text[ dutch ] = "The name $(ARG1) contains to many characters";
+        Text[ french ] = "The name $(ARG1) contains to many characters";
+        Text[ spanish ] = "The name $(ARG1) contains to many characters";
+        Text[ finnish ] = "The name $(ARG1) contains to many characters";
+        Text[ italian ] = "The name $(ARG1) contains to many characters";
+        Text[ danish ] = "The name $(ARG1) contains to many characters";
+        Text[ swedish ] = "The name $(ARG1) contains to many characters";
+        Text[ polish ] = "The name $(ARG1) contains to many characters";
+        Text[ portuguese_brazilian ] = "The name $(ARG1) contains to many characters";
+        Text[ japanese ] = "The name $(ARG1) contains to many characters";
+        Text[ korean ] = "The name $(ARG1) contains to many characters";
+        Text[ chinese_simplified ] = "√˚≥∆ $(ARG1) ∫¨”–Ã´∂‡µƒ◊÷∑˚°£";
+        Text[ chinese_traditional ] = "The name $(ARG1) contains to many characters";
+        Text[ turkish ] = "The name $(ARG1) contains to many characters";
+        Text[ arabic ] = "The name $(ARG1) contains to many characters";
+        Text[ catalan ] = "The name $(ARG1) contains to many characters";
     };
     // IOErrorCode_NOT_EXISTING = 22,
     String ( ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) existiert nicht" ;
         Text [ ENGLISH ] = "$(ARG1) does not exist" ;
+        Text[ english_us ] = "$(ARG1) does not exist";
+        Text[ portuguese ] = "$(ARG1) does not exist";
+        Text[ russian ] = "$(ARG1) does not exist";
+        Text[ greek ] = "$(ARG1) does not exist";
+        Text[ dutch ] = "$(ARG1) does not exist";
+        Text[ french ] = "$(ARG1) does not exist";
+        Text[ spanish ] = "$(ARG1) does not exist";
+        Text[ finnish ] = "$(ARG1) does not exist";
+        Text[ italian ] = "$(ARG1) does not exist";
+        Text[ danish ] = "$(ARG1) does not exist";
+        Text[ swedish ] = "$(ARG1) existerar inte";
+        Text[ polish ] = "$(ARG1) does not exist";
+        Text[ portuguese_brazilian ] = "$(ARG1) does not exist";
+        Text[ japanese ] = "$(ARG1) does not exist";
+        Text[ korean ] = "$(ARG1) does not exist";
+        Text[ chinese_simplified ] = "$(ARG1) ≤ª¥Ê‘⁄°£";
+        Text[ chinese_traditional ] = "$(ARG1) does not exist";
+        Text[ turkish ] = "$(ARG1) does not exist";
+        Text[ arabic ] = "$(ARG1) does not exist";
+        Text[ catalan ] = "$(ARG1) does not exist";
     };
     // IOErrorCode_NOT_EXISTING_PATH = 23,
     String ( ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK )
     {
         Text = "Der Pfad $(ARG1) existiert nicht" ;
         Text [ ENGLISH ] = "The path $(ARG1) does not exist" ;
+        Text[ english_us ] = "The path $(ARG1) does not exist";
+        Text[ portuguese ] = "The path $(ARG1) does not exist";
+        Text[ russian ] = "The path $(ARG1) does not exist";
+        Text[ greek ] = "The path $(ARG1) does not exist";
+        Text[ dutch ] = "The path $(ARG1) does not exist";
+        Text[ french ] = "The path $(ARG1) does not exist";
+        Text[ spanish ] = "The path $(ARG1) does not exist";
+        Text[ finnish ] = "The path $(ARG1) does not exist";
+        Text[ italian ] = "The path $(ARG1) does not exist";
+        Text[ danish ] = "The path $(ARG1) does not exist";
+        Text[ swedish ] = "Sˆkv‰gen $(ARG1) existerar inte";
+        Text[ polish ] = "The path $(ARG1) does not exist";
+        Text[ portuguese_brazilian ] = "The path $(ARG1) does not exist";
+        Text[ japanese ] = "The path $(ARG1) does not exist";
+        Text[ korean ] = "The path $(ARG1) does not exist";
+        Text[ chinese_simplified ] = "¬∑æ∂ $(ARG1) ≤ª¥Ê‘⁄°£";
+        Text[ chinese_traditional ] = "The path $(ARG1) does not exist";
+        Text[ turkish ] = "The path $(ARG1) does not exist";
+        Text[ arabic ] = "The path $(ARG1) does not exist";
+        Text[ catalan ] = "The path $(ARG1) does not exist";
     };
     // IOErrorCode_NOT_SUPPORTED = 24,
     String ( ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK )
     {
         Text = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterst¸tzt" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) is not supported on this operating system" ;
+        Text[ english_us ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ portuguese ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ russian ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ greek ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ dutch ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ french ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ spanish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ finnish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ italian ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ danish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ swedish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ polish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ portuguese_brazilian ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ japanese ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ korean ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ chinese_simplified ] = "’‚∏ˆ≤Ÿ◊˜œµÕ≥≤ª÷ß≥÷√¸¡Ó $(ARG1) °£";
+        Text[ chinese_traditional ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ turkish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ arabic ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ catalan ] = "The operation on $(ARG1) is not supported on this operating system";
     };
     // IOErrorCode_NO_DIRECTORY = 25,
     String ( ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) ist kein Verzeichnis" ;
         Text [ ENGLISH ] = "$(ARG1) is not a directory" ;
+        Text[ english_us ] = "$(ARG1) is not a directory";
+        Text[ portuguese ] = "$(ARG1) is not a directory";
+        Text[ russian ] = "$(ARG1) is not a directory";
+        Text[ greek ] = "$(ARG1) is not a directory";
+        Text[ dutch ] = "$(ARG1) is not a directory";
+        Text[ french ] = "$(ARG1) is not a directory";
+        Text[ spanish ] = "$(ARG1) is not a directory";
+        Text[ finnish ] = "$(ARG1) is not a directory";
+        Text[ italian ] = "$(ARG1) is not a directory";
+        Text[ danish ] = "$(ARG1) is not a directory";
+        Text[ swedish ] = "$(ARG1) ‰r ingen katalog";
+        Text[ polish ] = "$(ARG1) is not a directory";
+        Text[ portuguese_brazilian ] = "$(ARG1) is not a directory";
+        Text[ japanese ] = "$(ARG1) is not a directory";
+        Text[ korean ] = "$(ARG1) is not a directory";
+        Text[ chinese_simplified ] = "$(ARG1) ≤ª «“ª∏ˆƒø¬º°£";
+        Text[ chinese_traditional ] = "$(ARG1) is not a directory";
+        Text[ turkish ] = "$(ARG1) is not a directory";
+        Text[ arabic ] = "$(ARG1) is not a directory";
+        Text[ catalan ] = "$(ARG1) is not a directory";
     };
     // IOErrorCode_NO_FILE = 26,
     String ( ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) ist keine Datei" ;
         Text [ ENGLISH ] = "$(ARG1) is not a file" ;
+        Text[ english_us ] = "$(ARG1) is not a file";
+        Text[ portuguese ] = "$(ARG1) is not a file";
+        Text[ russian ] = "$(ARG1) is not a file";
+        Text[ greek ] = "$(ARG1) is not a file";
+        Text[ dutch ] = "$(ARG1) is not a file";
+        Text[ french ] = "$(ARG1) is not a file";
+        Text[ spanish ] = "$(ARG1) is not a file";
+        Text[ finnish ] = "$(ARG1) is not a file";
+        Text[ italian ] = "$(ARG1) is not a file";
+        Text[ danish ] = "$(ARG1) is not a file";
+        Text[ swedish ] = "$(ARG1) ‰r ingen fil";
+        Text[ polish ] = "$(ARG1) is not a file";
+        Text[ portuguese_brazilian ] = "$(ARG1) is not a file";
+        Text[ japanese ] = "$(ARG1) is not a file";
+        Text[ korean ] = "$(ARG1) is not a file";
+        Text[ chinese_simplified ] = "$(ARG1) ≤ª «“ª∏ˆŒƒº˛°£";
+        Text[ chinese_traditional ] = "$(ARG1) is not a file";
+        Text[ turkish ] = "$(ARG1) is not a file";
+        Text[ arabic ] = "$(ARG1) is not a file";
+        Text[ catalan ] = "$(ARG1) is not a file";
     };
     // IOErrorCode_OUT_OF_DISK_SPACE = 27,
     String ( ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK )
     {
         Text = "Auf dem Ger‰t $(ARG1) ist kein Platz mehr vorhanden" ;
         Text [ ENGLISH ] = "There was no space left on device $(ARG1)" ;
+        Text[ english_us ] = "There is no space left on device $(ARG1)";
+        Text[ portuguese ] = "There was no space left on device $(ARG1)";
+        Text[ russian ] = "There was no space left on device $(ARG1)";
+        Text[ greek ] = "There was no space left on device $(ARG1)";
+        Text[ dutch ] = "There was no space left on device $(ARG1)";
+        Text[ french ] = "There was no space left on device $(ARG1)";
+        Text[ spanish ] = "There was no space left on device $(ARG1)";
+        Text[ finnish ] = "There was no space left on device $(ARG1)";
+        Text[ italian ] = "There was no space left on device $(ARG1)";
+        Text[ danish ] = "There was no space left on device $(ARG1)";
+        Text[ swedish ] = "There was no space left on device $(ARG1)";
+        Text[ polish ] = "There was no space left on device $(ARG1)";
+        Text[ portuguese_brazilian ] = "There was no space left on device $(ARG1)";
+        Text[ japanese ] = "There was no space left on device $(ARG1)";
+        Text[ korean ] = "There was no space left on device $(ARG1)";
+        Text[ chinese_simplified ] = "”≤≈Ã $(ARG1) √ª”–ø…”√ø’º‰¡À°£";
+        Text[ chinese_traditional ] = "There was no space left on device $(ARG1)";
+        Text[ turkish ] = "There was no space left on device $(ARG1)";
+        Text[ arabic ] = "There was no space left on device $(ARG1)";
+        Text[ catalan ] = "There was no space left on device $(ARG1)";
     };
     // IOErrorCode_OUT_OF_FILE_HANDLES = 28,
     String ( ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK )
     {
         Text = "Die Operation auf $(ARG1) kann nicht ausgef¸hrt werden, da bereits zu viele Dateien geˆffnet sind" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there are too many open files" ;
+        Text[ english_us ] = "The operation on $(ARG1) cannot be performed because too many files are already open";
+        Text[ portuguese ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ russian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ greek ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ dutch ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ french ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ spanish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ finnish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ italian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ danish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ swedish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ polish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ japanese ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ korean ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ chinese_simplified ] = "“ÚŒ™“—æ≠¥Úø™¡ÀÃ´∂‡µƒŒƒº˛£¨Œﬁ∑®÷¥––ÕÍ≥…’‚∏ˆ√¸¡Ó $(ARG1) °£";
+        Text[ chinese_traditional ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ turkish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ arabic ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ catalan ] = "The operation on $(ARG1) can't be completed because there are too many open files";
     };
     // IOErrorCode_OUT_OF_MEMORY = 29,
     String ( ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK )
     {
         Text = "Die Operation auf $(ARG1) kann nicht ausgef¸hrt werden, da kein Speicher mehr zur Verf¸gung steht" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there is no more memory available" ;
+        Text[ english_us ] = "The operation on $(ARG1) cannot be performed because there is no more memory available";
+        Text[ portuguese ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ russian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ greek ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ dutch ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ french ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ spanish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ finnish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ italian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ danish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ swedish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ polish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ japanese ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ korean ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ chinese_simplified ] = "“ÚŒ™ƒ⁄¥Ê”√æ°£¨∂¯Œﬁ∑®÷¥––√¸¡Ó $(ARG1) °£";
+        Text[ chinese_traditional ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ turkish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ arabic ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ catalan ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
     };
     // IOErrorCode_PENDING = 30,
     String ( ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK )
     {
         Text = "Die Operation auf $(ARG1) kann nicht fortgesetzt werden, weil weitere Daten erwartet werden" ;
         Text [ ENGLISH ] = "The operation on $(ARG1) cannot continue, because there are pending data" ;
+        Text[ english_us ] = "The operation on $(ARG1) cannot continue because more data is pending";
+        Text[ portuguese ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ russian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ greek ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ dutch ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ french ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ spanish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ finnish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ italian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ danish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ swedish ] = "Operation pÂ $(ARG1) kan inte forts‰tta eftersom fler data v‰ntas";
+        Text[ polish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ portuguese_brazilian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ japanese ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ korean ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ chinese_simplified ] = "“ÚŒ™‘⁄µ»¥˝∆‰À˚µƒ ˝æ›£¨∂¯Œﬁ∑®÷¥––√¸¡Ó $(ARG1) °£";
+        Text[ chinese_traditional ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ turkish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ arabic ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ catalan ] = "The operation on $(ARG1) cannot continue, because there are pending data";
     };
     // IOErrorCode_RECURSIVE = 31,
     String ( ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) kann nicht in sich selbst kopiert werden" ;
         Text [ ENGLISH ] = "$(ARG1) cannot be copied into itself" ;
+        Text[ english_us ] = "$(ARG1) cannot be copied into itself";
+        Text[ portuguese ] = "$(ARG1) cannot be copied into itself";
+        Text[ russian ] = "$(ARG1) cannot be copied into itself";
+        Text[ greek ] = "$(ARG1) cannot be copied into itself";
+        Text[ dutch ] = "$(ARG1) cannot be copied into itself";
+        Text[ french ] = "$(ARG1) cannot be copied into itself";
+        Text[ spanish ] = "$(ARG1) cannot be copied into itself";
+        Text[ finnish ] = "$(ARG1) cannot be copied into itself";
+        Text[ italian ] = "$(ARG1) cannot be copied into itself";
+        Text[ danish ] = "$(ARG1) cannot be copied into itself";
+        Text[ swedish ] = "Det gÂr inte att kopiera $(ARG1) till sig sj‰lv";
+        Text[ polish ] = "$(ARG1) cannot be copied into itself";
+        Text[ portuguese_brazilian ] = "$(ARG1) cannot be copied into itself";
+        Text[ japanese ] = "$(ARG1) cannot be copied into itself";
+        Text[ korean ] = "$(ARG1) cannot be copied into itself";
+        Text[ chinese_simplified ] = "$(ARG1) Œﬁ∑®◊‘…Ì∏¥÷∆°£";
+        Text[ chinese_traditional ] = "$(ARG1) cannot be copied into itself";
+        Text[ turkish ] = "$(ARG1) cannot be copied into itself";
+        Text[ arabic ] = "$(ARG1) cannot be copied into itself";
+        Text[ catalan ] = "$(ARG1) cannot be copied into itself";
     };
     // IOErrorCode_UNKNOWN = 32,
     String ( ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK )
     {
         Text = "Unbekannter Ein-/Ausgabefehler beim Zugriff auf $(ARG1)" ;
         Text [ ENGLISH ] = "Unknown input/output error while accessing $(ARG1)" ;
+        Text[ english_us ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ portuguese ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ russian ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ greek ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ dutch ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ french ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ spanish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ finnish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ italian ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ danish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ swedish ] = "Ok‰nt input/outputfel vid Âtkomst till $(ARG1)";
+        Text[ polish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ portuguese_brazilian ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ japanese ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ korean ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ chinese_simplified ] = "∂¡»° $(ARG1)  ±∑¢…˙“ª∏ˆ≤ª√˜µƒ¥ÌŒÛ°£";
+        Text[ chinese_traditional ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ turkish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ arabic ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ catalan ] = "Unknown input/output error while accessing $(ARG1)";
     };
     // IOErrorCode_WRITE_PROTECTED = 33,
     String ( ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) ist schreibgesch¸tzt" ;
         Text [ english ] = "$(ARG1) is write protected" ;
+        Text[ english_us ] = "$(ARG1) is write protected";
+        Text[ portuguese ] = "$(ARG1) is write protected";
+        Text[ russian ] = "$(ARG1) is write protected";
+        Text[ greek ] = "$(ARG1) is write protected";
+        Text[ dutch ] = "$(ARG1) is write protected";
+        Text[ french ] = "$(ARG1) is write protected";
+        Text[ spanish ] = "$(ARG1) is write protected";
+        Text[ finnish ] = "$(ARG1) is write protected";
+        Text[ italian ] = "$(ARG1) is write protected";
+        Text[ danish ] = "$(ARG1) is write protected";
+        Text[ swedish ] = "$(ARG1) is write protected";
+        Text[ polish ] = "$(ARG1) is write protected";
+        Text[ portuguese_brazilian ] = "$(ARG1) is write protected";
+        Text[ japanese ] = "$(ARG1) is write protected";
+        Text[ korean ] = "$(ARG1) is write protected";
+        Text[ chinese_simplified ] = "$(ARG1)  «∑¿∏ƒ–¥µƒ°£";
+        Text[ chinese_traditional ] = "$(ARG1) is write protected";
+        Text[ turkish ] = "$(ARG1) is write protected";
+        Text[ arabic ] = "$(ARG1) is write protected";
+        Text[ catalan ] = "$(ARG1) is write protected";
     };
     // IOErrorCode_WRONG_FORMAT = 34,
     String ( ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) liegt in einem falschen Format vor" ;
         Text [ ENGLISH ] = "$(ARG1) has an incorrect format" ;
+        Text[ english_us ] = "$(ARG1) is not in the correct format";
+        Text[ portuguese ] = "$(ARG1) has an incorrect format";
+        Text[ russian ] = "$(ARG1) has an incorrect format";
+        Text[ greek ] = "$(ARG1) has an incorrect format";
+        Text[ dutch ] = "$(ARG1) has an incorrect format";
+        Text[ french ] = "$(ARG1) has an incorrect format";
+        Text[ spanish ] = "$(ARG1) has an incorrect format";
+        Text[ finnish ] = "$(ARG1) has an incorrect format";
+        Text[ italian ] = "$(ARG1) has an incorrect format";
+        Text[ danish ] = "$(ARG1) has an incorrect format";
+        Text[ swedish ] = "$(ARG1) har ett felaktigt format";
+        Text[ polish ] = "$(ARG1) has an incorrect format";
+        Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect format";
+        Text[ japanese ] = "$(ARG1) has an incorrect format";
+        Text[ korean ] = "$(ARG1) has an incorrect format";
+        Text[ chinese_simplified ] = "$(ARG1) ∏Ò Ω”–ŒÛ°£";
+        Text[ chinese_traditional ] = "$(ARG1) has an incorrect format";
+        Text[ turkish ] = "$(ARG1) has an incorrect format";
+        Text[ arabic ] = "$(ARG1) has an incorrect format";
+        Text[ catalan ] = "$(ARG1) has an incorrect format";
     };
     // IOErrorCode_WRONG_VERSION = 35,
     String ( ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK )
     {
         Text = "$(ARG1) liegt in einer falschen Version vor" ;
         Text [ ENGLISH ] = "$(ARG1) has an incorrect version" ;
+        Text[ english_us ] = "$(ARG1) is not in the correct version";
+        Text[ portuguese ] = "$(ARG1) has an incorrect version";
+        Text[ russian ] = "$(ARG1) has an incorrect version";
+        Text[ greek ] = "$(ARG1) has an incorrect version";
+        Text[ dutch ] = "$(ARG1) has an incorrect version";
+        Text[ french ] = "$(ARG1) has an incorrect version";
+        Text[ spanish ] = "$(ARG1) has an incorrect version";
+        Text[ finnish ] = "$(ARG1) has an incorrect version";
+        Text[ italian ] = "$(ARG1) has an incorrect version";
+        Text[ danish ] = "$(ARG1) has an incorrect version";
+        Text[ swedish ] = "$(ARG1) har en felaktig version";
+        Text[ polish ] = "$(ARG1) has an incorrect version";
+        Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect version";
+        Text[ japanese ] = "$(ARG1) has an incorrect version";
+        Text[ korean ] = "$(ARG1) has an incorrect version";
+        Text[ chinese_simplified ] = "$(ARG1) µƒ∞Ê±æ¥ÌŒÛ°£";
+        Text[ chinese_traditional ] = "$(ARG1) has an incorrect version";
+        Text[ turkish ] = "$(ARG1) has an incorrect version";
+        Text[ arabic ] = "$(ARG1) has an incorrect version";
+        Text[ catalan ] = "$(ARG1) has an incorrect version";
     };
 };
+
