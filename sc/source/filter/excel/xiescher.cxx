@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:14:33 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,12 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
 
 // ----------------------------------------------------------------------------
 
-void XclImpListBoxHelper::ReadFormula( XclImpStream& rStrm )
+XclImpCtrlLinkHelper::XclImpCtrlLinkHelper( ScDocument& rDoc ) :
+    mrDoc( rDoc )
+{
+}
+
+void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
 {
     sal_uInt16 nFmlaSize;
     rStrm >> nFmlaSize;
@@ -436,50 +441,69 @@ void XclImpListBoxHelper::ReadFormula( XclImpStream& rStrm )
     ScRangeList aRangeList;
     if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
     {
-        // Excel uses the first column of the first range only
-        mpDataRange.reset( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
-        if( mpDataRange.get() )
-            mpDataRange->aEnd.SetCol( mpDataRange->aStart.Col() );
+        // Use first cell of first range
+        ::std::auto_ptr< ScRange > pRange( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
+        if( pRange.get() )
+            mpCellLink.reset( new ScAddress( pRange->aStart ) );
     }
 }
 
-void XclImpListBoxHelper::InsertStringList( Reference< XPropertySet >& rxPropSet, ScDocument& rDoc ) const
+void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
 {
-    if( mpDataRange.get() )
+    sal_uInt16 nFmlaSize;
+    rStrm >> nFmlaSize;
+    rStrm.Ignore( 4 );
+    ScRangeList aRangeList;
+    if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
+        // Use first range
+        mpSrcRange.reset( aRangeList.Remove( static_cast< sal_uInt32 >( 0 ) ) );
+}
+
+void XclImpCtrlLinkHelper::InsertStringList( Reference< XPropertySet >& rxPropSet ) const
+{
+    if( mpSrcRange.get() )
     {
         Sequence< OUString > aStringList;
-        sal_uInt16 nScCol = mpDataRange->aStart.Col();
-        sal_uInt16 nScRow1 = mpDataRange->aStart.Row();
-        sal_uInt16 nScRow2 = mpDataRange->aEnd.Row();
-        sal_uInt16 nScTab = mpDataRange->aStart.Tab();
+        // Excel uses only first column
+        sal_uInt16 nScCol = mpSrcRange->aStart.Col();
+        sal_uInt16 nScRow1 = mpSrcRange->aStart.Row();
+        sal_uInt16 nScRow2 = mpSrcRange->aEnd.Row();
+        sal_uInt16 nScTab = mpSrcRange->aStart.Tab();
         String aCellText;
         aStringList.realloc( nScRow2 - nScRow1 + 1 );
         sal_Int32 nSeqIndex = 0;
 
         for( sal_uInt16 nScRow = nScRow1; nScRow <= nScRow2; ++nScRow, ++nSeqIndex )
         {
-            rDoc.GetString( nScCol, nScRow, nScTab, aCellText );
+            mrDoc.GetString( nScCol, nScRow, nScTab, aCellText );
             aStringList[ nSeqIndex ] = aCellText;
         }
         ::setPropValue( rxPropSet, CREATE_OUSTRING( "StringItemList" ), aStringList );
     }
 }
 
-String XclImpListBoxHelper::GetString( ScDocument& rDoc, sal_Int16 nPos ) const
+void XclImpCtrlLinkHelper::InsertLinkTag( Reference< XPropertySet >& rxPropSet ) const
+{
+    ::setPropString( rxPropSet, CREATE_OUSTRING( "Tag" ),
+        XclTools::GetCtrlLinkTag( mrDoc, mpCellLink.get(), mpSrcRange.get() ) );
+}
+
+String XclImpCtrlLinkHelper::GetString( sal_Int16 nPos ) const
 {
     String aString;
-    if( mpDataRange.get() && (nPos >= 0) )
-        rDoc.GetString( mpDataRange->aStart.Col(), mpDataRange->aStart.Row() + nPos, mpDataRange->aStart.Tab(), aString );
+    if( mpSrcRange.get() && (nPos >= 0) )
+        mrDoc.GetString( mpSrcRange->aStart.Col(), mpSrcRange->aStart.Row() + nPos, mpSrcRange->aStart.Tab(), aString );
     return aString;
 }
 
 
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherCtrl, XclImpEscherTxo );
+TYPEINIT1( XclImpEscherTbxCtrl, XclImpEscherTxo );
 
-XclImpEscherCtrl::XclImpEscherCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType ) :
+XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType ) :
     XclImpEscherTxo( rSrcObj ),
+    maLinkHelper( GetDoc() ),
     mnProgressSeg( SCF_INV_SEGMENT ),
     mnCtrlType( nCtrlType ),
     mnState( EXC_OBJ_CBLS_STATE_UNCHECK ),
@@ -490,7 +514,7 @@ XclImpEscherCtrl::XclImpEscherCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlTy
 {
 }
 
-void XclImpEscherCtrl::ReadCbls( XclImpStream& rStrm )
+void XclImpEscherTbxCtrl::ReadCbls( XclImpStream& rStrm )
 {
     sal_uInt16 nStyle;
     rStrm >> mnState;
@@ -500,7 +524,12 @@ void XclImpEscherCtrl::ReadCbls( XclImpStream& rStrm )
     mb3DStyle = ::get_flag( nStyle, EXC_OBJ_CBLS_3D );
 }
 
-void XclImpEscherCtrl::ReadLbsData( XclImpStream& rStrm )
+void XclImpEscherTbxCtrl::ReadCblsFmla( XclImpStream& rStrm )
+{
+    maLinkHelper.ReadCellLinkFormula( rStrm );
+}
+
+void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
 {
     sal_uInt16 nSubSize;
     rStrm >> nSubSize;
@@ -508,7 +537,7 @@ void XclImpEscherCtrl::ReadLbsData( XclImpStream& rStrm )
     {
         // read the address of the data source range
         rStrm.PushPosition();
-        maListbHelper.ReadFormula( rStrm );
+        maLinkHelper.ReadSrcRangeFormula( rStrm );
         rStrm.PopPosition();
         rStrm.Ignore( nSubSize );
     }
@@ -517,6 +546,7 @@ void XclImpEscherCtrl::ReadLbsData( XclImpStream& rStrm )
     sal_Int16 nEntryCount;
     sal_uInt16 nStyle;
     rStrm >> nEntryCount >> mnSelEntry >> nStyle;
+    rStrm.Ignore( 2 );  // linked edit field
 
     mnSelType = nStyle & EXC_OBJ_LBS_SELMASK;
     mb3DStyle = ::get_flag( nStyle, EXC_OBJ_LBS_3D );
@@ -524,21 +554,20 @@ void XclImpEscherCtrl::ReadLbsData( XclImpStream& rStrm )
     switch( mnCtrlType )
     {
         case EXC_OBJ_CMO_LISTBOX:
-            rStrm.Ignore( 2 );
             if( mnSelType != EXC_OBJ_LBS_SEL_SIMPLE )
                 for( sal_Int16 nEntry = 0; nEntry < nEntryCount; ++nEntry )
                     if( rStrm.ReaduInt8() != 0 )
                         maMultiSel.push_back( nEntry );
         break;
         case EXC_OBJ_CMO_COMBOBOX:
-            rStrm.Ignore( 4 );
+            rStrm.Ignore( 2 );
             rStrm >> mnLineCount;
         break;
     }
 
 }
 
-OUString XclImpEscherCtrl::GetServiceName() const
+OUString XclImpEscherTbxCtrl::GetServiceName() const
 {
 #define LCL_CREATE_NAME( name ) CREATE_OUSTRING( "com.sun.star.form.component." name )
     switch( mnCtrlType )
@@ -551,12 +580,12 @@ OUString XclImpEscherCtrl::GetServiceName() const
         case EXC_OBJ_CMO_GROUPBOX:      return LCL_CREATE_NAME( "GroupBox" );
         case EXC_OBJ_CMO_COMBOBOX:      return LCL_CREATE_NAME( "ComboBox" );
     }
-    DBG_ERRORFILE( "XclImpEscherCtrl::GetServiceName - unknown control type" );
+    DBG_ERRORFILE( "XclImpEscherTbxCtrl::GetServiceName - unknown control type" );
     return OUString();
 #undef LCL_CREATE_NAME
 }
 
-void XclImpEscherCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
+void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
     // the control name
     OUString aName;
@@ -606,6 +635,8 @@ void XclImpEscherCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) con
                 ::setPropString( rxPropSet, CREATE_OUSTRING( "FontName" ), rFontData.maName );
                 sal_Int16 nHeight = static_cast< sal_Int16 >( rFontData.GetApiHeight() + 0.5 );
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontHeight" ), nHeight );
+                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontFamily" ), rFontData.GetApiFamily() );
+                ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontCharset" ), rFontData.GetApiCharSet() );
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontWeight" ), rFontData.GetApiWeight() );
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontSlant" ), rFontData.GetApiPosture() );
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "FontUnderline" ), rFontData.GetApiUnderline() );
@@ -620,7 +651,7 @@ void XclImpEscherCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) con
     if( (mnCtrlType == EXC_OBJ_CMO_LISTBOX) || (mnCtrlType == EXC_OBJ_CMO_COMBOBOX) )
     {
         // string list
-        maListbHelper.InsertStringList( rxPropSet, GetDoc() );
+        maLinkHelper.InsertStringList( rxPropSet );
 
         switch( mnCtrlType )
         {
@@ -657,18 +688,21 @@ void XclImpEscherCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) con
                 ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineCount" ), mnLineCount );
                 // text content
                 ::setPropString( rxPropSet, CREATE_OUSTRING( "DefaultText" ),
-                    maListbHelper.GetString( GetDoc(), mnSelEntry - 1 ) );
+                    maLinkHelper.GetString( mnSelEntry - 1 ) );
             break;
         }
     }
+
+    // link range address
+    maLinkHelper.InsertLinkTag( rxPropSet );
 }
 
-void XclImpEscherCtrl::InitProgress( ScfProgressBar& rProgress )
+void XclImpEscherTbxCtrl::InitProgress( ScfProgressBar& rProgress )
 {
     mnProgressSeg = rProgress.AddSegment( 1 );
 }
 
-void XclImpEscherCtrl::Apply( ScfProgressBar& rProgress )
+void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
 {
     if( !mbSkip )
     {
@@ -696,6 +730,7 @@ TYPEINIT1( XclImpEscherOle, XclImpEscherObj );
 
 XclImpEscherOle::XclImpEscherOle( XclImpEscherObj& rSrcObj ):
     XclImpEscherObj( rSrcObj ),
+    maLinkHelper( GetDoc() ),
     mnCtrlStrmPos( 0 ),
     mnBlipId( 0 ),
     mnProgressSeg( SCF_INV_SEGMENT ),
@@ -777,11 +812,31 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
             mnCtrlStrmPos = nStorageId;
             bOk = false;    // do not create the storage name for controls
 
-            // try to read an additional formula specifying the source data range for a listbox
-            rStrm.Ignore( 8 );
-            rStrm.Ignore( rStrm.ReaduInt16() );
-            if( rStrm.IsValid() && (rStrm.ReaduInt16() > 0) )
-                maListbHelper.ReadFormula( rStrm );
+            // try to read additional link data
+            if( rStrm.GetRecLeft() > 8 )
+            {
+                rStrm.Ignore( 8 );
+                sal_uInt16 nDataSize;
+
+                // cell link
+                rStrm >> nDataSize;
+                if( nDataSize )
+                {
+                    rStrm.PushPosition();
+                    maLinkHelper.ReadCellLinkFormula( rStrm );
+                    rStrm.PopPosition();
+                    rStrm.Ignore( nDataSize );
+                }
+                // source data range
+                rStrm >> nDataSize;
+                if( nDataSize )
+                {
+                    rStrm.PushPosition();
+                    maLinkHelper.ReadSrcRangeFormula( rStrm );
+                    rStrm.PopPosition();
+                    rStrm.Ignore( nDataSize );
+                }
+            }
         }
         else if( nStorageId )
         {
@@ -803,7 +858,8 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
 void XclImpEscherOle::SetProperties( Reference< XPropertySet >& rxPropSet ) const
 {
-    maListbHelper.InsertStringList( rxPropSet, GetDoc() );
+    maLinkHelper.InsertStringList( rxPropSet );
+    maLinkHelper.InsertLinkTag( rxPropSet );
 }
 
 void XclImpEscherOle::InitProgress( ScfProgressBar& rProgress )
@@ -1557,7 +1613,7 @@ bool XclImpObjectManager::CreateSdrObj( XclImpEscherOle& rOleObj )
         GetDffManager().CreateSdrOleObj( rOleObj );
 }
 
-bool XclImpObjectManager::CreateSdrObj( XclImpEscherCtrl& rCtrlObj )
+bool XclImpObjectManager::CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj )
 {
     return GetOcxConverter().CreateSdrUnoObj( rCtrlObj );
 }
@@ -1632,8 +1688,11 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
             case EXC_ID_OBJ_FTCMO:      ReadObjFtCmo( rStrm );                      break;
             case EXC_ID_OBJ_FTPIOGRBIT: ReadObjFtPioGrbit( rStrm );                 break;
             case EXC_ID_OBJ_FTPICTFMLA: ReadObjFtPictFmla( rStrm, nSubRecSize );    break;
-            case EXC_ID_OBJ_FTCBLS:     ReadObjFtCbls( rStrm );                     break;
-            case EXC_ID_OBJ_FTLBSDATA:  ReadObjFtLbsData( rStrm );                  break;
+            // TBX form control subrecords
+            case EXC_ID_OBJ_FTCBLS:
+            case EXC_ID_OBJ_FTSBSFMLA:
+            case EXC_ID_OBJ_FTLBSDATA:
+            case EXC_ID_OBJ_FTCBLSFMLA: ReadObjTbxSubRec( rStrm, nSubRecId );       break;
         }
 
         rStrm.PopPosition();
@@ -1826,7 +1885,7 @@ void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
         case EXC_OBJ_CMO_GROUPBOX:
         case EXC_OBJ_CMO_LISTBOX:
         case EXC_OBJ_CMO_COMBOBOX:
-            ReplaceEscherObj( new XclImpEscherCtrl( *pEscherObj, nObjType ) );
+            ReplaceEscherObj( new XclImpEscherTbxCtrl( *pEscherObj, nObjType ) );
         break;
         case EXC_OBJ_CMO_PICTURE:
             ReplaceEscherObj( new XclImpEscherOle( *pEscherObj ) );
@@ -1861,20 +1920,19 @@ void XclImpObjectManager::ReadObjFtPictFmla( XclImpStream& rStrm, sal_uInt16 nRe
         DBG_ERRORFILE( "XclImpObjectManager::ReadObjFtPictFmla - no OLE object" );
 }
 
-void XclImpObjectManager::ReadObjFtCbls( XclImpStream& rStrm )
+void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId )
 {
-    if( XclImpEscherCtrl* pCtrlObj = PTR_CAST( XclImpEscherCtrl, GetLastEscherObj() ) )
-        pCtrlObj->ReadCbls( rStrm );
-    else
-        DBG_ERRORFILE( "XclImpObjectManager::ReadObjFtCbls - no control object" );
-}
-
-void XclImpObjectManager::ReadObjFtLbsData( XclImpStream& rStrm )
-{
-    if( XclImpEscherCtrl* pCtrlObj = PTR_CAST( XclImpEscherCtrl, GetLastEscherObj() ) )
-        pCtrlObj->ReadLbsData( rStrm );
-    else
-        DBG_ERRORFILE( "XclImpObjectManager::ReadObjFtLbsData - no control object" );
+    if( XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, GetLastEscherObj() ) )
+    {
+        switch( nSubRecId )
+        {
+            case EXC_ID_OBJ_FTCBLS:     pCtrlObj->ReadCbls( rStrm );        break;
+            case EXC_ID_OBJ_FTLBSDATA:  pCtrlObj->ReadLbsData( rStrm );     break;
+            case EXC_ID_OBJ_FTSBSFMLA:  // equal to ftCblsFmla
+            case EXC_ID_OBJ_FTCBLSFMLA: pCtrlObj->ReadCblsFmla( rStrm );    break;
+            default:    DBG_ERRORFILE( "XclImpObjectManager::ReadObjTbxSubRec - unknown subrecord" );
+        }
+    }
 }
 
 SvxMSDffSolverContainer& XclImpObjectManager::GetSolverContainer()
