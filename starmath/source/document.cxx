@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-15 10:47:20 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,8 +639,14 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
         pTree = aEquation.Import(rMedium);
         if (pTree)
         {
-            //ToDo
-            //aText = pTree->CreateTextFromTree();
+            pTree->CreateTextFromNode(aText);
+            aText.EraseTrailingChars();
+            while((aText.GetChar(0) == '{') &&
+                (aText.GetChar(aText.Len()-1) == '}'))
+            {
+                aText.Erase(0,1);
+                aText.Erase(aText.Len()-1,1);
+            }
             bSuccess = TRUE;
         }
     }

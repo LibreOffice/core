@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-11 13:44:17 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public:
         pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
         pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0)
+        pOperatorAttrTokenMap(0),pColorTokenMap(0)
         {}
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
@@ -229,6 +229,7 @@ public:
     const SvXMLTokenMap &GetPresElemTokenMap();
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
+    const SvXMLTokenMap &GetColorTokenMap();
     virtual ~SmXMLImport();
     SmNodeStack & GetNodeStack() {return aNodeStack;}
     SmNode *GetTree() { return aNodeStack.Pop();}
@@ -241,6 +242,7 @@ private:
         SvXMLTokenMap *pPresElemTokenMap;
         SvXMLTokenMap *pPresScriptEmptyElemTokenMap;
         SvXMLTokenMap *pPresTableElemTokenMap;
+        SvXMLTokenMap *pColorTokenMap;
 
         SmNodeStack aNodeStack;
 };
@@ -277,7 +279,8 @@ enum SmXMLPresLayoutAttrTokenMap
     XML_TOK_FONTWEIGHT,
     XML_TOK_FONTSTYLE,
     XML_TOK_FONTSIZE,
-    XML_TOK_FONTFAMILY
+    XML_TOK_FONTFAMILY,
+    XML_TOK_COLOR
 };
 
 
@@ -293,7 +296,6 @@ enum SmXMLPresTableElemTokenMap
     XML_TOK_MTR,
     XML_TOK_MTD
 };
-
 
 enum SmXMLPresElemTokenMap
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ private:
 
     int HandleRecords(int nLevel=0,BYTE nSelector=-1,
         BYTE nVariation=-1,int nRows=0,int nCols=0);
-    BOOL LookupChar(sal_Unicode nChar);
     BOOL HandleSize(INT16 nLSize,INT16 nDSize, int &rSetSize);
     void HandleAlign(BYTE nHAlign,BYTE nVAlign, int &rSetAlign);
     int HandlePile(int &rSetAlign,int nLevel,BYTE nSelector,BYTE nVariation);
@@ -197,6 +196,10 @@ private:
         tmOBAR,tmLARROW,tmRARROW,tmBARROW,tmSINT,tmDINT,tmTINT,tmSSINT,
         tmDSINT,tmTSINT,tmUHBRACE,tmLHBRACE,tmSUM
     };
+public:
+    static sal_Bool LookupChar(sal_Unicode nChar,String &rRet,
+        BYTE nVersion=3,BYTE nTypeFace=0);
+    static sal_Unicode aMathTypeTable[256]; //Magic lookup table
 };
 
 

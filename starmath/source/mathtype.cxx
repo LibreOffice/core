@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-12 17:11:33 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ String aSizes[7] =
 
 /*This table is not fully complete and is pending on what decisions are
  *made as regards the StarMath to Unicode stuff*/
-sal_Unicode aMathTypeTable[256] =
+sal_Unicode MathType::aMathTypeTable[256] =
 {
 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x0008, 0x0009,
 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f, 0x0010, 0x0011, 0x0012, 0x0013,
@@ -201,14 +201,17 @@ sal_Unicode aMathTypeTable[256] =
 0x21D0, 0x21D4, 0xffff, 0xffff, 0x2218, 0xffff, 0xffff, 0xffff, 0x003A, 0x003B,
 0x003C, 0x003D, 0x003E, 0x00BF, 0x2260, 0x002B, 0x2212, 0x002A, 0x00D7, 0x22C5,
 0x00F7, 0x00B1, 0x2213, 0x2295, 0x2296, 0x2297, 0x2298, 0x2299, 0x222A, 0x2229,
-0x003C, 0x003E, 0x2264, 0x2265, 0x2264, 0x2265, 0x226A, 0x226B, 0x007E, 0x2245,
+//0x003C, 0x003E, 0x2264, 0x2265,0x2264, 0x2265, 0x226A, 0x226B, 0x007E, 0x2245,
+0x003C, 0x003E, 0x2264, 0x2265, 0xE425, 0xE421, 0x226A, 0x226B, 0x007E, 0x2245,
 0x2248, 0x225D, 0x2261, 0x221D, 0x2202, 0x2282, 0x2283, 0x2286, 0x2287, 0x2284,
 0x2285, 0x2288, 0x2289, 0x2208, 0x2209, 0x2208, 0x2203, 0x220B, 0x2135, 0x2111,
 0x211C, 0x2118, 0x0192, 0x2221, 0x2222, 0x007C, 0x2225, 0x22A5, 0x2026, 0x22EF,
 0x22EE, 0x22F0, 0x22F1, 0x22B6, 0x22B7, 0x2192, 0x005C, 0x00AC, 0x222B, 0x222C,
 0x222D, 0x222E, 0x222F, 0x2230, 0x221A, 0x221A, 0x221A, 0x221A, 0x2210, 0x220F,
-0x2211, 0x2207, 0x2200, 0x2225, 0x005E, 0x02C7, 0x02D8, 0x00B4, 0x0060, 0x02DC,
-0x00AF, 0x2192, 0x02D9, 0x00A8, 0xffff, 0x02DA, 0x2227, 0x2228, 0x220D, 0x2205,
+0x2211, 0x2207, 0x2200, 0xffff, 0x005E, 0x02C7, 0x02D8, 0x00B4, 0x0060, 0x02DC,
+//0x2211, 0x2207, 0x2200, 0x2225,0x005E, 0x02C7, 0x02D8, 0x00B4, 0x0060, 0x02DC,
+//0x00AF, 0x2192, 0x02D9, 0x00A8,0xffff, 0x02DA, 0x2227, 0x2228, 0x220D, 0x2205,
+0x00AF, 0x0362, 0x02D9, 0x00A8, 0xffff, 0x02DA, 0x2227, 0x2228, 0x220D, 0x2205,
 0x007B, 0x007D, 0x0028, 0x0029, 0x2329, 0x232a, 0x005B, 0x005D, 0x2220, 0x221F,
 0xffff, 0x225C, 0x2254, 0x2255, 0x21B3, 0x2197, 0x2198, 0x2245, 0x301A, 0x301B,
 0xffff, 0xffff, 0xffff, 0xffff, 0x2112, 0x2130, 0x2131, 0xffff, 0xffff, 0x002F,
@@ -258,12 +261,16 @@ void EQNOLEFILEHDR::Write(SvStorageStream *pS)
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
  */
-BOOL MathType::LookupChar(sal_Unicode nChar)
+sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,BYTE nVersion,
+    BYTE nTypeFace)
 {
     BOOL bRet=FALSE;
     const char *pC = NULL;
     switch(nChar)
     {
+        case 0x0000:
+            pC = " none ";
+            break;
         case 0x00ac:
             pC = " neg ";
             break;
@@ -278,6 +285,24 @@ BOOL MathType::LookupChar(sal_Unicode nChar)
                 rRet.Append(nChar);
                 bRet=TRUE;
             }
+            break;
+        case 0x007b:
+            pC = " lbrace ";
+            break;
+        case 0x007c:
+            pC = " divides ";
+            break;
+        case 0x007d:
+            pC = " rbrace ";
+            break;
+        case 0x007e:
+            pC = " sim ";
+            break;
+        case 0x2224:
+            pC = " ndivides ";
+            break;
+        case 0x2225:
+            pC = " parallel ";
             break;
         case 0x00d7:
             if (nVersion < 3)
@@ -297,17 +322,32 @@ BOOL MathType::LookupChar(sal_Unicode nChar)
         case 0x2022:
             pC = " cdot ";
             break;
+        case 0x2102:
+            pC = " setC ";
+            break;
         case 0x210f:
             pC = " hbar ";
             break;
         case 0x2111:
             pC = " Im ";
             break;
+        case 0x2115:
+            pC = " setN ";
+            break;
         case 0x2118:
             pC = " wp ";
             break;
+        case 0x211a:
+            pC = " setQ ";
+            break;
         case 0x211c:
             pC = " Re ";
+            break;
+        case 0x211d:
+            pC = " setR ";
+            break;
+        case 0x2124:
+            pC = " setZ ";
             break;
         case 0x2135:
             pC = " aleph ";
@@ -321,8 +361,17 @@ BOOL MathType::LookupChar(sal_Unicode nChar)
         case 0x2192:
             pC = " rightarrow ";
             break;
+        case 0x0362:
+            pC = " vec ";
+            break;
         case 0x2193:
             pC = " downarrow ";
+            break;
+        case 0x21d0:
+            pC = " dlarrow ";
+            break;
+        case 0x21d2:
+            pC = " drarrow ";
             break;
         case 0x21d4:
             pC = " dlrarrow ";
@@ -420,11 +469,20 @@ BOOL MathType::LookupChar(sal_Unicode nChar)
         case 0x2284:
             pC = " nsubset ";
             break;
+        case 0x2285:
+            pC = " nsupset ";
+            break;
         case 0x2286:
             pC = " subseteq ";
             break;
         case 0x2287:
             pC = " supseteq ";
+            break;
+        case 0x2288:
+            pC = " nsubseteq ";
+            break;
+        case 0x2289:
+            pC = " nsupseteq ";
             break;
         case 0x227a:
         case 0x227b:
@@ -451,6 +509,24 @@ BOOL MathType::LookupChar(sal_Unicode nChar)
             break;
         case 0x22f1:
             pC = " dotsdown ";
+            break;
+        case 0x2329:
+            pC = " langle ";
+            break;
+        case 0x232a:
+            pC = " rangle ";
+            break;
+        case 0x301a:
+            pC = " ldbracket ";
+            break;
+        case 0x301b:
+            pC = " rdbracket ";
+            break;
+        case 0xE421:
+            pC = " geslant ";
+            break;
+        case 0xE425:
+            pC = " leslant ";
             break;
         case 0xeb01:    //no space
         case 0xeb08:    //normal space
@@ -2688,7 +2764,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
             rTextStart = rRet.Len();
         }
         nOldLen = rRet.Len();
-        if (!LookupChar(nChar))
+        if (!LookupChar(nChar,rRet,nVersion,nTypeFace))
         {
             if (nOldLen - rTextStart > 1)
             {
@@ -2862,6 +2938,10 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
         }
         else if (nArse == 0x2225)
             *pS << USHORT(0xEC09);
+        else if (nArse == 0xE421)
+            *pS << USHORT(0x2265);
+        else if (nArse == 0xE425)
+            *pS << USHORT(0x2264);
         else if (nArse == 0x226A)
         {
             *pS << USHORT(0x3C);
@@ -3085,4 +3165,3 @@ void MathType::HandleText(SmNode *pNode,int nLevel)
         }
     }
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:25 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public:
 
     SmSymSetManager&   operator = (const SmSymSetManager& rSymbolSetManager);
 
-    USHORT      GetCount() const { return NoSymbolSets; }
+    UINT32      GetCount() const { return NoSymbolSets; }
     SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const { return SymbolSets.Get(SymbolSetNo);}
 
     USHORT      AddSymbolSet(SmSymSet* pSymbolSet);

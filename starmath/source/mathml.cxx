@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-11 13:44:16 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@ one go*/
 #ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _TOOLS_SOLMATH_H
+#include <tools/solmath.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -86,10 +88,13 @@ one go*/
 #ifndef MATHML_HXX
 #include <mathml.hxx>
 #endif
-
 #ifndef DOCUMENT_HXX
 #include <document.hxx>
 #endif
+#ifndef UTILITY_HXX
+#include <utility.hxx>
+#endif
+
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -122,12 +127,15 @@ one go*/
 using namespace com::sun::star;
 using namespace rtl;
 
-extern sal_Unicode aMathTypeTable[256];
+#ifndef MATHTYPE_HXX
+#include "mathtype.hxx"
+#endif
+
 sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
 {
     sal_Unicode cMathChar = rChar;
-    for (int i=sizeof(aMathTypeTable)-1;i>=0;i--)
-        if (rChar == aMathTypeTable[i])
+    for (int i=sizeof(MathType::aMathTypeTable)-1;i>=0;i--)
+        if (rChar == MathType::aMathTypeTable[i])
         {
             cMathChar = i | 0xf000;
             break;
@@ -296,9 +304,12 @@ public:
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
+    SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > &xAttrList);
     void EndElement();
 protected:
-    USHORT nElementCount;
+    ULONG nElementCount;
 };
 
 class SmXMLFracContext_Impl : public SmXMLRowContext_Impl
@@ -328,85 +339,87 @@ public:
     void EndElement();
 };
 
-class SmXMLStyleContext_Impl : public SmXMLRowContext_Impl
+struct SmXMLContext_Helper
 {
-public:
-    /*Right now the style tag is completely ignored*/
-    SmXMLStyleContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
-        const OUString& rLName)
-        : SmXMLRowContext_Impl(rImport,nPrefix,rLName),bIsBold(sal_False),
-        bIsItalic(sal_False),nFontSize(0)
-        {}
-    void EndElement();
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > &
+    SmXMLContext_Helper(SmXMLImportContext &rImport) : rContext(rImport),
+    nIsBold(-1), nIsItalic(-1),nFontSize(0.0) {}
+    void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &
         xAttrList );
-protected:
-    sal_Bool bIsBold;
-    sal_Bool bIsItalic;
-    sal_Int32 nFontSize;
+    void ApplyAttrs();
+
+    sal_Int8 nIsBold;
+    sal_Int8 nIsItalic;
+    double nFontSize;
     sal_Bool bFontNodeNeeded;
     OUString sFontFamily;
+    OUString sColor;
+
+    SmXMLImportContext rContext;
 };
 
-void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
+void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
-    sal_Bool bOldIsBold=bIsBold;
-    sal_Bool bOldIsItalic=bIsItalic;
-    sal_Int32 nOldFontSize=nFontSize;
+    sal_Int8 nOldIsBold=nIsBold;
+    sal_Int8 nOldIsItalic=nIsItalic;
+    double nOldFontSize=nFontSize;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     OUString sOldFontFamily = sFontFamily;
     for (sal_Int16 i=0;i<nAttrCount;i++)
     {
         OUString sAttrName = xAttrList->getNameByIndex(i);
         OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+        sal_uInt16 nPrefix = rContext.GetSmImport().GetNamespaceMap().
             GetKeyByAttrName(sAttrName,&aLocalName);
         OUString sValue = xAttrList->getValueByIndex(i);
         const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetPresLayoutAttrTokenMap();
+            rContext.GetSmImport().GetPresLayoutAttrTokenMap();
         switch(rAttrTokenMap.Get(nPrefix,aLocalName))
         {
             case XML_TOK_FONTWEIGHT:
-                bIsBold = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                nIsBold = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     sXML_bold)));
                 break;
             case XML_TOK_FONTSTYLE:
-                bIsItalic = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                nIsItalic = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
                     sXML_italic)));
                 break;
             case XML_TOK_FONTSIZE:
-                GetSmImport().GetMM100UnitConverter().
+                SvXMLUnitConverter::convertNumber(nFontSize,sValue);
+                rContext.GetSmImport().GetMM100UnitConverter().
                     setXMLMeasureUnit(MAP_POINT);
-                GetSmImport().GetMM100UnitConverter().convertMeasure(nFontSize,
-                    sValue,MAP_POINT);
+                if (-1 == sValue.indexOf(OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt))))
+                    if (-1 == sValue.indexOf('%'))
+                        nFontSize=0.0;
+                    else
+                    {
+                        rContext.GetSmImport().GetMM100UnitConverter().
+                            setXMLMeasureUnit(MAP_RELATIVE);
+                    }
                 break;
             case XML_TOK_FONTFAMILY:
                 sFontFamily = sValue;
+                break;
+            case XML_TOK_COLOR:
+                sColor = sValue;
                 break;
             default:
                 break;
         }
     }
 
-    if ((bOldIsBold!=bIsBold) || (bOldIsItalic!=bIsItalic) ||
-        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily))
+    if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
+        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
+        || sColor.getLength())
         bFontNodeNeeded=sal_True;
     else
         bFontNodeNeeded=sal_False;
 }
 
-
-void SmXMLStyleContext_Impl::EndElement()
+void SmXMLContext_Helper::ApplyAttrs()
 {
-    /*
-    <mstyle> accepts any number of arguments; if this number is not 1, its
-    contents are treated as a single "inferred <mrow>" containing its
-    arguments
-    */
-    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    if (rNodeStack.Count() - nElementCount > 1)
-        SmXMLRowContext_Impl::EndElement();
+    SmNodeStack &rNodeStack = rContext.GetSmImport().GetNodeStack();
 
     if (bFontNodeNeeded)
     {
@@ -415,35 +428,53 @@ void SmXMLStyleContext_Impl::EndElement()
         aToken.nGroup = 0;
         aToken.nLevel = 5;
 
-        if (bIsBold)
+        if (nIsBold != -1)
         {
-            aToken.eType = TBOLD;
+            if (nIsBold)
+                aToken.eType = TBOLD;
+            else
+                aToken.eType = TNBOLD;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
             pFontNode->SetSubNodes(0,rNodeStack.Pop());
             rNodeStack.Push(pFontNode);
         }
-        if (bIsItalic)
+        if (nIsItalic != -1)
         {
-            aToken.eType = TITALIC;
+            if (nIsItalic)
+                aToken.eType = TITALIC;
+            else
+                aToken.eType = TNITALIC;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
             pFontNode->SetSubNodes(0,rNodeStack.Pop());
             rNodeStack.Push(pFontNode);
         }
-        if (nFontSize)
+        if (nFontSize != 0.0)
         {
             aToken.eType = TSIZE;
-            Fraction aValue = nFontSize;
             SmFontNode *pFontNode = new SmFontNode(aToken);
-            pFontNode->SetSizeParameter(aValue,FNTSIZ_ABSOLUT);
+
+            if (MAP_RELATIVE == rContext.GetSmImport().GetMM100UnitConverter().
+                getXMLMeasureUnit())
+            {
+                if (nFontSize < 100.00)
+                    pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
+                        FNTSIZ_DIVIDE);
+                else
+                    pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
+                        FNTSIZ_MULTIPLY);
+            }
+            else
+                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
+
             pFontNode->SetSubNodes(0,rNodeStack.Pop());
             rNodeStack.Push(pFontNode);
         }
         if (sFontFamily.getLength())
         {
             if (sFontFamily.equalsIgnoreCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("fixed"))))
+                RTL_CONSTASCII_USTRINGPARAM(sXML_fixed))))
                 aToken.eType = TFIXED;
             else if (sFontFamily.equalsIgnoreCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM("sans"))))
@@ -460,9 +491,206 @@ void SmXMLStyleContext_Impl::EndElement()
             pFontNode->SetSubNodes(0,rNodeStack.Pop());
             rNodeStack.Push(pFontNode);
         }
+        if (sColor.getLength())
+        {
+            //Again we can only handle a small set of colours in
+            //StarMath for now.
+            const SvXMLTokenMap& rTokenMap =
+                rContext.GetSmImport().GetColorTokenMap();
+            aToken.eType = static_cast<SmTokenType>(rTokenMap.Get(
+                XML_NAMESPACE_MATH, sColor));
+            if (aToken.eType != -1)
+            {
+                SmFontNode *pFontNode = new SmFontNode(aToken);
+                pFontNode->SetSubNodes(0,rNodeStack.Pop());
+                rNodeStack.Push(pFontNode);
+            }
+        }
+
     }
 }
 
+class SmXMLStyleContext_Impl : public SmXMLRowContext_Impl
+{
+public:
+    /*Right now the style tag is completely ignored*/
+    SmXMLStyleContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
+        const OUString& rLName) : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
+        aStyleHelper(*this) {}
+    void EndElement();
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > &
+        xAttrList );
+protected:
+    SmXMLContext_Helper aStyleHelper;
+};
+
+void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
+    xml::sax::XAttributeList > & xAttrList )
+{
+#if 1
+    aStyleHelper.RetrieveAttrs(xAttrList);
+#else
+    sal_Int8 nOldIsBold=nIsBold;
+    sal_Int8 nOldIsItalic=nIsItalic;
+    double nOldFontSize=nFontSize;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    OUString sOldFontFamily = sFontFamily;
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName(sAttrName,&aLocalName);
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap =
+            GetSmImport().GetPresLayoutAttrTokenMap();
+        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        {
+            case XML_TOK_FONTWEIGHT:
+                nIsBold = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    sXML_bold)));
+                break;
+            case XML_TOK_FONTSTYLE:
+                nIsItalic = sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    sXML_italic)));
+                break;
+            case XML_TOK_FONTSIZE:
+                SvXMLUnitConverter::convertNumber(nFontSize,sValue);
+                GetSmImport().GetMM100UnitConverter().
+                    setXMLMeasureUnit(MAP_POINT);
+                if (-1 == sValue.indexOf(OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt))))
+                    if (-1 == sValue.indexOf('%'))
+                        nFontSize=0.0;
+                    else
+                    {
+                        GetSmImport().GetMM100UnitConverter().
+                            setXMLMeasureUnit(MAP_RELATIVE);
+                    }
+                break;
+            case XML_TOK_FONTFAMILY:
+                sFontFamily = sValue;
+                break;
+            case XML_TOK_COLOR:
+                sColor = sValue;
+                break;
+            default:
+                break;
+        }
+    }
+
+    if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
+        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
+        || sColor.getLength())
+        bFontNodeNeeded=sal_True;
+    else
+        bFontNodeNeeded=sal_False;
+#endif
+}
+
+
+void SmXMLStyleContext_Impl::EndElement()
+{
+    /*
+    <mstyle> accepts any number of arguments; if this number is not 1, its
+    contents are treated as a single "inferred <mrow>" containing its
+    arguments
+    */
+    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
+    if (rNodeStack.Count() - nElementCount > 1)
+        SmXMLRowContext_Impl::EndElement();
+#if 1
+    aStyleHelper.ApplyAttrs();
+#else
+    if (bFontNodeNeeded)
+    {
+        SmToken aToken;
+        aToken.cMathChar = '\0';
+        aToken.nGroup = 0;
+        aToken.nLevel = 5;
+
+        if (nIsBold != -1)
+        {
+            if (nIsBold)
+                aToken.eType = TBOLD;
+            else
+                aToken.eType = TNBOLD;
+            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
+                (new SmFontNode(aToken));
+            pFontNode->SetSubNodes(0,rNodeStack.Pop());
+            rNodeStack.Push(pFontNode);
+        }
+        if (nIsItalic != -1)
+        {
+            if (nIsItalic)
+                aToken.eType = TITALIC;
+            else
+                aToken.eType = TNITALIC;
+            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
+                (new SmFontNode(aToken));
+            pFontNode->SetSubNodes(0,rNodeStack.Pop());
+            rNodeStack.Push(pFontNode);
+        }
+        if (nFontSize != 0.0)
+        {
+            aToken.eType = TSIZE;
+            SmFontNode *pFontNode = new SmFontNode(aToken);
+
+            if (MAP_RELATIVE == GetSmImport().GetMM100UnitConverter().
+                getXMLMeasureUnit())
+            {
+                if (nFontSize < 100.00)
+                    pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
+                        FNTSIZ_DIVIDE);
+                else
+                    pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
+                        FNTSIZ_MULTIPLY);
+            }
+            else
+                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
+
+            pFontNode->SetSubNodes(0,rNodeStack.Pop());
+            rNodeStack.Push(pFontNode);
+        }
+        if (sFontFamily.getLength())
+        {
+            if (sFontFamily.equalsIgnoreCase(OUString(
+                RTL_CONSTASCII_USTRINGPARAM(sXML_fixed))))
+                aToken.eType = TFIXED;
+            else if (sFontFamily.equalsIgnoreCase(OUString(
+                RTL_CONSTASCII_USTRINGPARAM("sans"))))
+                aToken.eType = TSANS;
+            else if (sFontFamily.equalsIgnoreCase(OUString(
+                RTL_CONSTASCII_USTRINGPARAM("serif"))))
+                aToken.eType = TSERIF;
+            else //Just give up, we need to extend our font mechanism to be
+                //more general
+                return;
+
+            aToken.aText = sFontFamily;
+            SmFontNode *pFontNode = new SmFontNode(aToken);
+            pFontNode->SetSubNodes(0,rNodeStack.Pop());
+            rNodeStack.Push(pFontNode);
+        }
+        if (sColor.getLength())
+        {
+            //Again we can only handle a small set of colours in
+            //StarMath for now.
+            const SvXMLTokenMap& rTokenMap =
+                GetSmImport().GetColorTokenMap();
+            aToken.eType = static_cast<SmTokenType>(rTokenMap.Get(
+                XML_NAMESPACE_MATH, sColor));
+            if (aToken.eType != -1)
+            {
+                SmFontNode *pFontNode = new SmFontNode(aToken);
+                pFontNode->SetSubNodes(0,rNodeStack.Pop());
+                rNodeStack.Push(pFontNode);
+            }
+        }
+
+    }
+#endif
+}
 
 class SmXMLPaddedContext_Impl : public SmXMLRowContext_Impl
 {
@@ -590,7 +818,7 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.aText = ',';
     aToken.eType = TIDENT;
 
-    USHORT i=rNodeStack.Count()-nElementCount;
+    ULONG i=rNodeStack.Count()-nElementCount;
     if (rNodeStack.Count()-nElementCount > 1)
         i+=rNodeStack.Count()-1-nElementCount;
     aRelationArray.SetSize(i);
@@ -720,8 +948,12 @@ class SmXMLIdentifierContext_Impl : public SmXMLImportContext
 public:
     SmXMLIdentifierContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
-    virtual void TCharacters(const ::rtl::OUString &rChars);
+        : SmXMLImportContext(rImport,nPrefix,rLName),aStyleHelper(*this) {}
+    void TCharacters(const ::rtl::OUString &rChars);
+    void StartElement(const uno::Reference<
+    xml::sax::XAttributeList > & xAttrList ) {aStyleHelper.RetrieveAttrs(xAttrList);};
+protected:
+    SmXMLContext_Helper aStyleHelper;
 };
 
 void SmXMLIdentifierContext_Impl::TCharacters(const ::rtl::OUString &rChars)
@@ -732,7 +964,36 @@ void SmXMLIdentifierContext_Impl::TCharacters(const ::rtl::OUString &rChars)
     aToken.aText = rChars;
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
-    GetSmImport().GetNodeStack().Push(new SmTextNode(aToken,FNT_VARIABLE));
+    SmTextNode *pNode = 0;
+
+    //we will handle identifier italic/normal here instead of with a standalone
+    //font node
+    if (((aStyleHelper.nIsItalic == -1) && (rChars.getLength() > 1))
+        || ((aStyleHelper.nIsItalic == 0) && (rChars.getLength() == 1)))
+    {
+        pNode = new SmTextNode(aToken,FNT_FUNCTION);
+        pNode->GetFont().SetItalic(ITALIC_NONE);
+        aStyleHelper.nIsItalic = -1;
+    }
+    else
+        pNode = new SmTextNode(aToken,FNT_VARIABLE);
+    if (aStyleHelper.bFontNodeNeeded && aStyleHelper.nIsItalic != -1)
+    {
+        if (aStyleHelper.nIsItalic)
+            pNode->GetFont().SetItalic(ITALIC_NORMAL);
+        else
+            pNode->GetFont().SetItalic(ITALIC_NONE);
+    }
+
+    if ((-1!=aStyleHelper.nIsBold) || (0.0!=aStyleHelper.nFontSize) ||
+        (aStyleHelper.sFontFamily.getLength()) ||
+        aStyleHelper.sColor.getLength())
+        aStyleHelper.bFontNodeNeeded=sal_True;
+    else
+        aStyleHelper.bFontNodeNeeded=sal_False;
+    if (aStyleHelper.bFontNodeNeeded)
+        aStyleHelper.ApplyAttrs();
+    GetSmImport().GetNodeStack().Push(pNode);
 }
 
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
@@ -807,8 +1068,8 @@ public:
     SmXMLSpaceContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
-    void SmXMLSpaceContext_Impl::StartElement(
-        const uno::Reference<xml::sax::XAttributeList >& xAttrList );
+    void StartElement(const uno::Reference<
+        xml::sax::XAttributeList >& xAttrList );
 };
 
 void SmXMLSpaceContext_Impl::StartElement(
@@ -852,7 +1113,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType,SmSubSup aSubSup)
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-    for (int i = 1;  i < aSubNodes.GetSize();  i++)
+    for (ULONG i = 1;  i < aSubNodes.GetSize();  i++)
         aSubNodes.Put(i, NULL);
 
     aSubNodes.Put(aSubSup+1,rNodeStack.Pop());
@@ -901,7 +1162,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-    for (int i = 1;  i < aSubNodes.GetSize();  i++)
+    for (ULONG i = 1;  i < aSubNodes.GetSize();  i++)
         aSubNodes.Put(i, NULL);
 
     aSubNodes.Put(aSup+1,rNodeStack.Pop());
@@ -1176,6 +1437,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
     { XML_NAMESPACE_MATH,   sXML_fontstyle,       XML_TOK_FONTSTYLE     },
     { XML_NAMESPACE_MATH,   sXML_fontsize,        XML_TOK_FONTSIZE      },
     { XML_NAMESPACE_MATH,   sXML_fontfamily,      XML_TOK_FONTFAMILY    },
+    { XML_NAMESPACE_MATH,   sXML_color,           XML_TOK_COLOR },
     XML_TOKEN_MAP_END
 };
 
@@ -1215,6 +1477,19 @@ static __FAR_DATA SvXMLTokenMapEntry aPresTableElemTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   sXML_mtr,       XML_TOK_MTR },
     { XML_NAMESPACE_MATH,   sXML_mtd,       XML_TOK_MTD },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aColorTokenMap[] =
+{
+    { XML_NAMESPACE_MATH,   sXML_black,        TBLACK},
+    { XML_NAMESPACE_MATH,   sXML_white,        TWHITE},
+    { XML_NAMESPACE_MATH,   sXML_red,          TRED},
+    { XML_NAMESPACE_MATH,   sXML_green,        TGREEN},
+    { XML_NAMESPACE_MATH,   sXML_blue,         TBLUE},
+    { XML_NAMESPACE_MATH,   sXML_aqua,         TCYAN},
+    { XML_NAMESPACE_MATH,   sXML_fuchsia,      TMAGENTA},
+    { XML_NAMESPACE_MATH,   sXML_yellow,       TYELLOW},
     XML_TOKEN_MAP_END
 };
 
@@ -1274,9 +1549,15 @@ const SvXMLTokenMap& SmXMLImport::GetPresScriptEmptyElemTokenMap()
 const SvXMLTokenMap& SmXMLImport::GetPresTableElemTokenMap()
 {
     if(!pPresTableElemTokenMap)
-        pPresTableElemTokenMap = new
-            SvXMLTokenMap(aPresTableElemTokenMap);
+        pPresTableElemTokenMap = new SvXMLTokenMap(aPresTableElemTokenMap);
     return *pPresTableElemTokenMap;
+}
+
+const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
+{
+    if(!pColorTokenMap)
+        pColorTokenMap = new SvXMLTokenMap(aColorTokenMap);
+    return *pColorTokenMap;
 }
 
 SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
@@ -1287,6 +1568,9 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
     SvXMLImportContext* pContext = 0L;
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
+
+    UINT32 nTest = rTokenMap.Get(nPrefix, rLocalName);
+
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         /*General Layout Schemata*/
@@ -1364,17 +1648,14 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
                 rLocalName, xAttrList);
             break;
         default:
-            /*Basically theres an implicit mrow around bare elements*/
-            SvXMLImportContext *pTempContext =
-                GetSmImport().CreateRowContext(nPrefix,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("mrow")),xAttrList);
-            pContext = pTempContext->CreateChildContext(nPrefix, rLocalName,
-                xAttrList);
-            delete pTempContext;
-#if 0
-            pContext = GetSmImport().CreateMathContext(nPrefix,rLocalName,
-                xAttrList);
-#endif
+            /*Basically theres an implicit mrow around certain bare
+             *elements, use a RowContext to see if this is one of
+             *those ones*/
+            SmXMLRowContext_Impl aTempContext(GetSmImport(),nPrefix,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_mrow)));
+
+            pContext = aTempContext.StrictCreateChildContext(nPrefix,
+                rLocalName, xAttrList);
             break;
     }
     return pContext;
@@ -1386,7 +1667,7 @@ void SmXMLDocContext_Impl::EndElement()
     ContextArray.SetSize(1);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    for(USHORT i=0;i< 1;i++)
+    for(ULONG i=0;i< 1;i++)
         ContextArray.Put(i, rNodeStack.Pop());
 
     SmToken aDummy;
@@ -1395,9 +1676,9 @@ void SmXMLDocContext_Impl::EndElement()
     rNodeStack.Push(pSNode);
 
     SmNodeArray  LineArray;
-    USHORT n = rNodeStack.Count();
+    ULONG n = rNodeStack.Count();
     LineArray.SetSize(n);
-    for (USHORT j = 0; j < n; j++)
+    for (ULONG j = 0; j < n; j++)
         LineArray.Put(n - (j + 1), rNodeStack.Pop());
     SmStructureNode *pSNode2 = new SmTableNode(aDummy);
     pSNode2->SetSubNodes(LineArray);
@@ -1469,12 +1750,12 @@ void SmXMLRowContext_Impl::EndElement()
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    USHORT nSize = rNodeStack.Count()-nElementCount;
+    ULONG nSize = rNodeStack.Count()-nElementCount;
 
     if (nSize)
     {
         aRelationArray.SetSize(nSize);
-        for(USHORT j=rNodeStack.Count()-nElementCount;j > 0;j--)
+        for(ULONG j=rNodeStack.Count()-nElementCount;j > 0;j--)
             aRelationArray.Put(j-1,rNodeStack.Pop());
 
 
@@ -1490,7 +1771,6 @@ void SmXMLRowContext_Impl::EndElement()
         {
             SmToken aToken;
             aToken.cMathChar = '\0';
-            aToken.aText = 'none';
             aToken.nGroup = 0;
             aToken.nLevel = 5;
 
@@ -1523,7 +1803,7 @@ void SmXMLRowContext_Impl::EndElement()
 
             aRelationArray2.SetSize(nSize-nLeft-nRight);
 
-            for(ULONG i=0;i < nSize-nLeft-nRight;i++)
+            for(USHORT i=0;i < nSize-nLeft-nRight;i++)
                 aRelationArray2.Put(i,aRelationArray.Get(i+nLeft));
 
             SmToken aDummy;
@@ -1557,7 +1837,8 @@ void SmXMLRowContext_Impl::EndElement()
 
 
 
-SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
+
+SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
@@ -1599,14 +1880,28 @@ SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
             pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName,
                 xAttrList);
             break;
-
-
         default:
-            //All of those are end nodes, i.e. nothing embedded in them
-            //anything else will be a schemata of some kind.
-            pContext = SmXMLDocContext_Impl::CreateChildContext(nPrefix,
-                rLocalName,xAttrList);
             break;
+    }
+    return pContext;
+}
+
+
+
+SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+{
+    SvXMLImportContext* pContext = StrictCreateChildContext(nPrefix,
+    rLocalName, xAttrList);
+
+    if (!pContext)
+    {
+        //Hmm, unrecognized for this level, check to see if its
+        //an element that can have an implicit schema around it
+        pContext = SmXMLDocContext_Impl::CreateChildContext(nPrefix,
+            rLocalName,xAttrList);
     }
     return pContext;
 }
@@ -1654,7 +1949,7 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
         aToken.nGroup = 0;
         aToken.nLevel = 0;
         aToken.eType = TRSUB;
-        USHORT nFinalCount = rNodeStack.Count()-nElementCount-1;
+        ULONG nFinalCount = rNodeStack.Count()-nElementCount-1;
 
         SmNodeStack aReverseStack;
         while (rNodeStack.Count()-nElementCount)
@@ -1663,14 +1958,14 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
             aReverseStack.Push(pThing);
         }
 
-        for (USHORT nCount=0;nCount < nFinalCount;nCount+=2)
+        for (ULONG nCount=0;nCount < nFinalCount;nCount+=2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
             // initialize subnodes array
             SmNodeArray  aSubNodes;
             aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-            for (int i = 1;  i < aSubNodes.GetSize();  i++)
+            for (ULONG i = 1;  i < aSubNodes.GetSize();  i++)
                 aSubNodes.Put(i, NULL);
 
             /*On each loop the base and its sub sup pair becomes the
@@ -1704,19 +1999,37 @@ void SmXMLTableContext_Impl::EndElement()
     SmNodeStack aReverseStack;
     aExpressionArray.SetSize(rNodeStack.Count()-nElementCount);
 
-    USHORT nRows = rNodeStack.Count()-nElementCount;
+    ULONG nRows = rNodeStack.Count()-nElementCount;
     USHORT nCols = 0;
 
     SmStructureNode *pArray;
-    for(USHORT i=rNodeStack.Count()-nElementCount;i > 0;i--)
+    for(ULONG i=rNodeStack.Count()-nElementCount;i > 0;i--)
     {
         pArray = (SmStructureNode *)rNodeStack.Pop();
+        if (pArray->GetNumSubNodes() == 0)
+        {
+            //This is a little tricky, it is possible that there was
+            //be elements that were not inside a <mtd> pair, in which
+            //case they will not be in a row, i.e. they will not have
+            //SubNodes, so we have to wait until here before we can
+            //resolve the situation. Implicitsurrounding tags are
+            //surprisingly difficult to get right within this
+            //architecture
+
+            SmNodeArray aRelationArray;
+            aRelationArray.SetSize(1);
+            aRelationArray.Put(0,pArray);
+            SmToken aDummy;
+            pArray = new SmExpressionNode(aDummy);
+            pArray->SetSubNodes(aRelationArray);
+        }
+
         if (pArray->GetNumSubNodes() > nCols)
             nCols = pArray->GetNumSubNodes();
         aReverseStack.Push(pArray);
     }
     aExpressionArray.SetSize(nCols*nRows);
-    USHORT j=0;
+    ULONG j=0;
     while (aReverseStack.Count())
     {
         pArray = (SmStructureNode *)aReverseStack.Pop();
@@ -1731,7 +2044,7 @@ void SmXMLTableContext_Impl::EndElement()
     aToken.eType = TMATRIX;
     SmMatrixNode *pSNode = new SmMatrixNode(aToken);
     pSNode->SetSubNodes(aExpressionArray);
-    pSNode->SetRowCol(nRows,nCols);
+    pSNode->SetRowCol(static_cast<USHORT>(nRows),nCols);
     rNodeStack.Push(pSNode);
 }
 
@@ -1794,19 +2107,19 @@ void SmXMLMultiScriptsContext_Impl::EndElement()
         aToken.nGroup = 0;
         aToken.nLevel = 0;
         aToken.eType = TLSUB;
-        USHORT nFinalCount = rNodeStack.Count()-nElementCount-1;
+        ULONG nFinalCount = rNodeStack.Count()-nElementCount-1;
 
         SmNodeStack aReverseStack;
         while (rNodeStack.Count()-nElementCount)
             aReverseStack.Push(rNodeStack.Pop());
-        for (USHORT nCount=0;nCount < nFinalCount;nCount+=2)
+        for (ULONG nCount=0;nCount < nFinalCount;nCount+=2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
             // initialize subnodes array
             SmNodeArray  aSubNodes;
             aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-            for (int i = 1;  i < aSubNodes.GetSize();  i++)
+            for (ULONG i = 1;  i < aSubNodes.GetSize();  i++)
                 aSubNodes.Put(i, NULL);
 
             /*On each loop the base and its sub sup pair becomes the
@@ -1837,7 +2150,7 @@ void SmXMLActionContext_Impl::EndElement()
      first pushed one*/
 
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    for(USHORT i=rNodeStack.Count()-nElementCount;i > 1;i--)
+    for(ULONG i=rNodeStack.Count()-nElementCount;i > 1;i--)
     {
         delete rNodeStack.Pop();
     }
@@ -1899,13 +2212,6 @@ SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
     return new SmXMLSpaceContext_Impl(*this,nPrefix,rLocalName);
 }
 
-
-SvXMLImportContext *SmXMLImport::CreateMathContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> &xAttrList)
-{
-        return NULL;
-}
 
 SvXMLImportContext *SmXMLImport::CreateFracContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
@@ -2075,6 +2381,8 @@ SmXMLImport::~SmXMLImport()
         delete pPresLayoutAttrTokenMap;
     if (pFencedAttrTokenMap)
         delete pFencedAttrTokenMap;
+    if (pColorTokenMap)
+        delete pColorTokenMap;
     if (pOperatorAttrTokenMap)
         delete pOperatorAttrTokenMap;
 }
@@ -2104,7 +2412,7 @@ void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode,int nLevel)
 void SmXMLExport::ExportExpression(const SmNode *pNode,int nLevel)
 {
     SvXMLElementExport *pRow=0;
-    USHORT  nSize = pNode->GetNumSubNodes();
+    ULONG  nSize = pNode->GetNumSubNodes();
 
     if (nSize > 1)
         pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mrow,
@@ -2182,7 +2490,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
     SvXMLElementExport aMath(*this,XML_NAMESPACE_MATH,sXML_mo,
         sal_True,sal_False);
     sal_Unicode nArse[2];
-    nArse[0] = aMathTypeTable[pTemp->GetText().GetChar(0)&0x00FF];
+    nArse[0] = MathType::aMathTypeTable[pTemp->GetText().GetChar(0)&0x00FF];
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -2190,11 +2498,21 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *aText;
+    const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
     switch (pNode->GetToken().eType)
     {
+        default:
         case TIDENT:
-            //Note that we should change the fontstyle away from
-            //italic for one char strings if needed, and vice versa
+            //Note that we change the fontstyle to italic for strings that
+            //are italic and longer than a single character.
+            if ((pTemp->GetText().Len() > 1) &&
+                (pTemp->GetFont().GetItalic() == ITALIC_NORMAL))
+                AddAttribute(XML_NAMESPACE_MATH,sXML_fontstyle,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_italic)));
+            else if ((pTemp->GetText().Len() == 1) &&
+                (pTemp->GetFont().GetItalic() == ITALIC_NONE))
+                AddAttribute(XML_NAMESPACE_MATH,sXML_fontstyle,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_normal)));
             aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mi,
             sal_True,sal_False);
             break;
@@ -2202,12 +2520,11 @@ void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
             aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mn,
             sal_True,sal_False);
             break;
-        default:
+        case TTEXT:
             aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mtext,
             sal_True,sal_False);
             break;
-    }
-    const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
+        }
     GetDocHandler()->characters(pTemp->GetText());
     delete aText;
 }
@@ -2216,7 +2533,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
 {
     const SmNode *pSub,*pSup,*pCSub,*pCSup,*pLSub,*pLSup;
     SvXMLElementExport *pThing=0,*pThing2=0;
-
+#if 0
     if ((pCSub = pNode->GetSubNode(CSUB+1))&&(pCSup=pNode->GetSubNode(CSUP+1)))
     {
         pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
@@ -2232,6 +2549,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
         pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mover,
             sal_True,sal_True);
     }
+#endif
 
     //if we have prescripts at all then we must use the tensor notation
 
@@ -2245,7 +2563,32 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
         SvXMLElementExport aMultiScripts(*this,XML_NAMESPACE_MATH,
             sXML_mmultiscripts, sal_True, sal_True);
 
+
+        if ((pCSub = pNode->GetSubNode(CSUB+1))
+            && (pCSup=pNode->GetSubNode(CSUP+1)))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_munderover, sal_True,sal_True);
+        }
+        else if (pCSub = pNode->GetSubNode(CSUB+1))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_munder, sal_True,sal_True);
+        }
+        else if (pCSup = pNode->GetSubNode(CSUP+1))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_mover, sal_True,sal_True);
+        }
+
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
+
+        if (pCSub)
+            ExportNodes(pCSub, nLevel+1);
+        if (pCSup)
+            ExportNodes(pCSup, nLevel+1);
+        if (pThing2)
+            delete pThing2;
 
         pSub = pNode->GetSubNode(RSUB+1);
         pSup = pNode->GetSubNode(RSUP+1);
@@ -2309,8 +2652,30 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
                 sal_True,sal_True);
         }
 
+        if ((pCSub = pNode->GetSubNode(CSUB+1))
+            && (pCSup=pNode->GetSubNode(CSUP+1)))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_munderover, sal_True,sal_True);
+        }
+        else if (pCSub = pNode->GetSubNode(CSUB+1))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_munder, sal_True,sal_True);
+        }
+        else if (pCSup = pNode->GetSubNode(CSUP+1))
+        {
+            pThing2 = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+                sXML_mover, sal_True,sal_True);
+        }
         ExportNodes(pNode->GetSubNode(0), nLevel+1);    //Main Term
 
+        if (pCSub)
+            ExportNodes(pCSub, nLevel+1);
+        if (pCSup)
+            ExportNodes(pCSup, nLevel+1);
+        if (pThing2)
+            delete pThing2;
 
         if (pSub)
             ExportNodes(pSub, nLevel+1);
@@ -2319,13 +2684,14 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
         if (pThing)
             delete pThing;
     }
-
+#if 0
     if (pCSub)
         ExportNodes(pCSub, nLevel+1);
     if (pCSup)
         ExportNodes(pCSup, nLevel+1);
     if (pThing2)
         delete pThing2;
+#endif
 }
 
 void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
@@ -2343,9 +2709,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
     {
         sal_Unicode nArse[2];
         nArse[1] = 0;
-        nArse[0] = aMathTypeTable[pLeft->GetText().GetChar(0)&0x00FF];
+        nArse[0] = MathType::aMathTypeTable[pLeft->GetText().GetChar(0)
+            & 0x00FF];
         AddAttribute(XML_NAMESPACE_MATH,sXML_open,nArse);
-        nArse[0] = aMathTypeTable[pRight->GetText().GetChar(0)&0x00FF];
+        nArse[0] = MathType::aMathTypeTable[pRight->GetText().GetChar(0)
+            & 0x00FF];
         AddAttribute(XML_NAMESPACE_MATH,sXML_close,nArse);
         pFences = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mfenced,
             sal_True,sal_True);
@@ -2415,6 +2783,8 @@ void SmXMLExport::ExportOperator(const SmNode *pNode, int nLevel)
     GetDocHandler()->characters(pTemp->GetText());
     }
 #endif
+    SvXMLElementExport aRow(*this,XML_NAMESPACE_MATH,sXML_mrow,
+        sal_True, sal_True);
     ExportNodes(pNode->GetSubNode(0),nLevel+1);
     ExportNodes(pNode->GetSubNode(1),nLevel+1);
 }
@@ -2426,14 +2796,14 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
     if (pNode->GetToken().eType == TUNDERLINE)
     {
         AddAttribute(XML_NAMESPACE_MATH,sXML_accentunder,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("True")));
+            OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
         pElement = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_munder,
             sal_True,sal_True);
     }
     else
     {
         AddAttribute(XML_NAMESPACE_MATH,sXML_accent,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("True")));
+            OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
         pElement = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mover,
             sal_True,sal_True);
     }
@@ -2488,21 +2858,103 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             break;
         case TBOLD:
             AddAttribute(XML_NAMESPACE_MATH,sXML_fontweight,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("bold")));
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bold)));
             break;
         case TITALIC:
             AddAttribute(XML_NAMESPACE_MATH,sXML_fontstyle,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("italic")));
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_italic)));
+            break;
+        case TNBOLD:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_fontweight,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_weight_normal)));
+            break;
+        case TNITALIC:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_fontstyle,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_weight_normal)));
+            break;
+        case TBLACK:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_black)));
+            break;
+        case TWHITE:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_white)));
+            break;
+        case TRED:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_red)));
+            break;
+        case TGREEN:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_green)));
+            break;
+        case TBLUE:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_blue)));
+            break;
+        case TCYAN:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_aqua)));
+            break;
+        case TMAGENTA:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_fuchsia)));
+            break;
+        case TYELLOW:
+            AddAttribute(XML_NAMESPACE_MATH,sXML_color,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_yellow)));
             break;
         case TSIZE:
             {
             const SmFontNode *pFontNode = static_cast<const SmFontNode *>
                 (pNode);
             const Fraction &aFrac = pFontNode->GetSizeParameter();
+
             OUStringBuffer sStrBuf;
-            GetMM100UnitConverter().setXMLMeasureUnit(MAP_POINT);
-            GetMM100UnitConverter().convertMeasure(sStrBuf,
-                static_cast<long>(aFrac),MAP_POINT);
+            switch(pFontNode->GetSizeType())
+            {
+                case FNTSIZ_MULTIPLY:
+                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                        static_cast<double>(aFrac*Fraction(100.00)));
+                    sStrBuf.append(static_cast<sal_Unicode>('%'));
+                    break;
+                case FNTSIZ_DIVIDE:
+                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                        static_cast<double>(Fraction(100.00)/aFrac));
+                    sStrBuf.append(static_cast<sal_Unicode>('%'));
+                    break;
+                case FNTSIZ_ABSOLUT:
+                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                        static_cast<double>(aFrac));
+                    sStrBuf.append(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt)));
+                    break;
+                default:
+                    {
+                        //The problem here is that the wheels fall off because
+                        //font size is stored in 100th's of a mm not pts, and
+                        //rounding errors take their toll on the original
+                        //value specified in points.
+
+                        //Must fix StarMath to retain the original pt values
+                        Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().
+                            GetSize().Height());
+
+                        if (pFontNode->GetSizeType() == FNTSIZ_MINUS)
+                            aTemp-=aFrac;
+                        else
+                            aTemp+=aFrac;
+
+                        double mytest = static_cast<double>(aTemp);
+
+                        mytest = SolarMath::Round(mytest,1);
+                        SvXMLUnitConverter::convertNumber(sStrBuf,mytest);
+                        sStrBuf.append(OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt)));
+                    }
+                    break;
+            }
+
             OUString sStr(sStrBuf.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_MATH,sXML_fontsize,sStr);
             }
@@ -2561,8 +3013,8 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
     SvXMLElementExport aOver1(*this,XML_NAMESPACE_MATH,pWhich, sal_True,
         sal_True);
     {//Scoping
-        AddAttribute(XML_NAMESPACE_MATH,sXML_accent,
-                OUString(RTL_CONSTASCII_USTRINGPARAM("True")));
+        AddAttribute(XML_NAMESPACE_MATH,sXML_accent,OUString(
+            RTL_CONSTASCII_USTRINGPARAM(sXML_accent)));
         SvXMLElementExport aOver2(*this,XML_NAMESPACE_MATH,pWhich, sal_True,
             sal_True);
         ExportNodes(pNode->GetSubNode(0),nLevel);
@@ -2577,11 +3029,11 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
         sal_True, sal_True);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
     USHORT i=0;
-    for (USHORT y = 0; y < pMatrix->GetNumRows(); y++)
+    for (ULONG y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this,XML_NAMESPACE_MATH,sXML_mtr,
             sal_True, sal_True);
-        for (USHORT x = 0; x < pMatrix->GetNumCols(); x++)
+        for (ULONG x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
                 SvXMLElementExport aCell(*this,XML_NAMESPACE_MATH,
@@ -2607,8 +3059,14 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NTEXT:
             ExportText(pNode,nLevel);
             break;
-        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
+        case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in
+                    //the XML engine.
         case NMATH:
+            //To fully handle generic MathML we need to implement the full
+            //operator dictionary, we will generate MathML with explicit
+            //stretchiness for now.
+            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,OUString(
+                RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
             ExportMath(pNode,nLevel);
             break;
         case NBINHOR:
@@ -2647,8 +3105,8 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 #if 0
         default:
             {
-            USHORT  nSize = pNode->GetNumSubNodes();
-            for (USHORT i = 0; i < nSize; i++)
+            ULONG  nSize = pNode->GetNumSubNodes();
+            for (ULONG i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     ExportNodes(pTemp,nLevel+1);
             }

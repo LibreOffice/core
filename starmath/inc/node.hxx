@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-21 12:31:18 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ public:
     virtual void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    virtual void CreateTextFromNode(String &rText);
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
@@ -391,6 +392,8 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    virtual void CreateTextFromNode(String &rText);
+
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -448,6 +451,7 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -532,6 +536,7 @@ public:
     {}
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -569,6 +574,7 @@ public:
     }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -605,6 +611,7 @@ public:
     virtual SmNode * GetLeftMost() { return this; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -678,6 +685,8 @@ public:
     SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode(1 + eSubSup); };
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
+
 };
 
 
@@ -694,6 +703,7 @@ public:
     }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -808,9 +818,11 @@ public:
 
     void SetSizeParameter(const Fraction &rValue, USHORT nType);
     const Fraction & GetSizeParameter() const {return aFontSize;}
+    const USHORT& GetSizeType() const {return nSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 
@@ -836,6 +848,7 @@ public:
     virtual SmNode * GetLeftMost() { return this; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+    void CreateTextFromNode(String &rText);
 };
 
 

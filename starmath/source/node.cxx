@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,16 @@
  ************************************************************************/
 
 #pragma hdrstop
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
 #ifndef _SV_GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
 #ifndef _FRACT_HXX //autogen
 #include <tools/fract.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_H
+#include <tools/solmath.hxx>
 #endif
 #ifndef _SV_COLOR_HXX //autogen
 #include <vcl/color.hxx>
@@ -110,6 +114,9 @@
 #endif
 #ifndef _SMMOD_HXX
 #include "smmod.hxx"
+#endif
+#ifndef _MATHTYPE_HXX
+#include "mathtype.hxx"
 #endif
 
 #include <math.h>
@@ -262,7 +269,8 @@ void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
     {
         Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
                         rSize.GetDenominator());
-        long      nHeight = (long) aVal;
+        //long    nHeight = SolarMath::Round(aVal);
+        long      nHeight = (long)aVal;
 
         aSize = GetFont().GetSize();
         aSize.Width() = 0;
@@ -415,6 +423,46 @@ void SmNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     for (USHORT i = 0;  i < nSize;  i++)
         if (pNode = GetSubNode(i))
             pNode->Arrange(rDev, rFormat);
+}
+
+void SmNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNode;
+    USHORT  nSize = GetNumSubNodes();
+    if (nSize > 1)
+        rText.Append('{');
+    for (USHORT i = 0;  i < nSize;  i++)
+        if (pNode = GetSubNode(i))
+            pNode->CreateTextFromNode(rText);
+    if (nSize > 1)
+    {
+        rText.EraseTrailingChars();
+        APPEND(rText,"} ");
+    }
+}
+
+void SmExpressionNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNode;
+    USHORT  nSize = GetNumSubNodes();
+    if (nSize > 1)
+        rText.Append('{');
+    for (USHORT i = 0;  i < nSize;  i++)
+        if (pNode = GetSubNode(i))
+        {
+            pNode->CreateTextFromNode(rText);
+            //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
+            if (pNode->GetType() == NMATH)
+                if ((nSize != 2) || ((rText.GetChar(rText.Len()-1) != '+') &&
+                    (rText.GetChar(rText.Len()-1) != '-')))
+                    rText.Append(' ');
+        }
+
+    if (nSize > 1)
+    {
+        rText.EraseTrailingChars();
+        APPEND(rText,"} ");
+    }
 }
 
 
@@ -795,6 +843,20 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
+void SmRootNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pExtra = GetSubNode(0);
+    if (pExtra)
+    {
+        APPEND(rText,"nroot ");
+        pExtra->CreateTextFromNode(rText);
+    }
+    else
+        APPEND(rText,"sqrt ");
+    GetSubNode(2)->CreateTextFromNode(rText);
+}
+
+
 /**************************************************************************/
 
 
@@ -893,6 +955,16 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     SmRect::operator = (*pNum);
     ExtendBy(*pDenom, RCP_NONE).ExtendBy(*pLine, RCP_NONE, pLine->GetCenterY());
+}
+
+void SmBinVerNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNum   = GetSubNode(0),
+           *pLine  = GetSubNode(1),
+           *pDenom = GetSubNode(2);
+    pNum->CreateTextFromNode(rText);
+    APPEND(rText,"over ");
+    pDenom->CreateTextFromNode(rText);
 }
 
 
@@ -1278,9 +1350,61 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     }
 }
 
+void SmSubSupNode::CreateTextFromNode(String &rText)
+{
+    SmNode *pNode;
+    GetSubNode(0)->CreateTextFromNode(rText);
+
+    if (pNode = GetSubNode(LSUB+1))
+    {
+        APPEND(rText,"lsub ");
+        pNode->CreateTextFromNode(rText);
+    }
+    if (pNode = GetSubNode(LSUP+1))
+    {
+        APPEND(rText,"lsup ");
+        pNode->CreateTextFromNode(rText);
+    }
+    if (pNode = GetSubNode(CSUB+1))
+    {
+        APPEND(rText,"csub ");
+        pNode->CreateTextFromNode(rText);
+    }
+    if (pNode = GetSubNode(CSUP+1))
+    {
+        APPEND(rText,"csup ");
+        pNode->CreateTextFromNode(rText);
+    }
+    if (pNode = GetSubNode(RSUB+1))
+    {
+        rText.EraseTrailingChars();
+        rText.Append('_');
+        pNode->CreateTextFromNode(rText);
+    }
+    if (pNode = GetSubNode(RSUP+1))
+    {
+        rText.EraseTrailingChars();
+        rText.Append('^');
+        pNode->CreateTextFromNode(rText);
+    }
+}
+
 
 /**************************************************************************/
 
+void SmBraceNode::CreateTextFromNode(String &rText)
+{
+    if (GetScaleMode() == SCALE_HEIGHT)
+        APPEND(rText,"left ");
+    GetSubNode(0)->CreateTextFromNode(rText);
+    rText.Append(' ');
+    GetSubNode(1)->CreateTextFromNode(rText);
+    if (GetScaleMode() == SCALE_HEIGHT)
+        APPEND(rText,"right ");
+    GetSubNode(2)->CreateTextFromNode(rText);
+    rText.Append(' ');
+
+}
 
 void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -1636,6 +1760,95 @@ void SmAttributNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 
 /**************************************************************************/
+
+
+
+
+void SmFontNode::CreateTextFromNode(String &rText)
+{
+    switch (GetToken().eType)
+    {
+        case TBOLD:
+            APPEND(rText,"bold ");
+            break;
+        case TNBOLD:
+            APPEND(rText,"nbold ");
+            break;
+        case TITALIC:
+            APPEND(rText,"italic ");
+            break;
+        case TNITALIC:
+            APPEND(rText,"nitalic ");
+            break;
+        case TPHANTOM:
+            APPEND(rText,"phantom ");
+            break;
+        case TSIZE:
+            {
+                APPEND(rText,"size ");
+                switch (nSizeType)
+                {
+                    case FNTSIZ_PLUS:
+                        rText.Append('+');
+                        break;
+                    case FNTSIZ_MINUS:
+                        rText.Append('-');
+                        break;
+                    case FNTSIZ_MULTIPLY:
+                        rText.Append('*');
+                        break;
+                    case FNTSIZ_DIVIDE:
+                        rText.Append('/');
+                        break;
+                    case FNTSIZ_ABSOLUT:
+                    default:
+                        break;
+                }
+                String sResult;
+                SolarMath::DoubleToString(sResult,
+                    static_cast<double>(aFontSize),'A',INT_MAX,'.',sal_True);
+                rText.Append(sResult);
+                rText.Append(' ');
+            }
+            break;
+        case TBLACK:
+            APPEND(rText,"color black ");
+            break;
+        case TWHITE:
+            APPEND(rText,"color white ");
+            break;
+        case TRED:
+            APPEND(rText,"color red ");
+            break;
+        case TGREEN:
+            APPEND(rText,"color green ");
+            break;
+        case TBLUE:
+            APPEND(rText,"color blue ");
+            break;
+        case TCYAN:
+            APPEND(rText,"color cyan ");
+            break;
+        case TMAGENTA:
+            APPEND(rText,"color magenta ");
+            break;
+        case TYELLOW:
+            APPEND(rText,"color yellow ");
+            break;
+        case TSANS:
+            APPEND(rText,"font sans ");
+            break;
+        case TSERIF:
+            APPEND(rText,"font serif ");
+            break;
+        case TFIXED:
+            APPEND(rText,"font fixed ");
+            break;
+        default:
+            break;
+    }
+    GetSubNode(1)->CreateTextFromNode(rText);
+}
 
 
 void SmFontNode::Prepare(const SmFormat &rFormat)
@@ -2067,6 +2280,21 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (SmRect(aTmpDev, &rFormat, aText, GetFont().GetBorderWidth()));
 }
 
+void SmTextNode::CreateTextFromNode(String &rText)
+{
+    if (GetToken().eType == TTEXT)
+        rText.Append('\"');
+    else if ((GetToken().eType == TIDENT) &&
+        (GetFontDesc() == FNT_FUNCTION))
+    {
+        //Search for existing functions and remove extraenous keyword
+        APPEND(rText,"func ");
+    }
+    rText.Append(GetToken().aText);
+    if (GetToken().eType == TTEXT)
+        rText.Append('\"');
+    rText.Append(' ');
+}
 
 void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
 {
@@ -2097,6 +2325,24 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
 
 /**************************************************************************/
 
+void SmMatrixNode::CreateTextFromNode(String &rText)
+{
+    APPEND(rText,"matrix {");
+    for (int i = 0;  i < nNumRows;  i++)
+    {
+        for (int j = 0;  j < nNumCols;  j++)
+        {
+            SmNode *pNode = GetSubNode(i * nNumCols + j);
+            pNode->CreateTextFromNode(rText);
+            if (j != nNumCols-1)
+                APPEND(rText,"# ");
+        }
+        if (i != nNumRows-1)
+            APPEND(rText,"## ");
+    }
+    rText.EraseTrailingChars();
+    APPEND(rText,"} ");
+}
 
 void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
@@ -2315,6 +2561,17 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
+
+void SmMathSymbolNode::CreateTextFromNode(String &rText)
+{
+//  rText.Append(MathType::aMathTypeTable[GetToken().cMathChar&0x00FF]);
+    String sStr;
+    MathType::LookupChar(MathType::aMathTypeTable[GetToken().cMathChar&0x00FF],
+        sStr);
+    sStr.EraseLeadingAndTrailingChars();
+    rText.Append(sStr);
+}
+
 
 
 /**************************************************************************/
