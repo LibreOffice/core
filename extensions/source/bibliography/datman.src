@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 21:01:31 $
+ *  last change: $Author: vg $ $Date: 2001-08-24 10:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,7 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
+
 
 
 
