@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 14:39:52 $
+ *  last change: $Author: ama $ $Date: 2001-11-20 15:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,7 @@ void SwCntntFrm::MakeAll()
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
             MakePrtArea( rAttrs );
-            if ( nOldW != (Prt().*fnRect->fnGetTop)() )
+            if ( nOldW != (Prt().*fnRect->fnGetWidth)() )
                 Prepare( PREP_FIXSIZE_CHG );
         }
 
