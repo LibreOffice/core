@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:02:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,14 +171,19 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
         }
         else if( aUndoIter.pMarkList )
         {
-            if( HasDrawView() )
+            if( this->ISA( SwFEShell ) )
             {
-                SdrView *pView = GetDrawView();
-                pView->UnmarkAll();
                 const SdrMarkList& rLst = *aUndoIter.pMarkList;
                 for( USHORT i = 0; i < rLst.GetMarkCount(); ++i )
-                    pView->MarkObj( rLst.GetMark( i )->GetObj(),
-                                    Imp()->GetPageView() );
+                    ((SwFEShell*)this)->SelectObj(
+                        Point(),
+                        (i==0) ? 0 : SW_ADD_SELECT,
+                        rLst.GetMark( i )->GetObj() );
+
+                // the old implementation would always unselect
+                // objects, even if no new ones were selected. If this
+                // is a problem, we need to re-work this a little.
+                ASSERT( rLst.GetMarkCount() != 0, "empty mark list" );
             }
         }
         else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
