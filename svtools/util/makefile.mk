@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.22 $
+#*  $Revision: 1.23 $
 #*
-#*  last change: $Author: dv $ $Date: 2001-06-28 12:17:55 $
+#*  last change: $Author: er $ $Date: 2001-07-02 09:42:09 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -126,6 +126,7 @@ LIB7FILES=	\
         $(SLB)$/urlobj.lib		\
         $(SLB)$/plugapp.lib 	\
         $(SLB)$/svcontnr.lib	\
+        $(SLB)$/syslocale.lib   \
         $(SLB)$/svhtml2.lib     \
         $(SLB)$/filepicker.lib
 
