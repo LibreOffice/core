@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:35:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Text[ english_us ] = "~Cancel";
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "~Zrušiť";
 };
 
 String STEP_ZERO + 1
@@ -124,6 +125,7 @@ Text[ english_us ] = "~Help";
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "~सहायता";
+    Text[ slovak ] = "~Pomocník";
 };
 
 String STEP_ZERO + 2
@@ -154,6 +156,7 @@ Text[ english_us ] = "<<~Back";
     Text[ czech ] = "<<Zpět";
     Text[ hebrew ] = "‮<< הקודם‬";
     Text[ hindi ] = "<<~पीछे";
+    Text[ slovak ] = "<<~Späť";
 };
 
 String STEP_ZERO + 3
@@ -184,6 +187,7 @@ Text[ english_us ] = "~Convert";
     Text[ czech ] = "Konvertovat";
     Text[ hebrew ] = "‮המרה‬";
     Text[ hindi ] = "~बदलो";
+    Text[ slovak ] = "~Konvertovať";
 };
 
 String STEP_ZERO + 4
@@ -214,6 +218,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ czech ] = "Pozor: Není možné konvertovat částky získané z externích odkazů a kurzové indexy zadané ve vzorcích.";
     Text[ hebrew ] = "‮לתשומת לב: כמויות מטבעות מקישורים חיצוניים והמרות מטבע בנוסחאות אינן ניתנות להמרה.‬";
     Text[ hindi ] = "सूचना: बाहरी लिंक्स से मुद्रा और मुद्रा बदलनेवाला फॉक्टर को सूत्र में नहीं बदल सकते है ।";
+    Text[ slovak ] = "Poznámka: Čiastky meny z externých odkazov a kurz meny vo vzorcoch nemožno konvertovať.";
 };
 
 String STEP_ZERO + 5
@@ -244,6 +249,7 @@ Text[ english_us ] = "First, unprotect all sheets.";
     Text[ czech ] = "Nejdříve musíte odemknout všechny listy.";
     Text[ hebrew ] = "‮יש להסיר הגנה מכל הגליונות.‬";
     Text[ hindi ] = "पहिले, सब शीटों को अरक्षित करो ।";
+    Text[ slovak ] = "Najprv odomkni všetky listy.";
 };
 
 String STEP_ZERO + 6
@@ -274,6 +280,7 @@ Text[ english_us ] = "Currencies:";
     Text[ czech ] = "Měny:";
     Text[ hebrew ] = "‮מטבעות:‬";
     Text[ hindi ] = "मुद्रा:";
+    Text[ slovak ] = "Meny:";
 };
 
 
@@ -305,6 +312,7 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ czech ] = "Pokračovat>>";
     Text[ hebrew ] = "‮המשך >>‬";
     Text[ hindi ] = "जा~री रखो>>";
+    Text[ slovak ] = "P~okračovať>>";
 };
 
 
@@ -336,6 +344,7 @@ Text[ english_us ] = "C~lose";
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "ब~न्द करो";
+    Text[ slovak ] = "Za~vrieť";
 };
 
 String STEP_CONVERTER
@@ -366,6 +375,7 @@ Text[ english_us ] = "~Entire document";
     Text[ czech ] = "Celý dokument";
     Text[ hebrew ] = "‮המסמך כולו‬";
     Text[ hindi ] = "~सम्पूर्ण लेखपत्र";
+    Text[ slovak ] = "C~elý dokument";
 };
 
 String STEP_CONVERTER + 1
@@ -397,6 +407,7 @@ Text[ english_us ] = "Selection";
     Text[ czech ] = "Výběr";
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "चुनाव";
+    Text[ slovak ] = "Výber";
 };
 
 String STEP_CONVERTER + 2
@@ -427,6 +438,7 @@ Text[ english_us ] = "Cell S~tyles";
     Text[ czech ] = "Formát buněk";
     Text[ hebrew ] = "‮סגנונות תאים‬";
     Text[ hindi ] = "कोष्ठ शै~लियाँ";
+    Text[ slovak ] = "Š~týly bunky";
 };
 
 String STEP_CONVERTER + 3
@@ -440,7 +452,7 @@ Text[ english_us ] = "Currency cells in the current ~sheet";
     Text[ dutch ] = "Valutacellen in het huidige ~werkblad";
     Text[ french ] = "Cellules mon�taires dans la ~feuille de calcul active";
     Text[ spanish ] = "Celdas monetarias en hoja a~ctiva";
-    Text[ italian ] = "Celle della valuta nella tabella corrente";
+    Text[ italian ] = "Celle della valuta nella tabella attiva";
     Text[ danish ] = "Valutaceller i det aktuelle ~ark";
     Text[ swedish ] = "Valutaceller p� det aktuella ~tabellbladet";
     Text[ polish ] = "Kom�rki walutowe w bie��cym ~arkuszu";
@@ -457,6 +469,7 @@ Text[ english_us ] = "Currency cells in the current ~sheet";
     Text[ czech ] = "Buňky z aktuálního listu, které mají formát měny";
     Text[ hebrew ] = "‮תאי מטבע בגליון הנוכחי‬";
     Text[ hindi ] = "वर्तमान ~शीट् का मुद्रा कोष्ठें";
+    Text[ slovak ] = "Bunky s menou v súča~snom liste";
 };
 
 String STEP_CONVERTER + 4
@@ -487,6 +500,7 @@ Text[ english_us ] = "Currency cells in the entire ~document";
     Text[ czech ] = "Buňky z celého sešitu, které mají formát měny";
     Text[ hebrew ] = "‮תאי מטבע במסמך כולו‬";
     Text[ hindi ] = "सम्पूर्ण ~लेखपत्र का मुद्रा कोष्ठें";
+    Text[ slovak ] = "Bunky s menou v celom ~dokumente";
 };
 
 String STEP_CONVERTER + 5
@@ -517,6 +531,7 @@ Text[ english_us ] = "~Selected range";
     Text[ czech ] = "Vybranou oblast";
     Text[ hebrew ] = "‮טווח נבחר‬";
     Text[ hindi ] = "~चुना हुआ फैलाव";
+    Text[ slovak ] = "Vybranú obla~sť";
 };
 
 String STEP_CONVERTER + 6
@@ -547,6 +562,7 @@ Text[ english_us ] = "Select Cell Styles";
     Text[ czech ] = "Vybrat formát buněk";
     Text[ hebrew ] = "‮בחירת סגנונות תאים‬";
     Text[ hindi ] = "कोष्ठ शैलियों को चुनो";
+    Text[ slovak ] = "Vybrať štýl buniek";
 };
 
 String STEP_CONVERTER + 7
@@ -577,6 +593,7 @@ Text[ english_us ] = "Select currency cells";
     Text[ czech ] = "Vybrat buňky, které mají formát měny";
     Text[ hebrew ] = "‮בחירת תאי מטבע‬";
     Text[ hindi ] = "मुद्रा कोष्ठों को चुनो";
+    Text[ slovak ] = "Vybrať bunky s menou";
 };
 
 String STEP_CONVERTER + 8
@@ -607,6 +624,7 @@ Text[ english_us ] = "Currency ranges:";
     Text[ czech ] = "Rozsahy peněžních částek";
     Text[ hebrew ] = "‮טווח מטבע:‬";
     Text[ hindi ] = "मुद्रा फैलाव:";
+    Text[ slovak ] = "Rozpätie meny:";
 };
 
 String STEP_CONVERTER + 9
@@ -637,6 +655,7 @@ Text[ english_us ] = "Templates:";
     Text[ czech ] = "Šablony:";
     Text[ hebrew ] = "‮תבניות:‬";
     Text[ hindi ] = "नमूनें:";
+    Text[ slovak ] = "Šablóny:";
 };
 
 
@@ -668,6 +687,7 @@ Text[ english_us ] = "Extent";
     Text[ czech ] = "Konvertovat";
     Text[ hebrew ] = "‮היקף‬";
     Text[ hindi ] = "विस्तार";
+    Text[ slovak ] = "Rozsah";
 };
 
 String STEP_AUTOPILOT + 1
@@ -698,6 +718,7 @@ Text[ english_us ] = "~Single %PRODUCTNAME Calc document";
     Text[ czech ] = "Samostatný soubor %PRODUCTNAME";
     Text[ hebrew ] = "‮קובץ %PRODUCTNAME calc יחיד‬";
     Text[ hindi ] = "~अकेला %PRODUCTNAME गणना लेखपत्र";
+    Text[ slovak ] = "Jednoduchý %PRODUCTNAME dokumen~t Calcu";
 };
 
 String STEP_AUTOPILOT + 2
@@ -728,6 +749,7 @@ Text[ english_us ] = "Complete ~directory";
     Text[ czech ] = "Celý adresář";
     Text[ hebrew ] = "‮ספריה שלמה‬";
     Text[ hindi ] = "सम्पूर्ण ~डैरक्टरी";
+    Text[ slovak ] = "Celý a~dresár";
 };
 
 String STEP_AUTOPILOT + 3
@@ -758,6 +780,7 @@ Text[ english_us ] = "Source Document:";
     Text[ czech ] = "Dokument ke konverzi:";
     Text[ hebrew ] = "‮קובץ מקור:‬";
     Text[ hindi ] = "मूल लेखपत्र:";
+    Text[ slovak ] = "Zdrojový dokument:";
 };
 
 String STEP_AUTOPILOT + 4
@@ -771,7 +794,7 @@ Text[ english_us ] = "Source directory:";
     Text[ dutch ] = "Brondirectory:";
     Text[ french ] = "R�pertoire source :";
     Text[ spanish ] = "Directorio fuente:";
-    Text[ italian ] = "Cartella di origine (root):";
+    Text[ italian ] = "Cartella sorgente:";
     Text[ danish ] = "Kildebibliotek:";
     Text[ swedish ] = "K�llkatalog:";
     Text[ polish ] = "Katalog �r�d�owy:";
@@ -788,6 +811,7 @@ Text[ english_us ] = "Source directory:";
     Text[ czech ] = "Adresář ke konverzi:";
     Text[ hebrew ] = "‮ספרית מקור:‬";
     Text[ hindi ] = "मूल डैरक्टरी:";
+    Text[ slovak ] = "Zdrojový adresár:";
 };
 
 String STEP_AUTOPILOT + 5
@@ -818,6 +842,7 @@ Text[ english_us ] = "~Including subfolders";
     Text[ czech ] = "Včetně podadresářů";
     Text[ hebrew ] = "‮כולל תתי-ספריות‬";
     Text[ hindi ] = "अधीन कोष्ठों को ~सम्मिलित करना";
+    Text[ slovak ] = "Vrátan~e podadresárov";
 };
 
 String STEP_AUTOPILOT + 6
@@ -848,6 +873,7 @@ Text[ english_us ] = "Target directory:";
     Text[ czech ] = "Cílový adresář:";
     Text[ hebrew ] = "‮ספרית יעד:‬";
     Text[ hindi ] = "लक्ष्य डैरक्टरी:";
+    Text[ slovak ] = "Cieľový adresár:";
 };
 
 
@@ -879,6 +905,7 @@ Text[ english_us ] = "Temporarily unprotect sheet without query";
     Text[ czech ] = "Dočasně odemkni listy bez dalších dotazů";
     Text[ hebrew ] = "‮הסרת הגנה על גליון באופן זמני ללא הצגת שאלה‬";
     Text[ hindi ] = "जानकारी के बिना कुछ समय केलिए शीट् को अरक्षित करो";
+    Text[ slovak ] = "Dočasne odomkni listy bez opýtania";
 };
 
 
@@ -911,6 +938,7 @@ Text[ language_user1 ] = "Label einer Checkbox";
     Text[ czech ] = "Převést i pole a tabulky v textových dokumentech";
     Text[ hebrew ] = "‮כולל תרגום שדות וטבלאות במסמכי טקסט‬";
     Text[ hindi ] = "टेक्स्ट् लेखपत्र में क्षेत्रों को और सारणियों को बदलो";
+    Text[ slovak ] = "Polia a tabuľky konvertovať aj v textových dokumentoch";
 };
 
 
@@ -942,6 +970,7 @@ Text[ english_us ] = "Conversion status: ";
     Text[ czech ] = "Stav konverze:";
     Text[ hebrew ] = "‮מצב המרה: ‬";
     Text[ hindi ] = "परिवर्तन वस्तुस्थिति: ";
+    Text[ slovak ] = "Stav konverzie:";
 };
 
 String STATUSLINE + 1
@@ -972,6 +1001,7 @@ Text[ english_us ] = "Conversion status of the cell templates:";
     Text[ czech ] = "Stav konverze šablon buněk:";
     Text[ hebrew ] = "‮מצב המרת תבניות התאים:‬";
     Text[ hindi ] = "कोष्ठ नमूने का परिवर्तन वस्तुस्थिति:";
+    Text[ slovak ] = "Stav konverzie zo šablón buniek";
 };
 
 String STATUSLINE + 2
@@ -1002,6 +1032,7 @@ Text[ english_us ] = "Registration of the relevant ranges: Sheet %1Number%1 of %
     Text[ czech ] = "Zadání příslušného rozsahu: List %1 Číslo %1 z %2 Celkem stran %2";
     Text[ hebrew ] = "‮רישום טווחים לעניין: %1Number%1 מתוך %2TotPageCount%2‬";
     Text[ hindi ] = "अनुरूप फैलाव की रजिस्टरी: शीट् %1Number%1 का %2TotPageCount%2";
+    Text[ slovak ] = "Registrácia relevantných oblastí zošitu %1Number%1 z %2TotPageCount%2";
 };
 
 
@@ -1033,6 +1064,7 @@ Text[ english_us ] = "Entry of the ranges to be converted...";
     Text[ czech ] = "Zadání rozsahu ke konverzi...";
     Text[ hebrew ] = "‮הכנסת טווחים להמרה...‬";
     Text[ hindi ] = "फैलाव की प्रविष्टि को बदलना चाहिए...";
+    Text[ slovak ] = "Položka z rozpätia na konverziu...";
 };
 
 
@@ -1066,6 +1098,7 @@ Text[ english_us ] = "Sheet protection for each sheet will be restored...";
     Text[ czech ] = "Uzamčení jednotlivých listů je obnovováno...";
     Text[ hebrew ] = "‮הגנת הגליונות תוחזר...‬";
     Text[ hindi ] = "हरेक शीट् केलिए शीट् की रक्षा को पूर्व अवस्था में पहुँचा सकते है...";
+    Text[ slovak ] = "Zabezpečenie listu pre každý list bude obnovené...";
 };
 
 
@@ -1097,6 +1130,7 @@ Text[ english_us ] = "Conversion of the currency units in the cell templates..."
     Text[ czech ] = "Převod měnových jednotek v buňkách šablon...";
     Text[ hebrew ] = "‮המרת מטבע בתבניות התאים...‬";
     Text[ hindi ] = "कोष्ठ नमूनें में मुद्रा यूनिट् का परिवर्तन...";
+    Text[ slovak ] = "Konverzia jednotiek meny v šablónach buniek...";
 };
 
 
@@ -1130,6 +1164,7 @@ Text[ english_us ] = "~Finish";
     Text[ czech ] = "Dokončit";
     Text[ hebrew ] = "‮סיום‬";
     Text[ hindi ] = "~समाप्ती";
+    Text[ slovak ] = "~Dokončiť";
 };
 
 String MESSAGES + 1
@@ -1161,6 +1196,7 @@ Text[ english_us ] = "Select directory";
     Text[ czech ] = "Vybrat adresář";
     Text[ hebrew ] = "‮בחירת ספריה‬";
     Text[ hindi ] = "डैरक्टरी चुनो";
+    Text[ slovak ] = "Vybrať adresár";
 };
 
 String MESSAGES + 2
@@ -1192,6 +1228,7 @@ Text[ english_us ] = "Select file";
     Text[ czech ] = "Vybrat soubor";
     Text[ hebrew ] = "‮בחירת קובץ‬";
     Text[ hindi ] = "फाइल चुनो";
+    Text[ slovak ] = "Vybrať súbor";
 };
 
 String MESSAGES + 3
@@ -1222,6 +1259,7 @@ Text[ english_us ] = "Select target directory";
     Text[ czech ] = "Vybrat cílový adresář";
     Text[ hebrew ] = "‮בחירת ספרית יעד‬";
     Text[ hindi ] = "लक्ष्य डैरक्टरी चुनो";
+    Text[ slovak ] = "Vybrať cieľový adresár";
 };
 
 String MESSAGES + 4
@@ -1252,6 +1290,7 @@ Text[ english_us ] = "non-existant";
     Text[ czech ] = "neexistuje";
     Text[ hebrew ] = "‮לא קיים‬";
     Text[ hindi ] = "अस्तित्व हीन";
+    Text[ slovak ] = "neexistuje";
 };
 
 
@@ -1283,6 +1322,7 @@ Text[ english_us ] = "Euro Converter";
     Text[ czech ] = "Eurokonvertor";
     Text[ hebrew ] = "‮המרה לאירו‬";
     Text[ hindi ] = "यूरो में बदलनेवाला";
+    Text[ slovak ] = "Eurokonvertor";
 };
 
 
@@ -1315,6 +1355,7 @@ Text[ english_us ] = "Should protected spreadsheets be temporarily unprotected?"
     Text[ czech ] = "Mají být zamčené sešity dočasně odemknuty?";
     Text[ hebrew ] = "‮האם להסיר זמנית את ההגנה מגליונות מוגנות?‬";
     Text[ hindi ] = "रक्षित स्प्रेडशीटों को कुछ समय केलिए अरक्षित करना है?";
+    Text[ slovak ] = "Majú byť zamknuté listy dočasne odomknuté?";
 };
 
 
@@ -1346,6 +1387,7 @@ Text[ english_us ] = "Enter the password to unprotect the table %1TableName%1";
     Text[ czech ] = "Zadejte heslo k odemknutí tabulky %1 jména %1";
     Text[ hebrew ] = "‮יש להקיש סיסמה כדי להסיר הגנה מטבלת %1TableName%1‬";
     Text[ hindi ] = "सारणी %1TableName%1 को अरक्षित करने केलिए कूटशब्द को प्रविष्ट करो";
+    Text[ slovak ] = "Zadaj heslo na odomknutie tabuľky %1TableName%1";
 };
 
 
@@ -1377,6 +1419,7 @@ Text[ english_us ] = "Wrong Password!";
     Text[ czech ] = "Neplatné heslo!";
     Text[ hebrew ] = "‮סיסמה שגויה‬";
     Text[ hindi ] = "गलत कूटशब्द!";
+    Text[ slovak ] = "Neplatné heslo!";
 };
 
 
@@ -1408,6 +1451,7 @@ Text[ english_us ] = "Protected Sheet";
     Text[ czech ] = "Zamknutý list";
     Text[ hebrew ] = "‮גליון מוגן‬";
     Text[ hindi ] = "रक्षित शीट्";
+    Text[ slovak ] = "Zamknutý list";
 };
 
 
@@ -1439,6 +1483,7 @@ Text[ english_us ] = "Warning!";
     Text[ czech ] = "Upozornění!";
     Text[ hebrew ] = "‮אזהרה!‬";
     Text[ hindi ] = "चेतावनी!";
+    Text[ slovak ] = "Upozornenie!";
 };
 
 
@@ -1470,6 +1515,7 @@ Text[ english_us ] = "Protection for the sheets will not be removed.";
     Text[ czech ] = "Listy nebudou odemčeny.";
     Text[ hebrew ] = "‮הגנת הגליונות לא תוסר.‬";
     Text[ hindi ] = "शीट् केलिए रक्षा को नहीं हटा सकते है ।";
+    Text[ slovak ] = "Ochrana listov nebude odstránená.";
 };
 
 
@@ -1501,6 +1547,7 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ czech ] = "List nemůže být odemčen";
     Text[ hebrew ] = "‮לא ניתן להסיר הגנת הגליון‬";
     Text[ hindi ] = "शीट् को अरक्षित नहीं कर सकते है";
+    Text[ slovak ] = "List musí byť zamknutý";
 };
 
 
@@ -1532,6 +1579,7 @@ Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats ca
     Text[ czech ] = "Průvodce nemůže editovat tento dokument, protože formáty buněk v dokumentech, které obsahují uzamčené tabulky, nemohou být měněny.";
     Text[ hebrew ] = "‮טייס האוטומטי אינו מסוגל לערוך מסמך זה כי לא ניתן לשנות את עיצוב התאים במסמכים המכילים גליונות מוגנים.‬";
     Text[ hindi ] = "कोष्ठ रचना को रक्षित स्प्रेडशीट् में न सुधारने के कारण ओटोपैलट् इस लेखपत्र में संपादन नहीं कर सकता है";
+    Text[ slovak ] = "Sprievodca nemôže upraviť tento dokument, pretože formát buniek nemôže byť upravený v dokumentoch obsahujúcich uzamknuté listy";
 };
 
 
@@ -1564,6 +1612,7 @@ Text[ english_us ] = "Please note that the Euro Converter will, otherwise, not b
     Text[ czech ] = "Pozor: Eurokonvertor nebude v opačném případě schopen editovat tento dokument!";
     Text[ hebrew ] = "‮סימו לב שאחרת, ממיר האירו לא יכול לערוך מסמך זה!‬";
     Text[ hindi ] = "कृपया ध्यान दीजिए कि यूरो बदलनेवाला, इस लेखपत्र में संपादन नहीं कर सकते है!";
+    Text[ slovak ] = "Prosím všimnite si, že Eurokonvertor nebude v opačnom prípade schopný upraviť tento dokument!";
 };
 
 
@@ -1596,6 +1645,7 @@ Text[ english_us ] = "Please choose a currency to be converted first!";
     Text[ czech ] = "Prosím, nejdříve zadejte měnu, kterou chcete konvertovat!";
     Text[ hebrew ] = "‮נא לבחור מטבע לפני פעולה זו!‬";
     Text[ hindi ] = "कृपया पहिले बदलने केलिए एक मुद्रा को चुनिए!";
+    Text[ slovak ] = "Prosím vyberte najprv menu, ktorá má byť skonvertovaná!";
 };
 
 String MESSAGES + 16
@@ -1626,6 +1676,7 @@ Text[ english_us ] = "Password:";
     Text[ czech ] = "Heslo:";
     Text[ hebrew ] = "‮סיסמה:‬";
     Text[ hindi ] = "कूटशब्द:";
+    Text[ slovak ] = "Heslo:";
 };
 
 String MESSAGES + 17
@@ -1656,6 +1707,7 @@ Text[ english_us ] = "OK";
     Text[ czech ] = "OK";
     Text[ hebrew ] = "‮אישור‬";
     Text[ hindi ] = "ठीक";
+    Text[ slovak ] = "OK";
 };
 
 String MESSAGES + 18
@@ -1686,6 +1738,7 @@ Text[ english_us ] = "Cancel";
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "रद्द करो";
+    Text[ slovak ] = "Zrušiť";
 };
 
 
@@ -1717,6 +1770,7 @@ Text[ english_us ] = "Please select a %PRODUCTNAME Calc document for editing!";
     Text[ czech ] = "Prosím vyberte dokument %PRODUCTNAME Calc k editaci!";
     Text[ hebrew ] = "‮נא לבחור מסמך %PRODUCTNAME Calcלעריכה!‬";
     Text[ hindi ] = "कृपया %PRODUCTNAME गणना लेखपत्र को संपादन करने केलिए चुनो!";
+    Text[ slovak ] = "Prosím vyberte %PRODUCTNAME dokument Calc pre úpravy!";
 };
 
 
@@ -1748,6 +1802,7 @@ Text[ english_us ] = "'<1>' is not a directory!";
     Text[ czech ] = "'<1>' není adresář!";
     Text[ hebrew ] = "‮'<1>' אינו ספריה!‬";
     Text[ hindi ] = "'<1>' डैरक्टरी नहीं है!";
+    Text[ slovak ] = "'<1>' nie je adresár!";
 };
 
 
@@ -1779,6 +1834,7 @@ Text[ english_us ] = "Document is read-only!";
     Text[ czech ] = "Přístupová práva dovolují pouze čtení dokumentu!";
     Text[ hebrew ] = "‮המסמך לקריאה בלבד‬";
     Text[ hindi ] = "लेखपत्र केवल पढ़ने केलिए!";
+    Text[ slovak ] = "Dokument je určený len na čítanie!";
 };
 
 
@@ -1810,6 +1866,7 @@ String MESSAGES + 22
     Text[ czech ] = "Soubor '<1>' již existuje.<CR>Přejete si jej přepsat?";
     Text[ hebrew ] = "‮הקובץ '<1>' כבר קיים<CR>האם להחליף אותו?‬";
     Text[ hindi ] = "'<1>' फाइल पहिले से ही अस्तित्व में है ।<CR>आप ओवररइट करना चाहते है?";
+    Text[ slovak ] = "Súbor <1> už existuje.<CR> Chcete ho prepísať?";
 };
 
 
@@ -1841,6 +1898,7 @@ String MESSAGES + 23
     Text[ czech ] = "Skutečně si přejete nyní ukončit konverzi?";
     Text[ hebrew ] = "‮האם אכן להפסיק את ההמרה בנקודה זו?‬";
     Text[ hindi ] = "आप इस सचमुच में परिवर्तन को समाप्त करना चाहते है?";
+    Text[ slovak ] = "Želáte si zrušiť konverziu?";
 };
 
 String MESSAGES + 24
@@ -1871,6 +1929,7 @@ String MESSAGES + 24
     Text[ czech ] = "Zrušit průvodce";
     Text[ hebrew ] = "‮בטל טייס אוטומטי‬";
     Text[ hindi ] = "ओटोपैलट् रद्द करो";
+    Text[ slovak ] = "Zrušiť Sprievodcu";
 };
 
  String CURRENCIES
@@ -1901,6 +1960,7 @@ Text[ english_us ] = "Portuguese Escudo";
     Text[ czech ] = "Portugalské Escudo";
     Text[ hebrew ] = "Portuguese Escudo";
     Text[ hindi ] = "पोर्चुगीस एस्कुडो";
+    Text[ slovak ] = "Portugalské escudo";
 };
 
 String CURRENCIES + 1
@@ -1931,6 +1991,7 @@ Text[ english_us ] = "Dutch Guilder";
     Text[ czech ] = "Holandský gulden";
     Text[ hebrew ] = "‮גילדן הולנדי‬";
     Text[ hindi ] = "डच गिल्डर";
+    Text[ slovak ] = "Holandský gulden";
 };
 
 String CURRENCIES + 2
@@ -1961,6 +2022,7 @@ Text[ english_us ] = "French Franc";
     Text[ czech ] = "Francouzský frank";
     Text[ hebrew ] = "‮פרנק צרפתי‬";
     Text[ hindi ] = "फ्रेन्च फ्रान्क";
+    Text[ slovak ] = "Francúzsky frank";
 };
 
 String CURRENCIES + 3
@@ -1991,6 +2053,7 @@ Text[ english_us ] = "Spanish Peseta";
     Text[ czech ] = "Španělská peseta";
     Text[ hebrew ] = "‮פזטה ספרדית‬";
     Text[ hindi ] = "स्पॉनिश पेसेटा";
+    Text[ slovak ] = "Španielska peseta";
 };
 
 String CURRENCIES + 4
@@ -2021,6 +2084,7 @@ Text[ english_us ] = "Italian Lira";
     Text[ czech ] = "Italská lira";
     Text[ hebrew ] = "‮לירטה איטלקית‬";
     Text[ hindi ] = "इटालियन लिरा";
+    Text[ slovak ] = "Talianska líra";
 };
 
 String CURRENCIES + 5
@@ -2051,6 +2115,7 @@ Text[ english_us ] = "German Mark";
     Text[ czech ] = "Německá marka";
     Text[ hebrew ] = "‮מארק גרמני‬";
     Text[ hindi ] = "जर्मन मार्क";
+    Text[ slovak ] = "Nemecká marka";
 };
 
 String CURRENCIES + 6
@@ -2081,6 +2146,7 @@ Text[ english_us ] = "Belgian Franc";
     Text[ czech ] = "Belgický frank";
     Text[ hebrew ] = "‮פרנק בלגי‬";
     Text[ hindi ] = "बेल्जियन फ्रान्क ";
+    Text[ slovak ] = "Belgický frank";
 };
 
 String CURRENCIES + 7
@@ -2111,6 +2177,7 @@ Text[ english_us ] = "Irish Punt";
     Text[ czech ] = "Irská libra";
     Text[ hebrew ] = "‮פאנט אירי‬";
     Text[ hindi ] = "अइरिश पन्ट";
+    Text[ slovak ] = "Írska libra";
 };
 
 String CURRENCIES + 8
@@ -2141,6 +2208,7 @@ Text[ english_us ] = "Luxembourg Franc";
     Text[ czech ] = "Lucemburský frank";
     Text[ hebrew ] = "‮פרנק לוקסמבורגי‬";
     Text[ hindi ] = "लक्सम्बर्ग फ्रान्क";
+    Text[ slovak ] = "Luxemburský frank";
 };
 
 String CURRENCIES + 9
@@ -2171,6 +2239,7 @@ Text[ english_us ] = "Austrian Schilling";
     Text[ czech ] = "Rakouský šilink";
     Text[ hebrew ] = "‮שילינג אוסטרי‬";
     Text[ hindi ] = "ऑस्ट्रियन शिल्लिंग";
+    Text[ slovak ] = "Rakúsky šiling";
 };
 
 String CURRENCIES + 10
@@ -2201,6 +2270,7 @@ Text[ english_us ] = "Finnish Mark";
     Text[ czech ] = "Finská marka";
     Text[ hebrew ] = "‮מארק פיני‬";
     Text[ hindi ] = "फिन्निश मार्क";
+    Text[ slovak ] = "Fínska marka";
 };
 
 String CURRENCIES + 11
@@ -2231,6 +2301,7 @@ Text[ english_us ] = "Greek Drachma";
     Text[ czech ] = "Řecká drachma";
     Text[ hebrew ] = "‮דרכמה יוונית‬";
     Text[ hindi ] = "ग्रीक ड्राक्मा";
+    Text[ slovak ] = "Grécka drachma";
 };
 
 String CURRENCIES + 12
@@ -2261,6 +2332,7 @@ Text[ english_us ] = "The currency set for the document is not a European curren
     Text[ czech ] = "Měna použitá v dokumentu není měnou používanou v Evropské Unii!";
     Text[ hebrew ] = "‮מטבע המסמך אינו מטבע אירופאי!‬";
     Text[ hindi ] = "लेखपत्र केलिए सेट्ट किया हुआ मुद्रा युरोपियन मुद्रा नहीं है !";
+    Text[ slovak ] = "Mena použitá v dokumente nie je menou používanou v Európskej únii!";
 };
 
 String CURRENCIES + 13
@@ -2291,6 +2363,7 @@ Text[ english_us ] = "The language set for your operating system is not a langua
     Text[ czech ] = "Jazyk vašeho operačního systému není jazykem používaným v Evropské Unii.";
     Text[ hebrew ] = "‮ השפה בה משתמשת מערכת ההפעלה הנוכחית אינה משפות האיחוד המוניטרי האירופי‬";
     Text[ hindi ] = "आपका ओपरेटिंग सिस्टम केलिए सेट्ट किया हुआ भाषा युरोपियन मोनेटरी यूनियन का भाषा नहीं है ।";
+    Text[ slovak ] = "Jazyk nastavený pre Váš operačný systém nie je jazykom Európskej menovej únie";
 };
 
 
@@ -2322,6 +2395,7 @@ Text[ english_us ] = "Progress";
     Text[ czech ] = "Průběh";
     Text[ hebrew ] = "‮התקדמות‬";
     Text[ hindi ] = "प्रस्थान";
+    Text[ slovak ] = "Priebeh";
 };
 
 
@@ -2353,6 +2427,7 @@ Text[ english_us ] = "Retrieving the relevant documents...";
     Text[ czech ] = "Získávám příslušné dokumenty...";
     Text[ hebrew ] = "‮מאחזר מסמכים מתאימים...‬";
     Text[ hindi ] = "अनुरूप लेखपत्रों को प्राप्त कर रहा है...";
+    Text[ slovak ] = "Získavam príslušné dokumenty...";
 };
 
 String STEP_LASTPAGE + 2
@@ -2383,6 +2458,7 @@ Text[ english_us ] = "Converting the documents...";
     Text[ czech ] = "Konvertuji dokumenty...";
     Text[ hebrew ] = "‮ממיר את המסמכים...‬";
     Text[ hindi ] = "लेखपत्रों को बदल रहा है...";
+    Text[ slovak ] = "Prebieha konverzia.";
 };
 
 String STEP_LASTPAGE + 3
@@ -2413,6 +2489,7 @@ Text[ english_us ] = "Settings:";
     Text[ czech ] = "Nastavení:";
     Text[ hebrew ] = "‮הגדרות:‬";
     Text[ hindi ] = "निर्धारण:";
+    Text[ slovak ] = "Nastavenia:";
 };
 
 String STEP_LASTPAGE + 4
@@ -2443,7 +2520,10 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ czech ] = "List je trvale odemknut";
     Text[ hebrew ] = "‮הגליון ללא הגנה תמיד‬";
     Text[ hindi ] = "शीट् हमेशा अरक्षित";
+    Text[ slovak ] = "List je stále odomknutý";
 };
+
+
 
 
 
