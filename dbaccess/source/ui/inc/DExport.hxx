@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:42:36 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ namespace dbaui
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
         String  ShortenFieldName( const String& rName, xub_StrLen nNewLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& rDestList );
+        virtual void release() = 0;
     };
 }
 

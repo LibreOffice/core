@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 13:36:09 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,11 +236,11 @@ void ORTFReader::NextToken( int nToken )
                             }
                             nTmpToken2 = GetNextToken();
                         }
-                        while(aToken.GetChar(0) != ';');
+                        while(aToken.GetChar(0) != ';' && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
                         m_vecColor.push_back(aColor.GetRGBColor());
                         nTmpToken2 = GetNextToken();
                     }
-                    while(nTmpToken2 == RTF_RED);
+                    while(nTmpToken2 == RTF_RED && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
                     SkipToken();
                 }
                 break;
@@ -314,7 +314,7 @@ void ORTFReader::NextToken( int nToken )
                 {
                     do
                     {}
-                    while(GetNextToken() != RTF_ROW);
+                    while(GetNextToken() != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
                     m_bHead = sal_False;
                 }
                 break;
@@ -420,10 +420,10 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 break;
         }
     }
-    while((nTmpToken2 = GetNextToken()) != RTF_ROW);
+    while((nTmpToken2 = GetNextToken()) != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
 
-
-
+    if(m_vDestVector.empty())
+        return sal_False;
 
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
@@ -476,9 +476,14 @@ sal_Bool ORTFReader::CreateTable(int nToken)
         bError = TRUE;
 
     if(!bError)
-        bError = createRowSet();
+        bError = !createRowSet();
 
     return !bError && m_xTable.is();
+}
+// -----------------------------------------------------------------------------
+void ORTFReader::release()
+{
+    ReleaseRef();
 }
 // -----------------------------------------------------------------------------
 

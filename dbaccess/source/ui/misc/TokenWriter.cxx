@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 14:40:23 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ ODatabaseImportExport::ODatabaseImportExport(   const ::com::sun::star::uno::Ref
     ,m_xFactory(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
     ,m_bDisposeConnection(sal_False)
+    ,m_bInInitialize(sal_False)
 {
     DBG_CTOR(ODatabaseImportExport,NULL);
 }
@@ -232,7 +233,7 @@ ODatabaseImportExport::~ODatabaseImportExport()
     disposing();
 
     if(m_pReader)
-        ((SvRefBase*)m_pReader)->ReleaseRef();
+        m_pReader->release();
     delete m_pRowMarker;
     DBG_DTOR(ODatabaseImportExport,NULL);
 }
@@ -264,13 +265,16 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
     if(m_xConnection.is() && m_xConnection == xCon)
     {
         disposing();
-        initialize();
+        if(!m_bInInitialize)
+            initialize();
         m_bDisposeConnection = m_xConnection.is();
     }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
 {
+    m_bInInitialize = sal_True;
+
     if(!m_xConnection.is())
     {   // we need a connection
         Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
@@ -351,6 +355,8 @@ void ODatabaseImportExport::initialize()
         );
         m_aFont = VCLUnoHelper::CreateFontDescriptor( aApplicationFont );
     }
+
+    m_bInInitialize = sal_False;
 }
 //======================================================================
 BOOL ORTFImportExport::Write()
@@ -594,7 +600,8 @@ BOOL ORTFImportExport::Read()
     m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((ORTFReader*)m_pReader)->AddRef();
     SvParserState eState = ((ORTFReader*)m_pReader)->CallParser();
-    ((ORTFReader*)m_pReader)->ReleaseRef();
+    m_pReader->release();
+    m_pReader = NULL;
 
     return eState != SVPAR_ERROR;
 }
@@ -663,7 +670,8 @@ BOOL OHTMLImportExport::Read()
     m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((OHTMLReader*)m_pReader)->AddRef();
     SvParserState eState = ((OHTMLReader*)m_pReader)->CallParser();
-    ((OHTMLReader*)m_pReader)->ReleaseRef();
+    m_pReader->release();
+    m_pReader = NULL;
 
     return eState != SVPAR_ERROR;
 }

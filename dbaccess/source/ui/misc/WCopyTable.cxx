@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ void OCopyTableWizard::construct()
     FreeResource();
 
     ::dbaui::fillTypeInfo(m_xSourceConnection,m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);
+    ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aDestTypeInfo,m_aDestTypeInfoIndex);
     m_pTypeInfo = new OTypeInfo();
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
 }
@@ -833,6 +834,44 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             else
                 m_xDestObject = NULL;
         }
+        if(m_xDestObject.is())
+        {
+            Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
+            Reference<XNameAccess> xNameAccess = xColSup->getColumns();
+            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+            const ::rtl::OUString* pBegin = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+
+            ::std::vector<int> aAlreadyFound(m_vColumnPos.size(),0);
+
+            for(sal_Int32 nNewPos=1;pBegin != pEnd;++pBegin,++nNewPos)
+            {
+                ODatabaseExport::TColumnVector::const_iterator aIter = pVec->begin();
+                for(sal_Int32 nOldPos = 1;aIter != pVec->end();++aIter,++nOldPos)
+                {
+                    if((*aIter)->first == *pBegin)
+                    {
+                        if(nOldPos != nNewPos)
+                        {
+                            ::std::vector<int>::iterator aFound = aAlreadyFound.begin();
+                            ::std::vector<sal_Int32>::iterator aColPos = m_vColumnPos.begin();
+                            for(; aColPos != m_vColumnPos.end() && nOldPos;++aColPos,++aFound)
+                            {
+                                if(*aColPos != CONTAINER_ENTRY_NOTFOUND && !*aFound && nOldPos == *aColPos)
+                                    break;
+                            }
+                            if(aColPos != m_vColumnPos.end())
+                            {
+                                *aFound = 1;
+                                *aColPos = nNewPos;
+                                m_vColumnTypes[m_vColumnPos.end() - aColPos] = (*aIter)->second->GetType();
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
     else if(xTables.is() && xTables->hasByName(m_sName))
         xTables->getByName(m_sName) >>= m_xDestObject;
@@ -917,8 +956,6 @@ const OTypeInfo* OCopyTableWizard::convertType(const OTypeInfo* _pType)
 {
     if(m_xSourceConnection == m_xConnection)
         return _pType;
-    if(m_aDestTypeInfoIndex.empty())
-        ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aDestTypeInfo,m_aDestTypeInfoIndex);
 
     sal_Bool bForce;
     const OTypeInfo* pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,bForce);

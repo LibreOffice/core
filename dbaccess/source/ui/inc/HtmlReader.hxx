@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ namespace dbaui
         sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
     protected:
         virtual void        NextToken( int nToken ); // Basisklasse
-
         virtual sal_Bool    CreateTable(int nToken);
         void                TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
@@ -117,6 +116,7 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap = 0);
 
         virtual     SvParserState CallParser();// Basisklasse
+        virtual     void          release();
         // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 13:33:23 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,4 +747,8 @@ void OHTMLReader::setTextEncoding()
     }
 }
 // -----------------------------------------------------------------------------
-
+void OHTMLReader::release()
+{
+    ReleaseRef();
+}
+// -----------------------------------------------------------------------------

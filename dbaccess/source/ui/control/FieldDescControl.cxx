@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1905,7 +1905,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         {
             const OTypeInfoMap* pMap = getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pMap->find(pFieldDescr->getTypeInfo()->nType);
-            if(aIter == pMap->end())
+            if(aIter == pMap->end() && !pMap->empty())
             {
                 aIter = pMap->begin();
                 if(pFieldDescr->GetPrecision() > aIter->second->nPrecision)
@@ -1917,7 +1917,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 if(!aIter->second->bAutoIncrement && pFieldDescr->IsAutoIncrement())
                     pFieldDescr->SetAutoIncrement(sal_False);
             }
-            pFieldDescr->SetType(aIter->second);
+            if(aIter != pMap->end())
+                pFieldDescr->SetType(aIter->second);
         }
         m_pType->SelectEntry(pFieldDescr->getTypeInfo()->aUIName);
     }

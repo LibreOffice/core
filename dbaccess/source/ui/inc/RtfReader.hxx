@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ namespace dbaui
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
 
-        virtual         SvParserState CallParser();// Basisklasse
+        virtual SvParserState   CallParser();// Basisklasse
+        virtual void            release();
         // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde
         // ansonsten wird die SbaColumnList ohne "Anderung zur"uckgegeben
     };

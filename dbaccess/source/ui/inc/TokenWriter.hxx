@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:26 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ namespace dbaui
 #endif
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
+        sal_Bool            m_bInInitialize;
 
         // export data
         ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:05 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,25 @@ namespace dbaui
                                         // create the sql stmt
                                         if(nCommandType == CommandType::TABLE)
                                         {
-                                            sSql = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                                            sSql = ::rtl::OUString::createFromAscii("SELECT ");
+                                            // we need to create the sql stmt with column names
+                                            // otherwise it is possible that names don't match
+                                            ::rtl::OUString sQuote = xSrcConnection->getMetaData()->getIdentifierQuoteString();
+                                            static ::rtl::OUString sComma = ::rtl::OUString::createFromAscii(",");
+
+                                            Reference<XColumnsSupplier> xSrcColsSup(xSourceObject,UNO_QUERY);
+                                            OSL_ENSURE(xSrcColsSup.is(),"No source columns!");
+                                            Reference<XNameAccess> xNameAccess = xSrcColsSup->getColumns();
+                                            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+                                            const ::rtl::OUString* pBegin = aSeq.getConstArray();
+                                            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+                                            for(;pBegin != pEnd;++pBegin)
+                                            {
+                                                sSql += ::dbtools::quoteName( sQuote,*pBegin);
+                                                sSql += sComma;
+                                            }
+                                            sSql = sSql.replaceAt(sSql.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
+                                            sSql += ::rtl::OUString::createFromAscii("FROM ");
                                             ::rtl::OUString sComposedName;
                                             ::dbaui::composeTableName(xSrcConnection->getMetaData(),xSourceObject,sComposedName,sal_True);
                                             sSql += sComposedName;
@@ -1192,6 +1210,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/11/15 15:15:05  oj
+ *  #94820# check type of dest database and adjust if possible
+ *
  *  Revision 1.31  2001/11/12 10:34:55  oj
  *  #94391# exclude tablefilter and enable schema name again
  *
