@@ -63,6 +63,8 @@
 module com { module sun { module star { module auth {
 
 /** indicates an underlying persistence implementation failure.
+
+    @since #107627#
  */
 
 exception PersistenceFailureException : ::com::sun::star::uno::Exception

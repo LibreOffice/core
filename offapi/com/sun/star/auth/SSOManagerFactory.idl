@@ -86,6 +86,8 @@ module com { module sun { module star { module auth {
             received from the initiator side and to create security tokens to
             send to the initiator side.</LI>
     </UL>
+
+    @since #107627#
  */
 
 service SSOManagerFactory
