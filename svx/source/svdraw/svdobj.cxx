@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:58:24 $
+ *  last change: $Author: kz $ $Date: 2004-11-05 14:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,7 @@ void SdrObject::ImpDrawLineGeometry(   XOutputDevice&   rXOut,
 //BFS09            SvtGraphicStroke aStroke( XOutCreatePolygonBezier( aPolyPoly[0] ),
 //BFS09                                      XOutCreatePolygonBezier( aStartPoly ),
 //BFS09                                      XOutCreatePolygonBezier( aEndPoly ),
-            SvtGraphicStroke aStroke( Polygon(aPolyPoly[0].getB2DPolygon()),
+            SvtGraphicStroke aStroke( static_cast<Polygon>(aPolyPoly[0].getB2DPolygon()),
                                       Polygon(aStartPoly.getB2DPolygon()),
                                       Polygon(aEndPoly.getB2DPolygon()),
                                       nTransparence / 100.0,
