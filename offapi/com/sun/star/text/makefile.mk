@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cp $ $Date: 2000-11-20 10:13:20 $
+#   last change: $Author: os $ $Date: 2000-11-29 09:12:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ IDLFILES=\
     IllustrationIndex.idl\
     InvalidTextContentException.idl\
     LineNumberingSettings.idl\
+    LineNumberingProperties.idl\
     NotePrintMode.idl\
     NumberingLevel.idl\
     NumberingRules.idl\
@@ -191,6 +192,7 @@ IDLFILES=\
     XHeaderFooter.idl\
     XHeaderFooterPageStyle.idl\
     XLineNumberingSupplier.idl\
+    XLineNumberingProperties.idl\
     XModule.idl\
     XNumberingFormatter.idl\
     XNumberingRulesSupplier.idl\

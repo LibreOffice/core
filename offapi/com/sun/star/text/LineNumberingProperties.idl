@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ *  $RCSfile: LineNumberingProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: os $ $Date: 2000-11-29 09:10:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_LineNumberingProperties_idl__
+#define __com_sun_star_text_LineNumberingProperties_idl__
+
+#ifndef __com_sun_star_text_XLineNumberingProperties_idl__
+#include <com/sun/star/text/XLineNumberingProperties.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::LineNumberingProperties
+/** provides access to the settings of the line numbering.
+ */
+service LineNumberingProperties
+{
+    interface XLineNumberingProperties;
+    //-------------------------------------------------------------------------
+
+    /** If <true></true>, line numbering is used.
+     */
+    [property] boolean IsOn;
+
+    //-------------------------------------------------------------------------
+
+    /** The name of the character style that is used for the line number.
+     */
+    [property] string CharStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** If <true></true>, empty lines are counted.
+     */
+    [property] boolean CountEmptyLines;
+
+    //-------------------------------------------------------------------------
+    /** If <true></true>, lines in frames are included in counting.
+     */
+    [property] boolean CountLinesInFrames;
+
+    //-------------------------------------------------------------------------
+    /** specifies the distance between the line number and the start or
+        end of the text area.
+     */
+    [property] long Distance;
+
+    //-------------------------------------------------------------------------
+    /** Line numbers are shown on every <var>LineInterval</var>th line.
+     */
+    [property] short LineInterval;
+
+    //-------------------------------------------------------------------------
+    /** specifies the symbol that is shown between the line numbers.
+     */
+    [property] string LineSeparator;
+
+    //-------------------------------------------------------------------------
+    /** The line separator is shown every <var>SeparatorLineDistance</var>th line.
+     */
+    [property] short SeparatorLineDistance;
+
+    //-------------------------------------------------------------------------
+    /** specifies the position of the line number (constant LineNumberPositions
+        left/right/inside/outside).
+     */
+    [property] short NumberPosition;
+
+    //-------------------------------------------------------------------------
+    /** specifies the type of the numbering.
+     */
+    [property] short NumberingType;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
