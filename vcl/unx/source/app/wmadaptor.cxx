@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-17 11:24:03 $
+ *  last change: $Author: cp $ $Date: 2001-08-23 17:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,18 +237,25 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                             m_aWMAtoms[ NET_WM_NAME ],
                                             0, 256,
                                             False,
-                                            m_aWMAtoms[ UTF8_STRING ],
+                                            AnyPropertyType, /* m_aWMAtoms[ UTF8_STRING ],*/
                                             &aRealType,
                                             &nFormat,
                                             &nItems,
                                             &nBytesLeft,
                                             &pProperty ) == 0
-                        && aRealType == m_aWMAtoms[ UTF8_STRING ]
-                        && nFormat == 8
                         && nItems != 0
                         )
                     {
-                        m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                        if (aRealType == m_aWMAtoms[ UTF8_STRING ])
+                        {
+                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                        }
+                        else
+                        if (aRealType == XA_STRING)
+                        {
+                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
+                        }
+
                         XFree( pProperty );
                         pProperty = NULL;
                     }
@@ -403,11 +410,8 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     }
 #ifdef DEBUG
     fprintf( stderr, "WM %s NET_WM\n", m_bNetWM ? "supports" : "does not support" );
-    if( m_bNetWM )
-    {
-        fprintf( stderr, "Window Manager's name is \"%s\"\n",
+    fprintf( stderr, "Window Manager's name is \"%s\"\n",
                  ByteString( m_aWMName, RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
-    }
 #endif
 }
 

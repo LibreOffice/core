@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
+ *  last change: $Author: cp $ $Date: 2001-08-23 17:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,16 @@ public:
      */
     Atom getAtom( WMAtom eAtom ) const
     { return m_aWMAtoms[ eAtom ]; }
+
+    /*
+     * supports correct positioning
+     */
+
+    bool supportsICCCMPos () const
+    {
+        return m_bNetWM || m_aWMName.EqualsAscii ("Sawfish");
+    }
+
 };
 
 } // namespace
