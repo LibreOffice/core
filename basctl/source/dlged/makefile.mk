@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tbe $ $Date: 2001-03-16 13:44:52 $
+#   last change: $Author: tbe $ $Date: 2001-04-10 15:15:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ CXXFILES=	dlged.cxx		\
             dlgedview.cxx	\
             dlgedobj.cxx	\
             dlgedlist.cxx	\
+            dlgedclip.cxx	\
             propbrw.cxx
 
 SLOFILES=	$(SLO)$/dlged.obj		\
@@ -95,11 +96,13 @@ SLOFILES=	$(SLO)$/dlged.obj		\
             $(SLO)$/dlgedview.obj	\
             $(SLO)$/dlgedobj.obj	\
             $(SLO)$/dlgedlist.obj	\
+            $(SLO)$/dlgedclip.obj	\
             $(SLO)$/propbrw.obj
 
 EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
                 $(SLO)$/dlgedfac.obj	\
                 $(SLO)$/dlgedlist.obj	\
+                $(SLO)$/dlgedclip.obj	\
                 $(SLO)$/propbrw.obj
 
 SRCFILES=	dlgresid.src

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:09:30 $
+ *  last change: $Author: tbe $ $Date: 2001-04-10 15:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,10 +372,10 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
-                    if( pObj->ISA( DlgEdForm ) )
-                        pView->UnmarkAll();
-                    else
-                        pParent->UnmarkDialog();
+                    //if( pObj->ISA( DlgEdForm ) )
+                    //  pView->UnmarkAll();
+                    //else
+                    //  pParent->UnmarkDialog();
                 }
             }
 
@@ -425,8 +425,8 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         if (pView->IsAction() )
         {
             pView->EndAction();
-            if( bMarkAction )
-                pParent->UnmarkDialog();
+            //if( bMarkAction )
+                //pParent->UnmarkDialog();
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:06:53 $
+ *  last change: $Author: tbe $ $Date: 2001-04-10 15:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include "dlgedobj.hxx"
 #endif
 
+#ifndef _BASCTL_DLGEDCLIP_HXX
+#include "dlgedclip.hxx"
+#endif
+
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
@@ -99,12 +103,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
-#include <com/sun/star/awt/XDialog.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
+#include <com/sun/star/awt/XDialog.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
@@ -115,31 +119,34 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
+#include <xmlscript/xmldlg_imexp.hxx>
+#endif
+
 #include "vcsbxdef.hxx"
 
+// only for progressbar test
+//#define _PROGRESSBAR_TEST_
+#ifdef _PROGRESSBAR_TEST_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 
 using namespace comphelper;
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::rtl;
+
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( DlgEditor, ClipboardCleared, Clipboard *, EMPTYARG ) // not working yet
+namespace xmlscript
 {
-    if( !bClipPrivate )
-        return 0;
-
-    SdrModel** ppClipPrivate = (SdrModel**)GetAppData( SHL_VCED );
-
-    if( *ppClipPrivate )
-        return 0;
-
-    delete *ppClipPrivate;
-    *ppClipPrivate = NULL;
-
-    bClipPrivate = FALSE;
-    return 0;
+    SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    SAL_CALL createInputStream(
+        ::rtl::ByteSequence const & rInData )
+        SAL_THROW( () );
 }
 
 //----------------------------------------------------------------------------
@@ -177,6 +184,21 @@ BOOL DlgEditor::UnmarkDialog()
     BOOL bWasMarked = pSdrView->IsObjMarked( pDlgObj );
 
     if( bWasMarked )
+        pSdrView->MarkObj( pDlgObj, pPgView, TRUE );
+
+    return bWasMarked;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL DlgEditor::RemarkDialog()
+{
+    SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
+    SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
+
+    BOOL bWasMarked = pSdrView->IsObjMarked( pDlgObj );
+
+    if( !bWasMarked )
         pSdrView->MarkObj( pDlgObj, pPgView, FALSE );
 
     return bWasMarked;
@@ -184,33 +206,30 @@ BOOL DlgEditor::UnmarkDialog()
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::RemarkDialog()
+DlgEditor::DlgEditor()
+    :pHScroll(NULL)
+    ,pVScroll(NULL)
+    ,pSdrModel(NULL)
+    ,pSdrPage(NULL)
+    ,pSdrView(NULL)
+    ,pDlgEdForm(NULL)
+    ,m_xUnoControlDialogModel(NULL)
+    ,m_ClipboardDataFlavors(1)
+    ,pObjFac(NULL)
+    ,pWindow(NULL)
+    ,pFunc(NULL)
+    ,eMode( VCDLGED_SELECT )
+    ,eActObj( OBJ_DLG_PUSHBUTTON )
+    ,bFirstDraw(FALSE)
+    ,aGridSize( 100, 100 )  // 100TH_MM
+    ,bGridVisible(FALSE)
+    ,bGridSnap(TRUE)
+    ,bCreateOK(TRUE)
+    ,bDialogModelChanged(FALSE)
 {
-    SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
-    SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
-
-    pSdrView->MarkObj( pDlgObj, pPgView, TRUE );
-}
-
-//----------------------------------------------------------------------------
-
-DlgEditor::DlgEditor() :
-    pHScroll(NULL),
-    pVScroll(NULL),
-    eMode( VCDLGED_SELECT ), // eActObj( OBJ_DLG_PUSHBUTTON ),
-    bFirstDraw(FALSE),
-    bGridSnap(FALSE),
-    bGridVisible(FALSE),
-    bClipPrivate(FALSE),
-    bCreateOK(TRUE),
-    pSdrView(NULL),
-    bDialogModelChanged(FALSE)
-{
-    pWindow     = NULL;
-
-    pSdrModel = new DlgEdModel;
+    pSdrModel = new DlgEdModel();
     pSdrModel->GetItemPool().FreezeIdRanges();
-    pSdrModel->SetScaleUnit( MAP_TWIP );
+    pSdrModel->SetScaleUnit( MAP_100TH_MM );
 
     SdrLayerAdmin& rAdmin = pSdrModel->GetLayerAdmin();
     rAdmin.NewStandardLayer();
@@ -223,7 +242,10 @@ DlgEditor::DlgEditor() :
 
     pFunc = new DlgEdFuncSelect( this );
 
-    aClip.SetClearedHdl( LINK( this, DlgEditor, ClipboardCleared ) );
+    // set clipboard data flavor
+    m_ClipboardDataFlavors[0].MimeType =                ::rtl::OUString::createFromAscii("application/vnd.sun.xml.dialog");
+    m_ClipboardDataFlavors[0].HumanPresentableName =    ::rtl::OUString::createFromAscii("Dialog 6.0");
+    m_ClipboardDataFlavors[0].DataType =                ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aPaintTimer.SetTimeout( 1 );
     aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
@@ -233,8 +255,6 @@ DlgEditor::DlgEditor() :
 
 DlgEditor::~DlgEditor()
 {
-    ClipboardCleared( NULL );
-
     delete pObjFac;
     delete pFunc;
     delete pSdrView;
@@ -254,16 +274,13 @@ void DlgEditor::SetWindow( Window* pWindow )
     pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
 
-    Size aGridSize( 100, 100 );  // 100TH_MM
-    bGridSnap    = TRUE;
-    bGridVisible = TRUE;
     pSdrView->SetGridCoarse( aGridSize );
     pSdrView->SetSnapGrid( aGridSize );
     pSdrView->SetGridSnap( bGridSnap );
-    pSdrView->SetGridVisible( FALSE );
+    pSdrView->SetGridVisible( bGridVisible );
     pSdrView->SetDragStripes( FALSE );
 
-    pSdrView->SetDesignMode( TRUE );  // tbe put this somewhere else
+    pSdrView->SetDesignMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -412,13 +429,53 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdForm = new DlgEdForm();
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
-    pDlgEdForm->StartListening();
-    pDlgEdForm->SortByTabIndex();       // for backward compatibility
-    pDlgEdForm->SetRectFromProps();
     pDlgEdForm->SetDlgEditor( this );
     ((DlgEdPage*)pSdrModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
     pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
-    pDlgEdForm->SendRepaintBroadcast();
+    pDlgEdForm->SetRectFromProps();
+    pDlgEdForm->SortByTabIndex();       // for backward compatibility
+    pDlgEdForm->StartListening();
+
+
+    // test progressbar
+
+#ifdef _PROGRESSBAR_TEST_
+
+    uno::Reference< lang::XMultiServiceFactory >  xModFact( xDlgMod, uno::UNO_QUERY );
+    //DlgEdObj* pBar = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.XProgressBar"), xModFact);
+    DlgEdObj* pBar = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel"));
+    pBar->SetSnapRect( Rectangle( Point(1000,1000) , Size(1000,1000) ) );
+    pBar->SetChanged();
+    pSdrModel->GetPage(0)->InsertObject( pBar );
+    pBar->SendRepaintBroadcast();
+
+    uno::Reference< awt::XControlModel > xCtrl1( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.XProgressBar" ) ) ), uno::UNO_QUERY );
+
+    Reference< lang::XTypeProvider > xTypeProvider( pBar->GetUnoControlModel() , UNO_QUERY );
+    if( xTypeProvider.is() )
+    {
+        Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
+        const Type* pTypeArray = aTypeSeq.getConstArray();
+        UINT32 nIfaceCount = aTypeSeq.getLength();
+        for( UINT32 j = 0 ; j < nIfaceCount ; j++ )
+        {
+            const Type& rType = pTypeArray[j];
+            //aRet += Impl_GetInterfaceInfo( x, TypeToIdlClass( rType ), 1 );
+        }
+    }
+
+    uno::Reference< beans::XPropertySet > xPSet( xCtrl1, uno::UNO_QUERY );
+    uno::Any aValue;
+    aValue <<= (sal_Int32) 10;
+    //xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Range" ) ), aValue );
+    uno::Any aAny;
+    aAny <<= xCtrl1;
+    uno::Reference< container::XNameContainer > xC( xDlgMod , uno::UNO_QUERY );
+    //xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressBar1" ) ), aAny );
+
+#endif
+
+    // end of progressbar test
 
     // create controls
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
@@ -434,15 +491,13 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
             Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
                aA >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj();
-            pCtrlObj->SetDlgEdForm(pDlgEdForm);
-            pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
             pCtrlObj->SetUnoControlModel( xCtrlModel );
-            pCtrlObj->StartListening();
+            pCtrlObj->SetDlgEdForm(pDlgEdForm);
+            pDlgEdForm->AddChild(pCtrlObj);                     // add child to parent form
+            pSdrModel->GetPage(0)->InsertObject( pCtrlObj );    // insert object into drawing page
             pCtrlObj->SetRectFromProps();
-            pCtrlObj->SetChanged();
-            pSdrModel->GetPage(0)->InsertObject( pCtrlObj );
             pCtrlObj->UpdateStep();
-            pCtrlObj->SendRepaintBroadcast();
+            pCtrlObj->StartListening();
         }
     }
 
@@ -548,7 +603,10 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
                 // set dialog position and size
                 pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
+                pDlgEdForm->EndListening(sal_False);
                 pDlgEdForm->SetPropsFromRect();
+                pDlgEdForm->GetDlgEditor()->SetDialogModelChanged(TRUE);
+                pDlgEdForm->StartListening();
 
                 // set position and size of controls
                 ULONG nObjCount;
@@ -613,71 +671,207 @@ USHORT DlgEditor::GetInsertObj() const
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::Cut()   // not working yet
+void DlgEditor::Cut()
 {
-    if( !pSdrView->HasMarkedObj() )
-        return;
-
-    pSdrView->BrkAction();
-
-    BOOL bDlgMarked = UnmarkDialog();
-
-    SdrModel* pMarked = pSdrView->GetAllMarkedModel();
-
-    aClip.Clear();
-    aClip.CopyPrivateData( pMarked );
-
-    SdrModel** ppClipPrivate = (SdrModel**)GetAppData( SHL_VCED );
-    *ppClipPrivate = pMarked;
-    bClipPrivate = TRUE;
-
+    Copy();
     Delete();
-
-    if( bDlgMarked )
-        RemarkDialog();
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::Copy()  // not working yet
+void DlgEditor::Copy()
 {
     if( !pSdrView->HasMarkedObj() )
         return;
 
+    // stop all drawing actions
     pSdrView->BrkAction();
 
-    BOOL bDlgMarked = UnmarkDialog();
+    // create an empty clipboard dialog model
+    Reference< util::XCloneable > xClone( m_xUnoControlDialogModel, UNO_QUERY );
+    Reference< util::XCloneable > xNewClone = xClone->createClone();
+    Reference< container::XNameContainer > xClipDialogModel( xNewClone, UNO_QUERY );
 
-    SdrModel* pMarked = pSdrView->GetAllMarkedModel();
+    Reference< container::XNameAccess > xNAcc( xClipDialogModel, UNO_QUERY );
+    if ( xNAcc.is() )
+    {
+           Sequence< OUString > aNames = xNAcc->getElementNames();
+           const OUString* pNames = aNames.getConstArray();
+        sal_uInt32 nCtrls = aNames.getLength();
 
-    aClip.Clear();
-    aClip.CopyPrivateData( pMarked );
+        for ( sal_uInt32 n = 0; n < nCtrls; n++ )
+        {
+               xClipDialogModel->removeByName( pNames[n] );
+        }
+    }
 
-    SdrModel** ppClipPrivate = (SdrModel**)GetAppData( SHL_VCED );
-    *ppClipPrivate = pMarked;
-    bClipPrivate   = TRUE;
+    // insert control models of marked objects into clipboard dialog model
+    ULONG nMark = pSdrView->GetMarkList().GetMarkCount();
+    for( ULONG i = 0; i < nMark; i++ )
+    {
+        SdrObject* pObj = pSdrView->GetMarkList().GetMark(i)->GetObj();
+        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
-    if( bDlgMarked )
-        RemarkDialog();
+        if (pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+        {
+            ::rtl::OUString aName;
+            Reference< beans::XPropertySet >  xMarkPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
+            if (xMarkPSet.is())
+            {
+                xMarkPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= aName;
+            }
+
+            Reference< container::XNameAccess > xNameAcc(m_xUnoControlDialogModel, UNO_QUERY );
+            if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
+            {
+                Any aCtrl = xNameAcc->getByName( aName );
+
+                // clone control model
+                Reference< util::XCloneable > xCtrl;
+                   aCtrl >>= xCtrl;
+                Reference< util::XCloneable > xNewCtrl = xCtrl->createClone();
+                Any aNewCtrl;
+                aNewCtrl <<= xNewCtrl;
+
+                if (xClipDialogModel.is())
+                    xClipDialogModel->insertByName( aName , aNewCtrl );
+            }
+        }
+    }
+
+    // export clipboard dialog model to xml
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel );
+    Reference< XInputStream > xStream( xISP->createInputStream() );
+    Sequence< sal_Int8 > bytes;
+    sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
+    for (;;)
+    {
+        Sequence< sal_Int8 > readBytes;
+        nRead = xStream->readBytes( readBytes, 1024 );
+        if (! nRead)
+            break;
+
+        sal_Int32 nPos = bytes.getLength();
+        bytes.realloc( nPos + nRead );
+        ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
+    }
+    xStream->closeInput();
+
+    // set clipboard content
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
+    if ( xClipboard.is() )
+    {
+        Any aBytes;
+        aBytes <<= bytes;
+        Sequence< Any > aSeqData(1);
+        aSeqData[0] = aBytes;
+        DlgEdTransferableImpl* pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , aSeqData );
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        xClipboard->setContents( pTrans , pTrans );
+        Application::AcquireSolarMutex( nRef );
+    }
 }
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::Paste() // not working yet
+void DlgEditor::Paste()
 {
-    SdrModel** ppClipPrivate = (SdrModel**)GetAppData( SHL_VCED );
-
+    // stop all drawing actions
     pSdrView->BrkAction();
 
-    if( !*ppClipPrivate )
-        return;
+    // unmark all objects
+    pSdrView->UnmarkAll();
 
-    static Point aDefPoint;
-    /*
-    Rectangle aRect( aDefPoint,
-                     pSbxForm->GetSize() );
-    pSdrView->Paste( **ppClipPrivate, aRect.Center() );
-    */
+    // get clipboard
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
+    if ( xClipboard.is() )
+    {
+        // get clipboard content
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
+        if ( xTransf.is() )
+        {
+            if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
+            {
+                // create clipboard dialog model from xml
+                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+                Reference< container::XNameContainer > xClipDialogModel( xMSF->createInstance
+                    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
+                        uno::UNO_QUERY );
+
+                Any aAny = xTransf->getTransferData( m_ClipboardDataFlavors[0] );
+                Sequence< sal_Int8 > bytes;
+                aAny >>= bytes;
+
+                if ( xClipDialogModel.is() )
+                {
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&bytes)) ) , xClipDialogModel );
+                }
+
+                // get control models from clipboard dialog model
+                Reference< ::com::sun::star::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
+                if ( xNameAcc.is() )
+                {
+                       Sequence< OUString > aNames = xNameAcc->getElementNames();
+                       const OUString* pNames = aNames.getConstArray();
+                    sal_uInt32 nCtrls = aNames.getLength();
+
+                    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+                    {
+                           Any aA = xNameAcc->getByName( pNames[n] );
+                        Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
+                           aA >>= xCtrlModel;
+
+                        DlgEdObj* pCtrlObj = new DlgEdObj();
+                        pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
+                        pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
+                        pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
+
+                        // set new name
+                        ::rtl::OUString aOUniqueName( pCtrlObj->GetUniqueName() );
+                        Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
+                        Any aUniqueName;
+                        aUniqueName <<= aOUniqueName;
+                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+
+                        // set tabindex
+                        Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
+                           Sequence< OUString > aNames = xNA->getElementNames();
+                        Any aTabIndex;
+                        aTabIndex <<= (sal_Int16) aNames.getLength();
+                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+
+                        // insert control model in editor dialog model
+                        Any aCtrlModel;
+                        aCtrlModel <<= xCtrlModel;
+                        m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
+
+                        // insert object into drawing page
+                        pSdrModel->GetPage(0)->InsertObject( pCtrlObj );
+                        pCtrlObj->SetRectFromProps();
+                        pCtrlObj->UpdateStep();
+                        pCtrlObj->StartListening();                         // start listening
+
+                        // mark object
+                        SdrPageView* pPgView = pSdrView->GetPageViewPvNum(0);
+                        pSdrView->MarkObj( pCtrlObj, pPgView, FALSE, TRUE);
+                    }
+
+                    // center marked objects in dialog editor form
+                    Point aMarkCenter = (pSdrView->GetMarkedObjRect()).Center();
+                    Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
+                    Point aPoint = aFormCenter - aMarkCenter;
+                    Size  aSize( aPoint.X() , aPoint.Y() );
+                    pSdrView->MoveMarkedObj( aSize );                       // update of control model properties (position + size) in NbcMove
+                    pSdrView->MarkListHasChanged();
+
+                    // dialog model changed
+                    SetDialogModelChanged(TRUE);
+                }
+            }
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -687,23 +881,15 @@ void DlgEditor::Delete()
     if( !pSdrView->HasMarkedObj() )
         return;
 
-    // Sicherstellen, dass nicht ein Dialog geloescht wird. So machts man
-    // richtig (inkompat.,ab 369): SdrView::CheckPossibilities() ueberladen
+    // remove control models of marked objects from dialog model
     ULONG nMark = pSdrView->GetMarkList().GetMarkCount();
 
     for( ULONG i = 0; i < nMark; i++ )
     {
-        if(pSdrView->GetMarkList().GetMark(i)->GetObj()->ISA(DlgEdForm))
-            return;
-    }
-
-    // remove control models of marked objects from dialog model
-    for( i = 0; i < nMark; i++ )
-    {
         SdrObject* pObj = pSdrView->GetMarkList().GetMark(i)->GetObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
-        if (pDlgEdObj)
+        if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
         {
             // get name from property
             ::rtl::OUString aName;
@@ -735,9 +921,7 @@ void DlgEditor::Delete()
     pSdrView->BrkAction();
 
     BOOL bDlgMarked = UnmarkDialog();
-
     pSdrView->DeleteMarked();
-
     if( bDlgMarked )
         RemarkDialog();
 }

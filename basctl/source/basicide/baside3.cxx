@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:22:44 $
+ *  last change: $Author: tbe $ $Date: 2001-04-10 15:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,11 +481,8 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
     switch ( rReq.GetSlot() )
     {
         case SID_CUT:
-            // not working yet for unocontrols
-#ifndef _DLGEDITOR_
             GetEditor()->Cut();
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
-#endif
             break;
         case SID_DELETE:
 #ifdef MAC
@@ -495,17 +492,11 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
             break;
         case SID_COPY:
-            // not working yet for unocontrols
-#ifndef _DLGEDITOR_
             GetEditor()->Copy();
-#endif
             break;
         case SID_PASTE:
-            // not working yet for unocontrols
-#ifndef _DLGEDITOR_
             GetEditor()->Paste();
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
-#endif
             break;
         case SID_CHOOSE_CONTROLS:
         {

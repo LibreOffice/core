@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-30 12:45:36 $
+ *  last change: $Author: tbe $ $Date: 2001-04-10 15:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,23 +543,39 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
     ::rtl::OUString aNewName;
     evt.NewValue >>= aNewName;
 
-    // remove the control by the old name and insert the control by the new name in the container
-    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
-    if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
+    if ( !aNewName.equals(aOldName) )
     {
-        uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
-        if ( xCont.is() )
+        Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), UNO_QUERY);
+        if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
         {
-            uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
-            uno::Any aAny;
-            aAny <<= xCtrl;
-            xCont->removeByName( aOldName );
-            xCont->insertByName( aNewName , aAny );
+            if ( !xNameAcc->hasByName(aNewName) && aNewName.getLength() != 0 )
+            {
+                // remove the control by the old name and insert the control by the new name in the container
+                Reference< container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
+                if ( xCont.is() )
+                {
+                    Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), UNO_QUERY);
+                    Any aAny;
+                    aAny <<= xCtrl;
+                    xCont->removeByName( aOldName );
+                    xCont->insertByName( aNewName , aAny );
+                }
+
+                // sort the controls by tabindex
+                GetDlgEdForm()->SortByTabIndex();
+            }
+            else
+            {
+                // set old name property
+                EndListening(sal_False);
+                Reference< beans::XPropertySet >  xPSet(GetUnoControlModel(), UNO_QUERY);
+                Any aName;
+                aName <<= aOldName;
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+                StartListening();
+            }
         }
     }
-
-    // sort the controls by tabindex
-    GetDlgEdForm()->SortByTabIndex();
 }
 
 //----------------------------------------------------------------------------
@@ -922,7 +938,25 @@ void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn) // not worki
 void DlgEdObj::NbcMove( const Size& rSize )
 {
     SdrUnoObj::NbcMove( rSize );
+
+    // stop listening
+    EndListening(sal_False);
+
+    // set geometry properties
     SetPropsFromRect();
+
+    // dialog model changed
+    if ( ISA(DlgEdForm) )
+    {
+        ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
+    }
+    else
+    {
+        GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+    }
+
+    // start listening
+    StartListening();
 }
 
 //----------------------------------------------------------------------------
@@ -930,7 +964,25 @@ void DlgEdObj::NbcMove( const Size& rSize )
 void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
+
+    // stop listening
+    EndListening(sal_False);
+
+    // set geometry properties
     SetPropsFromRect();
+
+    // dialog model changed
+    if ( ISA(DlgEdForm) )
+    {
+        ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
+    }
+    else
+    {
+        GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+    }
+
+    // start listening
+    StartListening();
 }
 
 //----------------------------------------------------------------------------
