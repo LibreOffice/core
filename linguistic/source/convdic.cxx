@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:33:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,24 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 }
 
 
+static BOOL lcl_SeqHasEntry(
+    const OUString *pSeqStart,  // first element to check
+    INT32 nToCheck,             // number of elements to check
+    const OUString &rText)
+{
+    BOOL bRes = FALSE;
+    if (pSeqStart && nToCheck > 0)
+    {
+        const OUString *pDone = pSeqStart + nToCheck;   // one behind last to check
+        while (!bRes && pSeqStart != pDone)
+        {
+            if (*pSeqStart++ == rText)
+                bRes = TRUE;
+        }
+    }
+    return bRes;
+}
+
 uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
         ConversionDirection eDirection )
     throw (RuntimeException)
@@ -588,11 +606,14 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
     INT32 nIdx = 0;
     while (aIt != rConvMap.end())
     {
-        pRes[ nIdx++ ] = (*aIt).first;
+        OUString aCurEntry( (*aIt).first );
+        // skip duplicate entries
+        if (nIdx == 0 || !lcl_SeqHasEntry( pRes, nIdx, aCurEntry ))
+            pRes[ nIdx++ ] = aCurEntry;
         ++aIt;
     }
-    DBG_ASSERT( nIdx == rConvMap.size(),
-            "ConvDic::getConversionEntries: size/index mismatch" );
+    //DBG_ASSERT( nIdx == rConvMap.size(),
+    //      "ConvDic::getConversionEntries: size/index mismatch" );
 
     return aRes;
 }
