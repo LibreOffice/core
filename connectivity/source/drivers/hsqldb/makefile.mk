@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:52:49 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:40:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,13 @@ SLOFILES=\
         $(SLO)$/StorageNativeOutputStream.obj	\
         $(SLO)$/StorageNativeInputStream.obj	\
         $(SLO)$/StorageFileAccess.obj			\
+        $(SLO)$/HTables.obj                     \
+        $(SLO)$/HTable.obj                      \
+        $(SLO)$/HViews.obj                      \
+        $(SLO)$/HCatalog.obj                    \
+        $(SLO)$/HColumns.obj                    \
+        $(SLO)$/HUser.obj                       \
+        $(SLO)$/HUsers.obj                      \
         $(SLO)$/Hservices.obj                   \
         $(SLO)$/accesslog.obj
         
