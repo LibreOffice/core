@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:34:41 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 17:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #define ITEMID_FMTBREAK     0
 #define ITEMID_ADJUST       0
 #define ITEMID_EMPHASISMARK 0
+#define ITEMID_TWOLINES     0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -132,6 +133,7 @@
 #include "lcolitem.hxx"
 #include "blnkitem.hxx"
 #include "emphitem.hxx"
+#include "twolinesitem.hxx"
 
 #include "pbinitem.hxx"
 #include "sizeitem.hxx"
@@ -178,6 +180,8 @@ inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,USHORT nId,
     { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
 inline const SvxLineSpacingItem& GetLineSpacing(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxLineSpacingItem&)rSet.Get( nId,bInP); }
+inline const SvxUnderlineItem& GetUnderline(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
+    { return (const SvxUnderlineItem&)rSet.Get( nId,bInP); }
 // frm
 inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxLRSpaceItem&)rSet.Get( nId,bInP); }
@@ -804,6 +808,31 @@ ATTR_SETUNDERLINE:
                 }
                 break;
 
+            case RTF_ULC:
+                if( PLAINID->nUnderline )
+                {
+                    SvxUnderlineItem aUL( UNDERLINE_SINGLE,
+                                            PLAINID->nUnderline );
+                    const SfxPoolItem* pItem;
+                    if( SFX_ITEM_SET == pSet->GetItemState(
+                        PLAINID->nUnderline, FALSE, &pItem ) )
+                    {
+                        // is switched off ?
+                        if( UNDERLINE_NONE ==
+                            ((SvxUnderlineItem*)pItem)->GetUnderline() )
+                            break;
+                        aUL = *(SvxUnderlineItem*)pItem;
+                    }
+                    else
+                        aUL = GetUnderline( *pSet, PLAINID->nUnderline, FALSE );
+
+                    if( UNDERLINE_NONE == aUL.GetUnderline() )
+                        aUL.SetUnderline( UNDERLINE_SINGLE );
+                    aUL.SetColor( GetColor( USHORT(nTokenValue) ));
+                    pSet->Put( aUL );
+                }
+                break;
+
             case RTF_UP:
             case RTF_SUPER:
                 if( PLAINID->nEscapement )
@@ -891,6 +920,15 @@ ATTR_SETEMPHASIS:
                 {
                     pSet->Put( SvxEmphasisMarkItem( eEmphasis,
                                                        PLAINID->nEmphasis ));
+                }
+                break;
+
+            case RTF_TWOINONE:
+                if( PLAINID->nTwoLines )
+                {
+                    sal_Unicode cStt = 0, cEnd = 0;
+                    pSet->Put( SvxTwoLinesItem( TRUE, cStt, cEnd,
+                                                       PLAINID->nTwoLines ));
                 }
                 break;
 
