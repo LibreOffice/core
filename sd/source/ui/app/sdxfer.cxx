@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:21:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,8 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             {
                 SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
                 pDoc->BurnInStyleSheetAttributes();
-                pDoc->SetStreamingSdrModel( TRUE );
-                pDoc->RemoveNotPersistentObjects( TRUE );
+//BFS04             pDoc->SetStreamingSdrModel( TRUE );
+//BFS02             pDoc->RemoveNotPersistentObjects( TRUE );
                 rxOStm->SetBufferSize( 16348 );
 
                 Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
@@ -650,7 +650,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 }
     */
 
-                pDoc->SetStreamingSdrModel( FALSE );
+//BFS04             pDoc->SetStreamingSdrModel( FALSE );
 
                 xComponent->dispose();
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
