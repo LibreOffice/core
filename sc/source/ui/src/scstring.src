@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:11:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,7 +1497,7 @@ String SCSTR_AREAS
     Text [ norwegian ] = "Tabellomrεde" ;
     Text [ italian ] = "Aree" ;
     Text [ portuguese_brazilian ] = "?reas da tabela" ;
-    Text [ portuguese ] = "Αreas" ;
+    Text [ portuguese ] = "Α~reas" ;
     Text [ finnish ] = "Alueet" ;
     Text [ danish ] = "Omrεder" ;
     Text [ french ] = "~Plages" ;
@@ -1511,7 +1511,7 @@ String SCSTR_AREAS
     Text[ japanese ] = "”ΝΝ";
     Text[ chinese_traditional ] = "°Ο°μ";
     Text[ arabic ] = "ΗαδΨΗήΗΚ";
-    Text[ greek ] = "Περιοχές";
+    Text[ greek ] = "~Περιοχές";
     Text[ korean ] = "±ΈΏª";
     Text[ turkish ] = "Aralύklar";
     Text[ language_user1 ] = " ";
@@ -2080,7 +2080,7 @@ String SCSTR_CLIP_RTF
     Text [ english_us ] = "Formatted text [RTF]" ;
     Text[ chinese_simplified ] = "ΈρΚ½»―µΔΞΔ±Ύ [RTF]";
     Text[ russian ] = "Τξπμΰςθπξβΰννϋι ςεκρς [RTF]";
-    Text[ polish ] = "Sformatowany tekst [RTF]";
+    Text[ polish ] = "sformatowany tekst [RTF]";
     Text[ japanese ] = "‘®έ’θΟ‚έΓ·½Δ [RTF]";
     Text[ greek ] = "Μορφωποιημένο κείμενο [RTF]";
     Text[ korean ] = "ΖχΈΛµΘ ΕΨ½ΊΖ® [RTF]";
@@ -2271,7 +2271,7 @@ String SCSTR_CHG_PROTECT
     Text[ japanese ] = "‹L^‚Μ•Ϋμ";
     Text[ chinese_traditional ] = "«OΕ@°OΏύ";
     Text[ arabic ] = "Protect trace";
-    Text[ greek ] = "Protect trace";
+    Text[ greek ] = "Προστασία καταγραφών";
     Text[ korean ] = "Protect trace";
     Text[ turkish ] = "Protect trace";
     Text[ language_user1 ] = " ";
@@ -2297,7 +2297,7 @@ String SCSTR_CHG_UNPROTECT
     Text[ japanese ] = "‹L^‚Μ•Ϋμ‚π‰π";
     Text[ chinese_traditional ] = "¨ϊ®ψ«OΕ@°OΏύ";
     Text[ arabic ] = "Unprotect trace";
-    Text[ greek ] = "Unprotect trace";
+    Text[ greek ] = "Κατάργηση προστασίας καταγραφών";
     Text[ korean ] = "Unprotect trace";
     Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
@@ -3115,5 +3115,6 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
