@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 06:05:45 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 06:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ namespace dbaui
         OSL_ENSURE(m_pAdminDialog,"No parent set!");
         if(_eType == DST_ADABAS && m_pAdminDialog && !bServiceFound)
         {
-            Reference<XCreateCatalog> xCatalog(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.ext.BDriver")),UNO_QUERY);
+            Reference<XCreateCatalog> xCatalog(m_xORB->createInstance(SERVICE_EXTENDED_ADABAS_DRIVER),UNO_QUERY);
             bServiceFound = xCatalog.is();
         }
         m_aCreateDatabase.Show(_eType == DST_ADABAS && bServiceFound);
@@ -592,7 +592,7 @@ namespace dbaui
                     OSL_ENSURE(m_pAdminDialog,"Parent not set!");
                     try
                     {
-                        Reference<XCreateCatalog> xCatalog(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.ext.BDriver")),UNO_QUERY);
+                        Reference<XCreateCatalog> xCatalog(m_xORB->createInstance(SERVICE_EXTENDED_ADABAS_DRIVER),UNO_QUERY);
                         if(xCatalog.is())
                         {
                             Sequence< Any > aArgs(2);
@@ -1171,6 +1171,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/05/30 06:05:45  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.3  2001/05/29 13:33:12  oj
  *  #87149# addressbook ui impl
  *
