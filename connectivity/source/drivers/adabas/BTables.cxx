@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 09:49:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 13:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,9 +260,9 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
 
-        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
-        aSql = aSql + ::rtl::OUString::createFromAscii(".");
-        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
+        aSql += m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
+        aSql += ::rtl::OUString::createFromAscii(".");
+        aSql += m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
         xStmt->execute(aSql);
         // if no exception was thrown we must delete it from the views
         if(bIsView)
@@ -321,29 +321,29 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
         {
 
-            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
+            aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
 
-            aSql = aSql + ::rtl::OUString::createFromAscii(" ");
+            aSql += ::rtl::OUString::createFromAscii(" ");
 
             aTypeName = xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
 
             if(aTypeName.hasValue() && getString(aTypeName).getLength())
-                aSql = aSql + getString(aTypeName);
+                aSql += getString(aTypeName);
             else
-                aSql = aSql + getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
+                aSql += getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
 
             switch(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    aSql = aSql + ::rtl::OUString::createFromAscii("(")
+                    aSql += ::rtl::OUString::createFromAscii("(")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                                 + ::rtl::OUString::createFromAscii(")");
                     break;
 
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
-                    aSql = aSql + ::rtl::OUString::createFromAscii("(")
+                    aSql += ::rtl::OUString::createFromAscii("(")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
                                 + ::rtl::OUString::createFromAscii(",")
                                 + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
@@ -353,14 +353,17 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
             ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
             if(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
             {
-                aSql = aSql + ::rtl::OUString::createFromAscii(" NOT NULL");
+                aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
                 if(aDefault.getLength())
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" WITH DEFAULT");
+                    aSql += ::rtl::OUString::createFromAscii(" WITH DEFAULT");
             }
             else if(aDefault.getLength())
-                aSql = aSql + ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
+            {
+                aSql +=::rtl::OUString::createFromAscii(" DEFAULT '") + aDefault;
+                aSql += ::rtl::OUString::createFromAscii("'");
+            }
 
-            aSql = aSql + ::rtl::OUString::createFromAscii(",");
+            aSql += ::rtl::OUString::createFromAscii(",");
         }
     }
 
@@ -390,11 +393,11 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
+                    aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+                            aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         +   ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -407,11 +410,11 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" UNIQUE (");
+                    aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+                            aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -426,20 +429,20 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
+                    aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
                     ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     sal_Int32 nLen = aRefTable.indexOf('.');
                     aSchema = aRefTable.copy(0,nLen);
                     aName   = aRefTable.copy(nLen+1);
 
-                    aSql = aSql + aQuote + aSchema + aQuote + aDot
+                    aSql += aQuote + aSchema + aQuote + aDot
                                 + aQuote + aName + aQuote
                                 + ::rtl::OUString::createFromAscii(" (");
 
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                            aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+                            aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
 
@@ -448,16 +451,16 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
                             break;
                         case KeyRule::RESTRICT:
-                            aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
                             break;
                         case KeyRule::SET_NULL:
-                            aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql = aSql + ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
                             break;
                         default:
                             ;
