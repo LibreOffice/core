@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:39:02 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 15:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,7 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 
-    Point  GetNextCntntPos( const Point &rPoint, BOOL bIgnoreTblHdln ) const;
-    Point  GetPrevCntntPos( const Point &rPoint ) const;
+    Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
     void   SetFixSize( SzPtr );
     virtual void ChgSize( const Size& aNewSize );
 

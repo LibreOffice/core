@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-10 15:01:50 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 15:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,11 +585,13 @@ const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 typedef const SwCntntFrm *(*GetNxtPrvCnt)( const SwCntntFrm* );
 
 //Frame in wiederholter Headline?
-FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm )
+FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
+                                    const SwTabFrm** ppTFrm = 0 )
 {
-    const SwTabFrm *pTab;
-    return 0 != (pTab = pFrm->FindTabFrm()) &&
-           pTab->IsFollow() &&
+    const SwTabFrm *pTab = pFrm->FindTabFrm();
+    if( ppTFrm )
+        *ppTFrm = pTab;
+    return pTab && pTab->IsFollow() &&
            pTab->GetTable()->IsHeadlineRepeat() &&
            ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pFrm );
 }
@@ -1341,17 +1343,18 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
 /*************************************************************************
 |*
-|*  SwRootFrm::GetNextCntntPos()
+|*  SwRootFrm::GetNextPrevCntntPos()
 |*
 |*  Beschreibung        Es wird der naechstliegende Cntnt zum uebergebenen
 |*                      Point gesucht. Es wird nur im BodyText gesucht.
 |*  Ersterstellung      MA 15. Jul. 92
-|*  Letzte Aenderung    MA 20. Dec. 93
+|*  Letzte Aenderung    JP 11.10.2001
 |*
 |*************************************************************************/
 
 //!!!!! Es wird nur der vertikal naechstliegende gesucht.
-Point SwRootFrm::GetNextCntntPos( const Point& rPoint, BOOL bIgnoreTblHdln ) const
+//JP 11.10.2001: only in tables we try to find the right column - Bug 72294
+Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
 {
     //Ersten CntntFrm und seinen Nachfolger im Body-Bereich suchen
     //Damit wir uns nicht tot suchen (und vor allem nicht zuviel formatieren)
@@ -1367,17 +1370,41 @@ Point SwRootFrm::GetNextCntntPos( const Point& rPoint, BOOL bIgnoreTblHdln ) con
     if ( !pCnt )
         return Point( 0, 0 );
 
-    //Liegt der Point ueber dem ersten CntntFrm?
     pCnt->Calc();
+    if( !bNext )
+    {
+        // Solange der Point vor dem ersten CntntFrm liegt und es noch
+        // vorhergehende Seiten gibt gehe ich jeweils eine Seite nach vorn.
+        while ( rPoint.Y() < pCnt->Frm().Top() && pPage->GetPrev() )
+        {
+            pPage = (SwLayoutFrm*)pPage->GetPrev();
+            pCnt = pPage->ContainsCntnt();
+            while ( !pCnt )
+            {
+                pPage = (SwLayoutFrm*)pPage->GetPrev();
+                if ( pPage )
+                    pCnt = pPage->ContainsCntnt();
+                else
+                    return ContainsCntnt()->UnionFrm().Pos();
+            }
+            pCnt->Calc();
+        }
+    }
+
+    //Liegt der Point ueber dem ersten CntntFrm?
     if ( rPoint.Y() < pCnt->Frm().Top() && !lcl_IsInRepeatedHeadline( pCnt ) )
-        return  pCnt->Frm().Pos();
+        return pCnt->UnionFrm().Pos();
 
     while ( pCnt )
-    {   //Liegt der Point mitten im aktuellen CntntFrm?
+    {
+        //Liegt der Point im aktuellen CntntFrm?
         SwRect aCntFrm( pCnt->UnionFrm() );
-        if ( aCntFrm.IsInside( rPoint ) && !lcl_IsInRepeatedHeadline( pCnt ) )
+        if ( aCntFrm.IsInside( rPoint ) && !lcl_IsInRepeatedHeadline( pCnt ))
             return rPoint;
 
+        //Ist der aktuelle der letzte CntntFrm? ||
+        //Wenn der naechste CntntFrm hinter dem Point liegt, ist der
+        //aktuelle der gesuchte.
         const SwCntntFrm *pNxt = pCnt->GetNextCntntFrm();
         while ( pNxt && !pNxt->IsInDocBody() )
             pNxt = pNxt->GetNextCntntFrm();
@@ -1388,78 +1415,16 @@ Point SwRootFrm::GetNextCntntPos( const Point& rPoint, BOOL bIgnoreTblHdln ) con
 
         //Wenn der naechste CntntFrm hinter dem Point liegt ist er der
         //gesuchte.
+        const SwTabFrm* pTFrm;
         pNxt->Calc();
-        if ( pNxt->Frm().Top() > rPoint.Y() && !lcl_IsInRepeatedHeadline( pCnt ) )
-            return pNxt->Frm().Pos();
-        pCnt = pNxt;
-    }
-    return Point( 0, 0 );
-}
-/*************************************************************************
-|*
-|*  SwRootFrm::GetPrevCntntPos()
-|*
-|*  Beschreibung        Es wird der vorhergehende Cntnt zum uebergebenen
-|*                      Point gesucht. Es wird nur im BodyTextGesucht
-|*  Ersterstellung      MA 13. Jul. 92
-|*  Letzte Aenderung    MA 19. Apr. 94
-|*
-|*************************************************************************/
-//!!!!! Es wird nur der vertikal naechstliegende gesucht.
-Point SwRootFrm::GetPrevCntntPos( const Point& rPoint ) const
-{
-    //Ersten CntntFrm und seinen Nachfolger im Body-Bereich suchen
-    //Damit wir uns nicht tot suchen (und vor allem nicht zuviel formatieren)
-    //gehen wir schon mal von der richtigen Seite aus.
-    SwLayoutFrm *pPage = (SwLayoutFrm*)Lower();
-    while ( pPage && pPage->Frm().Bottom() < rPoint.Y() )
-        pPage = (SwLayoutFrm*)pPage->GetNext();
-
-    const SwCntntFrm *pCnt = pPage ? pPage->ContainsCntnt() : ContainsCntnt();
-    while ( pCnt && !pCnt->IsInDocBody() )
-        pCnt = pCnt->GetNextCntntFrm();
-
-    if ( !pCnt )
-        return Point( 0, 0 );
-
-    //Solange der Point vor dem ersten CntntFrm liegt und es noch vorhergehende
-    //Seiten gibt gehe ich jeweils eine Seite nach vorn.
-    pCnt->Calc();
-    while ( rPoint.Y() < pCnt->Frm().Top() && pPage->GetPrev() )
-    {
-        pPage = (SwLayoutFrm*)pPage->GetPrev();
-        pCnt = pPage->ContainsCntnt();
-        while ( !pCnt )
-        {   pPage = (SwLayoutFrm*)pPage->GetPrev();
-            if ( pPage )
-                pCnt = pPage->ContainsCntnt();
-            else
-                return ContainsCntnt()->UnionFrm().Pos();
-        }
-        pCnt->Calc();
-    }
-    if ( rPoint.Y() < pCnt->Frm().Top() )
-        return pCnt->UnionFrm().Pos();
-
-    while ( pCnt )
-    {   //Liegt der Point im aktuellen CntntFrm?
-        SwRect aCntFrm( pCnt->UnionFrm() );
-        if ( aCntFrm.IsInside( rPoint ) )
-            return rPoint;
-
-        //Ist der aktuelle der letzte CntntFrm? ||
-        //Wenn der naechste CntntFrm hinter dem Point liegt, ist der
-        //aktuelle der gesuchte.
-        const SwCntntFrm *pNxt = pCnt->GetNextCntntFrm();
-        while ( pNxt && !pNxt->IsInDocBody() )
-            pNxt = pNxt->GetNextCntntFrm();
-
-        if ( pNxt )
-            pNxt->Calc();
-
-        if ( !pNxt ||
-             pNxt->Frm().Top() > rPoint.Y() )
+        if( pNxt->Frm().Top() > rPoint.Y() &&
+            !lcl_IsInRepeatedHeadline( pCnt, &pTFrm ) &&
+            ( !pTFrm || pNxt->Frm().Left() > rPoint.X() ))
+        {
+            if( bNext )
+                return pNxt->Frm().Pos();
             return Point( aCntFrm.Right(), aCntFrm.Bottom() );
+        }
         pCnt = pNxt;
     }
     return Point( 0, 0 );

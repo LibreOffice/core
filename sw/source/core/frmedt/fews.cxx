@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:17:26 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 15:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +181,7 @@ void SwFEShell::EndAllActionAndCall()
 Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
 {
     SET_CURR_SHELL( (ViewShell*)this );
-    if ( bNext )
-        return GetLayout()->GetNextCntntPos( rPoint, IsTableMode() );
-    return GetLayout()->GetPrevCntntPos( rPoint );
+    return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
 }
 
 
