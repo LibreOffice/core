@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:55:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
 SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
                             int bReadNewDoc )
     : SvRTFParser( rIn, 5 ),
+    rStrm(rIn),
     pAttrPool( &rPool ),
     pInsPos( 0 ),
     aColorTbl( 16, 4 ),
