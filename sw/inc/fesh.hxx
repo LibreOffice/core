@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:42:21 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class SwTabCols;
 class SvEmbeddedObjectRef;
 class SvInPlaceObject;
 class SvxBrushItem;
+class SvxFrameDirectionItem;
 class SwTableAutoFmt;
 class SwFrm;
 class SwTabFrm;
@@ -652,6 +653,9 @@ public:
     void SetBoxBackground( const SvxBrushItem &rNew );
     BOOL GetBoxBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
 
+    void SetBoxDirection( const SvxFrameDirectionItem& rNew );
+    BOOL GetBoxDirection( SvxFrameDirectionItem& rToFill ) const; //FALSE uneindeutig
+
     void SetRowBackground( const SvxBrushItem &rNew );
     BOOL GetRowBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
 
@@ -724,9 +728,12 @@ public:
     USHORT GetCurTabColNum() const;     //0 == in keiner Tabelle
     USHORT GetCurMouseTabColNum( const Point &rPt ) const;
     USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
-    BOOL IsTableRightToLeft()const;
+
+    BOOL IsTableRightToLeft() const;
+    BOOL IsMouseTableRightToLeft( const Point &rPt ) const;
+    BOOL IsTableVertical() const;
+
     BOOL IsLastCellInRow() const;
-    BOOL IsMouseTableRightToLeft(const Point &rPt) const;
     // Die Breite des aktuellen Bereichs fuer Spaltendialog
     long GetSectionWidth( SwFmt& rFmt ) const;
 
