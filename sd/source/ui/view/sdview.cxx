@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:21:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
 #endif
+#include "ViewClipboard.hxx"
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -198,7 +199,8 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     pLockedRedraws(NULL),
     nLockRedrawSmph(0),
     nAction(DND_ACTION_NONE),
-    bIsDropAllowed(TRUE)
+    bIsDropAllowed(TRUE),
+    mpClipboard (new ViewClipboard (*this))
 {
     // #114898#
     SetBufferedOutputAllowed(sal_True);
