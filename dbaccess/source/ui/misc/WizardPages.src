@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 20:19:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,10 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ swedish ] = "~Avbryt";
         Text[ polish ] = "Anuluj";
         Text[ portuguese_brazilian ] = "Cancel";
-        Text[ japanese ] = "·¬İ¾Ù";
-        Text[ korean ] = "Ãë¼Ò";
+        Text[ japanese ] = "·¬İ¾Ù(~C)";
+        Text[ korean ] = "Ãë¼Ò(~C)";
         Text[ chinese_simplified ] = "È¡Ïû(~C)";
-        Text[ chinese_traditional ] = "¨ú®ø";
+        Text[ chinese_traditional ] = "¨ú®ø(~C)";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
         Text[ turkish ] = "İptal";
     };
@@ -322,7 +322,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ portuguese_brazilian ] = "~Next>";
         Text[ japanese ] = "Ÿ‚Ö(~N)>";
         Text[ korean ] = "´ÙÀ½(~N)";
-        Text[ chinese_simplified ] = "¼ÌĞø(~N) >";
+        Text[ chinese_simplified ] = "¼ÌĞø (~N)>";
         Text[ chinese_traditional ] = "Ä~Äò >";
         Text[ arabic ] = "ÇáÊÇáí>";
         Text[ turkish ] = "Devam>";
@@ -636,8 +636,8 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Å‘ås”(~X):";
         Text[ korean ] = "ÁÙ[ÃÖ´ë(~X)";
-        Text[ chinese_simplified ] = "(×î¶à)ĞĞ£º";
-        Text[ chinese_traditional ] = "(³Ì¦h)¦C¡G";
+        Text[ chinese_simplified ] = "(×î¶à)ĞĞ(~X)£º";
+        Text[ chinese_traditional ] = "(³Ì¦h)¦C(~X)¡G";
         Text[ arabic ] = "(ÇáÍÏ ÇáÃŞÕì) ááÕİæİ:";
         Text[ turkish ] = "Satırlar (azami):";
     };
@@ -930,10 +930,10 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ swedish ] = "~inga";
         Text[ polish ] = "brak";
         Text[ portuguese_brazilian ] = "none";
-        Text[ japanese ] = "‚È‚µ(~N)";
-        Text[ korean ] = "¾øÀ½(~N)";
-        Text[ chinese_simplified ] = "ÎŞ(~N)";
-        Text[ chinese_traditional ] = "µL(~N)";
+        Text[ japanese ] = "‚È‚µ(~E)";
+        Text[ korean ] = "¾øÀ½(~E)";
+        Text[ chinese_simplified ] = "ÎŞ(~E)";
+        Text[ chinese_traditional ] = "µL(~E)";
         Text[ arabic ] = "ÈÏæä";
         Text[ turkish ] = "Hiçbiri";
     };
@@ -979,10 +979,10 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ swedish ] = "~Tabellnamn:";
         Text[ polish ] = "Nazwa tabeli:";
         Text[ portuguese_brazilian ] = "Tabellenname:";
-        Text[ japanese ] = "Ã°ÌŞÙ–¼:";
-        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§:";
-        Text[ chinese_simplified ] = "±í¸ñÃû³Æ£º";
-        Text[ chinese_traditional ] = "ªí®æ¦WºÙ¡G";
+        Text[ japanese ] = "Ã°ÌŞÙ–¼(~B):";
+        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~B):";
+        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~B)£º";
+        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~B)¡G";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá:";
         Text[ turkish ] = "Tablo adı:";
     };
@@ -1036,14 +1036,14 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ spanish ]    = "~Definición y datos" ;
         Text [ french ]     = "Définition et d~onnées" ;
         Text [ dutch ]      = "~Definitie en gegevens" ;
-        Text[ chinese_simplified ] = "¶¨ÒåºÍÊı¾İ";
+        Text[ chinese_simplified ] = "¶¨ÒåºÍÊı¾İ(~F)";
         Text[ russian ]     = "Îïğåäåëåíèå è äàííûå";
         Text[ polish ]      = "Definicja i dane";
-        Text[ japanese ]    = "’è‹`‚ÆÃŞ°À";
-        Text[ chinese_traditional ] = "©w¸q©M¸ê®Æ";
+        Text[ japanese ]    = "’è‹`‚ÆÃŞ°À(~F)";
+        Text[ chinese_traditional ] = "©w¸q©M¸ê®Æ(~F)";
         Text[ arabic ]      = "ÇáÊÚÑíİ æÇáÈíÇäÇÊ";
         Text[ greek ] = "Ïñéóìüò êáé äåäïìİí~á";
-        Text[ korean ] = "Á¤ÀÇ ±×¸®°í µ¥ÀÌÅÍ";
+        Text[ korean ] = "Á¤ÀÇ ±×¸®°í µ¥ÀÌÅÍ(~F)";
         Text[ turkish ] = "Tanım ve veriler";
     };
     RadioButton RB_DEF
@@ -1061,14 +1061,14 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ spanish ]    = "Defi~nición" ;
         Text [ french ]     = "~Définition" ;
         Text [ dutch ]      = "~Definitie" ;
-        Text[ chinese_simplified ] = "¶¨Òå";
+        Text[ chinese_simplified ] = "¶¨Òå(~I)";
         Text[ russian ]     = "Îïğåäåëåíèå";
         Text[ polish ]      = "Definicja";
-        Text[ japanese ]    = "’è‹`";
-        Text[ chinese_traditional ] = "©w¸q";
+        Text[ japanese ]    = "’è‹`(~I)";
+        Text[ chinese_traditional ] = "©w¸q(~I)";
         Text[ arabic ]      = "ÊÚÑíİ";
         Text[ greek ] = "Ïñéóìüò";
-        Text[ korean ] = "Á¤ÀÇ";
+        Text[ korean ] = "Á¤ÀÇ(~I)";
         Text[ turkish ] = "Tanım";
     };
 
@@ -1113,14 +1113,14 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ french ]     = "~Joindre des données" ;
         Text [ dutch ]      = "~Gegevens toevoegen" ;
         Text [ portuguese ] = "A~nexar dados" ;
-        Text[ chinese_simplified ] = "¸½¼ÓÊı¾İ";
+        Text[ chinese_simplified ] = "¸½¼ÓÊı¾İ(~D)";
         Text[ russian ]     = "Âëîæèòü äàííûå";
         Text[ polish ]      = "Za³¹cz dane";
-        Text[ japanese ]    = "ÃŞ°À‚Ì“Y•t";
-        Text[ chinese_traditional ] = "ªş¥[¸ê®Æ";
+        Text[ japanese ]    = "ÃŞ°À‚Ì“Y•t(~D)";
+        Text[ chinese_traditional ] = "ªş¥[¸ê®Æ(~D)";
         Text[ arabic ]      = "ÅÑİÇŞ ÈíÇäÇÊ";
         Text[ greek ] = "Ğñïóêüëëçóç äåäïìİ~íùí";
-        Text[ korean ] = "µ¥ÀÌÅÍ Ã·ºÎ";
+        Text[ korean ] = "µ¥ÀÌÅÍ Ã·ºÎ(~D)";
         Text[ turkish ] = "Verileri ekle";
     };
 
@@ -1142,10 +1142,10 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ swedish ] = "Skapa ~primärnyckel";
         Text[ polish ] = "Utwórz klucz g³ówny";
         Text[ portuguese_brazilian ] = "~Create primary key";
-        Text[ japanese ] = "Ìß×²ÏØ·°‚Ìì¬(~C)";
-        Text[ korean ] = "±âº»Å° ¸¸µé±â(~C)";
-        Text[ chinese_simplified ] = "Éú³ÉÖ÷¹Ø¼ü×Ö";
-        Text[ chinese_traditional ] = "¥Í¦¨¥DÃöÁä¦r(~C)";
+        Text[ japanese ] = "Ìß×²ÏØ·°‚Ìì¬(~T)";
+        Text[ korean ] = "±âº»Å° ¸¸µé±â(~T)";
+        Text[ chinese_simplified ] = "Éú³ÉÖ÷¹Ø¼ü×Ö(~T)";
+        Text[ chinese_traditional ] = "¥Í¦¨¥DÃöÁä¦r(~T)";
         Text[ arabic ] = "ÅäÔÇÁ ãİÊÇÍ ÃÓÇÓí";
         Text[ turkish ] = "Birincil anahtar oluştur";
     };
