@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:42:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,15 @@
 #ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
 
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
@@ -202,8 +209,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
-using namespace rtl;
-using namespace ucb;
+using namespace ::rtl;
+using namespace ::ucb;
 
 
 #include "doctempl.hxx"
@@ -219,6 +226,8 @@ using namespace ucb;
 #ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
 #include <svtools/templatefoldercache.hxx>
 #endif
+
+#include <comphelper/storagehelper.hxx>
 
 //========================================================================
 
@@ -256,7 +265,7 @@ class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
     SfxObjectShellLock  mxObjShell;
-    SvStorageRef        mxStor;
+    uno::Reference< embed::XStorage > mxStorage;
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
@@ -281,7 +290,7 @@ public:
     int                 Compare( const OUString& rTitle ) const;
 
     SfxObjectShellRef   CreateObjectShell();
-    BOOL                DeleteObjectShell();
+    sal_Bool                DeleteObjectShell();
 };
 
 };
@@ -534,17 +543,17 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
+sal_Bool SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 {
     if ( !pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pData = pImp->GetRegion( nIdx );
 
     if ( pData )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 //------------------------------------------------------------------------
@@ -833,7 +842,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     if(!aPath.MakeDir())
         return String();
 
-    MakeFileName_Impl(aPath, rLongName, TRUE);
+    MakeFileName_Impl(aPath, rLongName, sal_True);
     SfxTemplateDir  *pEntry = new SfxTemplateDir;
     SfxTemplateDirEntryPtr pDirEntry =
         new SfxTemplateDirEntry( String( '.' ), aPath.GetPath() );
@@ -846,7 +855,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::SaveDir
+sal_Bool SfxDocumentTemplates::SaveDir
 (
 //  SfxTemplateDir& rDir        //  das zu speichernde Directory
 )
@@ -858,16 +867,16 @@ BOOL SfxDocumentTemplates::SaveDir
 
     [R"uckgabewert]
 
-    BOOL                        FALSE,
+    sal_Bool                        sal_False,
                                 Schreibfehler
 
-                                TRUE
+                                sal_True
                                 gespeichert
 
 */
 
 {
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -914,14 +923,14 @@ void SfxDocumentTemplates::NewTemplate
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::CopyOrMove
+sal_Bool SfxDocumentTemplates::CopyOrMove
 (
     USHORT  nTargetRegion,      //  Index des Zielbereiches
     USHORT  nTargetIdx,         //  Index Zielposition
     USHORT  nSourceRegion,      //  Index des Quellbereiches
     USHORT  nSourceIdx,         /*  Index der zu kopierenden / zu verschiebenden
                                     Dokumentvorlage */
-    BOOL    bMove               //  kopieren / verschieben
+    sal_Bool    bMove               //  kopieren / verschieben
 )
 
 /*  [Beschreibung]
@@ -930,10 +939,10 @@ BOOL SfxDocumentTemplates::CopyOrMove
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef2uhrt werden
     [Querverweise]
 
@@ -952,16 +961,16 @@ BOOL SfxDocumentTemplates::CopyOrMove
     */
 
     if ( !pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     // Don't copy or move any folders
     if( nSourceIdx == USHRT_MAX )
-        return FALSE ;
+        return sal_False ;
 
     if ( nSourceRegion == nTargetRegion )
     {
         DBG_ERRORFILE( "Don't know, what to do!" );
-        return FALSE;
+        return sal_False;
 #if 0
     // Verschieben einer Vorlage innerhalb eines Bereiches
     // --> nur Verwaltungsdaten aktualisieren
@@ -981,15 +990,15 @@ BOOL SfxDocumentTemplates::CopyOrMove
 
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nSourceRegion );
     if ( !pSourceRgn )
-        return FALSE;
+        return sal_False;
 
     DocTempl_EntryData_Impl *pSource = pSourceRgn->GetEntry( nSourceIdx );
     if ( !pSource )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pTargetRgn = pImp->GetRegion( nTargetRegion );
     if ( !pTargetRgn )
-        return FALSE;
+        return sal_False;
 
     OUString aTitle = pSource->GetTitle();
 
@@ -1029,7 +1038,7 @@ BOOL SfxDocumentTemplates::CopyOrMove
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::Move
+sal_Bool SfxDocumentTemplates::Move
 (
     USHORT nTargetRegion,       //  Index des Zielbereiches
     USHORT nTargetIdx,          //  Index Zielposition
@@ -1045,24 +1054,24 @@ BOOL SfxDocumentTemplates::Move
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef2uhrt werden
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,BOOL)>
+    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
 */
 {
     return CopyOrMove( nTargetRegion, nTargetIdx,
-                       nSourceRegion, nSourceIdx, TRUE );
+                       nSourceRegion, nSourceIdx, sal_True );
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::Copy
+sal_Bool SfxDocumentTemplates::Copy
 (
     USHORT nTargetRegion,       //  Index des Zielbereiches
     USHORT nTargetIdx,          //  Index Zielposition
@@ -1078,25 +1087,25 @@ BOOL SfxDocumentTemplates::Copy
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,BOOL)>
+    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
 */
 
 {
     return CopyOrMove( nTargetRegion, nTargetIdx,
-                       nSourceRegion, nSourceIdx, FALSE );
+                       nSourceRegion, nSourceIdx, sal_False );
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::CopyTo
+sal_Bool SfxDocumentTemplates::CopyTo
 (
     USHORT          nRegion,    /*  Bereich der Vorlage, die exportiert werden
                                     soll  */
@@ -1113,10 +1122,10 @@ BOOL SfxDocumentTemplates::CopyTo
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 
@@ -1127,15 +1136,15 @@ BOOL SfxDocumentTemplates::CopyTo
 
 {
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pSourceRgn = pImp->GetRegion( nRegion );
     if ( !pSourceRgn )
-        return FALSE;
+        return sal_False;
 
     DocTempl_EntryData_Impl *pSource = pSourceRgn->GetEntry( nIdx );
     if ( !pSource )
-        return FALSE;
+        return sal_False;
 
     INetURLObject aTargetURL( rName );
 
@@ -1153,7 +1162,7 @@ BOOL SfxDocumentTemplates::CopyTo
         aTarget = Content( aParentURL, aCmdEnv );
 
         TransferInfo aTransferInfo;
-        aTransferInfo.MoveData = FALSE;
+        aTransferInfo.MoveData = sal_False;
         aTransferInfo.SourceURL = pSource->GetTargetURL();
         aTransferInfo.NewTitle = aTitle;
         aTransferInfo.NameClash = NameClash::OVERWRITE;
@@ -1164,16 +1173,16 @@ BOOL SfxDocumentTemplates::CopyTo
         aTarget.executeCommand( aCmd, aArg );
     }
     catch ( ContentCreationException& )
-    { return FALSE; }
+    { return sal_False; }
     catch ( Exception& )
-    { return FALSE; }
+    { return sal_False; }
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::CopyFrom
+sal_Bool SfxDocumentTemplates::CopyFrom
 (
     USHORT      nRegion,        /*  Bereich, in den die Vorlage importiert
                                     werden soll */
@@ -1189,12 +1198,12 @@ BOOL SfxDocumentTemplates::CopyFrom
     Importieren einer Dokumentvorlage aus dem Dateisystem
 
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfpTargetDirectory->GetContent());
+    [R"uckgabewert]                 Erfolg (sal_True) oder Mi"serfpTargetDirectory->GetContent());
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
     [Querverweise]
@@ -1204,16 +1213,16 @@ BOOL SfxDocumentTemplates::CopyFrom
 
 {
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pTargetRgn = pImp->GetRegion( nRegion );
 
     if ( !pTargetRgn )
-        return FALSE;
+        return sal_False;
 
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
     if ( !xTemplates.is() )
-        return FALSE;
+        return sal_False;
 
     OUString aTitle;
     sal_Bool bTemplateAdded = sal_False;
@@ -1313,7 +1322,7 @@ BOOL SfxDocumentTemplates::CopyFrom
 
                 pTargetRgn->AddEntry( aTitle, aTemplName, &nIdx );
                 rName = aTitle;
-                return TRUE;
+                return sal_True;
             }
             else
             {
@@ -1326,12 +1335,12 @@ BOOL SfxDocumentTemplates::CopyFrom
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::Delete
+sal_Bool SfxDocumentTemplates::Delete
 (
     USHORT nRegion,             //  Index des Bereiches
     USHORT nIdx                 /*  Index des Eintrags oder USHRT_MAX,
@@ -1345,10 +1354,10 @@ BOOL SfxDocumentTemplates::Delete
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 
@@ -1365,12 +1374,12 @@ BOOL SfxDocumentTemplates::Delete
        Then remove the data from the lists
     */
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( !pRegion )
-        return FALSE;
+        return sal_False;
 
     sal_Bool bRet;
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
@@ -1386,7 +1395,7 @@ BOOL SfxDocumentTemplates::Delete
         DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
 
         if ( !pEntry )
-            return FALSE;
+            return sal_False;
 
         bRet = xTemplates->removeTemplate( pRegion->GetTitle(),
                                            pEntry->GetTitle() );
@@ -1399,7 +1408,7 @@ BOOL SfxDocumentTemplates::Delete
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::InsertDir
+sal_Bool SfxDocumentTemplates::InsertDir
 (
     const String&   rText,      //  der logische Name des neuen Bereiches
     USHORT          nRegion     //  Index des Bereiches
@@ -1412,10 +1421,10 @@ BOOL SfxDocumentTemplates::InsertDir
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
     [Querverweise]
@@ -1451,7 +1460,7 @@ BOOL SfxDocumentTemplates::InsertDir
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::SetName
+sal_Bool SfxDocumentTemplates::SetName
 (
     const String&   rName,      //  Der zu setzende Name
     USHORT          nRegion,    //  Index des Bereiches
@@ -1466,23 +1475,23 @@ BOOL SfxDocumentTemplates::SetName
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 */
 
 {
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     DocTempl_EntryData_Impl *pEntry = NULL;
 
     if ( !pRegion )
-        return FALSE;
+        return sal_False;
 
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
     OUString aEmpty;
@@ -1506,10 +1515,10 @@ BOOL SfxDocumentTemplates::SetName
         pEntry = pRegion->GetEntry( nIdx );
 
         if ( !pEntry )
-            return FALSE;
+            return sal_False;
 
         if ( pEntry->GetTitle() == OUString( rName ) )
-            return TRUE;
+            return sal_True;
 
         if ( xTemplates->renameTemplate( pRegion->GetTitle(),
                                          pEntry->GetTitle(),
@@ -1527,7 +1536,7 @@ BOOL SfxDocumentTemplates::SetName
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::Rescan()
+sal_Bool SfxDocumentTemplates::Rescan()
 
 /*  [Beschreibung]
 
@@ -1539,21 +1548,21 @@ BOOL SfxDocumentTemplates::Rescan()
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 
     [Querverweise]
 
-    <SfxTemplateDir::Scan(BOOL bDirectory, BOOL bSave)>
+    <SfxTemplateDir::Scan(sal_Bool bDirectory, sal_Bool bSave)>
     <SfxTemplateDir::Freshen(const SfxTemplateDir &rNew)>
 */
 {
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     pImp->Rescan();
 
@@ -1602,7 +1611,7 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::DeleteObjectShell
+sal_Bool SfxDocumentTemplates::DeleteObjectShell
 (
     USHORT nRegion,         //  Index des Bereiches
     USHORT nIdx             //  Index des Eintrags
@@ -1615,10 +1624,10 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
     [Querverweise]
@@ -1629,7 +1638,7 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
 
 {
     if ( ! pImp->Construct() )
-        return TRUE;
+        return sal_True;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
     DocTempl_EntryData_Impl *pEntry = NULL;
@@ -1640,12 +1649,12 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
     if ( pEntry )
         return pEntry->DeleteObjectShell();
     else
-        return TRUE;
+        return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::GetFull
+sal_Bool SfxDocumentTemplates::GetFull
 (
     const String &rRegion,      // Der Name des Bereiches
     const String &rName,        // Der Name der Vorlage
@@ -1660,10 +1669,10 @@ BOOL SfxDocumentTemplates::GetFull
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 
@@ -1675,10 +1684,10 @@ BOOL SfxDocumentTemplates::GetFull
 {
     // We don't search for empty names!
     if ( ! rName.Len() )
-        return FALSE;
+        return sal_False;
 
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     DocTempl_EntryData_Impl* pEntry = NULL;
     const USHORT nCount = GetRegionCount();
@@ -1705,7 +1714,7 @@ BOOL SfxDocumentTemplates::GetFull
 
 //------------------------------------------------------------------------
 
-BOOL SfxDocumentTemplates::GetLogicNames
+sal_Bool SfxDocumentTemplates::GetLogicNames
 (
     const String &rPath,            // vollst"andiger Pfad zu der Vorlage
     String &rRegion,                // Out: der Bereichsname
@@ -1719,10 +1728,10 @@ BOOL SfxDocumentTemplates::GetLogicNames
 
     [R"uckgabewert]
 
-    BOOL                            TRUE
+    sal_Bool                            sal_True
                                     Aktion konnte ausgef"uhrt werden
 
-                                    FALSE
+                                    sal_False
                                     Aktion konnte nicht ausgef"uhrt werden
 
 
@@ -1733,7 +1742,7 @@ BOOL SfxDocumentTemplates::GetLogicNames
 
 {
     if ( ! pImp->Construct() )
-        return FALSE;
+        return sal_False;
 
     INetURLObject aFullPath;
 
@@ -1862,18 +1871,18 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
 {
     if( ! mxObjShell.Is() )
     {
-        mbIsOwner = FALSE;
-        BOOL bDum = FALSE;
+        mbIsOwner = sal_False;
+        sal_Bool bDum = sal_False;
         SfxApplication *pSfxApp = SFX_APP();
         String          aTargetURL = GetTargetURL();
 
-        mxObjShell = pSfxApp->DocAlreadyLoaded( aTargetURL, TRUE, bDum );
+        mxObjShell = pSfxApp->DocAlreadyLoaded( aTargetURL, sal_True, bDum );
 
         if( ! mxObjShell.Is() )
         {
-            mbIsOwner = TRUE;
+            mbIsOwner = sal_True;
             SfxMedium *pMed=new SfxMedium(
-                aTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE),  FALSE, 0 );
+                aTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE),  sal_False, 0 );
             const SfxFilter* pFilter = NULL;
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
@@ -1883,7 +1892,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
                 SfxErrorContext aEc( ERRCTX_SFX_LOADTEMPLATE,
                                      aTargetURL );
                 delete pMed;
-                mbDidConvert=TRUE;
+                mbDidConvert=sal_True;
                 ULONG lErr;
                 if ( mxObjShell.Is() ) {
                     lErr = pSfxApp->LoadTemplate( mxObjShell,aTargetURL);
@@ -1895,27 +1904,32 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
             else if (pFilter)
             {
                 delete pMed;
-                mbDidConvert=FALSE;
-                mxStor = new SvStorage(
-                    aTargetURL,
-                    STREAM_READWRITE | STREAM_NOCREATE |
-                    STREAM_SHARE_DENYALL, STORAGE_TRANSACTED);
-                if ( pFilter )
-                    mxStor->SetVersion( pFilter->GetVersion() );
-                if ( SVSTREAM_OK == mxStor->GetError() )
+                mbDidConvert=sal_False;
+                try
                 {
-                    mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-                    if ( mxObjShell.Is() )
+                    mxStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                                    aTargetURL,
+                                    embed::ElementModes::READWRITE | embed::ElementModes::NOCREATE );
+
+                    if ( mxStorage.is() )
                     {
-                        mxObjShell->DoInitNew(0);
-                        if(!mxObjShell->LoadFrom( mxStor ))
-                            mxObjShell.Clear();
-                        else
+                        mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
+                        if ( mxObjShell.Is() )
                         {
-                            mxObjShell->DoHandsOff();
-                            mxObjShell->DoSaveCompleted( mxStor );
+                            mxObjShell->DoInitNew(0);
+                            // TODO/LATER: make sure that we don't use binary templates!
+                            if( mxObjShell->LoadFrom( mxStorage ) )
+                            {
+                                mxObjShell->DoSaveCompleted( mxStorage );
+                            }
+                            else
+                                mxObjShell.Clear();
                         }
                     }
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO: probably needs error handling
                 }
             }
         }
@@ -1927,14 +1941,15 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
 //------------------------------------------------------------------------
 BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if ( mxObjShell.Is() )
     {
         if( mxObjShell->IsModified() )
         {
             //Hier speichern wir auch, falls die Vorlage in Bearbeitung ist...
-            bRet = FALSE;
+            bRet = sal_False;
+
             if ( mbIsOwner )
                 if( mbDidConvert )
                 {
@@ -1945,15 +1960,31 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
                 else
                 {
                     if( mxObjShell->Save() )
-                        bRet = mxStor->Commit();
-                    else
-                        bRet = FALSE;
+                    {
+                        uno::Reference< embed::XTransactedObject > xTransacted( mxStorage, uno::UNO_QUERY );
+                        DBG_ASSERT( xTransacted.is(), "Storage must implement XTransactedObject!\n" );
+                        if ( xTransacted.is() )
+                        {
+                            try
+                            {
+                                xTransacted->commit();
+                                bRet = sal_True;
+                            }
+                            catch( uno::Exception& )
+                            {
+                            }
+                        }
+                    }
                 }
         }
+
         if( bRet )
         {
             mxObjShell.Clear();
-            mxStor.Clear();
+
+             // disposing can be controlled by refcounting
+            // while the storage doesn't come outside of this class
+            mxStorage = uno::Reference< embed::XStorage >();
         }
     }
     return bRet;
@@ -2497,7 +2528,7 @@ long SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle,
     }
 
     if ( nCompVal == 0 )
-        rFound = TRUE;
+        rFound = sal_True;
     else
     {
         if ( nCompVal < 0 )     // pMid < pData
