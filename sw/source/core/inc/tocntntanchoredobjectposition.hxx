@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:08:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@ namespace objectpositioning
         private:
             // calculated data for object position
             const SwLayoutFrm* mpVertPosOrientFrm;
+            // --> OD 2004-06-17 #i26791#
+            // determine offset to frame anchor position according to the
+            // positioning alignments
+            Point maOffsetToFrmAnchorPos;
 
             // data for calculation of position
             bool          mbAnchorToChar;
@@ -95,11 +99,6 @@ namespace objectpositioning
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to
             // the needed type
             SwTxtFrm&       GetAnchorTxtFrm() const;
-
-            // method to cast <SwAnchoredObjectPosition::GetFrmOfObj()> to
-            // the needed type
-            SwFlyAtCntFrm*  GetFlyAtCntFrmOfObj() const;
-
 
         // *********************************************************************
             /** determine frame for horizontal position
@@ -137,6 +136,14 @@ namespace objectpositioning
                 @author OD
             */
             const SwLayoutFrm& GetVertPosOrientFrm() const;
+
+            /** determined offset to frame anchor position
+
+                --> OD 2004-06-17 #i26791#
+
+                @author OD
+            */
+            Point GetOffsetToFrmAnchorPos() const;
     };
 };
 
