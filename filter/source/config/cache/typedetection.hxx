@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:46:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,20 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         ::rtl::OUString impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor   ,
                                                 const OUStringList&                  rUsedDetectors);
+
+        //---------------------------------------
+
+        /** @short      seek a might existing stream to position 0.
+
+            @descr      This is an optinal action to be more robust
+                        in case any detect service doesnt make this seek ...
+                        Normaly it's part of any called detect service or filter ...
+                        but sometimes it's not done there.
+
+            @param      rDescriptor
+                        a stl representation of the MediaDescriptor as in/out parameter.
+         */
+        void impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor);
 
         //---------------------------------------
 
