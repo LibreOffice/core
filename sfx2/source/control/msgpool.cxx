@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-24 14:28:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
 // SlotName erfragen, gfs. mit HilfeText
 
-String SfxSlotPool::GetSlotName_Impl(USHORT nId, String *pHelpText) const
+String SfxSlotPool::GetSlotName(USHORT nId, String *pHelpText) const
 {
     // ist es eine Makro-SlotId?
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
