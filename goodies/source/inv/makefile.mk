@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+#   last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,9 +93,6 @@ SLOFILES= \
         $(SLO)$/expl.obj \
         $(SLO)$/score.obj \
         $(SLO)$/monst.obj
-.IF "$(GUI)"!="UNX"
-SLOFILES += $(SLO)$/dll.obj
-.ENDIF
 .ENDIF
 
 SRCFILES=gegner.src strings.src
@@ -132,9 +129,6 @@ SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"=="WNT"
 SHL1OBJS=$(SLOFILES)
 .ELSE
-.IF "$(GUI)"!="UNX"
-SHL1OBJS=$(SLO)$/dll.obj
-.ENDIF
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 .ENDIF
 

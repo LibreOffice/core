@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:09 $
+ *  last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,8 +273,8 @@ void MyWindow::Paint(const Rectangle& rRect)
             }
             pVirtualDevice->SetFont(*&aFont);
             String aString = String(ResId(STR_LEVELSTART, GetResMgr()));
-            aString += String(" ");
-            aString += String(nLevel);
+            aString += ' ';
+            aString += String::CreateFromInt32(nLevel);
             if(nStartLevel < 3)
                 pVirtualDevice->DrawText(Point(LEVELTEXTX,LEVELTEXTY),aString);
             nStartLevel++;
@@ -395,7 +395,7 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
     if(!bFightDest)
     {
         aString = String(ResId(STR_GRAT1,GetResMgr()));
-        aString += String(nLevel);
+        aString += String::CreateFromInt32(nLevel);
         aString += String(ResId(STR_GRAT2,GetResMgr()));
 
         pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
@@ -418,7 +418,7 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
         if(nFighter > 0)
         {
             aString = String(ResId(STR_FIGHTDEST1,GetResMgr()));
-            aString += String(nFighter);
+            aString += String::CreateFromInt32(nFighter);
             aString += String(ResId(STR_FIGHTDEST2,GetResMgr()));
         }
         else
@@ -456,9 +456,9 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTY_ARG )
             {
                 String  aString;
                 aString = String(ResId(STR_HIGHSCORE1,GetResMgr()));
-                aString += String(nScore);
+                aString += String::CreateFromInt32(nScore);
                 aString += String(ResId(STR_HIGHSCORE2,GetResMgr()));
-                aString += String(nHighScore);
+                aString += String::CreateFromInt32(nHighScore);
                 aString += String(ResId(STR_HIGHSCORE3,GetResMgr()));
                 nHighScore = nScore;
                 pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);

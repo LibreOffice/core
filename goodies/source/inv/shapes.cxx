@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "expl.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/bitmap.hxx>
 
 Image* ImplLoadImage( USHORT nId, ResMgr* pRes )
 {

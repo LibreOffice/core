@@ -2,9 +2,9 @@
  *
  *  $RCSfile: score.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,21 +105,17 @@ void ScoreWindow::Paint(const Rectangle& rRect)
     DrawText(Point(180,0),String(ResId(STR_ROCKETS, pRes)));
 
     DrawText(Point(300,0),String(ResId(STR_FIGHTER, pRes)));
-    DrawText(Point(370,0),String(nLives));
+    DrawText(Point(370,0),String::CreateFromInt32(nLives));
 
     DrawText(Point(400,0),String(ResId(STR_LEVEL, pRes)));
-    DrawText(Point(460,0),String(nLevel));
+    DrawText(Point(460,0),String::CreateFromInt32(nLevel));
 
     DrawText(Point(500,0),String(ResId(STR_SCORE, pRes)));
-    String aString(nScore);
-    if(aString.Len() < 7)
+    String aString = String::CreateFromInt32(nScore);
+    if ( aString.Len() < 7 )
     {
-        String bString;
-        for(long i=0; i+aString.Len()<7;i++)
-            bString += String("0");
-
-        aString = bString + aString;
-
+        for ( xub_StrLen i = aString.Len(); i < 7; ++i )
+            aString.Insert( '0', 0 );
     }
     DrawText(Point(560,0),aString);
 
