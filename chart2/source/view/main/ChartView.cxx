@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 19:05:48 $
+ *  last change: $Author: iha $ $Date: 2004-01-08 10:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,9 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
             Matrix4D aM4_SceneToScreen( createTransformationSceneToScreen(rPos,rSize) );
             drawing::HomogenMatrix aHM_SceneToScreen( Matrix4DToHomogenMatrix(aM4_SceneToScreen) );
 
+            //------------ create grids
+            rVCooSys.createGridShapes( xShapeFactory, xTarget, aHM_SceneToScreen );
+
             //------------ create axes --- @todo do auto layout / fontscaling
             for( nDim = 0; nDim < 3; nDim++ )
             {
@@ -472,8 +475,6 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                     aAxis.createShapes();
                 }
             }
-            //------------ create grids
-            rVCooSys.createGridShapes( xShapeFactory, xTarget, aHM_SceneToScreen );
 
             //------------ set scale to plotter
             apPlotter->init(xTarget,xPageShapes,xShapeFactory);
