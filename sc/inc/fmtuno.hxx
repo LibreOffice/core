@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_FMTUNO_HXX
 #define SC_FMTUNO_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"           // ScRange, ScAddress
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _LIST_HXX //autogen
