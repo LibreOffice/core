@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATEDWORD_HPP_
-#include <com/sun/star/linguistic/XHyphenatedWord.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #endif
 
 #include "txttypes.hxx"
@@ -78,6 +78,7 @@ class SwTxtSizeInfo;
 class SwTxtFormatInfo;
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::linguistic2;
 
 /*************************************************************************
  *                      class SwTxtGuess
@@ -85,7 +86,7 @@ using namespace ::com::sun::star;
 
 class SwTxtGuess
 {
-    uno::Reference< linguistic::XHyphenatedWord >  xHyphWord;
+    uno::Reference< XHyphenatedWord >  xHyphWord;
     xub_StrLen nLeftPos;        // untere Kante: Idx
     xub_StrLen nRightPos;       // obere  Kante: Idx
     KSHORT nLeftWidth;          // untere Kante: Width
@@ -107,7 +108,7 @@ public:
     inline xub_StrLen RightPos() const { return nRightPos; }
     inline KSHORT RightWidth() const { return nRightWidth; }
     inline KSHORT Height() const { return nHeight; }
-    inline uno::Reference< linguistic::XHyphenatedWord > HyphWord() const
+    inline uno::Reference< XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
 
     inline xub_StrLen GetPrevEnd( const SwTxtFormatInfo &rInf,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::linguistic2;
+
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 // steht im number.cxx
@@ -834,7 +836,7 @@ sal_Bool SwTxtFormatInfo::IsHyphenate() const
     if( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp )
         return sal_False;
 
-    uno::Reference< linguistic::XHyphenator > xHyph = ::GetHyphenator();
+    uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
     if (bInterHyph && xHyph.is())
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 08:23:11 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 
 inline sal_Bool IsDelim( const xub_Unicode cCh )
 {

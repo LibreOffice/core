@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:05:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 using namespace ::rtl;
+
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
 TYPEINIT1( SwModuleDummy, SfxModule );
@@ -357,7 +359,7 @@ SwModule::SwModule( SvFactory* pFact,
     }
     StartListening( *pOffApp );
 
-    xDicListEvtListener = uno::Reference< linguistic::XDictionaryListEventListener > (
+    xDicListEvtListener = uno::Reference< XDictionaryListEventListener > (
             new SwDicListEvtListener( ::GetDictionaryList() ) );
 
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );

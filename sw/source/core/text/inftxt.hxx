@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:35:39 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _INFTXT_HXX
 #define _INFTXT_HXX
 
-#include <com/sun/star/linguistic/XHyphenatedWord.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
 #include "swtypes.hxx"
 #include "txttypes.hxx"
@@ -589,8 +589,9 @@ public:
     inline sal_Bool IsRestoreHyphOptions() const    { return bRestoreHyphOptions; }
     void        RestoreHyphOptions();
     // ruft HyphenateWord() des Hyphenators
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenatedWord>
-        HyphWord( const String &rTxt, const USHORT nMinTrail );
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XHyphenatedWord >
+                HyphWord( const String &rTxt, const USHORT nMinTrail );
 
     sal_Bool CheckFtnPortion( SwLineLayout* pCurr )
         { return IsFtnInside() && _CheckFtnPortion( pCurr ); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 #ifndef _OLMENU_HXX
 #define _OLMENU_HXX
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARY_HPP_
-#include <com/sun/star/linguistic/XDictionary.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY_HPP_
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
-#include <com/sun/star/linguistic/XSpellAlternatives.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XOTHERLINGU_HPP_
-#include <com/sun/star/linguistic/XOtherLingu.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XOTHERLINGU_HPP_
+#include <com/sun/star/linguistic2/XOtherLingu.hpp>
 #endif
 
 #ifndef _MENU_HXX //autogen
@@ -82,17 +82,17 @@ class SwSpellPopup : public PopupMenu
 {
     SwWrtShell* pSh;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XDictionary >  >      aDics;
+        ::com::sun::star::linguistic2::XDictionary >  >     aDics;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XSpellAlternatives >  xSpellAlt;
+        ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XOtherLingu>          xOther;
+        ::com::sun::star::linguistic2::XOtherLingu>         xOther;
     LanguageType                nCorrLang;
 
 public:
     SwSpellPopup( SwWrtShell*,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XSpellAlternatives >  &xAlt );
+                ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt );
 
     sal_uInt16  Execute( Window* pWin, const Point& rPopupPos );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 08:25:07 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ extern const sal_Char *GetLangName( const MSHORT nLang );
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::text;
 
 /*************************************************************************
@@ -136,7 +137,8 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
                             pBreakIt->GetLocale( pFnt->GetLanguage() ),
-                            rTxt.Len() - nMinTrail );
+                            rTxt.Len() - nMinTrail,
+                            Sequence< PropertyValue >() );
     return xHyphWord;
 
 }
@@ -567,13 +569,14 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         {
             xub_StrLen nHyphenationPos = aTxt.Len() - nMinTrail - 1;
                 //! subtract 1 since the UNO-interface is 0 based
-            Reference< XAlternativeSpelling >
-                    xAlt = xHyph->queryAlternativeSpelling( OUString(aTxt),
+            Reference< XHyphenatedWord >
+                    xHW = xHyph->queryAlternativeSpelling( OUString(aTxt),
                             SvxCreateLocale( rInf.GetFont()->GetLanguage() ),
-                            nHyphenationPos );
-            if (xAlt.is())
+                            nHyphenationPos,
+                            Sequence< PropertyValue >() );
+            if (xHW.is()  &&  xHW->isAlternativeSpelling())
             {
-                nMinTrail -= xAlt->getHyphenPos() - nHyphenationPos;
+                nMinTrail -= xHW->getHyphenPos() - nHyphenationPos;
             }
         }
     }
@@ -586,7 +589,7 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
     // Die Laenge ist nicht der Index !
     CONST sal_Bool bAlter = xHyphWord.is() &&
-                        xHyphWord->getAlternativeSpelling().is();
+                        xHyphWord->isAlternativeSpelling();
 
     // Wenn kein Alternativwort gefunden wurde und ein SoftHyph
     // gerade die zweite Runde dreht, dann wollen wir uns nicht
@@ -622,28 +625,29 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         // check for: bAlter => xHyphWord.is()
         DBG_ASSERT(!bAlter || xHyphWord.is(), "NULL pointer");
 
-        Reference< XAlternativeSpelling > xAltSpl( xHyphWord->getAlternativeSpelling() );
-        DBG_ASSERT( xAltSpl.is(), "NULL pointer" );
+        SvxAlternativeSpelling aAltSpell;
+        aAltSpell = SvxGetAltSpelling( xHyphWord );
+        DBG_ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
-        XubString  aAlt      = xAltSpl->getReplacement();
-        xub_StrLen nTxtStart = xAltSpl->getChangedPos();
-        xub_StrLen nTxtEnd   = xAltSpl->getChangedLength() + nTxtStart;
+        XubString  aAltTxt   = aAltSpell.aReplacement;
+        xub_StrLen nTxtStart = aAltSpell.nChangedPos;
+        xub_StrLen nTxtEnd   = aAltSpell.nChangedLength + nTxtStart;
 
         if( bDoSoftHyph )
-            pHyphPor = new SwSoftHyphStrPortion( aAlt );
+            pHyphPor = new SwSoftHyphStrPortion( aAltTxt );
         else
-            pHyphPor = new SwHyphStrPortion( aAlt );
+            pHyphPor = new SwHyphStrPortion( aAltTxt );
         // pHyphPor wird auf die Laenge eingestellt, die im Original-
         // String ersetzt werden soll.
         nTxtStart = lcl_AdjSoftHyph( rInf, aOrgTxt, nTxtStart, nWordStart );
         nTxtEnd   = lcl_AdjSoftHyph( rInf, aOrgTxt, nTxtEnd, nWordStart );
         ASSERT(nTxtEnd >= nTxtStart, "SwTxtPortion::Hyphenate: time to die.");
         const xub_StrLen nTmpLen = pHyphPor->GetLen();
-        pHyphPor->SetLen( aAlt.Len() + 1 );
+        pHyphPor->SetLen( aAltTxt.Len() + 1 );
         (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
         pHyphPor->SetLen( nTxtEnd - nTxtStart + nTmpLen );
         nWordLen = nTxtStart;
-        if( !aAlt.Len() )  // Beim Wrapper Debuggen beobachtet: angebliche
+        if( !aAltTxt.Len() )  // Beim Wrapper Debuggen beobachtet: angebliche
             ++nWordLen;    // Alternativtrennstelle ohne Unterschied zum
                            // Originaltext ( Zukkerbackerei )
     }

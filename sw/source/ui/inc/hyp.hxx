@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _SVX_SPLWRAP_HXX //autogen
 #include <svx/splwrap.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #endif
 
 class SwView;
@@ -78,7 +78,7 @@ class SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >  xHyph;
+        ::com::sun::star::linguistic2::XHyphenator >  xHyph;
     Link            aOldLnk;
     sal_uInt32          nLangError;     // nicht vorhandene Sprache
     sal_uInt16          nPageCount;     // Seitenanzahl fuer Progressanzeige
@@ -89,9 +89,10 @@ private:
     DECL_LINK( SpellError, void * );
 
 public:
-    SwHyphWrapper( SwView* pVw, ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic::XHyphenator >  &rxHyph,
-        sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
+    SwHyphWrapper( SwView* pVw,
+                   ::com::sun::star::uno::Reference<
+                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
+                   sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
 
     ~SwHyphWrapper();
 protected:

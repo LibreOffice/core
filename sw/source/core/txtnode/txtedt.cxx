@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:33:17 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
@@ -577,7 +580,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     BOOL bCheck = FALSE;
     BOOL bNoLang = FALSE;
-    uno::Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
+    Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
     BOOL bReverse = xProp.is() ?
         *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : FALSE;
 
@@ -635,7 +638,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                 if (pArgs->xSpeller.is())
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
-                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, eActLang );
+                    pArgs->xSpellAlt = pArgs->xSpeller->spell( rWord, eActLang,
+                                            Sequence< PropertyValue >() );
                 }
                 if( (pArgs->xSpellAlt).is() )
                 {
@@ -710,7 +714,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         nInsertPos = 0;
     }
 
-    uno::Reference<linguistic::XSpellChecker1> xSpell( GetSpellChecker() );
+    Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
 
     BOOL bFresh = nBegin < nEnd;
     BOOL bACWDirty = FALSE;
@@ -737,7 +741,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                 // check for: bAlter => xHyphWord.is()
                 DBG_ASSERT(!bSpell || xSpell.is(), "NULL pointer");
 
-                if( !xSpell->isValid( rWord, eActLang ) )
+                if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
                 {
                     bACWDirty = TRUE;
                     if( !pNode->GetWrong() )
