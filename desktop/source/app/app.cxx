@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: as $ $Date: 2004-12-02 09:14:48 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 18:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,10 +1358,7 @@ void Desktop::Main()
                     return;
         }
 
-        //    The only step that should be done if terminate flag was specified
-        //    Typically called by the plugin only
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "setup2 (ok93719) ::Installer::InitializeInstallation" );
-        InitializeInstallation( Application::GetAppFileName() );
+        // terminate if requested...
         if( pCmdLineArgs->IsTerminateAfterInit() ) return;
 
 
