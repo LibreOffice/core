@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:14:32 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3328,7 +3328,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ dutch ] = "Kolomeinde invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥ε†ζ η¬¦";
     SlotName[ greek ] = "Εισαγωγή αλλαγής στήλης";
-    SlotName[ korean ] = "μ—΄ λ‚λ„κΈ° μ‚½μ…";
+    SlotName[ korean ] = "μ—΄ μ‚½μ…";
     SlotName[ turkish ] = "Sόtun sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cambio de columnas";
@@ -5702,7 +5702,7 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ dutch ] = "Pagina-opmaakprofiel: kolommen";
     SlotName[ chinese_simplified ] = "ι΅µιΆζ ·εΌοΌε—";
     SlotName[ greek ] = "Πρότυπο σελίδας: Στήλες";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ: μ—΄";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ: μ—΄";
     SlotName[ turkish ] = "Sayfa biηimi: Sόtunlar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de pαgina: Columnas";
@@ -6705,7 +6705,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ dutch ] = "Pagina-opmaakprofiel toewijzen";
     SlotName[ chinese_simplified ] = "ζ‡ε®ι΅µιΆζ ·εΌ";
     SlotName[ greek ] = "Εφαρμογή πρότυπου σελίδας";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ μ μ©";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ μ μ©";
     SlotName[ turkish ] = "Sayfa biηimi uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar estilo de pαgina";
@@ -7573,7 +7573,7 @@ SfxSlotInfo FN_STAT_TEMPLATE
     SlotName[ dutch ] = "Pagina-opmaakprofiel";
     SlotName[ chinese_simplified ] = "ι΅µιΆζ ·εΌ";
     SlotName[ greek ] = "Πρότυπο σελίδας";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ";
     SlotName[ turkish ] = "Sayfa biηimi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de pαgina";
