@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharSet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:44:39 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,12 @@
 /** These values are used to specify the characters which are available in
     a font and their codes.
 
-    <p>They may be expanded in future versions.</p>
+    <P>The currently defined constants of <CODE>CharSet</CODE> have the same
+    numerical values as the corresponding enum values of the C/C++
+    <CODE>rtl_TextEncoding</CODE> (from <CODE>rtl/textenc.h</CODE>).  This
+    correspondence is by design.  Since <CODE>CharSet</CODE> is deprecated,
+    however, it is not planned to add further constants to keep it in sync with
+    <CODE>rtl_TextEncoding</CODE>.</P>
 
     @deprecated
  */
