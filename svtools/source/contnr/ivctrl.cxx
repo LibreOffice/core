@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:12:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,11 @@ ULONG SvtIconChoiceCtrl::GetEntryCount() const
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( ULONG nPos ) const
 {
     return _pImp->GetEntry( nPos );
+}
+
+void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics )
+{
+    _pImp->CreateAutoMnemonics( &_rUsedMnemonics );
 }
 
 void SvtIconChoiceCtrl::CreateAutoMnemonics( void )
