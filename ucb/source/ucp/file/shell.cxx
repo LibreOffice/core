@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:22:34 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,9 +981,9 @@ shell::setv( sal_Int32 CommandId,
                 {   // valid value for the size
                     osl::File aFile(aUnqPath);
                     bool err =
-                        aFile.open(OpenFlag_Write) == osl::FileBase::E_None &&
-                        aFile.setSize(sal_uInt64(newSize)) == osl::FileBase::E_None &&
-                        aFile.close() == osl::FileBase::E_None;
+                        aFile.open(OpenFlag_Write) != osl::FileBase::E_None ||
+                        aFile.setSize(sal_uInt64(newSize)) != osl::FileBase::E_None ||
+                        aFile.close() != osl::FileBase::E_None;
 
                     if( err )
                     {
