@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-26 12:57:02 $
+#   last change: $Author: hjs $ $Date: 2002-11-18 12:09:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -321,6 +321,18 @@ rsclang_66=-lgTHAI $(UTF8)
 rescharset_66=$(thai$(LANG_GUI))
 RCLANGFLAGS_66+= -d THAI
 iso_66=th
+
+.IF "$(RES_HINDI)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=91
+.ENDIF          # "$(RES_HINDI)"!="" || "$(give_me_all_languages)"!=""
+hindi$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_91=hindi
+longlang_91=hindi
+langext_91=91
+rsclang_91=-lgHINDI $(UTF8)
+rescharset_91=$(hindi$(LANG_GUI))
+RCLANGFLAGS_91+= -d HINDI
+iso_91=th
 
 .IF "$(RES_PORTBR)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=55

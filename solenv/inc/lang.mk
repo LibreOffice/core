@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-26 12:56:34 $
+#   last change: $Author: hjs $ $Date: 2002-11-18 12:09:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ greek$(LANG_GUI)=-CHARSET_microsoft-cp1253
 turk$(LANG_GUI)=-CHARSET_microsoft-cp1254
 korean$(LANG_GUI)=-CHARSET_UTF8
 thai$(LANG_GUI)=-CHARSET_UTF8
+hindi$(LANG_GUI)=-CHARSET_UTF8
 extern$(LANG_GUI)=-CHARSET_UTF8
 
 ###################################################
