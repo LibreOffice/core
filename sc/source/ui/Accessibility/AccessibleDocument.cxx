@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-30 13:30:09 $
+ *  last change: $Author: sab $ $Date: 2002-08-30 14:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,33 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
     uno::Reference<XAccessible> xAccessible;
     if(mpViewShell)
     {
-        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        sal_Int32 i(maZOrderedShapes.size() - 1);
+        sal_Bool bFound(sal_False);
+        while (!bFound && i >= 0)
+        {
+            ScAccessibleShapeData* pShape = maZOrderedShapes[i];
+            if (pShape)
+            {
+                if (!pShape->pAccShape)
+                    Get(pShape);
+
+                if (pShape->pAccShape)
+                {
+                    if (VCLRectangle(pShape->pAccShape->getBounds()).IsInside(VCLPoint(rPoint)))
+                    {
+                        xAccessible = pShape->pAccShape;
+                        bFound = sal_True;
+                    }
+                }
+                else
+                    DBG_ERRORFILE("I should have an accessible shape now!");
+            }
+            else
+                bFound = sal_True; // this is the sheet and it lies before the rest of the shapes which are background shapes
+
+            --i;
+        }
+/*      Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
         {
             Point aPnt( rPoint.X, rPoint.Y );
@@ -612,8 +638,6 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
             if (pDrawPage)
             {
                 SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
-    //            if (pObj->GetLayer() != SC_LAYER_INTERN)
-    //            {
                 if (pObj)
                 {
                     uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
@@ -628,9 +652,8 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                     else
                         DBG_ERRORFILE("a shape is not in the list");
                 }
-    //            }
             }
-        }
+        }*/
     }
     return xAccessible;
 }
