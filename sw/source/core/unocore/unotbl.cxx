@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-20 14:05:58 $
+ *  last change: $Author: tl $ $Date: 2002-09-02 12:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2425,6 +2425,10 @@ uno::Reference< XTextTableCursor >  SwXTextTable::createCursorByCellName(const O
 void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange)
     throw( IllegalArgumentException, uno::RuntimeException )
 {
+    // attachToRange must only be called once
+    if(!bIsDescriptor)  /* already attached ? */
+        throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "SwXTextTable: already attached to range." ) ), static_cast < cppu::OWeakObject * > ( this ) );
+
     uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     SwXTextCursor* pCursor = 0;
