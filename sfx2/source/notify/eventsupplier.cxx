@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:38:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                     BlowUpMacro( rElement, aValue, mpObjShell );
 
                     // pConfig becomes the owner of the new SvxMacro
+                    if ( mpObjShell && !mpObjShell->IsLoading() )
+                        mpObjShell->SetModified( TRUE );
                     maEventData[i] = aValue;
 
                     SEQUENCE < PROPERTYVALUE > aProperties;
