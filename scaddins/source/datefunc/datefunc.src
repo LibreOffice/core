@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:52:56 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,6 +1536,8 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
+
 
 
 
