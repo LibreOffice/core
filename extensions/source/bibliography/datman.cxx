@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:41:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,6 +1015,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             switch(nType)
             {
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     sCurrentModelType = C2U("CheckBox");
                     break;
 
@@ -1595,6 +1596,7 @@ rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
     switch (nFormatKey)
     {
         case DataType::BIT:
+        case DataType::BOOLEAN:
             aResStr=C2U("CheckBox");
             break;
         case DataType::TINYINT:
