@@ -10,7 +10,7 @@ VERSION=4.2
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 dnl Checks for programs.
-AC_PROG_CXX
+#AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
@@ -52,6 +52,10 @@ fi
 if test ${OS_UNAME} = Linux; then
 	echo "Linux found"
 	OS_VERSION=linux
+fi
+if test ${OS_UNAME} = Irix; then
+	echo "Irix found"
+	OS_VERSION=sysvr4
 fi
 AC_SUBST(OS_VERSION)
 
