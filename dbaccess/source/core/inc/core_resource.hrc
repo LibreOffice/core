@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 15:54:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,32 @@
 #define RID_STR_COULDNOTCONNECT_NODRIVER        ( RID_CORE_STRINGS_START +  4 )
 #define RID_STR_COULDNOTCONNECT_UNSPECIFIED     ( RID_CORE_STRINGS_START +  5 )
 #define RID_STR_COULDNOTLOAD_MANAGER            ( RID_CORE_STRINGS_START +  6 )
+#define RID_STR_ONLY_QUERY                      ( RID_CORE_STRINGS_START +  7 )
+#define RID_STR_NO_VALUE_CHANGED                ( RID_CORE_STRINGS_START +  8 )
+#define RID_STR_NO_XROWUPDATE                   ( RID_CORE_STRINGS_START +  9 )
+#define RID_STR_NO_XRESULTSETUPDATE             ( RID_CORE_STRINGS_START + 10 )
+#define RID_STR_NO_UPDATE_MISSING_CONDITION     ( RID_CORE_STRINGS_START + 11 )
+#define RID_STR_NO_COLUMN_ADD                   ( RID_CORE_STRINGS_START + 12 )
+#define RID_STR_NO_COLUMN_DROP                  ( RID_CORE_STRINGS_START + 13 )
+#define RID_STR_NO_CONDITION_FOR_PK             ( RID_CORE_STRINGS_START + 14 )
+#define RID_STR_NO_XQUERIESSUPPLIER             ( RID_CORE_STRINGS_START + 15 )
+#define RID_STR_NO_ABS_ZERO                     ( RID_CORE_STRINGS_START + 16 )
+#define RID_STR_NO_RELATIVE                     ( RID_CORE_STRINGS_START + 17 )
+#define RID_STR_NO_REFESH_AFTERLAST             ( RID_CORE_STRINGS_START + 18 )
+#define RID_STR_NO_MOVETOINSERTROW_CALLED       ( RID_CORE_STRINGS_START + 19 )
+#define RID_STR_NO_UPDATEROW                    ( RID_CORE_STRINGS_START + 20 )
+#define RID_STR_NO_DELETEROW                    ( RID_CORE_STRINGS_START + 21 )
+#define RID_STR_COLUMN_MUST_VISIBLE             ( RID_CORE_STRINGS_START + 22 )
+#define RID_STR_COLUMN_NOT_VALID                ( RID_CORE_STRINGS_START + 23 )
+#define RID_STR_COLUMN_NOT_SEARCHABLE           ( RID_CORE_STRINGS_START + 24 )
+#define RID_STR_NOT_SEQUENCE_INT8               ( RID_CORE_STRINGS_START + 25 )
+#define RID_STR_NOT_SUPPORTED_BY_DRIVER         ( RID_CORE_STRINGS_START + 26 )
+#define RID_STR_NO_TABLE_RENAME                 ( RID_CORE_STRINGS_START + 27 )
+#define RID_STR_COLUMN_ALTER_BY_NAME            ( RID_CORE_STRINGS_START + 28 )
+#define RID_STR_COLUMN_ALTER_BY_INDEX           ( RID_CORE_STRINGS_START + 29 )
+#define RID_STR_NO_ALTER_COLUMN_DEF             ( RID_CORE_STRINGS_START + 30 )
+#define RID_STR_COLUMN_UNKNOWN_PROP             ( RID_CORE_STRINGS_START + 31 )
+
 
 
 #endif // _DBA_CORE_RESOURCE_HRC_
