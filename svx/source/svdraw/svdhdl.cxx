@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 15:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class SdrHdlBitmapSet
     BitmapEx                aRect_7x7[5];
     BitmapEx                aRect_9x9[5];
     BitmapEx                aRect_11x11[5];
+    BitmapEx                aRect_13x13[5];
     BitmapEx                aCirc_7x7[5];
     BitmapEx                aCirc_9x9[5];
     BitmapEx                aCirc_11x11[5];
@@ -206,6 +207,22 @@ void SdrHdlBitmapSet::FillBitmapsFromResource(UINT16 nResId)
             aRectPlus_11x11[a].GetMask().CreateDisplayBitmap( pOut ) );
     }
 
+    aRect_13x13[0] = aMarkersBitmap; aRect_13x13[0].Crop(Rectangle(Point(71, 53), Size(13, 13)));
+    aRect_13x13[0] = BitmapEx( aRect_13x13[0].GetBitmap().CreateDisplayBitmap( pOut ),
+        aRect_13x13[0].GetMask().CreateDisplayBitmap( pOut ) );
+    aRect_13x13[1] = aMarkersBitmap; aRect_13x13[1].Crop(Rectangle(Point(85, 53), Size(13, 13)));
+    aRect_13x13[1] = BitmapEx( aRect_13x13[1].GetBitmap().CreateDisplayBitmap( pOut ),
+        aRect_13x13[1].GetMask().CreateDisplayBitmap( pOut ) );
+    aRect_13x13[2] = aMarkersBitmap; aRect_13x13[2].Crop(Rectangle(Point(72, 65), Size(13, 13)));
+    aRect_13x13[2] = BitmapEx( aRect_13x13[2].GetBitmap().CreateDisplayBitmap( pOut ),
+        aRect_13x13[2].GetMask().CreateDisplayBitmap( pOut ) );
+    aRect_13x13[3] = aMarkersBitmap; aRect_13x13[3].Crop(Rectangle(Point(85, 65), Size(13, 13)));
+    aRect_13x13[3] = BitmapEx( aRect_13x13[3].GetBitmap().CreateDisplayBitmap( pOut ),
+        aRect_13x13[3].GetMask().CreateDisplayBitmap( pOut ) );
+    aRect_13x13[4] = aMarkersBitmap; aRect_13x13[4].Crop(Rectangle(Point(98, 65), Size(13, 13)));
+    aRect_13x13[4] = BitmapEx( aRect_13x13[4].GetBitmap().CreateDisplayBitmap( pOut ),
+        aRect_13x13[4].GetMask().CreateDisplayBitmap( pOut ) );
+
     aCrosshair = aMarkersBitmap; aCrosshair.Crop(Rectangle(Point(0, 55), Size(15, 15)));
     aCrosshair = BitmapEx( aCrosshair.GetBitmap().CreateDisplayBitmap( pOut ),
         aCrosshair.GetMask().CreateDisplayBitmap( pOut ) );
@@ -226,6 +243,7 @@ BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nI
         case Rect_7x7: return aRect_7x7[nInd]; break;
         case Rect_9x9: return aRect_9x9[nInd]; break;
         case Rect_11x11: return aRect_11x11[nInd]; break;
+        case Rect_13x13: return aRect_13x13[nInd]; break;
         case Circ_7x7: return aCirc_7x7[nInd]; break;
         case Circ_9x9: return aCirc_9x9[nInd]; break;
         case Circ_11x11: return aCirc_11x11[nInd]; break;
@@ -475,7 +493,7 @@ void SdrHdl::CreateB2dIAObject()
             }
             case HDL_CIRC:
             {
-                eKindOfMarker = Rect_9x9;
+                eKindOfMarker = Rect_11x11;
                 break;
             }
             case HDL_REF1:
@@ -548,6 +566,7 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         {
             case Rect_7x7: eKindOfMarker = Rect_9x9; break;
             case Rect_9x9: eKindOfMarker = Rect_11x11; break;
+            case Rect_11x11: eKindOfMarker = Rect_13x13; break;
             case Circ_7x7: eKindOfMarker = Circ_9x9; break;
             case Circ_9x9: eKindOfMarker = Circ_11x11; break;
             case Elli_7x9: eKindOfMarker = Elli_9x11; break;
