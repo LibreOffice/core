@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:10:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,6 +909,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_MODEL                        (FN_EXTRA2 + 96)
 #define FN_UNO_COMPONENT                    (FN_EXTRA2 + 97)
 #define FN_WORDCOUNT_DIALOG                 (FN_EXTRA2 + 98)
+#define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 99)
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
@@ -1088,6 +1089,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PARAM_REGION_CONDITION       (FN_PARAM+25)
 #define FN_PARAM_REGION_HIDDEN          (FN_PARAM+26)
 #define FN_PARAM_REGION_PROTECT         (FN_PARAM+27)
+#define FN_PARAM_REGION_EDIT_IN_READONLY (FN_PARAM+28)
 
 #define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
 #define FN_PARAM_FILTER                 (FN_PARAM+30)
