@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disdocum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class DT_EOL;
 class DT_StdAtTag;
 class DT_SeeAlsoAtTag;
 class DT_ParameterAtTag;
+class DT_SinceAtTag;
 }   // namespace dsapi
 }   // namespace csi
 
@@ -123,6 +124,9 @@ class DocumentationDisplay
     virtual void        Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag &
                                                 i_rToken ) = 0;
+    virtual void        Display_SinceAtTag(
+                            const csi::dsapi::DT_SinceAtTag &
+                                                i_rToken ) = 0;
 };
 
 
@@ -158,6 +162,9 @@ class DocuText_Display : public DocumentationDisplay
                                                 i_rToken );
     virtual void        Display_ParameterAtTag(
                             const csi::dsapi::DT_ParameterAtTag &
+                                                i_rToken );
+    virtual void        Display_SinceAtTag(
+                            const csi::dsapi::DT_SinceAtTag &
                                                 i_rToken );
 };
 
