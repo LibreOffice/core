@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-31 09:44:37 $
+ *  last change: $Author: nf $ $Date: 2001-06-01 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2362,8 +2362,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
 
                                 ByteString sText( "\t" );
                                 sText += sLine;
-                                sText += " ;";
-
                                 if ( bDefine )
                                     sText += " ;\\\n";
                                 else
