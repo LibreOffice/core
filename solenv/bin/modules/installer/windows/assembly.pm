@@ -2,9 +2,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:20:01 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:56:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,6 +177,37 @@ sub get_msiassembly_file
     return $onefile;
 }
 
+##############################################################
+# Returning the file object for the msiassembly table.
+##############################################################
+
+sub get_msiassembly_file_by_gid
+{
+    my ( $filesref, $gid ) = @_;
+
+    my $foundfile = 0;
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile = ${$filesref}[$i];
+        my $filegid = $onefile->{'gid'};
+
+        if ( $filegid eq $gid )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    # It does not need to exist. For example products that do not contain the libraries.
+    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
+
+    if (! $foundfile ) { $onefile  = ""; }
+
+    return $onefile;
+}
+
 ####################################################################################
 # Creating the file MsiAssembly.idt dynamically
 # Content:
@@ -197,9 +228,11 @@ sub create_msiassembly_table
 
     for ( my $i = 0; $i <= $#installer::globals::msiassemblyfiles; $i++ )
     {
-        my $libraryname = $installer::globals::msiassemblyfiles[$i];
+        # my $libraryname = $installer::globals::msiassemblyfiles[$i];
+        my $librarygid = $installer::globals::msiassemblyfiles[$i];
 
-        my $onefile = get_msiassembly_file($filesref, $libraryname);
+        # my $onefile = get_msiassembly_file($filesref, $libraryname);
+        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
 
         if ( $onefile eq "" ) { next; } # library not part of this product
 
@@ -263,9 +296,11 @@ sub create_msiassemblyname_table
 
     for ( my $i = 0; $i <= $#installer::globals::msiassemblynamecontent; $i++ )
     {
-        my $libraryname = $installer::globals::msiassemblynamecontent[$i];
+        # my $libraryname = $installer::globals::msiassemblynamecontent[$i];
+        my $librarygid = $installer::globals::msiassemblynamecontent[$i];
 
-        my $onefile = get_msiassembly_file($filesref, $libraryname);
+        # my $onefile = get_msiassembly_file($filesref, $libraryname);
+        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
 
         if ( $onefile eq "" )   # library not part of this product
         {
@@ -322,8 +357,12 @@ sub add_assembly_condition_into_component_table
 
     for ( my $i = 0; $i <= $#installer::globals::msiassemblyfiles; $i++ )
     {
-        my $libraryname = $installer::globals::msiassemblyfiles[$i];
-        my $onefile = get_msiassembly_file($filesref, $libraryname);
+        # my $libraryname = $installer::globals::msiassemblyfiles[$i];
+        my $librarygid = $installer::globals::msiassemblyfiles[$i];
+
+        # my $onefile = get_msiassembly_file($filesref, $libraryname);
+        my $onefile = get_msiassembly_file_by_gid($filesref, $librarygid);
+
         my $filecomponent = get_msiassembly_component($onefile);
 
         for ( my $j = 0; $j <= $#{$componenttable}; $j++ )
