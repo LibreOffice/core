@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrameProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:52:10 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ published service BaseFrameProperties
             of the shape, if the text document setting ConsiderTextWrapOnObjPos
             is <TRUE\>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-            @since #i28701#
+            @since OOo 2.0.0
          */
         [optional, property] short WrapInfluenceOnPosition;
 };
