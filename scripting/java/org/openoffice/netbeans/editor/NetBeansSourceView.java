@@ -2,9 +2,9 @@
 *
 *  $RCSfile: NetBeansSourceView.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 14:05:24 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:29:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -194,13 +194,9 @@ public class NetBeansSourceView extends JPanel
            so we don't get a storm of DocumentEvents during loading */
         pane.getDocument().removeDocumentListener(this);
 
-        if (model.isModified()) {
-            if (this.isModified()) {
-                // ouch, contention, TODO - prompt for what to do
-            }
-            else {
-                pane.setText(model.getText());
-            }
+        if (isModified == false)
+        {
+            pane.setText(model.getText());
         }
 
         // scroll to current position of the model
@@ -216,7 +212,11 @@ public class NetBeansSourceView extends JPanel
     }
 
     public boolean isModified() {
-        return this.isModified;
+        return isModified;
+    }
+
+    public void setModified(boolean value) {
+        isModified = value;
     }
 
     public String getText() {
@@ -237,7 +237,7 @@ public class NetBeansSourceView extends JPanel
     }
 
     public void doChanged(DocumentEvent e) {
-        this.isModified = true;
+        isModified = true;
     }
 
 }
