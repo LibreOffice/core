@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:36:00 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 14:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #define _CONNECTIVITY_DBTOOLS_HXX_
 
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 //#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 //#include <com/sun/star/sdbc/XConnection.hpp>
 //#endif
@@ -120,8 +123,6 @@ namespace task {
 //.........................................................................
 namespace dbtools
 {
-//.........................................................................
-    class SQLExceptionInfo;
 //=========================================================================
     // date conversion
 
