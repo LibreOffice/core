@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,16 +383,22 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect )
 void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose )
 {
     int nPoints = rPoly.GetSize();
-    appendPoint( rPoly[0], rBuffer );
-    rBuffer.append( " m\r\n" );
-    for( int i = 1; i < nPoints; i++ )
+    /*
+     *  #108582# applications do weird things
+     */
+    if( nPoints > 0 )
     {
-        appendPoint( rPoly[i], rBuffer );
-        rBuffer.append( " l" );
-        rBuffer.append( (i & 3) ? " " : "\r\n" );
+        appendPoint( rPoly[0], rBuffer );
+        rBuffer.append( " m\r\n" );
+        for( int i = 1; i < nPoints; i++ )
+        {
+            appendPoint( rPoly[i], rBuffer );
+            rBuffer.append( " l" );
+            rBuffer.append( (i & 3) ? " " : "\r\n" );
+        }
+        if( bClose )
+            rBuffer.append( "h\r\n" );
     }
-    if( bClose )
-        rBuffer.append( "h\r\n" );
 }
 
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose )
@@ -2280,14 +2286,24 @@ bool PDFWriterImpl::emit()
     return true;
 }
 
-void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects )
+void PDFWriterImpl::registerGlyphs(
+                                   int nGlyphs,
+                                   long* pGlyphs,
+                                   sal_Unicode* pUnicodes,
+                                   sal_uInt8* pMappedGlyphs,
+                                   sal_Int32* pMappedFontObjects,
+                                   ImplFontData* pFallbackFonts[] )
 {
     ImplFontData* pCurrentFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    FontSubset* pCurrentSubset = &m_aSubsets[ pCurrentFont ];
     if( pCurrentFont->mbSubsettable )
     {
-        FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
         for( int i = 0; i < nGlyphs; i++ )
         {
+            if( ! pGlyphs[i] )
+                continue;
+
+            FontSubset& rSubset = pFallbackFonts[i] ? m_aSubsets[pFallbackFonts[i]] : *pCurrentSubset;
             // search for glyphID
             FontMapping::iterator it = rSubset.m_aMapping.find( pGlyphs[i] );
             if( it != rSubset.m_aMapping.end() )
@@ -2463,11 +2479,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     sal_Unicode pUnicodes[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     long nAdvanceWidths[nMaxGlyphs];
+    ImplFontData* pFallbackFonts[nMaxGlyphs];
     long *pAdvanceWidths = m_aCurrentPDFState.m_aFont.IsVertical() ? nAdvanceWidths : NULL;
     long nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
-    Point aPos;
+    Point aPos, aLastPos(0, 0);
     bool bFirst = true;
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
@@ -2495,6 +2512,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
 
+    sal_Int32 nLastMappedFont = -1;
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
     {
         // back transformation to current coordinate system
@@ -2515,6 +2533,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 
         for( int i = 0; i < nGlyphs; i++ )
         {
+            if( pGlyphs[i] & GF_FONTMASK )
+                pFallbackFonts[i] = ((MultiSalLayout&)rLayout).GetFallbackFontData((pGlyphs[i] & GF_FONTMASK) >> GF_FONTSHIFT);
+            else
+                pFallbackFonts[i] = NULL;
+
             nGlyphFlags[i] = (pGlyphs[i] & GF_FLAGMASK);
 #ifndef WNT
             // #104930# workaround for Win32 bug: the glyph ids are actually
@@ -2534,7 +2557,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             // implementations set -1 then to indicate that no direct
             // mapping is possible
         }
-        registerGlyphs( nGlyphs, pGlyphs, pUnicodes, pMappedGlyphs, pMappedFontObjects );
+        registerGlyphs( nGlyphs, pGlyphs, pUnicodes, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
 
         if( pAdvanceWidths )
         {
@@ -2565,6 +2588,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 }
                 aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale)/rLayout.GetUnitsPerPixel(), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
                 nXOffset += pAdvanceWidths[n];
+                if( ! pGlyphs[n] )
+                    continue;
 
 
                 aDeltaPos = Point( (int)(fXScale * fCos * (double)aDeltaPos.X() + fSin * (double)aDeltaPos.Y()),
@@ -2582,23 +2607,40 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 appendDouble( fDCos*fYScale, aLine );
                 aLine.append( ' ' );
                 m_aPages.back().appendPoint( aPos+aDeltaPos, aLine );
-                aLine.append( " Tm /F" );
-                aLine.append( pMappedFontObjects[n] );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
-                aLine.append( " Tf [ <" );
+                aLine.append( " Tm" );
+                if( nLastMappedFont != pMappedFontObjects[n] )
+                {
+                    nLastMappedFont = pMappedFontObjects[n];
+                    aLine.append( " /F" );
+                    aLine.append( pMappedFontObjects[n] );
+                    aLine.append( ' ' );
+                    aLine.append( " Tf" );
+                    m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
+                }
+                aLine.append( " <" );
                 appendHex( (sal_Int8)pMappedGlyphs[n], aLine );
-                aLine.append( "> ] TJ\r\n" );
+                aLine.append( "> Tj\r\n" );
             }
         }
         else // normal case
         {
             // optimize use of Td vs. Tm
-            if( bFirst && fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
+            if( fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
             {
-                m_aPages.back().appendPoint( aPos, aLine );
+                if( bFirst )
+                {
+                    m_aPages.back().appendPoint( aPos, aLine );
+                    bFirst = false;
+                }
+                else
+                {
+                    Point aDiff = aPos - aLastPos;
+                    m_aPages.back().appendMappedLength( aDiff.X(), aLine, false );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true );
+                }
                 aLine.append( " Td " );
-                bFirst = false;
+                aLastPos = aPos;
             }
             else
             {
@@ -2616,21 +2658,31 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             int nLast = 0;
             while( nLast < nGlyphs )
             {
+                while( ! pGlyphs[nLast] && nLast < nGlyphs )
+                    nLast++;
+                if( nLast >= nGlyphs )
+                    break;
+
                 int nNext = nLast+1;
-                while( nNext < nGlyphs && pMappedFontObjects[ nNext ] == pMappedFontObjects[nLast] )
+                while( nNext < nGlyphs && pMappedFontObjects[ nNext ] == pMappedFontObjects[nLast] && pGlyphs[nNext] )
                     nNext++;
-                aLine.append( "/F" );
-                aLine.append( pMappedFontObjects[nLast] );
-                aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
-                aLine.append( " Tf [ <" );
+                if( nLastMappedFont != pMappedFontObjects[nLast] )
+                {
+                    aLine.append( "/F" );
+                    aLine.append( pMappedFontObjects[nLast] );
+                    aLine.append( ' ' );
+                    m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
+                    aLine.append( " Tf " );
+                    nLastMappedFont = pMappedFontObjects[nLast];
+                }
+                aLine.append( "<" );
                 for( int i = nLast; i < nNext; i++ )
                 {
                     appendHex( (sal_Int8)pMappedGlyphs[i], aLine );
                     if( i && (i % 35) == 0 )
                         aLine.append( "\r\n" );
                 }
-                aLine.append( "> ] TJ\r\n" );
+                aLine.append( "> Tj\r\n" );
 
                 nLast = nNext;
             }
@@ -3202,7 +3254,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     m_aPages.back().appendPoint( aPos, aLine );
     aLine.append( " cm\r\n" );
 
-    if ( aUnderlineColor == Color( COL_TRANSPARENT ) )
+    if ( aUnderlineColor.GetTransparency() != 0 )
         aUnderlineColor = aStrikeoutColor;
 
     if ( (eUnderline == UNDERLINE_SMALLWAVE) ||
