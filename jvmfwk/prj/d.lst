@@ -4,8 +4,7 @@ mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
-..\%__SRC%\lib\libjvmfwk*.so.*.*.* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libjvmfwk*.dylib* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libjvmfwk.*.* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\sunjavaplugin*.so %_DEST%\lib%_EXT%\*
@@ -16,5 +15,4 @@ mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\%__SRC%\bin\javavendors_so.xml %_DEST%\bin%_EXT%\so\javavendors.xml
 ..\%__SRC%\bin\javavendors_ooo.xml %_DEST%\bin%_EXT%\javavendors.xml
 
-linklib: libjvmfwk*.so.*.*.*
-
+linklib: libjvmfwk.*.*
