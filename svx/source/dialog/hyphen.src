@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ portuguese_brazilian ] = "~Apagar" ;
         TEXT [ portuguese ] = "~Remover" ;
         TEXT [ finnish ] = "~Poista" ;
-        TEXT [ danish ] = "Slet" ;
+        TEXT [ danish ] = "Fjern" ;
         TEXT [ french ] = "~Supprimer" ;
         TEXT [ swedish ] = "Ta ~bort" ;
         TEXT [ dutch ] = "Ver~wijderen" ;
