@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:15:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     BOOL            bAppConfig;
 
     DECL_LINK(      SelectHdl_Impl, ListBox* );
+
+    // Forbidden and not implemented.
+    SvxEventConfigPage (const SvxEventConfigPage &);
+    SvxEventConfigPage & operator= (const SvxEventConfigPage &);
 
 public:
                     SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet );
