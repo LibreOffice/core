@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.17 2000-11-23 15:12:34 sab Exp $
+	$Id: table.mod,v 1.18 2000-12-07 17:06:24 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -72,9 +72,9 @@
 	xlink:type (simple) #FIXED "simple"
 	xlink:actuate (onRequest) "onRequest"
 	xlink:href %uriReference; #REQUIRED
-	table:filter-name CDATA #REQUIRED
+	table:filter-name CDATA #IMPLIED
 	table:table-name CDATA #REQUIRED
-	table:filter-options CDATA #REQUIRED>
+	table:filter-options CDATA #IMPLIED>
 <!ELEMENT table:scenario EMPTY>
 <!ATTLIST table:scenario
 	table:display-border %boolean; "true"
