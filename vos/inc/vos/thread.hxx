@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:13 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 10:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ class OThreadData : public NAMESPACE_VOS(OObject)
 
 public:
     /// Create a thread specific local data key
-    OThreadData();
+    OThreadData( oslThreadKeyCallbackFunction = 0 );
 
     /// Destroy a thread specific local data key
     virtual ~OThreadData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:17 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 10:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,9 +255,9 @@ VOS_IMPLEMENT_CLASSINFO(VOS_CLASSNAME(OThreadData, vos),
                         VOS_NAMESPACE(OThreadData, vos),
                         VOS_NAMESPACE(OObject, vos), 0);
 
-OThreadData::OThreadData()
+OThreadData::OThreadData( oslThreadKeyCallbackFunction pCallback )
 {
-    VOS_VERIFY(m_hKey = osl_createThreadKey());
+    VOS_VERIFY(m_hKey = osl_createThreadKey( pCallback ));
 }
 
 OThreadData::~OThreadData()
