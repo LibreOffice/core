@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 17:15:59 $
+ *  last change: $Author: cmc $ $Date: 2001-04-05 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2562,7 +2562,12 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     }
                                             // Raender ausserhalb der Umrandung
     nWidth += nLeLMgn + nRiLMgn;
-//  nHeight += nUpLMgn + nLoLMgn;
+    /*
+    ##582##
+    Word has a curious bug where the offset stored do not take into account
+    the internal distance from the corner both
+    */
+    nXPos -= nLeLMgn;
 
     FlySecur1( nWidth, nLeMgn, nRiMgn, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, nUpMgn, nLoMgn, rWW.bBorderLines );
@@ -2799,6 +2804,14 @@ void SwWW8ImplReader::StopApo()
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
         pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
+        /*
+        ##582##
+        Take the last paragraph background colour and fill the frame with it.
+        This is how MSWord works
+        */
+        const SfxPoolItem *pItem = GetFmtAttr(RES_BACKGROUND);
+        if (pItem)
+            pSFlyPara->pFlyFmt->SetAttr(*pItem);
 
 // Ist die Fly-Breite durch eine innenliegende Grafik vergroessert worden
 // ( bei automatischer Breite des Flys ), dann muss die Breite des SW-Flys
@@ -4983,12 +4996,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.17 2001-03-16 17:15:59 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.18 2001-04-05 13:52:03 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/03/16 17:15:59  jp
+      new: im-/export emboss / engrave attribute
+
       Revision 1.16  2001/03/16 14:19:41  cmc
       Add some undocumented sprms
 
