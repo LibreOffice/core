@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:59:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 
-            const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchor();
+            const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
                  FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
