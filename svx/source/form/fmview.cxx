@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,13 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef _SFX_BINDINGS_HXX //autogen
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
 
@@ -465,7 +471,7 @@ SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
             pFormShellImpl->ResetForms(xForms, sal_True);
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
-            SFX_BINDINGS().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
+            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
 
             pFormShellImpl->SetSelection(GetMarkList());
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ void SvxFmAbsRecWin::FirePosition()
 
     FmFormInfoItem aItem( SID_FM_RECORD_ABSOLUTE, FmFormInfo(nRecord,-1));
 
-    SFX_DISPATCHER().Execute( SID_FM_RECORD_ABSOLUTE, SFX_CALLMODE_RECORD, &aItem, 0L );
+    m_pController->GetBindings().GetDispatcher()->Execute( SID_FM_RECORD_ABSOLUTE, SFX_CALLMODE_RECORD, &aItem, 0L );
 
     // to update our content we explicitly call StateChanged : a simple Invalidate(m_nId) is insufficient
     // as our StateChanged won't be called if entered a invalid position which didn't cause the cursor
@@ -346,7 +346,7 @@ void SvxFmTbxCtlConfig::Select( USHORT nModifier )
     //////////////////////////////////////////////////////////////////////
     // Click auf den Button SID_FM_CONFIG in der ObjectBar
     if (nLastSlot)
-        SFX_DISPATCHER().Execute( nLastSlot );
+        GetBindings().GetDispatcher()->Execute( nLastSlot );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,6 @@
 
 #ifndef _MULTIPRO_HXX
 #include "multipro.hxx"
-#endif
-
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -759,7 +755,8 @@ void SAL_CALL FmXFormShell::disposing(const ::com::sun::star::lang::EventObject&
         m_xActiveForm = NULL;
         m_xActiveController = NULL;
         m_xNavigationController = NULL;
-        SFX_BINDINGS().InvalidateShell(*m_pShell);
+
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
 
     if (e.Source == m_xExternalViewController)
@@ -804,8 +801,8 @@ void SAL_CALL FmXFormShell::propertyChange(const ::com::sun::star::beans::Proper
         ::vos::IMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
-            SFX_BINDINGS().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);
-            SFX_BINDINGS().Update(SID_FM_RECORD_TOTAL);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(SID_FM_RECORD_TOTAL);
             rSolarSafety.release();
         }
         else
@@ -852,7 +849,7 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
     if (!m_bActiveModified)
     {
         m_bActiveModified = sal_True;
-        SFX_BINDINGS().Invalidate(ModifySlotMap);
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(ModifySlotMap);
     }
 }
 // #endif
@@ -958,9 +955,9 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
             if (!pRequestedDispatcher)
             {
                 // nobody requested a dispatcher for this form and this slot before -> create a new one
-                SFX_BINDINGS().DENTERREGISTRATIONS();
-                pRequestedDispatcher = new FmFormNavigationDispatcher(aURL, nAccordingSlots[i], SFX_BINDINGS(), xAffectedForm, sOriginalPathWithPagePrefix);
-                SFX_BINDINGS().DLEAVEREGISTRATIONS();
+                m_pShell->GetViewShell()->GetViewFrame()->GetBindings().DENTERREGISTRATIONS();
+                pRequestedDispatcher = new FmFormNavigationDispatcher(aURL, nAccordingSlots[i], m_pShell->GetViewShell()->GetViewFrame()->GetBindings(), xAffectedForm, sOriginalPathWithPagePrefix);
+                m_pShell->GetViewShell()->GetViewFrame()->GetBindings().DLEAVEREGISTRATIONS();
                 DBG_ASSERT(((sPageId += '\\') += sAccessPath) == GetAccessPathFromForm(xAffectedForm, GetPageId(xAffectedForm)),
                     "FmXFormShell::queryDispatch : hmmm ... what does this access path mean ?");
 
@@ -1073,9 +1070,9 @@ void FmXFormShell::InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem, sal_Bool bW
     }
     else
         if (nId)
-            SFX_BINDINGS().Invalidate(nId, bWithItem, bWithId);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, bWithItem, bWithId);
         else
-            SFX_BINDINGS().InvalidateShell(*m_pShell);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
 
 //------------------------------------------------------------------------------
@@ -1108,9 +1105,9 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
         nFlags = m_arrInvalidSlots_Flags[i];
 
         if (m_arrInvalidSlots[i])
-            SFX_BINDINGS().Invalidate(m_arrInvalidSlots[i], (nFlags & 0x02), (nFlags & 0x01));
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], (nFlags & 0x02), (nFlags & 0x01));
         else
-            SFX_BINDINGS().InvalidateShell(*m_pShell);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
 
     m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
@@ -2012,7 +2009,7 @@ sal_Bool FmXFormShell::MoveLeft(const ::com::sun::star::uno::Reference< ::com::s
 void SAL_CALL FmXFormShell::cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException )
 {
     m_bActiveModified = sal_False;
-    SFX_BINDINGS().Invalidate(DatabaseSlotMap);
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
 }
 
 //------------------------------------------------------------------------------
@@ -2271,7 +2268,7 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
             if (xCursor == getActiveForm())
             {
                 m_bActiveModified = sal_False;
-                SFX_BINDINGS().Invalidate(DatabaseSlotMap);
+                m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
             }
         }
         break;
@@ -2428,7 +2425,7 @@ void FmXFormShell::setActiveController(const ::com::sun::star::uno::Reference< :
         m_bInActivate = sal_False;
 
         m_pShell->UIFeatureChanged();
-        SFX_BINDINGS().InvalidateShell(*m_pShell);
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 
         InvalidateSlot(SID_FM_FILTER_NAVIGATOR_CONTROL, sal_True, sal_True);
     }
@@ -2784,7 +2781,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     // hier dummerweise nicht, da i.A. ja der (modale) Suchdialog oben ist ... also Gewalt ...
     sal_uInt16 nPos = 0;
     while (DatabaseSlotMap[nPos])
-        SFX_BINDINGS().Update(DatabaseSlotMap[nPos++]);
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(DatabaseSlotMap[nPos++]);
         // leider geht das Update im Gegensatz zum Invalidate nur mit einzelnen Slots)
 
     return 0;
@@ -3422,7 +3419,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
         // That's why we use an asynchron execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
         FmInterfaceItem aInterfaceItem( SID_FM_SHOW_PROPERTY_BROWSER, getSelObject() );
-        SFX_DISPATCHER().Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
+        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
             &aInterfaceItem, 0L );
     }
     m_bChangingDesignMode = sal_False;
@@ -3608,7 +3605,7 @@ void FmXFormShell::startFiltering()
     m_bFilterMode = sal_True;
 
     m_pShell->UIFeatureChanged();
-    SFX_BINDINGS().InvalidateShell(*m_pShell);
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
 
 //------------------------------------------------------------------------------
@@ -3737,7 +3734,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     }
 
     m_pShell->UIFeatureChanged();
-    SFX_BINDINGS().InvalidateShell(*m_pShell);
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
 
 //------------------------------------------------------------------------------
@@ -4099,7 +4096,7 @@ IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pTh
             restoreControlLocks();
     }
 
-    SFX_BINDINGS().Invalidate(DatabaseSlotMap);
+    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
         // it may not be neccessary but me thinks it's faster without the check if we really have to do this
 
     return 0L;

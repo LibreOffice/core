@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,12 @@
 
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -1996,7 +2002,7 @@ void FmExplorer::Command( const CommandEvent& rEvt )
                         {
                             sal_Bool bOpenDesignMode = pFormModel->GetOpenInDesignMode();
                             pFormModel->SetOpenInDesignMode( !bOpenDesignMode );
-                            SFX_BINDINGS().Invalidate(SID_FM_OPEN_READONLY);
+                            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
                         }
                     }
                     break;
@@ -2665,7 +2671,7 @@ void FmExplorer::NewForm( SvLBoxEntry* pParentEntry )
         pFormShell->GetImpl()->setCurForm( xNewForm );
         pFormShell->GetCurPage()->GetImpl()->setCurForm( xNewForm );
 
-        SFX_BINDINGS().Invalidate(SID_FM_PROPERTIES,sal_True,sal_True);
+        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES,sal_True,sal_True);
     }
     GetExplModel()->SetModified();
 
@@ -2971,7 +2977,7 @@ void FmExplorer::ShowSelectionProperties(sal_Bool bForce)
     {
         // und jetzt kann ich das Ganze dem PropertyBrowser uebergeben
         FmInterfaceItem aInterfaceItem( SID_FM_SHOW_PROPERTY_BROWSER, xInterfaceSelected );
-        SFX_DISPATCHER().Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
+        pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
             &aInterfaceItem, 0L );
     }
 }

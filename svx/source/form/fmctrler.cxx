@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
 #endif
+#ifndef _SVX_FMSHELL_HXX
+#include "fmshell.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
@@ -133,10 +136,6 @@
 #include "qryparam.hxx"
 #endif
 
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
-#endif
-
 #ifndef _SVDPAGV_HXX //autogen
 #include <svdpagv.hxx>
 #endif
@@ -163,6 +162,16 @@
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
+#endif
+
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
 #endif
 
 #ifndef _SHL_HXX
@@ -1161,8 +1170,8 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e)
     if (bActivated)
         onActivate();
 
-    if (m_bDBConnection && !m_bFiltering)
-        SFX_BINDINGS().Invalidate(AutoSlotMap);
+    if (m_bDBConnection && !m_bFiltering && m_pView)
+        m_pView->GetFormShell()->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(AutoSlotMap);
 
     if (m_xCurrentControl.is())
     {

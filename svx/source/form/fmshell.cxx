@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-19 14:36:11 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, nIdentifier );
             SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, FmFormInventor );
-            SFX_DISPATCHER().Execute( SID_FM_CREATE_CONTROL, SFX_CALLMODE_ASYNCHRON,
+            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SFX_CALLMODE_ASYNCHRON,
                                       &aInventorItem, &aIdentifierItem, 0L );
             rReq.Done();
         }   break;
@@ -901,7 +901,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SHOW_FMEXPLORER:
         {
             if (!m_pFormView)   // setzen der ::com::sun::star::sdbcx::View Forcieren
-                SFX_DISPATCHER().Execute(SID_CREATE_SW_DRAWVIEW);
+                GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
             GetViewShell()->GetViewFrame()->ExecuteSlot(rReq);
             rReq.Done();
