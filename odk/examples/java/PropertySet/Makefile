@@ -1,68 +1,84 @@
-# Builds the java demo component.
+# Builds the Java PropertySet component example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
-include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
+COMPONENT1_NAME=PropTest
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT1_NAME)
+OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT1_NAME)
+COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).zip
+COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).zip")
+COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).jar
+COMPONENT1_JAR=$(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
+COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).Manifest
 
-REGISTERFLAG = $(OUT_MISC)$(PS)proptest_register_component.flag
-COMPONENTJARFLAG = $(OUT_MISC)$(PS)proptest_create_component.flag
+REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
 
-PACKAGE =
-OUT_COMPONENT = $(OUT_CLASS)$(PS)PropTest
+JAVAFILES  = PropTest.java
 
-COMPONENT_JAR = $(OUT_CLASS)$(PS)PropTest.jar
-COMPONENT_MANIFESTFILE = manifest
+CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-JAVAFILES  =	PropTest.java	
+$(COMPONENT1_NAME)_CLASSFILES = $(COMPONENT1_NAME).class
 
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMPONENT)$(PS)$(PACKAGE)$(PS)%.class,$(JAVAFILES))
-
-SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)java_uno.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)jut.jar\
-		$(PATH_SEPARATOR)$(OUT_COMPONENT))
-
-OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
 # Targets
 .PHONY: ALL
-ALL : register
+ALL : JavaPropertySetExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMPONENT) : $(OUT)
-	$(MKDIR) $@
+$(OUT_COMP_GEN) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_CLASS))
 
-$(CLASSFILES) : $(OUT_COMPONENT) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMPONENT) $(JAVAFILES) 
+$(OUT_COMP_CLASS)/%.Manifest : $(OUT_COMP_GEN)
+	@echo RegistrationClassName: $(basename $(@F))> $@
 
-$(COMPONENTJARFLAG) : $(CLASSFILES)
-	jar cvfm $(COMPONENT_JAR) $(COMPONENT_MANIFESTFILE) -C $(OUT_COMPONENT) .
-	-$(DEL) $(REGISTERFLAG)
-	@echo bla > $@
+$(CLASSFILES) : $(OUT_COMP_GEN) $(JAVAFILES)
+	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-$(REGISTERFLAG) : $(COMPONENTJARFLAG)
+$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(@F))_CLASSFILES)
+
+$(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
+	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
+
+$(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
-	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
-	java -classpath "$(SDK_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/PropTest.jar" com.sun.star.loader.Java2
-	@echo bla > $@
+	-$(DEL) $(subst /,$(PS),$@)
+	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	@echo flagged > $(subst /,$(PS),$@)
 else
-	@echo ----------------------------------------------------------------------------------------
+	@echo --------------------------------------------------------------------------------
 	@echo  If you want to install your component automatically, please set the environment
-	@echo  variable SDK_AUTO_DEPLOYMENT = YES. 
-	@echo ----------------------------------------------------------------------------------------
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
+	@echo  possible if no office instance is running. 
+	@echo --------------------------------------------------------------------------------
 endif
 
-register: $(REGISTERFLAG)
+JavaPropertySetExample : $(REGISTERFLAG)
+	@echo --------------------------------------------------------------------------------
+	@echo The PropTest was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo Load the PropertySet.sxw document to see how this component works. You can use 
+	@echo this component inside your office installation, see the example description.
+	@echo --------------------------------------------------------------------------------
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT1_JAR))
+	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))

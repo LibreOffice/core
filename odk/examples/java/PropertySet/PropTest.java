@@ -1,3 +1,14 @@
+/*
+This example shows a UNO component that inherits com.sun.star.lib.uno.helper.PropertySet in
+order to provide implementations of  these interfaces:
+
+      com.sun.star.beans.XPropertySet
+      com.sun.star.beans.XMultiPropertySet
+      com.sun.star.beans.XFastPropertySet
+      com.sun.star.lang.XComponent
+      com.sun.star.uno.XWeak
+      com.sun.star.lang.XTypeProvider
+*/
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XServiceInfo;
