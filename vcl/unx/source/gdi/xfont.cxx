@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-18 09:57:49 $
+ *  last change: $Author: cp $ $Date: 2002-07-01 12:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,16 @@ ExtendedFontStruct::GetSpacing( rtl_TextEncoding nEncoding )
     return mpXlfd->GetSpacing( nEncoding );
 }
 
+static XFontStruct*
+LoadXFont (Display* pDisplay, const char* pFontName)
+{
+    XFontStruct* pFont = XLoadQueryFont (pDisplay, pFontName);
+    if ((pFont != NULL) && (pFont->fid == 0))
+         pFont->fid = XLoadFont(pDisplay, pFontName);
+
+    return pFont;
+}
+
 int
 ExtendedFontStruct::LoadEncoding( rtl_TextEncoding nEncoding )
 {
@@ -136,9 +146,10 @@ ExtendedFontStruct::LoadEncoding( rtl_TextEncoding nEncoding )
     ByteString aFontName;
     mpXlfd->ToString( aFontName, mnPixelSize, nEncoding );
 
-    mpXFontStruct[ nIdx ] = XLoadQueryFont( mpDisplay, aFontName.GetBuffer() );
-    if ( (mpXFontStruct[nIdx] != NULL) && (mpXFontStruct[nIdx]->fid == 0) )
-         mpXFontStruct[nIdx]->fid = XLoadFont(mpDisplay, aFontName.GetBuffer());
+    mpXFontStruct[ nIdx ] = LoadXFont( mpDisplay, aFontName.GetBuffer() );
+    if (mpXFontStruct[nIdx] == NULL)
+        mpXFontStruct[nIdx] = LoadXFont( mpDisplay, "fixed" );
+
     return nIdx;
 }
 
