@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:35:10 $
+ *  last change: $Author: cl $ $Date: 2002-10-01 15:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,10 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                 if( aValue >>= nLevel )
                 {
                     // #101004# Call interface method instead of unsafe cast
-                    return pForwarder->SetDepth( pSelection->nStartPara, nLevel );
+                    if(! pForwarder->SetDepth( pSelection->nStartPara, nLevel ) )
+                        throw lang::IllegalArgumentException();
+
+                    return sal_True;
                 }
             }
         }
