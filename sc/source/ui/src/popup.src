@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:20:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ String RID_POPUP_TAB
     Text [ portuguese ] = "Menu instantâneo para barra de tabelas" ;
     Text [ finnish ] = "Taulukon hallinnan kohovalikko" ;
     Text [ danish ] = "Popup-menu for regnearkslinjen" ;
-    Text [ french ] = "Menu Pop-up pour la barre des tables" ;
+    Text [ french ] = "Menu Pop-up pour la barre des feuilles" ;
     Text [ swedish ] = "Popupmeny för tabellist" ;
     Text [ dutch ] = "PopUp-menu voor werkbladenbalk" ;
     Text [ spanish ] = "Menú emergente para la barra de hojas" ;
@@ -1600,7 +1600,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "³]©w¦C¦L­S³ò(~D)";
             Text[ arabic ] = "ÊÚííä äØÇŞ ÇáØÈÇÚÉ";
             Text[ greek ] = "~Ïñéóìüò ğåñéï÷Şò åêôığùóçò";
-            Text[ korean ] = "ÀÎ¼â ¿µ¿ª ÁöÁ¤";
+            Text[ korean ] = "ÀÎ¼â ¹üÀ§ Á¤ÀÇ";
             Text[ turkish ] = "Yazdırma aralığını tanımla";
             Text[ language_user1 ] = " ";
         };
@@ -1627,7 +1627,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ chinese_traditional ] = "·s¼W¦C¦L­S³ò(~A)";
             Text[ arabic ] = "ÅÖÇİÉ äØÇŞ ØÈÇÚÉ";
             Text[ greek ] = "ĞñïóèŞêç ğåñéï~÷Şò åêôığùóçò";
-            Text[ korean ] = "ÀÎ¼â ¿µ¿ª Ãß°¡";
+            Text[ korean ] = "ÀÎ¼â ¹üÀ§ Ãß°¡";
             Text[ turkish ] = "Yazdırma aralığını ekle";
             Text[ language_user1 ] = " ";
         };
