@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContext.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class ComponentContext implements XComponentContext, XComponent
         m_xSMgr = null;
         m_bDisposeSMgr = false;
 
-        Object o = table.get( "com.sun.star.lang.ServiceManager" );
+        Object o = table.get( "com.sun.star.lang.theServiceManager" );
         if (o != null)
         {
             if (o instanceof ComponentContextEntry)
@@ -266,7 +266,7 @@ public class ComponentContext implements XComponentContext, XComponent
         while (keys.hasMoreElements())
         {
             String name = (String)keys.nextElement();
-            if (! name.equals( "com.sun.star.lang.ServiceManager" ))
+            if (! name.equals( "com.sun.star.lang.theServiceManager" ))
             {
                 XComponent xComp;
 
@@ -284,7 +284,7 @@ public class ComponentContext implements XComponentContext, XComponent
 
                 if (xComp != null)
                 {
-                    if (name.equals( "com.sun.star.reflection.TypeDescriptionManager" ))
+                    if (name.equals( "com.sun.star.reflection.theTypeDescriptionManager" ))
                     {
                         tdmgr = xComp;
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-13 08:39:27 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 
 #include <hash_map>
 
-#define SMGR_NAME "com.sun.star.lang.ServiceManager"
-#define TDMGR_NAME "com.sun.star.reflection.TypeDescriptionManager"
+#define SMGR_NAME "com.sun.star.lang.theServiceManager"
+#define TDMGR_NAME "com.sun.star.reflection.theTypeDescriptionManager"
 
 
 using namespace ::osl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public class Bootstrap {
             context_entries = new Hashtable( 1 );
         // add smgr
         context_entries.put(
-            "com.sun.star.lang.ServiceManager",
+            "com.sun.star.lang.theServiceManager",
             new ComponentContextEntry( null, xSMgr ) );
         // ... xxx todo: add standard entries
         XComponentContext xContext = new ComponentContext( context_entries, null );
