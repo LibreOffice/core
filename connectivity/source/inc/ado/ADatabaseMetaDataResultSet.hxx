@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ namespace connectivity
         {
             sal_Int32   map = column;
 
-            if (m_aColMapping.size())
+            if (!m_aColMapping.empty())
             {
                 // Validate column number
                 map = m_aColMapping[column];

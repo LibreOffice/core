@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef CONNECTIVITY_TKEYVALUE_HXX
+#include "TKeyValue.hxx"
 #endif
 
 using namespace connectivity;
@@ -157,265 +160,16 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 // -----------------------------------------------------------------------------
-//------------------------------------------------------------------
-int
-#if defined(WIN) || defined(WNT)
-__cdecl
-#endif
-#if defined(ICC) && defined(OS2)
-_Optlink
-#endif
-connectivity::file::OFILEKeyCompare(const void * elem1, const void * elem2)
-{
-    const OFILESortIndex * pIndex = OFILESortIndex::pCurrentIndex;
-    const OFILEKeyValue * pKeyValue1 = (OFILEKeyValue *) * (OFILEKeyValue **) elem1;
-    const OFILEKeyValue * pKeyValue2 = (OFILEKeyValue *) * (OFILEKeyValue **) elem2;
-
-    // Ueber die (max.) drei ORDER BY-Columns iterieren. Abbruch des Vergleiches, wenn Ungleichheit erkannt
-    // oder alle Columns gleich.
-    for (UINT16 i = 0; i < SQL_ORDERBYKEYS && pIndex->eKeyType[i] != SQL_ORDERBYKEY_NONE; i++)
-    {
-        const int nGreater = (pIndex->m_aAscending[i]) ? 1 : -1;
-        const int nLess = - nGreater;
-
-        // Vergleich (je nach Datentyp):
-        switch (pIndex->eKeyType[i])
-        {
-            case SQL_ORDERBYKEY_STRING:
-            {
-                INT32 nRes = pKeyValue1->GetKeyString(i)->compareTo(*pKeyValue2->GetKeyString(i));
-                if (nRes < 0)
-                    return nLess;
-                else if (nRes > 0)
-                    return nGreater;
-            }
-            break;
-            case SQL_ORDERBYKEY_DOUBLE:
-            {
-                double d1 = pKeyValue1->GetKeyDouble(i);
-                double d2 = pKeyValue2->GetKeyDouble(i);
-
-                if (d1 < d2)
-                    return nLess;
-                else if (d1 > d2)
-                    return nGreater;
-            }
-            break;
-        }
-    }
-
-    // Wenn wir bis hierher gekommen sind, waren alle Werte gleich:
-    return 0;
-}
-// -----------------------------------------------------------------------------
-//------------------------------------------------------------------
-OKeySet* OFILESortIndex::CreateKeySet()
-{
-
-    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
-
-    // Kritischer Bereich: Hinterlegung von this in statischer Variable.
-    // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
-    // Da dies NUR waehrend der Ausfuehrung der qsort-Funktion stattfindet,
-    // ist dies aber unkritisch: unter Windows 3.x ist diese Ausfuehrung
-    // UNUNTERBRECHBAR; unter NT, OS/2, Unix, ... hat jede DLL ihr
-    // eigenes Datensegment.
-    pCurrentIndex = this;
-    eCurrentCharSet = eCharSet;
-
-    // Sortierung:
-    if (eKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // Sortierung, wenn mindestens nach dem ersten Key sortiert werden soll:
-        qsort(ppKeyValueArray,nCount,sizeof(void *),&OFILEKeyCompare);
-
-
-    // Ende des kritischen Bereiches
-    pCurrentIndex = NULL;
-
-
-    OKeySet* pKeySet = new OKeySet(nCount);
-    OKeySet::iterator aIter = pKeySet->begin();
-    for (INT32 i = 0; i < nCount; i++,++aIter)
-    {
-        OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
-
-        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-        (*aIter) = pKeyValue->GetValue();       // Wert holen ...
-
-        // Strings in KeyValue freigeben!
-        for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-        {
-            if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                delete pKeyValue->GetKeyString(j);
-        }
-        delete pKeyValue;
-    }
-    bFrozen = TRUE;
-    pKeySet->setFrozen();
-    return pKeySet;
-}
-// -----------------------------------------------------------------------------
-OFILESortIndex * OFILESortIndex::pCurrentIndex;
-CharSet OFILESortIndex::eCurrentCharSet;
-//------------------------------------------------------------------
-OFILESortIndex::OFILESortIndex(const OKeyType eKeyType2[],  // Genau 3 Eintraege!
-                           const ::std::vector<sal_Int16>& _aAscending,     // Genau 3 Eintraege!
-                           INT32 nMaxNumberOfRows, rtl_TextEncoding eSet)   // Obere Schranke fuer die Anzahl indizierbarer Zeilen
-    : nMaxCount(nMaxNumberOfRows),
-      nCount(0),
-      bFrozen(FALSE),
-      eCharSet(eSet),
-      m_aAscending(_aAscending)
-{
-    for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-    {
-        eKeyType[j] = eKeyType2[j];
-    }
-
-#if defined MAX_KEYSET_SIZE
-    // Zur Sicherheit Maximalgroesse nochmal pruefen:
-    if (nMaxCount > MAX_KEYSET_SIZE)
-    {
-        DBG_WARNING("OFILESortIndex::OFILESortIndex: nMaxNumberOfRows zur Zeit auf <16K beschraenkt!");
-        nMaxCount = MAX_KEYSET_SIZE;
-    }
-#endif
-    if (nMaxCount <= 0)
-        nMaxCount = USHORT(-1);
-
-    ppKeyValueArray = new OFILEKeyValuePtr[nMaxCount];
-
-    for (INT32 i = 0; i < nMaxCount; i++)
-        ppKeyValueArray[i] = NULL;
-}
-
-//------------------------------------------------------------------
-OFILESortIndex::~OFILESortIndex()
-{
-    __DELETE(nMaxCount) ppKeyValueArray;
-}
-
-
-//------------------------------------------------------------------
-BOOL OFILESortIndex::AddKeyValue(OFILEKeyValue * pKeyValue)
-{
-    if (nCount < nMaxCount)
-    {
-        if (bFrozen)                            // wenn der Index schon eingefroren
-                                                // dann wird der Key einfach ans Ende gehaengt
-        {
-            OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-            INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
-
-            // Strings in KeyValue freigeben!
-            for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-            {
-                if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                    delete pKeyValue->GetKeyString(j);
-            }
-            delete pKeyValue;
-            ppKeyValueArray[nCount++] = (OFILEKeyValuePtr) nValue;
-        }
-        else
-            ppKeyValueArray[nCount++] = pKeyValue;
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-//------------------------------------------------------------------
-void OFILESortIndex::Freeze()
-{
-    OSL_ENSURE(! bFrozen,"OFILESortIndex::Freeze: already frozen!");
-
-    // Kritischer Bereich: Hinterlegung von this in statischer Variable.
-    // Zugriff auf diese Variable von der OFILECompare-Funktion aus.
-    // Da dies NUR waehrend der Ausfuehrung der qsort-Funktion stattfindet,
-    // ist dies aber unkritisch: unter Windows 3.x ist diese Ausfuehrung
-    // UNUNTERBRECHBAR; unter NT, OS/2, Unix, ... hat jede DLL ihr
-    // eigenes Datensegment.
-    pCurrentIndex = this;
-    eCurrentCharSet = eCharSet;
-
-    // Sortierung:
-    if (eKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // Sortierung, wenn mindestens nach dem ersten Key sortiert werden soll:
-        qsort(ppKeyValueArray,nCount,sizeof(void *),&OFILEKeyCompare);
-
-
-    // Ende des kritischen Bereiches
-    pCurrentIndex = NULL;
-
-    // Wert auslesen, KeyValue loeschen und in den void * den Value
-    // reinschreiben (uebler Trick mit Typecast!)
-    for (INT32 i = 0; i < nCount; i++)
-    {
-        OFILEKeyValuePtr pKeyValue = ppKeyValueArray[i];
-
-        OSL_ENSURE(pKeyValue != NULL,"OFILESortIndex::Freeze: pKeyValue == NULL");
-        INT32 nValue = pKeyValue->GetValue();       // Wert holen ...
-
-        // Strings in KeyValue freigeben!
-        for (int j = 0; j < SQL_ORDERBYKEYS; j++)
-        {
-            if (eKeyType[j] == SQL_ORDERBYKEY_STRING)
-                delete pKeyValue->GetKeyString(j);
-        }
-        delete pKeyValue;
-        ppKeyValueArray[i] = (OFILEKeyValuePtr) nValue;
-    }
-
-    bFrozen = TRUE;
-}
-
-//------------------------------------------------------------------
-INT32 OFILESortIndex::GetValue(INT32 nPos) const
-{
-    OSL_ENSURE(nPos > 0,"OFILESortIndex::GetValue: nPos == 0");
-    OSL_ENSURE(nPos <= nCount,"OFILESortIndex::GetValue: Zugriff ausserhalb der Array-Grenzen");
-
-//  OSL_ENSURE(ppKeyValueArray[nPos-1] != NULL,"OFILESortIndex::GetValue: interner Fehler: kein KeyValue an dieser Stelle");
-//  return ppKeyValueArray[nPos-1]->GetValue();
-
-    if (!bFrozen)
-    {
-        if (eKeyType[0] == SQL_ORDERBYKEY_NONE)  // wenn keine Sortierung vorliegt
-                                                 // darf auf die Values schon vorher zugegriffen werden
-            return ppKeyValueArray[nPos-1]->GetValue();
-        else
-        {
-            OSL_ASSERT("OFILESortIndex::GetValue: Invalid use of index!");
-            return 0;
-        }
-    }
-    else
-        return (INT32) ppKeyValueArray[nPos-1]; // Trick: nach Freeze sind hier nur noch Values, keine KeyValue-Strukturen mehr!
-
-}
-// -----------------------------------------------------------------------------
-OFILEKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
+OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
 {
     UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
 
-    OFILEKeyValue* pKeyValue = new OFILEKeyValue((UINT32)nBookmarkValue);
-    for (int i = 0; i < m_aOrderbyColumnNumber.size(); ++i)
-    {
-        if (m_aOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
+    OKeyValue* pKeyValue = new OKeyValue((UINT32)nBookmarkValue);
 
-        ORowSetValue xKey = (*_rRow)[m_aOrderbyColumnNumber[i]];
-        switch (xKey.getTypeKind())
-        {
-            case ::com::sun::star::sdbc::DataType::VARCHAR:
-            case ::com::sun::star::sdbc::DataType::CHAR:
-                pKeyValue->SetKey(i,(rtl::OUString)xKey);
-                break;
-            default:
-                pKeyValue->SetKey(i,(double)xKey);
-                break;
-        }
-    }
+    ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
+    for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
+        pKeyValue->pushKey(new ORowSetValueDecorator((*_rRow)[*aIter]));
+
     return pKeyValue;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    if(!t.pEnv)
+        throw SQLException(::rtl::OUString::createFromAscii("No Java installed!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
     Reference< XConnection > xRet;
     // first try if the jdbc driver is alraedy registered at the driver manager
     try

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 sal_Unicode nChar = aName.toChar();
                 if(match(tableNamePattern,aName.getStr(),'\0') && (nChar < '0' || nChar > '9'))
                 {
-                    aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(aName));
+                    aRow.push_back(new ORowSetValueDecorator(aName));
                     bNewRow = sal_True;
                 }
             }
@@ -260,7 +260,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     sal_Unicode nChar = aURL.getBase().GetChar(0);
                     if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && (nChar < '0' || nChar > '9'))
                     {
-                        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
+                        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
                     }
                     break;
@@ -274,7 +274,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         if(bNewRow)
         {
-            aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(aTable));
+            aRow.push_back(new ORowSetValueDecorator(aTable));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
 
             aRows.push_back(aRow);
@@ -446,9 +446,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             {
                 static ODatabaseMetaDataResultSet::ORow aRow(8);
 
-                aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(*pBegin);
+                aRow[2] = new ORowSetValueDecorator(*pBegin);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-                aRow[7] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
+                aRow[7] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
@@ -701,7 +701,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("TABLE")));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TABLE")));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);

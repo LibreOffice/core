@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:02:18 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDat
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecorator& ODatabaseMetaDataResultSet::ORowSetValueDecorator::operator=(const ORowSetValue& _aValue)
+ORowSetValueDecorator& ORowSetValueDecorator::operator=(const ORowSetValue& _aValue)
 {
     m_aValue = _aValue;
     return *this;
@@ -666,82 +666,82 @@ const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
 }
 // -----------------------------------------------------------------------------
 /// return an empty ORowSetValueDecorator
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getEmptyValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getEmptyValue()
 {
     static ORowSetValueDecoratorRef aEmptyValueRef = new ORowSetValueDecorator();
     return aEmptyValueRef;
 }
 // -----------------------------------------------------------------------------
 /// return an ORowSetValueDecorator with 0 as value
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get0Value()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get0Value()
 {
     static ORowSetValueDecoratorRef a0ValueRef = new ORowSetValueDecorator((sal_Int32)0);
     return a0ValueRef;
 }
 // -----------------------------------------------------------------------------
 /// return an ORowSetValueDecorator with 1 as value
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get1Value()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::get1Value()
 {
     static ORowSetValueDecoratorRef a1ValueRef = new ORowSetValueDecorator((sal_Int32)1);
     return a1ValueRef;
 }
 // -----------------------------------------------------------------------------
 /// return an ORowSetValueDecorator with ColumnSearch::BASIC as value
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(ColumnSearch::BASIC);
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("SELECT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("INSERT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DELETE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("UPDATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CREATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("READ"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("ALTER"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DROP"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
+ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
 {
     static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("'"));
     return aValueRef;

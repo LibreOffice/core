@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,12 +441,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
         aRow[0] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[1] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[2] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(tableNamePattern);
+        aRow[2] = new ::connectivity::ORowSetValueDecorator(tableNamePattern);
         aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[5] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(getUserName());
+        aRow[5] = new ::connectivity::ORowSetValueDecorator(getUserName());
         aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
-        aRow[7] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
+        aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
 
         aRows.push_back(aRow);
         aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getInsertValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,12 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::list< ::rtl::OUString>   m_aBatchList;
 
-            OConnection*                                m_pConnection;// The owning Connection object
-            SQLHANDLE                                   m_aStatementHandle;
-            SQLUSMALLINT*                               m_pRowStatusArray;
+            OConnection*                    m_pConnection;// The owning Connection object
+            SQLHANDLE                       m_aStatementHandle;
+            SQLUSMALLINT*                   m_pRowStatusArray;
+            OConnection*                    m_pConnectionTemp; // this connection is set when the databsse doesn't support more statements per connection
 
             //using OStatement_BASE::rBHelper;
         protected:

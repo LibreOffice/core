@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,117 +116,14 @@
 #ifndef CONNECTIVITY_STDTYPEDEFS_HXX
 #include "connectivity/StdTypeDefs.hxx"
 #endif
+#ifndef CONNECTIVITY_TSORTINDEX_HXX
+#include "TSortIndex.hxx"
+#endif
 
 namespace connectivity
 {
     namespace file
     {
-        class OKeySet : public ::std::vector<sal_Int32>
-        {
-            sal_Bool m_bFrozen;
-        public:
-            OKeySet(): ::std::vector<sal_Int32>(),m_bFrozen(sal_False){}
-            OKeySet(size_type _nSize) : ::std::vector<sal_Int32>(_nSize),m_bFrozen(sal_False){}
-
-            sal_Bool    isFrozen() const            { return m_bFrozen; }
-            void        setFrozen(sal_Bool _bFrozen=sal_True) { m_bFrozen = _bFrozen; }
-        };
-
-        typedef union
-        {
-            double  aDouble;
-            rtl::OUString* pString;
-        } OFILEKey;
-
-        class OFILEKeyValue
-        {
-        private:
-            INT32 nValue;
-            OFILEKey pKey[SQL_ORDERBYKEYS];
-
-        public:
-            OFILEKeyValue() { }
-            OFILEKeyValue(INT32 nVal) : nValue(nVal) {}
-            ~OFILEKeyValue(){}
-
-            void SetKey(UINT16 i, double d) { pKey[i].aDouble = d; }
-            void SetKey(UINT16 i, const rtl::OUString& rString) { pKey[i].pString = new rtl::OUString(rString); }
-            void SetValue(INT32 nVal) { nValue = nVal; }
-
-            rtl::OUString* GetKeyString(UINT16 i) const { return pKey[i].pString; }
-            double GetKeyDouble(UINT16 i) const { return pKey[i].aDouble; }
-
-            inline INT32 GetValue() const {return nValue;}
-        };
-
-        typedef OFILEKeyValue * OFILEKeyValuePtr;
-
-        typedef enum
-        {
-            SQL_ORDERBYKEY_NONE,        // Nicht sortieren
-            SQL_ORDERBYKEY_DOUBLE,      // Numerischer Key
-            SQL_ORDERBYKEY_STRING       // String Key
-        } OKeyType;
-
-        class OFILESortIndex
-        {
-        private:
-            INT32 nMaxCount;            // Maximal moegliche Anzahl Key/Value-Paare im Index (und damit Array-Groesse)
-            INT32 nCount;               // Anzahl Key/Value-Paare im Index (und damit naechste freie Position)
-
-            OFILEKeyValuePtr * ppKeyValueArray;
-                                        // Zeiger auf Array der Groesse [nMaxCount]
-
-            BOOL bFrozen;
-            rtl_TextEncoding eCharSet;
-
-        public: // nur fuer OFILECompare:
-            static OFILESortIndex *pCurrentIndex;                   // Waehrend der Ausfuehrung von qsort ist hier der Zeiger
-            static rtl_TextEncoding eCurrentCharSet;
-                                                                    // auf den gerade zur Sortierung verwendeten Index hinterlegt
-                                                                    // (wird von der Vergleichsfunktion OFILEKeyCompare verwendet).
-            OKeyType eKeyType[SQL_ORDERBYKEYS];
-            ::std::vector<sal_Int16> m_aAscending;
-
-
-        public:
-
-            OFILESortIndex(const OKeyType eKeyType[],           // Art des Schluessels: numerisch/String/nicht sortieren (Genau 3 Eintraege!)
-                             const ::std::vector<sal_Int16>& _aAscending,               // TRUE = Aufsteigend sortieren (Genau 3 Eintraege!)
-                             INT32 nMaxNumberOfRows,
-                             rtl_TextEncoding eSet);
-
-            ~OFILESortIndex();
-
-
-            BOOL AddKeyValue(OFILEKeyValue * pKeyValue);
-                                                                // TRUE, wenn erfolgreich hinzugefuegt, FALSE bei Ueberschreitung
-                                                                // der Index-Kapazitaet.
-                                                                // pKeyValue wird beim Zerstoeren des Index automatisch freigegeben.
-
-            void Freeze();                                      // "Einfrieren" des Index:
-                                                                // Vor "Freeze" duerfen Count() und Get() nicht gerufen werden,
-                                                                // nach "Freeze" darf dafuer Add() nicht mehr gerufen werden.
-
-            OKeySet* CreateKeySet();
-
-
-
-            BOOL IsFrozen() { return bFrozen; }         // TRUE nach Aufruf von Freeze()
-
-            INT32 Count() const { return nCount; }      // Anzahl Key/Value-Paare im Index
-            INT32 GetValue(INT32 nPos) const;           // Value an Position nPos (1..n) [sortierter Zugriff].
-        };
-
-        static int
-#if defined(WIN) || defined(WNT)
-__cdecl
-#endif
-#if defined(ICC) && defined(OS2)
-_Optlink
-#endif
-OFILEKeyCompare(const void * elem1, const void * elem2);
-
         /*
         **  java_sql_ResultSet
         */
@@ -243,9 +140,9 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OResultSet :  public  comphelper::OBaseMutex,
-                                                public  OResultSet_BASE,
-                                                public  ::comphelper::OPropertyContainer,
-                                                public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
+                            public  OResultSet_BASE,
+                            public  ::comphelper::OPropertyContainer,
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
         protected:
@@ -268,12 +165,12 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
             ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
 
-            OKeySet*                                m_pFileSet;
+            ::vos::ORef<OKeySet>                    m_pFileSet;
             OKeySet::iterator                       m_aFileSetIter;
 
 
 
-            OFILESortIndex*                         m_pSortIndex;
+            OSortIndex*                             m_pSortIndex;
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
             ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
             OFileTable*                             m_pTable;
@@ -322,8 +219,8 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                                 BOOL bEvaluate = TRUE,
                                 BOOL bRetrieveData = TRUE);
 
-            OFILEKeyValue* GetOrderbyKeyValue(OValueRow _rRow);
-            BOOL IsSorted() const { return m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
+            OKeyValue* GetOrderbyKeyValue(OValueRow _rRow);
+            BOOL IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
 
             sal_Bool moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
             // return true when the select statement is "select count(*) from table"

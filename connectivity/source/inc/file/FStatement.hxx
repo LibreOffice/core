@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
-#define SQL_ORDERBYKEYS 10
 #define SQL_COLUMN_NOTFOUND STRING_NOTFOUND
 
 namespace connectivity
@@ -174,8 +173,7 @@ namespace connectivity
             void createColumnMapping();
             // searches the statement for sort criteria
             void anylizeSQL();
-            void setOrderbyColumn(UINT16 nOrderbyColumnNo,
-                                     connectivity::OSQLParseNode* pColumnRef,
+            void setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
                                      connectivity::OSQLParseNode* pAscendingDescending);
 
             virtual void initializeResultSet(OResultSet* _pResult);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     osl_incrementInterlockedCount( &m_refCount );
 
     m_aConnectionHandle  = SQL_NULL_HANDLE;
+    m_aURL  = url;
+    m_aInfo = info;
 
     // Connection allozieren
     N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
@@ -304,6 +306,11 @@ Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
         }
     }
     return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+::connectivity::odbc::OConnection* OAdabasConnection::cloneConnection()
+{
+    return new OAdabasConnection(m_pDriverHandleCopy,m_pDriver);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:10:35 $
+ *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ namespace connectivity
             ~ODatabaseMetaDataResultSet();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            ODatabaseMetaDataResultSet(OConnection* _pConnection,SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
+            ODatabaseMetaDataResultSet(OConnection* _pConnection);
 
 
             inline void* getOdbcFunction(sal_Int32 _nIndex)  const
