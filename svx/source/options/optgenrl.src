@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-30 20:17:09 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ portuguese ] = "Modificou os dados de utilizador.\nNгo se esqueзa de que o seu registo expirarб.\nPor esta razгo necessitarб de um novo cуdigo de registo dentro do prazo de 30 dias.\nEncontrarб o formulбrio de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
     Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten ge?ndert.\nBitte bedenken Sie, da? dadurch die Registrierung verf?llt.\nSie ben?igen einen neuen Registrierungsschl?sel, der innerhalb der n?chsten 30 Tage eingegeben werden mu?.\nDas Registrierungsformular finden Sie im Men?Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ?ndern?";
     Message[ danish ] = "Du har жndret brugerdataene.\nBemжrk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnшgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjжlp - Registrering...\nEr du sikker pе, at du vil жndre brugerdataene?";
-    Message[ chinese_simplified ] = "ж‚Ёе·Із»Џж›ґж”№дє†з”Ёж€·иµ„ж–™гЂ‚\nиї™ж ·ж‚Ёзљ„жіЁе†Ње°±дјљж— ж•€гЂ‚\nж‚Ёеї…йЎ»ењЁд»ЉеђЋ30е¤©д№‹е†…иѕ“е…ҐдёЂдёЄж–°зљ„жіЁе†ЊеЇ†з ЃгЂ‚\nж‚ЁиѓЅе¤џењЁиЏњеЌ•\"её®еЉ© - жіЁе†Њ...\"е¤„ж‰ѕе€°жіЁе†ЊиЎЁеЌ•гЂ‚\nж‚Ёзњџи¦Ѓж›ґж”№дЅїз”ЁиЂ…иµ„ж–™пјџ";
+    Message[ chinese_simplified ] = "ж‚Ёе·Із»Џж›ґж”№дє†дЅїз”ЁиЂ…ж•°жЌ®гЂ‚\nиї™ж ·ж‚Ёзљ„жіЁе†Ње°±дјљж— ж•€гЂ‚\nж‚Ёеї…йЎ»ењЁд»ЉеђЋ30е¤©д№‹е†…иѕ“е…ҐдёЂдёЄж–°зљ„жіЁе†ЊеЇ†з ЃгЂ‚\nж‚ЁиѓЅе¤џењЁиЏњеЌ•\"её®еЉ© - жіЁе†Њ...\"е¤„ж‰ѕе€°жіЁе†ЊиЎЁеЌ•гЂ‚\nж‚Ёзњџи¦Ѓж›ґж”№дЅїз”ЁиЂ…иµ„ж–™пјџ";
     Message[ russian ] = "Вы изменили данные пользователя.\nПожалуйста, помните, что из-за этого Вы утратите регистрацию.\nВам понодобится новый регистрационный ключ, который необходимо будет ввести в течение 30 дней.\nРегистрационный формуляр Вы найдете в меню Справка - Регистрация...\nВы действительно хотите изменить данные пользователя?";
     Message[ polish ] = "Zmieniono dane uїytkownika.\nNaleїy uwzglкdniж, їe przez to traci waїnoњж rejestracja.\nWymagany bкdzie nowy klucz rejestracyjny, ktуry naleїy wprowadziж w ci№gu nastкpnych 30 dni.\nFormularz rejestracyjny znajduje siк w menu Pomoc - Rejestracja...\nCzy na pewno zmieniж dane uїytkownika?";
     Message[ japanese ] = "пѕ•пЅ°пЅ»пѕћпЅ°пѕѓпѕћпЅ°пѕЂгЃЊе¤‰ж›ґгЃ•г‚ЊгЃѕгЃ—гЃџгЂ‚\nгЃќгЃ®гЃџг‚Ѓз™»йЊІгЃЊе¤±еЉ№гЃ™г‚‹гЃ®гЃЇе…Ќг‚ЊгЃѕгЃ›г‚“гЂ‚\nж–°гЃ—гЃ„з™»йЊІпЅ·пЅ°гЃЊеї…и¦ЃгЃЁгЃЄг‚ЉпЅ¤гЃќг‚Њг‚’30ж—Ґд»Ґе†…гЃ«жё€гЃѕгЃ•гЃЄгЃ‘г‚ЊгЃ°гЃЄг‚ЉгЃѕгЃ›г‚“гЂ‚\nз™»йЊІз”Ёзґ™гЃЇ[пѕ’пѕ†пЅ­пЅ°пѕЌпѕ™пѕЊпѕџ/з™»йЊІ...]гЃ«гЃ‚г‚ЉгЃѕгЃ™гЂ‚\nпѕ•пЅ°пЅ»пѕћпЅ°пѕѓпѕћпЅ°пѕЂг‚’жњ¬еЅ“гЃ«е¤‰ж›ґгЃ—гЃѕгЃ™гЃ‹?";
@@ -946,6 +946,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
