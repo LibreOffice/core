@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:10:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text [ ENGLISH ] = "Automatic";
     Text[ english_us ] = "Automatic";
     Text[ portuguese ] = "Automatic";
-    Text[ russian ] = "Automatic";
+    Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
     Text[ greek ] = "Automatic";
     Text[ dutch ] = "Automatic";
     Text[ french ] = "Automatic";
@@ -97,14 +97,14 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ italian ] = "Automatic";
     Text[ danish ] = "Automatic";
     Text[ swedish ] = "Automatic";
-    Text[ polish ] = "Automatic";
+    Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
-    Text[ japanese ] = "Automatic";
+    Text[ japanese ] = "é©ìÆ";
     Text[ korean ] = "Automatic";
-    Text[ chinese_simplified ] = "Automatic";
+    Text[ chinese_simplified ] = "◊‘∂Ø";
     Text[ chinese_traditional ] = "¶€∞ ";
     Text[ turkish ] = "Automatic";
-    Text[ arabic ] = "Automatic";
+    Text[ arabic ] = " ·ﬁ«∆Ì";
 };
 
 /*
@@ -126,14 +126,14 @@ String STR_SVT_COLLATE_NORMAL
     Text[ italian ] = "Normal";
     Text[ danish ] = "Normal";
     Text[ swedish ] = "Normal";
-    Text[ polish ] = "Normal";
+    Text[ polish ] = "Normalny";
     Text[ portuguese_brazilian ] = "Normal";
     Text[ japanese ] = "í èÌÃ´›ƒ";
     Text[ korean ] = "Normal";
     Text[ chinese_simplified ] = "“ª∞„";
     Text[ chinese_traditional ] = "§@ØÎ";
     Text[ turkish ] = "Normal";
-    Text[ arabic ] = "Normal";
+    Text[ arabic ] = "⁄«œÌ";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -158,7 +158,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ chinese_simplified ] = "◊÷ÃÂ";
     Text[ chinese_traditional ] = "¶r´¨";
     Text[ turkish ] = "Character Set";
-    Text[ arabic ] = "Character Set";
+    Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
