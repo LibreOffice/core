@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlListBox.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include <com/sun/star/awt/XListBox.idl>
 #endif
 
-#ifndef __com_sun_star_awt_XItemListener_idl__
-#include <com/sun/star/awt/XItemListener.idl>
-#endif
-
 #ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 #endif
@@ -88,29 +84,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoListBoxControl
 /** specifies a list box control.
-
-
 
     <p>A list box displays a list of strings and allows a selection within
     these.</p>
  */
 service UnoControlListBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XListBox;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::awt::XItemListener;
-
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XLayoutConstrains;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XTextLayoutConstrains;
 
 };
