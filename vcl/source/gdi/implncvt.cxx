@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implncvt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:44:03 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ ImplLineConverter::ImplLineConverter( const Polygon& rPolygon, const LineInfo& r
     mpFloat0        ( new ImplFloatPoint[ 6 ] ),
     mpFloat1        ( new ImplFloatPoint[ 6 ] ),
     mpFloatPoint    ( NULL ),
-    mnLines         ( 0 )
+    mnLines         ( 0 ),
+        mbRefPoint              ( FALSE )
 {
     UINT16  nIndex, nPolySize = rPolygon.GetSize();
     if ( nPolySize )
