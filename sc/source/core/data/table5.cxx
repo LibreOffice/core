@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-23 15:58:19 $
+ *  last change: $Author: sab $ $Date: 2001-05-04 05:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,8 @@
 
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 {
+    if ( pDocument->IsImportingXML() )
+        return;
     if ( !pUserArea && !bPageSizeValid )
         return;
 
