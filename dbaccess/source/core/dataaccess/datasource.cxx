@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:59:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,7 @@ Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_Static(  )
 {
     Sequence< ::rtl::OUString > aSNS( 3 );
     aSNS[0] = SERVICE_SDB_DATASOURCE;
-    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"));
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
     aSNS[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
     return aSNS;
 }
