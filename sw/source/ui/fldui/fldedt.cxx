@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 10:15:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
@@ -139,6 +143,11 @@
 #endif
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
+
+namespace swui
+{
+    SwAbstractDialogFactory * GetFactory();
+}
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -434,7 +443,7 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     //CHINA001 SwAddrDlg aDlg( this, aSet );
     //CHINA001 aDlg.Execute();
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
     AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet,ResId( RC_DLG_ADDR ));
