@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:05:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,8 @@ protected:
     void ReadFly( int nToken, SfxItemSet* pFillSet = 0 );
     void ReadTable( int nToken );
     void ReadPageDescTbl();
+    void SkipPageDescTbl();
+    bool IsBorderToken(int nToken);
 
     virtual ~SwRTFParser();
 
