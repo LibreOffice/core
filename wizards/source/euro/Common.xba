@@ -268,4 +268,5 @@ Sub	EndStatusLine()
 	Else
 		DialogModel.ProgressBar.ProgressValue = 100
 	End If
-End Sub</script:module>
+End Sub
+</script:module>
