@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:32:03 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_QUICKEDIT
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Schnellbearbeitung zulassen" ;
         Text [ ENGLISH ] = "Quick edit" ;
@@ -583,7 +583,7 @@ TabPage TP_OPTIONS_MISC
     CheckBox CBX_PICKTHROUGH
     {
         Pos = MAP_APPFONT ( 12 , 27  ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Nur Textbereich selektierbar" ;
         Text [ ENGLISH ] = "Only textarea selectable" ;
