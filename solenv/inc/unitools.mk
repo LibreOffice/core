@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 10:24:27 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ CFGEX*=cfgex
 .ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
 SCP_CHECK_TOOL=checkscp.exe
+DUMPBIN*=$(WRAPCMD) dumpbin
 
 .ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
 SED*=sed
@@ -151,6 +152,7 @@ CFGEX*=cfgex
 .ENDIF			# "$(GUI)"=="UNX"
 
 MAKEDEPEND*=$(WRAPCMD) makedepend
+ADJUSTVISIBILITY*=$(WRAPCMD) adjustvisibility
 
 RM+=$(RMFLAGS)
 
