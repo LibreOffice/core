@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.4 $ 
+#   $Revision: 1.5 $ 
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 11:13:35 $ 
+#   last change: $Author: vg $ $Date: 2003-12-17 15:28:38 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -90,7 +90,9 @@ JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class
 #        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/XSLTFilter$/META-INF
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
+.IF "$(SOLAR_JAVA)"!=""
 $(JAVACLASSFILES) : $(CLASSDIR)
+.ENDIF
   
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
