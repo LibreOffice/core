@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:04:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOWLISTENER_HPP_
-#include <com/sun/star/awt/XTopWindowListener.hpp>
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -132,8 +132,7 @@ namespace accessibility {
     instead.</li>
     <li>As window listener it waits for changes of the window geometry and
     forwards those as view forwarder changes.</li>
-    <li>As top window listener it waits for activation and deactivation of
-    the top window containing the document view to give this class and
+    <li>As focus listener it keeps track of the focus to give this class and
     derived classes the oportunity to set and remove the focus to/from
     shapes.</li>
     </ol>
@@ -146,7 +145,7 @@ class AccessibleDocumentViewBase
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::beans::XPropertyChangeListener,
         public ::com::sun::star::awt::XWindowListener,
-        public ::com::sun::star::awt::XTopWindowListener
+        public ::com::sun::star::awt::XFocusListener
 {
 public:
     //=====  internal  ========================================================
@@ -304,18 +303,14 @@ public:
         windowHidden (const ::com::sun::star::lang::EventObject& e)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //=====  XFocusListener  =================================================
 
-    //=====  XTopWindowListener  ==============================================
+    virtual void SAL_CALL focusGained (const ::com::sun::star::awt::FocusEvent& e)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusLost (const ::com::sun::star::awt::FocusEvent& e)
+        throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
-
-protected:
+private:
 
     // return the member maMutex;
     virtual ::osl::Mutex&
@@ -393,12 +388,18 @@ protected:
     /** This method is called when (after) the frame containing this
         document has been activated.  Can be used to send FOCUSED state
         changes for the currently selected element.
+
+        Note: Currently used as a substitute for FocusGained.  Should be
+        renamed in the future.
     */
     virtual void Activated (void);
 
     /** This method is called when (before or after?) the frame containing
         this document has been deactivated.  Can be used to send FOCUSED
         state changes for the currently selected element.
+
+        Note: Currently used as a substitute for FocusLost.  Should be
+        renamed in the future.
     */
     virtual void Deactivated (void);
 
