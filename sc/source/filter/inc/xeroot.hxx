@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:30:48 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,6 @@ class XclExpRoot : public XclRoot
     mutable XclExpRootData&     mrExpData;      /// Reference to the global export data struct.
 
 public:
-                                XclExpRoot( const XclExpRoot& rRoot );
-
-    XclExpRoot&                 operator=( const XclExpRoot& rRoot );
-
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpRoot&    GetRoot() const { return *this; }
     /** Returns true, if URLs should be stored relative to the document location. */
