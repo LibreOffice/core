@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-11 15:51:27 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:06:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,19 +73,36 @@ TARGET=so_libxml2
 
 LIBXML2VERSION=2.5.11
 
-NO_SHL1DESCRIPTION=TRUE
-
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES= \
-    makefile.mk \
-    xml2.map \
-    config.h 
+# This is only for UNX environment now
 
-BUILD_ACTION=dmake subdmake=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS) LIBXML2VERSION=$(LIBXML2VERSION)
+.IF "$(OS)"=="WNT"
+CONFIGURE_DIR=win32
+CONFIGURE_ACTION=cscript configure.js
+CONFIGURE_FLAGS=iconv=no
+BUILD_ACTION=nmake
+BUILD_DIR=$(CONFIGURE_DIR)
+.ELSE
+CONFIGURE_DIR=
+CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no
+BUILD_ACTION=$(GNUMAKE)
+BUILD_DIR=$(CONFIGURE_DIR)
+.ENDIF
+
 
 OUTDIR2INC=include$/libxml 
+
+.IF "$(OS)"=="MACOSX"
+OUT2LIB+=.libs$/libxml2.*.dylib
+.ELIF "$(OS)"=="WNT"
+OUT2LIB+=win32$/binaries$/*.lib
+OUT2BIN+=win32$/binaries$/*.dll
+.ELSE
+OUT2LIB+=.libs$/libxml2.so*
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
