@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:57:04 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,9 +256,11 @@ public:
 // conditional formatting style names -----------------------------------------
 
     /** Returns the style name for a single condition of a conditional formatting.
+        @param nScTab  The current Calc sheet index.
         @param nFormat  The zero-based index of the conditional formatting.
-        @param nCondition  The zero-based index of the condition. */
-    static String               GetCondFormatStyleName( sal_Int32 nFormat, sal_uInt16 nCondition );
+        @param nCondition  The zero-based index of the condition.
+        @return  A style sheet name in the form "Excel_CondFormat_<sheet>_<format>_<condition>". */
+    static String               GetCondFormatStyleName( sal_uInt16 nScTab, sal_Int32 nFormat, sal_uInt16 nCondition );
     /** Returns true, if the passed string is a name of a conditional format style created by Excel import.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
