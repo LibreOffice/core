@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:51:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ italian ] = "Modelli";
                 Text[ danish ] = "Typografier";
                 Text[ swedish ] = "Mallar";
-                Text[ polish ] = "Szablony";
+                Text[ polish ] = "Style";
                 Text[ portuguese_brazilian ] = "Styles";
                 Text[ japanese ] = "½ΐ²Ω";
                 Text[ chinese_simplified ] = "ΡωΚ½";
@@ -972,7 +972,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Altri modelli";
         Text[ danish ] = "Yderligere typografier";
         Text[ swedish ] = "Ytterligare ~mallar";
-        Text[ polish ] = "Inne szablony";
+        Text[ polish ] = "Inne style";
         Text[ portuguese_brazilian ] = "additional styles";
         Text[ japanese ] = "‚»‚Μ‘Ό‚Μ½ΐ²Ω";
         Text[ korean ] = "ΊΞ°΅ΐϋΐΞ ΐ―Ηό(~A)";
@@ -996,7 +996,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Modelli";
         Text[ danish ] = "Typografier";
         Text[ swedish ] = "~Mallar";
-        Text[ polish ] = "Szablony";
+        Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
         Text[ japanese ] = "½ΐ²Ω(~E)";
         Text[ korean ] = "ΐ―Ηό(~E)";
@@ -1399,7 +1399,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "~Mayϊsculas/minϊsculas";
         Text[ italian ] = "Maiuscole/minu~scole";
         Text[ danish ] = "Forskel pε store og smε bogstaver";
-        Text[ swedish ] = "Observera stor och liten bo~kstav";
+        Text[ swedish ] = "Versal~kδnslig";
         Text[ polish ] = "Uwzglκd~nij wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "‘ε•¶/¬•¶‚π‹ζ•Κ";
@@ -1445,7 +1445,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Keys as separate entries";
         Text[ portuguese ] = "~Chaves como entradas separadas";
         Text[ russian ] = "Κλώχ κΰκ ξςδελόνϋι ύλεμενς";
-        Text[ greek ] = "Κλειδιά ως ξεχωρι~στή εισαγωγή";
+        Text[ greek ] = "Κλειδιά ως ξεχωρι~στή καταχώριση";
         Text[ dutch ] = "~Sleutel als extra item";
         Text[ french ] = "~Clι comme entrιe sιparιe";
         Text[ spanish ] = "~Claves como entradas propias";
@@ -1534,7 +1534,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "ΕΨ½ΊΖ® ΗΑ·ΉΐΣ(~X)";
         Text[ chinese_simplified ] = "ΞΔ±ΎΏς(~X)";
         Text[ chinese_traditional ] = "¤ε¦r¤θ®Ψ(~X)";
-        Text[ arabic ] = "ΕΨΗΡΗΚ δΥ";
+        Text[ arabic ] = "ίζΗΟΡ δΥ";
         Text[ turkish ] = "Metin ηerηevesi";
         Text[ language_user1 ] = " ";
     };
@@ -1875,9 +1875,9 @@ TabPage TP_TOX_SELECT
         {
             < "StarOffice Math" ;               1;> ;
             < "StarOffice Chart" ;          2;> ;
-            < "StarOffice Image" ;              8;> ;
-            < "StarOffice Calc" ;   16;> ;
-            < "StarOffice Draw/StarOffice Impress";     128;> ;
+            < "StarOffice Calc" ;               8;> ;
+            < "StarOffice Draw/StarOffice Impress" ;    16;> ;
+            < "Altri oggetti OLE";  128;> ;
         };
         ItemList [ danish ] =
         {
@@ -2593,7 +2593,7 @@ TabPage TP_TOX_ENTRY
             Text[ english_us ] = "Bibliography entry: ";
             Text[ portuguese ] = "Entrada bibliogrαfica: ";
             Text[ russian ] = "έλεμενς ροθρκΰ λθςεπΰςσπϋ: ";
-            Text[ greek ] = "Εισαγωγή βιβλιογραφίας: ";
+            Text[ greek ] = "Καταχώριση βιβλιογραφίας: ";
             Text[ dutch ] = "Literatuuritem:  ";
             Text[ french ] = "Entrιe de bibliographie :  ";
             Text[ spanish ] = "Entrada de bibliografνa:  ";
@@ -2980,7 +2980,7 @@ TabPage TP_TOX_ENTRY
         Text[ english_us ] = "Chapter entry";
         Text[ portuguese ] = "Entrada de ~capνtulo";
         Text[ russian ] = "έλεμενς γλΰβϋ";
-        Text[ greek ] = "Εγγραφή κεφαλαίου";
+        Text[ greek ] = "Καταχώριση κεφαλαίου";
         Text[ dutch ] = "Hoofd~stukitem";
         Text[ french ] = "Entrιe de ~chapitre";
         Text[ spanish ] = "E~ntrada de capνtulo";
@@ -4058,7 +4058,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ italian ] = "~Modelli";
         Text[ danish ] = "Typografier";
         Text[ swedish ] = "Mallar";
-        Text[ polish ] = "Szablony";
+        Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
         Text[ japanese ] = "½ΐ²Ω(~E)";
         Text[ korean ] = "ΐ―Ηό(~E)";
@@ -4198,7 +4198,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ english_us ] = "Alternative entry";
             Text[ portuguese ] = "Entrada alternativa";
             Text[ russian ] = "ΐλόςεπνΰςθβνϋι ύλεμενς";
-            Text[ greek ] = "Εναλλακτική εγγραφή";
+            Text[ greek ] = "Εναλλακτική καταχώριση";
             Text[ dutch ] = "Alternatief item";
             Text[ french ] = "Entrιe de remplacement";
             Text[ spanish ] = "Entrada alternativa";
