@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:40 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
-
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -88,7 +87,10 @@ namespace configmgr
     using ::rtl::OUString;
 
     class ConfigChangeBroadcastHelper;
-
+    namespace backend
+    {
+        class CacheController;
+    }
 //-----------------------------------------------------------------------------
 
     class CacheClientAccess : public salhelper::SimpleReferenceObject, Noncopyable
@@ -162,6 +164,7 @@ namespace configmgr
         typedef Data::Path         Path;
 
         typedef std::vector< ModuleRef >  DisposeList;
+        friend class backend::CacheController;
     private:
         friend class CacheDisposeScheduler;
         typedef std::map< ModuleName, TimeStamp > DeadModuleList;
