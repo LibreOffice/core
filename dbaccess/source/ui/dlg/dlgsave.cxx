@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 09:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
                         const Reference<XNameAccess>& _rxNames,
                         const Reference< XDatabaseMetaData>& _rxMetaData,
-                        const String& rDefault)
+                        const String& rDefault,
+                        sal_Bool _bOverWrite)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
              ,m_aCatalogLbl(this, ResId (FT_CATALOG))
              ,m_aCatalog(this, ResId (ET_CATALOG))
@@ -115,6 +116,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
              ,m_xNames(_rxNames)
              ,m_xMetaData(_rxMetaData)
              ,m_nType(_rType)
+             ,m_bOverWrite(_bOverWrite)
 {
     switch (_rType)
     {
@@ -219,8 +221,9 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
             m_aTitle.GrabFocus();
             String aText(m_aExists);
             aText.SearchAndReplace(String::CreateFromAscii("'$Name: not supported by cvs2svn $'"),m_aName);
-            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, WB_OK, OSQLMessageBox::Query);
-            aDlg.Execute();
+            OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, m_bOverWrite ? WB_YES_NO : WB_OK, OSQLMessageBox::Query);
+            if(aDlg.Execute() == RET_YES)
+                EndDialog(RET_OK);
         }
         else
             EndDialog(RET_OK);

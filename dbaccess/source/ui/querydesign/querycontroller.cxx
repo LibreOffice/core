@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:17:55 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 09:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && getQueryView()->isCutAllowed();
+            aReturn.bEnabled = m_bEditable && m_pWindow->getView()->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
             break;
@@ -346,7 +346,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
-            getQueryView()->setReadOnly(!m_bEditable);
+            m_pWindow->getView()->setReadOnly(!m_bEditable);
             InvalidateFeature(ID_BROWSER_PASTE);
             InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
             break;
@@ -369,7 +369,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                     {
                         String aDefaultName = (ID_BROWSER_SAVEASDOC == _nId && !bNew) ? String(m_sName.getStr()) : String(ModuleRes(STR_QRY_TITLE));
                         aDefaultName.SearchAndReplace(String::CreateFromAscii(" #"),String::CreateFromInt32(xQueries->getElementNames().getLength()+1));
-                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection->getMetaData(),aDefaultName);
+                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection->getMetaData(),aDefaultName,(ID_BROWSER_SAVEASDOC == _nId));
                         if(aDlg.Execute() == RET_OK)
                             m_sName = aDlg.getName();
                     }
@@ -400,7 +400,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 ::cppu::extractInterface(xQuery,xQueries->getByName(m_sName));
                             }
                             // now set the properties
-                            m_sStatement = getQueryView()->getStatement();
+                            m_sStatement = m_pWindow->getView()->getStatement();
                             if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
                             {
                                 try
@@ -467,20 +467,20 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            getQueryView()->cut();
+            m_pWindow->getView()->cut();
             break;
         case ID_BROWSER_COPY:
-            getQueryView()->copy();
+            m_pWindow->getView()->copy();
             break;
         case ID_BROWSER_PASTE:
-            getQueryView()->paste();
+            m_pWindow->getView()->paste();
             break;
         case ID_BROWSER_SQL:
             {
                 try
                 {
                     ::rtl::OUString aErrorMsg;
-                    m_sStatement = getQueryView()->getStatement();
+                    m_sStatement = m_pWindow->getView()->getStatement();
                     if(!m_sStatement.getLength())
                     {
                         // change the view of the data
@@ -543,7 +543,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             }
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            getQueryView()->clear();
+            m_pWindow->getView()->clear();
             m_sStatement = ::rtl::OUString();
             if(m_bDesign)
                 InvalidateFeature(ID_BROWSER_ADDTABLE);
@@ -561,7 +561,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             {
                 // we don't need to check the connection here because we already check the composer
                 // which can't live without his connection
-                m_sStatement = getQueryView()->getStatement();
+                m_sStatement = m_pWindow->getView()->getStatement();
                 if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
                 {
                     try
@@ -832,7 +832,7 @@ void OQueryController::setQueryComposer()
             try
             {
                 m_xComposer = xFactory->createQueryComposer();
-                getQueryView()->setStatement(m_sStatement);
+                m_pWindow->getView()->setStatement(m_sStatement);
                 setModified(sal_False);
             }
             catch (Exception&)
