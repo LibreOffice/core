@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:29:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,8 +852,8 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
     {
         if(eCurOST!=OST_NONE) RemoveSubShell();
 
-        if(pFormShell) AddSubShell(*pFormShell);
-
+        if (pFormShell && !bFormShellAtTop)
+            AddSubShell(*pFormShell);               // add below own subshells
 
         switch(eOST)
         {
@@ -982,8 +982,31 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     DBG_ERROR("Falsche Shell angefordert");
                     break;
         }
+
+        if (pFormShell && bFormShellAtTop)
+            AddSubShell(*pFormShell);               // add on top of own subshells
+
         eCurOST=eOST;
     }
+}
+
+void ScTabViewShell::SetFormShellAtTop( BOOL bSet )
+{
+    if ( pFormShell && !bSet )
+        pFormShell->ForgetActiveControl();      // let the FormShell know it no longer has the focus
+
+    if ( bFormShellAtTop != bSet )
+    {
+        bFormShellAtTop = bSet;
+        SetCurSubShell( GetCurObjectSelectionType(), TRUE );
+    }
+}
+
+IMPL_LINK( ScTabViewShell, FormControlActivated, FmFormShell*, EMPTYARG )
+{
+    // a form control got the focus, so the form shell has to be on top
+    SetFormShellAtTop( TRUE );
+    return 0;
 }
 
 ObjectSelectionType ScTabViewShell::GetCurObjectSelectionType()
@@ -1540,6 +1563,8 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bActiveAuditingSh(FALSE),   \
     bActiveDrawFormSh(FALSE),   \
     bActiveOleObjectSh(FALSE),  \
+    bActiveEditSh(FALSE),       \
+    bFormShellAtTop(FALSE),     \
     bDontSwitch(FALSE),         \
     bInFormatDialog(FALSE),     \
     bPrintSelected(FALSE),      \
@@ -1633,6 +1658,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             //  an der FormShell angemeldet werden kann
             //  Gepusht wird die FormShell im ersten Activate
     pFormShell = new FmFormShell(this);
+    pFormShell->SetControlActivationHandler( LINK( this, ScTabViewShell, FormControlActivated ) );
 
             //  DrawView darf nicht im TabView - ctor angelegt werden,
             //  wenn die ViewShell noch nicht kostruiert ist...
