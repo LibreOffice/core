@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef CONFIGMGR_TEMPLATEIMPL_HXX_
 #define CONFIGMGR_TEMPLATEIMPL_HXX_
+
+#include "apitypes.hxx"
 
 #include "template.hxx"
 
@@ -175,13 +177,6 @@ namespace configmgr
         class TemplateImplHelper
         {
         public:
-            //-----------------------------------------------------------------
-
-            static UnoType getUnoInterfaceType()
-            {
-                uno::Reference<uno::XInterface> const * const p = 0;
-                return getCppuType(p);
-            }
             //-----------------------------------------------------------------
 
             static UnoType getNoTypeAvailable()

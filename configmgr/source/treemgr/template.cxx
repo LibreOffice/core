@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs
 TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
-    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
+    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, configapi::getUnoInterfaceType(), Attributes());
 }
 //-----------------------------------------------------------------------------
 

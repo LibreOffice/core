@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-05-03 08:51:21 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "templateimpl.hxx"
 #include "treeprovider.hxx"
 
-#include "apitypes.hxx"
 #include "strdecl.hxx"
 #include "typeconverter.hxx"
 
@@ -413,7 +412,7 @@ namespace
         switch (this->result) // transition depends on previous state
         {
         case NotFound:
-            this->type = TemplateImplHelper::getUnoInterfaceType();
+            this->type = configapi::getUnoInterfaceType();
             this->result = SomeTree;
             break;
 
