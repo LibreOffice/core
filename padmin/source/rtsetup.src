@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 12:15:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,16 +262,16 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ greek ] = "Ñõèìßóåéò ôïõ %s";
     Text[ dutch ] = "Instellingen voor %s";
     Text[ french ] = "Paramètres pour %s";
-    Text[ spanish ] = "Propiedades para %s";
+    Text[ spanish ] = "Propiedades de %s";
     Text[ italian ] = "Proprietà di %s";
     Text[ danish ] = "Properties of %s";
-    Text[ swedish ] = "Inställningar för %s";
+    Text[ swedish ] = "Egenskaper för %s";
     Text[ polish ] = "W³aœciwoœci %s";
     Text[ portuguese_brazilian ] = "Properties of %s";
-    Text[ japanese ] = "%s ‚Ìİ’è";
-    Text[ korean ] = " %sÀÇ¡¡¼³Á¤";
+    Text[ japanese ] = "%s ‚Ì‘®«";
+    Text[ korean ] = "%sÀÇ¡¡¼³Á¤";
     Text[ chinese_simplified ] = "%s µÄÊôĞÔ";
-    Text[ chinese_traditional ] = "%s Äİ©Ê";
+    Text[ chinese_traditional ] = "%s ªºÄİ©Ê";
     Text[ turkish ] = "Properties of %s";
     Text[ arabic ] = "ÅÚÏÇÏÇÊ %s";
     Text[ finnish ] = "Properties of %s";
@@ -369,7 +369,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ polish ] = "~Dupleks";
         Text[ portuguese_brazilian ] = "~Duplex";
         Text[ japanese ] = "—¼–Êˆóü(~D)";
-        Text[ korean ] = "~Áßº¹";
+        Text[ korean ] = "Áßº¹";
         Text[ chinese_simplified ] = "Ë«Ïò(~D)";
         Text[ chinese_traditional ] = "Âù¦V(~D)";
         Text[ turkish ] = "~Duplex";
@@ -1528,4 +1528,5 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "Please enter the fax number.";
     Text[ catalan ] = "Indique el número de fax";
 };
+
 
