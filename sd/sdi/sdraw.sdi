@@ -2824,7 +2824,7 @@ SfxBoolItem GlueEditMode SID_GLUE_EDITMODE
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
