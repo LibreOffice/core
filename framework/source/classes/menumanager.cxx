@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-22 08:11:48 $
+ *  last change: $Author: cd $ $Date: 2001-09-19 08:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,8 +710,11 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
                     nActiveItemId = nItemId;
 
                 Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-                aNewWindowListVector.push_back( pWin->GetText() );
-                ++nItemId;
+                if ( pWin && pWin->IsVisible() )
+                {
+                    aNewWindowListVector.push_back( pWin->GetText() );
+                    ++nItemId;
+                }
             }
         }
     }
