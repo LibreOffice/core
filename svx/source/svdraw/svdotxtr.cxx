@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 
 #ifndef _SDR_PROPERTIES_PROPERTIES_HXX
 #include <svx/sdr/properties/properties.hxx>
+#endif
+
+// #i37011#
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,23 +428,16 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const XPolyPolygon& rXPP, FASTBOOL bClo
             }
         }
     }
-    if (!bBezier && pModel!=NULL) {
-        // Polygon aus Bezierkurve interpolieren
-//BFS09     VirtualDevice   aVDev;
-        XPolyPolygon    aXPolyPoly;
 
-//BFS09     MapMode aMap = aVDev.GetMapMode();
-//BFS09     aMap.SetMapUnit(pModel->GetScaleUnit());
-//BFS09     aMap.SetScaleX(pModel->GetScaleFraction());
-//BFS09     aMap.SetScaleY(pModel->GetScaleFraction());
-//BFS09     aVDev.SetMapMode(aMap);
-
-        for (USHORT i=0; i<aXPP.Count(); i++)
-            aXPolyPoly.Insert(XOutCreatePolygon(aXPP[i]));
-//BFS09         aXPolyPoly.Insert(XOutCreatePolygon(aXPP[i],&aVDev));
-        aXPP=aXPolyPoly;
-        ePathKind=bClosed?OBJ_POLY:OBJ_PLIN;
+    // #i37011#
+    if(!bBezier)
+    {
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon(aXPP.getB2DPolyPolygon());
+        aB2DPolyPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
+        aXPP = XPolyPolygon(aB2DPolyPolygon);
+        ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
     }
+
     SdrPathObj* pPathObj=new SdrPathObj(ePathKind,aXPP);
     if (bBezier) {
         pPathObj->ConvertAllSegments(SDRPATH_CURVE);
