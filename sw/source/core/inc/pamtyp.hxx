@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamtyp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:40:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ FASTBOOL GoInSection( SwPaM&, SwMoveFn);
 FASTBOOL GoInNode( SwPaM&, SwMoveFn);
 FASTBOOL GoInCntnt( SwPaM&, SwMoveFn);
 FASTBOOL GoInCntntCells( SwPaM&, SwMoveFn);
+FASTBOOL GoInCntntSkipHidden( SwPaM&, SwMoveFn);
+FASTBOOL GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 
