@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:08:59 $
+ *  last change: $Author: kz $ $Date: 2002-08-16 20:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,14 +397,14 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ french ] = "Phone book";
     Text[ spanish ] = "Phone book";
     Text[ finnish ] = "Phone book";
-    Text[ italian ] = "Phone book";
+    Text[ italian ] = "Elenco telefonico";
     Text[ danish ] = "Phone book";
     Text[ swedish ] = "Phone book";
     Text[ polish ] = "Phone book";
-    Text[ japanese ] = "Phone book";
-    Text[ korean ] = "Phone book";
+    Text[ japanese ] = "電話帳";
+    Text[ korean ] = "전화 번호부";
     Text[ chinese_simplified ] = "Phone book";
-    Text[ chinese_traditional ] = "Phone book";
+    Text[ chinese_traditional ] = "電話簿";
     Text[ turkish ] = "Phone book";
     Text[ arabic ] = "Phone book";
 };
