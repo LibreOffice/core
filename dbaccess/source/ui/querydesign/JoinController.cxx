@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 12:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -385,6 +388,7 @@ void OJoinController::Execute(sal_uInt16 _nId)
                 m_pAddTabDlg = getJoinView()->getAddTableDialog();
             if(m_pAddTabDlg->IsVisible())
             {
+                ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
                 m_pView->GrabFocus();
             }
@@ -395,6 +399,7 @@ void OJoinController::Execute(sal_uInt16 _nId)
                     m_pAddTabDlg->Update();
                 }
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
+                ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;
     }

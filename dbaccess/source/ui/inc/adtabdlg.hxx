@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:32:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 12:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace dbaui
         DECL_LINK( CloseClickHdl, Button* );
         DECL_LINK( TableListDoubleClickHdl, ListBox* );
     public:
-        OAddTableDlg(Window* pParent);
+        OAddTableDlg(Window* pParent,OJoinTableView* _pTableView);
         virtual ~OAddTableDlg();
 
         virtual BOOL Close();

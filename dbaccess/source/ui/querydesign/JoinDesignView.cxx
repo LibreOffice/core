@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-08 13:02:11 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 12:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ void OJoinDesignView::Construct()
     m_pScrollWindow->Show();
     m_pTableView->Show();
 
-    m_pAddTabDlg = new OAddTableDlg(m_pTableView);
+    m_pAddTabDlg = new OAddTableDlg(m_pScrollWindow,m_pTableView);
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     ODataView::Construct();

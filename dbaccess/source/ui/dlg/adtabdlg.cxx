@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 08:54:04 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 12:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ using namespace dbtools;
 
 DBG_NAME(OAddTableDlg)
 //------------------------------------------------------------------------------
-OAddTableDlg::OAddTableDlg( Window* pParent)
+OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,aFTTable( this, ResId( FT_TABLE ) )
              ,aTableList( this, ResId( LB_TABLE ),sal_False,sal_False )
@@ -125,10 +125,11 @@ OAddTableDlg::OAddTableDlg( Window* pParent)
              ,aHelpButton( this, ResId( PB_HELP ) )
              ,aFixedLineTable( this, ResId( FL_TABLE ) )
              ,aDefaultString( ResId( STR_DEFAULT ) )
+             ,m_pTableView(_pTableView)
              ,m_bInitialized(sal_False)
 {
     DBG_CTOR(OAddTableDlg,NULL);
-    m_pTableView = static_cast<OJoinTableView*>(pParent);
+    OSL_ENSURE(_pTableView,"Must be a valid pointer!");
     // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
     // und eine neue ID verteilen
     aCloseButton.SetHelpText(String());
