@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:10:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,15 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace drafts::com::sun::star::script;
+using namespace com::sun::star::script;
+using namespace ::scripting_util;
 
 namespace func_provider
 {
     ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.LanguageScriptProvider" );
+        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
     ::rtl::OUString providerKey =
-        ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.ScriptProviderFor" );
+        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
 
 ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext )
     throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext )
