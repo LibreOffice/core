@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: th $ $Date: 2001-04-09 17:28:20 $
+ *  last change: $Author: th $ $Date: 2001-04-10 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2626,7 +2626,7 @@ int OutputDevice::ImplNewFont()
             pGraphics->GetFontMetric(
                 pFontEntry->maMetric,
                 nFactor, IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST,
-                pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX;
+                pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX,
                 (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
                 &pKernPairs, nKernPairs );
             pFontEntry->mnWidthFactor = nFactor;
