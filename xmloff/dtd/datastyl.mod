@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.6 2000-12-02 15:57:54 nn Exp $
+   $Id: datastyl.mod,v 1.7 2000-12-15 13:55:41 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -38,13 +38,13 @@
    License at http://www.openoffice.org/license.html.
 
    Software provided under this License is provided on an "AS IS" basis,
-   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
-   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
    MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
    See the License for the specific provisions governing your rights and
    obligations concerning the Software.
 
-   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 
    Copyright: 2000 by Sun Microsystems, Inc.
 
