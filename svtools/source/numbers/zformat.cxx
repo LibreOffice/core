@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-28 14:06:38 $
+ *  last change: $Author: er $ $Date: 2000-12-04 07:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2140,58 +2140,51 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
 }
 
 
-BOOL SvNumberformat::IsGengouCalendar( const ImpSvNumFor& rNumFor ) const
+BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
     const USHORT nAnz = rNumFor.GetnAnz();
     USHORT i;
-    BOOL bGfound = FALSE;
-    for ( i = 0; i < nAnz && !bGfound; i++ )
+    for ( i = 0; i < nAnz; i++ )
     {
         switch ( rInfo.nTypeArray[i] )
         {
             case SYMBOLTYPE_CALENDAR :
                 return FALSE;
             break;
-            case NF_KEY_G :
-            case NF_KEY_GG :
-            case NF_KEY_GGG :
-                bGfound = TRUE;
-            break;
-        }
-    }
-    for ( ; i < nAnz; i++ )
-    {
-        switch ( rInfo.nTypeArray[i] )
-        {
             case NF_KEY_EC :
             case NF_KEY_EEC :
                 return TRUE;
             break;
-            case SYMBOLTYPE_STAR :
-            case SYMBOLTYPE_BLANK :
-            case SYMBOLTYPE_STRING :
-                // allowed between G,GG,GGG and E,EE
-            break;
-            default:
-                return FALSE;   // all others
         }
     }
     return FALSE;
 }
 
 
-void SvNumberformat::SwitchToGengouCalendar( String& rOrgCalendar, double& fOrgDateTime )
+void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime )
 {
     CalendarWrapper& rCal = GetCal();
-    ::rtl::OUString aGengou( RTL_CONSTASCII_USTRINGPARAM( "gengou" ) );
-    if ( rCal.getUniqueID() != aGengou )
+    ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian" ) );
+    if ( rCal.getUniqueID() == aGregorian )
     {
-        rOrgCalendar = rCal.getUniqueID();
-        fOrgDateTime = rCal.getDateTime();
-        rCal.loadCalendar( aGengou,
-            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_JAPANESE ) );
-        rCal.setDateTime( fOrgDateTime );
+        using namespace ::com::sun::star::i18n;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals
+            = rCal.getAllCalendars( rLoc().getLocale() );
+        sal_Int32 nCnt = xCals.getLength();
+        if ( nCnt > 1 )
+        {
+            for ( sal_Int32 j=0; j < nCnt; j++ )
+            {
+                if ( xCals[j] != aGregorian )
+                {
+                    rOrgCalendar = rCal.getUniqueID();
+                    fOrgDateTime = rCal.getDateTime();
+                    rCal.loadCalendar( xCals[j], rLoc().getLocale() );
+                    rCal.setDateTime( fOrgDateTime );
+                }
+            }
+        }
     }
 }
 
@@ -2213,8 +2206,8 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     rCal.setGregorianDateTime( aDate );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    if ( IsGengouCalendar( NumFor[nIx] ) )
-        SwitchToGengouCalendar( aOrgCalendar, fOrgDateTime );
+    if ( IsOtherCalendar( NumFor[nIx] ) )
+        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
     for (USHORT i = 0; i < nAnz; i++)
@@ -2451,8 +2444,8 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     rCal.setGregorianDateTime( aDateTime );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    if ( IsGengouCalendar( NumFor[nIx] ) )
-        SwitchToGengouCalendar( aOrgCalendar, fOrgDateTime );
+    if ( IsOtherCalendar( NumFor[nIx] ) )
+        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     double fTime = fNum2*86400.0;
