@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-06 08:37:28 $
+ *  last change: $Author: hro $ $Date: 2001-11-07 14:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,19 @@ USER9X_API int ( WINAPI * lpfnDrawTextW ) (
   UINT uFormat      // text-drawing options
 );
 
+USER9X_API BOOL ( WINAPI * lpfnDrawStateW ) (
+  HDC hdc,                     // handle to device context
+  HBRUSH hbr,                  // handle to brush
+  DRAWSTATEPROC lpOutputFunc,  // callback function
+  LPARAM lData,                // image information
+  WPARAM wData,                // more image information
+  int x,                       // horizontal location
+  int y,                       // vertical location
+  int cx,                      // image width
+  int cy,                      // image height
+  UINT fuFlags                 // image type and state
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -206,6 +219,7 @@ USER9X_API int ( WINAPI * lpfnDrawTextW ) (
 #define GetWindowTextW              lpfnGetWindowTextW
 #define InsertMenuItemW             lpfnInsertMenuItemW
 #define DrawTextW                   lpfnDrawTextW
+#define DrawStateW                  lpfnDrawStateW
 
 #ifdef __cplusplus
 }
