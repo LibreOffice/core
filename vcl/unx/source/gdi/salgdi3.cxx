@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ bool SalGraphicsData::SetFont( const ImplFontSelectData *pEntry, int nFallbackLe
     nFontOrientation_   = pEntry->mnOrientation;
     bFontVertical_      = pEntry->mbVertical;
 
-#ifdef DEBUG
+#ifdef HDU_DEBUG
     ByteString aName( pEntry->maName, osl_getThreadTextEncoding() );
     fprintf( stderr, "SetFont(lvl=%d,\"%s\",naa=%d,b=%d,i=%d)\n", nFallbackLevel, aName.GetBuffer(), pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic );
     if( pEntry->mpFontData )
