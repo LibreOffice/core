@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:23:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2469,4 +2469,5 @@ String STR_SWBG_FOOTER
     Text[ finnish ] = "Alaselite";
 };
  //Ende: Strings fuer Gallery/Hintergrund
+
 
