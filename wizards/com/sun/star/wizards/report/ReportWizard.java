@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-11 13:16:39 $
+ *  last change: $Author: bc $ $Date: 2002-09-11 15:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,9 @@ public class ReportWizard {
      boolean bcreateTemplate;
      boolean buseTemplate;
      boolean bcreateLink;
+     boolean[] baskbeforeOverwrite = new boolean[2];
+     boolean[] bmodifiedbySaveAsDialog = new boolean[2];
+     boolean bfinalaskbeforeOverwrite;
 
      String[] OriginalList = new String[]{""};
      static XDesktop xDesktop;
@@ -414,9 +417,13 @@ public class ReportWizard {
             switch (iKey) {
         case SOTXTFIRSTSAVEPATH:
                 CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(xSaveTextBox[0].getText().length() > 0));
+            baskbeforeOverwrite[0] = (bmodifiedbySaveAsDialog[0] == false);
+            bmodifiedbySaveAsDialog[0] = false;
             break;
         case SOTXTSECSAVEPATH:
                 CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(xSaveTextBox[1].getText().length() > 0));
+            baskbeforeOverwrite[1] = (bmodifiedbySaveAsDialog[1] == false);
+            bmodifiedbySaveAsDialog[1] = false;
             break;
         case SOTXTTITLE:
             String TitleName = xTitleTextBox.getText();
@@ -635,7 +642,6 @@ public class ReportWizard {
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
         case 4:
-//      CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(false));
         CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Label", scmdReady);
         Object oFocusButton = CurUNODialog.xDlgContainer.getControl("optCreateReportTemplate");
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oFocusButton);
@@ -645,7 +651,7 @@ public class ReportWizard {
         bcreateTemplate = ((Short)  CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
         boolean bDocisStored;
         StorePath = getStorePath();
-        if (tools.PathisValid(xGlobalMSF, StorePath, CurUNODialog.xWindowPeer, sMsgFilePathInvalid)){
+        if (tools.PathisValid(xGlobalMSF, StorePath, CurReportDocument.xWindowPeer, sMsgFilePathInvalid, bfinalaskbeforeOverwrite)){
             if (bcreateTemplate == true){
             CurReportDocument.createDBForm(xMSF, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
@@ -819,10 +825,14 @@ public class ReportWizard {
     String StorePath = "";
     try{
     boolean bStoreAsTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
-    if (bStoreAsTemplate == true)
+    if (bStoreAsTemplate == true){
         StorePath = (String) CurUNODialog.getPropertyOfDialogControl("txtSavePath_1", "Text");
-    else
+        bfinalaskbeforeOverwrite = baskbeforeOverwrite[0];
+    }
+    else{
         StorePath = (String) CurUNODialog.getPropertyOfDialogControl("txtSavePath_2", "Text");
+        bfinalaskbeforeOverwrite = baskbeforeOverwrite[1];
+    }
     StorePath = tools.converttoURLNotation(StorePath);
     }
     catch( Exception exception ){
@@ -841,12 +851,25 @@ public class ReportWizard {
         CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
         sStorePath = tools.callStoreDialog(xMSF, CurReportPaths.UserTemplatePath, DefaultName + ".stw", "writer_StarOffice_XML_Writer_Template");
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", sStorePath);
+        if (sStorePath != ""){
+        // As the user has been asked already if the Path exists already and he does not want to be asked again later on when the
+        // document is created we set the flag 'bmodifiedbySaveAsDialog" to true
+        bmodifiedbySaveAsDialog[0] = true;
+        // it might be that the value in the textbox will not be changed; in this case also the flag 'baskbeforeOverwrite' has to be set
+        // because the textlistener won't be called.
+        baskbeforeOverwrite[0] = false;
+        }
+
     }
     else{
         if (CurReportPaths.WorkPath == null)
         CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
         sStorePath = tools.callStoreDialog(xMSF, CurReportPaths.WorkPath, DefaultName + ".sxw",  "writer_StarOffice_XML_Writer");
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", sStorePath);
+        if (sStorePath != ""){
+        bmodifiedbySaveAsDialog[1] = true;
+        baskbeforeOverwrite[1] = false;
+        }
     }
     CurUNODialog.assignPropertyToDialogControl("cmdGoOn", "Enabled", new Boolean(sStorePath != ""));
     }
@@ -914,11 +937,15 @@ public class ReportWizard {
     DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
     DefaultPath = tools.convertfromURLNotation(DefaultPath);
     CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
+    baskbeforeOverwrite[0] = true;
+    bmodifiedbySaveAsDialog[0] = false;
 
     CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
     DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
     DefaultPath = tools.convertfromURLNotation(DefaultPath);
     CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
+    baskbeforeOverwrite[1] = true;
+    bmodifiedbySaveAsDialog[1] = false;
     }
 
 
