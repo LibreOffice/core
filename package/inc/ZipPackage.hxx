@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:34:47 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,8 @@
 
 class ZipPackageFolder;
 class ZipFile;
-class OutputThread;
 class ByteGrabber;
-namespace ucb { class Content; }
+
 enum SegmentEnum
 {
     e_Aborted = -1000,
@@ -129,7 +128,6 @@ class ZipPackage :
                    public com::sun::star::util::XChangesBatch,
                    public com::sun::star::beans::XPropertySet
 {
-    friend class OutputThread;
 protected:
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
     NameHash         aRecent;
@@ -145,7 +143,6 @@ protected:
 
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
-    ::ucb::Content   *pContent;
 
     void getZipFileContents();
     // this one is for removable media
