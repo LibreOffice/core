@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2001-06-06 09:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,12 +695,12 @@ void Base3DDefault::Clipped3DLine(UINT32 nInd1, UINT32 nInd2)
         long nCount;
 
         // Werte fuer Schleife vorbereiten
-        if(abs(nDx) > abs(nDy))
+        if(labs(nDx) > labs(nDy))
             // ueber X gehen
-            nCount = abs(nDx);
+            nCount = labs(nDx);
         else
             // ueber Y gehen
-            nCount = abs(nDy);
+            nCount = labs(nDy);
 
         if(nCount)
         {
