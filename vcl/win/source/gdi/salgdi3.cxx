@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:32:50 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,18 +922,36 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
                 pMetric->mnOrientation = 0;
             }
             pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-            pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            pMetric->mnIntLeading       = aWinMetric.tmInternalLeading;
+            pMetric->mnExtLeading       = aWinMetric.tmExternalLeading;
             pMetric->mnAscent           = aWinMetric.tmAscent;
-            BOOL bHasKoreanRange;
-            if ( FontHasCJKUnicodeRange( this, bHasKoreanRange ))    // #107888# worakround for Asian...
-            {
-                pMetric->mnLeading  += aWinMetric.tmExternalLeading;
-                pMetric->mnAscent   += aWinMetric.tmExternalLeading;
-                // #109280# korean only: increase descent for wavelines and improved line space
-                if( bHasKoreanRange )
-                    pMetric->mnDescent   += aWinMetric.tmExternalLeading;
-            }
             pMetric->mnDescent          = aWinMetric.tmDescent;
+            // #107888# workround for Asian...
+            // TODO: assess workaround below for CWS >= extleading
+            BOOL bHasKoreanRange;
+            if ( FontHasCJKUnicodeRange( this, bHasKoreanRange ))
+            {
+                pMetric->mnIntLeading  += aWinMetric.tmExternalLeading;
+
+                // #109280# The line height for Asian fonts is too small.
+                // Therefore we add half of the external leading to the
+                // ascent, the other half is added to the descent.
+                const long nHalfTmpExtLeading = aWinMetric.tmExternalLeading / 2;
+                const long nOtherHalfTmpExtLeading = aWinMetric.tmExternalLeading -
+                                                     nHalfTmpExtLeading;
+
+                // #110641# external leading for Asian fonts.
+                // The factor 0.3 has been verified during experiments.
+                const long nCJKExtLeading = 0.30 * (pMetric->mnAscent + pMetric->mnDescent);
+
+                if ( nCJKExtLeading > aWinMetric.tmExternalLeading )
+                    pMetric->mnExtLeading = nCJKExtLeading - aWinMetric.tmExternalLeading;
+                else
+                    pMetric->mnExtLeading = 0;
+
+                pMetric->mnAscent   += nHalfTmpExtLeading;
+                pMetric->mnDescent  += nOtherHalfTmpExtLeading;
+            }
             pMetric->mnSlant            = 0;
             pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
             pMetric->mnLastChar         = aWinMetric.tmLastChar;
@@ -967,15 +985,18 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
             pMetric->mnAscent           = aWinMetric.tmAscent;
             pMetric->mnDescent          = aWinMetric.tmDescent;
-            pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            pMetric->mnIntLeading       = aWinMetric.tmInternalLeading;
+            pMetric->mnExtLeading       = aWinMetric.tmExternalLeading;
+            // #107888# workround for Asian...
+            // TODO: assess workaround below for CWS >= extleading
             BOOL bHasKoreanRange;
             if ( FontHasCJKUnicodeRange( this, bHasKoreanRange ))    // #107888# worakround for Asian...
             {
-                pMetric->mnLeading  += aWinMetric.tmExternalLeading;
-                pMetric->mnAscent   += aWinMetric.tmExternalLeading;
+                pMetric->mnIntLeading  += aWinMetric.tmExternalLeading;
+                pMetric->mnAscent      += aWinMetric.tmExternalLeading;
                 // #109280# korean only: increase descent for wavelines and improved line space
                 if( bHasKoreanRange )
-                    pMetric->mnDescent   += aWinMetric.tmExternalLeading;
+                    pMetric->mnDescent += aWinMetric.tmExternalLeading;
             }
             pMetric->mnSlant            = 0;
             pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
