@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 12:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,11 +548,16 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
                 SfxInPlaceClientRef xCli = GetView().FindIPClient( xIPObj,
                                                     &GetView().GetEditWin());
                 if ( !xCli.Is() )
-                    xCli = new SwOleClient( &GetView(), &GetView().GetEditWin());
+                {
+                    xCli = new SwOleClient( &GetView(), &GetView().GetEditWin() );
+                    SetCheckForOLEInCaption( TRUE );
+                }
+
                 ErrCode nErr = xIPObj->DoConnect( xCli );
                 ErrorHandler::HandleError( nErr );
                 if ( !ERRCODE_TOERROR(nErr) )
                 {
+
                     SvEmbeddedObjectRef xObj = &xIPObj;
                     CalcAndSetScale( xObj );
                     //#50270# Error brauchen wir nicht handeln, das erledigt das
@@ -765,9 +770,14 @@ BOOL SwWrtShell::FinishOLEObj()                     // Server wird beendet
             }
         }
 
+        if( ((SwOleClient*)pIPClient)->IsCheckForOLEInCaption() !=
+            IsCheckForOLEInCaption() )
+            SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
+
         //InPlace beenden.
         pIPClient->GetProtocol().Reset2Open();
         SFX_APP()->SetViewFrame( GetView().GetViewFrame() );
+
     }
     return bRet;
 }
@@ -1574,6 +1584,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.7  2001/02/23 12:45:30  os
+   Complete use of DefaultNumbering component
+
    Revision 1.6  2000/11/14 18:28:14  jp
    use moduleoptions
 
