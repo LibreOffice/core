@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:57:25 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 08:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ service ContentProvider
     /** creates special <type>XContentIdentifier</type> implementation
         objects for the contents provided by this content provider.
 
-        <p>This interface is optional. It can be implemented in case the
-        provider wants to provide some additional interfaces with its
-        implementation of the identifier objects.
+        <p>This interface can be implemented in case the provider wants to
+        provide some additional interfaces with its implementation of the
+        identifier objects.
      */
-    interface com::sun::star::ucb::XContentIdentifierFactory;
+    [optional] interface com::sun::star::ucb::XContentIdentifierFactory;
 
     //-------------------------------------------------------------------------
     /** allows a <type>ContentProvider</type> to adjust itself to special
@@ -110,10 +110,8 @@ service ContentProvider
         method <member>XParameterizedContentProvider::registerInstance</member>
         should first be called, using the returned <type>XContentProvider</type>
         to register at the <type>XContentProviderManager</type>.
-
-        <p>This interface is optional.
      */
-    interface com::sun::star::ucb::XParameterizedContentProvider;
+    [optional] interface com::sun::star::ucb::XParameterizedContentProvider;
 
     //-------------------------------------------------------------------------
     /** allows the implementation of a proxy object for a content provider.
@@ -124,12 +122,11 @@ service ContentProvider
         shall be deferred for some reason until the first method gets called
         on it ( i.e. performance ).
 
-        <p>This interface is optional, but it is highly recommended to support
-        it.
+        <p><b>It is highly recommended to support this interface.</b>
 
         @see <type>ContentProviderProxy</type>
      */
-    interface com::sun::star::ucb::XContentProviderSupplier;
+    [optional] interface com::sun::star::ucb::XContentProviderSupplier;
 };
 
 //=============================================================================
