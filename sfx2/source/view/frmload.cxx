@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:25:03 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,16 +306,25 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             break;
     }
 
+    BOOL bFrameCreated = FALSE;
     if ( !pFrame )
+    {
         pFrame = SfxTopFrame::Create( rFrame );
+        bFrameCreated = TRUE;
+    }
 
     if ( xModel.is() )
     {
         // !TODO: replace by ViewFactory
         if ( pFrame->GetFrameInterface()->getController().is() )
+        {
+            // remove old component
+            // if a frame was created already, it can't be an SfxComponent!
             pFrame->GetFrameInterface()->setComponent( 0, 0 );
+            if ( !bFrameCreated )
+                pFrame = SfxTopFrame::Create( rFrame );
+        }
 
-        pFrame = SfxTopFrame::Create( rFrame );
         aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
 
         for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
@@ -475,9 +484,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
 
             // !TODO: replace by ViewFactory
             if ( pFrame->GetFrameInterface()->getController().is() )
+            {
+                // remove old component
+                // if a frame was created already, it can't be an SfxComponent!
                 pFrame->GetFrameInterface()->setComponent( 0, 0 );
+                if ( !bFrameCreated )
+                    pFrame = SfxTopFrame::Create( rFrame );
+            }
 
-            pFrame = SfxTopFrame::Create( rFrame );
             aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
             if( pFrame->InsertDocument( pDoc ) )
             {
