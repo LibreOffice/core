@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:22:25 $
+ *  last change: $Author: cd $ $Date: 2002-09-09 07:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,33 +273,6 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_URLTransformer   (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        );
-        static sal_Bool impldbg_checkParameter_parseStrict      (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_parseSmart       (           css::util::URL&                                         aURL            ,
-                                                                    const   ::rtl::OUString&                                        sSmartProtocol  );
-        static sal_Bool impldbg_checkParameter_assemble         (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_getPresentation  (   const   css::util::URL&                                         aURL            ,
-                                                                            sal_Bool                                                bWithPassword   );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables

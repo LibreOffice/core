@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 06:58:30 $
+ *  last change: $Author: cd $ $Date: 2002-09-09 07:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ URLTransformer::URLTransformer( const Reference< XMultiServiceFactory >& xFactor
 {
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_URLTransformer( xFactory ), "URLTransformer::URLTransformer()\nInvalid parameter detected!\n" )
+    LOG_ASSERT( xFactory.is(), "URLTransformer::URLTransformer()\nInvalid parameter detected!\n" )
 }
 
 //*****************************************************************************************************************
@@ -182,9 +182,13 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
+
     // Safe impossible cases.
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_parseStrict( aURL ), "URLTransformer::parseStrict()\nInvalid parameter detected!\n" )
+    if  (( &aURL                        ==  NULL    )   ||
+         ( aURL.Complete.getLength()    <   1       )       )
+    {
+        return sal_False;
+    }
 
     // Initialize parser with given URL.
     INetURLObject aParser( aURL.Complete );
@@ -218,33 +222,42 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
     // Safe impossible cases.
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_parseSmart( aURL, sSmartProtocol ), "URLTransformer::parseSmart()\nInvalid parameter detected!\n" )
+    if  (( &aURL                            ==  NULL    ) ||
+         ( aURL.Complete.getLength()        <   1       )    )
+    {
+        return sal_False;
+    }
 
     // Initialize parser with given URL.
     INetURLObject aParser;
 
     aParser.SetSmartProtocol( INetURLObject::CompareProtocolScheme( sSmartProtocol ));
-    aParser.SetSmartURL     ( aURL.Complete                                         );
+    bool bOk = aParser.SetSmartURL( aURL.Complete );
+    if ( bOk )
+    {
+        // Get all information about this URL.
+        aURL.Protocol   = INetURLObject::GetScheme( aParser.GetProtocol() );
+        aURL.User       = aParser.GetUser   ( INetURLObject::DECODE_WITH_CHARSET );
+        aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
+        aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
+        aURL.Port       = (sal_Int16)aParser.GetPort();
+        aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
+//      aURL.Name       = aParser.GetName   ();
+        aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
+        aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
 
-    // Get all information about this URL.
-    aURL.Protocol   = INetURLObject::GetScheme( aParser.GetProtocol() );
-    aURL.User       = aParser.GetUser   ( INetURLObject::DECODE_WITH_CHARSET );
-    aURL.Password   = aParser.GetPass   ( INetURLObject::DECODE_WITH_CHARSET );
-    aURL.Server     = aParser.GetHost   ( INetURLObject::DECODE_WITH_CHARSET );
-    aURL.Port       = (sal_Int16)aParser.GetPort();
-    aURL.Path       = aParser.GetURLPath( INetURLObject::NO_DECODE           );
-//  aURL.Name       = aParser.GetName   ();
-    aURL.Arguments  = aParser.GetParam  ( INetURLObject::NO_DECODE           );
-    aURL.Mark       = aParser.GetMark   ( INetURLObject::DECODE_WITH_CHARSET );
+        aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
-    aParser.SetMark ( OUString() );
-    aParser.SetParam( OUString() );
+        aParser.SetMark ( OUString() );
+        aParser.SetParam( OUString() );
 
-    aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
+        aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
-    // Return "URL is parsed".
-    return sal_True;
+        // Return "URL is parsed".
+        return sal_True;
+    }
+    else
+        return sal_False;
 }
 
 //*****************************************************************************************************************
@@ -254,19 +267,26 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
+
     // Safe impossible cases.
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_assemble( aURL ), "URLTransformer::assemble()\nInvalid parameter detected!\n" )
+    if  ( &aURL == NULL )
+    {
+        return sal_False ;
+    }
 
     // Initialize parser.
     INetURLObject aParser;
 
-    aParser.ConcatData( INetURLObject::CompareProtocolScheme( aURL.Protocol )   ,
+    bool bResult = aParser.ConcatData(
+                        INetURLObject::CompareProtocolScheme( aURL.Protocol )   ,
                          aURL.User                                              ,
                         aURL.Password                                           ,
                         aURL.Server                                             ,
                          aURL.Port                                              ,
                         aURL.Path                                               );
+
+    if ( !bResult )
+        return sal_False;
 
     // First parse URL WITHOUT ...
     aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
@@ -287,9 +307,15 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
+
     // Safe impossible cases.
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_getPresentation( aURL, bWithPassword ), "URLTransformer::getPresentation()\nInvalid parameter detected!\n" )
+    if  (( &aURL                        ==  NULL        )   ||
+         ( aURL.Complete.getLength()    <   1           )   ||
+            (( bWithPassword            !=  sal_True    )   &&
+             ( bWithPassword            !=  sal_False   )       ) )
+    {
+        return OUString();
+    }
 
     // Convert internal URLs to "praesentation"-URLs!
     UniString   sPraesentationURL;
@@ -303,113 +329,5 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
 //  debug methods
 //_________________________________________________________________________________________________________________
 
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact Andreas Schluens [as] or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
-// We need a valid factory to work with her.
-sal_Bool URLTransformer::impldbg_checkParameter_URLTransformer( const Reference< XMultiServiceFactory >& xFactory )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &xFactory     ==  NULL        )   ||
-            ( xFactory.is() ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We need a valid "Complete" value for parsing.
-sal_Bool URLTransformer::impldbg_checkParameter_parseStrict( URL& aURL )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.getLength() <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We need a valid "Complete" value for URL and a non empty smart protocol description.
-sal_Bool URLTransformer::impldbg_checkParameter_parseSmart(         URL&        aURL            ,
-                                                            const   OUString&   sSmartProtocol  )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL                         ==  NULL    )   ||
-            ( &sSmartProtocol               ==  NULL    )   ||
-            ( aURL.Complete.getLength()     <   1       )   ||
-            ( sSmartProtocol.getLength()    <   1       )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool URLTransformer::impldbg_checkParameter_assemble( URL& aURL )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL == NULL )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-sal_Bool URLTransformer::impldbg_checkParameter_getPresentation (   const   URL&        aURL            ,
-                                                                            sal_Bool    bWithPassword   )
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL                     ==  NULL        )   ||
-            ( aURL.Complete.getLength() <   1           )   ||
-            (
-                ( bWithPassword         !=  sal_True    )   &&
-                ( bWithPassword         !=  sal_False   )
-            )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
