@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:40 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #include <memory>
 
 
-// Global static helpers ======================================================
+// Common Macros ==============================================================
 
 /** Expands to the size of a STATIC data array. */
 #define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
@@ -94,6 +94,19 @@
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 /** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
 #define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
+
+// items and item sets --------------------------------------------------------
+
+/** Expands to the item (with type 'itemtype') with Which-ID 'which'. */
+#define GETITEM( itemset, itemtype, which ) \
+    static_cast< const itemtype & >( (itemset).Get( which ) )
+
+/** Expands to the value (with type 'valuetype') of the item with Which-ID 'which'. */
+#define GETITEMVALUE( itemset, itemtype, which, valuetype ) \
+    static_cast< valuetype >( GETITEM( itemset, itemtype, which ).GetValue() )
+
+
+// Global static helpers ======================================================
 
 // Read from bitfields --------------------------------------------------------
 
@@ -199,6 +212,7 @@ class ScfNoInstance : private ScfNoCopy {};
 
 // ============================================================================
 
+class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class SvStorage;
@@ -242,6 +256,12 @@ public:
     static const SvStorageStreamRef OpenStorageStreamRead( SvStorage* pStorage, const String& rStrmName );
     /** Tries to create or open a stream with the specified name in the passed storage (read/write). */
     static const SvStorageStreamRef OpenStorageStreamWrite( SvStorage* pStorage, const String& rStrmName );
+
+// *** item handling ***
+
+    /** Returns true, if the passed item set contains the item.
+        @param bDeep  true = Searches in parent item sets too. */
+    static bool                 CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
 
 // *** style sheet handling ***
 
