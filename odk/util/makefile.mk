@@ -27,8 +27,3 @@ $(BIN)$/$(PRODUCTTARGZFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDKCHECKFLAG)
 .ELSE
     +cd $(BIN) && tar cf - $(PRODUCT_NAME) | gzip - > $(PRODUCTTARGZFILE)
 .ENDIF
-
-    
-
-
-
