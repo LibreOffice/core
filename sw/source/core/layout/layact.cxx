@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:32:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,6 +751,11 @@ class NotifyLayoutOfPageInProgress
                         pObj->LockPosition();
                     else
                         pObj->UnlockPosition();
+                    // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+                    // of wrapping style influence at each start/end of the
+                    // layout process of a page frame
+                    pObj->SetTmpConsiderWrapInfluence( false );
+                    // <--
                 }
             }
         }
@@ -1844,7 +1849,12 @@ void lcl_ValidateLowerObjs( SwFrm* pFrm,
                 if ( !bResetOnly )
                 {
                     pFly->Frm().Pos().Y() += nOfst;
-                    pFly->GetVirtDrawObj()->_SetRectsDirty();
+                    pFly->GetVirtDrawObj()->SetRectsDirty();
+                    // --> OD 2004-08-17 - also notify view of <SdrObject>
+                    // instance, which represents the Writer fly frame in the
+                    // drawing layer
+                    pFly->GetVirtDrawObj()->SetChanged();
+                    // <--
                     if ( pFly->IsFlyInCntFrm() )
                         ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
                 }
