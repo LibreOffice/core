@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 11:53:53 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,20 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICTIONARYLISTEVENTFLAGS_HPP_
-#include <com/sun/star/linguistic/DictionaryListEventFlags.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYLISTEVENTFLAGS_HPP_
+#include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_DICTIONARYLISTEVENT_HPP_
-#include <com/sun/star/linguistic/DictionaryListEvent.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_DICTIONARYLISTEVENT_HPP_
+#include <com/sun/star/linguistic2/DictionaryListEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLISTEVENTLISTENER_HPP_
-#include <com/sun/star/linguistic/XDictionaryListEventListener.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
-#include <com/sun/star/linguistic/XDictionaryList.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
+#include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XOTHERLINGU_HPP_
-#include <com/sun/star/linguistic/XOtherLingu.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XOTHERLINGU_HPP_
+#include <com/sun/star/linguistic2/XOtherLingu.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -142,7 +142,7 @@ using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -358,7 +358,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
     if (xDic.is())
     {
         OUString aTmp( C2U("v_7xj4") );
-        sal_Bool bOk = xDic->add( aTmp, sal_False, OUString(), LANGUAGE_GERMAN);
+        sal_Bool bOk = xDic->add( aTmp, sal_False, OUString() );
         if (bOk)
             xDic->remove( aTmp );
     }
@@ -952,7 +952,8 @@ SvxExternalLinguTabPage::SvxExternalLinguTabPage(Window* pParent, const SfxItemS
 {
     FreeResource();
     Reference< lang::XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
-    Reference< XInterface >  xInst = xMgr->createInstance( C2U("com.sun.star.linguistic.OtherLingu") );
+    Reference< XInterface >  xInst = xMgr->createInstance(
+            C2U("com.sun.star.linguistic2.OtherLingu") );
     xOtherLingu = Reference< XOtherLingu > (xInst, UNO_QUERY);
     if(xOtherLingu.is())
     {
@@ -966,7 +967,8 @@ SvxExternalLinguTabPage::SvxExternalLinguTabPage(Window* pParent, const SfxItemS
         aLinguLB.SetSelectHdl(LINK(this, SvxExternalLinguTabPage, LBSelectHdl_Impl));
         aOptionsPB.SetClickHdl(LINK(this, SvxExternalLinguTabPage, OptDlgHdl_Impl));
 
-        xInst = xMgr->createInstance( C2U("com.sun.star.linguistic.LinguProperties") );
+        xInst = xMgr->createInstance(
+                C2U("com.sun.star.linguistic2.LinguProperties") );
         xLinguProps = Reference< XPropertySet > (xInst, UNO_QUERY);
         if(xLinguProps.is())
         {
@@ -1054,7 +1056,7 @@ sal_Bool    SvxExternalLinguTabPage::FillItemSet( SfxItemSet& rSet )
             if (xDic.is())
             {
                 OUString aTmp( C2U("v_7xj4") );
-                sal_Bool bOk = xDic->add( aTmp, sal_False, OUString(), LANGUAGE_GERMAN);
+                sal_Bool bOk = xDic->add( aTmp, sal_False, OUString() );
                 if (bOk)
                     xDic->remove( aTmp );
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optitems.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 10:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include <tools/stream.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
 
 #define ITEMID_SPELLCHECK   0
@@ -83,6 +83,9 @@
 #include "optitems.hxx"
 #include "dialmgr.hxx"
 #include "svxitems.hrc"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -93,7 +96,7 @@ TYPEINIT1(SfxHyphenRegionItem, SfxPoolItem);
 
 SfxSpellCheckItem::SfxSpellCheckItem
 (
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 > &xChecker,
+    Reference< XSpellChecker1 > &xChecker,
     sal_uInt16 nWhich
 ) :
 
