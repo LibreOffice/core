@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-15 12:24:59 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,6 +796,13 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
 
         if( msChartAddress.getLength())
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msChartAddress );
+
+        if( msTableNumberList.getLength())
+        {
+            // this attribute is for charts embedded in calc documents only.
+            // With this you are able to store a file again in 5.0 binary format
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_table_number_list, msTableNumberList );
+        }
 
         // attributes
         uno::Reference< drawing::XShape > xShape ( xDiagram, uno::UNO_QUERY );
@@ -1914,9 +1921,15 @@ void SchXMLExport::_ExportContent()
                     {
                         ::rtl::OUString sChartAddress;
                         aAny = xProp->getPropertyValue(
-                            rtl::OUString::createFromAscii( "ChartRangeAddress" ));
+                            ::rtl::OUString::createFromAscii( "ChartRangeAddress" ));
                         aAny >>= sChartAddress;
                         maExportHelper.SetChartRangeAddress( sChartAddress );
+
+                        ::rtl::OUString sTableNumberList;
+                        aAny = xProp->getPropertyValue(
+                            ::rtl::OUString::createFromAscii( "TableNumberList" ));
+                        aAny >>= sTableNumberList;
+                        maExportHelper.SetTableNumberList( sTableNumberList );
 
                         // do not include own table if there are external addresses
                         bIncludeTable = (sChartAddress.getLength() == 0);

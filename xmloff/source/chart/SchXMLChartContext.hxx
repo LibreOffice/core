@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-15 12:26:21 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ private:
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
     ::rtl::OUString msCategoriesAddress;
     ::rtl::OUString msChartAddress;
+    ::rtl::OUString msTableNumberList;
 
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,

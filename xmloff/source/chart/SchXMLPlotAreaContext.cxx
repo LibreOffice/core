@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-15 12:26:53 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,14 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                                               SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                               uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
                                               ::rtl::OUString& rCategoriesAddress,
-                                              ::rtl::OUString& rChartAddress ) :
+                                              ::rtl::OUString& rChartAddress,
+                                              ::rtl::OUString& rTableNumberList) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
         mrChartAddress( rChartAddress ),
+        mrTableNumberList( rTableNumberList ),
         mnDomainOffset( 0 ),
         mnSeries( 0 ),
         mnMaxSeriesLength( 0 ),
@@ -322,6 +324,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
             case XML_TOK_PA_CHART_ADDRESS:
                 mrChartAddress = aValue;
+                break;
+            case XML_TOK_PA_TABLE_NUMBER_LIST:
+                mrTableNumberList = aValue;
                 break;
             default:
                 maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );

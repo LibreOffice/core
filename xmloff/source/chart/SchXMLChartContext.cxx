@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-15 12:25:49 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,12 @@ void SchXMLChartContext::EndElement()
                 {
                     aAny <<= msChartAddress;
                     xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "ChartRangeAddress" ), aAny );
+
+                    if( msTableNumberList.getLength())
+                    {
+                        aAny <<= msTableNumberList;
+                        xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "TableNumberList" ), aAny );
+                    }
                 }
                 else
                 {
@@ -584,7 +590,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         case XML_TOK_CHART_PLOT_AREA:
             pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(), rLocalName,
                                                   maSeriesAddresses, msCategoriesAddress,
-                                                  msChartAddress );
+                                                  msChartAddress, msTableNumberList );
             break;
 
         case XML_TOK_CHART_TITLE:

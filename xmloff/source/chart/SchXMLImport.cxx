@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-15 12:25:18 $
+ *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,13 +179,14 @@ static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    sXML_x,                     XML_TOK_PA_X            },
-    { XML_NAMESPACE_SVG,    sXML_y,                     XML_TOK_PA_Y            },
-    { XML_NAMESPACE_SVG,    sXML_width,                 XML_TOK_PA_WIDTH        },
-    { XML_NAMESPACE_SVG,    sXML_height,                XML_TOK_PA_HEIGHT       },
-    { XML_NAMESPACE_CHART,  sXML_style_name,            XML_TOK_PA_STYLE_NAME   },
-    { XML_NAMESPACE_DR3D,   sXML_transform,             XML_TOK_PA_TRANSFORM    },
-    { XML_NAMESPACE_TABLE,  sXML_cell_range_address,    XML_TOK_PA_CHART_ADDRESS},
+    { XML_NAMESPACE_SVG,    sXML_x,                     XML_TOK_PA_X                 },
+    { XML_NAMESPACE_SVG,    sXML_y,                     XML_TOK_PA_Y                 },
+    { XML_NAMESPACE_SVG,    sXML_width,                 XML_TOK_PA_WIDTH             },
+    { XML_NAMESPACE_SVG,    sXML_height,                XML_TOK_PA_HEIGHT            },
+    { XML_NAMESPACE_CHART,  sXML_style_name,            XML_TOK_PA_STYLE_NAME        },
+    { XML_NAMESPACE_DR3D,   sXML_transform,             XML_TOK_PA_TRANSFORM         },
+    { XML_NAMESPACE_TABLE,  sXML_cell_range_address,    XML_TOK_PA_CHART_ADDRESS     },
+    { XML_NAMESPACE_CHART,  sXML_table_number_list,     XML_TOK_PA_TABLE_NUMBER_LIST },
     XML_TOKEN_MAP_END
 };
 
