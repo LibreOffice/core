@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-07 13:14:08 $
+ *  last change: $Author: sb $ $Date: 2001-12-19 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,8 +2057,8 @@ void ImplHandleGeometryChange( Window *pWindow, Rectangle *pRect )
     {
         pWindow->ImplGetFrame()->maGeometry.nX = pRect->nLeft;
         pWindow->ImplGetFrame()->maGeometry.nY = pRect->nTop;
-        pWindow->ImplGetFrame()->maGeometry.nWidth = pRect->nRight - pRect->nLeft;
-        pWindow->ImplGetFrame()->maGeometry.nHeight = pRect->nBottom - pRect->nTop;
+        pWindow->ImplGetFrame()->maGeometry.nWidth = pRect->nRight - pRect->nLeft + 1;
+        pWindow->ImplGetFrame()->maGeometry.nHeight = pRect->nBottom - pRect->nTop + 1;
         ImplHandleMoveResize( pWindow, pRect->nLeft, pRect->nTop,
             pWindow->ImplGetFrame()->maGeometry.nWidth,
             pWindow->ImplGetFrame()->maGeometry.nHeight );
