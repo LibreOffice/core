@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:06:36 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,17 +174,15 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             /******************************************************************
             * Date-Field
             ******************************************************************/
-            pInfo->SetRepresentation(
-                ((const SvxDateField*) pField)->GetFormatted(LANGUAGE_SYSTEM,
-                                                             LANGUAGE_SYSTEM) );
+            SvNumberFormatter* pNumberFormatter = GetNumberFormatter();
+            pInfo->SetRepresentation( ((const SvxDateField*) pField)->GetFormatted( *GetNumberFormatter(), LANGUAGE_SYSTEM) );
         }
         else if( pField && pField->ISA( SvxExtTimeField ) )
         {
             /******************************************************************
             * Time-Field
             ******************************************************************/
-            pInfo->SetRepresentation( ( (const SvxExtTimeField*) pField)->
-                            GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+            pInfo->SetRepresentation( ( (const SvxExtTimeField*) pField)->GetFormatted( *GetNumberFormatter(), LANGUAGE_SYSTEM ) );
         }
         else if( pField && pField->ISA( SvxExtFileField ) )
         {

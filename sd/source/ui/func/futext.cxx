@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-12 12:45:17 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                 SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pDoc );
                 pOutl->SetMinDepth(0);
                 pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pDoc->GetStyleSheetPool());
-                pOutl->SetCalcFieldValueHdl(LINK(SFX_APP(), SdModule, CalcFieldValueHdl));
+                pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
                 ULONG nCntrl = pOutl->GetControlWord();
                 nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
                 nCntrl |= EE_CNTRL_URLSFXEXECUTE;

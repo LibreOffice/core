@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-15 08:48:14 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,14 @@
 #ifndef _SVX_ZOOMCTRL_HXX //autogen
 #include <svx/zoomctrl.hxx>
 #endif
-
 #ifndef _SVX_MODCTRL_HXX //autogen
 #include <svx/modctrl.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
@@ -143,6 +148,7 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
     pImpressOptions(NULL),
     pDrawOptions(NULL),
     pSearchItem(NULL),
+    pNumberFormatter( NULL ),
     eCurrentNavigatorDragType( NAVIGATOR_DRAGTYPE_NONE ),
     pCurrentNavigatorDragDocShell( NULL )
 {
@@ -163,6 +169,8 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
 SdModule::~SdModule()
 {
     delete pSearchItem;
+    if( pNumberFormatter )
+        delete pNumberFormatter;
 }
 
 
@@ -345,5 +353,16 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
     return xStm;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
+SvNumberFormatter* SdModule::GetNumberFormatter()
+{
+    if( !pNumberFormatter )
+        pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM );
+
+    return pNumberFormatter;
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-15 08:49:06 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class EditFieldInfo;
 class SvFactory;
 class SdTransferable;
 class SdDrawDocShell;
+class SvNumberFormatter;
 
 // ----------------------
 // - SdOptionStreamMode -
@@ -119,6 +120,7 @@ protected:
     SdOptions*              pImpressOptions;
     SdOptions*              pDrawOptions;
     SvxSearchItem*          pSearchItem;
+    SvNumberFormatter*      pNumberFormatter;
     SvStorageRef            xOptionStorage;
     const SdDrawDocShell*   pCurrentNavigatorDragDocShell;
     NavigatorDragType       eCurrentNavigatorDragType;
@@ -161,6 +163,8 @@ public:
 
     SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
+
+    SvNumberFormatter*      GetNumberFormatter();
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );

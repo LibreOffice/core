@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,16 @@
 #endif
 #define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
 
 #include "strings.hrc"
 #include "dlgfield.hrc"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
+#include "sdmod.hxx"
 #include "dlgfield.hxx"
 
 /*************************************************************************
@@ -212,18 +217,19 @@ void SdModifyFieldDlg::FillControls()
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_SMALL ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_BIG ) ) );
 
+        SvNumberFormatter* pNumberFormatter = NULL /*SD_MOD()->GetNumberFormatter()*/;
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
-        aLbFormat.InsertEntry( aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
 
         aLbFormat.SelectEntryPos( (USHORT) ( pDateField->GetFormat() - 2 ) );
     }
@@ -241,18 +247,19 @@ void SdModifyFieldDlg::FillControls()
         //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_NORMAL ) ) );
 
+        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
-        aLbFormat.InsertEntry( aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ) );
+        aLbFormat.InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ) );
         //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
         //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
         //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,14 @@
 #include <svx/editeng.hxx>
 #define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 
 #include "strings.hrc"
 #include "sdpopup.hxx"
 #include "sdresid.hxx"
+#include "sdmod.hxx"
 
 /*************************************************************************
 |*
@@ -125,19 +129,20 @@ void SdFieldPopup::Fill()
         InsertItem( nID++, String( SdResId( STR_STANDARD_SMALL ) ), nStyle );
         InsertItem( nID++, String( SdResId( STR_STANDARD_BIG ) ), nStyle );
 
+        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
 
         aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
 
         CheckItem( (USHORT) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
@@ -155,19 +160,20 @@ void SdFieldPopup::Fill()
         //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
         InsertItem( nID++, String( SdResId( STR_STANDARD_NORMAL ) ), nStyle );
 
+        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
 
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
-        InsertItem( nID++, aTimeField.GetFormatted( LANGUAGE_SYSTEM, LANGUAGE_SYSTEM ), nStyle );
+        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, LANGUAGE_SYSTEM ), nStyle );
         //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
         //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
         //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:04:33 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 15:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
 #ifndef SVX_LIGHT
-    rOutliner.SetCalcFieldValueHdl(LINK(SFX_APP(), SdModule, CalcFieldValueHdl));
+    rOutliner.SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
 #endif // !SVX_LIGHT
 
 #ifndef SVX_LIGHT
@@ -439,7 +439,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
 #ifndef SVX_LIGHT
-    pHitTestOutliner->SetCalcFieldValueHdl( LINK(SFX_APP(), SdModule, CalcFieldValueHdl) );
+    pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
     try
     {
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
