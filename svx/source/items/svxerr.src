@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:12:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "µ¿ÀÇ¾î »çÀü ½ÇÇà½Ã $(ERR)";
         Text[ turkish ] = "Eşanlamlılar kullanımı sırasında $(ERR).";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al ejecutar el diccionario de sinónimos.";
     };
     String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
     {
@@ -122,6 +123,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "¸ÂÃã¹ı °Ë»ç ½ÇÇà½Ã $(ERR)";
         Text[ turkish ] = "Yazım denetimi sırasında $(ERR).";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al ejecutar la revisión ortográfica.";
     };
     String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
     {
@@ -150,6 +152,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "ÇÏÀÌÇÂ ½ÇÇà½Ã $(ERR)";
         Text[ turkish ] = "Heceleme yardımını yürütme sırasında $(ERR).";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al ejecutar la separación silábica.";
     };
     String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
     {
@@ -178,6 +181,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "»çÀü ÀÛ¼º½Ã $(ERR)";
         Text[ turkish ] = "Sözlük oluşturma sırasında $(ERR).";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al crear un diccionario.";
     };
     String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
     {
@@ -204,6 +208,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "¹è°æ ¼Ó¼º ¼³Á¤½Ã $(ERR)";
         Text[ turkish ] = "Artalan özniteliklerinin tanımlanması sırasında $(ERR) .";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al definir un atributo de fondo.";
     };
     String ERRCTX_SVX_IMPORT_GRAPHIC&ERRCODE_RES_MASK
     {
@@ -230,6 +235,7 @@ Resource RID_SVXERRCTX
         Text[ korean ] = "±×·¡ÇÈ ·Îµå½Ã $(ERR)";
         Text[ turkish ] = "Grafik yükleme sırasında $(ERR).";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ERR) al cargar una imagen.";
     };
 };
  // Error-Code ------------------------------------------------------------
@@ -262,6 +268,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ ´ëÇÑ µ¿ÀÇ¾î »çÀüÀ» ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ÇÑ °ÍÀ» °Ë»çÇÑ ´ÙÀ½ ÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Ayarlanan dile ilişkin eşanlamlılar mevcut değil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No hay ningún diccionario de sinónimos disponible para el idioma seleccionado.\nExamine por favor su instalación e instale en caso dado el idioma deseado.";
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
@@ -290,6 +297,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "$(ARG1)À»(¸¦) ¸ÂÃã¹ı °Ë»ç¿¡ ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n »ç¿ëÀÚÀÇ ¼³Ä¡¸¦ Á¡°ËÇÑ ´ÙÀ½, ÇÊ¿ä½Ã ¿ä±¸µÇ´Â  ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "$(ARG1) no disponible para la revisión ortográfica.\n Examine por favor su instalación e instale en caso dado el idioma deseado.";
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -318,6 +326,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "¸ÂÃã¹ı °Ë»ç¸¦ ÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Yazım denetimi işlevi kullanılamıyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La revisión ortográfica no está disponible.";
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -346,6 +355,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "ÇÏÀÌÇÂÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Heceleme yardımı mevcut değil.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La ayuda para la separación silábica no está disponible.";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -374,6 +384,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À»(¸¦) ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Özel sözlük $(ARG1) okunamıyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible leer el diccionario personal $(ARG1).";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
     {
@@ -402,6 +413,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À»(¸¦) ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Özel sözlük $(ARG1) oluşturulamıyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede crear el diccionario personal $(ARG1).";
     };
     String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -428,6 +440,7 @@ Resource RID_SVXERRCODE
         Text[ korean ] = "±×·¡ÇÈ$(ARG1)À»(¸¦) Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Grafik $(ARG1) bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo encontrar la imagen $(ARG1).";
     };
     String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
     {
@@ -451,6 +464,7 @@ Resource RID_SVXERRCODE
         TEXT[ chinese_traditional ] = "µLªk¸ü¤J¤@­Ó©|¥¼³sµ²ªº¹Ï§Î";
         TEXT[ arabic ] = "ÊÚĞÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
         TEXT[ turkish ] = "Bağlantı oluşturulmamış bir grafik yüklenemedi";
+        TEXT[ catalan ] = "No se pudo cargar una imagen no vinculada";
     };
     String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
     {
@@ -474,6 +488,7 @@ Resource RID_SVXERRCODE
         TEXT[ chinese_traditional ] = "¨S¦³¿ï¾Ü¤@­Ó»y¨¥¡C";
         TEXT[ arabic ] = "áÇ ÊæÌÏ áÛÉ Úáì ÇáßÇÆä ÇáãõÍÏÏ.";
         TEXT[ turkish ] = "Seçilen sözcük için dil belirlenmedi.";
+        TEXT[ catalan ] = "No hay idioma determinado para la entrada seleccionada";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -498,6 +513,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yüklenemedi.";
+        Text[ catalan ] = "No se cargó la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -521,6 +537,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¼g¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "áã íÊã ßÊÇÈÉ ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yazılamadı.";
+        Text[ catalan ] = "No se pudo escribir la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -544,6 +561,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±¨î¶µ®Éµo¥Í¿ù»~¡CµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öğeleri okunurken bir hata oluştu. Form düzeyi yüklenemedi.";
+        Text[ catalan ] = "Ha ocurrido un error al leer los controles de formulario. No se cargó la capa de formulario.";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -567,6 +585,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_traditional ] = "¦b¼g¤Jªí³æ±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¨S¦³Àx¦sªí³æ¼h¦¸¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÍİÙ ØÈŞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öğeleri yazılırken bir hata oluştu. Form düzeyi kaydedilemedi.";
+        Text[ catalan ] = "Ha ocurrido un error al escribir los controles de formulario. No se guardó la capa de formulario.";
     };
     String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -590,6 +609,7 @@ Resource RID_SVXERRCODE
         Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø½s¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
         Text[ turkish ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
+        Text[ catalan ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
     };
 
     String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
@@ -616,6 +636,7 @@ Resource RID_SVXERRCODE
         TEXT[ chinese_traditional ] = "¤å¥óªº Basic ½X©Ò¦³ÅÜ§ó¤w¸g¬y¥¢¡C¤w¸gÀx¦s·½ VBA ¥¨¶°¡C";
         TEXT[ turkish ] = "Basic Code belgesindeki tüm değişiklikler kaybolacak. Bunun yerine orjinal VBA Macrocode kaydedilecek.";
         TEXT[ arabic ] = "Óæİ ÊÖíÚ ßÇİÉ ÇáÊÚÏíáÇÊ ÇáÊí Êã ÅÏÎÇáåÇ Úáì  Basic Code ÇáãÓÊäÏ¡ æÓæİ íÊã ÍİÙ VBA Macro Code ÈÏáÇğ ãäåÇ.";
+        TEXT[ catalan ] = "Se perderán todas las modificaciones del Basic Code del documento. En su lugar se guardará el código macro VBA original.";
     };
 
     String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
@@ -640,6 +661,7 @@ Resource RID_SVXERRCODE
         TEXT[ chinese_traditional ] = "¤å¥ó§t¦³ªº·½ VBA basic ½X¤£·|³QÀx¦s¡C";
         TEXT[ turkish ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
         TEXT[ arabic ] = "áä íÊã ÍİÙ ÇáÜ  VBA Basic CodeÇáÃÕáí ÇáãæÌæÏ İí ÇáãÓÊäÏ.";
+        TEXT[ catalan ] = "No se guardará el Basic Code VBA incluido en el documento.";
     };
 };
  // ********************************************************************** EOF
