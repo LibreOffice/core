@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:36:58 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4219,6 +4219,31 @@ SfxVoidItem MergeCells FID_MERGE_ON
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ToggleMergeCells FID_MERGE_TOGGLE
+(SfxBoolItem MoveContents FID_MERGE_TOGGLE)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxBoolItem Mirror SID_OBJECT_MIRROR
 ()
 [
@@ -4859,6 +4884,33 @@ SfxVoidItem OriginalSize SID_ORIGINALSIZE
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem NormalViewMode FID_NORMALVIEWMODE
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
 ]
 
 //--------------------------------------------------------------------------
