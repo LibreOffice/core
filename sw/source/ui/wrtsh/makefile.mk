@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-10-25 12:06:30 $
+#   last change: $Author: vg $ $Date: 2003-04-17 16:04:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,6 @@ TARGET=wrtsh
 
 AUTOSEG=true
 
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
 # --- Settings -----------------------------------------------------
 
