@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Scripting.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:50:20 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,16 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>DF</author>
-		<desc xml:lang="en-US">Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
+		<desc >Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
 	</info>
 	<templates>
 		<group oor:name="RuntimeNode">
 			<info>
-				<desc xml:lang="en-US">Specifies the runtimes available to the Scriptying Framework.</desc>
-				<desc xml:lang="zh-CN">Specifies the runtimes available to the Scriptying Framework.</desc>
+				<desc>Specifies the runtimes available to the Scriptying Framework.</desc>
 			</info>
 			<prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
 				<info>
-					<desc xml:lang="en-US">Lists the file extensions that are recognized by this runtime.</desc>
-					<desc xml:lang="zh-CN">Lists the file extensions that are recognized by this runtime.</desc>
+					<desc>Lists the file extensions that are recognized by this runtime.</desc>
 				</info>
 			</prop>
 		</group>
@@ -81,26 +79,22 @@
 	<component>
 		<set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
 			<info>
-				<desc xml:lang="en-US">Lists the registered Scripting Framework runtimes.</desc>
-				<desc xml:lang="zh-CN">Lists the registered Scripting Framework runtimes.</desc>
+				<desc>Lists the registered Scripting Framework runtimes.</desc>
 			</info>
 		</set>
 		<group oor:name="ScriptDisplaySettings">
 			<info>
-				<desc xml:lang="en-US"> Specifies display settings for assignment dialogs </desc>
-				<desc xml:lang="zh-CN"> Specifies display settings for assignment dialogs </desc>
+				<desc> Specifies display settings for assignment dialogs </desc>
 			</info>
 			<prop oor:name="ShowBasic" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">Show Basic scripts in assignment dialogs</desc>
-					<desc xml:lang="zh-CN">Show Basic scripts in assignment dialogs</desc>
+					<desc>Show Basic scripts in assignment dialogs</desc>
 				</info>
 				<value>false</value>
 			</prop>
 			<prop oor:name="ShowSF" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">Show Scripting Framework scripts in assignment dialogs</desc>
-					<desc xml:lang="zh-CN">Show Scripting Framework scripts in assignment dialogs</desc>
+					<desc>Show Scripting Framework scripts in assignment dialogs</desc>
 				</info>
 				<value>true</value>
 			</prop>
