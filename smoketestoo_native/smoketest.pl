@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-20 09:43:53 $
+#   last change: $Author: pjunck $ $Date: 2004-11-02 10:20:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # smoketest - do the smoketest
 #
 
+use File::Basename;
 use File::Path;
 use File::Copy;
 use Getopt::Long;
@@ -82,6 +83,7 @@ $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
 $is_do_statistics = 0;
+$is_do_deinstall = 1;
 $is_oo = 1;
 
 $gui = $ENV{GUI};
@@ -93,6 +95,7 @@ $userinstalldir = "Office";
 $cygwin = "cygwin";
 $prefered_lang = "en-US";
 $global_instset_mask = "";
+$smoketest_install = $ENV{SMOKETESTINSTALLSET};
 
 if (!defined($gui)) {
     print "The workstamp is missing. Please use setsolar\n";
@@ -132,6 +135,7 @@ if ($gui eq "WNT") {
     $bootstrapiniTemp = $bootstrapini . "_";
 }
 elsif ($gui eq "UNX") {
+    $is_do_deinstall = 0;
     $PathSeparator = '/';
     $NewPathSeparator = ':';
     $dos = "";
@@ -205,7 +209,9 @@ else {
             'Error in setup log',
             'installationsset is not complete',
             'can not copy all basic scripts',
-            'can not patch bottstrapini'
+            'can not patch bottstrapini',
+            'msiexec failed. Maybe you have got an installed version',
+            'deinstallation is incomplete'
 );
 
 my $show_NoMessage = 0;
@@ -220,6 +226,8 @@ my $error_setup_log = 7;
 my $error_installset = 8;
 my $error_copyBasic = 9;
 my $error_patchBootstrap = 10;
+my $error_msiexec = 11;
+my $error_deinst = 12;
 
 my $command_normal = 0;
 my $command_withoutErrorcheck = 1;
@@ -272,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.5 $ ';
+$id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -282,6 +290,9 @@ print "$script_name -- version: $script_rev\n";
 #### main ####
 
 if (!$is_debug) {
+    if ($is_do_deinstall) {
+        deinstallInstallation ($installpath);
+    }
     removeOldInstallation($installpath);
     save_sversion ($SVERSION_INI);
 }
@@ -295,6 +306,9 @@ doTest();
 if (!$is_debug) {
     restore_sversion ($SVERSION_INI);
     if ($is_remove_at_end) {
+        if ($is_do_deinstall) {
+            deinstallInstallation ($installpath);
+        }
         removeInstallation($installpath);
     }
     else {
@@ -354,7 +368,7 @@ sub findSubDir {
     my ($DirArray_ref) = @_;
     my (@sortedArray, $dir, $instdir);
     @sortedArray = sort langsort @{$DirArray_ref};
-    print "Langs: @sortedArray\n";
+    print "Langs: @sortedArray\n" if $is_command_infos;
     foreach $dir (@sortedArray) {
         if ($dir =~ /log$/) {
             next;
@@ -500,8 +514,10 @@ sub doInstall {
             if (!$is_oo) {
                 $Command .= " TRANSFORMS=$DATA" . "staroffice.mst";
             }
-            execute_Command ($Command, $error_setup, $show_Message,  $command_normal);
+            execute_Command ($Command, $error_msiexec, $show_Message,  $command_normal);
         }
+        $Command = "$COPY_FILE \"$installsetpath" . "setup.ini" . "\" \"$dest_installdir\"";
+        execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
         @DirArray = ();
         getSubDirsFullPath ($dest_installdir, \@DirArray);
         if ($#DirArray == 0) {
@@ -562,6 +578,7 @@ sub doInstall {
             createPath ($optdir, $error_setup);
             createPath ($dest_installdir . "usr$PathSeparator" . "bin", $error_setup);
             getSubDirs ("$installsetpath", \@DirArray);
+            my $ld_preload = $ENV{LD_PRELOAD};
             $ENV{LD_PRELOAD} = $solarisdata . "getuid.so";
             if ($#DirArray == -1) {
                             print_error ("Installationset in $installsetpath is incomplete", 2);
@@ -578,6 +595,7 @@ sub doInstall {
                 $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
+            $ENV{LD_PRELOAD} = $ld_preload;
         }
         @DirArray = ();
         getSubDirsFullPath ($optdir, \@DirArray);
@@ -611,7 +629,14 @@ sub getInstset {
     my (@DirArray, $InstDir, $RootDir, $TestDir1, $TestDir2);
     print "get Instset\n" if $is_debug;
     $NEWINSTSET = "";
-    if (($ENV{UPDATER} eq "YES") and !defined($ENV{CWS_WORK_STAMP})) {
+    if (defined($smoketest_install)) {
+        my $mask = "\\" . $PathSeparator . "\$";
+        $smoketest_install =~ s/$mask//;
+        my ($sufix);
+        ($NEWINSTSET, $INSTSET, $sufix) = fileparse ($smoketest_install);
+        return ($NEWINSTSET, $INSTSET);
+    }
+    if (defined ($ENV{UPDATER}) and ($ENV{UPDATER} eq "YES") and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
     }
     else {
@@ -633,7 +658,8 @@ sub getInstset {
             }
             getSubDirs ("$InstDir", \@DirArray);
             $INSTSET = findSubDir (\@DirArray);
-            print "Lang-Sel: $INSTSET\n";
+            print "Lang-Sel: $INSTSET\n" if $is_command_infos;
+;
             if ($INSTSET ne "")  {
                 $NEWINSTSET = $INSTSET;
                 $INSTSET = $InstDir;
@@ -663,7 +689,7 @@ sub get_milestone {
         $updext = "";
     }
 
-    $path = "$ENV{SOLAR_SOURCE_ROOT}$PathSeparator$ws$PathSeparator$pf$PathSeparator" . "inc$updext$PathSeparator$upd" . "minor.mk";
+    $path = "$ENV{SOLARVER}$PathSeparator$pf$PathSeparator" . "inc$updext$PathSeparator$upd" . "minor.mk";
     print "$path\n" if $is_debug;
     if ( !open(MINORMK,$path) ) {
         print "FATAL: can't open $path\n";
@@ -681,6 +707,30 @@ sub get_milestone {
         close(MINORMK);
     }
     return ($milestone);
+}
+
+sub get_productcode {
+    my ( $installpath ) = @_;
+    my ($path, $productcode);
+    $productcode = "";
+    $path = "$installpath" . "setup.ini";
+    print "$path\n" if $is_debug;
+    if ( !open(SETUP,$path) ) {
+        print "FATAL: can't open $path\n" if ($is_command_infos);
+        return ($productcode);
+    }
+
+    if (!eof(SETUP)) {
+        while (<SETUP>) {
+            chomp;
+            if ( /productcode=(\{[\d\w-]+\})/ ) {
+                $productcode = $1;
+            }
+        }
+
+        close(SETUP);
+    }
+    return ($productcode);
 }
 
 sub InstsetSort {
@@ -879,6 +929,23 @@ sub removeInstallation  {
     }
 }
 
+sub deinstallInstallation  {
+    my ($installpath) = @_;
+    my ($productcode);
+    if ($gui eq "UNX") { return; }
+    if (!$is_debug) {
+        if (-e $installpath) {
+            $productcode = get_productcode ($installpath);
+            print "Productcode: $productcode\n" if ($is_command_infos);
+            if ($productcode ne "") {
+                print "deinstalling $productcode ...\n";
+                $Command = "msiexec.exe -x $productcode -qn";
+                execute_Command ($Command, $error_deinst, $show_Message, $command_withoutErrorcheck);
+            }
+        }
+    }
+}
+
 sub setInstallpath {
     my ($infile, $outfile, $installpath) = @_;
     if (-e $outfile) {
@@ -979,6 +1046,9 @@ sub do_exit
     restore_sversion ($SVERSION_INI);
     }
     if ($is_remove_on_error) {
+    if ($is_do_deinstall) {
+        deinstallInstallation ($installpath);
+    }
     removeInstallation($installpath);
     }
     else {
