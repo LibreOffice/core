@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-03-13 14:43:02 $
+#   last change: $Author: mtg $ $Date: 2001-05-11 12:57:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,18 +79,6 @@ PROJECTPCHSOURCE=..$/ui_1st$/ui_pch
 
 # --- Files --------------------------------------------------------
 
-
-CXXFILES = \
-        unodefaults.cxx  \
-        unodispatch.cxx  \
-        unotxdoc.cxx  \
-        unoatxt.cxx  \
-        unomod.cxx  \
-        unotxvw.cxx \
-        dlelstnr.cxx \
-        unofreg.cxx
-
-
 SLOFILES =  \
         $(SLO)$/unodefaults.obj\
         $(SLO)$/unodispatch.obj\
@@ -99,7 +87,8 @@ SLOFILES =  \
         $(SLO)$/unomod.obj \
         $(SLO)$/unotxvw.obj \
         $(SLO)$/dlelstnr.obj \
-        $(SLO)$/unofreg.obj
+        $(SLO)$/unofreg.obj \
+        $(SLO)$/SwXDocumentSettings.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/unodispatch.obj\
