@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:00:44 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,29 +126,6 @@ namespace ucb_impl { struct ContentImplHelper_Impl; }
 
 namespace ucb
 {
-
-#if 0
-
-//=========================================================================
-
-struct PropertyInfoTableEntry
-{
-    const sal_Char*                     pName;
-    sal_Int32                           nHandle;
-    const ::com::sun::star::uno::Type*  pType;
-    sal_Int16                           nAttributes;
-};
-
-//=========================================================================
-
-struct CommandInfoTableEntry
-{
-    const sal_Char*                     pName;
-    sal_Int32                           nHandle;
-    const ::com::sun::star::uno::Type*  pArgType;
-};
-
-#endif
 
 //=========================================================================
 
