@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: sb $ $Date: 2000-10-10 13:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
 inline bool isWLetter(CharClass const & rCharClass,
                       UniString const & rStr, xub_StrLen nPos)
 {
-    if (rCharClass.isAlphaNumeric(rStr, nPos))
+    if (rCharClass.isLetterNumeric(rStr, nPos))
         return true;
     sal_Unicode c = rStr.GetChar(nPos);
     return c == '$' || c == '%' || c == '&' || c == '-' || c == '/'
@@ -340,7 +340,7 @@ inline bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
                 return true;
         }
     }
-    else if (rCharClass.isAlphaNumeric(rStr, *pPos))
+    else if (rCharClass.isLetterNumeric(rStr, *pPos))
     {
         *pEnd = *pPos = nextChar(rStr, *pPos);
         return true;
