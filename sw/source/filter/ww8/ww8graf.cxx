@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-14 12:45:55 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3044,18 +3044,8 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     }
 
     String aObjectName( rpObject->GetName() );
-    if( OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()) )
-    {
-        SvInPlaceObjectRef xIPRef(((SdrOle2Obj*)rpObject)->GetObjRef());
-
-        // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll, was die UI
-        // derzeit (27.1.99) noch nicht kann khz.
-        pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &rFlySet );
-        //JP 10.4.2001: Bug 85614 - don't remove in DTOR the object from
-        //our persist
-        SvInPlaceObjectRef xEmpty;
-        ((SdrOle2Obj*)rpObject)->SetObjRef( xEmpty );
-    }
+    if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
+        pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet);
     else
     {
         const Graphic& rGraph = ((SdrGrafObj*)rpObject)->GetGraphic();
