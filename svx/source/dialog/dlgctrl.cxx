@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:18:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2087,7 +2087,7 @@ void SvxXLinePreview::Paint( const Rectangle& rRect )
     sdr::contact::DisplayInfo aDisplayInfo;
     SdrPaintInfoRec aInfoRec;
 
-    aDisplayInfo.SetExtendedOutputDevice((ExtOutputDevice*)mpXOutDev);
+    aDisplayInfo.SetExtendedOutputDevice((XOutputDevice*)mpXOutDev);
     aDisplayInfo.SetPaintInfoRec(&aInfoRec);
     aDisplayInfo.SetOutputDevice(mpXOutDev->GetOutDev());
 
