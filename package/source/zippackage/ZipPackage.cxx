@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-06 12:07:08 $
+ *  last change: $Author: mtg $ $Date: 2001-12-11 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,8 +941,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
     }
-    else if (! aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SegmentSize") ) )
-        throw UnknownPropertyException();
+    throw UnknownPropertyException();
 }
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -958,13 +957,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         aAny <<= bHasEncryptedEntries;
         return aAny;
     }
-    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "SegmentSize" ) ) )
-    {
-        aAny <<= static_cast < sal_Int32 > ( 0 );
-        return aAny;
-    }
-    else
-        throw UnknownPropertyException();
+    throw UnknownPropertyException();
 }
 void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
