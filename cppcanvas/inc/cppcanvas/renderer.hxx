@@ -2,9 +2,9 @@
  *
  *  $RCSfile: renderer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:58:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,27 @@
 #include <sal/types.h>
 #endif
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
 #endif
 
+#ifndef _COMPHELPER_OPTIONALVALUE_HXX
+#include <comphelper/optionalvalue.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 #ifndef _CPPCANVAS_CANVASGRAPHIC_HXX
 #include <cppcanvas/canvasgraphic.hxx>
+#endif
+#ifndef _CPPCANVAS_COLOR_HXX
+#include <cppcanvas/color.hxx>
 #endif
 
 
@@ -86,10 +101,7 @@ namespace cppcanvas
         /** Render subset of metafile to given canvas
 
             This method renders the given subset of the content to the
-            given canvas. Previously cached data is used, if the
-            canvases are identical. Otherwise, the equivalent of a
-            flush() followed by a prefetch() with the given canvas is
-            performed.
+            associated canvas.
 
             @param nStartIndex
             The index of the first action to be rendered (the indices
@@ -107,6 +119,41 @@ namespace cppcanvas
         virtual bool drawSubset( int    nStartIndex,
                                  int    nEndIndex ) const = 0;
 
+        /** Parameters for the Renderer
+         */
+        struct Parameters
+        {
+            /// Optionally forces the fill color attribute for all actions
+            ::comphelper::OptionalValue< Color::IntSRGBA >          maFillColor;
+
+            /// Optionally forces the line color attribute for all actions
+            ::comphelper::OptionalValue< Color::IntSRGBA >          maLineColor;
+
+            /// Optionally forces the text color attribute for all actions
+            ::comphelper::OptionalValue< Color::IntSRGBA >          maTextColor;
+
+            /// Optionally forces the given fontname for all text actions
+            ::comphelper::OptionalValue< ::rtl::OUString >          maFontName;
+
+            /** Optionally transforms all text output actions with the
+                given matrix (in addition to the overall canvas
+                transformation).
+
+                Note that the matrix given here is applied to the unit
+                rect coordinate system, i.e. the metafile is assumed
+                to be contained in the unit rect.
+             */
+            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >  maTextTransformation;
+
+            /// Optionally forces the given font weight for all text actions
+            ::comphelper::OptionalValue< sal_Int8 >                 maFontWeight;
+
+            /// Optionally forces the given font letter form (italics etc.) for all text actions
+            ::comphelper::OptionalValue< sal_Int8 >                 maFontLetterForm;
+
+            /// Optionally forces underlining for all text actions
+            ::comphelper::OptionalValue< bool >                     maFontUnderline;
+        };
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
