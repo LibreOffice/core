@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-18 07:05:37 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 07:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,8 +844,6 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aForwardErrorMessg.SearchAndReplaceAscii( "%PLACEHOLDER%", aRBForwardUpdate.GetText() );
 
     ChangeState( S_NoUpdate );
-
-    SetExchangeSupport( TRUE ); // not used for this tabpage BUT necessary if DeactivatePage() should be called in SfxTabDialog::PrepareLeaveCurrentPage()!
 }
 
 
