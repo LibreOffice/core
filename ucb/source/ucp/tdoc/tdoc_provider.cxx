@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:39:59 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,13 +319,54 @@ ContentProvider::queryStorage( const rtl::OUString & rUri,
         }
         catch ( io::IOException const & )
         {
-            OSL_ENSURE( false, "Caught IOException!" );
+            // Okay to happen, for instance when the storage does not exist.
+            //OSL_ENSURE( false, "Caught IOException!" );
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
             OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
         }
     }
+    return uno::Reference< embed::XStorage >();
+}
+
+//=========================================================================
+uno::Reference< embed::XStorage >
+ContentProvider::queryStorageClone( const rtl::OUString & rUri ) const
+{
+    if ( m_xStgElemFac.is() )
+    {
+        try
+        {
+            Uri aUri( rUri );
+            uno::Reference< embed::XStorage > xParentStorage
+                = m_xStgElemFac->createStorage( aUri.getParentUri(), READ );
+            uno::Reference< embed::XStorage > xStorage
+                = m_xStgElemFac->createTemporaryStorage();
+
+            xParentStorage->copyStorageElementLastCommitTo(
+                                aUri.getDecodedName(), xStorage );
+            return xStorage;
+        }
+        catch ( embed::InvalidStorageException const & )
+        {
+            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        }
+        catch ( lang::IllegalArgumentException const & )
+        {
+            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        }
+        catch ( io::IOException const & )
+        {
+            // Okay to happen, for instance when the storage does not exist.
+            //OSL_ENSURE( false, "Caught IOException!" );
+        }
+        catch ( embed::StorageWrappedTargetException const & )
+        {
+            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+        }
+    }
+
     return uno::Reference< embed::XStorage >();
 }
 
@@ -371,14 +412,16 @@ ContentProvider::queryInputStream( const rtl::OUString & rUri,
 //=========================================================================
 uno::Reference< io::XOutputStream >
 ContentProvider::queryOutputStream( const rtl::OUString & rUri,
-                                    const rtl::OUString & rPassword ) const
+                                    const rtl::OUString & rPassword,
+                                    bool bTruncate ) const
     throw ( packages::WrongPasswordException )
 {
     if ( m_xStgElemFac.is() )
     {
         try
         {
-            return m_xStgElemFac->createOutputStream( rUri, rPassword );
+            return
+                m_xStgElemFac->createOutputStream( rUri, rPassword, bTruncate );
         }
         catch ( embed::InvalidStorageException const & )
         {
@@ -390,7 +433,8 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
         }
         catch ( io::IOException const & )
         {
-            OSL_ENSURE( false, "Caught IOException!" );
+            // Okay to happen, for instance when the storage does not exist.
+            //OSL_ENSURE( false, "Caught IOException!" );
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
@@ -405,6 +449,47 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
 */
     }
     return uno::Reference< io::XOutputStream >();
+}
+
+//=========================================================================
+uno::Reference< io::XStream >
+ContentProvider::queryStream( const rtl::OUString & rUri,
+                              const rtl::OUString & rPassword,
+                              bool bTruncate ) const
+    throw ( packages::WrongPasswordException )
+{
+    if ( m_xStgElemFac.is() )
+    {
+        try
+        {
+            return m_xStgElemFac->createStream( rUri, rPassword, bTruncate );
+        }
+        catch ( embed::InvalidStorageException const & )
+        {
+            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        }
+        catch ( lang::IllegalArgumentException const & )
+        {
+            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        }
+        catch ( io::IOException const & )
+        {
+            // Okay to happen, for instance when the storage does not exist.
+            //OSL_ENSURE( false, "Caught IOException!" );
+        }
+        catch ( embed::StorageWrappedTargetException const & )
+        {
+            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+        }
+/*
+        catch ( packages::WrongPasswordException const & )
+        {
+            // the key provided is wrong; rethrow; to be handled by caller.
+            throw;
+        }
+*/
+    }
+    return uno::Reference< io::XStream >();
 }
 
 //=========================================================================
@@ -441,6 +526,24 @@ bool ContentProvider::queryNamesOfChildren(
                     if ( xNA.is() )
                     {
                         rNames = xNA->getElementNames();
+#if 1
+                        // Special folder that is always kept open by SFX
+                        // in read-write mode => never accessible
+                        for ( sal_Int32 n = 0; n < rNames.getLength(); ++n )
+                        {
+                            if ( rNames[ n ].equalsAscii( "Configurations2" ) )
+                            {
+                                for ( sal_Int32 nn = n;
+                                      nn < rNames.getLength() - 1;
+                                      ++nn )
+                                {
+                                    rNames[ nn ] = rNames[ nn + 1 ];
+                                }
+                                rNames.realloc( rNames.getLength() - 1 );
+                                break;
+                            }
+                        }
+#endif
                         return true;
                     }
                 }
@@ -455,7 +558,8 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( io::IOException const & )
             {
-                OSL_ENSURE( false, "Caught IOException!" );
+                // Okay to happen, for instance when the storage does not exist.
+                //OSL_ENSURE( false, "Caught IOException!" );
             }
             catch ( embed::StorageWrappedTargetException const & )
             {
