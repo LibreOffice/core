@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-26 12:30:42 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,9 @@ BOOL SfxPopupWindow::Close()
 
 void SfxPopupWindow::PopupModeEnd()
 {
+    //! to allow PopupModeEndHdl to be called
+    FloatingWindow::PopupModeEnd();
+
     if ( IsVisible() )
     {
         // wurde abgerissen
