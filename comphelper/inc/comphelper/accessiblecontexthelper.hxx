@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -128,8 +128,8 @@ namespace comphelper
     //=====================================================================
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                                    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::accessibility::XAccessibleContext,
+                                                    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                                 >   OAccessibleContextHelper_Base;
 
     /** helper class for implementing an AccessibleContext
@@ -186,11 +186,11 @@ namespace comphelper
             XAccessible, we can compare it with all the children, instead of asking all children for their
             context and comparing this context with ourself.</p>
         */
-        void    lateInit( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxAccessible );
+        void    lateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccessible );
 
         /** retrieves the creator previously set with <method>lateInit</method>
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 getAccessibleCreator( ) const;
 
         /** forgets the reference to the external lock, if present.
@@ -204,18 +204,18 @@ namespace comphelper
 
     public:
         // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleContext - still waiting to be overwritten
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) = 0;
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
         virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
         // XAccessibleContext - default implementations
         /** default implementation for retrieving the index of this object within the parent
@@ -227,7 +227,7 @@ namespace comphelper
             <p>This basic implementation returns the locale of the parent context,
             as retrieved via getAccessibleParent()->getAccessibleContext.</p>
         */
-        virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
     public:
         // helper struct for granting selective access rights
@@ -302,7 +302,7 @@ namespace comphelper
 
         /** shortcut for retrieving the context of the parent (returned by getAccessibleParent)
         */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     implGetParentContext() SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
         // access to the base class' broadcast helper/mutex
