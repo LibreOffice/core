@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 09:19:18 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,10 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
             if (rCode.GetCode() != KEY_RETURN)
             {
                 if(m_pTabWin)
+                {
                     m_pTabWin->KeyInput(*pKeyEvent);
+                    bHandled = TRUE;
+                }
                 break;
             }
 
