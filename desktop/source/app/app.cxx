@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:29:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
+#include "javainteractionhandler.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATION_HPP_
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
@@ -1647,6 +1648,11 @@ void Desktop::Main()
 
     try
     {
+        // The JavaContext contains an interaction handler which is used when
+        // the creation of a Java Virtual Machine fails
+        com::sun::star::uno::ContextLayer layer(
+            new JavaContext( com::sun::star::uno::getCurrentContext() ) );
+
         Execute();
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
