@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "~Druckbereich" ;
         Text [ ENGLISH ] = "~Print area" ;
         Text [ NORWEGIAN ] = "Print area" ;
-        Text [ DANISH ] = "~Udskriftsomr�de" ;
+        Text [ DANISH ] = "Udskriftsomr�de" ;
         Text [ ENGLISH_US ] = "Print range" ;
         Text [ SPANISH ] = "�rea de impresi�n" ;
         Text [ FINNISH ] = "Tulostusalue" ;
@@ -124,6 +124,8 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "छपाई फैलाव";
         Text[ slovak ] = "Tlač oblasti";
+        Text[ hungarian ] = "Nyomtatási tartomány";
+        Text[ slovenian ] = "Obseg tiskanja";
     };
     ListBox LB_PRINTAREA
     {
@@ -301,6 +303,18 @@ ModelessDialog RID_SCDLG_AREAS
         < "- užívateľom definované -" ; Default ; > ;
         < "- výber -" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "- semmi -" ; Default ; > ;
+        < "- egyéni -" ; Default ; > ;
+        < "- kijelölés -" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "- brez -" ; Default ; > ;
+        < "- uporabniško določeno -" ; Default ; > ;
+        < "- Izbor -" ; Default ; > ;
+    };
     };
     Edit ED_PRINTAREA
     {
@@ -340,6 +354,8 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_REPEATROW
     {
@@ -348,7 +364,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "Wiederholungs~zeile" ;
         Text [ ENGLISH ] = "~Row to repeat at top" ;
         Text [ NORWEGIAN ] = "Row to repeat at top" ;
-        Text [ DANISH ] = "Gentagelses~r�kke" ;
+        Text [ DANISH ] = "R�kker der skal gentages" ;
         Text [ ENGLISH_US ] = "Rows to repeat" ;
         Text [ SPANISH ] = "Fil~a que repetir" ;
         Text [ FINNISH ] = "Toistettavat rivit" ;
@@ -373,6 +389,8 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ hebrew ] = "Wiederholungs~zeile";
         Text[ hindi ] = "दुहरानेवाला पंक्तियाँ";
         Text[ slovak ] = "Riadky na opakovanie";
+        Text[ hungarian ] = "Ismétlendő sorok";
+        Text[ slovenian ] = "Vrstice, ki naj se ponovijo";
     };
     ListBox LB_REPEATROW
     {
@@ -525,6 +543,16 @@ ModelessDialog RID_SCDLG_AREAS
          < "- nič -" ; Default ; > ;
         < "- užívateľom definované -" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "- semmi -" ; Default ; > ;
+        < "- egyéni -" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "- brez -" ; Default ; > ;
+        < "- uporabniško določeno -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATROW
     {
@@ -564,6 +592,8 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_REPEATCOL
     {
@@ -572,7 +602,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text = "Wiederholungs~spalte" ;
         Text [ ENGLISH ] = "~Columns to repeat at left" ;
         Text [ NORWEGIAN ] = "Columns to repeat at left" ;
-        Text [ DANISH ] = "Gentagelses~kolonne" ;
+        Text [ DANISH ] = "Kolonner der skal gentages" ;
         Text [ ENGLISH_US ] = "Columns to repeat" ;
         Text [ SPANISH ] = "~Columna que repetir" ;
         Text [ FINNISH ] = "Toista sarake" ;
@@ -597,6 +627,8 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ hebrew ] = "Wiederholungs~spalte";
         Text[ hindi ] = "दुहरानेवाला स्तंभें";
         Text[ slovak ] = "Stĺpce na opakovanie";
+        Text[ hungarian ] = "Ismétlendő oszlopok";
+        Text[ slovenian ] = "Stolpci, ki naj se ponovijo";
     };
     ListBox LB_REPEATCOL
     {
@@ -749,6 +781,16 @@ ModelessDialog RID_SCDLG_AREAS
          < "- nič -" ; Default ; > ;
         < "- užívateľom definované -" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "- semmi -" ; Default ; > ;
+        < "- egyéni -" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "- brez -" ; Default ; > ;
+        < "- uporabniško določeno -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATCOL
     {
@@ -788,6 +830,8 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     Text [ swedish ] = "Redigera utskriftsomr�den" ;
     Text [ danish ] = "Rediger udskriftsomr�de" ;
@@ -809,6 +853,8 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ hebrew ] = "Druckbereiche bearbeiten";
     Text[ hindi ] = "छपाई फैलाव का संपादन";
     Text[ slovak ] = "Upraviť oblasti tlače";
+    Text[ hungarian ] = "Nyomtatási tartományok módosítása";
+    Text[ slovenian ] = "Uredi obsege tiskanja";
 };
 TabPage RID_SCPAGE_TABLE
 {
@@ -828,7 +874,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "Cabe�alhos de linhas e ~colunas" ;
         Text [ portuguese ] = "T�~tulos de colunas & linhas" ;
         Text [ finnish ] = "~Sarake- ja rivitunnukset" ;
-        Text [ danish ] = "R�kke-/kolonneoverskrifter" ;
+        Text [ danish ] = "~Kolonne- og r�kkeoverskrifter" ;
         Text [ french ] = "~En-t�tes de colonnes/lignes" ;
         Text [ swedish ] = "Rad- och kolumnhu~vuden" ;
         Text [ dutch ] = "Kolom- en rij~koppen" ;
@@ -850,6 +896,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Zeilen- & Sp~altenköpfe";
         Text[ hindi ] = "~स्तंभ और पंक्ति शीर्षकें";
         Text[ slovak ] = "Záhlavia stĺp~cov a riadokov";
+        Text[ hungarian ] = "~Oszlop- és sorfejlécek";
+        Text[ slovenian ] = "Glave ~stolpcev in vrstic";
     };
     CheckBox BTN_GRID
     {
@@ -862,7 +910,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Grade" ;
         Text [ portuguese ] = "~Grelha" ;
         Text [ finnish ] = "~Ruudukko" ;
-        Text [ danish ] = "T~abelgitter" ;
+        Text [ danish ] = "~Gitter" ;
         Text [ french ] = "~Grille" ;
         Text [ swedish ] = "Tabell~gitter" ;
         Text [ dutch ] = "Tabellen~raster" ;
@@ -884,6 +932,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Tabellen~gitter";
         Text[ hindi ] = "~जाल";
         Text[ slovak ] = "Mriež~ka";
+        Text[ hungarian ] = "~Rács";
+        Text[ slovenian ] = "~Mreža";
     };
     CheckBox BTN_NOTES
     {
@@ -896,7 +946,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Anota��es" ;
         Text [ portuguese ] = "~Anota��es" ;
         Text [ finnish ] = "H~uomautukset" ;
-        Text [ danish ] = "Noter" ;
+        Text [ danish ] = "~Noter" ;
         Text [ french ] = "Notes" ;
         Text [ swedish ] = "A~nteckningar" ;
         Text [ dutch ] = "~Aantekeningen" ;
@@ -918,6 +968,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "~टिप्पणी";
         Text[ slovak ] = "~Poznámky";
+        Text[ hungarian ] = "~Jegyzetek";
+        Text[ slovenian ] = "~Opombe";
     };
     CheckBox BTN_OBJECTS
     {
@@ -930,7 +982,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Objetos/figuras" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "O~bjektit/grafiikka" ;
-        Text [ danish ] = "Objekter/grafik" ;
+        Text [ danish ] = "~Objekter/grafik" ;
         Text [ french ] = "Objets/Images" ;
         Text [ swedish ] = "O~bjekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeldingen" ;
@@ -952,6 +1004,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "~Objekte/Grafiken";
         Text[ hindi ] = "~वस्तु/सुचित्र";
         Text[ slovak ] = "~Objekty/obrázky";
+        Text[ hungarian ] = "Obj~ektumok/képek";
+        Text[ slovenian ] = "~Predmeti/grafika";
     };
     CheckBox BTN_CHARTS
     {
@@ -964,7 +1018,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Gr�ficos" ;
         Text [ portuguese ] = "~Gr�ficos" ;
         Text [ finnish ] = "Kaav~iot" ;
-        Text [ danish ] = "Diagrammer" ;
+        Text [ danish ] = "Diag~rammer" ;
         Text [ french ] = "~Diagrammes" ;
         Text [ swedish ] = "~Diagram" ;
         Text [ dutch ] = "~Diagrammen" ;
@@ -986,6 +1040,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "~Diagramme";
         Text[ hindi ] = "चा~र्ट";
         Text[ slovak ] = "G~rafy";
+        Text[ hungarian ] = "~Diagramok";
+        Text[ slovenian ] = "G~rafikoni";
     };
     CheckBox BTN_DRAWINGS
     {
@@ -998,7 +1054,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "Objetos de ~desenho" ;
         Text [ portuguese ] = "Objectos de ~desenho" ;
         Text [ finnish ] = "~Piirrosobjektit" ;
-        Text [ danish ] = "T~egneobjekter" ;
+        Text [ danish ] = "~Tegneobjekter" ;
         Text [ french ] = "~Objets de dessin" ;
         Text [ swedish ] = "Ritob~jekt" ;
         Text [ dutch ] = "~Tekenobjecten" ;
@@ -1020,6 +1076,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Zeichenob~jekte";
         Text[ hindi ] = "~रेखाचित्र वस्तु";
         Text[ slovak ] = "Kres~by (obrázky)";
+        Text[ hungarian ] = "Raj~zobjektumok";
+        Text[ slovenian ] = "~Risani predmeti";
     };
     CheckBox BTN_FORMULAS
     {
@@ -1054,6 +1112,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
         Text[ slovak ] = "Vzorc~e";
+        Text[ hungarian ] = "Képle~tek";
+        Text[ slovenian ] = "~Formule";
     };
     CheckBox BTN_NULLVALS
     {
@@ -1066,7 +1126,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Valores zero" ;
         Text [ portuguese ] = "~Valores zero" ;
         Text [ finnish ] = "~Nolla-arvot" ;
-        Text [ danish ] = "Nulv�rdier" ;
+        Text [ danish ] = "N~ulv�rdier" ;
         Text [ french ] = "Valeurs ~z�ro" ;
         Text [ swedish ] = "N~ollv�rden" ;
         Text [ dutch ] = "N~ulwaarden" ;
@@ -1088,6 +1148,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "N~ullwerte";
         Text[ hindi ] = "शून्य मू~ल्य";
         Text[ slovak ] = "N~ulové hodnoty";
+        Text[ hungarian ] = "~Nullértékek";
+        Text[ slovenian ] = "Ničelne vre~dnosti";
     };
     FixedLine FL_PRINT
     {
@@ -1121,6 +1183,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "‮הדפסה‬";
         Text[ hindi ] = "छपाई";
         Text[ slovak ] = "Tlač";
+        Text[ hungarian ] = "Nyomtatás";
+        Text[ slovenian ] = "Natisni";
     };
     RadioButton BTN_TOPDOWN
     {
@@ -1133,7 +1197,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "De ~cima para baixo, depois � direita" ;
         Text [ portuguese ] = "De ~cima para baixo, depois � direita" ;
         Text [ finnish ] = "~Ylh��lt� alas, sitten oikealle" ;
-        Text [ danish ] = "Oppefra og ned, derefter til h�jre" ;
+        Text [ danish ] = "~Oppefra og ned, derefter til h�jre" ;
         Text [ french ] = "~De haut en bas, puis vers la droite" ;
         Text [ swedish ] = "~Uppifr�n och ned, sedan till h�ger" ;
         Text [ dutch ] = "Van ~boven naar beneden, dan naar rechts" ;
@@ -1155,6 +1219,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Von o~ben nach unten, dann nach rechts";
         Text[ hindi ] = "~ऊपर से निचे, और दाहिनी ओर";
         Text[ slovak ] = "Od vrchu nadol, po~tom vpravo";
+        Text[ hungarian ] = "~Fentről lefelé, majd jobbra";
+        Text[ slovenian ] = "Od ~zgoraj navzdol, potem desno";
     };
     RadioButton BTN_LEFTRIGHT
     {
@@ -1190,6 +1256,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Von Lin~ks-nach-rechts, dann nach unten";
         Text[ hindi ] = "बा~याँ ओर से दाहिनी ओर, और नीचे की ओर";
         Text[ slovak ] = "Zľava do prava, potom dol~e";
+        Text[ hungarian ] = "~Balról jobbra, majd le";
+        Text[ slovenian ] = "Od l~eve proti desni, potem dol";
     };
     FixedImage BMP_PAGEDIR
     {
@@ -1249,6 +1317,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Erste Seiten~zahl";
         Text[ hindi ] = "पहिला ~पृष्ठ संख्या";
         Text[ slovak ] = "Číslo ~prvej stránky";
+        Text[ hungarian ] = "Oldalszámozás ~kezdete";
+        Text[ slovenian ] = "Številka prve s~trani";
     };
     NumericField ED_PAGENO
     {
@@ -1294,6 +1364,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "‮סדר הדפסות הדפים‬";
         Text[ hindi ] = "पृष्ठ क्रम";
         Text[ slovak ] = "Usporiadanie stránky";
+        Text[ hungarian ] = "Oldalak sorrendje";
+        Text[ slovenian ] = "Vrstni red strani";
     };
     RadioButton BTN_SCALEALL
     {
@@ -1327,6 +1399,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Ausdruck verk~leinern/vergrößern";
         Text[ hindi ] = "छपाई किया हुआ शीट् को घटाओ/बढ़ाओ";
         Text[ slovak ] = "Zväčšiť/zmenšiť tlač";
+        Text[ hungarian ] = "Nyomtatási kép nagyítása/kicsinyítése";
+        Text[ slovenian ] = "Zmanjšaj/povečaj izpis";
     };
     RadioButton BTN_SCALEPAGENUM
     {
@@ -1360,6 +1434,8 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "Ausdruck auf Seitenzahl an~passen";
         Text[ hindi ] = "~पृष्ठों में छपाई किया हुआ शीट् को योग्य बनाओ";
         Text[ slovak ] = "Prispôsobiť tlač počtu strá~n";
+        Text[ hungarian ] = "Nyo~mtatás illesztése oldalszámhoz";
+        Text[ slovenian ] = "Prilagodi izpis šte~vilu strani";
     };
     MetricField ED_SCALEALL
     {
@@ -1419,8 +1495,11 @@ TabPage RID_SCPAGE_TABLE
         Text[ hebrew ] = "‮התאמת גודל‬";
         Text[ hindi ] = "स्केल";
         Text[ slovak ] = "Pravítko";
+        Text[ hungarian ] = "Méretezés";
+        Text[ slovenian ] = "Merilo";
     };
 };
+
 
 
 
