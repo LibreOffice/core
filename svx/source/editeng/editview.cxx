@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:29:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,14 +889,6 @@ void EditView::CompleteAutoCorrect()
     }
 }
 
-EESpellState EditView::StartSpeller( LanguageType eLang, sal_Bool bMultipleDoc )
-{
-#if SUPD >= 615
-    DBG_ERROR( "DefaultLanguage not longer supported" );
-#endif
-    return StartSpeller( bMultipleDoc );
-}
-
 EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 {
 #ifdef SVX_LIGHT
@@ -906,17 +898,9 @@ EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
-    SvxSpellWrapper::CheckSpellLang( PIMPEE->GetSpeller(), PIMPEE->GetLanguage( EditPaM( PIMPEE->GetEditDoc().SaveGetObject( 0 ), 0 ) ) );
+
     return PIMPEE->Spell( this, bMultipleDoc );
 #endif
-}
-
-EESpellState EditView::StartThesaurus( LanguageType eLang )
-{
-#if SUPD >= 615
-    DBG_ERROR( "DefaultLanguage not longer supported" );
-#endif
-    return StartThesaurus();
 }
 
 EESpellState EditView::StartThesaurus()
