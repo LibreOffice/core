@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-06 09:08:08 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 10:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ using namespace ::com::sun::star::uno   ;
 #define ROOTNODE_MENU                           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"  ))
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
 #define DEFAULT_FOLLOWMOUSE                     sal_True
+#define DEFAULT_MENUICONS                       sal_True
 
 #define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"    ))
 #define PROPERTYNAME_FOLLOWMOUSE                OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"              ))
@@ -118,6 +119,16 @@ using namespace ::com::sun::star::uno   ;
 
 class SvtMenuOptions_Impl : public ConfigItem
 {
+    //-------------------------------------------------------------------------------------------------------------
+    //  private member
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
+
+        sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
+        sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
+        sal_Bool    m_bMenuIcons                        ;   /// cache "MenuIcons" of Menu section
+
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -183,10 +194,23 @@ class SvtMenuOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsEntryHidingEnabled(                   ) const ;
-        sal_Bool    IsFollowMouseEnabled(                   ) const ;
-        void        SetEntryHidingState ( sal_Bool bState   )       ;
-        void        SetFollowMouseState ( sal_Bool bState   )       ;
+        sal_Bool    IsEntryHidingEnabled() const
+                    { return m_bDontHideDisabledEntries; }
+
+        sal_Bool    IsFollowMouseEnabled() const
+                    { return m_bFollowMouse; }
+
+        sal_Bool    IsMenuIconsEnabled() const
+                    { return m_bMenuIcons; }
+
+        void        SetEntryHidingState ( sal_Bool bState )
+                    { m_bDontHideDisabledEntries = bState; SetModified(); }
+
+        void        SetFollowMouseState ( sal_Bool bState )
+                    { m_bFollowMouse = bState; SetModified(); }
+
+        void        SetMenuIconsState ( sal_Bool bState )
+                    { m_bMenuIcons = bState; SetModified(); }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -208,15 +232,6 @@ class SvtMenuOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         static Sequence< OUString > impl_GetPropertyNames();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
-        sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
 };
 
 //_________________________________________________________________________________________________________________
@@ -232,6 +247,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Init member then.
     ,   m_bDontHideDisabledEntries  ( DEFAULT_DONTHIDEDISABLEDENTRIES   )
     ,   m_bFollowMouse              ( DEFAULT_FOLLOWMOUSE               )
+    ,   m_bMenuIcons                ( DEFAULT_MENUICONS                 )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames();
@@ -342,40 +358,6 @@ void SvtMenuOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtMenuOptions_Impl::IsEntryHidingEnabled() const
-{
-    return m_bDontHideDisabledEntries;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtMenuOptions_Impl::IsFollowMouseEnabled() const
-{
-    return m_bFollowMouse;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtMenuOptions_Impl::SetEntryHidingState( sal_Bool bState )
-{
-    m_bDontHideDisabledEntries = bState;
-    SetModified();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtMenuOptions_Impl::SetFollowMouseState( sal_Bool bState )
-{
-    m_bFollowMouse = bState ;
-    SetModified();
-}
-
-//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
@@ -468,6 +450,24 @@ void SvtMenuOptions::SetFollowMouseState( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetFollowMouseState( bState );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtMenuOptions::IsMenuIconsEnabled() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsMenuIconsEnabled();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtMenuOptions::SetMenuIconsState( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMenuIconsState( bState );
 }
 
 //*****************************************************************************************************************
