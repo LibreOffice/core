@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Socket.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:33:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 21:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 //------------------------------------------------------------------------
 
 #ifndef _OSL_SOCKET_CONST_H_
-#include <osl_Socket_Const.h>
+#include <osl_Socket_Const_orig.h>
 #endif
 
 #include <cppunit/simpleheader.hxx>
@@ -187,8 +187,11 @@ inline ::rtl::OUString getThisHostname( void )
     struct hostent *hptr;
     //first search /ets/hosts, then search from dns
     hptr = gethostbyname( hostname);
-    if ( hptr != NULL );
+    if ( hptr != NULL )
+    {
         strcpy( hostname, hptr->h_name );
+    }
+
     printf("# hostname is %s \n", hostname );
     aUString = ::rtl::OUString::createFromAscii( (const sal_Char *) hostname );
 #endif
@@ -197,12 +200,12 @@ inline ::rtl::OUString getThisHostname( void )
 
 /** get IP by name, search /etc/hosts first, then search from dns, fail return OUString("")
 */
-inline ::rtl::OUString getIPbyName( char* str_name )
+inline ::rtl::OUString getIPbyName( rtl::OString const& str_name )
 {
     ::rtl::OUString aUString;
     struct hostent *hptr;
     //first search /ets/hosts, then search from dns
-    hptr = gethostbyname( str_name);
+    hptr = gethostbyname( str_name.getStr());
     if ( hptr != NULL )
     {
         struct in_addr ** addrptr;
@@ -252,10 +255,10 @@ void thread_sleep( sal_Int32 _nSec )
     fflush(stdout);
 
 #ifdef WNT                               //Windows
-    Sleep( _nSec * 1000 );
+    Sleep( _nSec * 100 );
 #endif
 #if ( defined UNX ) || ( defined OS2 )   //Unix
-    sleep( _nSec );
+    usleep(_nSec * 100000);
 #endif
     printf( "# done\n" );
 }
@@ -422,8 +425,8 @@ protected:
             printf("# ServerSocketThread: acceptConnection failed! \n");
             break;
         }
-            sal_uInt32 nReadNumber1 = ssStreamConnection.recv( pReadBuffer, 11 );
-            sal_uInt32 nReadNumber2 = ssStreamConnection.recv( pReadBuffer + nReadNumber1, 11 );
+            sal_Int32 nReadNumber1 = ssStreamConnection.recv( pReadBuffer, 11 );
+            sal_Int32 nReadNumber2 = ssStreamConnection.recv( pReadBuffer + nReadNumber1, 11 );
             pReadBuffer[nReadNumber1 + nReadNumber2] = '\0';
             //printf( "# read buffer content: %s\n", pReadBuffer );
             break;
@@ -543,7 +546,7 @@ protected:
         //      terminate();
         //}
         //remove this line for deadlock on solaris( margritte.germany )
-        //csConnectorSocket.close();
+        csConnectorSocket.close();
         free( pTimeout );
     }
 
@@ -644,7 +647,7 @@ protected:
 // LLA:             else
 // LLA:                 printf( "# File $SRC_ROOT/sal/inc/osl/file.hxx could not be opened\n" );
 
-            sal_uInt32 nReadNumber1 = ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
+            sal_Int32 nReadNumber1 = ssStreamConnection.write( m_aValues.getBuffer(), m_aValues.getBufferSize() );
             break;
         }
         ssStreamConnection.close();
@@ -678,14 +681,13 @@ public:
 // just used to test socket::close() when accepting
 class AcceptorThread : public Thread
 {
-::osl::AcceptorSocket asAcceptorSocket;
-sal_Bool bOK;
-
+    ::osl::AcceptorSocket asAcceptorSocket;
+    ::rtl::OUString aHostIP;
+    sal_Bool bOK;
 protected:
-
     void SAL_CALL run( )
     {
-        ::osl::SocketAddr saLocalSocketAddr( aHostIp1, IP_PORT_MYPORT9 );
+        ::osl::SocketAddr saLocalSocketAddr( aHostIP, IP_PORT_MYPORT9 );
         ::osl::StreamSocket ssStreamConnection;
 
         asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //integer not sal_Bool : sal_True);
@@ -712,8 +714,8 @@ protected:
         }
     }
 public:
-    AcceptorThread(::osl::AcceptorSocket & asSocket )
-        : asAcceptorSocket( asSocket )
+    AcceptorThread(::osl::AcceptorSocket & asSocket, ::rtl::OUString & aBindIP )
+        : asAcceptorSocket( asSocket ), aHostIP( aBindIP )
     {
         bOK = sal_False;
     }
@@ -726,6 +728,30 @@ public:
         {
             asAcceptorSocket.shutdown();
             printf( "# error: Acceptor thread not terminated.\n" );
+        }
+    }
+};
+
+class CloseSocketThread : public Thread
+{
+    ::osl::Socket m_sSocket;
+protected:
+    void SAL_CALL run( )
+    {
+        thread_sleep( 1 );
+        m_sSocket.close( );
+    }
+public:
+    CloseSocketThread(::osl::Socket & sSocket )
+        : m_sSocket( sSocket )
+    {
+    }
+
+    ~CloseSocketThread( )
+    {
+        if ( isRunning( ) )
+        {
+            printf( "# error: CloseSocketThread not terminated.\n" );
         }
     }
 };
@@ -754,8 +780,33 @@ namespace osl_SocketAddr
             /// SocketAddr constructor.
             ::osl::SocketAddr saSocketAddr;
 
+            // oslSocketResult aResult;
+            // rtl::OUString suHost = saSocketAddr.getLocalHostname( &aResult);
+
+            // rtl::OUString suHost2 = getThisHostname();
+
             CPPUNIT_ASSERT_MESSAGE("test for none parameter constructor function: check if the socket address was created successfully",
                                     sal_True == saSocketAddr.is( ) );
+        }
+
+        void ctors_none_000()
+        {
+            /// SocketAddr constructor.
+            ::osl::SocketAddr saSocketAddr;
+
+            oslSocketResult aResult;
+            rtl::OUString suHost = saSocketAddr.getLocalHostname( &aResult);
+            rtl::OUString suHost2 = getThisHostname();
+
+            sal_Bool bOk = compareUString(suHost, suHost2);
+
+            rtl::OUString suError = rtl::OUString::createFromAscii("Host names should be the same. From SocketAddr.getLocalHostname() it is'");
+            suError += suHost;
+            suError += rtl::OUString::createFromAscii("', from getThisHostname() it is '");
+            suError += suHost2;
+            suError += rtl::OUString::createFromAscii("'.");
+
+            CPPUNIT_ASSERT_MESSAGE(suError, sal_True == bOk);
         }
 
         void ctors_copy()
@@ -851,6 +902,7 @@ namespace osl_SocketAddr
         }
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
+        CPPUNIT_TEST( ctors_none_000 );
         CPPUNIT_TEST( ctors_copy );
         CPPUNIT_TEST( ctors_copy_no_001 );
         CPPUNIT_TEST( ctors_copy_no_002 );
@@ -918,6 +970,12 @@ namespace osl_SocketAddr
         {
         }
 
+        void getHostname_000()
+            {
+                ::osl::SocketAddr saSocketAddr( aHostIp4, IP_PORT_FTP );
+
+            }
+
         /** it will search the Ip in current machine's /etc/hosts at first, if find, then return the
             mapped hostname, otherwise, it will search via DNS server, and often return hostname+ Domain name
             like "sceri.PRC.Sun.COM"
@@ -940,26 +998,33 @@ namespace osl_SocketAddr
         }
 
 // LLA: now we have to control, if this behaviour is right.
+// LLA: this function does not work in company (Linux, Windows) but at home
         void getHostname_002()
         {
-            ::osl::SocketAddr saSocketAddr( aHostName1, IP_PORT_FTP );
-            sal_Bool bOK = saSocketAddr.setHostname( aHostName6 );
-            CPPUNIT_ASSERT_MESSAGE("#SocketAddr.setHostname failed", sal_True == bOK );
-                    oslSocketResult aResult;
-            rtl::OUString suResult = saSocketAddr.getHostname( &aResult );
-                    CPPUNIT_ASSERT_MESSAGE("SocketAddr.getHostname failed.", aResult == osl_Socket_Ok);
+            rtl::OUString suHostname = rtl::OUString::createFromAscii("cn-1.germany.sun.com");
+            rtl::OUString aHostIP    = getIPbyName( oustring2char( suHostname ) );
 
-            rtl::OUString suError = outputError(suResult, aHostName6, "test for getHostname(0)");
-            bOK = compareUString( suResult, aHostName6 );
+            ::osl::SocketAddr saSocketAddr( aHostName1, IP_PORT_FTP );
+            sal_Bool bOK = saSocketAddr.setHostname( suHostname );
+            CPPUNIT_ASSERT_MESSAGE("#SocketAddr.setHostname failed", sal_True == bOK );
+            oslSocketResult aResult;
+            rtl::OUString suResult = saSocketAddr.getHostname( &aResult );
+            CPPUNIT_ASSERT_MESSAGE("SocketAddr.getHostname failed.", aResult == osl_Socket_Ok);
+
+            rtl::OUString suError = outputError(suResult, suHostname, "test for getHostname(0)");
+            bOK = compareUString( suResult, suHostname );
             if ( bOK == sal_False)
             {
                 rtl::OString aString = ::rtl::OUStringToOString( suResult, RTL_TEXTENCODING_ASCII_US );
-                if ( compareUString( getIPbyName( (char *)(aString.getStr( )) ), aHostIp6 ) == sal_True )
+                if ( compareUString( getIPbyName( aString) , aHostIp6 ) == sal_True )
+                {
                     bOK = sal_True;
+                }
             }
 
             CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
         }
+
 
         CPPUNIT_TEST_SUITE( getHostname );
         CPPUNIT_TEST( getHostname_001 );
@@ -1079,6 +1144,7 @@ namespace osl_SocketAddr
             CPPUNIT_ASSERT_MESSAGE( "test for setPort( ) function: set an invalid address with valid port. it should return error.",
                                      bOK == sal_False);
         }
+
 
         CPPUNIT_TEST_SUITE( setPort );
         CPPUNIT_TEST( setPort_001 );
@@ -1326,19 +1392,44 @@ namespace osl_SocketAddr
         /* the process of getLocalHostname: 1.gethostname (same as /bin/hostname) returned name A
            2. search A in /etc/hosts, if there is an alias name is A, return the name in the same row
         */
+
+        void getLocalHostname_000()
+            {
+                // _osl_getFullQualifiedDomainName( );
+                oslSocketResult aResult = osl_Socket_Error;
+                rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
+                CPPUNIT_ASSERT_MESSAGE("getLocalHostname failed", aResult == osl_Socket_Ok);
+            }
+
         void getLocalHostname_001()
         {
             oslSocketResult *pResult = NULL;
             //printSocketResult(*pResult);
             ::rtl::OUString suResult = ::osl::SocketAddr::getLocalHostname( pResult );
-            ::rtl::OUString suError = outputError(suResult, getThisHostname( ),
-                "test for getLocalHostname() function");
 
-            CPPUNIT_ASSERT_MESSAGE( suError,
-                sal_True == compareUString( suResult, getThisHostname( ) ) );
+            // LLA: IMHO localhost, or hostname by itself should be ok.
+            rtl::OUString suThisHost = getThisHostname( );
+            bool bOk = false;
+            if (suThisHost.equals(rtl::OUString::createFromAscii("localhost")))
+            {
+                bOk = true;
+            }
+            else
+            {
+                if (suThisHost.equals(suResult))
+                {
+                    bOk = true;
+                }
+            }
+
+            ::rtl::OUString suError;
+            suError = outputError(suResult, getThisHostname( ), "test for getLocalHostname() function");
+
+            CPPUNIT_ASSERT_MESSAGE( suError, bOk == true );
         }
 
         CPPUNIT_TEST_SUITE( getLocalHostname );
+        CPPUNIT_TEST( getLocalHostname_000 );
         CPPUNIT_TEST( getLocalHostname_001 );
         CPPUNIT_TEST_SUITE_END( );
 
@@ -1679,7 +1770,7 @@ namespace osl_Socket
         {
 //#if defined(LINUX)
             ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            AcceptorThread myAcceptorThread(asSocket);
+            AcceptorThread myAcceptorThread( asSocket, aHostIp1 );
             myAcceptorThread.create();
 
             thread_sleep( 1 );
@@ -1694,9 +1785,25 @@ namespace osl_Socket
 //#endif
         }
 
+        // to cover "if ( pSockAddrIn->sin_addr.s_addr == htonl(INADDR_ANY) )" in osl_closeSocket( )
+        void close_003()
+        {
+            ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+            AcceptorThread myAcceptorThread( asSocket, aHostIpZero );
+            myAcceptorThread.create();
+
+            thread_sleep( 1 );
+            asSocket.close();
+            myAcceptorThread.join();
+
+            CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
+                                myAcceptorThread.isOK() == sal_True );
+        }
+
         CPPUNIT_TEST_SUITE( close );
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
+        CPPUNIT_TEST( close_003 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class close
@@ -2321,6 +2428,20 @@ namespace osl_Socket
                                     sal_True == bOK );
         }
 
+        // getsockopt error
+        void getOption_004()
+        {
+            sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeDgram, osl_Socket_ProtocolIp );
+            ::osl::Socket sSocket(sHandle);
+
+            sal_Bool * pbDontRoute = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
+            sal_Int32 nRes = sSocket.getOption( osl_Socket_OptionInvalid,  pbDontRoute, sizeof ( sal_Bool ) );
+            free( pbDontRoute );
+
+            CPPUNIT_ASSERT_MESSAGE( "test for getOption function: get invalid option of socket, should return -1.",
+                                     nRes  ==  -1 );
+        }
+
         void getOption_simple_001()
         {
             sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeDgram, osl_Socket_ProtocolIp );
@@ -2347,6 +2468,7 @@ namespace osl_Socket
         CPPUNIT_TEST( getOption_001 );
         CPPUNIT_TEST( getOption_002 );
         CPPUNIT_TEST( getOption_003 );
+        CPPUNIT_TEST( getOption_004 );
         CPPUNIT_TEST( getOption_simple_001 );
         CPPUNIT_TEST( getOption_simple_002 );
         CPPUNIT_TEST_SUITE_END();
@@ -2451,23 +2573,36 @@ namespace osl_Socket
             // sal_Int32 * pbLingerSet = ( sal_Int32 * )malloc( nBufferLen );
             // *pbLingerSet = 7;
             // sal_Int32 * pbLingerGet = ( sal_Int32 * )malloc( nBufferLen );
-            /* struct */linger aLingerSet;
-            sal_Int32 nBufferLen = sizeof( struct linger );
-            aLingerSet.l_onoff = 1;
-            aLingerSet.l_linger = 7;
+                    /* struct */linger aLingerSet;
+                    sal_Int32 nBufferLen = sizeof( struct linger );
+                    aLingerSet.l_onoff = 1;
+                    aLingerSet.l_linger = 7;
 
-            linger aLingerGet;
+                   linger aLingerGet;
 
             sal_Bool b1 = asAcceptorSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
 
             sal_Int32 n1 = asAcceptorSocket.getOption( osl_Socket_OptionLinger,  &aLingerGet, nBufferLen );
-            CPPUNIT_ASSERT_MESSAGE( "getOption (SO_LINGER) function failed.", ( n1 == nBufferLen ) );
+                    CPPUNIT_ASSERT_MESSAGE( "getOption (SO_LINGER) function failed.", ( n1 == nBufferLen ) );
 
             //printf("#setOption_002: getOption is %d \n", aLingerGet.l_linger);
             sal_Bool bOK = ( 7  ==  aLingerGet.l_linger );
-            // free( pbLingerSet );
-            // free( pbLingerGet );
+            CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check. ",
+                sal_True == bOK );
 
+        }
+
+        void setOption_003()
+        {
+            linger aLingerSet;
+                    sal_Int32 nBufferLen = sizeof( struct linger );
+                aLingerSet.l_onoff = 1;
+                    aLingerSet.l_linger = 7;
+
+            sal_Bool b1 = asAcceptorSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, 0 );
+                    printUString( asAcceptorSocket.getErrorAsString() );
+            CPPUNIT_ASSERT_MESSAGE( "setOption (SO_LINGER) function failed for optlen is 0.",
+                ( b1 == sal_False ) );
         }
 
         void setOption_simple_001()
@@ -2495,6 +2630,7 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE( setOption );
         CPPUNIT_TEST( setOption_001 );
         CPPUNIT_TEST( setOption_002 );
+        CPPUNIT_TEST( setOption_003 );
         CPPUNIT_TEST( setOption_simple_001 );
 // LLA:     CPPUNIT_TEST( setOption_simple_002 );
         CPPUNIT_TEST_SUITE_END();
@@ -2675,7 +2811,7 @@ namespace osl_Socket
             ::osl::Socket sSocket(sHandle);
             ::osl::SocketAddr saBindSocketAddr( aHostIpInval, IP_PORT_FTP );
             ::osl::SocketAddr saLocalSocketAddr;
-            sSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
+            sSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
             sSocket.bind( saBindSocketAddr );//build an error "osl_Socket_E_AddrNotAvail"
 
             CPPUNIT_ASSERT_MESSAGE( "test for getErrorAsString function: trick an error called sSocket.getError( ), check the getError result.",
@@ -2882,7 +3018,32 @@ namespace osl_StreamSocket
             strcat( myStr, pTestString2 );
             sal_Int32 nRes = strcmp( myServerThread.pReadBuffer, myStr );
             CPPUNIT_ASSERT_MESSAGE(" test for send/recv with two threads: launch Server/Client threads, send data from client, check received data in Server thread.",
-                                    nRes == 0 );
+                        nRes == 0 );
+        }
+
+        // error when recv
+        void send_recv2()
+        {
+            ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+            ::osl::SocketAddr saLocalSocketAddr( aHostIp1, IP_PORT_MYPORT9 );
+            ::osl::StreamSocket ssStreamConnection;
+            sal_Char pReadBuffer[30] = "";
+
+            ClientSocketThread myClientThread;
+            myClientThread.create( );
+
+            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
+
+            sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
+            asAcceptorSocket.enableNonBlockingMode( sal_True );
+            oslSocketResult eResult = asAcceptorSocket.acceptConnection( ssStreamConnection );
+            sal_Int32 nReadNumber = ssStreamConnection.recv( pReadBuffer, 11 );
+
+            myClientThread.join( ) ;
+            ssStreamConnection.close();
+            asAcceptorSocket.close();
+            CPPUNIT_ASSERT_MESSAGE(" test for send/recv, recv error!", nReadNumber == -1 );
         }
 
         void write_read(sal_Int32 _nBufferSize, int _nValue)
@@ -2933,6 +3094,7 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( write_read_003 );
         CPPUNIT_TEST( write_read_004 );
         CPPUNIT_TEST( send_recv1 );
+        CPPUNIT_TEST( send_recv2 );
 //      CPPUNIT_TEST( write_read );
         CPPUNIT_TEST_SUITE_END();
     }; // class send_recv
@@ -2950,11 +3112,11 @@ protected:
 
           if ( osl_Socket_Ok == csConnectorSocket.connect( saTargetSocketAddr, pTimeout ))
           {
-              sal_uInt32 nWrite1 = csConnectorSocket.write( pTestString1, 11 ); // "test socket"
+              sal_Int32 nWrite1 = csConnectorSocket.write( pTestString1, 11 ); // "test socket"
 
-              sal_uInt32 nWrite2 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
+              sal_Int32 nWrite2 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
             thread_sleep( 2 );
-              sal_uInt32 nWrite3 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
+              sal_Int32 nWrite3 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
               printf("# nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
               //thread_sleep( 1 );
           }
@@ -2966,7 +3128,6 @@ protected:
     }
 
 };
-
 
     class shutdown: public CppUnit::TestFixture
     {
@@ -2986,7 +3147,7 @@ protected:
         {
 #if defined(LINUX)
             ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            AcceptorThread myAcceptorThread(asSocket);
+            AcceptorThread myAcceptorThread( asSocket, aHostIp1 );
             myAcceptorThread.create();
 
             thread_sleep( 1 );
@@ -2996,7 +3157,7 @@ protected:
             myAcceptorThread.join();
 
             CPPUNIT_ASSERT_MESSAGE( "test for close when is accepting: the socket will quit accepting status.",
-                                myAcceptorThread.isOK() == sal_True );
+                                myAcceptorThread.isOK( ) == sal_True );
 #endif
         }
 
@@ -3025,13 +3186,13 @@ protected:
             sal_Bool b1 = ssConnectionSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
             thread_sleep( 1 );
             //sal_uInt32 nRecv1 = 0;
-            sal_uInt32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
+            sal_Int32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
 
             //shutdown read after client the first send complete
             ssConnectionSocket.shutdown( osl_Socket_DirRead );
 
-            sal_uInt32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
-            sal_uInt32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 + nRead2, 12 );
+            sal_Int32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
+            sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 + nRead2, 12 );
             printf("# after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", nRead1, nRead2, nRead3 );
             mySendThread.join();
 
@@ -3044,10 +3205,10 @@ protected:
             */
 #ifdef LINUX
             CPPUNIT_ASSERT_MESSAGE( "test for shutdown read direction: the socket can not read(recv).",
-                                nRead1  > 0  && nRead3 == 0 );
+                                nRead1 > 0  && nRead3 == 0 );
 #else
             CPPUNIT_ASSERT_MESSAGE( "test for shutdown read direction: the socket can not read(recv).",
-                                nRead1  > 0  && nRead2 == 0 && nRead3 == 0 );
+                                nRead1 > 0  && nRead2 == 0 && nRead3 == 0 );
 #endif
 
         }
@@ -3073,11 +3234,11 @@ protected:
             ssConnectionSocket.shutdown( osl_Socket_DirWrite );
 
             // recv should not shutdown
-            sal_uInt32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
+            sal_Int32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
 
-            sal_uInt32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
+            sal_Int32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
             // still can read
-            sal_uInt32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
+            sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
             printf("# after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", nRead1, nWrite, nRead3 );
             mySendThread.join();
             ssConnectionSocket.close();
@@ -3095,12 +3256,37 @@ protected:
         CPPUNIT_TEST_SUITE_END();
     }; // class shutdown
 
+    class isExceptionPending: public CppUnit::TestFixture
+    {
+    public:
+        void isExPending_001()
+        {
+            ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+            TimeValue *pTimeout;
+            pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );
+            pTimeout->Seconds = 3;
+            pTimeout->Nanosec = 0;
+            sal_Bool bOk = asSocket.isExceptionPending( pTimeout );
+            free( pTimeout );
+
+            CPPUNIT_ASSERT_MESSAGE( "test for isExceptionPending.",
+                                bOk == sal_False );
+        }
+
+        /**tester's comments: lack of a case that return sal_True, do not know when it will return sal_True*/
+
+
+        CPPUNIT_TEST_SUITE( isExceptionPending );
+        CPPUNIT_TEST( isExPending_001 );
+        CPPUNIT_TEST_SUITE_END();
+    }; // class isExceptionPending
 
 // -----------------------------------------------------------------------------
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::ctors, "osl_StreamSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::send_recv, "osl_StreamSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::shutdown, "osl_StreamSocket");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::isExceptionPending, "osl_StreamSocket");
 
 } // namespace osl_StreamSocket
 
@@ -3176,11 +3362,12 @@ namespace osl_ConnectorSocket
             sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
             CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
 
-            asAcceptorSocket.enableNonBlockingMode( sal_True );
-            asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
-
+            //asAcceptorSocket.enableNonBlockingMode( sal_True );
+            //oslSocketResult eResultAccept = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+            //CPPUNIT_ASSERT_MESSAGE( "accept failed.",  osl_Socket_Ok == eResultAccept );
             /// launch client socket
             oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+            CPPUNIT_ASSERT_MESSAGE( "connect failed.",  osl_Socket_Ok == eResult );
 
             /// get peer information
             csConnectorSocket.getPeerAddr( saPeerSocketAddr );/// connected.
@@ -3189,9 +3376,68 @@ namespace osl_ConnectorSocket
                                     ( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr ) ) &&
                                     ( osl_Socket_Ok == eResult ));
         }
+        //non-blocking mode connect?
+        void connect_002()
+        {
+            ::osl::SocketAddr saLocalSocketAddr( aHostIp1, IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr( aHostIp1, IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saPeerSocketAddr( aHostIp2, IP_PORT_FTP );
+
+            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
+            asAcceptorSocket.enableNonBlockingMode( sal_True );
+            sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
+            sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
+            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
+
+            csConnectorSocket.enableNonBlockingMode( sal_True );
+
+            oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+            CPPUNIT_ASSERT_MESSAGE( "connect failed.",  osl_Socket_InProgress == eResult ||  osl_Socket_Ok == eResult );
+
+            /// get peer information
+            csConnectorSocket.getPeerAddr( saPeerSocketAddr );
+
+            CPPUNIT_ASSERT_MESSAGE( "test for connect function: try to create a connection with remote host. and check the setup address.",
+                sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  ) ;
+        }
+        // really an error or just delayed
+        // how to design senarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
+        void connect_003()
+        {
+            ::osl::SocketAddr saTargetSocketAddr1( aHostIp1, IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr2( aHostIpInval1, IP_PORT_MYPORT3 );
+
+            csConnectorSocket.enableNonBlockingMode( sal_False );
+
+            oslSocketResult eResult1 = csConnectorSocket.connect( saTargetSocketAddr1, pTimeout );
+            oslSocketResult eResult2 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
+            CloseSocketThread myCloseThread( csConnectorSocket );
+            oslSocketResult eResult3 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
+            myCloseThread.join();
+            CPPUNIT_ASSERT_MESSAGE( "connect should failed.",  osl_Socket_Error == eResult1 &&
+                osl_Socket_Error == eResult2 &&  osl_Socket_Error == eResult3 );
+
+        }
+
+        // really an error in non-blocking mode
+        void connect_004()
+        {
+            ::osl::SocketAddr saTargetSocketAddr( aHostIpInval1, IP_PORT_MYPORT3 );
+
+            csConnectorSocket.enableNonBlockingMode( sal_True );
+
+            oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+            CPPUNIT_ASSERT_MESSAGE( "connect should failed.",  osl_Socket_Error == eResult );
+        }
+        /** here need a case: immediate connection, say in non-blocking mode connect return osl_Socket_Ok
+        */
 
         CPPUNIT_TEST_SUITE( connect );
         CPPUNIT_TEST( connect_001 );
+        CPPUNIT_TEST( connect_002 );
+        CPPUNIT_TEST( connect_003 );
+        CPPUNIT_TEST( connect_004 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class connect
@@ -3248,7 +3494,7 @@ namespace osl_AcceptorSocket
             ::osl::SocketAddr saSocketAddr( aHostIp1, IP_PORT_MYPORT4 );
             asSocket.bind( saSocketAddr );
 
-            AcceptorThread myAcceptorThread( asSocketAssign );
+            AcceptorThread myAcceptorThread( asSocketAssign, aHostIp1 );
             myAcceptorThread.create();
 
             thread_sleep( 1 );
@@ -3327,8 +3573,7 @@ namespace osl_AcceptorSocket
             oslSocketResult eResult = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
 
             CPPUNIT_ASSERT_MESSAGE( "test for listen_accept function: try to create a connection with remote host, using listen and accept.",
-                                    ( sal_True == bOK2 ) &&
-                                    ( osl_Socket_Ok == eResult ) );
+                ( osl_Socket_Ok == eResult ) );
         }
 
         void listen_accept_002()
@@ -3354,6 +3599,11 @@ namespace osl_AcceptorSocket
                                     ( sal_True == bOK2 ) &&
                                     ( osl_Socket_Ok == eResult ) &&
                                     ( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr ) ) );
+        }
+
+        void listen_accept_003()
+        {
+
         }
 
         CPPUNIT_TEST_SUITE( listen_accept );
@@ -3498,7 +3748,7 @@ public:
             myTalkThread.create();
             sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
             myTalkThread.join();
-            printf("#received buffer is %s# \n", pReadBuffer);
+            //printf("#received buffer is %s# \n", pReadBuffer);
 
             sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
 
@@ -3522,7 +3772,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo failed: nSend <= 0.", nSend > 0);
 
             myListenThread.join();
-            printf("#received buffer is %s# \n", myListenThread.pRecvBuffer);
+            //printf("#received buffer is %s# \n", myListenThread.pRecvBuffer);
 
             sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
 
@@ -3530,10 +3780,43 @@ public:
                                     bOk == sal_True );
         }
 
+        //sendTo error, return -1; recvFrom error, return -1
+        void sr_003()
+        {
+            ::osl::SocketAddr saListenSocketAddr( aHostIpInval1, IP_PORT_MYPORT10 );
+            ::osl::DatagramSocket dsSocket;
+            // Transport endpoint is not connected
+            sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
+            CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
+                nSend == -1 );
+        }
+
+        void sr_004()
+        {
+            ::osl::SocketAddr saListenSocketAddr1( aHostIpInval1, IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr2( aHostIp2, IP_PORT_MYPORT10 );
+            ::osl::DatagramSocket dsSocket;
+
+            dsSocket.enableNonBlockingMode( sal_True );
+
+            sal_Char pReadBuffer[30];
+            //sal_Int32 nRecv1 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
+
+            // will block ?
+            CloseSocketThread myThread( dsSocket );
+            myThread.create();
+            sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
+            myThread.join();
+            //printf("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
+            CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
+                 nRecv2 == -1 );
+        }
 
         CPPUNIT_TEST_SUITE( sendTo_recvFrom );
         CPPUNIT_TEST( sr_001 );
         CPPUNIT_TEST( sr_002 );
+        CPPUNIT_TEST( sr_003 );
+        CPPUNIT_TEST( sr_004 );
         CPPUNIT_TEST_SUITE_END();
 
     }; // class sendTo_recvFrom
