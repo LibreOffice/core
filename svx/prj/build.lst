@@ -2,7 +2,6 @@ sx	svx	:	connectivity xmloff linguistic NULL
 sx	svx										usr1	-	all	sx_mkout NULL
 sx	svx\inc									get		-	all	sx_inc NULL
 sx	svx\prj									get		-	all	sx_prj NULL
-sx	svx\jobs								get		-	all	sx_jobs NULL
 sx	svx\win\res								get		-	all	sx_wres NULL
 sx	svx\os2\res								get		-	all	sx_ores NULL
 sx	svx\unx\res								get		-	all	sx_ures NULL
