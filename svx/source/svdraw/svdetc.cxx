@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-24 12:46:49 $
+ *  last change: $Author: dl $ $Date: 2001-02-09 11:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,184 @@
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+
+
+
+/******************************************************************************
+* Globale Daten der DrawingEngine
+******************************************************************************/
+::com::sun::star::lang::Locale*     SdrGlobalData::pLocale = NULL;
+CharClass*  SdrGlobalData::pCharClass = NULL;
+LocaleDataWrapper* SdrGlobalData::pLocaleData = NULL;
+
+
+SdrGlobalData::SdrGlobalData() :
+    pOutliner(NULL),
+    pDefaults(NULL),
+    pResMgr(NULL),
+    pStrCache(NULL),
+    nExchangeFormat(0)
+{
+    String aLanguage, aCountry;
+    ConvertLanguageToIsoNames( International::GetRealLanguage( LANGUAGE_SYSTEM ), aLanguage, aCountry );
+    pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, String() );
+    pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
+    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
+}
+
+SdrGlobalData::~SdrGlobalData()
+{
+    delete pOutliner;
+    delete pDefaults;
+    delete pResMgr;
+    delete [] pStrCache;
+    DELETEZ( pLocaleData );
+    DELETEZ( pCharClass );
+    DELETEZ( pLocale );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+OLEObjCache::OLEObjCache()
+:   Container( 0 )
+{
+    nSize = 20;
+/* !!! IniManager
+    SfxIniManager* pIniMgr = SfxIniManager::Get();
+
+    if(pIniMgr)
+    {
+        sal_Char aTextOLECacheNum[] = "MaxOLEObjectsInDrawingEngineMemory";
+        String aKeyName = UniString(aTextOLECacheNum, sizeof(aTextOLECacheNum-1));
+        String aGroupName(pIniMgr->GetGroupName(SFX_GROUP_WORKINGSET_IMPL));
+
+        if(!pIniMgr->ReadKey(aGroupName, aKeyName).Len())
+        {
+            pIniMgr->WriteKey(aGroupName, aKeyName, UniString::CreateFromInt32(nSize));
+        }
+        else
+        {
+            String aIniManagerString = pIniMgr->Get(SFX_GROUP_WORKINGSET_IMPL, aKeyName);
+            nSize = aIniManagerString.ToInt32();
+
+            if(nSize < 5)
+                nSize = 5;
+        }
+    }
+*/
+    pTimer = new AutoTimer();
+    Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
+
+    pTimer->SetTimeoutHdl(aLink);
+    pTimer->SetTimeout(20000);
+    pTimer->Start();
+
+    aLink.Call(pTimer);
+}
+
+OLEObjCache::~OLEObjCache()
+{
+    pTimer->Stop();
+    delete pTimer;
+    // Kein Unload notwendig, da zu diesem Zeitpunkt
+    // die Objekte nicht mehr vorhanden sind
+}
+
+void OLEObjCache::SetSize(ULONG nNewSize)
+{
+    nSize = nNewSize;
+}
+
+void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
+{
+    if (nSize <= Count())
+    {
+        // Eintraege reduzieren
+        ULONG nIndex = Count() - 1;
+
+        for (ULONG i = nIndex; i + 1 >= nSize; i--)
+        {
+            // Pruefen, ob Objekte entfernt werden koennen
+            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
+
+            if ( pCacheObj != pObj &&  UnloadObj(pCacheObj) )
+            {
+                 Remove(i);
+            }
+        }
+    }
+
+    // Objekt ggf. entfernen und an erster Position einfuegen
+    Remove(pObj);
+    Insert(pObj, (ULONG) 0L);
+}
+
+void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
+{
+    UnloadObj( (SdrOle2Obj*) Remove(pObj) );
+}
+
+BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
+{
+    BOOL bUnloaded = FALSE;
+
+    if (pObj)
+    {
+        BOOL bVisible = FALSE;
+          SdrViewIter aIter(pObj);
+        SdrView* pView = aIter.FirstView();
+
+        while (!bVisible && pView!=NULL)
+        {
+            bVisible = !pView->IsGrafDraft();
+
+            if (!bVisible)
+                pView = aIter.NextView();
+        }
+
+        if (!bVisible)
+            bUnloaded = pObj->Unload();
+    }
+
+    return bUnloaded;
+}
+
+IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, pTim)
+{
+    if (nSize <= Count())
+    {
+        // Eintraege reduzieren
+        ULONG nIndex = Count() - 1;
+
+        for (ULONG i = nIndex; i + 1 >= nSize; i--)
+        {
+            // Pruefen, ob Objekte entfernt werden koennen
+            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
+
+            if ( UnloadObj(pCacheObj) )
+                Remove(i);
+        }
+    }
+
+    return 0;
+}
+
 
 
 void ContainerSorter::DoSort(ULONG a, ULONG b) const
@@ -796,150 +974,5 @@ void SvdProgressInfo::ReportError()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/******************************************************************************
-* Globale Daten der DrawingEngine
-******************************************************************************/
-SdrGlobalData::SdrGlobalData() :
-    pOutliner(NULL),
-    pDefaults(NULL),
-    pResMgr(NULL),
-    pStrCache(NULL),
-    nExchangeFormat(0)
-{
-}
-
-SdrGlobalData::~SdrGlobalData()
-{
-    delete pOutliner;
-    delete pDefaults;
-    delete pResMgr;
-    delete [] pStrCache;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-OLEObjCache::OLEObjCache()
-:   Container( 0 )
-{
-    nSize = 20;
-/* !!! IniManager
-    SfxIniManager* pIniMgr = SfxIniManager::Get();
-
-    if(pIniMgr)
-    {
-        sal_Char aTextOLECacheNum[] = "MaxOLEObjectsInDrawingEngineMemory";
-        String aKeyName = UniString(aTextOLECacheNum, sizeof(aTextOLECacheNum-1));
-        String aGroupName(pIniMgr->GetGroupName(SFX_GROUP_WORKINGSET_IMPL));
-
-        if(!pIniMgr->ReadKey(aGroupName, aKeyName).Len())
-        {
-            pIniMgr->WriteKey(aGroupName, aKeyName, UniString::CreateFromInt32(nSize));
-        }
-        else
-        {
-            String aIniManagerString = pIniMgr->Get(SFX_GROUP_WORKINGSET_IMPL, aKeyName);
-            nSize = aIniManagerString.ToInt32();
-
-            if(nSize < 5)
-                nSize = 5;
-        }
-    }
-*/
-    pTimer = new AutoTimer();
-    Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
-
-    pTimer->SetTimeoutHdl(aLink);
-    pTimer->SetTimeout(20000);
-    pTimer->Start();
-
-    aLink.Call(pTimer);
-}
-
-OLEObjCache::~OLEObjCache()
-{
-    pTimer->Stop();
-    delete pTimer;
-    // Kein Unload notwendig, da zu diesem Zeitpunkt
-    // die Objekte nicht mehr vorhanden sind
-}
-
-void OLEObjCache::SetSize(ULONG nNewSize)
-{
-    nSize = nNewSize;
-}
-
-void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
-{
-    if (nSize <= Count())
-    {
-        // Eintraege reduzieren
-        ULONG nIndex = Count() - 1;
-
-        for (ULONG i = nIndex; i + 1 >= nSize; i--)
-        {
-            // Pruefen, ob Objekte entfernt werden koennen
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
-
-            if ( pCacheObj != pObj &&  UnloadObj(pCacheObj) )
-            {
-                 Remove(i);
-            }
-        }
-    }
-
-    // Objekt ggf. entfernen und an erster Position einfuegen
-    Remove(pObj);
-    Insert(pObj, (ULONG) 0L);
-}
-
-void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
-{
-    UnloadObj( (SdrOle2Obj*) Remove(pObj) );
-}
-
-BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
-{
-    BOOL bUnloaded = FALSE;
-
-    if (pObj)
-    {
-        BOOL bVisible = FALSE;
-          SdrViewIter aIter(pObj);
-        SdrView* pView = aIter.FirstView();
-
-        while (!bVisible && pView!=NULL)
-        {
-            bVisible = !pView->IsGrafDraft();
-
-            if (!bVisible)
-                pView = aIter.NextView();
-        }
-
-        if (!bVisible)
-            bUnloaded = pObj->Unload();
-    }
-
-    return bUnloaded;
-}
-
-IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, pTim)
-{
-    if (nSize <= Count())
-    {
-        // Eintraege reduzieren
-        ULONG nIndex = Count() - 1;
-
-        for (ULONG i = nIndex; i + 1 >= nSize; i--)
-        {
-            // Pruefen, ob Objekte entfernt werden koennen
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
-
-            if ( UnloadObj(pCacheObj) )
-                Remove(i);
-        }
-    }
-
-    return 0;
-}
 
 
