@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 15:44:27 $
+ *  last change: $Author: os $ $Date: 2001-05-08 07:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,7 +1182,7 @@ BOOL SwXCell::supportsService(const OUString& rServiceName) throw( RuntimeExcept
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.table.Cell")||
-            sServiceName.EqualsAscii("com.sun.star.table.CellProperties");
+            sServiceName.EqualsAscii("com.sun.star.text.CellProperties");
 }
 /* -----------------------------19.04.00 15:20--------------------------------
 
@@ -1192,7 +1192,7 @@ Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( RuntimeExcep
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.table.Cell");
-    pArray[1] = C2U("com.sun.star.table.CellProperties");
+    pArray[1] = C2U("com.sun.star.text.CellProperties");
     return aRet;
 }
 
