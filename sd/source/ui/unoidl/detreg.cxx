@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:17:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "sddetect.hxx"
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -71,8 +73,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
-#include "sddetect.hxx"
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -81,15 +84,16 @@ using namespace ::com::sun::star::lang;
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const  sal_Char**   ppEnvironmentTypeName,
         uno_Environment**   ppEnvironment           )
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
-                                        void*   pRegistryKey    )
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
+    void*   pServiceManager ,
+    void*   pRegistryKey    )
 {
     Reference< ::registry::XRegistryKey >
             xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
@@ -111,9 +115,10 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     return sal_True;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplementationName,
-                                     void* pServiceManager,
-                                     void* pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+    const sal_Char* pImplementationName,
+    void* pServiceManager,
+    void* pRegistryKey )
 {
     // Set default return value for this operation - if it failed.
     void* pReturn = NULL ;
