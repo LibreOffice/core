@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tbe $ $Date: 2001-05-02 16:27:19 $
+#   last change: $Author: tbe $ $Date: 2001-05-04 10:57:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,6 +138,7 @@ IDLFILES=\
     UnoControlDateFieldModel.idl\
     UnoControlEditModel.idl\
     UnoControlFileControlModel.idl\
+    UnoControlFixedLineModel.idl\
     UnoControlFixedTextModel.idl\
     UnoControlFormattedFieldModel.idl\
     UnoControlGroupBoxModel.idl\
@@ -154,6 +155,7 @@ IDLFILES=\
     UnoControlDateField.idl\
     UnoControlEdit.idl\
     UnoControlFileControl.idl\
+    UnoControlFixedLine.idl\
     UnoControlFixedText.idl\
     UnoControlFormattedField.idl\
     UnoControlGroupBox.idl\
