@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.45 2002-01-17 14:08:40 dvo Exp $
+	$Id: text.mod,v 1.46 2002-01-17 14:27:00 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -270,7 +270,7 @@
 
 <!ENTITY % formula "CDATA">
 
-<!ENTITY % valueAttr "text:value-type %valueType; #REQUIRED
+<!ENTITY % valueAttr "text:value-type %valueType; #IMPLIED
 							 text:currency CDATA #IMPLIED" >
 
 <!ENTITY % valueAndTypeAttr "%valueAttr;
