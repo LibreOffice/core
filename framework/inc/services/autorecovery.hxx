@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:29:15 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,19 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_SUCCEDED = 512
         };
 
+        /** @short  indicates the results of a FAILURE_SAFE operation
+
+            @descr  We must know, which reason was the real one in case
+                    we couldnt copy a "failure document" to a user specified path.
+                    We must know, if we can forget our cache entry or not.
+         */
+        enum EFailureSafeResult
+        {
+            E_COPIED,
+            E_ORIGINAL_FILE_MISSING,
+            E_WRONG_TARGET_PATH
+        };
+
         // TODO document me
         enum ETimerType
         {
@@ -244,11 +257,15 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         // Emergency_Save and Recovery overwrites Auto_Save!
         enum EJob
         {
-            E_NO_JOB = 0,
-            E_AUTO_SAVE = 1,
-            E_EMERGENCY_SAVE = 2,
-            E_RECOVERY = 4,
-            E_FAILURE_SAVE = 8
+            E_NO_JOB                    =   0,
+            E_AUTO_SAVE                 =   1,
+            E_EMERGENCY_SAVE            =   2,
+            E_RECOVERY                  =   4,
+            E_ENTRY_BACKUP              =   8,
+            E_ENTRY_CLEANUP             =  16,
+            E_PREPARE_EMERGENCY_SAVE    =  32,
+            E_SESSION_SAVE              =  64,
+            E_SESSION_RESTORE           = 128
         };
 
         //---------------------------------------
@@ -354,10 +371,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         ETimerType m_eTimerType;
 
         //---------------------------------------
-        /** @short  list of all documents, which must behandled by this AutoSave
-                    mechanism.
+        /** @short  this cache is used to hold all informations about
+                    recovery/emergency save documents alive.
          */
-        TDocumentList m_lDocuments;
+        TDocumentList m_lDocCache;
 
         //---------------------------------------
         // TODO document me
@@ -382,7 +399,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         /** TODO document me */
-        ::rtl::OUString m_sFailurePath;
+        ::rtl::OUString m_sSavePath;
+
+        //---------------------------------------
+        /** @short  define the current cache entry, which should be used for current
+                    backup or cleanUp operation ... which is may be done asynchronous */
+        sal_Int32 m_nWorkingEntryID;
 
         //---------------------------------------
         /** @short  special debug option to make testing faster.
@@ -394,6 +416,27 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         #if OSL_DEBUG_LEVEL > 1
         sal_Bool m_dbg_bMakeItFaster;
         #endif
+
+        /** @short  used for asyncoperations, to prevent us from dying.
+
+            @descr  If our dispatch() method was forced to start the
+                    internal operation asynchronous ... we send an event
+                    to start and return immediatly. But we must be shure that
+                    our instance live if the event callback reach us.
+                    So we hold an uno reference to ourself.
+         */
+        css::uno::Reference< css::uno::XInterface > m_xSelfHold;
+
+        /** @descr  This member is used to prevent us against re-entrance problems.
+                    A mutex cant help to prevent us from concurrent using of members
+                    inside the same thread. But e.g. our internaly used stl structures
+                    are not threadsafe ... and furthermore they cant be used at the same time
+                    for iteration and add/remove requests!
+                    So we have to detect such states and ... show a warning.
+                    May be there will be a better solution next time ... (copying the cache temp.
+                    bevor using).
+         */
+        sal_Bool m_bDocCacheLock;
 
     //___________________________________________
     // interface
@@ -413,9 +456,11 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
             throw(css::uno::RuntimeException);
+
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL&                                     aURL     )
             throw(css::uno::RuntimeException);
+
         virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                    const css::util::URL&                                     aURL     )
             throw(css::uno::RuntimeException);
@@ -510,8 +555,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_flushConfigItem(const TDocumentInfo& rInfo               ,
-                                          sal_Bool      bRemoveIt = sal_False);
+        void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo                ,
+                                          sal_Bool                     bRemoveIt = sal_False);
 
         //---------------------------------------
         // TODO document me
@@ -607,7 +652,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     If document does not exists - its set to
                     rList.end()!
          */
-        static TDocumentList::iterator impl_searchDocument(      TDocumentList&                             rList    ,
+        static TDocumentList::iterator impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
                                                            const css::uno::Reference< css::frame::XModel >& xDocument);
 
         //---------------------------------------
@@ -624,12 +669,26 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     be called again. May be some documents was not saved yet
                     and must wait for an user idle period ...
 
+            @param  bAllowUserIdleLoop
+                    Because this method is used for different uses cases, it must
+                    know, which actions are allowed or not.
+                    AUTO_SAVE =>
+                                 If a document is the most active one, saving it
+                                 will be postponed if there exists other unsaved
+                                 documents. This feature was implemented, because
+                                 we dont wish to disturb the user on it's work.
+                                 ... bAllowUserIdleLoop should be set to TRUE
+                    EMERGENCY_SAVE / SESSION_SAVE =>
+                                 Here we must finish our work ASAP! It's not allowed
+                                 to postpone any document.
+                                 ... bAllowUserIdleLoop must(!) be set to FALSE
+
             @return A suggestion, how the timer (if its not already disabled!)
                     should be restarted to full fill the requirements.
 
             @threadsafe
          */
-        ETimerType implts_saveDocs();
+        AutoRecovery::ETimerType implts_saveDocs(sal_Bool bAllowUserIdleLoop);
 
         //---------------------------------------
         /** @short  save one of the current documents to a specific
@@ -665,8 +724,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
           */
-        void implts_saveOneDoc(const ::rtl::OUString& sBackupPath,
-                                     TDocumentInfo&   rInfo      );
+        void implts_saveOneDoc(const ::rtl::OUString&             sBackupPath,
+                                     AutoRecovery::TDocumentInfo& rInfo      );
 
         //---------------------------------------
         /** @short  recovery all documents, which was saved during
@@ -676,7 +735,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
          */
-        ETimerType implts_openDocs();
+        AutoRecovery::ETimerType implts_openDocs();
 
         //---------------------------------------
         // TODO document me
@@ -688,7 +747,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         // TODO document me
         void implts_generateNewTempURL(const ::rtl::OUString&               sBackupPath     ,
                                              ::comphelper::MediaDescriptor& rMediaDescriptor,
-                                             TDocumentInfo&                 rInfo           );
+                                             AutoRecovery::TDocumentInfo&   rInfo           );
 
         //---------------------------------------
         // TODO document me
@@ -698,44 +757,124 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** @short  notifies all interested listener about the current state
                     of the currently running operation.
 
-            @descr  Note: this method notifies all listener registered for "" as URL
-                    too. So we support listening for "ALL " changes.
+            @descr  We support different set's of functions. AUTO_SAVE, EMERGENCY_SAVE,
+                    AUTO_RECOVERY, FAILURE_SAVE ... etcpp.
+                    Listener can register itself for any type of supported
+                    functionality ... but not for document URL's in special.
+
+            @param  eJob
+                    is used to know, which set of listener we must notify.
 
             @param  aEvent
                     describe the event more in detail.
 
             @threadsafe
           */
-        void implts_informListener(const css::frame::FeatureStateEvent& aEvent);
+        void implts_informListener(      sal_Int32                      eJob  ,
+                                   const css::frame::FeatureStateEvent& aEvent);
+
+        //---------------------------------------
+        /** short   create a feature event struct, which can be send
+                    to any interested listener.
+
+            @param  eJob
+                    describe the current running operation
+                    AUTOSAVE, EMERGENCYSAVE, RECOVERY
+
+            @param  sEventType
+                    describe the type of this event
+                    START, STOP, UPDATE
+
+            @param  pInfo
+                    if sOperation is an update, this parameter must be different from NULL
+                    and is used to send informations regarding the current handled document.
+
+            @return [css::frame::FeatureStateEvent]
+                    the event structure for sending.
+         */
+        static css::frame::FeatureStateEvent implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
+                                                                            const ::rtl::OUString&             sEventType,
+                                                                                  AutoRecovery::TDocumentInfo* pInfo     );
+
+        //---------------------------------------
+
+        // TODO document me
+        void implts_resetHandleStates(sal_Bool bLoadCache);
 
         //---------------------------------------
         // TODO document me
-        css::frame::FeatureStateEvent implts_createFeatureStateEvent(const AutoRecovery::TDocumentInfo& rInfo);
-
-        //---------------------------------------
-
-        // TODO document me
-        void implts_resetHandleStates();
+        void implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocumentInfo& rInfo);
 
         //---------------------------------------
         // TODO document me
-        void implts_specifyDefaultFilterAndExtension(TDocumentInfo& rInfo);
+        void implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentInfo& rInfo);
 
         //---------------------------------------
         // TODO document me
-        void implts_specifyAppModuleAndFactoryURL(TDocumentInfo& rInfo);
+        void implts_prepareEmergencySave();
 
         //---------------------------------------
         // TODO document me
-        void implts_doFailureSave();
+        void implts_doEmergencySave();
 
         //---------------------------------------
         // TODO document me
-        void implts_copyFile(const ::rtl::OUString& sSource    ,
-                             const ::rtl::OUString& sTargetPath,
-                             const ::rtl::OUString& sTargetName);
+        void implts_doRecovery();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_doSessionSave();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_doSessionRestore();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_backupWorkingEntry();
+
+        //---------------------------------------
+        // TODO document me
+        void implts_cleanUpWorkingEntry();
+
+        //---------------------------------------
+        // TODO document me
+        AutoRecovery::EFailureSafeResult implts_copyFile(const ::rtl::OUString& sSource    ,
+                                                         const ::rtl::OUString& sTargetPath,
+                                                         const ::rtl::OUString& sTargetName);
+
+        //---------------------------------------
+        /** @short  converts m_eJob into a job description, which
+                    can be used to inform an outside listener
+                    about the current running operation
+
+            @param  eJob
+                    describe the current running operation
+                    AUTOSAVE, EMERGENCYSAVE, RECOVERY
+
+            @return [string]
+                    a suitable job description of form:
+                        vnd.sun.star.autorecovery:/do...
+         */
+        static ::rtl::OUString implst_getJobDescription(sal_Int32 eJob);
+
+        //---------------------------------------
+        /** @short  mape the given URL to an internal int representation.
+
+            @param  aURL
+                    the url, which describe the next starting or may be already running
+                    operation.
+
+            @return [long]
+                    the internal int representation
+                    see enum EJob
+         */
+        static sal_Int32 implst_classifyJob(const css::util::URL& aURL);
+
+        /// TODO
+        void implts_lockDocCache();
+        void implts_unlockDocCache();
 };
-
 
 } // namespace framework
 
