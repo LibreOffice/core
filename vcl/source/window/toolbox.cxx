@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-27 10:21:16 $
+ *  last change: $Author: ssa $ $Date: 2002-03-27 15:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2496,13 +2496,16 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 #ifndef REMOTE_APPSERVER
     if( ImplGetFrame()->GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
     {
-        ImplFormat( TRUE );
         mbFormat = TRUE;
+        ImplFormat( TRUE );
         maTimer.Start();
     }
     else
 #endif
+    {
+        mbFormat = TRUE;
         ImplFormat();
+    }
 
     return 0;
 }
@@ -3953,15 +3956,7 @@ void ToolBox::Resize()
     if ( mbScroll )
     {
         if ( !mbFormat )
-        {
-            mbFormat = TRUE;
-            if ( IsReallyVisible() )
-            {
-                ImplFormat( TRUE );
-                mbFormat = TRUE;
-            }
             maTimer.Start();
-        }
     }
 
     // Border muss neu ausgegeben werden
