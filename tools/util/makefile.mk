@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 14:40:47 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:38:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,7 +164,8 @@ LIB1FILES+=  \
             $(SLB)$/rc.lib          \
             $(SLB)$/debug.lib       \
             $(SLB)$/zcodec.lib      \
-            $(SLB)$/inet.lib
+            $(SLB)$/inet.lib        \
+            $(SLB)$/testtoolloader.lib
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS += $(UCBHELPERLIB) \
