@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:02:11 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,11 @@
 
 #include "slidvish.hxx"
 #include "sdoutl.hxx"
+
+// #96090#
+#ifndef _SVXIDS_HXX
+#include <svx/svxids.hrc>
+#endif
 
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
@@ -1813,6 +1818,74 @@ void  SdViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
+    }
+
+    // #96090#
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
+    {
+        ImpGetUndoStrings(rSet);
+    }
+
+    // #96090#
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
+    {
+        ImpGetRedoStrings(rSet);
+    }
+
+    // #96090#
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
+    {
+        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(FALSE);
+
+        if(pUndoManager)
+        {
+            if(pUndoManager->GetUndoActionCount() != 0)
+            {
+                bActivate = TRUE;
+            }
+        }
+
+        if(bActivate)
+        {
+            // #87229# Set the necessary string like in
+            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
+            String aTmp(ResId(STR_UNDO, SFX_APP()->GetSfxResManager()));
+            aTmp += pUndoManager->GetUndoActionComment(0);
+            rSet.Put(SfxStringItem(SID_UNDO, aTmp));
+        }
+        else
+        {
+            rSet.DisableItem(SID_UNDO);
+        }
+    }
+
+    // #96090#
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
+    {
+        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(FALSE);
+
+        if(pUndoManager)
+        {
+            if(pUndoManager->GetRedoActionCount() != 0)
+            {
+                bActivate = TRUE;
+            }
+        }
+
+        if(bActivate)
+        {
+            // #87229# Set the necessary string like in
+            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
+            String aTmp(ResId(STR_REDO, SFX_APP()->GetSfxResManager()));
+            aTmp += pUndoManager->GetRedoActionComment(0);
+            rSet.Put(SfxStringItem(SID_REDO, aTmp));
+        }
+        else
+        {
+            rSet.DisableItem(SID_REDO);
+        }
     }
 }
 
