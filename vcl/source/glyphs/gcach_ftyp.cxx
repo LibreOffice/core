@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:21:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,17 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include FT_OUTLINE_H
+#include FT_TRUETYPE_TABLES_H
+#include FT_TRUETYPE_TAGS_H
+#include FT_TRUETYPE_IDS_H
+
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
-
-#include <ft2build.h>
-#include  FT_FREETYPE_H
-#include  FT_GLYPH_H
-#include  FT_OUTLINE_H
-#include  FT_TRUETYPE_TABLES_H
-#include  FT_TRUETYPE_TAGS_H
-#include  FT_TRUETYPE_IDS_H
 
 #ifndef FREETYPE_PATCH
     // VERSION_MINOR in freetype.h is too coarse
@@ -1403,7 +1403,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     {
         for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
         {
-            unsigned char nSrc;
+            unsigned char nSrc = 0;
             for( x = 0; x < rBitmapFT.width; ++x, nSrc+=nSrc )
             {
                 if( (x & 7) == 0 )
