@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:01:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                 else
                 {
                     SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pSdrObj);
-                    if ( pContact->GetAnchor() )
+                    if ( pContact->GetAnchorFrm() )
                         pContact->DisconnectFromLayout( false );
                     pPg->SwFrm::AppendDrawObj( pContact );
                 }
@@ -523,8 +523,8 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                 if ( pTmp )
                 {
                     pFly = (SwFlyFrm*)pTmp;
-                    if( pFly->GetAnchor() )
-                        pFly->GetAnchor()->RemoveFly( pFly );
+                    if( pFly->GetAnchorFrm() )
+                        pFly->AnchorFrm()->RemoveFly( pFly );
                 }
                 else
                     pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pPg );
@@ -1061,8 +1061,8 @@ void SwPageFrm::Cut()
                 if ( pO->ISA(SwVirtFlyDrawObj) &&
                      (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsFlyAtCntFrm() )
                 {
-                    SwPageFrm *pAnchPage = pFly->GetAnchor() ?
-                                pFly->GetAnchor()->FindPageFrm() : 0;
+                    SwPageFrm *pAnchPage = pFly->GetAnchorFrm() ?
+                                pFly->AnchorFrm()->FindPageFrm() : 0;
                     if ( pAnchPage && (pAnchPage != this) )
                     {
                         MoveFly( pFly, pAnchPage );
@@ -1631,7 +1631,7 @@ void SwRootFrm::RemoveSuperfluous()
                     {
                         SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         // OD 19.06.2003 #108784# - correction
-                        if ( !pFly->GetAnchor()->FindFooterOrHeader() )
+                        if ( !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
                             bOnlySuperfluosObjs = false;
                         }
@@ -1641,7 +1641,7 @@ void SwRootFrm::RemoveSuperfluous()
                         // OD 19.06.2003 #108784# - determine, if drawing object
                         // isn't anchored in header/footer frame. If so, drawing
                         // object isn't superfluos.
-                        SwFrm* pAnchorFrm = 0L;
+                        const SwFrm* pAnchorFrm = 0L;
                         if ( pO->ISA(SwDrawVirtObj) )
                         {
                             pAnchorFrm = static_cast<SwDrawVirtObj*>(pO)->GetAnchorFrm();
@@ -1650,7 +1650,7 @@ void SwRootFrm::RemoveSuperfluous()
                         {
                             SwDrawContact* pDrawContact =
                                     static_cast<SwDrawContact*>(pO->GetUserCall());
-                            pAnchorFrm = pDrawContact ? pDrawContact->GetAnchor() : 0L;
+                            pAnchorFrm = pDrawContact ? pDrawContact->GetAnchorFrm() : 0L;
                         }
                         if ( pAnchorFrm )
                         {
