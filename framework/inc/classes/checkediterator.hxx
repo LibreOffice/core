@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-30 11:07:51 $
+ *  last change: $Author: as $ $Date: 2000-12-01 06:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 #ifndef __SGI_STL_ITERATOR
 #include <stl/iterator>
