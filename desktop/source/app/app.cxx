@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-23 11:56:12 $
+ *  last change: $Author: dg $ $Date: 2001-02-08 15:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,17 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #include <offmgr/app.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
+#endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 #include <setup2/installer.hxx>
@@ -84,6 +90,26 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+void PreloadConfigTrees()
+{
+    // these tree are preloaded to get a faster startup for the office
+    Sequence <rtl::OUString> aPreloadPathList(5);
+    aPreloadPathList[0] =  rtl::OUString::createFromAscii("org.openoffice.Office.Common");
+    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.Office.Writer");
+    aPreloadPathList[2] =  rtl::OUString::createFromAscii("org.openoffice.Office.WriterWeb");
+    aPreloadPathList[3] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
+    aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Impress");
+
+    Reference< XMultiServiceFactory > xProvider(
+            ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
+
+    Any aValue;
+    aValue <<= aPreloadPathList;
+
+    Reference < com::sun::star::beans::XPropertySet > (xProvider, UNO_QUERY)->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
+}
+
 
 void ReplaceStringHookProc( UniString& rStr )
 {
@@ -129,6 +155,8 @@ void Desktop::Main()
 {
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
+//  Read the common configuration items for optimization purpose
+    PreloadConfigTrees();
 
     Installer* pInstaller = new Installer;
     pInstaller->InitializeInstallation( Application::GetAppFileName() );
