@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-07 16:26:50 $
+ *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ uno::Reference<XAccessible> SAL_CALL
     else
         throw lang::IndexOutOfBoundsException (
             ::rtl::OUString::createFromAscii ("shape has no child"),
-            uno::Reference<XInterface>());
+            NULL);
 }
 
 
@@ -344,7 +344,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessibleShape::createAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -436,7 +436,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessibleShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-07 16:26:50 $
+ *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,12 @@ long ChildrenManager::getChildCount (void) const throw ()
     throw (::com::sun::star::uno::RuntimeException)
 {
     // Check wether the given index is valid.
-    if (nIndex < 0 || nIndex >= maChildDescriptorList.size())
+    if (nIndex < 0 || (unsigned long)nIndex >= maChildDescriptorList.size())
         throw lang::IndexOutOfBoundsException (
             ::rtl::OUString::createFromAscii ("no accessible child with index " + nIndex),
             mxParent);
 
-    ChildDescriptor& aChildDescriptor (maChildDescriptorList[nIndex]);
+    ChildDescriptor& aChildDescriptor = maChildDescriptorList[nIndex];
     if ( ! aChildDescriptor.mxAccessibleShape.is())
     {
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());

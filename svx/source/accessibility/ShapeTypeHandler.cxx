@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ uno::Reference<XAccessible>
 
 
 
-const ShapeTypeHandler& ShapeTypeHandler::Instance (void)
+ShapeTypeHandler& ShapeTypeHandler::Instance (void)
 {
     // Using double check pattern to make sure that exactly one instance of
     // the shape type handler is instantiated.

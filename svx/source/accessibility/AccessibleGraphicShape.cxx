@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessibleGraphicShape::createAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -217,7 +217,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessibleGraphicShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

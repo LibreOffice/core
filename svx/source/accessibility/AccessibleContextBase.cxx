@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     throw lang::IndexOutOfBoundsException (
         ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
-        uno::Reference<XInterface>());
+        NULL);
 }
 
 
@@ -324,6 +324,9 @@ void SAL_CALL
     }
 }
 
+
+
+
 //=====  XServiceInfo  ========================================================
 
 ::rtl::OUString SAL_CALL
@@ -405,7 +408,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-void SAL_CALL
+void
     AccessibleContextBase::setAccessibleDescription (const ::rtl::OUString& rDescription)
     throw (uno::RuntimeException)
 {
@@ -421,7 +424,7 @@ void SAL_CALL
     }
 }
 
-void SAL_CALL
+void
     AccessibleContextBase::setAccessibleName (const ::rtl::OUString& rName)
     throw (uno::RuntimeException)
 {
@@ -449,7 +452,7 @@ void SAL_CALL
 
 
 
-::rtl::OUString SAL_CALL AccessibleContextBase::createAccessibleName (void)
+::rtl::OUString AccessibleContextBase::createAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii ("Empty Name");
