@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:03:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
@@ -191,27 +194,54 @@ XML_STRING( sXML_contentStreamName, "content.xml" );
 XML_STRING( sXML_oldContentStreamName, "Content.xml" );
 XML_STRING( sXML_settingsStreamName, "settings.xml" );
 
-XML_STRING( sXML_export_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaExporter" );
-XML_STRING( sXML_export_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesExporter" );
-XML_STRING( sXML_export_impress_content_service, "com.sun.star.comp.Impress.XMLContentExporter" );
-XML_STRING( sXML_export_impress_settings_service, "com.sun.star.comp.Impress.XMLSettingsExporter" );
+XML_STRING( sXML_export_impress_oasis_service, "com.sun.star.comp.Impress.XMLOasisExporter" );
+XML_STRING( sXML_export_impress_meta_oasis_service, "com.sun.star.comp.Impress.XMLOasisMetaExporter" );
+XML_STRING( sXML_export_impress_styles_oasis_service, "com.sun.star.comp.Impress.XMLOasisStylesExporter" );
+XML_STRING( sXML_export_impress_content_oasis_service, "com.sun.star.comp.Impress.XMLOasisContentExporter" );
+XML_STRING( sXML_export_impress_settings_oasis_service, "com.sun.star.comp.Impress.XMLOasisSettingsExporter" );
 
-XML_STRING( sXML_export_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaExporter" );
-XML_STRING( sXML_export_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesExporter" );
-XML_STRING( sXML_export_draw_content_service, "com.sun.star.comp.Draw.XMLContentExporter" );
-XML_STRING( sXML_export_draw_settings_service, "com.sun.star.comp.Draw.XMLSettingsExporter" );
+XML_STRING( sXML_export_draw_oasis_service, "com.sun.star.comp.Draw.XMLOasisExporter" );
+XML_STRING( sXML_export_draw_meta_oasis_service, "com.sun.star.comp.Draw.XMLOasisMetaExporter" );
+XML_STRING( sXML_export_draw_styles_oasis_service, "com.sun.star.comp.Draw.XMLOasisStylesExporter" );
+XML_STRING( sXML_export_draw_content_oasis_service, "com.sun.star.comp.Draw.XMLOasisContentExporter" );
+XML_STRING( sXML_export_draw_settings_oasis_service, "com.sun.star.comp.Draw.XMLOasisSettingsExporter" );
 
-XML_STRING( sXML_import_impress_service, "com.sun.star.comp.Impress.XMLImporter" );
-XML_STRING( sXML_import_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaImporter" );
-XML_STRING( sXML_import_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesImporter" );
-XML_STRING( sXML_import_impress_content_service, "com.sun.star.comp.Impress.XMLContentImporter" );
-XML_STRING( sXML_import_impress_settings_service, "com.sun.star.comp.Impress.XMLSettingsImporter" );
+XML_STRING( sXML_import_impress_oasis_service, "com.sun.star.comp.Impress.XMLOasisImporter" );
+XML_STRING( sXML_import_impress_meta_oasis_service, "com.sun.star.comp.Impress.XMLOasisMetaImporter" );
+XML_STRING( sXML_import_impress_styles_oasis_service, "com.sun.star.comp.Impress.XMLOasisStylesImporter" );
+XML_STRING( sXML_import_impress_content_oasis_service, "com.sun.star.comp.Impress.XMLOasisContentImporter" );
+XML_STRING( sXML_import_impress_settings_oasis_service, "com.sun.star.comp.Impress.XMLOasisSettingsImporter" );
 
-XML_STRING( sXML_import_draw_service, "com.sun.star.comp.Draw.XMLImporter" );
-XML_STRING( sXML_import_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaImporter" );
-XML_STRING( sXML_import_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesImporter" );
-XML_STRING( sXML_import_draw_content_service, "com.sun.star.comp.Draw.XMLContentImporter" );
-XML_STRING( sXML_import_draw_settings_service, "com.sun.star.comp.Draw.XMLSettingsImporter" );
+XML_STRING( sXML_import_draw_oasis_service, "com.sun.star.comp.Draw.XMLOasisImporter" );
+XML_STRING( sXML_import_draw_meta_oasis_service, "com.sun.star.comp.Draw.XMLOasisMetaImporter" );
+XML_STRING( sXML_import_draw_styles_oasis_service, "com.sun.star.comp.Draw.XMLOasisStylesImporter" );
+XML_STRING( sXML_import_draw_content_oasis_service, "com.sun.star.comp.Draw.XMLOasisContentImporter" );
+XML_STRING( sXML_import_draw_settings_oasis_service, "com.sun.star.comp.Draw.XMLOasisSettingsImporter" );
+
+// OOo
+XML_STRING( sXML_export_impress_ooo_service, "com.sun.star.comp.Impress.XMLExporter" );
+XML_STRING( sXML_export_impress_meta_ooo_service, "com.sun.star.comp.Impress.XMLMetaExporter" );
+XML_STRING( sXML_export_impress_styles_ooo_service, "com.sun.star.comp.Impress.XMLStylesExporter" );
+XML_STRING( sXML_export_impress_content_ooo_service, "com.sun.star.comp.Impress.XMLContentExporter" );
+XML_STRING( sXML_export_impress_settings_ooo_service, "com.sun.star.comp.Impress.XMLSettingsExporter" );
+
+XML_STRING( sXML_export_draw_ooo_service, "com.sun.star.comp.Draw.XMLExporter" );
+XML_STRING( sXML_export_draw_meta_ooo_service, "com.sun.star.comp.Draw.XMLMetaExporter" );
+XML_STRING( sXML_export_draw_styles_ooo_service, "com.sun.star.comp.Draw.XMLStylesExporter" );
+XML_STRING( sXML_export_draw_content_ooo_service, "com.sun.star.comp.Draw.XMLContentExporter" );
+XML_STRING( sXML_export_draw_settings_ooo_service, "com.sun.star.comp.Draw.XMLSettingsExporter" );
+
+XML_STRING( sXML_import_impress_ooo_service, "com.sun.star.comp.Impress.XMLImporter" );
+XML_STRING( sXML_import_impress_meta_ooo_service, "com.sun.star.comp.Impress.XMLMetaImporter" );
+XML_STRING( sXML_import_impress_styles_ooo_service, "com.sun.star.comp.Impress.XMLStylesImporter" );
+XML_STRING( sXML_import_impress_content_ooo_service, "com.sun.star.comp.Impress.XMLContentImporter" );
+XML_STRING( sXML_import_impress_settings_ooo_service, "com.sun.star.comp.Impress.XMLSettingsImporter" );
+
+XML_STRING( sXML_import_draw_ooo_service, "com.sun.star.comp.Draw.XMLImporter" );
+XML_STRING( sXML_import_draw_meta_ooo_service, "com.sun.star.comp.Draw.XMLMetaImporter" );
+XML_STRING( sXML_import_draw_styles_ooo_service, "com.sun.star.comp.Draw.XMLStylesImporter" );
+XML_STRING( sXML_import_draw_content_ooo_service, "com.sun.star.comp.Draw.XMLContentImporter" );
+XML_STRING( sXML_import_draw_settings_ooo_service, "com.sun.star.comp.Draw.XMLSettingsImporter" );
 
 struct XML_SERVICEMAP
 {
@@ -220,13 +250,40 @@ struct XML_SERVICEMAP
     sal_Bool mbPlain;
 };
 
+struct XML_SERVICES
+{
+    const sal_Char* mpAll;
+    const sal_Char* mpMeta;
+    const sal_Char* mpStyles;
+    const sal_Char* mpContent;
+    const sal_Char* mpSettings;
+};
+
+XML_SERVICES* getServices( bool bImport, bool bDraw, ULONG nStoreVer )
+{
+    static XML_SERVICES gServices[] =
+    {
+        { sXML_export_impress_oasis_service, sXML_export_impress_meta_oasis_service, sXML_export_impress_styles_oasis_service, sXML_export_impress_content_oasis_service, sXML_export_impress_settings_oasis_service },
+        { sXML_export_draw_oasis_service, sXML_export_draw_meta_oasis_service, sXML_export_draw_styles_oasis_service, sXML_export_draw_content_oasis_service, sXML_export_draw_settings_oasis_service },
+        { sXML_import_impress_oasis_service, sXML_import_impress_meta_oasis_service, sXML_import_impress_styles_oasis_service, sXML_import_impress_content_oasis_service, sXML_import_impress_settings_oasis_service },
+        { sXML_import_draw_oasis_service, sXML_import_draw_meta_oasis_service, sXML_import_draw_styles_oasis_service, sXML_import_draw_content_oasis_service, sXML_import_draw_settings_oasis_service },
+
+        { sXML_export_impress_ooo_service, sXML_export_impress_meta_ooo_service, sXML_export_impress_styles_ooo_service, sXML_export_impress_content_ooo_service, sXML_export_impress_settings_ooo_service },
+        { sXML_export_draw_ooo_service, sXML_export_draw_meta_ooo_service, sXML_export_draw_styles_ooo_service, sXML_export_draw_content_ooo_service, sXML_export_draw_settings_ooo_service },
+        { sXML_import_impress_ooo_service, sXML_import_impress_meta_ooo_service, sXML_import_impress_styles_ooo_service, sXML_import_impress_content_ooo_service, sXML_import_impress_settings_ooo_service },
+        { sXML_import_draw_ooo_service, sXML_import_draw_meta_ooo_service, sXML_import_draw_styles_ooo_service, sXML_import_draw_content_ooo_service, sXML_import_draw_settings_ooo_service },
+    };
+
+    return &gServices[ (bImport ? 2 : 0) + ((nStoreVer == SOFFICE_FILEFORMAT_60) ? 4 : 0) + (bDraw ? 1 : 0 ) ];
+}
+
 
 // ----------------
 // - SdXMLWrapper -
 // ----------------
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode ) :
-    SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode )
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode, ULONG nStoreVer ) :
+    SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
 {
 }
 
@@ -398,6 +455,17 @@ sal_Int32 ReadThroughComponent(
             return 0;
     }
 
+    // set Base URL
+    uno::Reference< beans::XPropertySet > xInfoSet;
+    if( rFilterArguments.getLength() > 0 )
+        rFilterArguments.getConstArray()[0] >>= xInfoSet;
+    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    if( xInfoSet.is() )
+    {
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+    }
+
     // get input stream
     SvStorageStreamRef xEventsStream;
     xEventsStream = pStorage->OpenStream( sStreamName,
@@ -460,6 +528,18 @@ sal_Bool SdXMLFilter::Import()
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "Preview" ),         0, &::getCppuType((const sal_Bool*)0),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "PageLayouts" ), 0, SEQTYPE(::getCppuType((const uno::Reference< container::XNameAccess >*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+        { MAP_LEN( "PrivateData" ), 0,
+              &::getCppuType( (Reference<XInterface> *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI" ), 0,
+              &::getCppuType( (OUString *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamRelPath" ), 0,
+              &::getCppuType( (OUString *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName" ), 0,
+              &::getCppuType( (OUString *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
 
@@ -543,25 +623,42 @@ sal_Bool SdXMLFilter::Import()
         }
     }
 
+    // Set base URI
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName,
+                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+    if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+    {
+        OUString aName( pStorage->GetName() );
+        if( aName.getLength() )
+        {
+            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+        }
+    }
+
+
     // -------------------------------------
 
     if( 0 == nRet )
     {
 
         // prepare filter arguments
-        Sequence<Any> aFilterArgs( 5 );
+        Sequence<Any> aFilterArgs( 4 );
         Any *pArgs = aFilterArgs.getArray();
+        *pArgs++ <<= xInfoSet;
         *pArgs++ <<= xGraphicResolver;
         *pArgs++ <<= xObjectResolver;
         *pArgs++ <<= mxStatusIndicator;
-        *pArgs++ <<= xInfoSet;
 
-        Sequence<Any> aEmptyArgs( 3 );
+        Sequence<Any> aEmptyArgs( 2 );
         pArgs = aEmptyArgs.getArray();
-        *pArgs++ <<= mxStatusIndicator;
         *pArgs++ <<= xInfoSet;
+        *pArgs++ <<= mxStatusIndicator;
 
         const OUString aName( mrMedium.GetName() );
+
+        XML_SERVICES* pServices = getServices( true, IsDraw(), mnStoreVer );
 
         sal_uInt32 nWarn = 0;
         sal_uInt32 nWarn2 = 0;
@@ -570,24 +667,24 @@ sal_Bool SdXMLFilter::Import()
         {
             nWarn = ReadThroughComponent(
                 pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
-                IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service,
+                pServices->mpMeta,
                 aEmptyArgs, aName, sal_False );
 
             nWarn2 = ReadThroughComponent(
                 pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-                IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service,
+                pServices->mpSettings,
                 aFilterArgs, aName, sal_False );
         }
 
         nRet = ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
-            IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service,
+            pServices->mpStyles,
             aFilterArgs, aName, sal_True );
 
         if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
             nRet = ReadThroughComponent(
                pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
-               IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service,
+               pServices->mpContent,
                aFilterArgs, aName, sal_True );
 
         if( !nRet )
@@ -697,6 +794,15 @@ sal_Bool SdXMLFilter::Export()
             { MAP_LEN( "UsePrettyPrinting"),0, &::getBooleanCppuType(),             ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
             { MAP_LEN( "PageLayoutNames" ), 0, SEQTYPE(::getCppuType((const OUString*)0)),  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},
+            { MAP_LEN( "BaseURI" ), 0,
+                  &::getCppuType( (OUString *)0 ),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath" ), 0,
+                  &::getCppuType( (OUString *)0 ),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamName" ), 0,
+                  &::getCppuType( (OUString *)0 ),
+                  ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -709,6 +815,20 @@ sal_Bool SdXMLFilter::Export()
         xInfoSet->setPropertyValue( sUsePrettyPrinting, makeAny( bUsePrettyPrinting ) );
 
         SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
+
+        // Set base URI
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        xInfoSet->setPropertyValue( sPropName,
+                                makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+        {
+            OUString aName( pStorage->GetName() );
+            if( aName.getLength() )
+            {
+                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+            }
+        }
 
         // initialize descriptor
         uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
@@ -760,22 +880,24 @@ sal_Bool SdXMLFilter::Export()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
+            XML_SERVICES* pServiceNames = getServices( false, IsDraw(), mnStoreVer );
+
             XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
-            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
+            aServices[i  ].mpService = pServiceNames->mpStyles;
             aServices[i  ].mpStream  = sXML_styleStreamName;
             aServices[i++].mbPlain = sal_False;
 
-            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
+            aServices[i  ].mpService = pServiceNames->mpContent;
             aServices[i  ].mpStream  = sXML_contentStreamName;
             aServices[i++].mbPlain = sal_False;
 
-            aServices[i  ].mpService = IsDraw() ? sXML_export_draw_settings_service : sXML_export_impress_settings_service;
+            aServices[i  ].mpService = pServiceNames->mpSettings;
             aServices[i  ].mpStream  = sXML_settingsStreamName;
             aServices[i++].mbPlain = sal_False;
 
             if( mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
-                aServices[i  ].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
+                aServices[i  ].mpService = pServiceNames->mpMeta;
                 aServices[i  ].mpStream  = sXML_metaStreamName;
                 aServices[i++].mbPlain = sal_True;
             };
@@ -818,6 +940,8 @@ sal_Bool SdXMLFilter::Export()
                         xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
                     }
 
+                    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+                    xInfoSet->setPropertyValue( sPropName, makeAny( sDocName ) );
                 }
 
                 uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
@@ -825,11 +949,11 @@ sal_Bool SdXMLFilter::Export()
 
                 uno::Sequence< uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                 uno::Any* pArgs = aArgs.getArray();
+                *pArgs++ <<= xInfoSet;
                 if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
                 if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
                 if( mxStatusIndicator.is() )    *pArgs++ <<= mxStatusIndicator;
 
-                *pArgs++ <<= xInfoSet;
                 *pArgs   <<= xHandler;
 
                 uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs ), uno::UNO_QUERY );
