@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-10 13:57:08 $
+ *  last change: $Author: ka $ $Date: 2002-01-10 10:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <cstdio>
 #include <csignal>
+#include <vector>
 #include <vcl/svapp.hxx>
 
 #include "solar.hrc"
@@ -72,47 +73,63 @@
 // - BmpApp -
 // ----------
 
-class BmpApp : public Application, public BmpCreator
+class BmpApp : public BmpCreator
 {
 private:
 
     String          aOutputFileName;
     BYTE            cExitCode;
 
-    BOOL            GetCommandOption( const String& rSwitch, String& rSwitchParam );
+    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
     void            SetExitCode( BYTE cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
                     }
+    void            ShowUsage();
 
     virtual void    Message( const String& rText, BYTE cExitCode );
 
 public:
 
-    void            Main();
+                    BmpApp();
+                    ~BmpApp();
+
+    int             Start( const ::std::vector< String >& rArgs );
 };
+
+// -----------------------------------------------------------------------------
+
+BmpApp::BmpApp()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+BmpApp::~BmpApp()
+{
+}
 
 // -----------------------------------------------------------------------
 
-BOOL BmpApp::GetCommandOption( const String& rSwitch, String& rFollowingParam )
+BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rFollowingParam )
 {
     BOOL bRet = FALSE;
 
-    for( USHORT i = 0, nCount = GetCommandLineParamCount(); ( i < nCount ) && !bRet; i++ )
+    for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
         String  aTestStr( '-' );
 
-        for( long n = 0; ( n < 2 ) && !bRet; n++ )
+        for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( GetCommandLineParam( i ) ) == COMPARE_EQUAL )
+            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
                 bRet = TRUE;
 
                 if( i < ( nCount - 1 ) )
-                    rFollowingParam = GetCommandLineParam( i + 1 );
+                    rFollowingParam = rArgs[ i + 1 ];
                 else
                     rFollowingParam = String();
             }
@@ -133,49 +150,53 @@ void BmpApp::Message( const String& rText, BYTE cExitCode )
         SetExitCode( cExitCode );
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
-#ifdef UNX
     aText.Append( "\r\n" );
-#else
-    aText.Append( "\n" );
-#endif
     fprintf( stderr, aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
 
-void BmpApp::Main( )
+void BmpApp::ShowUsage()
 {
-    // Param1: filename of *.srs input file with image lists
-    // Param2: path to local bitmaps
-    // Param3: output directory
-    // Param4: Langugage dependent directory
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile bmp_dir output_dir lang_dir [-f err_file]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file output should be written to" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/res /home/out /home/res/enus" ) ), EXIT_NOERROR );
+}
 
-    String  aOutName;
-    int     nCmdCount = GetCommandLineParamCount();
-    USHORT  nCurCmd = 0;
+// -----------------------------------------------------------------------------
+
+int BmpApp::Start( const ::std::vector< String >& rArgs )
+{
+    String aOutName;
 
     cExitCode = EXIT_NOERROR;
 
-    if( nCmdCount >= 4 )
+    if( rArgs.size() >= 4 )
     {
         LangInfo            aLangInfo;
-        const String        aSrsName( GetCommandLineParam( nCurCmd++ ) );
-        const String        aInName( GetCommandLineParam( nCurCmd++ ) );
+        USHORT              nCurCmd = 0;
+        const String        aSrsName( rArgs[ nCurCmd++ ] );
+        const String        aInName( rArgs[ nCurCmd++ ] );
         ByteString          aLangDir;
 
-        aOutName = GetCommandLineParam( nCurCmd++ );
-        aLangDir = ByteString( GetCommandLineParam( nCurCmd++ ), RTL_TEXTENCODING_ASCII_US );
+        aOutName = rArgs[ nCurCmd++ ];
+        aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
 
-        GetCommandOption( 'f', aOutputFileName );
+        GetCommandOption( rArgs, 'f', aOutputFileName );
 
-        // create LangInfo
         memcpy( aLangInfo.maLangDir, aLangDir.GetBuffer(), aLangDir.Len() + 1 );
         aLangInfo.mnLangNum = (USHORT) DirEntry( aOutName ).GetName().ToInt32();
 
         Create( aSrsName, aInName, aOutName, aLangInfo );
     }
     else
-        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: invalid command line parameters" ) ), EXIT_COMMONERROR );
+    {
+        ShowUsage();
+        cExitCode = EXIT_COMMONERROR;
+    }
 
     if( ( EXIT_NOERROR == cExitCode ) && aOutputFileName.Len() && aOutName.Len() )
     {
@@ -188,11 +209,70 @@ void BmpApp::Main( )
 
     if ( EXIT_NOERROR != cExitCode )
         raise( SIGABRT );
-    return;
+
+    return cExitCode;
 }
+
+// --------
+// - Main -
+// --------
+
+int main( int nArgCount, char* ppArgs[] )
+{
+    ::std::vector< String > aArgs;
+    BmpApp                  aBmpApp;
+
+    for( int i = 1; i < nArgCount; i++ )
+        aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
+
+    return aBmpApp.Start( aArgs );
+}
+
+#if 0
 
 // ---------------
 // - Application -
 // ---------------
 
-BmpApp aBmpApp;
+class ApplicationWrapper : public Application
+{
+protected:
+
+    virtual void    Main();
+
+public:
+
+                    ApplicationWrapper();
+                    ~ApplicationWrapper();
+};
+
+// -----------------------------------------------------------------------------
+
+ApplicationWrapper::ApplicationWrapper()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+ApplicationWrapper::~ApplicationWrapper()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void ApplicationWrapper::Main()
+{
+    ::std::vector< String > aArgs;
+    BmpApp                  aBmpApp;
+
+    for( int i = 0; i < GetCommandLineParamCount(); i++ )
+        aArgs.push_back( GetCommandLineParam( i ) );
+
+    aBmpApp.Start( aArgs );
+}
+
+// -----------------------------------------------------------------------------
+
+ApplicationWrapper aApp;
+
+#endif

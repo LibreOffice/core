@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ka $ $Date: 2001-09-26 09:33:56 $
+#   last change: $Author: ka $ $Date: 2002-01-10 10:08:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..
 PRJNAME=bmpmaker
 TARGET=bmp
-TARGETTYPE=GUI
+TARGETTYPE= 
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
