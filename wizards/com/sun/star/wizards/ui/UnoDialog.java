@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2004-11-26 20:44:03 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:06:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
@@ -70,6 +69,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.*;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XFrame;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.*;
@@ -77,6 +77,8 @@ import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.ui.event.*;
+
+import java.awt.Color;
 import java.util.Hashtable;
 
 public class UnoDialog implements EventNames {
@@ -94,6 +96,7 @@ public class UnoDialog implements EventNames {
     public XPropertySet xPSetDlg;
     public Hashtable ControlList;
     public Resource oResource;
+    public XWindowPeer xWindowPeer = null;
 
     protected AbstractListener guiEventListener;
 
@@ -158,6 +161,10 @@ public class UnoDialog implements EventNames {
         }
     }
 
+
+    public Resource getResource(){
+        return oResource;
+    }
 
     public void setControlProperties(String ControlName, String[] PropertyNames, Object[] PropertyValues) {
         try {
@@ -451,7 +458,7 @@ public class UnoDialog implements EventNames {
      * @param the name of the control
      * @param iStep  change the step if you want to make the control invisible
      */
-    public void setControlVisible(String controlname, int iStep) {
+    private void setControlVisible(String controlname, int iStep) {
         try {
             int iCurStep = AnyConverter.toInt(getControlProperty(controlname, "Step"));
             setControlProperty(controlname, "Step", new Integer(iStep));
@@ -465,7 +472,8 @@ public class UnoDialog implements EventNames {
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The "Step" property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
-     * Afterwards the step property of the dialog has to be set
+     * Afterwards the step property of the dialog has to be set with "repaintDialogStep". As the performance
+     * of that method is very bad it should be used only once for all controls
      * @param controlname the name of the control
      * @param bIsVisible sets the control visible or invisible
      */
@@ -547,12 +555,8 @@ public class UnoDialog implements EventNames {
     public void deselectListBox(XInterface _xBasisListBox) {
         Object oListBoxModel = getModel(_xBasisListBox);
         Object sList = Helper.getUnoPropertyValue(oListBoxModel, "StringItemList");
-        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", new String[] {
-        });
+        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", new String[] {});
         Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", sList);
-        //      XListBox xListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, _xBasisListBox);
-
-        //      xListBox.selectItemPos(xListBox.getSelectedItemPos(), false);
     }
 
     public void calculateDialogPosition(Rectangle FramePosSize) {
@@ -578,9 +582,11 @@ public class UnoDialog implements EventNames {
         if (xControl.getPeer() == null)
             throw new java.lang.IllegalArgumentException("Please create a peer, using your own frame");
         calculateDialogPosition(FramePosSize);
-
-        //      XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
-        //      xVclWindowPeer.setProperty("AutoMnemonics", new Boolean(true));
+        if (xWindowPeer == null)
+            createWindowPeer();
+        XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
+//      xVclWindowPeer.setProperty("AutoMnemonics", new Boolean(true));
+        this.BisHighContrastModeActivated = new Boolean(this.isHighContrastModeActivated(xVclWindowPeer));
         xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
         return xDialog.execute();
     }
@@ -612,7 +618,6 @@ public class UnoDialog implements EventNames {
         }
 
         return executeDialog(new Rectangle(0,0,640,400));
-
     }
 
 
@@ -655,6 +660,7 @@ public class UnoDialog implements EventNames {
             parentPeer = ((XToolkit) UnoRuntime.queryInterface(XToolkit.class, tk)).getDesktopWindow();
         XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, tk);
         xControl.createPeer(xToolkit, parentPeer);
+        xWindowPeer = xControl.getPeer();
         return xControl.getPeer();
     }
 
@@ -817,4 +823,32 @@ public class UnoDialog implements EventNames {
     public static short setInitialTabindex(int _istep) {
         return (short) (_istep * 100);
     }
+
+
+    private Boolean BisHighContrastModeActivated = null;
+
+    public boolean isHighContrastModeActivated(XVclWindowPeer xPeerPropertySet){
+        if (BisHighContrastModeActivated == null){
+            int nUIColor;
+            try {
+                nUIColor = AnyConverter.toInt(xPeerPropertySet.getProperty("DisplayBackgroundColor"));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace(System.out);
+                return false;
+            }
+            Color aColor = new Color(nUIColor);
+            int nRed = aColor.getRed();
+            int nGreen = aColor.getGreen();
+            int nBlue = aColor.getBlue();
+            int nLuminance = (( nBlue*28 + nGreen*151 + nRed*77 ) / 256 );
+            boolean bisactivated = (nLuminance <= 25);
+            BisHighContrastModeActivated = new Boolean(bisactivated);
+            return bisactivated;
+        }
+        else
+            return BisHighContrastModeActivated.booleanValue();
+    }
+
+
+
 }
