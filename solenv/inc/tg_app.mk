@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:04:57 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -205,7 +205,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         -map:$(MISC)$/$(@:b).map \
         $(STDOBJ) \
         $(APP$(TNR)LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) \
+        $(APP$(TNR)RES) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
@@ -223,7 +223,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         -out:$@ \
         $(STDOBJ) \
         $(APP$(TNR)LINKRES) \
-        $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) \
+        $(APP$(TNR)RES) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
