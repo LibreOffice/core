@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-29 11:34:53 $
+ *  last change: $Author: aw $ $Date: 2001-07-27 12:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,10 +963,20 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
         if (nY<1) { nY=1; bNoMoreLoop=TRUE; }
         if (nY>65535) { nY=65535; bNoMoreLoop=TRUE; }
 
-        if (nIsWdt<=1) { // Ausnahme, weil warscheinlich noch gar kein Text drin ist
-            nX=nY;
-            bNoMoreLoop=TRUE;
+        // exception, there is no text yet (horizontal case)
+        if(nIsWdt <= 1)
+        {
+            nX = nY;
+            bNoMoreLoop = TRUE;
         }
+
+        // #87877# exception, there is no text yet (vertical case)
+        if(nIsHgt <= 1)
+        {
+            nY = nX;
+            bNoMoreLoop = TRUE;
+        }
+
         rOutliner.SetGlobalCharStretching((USHORT)nX,(USHORT)nY);
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
