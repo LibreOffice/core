@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 13:06:36 $
+ *  last change: $Author: pb $ $Date: 2001-10-23 10:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,10 @@ SfxModalDefParentHelper::~SfxModalDefParentHelper()
 void SetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg,
                          sal_uInt16 nId, const String &rExtraData = aEmptyString )
 {
-    // save settings
+    // save settings (position and user data)
     SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
-    aDlgOpt.SetWindowState( OUString::createFromAscii( pDlg->GetWindowState().GetBuffer() ) );
+    aDlgOpt.SetWindowState(
+        OUString::createFromAscii( pDlg->GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
     if ( rExtraData.Len() )
         aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( rExtraData ) ) );
 }
