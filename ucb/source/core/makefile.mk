@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-27 07:52:50 $
+#   last change: $Author: kso $ $Date: 2002-06-25 13:04:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,14 +79,9 @@ SLOFILES=\
     $(SLO)$/ucbserv.obj \
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
-    $(SLO)$/provprox.obj
-
-.IF "$(UPD)">="619"
-SLOFILES+=$(SLO)$/ucbcmds.obj \
+        $(SLO)$/provprox.obj \
+        $(SLO)$/ucbcmds.obj \
     $(SLO)$/coreremotecontentbroker.obj
-.ELSE
-SLOFILES+=$(SLO)$/ucbcfg.obj
-.ENDIF
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -103,11 +98,13 @@ SHL1LIBS=\
     $(SLB)$/regexp.lib
 SHL1IMPLIB=i$(TARGET)
 
-DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+.IF "$(OS)"=="MACOSX"
+.ELSE
+SHL1VERSIONMAP=exports.map
+.ENDIF
+
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORT1 =component_getImplementationEnvironment
-DEF1EXPORT2 =component_writeInfo
-DEF1EXPORT3 =component_getFactory
+DEF1EXPORTFILE=exports.dxp
 DEF1DES=Universal Content Broker
 
 # Make symbol renaming match library name for Mac OS X
@@ -117,17 +114,3 @@ SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
 
 .INCLUDE: target.mk
 
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-#	@echo Type >> $@
-    @echo cpp >> $@
-    @echo m_ >> $@
-    @echo rtl >> $@
-    @echo vos >> $@
-    @echo component_getImplementationEnvironment >> $@
-    @echo component_writeInfo >> $@
-    @echo component_getFactory >> $@
-.IF "$(COM)"=="MSC"
-    @echo ??_ >> $@
-.ENDIF # COM MSC

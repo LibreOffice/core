@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-15 17:21:29 $
+#   last change: $Author: kso $ $Date: 2002-06-25 13:03:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ UCB_MAJOR=1
 .INCLUDE: settings.mk
 .INCLUDE: sv.mk
 
-#INCPRE+=$(PRJ)$/source$/inc
-
 SLOFILES=\
     $(SLO)$/contentresultsetwrapper.obj \
     $(SLO)$/cachedcontentresultsetstub.obj \
@@ -97,11 +95,13 @@ SHL1STDLIBS=\
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=i$(TARGET)
 
-DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+.IF "$(OS)"=="MACOSX"
+.ELSE
+SHL1VERSIONMAP=exports.map
+.ENDIF
+
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORT1 =component_getImplementationEnvironment
-DEF1EXPORT2 =component_writeInfo
-DEF1EXPORT3 =component_getFactory
+DEF1EXPORTFILE=exports.dxp
 DEF1DES=Cached Dynamic Resultset
 
 # Make symbol renaming match library name for Mac OS X
@@ -111,7 +111,3 @@ SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
 
 .INCLUDE: target.mk
 
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    $(TYPE) cached1.flt > $@

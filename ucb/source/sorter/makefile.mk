@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 08:53:58 $
+#   last change: $Author: kso $ $Date: 2002-06-25 13:04:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,11 +97,13 @@ SHL1STDLIBS+=$(TOOLSLIB)
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=i$(TARGET)
 
-DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+.IF "$(OS)"=="MACOSX"
+.ELSE
+SHL1VERSIONMAP=exports.map
+.ENDIF
+
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORT1 =component_getImplementationEnvironment
-DEF1EXPORT2 =component_writeInfo
-DEF1EXPORT3 =component_getFactory
+DEF1EXPORTFILE=exports.dxp
 DEF1DES=UCB : Sorted Dynamic ResultSet
 
 # Make symbol renaming match library name for Mac OS X
@@ -111,16 +113,3 @@ SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
 
 .INCLUDE: target.mk
 
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-#	@echo Type >> $@
-    @echo cpp >> $@
-    @echo m_ >> $@
-    @echo rtl >> $@
-    @echo component_getImplementationEnvironment >> $@
-    @echo component_writeInfo >> $@
-    @echo component_getFactory >> $@
-.IF "$(COM)"=="MSC"
-    @echo ??_ >> $@
-.ENDIF # COM MSC
