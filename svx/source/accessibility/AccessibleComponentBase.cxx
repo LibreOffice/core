@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-03-06 15:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ void SAL_CALL AccessibleComponentBase::grabFocus (void)
 
 
 
-//=====  XAccessibleComponent  ========================================
+//=====  XAccessibleExtendedComponent  ========================================
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground (void)
         throw (::com::sun::star::uno::RuntimeException)
