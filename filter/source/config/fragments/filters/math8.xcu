@@ -7,8 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Open Formula</value>
-            <value xml:lang="de">Offene Formel</value>
+            <value xml:lang="en-US">Open Office Formula</value>
+            <value xml:lang="de">Open Office Formel</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT</value></prop>
     </node>
