@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 14:37:01 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ Text[ swedish ] = "%PRODUCTNAME kalender";
     Text[ arabic ] = "КЮжнг%PRODUCTNAME ";
     Text[ turkish ] = "%PRODUCTNAME Takvimi";
     Text[ catalan ] = "%PRODUCTNAME Calendari";
-    Text[ finnish ] = "%PRODUCTNAME: Kalenteri";
+    Text[ finnish ] = "%PRODUCTNAME-kalenteri";
     Text[ thai ] = "аё›аёЏаёґаё—аёґаё™ %PRODUCTNAME ";
 };
 
@@ -203,7 +203,7 @@ Text[ spanish ] = "Cбlculo de los dнas festivos";
 Text[ portuguese ] = "Cбlculo dos feriados";
 Text[ dutch ] = "Feestdagen berekenen";
 Text[ swedish ] = "Berдkna helgdagar";
-    Text[ russian ] = "Включить праздники в календарь";
+    Text[ russian ] = "Добавить праздники в календарь";
     Text[ greek ] = "Хрплпгйумьт змесюн бсгЯбт";
     Text[ danish ] = "Beregn helligdage";
     Text[ polish ] = "Oblicz dni њwi№teczne";
@@ -231,7 +231,7 @@ Text[ spanish ] = "Crear";
 Text[ portuguese ] = "Criar";
 Text[ dutch ] = "Voltooien";
 Text[ swedish ] = "Fдrdigstдll";
-    Text[ russian ] = "Готово";
+    Text[ russian ] = "Создать";
     Text[ greek ] = "ДзмйпхсгЯб";
     Text[ danish ] = "Udfшr";
     Text[ polish ] = "Utwуrz";
@@ -258,7 +258,7 @@ Text[ spanish ] = "Cancelar";
 Text[ portuguese ] = "Cancelar";
 Text[ dutch ] = "Annuleren";
 Text[ swedish ] = "Avbryt";
-    Text[ russian ] = "Отмена";
+    Text[ russian ] = "Отменить";
     Text[ greek ] = "Бкэсщуз";
     Text[ danish ] = "Annuller";
     Text[ polish ] = "Anuluj";
@@ -420,7 +420,7 @@ Text[ french ] = "Pйriode";
 Text[ italian ] = "Intervallo di tempo";
 Text[ spanish ] = "Perнodo";
 Text[ portuguese ] = "Perнodo";
-Text[ dutch ] = "Tijdsbestek";
+Text[ dutch ] = "Periode";
 Text[ swedish ] = "Tidsrymd";
     Text[ russian ] = "Период";
     Text[ greek ] = "Чспнйкь дйЬуфзмб";
@@ -578,7 +578,7 @@ Text[ spanish ] = "~Eliminar";
 Text[ portuguese ] = "Rem~over";
 Text[ dutch ] = "Ver~wijderen";
 Text[ swedish ] = "Ta ~bort";
-    Text[ russian ] = "~Убрать";
+    Text[ russian ] = "~Удалить";
     Text[ greek ] = "Дйбгсб~цЮ";
     Text[ danish ] = "~Fjern";
     Text[ polish ] = "~Usuс";
@@ -605,7 +605,7 @@ Text[ spanish ] = "Nuevo acontecimiento";
 Text[ portuguese ] = "Novo evento";
 Text[ dutch ] = "Nieuwe gebeurtenis";
 Text[ swedish ] = "Ny hдndelse";
-    Text[ russian ] = "Новое событие";
+    Text[ russian ] = "Создать событие";
     Text[ greek ] = "НЭп гегпньт";
     Text[ danish ] = "Ny begivenhed";
     Text[ polish ] = "Nowe wydarzenie";
@@ -755,7 +755,7 @@ Text[ swedish ] = "Еr";
     Text[ turkish ] = "Yэl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Any";
-    Text[ finnish ] = "Vuosi";
+    Text[ finnish ] = "Julkaisuvuosi";
     Text[ thai ] = "аё›аёµ";
 };
 
@@ -771,7 +771,7 @@ Text[ french ] = "france.bmp";
 Text[ italian ] = "italia.bmp";
 Text[ spanish ] = "spain.bmp";
 Text[ portuguese ] = "portugal.bmp";
-Text[ dutch ] = "nedland.bmp";
+Text[ dutch ] = "netherlands.bmp";
 Text[ swedish ] = "sweden.bmp";
     Text[ russian ] = "russia.bmp";
     Text[ greek ] = "greece.bmp";
@@ -804,7 +804,7 @@ Text[ spanish ] = "Dнas festivos nacionales";
 Text[ portuguese ] = "Feriados gerais";
 Text[ dutch ] = "Algemene feestdagen";
 Text[ swedish ] = "Allmдnna helgdagar";
-    Text[ russian ] = "Общественные праздники";
+    Text[ russian ] = "Официальные праздники";
     Text[ danish ] = "Almindelige helligdage";
     Text[ polish ] = "Ogуlne dni њwi№teczne";
     Text[ chinese_traditional ] = "дёЂи€¬зЇЂеЃ‡ж—Ґ";
@@ -1184,7 +1184,7 @@ Text[ spanish ] = "Ha ocurrido un error al crear el calendario.";
 Text[ portuguese ] = "Surgiu um erro ao criar o calendбrio.";
 Text[ dutch ] = "Bij het maken van de kalender is een fout opgetreden.";
 Text[ swedish ] = "Ett fel uppstod nдr kalendern skapades.";
-    Text[ russian ] = "Во время создания календаря произошла ошибка";
+    Text[ russian ] = "Ошибка создания календаря.";
     Text[ greek ] = "РбспхуйЬуфзке уцЬлмб кбфЬ фзн дзмйпхсгЯб фпх змесплпгЯпх.";
     Text[ danish ] = "Der opstod en fejl under oprettelsen af kalenderen.";
     Text[ polish ] = "Podczas tworzenia kalendarza zaszedі bі№d.";
@@ -1209,7 +1209,7 @@ Text[ french ] = "Supprimer les йvйnements ?";
 Text[ italian ] = "Elimina gli eventi";
 Text[ spanish ] = "Eliminar acontecimientos";
 Text[ portuguese ] = "Eliminar eventos";
-Text[ dutch ] = "Ingevulde gegevens wissen";
+Text[ dutch ] = "Gebeurtenisgegevens wissen";
 Text[ swedish ] = "Ta bort hдndelseposter";
     Text[ russian ] = "Удалить записи событий";
     Text[ greek ] = "ДйбгсбцЮ еггсбцюн гегпньфщн";
@@ -1269,7 +1269,7 @@ Text[ portuguese ] = "";
 Text[ dutch ] = "";
 Text[ swedish ] = "";
     Text[ portuguese ] = "Dias ъteis";
-    Text[ russian ] = "Рабочая";
+    Text[ russian ] = "Рабочая неделя";
     Text[ greek ] = "ЕсгЬуймз евдпмЬдб";
     Text[ dutch ] = "Werkweek";
     Text[ french ] = "Semaine ouvrйe";
@@ -1391,9 +1391,9 @@ Text = "Fortschritt:";
 Text[ English ] = "Progress:";
 Text[ English_us ] = "Progress:";
     Text[ portuguese ] = "Progressгo:";
-    Text[ russian ] = "Прогресс:";
+    Text[ russian ] = "Выполнение:";
     Text[ greek ] = "Рсьпдпт:";
-    Text[ dutch ] = "Vooruitgang:";
+    Text[ dutch ] = "Voortgang:";
     Text[ french ] = "Progression :";
     Text[ spanish ] = "Progresiуn:";
     Text[ italian ] = "Progresso:";
