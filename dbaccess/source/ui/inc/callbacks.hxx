@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-22 10:40:44 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,14 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #define _DBACCESS_UI_CALLBACKS_HXX_
 
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
+#endif
+
 class CommandEvent;
+struct AcceptDropEvent;
+struct ExecuteDropEvent;
+
 //........................................................................
 namespace dbaui
 {
@@ -75,13 +82,22 @@ namespace dbaui
     {
     public:
         /** handler for context menu requests
-            @return sal_Bool if the request was handled
+            @return <TRUE/> if the request was handled
         */
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent ) = 0;
 
         /** handler for StartDrag requests
+            @return <TRUE/> if a drag operation was started
         */
-        virtual void        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
+        virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
+
+        /** check whether or no a drop request should be accepted
+        */
+        virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) = 0;
+
+        /** execute a drop request
+        */
+        virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) = 0;
     };
 
 //........................................................................
@@ -93,6 +109,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/22 10:40:44  fs
+ *  initial checkin - callbacks
+ *
  *
  *  Revision 1.0 22.03.01 10:12:22  fs
  ************************************************************************/
