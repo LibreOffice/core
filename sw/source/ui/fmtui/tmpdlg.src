@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:31:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ TabDialog DLG_TEMPLATE_2
     Text [ ENGLISH ] = "Paragraph Style" ;
     Text [ norwegian ] = "Paragraph Style" ;
     Text [ italian ] = "Modello paragrafo" ;
-    Text [ portuguese_brazilian ] = "Estilo de parágrafo" ;
+    Text [ portuguese_brazilian ] = "Estilo de par?grafo" ;
     Text [ portuguese ] = "Estilo de parágrafo" ;
     Text [ finnish ] = "Kappaleen tyyli" ;
     Text [ danish ] = "Afsnitstypografi" ;
@@ -274,7 +274,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -526,7 +526,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Tabs" ;
                 Text [ norwegian ] = "Tabulatorer" ;
                 Text [ italian ] = "Tabulazioni" ;
-                Text [ portuguese_brazilian ] = "Tabulações" ;
+                Text [ portuguese_brazilian ] = "Tabula??s" ;
                 Text [ portuguese ] = "Tabulações" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulatorer" ;
@@ -866,7 +866,7 @@ String STR_PAGE_STD
     Text [ ENGLISH ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "Página" ;
+    Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Sivu" ;
     Text [ danish ] = "Side" ;
@@ -920,7 +920,7 @@ String STR_PAGE_HEADER
     Text [ ENGLISH ] = "Header" ;
     Text [ norwegian ] = "Header" ;
     Text [ italian ] = "Riga d'intestazione" ;
-    Text [ portuguese_brazilian ] = "Cabeçalho" ;
+    Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalho" ;
     Text [ finnish ] = "Yläotsikko" ;
     Text [ danish ] = "Sidehoved" ;
@@ -948,7 +948,7 @@ String STR_PAGE_FOOTER
     Text [ ENGLISH ] = "Footer" ;
     Text [ norwegian ] = "Footer" ;
     Text [ italian ] = "Piè di pagina" ;
-    Text [ portuguese_brazilian ] = "Rodapé" ;
+    Text [ portuguese_brazilian ] = "Rodap?" ;
     Text [ portuguese ] = "Rodapé" ;
     Text [ finnish ] = "Alaselite" ;
     Text [ danish ] = "Sidefod" ;
@@ -1003,7 +1003,7 @@ String STR_PAGE_FOOTNOTE
     Text [ ENGLISH ] = "Footnote" ;
     Text [ norwegian ] = "Footnote" ;
     Text [ italian ] = "Nota a piè pagina" ;
-    Text [ portuguese_brazilian ] = "Nota de pé de página" ;
+    Text [ portuguese_brazilian ] = "Nota de p? de p?gina" ;
     Text [ portuguese ] = "Nota de rodapé" ;
     Text [ finnish ] = "Alaviite" ;
     Text [ danish ] = "Fodnote" ;
@@ -1090,7 +1090,7 @@ TabDialog DLG_TEMPLATE_3
                 Text [ dutch ] = "Overige" ;
                 Text [ swedish ] = "Tillägg" ;
                 Text [ danish ] = "Flere" ;
-                Text [ portuguese_brazilian ] = "Zusätze" ;
+                Text [ portuguese_brazilian ] = "Zus?tze" ;
                 Text [ portuguese ] = "Opções" ;
                 Text[ chinese_simplified ] = "ÆäËü";
                 Text[ russian ] = "Ïàðàìåòðû";
