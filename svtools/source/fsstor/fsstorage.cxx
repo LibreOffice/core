@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:38:51 $
+ *  last change: $Author: mav $ $Date: 2004-12-01 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,14 @@
 
 #ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
+#include <com/sun/star/ucb/IOErrorCode.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
@@ -353,42 +361,52 @@ void FSStorage::CopyContentToStorage_Impl( ::ucb::Content* pContent, const uno::
     pProps[1] = ::rtl::OUString::createFromAscii( "IsFolder" );
     ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-    uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, eInclude );
-    uno::Reference< ::com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-    uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
-    if ( xResultSet.is() )
+    try
     {
-        // go through the list: insert files as streams, insert folders as substorages using recursion
-        while ( xResultSet->next() )
+        uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, eInclude );
+        uno::Reference< ::com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+        uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
+        if ( xResultSet.is() )
         {
-            ::rtl::OUString aSourceURL( xRow->getString( 1 ) );
-            sal_Bool bIsFolder( xRow->getBoolean(2) );
-
-            // TODO/LATER: not sure whether the entry name must be encoded
-            ::rtl::OUString aNewEntryName( INetURLObject( aSourceURL ).getName( INetURLObject::LAST_SEGMENT,
-                                                                                true,
-                                                                                INetURLObject::NO_DECODE ) );
-            if ( bIsFolder )
+            // go through the list: insert files as streams, insert folders as substorages using recursion
+            while ( xResultSet->next() )
             {
-                uno::Reference< embed::XStorage > xSubStorage = xDest->openStorageElement( aNewEntryName,
-                                                                                            embed::ElementModes::READWRITE );
-                if ( !xSubStorage.is() )
-                    throw uno::RuntimeException();
+                ::rtl::OUString aSourceURL( xRow->getString( 1 ) );
+                sal_Bool bIsFolder( xRow->getBoolean(2) );
 
-                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-                ::ucb::Content aSourceContent( aSourceURL, xDummyEnv );
-                CopyContentToStorage_Impl( &aSourceContent, xSubStorage );
-            }
-            else
-            {
-                CopyStreamToSubStream( aSourceURL, xDest, aNewEntryName );
+                // TODO/LATER: not sure whether the entry name must be encoded
+                ::rtl::OUString aNewEntryName( INetURLObject( aSourceURL ).getName( INetURLObject::LAST_SEGMENT,
+                                                                                    true,
+                                                                                    INetURLObject::NO_DECODE ) );
+                if ( bIsFolder )
+                {
+                    uno::Reference< embed::XStorage > xSubStorage = xDest->openStorageElement( aNewEntryName,
+                                                                                                embed::ElementModes::READWRITE );
+                    if ( !xSubStorage.is() )
+                        throw uno::RuntimeException();
+
+                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+                    ::ucb::Content aSourceContent( aSourceURL, xDummyEnv );
+                    CopyContentToStorage_Impl( &aSourceContent, xSubStorage );
+                }
+                else
+                {
+                    CopyStreamToSubStream( aSourceURL, xDest, aNewEntryName );
+                }
             }
         }
-    }
 
-    uno::Reference< embed::XTransactedObject > xTransact( xDest, uno::UNO_QUERY );
-    if ( xTransact.is() )
-        xTransact->commit();
+        uno::Reference< embed::XTransactedObject > xTransact( xDest, uno::UNO_QUERY );
+        if ( xTransact.is() )
+            xTransact->commit();
+    }
+    catch( ::com::sun::star::ucb::InteractiveIOException& r )
+    {
+        if ( r.Code == ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING )
+            OSL_ENSURE( sal_False, "The folder does not exist!\n" );
+        else
+            throw;
+    }
 }
 
 //____________________________________________________________________________________________________
@@ -546,6 +564,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     if ( !GetContent() )
         throw io::IOException(); // TODO: error handling
 
+    // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aFileURL( m_pImpl->m_aURL );
     aFileURL.Append( aStreamName );
 
@@ -670,6 +689,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
       && !( m_pImpl->m_nMode & embed::ElementModes::WRITE ) )
           throw io::IOException(); // TODO: error handling
 
+    // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aFolderURL( m_pImpl->m_aURL );
     aFolderURL.Append( aStorName );
 
@@ -751,6 +771,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const ::rt
     if ( !GetContent() )
         throw io::IOException(); // TODO: error handling
 
+    // TODO/LATER: may need possibility to create folder if it was removed, since the folder can not be locked
     INetURLObject aFileURL( m_pImpl->m_aURL );
     aFileURL.Append( aStreamName );
 
@@ -1207,6 +1228,19 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
                 aResult.realloc( ++nSize );
                 aResult[nSize-1] = aName;
             }
+        }
+    }
+    catch( ::com::sun::star::ucb::InteractiveIOException& r )
+    {
+        if ( r.Code == ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING )
+            OSL_ENSURE( sal_False, "The folder does not exist!\n" );
+        else
+        {
+               uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
+                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                uno::UNO_QUERY ),
+                                            aCaught );
         }
     }
     catch( uno::RuntimeException& )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fsfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:38:40 $
+ *  last change: $Author: mav $ $Date: 2004-12-01 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
     if ( nStorageMode & embed::ElementModes::WRITE )
         FSStorage::MakeFolderNoUI( aURL, sal_False );
+    else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
+        throw io::IOException(); // there is no such folder
 
     ::ucb::Content aResultContent( aURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
