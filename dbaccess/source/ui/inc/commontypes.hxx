@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 14:44:34 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@ namespace dbaui
 //.........................................................................
 
     DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
-    DECLARE_STL_VECTOR(sal_Int8, ByteVector);
+    DECLARE_STL_VECTOR( sal_Int8, ByteVector );
+    DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
 
 //.........................................................................
 }   // namespace dbaui
@@ -83,6 +84,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/30 14:44:34  fs
+ *  moved from ../dlg
+ *
  *  Revision 1.2  2000/10/26 18:06:21  fs
  *  ByteVector
  *
