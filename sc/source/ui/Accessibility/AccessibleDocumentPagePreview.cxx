@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
 #endif
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
@@ -84,12 +87,21 @@
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
+#endif
+#ifndef SC_EDITSRC_HXX
+#include "editsrc.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
@@ -107,35 +119,1182 @@
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
+#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#include <svx/AccessibleTextHelper.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#include <svx/AccessibleShape.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
+#include <svx/ShapeTypeHandler.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
+#endif
+
+#include<vector>
+#include<list>
+#include<algorithm>
+#include<memory>
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
 //=========================================================================
 
+typedef std::list< uno::Reference< XAccessible > > ScXAccList;
+
+
+struct ScAccNote
+{
+    String      maNoteText;
+    Rectangle   maRect;
+    ScAddress   maNoteCell;
+    accessibility::AccessibleTextHelper* mpTextHelper;
+    sal_Int32   mnParaCount;
+    sal_Bool    mbMarkNote;
+};
+
+class ScNotesChilds
+{
+public:
+    ScNotesChilds(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc);
+    ~ScNotesChilds();
+    void Init(const Rectangle& rVisRect, sal_Int32 nOffset);
+
+    sal_Int32 GetChildsCount() const;
+    uno::Reference<XAccessible> GetChild(sal_Int32 nIndex) const;
+    uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
+
+    void DataChanged(const Rectangle& rVisRect);
+    void SetOffset(sal_Int32 nNewOffset);
+private:
+    ScPreviewShell*         mpViewShell;
+    ScAccessibleDocumentPagePreview* mpAccDoc;
+    typedef std::vector<ScAccNote> ScAccNotes;
+    mutable ScAccNotes      maNotes;
+    mutable ScAccNotes      maMarks;
+    sal_Int32               mnParagraphs;
+    sal_Int32               mnOffset;
+
+    accessibility::AccessibleTextHelper* CreateTextHelper(const String& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const;
+    sal_Int32 AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rNotes);
+
+    sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
+    void CollectChilds(const ScAccNote& rNote, ScXAccList& rList);
+    sal_Int32 CheckChanges(const ScPreviewLocationData& rData, const Rectangle& rVisRect,
+        sal_Bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
+        ScXAccList& rOldParas, ScXAccList& rNewParas);
+
+    inline ScDocument* GetDocument() const;
+};
+
+ScNotesChilds::ScNotesChilds(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc)
+    : mpViewShell(pViewShell),
+    mpAccDoc(pAccDoc),
+    mnParagraphs(0),
+    mnOffset(0)
+{
+}
+
+struct DeleteAccNote
+{
+    void operator()(ScAccNote& rNote)
+    {
+        if (rNote.mpTextHelper)
+            DELETEZ( rNote.mpTextHelper);
+    }
+};
+
+ScNotesChilds::~ScNotesChilds()
+{
+    std::for_each(maNotes.begin(), maNotes.end(), DeleteAccNote());
+    std::for_each(maMarks.begin(), maMarks.end(), DeleteAccNote());
+}
+
+accessibility::AccessibleTextHelper* ScNotesChilds::CreateTextHelper(const String& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const
+{
+    accessibility::AccessibleTextHelper* pTextHelper = NULL;
+
+    ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
+        (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
+    ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
+
+    pTextHelper = new accessibility::AccessibleTextHelper(mpAccDoc, pEditSource );
+
+    if (pTextHelper)
+    {
+        pTextHelper->SetChildrenOffset(nChildOffset);
+        pTextHelper->SetOffset(rVisRect.TopLeft());
+    }
+
+    return pTextHelper;
+}
+
+sal_Int32 ScNotesChilds::AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rNotes)
+{
+    sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
+
+    rNotes.reserve(nCount);
+
+    sal_Int32 nParagraphs(0);
+    ScDocument* pDoc = GetDocument();
+    if (pDoc)
+    {
+        ScAccNote aNote;
+        aNote.mbMarkNote = bMark;
+        if (bMark)
+            aNote.mnParaCount = 1;
+        for (sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            if (rData.GetNoteInRange(rVisRect, nIndex, bMark, aNote.maNoteCell, aNote.maRect))
+            {
+                if (bMark)
+                {
+                    // Document not needed, because only the cell address, but not the tablename is needed
+                    aNote.maNoteCell.Format( aNote.maNoteText, SCA_VALID, NULL );
+                }
+                else
+                {
+                    ScPostIt aPostIt;
+                    pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
+                    aNote.maNoteText = aPostIt.GetText();
+                    aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
+                    if (aNote.mpTextHelper)
+                        aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
+                }
+                nParagraphs += aNote.mnParaCount;
+                rNotes.push_back(aNote);
+            }
+        }
+    }
+    return nParagraphs;
+}
+
+void ScNotesChilds::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
+{
+    if (mpViewShell && !mnParagraphs)
+    {
+        mnOffset = nOffset;
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+
+        mnParagraphs = AddNotes(rData, rVisRect, sal_False, maMarks);
+        mnParagraphs += AddNotes(rData, rVisRect, sal_True, maNotes);
+    }
+}
+
+sal_Int32 ScNotesChilds::GetChildsCount() const
+{
+    return mnParagraphs;
+}
+
+struct ScParaFound
+{
+    sal_Int32 mnIndex;
+    ScParaFound(sal_Int32 nIndex) : mnIndex(nIndex) {}
+    sal_Bool operator() (const ScAccNote& rNote)
+    {
+        sal_Bool bResult(sal_False);
+        if (rNote.mnParaCount > mnIndex)
+            bResult = sal_True;
+        else
+            mnIndex -= rNote.mnParaCount;
+        return bResult;
+    }
+};
+
+uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
+{
+    uno::Reference<XAccessible> xAccessible;
+
+    if (nIndex < mnParagraphs)
+    {
+        if (nIndex < static_cast<sal_Int32>(maMarks.size()))
+        {
+#ifndef PRODUCT
+            ScAccNotes::iterator aEndItr = maMarks.end();
+            ScParaFound aParaFound(nIndex);
+            ScAccNotes::iterator aItr = std::find_if(maMarks.begin(), aEndItr, aParaFound);
+            if (aItr != aEndItr)
+            {
+                DBG_ASSERT((aItr->maNoteCell == maMarks[nIndex].maNoteCell) && (aItr->mbMarkNote == maMarks[nIndex].mbMarkNote), "wrong note found");
+            }
+            else
+                DBG_ERRORFILE("wrong note found");
+#endif
+            if (!aItr->mpTextHelper)
+                aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
+            xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex);
+        }
+        else
+        {
+            nIndex -= maMarks.size();
+            ScAccNotes::iterator aEndItr = maNotes.end();
+            ScParaFound aParaFound(nIndex);
+            ScAccNotes::iterator aItr = std::find_if(maNotes.begin(), aEndItr, aParaFound);
+            if (aEndItr != aItr)
+            {
+                if (!aItr->mpTextHelper)
+                    aItr->mpTextHelper = CreateTextHelper(aItr->maNoteText, aItr->maRect, aItr->maNoteCell, aItr->mbMarkNote, (nIndex - aParaFound.mnIndex) + mnOffset + maMarks.size());
+                xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex);
+            }
+        }
+    }
+
+    return xAccessible;
+}
+
+struct ScPointFound
+{
+    Rectangle maPoint;
+    sal_Int32 mnParagraphs;
+    ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
+    sal_Bool operator() (const ScAccNote& rNote)
+    {
+        sal_Bool bResult(sal_False);
+        if (maPoint.IsInside(rNote.maRect))
+            bResult = sal_True;
+        else
+            mnParagraphs += rNote.mnParaCount;
+        return bResult;
+    }
+};
+
+uno::Reference<XAccessible> ScNotesChilds::GetAt(const awt::Point& rPoint) const
+{
+    uno::Reference<XAccessible> xAccessible;
+
+    ScPointFound aPointFound(Point(rPoint.X, rPoint.Y));
+
+    ScAccNotes::iterator aEndItr = maMarks.end();
+    ScAccNotes::iterator aItr = std::find_if(maMarks.begin(), aEndItr, aPointFound);
+    if (aEndItr == aItr)
+    {
+        aEndItr = maNotes.end();
+        aItr = std::find_if(maNotes.begin(), aEndItr, aPointFound);
+    }
+    if (aEndItr != aItr)
+    {
+        if (!aItr->mpTextHelper)
+            aItr->mpTextHelper = CreateTextHelper(aItr->maNoteText, aItr->maRect, aItr->maNoteCell, aItr->mbMarkNote, aPointFound.mnParagraphs + mnOffset);
+        xAccessible = aItr->mpTextHelper->GetAt(rPoint);
+    }
+
+    return xAccessible;
+}
+
+sal_Int8 ScNotesChilds::CompareCell(const ScAddress& aCell1, const ScAddress& aCell2)
+{
+    DBG_ASSERT(aCell1.Tab() == aCell2.Tab(), "the notes should be on the same table")
+    sal_Int8 nResult(0);
+    if (aCell1 != aCell2)
+    {
+        if (aCell1.Row() == aCell2.Row())
+            nResult = (aCell1.Col() < aCell2.Col()) ? -1 : 1;
+        else
+            nResult = (aCell1.Row() < aCell2.Row()) ? -1 : 1;
+    }
+    return nResult;
+}
+
+void ScNotesChilds::CollectChilds(const ScAccNote& rNote, ScXAccList& rList)
+{
+    if (rNote.mpTextHelper)
+        for (sal_Int32 i = 0; i < rNote.mnParaCount; ++i)
+            rList.push_back(rNote.mpTextHelper->GetChild(i));
+}
+
+sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
+            const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rOldNotes,
+            ScAccNotes& rNewNotes, ScXAccList& rOldParas, ScXAccList& rNewParas)
+{
+    sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
+
+    rNewNotes.reserve(nCount);
+
+    sal_Int32 nParagraphs(0);
+    ScDocument* pDoc = GetDocument();
+    if (pDoc)
+    {
+        ScAccNote aNote;
+        aNote.mbMarkNote = bMark;
+        if (bMark)
+            aNote.mnParaCount = 1;
+        ScAccNotes::iterator aItr = rOldNotes.begin();
+        ScAccNotes::iterator aEndItr = rOldNotes.end();
+        sal_Bool bAddNote(sal_False);
+        for (sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            if (rData.GetNoteInRange(rVisRect, nIndex, bMark, aNote.maNoteCell, aNote.maRect))
+            {
+                if (bMark)
+                {
+                    // Document not needed, because only the cell address, but not the tablename is needed
+                    aNote.maNoteCell.Format( aNote.maNoteText, SCA_VALID, NULL );
+                }
+                else
+                {
+                    ScPostIt aPostIt;
+                    pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
+                    aNote.maNoteText = aPostIt.GetText();
+                }
+
+                sal_Int8 nCompare(CompareCell(aNote.maNoteCell, aItr->maNoteCell));
+                if (nCompare == 0)
+                {
+                    if (aNote.maNoteText == aItr->maNoteText)
+                    {
+                        aNote.mpTextHelper = aItr->mpTextHelper;
+                        if (aNote.maRect != aItr->maRect)  //neue VisArea setzen
+                        {
+                            aNote.mpTextHelper->SetOffset(aNote.maRect.TopLeft());
+                            aNote.mpTextHelper->UpdateChildren();
+                            //DBG_ASSERT(aItr->maRect.GetSize() == aNote.maRect.GetSize(), "size should be the same, because the text is not changed");
+                            // could be changed, because only a part of the note is visible
+                        }
+                    }
+                    else
+                    {
+                        aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
+                        if (aNote.mpTextHelper)
+                            aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
+                        // collect removed childs
+                        CollectChilds(*aItr, rOldParas);
+                        DELETEZ(aItr->mpTextHelper);
+                        // collect new childs
+                        CollectChilds(aNote, rNewParas);
+                    }
+                    bAddNote = sal_True;
+                    ++aItr;
+                }
+                else if (nCompare < 0)
+                {
+                    aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
+                    if (aNote.mpTextHelper)
+                        aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
+                    // collect new childs
+                    CollectChilds(aNote, rNewParas);
+                    bAddNote = sal_True;
+                }
+                else
+                {
+                    // collect removed childs
+                    CollectChilds(*aItr, rOldParas);
+                    DELETEZ(aItr->mpTextHelper);
+
+                    // no note to add
+                    ++aItr;
+                }
+                if (bAddNote)
+                {
+                    nParagraphs += aNote.mnParaCount;
+                    rNewNotes.push_back(aNote);
+                    bAddNote = sal_False;
+                }
+            }
+        }
+    }
+    return nParagraphs;
+}
+
+struct ScChildGone
+{
+    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    void operator() (const uno::Reference<XAccessible>& xAccessible) const
+    {
+        if (mpAccDoc)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(mpAccDoc);
+            aEvent.OldValue <<= xAccessible;
+
+            mpAccDoc->CommitChange(aEvent); // gone child - event
+        }
+    }
+};
+
+struct ScChildNew
+{
+    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
+    void operator() (const uno::Reference<XAccessible>& xAccessible) const
+    {
+        if (mpAccDoc)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(mpAccDoc);
+            aEvent.NewValue <<= xAccessible;
+
+            mpAccDoc->CommitChange(aEvent); // new child - event
+        }
+    }
+};
+
+void ScNotesChilds::DataChanged(const Rectangle& rVisRect)
+{
+    if (mpViewShell && mpAccDoc)
+    {
+        ScXAccList aNewParas;
+        ScXAccList aOldParas;
+        ScAccNotes aNewMarks;
+        mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, sal_True, maMarks, aNewMarks, aOldParas, aNewParas);
+        maMarks = aNewMarks;
+        ScAccNotes aNewNotes;
+        mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, sal_False, maNotes, aNewNotes, aOldParas, aNewParas);
+        maNotes = aNewNotes;
+
+        std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
+        std::for_each(aNewParas.begin(), aNewParas.end(), ScChildNew(mpAccDoc));
+    }
+}
+
+struct ScChangeOffset
+{
+    sal_Int32 mnDiff;
+    ScChangeOffset(sal_Int32 nDiff) : mnDiff(nDiff) {}
+    void operator() (const ScAccNote& rNote)
+    {
+        if (rNote.mpTextHelper)
+            rNote.mpTextHelper->SetChildrenOffset(rNote.mpTextHelper->GetChildrenOffset() + mnDiff);
+    }
+};
+
+void ScNotesChilds::SetOffset(sal_Int32 nNewOffset)
+{
+    sal_Int32 nDiff(nNewOffset - mnOffset);
+    if (nDiff != 0)
+    {
+        std::for_each(maMarks.begin(), maMarks.end(), ScChangeOffset(nDiff));
+        std::for_each(maNotes.begin(), maNotes.end(), ScChangeOffset(nDiff));
+        mnOffset = nNewOffset;
+    }
+}
+
+inline ScDocument* ScNotesChilds::GetDocument() const
+{
+    ScDocument* pDoc = NULL;
+    if (mpViewShell)
+        pDoc = mpViewShell->GetDocument();
+    return pDoc;
+}
+
+struct ScShapeChild
+{
+    ScShapeChild() : mpAccShape(NULL), mpRelationCell(NULL) {}
+    ~ScShapeChild();
+    mutable accessibility::AccessibleShape* mpAccShape;
+    mutable ScAddress*          mpRelationCell; // if it is NULL this shape is anchored on the table
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
+};
+
+ScShapeChild::~ScShapeChild()
+{
+    if (mpAccShape)
+        mpAccShape->release();
+}
+
+struct ScShapeChildLess
+{
+    sal_Bool operator()(const ScShapeChild& rChild1, const ScShapeChild& rChild2) const
+    {
+      sal_Bool bResult(sal_False);
+      if (rChild1.mxShape.is() && rChild2.mxShape.is())
+          bResult = (rChild1.mxShape.get() < rChild2.mxShape.get());
+      return bResult;
+    }
+};
+
+typedef std::vector<ScShapeChild> ScShapeChildVec;
+
+struct ScShapeRange
+{
+    ScShapeChildVec maBackShapes;
+    ScShapeChildVec maForeShapes; // inclusive internal shapes
+    ScShapeChildVec maControls;
+    Rectangle       maPixelRect;
+    MapMode         maMapMode;
+};
+
+typedef std::vector<ScShapeRange> ScShapeRangeVec;
+
+class ScShapeChilds : public SfxListener,
+        public accessibility::IAccessibleViewForwarder,
+        public accessibility::IAccessibleParent
+{
+public:
+    ScShapeChilds(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc);
+    ~ScShapeChilds();
+
+    ///=====  SfxListener  =====================================================
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    ///=====  IAccessibleViewForwarder  ========================================
+
+    virtual sal_Bool IsValid (void) const;
+    virtual Rectangle GetVisibleArea() const;
+    virtual Point LogicToPixel (const Point& rPoint) const;
+    virtual Size LogicToPixel (const Size& rSize) const;
+    virtual Point PixelToLogic (const Point& rPoint) const;
+    virtual Size PixelToLogic (const Size& rSize) const;
+
+    ///=====  IAccessibleParent  ==============================================
+
+    virtual sal_Bool ReplaceChild (
+        accessibility::AccessibleShape* pCurrentChild,
+        accessibility::AccessibleShape* pReplacement)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    ///=====  Internal  ========================================================
+
+    void Init();
+
+    sal_Int32 GetBackShapeCount() const;
+    uno::Reference<XAccessible> GetBackShape(sal_Int32 nIndex) const;
+    sal_Int32 GetForeShapeCount() const;
+    uno::Reference<XAccessible> GetForeShape(sal_Int32 nIndex) const;
+    sal_Int32 GetControlCount() const;
+    uno::Reference<XAccessible> GetControl(sal_Int32 nIndex) const;
+private:
+    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScPreviewShell* mpViewShell;
+    ScShapeRangeVec maShapeRanges;
+    mutable accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
+
+    uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScShapeChild& aShape) const;
+    ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
+    void SetAnchor(ScShapeChild& rShape) const;
+    accessibility::AccessibleShape* GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const;
+    void FillShapes(const Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId);
+    sal_Bool FindShape(ScShapeChildVec& rShapes, const uno::Reference <drawing::XShape>& xShape, ScShapeChildVec::iterator& rItr) const;
+    void AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
+    void RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
+    void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
+    SdrPage* GetDrawPage() const;
+};
+
+ScShapeChilds::ScShapeChilds(ScPreviewShell* pViewShell, ScAccessibleDocumentPagePreview* pAccDoc)
+    :
+    mpAccDoc(pAccDoc),
+    mpViewShell(pViewShell),
+    maShapeRanges(SC_PREVIEW_MAXRANGES)
+{
+    if (pViewShell)
+    {
+        SfxBroadcaster* pDrawBC = pViewShell->GetDocument()->GetDrawBroadcaster();
+        if (pDrawBC)
+            StartListening(*pDrawBC);
+    }
+}
+
+ScShapeChilds::~ScShapeChilds()
+{
+    if (mpViewShell)
+    {
+        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
+        if (pDrawBC)
+            EndListening(*pDrawBC);
+    }
+}
+
+void ScShapeChilds::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+{
+    if ( rHint.ISA( SdrHint ) )
+    {
+        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+        if (pSdrHint)
+        {
+            SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
+            if (pObj && (pObj->GetPage() == GetDrawPage()))
+            {
+                switch (pSdrHint->GetKind())
+                {
+                    case HINT_OBJCHG :         // Objekt geaendert
+                    {
+                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                        if (xShape.is())
+                            CheckWhetherAnchorChanged(xShape, pObj->GetLayer());
+                    }
+                    break;
+                    case HINT_OBJINSERTED :    // Neues Zeichenobjekt eingefuegt
+                    {
+                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                        if (xShape.is())
+                            AddShape(xShape, pObj->GetLayer());
+                    }
+                    break;
+                    case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
+                    {
+                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                        if (xShape.is())
+                            RemoveShape(xShape, pObj->GetLayer());
+                    }
+                    break;
+                    default :
+                    {
+                        // other events are not interesting
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+///=====  IAccessibleViewForwarder  ========================================
+
+sal_Bool ScShapeChilds::IsValid (void) const
+{
+    ScUnoGuard aGuard;
+    return (mpViewShell != NULL);
+}
+
+Rectangle ScShapeChilds::GetVisibleArea() const
+{
+    ScUnoGuard aGuard;
+    Rectangle aVisRect;
+
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+    {
+        aVisRect.SetSize(pWin->GetOutputSizePixel());
+        aVisRect.SetPos(Point(0, 0));
+
+        aVisRect = pWin->PixelToLogic(aVisRect, maShapeRanges[0].maMapMode);
+    }
+
+    return aVisRect;
+}
+
+Point ScShapeChilds::LogicToPixel (const Point& rPoint) const
+{
+    ScUnoGuard aGuard;
+    Point aPoint;
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+        aPoint = pWin->LogicToPixel(rPoint, maShapeRanges[0].maMapMode);
+    return aPoint;
+}
+
+Size ScShapeChilds::LogicToPixel (const Size& rSize) const
+{
+    ScUnoGuard aGuard;
+    Size aSize;
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+        aSize = pWin->LogicToPixel(rSize, maShapeRanges[0].maMapMode);
+    return aSize;
+}
+
+Point ScShapeChilds::PixelToLogic (const Point& rPoint) const
+{
+    ScUnoGuard aGuard;
+    Point aPoint;
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+        aPoint = pWin->PixelToLogic(rPoint, maShapeRanges[0].maMapMode);
+    return aPoint;
+}
+
+Size ScShapeChilds::PixelToLogic (const Size& rSize) const
+{
+    ScUnoGuard aGuard;
+    Size aSize;
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+        aSize = pWin->PixelToLogic(rSize, maShapeRanges[0].maMapMode);
+    return aSize;
+}
+
+    ///=====  IAccessibleParent  ==============================================
+
+sal_Bool ScShapeChilds::ReplaceChild (accessibility::AccessibleShape* pCurrentChild, accessibility::AccessibleShape* pReplacement)
+        throw (uno::RuntimeException)
+{
+    DBG_ERRORFILE("should not be called in the page preview");
+    return sal_False;
+}
+
+    ///=====  Internal  ========================================================
+
+void ScShapeChilds::Init()
+{
+    if(mpViewShell)
+    {
+        maShapeRanges.clear();
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        MapMode aMapMode;
+        Rectangle aPixelPaintRect;
+        sal_uInt8 nRangeId;
+        sal_uInt16 nCount(rData.GetDrawRanges());
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            rData.GetDrawRange(i, aPixelPaintRect, aMapMode, nRangeId);
+            FillShapes(aPixelPaintRect, aMapMode, nRangeId);
+        }
+    }
+}
+
+sal_Int32 ScShapeChilds::GetBackShapeCount() const
+{
+    sal_Int32 nCount(0);
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
+        nCount += aItr->maBackShapes.size();
+    return nCount;
+}
+
+uno::Reference<XAccessible> ScShapeChilds::GetBackShape(sal_Int32 nIndex) const
+{
+    uno::Reference<XAccessible> xAccessible;
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
+    while ((aItr != aEndItr) && !xAccessible.is())
+    {
+        sal_Int32 nCount(aItr->maBackShapes.size());
+        if(nIndex < nCount)
+            xAccessible = GetAccShape(aItr->maBackShapes, nIndex);
+        else
+        {
+            nIndex -= nCount;
+            ++aItr;
+        }
+    }
+
+    if (nIndex >= 0)
+        throw lang::IndexOutOfBoundsException();
+
+   return xAccessible;
+}
+
+sal_Int32 ScShapeChilds::GetForeShapeCount() const
+{
+    sal_Int32 nCount(0);
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
+        nCount += aItr->maForeShapes.size();
+    return nCount;
+}
+
+uno::Reference<XAccessible> ScShapeChilds::GetForeShape(sal_Int32 nIndex) const
+{
+    uno::Reference<XAccessible> xAccessible;
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
+    while ((aItr != aEndItr) && !xAccessible.is())
+    {
+        sal_Int32 nCount(aItr->maForeShapes.size());
+        if(nIndex < nCount)
+            xAccessible = GetAccShape(aItr->maForeShapes, nIndex);
+        else
+        {
+            nIndex -= nCount;
+            ++aItr;
+        }
+    }
+
+    if (nIndex >= 0)
+        throw lang::IndexOutOfBoundsException();
+
+   return xAccessible;
+}
+
+sal_Int32 ScShapeChilds::GetControlCount() const
+{
+    sal_Int32 nCount(0);
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    for ( ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin(); aItr != aEndItr; ++aItr )
+        nCount += aItr->maControls.size();
+    return nCount;
+}
+
+uno::Reference<XAccessible> ScShapeChilds::GetControl(sal_Int32 nIndex) const
+{
+    uno::Reference<XAccessible> xAccessible;
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
+    while ((aItr != aEndItr) && !xAccessible.is())
+    {
+        sal_Int32 nCount(aItr->maControls.size());
+        if(nIndex < nCount)
+            xAccessible = GetAccShape(aItr->maControls, nIndex);
+        else
+        {
+            nIndex -= nCount;
+            ++aItr;
+        }
+    }
+
+    if (nIndex >= 0)
+        throw lang::IndexOutOfBoundsException();
+
+   return xAccessible;
+}
+
+uno::Reference<XAccessibleRelationSet> ScShapeChilds::GetRelationSet(const ScShapeChild& aShape) const
+{
+    utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
+
+    if(pRelationSet && mpAccDoc)
+    {
+        uno::Reference<XAccessible> xAccessible = mpAccDoc->GetCurrentAccessibleTable(); // should be the current table
+        if (aShape.mpRelationCell && xAccessible.is())
+        {
+            uno::Reference<XAccessibleTable> xAccTable (xAccessible->getAccessibleContext(), uno::UNO_QUERY);
+            if (xAccTable.is())
+                xAccessible = xAccTable->getAccessibleCellAt(aShape.mpRelationCell->Row(), aShape.mpRelationCell->Col());
+        }
+        AccessibleRelation aRelation;
+        aRelation.TargetSet.realloc(1);
+        aRelation.TargetSet[0] = xAccessible;
+        aRelation.RelationType = AccessibleRelationType::CONTROLLED_BY;
+        pRelationSet->AddRelation(aRelation);
+    }
+
+    return pRelationSet;
+}
+
+ScAddress* ScShapeChilds::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
+{
+    ScAddress* pAddress = NULL;
+    if (mpViewShell)
+    {
+        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+        uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
+        if (pShapeImp && xShapeProp.is())
+        {
+            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+            if (pSdrObj)
+            {
+                if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                {
+                    ScDocument* pDoc = mpViewShell->GetDocument();
+                    if (pDoc)
+                    {
+                        rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
+                        awt::Point aPoint(xShape->getPosition());
+                        awt::Size aSize(xShape->getSize());
+                        rtl::OUString sType(xShape->getShapeType());
+                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                        if ( sType.equals(sCaptionShape) )
+                        {
+                            awt::Point aRelativeCaptionPoint;
+                            rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
+                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
+                            Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
+                            Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
+                            aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
+                            aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
+                        }
+                        ScRange aRange = pDoc->GetRange(mpViewShell->GetLocationData().GetPrintTab(), aRectangle);
+                        pAddress = new ScAddress(aRange.aStart);
+                    }
+                }
+//              else
+//                  do nothing, because it is always a NULL Pointer
+            }
+        }
+    }
+
+    return pAddress;
+}
+
+void ScShapeChilds::SetAnchor(ScShapeChild& rShape) const
+{
+    ScAddress* pAddress = GetAnchor(rShape.mxShape);
+    if ((pAddress && rShape.mpRelationCell && (*pAddress != *(rShape.mpRelationCell))) ||
+        (!pAddress && rShape.mpRelationCell) || (pAddress && !rShape.mpRelationCell))
+    {
+        if (rShape.mpRelationCell)
+            delete rShape.mpRelationCell;
+        rShape.mpRelationCell = pAddress;
+        if (rShape.mpAccShape)
+            rShape.mpAccShape->SetRelationSet(GetRelationSet(rShape));
+    }
+}
+
+accessibility::AccessibleShape* ScShapeChilds::GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const
+{
+    if (!rShapes[nIndex].mpAccShape)
+    {
+        accessibility::ShapeTypeHandler& rShapeHandler = accessibility::ShapeTypeHandler::Instance();
+        accessibility::AccessibleShapeInfo aShapeInfo(rShapes[nIndex].mxShape, mpAccDoc, const_cast<ScShapeChilds*>(this));
+        rShapes[nIndex].mpAccShape = rShapeHandler.CreateAccessibleObject(aShapeInfo, maShapeTreeInfo);
+        if (rShapes[nIndex].mpAccShape)
+        {
+            rShapes[nIndex].mpAccShape->acquire();
+            rShapes[nIndex].mpAccShape->SetRelationSet(GetRelationSet(rShapes[nIndex]));
+        }
+    }
+    return rShapes[nIndex].mpAccShape;
+}
+
+void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId)
+{
+    DBG_ASSERT(nRangeId < maShapeRanges.size(), "this is not a valid range for draw objects");
+    SdrPage* pPage = GetDrawPage();
+    Window* pWin = mpViewShell->GetWindow();
+    if (pPage && pWin)
+    {
+        sal_Bool bForeAdded(sal_False);
+        sal_Bool bBackAdded(sal_False);
+        sal_Bool bControlAdded(sal_False);
+        Rectangle aLogicPaintRect(pWin->PixelToLogic(aPixelPaintRect, aMapMode));
+        maShapeRanges[nRangeId].maPixelRect = aPixelPaintRect;
+        maShapeRanges[nRangeId].maMapMode = aMapMode;
+        sal_uInt32 nCount(pPage->GetObjCount());
+        for (sal_uInt32 i = 0; i < nCount; ++i)
+        {
+            SdrObject* pObj = pPage->GetObj(i);
+            if (pObj)
+            {
+                uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape.is())
+                {
+                    Rectangle aRect(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize()));
+                    if(!aRect.GetIntersection(aLogicPaintRect).IsEmpty())
+                    {
+                        ScShapeChild aShape;
+                        aShape.mxShape = xShape;
+                        switch (pObj->GetLayer())
+                        {
+                            case SC_LAYER_INTERN:
+                            case SC_LAYER_FRONT:
+                            {
+                                SetAnchor(aShape);
+                                maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
+                                bForeAdded = sal_True;
+                            }
+                            break;
+                            case SC_LAYER_BACK:
+                            {
+                                maShapeRanges[nRangeId].maBackShapes.push_back(aShape);
+                                bBackAdded = sal_True;
+                            }
+                            break;
+                            case SC_LAYER_CONTROLS:
+                            {
+                                SetAnchor(aShape);
+                                maShapeRanges[nRangeId].maControls.push_back(aShape);
+                                bControlAdded = sal_True;
+                            }
+                            break;
+                            default:
+                            {
+                                DBG_ERRORFILE("I don't know this layer.")
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (bForeAdded)
+            std::sort(maShapeRanges[nRangeId].maForeShapes.begin(), maShapeRanges[nRangeId].maForeShapes.end(),ScShapeChildLess());
+        if (bBackAdded)
+            std::sort(maShapeRanges[nRangeId].maBackShapes.begin(), maShapeRanges[nRangeId].maBackShapes.end(),ScShapeChildLess());
+        if (bControlAdded)
+            std::sort(maShapeRanges[nRangeId].maControls.begin(), maShapeRanges[nRangeId].maControls.end(),ScShapeChildLess());
+    }
+}
+
+sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference <drawing::XShape>& xShape, ScShapeChildVec::iterator& rItr) const
+{
+    sal_Bool bResult(sal_False);
+    ScShapeChild aShape;
+    aShape.mxShape = xShape;
+    rItr = std::lower_bound(rShapes.begin(), rShapes.end(), aShape, ScShapeChildLess());
+    if (rItr->mxShape.get() == xShape.get())
+        bResult = sal_True; // if the shape is found
+
+/*#ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
+    ScShapeChildVec::iterator aDebugItr = std::find(rShapes.begin(), rShapes.end(), aShape);
+    DBG_ASSERT(rItr == aDebugItr, "wrong Shape found");
+#endif*/
+    return bResult;
+}
+
+void ScShapeChilds::AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
+{
+    uno::Reference < XAccessible > xNew;
+    Window* pWin = mpViewShell->GetWindow();
+    if (pWin)
+    {
+        ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
+        ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
+        while (aItr != aEndItr)
+        {
+            Rectangle aLogicPaintRect(pWin->PixelToLogic(aItr->maPixelRect, aItr->maMapMode));
+            Rectangle aRect(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize()));
+            if(!aRect.GetIntersection(aLogicPaintRect).IsEmpty())
+            {
+                ScShapeChild aShape;
+                aShape.mxShape = xShape;
+                switch (aLayerID)
+                {
+                    case SC_LAYER_INTERN:
+                    case SC_LAYER_FRONT:
+                    {
+                        SetAnchor(aShape);
+                        aItr->maForeShapes.push_back(aShape);
+                        std::sort(aItr->maForeShapes.begin(), aItr->maForeShapes.end(),ScShapeChildLess());
+                    }
+                    break;
+                    case SC_LAYER_BACK:
+                    {
+                        aItr->maBackShapes.push_back(aShape);
+                        std::sort(aItr->maBackShapes.begin(), aItr->maBackShapes.end(),ScShapeChildLess());
+                    }
+                    break;
+                    case SC_LAYER_CONTROLS:
+                    {
+                        SetAnchor(aShape);
+                        aItr->maControls.push_back(aShape);
+                        std::sort(aItr->maControls.begin(), aItr->maControls.end(),ScShapeChildLess());
+                    }
+                    break;
+                    default:
+                    {
+                        DBG_ERRORFILE("I don't know this layer.")
+                    }
+                    break;
+                }
+            }
+            ++aItr;
+        }
+    }
+}
+
+void ScShapeChilds::RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
+{
+    ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
+    ScShapeChildVec::iterator aEraseItr;
+    while (aItr != aEndItr)
+    {
+        switch (aLayerID)
+        {
+            case SC_LAYER_INTERN:
+            case SC_LAYER_FRONT:
+            {
+                if (FindShape(aItr->maForeShapes, xShape, aEraseItr))
+                    aItr->maForeShapes.erase(aEraseItr);
+            }
+            break;
+            case SC_LAYER_BACK:
+            {
+                if (FindShape(aItr->maBackShapes, xShape, aEraseItr))
+                    aItr->maBackShapes.erase(aEraseItr);
+            }
+            break;
+            case SC_LAYER_CONTROLS:
+            {
+                if (FindShape(aItr->maControls, xShape, aEraseItr))
+                    aItr->maControls.erase(aEraseItr);
+            }
+            break;
+            default:
+            {
+                DBG_ERRORFILE("I don't know this layer.")
+            }
+            break;
+        }
+        ++aItr;
+    }
+}
+
+void ScShapeChilds::CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
+{
+    ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
+    ScShapeChildVec::iterator aFindItr;
+    while (aItr != aEndItr)
+    {
+        switch (aLayerID)
+        {
+            case SC_LAYER_INTERN:
+            case SC_LAYER_FRONT:
+            {
+                if (FindShape(aItr->maForeShapes, xShape, aFindItr))
+                    SetAnchor(*aFindItr);
+            }
+            break;
+            case SC_LAYER_BACK:
+            {
+                if (FindShape(aItr->maBackShapes, xShape, aFindItr))
+                    SetAnchor(*aFindItr);
+            }
+            break;
+            case SC_LAYER_CONTROLS:
+            {
+                if (FindShape(aItr->maControls, xShape, aFindItr))
+                    SetAnchor(*aFindItr);
+            }
+            break;
+            default:
+            {
+                DBG_ERRORFILE("I don't know this layer.")
+            }
+            break;
+        }
+        ++aItr;
+    }
+}
+
+SdrPage* ScShapeChilds::GetDrawPage() const
+{
+    sal_uInt16 nTab( mpViewShell->GetLocationData().GetPrintTab() );
+    SdrPage* pDrawPage = NULL;
+    if (mpViewShell)
+    {
+        ScDocument* pDoc = mpViewShell->GetDocument();
+        if (pDoc && pDoc->GetDrawLayer())
+        {
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
+                pDrawPage = pDrawLayer->GetPage(nTab);
+        }
+    }
+    return pDrawPage;
+}
+
 struct ScPagePreviewCountData
 {
-    //  order is background shapes, header, table, footer, foreground shapes, controls
+    //  order is background shapes, header, table or notes, footer, foreground shapes, controls
 
     long nBackShapes;
     long nHeaders;
     long nTables;
+    long nNoteParagraphs;
     long nFooters;
     long nForeShapes;
     long nControls;
 
-    ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow );
+    ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow,
+        ScNotesChilds* pNotesChilds, ScShapeChilds* pShapeChilds );
 
     long GetTotal() const
     {
-        return nBackShapes + nHeaders + nTables + nFooters + nForeShapes + nControls;
+        return nBackShapes + nHeaders + nTables + nNoteParagraphs + nFooters + nForeShapes + nControls;
     }
 };
 
-ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData, Window* pSizeWindow ) :
+ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData,
+                                Window* pSizeWindow, ScNotesChilds* pNotesChilds,
+                                ScShapeChilds* pShapeChilds) :
     nBackShapes( 0 ),
     nHeaders( 0 ),
     nTables( 0 ),
+    nNoteParagraphs( 0 ),
     nFooters( 0 ),
     nForeShapes( 0 ),
     nControls( 0 )
@@ -158,6 +1317,14 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
         nTables = 1;
 
     //! shapes...
+    pShapeChilds->Init();
+    nBackShapes = pShapeChilds->GetBackShapeCount();
+    nForeShapes = pShapeChilds->GetForeShapeCount();
+    nControls = pShapeChilds->GetControlCount();
+
+    //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+    pNotesChilds->Init(aVisRect, nBackShapes + nHeaders);
+    nNoteParagraphs = pNotesChilds->GetChildsCount();
 }
 
 //=====  internal  ========================================================
@@ -165,29 +1332,57 @@ ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rDa
 ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
         const uno::Reference<XAccessible>& rxParent, ScPreviewShell* pViewShell ) :
     ScAccessibleDocumentBase(rxParent),
-    mpViewShell(pViewShell)
+    mpViewShell(pViewShell),
+    mpNotesChilds(NULL),
+    mpShapeChilds(NULL),
+    mpTable(NULL),
+    mpHeader(NULL),
+    mpFooter(NULL)
 {
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
+
+    GetNotesChilds();
+    GetShapeChilds();
 }
 
 ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
 {
-    if (mpViewShell)
-        mpViewShell->RemoveAccessibilityObject(*this);
+    if (!ScAccessibleDocumentBase::IsDefunc() && !rBHelper.bInDispose)
+    {
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        // call dispose to inform object wich have a weak reference to this object
+        dispose();
+    }
 }
 
 void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
-    mxTable.clear();
-    mxHeader.clear();
-    mxFooter.clear();
+    if (mpTable)
+    {
+        mpTable->release();
+        mpTable = NULL;
+    }
+    if (mpHeader)
+    {
+        mpHeader->release();
+        mpHeader = NULL;
+    }
+    if (mpFooter)
+    {
+        mpFooter->release();
+        mpFooter = NULL;
+    }
 
     if (mpViewShell)
     {
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = NULL;
     }
+
+    if (mpNotesChilds)
+        DELETEZ(mpNotesChilds);
 
     ScAccessibleDocumentBase::disposing();
 }
@@ -196,6 +1391,21 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    if (rHint.ISA( SfxSimpleHint ) )
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        // only notify if child exist, otherwise it is not necessary
+        if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        {
+            Size aOutputSize;
+            Window* pSizeWindow = mpViewShell->GetWindow();
+            if ( pSizeWindow )
+                aOutputSize = pSizeWindow->GetOutputSizePixel();
+            Point aPoint;
+            Rectangle aVisRect( aPoint, aOutputSize );
+            GetNotesChilds()->DataChanged(aVisRect);
+        }
+    }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
 
@@ -210,20 +1420,28 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
     if ( mpViewShell )
     {
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow() );
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
         if ( rData.HasCellsInRange( Rectangle( rPoint.X, rPoint.Y, rPoint.X, rPoint.Y ) ) )
         {
-            if ( !mxTable.is() )
+            if ( !mpTable )
             {
-                //! order is background shapes, header, table, footer, foreground shapes, controls
-                sal_Int32 nIndex = 0;
+                //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+                sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
-                ScAccessiblePreviewTable* pTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mxTable = pTable;
-                pTable->Init();
+                mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+                mpTable->acquire();
+                mpTable->Init();
             }
-            xAccessible = mxTable;
+            xAccessible = mpTable;
+        }
+        else
+        {
+            xAccessible = GetNotesChilds()->GetAt(rPoint);
+            if (!xAccessible.is())
+            {
+                ///
+            }
         }
     }
 
@@ -253,7 +1471,7 @@ long SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) thr
     long nRet = 0;
     if ( mpViewShell )
     {
-        ScPagePreviewCountData aCount( mpViewShell->GetLocationData(), mpViewShell->GetWindow() );
+        ScPagePreviewCountData aCount( mpViewShell->GetLocationData(), mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
         nRet = aCount.GetTotal();
     }
 
@@ -269,7 +1487,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
     if ( mpViewShell )
     {
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow() );
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
         if ( nIndex < aCount.nBackShapes )
         {
@@ -277,21 +1495,37 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         }
         else if ( nIndex < aCount.nBackShapes + aCount.nHeaders )
         {
-            if ( !mxHeader.is() )
-                mxHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, nIndex );
-            xAccessible = mxHeader;
+            if ( !mpHeader )
+            {
+                mpHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, nIndex );
+                mpHeader->acquire();
+            }
+
+            xAccessible = mpHeader;
         }
         else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables )
         {
-            if ( !mxTable.is() )
-                mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-            xAccessible = mxTable;
+            if ( !mpTable )
+            {
+                mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+                mpTable->acquire();
+                mpTable->Init();
+            }
+            xAccessible = mpTable;
         }
-        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nFooters )
+        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nNoteParagraphs )
         {
-            if ( !mxFooter.is() )
-                mxFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, nIndex );
-            xAccessible = mxFooter;
+            xAccessible = GetNotesChilds()->GetChild(nIndex - aCount.nBackShapes - aCount.nHeaders);
+        }
+        else if ( (nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nFooters) ||
+                  (nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nNoteParagraphs + aCount.nFooters) )
+        {
+            if ( !mpFooter )
+            {
+                mpFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, nIndex );
+                mpFooter->acquire();
+            }
+            xAccessible = mpFooter;
         }
         //! remaining shapes
     }
@@ -379,7 +1613,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return sName;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -391,7 +1625,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() throw (uno::
     return aRect;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() const throw (uno::RuntimeException)
 {
     Rectangle aRect;
     if (mpViewShell)
@@ -410,3 +1644,54 @@ sal_Bool ScAccessibleDocumentPagePreview::IsDefunc(
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
+ScNotesChilds* ScAccessibleDocumentPagePreview::GetNotesChilds()
+{
+    if (!mpNotesChilds)
+        mpNotesChilds = new ScNotesChilds(mpViewShell, this);
+    return mpNotesChilds;
+}
+
+ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
+{
+    if (mpShapeChilds)
+        mpShapeChilds = new ScShapeChilds(mpViewShell, this);
+    return mpShapeChilds;
+}
+
+uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
+{
+    if (!mpTable)
+    {
+        if ( mpViewShell )
+        {
+            const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+            ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+            //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+            sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+
+            mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+            mpTable->acquire();
+            mpTable->Init();
+        }
+    }
+    return mpTable;
+}
+
+void ScAccessibleDocumentPagePreview::ChildCountChanged()
+{
+    if (mpViewShell)
+    {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+        if(mpHeader)
+            mpHeader->SetCurrentIndexInParent(aCount.nBackShapes);
+        if (mpTable)
+            mpTable->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders);
+        if (mpFooter)
+            mpFooter->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs);
+
+        if (mpNotesChilds)
+            mpNotesChilds->SetOffset(aCount.nBackShapes + aCount.nHeaders);
+    }
+}

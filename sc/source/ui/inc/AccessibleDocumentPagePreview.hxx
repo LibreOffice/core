@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:49:02 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #endif
 
 class ScPreviewShell;
+class ScNotesChilds;
+class ScShapeChilds;
+class ScAccessiblePreviewTable;
+class ScAccessiblePageHeader;
 
 class ScAccessibleDocumentPagePreview
     :   public ScAccessibleDocumentBase
@@ -139,6 +143,13 @@ public:
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  internal  ========================================================
+
+    com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible >
+        GetCurrentAccessibleTable();
+
+    void ChildCountChanged();
+
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
@@ -151,22 +162,27 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
+    virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
+    virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ScPreviewShell* mpViewShell;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxTable;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxHeader;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxFooter;
+    ScNotesChilds* mpNotesChilds;
+    ScShapeChilds* mpShapeChilds;
+    ScAccessiblePreviewTable* mpTable;
+    ScAccessiblePageHeader* mpHeader;
+    ScAccessiblePageHeader* mpFooter;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    ScNotesChilds* GetNotesChilds();
+    ScShapeChilds* GetShapeChilds();
 };
 
 
