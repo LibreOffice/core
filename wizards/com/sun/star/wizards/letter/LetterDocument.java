@@ -22,42 +22,12 @@ import com.sun.star.style.XStyle;
 public class LetterDocument extends TextDocument {
 
     XDesktop xDesktop;
-    XMultiServiceFactory xDocMSF;
-    XTextDocument xTextDocument;
-    Size DocSize = null;
+    //Size DocSize = null;
 
     public LetterDocument(XMultiServiceFactory xMSF) {
         super(xMSF);
     }
 
-    public XTextDocument loadTemplate(String sDefaultTemplate) {
-        PropertyValue loadValues[] = new PropertyValue[3];
-        //      open document in the Preview mode
-        loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "ReadOnly";
-        loadValues[0].Value = Boolean.TRUE;
-        loadValues[1] = new PropertyValue();
-        loadValues[1].Name = "AsTemplate";
-        loadValues[1].Value = Boolean.FALSE;
-        loadValues[2] = new PropertyValue();
-        loadValues[2].Name = "Preview";
-        loadValues[2].Value = Boolean.TRUE;
-
-
-        Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
-        xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
-        DocSize = getPageSize();
-        xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-
-        ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
-        try {
-            myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return xTextDocument;
-    }
 
     public XWindowPeer getWindowPeer() {
         XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xTextDocument);
@@ -98,9 +68,8 @@ public class LetterDocument extends TextDocument {
                         myCursor.gotoEnd(false);
                         xFooterText.insertControlCharacter(myCursor, ControlCharacter.PARAGRAPH_BREAK, false);
                         XPropertySet xCursorPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, myCursor);
-                        //XTextField xPageNumberField = (XTextField) UnoRuntime.queryInterface(XTextField.class, xDocMSF.createInstance("com.sun.star.style.ParagraphProperties"));
                         xCursorPSet.setPropertyValue("ParaAdjust", ParagraphAdjust.CENTER);
-                        XTextField xPageNumberField = (XTextField) UnoRuntime.queryInterface(XTextField.class, xDocMSF.createInstance("com.sun.star.text.TextField.PageNumber"));
+                        XTextField xPageNumberField = (XTextField) UnoRuntime.queryInterface(XTextField.class, xMSFDoc.createInstance("com.sun.star.text.TextField.PageNumber"));
                         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageNumberField);
                         xPSet.setPropertyValue("SubType", PageNumberType.CURRENT);
                         xPSet.setPropertyValue("NumberingType", new Short (NumberingType.ARABIC));
@@ -135,12 +104,13 @@ public class LetterDocument extends TextDocument {
 
     public void fillSenderWithUserData() {
         try {
-            TextFieldHandler myFieldHandler = new TextFieldHandler(xDocMSF, xTextDocument);
+            TextFieldHandler myFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
             Object oUserDataAccess = Configuration.getConfigurationRoot(xMSF, "org.openoffice.UserProfile/Data", false);
             myFieldHandler.changeUserFieldContent("Company", (String) Helper.getUnoObjectbyName(oUserDataAccess, "o"));
             myFieldHandler.changeUserFieldContent("Street", (String) Helper.getUnoObjectbyName(oUserDataAccess, "street"));
             myFieldHandler.changeUserFieldContent("PostCode", (String) Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"));
             myFieldHandler.changeUserFieldContent("City", (String) Helper.getUnoObjectbyName(oUserDataAccess, "l"));
+            myFieldHandler.changeUserFieldContent("State", (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -148,8 +118,7 @@ public class LetterDocument extends TextDocument {
 
     public void killEmptyUserFields() {
         TextFieldHandler myFieldHandler = new TextFieldHandler(xMSF, xTextDocument);
-        myFieldHandler.removeUserFieldByContent("Salutation");
-        myFieldHandler.removeUserFieldByContent("Greeting");
+        myFieldHandler.removeUserFieldByContent("");
     }
 
     public void loadResult(String sLoadURL, boolean bAsTemplate) {
@@ -161,21 +130,6 @@ public class LetterDocument extends TextDocument {
         OfficeDocument.load(xDesktop, sLoadURL, sFrame, loadValues);
     }
 
-    public Size getPageSize() {
-        try {
-            XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
-            com.sun.star.container.XNameAccess xNameAccess = null;
-            xNameAccess = xStyleFamiliesSupplier.getStyleFamilies();
-            com.sun.star.container.XNameContainer xPageStyleCollection = null;
-            xPageStyleCollection = (com.sun.star.container.XNameContainer) UnoRuntime.queryInterface(com.sun.star.container.XNameContainer.class, xNameAccess.getByName("PageStyles"));
-            XStyle xPageStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, xPageStyleCollection.getByName("First Page"));
-            return (Size) Helper.getUnoPropertyValue(xPageStyle, "Size");
-
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-            return null;
-        }
-    }
 
     public class BusinessPaperObject {
 
@@ -195,7 +149,7 @@ public class LetterDocument extends TextDocument {
             iYPos = YPos;
 
             try {
-                xFrame = (XTextFrame) UnoRuntime.queryInterface(XTextFrame.class, xDocMSF.createInstance("com.sun.star.text.TextFrame"));
+                xFrame = (XTextFrame) UnoRuntime.queryInterface(XTextFrame.class, xMSFDoc.createInstance("com.sun.star.text.TextFrame"));
                 xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xFrame);
 
                 setFramePosition();
