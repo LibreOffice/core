@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:49:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,7 @@
 			<prop oor:name="ooSetupFactoryWindowStateConfigRef" oor:type="xs:string">
 				<info>
     				<author>CD</author>
-					<desc xml:lang="en-US">Refer to a configuration file, which contains the persistent window data, suitable for this module.</desc>
-					<desc xml:lang="x-comment">Refer to a configuration file, which contains the persistent window data, suitable for this module.</desc>
+					<desc>Refer to a configuration file, which contains the persistent window data, suitable for this module.</desc>
 				</info>
 			</prop>
 		</group>
