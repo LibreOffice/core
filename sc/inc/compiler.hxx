@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:53:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ private:
     ScOpCodeHashMap*    pSymbolHashMap;     // which symbol hash map is used
     USHORT      pc;
     short       nNumFmt;                    // set during CompileTokenArray()
-    short       nMaxTab;                    // last sheet in document
+    SCsTAB      nMaxTab;                    // last sheet in document
     short       nRecursion;                 // GetToken() recursions
     BOOL        glSubTotal;                 // if code contains one or more subtotal functions
     BOOL        bAutoCorrect;               // whether to apply AutoCorrection
@@ -294,11 +294,11 @@ private:
     void NotLine();
     OpCode Expression();
 
-    String MakeColStr( USHORT nCol );
-    void MakeColStr( rtl::OUStringBuffer& rBuffer, USHORT nCol );
-    String MakeRowStr( USHORT nRow );
-    void MakeRowStr( rtl::OUStringBuffer& rBuffer, USHORT nRow );
-    String MakeTabStr( USHORT nTab, String& aDoc );
+    String MakeColStr( SCCOL nCol );
+    void MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol );
+    String MakeRowStr( SCROW nRow );
+    void MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow );
+    String MakeTabStr( SCTAB nTab, String& aDoc );
     String MakeRefStr( ComplRefData& rRefData, BOOL bSingleRef );
     void MakeRefStr( rtl::OUStringBuffer& rBuffer, ComplRefData& rRefData, BOOL bSingleRef );
 
@@ -364,23 +364,23 @@ public:
 
     BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,
-                              short nDx, short nDy, short nDz,
+                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                               BOOL& rChanged);
 
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
-                                  short nDx, short nDy, short nDz,
+                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   BOOL& rChanged);
 
     /// Only once for converted shared formulas,
     /// token array has to be compiled afterwards.
     void UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
-                                  short nDx, short nDy, short nDz );
+                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    ScRangeData* UpdateInsertTab(USHORT nTable, BOOL bIsName );
-    ScRangeData* UpdateDeleteTab(USHORT nTable, BOOL bIsMove, BOOL bIsName, BOOL& bCompile);
-    ScRangeData* UpdateMoveTab(USHORT nOldPos, USHORT nNewPos, BOOL bIsName );
+    ScRangeData* UpdateInsertTab(SCTAB nTable, BOOL bIsName );
+    ScRangeData* UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsName, BOOL& bCompile);
+    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, BOOL bIsName );
 
     BOOL HasModifiedRange();
 
@@ -452,6 +452,7 @@ private:
             { return operator->(); }
     };
 };
+
 extern String* GetScCompilerpSymbolTableNative(); //CHINA001
 
 #endif
