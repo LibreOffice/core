@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:26:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,8 @@
 #endif // !SVX_LIGHT
 
 #include "PageListWatcher.hxx"
+
+using namespace ::sd;
 
 const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
 
@@ -487,39 +489,68 @@ SdrUndoUserCallObj::SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pNew)
     mpOld((SdPage*)rNewObj.GetUserCall()),
     mpNew(pNew)
 {
+    if( mpOld )
+    {
+        meKind = mpOld->GetPresObjKind(&rNewObj);
+    }
+    else if( mpNew )
+    {
+        meKind = mpNew->GetPresObjKind(&rNewObj);
+    }
+    else
+    {
+        DBG_ERROR( "SdrUndoUserCallObj::SdrUndoUserCallObj() - no page, how shall I restore the user call?" );
+        meKind = PRESOBJ_NONE;
+    }
+}
+
+SdrUndoUserCallObj::SdrUndoUserCallObj(SdrObject& rNewObj, SdPage* pOld, SdPage* pNew)
+:   SdrUndoObj(rNewObj),
+    mpOld(pOld),
+    mpNew(pNew)
+{
+    if( mpOld )
+    {
+        meKind = mpOld->GetPresObjKind(&rNewObj);
+    }
+    else if( mpNew )
+    {
+        meKind = mpNew->GetPresObjKind(&rNewObj);
+    }
+    else
+    {
+        DBG_ERROR( "SdrUndoUserCallObj::SdrUndoUserCallObj() - no page, how shall I restore the user call?" );
+        meKind = PRESOBJ_NONE;
+    }
 }
 
 void SdrUndoUserCallObj::Undo()
 {
-    if(mpNew)
+    if(mpNew && (meKind != PRESOBJ_NONE))
     {
-        List* pPresObjList = mpNew->GetPresObjList();
-        pPresObjList->Remove(pObj);
+        mpNew->RemovePresObj(pObj);
     }
 
     pObj->SetUserCall(mpOld);
 
-    if(mpOld)
+    if(mpOld && (meKind != PRESOBJ_NONE))
     {
-        List* pPresObjList = mpOld->GetPresObjList();
-        pPresObjList->Insert(pObj, LIST_APPEND);
+        mpOld->InsertPresObj( pObj, meKind );
     }
 }
 
 void SdrUndoUserCallObj::Redo()
 {
-    if(mpOld)
+    if(mpOld && (meKind != PRESOBJ_NONE))
     {
-        List* pPresObjList = mpOld->GetPresObjList();
-        pPresObjList->Remove(pObj);
+        mpOld->RemovePresObj(pObj);
     }
 
     pObj->SetUserCall(mpNew);
 
-    if(mpNew)
+    if(mpNew && (meKind != PRESOBJ_NONE))
     {
-        List* pPresObjList = mpNew->GetPresObjList();
-        pPresObjList->Insert(pObj, LIST_APPEND);
+        mpNew->InsertPresObj( pObj, meKind );
     }
 }
 
@@ -591,8 +622,7 @@ IMPL_LINK( SdDrawDocument, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
                                         pUndoGroup->AddAction(new SdrUndoUserCallObj(*pTextObj, NULL));
                                     }
 
-                                    List* pPresObjList = pPage->GetPresObjList();
-                                    pPresObjList->Remove((void*) pTextObj);
+                                    pPage->RemovePresObj(pTextObj);
                                     pTextObj->SetUserCall(NULL);
 
                                     if(!pObj->IsEmptyPresObj())
@@ -666,8 +696,7 @@ IMPL_LINK( SdDrawDocument, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
                                             }
 
                                             pNewTextObj->SetUserCall(pPage);
-                                            List* pPresObjList = pPage->GetPresObjList();
-                                            pPresObjList->Insert(pNewTextObj, LIST_APPEND);
+                                            pPage->InsertPresObj(pNewTextObj, ePresObjKind);
 
                                             if(pUndoGroup)
                                             {
@@ -775,7 +804,7 @@ void SdDrawDocument::CreateFirstPages()
         SdPage* pHandoutPage = (SdPage*) AllocPage(bMasterPage=FALSE);
 
         // Stets Querformat
-        if (aDefSize.Height() <= aDefSize.Width())
+        if (aDefSize.Height() >= aDefSize.Width())
         {
             pHandoutPage->SetSize(aDefSize);
         }
@@ -784,7 +813,7 @@ void SdDrawDocument::CreateFirstPages()
             pHandoutPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
         }
 
-        pHandoutPage->SetBorder(2000, 2000, 2000, 2000);
+        pHandoutPage->SetBorder(0, 0, 0, 0);
         pHandoutPage->SetPageKind(PK_HANDOUT);
         pHandoutPage->SetName( String (SdResId(STR_HANDOUT) ) );
         InsertPage(pHandoutPage, 0);
@@ -882,7 +911,7 @@ void SdDrawDocument::CreateFirstPages()
             pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
         }
 
-        pNotesPage->SetBorder(2000, 2000, 2000, 2000);
+        pNotesPage->SetBorder(0, 0, 0, 0);
         pNotesPage->SetPageKind(PK_NOTES);
         InsertPage(pNotesPage, 2);
         if( bClipboard )
@@ -1168,7 +1197,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
     if (pHandoutMPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
-        pHandoutMPage->SetAutoLayout(AUTOLAYOUT_HANDOUT4, TRUE);
+        pHandoutMPage->SetAutoLayout(AUTOLAYOUT_HANDOUT6, TRUE, TRUE);
     }
 
     SdPage* pPage = GetSdPage(0, PK_STANDARD);
@@ -1176,7 +1205,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
     if (pPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
-        pPage->SetAutoLayout(AUTOLAYOUT_NONE, TRUE);
+        pPage->SetAutoLayout(AUTOLAYOUT_NONE, TRUE, TRUE);
     }
 
     SdPage* pNotesPage = GetSdPage(0, PK_NOTES);
@@ -1184,7 +1213,7 @@ IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, pTimer )
     if (pNotesPage->GetAutoLayout() == AUTOLAYOUT_NONE)
     {
         // AutoLayout wurde noch nicht umgesetzt -> Initialisieren
-        pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE);
+        pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE, TRUE);
     }
 
     SetChanged(bChanged || FALSE);
@@ -1285,7 +1314,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 
 IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                                               const Point& rWinPoint,
-                                              const Window& rCmpWnd )
+                                              const ::Window& rCmpWnd )
 {
     SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
     IMapObject* pIMapObj = NULL;
@@ -1541,7 +1570,7 @@ void SdDrawDocument::CheckMasterPages()
                     }
                     InsertMasterPage(pNotesPage,  nPage );
                     pNotesPage->SetLayoutName( pPage->GetLayoutName() );
-                    pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
+                    pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True );
                     nMaxPages++;
                 }
             }
@@ -1648,6 +1677,7 @@ USHORT SdDrawDocument::CreatePage (
     // User layout of current standard page.
     pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
     pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
+    pStandardPage->getHeaderFooterSettings() = pPreviousStandardPage->getHeaderFooterSettings();
 
     // Create new notes page and set it up.
     pNotesPage = (SdPage*) AllocPage(FALSE);
@@ -1658,6 +1688,7 @@ USHORT SdDrawDocument::CreatePage (
     // Use layout of current notes page.
     pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
     pNotesPage->SetAutoLayout(eNotesLayout, TRUE);
+    pNotesPage->getHeaderFooterSettings() = pPreviousNotesPage->getHeaderFooterSettings();
 
     return InsertPageSet (
         pActualPage, ePageKind,
