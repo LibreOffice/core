@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recorder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 15:47:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,12 +637,12 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 }
                                 else
                                 {   // not a regular key, transfer KeyCode
-                                    aKeyString += 1;   // mask it
+                                    aKeyString += sal_Unicode(1);   // mask it
                                     // extra for '>' which is coded as <SHIFT LESS>
                                     if ( pKeyEvent->GetCharCode() == '>' )
-                                        aKeyString += ( KEY_GREATER | aKeyCode.GetAllModifier() & ~KEY_SHIFT );
+                                        aKeyString += sal_Unicode( KEY_GREATER | aKeyCode.GetAllModifier() & ~KEY_SHIFT );
                                     else
-                                        aKeyString += ( aKeyCode.GetCode() | aKeyCode.GetAllModifier() );
+                                        aKeyString += sal_Unicode( aKeyCode.GetCode() | aKeyCode.GetAllModifier() );
                                 }
                                 pKeyWin = pWin;
                                 Window *pIdWin = pWin;
