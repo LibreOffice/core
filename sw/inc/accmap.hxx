@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ACCMAP_HXX
 #define _ACCMAP_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -146,7 +146,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     /// preview-to-display coordinates
     SwAccPreviewData* mpPreview;
 
-    ::com::sun::star::uno::WeakReference < ::drafts::com::sun::star::accessibility::XAccessible > mxCursorContext;
+    ::com::sun::star::uno::WeakReference < ::com::sun::star::accessibility::XAccessible > mxCursorContext;
 
     sal_Int32 mnPara;
     sal_Int32 mnFootnote;
@@ -161,7 +161,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
 
     void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
+            ::com::sun::star::accessibility::XAccessible>& rAcc );
     void DoInvalidateShapeSelection();
     void DoInvalidateShapeFocus();
     void InvalidateShapeSelection();
@@ -169,7 +169,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>
+        ::com::sun::star::accessibility::XAccessible>
             _GetDocumentView( sal_Bool bPagePreview );
 
 public:
@@ -178,12 +178,12 @@ public:
     ~SwAccessibleMap();
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentView();
+        ::com::sun::star::accessibility::XAccessible> GetDocumentView();
 
     // OD 15.01.2003 #103492# - complete re-factoring of method due to new
     // page/print preview functionality.
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
+        ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PrevwPage*>& _rPrevwPages,
                             const Fraction&  _rScale,
                             const SwPageFrm* _pSelectedPageFrm,
@@ -193,7 +193,7 @@ public:
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
+        ::com::sun::star::accessibility::XAccessible> GetContext(
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
 
@@ -202,7 +202,7 @@ public:
                                         SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
+        ::com::sun::star::accessibility::XAccessible> GetContext(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
