@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
+ *  last change: $Author: os $ $Date: 2002-06-10 11:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,12 +524,13 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
                 sBuf = p;
             else
             {
+                long lUniLen = (lLen / sizeof( sal_Unicode ));
                 sal_Unicode* pStrBuf = sBuf.AllocBuffer( xub_StrLen(
-                                ( lLen / sizeof( sal_Unicode )) + 1 ) );
+                                lUniLen + 1));
                 aStream.Seek( 0 );
                 aStream.ResetError();
                 aStream.Read( pStrBuf, lLen );
-                pStrBuf[ lLen ] = '\0';
+                pStrBuf[ lUniLen ] = '\0';
             }
             rBuffer = OUString( sBuf );
         }
