@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-13 11:21:54 $
+ *  last change: $Author: tl $ $Date: 2001-08-13 11:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2561,10 +2561,14 @@ void SmXMLRowContext_Impl::EndElement()
 
             SmNodeArray aRelationArray2;
 
-            aRelationArray2.SetSize(nSize-nLeft-nRight);
-
-            for(USHORT i=0;i < nSize-nLeft-nRight;i++)
-                aRelationArray2.Put(i,aRelationArray.Get(i+nLeft));
+            //!! nSize-nLeft-nRight may be < 0 !!
+            int nRelArrSize = nSize-nLeft-nRight;
+            if (nRelArrSize > 0)
+            {
+                aRelationArray2.SetSize(nRelArrSize);
+                for(int i=0;i < nRelArrSize;i++)
+                    aRelationArray2.Put(i,aRelationArray.Get(i+nLeft));
+            }
 
             SmToken aDummy;
             SmStructureNode *pSNode = new SmBraceNode(aToken);
