@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-26 07:54:52 $
+ *  last change: $Author: fme $ $Date: 2002-09-03 15:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,61 +136,70 @@ void lcl_GetPositionInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 {
     ASSERT( rCMS.pSpecialPos, "Information about special pos missing" )
 
-    const USHORT nCharOfst = rCMS.pSpecialPos->nCharOfst;
-    USHORT nFldIdx = 0;
-    USHORT nFldLen = 0;
-
-    const XubString* pString = 0;
-    const SwLinePortion* pPor = &rPor;
-    do
+    if ( rPor.InFldGrp() && ((SwFldPortion&)rPor).GetExp().Len() )
     {
-        if ( pPor->InFldGrp() )
+        const USHORT nCharOfst = rCMS.pSpecialPos->nCharOfst;
+        USHORT nFldIdx = 0;
+        USHORT nFldLen = 0;
+
+        const XubString* pString = 0;
+        const SwLinePortion* pPor = &rPor;
+        do
         {
-            pString = &((SwFldPortion*)pPor)->GetExp();
-            nFldLen = pString->Len();
-        }
-        else
+            if ( pPor->InFldGrp() )
+            {
+                pString = &((SwFldPortion*)pPor)->GetExp();
+                nFldLen = pString->Len();
+            }
+            else
+            {
+                pString = 0;
+                nFldLen = 0;
+            }
+
+            if ( ! pPor->GetPortion() || nFldIdx + nFldLen > nCharOfst )
+                break;
+
+            nFldIdx += nFldLen;
+            rOrig.Pos().X() += pPor->Width();
+            pPor = pPor->GetPortion();
+
+        } while ( TRUE );
+
+        ASSERT( nCharOfst >= nFldIdx, "Request of position inside field failed" )
+        USHORT nLen = nCharOfst - nFldIdx + 1;
+
+        if ( pString )
         {
-            pString = 0;
-            nFldLen = 0;
+            // get script for field portion
+            rInf.GetFont()->SetActual( WhichFont( 0, pString, 0 ) );
+
+            xub_StrLen nOldLen = pPor->GetLen();
+            ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
+            const SwTwips nX1 = pPor->GetLen() ?
+                                pPor->GetTxtSize( rInf ).Width() :
+                                0;
+
+            SwTwips nX2 = 0;
+            if ( rCMS.bRealWidth )
+            {
+                ((SwLinePortion*)pPor)->SetLen( nLen );
+                nX2 = pPor->GetTxtSize( rInf ).Width();
+            }
+
+            ((SwLinePortion*)pPor)->SetLen( nOldLen );
+
+            rOrig.Pos().X() += nX1;
+            rOrig.Width( ( nX2 > nX1 ) ?
+                         ( nX2 - nX1 ) :
+                           1 );
         }
-
-        if ( ! pPor->GetPortion() || nFldIdx + nFldLen > nCharOfst )
-            break;
-
-        nFldIdx += nFldLen;
-        rOrig.Pos().X() += pPor->Width();
-        pPor = pPor->GetPortion();
-
-    } while ( TRUE );
-
-    ASSERT( nCharOfst >= nFldIdx, "Request of position inside field failed" )
-    USHORT nLen = nCharOfst - nFldIdx + 1;
-
-    if ( pString )
+    }
+    else
     {
-        // get script for field portion
-        rInf.GetFont()->SetActual( WhichFont( 0, pString, 0 ) );
-
-        xub_StrLen nOldLen = pPor->GetLen();
-        ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
-        const SwTwips nX1 = pPor->GetLen() ?
-                            pPor->GetTxtSize( rInf ).Width() :
-                            0;
-
-        SwTwips nX2 = 0;
-        if ( rCMS.bRealWidth )
-        {
-            ((SwLinePortion*)pPor)->SetLen( nLen );
-            nX2 = pPor->GetTxtSize( rInf ).Width();
-        }
-
-        ((SwLinePortion*)pPor)->SetLen( nOldLen );
-
-        rOrig.Pos().X() += nX1;
-        rOrig.Width( ( nX2 > nX1 ) ?
-                     ( nX2 - nX1 ) :
-                       1 );
+        // special cases: no common fields, e.g., graphic number portion,
+        // FlyInCntPortions, Notes
+        rOrig.Width( rCMS.bRealWidth && rPor.Width() ? rPor.Width() : 1 );
     }
 }
 
