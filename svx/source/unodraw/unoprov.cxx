@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:22:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
 #include <com/sun/star/util/MeasureUnit.hpp>
+#endif
+#ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HDL_
+#include <com/sun/star/media/ZoomLevel.hpp>
 #endif
 
 #ifndef _VCL_FLDUNIT_HXX
@@ -716,6 +719,31 @@ SfxItemPropertyMap* ImplGetSvxCustomShapePropertyMap()
     return aCustomShapePropertyMap_Impl;
 }
 
+SfxItemPropertyMap* ImplGetSvxMediaShapePropertyMap()
+{
+    static SfxItemPropertyMap aMediaShapePropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER), OWN_ATTR_ZORDER, &::getCppuType((const sal_Int32*)0), 0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID), SDRATTR_LAYERID, &::getCppuType((const sal_Int16*)0), 0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME), SDRATTR_LAYERNAME, &::getCppuType((const ::rtl::OUString*)0), 0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP, &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME), OWN_ATTR_LDNAME, &::getCppuType(( const ::rtl::OUString*)0),  ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("Transformation"), OWN_ATTR_TRANSFORMATION, &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 },
+        { MAP_CHAR_LEN("MediaURL"), OWN_ATTR_MEDIA_URL, &::getCppuType((const ::rtl::OUString*)0), 0, 0},
+        { MAP_CHAR_LEN("PreferredSize"), OWN_ATTR_MEDIA_PREFERREDSIZE, &::getCppuType((const ::com::sun::star::awt::Size*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("Loop"), OWN_ATTR_MEDIA_LOOP, &::getCppuType((const sal_Bool*)0), 0, 0},
+        { MAP_CHAR_LEN("Mute"), OWN_ATTR_MEDIA_MUTE, &::getCppuType((const sal_Bool*)0), 0, 0},
+        { MAP_CHAR_LEN("VolumeDB"), OWN_ATTR_MEDIA_VOLUMEDB, &::getCppuType((const sal_Int16*)0), 0, 0},
+        { MAP_CHAR_LEN("Zoom"), OWN_ATTR_MEDIA_ZOOM, &::getCppuType((const ::com::sun::star::media::ZoomLevel*)0), 0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT, &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        {0,0,0,0,0}
+    };
+
+    return aMediaShapePropertyMap_Impl;
+}
+
 comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry aSvxDrawingDefaultsPropertyMap_Impl[] =
@@ -778,6 +806,7 @@ UHashMapEntry pSdrShapeIdentifierMap[] =
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE ),
+    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA ),
 
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
     UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
@@ -897,6 +926,7 @@ SfxItemPropertyMap* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
             case SVXMAP_CONTROL: aMapArr[SVXMAP_CONTROL]=ImplGetSvxControlShapePropertyMap(); break;
             case SVXMAP_TEXT: aMapArr[SVXMAP_TEXT]=ImplGetSvxTextShapePropertyMap(); break;
             case SVXMAP_CUSTOMSHAPE: aMapArr[SVXMAP_CUSTOMSHAPE]=ImplGetSvxCustomShapePropertyMap(); break;
+            case SVXMAP_MEDIA: aMapArr[SVXMAP_MEDIA]=ImplGetSvxMediaShapePropertyMap(); break;
 
             default:
                 DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
