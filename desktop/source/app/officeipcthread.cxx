@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:15:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+
 
 using namespace vos;
 using namespace rtl;
@@ -105,6 +108,7 @@ using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uri;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -407,6 +411,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         {
             sal_Bool    bPrintTo = sal_False;
             OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
+
+            Reference< XExternalUriReferenceTranslator > xTranslator(
+                comphelper::getProcessServiceFactory()->createInstance(
+                OUString::createFromAscii(
+                "com.sun.star.uri.ExternalUriReferenceTranslator")),
+                UNO_QUERY);
+
             for( ULONG i=0; i < nCount; i++ )
             {
                 aInfo.getCommandArg( i, aDummy );
@@ -417,8 +428,19 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 if( aDummy.indexOf('-',0) != 0 )
                 {
                     bWaitBeforeClose = sal_True;
-                    if ( !bPrintTo )
+                    // convert to an absolut url, but don't touch extrnal file URLs here
+                    if ( !bPrintTo)
+                    {
+                        // convert file URLs to internal form #112849#
+                        if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
+                            xTranslator.is())
+                        {
+                            OUString tmp(xTranslator->translateToInternal(aDummy));
+                            if (tmp.getLength() > 0)
+                                aDummy = tmp;
+                        }
                         aDummy = GetURL_Impl( aDummy );
+                    }
                     bPrintTo = sal_False;
                 }
                 else
@@ -641,7 +663,12 @@ void SAL_CALL OfficeIPCThread::run()
                 bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
 
                 // Special command line args to create an empty document for a given module
-                if ( aCmdLineArgs.HasModuleParam() && Desktop::CheckOEM())
+
+                // #i18338# (lo)
+                // we only do this if no document was specified on the command line,
+                // since this would be inconsistent with the the behaviour of
+                // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
+                if ( aCmdLineArgs.HasModuleParam() && Desktop::CheckOEM() && (!bDocRequestSent))
                 {
                     SvtModuleOptions aOpt;
                     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
