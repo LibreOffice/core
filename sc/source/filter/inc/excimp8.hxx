@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:10 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ class ScDBData;
 class ScfSimpleProgressBar;
 
 class XclImpStream;
-class XclImpAutoFilterBuffer;
 
 
 
@@ -115,8 +114,6 @@ class ImportExcel8 : public ImportExcel
         XclImpPivotTable*       pCurrPivTab;
         XclImpPivotCache*       pCurrPivotCache;
 
-        XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
-
         BOOL                    bObjSection;
 
         BOOL                    bHasBasic;
@@ -127,10 +124,7 @@ class ImportExcel8 : public ImportExcel
         void                    Calccount( void );              // 0x0C
         void                    Delta( void );                  // 0x10
         void                    Iteration( void );              // 0x11
-        void                    Verticalpagebreaks( void );     // 0x1A
-        void                    Horizontalpagebreaks( void );   // 0x1B
         void                    Note( void );                   // 0x1C
-        void                    Format( void );                 // 0x1E
         void                    WinProtection(  void );         // 0x19
         void                    Cont( void );                   // 0x3C
         void                    Dconref( void );                // 0x51
@@ -167,12 +161,10 @@ class ImportExcel8 : public ImportExcel
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
         void                    Dimensions( void );             // 0x0200
-        void                    Name( void );                   // 0x0218
 
         void                    ChartEof( void );               // 0x000A
         void                    ChartScl( void );               // 0x00A0
 
-        virtual void            GetHFString( String& rStr );
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
         virtual void            PostDocLoad( void );
