@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:45:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@
     @see    com::sun::star::text::TableRows
     @see    com::sun::star::text::TextTableCursor
  */
-service TextTable
+published service TextTable
 {
     service com::sun::star::text::TextContent;
 
