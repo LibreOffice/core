@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:30:12 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,7 +1045,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ russian ] = "Ëèíèè";
         Text[ greek ] = "Ãñáììİò";
         Text[ dutch ] = "Visual aids";
-        Text[ french ] = "Visual aids";
+        Text[ french ] = "Lignes";
         Text[ spanish ] = "Visual aids";
         Text[ italian ] = "Visual aids";
         Text[ danish ] = "Visual aids";
@@ -1135,7 +1135,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ danish ] = "Sideskift" ;
         Text [ italian ] = "Interruzioni pagina" ;
         Text [ spanish ] = "~Saltos de página" ;
-        Text [ french ] = "~Sauts de pages" ;
+        Text [ french ] = "~Sauts de page" ;
         Text [ dutch ] = "~Paginaeinde" ;
         Text [ portuguese ] = "~Quebras de página" ;
         Text[ chinese_simplified ] = "»»Ò³";
@@ -1160,7 +1160,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ russian ] = "Íàïğàâëÿşùèå ëèíèè ïğè ïåğåìåùåíèè";
         Text[ greek ] = "Âïçèçô~éêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
         Text[ dutch ] = "Guides while moving";
-        Text[ french ] = "Guides while moving";
+        Text[ french ] = "~Repères lors du déplacement";
         Text[ spanish ] = "Guides while moving";
         Text[ italian ] = "Guides while moving";
         Text[ danish ] = "Guides while moving";
@@ -1695,7 +1695,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "~Separadores de folhas" ;
         Text [ finnish ] = "Table ~registers" ;
         Text [ danish ] = "Regnearksfaner" ;
-        Text [ french ] = "~Onglets des feuilles" ;
+        Text [ french ] = "~Onglets de classeur" ;
         Text [ swedish ] = "Tabell~flik" ;
         Text [ dutch ] = "~Werkbladenregister" ;
         Text [ spanish ] = "Registro de ~hojas" ;
@@ -1723,7 +1723,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese ] = "Símbolos de ~esquema" ;
         Text [ finnish ] = "~Jäsennin" ;
         Text [ danish ] = "Dispositionssymboler" ;
-        Text [ french ] = "~Symboles de puces/numéros" ;
+        Text [ french ] = "~Symboles du plan" ;
         Text [ swedish ] = "~Dispositionssymboler" ;
         Text [ dutch ] = "Op~sommingstekens" ;
         Text [ spanish ] = "Símbolos para esq~uemas" ;
@@ -1766,7 +1766,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Ìåòğèêè";
         Text[ greek ] = "~ÌåôñéêÜ";
         Text[ dutch ] = "Metrics";
-        Text[ french ] = "Metrics";
+        Text[ french ] = "~Métriques";
         Text[ spanish ] = "Metrics";
         Text[ italian ] = "Metrics";
         Text[ danish ] = "Metrics";
@@ -1791,7 +1791,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
         Text[ dutch ] = "Measurement unit";
-        Text[ french ] = "Measurement unit";
+        Text[ french ] = "Unité de mesure";
         Text[ spanish ] = "Measurement unit";
         Text[ italian ] = "Measurement unit";
         Text[ danish ] = "Measurement unit";
@@ -1943,7 +1943,7 @@ TabPage RID_SCPAGE_LAYOUT
             < "Kilometer" ; FUNIT_KM ; > ;
             < "Tum" ; FUNIT_INCH ; > ;
             < "Fot" ; FUNIT_FOOT ; > ;
-            < "Miles" ; FUNIT_MILE ; > ;
+            < "Mil" ; FUNIT_MILE ; > ;
             < "Pica" ; FUNIT_PICA ; > ;
             < "Point" ; FUNIT_POINT ; > ;
         };
@@ -2103,7 +2103,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ greek ] = "Óôçëïèİôçò";
         Text[ dutch ] = "Tab stops";
-        Text[ french ] = "Tab stops";
+        Text[ french ] = "Tabulation";
         Text[ spanish ] = "Tab stops";
         Text[ italian ] = "Tab stops";
         Text[ danish ] = "Tab stops";
@@ -2196,7 +2196,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese_brazilian ] = "~Always";
         Text[ portuguese ] = "~Sempre";
         Text[ danish ] = "Altid";
-        Text[ french ] = "Toujours";
+        Text[ french ] = "~Toujours";
         Text[ swedish ] = "Allt~id";
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
@@ -2223,7 +2223,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese_brazilian ] = "On request";
         Text[ portuguese ] = "Por ~pedido";
         Text[ danish ] = "På anmodning";
-        Text[ french ] = "Sur demande";
+        Text[ french ] = "Sur ~demande";
         Text[ swedish ] = "På ~begäran";
         Text[ dutch ] = "Op aan~vraag";
         Text[ spanish ] = "A ~petición";
@@ -2250,7 +2250,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese_brazilian ] = "Never";
         Text[ portuguese ] = "~Nunca";
         Text[ danish ] = "Aldrig";
-        Text[ french ] = "Jamais";
+        Text[ french ] = "~Jamais";
         Text[ swedish ] = "Al~drig";
         Text[ dutch ] = "~Nooit";
         Text[ spanish ] = "~Nunca";
@@ -2277,7 +2277,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Íàñòğîéêè ââîäà";
         Text[ greek ] = "Ñõèìßóåéò åéóáãùãŞò";
         Text[ dutch ] = "Input settings";
-        Text[ french ] = "Input settings";
+        Text[ french ] = "Paramètres de saisie";
         Text[ spanish ] = "Input settings";
         Text[ italian ] = "Input settings";
         Text[ danish ] = "Input settings";
@@ -2303,7 +2303,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ danish ] = "Flyt markering efter Enter" ;
         Text [ italian ] = "Premi invio per passare alla prossima selezione" ;
         Text [ spanish ] = "~Pulsar Entrada para desplazar selección hacia" ;
-        Text [ french ] = "Touche Entrée pour déplacer la ~sélection vers" ;
+        Text [ french ] = "Touche Entrée pour déplacer la ~sélection" ;
         Text [ portuguese ] = "Confirmar entrada para mover ~selecção para" ;
         Text [ portuguese_brazilian ] = "Eingabebestätigung setzt die Selektion nach" ;
         Text[ chinese_simplified ] = "°´»÷»Ø³µ¼ü×Ô¶¯Ñ¡ÔñÏÂÒ»¸öµ¥Ôª¸ñµÄ·½Ïò";
@@ -2382,10 +2382,10 @@ TabPage RID_SCPAGE_LAYOUT
         };
         stringlist [ french ] =
         {
-            < "en bas" ; Default ; > ;
-            < "à droite" ; Default ; > ;
-            < "en haut" ; Default ; > ;
-            < "à gauche" ; Default ; > ;
+            < "En bas" ; Default ; > ;
+            < "À droite" ; Default ; > ;
+            < "En haut" ; Default ; > ;
+            < "À gauche" ; Default ; > ;
         };
         stringlist [ dutch ] =
         {
@@ -2536,7 +2536,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ danish ] = "Udvid referencer ved kanterne, når kolonner/rækker indsættes" ;
         Text [ italian ] = "Amplia i riferimenti nell'inserimento di colonne/righe ai bordi di questi" ;
         Text [ spanish ] = "~Expandir referencias al insertar filas/columnas en los bordes" ;
-        Text [ french ] = "Expansion de la plage de ~références si insertion de colonnes ou lignes" ;
+        Text [ french ] = "Expansion des ~références si insertion de colonnes ou lignes" ;
         Text [ dutch ] = "Ver~wijzingen bij invoegen van kolommen/rijen aan de randen verbreden" ;
         Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas " ;
         Text[ chinese_simplified ] = "À©Õ¹ÏÔÊ¾²åÈëĞĞÁĞµÄÒıÓÃÄÚÈİ";
