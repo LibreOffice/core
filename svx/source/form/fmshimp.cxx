@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:39:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2660,6 +2660,9 @@ void FmXFormShell::startListening()
         if (xActiveFormSet.is())
         {
             // wenn es eine Datenquelle gibt, dann den Listener aufbauen
+            // TODO: this is strange - shouldn't this depend on a isLoaded instead of
+            // a "has command value"? Finally, the command value only means that it was
+            // intended to be loaded, not that it actually *is* loaded
             ::rtl::OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
             if (aSource.getLength())
             {
@@ -2770,7 +2773,7 @@ void FmXFormShell::stopListening()
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XRowSet> xDatabaseForm(m_xActiveForm, UNO_QUERY);
-    if (xDatabaseForm.is() && m_bDatabaseBar)
+    if ( xDatabaseForm.is() )
     {
         // datensatzwechsel mitbekommen
         xDatabaseForm->removeRowSetListener(this);
