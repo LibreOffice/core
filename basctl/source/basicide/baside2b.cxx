@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:11:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,16 @@
 
 #pragma hdrstop
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
@@ -103,6 +113,10 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -405,14 +419,50 @@ __EXPORT EditorWindow::~EditorWindow()
 
 String EditorWindow::GetWordAtCursor()
 {
-//  ESelection aESel( pEditView->GetSelection() );
-    // Nicht den Selektierten Bereich, sondern an der CursorPosition,
-    // falls Teil eines Worts markiert.
-    String aWord( pEditView->GetTextEngine()->GetWord( pEditView->GetSelection().GetEnd() ) );
-    // Kann leer sein, wenn komplettes Word markiert, da Cursor dahinter.
-    if ( !aWord.Len() && pEditView->HasSelection() )
-        aWord = pEditView->GetTextEngine()->GetWord( pEditView->GetSelection().GetStart() );
-    return aWord ;
+    String aWord;
+
+    if ( pEditView )
+    {
+        TextEngine* pTextEngine = pEditView->GetTextEngine();
+        if ( pTextEngine )
+        {
+            // check first, if the cursor is at a help URL
+            const TextSelection& rSelection = pEditView->GetSelection();
+            const TextPaM& rSelStart = rSelection.GetStart();
+            const TextPaM& rSelEnd = rSelection.GetEnd();
+            String aText = pTextEngine->GetText( rSelEnd.GetPara() );
+            CharClass aClass( ::comphelper::getProcessServiceFactory() , Application::GetSettings().GetLocale() );
+            xub_StrLen nSelStart = static_cast< xub_StrLen >( rSelStart.GetIndex() );
+            xub_StrLen nSelEnd = static_cast< xub_StrLen >( rSelEnd.GetIndex() );
+            xub_StrLen nLength = static_cast< xub_StrLen >( aText.Len() );
+            xub_StrLen nStart = 0;
+            xub_StrLen nEnd = nLength;
+            while ( nStart < nLength )
+            {
+                String aURL( URIHelper::FindFirstURLInText( aText, nStart, nEnd, aClass ) );
+                INetURLObject aURLObj( aURL );
+                if ( aURLObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP
+                     && nSelStart >= nStart && nSelStart <= nEnd && nSelEnd >= nStart && nSelEnd <= nEnd )
+                {
+                    aWord = aURL;
+                    break;
+                }
+                nStart = nEnd;
+                nEnd = nLength;
+            }
+
+            // Nicht den Selektierten Bereich, sondern an der CursorPosition,
+            // falls Teil eines Worts markiert.
+            if ( !aWord.Len() )
+                aWord = pTextEngine->GetWord( rSelEnd );
+
+            // Kann leer sein, wenn komplettes Word markiert, da Cursor dahinter.
+            if ( !aWord.Len() && pEditView->HasSelection() )
+                aWord = pTextEngine->GetWord( rSelStart );
+        }
+    }
+
+    return aWord;
 }
 
 void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
