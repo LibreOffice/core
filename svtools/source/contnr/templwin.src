@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:37:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ String STR_SVT_NEWDOC
     Text[ czech ] = "Nový dokument";
     Text[ hebrew ] = "‮מסמך חדש‬";
     Text[ hindi ] = "नया लेखपत्र";
+    Text[ slovak ] = "Nový dokument";
 };
 
 Image IMG_SVT_NEWDOC
@@ -142,6 +143,7 @@ String STR_SVT_MYDOCS
     Text[ czech ] = "Moje dokumenty";
     Text[ hebrew ] = "‮המסמכים שלי‬";
     Text[ hindi ] = "My Documents";
+    Text[ slovak ] = " Moje dokumenty";
 };
 
 Image IMG_SVT_MYDOCS
@@ -183,6 +185,7 @@ String STR_SVT_TEMPLATES
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूने";
+    Text[ slovak ] = "Šablóny";
 };
 
 Image IMG_SVT_TEMPLATES
@@ -224,6 +227,7 @@ String STR_SVT_SAMPLES
     Text[ czech ] = "Příklady";
     Text[ hebrew ] = "‮דוגמאות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Príklady";
 };
 
 Image IMG_SVT_SAMPLES
@@ -274,6 +278,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ czech ] = "Zpět";
             Text[ hebrew ] = "‮הקודם‬";
             Text[ hindi ] = "पीछे";
+            Text[ slovak ] = "Späť";
         };
         ToolBoxItem
         {
@@ -305,6 +310,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ czech ] = "O úroveň výše";
             Text[ hebrew ] = "‮רמה אחת למעלה‬";
             Text[ hindi ] = "एक स्तर ऊपर";
+            Text[ slovak ] = "O úroveň vyššie";
         };
         ToolBoxItem
         {
@@ -340,6 +346,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ czech ] = "Tisk";
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
+            Text[ slovak ] = "Tlač";
         };
     };
 };
@@ -442,6 +449,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ czech ] = "Vlastnosti dokumentu";
             Text[ hebrew ] = "‮תכונות קובץ‬";
             Text[ hindi ] = "Document Properties";
+            Text[ slovak ] = "Vlastnosti dokumentu";
         };
         ToolBoxItem
         {
@@ -474,6 +482,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ czech ] = "Náhled";
             Text[ hebrew ] = "‮תצוגה מקדימה‬";
             Text[ hindi ] = "पूर्वदृश्य";
+            Text[ slovak ] = "Náhľad";
         };
     };
 };
@@ -581,6 +590,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ czech ] = "Uspořádat...";
         Text[ hebrew ] = "‮סידור...‬";
         Text[ hindi ] = "व्यवस्था ~करो...";
+        Text[ slovak ] = "Organi~zovať...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
@@ -611,6 +621,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
+        Text[ slovak ] = "~Upraviť";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
@@ -642,6 +653,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ czech ] = "Otevřít";
         Text[ hebrew ] = "‮פתיחה‬";
         Text[ hindi ] = "~खोलो";
+        Text[ slovak ] = "~Otvoriť";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
@@ -657,6 +669,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ czech ] = "Šablony a dokumenty";
     Text[ hebrew ] = "‮תבניות ומסמכים‬";
     Text[ hindi ] = "नमूनें और लेखपत्रें";
+    Text[ slovak ] = "Šablóny a dokumenty";
 };
 
 StringArray STRARY_SVT_DOCINFO
@@ -1051,6 +1064,21 @@ ItemList [ czech ] =
         < "विषय" ; DI_THEME ; > ;
         < "परिमाण" ; DI_SIZE ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "Titul" ; DI_TITLE ; > ;
+        < "Autor" ; DI_FROM ; > ;
+        < "Dátum" ; DI_DATE ; > ;
+        < "Kľúčové slová" ; DI_KEYWORDS ; > ;
+        < "Popis" ; DI_DESCRIPTION ; > ;
+        < "Typ" ; DI_MIMETYPE ; > ;
+        < "Upravené" ; DI_MODIFIEDDATE ; > ;
+        < "Upravil" ; DI_MODIFIEDBY ; > ;
+        < "Vytlačené" ; DI_PRINTDATE ; > ;
+        < "Vytlačil" ; DI_PRINTBY ; > ;
+        < "Predmet" ; DI_THEME ; > ;
+        < "Veľkosť" ; DI_SIZE ; > ;
+    };
     };
 
 String STR_SVT_NEWDOC_HELP
@@ -1080,6 +1108,7 @@ String STR_SVT_NEWDOC_HELP
     Text[ portuguese_brazilian ] = "Click here to create new documents.";
     Text[ thai ] = "Click here to create new documents.";
     Text[ hindi ] = "Click here to create new documents.";
+    Text[ slovak ] = "Kliknite tu pre vytváranie nových dokumentov.";
 };
 String STR_SVT_MYDOCS_HELP
 {
@@ -1108,6 +1137,7 @@ String STR_SVT_MYDOCS_HELP
     Text[ portuguese_brazilian ] = "Contains your letters, reports and other documents";
     Text[ thai ] = "Contains your letters, reports and other documents";
     Text[ hindi ] = "Contains your letters, reports and other documents";
+    Text[ slovak ] = "Obsahuje vaše listy, správy a iné dokumenty";
 };
 String STR_SVT_TEMPLATES_HELP
 {
@@ -1136,6 +1166,7 @@ String STR_SVT_TEMPLATES_HELP
     Text[ portuguese_brazilian ] = "Contains templates for creating new documents";
     Text[ thai ] = "Contains templates for creating new documents";
     Text[ hindi ] = "Contains templates for creating new documents";
+    Text[ slovak ] = "Obsahuje šablóny pre vytváranie nových dokumentov";
 };
 String STR_SVT_SAMPLES_HELP
 {
@@ -1164,7 +1195,10 @@ String STR_SVT_SAMPLES_HELP
     Text[ portuguese_brazilian ] = "Contains a selection of sample letters, reports and other documents";
     Text[ thai ] = "Contains a selection of sample letters, reports and other documents";
     Text[ hindi ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ slovak ] = "Obsahuje výber vzorových listov, správ a iných dokumetov";
 };
+
+
 
 
 
