@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 14:45:04 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 14:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ static const ::rtl::OUString lcl_aServiceName(
 enum
 {
     PROP_LEGEND_POSITION,
-    PROP_LEGEND_PREFERRED_EXPANSION
+    PROP_LEGEND_PREFERRED_EXPANSION,
+    PROP_LEGEND_SHOW
 };
 
 void lcl_AddPropertiesToVector(
@@ -123,6 +124,13 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::LegendExpansion * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "Show" ),
+                  PROP_LEGEND_SHOW,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -131,6 +139,10 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_POSITION ));
     rOutMap[ PROP_LEGEND_POSITION ] =
         uno::makeAny( chart2::LegendPosition_LINE_END );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
+    rOutMap[ PROP_LEGEND_SHOW ] =
+        uno::makeAny( sal_True );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()

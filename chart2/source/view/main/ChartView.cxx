@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 14:45:05 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 14:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,23 +606,28 @@ void createLegend( const uno::Reference< XLegend > & xLegend
 {
     if( xLegend.is())
     {
-        VLegend aVLegend( xLegend );
-        aVLegend.init( xPageShapes, xShapeFactory );
-        aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
-
         LegendPosition ePos = LegendPosition_LINE_END;
+        sal_Bool bShow = sal_True;
         uno::Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY );
         if( xLegendProp.is())
         {
             try
             {
                 xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
+                xLegendProp->getPropertyValue( C2U( "Show" )) >>= bShow;
             }
             catch( uno::Exception & ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
         }
+
+        if( ! bShow )
+            return;
+
+        VLegend aVLegend( xLegend );
+        aVLegend.init( xPageShapes, xShapeFactory );
+        aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
 
         const sal_Int32 nEdgeOffset = 300;
 
