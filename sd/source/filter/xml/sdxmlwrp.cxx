@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:24:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,15 @@
 
 #ifndef MAC
 #ifndef SVX_LIGHT
-#include "../../ui/inc/docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../../ui/inc/DrawDocShell.hxx"
+#endif
 #endif //!SVX_LIGHT
 #else  //MAC
 #ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #endif //!SVX_LIGHT
 #endif //!MAC
 #include "sdxmlwrp.hxx"
@@ -221,8 +225,12 @@ struct XML_SERVICEMAP
 // - SdXMLWrapper -
 // ----------------
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode ) :
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode ) :
     SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode )
+{
+}
+
+SdXMLFilter::~SdXMLFilter(void)
 {
 }
 
@@ -313,6 +321,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r )
     {
+        (void)r;
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -325,6 +334,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( packages::zip::ZipIOException& r )
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -334,6 +344,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( io::IOException& r )
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -343,6 +354,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( uno::Exception& r )
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
