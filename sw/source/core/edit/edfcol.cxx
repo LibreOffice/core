@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:00:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,15 @@
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
 
 /*************************************
  * FormatColl
@@ -113,19 +122,22 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( USHORT nFmtColl) const
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
 
-
 void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt)
 {
     SwTxtFmtColl *pLocal = pFmt? pFmt: (*GetDoc()->GetTxtFmtColls())[0];
     StartAllAction();
-    GetDoc()->StartUndo();
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, pLocal->GetName());
+
+    GetDoc()->StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel() )
             GetDoc()->SetTxtFmtColl(*PCURCRSR, pLocal);
 
     FOREACHPAM_END()
-    GetDoc()->EndUndo();
+    GetDoc()->EndUndo(UNDO_SETFMTCOLL);
     EndAllAction();
 
 }
@@ -149,7 +161,9 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
     if( bReset )
         pColl->ResetAllAttr();
 
-    const SfxItemSet* pSet = GetCrsr()->GetCntntNode()->GetpSwAttrSet();
+    SwPaM * pCrsr = GetCrsr();
+    SwCntntNode * pCnt = pCrsr->GetCntntNode();
+    const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
         // JP 05.10.98: falls eines der Attribute Break/PageDesc/NumRule(auto)
@@ -179,10 +193,10 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
                 aSet.ClearItem( RES_PARATR_NUMRULE );
 
             if( aSet.Count() )
-                pColl->SetAttr( aSet );
+                GetDoc()->ChgFmt(*pColl, aSet );
         }
         else
-            pColl->SetAttr( *pSet );
+            GetDoc()->ChgFmt(*pColl, *pSet );
     }
 }
 
