@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.3 2000-10-10 06:25:23 sab Exp $
+	$Id: style.mod,v 1.4 2000-10-10 10:44:37 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -59,7 +59,7 @@
 <!ATTLIST style:style style:name %styleName; #REQUIRED>
 
 <!ENTITY % styleFamily "(paragraph|text|
-						 table|table-column|table-row|table-cell|table-page|chart|graphics)">
+						 table|table-column|table-row|table-cell|table-page|chart|graphics|default|drawing-page|presentation)">
 <!ATTLIST style:style style:family %styleFamily; #REQUIRED>
 
 <!ATTLIST style:style style:parent-style-name %styleName; #IMPLIED>
@@ -262,3 +262,4 @@
 <!ATTLIST style:column style:rel-width CDATA #IMPLIED>
 <!ATTLIST style:column fo:margin-left %positiveLength; #IMPLIED>
 <!ATTLIST style:column fo:margin-right %positiveLength; #IMPLIED>
+

@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.1 2000-09-29 16:16:03 mh Exp $
+	$Id: drawing.mod,v 1.2 2000-10-10 10:41:12 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -59,8 +59,14 @@
 <!ENTITY % draw-position "svg:x %coordinate; #IMPLIED svg:y %coordinate; #IMPLIED">
 <!ENTITY % draw-size "svg:width %coordinate; #IMPLIED svg:height %coordinate; #IMPLIED">
 <!ENTITY % draw-transform "svg:transform CDATA #IMPLIED">
-<!ENTITY % draw-viewbox "svg:viewbox CDATA #REQUIRED">
-<!ENTITY % draw-style-name "draw:style-name %styleName; #REQUIRED">
+<!ENTITY % draw-viewbox "svg:viewBox CDATA #REQUIRED">
+<!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED">
+
+<!-- commont presentation shape attributes -->
+<!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
+<!ENTITY % presentation-classes "(title|outline|subtitle|text|graphic|object|chart|table|orgchart|page|notes)" >
+<!-- ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED" -->
+<!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED presentation:placeholder (true|false) #IMPLIED">
 
 <!-- Drawing shapes -->
 <!ELEMENT draw:rect (text:p)*>
@@ -118,11 +124,18 @@
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
 
-<!-- commont presentation shape attributes -->
-<!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
-<!ENTITY % presentation-classes "title|outline|subtitle|text|graphic|object|chart|table|orgchart|page|notes" >
-<!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED">
+<!ELEMENT draw:page-thumbnail EMPTY>
+<!ATTLIST draw:page-thumbnail %draw-position; >
+<!ATTLIST draw:page-thumbnail %draw-size; >
+<!ATTLIST draw:page-thumbnail %draw-style-name; >
+<!ATTLIST draw:page-thumbnail %presentation-class; >
 
+<!ELEMENT text:text-box (text:p)*>
+<!ATTLIST text:text-box %draw-position; >
+<!ATTLIST text:text-box %draw-size; >
+<!ATTLIST text:text-box %draw-style-name; >
+<!ATTLIST text:text-box %presentation-class; >
+<!ATTLIST text:text-box %draw-transform; >
 
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
@@ -173,8 +186,8 @@
 <!ATTLIST style:properties svg:stroke-dasharray CDATA #IMPLIED>
 <!ATTLIST style:properties svg:stroke-width %length; #IMPLIED>
 <!ATTLIST style:properties svg:stroke-color %color; #IMPLIED>
-<!ATTLIST style:properties draw:marker-start (none|%uriReference;) #IMPLIED>
-<!ATTLIST style:properties draw:marker-end (none|%uriReference;) #IMPLIED>
+<!ATTLIST style:properties draw:marker-start %styleName; #IMPLIED>
+<!ATTLIST style:properties draw:marker-end %styleName; #IMPLIED>
 <!ATTLIST style:properties draw:marker-start-width %length; #IMPLIED>
 <!ATTLIST style:properties draw:marker-end-width %length; #IMPLIED>
 <!ATTLIST style:properties draw:marker-start-center %boolean; #IMPLIED>
@@ -209,10 +222,10 @@
 
 <!-- shadow attributes -->
 <!ATTLIST style:properties draw:shadow (visible|hidden) #IMPLIED>
-<!ATTLIST style:properties draw:shadow-distance-x %length; #IMPLIED>
-<!ATTLIST style:properties draw:shadow-distance-y %length; #IMPLIED>
+<!ATTLIST style:properties draw:shadow-offset-x %length; #IMPLIED>
+<!ATTLIST style:properties draw:shadow-offset-y %length; #IMPLIED>
 <!ATTLIST style:properties draw:shadow-color %color; #IMPLIED>
-<!ATTLIST style:properties draw:shadow-transparency (%float;|%percentage;) #IMPLIED>
+<!ATTLIST style:properties draw:shadow-transparency CDATA #IMPLIED>
 
 <!-- Master page -->
 <!ELEMENT style:master-page (style:style*,(%shapes;)*,presentation:notes?) >

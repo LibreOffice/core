@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.1 2000-09-29 16:16:03 mh Exp $
+	$Id: dtypes.mod,v 1.2 2000-10-10 10:42:02 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -145,6 +145,6 @@
 <!-- an svg coordinate in different distance formats -->
 <!ENTITY % coordinate "CDATA">
 
-<!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:polygonpath|draw:circle|draw:ellipse|draw:g)" >
+<!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:polygonpath|draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|text:text-box)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">

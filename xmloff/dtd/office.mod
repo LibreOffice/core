@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.1 2000-09-29 16:16:04 mh Exp $
+	$Id: office.mod,v 1.2 2000-10-10 10:43:12 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -103,7 +103,8 @@
 
 <!ENTITY % styles "(style:style|text:list-style|number:number-style|
 		number:currency-style|number:percentage-style|number:date-style|
-		number:time-style|number:boolean-style|number:text-style)">
+		number:time-style|number:boolean-style|number:text-style|
+		draw:gradient|draw:hatch|draw:fill-image|draw:marker)">
 
 <!-- Validity constraint: The elements
 		text:outline-style,
@@ -117,13 +118,13 @@
 
 <!ELEMENT office:automatic-styles (%styles;)*>
 
-<!ELEMENT office:master-styles EMPTY>
+<!ELEMENT office:master-styles (style:master-page)* >
 
 <!ENTITY % text-decls "text:variable-decls?, text:sequence-decls?,
 					   text:user-field-decls?, text:dde-connection-decls?" >
 
 <!ENTITY % body "(%text-decls;,table:content-validations?,(text:h|text:p|text:ordered-list|
-		text:unordered-list|table:table|chart:chart|
+		text:unordered-list|table:table|chart:chart|draw:page|
 		draw:a|draw:text-box|draw:image)*,table:named-expressions?,
 		table:database-ranges?,table:data-pilot-tables?)">
 <!ELEMENT office:body %body;>
