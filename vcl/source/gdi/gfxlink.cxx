@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 11:47:43 $
+ *  last change: $Author: ka $ $Date: 2002-07-19 12:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,20 +82,23 @@ GfxLink::GfxLink() :
     mnBufSize   ( 0 ),
     mpBuf       ( NULL ),
     mpSwap      ( NULL ),
-    mnUserId    ( 0UL )
+    mnUserId    ( 0UL ),
+    mpImpData   ( new ImpGfxLink )
 {
 }
 
 // ------------------------------------------------------------------------
 
-GfxLink::GfxLink( const GfxLink& rGfxLink )
+GfxLink::GfxLink( const GfxLink& rGfxLink ) :
+    mpImpData( new ImpGfxLink )
 {
     ImplCopy( rGfxLink );
 }
 
 // ------------------------------------------------------------------------
 
-GfxLink::GfxLink( BYTE* pBuf, ULONG nSize, GfxLinkType nType, BOOL bOwns )
+GfxLink::GfxLink( BYTE* pBuf, ULONG nSize, GfxLinkType nType, BOOL bOwns ) :
+    mpImpData( new ImpGfxLink )
 {
     meType = nType;
     mnBufSize = nSize;
@@ -122,6 +125,8 @@ GfxLink::~GfxLink()
 
     if( mpSwap && !( --mpSwap->mnRefCount ) )
         delete mpSwap;
+
+    delete mpImpData;
 }
 
 // ------------------------------------------------------------------------
@@ -151,6 +156,7 @@ void GfxLink::ImplCopy( const GfxLink& rGfxLink )
     mpBuf = rGfxLink.mpBuf;
     mpSwap = rGfxLink.mpSwap;
     mnUserId = rGfxLink.mnUserId;
+    *mpImpData = *rGfxLink.mpImpData;
 
     if( mpBuf )
         mpBuf->mnRefCount++;
@@ -188,6 +194,34 @@ const BYTE* GfxLink::GetData() const
         ( (GfxLink*) this )->SwapIn();
 
     return( mpBuf ? mpBuf->mpBuffer : NULL );
+}
+
+// ------------------------------------------------------------------------
+
+const Size& GfxLink::GetPrefSize() const
+{
+    return mpImpData->maPrefSize;
+}
+
+// ------------------------------------------------------------------------
+
+void GfxLink::SetPrefSize( const Size& rPrefSize )
+{
+    mpImpData->maPrefSize = rPrefSize;
+}
+
+// ------------------------------------------------------------------------
+
+const MapMode& GfxLink::GetPrefMapMode() const
+{
+    return mpImpData->maPrefMapMode;
+}
+
+// ------------------------------------------------------------------------
+
+void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
+{
+    mpImpData->maPrefMapMode = rPrefMapMode;
 }
 
 // ------------------------------------------------------------------------
@@ -267,9 +301,13 @@ void GfxLink::SwapIn()
 
 SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
 {
-    VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 1 );
+    VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
+    // Version 1
     rOStream << (UINT16) rGfxLink.GetType() << rGfxLink.GetDataSize() << rGfxLink.GetUserId();
+
+    // Version 2
+    rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode();
 
     delete pCompat;
 
@@ -288,13 +326,21 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
 
 SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 {
+    Size            aSize;
+    MapMode         aMapMode;
     ULONG           nSize;
     ULONG           nUserId;
     UINT16          nType;
     BYTE*           pBuf;
     VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
+    // Version 1
     rIStream >> nType >> nSize >> nUserId;
+
+    if( pCompat->GetVersion() >= 2 )
+    {
+        rIStream >> aSize >> aMapMode;
+    }
 
     delete pCompat;
 
@@ -303,6 +349,8 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 
     rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, TRUE );
     rGfxLink.SetUserId( nUserId );
+    rGfxLink.SetPrefSize( aSize );
+    rGfxLink.SetPrefMapMode( aMapMode );
 
     return rIStream;
 }
