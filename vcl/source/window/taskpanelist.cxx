@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-21 10:28:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _RCID_H
-#include <rcid.h>
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <dockwin.hxx>
@@ -199,7 +199,6 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         bSplitterOnly = bF6 && aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?
-        BOOL bHasFocus = FALSE;
         ::std::vector< Window* >::iterator p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
         {
