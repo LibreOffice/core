@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:26:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@
 #include "appdata.hxx"
 #include "appbas.hxx"
 #include "sfxhelp.hxx"
-#include "stbmgr.hxx"
 #include "appimp.hxx"
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
@@ -1012,11 +1011,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            case SID_STATUSBARTEXT:
-            {
-                rSet.Put( SfxStringItem( SID_STATUSBARTEXT, GetStatusBarManager()->GetStatusBar()->GetText() ) );
-                break;
-            }
             case SID_OFFICE_PRIVATE_USE:
             case SID_OFFICE_COMMERCIAL_USE:
             {
