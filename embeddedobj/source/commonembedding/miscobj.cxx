@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:47:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_nMiscStatus( 0 )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_False )
+, m_bLinkHasPassword( sal_False )
 {
     CommonInit_Impl( aObjProps );
 }
@@ -132,6 +133,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_nMiscStatus( 0 )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_True )
+, m_bLinkHasPassword( sal_False )
 {
     // linked object has no own persistence so it is in loaded state starting from creation
     LinkInit_Impl( aObjProps, aMediaDescr, aObjectDescr );
