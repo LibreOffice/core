@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:06:53 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 06:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@ IMAGE RID_IMG_BITMAPFONT
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
+String STR_SVT_AUTOMATIC_COLOR
+{
+    Text = "Automatisch";
+    Text [ ENGLISH ] = "Automatic";
+};
 
 /*
  * ressources for CollatorRessource / CollatorRessourceData resp.
