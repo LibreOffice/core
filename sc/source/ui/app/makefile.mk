@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-10 16:19:53 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:22:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-OBJFILES = \
-    $(OBJ)$/sclib.obj  \
+#OBJFILES = \
+#	$(OBJ)$/sclib.obj  \
 
 SLOFILES =  \
     $(SLO)$/scmod.obj  \
@@ -104,15 +104,15 @@ EXCEPTIONSFILES= \
     $(SLO)$/scmod2.obj \
     $(SLO)$/scmod.obj
 
-LIB3TARGET=$(SLB)$/ysclib.lib
-LIB3OBJFILES=$(SLO)$/sclib.obj
+#LIB3TARGET=$(SLB)$/ysclib.lib
+#LIB3OBJFILES=$(SLO)$/sclib.obj
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-$(SLO)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
-$(OBJ)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
+#$(SLO)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
+#$(OBJ)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
 
 $(INCCOM)$/scdll0.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
