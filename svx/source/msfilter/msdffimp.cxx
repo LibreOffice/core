@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:41:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,8 +992,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                             const Point& rPoint = rPolygon.GetPoint( j );
                                                             double fXRel = rPoint.X() - aBoundRect.Left();
                                                             double fYRel = rPoint.Y() - aBoundRect.Top();
-                                                            fXRel = fXRel / aBoundRect.GetWidth() * 10000;
-                                                            fYRel = fYRel / aBoundRect.GetHeight() * 10000;
+                                                            sal_Int32 nWidth = aBoundRect.GetWidth();
+                                                            if ( !nWidth )
+                                                                nWidth = 1;
+                                                            sal_Int32 nHeight= aBoundRect.GetHeight();
+                                                            if ( !nHeight )
+                                                                nHeight = 1;
+                                                            fXRel /= (double)nWidth;
+                                                            fXRel *= 10000;
+                                                            fYRel /= (double)nHeight;
+                                                            fYRel *= 10000;
                                                             aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
                                                             aGluePoint.SetPercent( sal_True );
                                                             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
