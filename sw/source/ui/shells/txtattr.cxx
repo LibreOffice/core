@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:47:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-#ifndef _DRPCPS_HXX
-#include <drpcps.hxx>
-#endif
+//CHINA001 #ifndef _DRPCPS_HXX
+//CHINA001 #include <drpcps.hxx>
+//CHINA001 #endif
 #ifndef _NUM_HXX
 #include <num.hxx>
 #endif
@@ -168,6 +168,8 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include "chrdlg.hrc" //CHINA001
 const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
 const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
 
@@ -614,7 +616,12 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP,
                                            HINT_END, HINT_END, 0);
                 rSh.GetAttr(aSet);
-                SwDropCapsDlg *pDlg = new SwDropCapsDlg(GetView().GetWindow(), aSet);
+                //CHINA001 SwDropCapsDlg *pDlg = new SwDropCapsDlg(GetView().GetWindow(), aSet);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet,ResId( DLG_SWDROPCAPS ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
