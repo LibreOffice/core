@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:24 $
+ *  last change: $Author: hr $ $Date: 2001-01-04 14:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ enum LineNumberingToken
     XML_TOK_LINENUMBERING_NUM_FORMAT,
     XML_TOK_LINENUMBERING_NUM_LETTER_SYNC,
     XML_TOK_LINENUMBERING_NUMBER_POSITION,
-    XML_TOK_LINENUMBERING_INCREMENT,
+    XML_TOK_LINENUMBERING_INCREMENT
 //  XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION,
 //  XML_TOK_LINENUMBERING_INCREMENT,
 //  XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR,
