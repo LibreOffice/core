@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 09:48:27 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 12:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,10 @@ void OStorage_Impl::Commit()
                 // it's temporary PackageFolder should be inserted instead of current one
                 // also the new copy of PackageFolder should be used by the children storages
 
-                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                // the renamed elements are not in new temporary storage
+                if ( m_bCommited || m_bIsRoot )
+                    xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+
                 (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
             }
             else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream )
@@ -750,7 +753,10 @@ void OStorage_Impl::Commit()
 
                 (*pElementIter)->m_pStream->Commit();
 
-                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                // the renamed elements are not in new temporary storage
+                if ( m_bCommited || m_bIsRoot )
+                    xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+
                 (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
             }
             else if ( !m_bCommited && !m_bIsRoot )
