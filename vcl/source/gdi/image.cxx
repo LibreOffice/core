@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 14:43:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,25 +91,6 @@
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <image.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
-#include <com/sun/star/graphic/XGraphic.hpp>
 #endif
 
 DBG_NAME( Image );
@@ -251,14 +232,8 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
 {
     DBG_CTOR( Image, NULL );
 
-    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
-                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
-                                                          NULL );
-
-    if( pGraphic )
-        ImplInit( pGraphic->GetBitmapEx() );
+    const Graphic aGraphic( rxGraphic );
+    ImplInit( aGraphic.GetBitmapEx() );
 }
 
 // -----------------------------------------------------------------------
@@ -359,33 +334,9 @@ BitmapEx Image::GetBitmapEx() const
 
 uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 {
-    const Graphic                       aGraphic( GetBitmapEx() );
-    uno::Reference< graphic::XGraphic > xRet;
+    const Graphic aGraphic( GetBitmapEx() );
 
-    if( aGraphic.GetType() != GRAPHIC_NONE )
-    {
-        uno::Reference < lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-
-        if( xMSF.is() )
-        {
-            uno::Reference< graphic::XGraphicProvider > xProv( xMSF->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ),
-                uno::UNO_QUERY );
-
-            if( xProv.is() )
-            {
-                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
-                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
-
-                aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( (sal_Int64) &aGraphic ) );
-
-                xRet = xProv->queryGraphic( aLoadProps );
-            }
-        }
-    }
-
-    return xRet;
+    return aGraphic.GetXGraphic();
 }
 
 // -----------------------------------------------------------------------
