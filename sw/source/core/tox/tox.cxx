@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,13 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+// -> #i21237#
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+// <- #i21237#
+
 const sal_Char* SwForm::aFormEntry      = "<E>";
 const sal_Char* SwForm::aFormTab        = "<T>";
 const sal_Char* SwForm::aFormPageNums   = "<#>";
@@ -127,14 +134,13 @@ BYTE SwForm::nFormChapterMarkLen    = 3;
 BYTE SwForm::nFormTextLen           = 3;
 BYTE SwForm::nFormAuthLen           = 5;
 
-
 SV_IMPL_PTRARR(SwTOXMarks, SwTOXMark*)
 
 TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
 
 /* -----------------23.09.99 14:09-------------------
     includes plain text at a given position into
-     the appropriate token
+    the appropriate token
  --------------------------------------------------*/
 USHORT lcl_ConvertTextIntoPattern( String& rPattern,
                                     xub_StrLen nStart, xub_StrLen nEnd )
@@ -198,22 +204,13 @@ const PatternIni aPatternIni[] =
 /* -----------------23.09.99 13:58-------------------
 
  --------------------------------------------------*/
-String lcl_GetAuthPattern(USHORT nTypeId)
+// -> #i21237#
+SwFormTokens lcl_GetAuthPattern(USHORT nTypeId)
 {
-    String sAuth; sAuth.AssignAscii( SwForm::aFormAuth );
-    sAuth.Insert(' ', 2);
-    //
-    PatternIni aIni = aPatternIni[nTypeId];
+    SwFormTokens aRet; // #i21237#
 
-    //TODO: create pattern for authorities
-    // create a level for each type of authorities
-    String sRet = sAuth;
-    String sTmp( String::CreateFromInt32( AUTH_FIELD_IDENTIFIER ));
-    if(sTmp.Len() < 2)
-        sTmp.Insert('0', 0);
-    sRet.Insert(sTmp, 2);
-    sRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
-    lcl_ConvertTextIntoPattern(sRet, sRet.Len() - 2, sRet.Len());
+
+    PatternIni aIni = aPatternIni[nTypeId];
     USHORT nVals[5];
     nVals[0] = aIni.n1;
     nVals[1] = aIni.n2;
@@ -225,18 +222,15 @@ String lcl_GetAuthPattern(USHORT nTypeId)
     {
         if(nVals[i] == USHRT_MAX)
             break;
-        if(i > 0)
-        {
-            sRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ));
-            lcl_ConvertTextIntoPattern(sRet, sRet.Len() - 2, sRet.Len());
-        }
-        sRet += sAuth;
-        sTmp = String::CreateFromInt32( nVals[ i ] );
-        if(sTmp.Len() < 2)
-            sTmp.Insert('0', 0);
-        sRet.Insert(sTmp, sRet.Len() - 2);
+         // -> #i21237#
+        SwFormToken aToken(TOKEN_AUTHORITY);
+
+        aToken.nAuthorityField = nVals[i];
+        aRet.push_back(aToken);
+        // <- #i21237#
     }
-    return sRet;
+
+    return aRet;
 }
 /*--------------------------------------------------------------------
      Beschreibung:  Verzeichnis-Markierungen D/Ctor
@@ -339,8 +333,7 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
     Beschreibung: Formen bearbeiten
   --------------------------------------------------------------------*/
 
-
-SwForm::SwForm( USHORT nTyp )
+SwForm::SwForm( USHORT nTyp ) // #i21237#
     : nType( nTyp ), nFormMaxLevel( SwForm::GetFormMaxLevel( nTyp )),
 //  nFirstTabPos( lNumIndent ),
     bCommaSeparated(FALSE)
@@ -369,36 +362,29 @@ SwForm::SwForm( USHORT nTyp )
         return ;
     }
 
-    String sStr;
+    SwFormTokens aTokens;
+    if (TOX_CONTENT == nType)
     {
-        ByteString sBStr;
-        if( TOX_CONTENT == nType )
-            ( sBStr = SwForm::aFormEntryNum ) += SwForm::aFormEntryTxt;
-        else
-            sBStr = SwForm::aFormEntry;
-        if( TOX_AUTHORITIES != nType)
+        aTokens.push_back(SwFormToken(TOKEN_ENTRY_NO));
+        aTokens.push_back(SwFormToken(TOKEN_ENTRY_TEXT));
+    }
+    else
+        aTokens.push_back(SwFormToken(TOKEN_ENTRY));
+
+    if (TOX_AUTHORITIES != nType)
+    {
+        SwFormToken aToken(TOKEN_TAB_STOP);
+        aToken.nTabStopPosition = USHRT_MAX;
+
+        if(TOX_CONTENT == nType || TOX_TABLES == nType ||
+           TOX_ILLUSTRATIONS == nType || TOX_OBJECTS == nType)
         {
-            sBStr += SwForm::aFormTab;
-            ByteString sTmp( RTL_CONSTASCII_STRINGPARAM( " ,65535,0," ));
-            if(TOX_CONTENT == nType || TOX_TABLES == nType ||
-                        TOX_ILLUSTRATIONS == nType || TOX_OBJECTS == nType)
-            {
-                //the most right tab stop is "most_right_aligned"
-                sTmp += ByteString::CreateFromInt32( SVX_TAB_ADJUST_END );
-                //and has a dot as FillChar
-                sTmp.Append( RTL_CONSTASCII_STRINGPARAM( ",." ));
-                sBStr.Insert(sTmp, sBStr.Len() - 1);
-            }
-            else
-            {
-                sTmp += ByteString::CreateFromInt32( SVX_TAB_ADJUST_LEFT );
-                //and has a space as FillChar
-                sTmp.Append( RTL_CONSTASCII_STRINGPARAM( ", " ));
-            }
-            sBStr.Insert( sTmp, sBStr.Len() - 1);
-            sBStr += SwForm::aFormPageNums;
+            aToken.cTabFillChar = '.';
+            aToken.eTabAlign = SVX_TAB_ADJUST_END;
         }
-        sStr.AppendAscii( sBStr.GetBuffer(), sBStr.Len() );
+
+        aTokens.push_back(aToken);
+        aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
     }
 
     SetTemplate( 0, SW_RESSTR( nPoolId++ ));
@@ -409,14 +395,16 @@ SwForm::SwForm( USHORT nTyp )
         {
             if(1 == i)
             {
-                String sTmp; sTmp.AssignAscii( SwForm::aFormEntry );
-                sTmp.Insert(' ', SwForm::nFormEntryLen - 1);
-                SetPattern( i, sTmp );
+                SwFormTokens aTmpTokens;
+                SwFormToken aTmpToken(TOKEN_ENTRY);
+                aTmpTokens.push_back(aTmpToken);
+
+                SetPattern( i, aTmpTokens );
                 SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDXBREAK    ));
             }
             else
             {
-                SetPattern( i, sStr );
+                SetPattern( i, aTokens );
                 SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDX1 + i - 2 ));
             }
         }
@@ -427,7 +415,7 @@ SwForm::SwForm( USHORT nTyp )
             if(TOX_AUTHORITIES == nType)
                 SetPattern(i, lcl_GetAuthPattern(i));
             else
-                SetPattern( i, sStr );
+                SetPattern( i, aTokens );
 
             if( TOX_CONTENT == nType && 6 == i )
                 nPoolId = STR_POOLCOLL_TOX_CNTNT6;
@@ -511,81 +499,59 @@ String lcl_GetPattern( const String& rPattern, const sal_Char* pToken )
     return sRet;
 }
 
-USHORT SwForm::GetFirstTabPos() const   //{ return nFirstTabPos; }
+// #i21237#
+bool operator == (const SwFormToken & rToken, FormTokenType eType)
+{
+    return rToken.eTokenType == eType;
+}
+
+USHORT SwForm::GetFirstTabPos() const   // #i21237#
 {
     DBG_WARNING("compatibility")
-    String sFirstLevelPattern = aPattern[ 1 ];
     USHORT nRet = 0;
-    if( 2 <= ::lcl_GetPatternCount( sFirstLevelPattern, SwForm::aFormTab ))
+    const SwFormTokens & aTokens = aPattern[1];
+
+    if (2 <= count_if(aTokens.begin(), aTokens.end(),
+                      SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP)))
     {
-        //sTab is in the Form "<T ,,value>" where value is the tab position an may be empty
-        String sTab = lcl_GetPattern( sFirstLevelPattern, SwForm::aFormTab );
-        if( 3 <= sTab.GetTokenCount(',') )
-        {
-            sTab = sTab.GetToken( 2, ',');
-            sTab.Erase( sTab.Len() - 1, 1 );
-            nRet = sTab.ToInt32();
-        }
+        SwFormTokens::const_iterator aIt =
+            find_if(aTokens.begin(), aTokens.end(),
+                    SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP));
+
+        if (aIt != aTokens.end())
+            nRet = aIt->nTabStopPosition;
     }
+
     return nRet;
 }
-void SwForm::SetFirstTabPos( USHORT n )     //{ nFirstTabPos = n; }
-{
-    // the tab stop token looks like: <T ,,1234,0,.> <T> <T ,,1234>
-    //for loading only: all levels get a first tab stop at the given position
-    String sVal( String::CreateFromInt32(  n ));
-    String sTmp; sTmp.AssignAscii( SwForm::aFormTab );
-    sTmp.Insert(sVal, 2);
 
+void SwForm::SetFirstTabPos( USHORT n )     // #i21237#
+{
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
-        //if two tabstops then exchange
-        String& rPattern = aPattern[ i + 1];
-        if( 2 <= lcl_GetPatternCount( rPattern, SwForm::aFormTab ))
-        {
-            //change existing tab
-            xub_StrLen nStart = rPattern.SearchAscii( "<T" );
-            xub_StrLen nEnd = rPattern.Search( '>', nStart );
-            String sTmp( rPattern.Copy( nStart, nEnd - nStart + 1 ));
-            rPattern.Erase( nStart, nEnd - nStart + 1 );
+        SwFormTokens & aTokens = aPattern[i+1];
 
-            // if TabAlign is set
-            String sTabAlign;
-            if(sTmp.GetTokenCount(',') >= 4)
-            {
-                sTabAlign = sTmp.GetToken(3, ',');
-                sTabAlign.Erase(sTabAlign.Len() - 1, 1);
-            }
-            String sTabFillChar;
-            if(sTmp.GetTokenCount(',') >= 5)
-            {
-                sTabFillChar = sTmp.GetToken(4, ',');
-                sTabFillChar.Erase(sTabAlign.Len() - 1, 1);
-            }
-            sTmp.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "<T ,," ));
-            sTmp += sVal;
-            if( sTabAlign.Len() )
-            {
-                sTmp += ',';
-                sTmp += sTabAlign;
-            }
-            if(sTabFillChar.Len())
-            {
-                sTmp += ',';
-                sTmp += sTabFillChar;
-            }
-            sTmp += '>';
-            rPattern.Insert( sTmp, nStart );
+        if (2 <= count_if(aTokens.begin(), aTokens.end(),
+                          SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP)))
+        {
+            SwFormTokens::iterator aIt =
+                find_if(aTokens.begin(), aTokens.end(),
+                        SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP));
+
+            SwFormToken aToken(TOKEN_TAB_STOP);
+            aToken.eTabAlign = aIt->eTabAlign;
+            aToken.cTabFillChar = aIt->cTabFillChar;
+            aToken.nTabStopPosition = n;
+
+            *aIt = aToken;
         }
         else
         {
-            //insert new tab after the first token
-            xub_StrLen nIndex = rPattern.Search('>');
-            String sTmp;
-            sTmp.AssignAscii( SwForm::aFormTab );
-            sTmp.InsertAscii( " ,,", nFormTabLen - 1);
-            sTmp.Insert( sVal, nFormTabLen + 2 );
-            rPattern.Insert( sTmp, nIndex + 1 );
+            SwFormToken aToken(TOKEN_TAB_STOP);
+
+            SwFormTokens::iterator aIt = aTokens.begin();
+            aIt++;
+            aTokens.insert(aIt, aToken);
         }
     }
 }
@@ -633,7 +599,7 @@ BOOL lcl_FindTabToken( const String& rPattern, xub_StrLen nSearchFrom,
     return bRet;
 }
 //-----------------------------------------------------------------------------
-void SwForm::AdjustTabStops(SwDoc& rDoc)
+void SwForm::AdjustTabStops(SwDoc& rDoc, BOOL bDefaultRightTabStop) // #i21237#
 {
     for(USHORT nLevel = 1; nLevel < GetFormMax(); nLevel++)
     {
@@ -642,7 +608,8 @@ void SwForm::AdjustTabStops(SwDoc& rDoc)
         SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( sTemplateName );
         if( !pColl )
         {
-            USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sTemplateName, GET_POOLID_TXTCOLL );
+            USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName
+                ( sTemplateName, GET_POOLID_TXTCOLL ); // #i21237#
             if( USHRT_MAX != nId )
                 pColl = rDoc.GetTxtCollFromPool( nId );
         }
@@ -650,46 +617,66 @@ void SwForm::AdjustTabStops(SwDoc& rDoc)
         {
             const SvxTabStopItem& rTabStops = pColl->GetTabStops( FALSE );
             USHORT nTabCount = rTabStops.Count();
-            String sCurrentPattern = GetPattern(nLevel);
+            // #i21237#
+            SwFormTokens aCurrentPattern = GetPattern(nLevel);
+            SwFormTokens::iterator aIt = aCurrentPattern.begin();
+
             xub_StrLen nLastTabFoundEndPos = 0;
             BOOL bChanged = FALSE;
+
             for(USHORT nTab = 0; nTab < nTabCount; nTab++)
             {
                 bChanged = TRUE;
                 const SvxTabStop& rTab = rTabStops[nTab];
                 xub_StrLen nStart, nEnd;
-                if( ::lcl_FindTabToken( sCurrentPattern, nLastTabFoundEndPos,
-                                        nStart, nEnd ))
+
+                // -> #i21237
+                if (aIt != aCurrentPattern.end())
+                    aIt = find_if(aIt, aCurrentPattern.end(),
+                                  SwFormTokenEqualToFormTokenType
+                                  (TOKEN_TAB_STOP));
+
+                if (aIt == aCurrentPattern.end())
                 {
-                    sCurrentPattern.Erase( nStart, nEnd - nStart + 1 );
-                    // should look like: T ,,12345,2,_
-                    long nPosition = rTab.GetTabPos();
-                    USHORT eAlign =  rTab.GetAdjustment();
-                    sal_Unicode cFillChar = rTab.GetFill();
-                    //create new token
-                    String sNewToken;
-                    sNewToken.AssignAscii( RTL_CONSTASCII_STRINGPARAM("<T ,,"));
-                    sNewToken += String::CreateFromInt32( nPosition );
-                    sNewToken += ',';
-                    //the last tab stop is converted into a 'most right' tab stop
-                    //this will work most of the time - not if a right tab stop
-                    //is define before the line end - but it cannot be detected
-                    if( nTab == nTabCount - 1 && eAlign == SVX_TAB_ADJUST_RIGHT)
-                        eAlign = SVX_TAB_ADJUST_END;
-                    sNewToken += String::CreateFromInt32( eAlign );
-                    sNewToken += ',';
-                    sNewToken += cFillChar;
-                    sNewToken += '>';
-                    sCurrentPattern.Insert(sNewToken, nStart);
-                    //set next search pos behind the changed token
-                    nLastTabFoundEndPos = nStart + sNewToken.Len();
+                    SwFormToken aToken(TOKEN_TAB_STOP);
+                    aToken.bWithTab = FALSE;
+
+                    aCurrentPattern.push_back(aToken);
+                    aIt = aCurrentPattern.end();
+                    aIt--;
                 }
-                else
-                    break;
+
+                aIt->nTabStopPosition = rTab.GetTabPos();
+                aIt->eTabAlign = rTab.GetAdjustment();
+                aIt->cTabFillChar = rTab.GetFill();
+
+                if( nTab == nTabCount - 1 &&
+                        rTab.GetAdjustment() == SVX_TAB_ADJUST_RIGHT)
+                        aIt->eTabAlign = SVX_TAB_ADJUST_END;
+
+                if ( aIt != aCurrentPattern.end())
+                    aIt++;
+                // <- #i21237
             }
 
+            // -> #i21237
+            if (bDefaultRightTabStop)
+            {
+                SwFormTokens::reverse_iterator aIt = aCurrentPattern.rbegin();
+
+                if (aIt == aCurrentPattern.rend() ||
+                    aIt->eTabAlign != SVX_TAB_ADJUST_END)
+                {
+                    SwFormToken aToken(TOKEN_TAB_STOP);
+                    aToken.eTabAlign = SVX_TAB_ADJUST_END;
+                    aToken.bWithTab = FALSE;
+
+                    aCurrentPattern.push_back(aToken);
+                }
+            }
+            // <- #i21237
             if(bChanged)
-                SetPattern(nLevel, sCurrentPattern);
+                SetPattern(nLevel, aCurrentPattern); // #i21237#
         }
     }
 }
@@ -698,7 +685,9 @@ void SwForm::AdjustTabStops(SwDoc& rDoc)
 BOOL SwForm::IsFirstTabPosFlag() const      //{ return bHasFirstTabPos; }
 {
     //rturn true if the first level contains two ore more tabstops
-    return 2 <= lcl_GetPatternCount(aPattern[ 1 ], SwForm::aFormTab);
+    // #i21237#
+    return 2 <= count_if(aPattern[1].begin(), aPattern[1].end(),
+                         SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP));
 }
 void SwForm::SetFirstTabPosFlag( BOOL b )   //{ bHasFirstTabPos = b; }
 {
@@ -708,13 +697,14 @@ void SwForm::SetFirstTabPosFlag( BOOL b )   //{ bHasFirstTabPos = b; }
 /* -----------------29.07.99 14:37-------------------
 
  --------------------------------------------------*/
-String  SwForm::ConvertPatternTo51(const String& rSource)
+// #i21237#
+String  SwForm::ConvertPatternTo51(const SwFormTokens & rSource)
 {
-    SwFormTokenEnumerator aEnum(rSource);
+    SwFormTokens::const_iterator aIt = rSource.begin();
     String sRet;
-    while(aEnum.HasNextToken())
+    while(aIt != rSource.end())
     {
-        SwFormToken  aToken(aEnum.GetNextToken());
+        SwFormToken  aToken = *aIt;
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO     :
@@ -749,9 +739,12 @@ String  SwForm::ConvertPatternTo51(const String& rSource)
                 sRet.AppendAscii( SwForm::aFormEntry );
             break;
         }
+
+        aIt++;
     }
     return sRet;
 }
+
 /* -----------------29.07.99 14:37-------------------
 
  --------------------------------------------------*/
@@ -930,247 +923,6 @@ SwTOXBase::~SwTOXBase()
 //        delete aData.pTemplateName;
 }
 
-/* -----------------16.07.99 16:02-------------------
-
- --------------------------------------------------*/
-SwFormTokenEnumerator::SwFormTokenEnumerator( const String& rPattern )
-    : sPattern( rPattern ), nCurPatternPos( 0  ), nCurPatternLen( 0 )
-{
-#ifdef DBG_UTIL
-    DBG_ASSERT( !sPattern.Len() ||
-                (sPattern.GetChar(0) == '<' &&
-                sPattern.GetChar(sPattern.Len() - 1) == '>'),
-                "Pattern incorrect!" )
-
-
-    // strip all characters included in TOX_STYLE_DELIMITER
-    String sTmp( sPattern );
-    xub_StrLen nFoundStt = sTmp.Search(TOX_STYLE_DELIMITER);
-    while(nFoundStt != STRING_NOTFOUND)
-    {
-        xub_StrLen nFoundEnd = sTmp.Search(TOX_STYLE_DELIMITER, nFoundStt + 1);
-        DBG_ASSERT(STRING_NOTFOUND != nFoundEnd, "Pattern incorrect")
-        sTmp.Erase(nFoundStt, nFoundEnd - nFoundStt + 1);
-        nFoundStt = sTmp.Search(TOX_STYLE_DELIMITER);
-    }
-    DBG_ASSERT( sTmp.GetTokenCount('<') == sTmp.GetTokenCount('>'),
-                            "Pattern incorrect!")
-#endif
-}
-
-/* -----------------29.06.99 11:55-------------------
-
- --------------------------------------------------*/
-SwFormToken SwFormTokenEnumerator::GetNextToken()
-{
-    xub_StrLen nTokenLen, nEnd;
-    nCurPatternPos += nCurPatternLen;
-    FormTokenType eTokenType = _SearchNextToken( nCurPatternPos, nEnd,
-                                                &nTokenLen );
-    nCurPatternLen = nEnd - nCurPatternPos;
-    return BuildToken( eTokenType, nTokenLen );
-}
-
-SwFormToken SwFormTokenEnumerator::GetCurToken() const
-{
-    xub_StrLen nTokenLen, nEnd;
-    FormTokenType eTokenType = _SearchNextToken( nCurPatternPos, nEnd,
-                                                    &nTokenLen );
-    return BuildToken( eTokenType, nTokenLen );
-}
-
-SwFormToken SwFormTokenEnumerator::BuildToken( FormTokenType eTokenType,
-                                                  xub_StrLen nTokenLen ) const
-{
-    String sToken( sPattern.Copy( nCurPatternPos, nCurPatternLen ));
-
-    // at this point sPattern contains the
-    // character style name, the PoolId, tab stop position, tab stop alignment, chapter info format
-    // the form is: CharStyleName, PoolId[, TabStopPosition|ChapterInfoFormat[, TabStopAlignment[, TabFillChar]]]
-    // in text tokens the form differs from the others: CharStyleName, PoolId[,\0xffinserted text\0xff]
-    SwFormToken eRet( eTokenType );
-    String sAuthFieldEnum = sToken.Copy( 2, 2 );
-    sToken = sToken.Copy( nTokenLen, sToken.Len() - nTokenLen - 1);
-
-    eRet.sCharStyleName = sToken.GetToken( 0, ',');
-    String sTmp( sToken.GetToken( 1, ',' ));
-    if( sTmp.Len() )
-        eRet.nPoolId = sTmp.ToInt32();
-
-    switch( eTokenType )
-    {
-    case TOKEN_TEXT:
-        {
-            xub_StrLen nStartText = sToken.Search( TOX_STYLE_DELIMITER );
-            if( STRING_NOTFOUND != nStartText )
-            {
-                xub_StrLen nEndText = sToken.Search( TOX_STYLE_DELIMITER,
-                                                nStartText + 1);
-                if( STRING_NOTFOUND != nEndText )
-                {
-                    eRet.sText = sToken.Copy( nStartText + 1,
-                                                nEndText - nStartText - 1);
-                }
-            }
-        }
-        break;
-
-    case TOKEN_TAB_STOP:
-        if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
-            eRet.nTabStopPosition = sTmp.ToInt32();
-
-        if( (sTmp = sToken.GetToken( 3, ',' ) ).Len() )
-            eRet.eTabAlign = sTmp.ToInt32();
-
-        if( (sTmp = sToken.GetToken( 4, ',' ) ).Len() )
-            eRet.cTabFillChar = sTmp.GetChar(0);
-        break;
-
-    case TOKEN_CHAPTER_INFO:
-        if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
-            eRet.nChapterFormat = sTmp.ToInt32(); //SwChapterFormat;
-        break;
-
-    case TOKEN_AUTHORITY:
-        eRet.nAuthorityField = sAuthFieldEnum.ToInt32();
-        break;
-    }
-    return eRet;
-}
-
-FormTokenType SwFormTokenEnumerator::_SearchNextToken( xub_StrLen nStt,
-                            xub_StrLen& rEnd, xub_StrLen* pTokenLen ) const
-{
-    //it's not so easy - it doesn't work if the text part contains a '>'
-    //USHORT nTokenEnd = sPattern.Search('>');
-    rEnd = sPattern.Search( '>', nStt );
-    if( STRING_NOTFOUND == rEnd )
-    {
-        rEnd = sPattern.Len();
-        return TOKEN_END;
-    }
-
-    xub_StrLen nTextSeparatorFirst = sPattern.Search( TOX_STYLE_DELIMITER, nStt );
-    if( STRING_NOTFOUND != nTextSeparatorFirst )
-    {
-        xub_StrLen nTextSeparatorSecond = sPattern.Search( TOX_STYLE_DELIMITER,
-                                                nTextSeparatorFirst + 1 );
-        if( STRING_NOTFOUND != nTextSeparatorSecond &&
-            rEnd > nTextSeparatorFirst )
-            rEnd = sPattern.Search( '>', nTextSeparatorSecond );
-    }
-
-    ++rEnd;
-    String sToken( sPattern.Copy( nStt, rEnd - nStt ) );
-
-    static struct
-    {
-        const sal_Char* pNm;
-        USHORT nLen;
-        USHORT nOffset;
-        FormTokenType eToken;
-    } __READONLY_DATA aTokenArr[] = {
-        SwForm::aFormTab,       SwForm::nFormEntryLen,      1, TOKEN_TAB_STOP,
-        SwForm::aFormPageNums,  SwForm::nFormPageNumsLen,   1, TOKEN_PAGE_NUMS,
-        SwForm::aFormLinkStt,   SwForm::nFormLinkSttLen,    1, TOKEN_LINK_START,
-        SwForm::aFormLinkEnd,   SwForm::nFormLinkEndLen,    1, TOKEN_LINK_END,
-        SwForm::aFormEntryNum,  SwForm::nFormEntryNumLen,   1, TOKEN_ENTRY_NO,
-        SwForm::aFormEntryTxt,  SwForm::nFormEntryTxtLen,   1, TOKEN_ENTRY_TEXT,
-        SwForm::aFormChapterMark,SwForm::nFormChapterMarkLen,1,TOKEN_CHAPTER_INFO,
-        SwForm::aFormText,      SwForm::nFormTextLen,       1, TOKEN_TEXT,
-        SwForm::aFormEntry,     SwForm::nFormEntryLen,      1, TOKEN_ENTRY,
-        SwForm::aFormAuth,      SwForm::nFormAuthLen,       3, TOKEN_AUTHORITY,
-        0,                      0,                          0, TOKEN_END
-    };
-
-    FormTokenType eTokenType = TOKEN_TEXT;
-    xub_StrLen nTokenLen = 0;
-    const sal_Char* pNm;
-    for( int i = 0; 0 != ( pNm = aTokenArr[ i ].pNm ); ++i )
-        if( COMPARE_EQUAL == sToken.CompareToAscii( pNm,
-                            aTokenArr[ i ].nLen - aTokenArr[ i ].nOffset ))
-        {
-            eTokenType = aTokenArr[ i ].eToken;
-            nTokenLen = aTokenArr[ i ].nLen;
-            break;
-        }
-
-    ASSERT( pNm, "wrong token" );
-    if( pTokenLen )
-        *pTokenLen = nTokenLen;
-    return eTokenType;
-}
-
-FormTokenType SwFormTokenEnumerator::GetCurTokenType()
-{
-    xub_StrLen nEnd;
-    return _SearchNextToken( nCurPatternPos, nEnd );
-}
-
-FormTokenType SwFormTokenEnumerator::GetNextTokenType()
-{
-    xub_StrLen nEnd;
-    nCurPatternPos += nCurPatternLen;
-    FormTokenType eTokenType;
-    if( nCurPatternPos < sPattern.Len() )
-    {
-        eTokenType = _SearchNextToken( nCurPatternPos, nEnd );
-        nCurPatternLen = nEnd - nCurPatternPos;
-    }
-    else
-    {
-        eTokenType = TOKEN_END;
-        nCurPatternLen = 0;
-    }
-    return eTokenType;
-}
-
-FormTokenType SwFormTokenEnumerator::GetPrevTokenType()
-{
-    FormTokenType eTokenType = TOKEN_END;
-    if( nCurPatternPos )
-    {
-        xub_StrLen nStt = 0, nEnd;
-        do {
-            eTokenType = _SearchNextToken( nStt, nEnd );
-            if( nEnd == nCurPatternPos )
-            {
-                nCurPatternPos = nStt;
-                nCurPatternLen = nEnd - nStt;
-                break;
-            }
-            nStt = nEnd;
-            if( nStt >= sPattern.Len() )
-            {
-                eTokenType = TOKEN_END;
-                break;
-            }
-        } while( TRUE );
-    }
-    return eTokenType;
-}
-
-void SwFormTokenEnumerator::RemoveCurToken()
-{
-    if( nCurPatternLen )
-    {
-        sPattern.Erase( nCurPatternPos, nCurPatternLen );
-        nCurPatternLen = 0;
-        GetNextTokenType();
-    }
-}
-
-void SwFormTokenEnumerator::InsertToken( const SwFormToken& rToken )
-{
-    String sIns( rToken.GetString() );
-    if( sIns.Len() )
-    {
-        sPattern.Insert( sIns, nCurPatternPos );
-        nCurPatternLen = sIns.Len();
-        GetNextTokenType();
-    }
-}
-
 String SwFormToken::GetString() const
 {
     String sRet;
@@ -1230,6 +982,8 @@ String SwFormToken::GetString() const
         sRet += String::CreateFromInt32( eTabAlign );
         sRet += ',';
         sRet += cTabFillChar;
+        sRet += ',';
+        sRet += String::CreateFromInt32( bWithTab );
     }
     else if(TOKEN_CHAPTER_INFO == eTokenType)
     {
@@ -1262,6 +1016,167 @@ String SwFormToken::GetString() const
     return sRet;
 }
 
+// -> #i21237#
+SwFormTokensHelper::SwFormTokensHelper(const String & rPattern)
+{
+    xub_StrLen nCurPatternPos = 0;
+    xub_StrLen nCurPatternLen = 0;
 
+    while (nCurPatternPos < rPattern.Len())
+    {
+        nCurPatternPos += nCurPatternLen;
 
+        SwFormToken aToken = BuildToken(rPattern, nCurPatternPos);
+        aTokens.push_back(aToken);
+    }
+}
 
+SwFormToken SwFormTokensHelper::BuildToken( const String & sPattern,
+                                           xub_StrLen & nCurPatternPos ) const
+{
+    String sToken( SearchNextToken(sPattern, nCurPatternPos) );
+    nCurPatternPos += sToken.Len();
+    xub_StrLen nTokenLen;
+    FormTokenType eTokenType = GetTokenType(sToken, &nTokenLen);
+
+    // at this point sPattern contains the
+    // character style name, the PoolId, tab stop position, tab stop alignment, chapter info format
+    // the form is: CharStyleName, PoolId[, TabStopPosition|ChapterInfoFormat[, TabStopAlignment[, TabFillChar]]]
+    // in text tokens the form differs from the others: CharStyleName, PoolId[,\0xffinserted text\0xff]
+    SwFormToken eRet( eTokenType );
+    String sAuthFieldEnum = sToken.Copy( 2, 2 );
+    sToken = sToken.Copy( nTokenLen, sToken.Len() - nTokenLen - 1);
+
+    eRet.sCharStyleName = sToken.GetToken( 0, ',');
+    String sTmp( sToken.GetToken( 1, ',' ));
+    if( sTmp.Len() )
+        eRet.nPoolId = sTmp.ToInt32();
+
+    switch( eTokenType )
+    {
+    case TOKEN_TEXT:
+        {
+            xub_StrLen nStartText = sToken.Search( TOX_STYLE_DELIMITER );
+            if( STRING_NOTFOUND != nStartText )
+            {
+                xub_StrLen nEndText = sToken.Search( TOX_STYLE_DELIMITER,
+                                                nStartText + 1);
+                if( STRING_NOTFOUND != nEndText )
+                {
+                    eRet.sText = sToken.Copy( nStartText + 1,
+                                                nEndText - nStartText - 1);
+                }
+            }
+        }
+        break;
+
+    case TOKEN_TAB_STOP:
+        if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
+            eRet.nTabStopPosition = sTmp.ToInt32();
+
+        if( (sTmp = sToken.GetToken( 3, ',' ) ).Len() )
+            eRet.eTabAlign = sTmp.ToInt32();
+
+        if( (sTmp = sToken.GetToken( 4, ',' ) ).Len() )
+            eRet.cTabFillChar = sTmp.GetChar(0);
+
+        if( (sTmp = sToken.GetToken( 5, ',' ) ).Len() )
+            eRet.bWithTab = 0 != sTmp.ToInt32();
+        break;
+
+    case TOKEN_CHAPTER_INFO:
+        if( (sTmp = sToken.GetToken( 2, ',' ) ).Len() )
+            eRet.nChapterFormat = sTmp.ToInt32(); //SwChapterFormat;
+        break;
+
+    case TOKEN_AUTHORITY:
+        eRet.nAuthorityField = sAuthFieldEnum.ToInt32();
+        break;
+    }
+    return eRet;
+}
+
+String SwFormTokensHelper::SearchNextToken( const String & sPattern,
+                                            xub_StrLen nStt ) const
+{
+    //it's not so easy - it doesn't work if the text part contains a '>'
+    //USHORT nTokenEnd = sPattern.Search('>');
+
+    String aResult;
+
+    xub_StrLen nEnd = sPattern.Search( '>', nStt );
+    if( STRING_NOTFOUND == nEnd )
+    {
+        nEnd = sPattern.Len();
+    }
+    else
+    {
+        xub_StrLen nTextSeparatorFirst = sPattern.Search( TOX_STYLE_DELIMITER, nStt );
+        if( STRING_NOTFOUND != nTextSeparatorFirst )
+        {
+            xub_StrLen nTextSeparatorSecond = sPattern.Search( TOX_STYLE_DELIMITER,
+                                                               nTextSeparatorFirst + 1 );
+            if( STRING_NOTFOUND != nTextSeparatorSecond &&
+                nEnd > nTextSeparatorFirst )
+                nEnd = sPattern.Search( '>', nTextSeparatorSecond );
+        }
+
+        ++nEnd;
+
+        aResult = sPattern.Copy( nStt, nEnd - nStt );
+    }
+
+    return aResult;
+}
+
+FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
+                                               xub_StrLen * pTokenLen) const
+{
+    static struct
+    {
+        const sal_Char* pNm;
+        USHORT nLen;
+        USHORT nOffset;
+        FormTokenType eToken;
+    } __READONLY_DATA aTokenArr[] = {
+        SwForm::aFormTab,       SwForm::nFormEntryLen,      1, TOKEN_TAB_STOP,
+        SwForm::aFormPageNums,  SwForm::nFormPageNumsLen,   1, TOKEN_PAGE_NUMS,
+        SwForm::aFormLinkStt,   SwForm::nFormLinkSttLen,    1, TOKEN_LINK_START,
+        SwForm::aFormLinkEnd,   SwForm::nFormLinkEndLen,    1, TOKEN_LINK_END,
+        SwForm::aFormEntryNum,  SwForm::nFormEntryNumLen,   1, TOKEN_ENTRY_NO,
+        SwForm::aFormEntryTxt,  SwForm::nFormEntryTxtLen,   1, TOKEN_ENTRY_TEXT,
+        SwForm::aFormChapterMark,SwForm::nFormChapterMarkLen,1,TOKEN_CHAPTER_INFO,
+        SwForm::aFormText,      SwForm::nFormTextLen,       1, TOKEN_TEXT,
+        SwForm::aFormEntry,     SwForm::nFormEntryLen,      1, TOKEN_ENTRY,
+        SwForm::aFormAuth,      SwForm::nFormAuthLen,       3, TOKEN_AUTHORITY,
+        0,                      0,                          0, TOKEN_END
+    };
+
+    FormTokenType eTokenType = TOKEN_TEXT;
+    xub_StrLen nTokenLen = 0;
+    const sal_Char* pNm;
+    for( int i = 0; 0 != ( pNm = aTokenArr[ i ].pNm ); ++i )
+        if( COMPARE_EQUAL == sToken.CompareToAscii( pNm,
+                            aTokenArr[ i ].nLen - aTokenArr[ i ].nOffset ))
+        {
+            eTokenType = aTokenArr[ i ].eToken;
+            nTokenLen = aTokenArr[ i ].nLen;
+            break;
+        }
+
+    ASSERT( pNm, "wrong token" );
+    if (pTokenLen)
+        *pTokenLen = nTokenLen;
+
+    return eTokenType;
+}
+
+String SwFormTokensHelper::GetPatternString() const
+{
+    String aResult;
+
+    for_each(aTokens.begin(), aTokens.end(), SwFormTokenToString(aResult));
+
+    return aResult;
+}
+// <- #i21237#
