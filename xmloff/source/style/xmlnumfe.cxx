@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-02 16:08:42 $
+ *  last change: $Author: er $ $Date: 2000-12-07 18:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,10 +1124,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_MM:
                 case NF_KEY_MMM:
                 case NF_KEY_MMMM:
+                case NF_KEY_MMMMM:      //! first letter of month name, no attribute available
                     {
                         AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_MM  || nElemType == NF_KEY_MMMM );
-                        sal_Bool bText = ( nElemType == NF_KEY_MMM || nElemType == NF_KEY_MMMM );
+                        sal_Bool bText = ( nElemType == NF_KEY_MMM || nElemType == NF_KEY_MMMM ||
+                                            nElemType == NF_KEY_MMMMM );
                         WriteMonthElement_Impl( ( bSystemDate ? bLongSysDate : bLong ), bText );
                     }
                     break;
@@ -1135,21 +1137,31 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_YYYY:
                 case NF_KEY_EC:
                 case NF_KEY_EEC:
+                case NF_KEY_R:      //! R acts as EE, no attribute available
                     {
-                        //! add calendar attribute for E and EE?
+                        //! distinguish EE and R
+                        //! add calendar attribute for E and EE and R?
                         AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
-                        sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC );
+                        sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC ||
+                                            nElemType == NF_KEY_R );
                         WriteYearElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
                     break;
                 case NF_KEY_G:
                 case NF_KEY_GG:
                 case NF_KEY_GGG:
+                case NF_KEY_RR:     //! RR acts as GGGEE, no attribute available
                     {
-                        //! distinguish GG and GGG
+                        //! distinguish GG and GGG and RR
                         AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
-                        sal_Bool bLong = ( nElemType == NF_KEY_GGG );
+                        sal_Bool bLong = ( nElemType == NF_KEY_GGG || nElemType == NF_KEY_RR );
                         WriteEraElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        if ( nElemType == NF_KEY_RR )
+                        {
+                            //! add calendar attribute for RR?
+                            AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
+                            WriteYearElement_Impl( bSystemDate ? bLongSysDate : sal_True );
+                        }
                     }
                     break;
                 case NF_KEY_Q:
