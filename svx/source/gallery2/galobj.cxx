@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:03:19 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void SgaObject::WriteData( SvStream& rOut ) const
     else
         rOut << aThumbMtf;
 
-    rOut << ByteString( aURL.GetMainURL( INetURLObject::NO_DECODE ), RTL_TEXTENCODING_UTF8 );
+    rOut << ByteString( String(aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8 );
 }
 
 // ------------------------------------------------------------------------
