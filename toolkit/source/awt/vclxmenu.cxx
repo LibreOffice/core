@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:02:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,10 +245,11 @@ void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( mpMenu && nCount )
+    sal_uInt32 nItemCount = (sal_uInt32)mpMenu->GetItemCount();
+    if ( mpMenu && ( nCount > 0 ) && ( nPos >= 0 ) && ( nPos < nItemCount ) && ( nItemCount > 0 ))
     {
-        sal_uInt16 nP = (sal_uInt16) Min( sal_uInt32(nPos+nCount), (sal_uInt32)mpMenu->GetItemCount() );
-        for ( nP; nP; )
+        sal_uInt16 nP = (sal_uInt16)Min( sal_uInt32( nPos+nCount ), nItemCount );
+        for( nP; nP-nPos>0; )
             mpMenu->RemoveItem( --nP );
     }
 }
