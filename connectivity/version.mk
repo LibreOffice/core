@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-04-26 10:34:28 $
+#   last change: $Author: oj $ $Date: 2001-05-08 12:12:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,15 +187,6 @@ DBASE_MICRO=0
 DBASE_CPP=1
 
 DBASE=$(DBASE_TARGET_TARGET)_$(CMPEXT)
-
-# --------------------------- Precompiled header files -------------------------- #
-PROJECTPCH=pch
-PDBTARGET=pch
-PROJECTPCHSOURCE=$(PRJ)$/source$/types$/pch
-PROJECTPCH4DLL=TRUE
-.IF "$(prjpch)" != ""
-CDEFS+=-DPRECOMPILED
-.ENDIF
 
 
 
