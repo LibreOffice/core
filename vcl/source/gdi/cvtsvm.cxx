@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-15 13:01:09 $
+ *  last change: $Author: ka $ $Date: 2000-12-18 17:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
     rIStm >> nSize;                                 // Size
     rIStm >> nVersion;                              // Version
-    rIStm >> aPrefSz;                               // PrefSize
+    rIStm >> aPrefSz.Width();                       // PrefSize.Width()
+    rIStm >> aPrefSz.Height();                      // PrefSize.Height()
     ImplReadMapMode( rIStm, aMapMode );             // MapMode
     rIStm >> nActions;                              // Action count
 
