@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-15 09:41:37 $
+*  last change: $Author: rt $ $Date: 2004-12-16 11:03:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -154,28 +154,28 @@ STD_RES_FILE( gid_File_Res_Sfx, sfx )
 
 #ifdef UNX
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Spa, spa )
+STD_RES_FILE( gid_File_Res_Spa, spa )
 
 #endif
 
 STD_RES_FILE( gid_File_Res_Stt, stt )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Svs, svs )
+STD_RES_FILE( gid_File_Res_Svs, svs )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Svt, svt )
+STD_RES_FILE( gid_File_Res_Svt, svt )
 
 STD_RES_FILE( gid_File_Res_Svx, svx )
 STD_RES_FILE( gid_File_Res_TextConversionDlgs, textconversiondlgs )
 
 STD_RES_FILE( gid_File_Res_Sw, sw )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Tk, tk )
+STD_RES_FILE( gid_File_Res_Tk, tk )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Uui, uui )
+STD_RES_FILE( gid_File_Res_Uui, uui )
 
-STD_SETUPZIP_RES_FILE( gid_File_Res_Vcl, vcl )
+STD_RES_FILE( gid_File_Res_Vcl, vcl )
 
 //STD_RES_FILE( gid_File_Res_Wwz, wwz )
 
