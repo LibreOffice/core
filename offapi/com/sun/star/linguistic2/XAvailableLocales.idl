@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAvailableLocales.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** retrieves the list of available languages.
 */
-interface XAvailableLocales : com::sun::star::uno::XInterface
+published interface XAvailableLocales : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** retrieve the list of supported languages (Locales).
