@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-15 16:57:12 $
+ *  last change: $Author: sj $ $Date: 2002-10-30 16:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,8 @@ class WinMtfOutput
         void                DeleteObject( INT32 nIndex );
         void                SelectObject( INT32 nIndex );
         CharSet             GetCharSet(){ return maFont.GetCharSet(); };
+        void                SetFont( const Font& rFont );
+        const Font&         GetFont() const;
 
         void                ClearPath(){ aPathObj.Init(); };
         void                ClosePath(){ aPathObj.ClosePath(); };
@@ -744,6 +746,7 @@ private:
     sal_uInt32      nCurrentAction;
     sal_uInt32      nUnicodeEscapeAction;
     String          aUnicodeEscapeString;
+    sal_Int8        nUnicodeEscapeFont;
 
     // Liesst den Kopf der WMF-Datei
     BOOL            ReadHeader();
@@ -756,6 +759,7 @@ private:
     Rectangle       ReadRectangle();            // Liesst und konvertiert ein Rechteck
     Size            ReadYXExt();
     sal_Bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
+    Font            GetUnicodeEscapeFont() const;
 
 public:
 

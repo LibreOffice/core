@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-30 11:37:21 $
+ *  last change: $Author: sj $ $Date: 2002-10-30 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,24 @@ Size WMFReader::ReadYXExt()
     short nW, nH;
     *pWMF >> nH >> nW;
     return Size( nW, nH );
+}
+
+// ------------------------------------------------------------------------
+
+Font WMFReader::GetUnicodeEscapeFont() const
+{
+    Font aCurrent = pOut->GetFont();
+    if ( nUnicodeEscapeFont == 1 )
+    {
+        aCurrent.SetName( String( ByteString( "StarSymbol" ), RTL_TEXTENCODING_UTF8 ) );
+        aCurrent.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+    }
+    else if ( nUnicodeEscapeFont == 2 )
+    {
+        aCurrent.SetName( String( ByteString( "OpenSymbol" ), RTL_TEXTENCODING_UTF8 ) );
+        aCurrent.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+    }
+    return aCurrent;
 }
 
 // ------------------------------------------------------------------------
@@ -429,7 +447,10 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 delete[] pChar;
                 Point aPosition( ReadYX() );
                 if ( aText.Len() == aUnicodeEscapeString.Len() )
+                {
                     aText = aUnicodeEscapeString;
+                    pOut->SetFont( GetUnicodeEscapeFont() );
+                }
                 aUnicodeEscapeString = String();
                 pOut->DrawText( aPosition, aText );
             }
@@ -467,7 +488,10 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 delete[] pChar;                                                         // dxAry will not fit
 
                 if ( aText.Len() == aUnicodeEscapeString.Len() )
+                {
                     aText = aUnicodeEscapeString;
+                    pOut->SetFont( GetUnicodeEscapeFont() );
+                }
                 aUnicodeEscapeString = String();
 
                 if ( nNewTextLen )
@@ -863,14 +887,17 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                                     {
 #ifdef __BIGENDIAN
                                         String aUniString;
-                                        sal_Unicode* pUniString = aUniString.AllocBuffer( nStrLen );
-                                        for ( i = 0; i < nStrLen; i++ )
-                                            *pUniString++ = ( pData[ i ] << 8 ) | ( (sal_uInt16)pData[ i ] >> 8 );
+                                        sal_Unicode* pUniString = aUniString.AllocBuffer( (sal_uInt16)nStrLen );
+                                        const sal_uInt8* pTmp = (sal_uInt8*)pData;
+                                        sal_uInt32 i;
+                                        for ( i = 0; i < nStrLen; i++, pTmp += 2 )
+                                            *pUniString++ = pTmp[ 0 ] | ( pTmp[ 1 ] << 8 );
 #else
                                         String aUniString( (const sal_Unicode*)pData, (sal_uInt16)nStrLen );
 #endif
                                         aUnicodeEscapeString = aUniString;
                                         nUnicodeEscapeAction = nCurrentAction;
+                                        nUnicodeEscapeFont = nEscLen & 1 ? pData[ nStrLen << 1 ] : 0;
                                     }
                                 }
                                 break;

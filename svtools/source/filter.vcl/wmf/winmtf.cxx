@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-15 16:57:03 $
+ *  last change: $Author: sj $ $Date: 2002-10-30 16:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,20 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
     }
     if ( nIndex & ENHMETA_STOCK_OBJECT )
         delete pGDIObj;
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfOutput::SetFont( const Font& rFont )
+{
+    maFont = rFont;
+}
+
+//-----------------------------------------------------------------------------------
+
+const Font& WinMtfOutput::GetFont() const
+{
+    return maFont;
 }
 
 //-----------------------------------------------------------------------------------

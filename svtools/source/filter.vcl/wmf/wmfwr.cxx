@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-15 12:42:54 $
+ *  last change: $Author: sj $ $Date: 2002-10-30 16:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
+
+
+#include <vcl/metric.hxx>
 
 //====================== MS-Windows-defines ===============================
 
@@ -591,7 +594,13 @@ void WMFWriter::WMFRecord_Escape_Unicode( const String& rUniStr )
                 SvMemoryStream aMemoryStream( nLen * 2 );
                 for ( i = 0; i < nLen; i++ )
                     aMemoryStream << *pBuf++;
-                WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nLen * 2, (const sal_Int8*)aMemoryStream.GetData() );
+                sal_Char cUsedFont = 0;
+                if ( aSrcFont.GetName().EqualsIgnoreCaseAscii("starsymbol") )
+                    cUsedFont = 1;
+                else if ( aSrcFont.GetName().EqualsIgnoreCaseAscii("opensymbol") )
+                    cUsedFont = 2;
+                aMemoryStream << cUsedFont;
+                WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nLen * 2 + 1, (const sal_Int8*)aMemoryStream.GetData() );
             }
         }
     }
@@ -607,12 +616,10 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
         WMFRecord_TextOut(rPoint, rString);
         return;
     }
-
     if (IsStarSymbol(aSrcFont.GetName()))
     {
         if (!pConvert)
             pConvert = CreateStarSymbolToMSMultiFont();
-
         xub_StrLen nIndex = 0;
         String sEditable(rString);
         Point aPoint(rPoint);
@@ -635,7 +642,6 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
                 aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
                     gsl_getSystemTextEncoding());
             }
-
             if (xub_StrLen nLen = (nIndex-nOldIndex) == 1)
             {
                 ByteString sTemp;
@@ -980,11 +986,9 @@ void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
     {
         if (!pConvert)
             pConvert = CreateStarSymbolToMSMultiFont();
-
         long *pDXAry = new long[rStr.Len()];
         pVirDev->SetFont(aSrcFont);
         pVirDev->GetTextArray(rStr, pDXAry);
-
         xub_StrLen nIndex = 0;
         String sEditable(rStr);
         Point aPoint(rPoint);
@@ -1012,7 +1016,6 @@ void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
                 aPoint.X() += pDXAry[nI];
         }
         delete[] pDXAry;
-        return;
     }
     else
     {
@@ -1153,8 +1156,17 @@ void WMFWriter::SetAllAttr()
         eDstTextAlign = eSrcTextAlign;
         WMFRecord_SetTextAlign( eDstTextAlign );
     }
-    if ( aDstFont != aSrcFont )
+    if ( aDstFont.GetName() != aSrcFont.GetName() )
     {
+        pVirDev->SetFont(aSrcFont);
+        FontCharMap aFontCharMap;
+        if ( pVirDev->GetFontCharMap( aFontCharMap ) )
+        {
+            if ( ( aFontCharMap.GetFirstChar() & 0xff00 ) == 0xf000 )
+                aSrcFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
+            else if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+                aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+        }
         aDstFont = aSrcFont;
         CreateSelectDeleteFont(aDstFont);
     }
