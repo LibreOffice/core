@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-25 17:53:19 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseRadioButton");
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_RADIOBUTTON;
     return aSupported;
 }

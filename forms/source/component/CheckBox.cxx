@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-25 17:16:49 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseCheckBox");
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_CHECKBOX;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_CHECKBOX;
     return aSupported;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:33:38 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseDateField");
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_DATEFIELD;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_DATEFIELD;
     return aSupported;
 }

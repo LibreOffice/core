@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-31 14:22:44 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseComboBox");
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_COMBOBOX;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_COMBOBOX;
     return aSupported;
 }

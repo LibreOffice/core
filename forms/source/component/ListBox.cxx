@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 15:07:44 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 14:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeE
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseListBox");
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_LISTBOX;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_LISTBOX;
     return aSupported;
 }
