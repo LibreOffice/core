@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ class XMLIndexTOCContext : public SvXMLImportContext
     const sal_Char* pSourceElementName;
 
     sal_Bool bValid;
+
+    SvXMLImportContextRef xBodyContextRef;
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         pSourceElementName(NULL),
         bValid(sal_False),
+        xBodyContextRef(),
         sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
         sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
 {
@@ -423,11 +424,15 @@ void XMLIndexTOCContext::EndElement()
     OUString sEmpty;
     UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
 
-    // get rid of last paragraph
+    // get rid of last paragraph (unless it's the only paragraph)
     rHelper->GetCursor()->goRight(1, sal_False);
-    rHelper->GetCursor()->goLeft(1, sal_True);
-    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     sEmpty, sal_True);
+    if( xBodyContextRef.Is() &&
+        ((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
+    {
+        rHelper->GetCursor()->goLeft(1, sal_True);
+        rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                         sEmpty, sal_True);
+    }
 
     // and delete second marker
     rHelper->GetCursor()->goRight(1, sal_True);
@@ -452,6 +457,11 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
             {
                 pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);
+                if ( !xBodyContextRef.Is() ||
+                     !((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
+                {
+                    xBodyContextRef = pContext;
+                }
             }
             else if (0 == rLocalName.compareToAscii(pSourceElementName))
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBodyContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ XMLIndexBodyContext::XMLIndexBodyContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const ::rtl::OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName)
+        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        bHasContent(sal_False)
 {
 }
 
@@ -121,6 +122,8 @@ SvXMLImportContext* XMLIndexBodyContext::CreateChildContext(
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
+    else
+        bHasContent = sal_True;
 
     return pContext;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 15:21:22 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,6 +1730,7 @@ sal_Bool XMLSectionExport::IsMuteSection(
     // 1) it exists
     // 2) the SaveLinkedSections flag (at the export) is false
     // 3) the IsGlobalDocumentSection property is true
+    // 4) it is not an Index
 
     if ( (!rExport.IsSaveLinkedSections()) && rSection.is() )
     {
@@ -1738,16 +1739,23 @@ sal_Bool XMLSectionExport::IsMuteSection(
             aSection.is();
             aSection = aSection->getParentSection())
         {
-            // check if section is linked
+            // check if it is a global document section (linked or index)
             Reference<XPropertySet> xPropSet(aSection, UNO_QUERY);
             if (xPropSet.is())
             {
                 Any aAny = xPropSet->getPropertyValue(sIsGlobalDocumentSection);
-                bRet |= *(sal_Bool*)aAny.getValue();
 
-                // early out if result is known
-                if (bRet)
-                    break;
+                if ( *(sal_Bool*)aAny.getValue() )
+                {
+                    Reference<XDocumentIndex> xIndex;
+                    if (! GetIndex(rSection, xIndex))
+                    {
+                        bRet = sal_True;
+
+                        // early out if result is known
+                        break;
+                    }
+                }
             }
             // section has no properties: ignore
         }

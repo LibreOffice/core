@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBodyContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ namespace rtl { class OUString; }
  */
 class XMLIndexBodyContext : public SvXMLImportContext
 {
+    sal_Bool bHasContent;
+
 public:
 
     TYPEINFO();
@@ -96,6 +98,9 @@ public:
 
     ~XMLIndexBodyContext();
 
+    /// return whether any content elements were encountered
+    inline sal_Bool HasContent();
+
 protected:
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -104,5 +109,10 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
+
+inline sal_Bool XMLIndexBodyContext::HasContent()
+{
+    return bHasContent;
+}
 
 #endif
