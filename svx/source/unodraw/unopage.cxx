@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:06:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,21 +79,14 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _PERSIST_HXX
-#include <so3/persist.hxx>
-#endif
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
 #endif
 
-/*
-#ifndef _SFX_BINDINGS_HXX
-#include <sfx2/bindings.hxx>
-#endif
-*/
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <sfx2/objsh.hxx>
 
 #include "svdobj.hxx"
 #include "svdoole2.hxx"
@@ -832,19 +825,17 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 #ifndef SVX_LIGHT
                         if( pObj && !pObj->IsEmptyPresObj() )
                         {
-                            SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
-
+                            SfxObjectShell *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
                             if( pPersist )
                             {
-                                const SvInfoObject *pInfo = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+                                uno::Reference < embed::XEmbeddedObject > xObject = pPersist->GetEmbeddedObjectContainer().
+                                        GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                                DBG_ASSERT( pInfo, "no info object for OLE object found" );
-
-                                // CL->KA: Why is this not working anymore?
-                                if( pInfo )
+                                // TODO CL->KA: Why is this not working anymore?
+                                if( xObject.is() )
                                 {
+                                    SvGlobalName aClassId( xObject->getClassID() );
 
-                                    const SvGlobalName aClassId( pInfo->GetClassName() );
                                     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
                                     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
                                     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
