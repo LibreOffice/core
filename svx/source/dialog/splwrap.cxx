@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:34:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@
 
 
 #include "svxenum.hxx"
-#include "spldlg.hxx"       // Der SpellDialog
 #include "hyphen.hxx"       // Der HyphenDialog
 #include "splwrap.hxx"      // Der Wrapper
 #include "thesdlg.hxx"      // ThesaurusDlg
@@ -472,16 +471,7 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 
     if ( aDlg.Execute()== RET_OK )
     {
-        if ( bDialog )
-        {
-            SvxSpellCheckDialog* pSplDlg = (SvxSpellCheckDialog*)GetWin();
-            pSplDlg->SetNewEditWord( aDlg.GetWord() );
-            pSplDlg->SetLanguage( aDlg.GetLanguage() );
-        }
-        else
-        {
-            ChangeThesWord( aDlg.GetWord() );
-        }
+        ChangeThesWord( aDlg.GetWord() );
     }
 
 }
@@ -538,20 +528,6 @@ void SvxSpellWrapper::SpellDocument( )
                             SvxLocaleToLanguage( xHyphWord->getLocale() ),
                             pWin, xHyph, this );
             pWin = pDlg;
-            pDlg->Execute();
-            delete pDlg;
-        }
-        else
-        {
-            SvxSpellCheckDialog* pDlg =
-                new SvxSpellCheckDialog( pWin, xSpell, this );
-
-            if ( !bAuto )
-                pDlg->HideAutoCorrect();
-            pWin = pDlg;
-            // Visarea richtig setzen
-            ScrollArea();
-
             pDlg->Execute();
             delete pDlg;
         }
@@ -772,21 +748,4 @@ sal_Bool SvxSpellWrapper::FindSpellError()
 }
 
 
-// -----------------------------------------------------------------------
-String SvxSpellWrapper::GetNewEditWord()
-{
-    String sReturn;
 
-    DBG_ASSERT( IsDialog(), "SvxSpellWrapper::GetNewEditWord: do not have the dialog!" );
-    if ( IsDialog() )
-        sReturn = static_cast< SvxSpellCheckDialog* >( pWin )->GetNewEditWord();
-    return sReturn;
-}
-
-// -----------------------------------------------------------------------
-void SvxSpellWrapper::SetNewEditWord( const String& _rNew )
-{
-    DBG_ASSERT( IsDialog(), "SvxSpellWrapper::SetNewEditWord: do not have the dialog!" );
-    if ( IsDialog() )
-        static_cast< SvxSpellCheckDialog* >( pWin )->SetNewEditWord( _rNew );
-}
