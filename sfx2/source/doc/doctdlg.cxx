@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 07:53:54 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "doctdlg.hxx"
 #include "docvor.hxx"
