@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtextsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:59:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <svtools/sbxvar.hxx>
-#endif
-#ifndef _SBASLTID_HRC //autogen
-#include <offmgr/sbasltid.hrc>
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
