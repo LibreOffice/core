@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-28 02:36:08 $
+ *  last change: $Author: os $ $Date: 2000-11-28 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,8 @@ struct ServiceInfo_Impl
     ServiceInfo_Impl() :
     bConfigured(sal_False){}
 };
-SV_DECL_PTRARR_DEL(ServiceInfoArr, ServiceInfo_Impl*, 2, 2);
+typedef ServiceInfo_Impl* ServiceInfo_ImplPtr;
+SV_DECL_PTRARR_DEL(ServiceInfoArr, ServiceInfo_ImplPtr, 2, 2);
 SV_IMPL_PTRARR(ServiceInfoArr, ServiceInfo_Impl*);
 
 class SvxLinguData_Impl
@@ -1822,7 +1823,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
         if (pEntry)
         {
             ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-            if(!pData->IsParent())
+            if(!pData->IsParent() && pData->GetType() == TYPE_HYPH)
             {
                 USHORT  nCurPos = pBox->GetSelectEntryPos();
                 if(nCurPos < pBox->GetEntryCount() - 2)
@@ -2005,6 +2006,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     aModulesCLB.SelectEntryPos(nDestPos );
     aModulesCLB.SetUpdateMode(TRUE);
     SelectHdl_Impl(&aModulesCLB);
+
     return 0;
 }
 /* ---------------------------------------------------------------------------
