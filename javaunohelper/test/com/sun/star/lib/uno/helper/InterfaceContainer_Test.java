@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:43:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.IQueryInterface;
-import com.sun.star.lib.uno.environments.java.IRequester;
+//import com.sun.star.lib.uno.environments.java.IRequester;
 import com.sun.star.bridge.XBridge;
-import com.sun.star.lib.uno.environments.java.Proxy;
+//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.java.java_environment;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import java.util.HashMap;
@@ -109,11 +109,11 @@ public class InterfaceContainer_Test
         obj2= new AWeakBase();
         obj3= new AWeakBase();
         obj4= new AWeakBase();
-        proxyObj1Weak1= ProxyProvider.getHolderProxy(obj1, XWeak.class);
-        proxyObj3Weak1= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj3Weak2= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj2TypeProv= ProxyProvider.getHolderProxy(obj2, XTypeProvider.class);
-        proxyObj3TypeProv= ProxyProvider.getHolderProxy(obj3, XTypeProvider.class);
+        proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
+        proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
+        proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
 
         list1= new ArrayList();
         list1.add(obj1);
@@ -309,13 +309,11 @@ public class InterfaceContainer_Test
         cont.add(proxyObj2TypeProv);
         cont.add(proxyObj3TypeProv);
         r[i++]= cont.contains(obj1);
-        // can return false. cont contains a HolderProxy (proxyObj2TypeProv) for obj2 but in reality a VM will not
-        // contain both the original object and proxies for it.
-        r[i++]= cont.contains(obj2) ? false : true;
+        r[i++]= cont.contains(obj2);
         r[i++]= cont.contains(proxyObj3Weak1);
         r[i++]= cont.contains(proxyObj3Weak2);
-        r[i++]= cont.contains(proxyObj1Weak1) ? false : true;
-        r[i++]= cont.contains(obj3) ? false : true;
+        r[i++]= cont.contains(proxyObj1Weak1);
+        r[i++]= cont.contains(obj3);
         r[i++]= cont.contains(null) ? false : true;
 
         boolean bOk= true;
@@ -447,9 +445,10 @@ public class InterfaceContainer_Test
 
         r[i++]= cont.retainAll(list);
         r[i++]= cont.get(0) == obj1;
-        r[i++]= cont.get(1) == obj1;
-        r[i++]= cont.get(2) == proxyObj3TypeProv;
-        r[i++]= 3 == cont.size();
+        r[i++]= cont.get(1) == obj3;
+        r[i++]= cont.get(2) == obj1;
+        r[i++]= cont.get(3) == proxyObj3TypeProv;
+        r[i++]= 4 == cont.size();
 
         boolean bOk= true;
         for (int c= 0; c < i; c++)

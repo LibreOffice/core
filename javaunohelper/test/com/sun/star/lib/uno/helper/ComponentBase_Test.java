@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentBase_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:43:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,11 @@ public class ComponentBase_Test
         obj1= new AWeakBase();
         obj2= new AWeakBase();
         obj3= new AWeakBase();
-        proxyObj1Weak1= ProxyProvider.getHolderProxy(obj1, XWeak.class);
-        proxyObj3Weak1= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj3Weak2= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj2TypeProv= ProxyProvider.getHolderProxy(obj2, XTypeProvider.class);
-        proxyObj3TypeProv= ProxyProvider.getHolderProxy(obj3, XTypeProvider.class);
-
+        proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
+        proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
+        proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
     }
 
     public boolean dispose()
