@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:15:10 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,50 +62,88 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef SW_WRITERHELPER
-#include "writerhelper.hxx"
+#   include "writerhelper.hxx"
 #endif
 
-#include <algorithm>        //std::swap
-#include <functional>       //std::binary_function
+#include <algorithm>                //std::swap
+#include <functional>               //std::binary_function
 
-#ifndef _DOC_HXX
-#include <doc.hxx>          //SwDoc
-#endif
-#ifndef _NDTXT_HXX
-#include <ndtxt.hxx>        //SwTxtNode
-#endif
-#ifndef _NDNOTXT_HXX
-#include <ndnotxt.hxx>      //SwNoTxtNode
-#endif
-#ifndef _FMTCNTNT_HXX
-#include <fmtcntnt.hxx>     //SwFmtCntnt
-#endif
-#ifndef _NDINDEX_HXX
-#include <ndindex.hxx>      //SwNodeIndex
-#endif
-#ifndef _NUMRULE_HXX
-#include <numrule.hxx>      //SwNodeNum
-#endif
-#ifndef _SWTABLE_HXX
-#include <swtable.hxx>      //SwTable
-#endif
-#ifndef _FRMFMT_HXX
-#include <frmfmt.hxx>       //SwFrmFmt
-#endif
-#ifndef _SVX_TSPTITEM_HXX
-#include <svx/tstpitem.hxx> //SvxTabStopItem
-#endif
 #ifndef _SVDOBJ_HXX
-#include <svx/svdobj.hxx>   //SdrObject
+#    include <svx/svdobj.hxx>       //SdrObject
 #endif
 #ifndef _SVDOOLE2_HXX
-#include <svx/svdoole2.hxx> //SdrOle2Obj
+#   include <svx/svdoole2.hxx>      //SdrOle2Obj
 #endif
 #ifndef _SVX_FMGLOB_HXX
-#include <svx/fmglob.hxx>   //FmFormInventor
+#   include <svx/fmglob.hxx>        //FmFormInventor
 #endif
 #ifndef _SVX_BRKITEM_HXX
-#include <svx/brkitem.hxx>  //SvxFmtBreakItem
+#   include <svx/brkitem.hxx>       //SvxFmtBreakItem
+#endif
+#ifndef _SVX_TSPTITEM_HXX
+#    include <svx/tstpitem.hxx>     //SvxTabStopItem
+#endif
+#ifndef _SVDOBJ_HXX
+#    include <svx/svdobj.hxx>       //SdrObject
+#endif
+#ifndef _DOC_HXX
+#    include <doc.hxx>              //SwDoc
+#endif
+#ifndef _NDTXT_HXX
+#    include <ndtxt.hxx>            //SwTxtNode
+#endif
+#ifndef _NDNOTXT_HXX
+#     include <ndnotxt.hxx>         //SwNoTxtNode
+#endif
+#ifndef _FMTCNTNT_HXX
+#    include <fmtcntnt.hxx>         //SwFmtCntnt
+#endif
+#ifndef _NDINDEX_HXX
+#    include <ndindex.hxx>          //SwNodeIndex
+#endif
+#ifndef _NUMRULE_HXX
+#    include <numrule.hxx>          //SwNodeNum
+#endif
+#ifndef _SWTABLE_HXX
+#    include <swtable.hxx>          //SwTable
+#endif
+#ifndef _FRMFMT_HXX
+#    include <frmfmt.hxx>           //SwFrmFmt
+#endif
+#ifndef _FLYPOS_HXX
+#    include <flypos.hxx>           //SwPosFlyFrms
+#endif
+#ifndef _FMTANCHR_HXX
+#    include <fmtanchr.hxx>         //SwFmtAnchor
+#endif
+#ifndef _NDGRF_HXX
+#    include <ndgrf.hxx>            //SwGrfNode
+#endif
+#ifndef _FMTFSIZE_HXX
+#    include <fmtfsize.hxx>         //SwFmtFrmSize
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#   include<SwStyleNameMapper.hxx>  //SwStyleNameMapper
+#endif
+#ifndef _DOCARY_HXX
+#   include <docary.hxx>            //SwCharFmts
+#endif
+#ifndef _CHARFMT_HXX
+#    include <charfmt.hxx>          //SwCharFmt
+#endif
+#ifdef DEBUGDUMP
+#   ifndef _SV_SVAPP_HXX
+#       include <vcl/svapp.hxx>
+#   endif
+#   ifndef _TOOLS_URLOBJ_HXX
+#       include <tools/urlobj.hxx>
+#   endif
+#   ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#       include <unotools/ucbstreamhelper.hxx>
+#   endif
+#   ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#       include <unotools/localfilehelper.hxx>
+#   endif
 #endif
 
 namespace
@@ -120,11 +158,283 @@ namespace
             return pB->GetOutlineLevel() < pB->GetOutlineLevel();
         }
     };
+
+    /*
+     Stroustroup forgets copy_if, See C++ Programming language Chp 18, pg 530
+    */
+    template <typename In , typename Out , typename Pred>
+        Out my_copy_if(In first, In last, Out res, Pred p)
+    {
+        while (first != last)
+        {
+            if (p(*first))
+                *res = *first;
+            ++first;
+        }
+        return res;
+    }
+
+    /*
+     Utility to convert a SwPosFlyFrms into a simple vector of sw::Frames
+
+     The crucial thing is that a sw::Frame always has an anchor which
+     points to some content in the document. This is a requirement of exporting
+     to Word
+    */
+    sw::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
+    {
+        sw::Frames aRet;
+        USHORT nEnd = rFlys.Count();
+        for (USHORT nI = 0; nI < nEnd; ++nI)
+        {
+            const SwFrmFmt &rEntry = rFlys[nI]->GetFmt();
+            if (const SwPosition* pAnchor = rEntry.GetAnchor().GetCntntAnchor())
+                aRet.push_back(sw::Frame(rEntry, *pAnchor));
+            else
+            {
+                SwPosition aPos(rFlys[nI]->GetNdIndex());
+                if (SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode())
+                    aPos.nContent.Assign(pTxtNd, 0);
+                aRet.push_back(sw::Frame(rEntry, aPos));
+            }
+        }
+        return aRet;
+    }
+
+    /*
+     Utility to extract flyfmts from a document, potentially from a
+     selection, and with bAll off ignores the drawing objects
+    */
+    sw::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM, bool bAll)
+    {
+        SwPosFlyFrms aFlys;
+        rDoc.GetAllFlyFmts(aFlys, pPaM, true);
+        sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
+        for (USHORT i = aFlys.Count(); i > 0;)
+            delete aFlys[--i];
+        return aRet;
+    }
+
+    //Utility to test if a frame is anchored at a given node index
+    class anchoredto: public std::unary_function<const sw::Frame&, bool>
+    {
+    private:
+        ULONG mnNode;
+    public:
+        anchoredto(ULONG nNode) : mnNode(nNode) {}
+        bool operator()(const sw::Frame &rFrame) const
+        {
+            return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
+        }
+    };
+
+    Size GetSwappedInSize(const SwNoTxtNode& rNd)
+    {
+        Size aGrTwipSz(rNd.GetTwipSize());
+        if ((!aGrTwipSz.Width() || !aGrTwipSz.Height()))
+        {
+            SwGrfNode *pGrfNode = const_cast<SwGrfNode*>(rNd.GetGrfNode());
+            if (pGrfNode && (GRAPHIC_NONE != pGrfNode->GetGrf().GetType()))
+            {
+                bool bWasSwappedOut = pGrfNode->GetGrfObj().IsSwappedOut();
+                pGrfNode->SwapIn();
+                aGrTwipSz = pGrfNode->GetTwipSize();
+                if (bWasSwappedOut)
+                    pGrfNode->SwapOut();
+            }
+        }
+
+        ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
+        return aGrTwipSz;
+    }
 }
 
 namespace sw
 {
+    Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
+        : mpFlyFrm(&rFmt), maPos(rPos), meWriterType(eTxtBox),
+        mpStartFrameContent(0)
+    {
+        mbIsInline = (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT);
+        switch (rFmt.Which())
+        {
+            case RES_FLYFRMFMT:
+                if (const SwNodeIndex* pIdx = rFmt.GetCntnt().GetCntntIdx())
+                {
+                    SwNodeIndex aIdx(*pIdx, 1);
+                    const SwNode &rNd = aIdx.GetNode();
+                    switch (rNd.GetNodeType())
+                    {
+                        case ND_GRFNODE:
+                            meWriterType = eGraphic;
+                            maSize = GetSwappedInSize(*rNd.GetNoTxtNode());
+                            break;
+                        case ND_OLENODE:
+                            meWriterType = eOle;
+                            maSize = GetSwappedInSize(*rNd.GetNoTxtNode());
+                            break;
+                        default:
+                            {
+                                meWriterType = eTxtBox;
+
+                                Rectangle aRect;
+                                SwRect aLayRect(rFmt.FindLayoutRect());
+                                /*
+                                 The Object is not rendered (e.g. something in
+                                 unused header/footer - so get the values from
+                                 the format.
+                                */
+                                if (aLayRect.IsEmpty())
+                                    aRect.SetSize(rFmt.GetFrmSize().GetSize());
+                                else
+                                    aRect = aLayRect.SVRect();
+
+                                maSize = aRect.GetSize();
+                            }
+                            break;
+                    }
+                    mpStartFrameContent = &rNd;
+                }
+                else
+                {
+                    ASSERT(!this, "Impossible");
+                    meWriterType = eTxtBox;
+                }
+                break;
+            default:
+                if (const SdrObject* pObj = rFmt.FindRealSdrObject())
+                {
+                    if (pObj->GetObjInventor() == FmFormInventor)
+                        meWriterType = eFormControl;
+                    else
+                        meWriterType = eDrawing;
+                    maSize = pObj->GetSnapRect().GetSize();
+                }
+                else
+                {
+                    ASSERT(!this, "Impossible");
+                    meWriterType = eDrawing;
+                }
+                break;
+        }
+    }
+
+    bool Frame::IsInline() const
+    {
+        return mbIsInline;
+    }
+
+    void Frame::ForceTreatAsInline()
+    {
+        mbIsInline = true;
+    }
+
     namespace hack
+    {
+        DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
+            SvPersist &rPers)
+            : mxIPRef(rObj.GetObjRef()),
+            msOrigPersistName(rObj.GetPersistName()), mrPers(rPers)
+        {
+            rObj.SetPersistName(String());
+            rObj.SetObjRef(SvInPlaceObjectRef());
+        }
+
+        bool DrawingOLEAdaptor::TransferToDoc(const String &rName)
+        {
+            ASSERT(mxIPRef.Is(), "Transferring invalid object to doc");
+            if (!mxIPRef.Is())
+                return false;
+
+            SvInfoObjectRef refObj = new SvEmbeddedInfoObject(mxIPRef, rName);
+            bool bSuccess = mrPers.Move(refObj, rName);
+            if (bSuccess)
+            {
+                SvPersist *pO = mxIPRef;
+                ASSERT(!pO->IsModified(), "Not expected to be modified here");
+                if (pO->IsModified())
+                {
+                    pO->DoSave();
+                    pO->DoSaveCompleted();
+                }
+                mxIPRef.Clear();
+                bSuccess = mrPers.Unload(pO);
+            }
+
+            return bSuccess;
+        }
+
+        DrawingOLEAdaptor::~DrawingOLEAdaptor()
+        {
+            if (mxIPRef.Is())
+            {
+                if (SvInfoObject* pInfo = mrPers.Find(msOrigPersistName))
+                {
+                    pInfo->SetDeleted(TRUE);
+                    pInfo->SetObj(0);
+                }
+                mxIPRef->DoClose();
+                mrPers.Remove(mxIPRef);
+                mxIPRef.Clear();
+            }
+        }
+
+#ifdef DEBUGDUMP
+        SvStream *CreateDebuggingStream(const String &rSuffix)
+        {
+            SvStream* pDbgOut = 0;
+            static sal_Int32 nCount;
+            String aFileName(String(RTL_CONSTASCII_STRINGPARAM("wwdbg")));
+            aFileName.Append(String::CreateFromInt32(++nCount));
+            aFileName.Append(rSuffix);
+            String aURLStr;
+            if (::utl::LocalFileHelper::ConvertPhysicalNameToURL(
+                Application::GetAppFileName(), aURLStr))
+            {
+                INetURLObject aURL(aURLStr);
+                aURL.removeSegment();
+                aURL.removeFinalSlash();
+                aURL.Append(aFileName);
+
+                pDbgOut = ::utl::UcbStreamHelper::CreateStream(
+                    aURL.GetMainURL(INetURLObject::NO_DECODE),
+                    STREAM_TRUNC | STREAM_WRITE);
+            }
+            return pDbgOut;
+        }
+
+        void DumpStream(const SvStream &rSrc, SvStream &rDest)
+        {
+            SvStream &rSource = const_cast<SvStream&>(rSrc);
+            ULONG nOrigPos = rSource.Tell();
+            rSource.Seek(STREAM_SEEK_TO_END);
+            if (ULONG nLen = rSource.Tell())
+            {
+                rSource.Seek(nOrigPos);
+                sal_Char* pDat = new sal_Char[nLen];
+                rSource.Read(pDat, nLen);
+                rDest.Write(pDat, nLen);
+                delete[] pDat;
+                rSource.Seek(nOrigPos);
+            }
+        }
+#endif
+
+        const OutlinerParaObject* GetOutlinerParaObject(const SdrTextObj &rObj)
+        {
+            /*
+            #i13885#
+            When the object is actively being edited, that text is not set into
+            the objects normal text object, but lives in a seperate object.
+            */
+            if (rObj.IsTextEditActive())
+                return rObj.GetEditOutlinerParaObject();
+            else
+                return rObj.GetOutlinerParaObject();
+        }
+    }
+
+    namespace util
     {
         void SetLayer::SendObjectToHell(SdrObject &rObject) const
         {
@@ -184,58 +494,6 @@ namespace sw
         }
         //SetLayer boilerplate end
 
-
-        DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
-            SvPersist &rPers)
-            : mxIPRef(rObj.GetObjRef()),
-            msOrigPersistName(rObj.GetPersistName()), mrPers(rPers)
-        {
-            rObj.SetPersistName(String());
-            rObj.SetObjRef(SvInPlaceObjectRef());
-        }
-
-        bool DrawingOLEAdaptor::TransferToDoc(const String &rName)
-        {
-            ASSERT(mxIPRef.Is(), "Transferring invalid object to doc");
-            if (!mxIPRef.Is())
-                return false;
-
-            SvInfoObjectRef refObj = new SvEmbeddedInfoObject(mxIPRef, rName);
-            bool bSuccess = mrPers.Move(refObj, rName);
-            if (bSuccess)
-            {
-                SvPersist *pO = mxIPRef;
-                ASSERT(!pO->IsModified(), "Not expected to be modified here");
-                if (pO->IsModified())
-                {
-                    pO->DoSave();
-                    pO->DoSaveCompleted();
-                }
-                mxIPRef.Clear();
-                bSuccess = mrPers.Unload(pO);
-            }
-
-            return bSuccess;
-        }
-
-        DrawingOLEAdaptor::~DrawingOLEAdaptor()
-        {
-            if (mxIPRef.Is())
-            {
-                if (SvInfoObject* pInfo = mrPers.Find(msOrigPersistName))
-                {
-                    pInfo->SetDeleted(TRUE);
-                    pInfo->SetObj(0);
-                }
-                mxIPRef->DoClose();
-                mrPers.Remove(mxIPRef);
-                mxIPRef.Clear();
-            }
-        }
-    }
-
-    namespace util
-    {
         ParaStyles GetParaStyles(const SwDoc &rDoc)
         {
             ParaStyles aStyles;
@@ -249,9 +507,70 @@ namespace sw
             return aStyles;
         }
 
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const String& rName)
+        {
+            // Search first in the Doc-Styles
+            SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName(rName);
+            if (!pColl)
+            {
+                // Collection not found, try in Pool ?
+                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                    GET_POOLID_TXTCOLL);
+                if (n != SAL_MAX_UINT16)       // found or standard
+                    pColl = rDoc.GetTxtCollFromPoolSimple(n, false);
+            }
+            return pColl;
+        }
+
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const String& rName)
+        {
+            SwCharFmt *pFmt = rDoc.FindCharFmtByName(rName);
+            if (!pFmt)
+            {
+                // Collection not found, try in Pool ?
+                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                    GET_POOLID_CHRFMT);
+                if (n != SAL_MAX_UINT16)       // found or standard
+                    pFmt = rDoc.GetCharFmtFromPool(n);
+            }
+            return pFmt;
+        }
+
         void SortByOutline(ParaStyles &rStyles)
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
+        }
+
+        Frames GetAllFrames(const SwDoc &rDoc, SwPaM *pPaM)
+        {
+            return GetFrames(rDoc, pPaM, true);
+        }
+
+        Frames GetNonDrawingFrames(const SwDoc &rDoc, SwPaM *pPaM)
+        {
+            return GetFrames(rDoc, pPaM, false);
+        }
+
+        Frames GetFramesBetweenNodes(const Frames &rFrames,
+            const SwNode &rStart, const SwNode &rEnd)
+        {
+            Frames aRet;
+            ULONG nEnd = rEnd.GetIndex();
+            for (ULONG nI = rStart.GetIndex(); nI < nEnd; ++nI)
+            {
+                my_copy_if(rFrames.begin(), rFrames.end(),
+                    std::back_inserter(aRet), anchoredto(nI));
+            }
+            return aRet;
+
+        }
+
+        Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode)
+        {
+            Frames aRet;
+            my_copy_if(rFrames.begin(), rFrames.end(),
+                std::back_inserter(aRet), anchoredto(rNode.GetIndex()));
+            return aRet;
         }
 
         const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode)
