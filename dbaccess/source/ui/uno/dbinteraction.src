@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 13:00:01 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ String STR_REMEMBERPASSWORD_SESSION
     Text = "Passwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡¿ÚÁî(~R)";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡¿ÚÁî(~R)";
+    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
+    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
     Text[ chinese_traditional ] = "µ²§ôµ{§Ç¤§«e¤@ª½°O¦í±K½X(~R)";
     Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
@@ -94,8 +94,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æ¿ÚÁî(~S)";
-    Text[ chinese_simplified ] = "±£´æ¿ÚÁî(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
+    Text[ chinese_simplified ] = "±£´æÃÜÂë(~S)";
     Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
@@ -106,7 +106,7 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ italian ] = "Salva pa~ssword ";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì’·Šú•Û‘¶(~S)";
     Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå";
-    Text[ polish ] = "Zapisz has³o";
+    Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
     Text[ russian ] = "Ñîõğàíèòü ïàğîëü";
@@ -119,6 +119,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 13:00:01  fs
+ *  initial checkin - InteractionHandler for common database related interaction requests
+ *
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
