@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:55:14 $
+ *  last change: $Author: tl $ $Date: 2002-01-21 11:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,12 +249,6 @@ IMPL_LINK_INLINE_START( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 IMPL_LINK_INLINE_END( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 
 
-void SmToolBoxWindow::ShowWindows()
-{
-    if ( SM_MOD1()->GetConfig()->IsToolboxVisible() )
-        Show();
-}
-
 /**************************************************************************/
 
 SFX_IMPL_FLOATINGWINDOW(SmToolBoxWrapper, SID_TOOLBOXWINDOW);
@@ -266,9 +260,6 @@ SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
 {
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
-
-    ((SmToolBoxWindow *)pWindow)->ShowWindows();
-
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-06 09:13:28 $
+ *  last change: $Author: tl $ $Date: 2002-01-21 11:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,14 +662,6 @@ void SmCmdBoxWindow::AdjustPosition()
 }
 
 
-void SmCmdBoxWindow::ShowWindows ()
-{
-    Show ();
-    Resize();
-    aEdit.Show ();
-}
-
-
 void SmCmdBoxWindow::ToggleFloatingMode()
 {
     SfxDockingWindow::ToggleFloatingMode();
@@ -701,8 +693,6 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
         pWindow->SetPosPixel(pInfo->aPos);
         ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
     }
-
-    ((SmCmdBoxWindow *)pWindow)->ShowWindows ();
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-31 14:11:58 $
+ *  last change: $Author: tl $ $Date: 2002-01-21 11:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,6 @@ public:
 
     SmEditWindow *GetEditWindow() { return (&aEdit); }
     SmViewShell  *GetView();
-
-    void ShowWindows ();
 
     void RestartFocusTimer ()
     {
