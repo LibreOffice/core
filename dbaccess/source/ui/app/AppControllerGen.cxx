@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:06:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
     return bEnabled;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
 
     if ( _xLayoutManager.is() )
