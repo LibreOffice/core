@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:50 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:36:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,6 @@ TARGET=pdffilter
 GEN_HID=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
@@ -91,25 +90,24 @@ RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(VCLLIB)			\
-    $(UNOTOOLSLIB)		\
-    $(SVLLIB)			\
     $(SVTOOLLIB)		\
-    $(TKLIB)		
+    $(TKLIB)			\
+    $(VCLLIB)			\
+    $(SVLLIB)			\
+    $(UNOTOOLSLIB)		\
+    $(TOOLSLIB)			\
+    $(COMPHELPERLIB)	\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Targets ----------------------------------
 
