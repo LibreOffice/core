@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:37:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ polish ] = "Nie mo¿na by³o ustaliæ zawartoœci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "ºİÎŞÎŞ¯¸½‚Ü‚½‚ÍØ½ÄÎŞ¯¸½‚Ì“à—e‚ªŠm”F‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "ÄŞº¸¹Ú½º/¸ñ·Ï ÇÊµåÀÇ ³»¿ëÀ» Á¶»çÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
+    Text[ korean ] = "ÄŞº¸¹Ú½º ¶Ç´Â ¸ñ·Ï ÇÊµåÀÇ ³»¿ëÀ» Á¶»çÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨×éºÏ¿ò»òÕßÁĞ±í¿òÄÚµÄÄÚÈİ¡£";
     Text[ chinese_traditional ] = "µLªk±q¸ê®Æ®w¤º´ú©w²Õ¦X¤è¶ô©Î²M³æ¤è¶ôªº¤º®e";
     Text[ arabic ] = "ÊÚĞÑ ÇáÊÚÑİ Úáì ãÍÊæíÇÊ ãÑÈÚ ÊÍÑíÑ æÓÑÏ Ãæ ãÑÈÚ ŞÇÆãÉ.";
@@ -317,7 +317,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ polish ] = "B³¹d przy pisaniu aktualnego rekordu";
     Text[ portuguese_brazilian ] = "error updating the current record";
     Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ‘‚«‚Ş‚Ì´×°";
-    Text[ korean ] = "ÇöÀçÀÇ ·¹ÄÚµå ¾²±â½Ã¿¡ ¿À·ù";
+    Text[ korean ] = "ÇöÀçÀÇ µ¥ÀÌÅÍ ·¹ÄÚµå¿¡¼­ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚ¸üĞÂµ±Ç°Êı¾İÌõÄ¿Ê±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "¦b¼g¤J¸ê®Æ±ø¥Ø®Éµo¥Í¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáÓÌá ÇáÍÇáí";
@@ -377,5 +377,6 @@ String RID_STR_ERR_DELETERECORDS
     Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
     Text[ finnish ] = "Virhe poistettaessa määritettyjä tietueita";
 };
+
 
 
