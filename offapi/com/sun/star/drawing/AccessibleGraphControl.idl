@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:53:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 
 // Declarations of interfaces to avoid inclusion of IDL files.
 module com {  module sun {  module star {  module accessibility {
-         interface XAccessible;
-         interface XAccessibleContext;
-         interface XAccessibleComponent;
-         interface XAccessibleEventBroadcaster;
-         interface XAccessibleSelection;
+          published interface XAccessible;
+          published interface XAccessibleContext;
+          published interface XAccessibleComponent;
+          published interface XAccessibleEventBroadcaster;
+          published interface XAccessibleSelection;
 }; }; }; };
 
 
@@ -84,7 +84,7 @@ module com {  module sun {  module star {  module drawing {
 
      @since #107627#
  */
-service AccessibleGraphControl
+published service AccessibleGraphControl
 {
     /** Base interface for being accessible.  It gives access to the
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
