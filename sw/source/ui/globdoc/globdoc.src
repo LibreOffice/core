@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:49:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g³ówny";
     TEXT[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ japanese ] = "%PRODUCTNAME 6.0 Ï½À°ÄÞ·­ÒÝÄ";
-    TEXT[ korean ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ korean ] = "%PRODUCTNAME 6.0 ¸¶½ºÅÍ ¹®¼­";
     TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 Ö÷¿ØÎÄµµ";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¥D±±¤å¥ó";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Master Document";
@@ -121,4 +121,5 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ catalan ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ finnish ] = "%PRODUCTNAME 6.0 Global Dokument";
 };
+
 
