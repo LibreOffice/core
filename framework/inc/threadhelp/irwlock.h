@@ -2,9 +2,9 @@
  *
  *  $RCSfile: irwlock.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,6 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
-#endif
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -109,12 +101,6 @@ class IRWLock
     public:
 
         /*-****************************************************************************************************//**
-            @descr      The dtor isn't realy important ... but if you whish to use derived classes
-                        with any pointer ... you must have it!
-        *//*-*****************************************************************************************************/
-        virtual ~IRWLock() {}
-
-        /*-****************************************************************************************************//**
             @descr      These functions must be supported by a derived class!
                             acquireReadAccess()     -try to register thread as reader
                             releaseReadAccess()     -unregister thread as reader
@@ -122,11 +108,11 @@ class IRWLock
                             releaseWriteAccess()    -unregister thread as writer
                             downgradeWriteAccess()  -make writer to reader
         *//*-*****************************************************************************************************/
-        virtual void SAL_CALL acquireReadAccess    () = 0;
-        virtual void SAL_CALL releaseReadAccess    () = 0;
-        virtual void SAL_CALL acquireWriteAccess   () = 0;
-        virtual void SAL_CALL releaseWriteAccess   () = 0;
-        virtual void SAL_CALL downgradeWriteAccess () = 0;
+        virtual void acquireReadAccess    () =0;
+        virtual void releaseReadAccess    () =0;
+        virtual void acquireWriteAccess   () =0;
+        virtual void releaseWriteAccess   () =0;
+        virtual void downgradeWriteAccess () =0;
 
 };      //  class IRWLock
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itransactionmanager.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
-#endif
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -174,25 +170,19 @@ class ITransactionManager
     public:
 
         /*-****************************************************************************************************//**
-            @descr      The dtor isn't realy important ... but if you whish to use derived classes
-                        with any pointer ... you must have it!
-        *//*-*****************************************************************************************************/
-        virtual ~ITransactionManager() {}
-
-        /*-****************************************************************************************************//**
             @descr      These functions must be supported by a derived class!
                             getWorkingMode()        -return current set working mode
                             setWorkingMode()        -change working mode
                                                      (This will block till all current transactions are finished!)
                             isCallRejected()        -test method to check if a call will be rejected by wrong working mode or not
-                            acquire()               -start new transaction (increase internal transaction count)
-                            release()               -finish transaction    (decrease internal transaction count)
+                            registerTransaction()   -start new transaction (increase internal transaction count)
+                            unregisterTransaction() -finish transaction    (decrease internal transaction count)
         *//*-*****************************************************************************************************/
-        virtual EWorkingMode SAL_CALL getWorkingMode (                                                ) const = 0;
-        virtual void         SAL_CALL setWorkingMode ( EWorkingMode   eMode                           )       = 0;
-        virtual sal_Bool     SAL_CALL isCallRejected ( ERejectReason& eReason                         ) const = 0;
-        virtual void         SAL_CALL acquire        ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
-        virtual void         SAL_CALL release        (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
+        virtual EWorkingMode getWorkingMode         (                                                ) const = 0;
+        virtual void         setWorkingMode         ( EWorkingMode   eMode                           )       = 0;
+        virtual sal_Bool     isCallRejected         ( ERejectReason& eReason                         ) const = 0;
+        virtual void         registerTransaction    ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
+        virtual void         unregisterTransaction  (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException ) = 0;
 
 };      //  class ITransactionManager
 
