@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:01:44 $
+ *  last change: $Author: kso $ $Date: 2001-06-18 08:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,7 +981,13 @@ Reference< XInterface > SAL_CALL ContentImplHelper::getParent()
     {
         Reference< XContentIdentifier > xId(
                     new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
-        return m_xProvider->queryContent( xId );
+        try
+        {
+            return m_xProvider->queryContent( xId );
+        }
+        catch ( IllegalIdentifierException const & )
+        {
+        }
     }
 
     return Reference< XInterface >();
