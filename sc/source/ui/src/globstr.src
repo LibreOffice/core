@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:19:36 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2124,10 +2124,10 @@ Resource RID_GLOBSTR
         Text[ portuguese ] = "Change case";
         Text[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
         Text[ greek ] = "Change case";
-        Text[ dutch ] = "Change case";
+        Text[ dutch ] = "Hoofd-/kleine letters belangrijk";
         Text[ french ] = "Casse/Caractères";
         Text[ spanish ] = "Change case";
-        Text[ italian ] = "Change case";
+        Text[ italian ] = "Maiuscole/minuscole";
         Text[ danish ] = "Change case";
         Text[ swedish ] = "Bokstäver/tecken";
         Text[ polish ] = "Wielkie i ma³e litery";
