@@ -1,4 +1,4 @@
-vc	vcl	:	nas freetype psprint rsc sot ucbhelper unotools sysui NULL
+vc	vcl	:	nas freetype psprint rsc sot ucbhelper unotools sysui portalapi NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\source\unotypes						nmake	-	all	vc_unot NULL
 vc	vcl\source\glyphs						nmake	-	all	vc_glyphs NULL
@@ -17,7 +17,7 @@ vc	vcl\os2\source\app						nmake	-	p	vc__appp NULL
 vc	vcl\os2\source\gdi						nmake	-	p	vc__gdip vc_unot NULL
 vc	vcl\os2\source\window					nmake	-	p	vc__winp vc_unot NULL
 vc	vcl\os2\source\src						nmake	-	p	vc__srcp NULL
-vc	vcl\unx\source\app						nmake	-	u	vc__appu NULL
+vc	vcl\unx\source\app						nmake	-	u	vc__appu vc_unot NULL
 vc	vcl\unx\source\gdi						nmake	-	u	vc__gdiu vc_unot NULL
 vc	vcl\unx\source\window					nmake	-	u	vc__winu vc_unot NULL
 vc	vcl\unx\source\src						nmake	-	u	vc__srcu NULL
