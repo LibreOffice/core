@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:10:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ turkish ] = "Script tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo de script";
+        Text[ finnish ] = "Komentosarjatyyppi";
     };
     Edit ED_TYPE
     {
@@ -136,6 +137,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL";
+        Text[ finnish ] = "URL-osoite";
     };
     Edit ED_URL
     {
@@ -275,6 +277,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ turkish ] = "Script bearbeiten";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar script";
+        Text[ finnish ] = "Muokkaa komentosarjaa";
     };
     String STR_JAVA_INSERT
     {
@@ -301,6 +304,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ turkish ] = "Script einfügen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar script";
+        Text[ finnish ] = "Lisää komentosarja";
     };
     Text [ english_us ] = "Edit Script" ;
     Text [ portuguese_brazilian ] = "Script bearbeiten" ;
@@ -322,5 +326,6 @@ ModalDialog DLG_JAVAEDIT
     Text[ turkish ] = "Script'i düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar script";
+    Text[ finnish ] = "Muokkaa komentosarjaa";
 };
  // ********************************************************************** EOF
