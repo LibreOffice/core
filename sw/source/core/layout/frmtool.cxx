@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:05:51 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,6 +1416,12 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     // invalidate page in order to force format and paint of
                     // inserted section frame
                     pFrm->InvalidatePage( pPage );
+
+                    // FME 10.11.2003 #112243#
+                    // Invalidate fly content flag:
+                    if ( pFrm->IsInFly() )
+                        pPage->InvalidateFlyCntnt();
+
                     // OD 14.11.2002 #104684# - invalidate page content in order to
                     // force format and paint of section content.
                     pPage->InvalidateCntnt();
