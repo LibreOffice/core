@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:38:11 $
+ *  last change: $Author: as $ $Date: 2001-04-11 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace utl
 {
 #define CONFIG_MODE_IMMEDIATE_UPDATE    0x00
 #define CONFIG_MODE_DELAYED_UPDATE      0x01
+#define CONFIG_MODE_ALL_LOCALES         0x02
 
     class ConfigChangeListener_Impl;
     class ConfigManager;
@@ -114,6 +115,25 @@ namespace utl
             void                    RemoveListener();
             void                    CallNotify(
                                 const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+
+            //***********************************************************************************************************************
+            // In special mode ALL_LOCALES we must support reading/writing of localized cfg entries as Sequence< PropertyValue >.
+            // These methods are helper to convert given lists of names and Any-values.
+            // format:  PropertyValue.Name  = <locale as ISO string>
+            //          PropertyValue.Value = <value; type depends from cfg entry!>
+            // e.g.
+            //          LOCALIZED NODE
+            //          "UIName"
+            //                      LOCALE      VALUE
+            //                      "de"        "Mein Name"
+            //                      "en-US"     "my name"
+            void impl_packLocalizedProperties   (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
+                                                    const   com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
+                                                               com::sun::star::uno::Sequence< com::sun::star::uno::Any >&   lOutValues  );
+            void impl_unpackLocalizedProperties (   const   com::sun::star::uno::Sequence< rtl::OUString >&             lInNames    ,
+                                                       const    com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lInValues   ,
+                                                               com::sun::star::uno::Sequence< rtl::OUString >&              lOutNames   ,
+                                                               com::sun::star::uno::Sequence< com::sun::star::uno::Any >&   lOutValues  );
 
         protected:
             ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
