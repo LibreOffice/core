@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextVerticalAdjust.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:27 $
+ *  last change: $Author: cl $ $Date: 2002-10-11 09:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ enum TextVerticalAdjust
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::LEFT
-    /** The left edge of the text is adjusted to the left edge of the shape.
+    /** The top edge of the text is adjusted to the top edge of the shape.
      */
     TOP,
 
@@ -91,9 +91,15 @@ enum TextVerticalAdjust
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::RIGHT
-    /** The right edge of the text is adjusted to the right edge of the shape.
+    /** The bottom edge of the text is adjusted to the bottom edge of the shape.
      */
-    BOTTOM
+    BOTTOM,
+
+    //-------------------------------------------------------------------------
+
+    /** The text extends from the top to the bottom edge of the shape.
+     */
+    BLOCK
  };
 
 //=============================================================================
