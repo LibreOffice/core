@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:36:07 $
+ *  last change: $Author: od $ $Date: 2002-11-04 13:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,13 +489,13 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
         if( bVert )
             aPaintRect.Pos().X() += nOfst;
         else
-        aPaintRect.Pos().Y() -= nOfst;
+            aPaintRect.Pos().Y() -= nOfst;
         if ( ::lcl_IsOverObj( pCntnt, pPage, aPaintRect, aRect, 0 ) )
             bScroll = FALSE;
         if( bVert )
             aPaintRect.Pos().X() -= nOfst;
         else
-        aPaintRect.Pos().Y() += nOfst;
+            aPaintRect.Pos().Y() += nOfst;
     }
     if ( bScroll && pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
         bScroll = FALSE;
@@ -1784,11 +1784,11 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
     //Frm nicht selbst steht, so ist nichts mit Scrollen.
     const SwPageFrm *pPage = pTab->FindPageFrm();
     SwRect aRect( rRect );
-    SWRECTFN( pTab )
-    if( bVert )
+    // OD 04.11.2002 #104100# - <SWRECTFN( pTab )> not needed.
+    if( pTab->IsVertical() )
         aRect.Pos().X() -= nOfst;
     else
-    aRect.Pos().Y() += nOfst;
+        aRect.Pos().Y() += nOfst;
     if ( pPage->GetSortedObjs() )
     {
         if ( ::lcl_IsOverObj( pTab, pPage, rRect, aRect, pTab ) )
@@ -1804,6 +1804,8 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
                                                 pTab->IsLowersFormatted() );
 }
 
+// OD 31.10.2002 #104100#
+// NOTE: no adjustments for vertical layout support necessary
 BOOL CheckPos( SwFrm *pFrm )
 {
     if ( !pFrm->GetValidPosFlag() )
@@ -1820,6 +1822,8 @@ BOOL CheckPos( SwFrm *pFrm )
     return TRUE;
 }
 
+// OD 31.10.2002 #104100#
+// Implement vertical layout support
 BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 {
     ASSERT( !IsAgain(), "8-) Ungueltige Seite beachten." );
@@ -1834,6 +1838,11 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     FASTBOOL bPainted = FALSE;
 
     const SwPageFrm *pOldPage = pTab->FindPageFrm();
+
+    // OD 31.10.2002 #104100# - vertical layout support
+    // use macro to declare and init <sal_Bool bVert>, <sal_Bool bRev> and
+    // <SwRectFn fnRect> for table frame <pTab>.
+    SWRECTFN( pTab );
 
     if ( !pTab->IsValid() || pTab->IsCompletePaint() || pTab->IsComplete() )
     {
@@ -1851,11 +1860,13 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
             pRow = (SwLayoutFrm*)pTab->Lower();
             while ( pRow->GetNext() )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
-            aScrollRect.Bottom( pRow->Frm().Bottom() );
+            // OD 31.10.2002 #104100# - vertical layout support
+            (aScrollRect.*fnRect->fnSetBottom)( (pRow->Frm().*fnRect->fnGetBottom)() );
             //Die Oberkante wird ggf. durch die erste unveraenderte Zeile bestimmt.
             pRow = ::lcl_IsTabScrollable( pTab );
             if ( pRow && pRow != pTab->Lower() )
-                aScrollRect.Top( pRow->Frm().Top() );
+                // OD 31.10.2002 #104100# - vertical layout support
+                (aScrollRect.*fnRect->fnSetTop)( (pRow->Frm().*fnRect->fnGetTop)() );
         }
 
         const SwFrm *pOldUp = pTab->GetUpper();
@@ -1871,7 +1882,8 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
         {
             if ( pRow && pOldUp == pTab->GetUpper() &&
                  pTab->Frm().SSize() == aOldRect.SSize() &&
-                 pTab->Frm().Left()  == aOldRect.Left() &&
+                 // OD 31.10.2002 #104100# - vertical layout support
+                 (pTab->Frm().*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)() &&
                  pTab->IsAnLower( pRow ) )
             {
                 SwTwips nOfst;
@@ -1879,12 +1891,16 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
                 {
                     if ( pRow->GetPrev()->IsValid() ||
                          ::CheckPos( pRow->GetPrev() ) )
-                        nOfst = (pRow->GetPrev()->Frm().Bottom()+1) - pRow->Frm().Top();
+                    {
+                        // OD 31.10.2002 #104100# - vertical layout support
+                        nOfst = -(pRow->Frm().*fnRect->fnTopDist)( (pRow->GetPrev()->Frm().*fnRect->fnGetBottom)() );
+                    }
                     else
                         nOfst = 0;
                 }
                 else
-                    nOfst = pTab->Frm().Top() - aOldRect.Top();
+                    // OD 31.10.2002 #104100# - vertical layout support
+                    nOfst = (pTab->Frm().*fnRect->fnTopDist)( (aOldRect.*fnRect->fnGetTop)() );
 
                 if ( nOfst )
                 {
@@ -1893,40 +1909,46 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
                 }
             }
 
+            // OD 01.11.2002 #104100# - add condition <pTab->Frm().HasArea()>
             if ( !pTab->IsCompletePaint() && pTab->IsComplete() &&
                  ( pTab->Frm().SSize() != pTab->Prt().SSize() ||
-                   pTab->Prt().Left() ) )
+                   // OD 31.10.2002 #104100# - vertical layout support
+                   (pTab->*fnRect->fnGetLeftMargin)()
+                 ) &&
+                 pTab->Frm().HasArea()
+               )
             {
-                if ( pTab->Frm().Height() != pTab->Prt().Height() )
+                // OD 01.11.2002 #104100# - re-implement calculation of margin rectangles.
+                SwRect aMarginRect;
+
+                SwTwips nLeftMargin = (pTab->*fnRect->fnGetLeftMargin)();
+                if ( nLeftMargin > 0)
                 {
-                    if ( pTab->Prt().Top() )
-                    {
-                        aOldRect = pTab->Frm();
-                        aOldRect.Height( pTab->Prt().Top() );
-                        pImp->GetShell()->AddPaintRect( aOldRect );
-                    }
-                    aOldRect.Height( pTab->Frm().Height() );
-                    aOldRect.Top( aOldRect.Top() + pTab->Prt().Height() );
-                    if ( aOldRect.HasArea() )
-                        pImp->GetShell()->AddPaintRect( aOldRect );
+                    aMarginRect = pTab->Frm();
+                    (aMarginRect.*fnRect->fnSetWidth)( nLeftMargin );
+                    pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
-                if ( pTab->Frm().Width() != pTab->Prt().Width() ||
-                     pTab->Prt().Left() )
+
+                if ( (pTab->*fnRect->fnGetRightMargin)() > 0)
                 {
-                    if ( pTab->Prt().Left() > 0 )
-                    {
-                        aOldRect = pTab->Frm();
-                        aOldRect.Width( pTab->Prt().Left() );
-                        pImp->GetShell()->AddPaintRect( aOldRect );
-                    }
-                    aOldRect.Width( pTab->Frm().Width() );
-                    if( pTab->Prt().Left() + pTab->Prt().Width() <
-                        aOldRect.Left() + aOldRect.Width() )
-                    {
-                        aOldRect.Left( aOldRect.Left() + pTab->Prt().Right() );
-                        if ( aOldRect.HasArea() )
-                            pImp->GetShell()->AddPaintRect( aOldRect );
-                    }
+                    aMarginRect = pTab->Frm();
+                    (aMarginRect.*fnRect->fnSetLeft)( (pTab->*fnRect->fnGetPrtRight)() );
+                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                }
+
+                SwTwips nTopMargin = (pTab->*fnRect->fnGetTopMargin)();
+                if ( nTopMargin > 0)
+                {
+                    aMarginRect = pTab->Frm();
+                    (aMarginRect.*fnRect->fnSetHeight)( nTopMargin );
+                    pImp->GetShell()->AddPaintRect( aMarginRect );
+                }
+
+                if ( (pTab->*fnRect->fnGetBottomMargin)() > 0)
+                {
+                    aMarginRect = pTab->Frm();
+                    (aMarginRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
+                    pImp->GetShell()->AddPaintRect( aMarginRect );
                 }
             }
             else if ( pTab->IsCompletePaint() )
@@ -1935,11 +1957,12 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
                 bAddRect = FALSE;
                 bPainted = TRUE;
             }
+
             if ( pTab->IsRetouche() && !pTab->GetNext() )
             {
                 SwRect aRect( pTab->GetUpper()->PaintArea() );
-                /// OD 09.10.2002 #102779# - delete "- 1"
-                aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() );
+                // OD 04.11.2002 #104100# - vertical layout support
+                (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
                 if ( !pImp->GetShell()->AddPaintRect( aRect ) )
                     pTab->ResetRetouche();
             }
@@ -1953,11 +1976,12 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     }
     if ( IsPaint() && bAddRect && pTab->IsRetouche() && !pTab->GetNext() )
     {
-        /// OD 04.10.2002 #102779#
-        /// set correct rectangle for retouche: area between bottom of table frame
-        /// and bottom of paint area of the upper frame.
+        // OD 04.10.2002 #102779#
+        // set correct rectangle for retouche: area between bottom of table frame
+        // and bottom of paint area of the upper frame.
         SwRect aRect( pTab->GetUpper()->PaintArea() );
-        aRect.Top( pTab->Frm().Top() + pTab->Prt().Bottom() );
+        // OD 04.11.2002 #104100# - vertical layout support
+        (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
         if ( !pImp->GetShell()->AddPaintRect( aRect ) )
             pTab->ResetRetouche();
     }
