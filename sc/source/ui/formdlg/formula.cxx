@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen
@@ -1477,8 +1478,7 @@ void ScFormulaDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
             aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ..." ));
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
 
-        aStr.EraseAllChars( '~' );
-        SetText( aStr );
+        SetText( MnemonicGenerator::EraseAllMnemonicChars( aStr ) );
     }
 }
 
