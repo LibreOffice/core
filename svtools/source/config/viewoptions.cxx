@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-07-10 10:31:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ using namespace ::com::sun::star::beans ;
 #define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("PageID"                   ))
 #define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("Visible"                  ))
 #define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("UserData"                 ))
+#define PROPERTYNAME_ANYDATA                OUString(RTL_CONSTASCII_USTRINGPARAM("AnyData"                  ))
 
 #define SEPERATOR_NOT_FOUND                 -1
 #define PATHSEPERATOR                       OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
@@ -166,35 +167,138 @@ sal_Int32                       SvtViewOptions::m_nRefCount_Windows         =   
 
 struct IMPL_TDialogData
 {
-    sal_Int32   nX          ;
-    sal_Int32   nY          ;
-    sal_Int32   nWidth      ;
-    sal_Int32   nHeight     ;
-    OUString    sUserData   ;
+    sal_Int32                   nX          ;
+    sal_Int32                   nY          ;
+    sal_Int32                   nWidth      ;
+    sal_Int32                   nHeight     ;
+    OUString                    sUserData   ;
+    Sequence< PropertyValue >   aAnyData    ;
 };
 
 struct IMPL_TTabDialogData
 {
-    sal_Int32   nX          ;
-    sal_Int32   nY          ;
-    sal_Int32   nPageID     ;
-    OUString    sUserData   ;
+    sal_Int32                   nX          ;
+    sal_Int32                   nY          ;
+    sal_Int32                   nPageID     ;
+    OUString                    sUserData   ;
+    Sequence< PropertyValue >   aAnyData    ;
 };
 
 struct IMPL_TTabPageData
 {
-    OUString    sUserData   ;
+    OUString                    sUserData   ;
+    Sequence< PropertyValue >   aAnyData    ;
 };
 
 struct IMPL_TWindowData
 {
-    sal_Int32   nX          ;
-    sal_Int32   nY          ;
-    sal_Int32   nWidth      ;
-    sal_Int32   nHeight     ;
-    sal_Bool    bVisible    ;
-    OUString    sUserData   ;
+    sal_Int32                   nX          ;
+    sal_Int32                   nY          ;
+    sal_Int32                   nWidth      ;
+    sal_Int32                   nHeight     ;
+    sal_Bool                    bVisible    ;
+    OUString                    sUserData   ;
+    Sequence< PropertyValue >   aAnyData    ;
 };
+
+// TODO:
+// why don't these classes share a common base class? It could handle the UserData a´nd the AnyData,
+// and a second base class could handle X, Y (and perhaps an additional one for the Width/Height)
+//
+// This way we would avoid the extensive code duplication we do currently !!!
+//
+
+/*-************************************************************************************************************//**
+    @descr  helper for reading AnyValue nodes
+*//*-*************************************************************************************************************/
+
+namespace reading
+{
+    //------------------------------------------------------------------------------------------------------------/
+    class IPublicConfigReadAccess
+    {
+    public:
+        virtual void getNodeNames( const OUString& _rNode, Sequence< OUString >& _rNames ) = 0;
+    };
+
+    //------------------------------------------------------------------------------------------------------------/
+    static void lcl_implInitReadAnyValues(  ::std::vector< OUString >& _rNames, ::std::vector< sal_Int32 >& _rCounts,
+                                            ::std::vector< sal_Int32 >& _rNamePrefixLen, const sal_Int32 _nNodeCount )
+    {
+        // not much to do here
+        _rNames.reserve         ( _nNodeCount * 2 );    // just a guess
+        _rCounts.reserve        ( _nNodeCount * 2 );    // just a guess
+        _rNamePrefixLen.reserve ( _nNodeCount * 2 );    // just a guess
+    }
+
+    //------------------------------------------------------------------------------------------------------------/
+    static void lcl_implReadOneNodeAnyValues(
+                            OUString& _rNameBase,                           // the name above the AnyData node
+                            ::std::vector< OUString >& _rNames,             // the names of the nodes containing AnyData
+                            ::std::vector< sal_Int32 >& _rCounts,           // the vector if node counts
+                            ::std::vector< sal_Int32 >& _rNamePrefixLen,    // the vector of name prefix lengths
+                            IPublicConfigReadAccess* _pReader               // the instance implementing the read
+                        )
+    {
+        _rNameBase += PROPERTYNAME_ANYDATA;
+        _rNameBase += PATHSEPERATOR;
+
+        _rNamePrefixLen.push_back( _rNameBase.getLength() );
+
+        // node names
+        Sequence< OUString > aAnyNodeNames;
+        _pReader->getNodeNames( _rNameBase, aAnyNodeNames );
+        // node count
+        _rCounts.push_back( aAnyNodeNames.getLength() );
+
+        // collect the assembled names
+        const OUString* pAnyNodeNames       =                   aAnyNodeNames.getConstArray();
+        const OUString* pAnyNodeNamesEnd    =   pAnyNodeNames + aAnyNodeNames.getLength();
+        for (;pAnyNodeNames < pAnyNodeNamesEnd; ++pAnyNodeNames)
+            _rNames.push_back( _rNameBase + *pAnyNodeNames );
+    }
+
+    //------------------------------------------------------------------------------------------------------------/
+    static void lcl_implFillReadAnyValues( Sequence< PropertyValue >& _rValues, sal_Int32 const* _pCount,
+        OUString const* & _rpAnyName, Any const* & _rpAnyValue, const sal_Int32 _nNamePrefixLen )
+    {
+        if ( *_pCount )
+        {
+            _rValues.realloc( *_pCount );
+            PropertyValue* pAnyData     =                   _rValues.getArray();
+            PropertyValue* pAnyDataEnd  =   pAnyData    +   _rValues.getLength();
+            for (;pAnyData != pAnyDataEnd; ++pAnyData, ++_rpAnyName, ++_rpAnyValue)
+            {
+                pAnyData->Name  =   _rpAnyName->copy( _nNamePrefixLen );
+                pAnyData->Value =   *_rpAnyValue;
+            }
+        }
+    }
+}
+
+/*-************************************************************************************************************//**
+    @descr  helper for writing AnyValue nodes
+*//*-*************************************************************************************************************/
+
+namespace writing
+{
+    //------------------------------------------------------------------------------------------------------------/
+    static void lcl_implPrefixAnyValues( OUString& _rNameBase, Sequence< PropertyValue >& _rAnyValues )
+    {
+        // the path to the AnyData node
+        _rNameBase += PROPERTYNAME_ANYDATA;
+
+        OUString sPrefix = _rNameBase;
+        sPrefix += PATHSEPERATOR;
+
+        // prefix the AnyData names with the path to the node for the window
+                PropertyValue* pAnyData     =               _rAnyValues.getArray();
+        const   PropertyValue* pAnyDataEnd  = pAnyData  +   _rAnyValues.getLength();
+        for (;pAnyData != pAnyDataEnd; ++pAnyData)
+            pAnyData->Name = sPrefix + pAnyData->Name;
+
+    }
+}
 
 /*-************************************************************************************************************//**
     @descr  We define different hash list to hold the view type data.
@@ -232,7 +336,7 @@ typedef hash_map<   OUString                    ,
     @descr  Implement the data container for dialogs.
 *//*-*************************************************************************************************************/
 
-class SvtViewDialogOptions_Impl : public ConfigItem
+class SvtViewDialogOptions_Impl : public ConfigItem, public reading::IPublicConfigReadAccess
 {
     public:
 
@@ -250,6 +354,11 @@ class SvtViewDialogOptions_Impl : public ConfigItem
         void        SetSize     (   const   OUString&   sName   ,           sal_Int32   nWidth  ,   sal_Int32   nHeight );
         OUString    GetUserData (   const   OUString&   sName                                                           );
         void        SetUserData (   const   OUString&   sName   ,   const   OUString&   sData                           );
+
+        Sequence< PropertyValue >   GetAnyData( const   OUString&   sName                                                   );
+        void                        SetAnyData( const   OUString&   sName   ,   const   Sequence< PropertyValue >&  aData   );
+
+        virtual void getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames );
 
     private:
 
@@ -328,6 +437,12 @@ void SvtViewDialogOptions_Impl::Commit()
         seqProperties[4].Value  <<= pIterator->second.sUserData ;
 
         SetSetProperties( ROOTNODE_DIALOGS, seqProperties ); // The keyname of our hash is the kename of our set!
+
+        // the AnyData nodes
+        Sequence< PropertyValue > aAnyValues( pIterator->second.aAnyData ); // copy, 'cause we want to modify it
+        writing::lcl_implPrefixAnyValues( sName, aAnyValues );
+        ClearNodeSet( sName );
+        SetSetProperties( sName, aAnyValues );
     }
 }
 
@@ -413,6 +528,27 @@ void SvtViewDialogOptions_Impl::SetUserData( const OUString& sName, const OUStri
 }
 
 //*****************************************************************************************************************
+Sequence< PropertyValue > SvtViewDialogOptions_Impl::GetAnyData( const OUString& sName )
+{
+    impl_CreateIfNotExist( sName );
+    return m_aList[ sName ].aAnyData;
+}
+
+//*****************************************************************************************************************
+void SvtViewDialogOptions_Impl::SetAnyData( const OUString& sName, const Sequence< PropertyValue >& seqData )
+{
+    impl_CreateIfNotExist( sName );
+    m_aList[ sName ].aAnyData = seqData;
+    SetModified();
+}
+
+//*****************************************************************************************************************
+void SvtViewDialogOptions_Impl::getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames )
+{
+    _rNames = GetNodeNames( _rNode );
+}
+
+//*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::impl_ReadWholeList()
 {
     // Clear cache, get current name list of existing dialogs in configuration.
@@ -426,6 +562,11 @@ void SvtViewDialogOptions_Impl::impl_ReadWholeList()
     sal_uInt32              nNodeName       = 0                                 ;
     sal_uInt32              nProperty       = 0                                 ;
     OUString                sName                                               ;
+
+    ::std::vector< OUString >           aAnyValuesNames;
+    ::std::vector< sal_Int32 >          aAnyValuesCount;
+    ::std::vector< sal_Int32 >          aAnyValuesNodeNamePrefixLen;
+    reading::lcl_implInitReadAnyValues( aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, nNodeCount );
 
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
@@ -443,17 +584,31 @@ void SvtViewDialogOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
         ++nProperty;
+
+        // under the AnyData node, there may be 0 to n sub nodes ....
+        reading::lcl_implReadOneNodeAnyValues( sName, aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, this );
     }
 
+    // the fixed values
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+    // the AnyValue's
+    Sequence< Any > seqAnyValues;
+    if ( aAnyValuesNames.size() )
+        seqAnyValues = GetProperties( Sequence< OUString >( aAnyValuesNames.begin(), aAnyValuesNames.size() ) );
 
     // Safe impossible cases.
     // We have asked for ALL our subtree keys and we would get all his values.
     // It's important for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set!\n" );
+    DBG_ASSERT( !(aAnyValuesNames.size()!=(sal_uInt32)seqAnyValues.getLength()), "SvtViewDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set (any data)!\n" );
 
     nProperty = 0;
-    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
+    const sal_Int32*    pAnyCount   = aAnyValuesCount.begin();
+    const OUString*     pAnyName    = aAnyValuesNames.begin();
+    const Any*          pAnyValue   = seqAnyValues.getConstArray();
+    const sal_Int32*    pAnyNameLen = aAnyValuesNodeNamePrefixLen.begin();
+
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName, ++pAnyCount, ++pAnyNameLen )
     {
         sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
         seqAllValues[nProperty] >>= m_aList[sName].nX           ;
@@ -466,6 +621,8 @@ void SvtViewDialogOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
         ++nProperty;
+
+        reading::lcl_implFillReadAnyValues( m_aList[sName].aAnyData, pAnyCount, pAnyName, pAnyValue, *pAnyNameLen );
     }
 }
 
@@ -487,7 +644,7 @@ void SvtViewDialogOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
     @descr  Implement the data container for tab-dialogs.
 *//*-*************************************************************************************************************/
 
-class SvtViewTabDialogOptions_Impl : public ConfigItem
+class SvtViewTabDialogOptions_Impl : public ConfigItem, public reading::IPublicConfigReadAccess
 {
     public:
 
@@ -505,6 +662,11 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
         void        SetPageID   (   const   OUString&   sName   ,           sal_Int32   nID                             );
         OUString    GetUserData (   const   OUString&   sName                                                           );
         void        SetUserData (   const   OUString&   sName   ,   const   OUString&   sData                           );
+
+        Sequence< PropertyValue >   GetAnyData( const   OUString&   sName                                                   );
+        void                        SetAnyData( const   OUString&   sName   ,   const   Sequence< PropertyValue >&  aData   );
+
+        virtual void getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames );
 
     private:
 
@@ -581,6 +743,12 @@ void SvtViewTabDialogOptions_Impl::Commit()
         seqProperties[3].Value  <<= pIterator->second.sUserData ;
 
         SetSetProperties( ROOTNODE_TABDIALOGS, seqProperties ); // The keyname of our hash is the kename of our set!
+
+        // the AnyData nodes
+        Sequence< PropertyValue > aAnyValues( pIterator->second.aAnyData ); // copy, 'cause we want to modify it
+        writing::lcl_implPrefixAnyValues( sName, aAnyValues );
+        ClearNodeSet( sName );
+        SetSetProperties( sName, aAnyValues );
     }
 }
 
@@ -661,6 +829,27 @@ void SvtViewTabDialogOptions_Impl::SetUserData( const OUString& sName, const OUS
 }
 
 //*****************************************************************************************************************
+Sequence< PropertyValue > SvtViewTabDialogOptions_Impl::GetAnyData( const OUString& sName )
+{
+    impl_CreateIfNotExist( sName );
+    return m_aList[ sName ].aAnyData;
+}
+
+//*****************************************************************************************************************
+void SvtViewTabDialogOptions_Impl::SetAnyData( const OUString& sName, const Sequence< PropertyValue >& seqData )
+{
+    impl_CreateIfNotExist( sName );
+    m_aList[ sName ].aAnyData = seqData;
+    SetModified();
+}
+
+//*****************************************************************************************************************
+void SvtViewTabDialogOptions_Impl::getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames )
+{
+    _rNames = GetNodeNames( _rNode );
+}
+
+//*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
 {
     // Clear cache, get current name list of existing dialogs in configuration.
@@ -674,6 +863,11 @@ void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
     sal_uInt32              nNodeName       = 0                                     ;
     sal_uInt32              nProperty       = 0                                     ;
     OUString                sName                                                   ;
+
+    ::std::vector< OUString >           aAnyValuesNames;
+    ::std::vector< sal_Int32 >          aAnyValuesCount;
+    ::std::vector< sal_Int32 >          aAnyValuesNodeNamePrefixLen;
+    reading::lcl_implInitReadAnyValues( aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, nNodeCount );
 
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
@@ -689,17 +883,31 @@ void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
         ++nProperty;
+
+        // under the AnyData node, there may be 0 to n sub nodes ....
+        reading::lcl_implReadOneNodeAnyValues( sName, aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, this );
     }
 
+    // the fixed values
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+    // the AnyValue's
+    Sequence< Any > seqAnyValues;
+    if ( aAnyValuesNames.size() )
+        seqAnyValues = GetProperties( Sequence< OUString >( aAnyValuesNames.begin(), aAnyValuesNames.size() ) );
 
     // Safe impossible cases.
     // We have asked for ALL our subtree keys and we would get all his values.
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-dialog set!\n" );
+    DBG_ASSERT( !(aAnyValuesNames.size()!=(sal_uInt32)seqAnyValues.getLength()), "SvtViewTabDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set (any data)!\n" );
 
     nProperty = 0;
-    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
+    const sal_Int32*    pAnyCount   = aAnyValuesCount.begin();
+    const OUString*     pAnyName    = aAnyValuesNames.begin();
+    const Any*          pAnyValue   = seqAnyValues.getConstArray();
+    const sal_Int32*    pAnyNameLen = aAnyValuesNodeNamePrefixLen.begin();
+
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName, ++pAnyCount, ++pAnyNameLen )
     {
         sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
         seqAllValues[nProperty] >>= m_aList[sName].nX           ;
@@ -710,6 +918,8 @@ void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
         ++nProperty;
+
+        reading::lcl_implFillReadAnyValues( m_aList[sName].aAnyData, pAnyCount, pAnyName, pAnyValue, *pAnyNameLen );
     }
 }
 
@@ -730,7 +940,7 @@ void SvtViewTabDialogOptions_Impl::impl_CreateIfNotExist( const OUString& sName 
     @descr  Implement the data container for tab-pages.
 *//*-*************************************************************************************************************/
 
-class SvtViewTabPageOptions_Impl : public ConfigItem
+class SvtViewTabPageOptions_Impl : public ConfigItem, public reading::IPublicConfigReadAccess
 {
     public:
 
@@ -744,6 +954,11 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
         sal_Bool    Delete      (   const   OUString&   sName                               );
         OUString    GetUserData (   const   OUString&   sName                               );
         void        SetUserData (   const   OUString&   sName,  const   OUString&   sData   );
+
+        Sequence< PropertyValue >   GetAnyData( const   OUString&   sName                                                   );
+        void                        SetAnyData( const   OUString&   sName   ,   const   Sequence< PropertyValue >&  aData   );
+
+        virtual void getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames );
 
     private:
 
@@ -813,6 +1028,12 @@ void SvtViewTabPageOptions_Impl::Commit()
         seqProperties[0].Value  <<= pIterator->second.sUserData;
 
         SetSetProperties( ROOTNODE_TABPAGES, seqProperties ); // The keyname of our hash is the kename of our set!
+
+        // the AnyData nodes
+        Sequence< PropertyValue > aAnyValues( pIterator->second.aAnyData ); // copy, 'cause we want to modify it
+        writing::lcl_implPrefixAnyValues( sName, aAnyValues );
+        ClearNodeSet( sName );
+        SetSetProperties( sName, aAnyValues );
     }
 }
 
@@ -858,6 +1079,27 @@ void SvtViewTabPageOptions_Impl::SetUserData( const OUString& sName, const OUStr
 }
 
 //*****************************************************************************************************************
+Sequence< PropertyValue > SvtViewTabPageOptions_Impl::GetAnyData( const OUString& sName )
+{
+    impl_CreateIfNotExist( sName );
+    return m_aList[ sName ].aAnyData;
+}
+
+//*****************************************************************************************************************
+void SvtViewTabPageOptions_Impl::SetAnyData( const OUString& sName, const Sequence< PropertyValue >& seqData )
+{
+    impl_CreateIfNotExist( sName );
+    m_aList[ sName ].aAnyData = seqData;
+    SetModified();
+}
+
+//*****************************************************************************************************************
+void SvtViewTabPageOptions_Impl::getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames )
+{
+    _rNames = GetNodeNames( _rNode );
+}
+
+//*****************************************************************************************************************
 void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
 {
     // Clear cache, get current name list of existing dialogs in configuration.
@@ -876,6 +1118,11 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
     sal_uInt32              nProperty       = 0                                 ;
     OUString                sName                                               ;
 
+    ::std::vector< OUString >           aAnyValuesNames;
+    ::std::vector< sal_Int32 >          aAnyValuesCount;
+    ::std::vector< sal_Int32 >          aAnyValuesNodeNamePrefixLen;
+    reading::lcl_implInitReadAnyValues( aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, nNodeCount );
+
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
         sName  = ROOTNODE_TABPAGES      ;
@@ -884,21 +1131,37 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
         sName += PATHSEPERATOR          ;
         seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA;
         ++nProperty;
+
+        // under the AnyData node, there may be 0 to n sub nodes ....
+        reading::lcl_implReadOneNodeAnyValues( sName, aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, this );
     }
 
+    // the fixed values
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+    // the AnyValue's
+    Sequence< Any > seqAnyValues;
+    if ( aAnyValuesNames.size() )
+        seqAnyValues = GetProperties( Sequence< OUString >( aAnyValuesNames.begin(), aAnyValuesNames.size() ) );
 
     // Safe impossible cases.
     // We have asked for ALL our subtree keys and we would get all his values.
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabPageOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-page set!\n" );
+    DBG_ASSERT( !(aAnyValuesNames.size()!=(sal_uInt32)seqAnyValues.getLength()), "SvtViewTabPageOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set (any data)!\n" );
 
     nProperty = 0;
+    const sal_Int32*    pAnyCount   = aAnyValuesCount.begin();
+    const OUString*     pAnyName    = aAnyValuesNames.begin();
+    const Any*          pAnyValue   = seqAnyValues.getConstArray();
+    const sal_Int32*    pAnyNameLen = aAnyValuesNodeNamePrefixLen.begin();
+
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
         sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
         seqAllValues[nProperty] >>= m_aList[sName].sUserData;
         ++nProperty;
+
+        reading::lcl_implFillReadAnyValues( m_aList[sName].aAnyData, pAnyCount, pAnyName, pAnyValue, *pAnyNameLen );
     }
 }
 
@@ -916,7 +1179,7 @@ void SvtViewTabPageOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
     @descr  Implement the data container for windows.
 *//*-*************************************************************************************************************/
 
-class SvtViewWindowOptions_Impl : public ConfigItem
+class SvtViewWindowOptions_Impl : public ConfigItem, public reading::IPublicConfigReadAccess
 {
     public:
 
@@ -936,6 +1199,11 @@ class SvtViewWindowOptions_Impl : public ConfigItem
         void        SetVisible  (   const   OUString&   sName   ,           sal_Bool    bState                          );
         OUString    GetUserData (   const   OUString&   sName                                                           );
         void        SetUserData (   const   OUString&   sName   ,   const   OUString&   sData                           );
+
+        Sequence< PropertyValue >   GetAnyData( const   OUString&   sName                                                   );
+        void                        SetAnyData( const   OUString&   sName   ,   const   Sequence< PropertyValue >&  aData   );
+
+        virtual void getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames );
 
     private:
 
@@ -1016,6 +1284,12 @@ void SvtViewWindowOptions_Impl::Commit()
         seqProperties[5].Value  <<= pIterator->second.sUserData ;
 
         SetSetProperties( ROOTNODE_WINDOWS, seqProperties ); // The keyname of our hash is the kename of our set!
+
+        // the AnyData nodes
+        Sequence< PropertyValue > aAnyValues( pIterator->second.aAnyData ); // copy, 'cause we want to modify it
+        writing::lcl_implPrefixAnyValues( sName, aAnyValues );
+        ClearNodeSet( sName );
+        SetSetProperties( sName, aAnyValues );
     }
 }
 
@@ -1116,6 +1390,27 @@ void SvtViewWindowOptions_Impl::SetUserData( const OUString& sName, const OUStri
 }
 
 //*****************************************************************************************************************
+Sequence< PropertyValue > SvtViewWindowOptions_Impl::GetAnyData( const OUString& sName )
+{
+    impl_CreateIfNotExist( sName );
+    return m_aList[ sName ].aAnyData;
+}
+
+//*****************************************************************************************************************
+void SvtViewWindowOptions_Impl::SetAnyData( const OUString& sName, const Sequence< PropertyValue >& seqData )
+{
+    impl_CreateIfNotExist( sName );
+    m_aList[ sName ].aAnyData = seqData;
+    SetModified();
+}
+
+//*****************************************************************************************************************
+void SvtViewWindowOptions_Impl::getNodeNames( const rtl::OUString& _rNode, Sequence< OUString >& _rNames )
+{
+    _rNames = GetNodeNames( _rNode );
+}
+
+//*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::impl_ReadWholeList()
 {
     // Clear cache, get current name list of existing dialogs in configuration.
@@ -1129,6 +1424,11 @@ void SvtViewWindowOptions_Impl::impl_ReadWholeList()
     sal_uInt32              nNodeName       = 0                                 ;
     sal_uInt32              nProperty       = 0                                 ;
     OUString                sName                                               ;
+
+    ::std::vector< OUString >           aAnyValuesNames;
+    ::std::vector< sal_Int32 >          aAnyValuesCount;
+    ::std::vector< sal_Int32 >          aAnyValuesNodeNamePrefixLen;
+    reading::lcl_implInitReadAnyValues( aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, nNodeCount );
 
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
@@ -1148,16 +1448,30 @@ void SvtViewWindowOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
         ++nProperty;
+
+        // under the AnyData node, there may be 0 to n sub nodes ....
+        reading::lcl_implReadOneNodeAnyValues( sName, aAnyValuesNames, aAnyValuesCount, aAnyValuesNodeNamePrefixLen, this );
     }
 
+    // the fixed values
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+    // the AnyValue's
+    Sequence< Any > seqAnyValues;
+    if ( aAnyValuesNames.size() )
+        seqAnyValues = GetProperties( Sequence< OUString >( aAnyValuesNames.begin(), aAnyValuesNames.size() ) );
 
     // Safe impossible cases.
     // We have asked for ALL our subtree keys and we would get all his values.
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewWindowOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for window set!\n" );
+    DBG_ASSERT( !(aAnyValuesNames.size()!=(sal_uInt32)seqAnyValues.getLength()), "SvtViewWindowOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set (any data)!\n" );
 
     nProperty = 0;
+    const sal_Int32*    pAnyCount   = aAnyValuesCount.begin();
+    const OUString*     pAnyName    = aAnyValuesNames.begin();
+    const Any*          pAnyValue   = seqAnyValues.getConstArray();
+    const sal_Int32*    pAnyNameLen = aAnyValuesNodeNamePrefixLen.begin();
+
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
         sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
@@ -1173,6 +1487,8 @@ void SvtViewWindowOptions_Impl::impl_ReadWholeList()
         ++nProperty;
         seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
         ++nProperty;
+
+        reading::lcl_implFillReadAnyValues( m_aList[sName].aAnyData, pAnyCount, pAnyName, pAnyValue, *pAnyNameLen );
     }
 }
 
@@ -1623,6 +1939,62 @@ void SvtViewOptions::SetUserData( const OUString& sData )
                                 break;
         case E_WINDOW       :   {
                                     m_pDataContainer_Windows->SetUserData( m_sViewName, sData );
+                                }
+                                break;
+    }
+}
+
+//*****************************************************************************************************************
+Sequence< PropertyValue > SvtViewOptions::GetAnyData( )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    Sequence< PropertyValue > aData;
+    switch( m_eViewType )
+    {
+        case E_DIALOG       :   {
+                                    aData = m_pDataContainer_Dialogs->GetAnyData( m_sViewName );
+                                }
+                                break;
+        case E_TABDIALOG    :   {
+                                    aData = m_pDataContainer_TabDialogs->GetAnyData( m_sViewName );
+                                }
+                                break;
+        case E_TABPAGE      :   {
+                                    aData = m_pDataContainer_TabPages->GetAnyData( m_sViewName );
+                                }
+                                break;
+        case E_WINDOW       :   {
+                                    aData = m_pDataContainer_Windows->GetAnyData( m_sViewName );
+                                }
+                                break;
+    }
+    return aData;
+}
+
+//*****************************************************************************************************************
+void SvtViewOptions::SetAnyData( const Sequence< PropertyValue >& seqData )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    switch( m_eViewType )
+    {
+        case E_DIALOG       :   {
+                                    m_pDataContainer_Dialogs->SetAnyData( m_sViewName, seqData );
+                                }
+                                break;
+        case E_TABDIALOG    :   {
+                                    m_pDataContainer_TabDialogs->SetAnyData( m_sViewName, seqData );
+                                }
+                                break;
+        case E_TABPAGE      :   {
+                                    m_pDataContainer_TabPages->SetAnyData( m_sViewName, seqData );
+                                }
+                                break;
+        case E_WINDOW       :   {
+                                    m_pDataContainer_Windows->SetAnyData( m_sViewName, seqData );
                                 }
                                 break;
     }
