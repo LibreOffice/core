@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 15:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "TopBorder", XML_NAMESPACE_FO, sXML_border_top, XML_TYPE_BORDER, CTF_SC_TOPBORDER },
     { "TopBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_top, XML_TYPE_BORDER_WIDTH, CTF_SC_TOPBORDERWIDTH },
     { "VertJustify", XML_NAMESPACE_FO, sXML_vertical_align, XML_SC_TYPE_VERTJUSTIFY, 0},
+    { "StandardDecimals", XML_NAMESPACE_STYLE, sXML_decimal_places, XML_TYPE_NUMBER16, 0 },
 
 // CharacterProperties
 /*  { "CharAutoKerning", XML_NAMESPACE_STYLE, sXML_letter_kerning, XML_TYPE_BOOL, 0 },
