@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:39:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,6 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLength"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLength of the database."))
-                ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
-                );
-        aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field separator."))
                 ,sal_False
@@ -178,7 +171,8 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
-        return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size()));
+        return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),
+                                             Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()));
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
