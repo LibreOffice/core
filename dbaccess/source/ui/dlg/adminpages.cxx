@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:22:25 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 14:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,10 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
             // collect the names of the installed databases
             StringBag aInstalledDBs;
 
-            String sAdabasConfigDir; sAdabasConfigDir.AssignAscii(getenv("DBCONFIG"));
+            String sAdabasConfigDir;
+            const char* pAdabas = getenv("DBCONFIG");
+            if (pAdabas)
+                sAdabasConfigDir.AssignAscii(pAdabas);
             if(sAdabasConfigDir.Len())
             {
                 INetURLObject aNormalizer;
@@ -1726,6 +1729,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2000/10/30 15:22:25  fs
+ *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
+ *
  *  Revision 1.9  2000/10/30 13:48:29  fs
  *  some help ids
  *
