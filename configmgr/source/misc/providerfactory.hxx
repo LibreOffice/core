@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-22 08:26:18 $
+ *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
 #define _CONFIGMGR_PROVIDER_FACTORY_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -107,7 +110,7 @@ namespace configmgr
     //====================================================================
     //= OProviderFactory
     //====================================================================
-    typedef ::cppu::WeakImplHelper1< lang::XSingleServiceFactory > OProviderFactory_Base;
+    typedef ::cppu::WeakImplHelper2< lang::XSingleServiceFactory, lang::XSingleComponentFactory > OProviderFactory_Base;
     /** a special factory for the configuration provider, which implements some kind of
         "shared multiple instances" factory.
     */
@@ -130,6 +133,7 @@ namespace configmgr
         DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, ProviderCache);
         ProviderCache   m_aProviders;
 
+        typedef uno::Reference< uno::XComponentContext > Context;
     public:
         OProviderFactory(
             const uno::Reference< lang::XMultiServiceFactory >& _rxORB,
@@ -139,13 +143,21 @@ namespace configmgr
         virtual uno::Reference< uno::XInterface > SAL_CALL createInstance(  ) throw(uno::Exception, uno::RuntimeException);
         virtual uno::Reference< uno::XInterface > SAL_CALL createInstanceWithArguments( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException);
 
-        uno::Reference< uno::XInterface > createProvider();
-        uno::Reference< uno::XInterface > createProviderWithArguments(const uno::Sequence< uno::Any >& _rArguments);
-        uno::Reference< uno::XInterface > createProviderWithSettings(const ConnectionSettings& _rSettings);
+        virtual uno::Reference< uno::XInterface >
+            SAL_CALL createInstanceWithContext( const uno::Reference< uno::XComponentContext >& xContext )
+                throw (uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            createInstanceWithArgumentsAndContext( const uno::Sequence< uno::Any >& aArguments, const uno::Reference< uno::XComponentContext >& xContext )
+                throw (uno::Exception, uno::RuntimeException);
+
+        uno::Reference< uno::XInterface > createProvider(Context const & xContext);
+        uno::Reference< uno::XInterface > createProviderWithArguments(Context const & xContext, const uno::Sequence< uno::Any >& _rArguments);
+        uno::Reference< uno::XInterface > createProviderWithSettings(Context const & xContext, const ConnectionSettings& _rSettings);
 
     protected:
-        void    ensureDefaultProvider();
-        void    ensureBootstrapSettings();
+        void    ensureDefaultProvider(Context const & xContext);
+        void    ensureBootstrapSettings(Context const & xContext);
 
         uno::Reference< uno::XInterface > implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool bRequiresBootstrap);
         // from the given map, extract a provider for the given user. (if necessary, create one and insert it into the map)
@@ -164,6 +176,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/06/22 08:26:18  jb
+ *  Correct argument-dependent caching of providers
+ *
  *  Revision 1.5  2001/05/18 16:16:52  jb
  *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:44:13 $
+ *  last change: $Author: jb $ $Date: 2002-09-19 10:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -347,21 +350,24 @@ namespace configmgr
     class BootstrapSettings
     {
     public:
+        typedef uno::Reference< uno::XComponentContext > Context;
+
         ConnectionSettings  settings; /// the settings collected from bootstrapping (may work even if !valid)
         bool                valid;    /// indicates whether the whole bootstrap process was executed successfully
 
-        BootstrapSettings()
+        explicit
+        BootstrapSettings(Context const & xContext)
         : settings()
         , valid(false)
         {
-            bootstrap();
+            bootstrap(xContext);
         }
 
-        void raiseBootstrapException( uno::Reference< uno::XInterface > const & xContext ) const;
+        void raiseBootstrapException( uno::Reference< uno::XInterface > const & xErrorContext ) const;
 
         static OUString getURL();
     private:
-        void bootstrap();
+        void bootstrap(Context const & xContext);
 
         struct Impl;
         friend struct Impl;

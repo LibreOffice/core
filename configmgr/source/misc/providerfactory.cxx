@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 15:54:38 $
+ *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include "bootstrap.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -129,6 +132,31 @@ namespace configmgr
     };
     //---------------------------------------------------------------------------------------
 
+    static BootstrapSettings::Context getBootstrapContext(const Reference< XMultiServiceFactory >& _xORB)
+    {
+        Reference< XComponentContext > xContext;
+
+        Reference< XPropertySet > xORBPS( _xORB, UNO_QUERY );
+        if (xORBPS.is())
+        try
+        {
+            OUString const k_CONTEXT(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"));
+
+            OSL_VERIFY( xORBPS->getPropertyValue(k_CONTEXT) >>= xContext );
+        }
+        catch (UnknownPropertyException & )
+        {
+            OSL_TRACE("Warning: Cannot get context - Service manager has no DefaultContext property");
+        }
+        catch (Exception& )
+        {
+            OSL_TRACE("Warning: Cannot get context - Unexpected exception retrieving DefaultContext");
+        }
+        else
+            OSL_TRACE("Warning: Cannot get context - ServiceManager is no PropertySet");
+
+        return xContext;
+    }
     //=======================================================================================
     //= OProviderFactory
     //=======================================================================================
@@ -167,11 +195,11 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureBootstrapSettings()
+    void OProviderFactory::ensureBootstrapSettings(Context const & xContext)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "ensureBootstrapSettings()");
         if (!m_pPureSettings)
-            m_pPureSettings = new BootstrapSettings();
+            m_pPureSettings = new BootstrapSettings( xContext );
     }
 
     //---------------------------------------------------------------------------------------
@@ -256,12 +284,14 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureDefaultProvider()
+    void OProviderFactory::ensureDefaultProvider(Context const & xContext)
     {
         if (m_xDefaultProvider.is())
             return;
 
-        ensureBootstrapSettings();
+        // force new BootstrapSettings
+        delete m_pPureSettings,m_pPureSettings  = NULL;
+        ensureBootstrapSettings(xContext);
 
         ConnectionSettings aThisRoundSettings(m_pPureSettings->settings);
 
@@ -279,25 +309,25 @@ namespace configmgr
     }
 
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProvider()
+    Reference< XInterface > OProviderFactory::createProvider(Context const & xContext)
     {
         MutexGuard aGuard(m_aMutex);
         RTL_LOGFILE_CONTEXT( aLog, "Configmgr::OProviderFactory::createProvider()" );
 
-        ensureDefaultProvider();
+        ensureDefaultProvider(xContext);
         return m_xDefaultProvider;
     }
 
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProviderWithArguments(const Sequence< Any >& _rArguments)
+    Reference< XInterface > OProviderFactory::createProviderWithArguments(Context const & xContext, const Sequence< Any >& _rArguments)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "createProviderWithArguments()");
         ConnectionSettings aSettings(_rArguments);
-        return createProviderWithSettings( aSettings );
+        return createProviderWithSettings( xContext, aSettings );
     }
 
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProviderWithSettings(const ConnectionSettings& _rSettings)
+    Reference< XInterface > OProviderFactory::createProviderWithSettings(Context const & xContext, const ConnectionSettings& _rSettings)
     {
         MutexGuard aGuard(m_aMutex);
 
@@ -315,11 +345,11 @@ namespace configmgr
         // use bootstrap data if necessary
         if (bUseBootstrapData)
         {
-            ensureBootstrapSettings();
+            ensureBootstrapSettings(xContext);
 
             // hack to disable 'plugin' behavior for new-style sessions
             if (bIsPluginSession && m_pPureSettings->settings.isUnoBackend())
-                return this->createProvider(); //--> use default provider
+                return this->createProvider(xContext); //--> use default provider
 
             ConnectionSettings aMergedSettings = m_pPureSettings->settings;
             aMergedSettings.mergeOverrides(aThisRoundSettings);
@@ -384,15 +414,33 @@ namespace configmgr
     Reference< XInterface > SAL_CALL OProviderFactory::createInstance(  ) throw(Exception, RuntimeException)
     {
         // default provider
-        return createProvider();
+        return createProvider( getBootstrapContext(m_xORB) );
     }
 
     //---------------------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OProviderFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
     {
-        return createProviderWithArguments(_rArguments);
+        return createProviderWithArguments(getBootstrapContext(m_xORB), _rArguments);
+    }
+    //---------------------------------------------------------------------------------------
+
+    uno::Reference< uno::XInterface >
+        SAL_CALL OProviderFactory::createInstanceWithContext( const uno::Reference< uno::XComponentContext >& xContext )
+            throw (uno::Exception, ::com::sun::star::uno::RuntimeException)
+    {
+        // default provider
+        return createProvider( xContext );
+    }
+    //---------------------------------------------------------------------------------------
+
+    uno::Reference< uno::XInterface > SAL_CALL
+        OProviderFactory::createInstanceWithArgumentsAndContext( const uno::Sequence< uno::Any >& aArguments, const uno::Reference< uno::XComponentContext >& xContext )
+            throw (uno::Exception, uno::RuntimeException)
+    {
+        return createProviderWithArguments(xContext, aArguments);
     }
 
+    //---------------------------------------------------------------------------------------
     //=======================================================================================
     Reference< XSingleServiceFactory > SAL_CALL createProviderFactory(
             const Reference< XMultiServiceFactory > & rServiceManager,
@@ -432,6 +480,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/07/03 15:54:38  jb
+ *  #98489# Added support for uno backend bootstrapping
+ *
  *  Revision 1.16  2002/06/12 16:44:14  jb
  *  #98489# Initial support for new UNO-based backends
  *

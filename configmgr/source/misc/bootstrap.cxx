@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-18 14:49:21 $
+ *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1246,7 +1246,7 @@ namespace {
 // ---------------------------------------------------------------------------------------
     struct BootstrapSettings::Impl
     {
-        Impl();
+        Impl(Context const & xContext);
 
         bool hasInifile() const;
         bool getInifile(OUString& _rInifile) const;
@@ -1264,16 +1264,17 @@ namespace {
 
         static bool urlExists(OUString const& _sURL);
 
-        rtl::Bootstrap m_data;
+        rtl::Bootstrap  m_data;
+        Context         m_context;
     };
 
 // ---------------------------------------------------------------------------------------
 
-    void BootstrapSettings::bootstrap()
+    void BootstrapSettings::bootstrap(Context const & xContext)
     {
         CFG_TRACE_INFO("provider bootstrapping: collecting bootstrap setting");
 
-        Impl aBootstrapper;
+        Impl aBootstrapper(xContext);
 
         aBootstrapper.collectSettings(this->settings.m_aSettings);
 
@@ -1310,7 +1311,7 @@ namespace {
         {
             OUString sMessage,sURL;
 
-            BootstrapResult rc = Impl().getBootstrapErrorMessage(this->settings,sMessage,sURL);
+            BootstrapResult rc = Impl( Context() ).getBootstrapErrorMessage(this->settings,sMessage,sURL);
 
             impl_raiseBootstrapException(rc,sMessage,sURL,_xContext);
 
@@ -1342,8 +1343,9 @@ namespace {
         return getCurrentModuleDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_CONFIGMGR_DATA));
     }
 // ---------------------------------------------------------------------------------------
-    BootstrapSettings::Impl::Impl()
+    BootstrapSettings::Impl::Impl(Context const & xContext)
     : m_data(getURL())
+    , m_context(xContext)
     {
     }
 // ---------------------------------------------------------------------------------------
@@ -1407,6 +1409,19 @@ namespace {
 
     void BootstrapSettings::Impl::addSetting(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem)
     {
+        if (m_context.is())
+        {
+            static const OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.bootstrap."));
+            uno::Any aValue = m_context->getValueByName( sPrefix + _sSetting );
+
+            if (aValue.hasValue())
+            {
+                _rSettings.putSetting(_sSetting,Settings::Setting(aValue, Settings::SO_BOOTSTRAP) );
+                return;
+            }
+        }
+
+        // not available from context
         OUString sValue;
         if (m_data.getFrom(_sBootstrapItem,sValue))
         {
