@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:20:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String S_INVALID_KEYCODE
     Text[ arabic ] = "Is an invalid KeyCode!";
     Text[ turkish ] = "Geçerli bir KeyCode deðil!";
     Text[ catalan ] = "¡No es un KeyCode correcto!";
+    Text[ finnish ] = "On virheellinen avainkoodi.";
 };
 String S_MANDATORY_FILE
 {
@@ -109,6 +110,7 @@ String S_MANDATORY_FILE
     Text[ arabic ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ turkish ] = "\nbulunamadý.\nBu dosya mutlaka gerekli.";
     Text[ catalan ] = "\nno se encontró.\nEste archivo es imprescindible.";
+    Text[ finnish ] = "\nei löytynyt.\nTätä tiedostoa ei voi korvata.";
 };
 String S_READING_LONGNAMES
 {
@@ -132,6 +134,7 @@ String S_READING_LONGNAMES
     Text[ arabic ] = "Reading long names";
     Text[ turkish ] = "Uzun adlar okunuyor";
     Text[ catalan ] = "Leyendo nombres largos";
+    Text[ finnish ] = "Luetaan pitkiä nimiä";
 };
 String S_READING_SLOT_IDS
 {
@@ -155,6 +158,7 @@ String S_READING_SLOT_IDS
     Text[ arabic ] = "Reading Slot IDs";
     Text[ turkish ] = "Slot ID'ler okunuyor";
     Text[ catalan ] = "Leyendo Slot IDs";
+    Text[ finnish ] = "Luetaan paikkatunnukset";
 };
 String S_READING_CONTROLS
 {
@@ -178,6 +182,7 @@ String S_READING_CONTROLS
     Text[ arabic ] = "Reading Controls";
     Text[ turkish ] = "Control'ler okunuyor";
     Text[ catalan ] = "Leyendo Controls";
+    Text[ finnish ] = "Luetaan ohjaimet";
 };
 String S_READING_BASIC_MODULE
 {
@@ -201,6 +206,7 @@ String S_READING_BASIC_MODULE
     Text[ arabic ] = "Reading BASIC module";
     Text[ turkish ] = "BASIC modülü okunuyor";
     Text[ catalan ] = "Leyendo módulo BASIC";
+    Text[ finnish ] = "Luetaan BASIC-moduuli";
 };
 String S_STARTING_APPLICATION
 {
@@ -224,5 +230,6 @@ String S_STARTING_APPLICATION
     Text[ arabic ] = "Starting application";
     Text[ turkish ] = "Uygulama baþlatýlýyor";
     Text[ catalan ] = "Iniciando la aplicación";
+    Text[ finnish ] = "Aloitetaan sovellus";
 };
 
