@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:30:29 $
+ *  last change: $Author: af $ $Date: 2002-03-19 17:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-
-
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_OLE_SHAPE_HXX
 #include "AccessiblePresentationOLEShape.hxx"
 #endif
@@ -68,6 +66,9 @@
 #include "SdShapeTypes.hxx"
 
 #include <svx/DescriptionGenerator.hxx>
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
