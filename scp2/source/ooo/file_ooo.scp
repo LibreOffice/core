@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.40 $
+*  $Revision: 1.41 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 08:18:25 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:46:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -685,7 +685,15 @@ UNO_JAR_FILE( gid_File_Jar_Report, report )
 #endif
 
 #ifdef SOLAR_JAVA
+UNO_JAR_FILE( gid_File_Jar_Table, table )
+#endif
+
+#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Letter, letter )
+#endif
+
+#ifdef SOLAR_JAVA
+UNO_JAR_FILE( gid_File_Jar_Form, form )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1454,6 +1462,36 @@ File gid_File_Oo_Office_WebWizard_Xcu
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/WebWizard.xcu";
 End
+
+File gid_File_Oo_Office_FormWizard_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/FormWizard.xcs";
+End
+
+File gid_File_Oo_Office_FormWizard_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/FormWizard.xcu";
+End
+
+
+File gid_File_Oo_Office_TableWizard_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/TableWizard.xcs";
+End
+
+File gid_File_Oo_Office_TableWizard_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/TableWizard.xcu";
+End
+
 
 File gid_File_Oo_Office_Writerweb_Xcs
     TXT_FILE_BODY;
