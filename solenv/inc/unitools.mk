@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
+#   last change: $Author: hjs $ $Date: 2002-03-19 18:11:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@
 AWK*=awk
 SORT*=sort
 SED*=sed
-.IF "$(use_shell)"!="4nt"
+.IF "$(USE_SHELL)"!="4nt"
 # expect cygwin tools to exist
 COPY*=cp
 COPYRECURSE=-r

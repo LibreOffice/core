@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-14 12:41:18 $
+#   last change: $Author: hjs $ $Date: 2002-03-19 18:11:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -235,11 +235,11 @@ CC=$(DEVROOT)\truetime\nmcl /NMttOn
 .IF "$(syntax)"!=""
 CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .ELSE
-.IF "$(use_shell)"=="4nt"
+.IF "$(USE_SHELL)"=="4nt"
 CC=cl
-.ELSE			# "$(use_shell)"=="4nt"
+.ELSE			# "$(USE_SHELL)"=="4nt"
 CC=cl_w
-.ENDIF			# "$(use_shell)"=="4nt"
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
 .ENDIF
@@ -398,11 +398,11 @@ CDEFS+=-D_MT
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE)_$(__TIME)_$(VCSID)_"
 
 
-.IF "$(use_shell)"=="4nt"
+.IF "$(USE_SHELL)"=="4nt"
 LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-.ELSE			# "$(use_shell)"=="4nt"
+.ELSE			# "$(USE_SHELL)"=="4nt"
 LINK=link_w $(NOLOGO) /MACHINE:IX86 
-.ENDIF			# "$(use_shell)"=="4nt"
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 .IF "$(PRODUCT)"!="full"
 .IF "$(PRODUCT)"!="demo"
@@ -502,11 +502,11 @@ STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 LIBSTLPORT=stlport_vc6.lib
 LIBSTLPORTST=stlport_vc6_static.lib
 
-.IF "$(use_shell)"=="4nt"
+.IF "$(USE_SHELL)"=="4nt"
 LIBMGR=lib $(NOLOGO)
-.ELSE			# "$(use_shell)"=="4nt"
+.ELSE			# "$(USE_SHELL)"=="4nt"
 LIBMGR=lib_w $(NOLOGO)
-.ENDIF			# "$(use_shell)"=="4nt"
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
 IMPLIB=lib
