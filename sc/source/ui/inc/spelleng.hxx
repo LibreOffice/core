@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:29:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ public:
                                 const Font *pTargetFont,        // target font to be used if language has to be changed
                                 sal_Int32 nOptions,             // misc conversion flags
                                 sal_Bool bIsInteractive         // textconversiob has (specific) dialog that may be raised
-                                LanguageType eConvLanguage );
 
     /** Converts all cells in the selection or sheet according to set language. */
     virtual void            ConvertAll( EditView& rEditView );
