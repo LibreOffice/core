@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-07 14:23:14 $
+ *  last change: $Author: cmc $ $Date: 2001-12-07 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             pC = " rightarrow ";
             break;
         case 0x0362:
-            pC = " vec ";
+            pC = " widevec ";
             break;
         case 0x2193:
             pC = " downarrow ";
@@ -650,6 +650,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             rRet.Append('+');
             bRet=TRUE;
             break;
+        case '^':
         case 0xe091:
             pC = " widehat ";
             break;

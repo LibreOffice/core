@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:31 $
+ *  last change: $Author: cmc $ $Date: 2001-12-07 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,12 +1519,49 @@ void SmBraceNode::CreateTextFromNode(String &rText)
 {
     if (GetScaleMode() == SCALE_HEIGHT)
         APPEND(rText,"left ");
-    GetSubNode(0)->CreateTextFromNode(rText);
-    rText.Append(' ');
+    {
+        String aStr;
+        GetSubNode(0)->CreateTextFromNode(aStr);
+        aStr.EraseLeadingAndTrailingChars();
+        aStr.EraseLeadingChars('\\');
+        if (aStr.Len())
+        {
+            if (aStr.EqualsAscii("divides"))
+                APPEND(rText,"lline");
+            else if (aStr.EqualsAscii("parallel"))
+                APPEND(rText,"ldline");
+            else if (aStr.EqualsAscii("<"))
+                APPEND(rText,"langle");
+            else
+                rText.Append(aStr);
+            rText.Append(' ');
+        }
+        else
+            APPEND(rText,"none ");
+    }
     GetSubNode(1)->CreateTextFromNode(rText);
     if (GetScaleMode() == SCALE_HEIGHT)
         APPEND(rText,"right ");
-    GetSubNode(2)->CreateTextFromNode(rText);
+    {
+        String aStr;
+        GetSubNode(2)->CreateTextFromNode(aStr);
+        aStr.EraseLeadingAndTrailingChars();
+        aStr.EraseLeadingChars('\\');
+        if (aStr.Len())
+        {
+            if (aStr.EqualsAscii("divides"))
+                APPEND(rText,"rline");
+            else if (aStr.EqualsAscii("parallel"))
+                APPEND(rText,"rdline");
+            else if (aStr.EqualsAscii(">"))
+                APPEND(rText,"rangle");
+            else
+                rText.Append(aStr);
+            rText.Append(' ');
+        }
+        else
+            APPEND(rText,"none ");
+    }
     rText.Append(' ');
 
 }
@@ -2776,12 +2813,40 @@ void SmAttributNode::CreateTextFromNode(String &rText)
     USHORT  nSize = GetNumSubNodes();
     DBG_ASSERT(nSize == 2, "Node missing members");
     rText.Append('{');
+    sal_Unicode nLast=0;
     if (pNode = GetSubNode(0))
     {
-            pNode->CreateTextFromNode(rText);
-            if (rText.GetChar(rText.Len()-1) == 0xAF)
-                rText.ReplaceAscii(rText.Len()-1,1,"overline ");
-
+        String aStr;
+        pNode->CreateTextFromNode(aStr);
+        if (aStr.Len() > 1)
+            rText.Append(aStr);
+        else
+        {
+            nLast = aStr.GetChar(0);
+            switch (nLast)
+            {
+            case 0xAF:
+                APPEND(rText,"overline ");
+                break;
+            case 0x2d9:
+                APPEND(rText,"dot ");
+                break;
+            case 0x2dc:
+                APPEND(rText,"widetilde ");
+                break;
+            case 0xA8:
+                APPEND(rText,"ddot ");
+                break;
+            case 0xE082:
+                break;
+            case 0xE09B:
+                APPEND(rText,"dddot ");
+                break;
+            default:
+                rText.Append(nLast);
+                break;
+            }
+        }
     }
 
     if (nSize == 2)
@@ -2789,6 +2854,10 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             pNode->CreateTextFromNode(rText);
 
     rText.EraseTrailingChars();
+
+    if (nLast == 0xE082)
+        APPEND(rText," overbrace {}");
+
     APPEND(rText,"} ");
 }
 
