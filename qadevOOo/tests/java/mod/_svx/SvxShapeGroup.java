@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeGroup.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:07 $
+ *  last change:$Date: 2003-02-10 09:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ import util.InstCreator;
 import util.SOfficeFactory;
 import util.ShapeDsc;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  *
  * initial description
@@ -149,7 +152,8 @@ public class SvxShapeGroup extends TestCase {
             XDrawPages oDPn = oDPS.getDrawPages();
             XIndexAccess oDPi = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
-            oObj = (XDrawPage) oDPi.getByIndex(0);
+            oObj = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -179,13 +183,15 @@ public class SvxShapeGroup extends TestCase {
             UnoRuntime.queryInterface(XPropertySet.class,Shape1);
         XStyle aStyle1 = null;
         try {
-            aStyle1 = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle1 = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
         oShapeProps = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class,Shape2);
         XStyle aStyle2 = null;
         try {
-            aStyle2 = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle2 = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:08 $
+ *  last change:$Date: 2003-02-10 09:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import util.DrawTools;
 import util.FormTools;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class SvxShapeControl extends TestCase {
 
     XComponent xDrawDoc;
@@ -131,9 +134,7 @@ public class SvxShapeControl extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    public TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         XShape oShape = null;
@@ -167,13 +168,15 @@ public class SvxShapeControl extends TestCase {
                             UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XStyle aStyle = null;
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
         tEnv.addObjRelation("Style1",aStyle);
         oShapeProps = (XPropertySet)
                             UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
         tEnv.addObjRelation("Style2",aStyle);
 

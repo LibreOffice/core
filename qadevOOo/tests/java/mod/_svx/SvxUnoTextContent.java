@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextContent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:06 $
+ *  last change:$Date: 2003-02-10 09:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import lib.TestParameters;
 import util.DrawTools;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class SvxUnoTextContent extends TestCase {
 
     XComponent xDrawDoc;
@@ -131,9 +134,7 @@ public class SvxUnoTextContent extends TestCase {
      *  @see TestParameters
      *    @see PrintWriter
      */
-    public TestEnvironment createTestEnvironment( TestParameters tParam,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         // create testobject here
@@ -163,7 +164,8 @@ public class SvxUnoTextContent extends TestCase {
             xEA = (XEnumerationAccess) UnoRuntime.queryInterface
                 (XEnumerationAccess.class, text) ;
 
-            oObj = (XInterface) xEA.createEnumeration().nextElement() ;
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),xEA.createEnumeration().nextElement());
         } catch (Exception e) {
             log.println("Can't create test object") ;
             e.printStackTrace(log) ;
