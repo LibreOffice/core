@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ protected:
     SdDrawDocument*         pBookmarkDoc;
     SfxMedium*              pMedium;
     SfxMedium*              pOwnMedium;
-    Color                   aColor;
+    /// The color used for masking transparency.
+    Color                   aTransparencyColor;
     Image                   aImgOle;
     Image                   aImgGraphic;
     Image                   aImgOleH;
