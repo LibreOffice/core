@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:10:29 $
+#   last change: $Author: hr $ $Date: 2004-10-06 14:10:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -795,13 +795,14 @@ sub sanitize_cvs_hierarchy
 
     my $save_dir = cwd();
 
+    my $config = CwsConfig->get_config();
+    my $cvs_binary = $config->cvs_binary();
+
     foreach ( @elements ) {
         if ( ! -d $_ ) {
             my $rc = mkdir($_);
             print_error("can create directory '$_': $!", 9) unless $rc;
             # TODO use a Cvs method for this
-            my $config = CwsConfig->get_config();
-            my $cvs_binary = $config->cvs_binary();
             system("$cvs_binary add $_ > /dev/null 2>&1 ");
         }
         if ( !chdir($_) ) {
