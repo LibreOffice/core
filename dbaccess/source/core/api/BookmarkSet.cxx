@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:58:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                         _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     _xParameter->updateBoolean(nPos,_rValue);
                     break;
                 case DataType::TINYINT:
