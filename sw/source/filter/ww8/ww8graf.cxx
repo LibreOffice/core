@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:00:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,18 @@
 #endif
 #ifndef _WW8GRAF_HXX
 #include "ww8graf.hxx"
+#endif
+
+#ifndef _FMTINFMT_HXX
+#include <fmtinfmt.hxx>
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+#ifndef _SVX_FLDITEM_HXX
+//miserable hack to get around #98519#
+#define ITEMID_FIELD            EE_FEATURE_FIELD
+#include <svx/flditem.hxx>
 #endif
 
 // Hilfsroutinen
@@ -673,34 +685,82 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
 
 }
 
+static void lcl_StripFields(String &rString, long &rNewStartCp)
+{
+    for(USHORT i=0; i < rString.Len(); i++)
+    {
+        if( 0x13 == rString.GetChar( i ) )
+        {
+            do
+            {
+                rString.Erase( i, 1 );
+                rNewStartCp++;
+            }
+            while(              rString.Len()
+                    && (   i  < rString.Len())
+                    && (0x14 != rString.GetChar( i ) )
+                    && (0x15 != rString.GetChar( i ) ) );
+            if( rString.Len() )
+            {
+                if( 0x14 == rString.GetChar( i ) )
+                {
+                    rString.Erase( i, 1 );
+                    rNewStartCp++;
+                    do
+                    {
+                        i++;
+                    }
+                    while(              rString.Len()
+                            && (   i  < rString.Len())
+                            && (0x15 != rString.GetChar( i ) ) );
+                    if( i < rString.Len() )
+                        rString.Erase( i, 1 );
+                }
+                else if( 0x15 == rString.GetChar( i ) )
+                    rString.Erase( i, 1 );
+            }
+        }
+    }
+}
+
+class Chunk
+{
+private:
+    String msURL;
+    long mnStartPos; //0x13
+    long mnEndPos;   //0x15
+public:
+    explicit Chunk(long nStart, const String &rURL)
+        : msURL(rURL), mnStartPos(nStart) {}
+    Chunk(const Chunk &rChunk)
+        : msURL(rChunk.msURL), mnStartPos(rChunk.mnStartPos),
+        mnEndPos(rChunk.mnEndPos) {}
+    Chunk& operator=(const Chunk &rChunk)
+    {
+        msURL = rChunk.msURL;
+        mnStartPos = rChunk.mnStartPos;
+        mnEndPos = rChunk.mnEndPos;
+        return *this;
+    }
+    void SetEndPos(long nEnd) { mnEndPos = nEnd; }
+    long GetStartPos() const {return mnStartPos;}
+    long GetEndPos() const {return mnEndPos;}
+    const String &GetURL() const {return msURL;}
+    void Adjust(xub_StrLen nAdjust)
+    {
+        mnStartPos-=nAdjust;
+        mnEndPos-=nAdjust;
+    }
+};
+
 // InsertTxbxAttrs() setzt zwischen StartCp und EndCp die Attribute.
 // Dabei werden Style-Attribute als harte Attribute, Absatz- und Zeichen-
 // attribute gesetzt.
 void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     bool bONLYnPicLocFc)
 {
-    nStartCp += nDrawCpO;
-    nEndCp   += nDrawCpO;
-    if (pPlcxMan->GetManType() == MAN_HDFT)
-    {
-        //What is after happening is that the insert text into
-        //frames/textboxes is all mixed up. nDrawCpO needs to be removed
-        //and a plcfman for HDFT_TEXTBOXES vs TEXTBOXES setup when
-        //working with frames, currently the host plcfman is created and
-        //offsets from that are spread around the frame code, possibly
-        //other adjusts are missing. The right thing to do is to remove
-        //AnDrawCp0 and work with a correct txtbox plcfman with working
-        //with textboxes.
-
-        //There is a set of methods which has word 6 and 97 mixed up
-        //with eachother and they need to refactored out seperately.
-        //And adjusts removed from places like here where they have no
-        //place being.
-        //These additional two lines should work perfectly correctly but the
-        //design here is confused.
-        nStartCp -= pWwFib->ccpText + pWwFib->ccpFtn;
-        nEndCp -= pWwFib->ccpText + pWwFib->ccpFtn;
-    }
+    ManTypes eType =
+        pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
 
     /*
      Save and create new plcxman for this drawing object, of the type that
@@ -710,7 +770,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    pPlcxMan = new WW8PLCFMan(pSBase, pPlcxMan->GetManType(), nStartCp, true);
+    pPlcxMan = new WW8PLCFMan(pSBase, eType, nStartCp, true);
 
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext, nEnd, nStartReplace=0;
@@ -720,6 +780,8 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
 
     SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
     WW8PLCFManResult aRes;
+
+    std::deque<Chunk> aChunks;
 
     //Here store stack location
     USHORT nCurrentCount = pCtrlStck->Count();
@@ -773,6 +835,35 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
                             GetESelection(nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
                     }
+                }
+            }
+            else if (aRes.nSprmId == eFLD)
+            {
+                if (bStartAttr)
+                {
+                    USHORT nCount = pCtrlStck->Count();
+                    if (maFieldStack.empty() && Read_Field(&aRes))
+                    {
+                        String sURL;
+                        for (USHORT nI = pCtrlStck->Count(); nI > nCount; --nI)
+                        {
+                            const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1])->pAttr;
+                            USHORT nWhich = pItem->Which();
+                            if (nWhich == RES_TXTATR_INETFMT)
+                            {
+                                const SwFmtINetFmt *pURL =
+                                    (const SwFmtINetFmt *)pItem;
+                                sURL = pURL->GetValue();
+                            }
+                            pCtrlStck->DeleteAndDestroy(nI-1);
+                        }
+                        aChunks.push_back(Chunk(nStart, sURL));
+                    }
+                }
+                else
+                {
+                    if (!maFieldStack.empty() && End_Field())
+                        aChunks.back().SetEndPos(nStart+1);
                 }
             }
         }
@@ -829,8 +920,36 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
 
     //pop off as far as recorded location just in case there were some left
     //unclosed
-    for (USHORT nI = pCtrlStck->Count(); nI > nCurrentCount; nI--)
+    for (USHORT nI = pCtrlStck->Count(); nI > nCurrentCount; --nI)
         pCtrlStck->DeleteAndDestroy(nI-1);
+
+    typedef std::deque<Chunk>::iterator myIter;
+    myIter aEnd = aChunks.end();
+    for (myIter aIter = aChunks.begin(); aIter != aEnd; ++aIter)
+    {
+        ESelection aSel(GetESelection(aIter->GetStartPos()-nStartCp,
+            aIter->GetEndPos()-nStartCp));
+        String aString(pDrawEditEngine->GetText(aSel));
+        xub_StrLen nOrigLen = aString.Len();
+        long nDummy(0);
+        lcl_StripFields(aString, nDummy);
+
+        xub_StrLen nChanged;
+        if (aIter->GetURL().Len())
+        {
+            SvxURLField aURL(aIter->GetURL(), aString,
+                SVXURLFORMAT_APPDEFAULT);
+            pDrawEditEngine->QuickInsertField(SvxFieldItem(aURL), aSel);
+            nChanged = nOrigLen - 1;
+        }
+        else
+        {
+            pDrawEditEngine->QuickInsertText(aString, aSel);
+            nChanged = nOrigLen - aString.Len();
+        }
+        for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
+            aIter->Adjust(nChanged);
+        }
 
     /*
      Don't worry about the new pPlcxMan, the restorer removes it when
@@ -960,7 +1079,6 @@ bool SwWW8ImplReader::GetTxbxText(String& rString, long nStartCp, long nEndCp)
     return bOk;
 }
 
-
 // InsertTxbxText() fuegt fuer TextBoxen und CaptionBoxen den Text
 // und die Attribute ein
 SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
@@ -975,12 +1093,10 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     rbEraseTextObj = false;
 
     String aString;
-    long nStartCp, nEndCp, nNewStartCp;
+    long nStartCp, nEndCp;
     bool bContainsGraphics = false;
     bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
         nSequence ) && GetTxbxText( aString, nStartCp, nEndCp );
-
-    nNewStartCp = nStartCp;
 
     if( !pbTestTxbxContainsText )
     {
@@ -994,42 +1110,11 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
             pDrawEditEngine->SetPaperSize( *pObjSiz );
     }
 
+    String aOrigString(aString);
     if( bTextWasRead )
     {
-        for(USHORT i=0; i < aString.Len(); i++)
-        {
-            if( 0x13 == aString.GetChar( i ) )
-            {
-                do
-                {
-                    aString.Erase( i, 1 );
-                    nNewStartCp++;
-                }
-                while(              aString.Len()
-                        && (   i  < aString.Len())
-                        && (0x14 != aString.GetChar( i ) )
-                        && (0x15 != aString.GetChar( i ) ) );
-                if( aString.Len() )
-                {
-                    if( 0x14 == aString.GetChar( i ) )
-                    {
-                        aString.Erase( i, 1 );
-                        nNewStartCp++;
-                        do
-                        {
-                            i++;
-                        }
-                        while(              aString.Len()
-                                && (   i  < aString.Len())
-                                && (0x15 != aString.GetChar( i ) ) );
-                        if( i < aString.Len() )
-                            aString.Erase( i, 1 );
-                    }
-                    else if( 0x15 == aString.GetChar( i ) )
-                        aString.Erase( i, 1 );
-                }
-            }
-        }
+        long nNewStartCp = nStartCp;
+        lcl_StripFields(aString, nNewStartCp);
 
         if (1 != aString.Len())
         {
@@ -1047,7 +1132,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                 case 0x1:
                     if (!pbTestTxbxContainsText)
                     {
-                        WW8ReaderSave aSave(this,nNewStartCp + nDrawCpO -1);
+                        WW8ReaderSave aSave(this, nNewStartCp -1);
                         bool bOldEmbeddObj = bEmbeddObj;
                         //bEmbedd Ordinarily would have been set by field
                         //parse, but this is impossible here so...
@@ -1130,7 +1215,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         }
                         else
                         {
-                            InsertTxbxAttrs(nNewStartCp,nNewStartCp+1,true);
+                            InsertTxbxAttrs(nNewStartCp, nNewStartCp+1, true);
                             pFlyFmt = ImportGraf(bMakeSdrGrafObj ? pTextObj : 0,
                                 pOldFlyFmt);
                         }
@@ -1186,7 +1271,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     {
         if( bTextWasRead )
         {
-            pDrawEditEngine->SetText(aString);
+            pDrawEditEngine->SetText(aOrigString);
             InsertTxbxAttrs(nStartCp, nEndCp, false);
         }
 
