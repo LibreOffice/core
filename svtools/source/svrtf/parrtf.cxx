@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,39 +622,23 @@ void SvRTFParser::Continue( int nToken )
 
         case RTF_UNKNOWNCONTROL:
             break;      // unbekannte Token ueberspringen
-
         case RTF_NEXTTYPE:
-        case RTF_ANSITYPE:      SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );      break;
-        case RTF_MACTYPE:       SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );      break;
-        case RTF_PCTYPE:        SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );  break;
-        case RTF_PCATYPE:       SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );  break;
-
+        case RTF_ANSITYPE:
+            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
+            break;
+        case RTF_MACTYPE:
+            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );
+            break;
+        case RTF_PCTYPE:
+            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );
+            break;
+        case RTF_PCATYPE:
+            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );
+            break;
         case RTF_ANSICPG:
-                switch( nTokenValue )
-                {
-                case 1250:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1250 );  break;
-                case 1251:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1251 );  break;
-                case 1253:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1253 );  break;
-                case 1254:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1254 );  break;
-                case 1255:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1255 );  break;
-                case 1256:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1256 );  break;
-                case 1257:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1257 );  break;
-                case 1258:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1258 );  break;
-                case  950:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_950 );   break;
-                case  932:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_932 );   break;
-                case  936:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_936 );   break;
-                case  437:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );  break;
-                case  850:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );  break;
-                case  852:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_852 );  break;
-                case  862:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_862 );  break;
-                case  863:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_863 );  break;
-                case  864:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_864 );  break;
-                case  865:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_865 );  break;
-                case  866:  SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_866 );  break;
-                }
-                break;
-
-
+            eCodeSet = rtl_getTextEncodingFromWindowsCodePage(nTokenValue);
+            SetSrcEncoding(eCodeSet);
+            break;
         default:
 NEXTTOKEN:
             NextToken( nToken );
