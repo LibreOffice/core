@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 09:29:37 $
+ *  last change: $Author: cmc $ $Date: 2002-08-14 10:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,8 +1484,13 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
         if (const BYTE *pLevel = pPlcxMan->HasParaSprm(0x6649))
             nCellLevel = *pLevel;
 
-        if (SearchRowEnd(pPap, nMyStartCp, nCellLevel-1) && (ParseTabPos(&aTabPos,pPap)))
+        if (
+             SearchRowEnd(pPap, nMyStartCp, nCellLevel-1) &&
+             ParseTabPos(&aTabPos,pPap)
+           )
+        {
             pTabPos = &aTabPos;
+        }
 
         pPlcxMan->GetPap()->Restore( aSave );
     }
@@ -2945,13 +2950,13 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
             if( bVer67 )
             {
                 mpAtnNames->push_back(WW8ReadPString(rStrm, FALSE));
-                nRead += mpAtnNames->rend()->Len() + 1; // Laenge + BYTE Count
+                nRead += mpAtnNames->rbegin()->Len() + 1;   // Laenge + BYTE Count
             }
             else
             {
                 mpAtnNames->push_back(WW8Read_xstz(rStrm, 0, FALSE));
                 // UNICode: doppelte Laenge + USHORT Count
-                nRead += mpAtnNames->rend()->Len() * 2 + 2;
+                nRead += mpAtnNames->rbegin()->Len() * 2 + 2;
             }
         }
         rStrm.Seek( nOldPos );
