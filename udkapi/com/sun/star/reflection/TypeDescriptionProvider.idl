@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 14:32:33 $
+ *  last change: $Author: dbo $ $Date: 2002-11-06 10:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 /** This service provides type descriptions, i.e. concrete
     service implementations read from source like the persistent registry
     database format.<br>
-    All registered implementations of this service will be inserted to the
-    initial component context's singleton object
-    "/singletons/com.sun.star.reflection.theTypeDescriptionManager".<br>
 
     @see com::sun::star::reflection::TypeDescriptionManager
     @see com::sun::star::reflection::XTypeDescription
@@ -98,8 +95,8 @@ service TypeDescriptionProvider
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
     /** Interface to signal shutdown to the provider.<br>
-        This has to be done maunally, because usually each provider references
-        its manager (which implements type caching) for late resolution of
+        This has to be done manually, because usually each provider references
+        its manager (which may implement type caching) for late resolution of
         partial types (e.g. parameter types).
     */
     interface com::sun::star::lang::XComponent;
@@ -112,6 +109,9 @@ service TypeDescriptionProvider
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/10/29 14:32:33  dbo
+    #104560# docu
+
     Revision 1.6  2002/03/08 17:19:13  dbo
     #96711# reviewed reflection API documentation
 

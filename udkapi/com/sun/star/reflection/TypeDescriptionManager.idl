@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 14:32:33 $
+ *  last change: $Author: dbo $ $Date: 2002-11-06 10:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,12 @@
     to every type description.  It delegates calls for demanded types to
     subsequent
     <type scope="com::sun::star::reflection>TypeDescriptionProvider</type>s
-    and may cache read type descriptions.<br>
-    At runtime there will be a singleton accessable via the initial
-    component context's key
+    and may cache type descriptions.<br>
+    Using cppuhelper's bootstrapping routines bootstrapping an initial
+    component context, there is a singleton accessable via key
     "/singletons/com.sun.star.reflection.theTypeDescriptionManager".
-    This object is hooked into the C UNO runtime typelib and lives
-    until the component context is shut down.<br>
-    At startup the object enumerates every
-    <type scope="com::sun::star::reflection>TypeDescriptionProvider</type>
-    and creates instances of every available one.
-    You can later on manually add or remove a provider via the
-    <type scope="com::sun::star::container>XSet</type> interface.
+    This singleton object is hooked into the C UNO runtime typelib and
+    lives until the context is shut down.<br>
 
     @see com::sun::star::reflection::TypeDescriptionProvider
     @see com::sun::star::reflection::XTypeDescription
@@ -114,13 +109,12 @@ service TypeDescriptionManager
         The returned values are of interface type <type>XTypeDescription</type>.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
-    /** Interface to modify the set of
-        <type scope="com::sun::star::container>TypeDescriptionProvider</type>s.
+    /** You can manually add or remove a providers via this interface.
     */
     interface com::sun::star::container::XSet;
     /** Interface to signal shutdown to the manager.<br>
         This signals all providers to shut down, because usually each provider
-        references its manager.
+        references its manager, listening for disposing events.
     */
     [optional] interface com::sun::star::lang::XComponent;
 };
@@ -132,6 +126,9 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/10/29 14:32:33  dbo
+    #104560# docu
+
     Revision 1.7  2002/03/08 17:19:13  dbo
     #96711# reviewed reflection API documentation
 
