@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 11:20:56 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 16:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,8 +781,8 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
         HasAnnotation( aCell );
         SetMatrixCellData( aCell );
         sal_Bool bIsAutoStyle;
-        sal_Bool bRemoveStyleRange((aLastAddress.Column == aCell.aCellAddress.Column) &&
-            (aLastAddress.Row + 1 == aCell.aCellAddress.Row));
+        sal_Bool bRemoveStyleRange((aLastAddress.Row == aCell.aCellAddress.Row) &&
+            (aLastAddress.Column + 1 == aCell.aCellAddress.Column));
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
             aCell.aCellAddress.Column, aCell.aCellAddress.Row,
             bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, bRemoveStyleRange);

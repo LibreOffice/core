@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:43:51 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 16:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ sal_Int32 ScRowFormatRanges::GetMaxRows()
             aItr++;
         }
     else
-        nMaxRows = 0;
+        DBG_ERROR("no ranges found");
     return nMaxRows;
 }
 
