@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-10 06:35:35 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,6 @@
 #endif
 using namespace ::com::sun::star::view;
 #endif
-
-#define GRID_NAME   "MyOneAndOnlyGrid"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -667,7 +665,10 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     // ----------
     // marry them
     Reference< ::com::sun::star::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
-    xNameCont->insertByName(::rtl::OUString::createFromAscii(GRID_NAME), makeAny(m_xGridModel));
+    {
+        String sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
+        xNameCont->insertByName(::rtl::OUString(sText), makeAny(m_xGridModel));
+    }
 
 
 
