@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-10-30 14:31:59 $
+ *  last change: $Author: os $ $Date: 2002-02-27 10:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ public:
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
     const BOOL      bIsBmp;
@@ -312,7 +313,9 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
 
 */
 {
-    SetLineColor();
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetFillColor( rStyleSettings.GetFieldColor() );
+    SetLineColor( rStyleSettings.GetFieldTextColor() );
     DrawRect( aDrawRect );
     if ( bIsBmp )
     {
@@ -321,11 +324,22 @@ void BackgroundPreviewImpl::Paint( const Rectangle& rRect )
         else
         {
             Size aSize = GetOutputSizePixel();
-            SetLineColor( Color( COL_BLACK ) );
             DrawLine( Point(0,0),               Point(aSize.Width(),aSize.Height()) );
             DrawLine( Point(0,aSize.Height()),  Point(aSize.Width(),0) );
         }
     }
+}
+/* -----------------------------27.02.2002 11:07------------------------------
+
+ ---------------------------------------------------------------------------*/
+void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        Invalidate();
+    }
+    Window::DataChanged( rDCEvt );
 }
 
 // class SvxBackgroundTabPage --------------------------------------------
