@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:06:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1583,48 +1583,6 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     EndAllAction();
 }
 
-/***********************************************************************
-#*  Class       :  SwFEShell
-#*  Methode     :  DeleteCurrFrmFmt
-#*  Datum       :  JP 28.07.95
-#*  Update      :  JP 28.07.95
-#***********************************************************************/
-
-sal_Bool SwFEShell::WizzardDelFly()
-{
-    // mal nicht uebers Layout den Fly suchen. Dann kann auch ohne gueltiges
-    // Layout ein Rahmen geloescht werden. ( z.B.: fuer die Wizard's )
-    SwFrmFmt* pDelFmt = WizzardGetFly();
-    if( pDelFmt )
-    {
-        // gefunden: dann also loeschen
-        // bei Zeichen/Absatz gebundenen Flys den Crsr auf den Anker umsetzen,
-        // dadurch bleibt der Crsr auf einer "definierten" Position
-        // (Im Wizzard wird das Layout nicht aktualisiert!)
-        SwPosition* pCrsrPos = GetCrsr()->GetPoint(), *pNewPos = 0;
-        const SwFmtAnchor& rAnch = pDelFmt->GetAnchor();
-        if( rAnch.GetCntntAnchor() &&
-            ( FLY_AT_CNTNT == rAnch.GetAnchorId() ||
-              FLY_AUTO_CNTNT == rAnch.GetAnchorId() ||
-                FLY_IN_CNTNT == rAnch.GetAnchorId() ))
-        {
-            pNewPos = new SwPosition( *rAnch.GetCntntAnchor() );
-            if( FLY_IN_CNTNT != rAnch.GetAnchorId() )
-                pNewPos->nContent.Assign( GetDoc()->GetNodes()[ pNewPos->nNode ]
-                                                    ->GetCntntNode(), 0 );
-        }
-
-        GetDoc()->DelLayoutFmt( pDelFmt );
-
-        if( pNewPos )
-        {
-            *pCrsrPos = *pNewPos;
-            delete pNewPos;
-        }
-        return sal_True;
-    }
-    return sal_False;
-}
 
 /***********************************************************************
 #*  Class       :  SwFEShell
