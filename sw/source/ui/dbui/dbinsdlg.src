@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Daten einf�gen als:" ;
         Text [ ENGLISH ] = "Insert data as:" ;
         Text [ english_us ] = "Insert data as:" ;
-        Text [ portuguese_brazilian ] = "Daten einf?en als:" ;
+        Text [ portuguese_brazilian ] = "Inserir dados como:" ;
         Text [ swedish ] = "Infoga data som:" ;
         Text [ danish ] = "Inds�t data som:" ;
         Text [ italian ] = "Inserisci file come:" ;
@@ -103,6 +103,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "Insereix la data com:";
         Text[ finnish ] = "Lis�� tiedot muodossa:";
         Text[ thai ] = "Insert data as:";
+        Text[ czech ] = "Vložit data jako:";
+        Text[ hebrew ] = "Daten einfügen als:";
+        Text[ hindi ] = "ड़ॉटा जोड़ो जैसे:";
     };
     RadioButton RB_AS_TABLE
     {
@@ -114,7 +117,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Check = TRUE ;
         Text [ portuguese ] = "T~abela" ;
         Text [ english_us ] = "T~able" ;
-        Text [ portuguese_brazilian ] = "T~abelle" ;
+        Text [ portuguese_brazilian ] = "T~abela" ;
         Text [ swedish ] = "T~abell" ;
         Text [ danish ] = "Tabel" ;
         Text [ italian ] = "T~abella" ;
@@ -135,6 +138,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "T~aula";
         Text[ finnish ] = "~Taulukko";
         Text[ thai ] = "ตา~ราง";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "T~abelle";
+        Text[ hindi ] = "सा~रणी";
     };
     RadioButton RB_AS_FIELD
     {
@@ -145,7 +151,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text [ portuguese ] = "~Campos" ;
         Text [ english_us ] = "~Fields" ;
-        Text [ portuguese_brazilian ] = "~Felder" ;
+        Text [ portuguese_brazilian ] = "~Campos" ;
         Text [ swedish ] = "~F�lt" ;
         Text [ danish ] = "Felter" ;
         Text [ italian ] = "~Campi" ;
@@ -154,7 +160,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ dutch ] = "~Velden" ;
         Text[ chinese_simplified ] = "字段(~F)";
         Text[ russian ] = "����";
-        Text[ polish ] = "Pola";
+        Text[ polish ] = "~Pola";
         Text[ japanese ] = "フィールド(~F)";
         Text[ chinese_traditional ] = "欄位(~F)";
         Text[ arabic ] = "����";
@@ -166,6 +172,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "~Camps";
         Text[ finnish ] = "~Kent�t";
         Text[ thai ] = "เ~ขตข้อมูล";
+        Text[ czech ] = "Pole";
+        Text[ hebrew ] = "‮שדות‬";
+        Text[ hindi ] = "~क्षेत्रें";
     };
     RadioButton RB_AS_TEXT
     {
@@ -176,7 +185,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text [ portuguese ] = "~Texto" ;
         Text [ english_us ] = "~Text" ;
-        Text [ portuguese_brazilian ] = "~Text" ;
+        Text [ portuguese_brazilian ] = "~Texto" ;
         Text [ swedish ] = "~Text" ;
         Text [ danish ] = "Tekst" ;
         Text [ italian ] = "~Testo" ;
@@ -185,7 +194,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ dutch ] = "~Tekst" ;
         Text[ chinese_simplified ] = "文字(~T)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Tekst";
+        Text[ polish ] = "~Tekst";
         Text[ japanese ] = "テキスト(~T)";
         Text[ chinese_traditional ] = "文字(~T)";
         Text[ arabic ] = "��";
@@ -197,6 +206,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
         Text[ thai ] = "~ข้อความ";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "‮טקסט‬";
+        Text[ hindi ] = "~टेक्स्ट्";
     };
     OKButton BT_OK
     {
@@ -231,7 +243,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Datenbank~spalten" ;
         Text [ ENGLISH ] = "Database columns" ;
         Text [ english_us ] = "Database ~columns" ;
-        Text [ portuguese_brazilian ] = "Datenbank~spalten" ;
+        Text [ portuguese_brazilian ] = "~Colunas do banco de dados" ;
         Text [ swedish ] = "Databa~skolumner" ;
         Text [ danish ] = "Databasekolonner" ;
         Text [ italian ] = "Colonne database" ;
@@ -241,7 +253,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ portuguese ] = "~Colunas da base de dados" ;
         Text[ chinese_simplified ] = "数据库栏位(~C)";
         Text[ russian ] = "������� ���� ������";
-        Text[ polish ] = "Kolumny w bazie danych";
+        Text[ polish ] = "~Kolumny bazy danych";
         Text[ japanese ] = "データベース列(~C)";
         Text[ chinese_traditional ] = "資料庫欄位(~C)";
         Text[ arabic ] = "����� ����� ��������";
@@ -253,6 +265,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "~Columnes de la base de dades";
         Text[ finnish ] = "~Tietokannan sarakkeet";
         Text[ thai ] = "~คอลัมน์ของฐานข้อมูล";
+        Text[ czech ] = "Databázové sloupce";
+        Text[ hebrew ] = "Datenbank~spalten";
+        Text[ hindi ] = "लेखासंचय ~स्तंभें";
     };
     FixedLine FL_FORMAT
     {
@@ -261,7 +276,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "For~mat" ;
         Text [ ENGLISH ] = "For~mat" ;
         Text [ english_us ] = "For~mat" ;
-        Text [ portuguese_brazilian ] = "For~mat" ;
+        Text [ portuguese_brazilian ] = "For~mato" ;
         Text [ swedish ] = "For~mat" ;
         Text [ danish ] = "For~mat" ;
         Text [ italian ] = "For~mato" ;
@@ -271,7 +286,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ portuguese ] = "For~mato" ;
         Text[ chinese_simplified ] = "格式(~M)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Format";
+        Text[ polish ] = "For~mat";
         Text[ japanese ] = "書式(~M)";
         Text[ chinese_traditional ] = "格式(~M)";
         Text[ arabic ] = "�������";
@@ -283,6 +298,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "For~mat";
         Text[ finnish ] = "~Muotoile";
         Text[ thai ] = "รูปแ~บบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "For~mat";
+        Text[ hindi ] = "रच~ना";
     };
     RadioButton RB_DBFMT_FROM_DB
     {
@@ -294,7 +312,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Check = TRUE ;
         Text [ portuguese ] = "Da ~base de dados" ;
         Text [ english_us ] = "From ~database" ;
-        Text [ portuguese_brazilian ] = "A~us Datenbank" ;
+        Text [ portuguese_brazilian ] = "Do ~banco de dados" ;
         Text [ swedish ] = "Fr�n ~databas" ;
         Text [ danish ] = "Fra database" ;
         Text [ italian ] = "Dal ~database" ;
@@ -303,7 +321,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ dutch ] = "U~it database" ;
         Text[ chinese_simplified ] = "从数据库(~D)";
         Text[ russian ] = "�� ���� ������";
-        Text[ polish ] = "Z bazy danych";
+        Text[ polish ] = "Z bazy ~danych";
         Text[ japanese ] = "データベースから(~D)";
         Text[ chinese_traditional ] = "從資料庫(~D)";
         Text[ arabic ] = "�� ����� ��������";
@@ -315,6 +333,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "Des de la ~base de dades";
         Text[ finnish ] = "~Tietokannasta";
         Text[ thai ] = "จาก~ฐานข้อมูล";
+        Text[ czech ] = "Z databáze";
+        Text[ hebrew ] = "A~us Datenbank";
+        Text[ hindi ] = "~लेखासंचय से";
     };
     RadioButton RB_DBFMT_FROM_USR
     {
@@ -375,7 +396,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT [ English ] = "Paragraph Style:" ;
         TEXT [ norwegian ] = "Avsnittsmal:" ;
         TEXT [ italian ] = "Modello di paragrafo:" ;
-        TEXT [ portuguese_brazilian ] = "(Estilo de Par?grafo:" ;
+        TEXT [ portuguese_brazilian ] = "Estilos do ~Par�grafo:" ;
         TEXT [ portuguese ] = "Estilo de ~par�grafo:" ;
         TEXT [ finnish ] = "~Kappaleen tyyli:" ;
         TEXT [ danish ] = "Afsnitstypografi:" ;
@@ -387,7 +408,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Hide = TRUE ;
         TEXT[ chinese_simplified ] = "段落样式(~S)：";
         TEXT[ russian ] = "����� ������:";
-        TEXT[ polish ] = "Styl akapitu:";
+        TEXT[ polish ] = "~Styl akapitu:";
         TEXT[ japanese ] = "段落スタイル(~S):";
         TEXT[ chinese_traditional ] = "段落樣式(~S)";
         TEXT[ arabic ] = "��� ����:";
@@ -398,6 +419,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ turkish ] = "Paragraf b~i�imi:";
         TEXT[ catalan ] = "~Estil de par�graf:";
         TEXT[ thai ] = "~ลักษณะย่อหน้า:";
+        TEXT[ czech ] = "Styl odstavce:";
+        TEXT[ hebrew ] = "Absat~zvorlage:";
+        TEXT[ hindi ] = "परिच्छे~द शैली:";
     };
     ListBox LB_DB_PARA_COLL
     {
@@ -481,7 +505,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Tabe~llenspalte(n)" ;
         Text [ ENGLISH ] = "Tab~le column(s)" ;
         Text [ english_us ] = "Tab~le column(s)" ;
-        Text [ portuguese_brazilian ] = "Tabe~lle" ;
+        Text [ portuguese_brazilian ] = "Ta~bela" ;
         Text [ swedish ] = "Tabe~llkolumn(er)" ;
         Text [ danish ] = "Tabel" ;
         Text [ italian ] = "Colonna/e tabe~lla" ;
@@ -491,7 +515,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ portuguese ] = "Ta~bela" ;
         Text[ chinese_simplified ] = "表格列(~L)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Tabela";
+        Text[ polish ] = "Tabe~la";
         Text[ japanese ] = "テーブルの列(~L)";
         Text[ chinese_traditional ] = "表格欄(~L)";
         Text[ arabic ] = "������";
@@ -499,10 +523,13 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "表格列(~L)";
         Text[ greek ] = "�������";
         Text[ korean ] = "표의 열(~L)";
-        Text[ turkish ] = "~Tablo";
+        Text[ turkish ] = "~Tablo s�tunu";
         Text[ catalan ] = "Tau~la";
         Text[ finnish ] = "~Taulukko";
         Text[ thai ] = "ตารา~ง";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "Tabe~llenspalte(n)";
+        Text[ hindi ] = "~सारणी";
     };
     ListBox LB_TABLE_COL
     {
@@ -535,16 +562,19 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ italian ] = "Inserisci intestazione tabella";
         Text[ danish ] = "Inds�t tabeloverskrift";
         Text[ swedish ] = "Infoga tabell�verskrift";
-        Text[ polish ] = "Wstaw tytu� tabeli";
-        Text[ portuguese_brazilian ] = "E~inschalten";
+        Text[ polish ] = "Wstaw nag��wek tabeli";
+        Text[ portuguese_brazilian ] = "Inserir linha-t�tulo da tabela";
         Text[ japanese ] = "表見出しの挿入";
         Text[ korean ] = "표 제목 삽입";
         Text[ chinese_simplified ] = "插入表格大标题";
-        Text[ chinese_traditional ] = "插入表格大標題";
-        Text[ turkish ] = "�al��t�r";
+        Text[ chinese_traditional ] = "插入表格標頭";
+        Text[ turkish ] = "Tablo ba�l��� ekle";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Activat";
         Text[ thai ] = "แทรกหัวข้อตาราง";
+        Text[ czech ] = "Vložit nadpis tabulky";
+        Text[ hebrew ] = "Tabellenüberschrift einfügen";
+        Text[ hindi ] = "सारणी शीर्षक को जोड़ो";
     };
     RadioButton RB_HEADL_COLNMS
     {
@@ -565,16 +595,19 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ italian ] = "Importa nomi colonne";
         Text[ danish ] = "Anvend k~olonnenavn";
         Text[ swedish ] = "Anv�nd kolumn~namn";
-        Text[ polish ] = "Przejmij nazw� kolumny";
-        Text[ portuguese_brazilian ] = "S~paltenamen";
+        Text[ polish ] = "Zastosuj ~nazw� kolumny";
+        Text[ portuguese_brazilian ] = "~Aplicar nome da coluna";
         Text[ japanese ] = "列名の適用(~N)";
         Text[ korean ] = "열 이름 적용(~N)";
         Text[ chinese_simplified ] = "采用栏名(~N)";
         Text[ chinese_traditional ] = "採用欄名(~N)";
-        Text[ turkish ] = "~S�tun ad�";
+        Text[ turkish ] = "~S�tun ad� uygula";
         Text[ arabic ] = "����� �������";
         Text[ catalan ] = "~Nom de la columna";
         Text[ thai ] = "ใช้~ชื่อคอลัมน์";
+        Text[ czech ] = "Použít název sloupce";
+        Text[ hebrew ] = "S~paltenamen übernehmen";
+        Text[ hindi ] = "स्तंभ ~नाम को लागू करो";
     };
     RadioButton RB_HEADL_EMPTY
     {
@@ -595,16 +628,19 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ danish ] = "Opret kun linje";
         Text[ swedish ] = "Skapa bara rad";
         Text[ polish ] = "Utw�rz tylko wiersz";
-        Text[ portuguese_brazilian ] = "lee~r";
+        Text[ portuguese_brazilian ] = "Criar somente linha";
         Text[ japanese ] = "行のみ作成";
         Text[ korean ] = "행만 만들기";
         Text[ chinese_simplified ] = "只新增行";
         Text[ chinese_traditional ] = "僅新增列";
-        Text[ turkish ] = "bo�";
+        Text[ turkish ] = "Sadece s�tun olu�tur";
         Text[ arabic ] = "����";
         Text[ catalan ] = "~buit";
         Text[ language_user1 ] = "(EM1; (EM1; (EM18.7.01)Wo in Writer: Mit F4 den Datenbank-Browser aufrufen, dann eine Tabelle ausw�hlen und mindestens eine Zeile selektieren. Danach den Button �Daten in Text� dr�cken. Dann erscheint der Dialog �Datenbankspalten einf�gen�. Optionsfeld �Tabelle� ausw�hlen.";
         Text[ thai ] = "สร้างบรรทัดอย่างเดียว";
+        Text[ czech ] = "Vytvořit jen řádek";
+        Text[ hebrew ] = "Nur Zeile erstellen";
+        Text[ hindi ] = "केवल पंक्ति उत्पन्न करो";
     };
     PushButton PB_TBL_FORMAT
     {
@@ -613,7 +649,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text = "Ei~genschaften..." ;
         Text [ English ] = "Properties..." ;
         Text [ english_us ] = "Pr~operties..." ;
-        Text [ portuguese_brazilian ] = "Eigenschaften..." ;
+        Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ swedish ] = "E~genskaper..." ;
         Text [ danish ] = "Egenskaber..." ;
         Text [ italian ] = "Propriet�..." ;
@@ -624,7 +660,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "属性(~O)...";
         Text[ russian ] = "��������...";
-        Text[ polish ] = "W�a�ciwo�ci";
+        Text[ polish ] = "~W�a�ciwo�ci...";
         Text[ japanese ] = "プロパティ(~O)...";
         Text[ chinese_traditional ] = "屬性(~O)...";
         Text[ arabic ] = "�����...";
@@ -636,6 +672,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "Pr~opietats...";
         Text[ finnish ] = "~Ominaisuudet...";
         Text[ thai ] = "คุณ~สมบัติ...";
+        Text[ czech ] = "Vlastnosti...";
+        Text[ hebrew ] = "‮מאפינים‬";
+        Text[ hindi ] = "वि~शेषतायें...";
     };
     PushButton PB_TBL_AUTOFMT
     {
@@ -646,7 +685,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TabStop = TRUE ;
         Text [ portuguese ] = "Aut~oFormato..." ;
         Text [ english_us ] = "Aut~oFormat..." ;
-        Text [ portuguese_brazilian ] = "Aut~oformat..." ;
+        Text [ portuguese_brazilian ] = "Aut~oFormata��o..." ;
         Text [ swedish ] = "Aut~oFormat..." ;
         Text [ danish ] = "AutoFormat..." ;
         Text [ italian ] = "Formatt. auto..." ;
@@ -655,7 +694,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ dutch ] = "Aut~oOpmaak..." ;
         Text[ chinese_simplified ] = "自动格式(~O)...";
         Text[ russian ] = "����������...";
-        Text[ polish ] = "Autoformat";
+        Text[ polish ] = "Aut~oformatowanie";
         Text[ japanese ] = "オートフォーマット(~O)...";
         Text[ chinese_traditional ] = "自動格式(~O)...";
         Text[ arabic ] = "����� ������...";
@@ -663,10 +702,13 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ chinese_simplified ] = "自动格式(~O)...";
         Text[ greek ] = "���~������...";
         Text[ korean ] = "자동 서식 (~O)...";
-        Text[ turkish ] = "Otomatik formatla...";
+        Text[ turkish ] = "Ot~omatik formatla...";
         Text[ catalan ] = "~Autoformat...";
         Text[ finnish ] = "~Autom. muotoilu...";
         Text[ thai ] = "รูปแบบอัโน~มัติ...";
+        Text[ czech ] = "Automatické formátování";
+        Text[ hebrew ] = "Aut~oFormat...";
+        Text[ hindi ] = "स्व~चालित ढंग से रचना...";
     };
     String STR_NOTEMPL
     {
@@ -680,7 +722,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ swedish ] = "<ingen>" ;
         Text [ danish ] = "<ingen>" ;
         Text [ portuguese ] = "<nenhum>" ;
-        Text [ portuguese_brazilian ] = "<keine>" ;
+        Text [ portuguese_brazilian ] = "<nenhum>" ;
         Text[ chinese_simplified ] = "<无>";
         Text[ russian ] = "<���>";
         Text[ polish ] = "<brak>";
@@ -695,9 +737,12 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ catalan ] = "<cap>";
         Text[ finnish ] = "<ei mit��n>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<nic>";
+        Text[ hebrew ] = "<keine>";
+        Text[ hindi ] = "<कोई नहीं>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
-    Text [ portuguese_brazilian ] = "Datenbankspalten einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Colunas do Banco de Dados" ;
     Text [ swedish ] = "Infoga databaskolumner" ;
     Text [ danish ] = "Inds�t databasekolonner" ;
     Text [ italian ] = "Inserisci colonne di database" ;
@@ -707,7 +752,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text [ portuguese ] = "Inserir colunas para bases de dados" ;
     Text[ chinese_simplified ] = "插入数据库栏位";
     Text[ russian ] = "������� �������� ���� ������";
-    Text[ polish ] = "Wstaw kolumny w bazie danych";
+    Text[ polish ] = "Wstaw kolumny bazy danych";
     Text[ japanese ] = "データベースの列の挿入";
     Text[ chinese_traditional ] = "插入資料庫欄";
     Text[ arabic ] = "����� ����� ����� ������";
@@ -719,7 +764,19 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ catalan ] = "Insereix les columnes de la base de dades";
     Text[ finnish ] = "Lis�� tietokantasarakkeet";
     Text[ thai ] = "แทรกคอลัมน์ของฐานข้อมูล";
+    Text[ czech ] = "Vložit sloupce databáze";
+    Text[ hebrew ] = "Datenbankspalten einfügen";
+    Text[ hindi ] = "लेखासंचय स्तंभों को जोड़ो";
 };
+
+
+
+
+
+
+
+
+
 
 
 
