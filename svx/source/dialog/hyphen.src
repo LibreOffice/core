@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:56:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
-    Text [ french ] = "Coupure de mots" ;
+    Text [ french ] = "Coupure des mots" ;
     Text [ swedish ] = "Avstavning" ;
     Text [ dutch ] = "Woordafbreking" ;
     Text [ spanish ] = "Separación silábica" ;
