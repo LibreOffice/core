@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 17:33:43 $
+#   last change: $Author: rt $ $Date: 2005-01-31 08:43:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,6 @@ SLOFILES =\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
         $(SLO)$/passwd.obj			\
-        $(SLO)$/register.obj		\
         $(SLO)$/sfxurl.obj			\
         $(SLO)$/slotinfo.obj		\
         $(SLO)$/splitwin.obj		\
@@ -128,7 +127,6 @@ SRC1FILES =\
         mgetempl.src		\
         newstyle.src		\
         passwd.src			\
-        register.src		\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
