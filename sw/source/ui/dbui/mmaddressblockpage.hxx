@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:14:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ public:
     void            Modified();
 
     void            InsertNewEntry( const String& rStr );
+    void            InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex );
     void            RemoveCurrentEntry();
 
     void            MoveCurrentItem(sal_uInt16 nMove);
