@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrinterIndependentLayout.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:05:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com {   module sun {   module star {   module document {
 
     @since #107627#
 */
-constants PrinterIndependentLayout
+published constants PrinterIndependentLayout
 {
     /** use printer-dependent metrics for layout */
     const short DISABLED = 1;
