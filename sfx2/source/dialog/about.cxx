@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 10:30:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 08:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,15 +121,22 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     bNormal ( TRUE )
 
 {
-    // --> PB 2004-11-18 #118455# new copyright text (only in french version show a french text)
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    ::rtl::OUString sFrenchLang( DEFINE_CONST_OUSTRING( "fr" ) );
-    if ( aLocale.Language.equals( sFrenchLang ) )
+    rtl::OUString sProduct;
+    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
+
+    if ( sProduct.equals( rtl::OUString::createFromAscii("StarOffice") ) ||
+         sProduct.equals( rtl::OUString::createFromAscii("StarSuite") ) )
     {
-        String sNewCopyrightText( ResId( ABOUT_STR_FRENCH_COPYRIGHT ) );
-        aCopyrightText.SetText( sNewCopyrightText );
+        // --> PB 2004-11-18 #118455# new copyright text (only in french version show a french text)
+        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        ::rtl::OUString sFrenchLang( DEFINE_CONST_OUSTRING( "fr" ) );
+        if ( aLocale.Language.equals( sFrenchLang ) )
+        {
+            String sNewCopyrightText( ResId( ABOUT_STR_FRENCH_COPYRIGHT ) );
+            aCopyrightText.SetText( sNewCopyrightText );
+        }
+        // <--
     }
-    // <--
 
     // load image from module path
     String aBmpFileName( DEFINE_CONST_UNICODE("about.bmp") );
@@ -257,8 +264,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     SetHelpId( SID_ABOUT );
 
     //#112429# replace occurences of "StarOffice" in the "StarSuite" version
-    rtl::OUString sProduct;
-    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
     if(sProduct.equals(rtl::OUString::createFromAscii("StarSuite")))
     {
         String sCopyright(aCopyrightText.GetText());
@@ -431,13 +436,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
 
     if ( nCount )
     {
-        // use deactive color for some headers
-        Color aGrayColor = GetSettings().GetStyleSettings().GetDeactiveTextColor();
-        if ( GetBackground().GetColor() == aGrayColor )
-            aGrayColor = GetFont().GetColor();
-
         USHORT nEmptyString = 0;
-
         for ( USHORT i = 0; i < nCount; ++i )
         {
             String aStr;
@@ -469,17 +468,15 @@ void AboutDialog::Paint( const Rectangle& rRect )
                     // emphasize the headers
                     Font aFont = GetFont();
                     FontWeight eOldWeight = aFont.GetWeight();
-                    Color aOldCol = aFont.GetColor();
                     aFont.SetWeight( (FontWeight)nVal );
-                    if ( aStr.GetChar(1) != ' ' && aStr.GetChar(aStr.Len()-2) != ' ' )
-                        aFont.SetColor( aGrayColor );
                     SetFont( aFont );
                     long nOldW = aSize.Width();
                     aSize = Size(GetTextWidth( aStr ),GetTextHeight());
                     aPnt.X() -= ( aSize.Width() - nOldW ) / 2;
+                    if ( aPnt.X() < 0 )
+                        aPnt.X() = SPACE_OFFSET;
                     DrawText( aPnt, aStr );
                     aFont.SetWeight( eOldWeight );
-                    aFont.SetColor( aOldCol );
                     SetFont( aFont );
                 }
                 else
