@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:26:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <sfx2/bindings.hxx>
 #endif
 
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
