@@ -1,6 +1,65 @@
 eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
-
+# *************************************************************************
+# *
+# *  $RCSfile: buildall.pl,v $
+# *
+# *  $Revision: 1.3 $
+# *
+# *  last change: $Author: rt $ $Date: 2004-05-03 08:54:05 $
+# *
+# *  The Contents of this file are made available subject to the terms of
+# *  either of the following licenses
+# *
+# *         - GNU Lesser General Public License Version 2.1
+# *         - Sun Industry Standards Source License Version 1.1
+# *
+# *  Sun Microsystems Inc., October, 2000
+# *
+# *  GNU Lesser General Public License Version 2.1
+# *  =============================================
+# *  Copyright 2000 by Sun Microsystems, Inc.
+# *  901 San Antonio Road, Palo Alto, CA 94303, USA
+# *
+# *  This library is free software; you can redistribute it and/or
+# *  modify it under the terms of the GNU Lesser General Public
+# *  License version 2.1, as published by the Free Software Foundation.
+# *
+# *  This library is distributed in the hope that it will be useful,
+# *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# *  Lesser General Public License for more details.
+# *
+# *  You should have received a copy of the GNU Lesser General Public
+# *  License along with this library; if not, write to the Free Software
+# *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+# *  MA  02111-1307  USA
+# *
+# *
+# *  Sun Industry Standards Source License Version 1.1
+# *  =================================================
+# *  The contents of this file are subject to the Sun Industry Standards
+# *  Source License Version 1.1 (the "License"); You may not use this file
+# *  except in compliance with the License. You may obtain a copy of the
+# *  License at http://www.openoffice.org/license.html.
+# *
+# *  Software provided under this License is provided on an "AS IS" basis,
+# *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+# *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+# *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+# *  See the License for the specific provisions governing your rights and
+# *  obligations concerning the Software.
+# *
+# *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+# *
+# *  Copyright: 2000 by Sun Microsystems, Inc.
+# *
+# *  All Rights Reserved.
+# *
+# *  Contributor(s): _______________________________________
+# *
+# *
+# ************************************************************************
 
 # #!/usr/bin/perl -w
 
@@ -8,9 +67,9 @@ use strict;
 use POSIX;
 use Cwd;
 use File::Path;
-
 use English;
 use Cwd 'chdir';
+
 my $cwd = getcwd();
 
 my $g_sTempDir = "";
@@ -18,11 +77,15 @@ my $FS = "";
 
 my $nGlobalFailures = 0;
 
+my %libraryRunThrough;
+my $bBuildAll = 0;
+
 # LLA: this does not exist, ... use a little bit simpler method.
 # use File::Temp qw/ :POSIX /;
 
 my $params;
 my $param;
+
 if ($#ARGV < 0)
 {
     $params = "test "; # debug=t TESTOPTADD=\"-boom\"   TESTOPTADD=\"-noerroronexit\"
@@ -40,6 +103,11 @@ else
     if (checkForKillobj() == 1)
     {
         $params = "killobj";
+    }
+    elsif (checkARGVFor("buildall") == 1)
+    {
+        $bBuildAll = 1;
+        $params = "test";
     }
     else
     {
@@ -60,7 +128,22 @@ print "parameters for dmake: $params\n";
 initEnvironment();
 main($params);
 
-
+# ------------------------------------------------------------------------------
+sub checkARGVFor($)
+{
+    my $sCheckValue = shift;
+    my $sLocalParam;
+    my $nBackValue = 0;
+    foreach $sLocalParam (@ARGV)
+    {
+        if ($sLocalParam =~ /^${sCheckValue}$/)
+        {
+            $nBackValue = 1;
+            last;
+        }
+    }
+    return $nBackValue;
+}
 # ------------------------------------------------------------------------------
 sub checkForKillobj()
 {
@@ -85,29 +168,29 @@ sub initEnvironment()
     $ENV{'DISABLE_SAL_DBGBOX'}="t";
 
   SWITCH: {
-        if ( $gui eq "WNT" ) {
-            $FS             = "\\";
-            $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-            last SWITCH;
-        }
-        if ( $gui eq "WIN" ) {
-            $FS             = "\\";
-            $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-            last SWITCH;
-        }
-        if ( $gui eq "OS2" ) {
-            $FS             = "\\";
-            $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-            last SWITCH;
-        }
-        if ( $gui eq "UNX" ) {
-            $FS             = "/";
-            $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
-            last SWITCH;
-        }
-        print STDERR "buildall.pl: unkown platform\n";
-        exit(1);
-    }
+      if ( $gui eq "WNT" ) {
+          $FS             = "\\";
+          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
+          last SWITCH;
+      }
+      if ( $gui eq "WIN" ) {
+          $FS             = "\\";
+          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
+          last SWITCH;
+      }
+      if ( $gui eq "OS2" ) {
+          $FS             = "\\";
+          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
+          last SWITCH;
+      }
+      if ( $gui eq "UNX" ) {
+          $FS             = "/";
+          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
+          last SWITCH;
+      }
+      print STDERR "buildall.pl: unkown platform\n";
+      exit(1);
+  }
 }
 # ------------------------------------------------------------------------------
 
@@ -133,6 +216,24 @@ sub getLibName($)
     return $sFile;
 }
 # ------------------------------------------------------------------------------
+sub giveOutAll($)
+{
+    my $sFailureFile = shift;
+    local *IN;
+    if (! open(IN, $sFailureFile))
+    {
+        print "ERROR: Can't open output file $sFailureFile\n";
+        return;
+    }
+    my $line;
+    while ($line = <IN>)
+    {
+        chomp($line);
+        print "$line\n";
+    }
+    close(IN);
+}
+# ------------------------------------------------------------------------------
 sub giveOutFailures($$)
 {
     my $sTest = shift;
@@ -148,29 +249,54 @@ sub giveOutFailures($$)
         print "ERROR: Can't open output file $sFailureFile\n";
         return;
     }
+
+    my $bStartUnitTest = 0;
     while ($line = <IN>)
     {
         chomp($line);
-
-        # handling of the states
-        if ( $line =~ /^\# -- BEGIN:/)
+        if ( $line =~ /^- start unit test/)
         {
-            $bBegin = 1;
-        }
-        elsif ( $line =~ /^\# -- END:/)
-        {
-            $bBegin = 0;
-        }
-        else
-        {
-            if ($bBegin == 1)
-            {
-                print "$line\n";
-                $nFailures++;
-            }
+            $bStartUnitTest = 1;
         }
     }
     close(IN);
+
+    if ($bStartUnitTest == 0)
+    {
+        print "\nFailure: Unit test not started. Maybe compiler error.\n";
+        giveOutAll($sFailureFile);
+        $nFailures++;
+        # exit(1);
+    }
+    else
+    {
+        open(IN, $sFailureFile);
+        # check if testshl2 was started
+        while ($line = <IN>)
+        {
+            chomp($line);
+
+            # handling of the states
+            if ( $line =~ /^\# -- BEGIN:/)
+            {
+                $bBegin = 1;
+            }
+            elsif ( $line =~ /^\# -- END:/)
+            {
+                $bBegin = 0;
+            }
+            else
+            {
+                if ($bBegin == 1)
+                {
+                    print "$line\n";
+                    $nFailures++;
+                }
+            }
+        }
+        close(IN);
+    }
+
     if ($nFailures > 0)
     {
         # extra return for a better output
@@ -183,6 +309,12 @@ sub giveOutFailures($$)
     }
 }
 # ------------------------------------------------------------------------------
+sub printOnLibrary($)
+{
+    my $sTarget = shift;
+    print "       on library: " . getLibName($sTarget);
+}
+# ------------------------------------------------------------------------------
 sub runASingleTest($$)
 {
     my $sTarget = shift;
@@ -193,7 +325,16 @@ sub runASingleTest($$)
     mkdir($sLogPath);
     my $sLogFile = $sLogPath . "/" . $sTarget . ".out";
 
-    print "       on library: " . getLibName($sTarget) . "\n";
+    # due to the fact, a library name in one project is distinct, we should remember all already run through libraries and
+    # supress same libraries, if they occur one more.
+
+    if (exists $libraryRunThrough{getLibName($sTarget)})
+    {
+        # already done
+        return;
+    }
+    printOnLibrary($sTarget);
+    print "\n";
 
 # redirect tcsh ">&" (stdout, stderr)
 # redirect 4nt   ">" (stdout), "2>" (stderr)
@@ -243,7 +384,10 @@ sub runASingleTest($$)
     close(LOGFILE);
 
     giveOutFailures($sTarget, $sLogFile);
+
+    $libraryRunThrough{getLibName($sTarget)} = "done";
 }
+
 # ------------------------------------------------------------------------------
 sub interpretLine($)
 {
@@ -322,7 +466,17 @@ sub runTestsOnPath($$$)
             $sLocalParams = $params . " ";                  # append a whitespace, so we can check if 'test' exist without additional digits
             $sLocalParams =~ s/test\s/test$nNumber/;
             # DBG: print "$sLocalParams\n";
-            runASingleTest($sTarget, $sLocalParams);
+            if ($bBuildAll == 1 ||
+                $file eq $sTarget)
+            {
+                # print "runASingleTest on Target: $sTarget 'dmake $sLocalParams'\n";
+                runASingleTest($sTarget, $sLocalParams);
+            }
+            else
+            {
+                # printOnLibrary($sTarget);
+                # print " suppressed, not in libs2test.txt\n";
+            }
         }
     }
     close(MAKEFILE_MK);
@@ -362,10 +516,19 @@ sub main($)
     if ($nGlobalFailures > 0)
     {
         print "\nFailures over all occured: $nGlobalFailures\n";
+        print "\nPASSED FAILED.\n";
+    }
+    else
+    {
+        print "\nPASSED OK.\n";
     }
 }
 
 # ------------------------------------------------------------------------------
+
+# TODO:
+# -verbose
+# -fan   - \ | /
 
 # END!
 
