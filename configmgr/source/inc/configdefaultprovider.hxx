@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
     class ISubtree;
-    class IDefaultProvider;
+    class IConfigDefaultProvider;
     class IDefaultableTreeManager;
     class OOptions;
 
@@ -117,7 +117,7 @@ namespace configmgr
             static DefaultProvider createEmpty();
             static DefaultProvider create(Tree const& _aRootTree,
                                           vos::ORef<OOptions> const& _xOptions,
-                                          IDefaultProvider* _pDefaultProvider,
+                                          rtl::Reference< IConfigDefaultProvider > const & _xDefaultProvider,
                                           IDefaultableTreeManager* _pDefaultableTree);
 
             // actual c'tor

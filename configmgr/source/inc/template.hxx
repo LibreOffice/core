@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    class ITemplateManager;
+    struct IConfigTemplateManager;
     class OOptions;
 //-----------------------------------------------------------------------------
     namespace data { class SetNodeAccess; }
@@ -116,8 +116,10 @@ namespace configmgr
 
             rtl::Reference<TemplateProvider_Impl> m_aImpl;
         public:
+            typedef rtl::Reference< IConfigTemplateManager > TemplateManagerRef;
+        public:
             TemplateProvider(); // creates an empty (invalid) template instance provider
-            TemplateProvider(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions);
+            TemplateProvider(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions);
             TemplateProvider(TemplateProvider const& aOther);
             TemplateProvider& operator=(TemplateProvider const& aOther);
             ~TemplateProvider();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:13:29 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,16 +242,18 @@ namespace configmgr
 
         struct TemplateProvider_Impl : salhelper::SimpleReferenceObject
         {
-            TemplateProvider_Impl(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions);
+            typedef TemplateProvider::TemplateManagerRef TemplateManagerRef;
+
+            TemplateProvider_Impl(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions);
 
             data::TreeSegment instantiate(memory::Accessor const& _aSourceAccessor, TemplateHolder const& aTemplate);
 
             TemplateHolder makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet);
         private:
-            ITemplateManager& m_rProvider;
-            vos::ORef< OOptions > m_xOptions;
+            TemplateManagerRef      m_xProvider;
+            vos::ORef< OOptions >   m_xOptions;
 
-            TemplateRepository m_aRepository;
+            TemplateRepository      m_aRepository;
         };
 
 //-----------------------------------------------------------------------------

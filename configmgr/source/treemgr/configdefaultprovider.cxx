@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ DefaultProvider DefaultProvider::createEmpty()
 //-----------------------------------------------------------------------------
 
 DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptions> const& _xOptions,
-                                          IDefaultProvider* _pDefaultProvider,
+                                          rtl::Reference< IConfigDefaultProvider > const &  _xDefaultProvider,
                                           IDefaultableTreeManager* _pDefaultableTree)
 {
     OSL_PRECOND( !_aRootTree.isEmpty(), "ERROR: Cannot create DefaultProvider for NULL tree");
@@ -107,7 +107,7 @@ DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptio
 
     if (!_aRootTree.isEmpty())
     {
-        xNewProxy = new DefaultProviderProxy(_pDefaultProvider,_pDefaultableTree,
+        xNewProxy = new DefaultProviderProxy(_xDefaultProvider,_pDefaultableTree,
                                              _aRootTree.getRootPath(), _xOptions,
                                              _aRootTree.getRootNode().getDepth() );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
@@ -86,7 +89,7 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
     class ISubtree;
-    class IDefaultProvider;
+    class IConfigDefaultProvider;
     class IDefaultableTreeManager;
     class OOptions;
 //-----------------------------------------------------------------------------
@@ -109,12 +112,12 @@ namespace configmgr
             sal_Int16               m_nRequestDepth;
 
             // the object(s) that provide the defaults
-            IDefaultProvider *          m_pDefaultTreeProvider;
-            IDefaultableTreeManager *   m_pDefaultTreeManager;
+            rtl::Reference< IConfigDefaultProvider >    m_xDefaultTreeProvider;
+            IDefaultableTreeManager *                   m_pDefaultTreeManager;
         public:
             explicit
             DefaultProviderProxy(
-                    IDefaultProvider *          _pDefaultTreeProvider,
+                    rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
                     IDefaultableTreeManager *   _pDefaultTreeManager,
                     AbsolutePath        const&  _aBaseLocation,
                     vos::ORef<OOptions> const&  _xOptions,

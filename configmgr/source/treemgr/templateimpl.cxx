@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,8 @@ TemplateHolder SpecialTemplateProvider_Impl::makeTemplate (TemplateName const& a
 // class TemplateProvider_Impl
 //-----------------------------------------------------------------------------
 
-TemplateProvider_Impl::TemplateProvider_Impl(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions)
-: m_rProvider(rProvider)
+TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions)
+: m_xProvider(xProvider)
 , m_xOptions(xOptions)
 , m_aRepository()
 {
@@ -247,7 +247,7 @@ data::TreeSegment TemplateProvider_Impl::instantiate(data::Accessor const& _aSou
     data::TreeSegment pRet;
     if (aTemplate.is())
     {
-        data::TreeAccessor aTemplateData = m_rProvider.requestTemplate(_aSourceAccessor, aTemplate->getName(), aTemplate->getModule());
+        data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aSourceAccessor, aTemplate->getName(), aTemplate->getModule());
 
         // #86095# we sometimes wrongly are passed NULL options - using default instead
         OSL_ENSURE( m_xOptions.isValid(), "ERROR: Requesting template instance without options" );
@@ -364,7 +364,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
             OSL_ASSERT(_aNames.aName == _aSet.getElementTemplateName());
             OSL_ASSERT(_aNames.aModule == _aSet.getElementTemplateModule());
 
-            data::TreeAccessor aTemplateData = m_rProvider.requestTemplate(_aSet.accessor(), _aNames.aName, _aNames.aModule);
+            data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aSet.accessor(), _aNames.aName, _aNames.aModule);
 
             aType = detectNodeType(aTemplateData); // throws if necessary
         }

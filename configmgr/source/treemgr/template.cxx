@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ TemplateProvider::TemplateProvider()
 }
 
 //-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions)
-: m_aImpl( new TemplateProvider_Impl(rProvider,xOptions) )
+TemplateProvider::TemplateProvider(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions)
+: m_aImpl( new TemplateProvider_Impl(xProvider,xOptions) )
 {
 }
 

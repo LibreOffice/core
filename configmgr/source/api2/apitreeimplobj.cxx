@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,9 +383,9 @@ configuration::DefaultProvider createDefaultProvider(
                                )
 {
     OProviderImpl& rProviderImpl        = rProvider.getProviderImpl();
-    IDefaultProvider& rDefaultProvider  = rProviderImpl.getDefaultProvider();
+    rtl::Reference< IConfigDefaultProvider > xDefaultProvider  = rProviderImpl.getDefaultProvider();
 
-    return configuration::DefaultProvider::create(aTree,_xOptions,&rDefaultProvider,&rProviderImpl);
+    return configuration::DefaultProvider::create(aTree,_xOptions,xDefaultProvider,&rProviderImpl);
 }
 //-------------------------------------------------------------------------
 static

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 DefaultProviderProxy::DefaultProviderProxy(
-        IDefaultProvider *          _pDefaultTreeProvider,
+        rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
         IDefaultableTreeManager *   _pDefaultTreeManager,
         AbsolutePath        const&  _aBaseLocation,
         vos::ORef<OOptions> const&  _xOptions,
@@ -94,7 +94,7 @@ DefaultProviderProxy::DefaultProviderProxy(
 : m_aBaseLocation(_aBaseLocation)
 , m_xOptions(_xOptions)
 , m_nRequestDepth(_nRequestDepth)
-, m_pDefaultTreeProvider(_pDefaultTreeProvider)
+, m_xDefaultTreeProvider(_xDefaultTreeProvider)
 , m_pDefaultTreeManager(_pDefaultTreeManager)
 {
 }
@@ -116,8 +116,8 @@ std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
 
     std::auto_ptr<ISubtree> aRet;
 
-    if (m_pDefaultTreeProvider != NULL)
-        aRet = m_pDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, ITreeProvider::ALL_LEVELS);
+    if (m_xDefaultTreeProvider.is())
+        aRet = m_xDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, ITreeProvider::ALL_LEVELS);
 
     return aRet;
 }
