@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:17:48 $
+ *  last change: $Author: ssa $ $Date: 2002-09-09 13:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4579,11 +4579,18 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
 
     if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
     {
-        if( IsRTLEnabled() && ImplHasMirroredGraphics() )
+        if( ImplHasMirroredGraphics() )
         {
             long w = mpGraphics->GetGraphicsWidth();
             long x = rSalLayout.DrawBase().X();
                rSalLayout.DrawBase().X() = w - 1 - x;
+            if( !IsRTLEnabled() )
+            {
+                // mirror this window back
+                long devX = w-mnOutWidth-mnOutOffX;   // re-mirrored mnOutOffX
+                rSalLayout.DrawBase().X() = devX + ( mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
+            }
+
         }
 
         rSalLayout.DrawText( *mpGraphics );
