@@ -15428,3 +15428,17 @@ _TI2?AVbad_alloc@std@@
 ?lcl_getSpinButtonValue@?A0xd4c68622@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
 ?lcl_modifyStyle@?A0xd4c68622@toolkit@@YAXPAVWindow@@_JE@Z
 ?lcl_setSpinButtonValue@?A0xd4c68622@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
+?acquire@OAccessibleContextWrapper@comphelper@@WFA@AAXXZ
+?acquire@OToolBoxWindowItem@?A0xb2e0047f@@OFM@AAXXZ
+?disposing@OAccessibleContextWrapperHelper@comphelper@@OBM@AAXABUEventObject@lang@star@sun@com@@@Z
+?getImplementationId@OAccessibleContextWrapper@comphelper@@WCI@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getImplementationId@OToolBoxWindowItem@?A0xb2e0047f@@OFI@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getTypes@OAccessibleContextWrapper@comphelper@@WCI@AA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?getTypes@OToolBoxWindowItem@?A0xb2e0047f@@OFI@AA?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?queryInterface@OAccessibleContextWrapper@comphelper@@WFA@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?queryInterface@OToolBoxWindowItem@?A0xb2e0047f@@OFM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@OAccessibleContextWrapper@comphelper@@WFA@AAXXZ
+?release@OToolBoxWindowItem@?A0xb2e0047f@@OFM@AAXXZ
+?lcl_getSpinButtonValue@?A0x745d3871@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0x745d3871@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0x745d3871@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
