@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:38:37 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3200,6 +3200,8 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
     if ( pRet )
         ::rtl::OUString = ((SfxStringItem*)pRet)->GetValue();
     */
+    if ( !sMacro.getLength() )
+        return;
 
     SfxApplication* pSfxApp = SFX_APP();
     SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pSfxApp->GetPool() );
@@ -3627,7 +3629,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     GetDispatcher()->Update_Impl( TRUE );
 
     // ggf. recorden
-    if ( nSID == SID_HYPERLINK_DIALOG )
+    if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )
     {
         rReq.Ignore();
     }
@@ -3833,7 +3835,7 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
 {
     SetChildWindow( nId, bOn, TRUE );
-} */
+}*/
 
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn, BOOL bSetFocus )
 {
