@@ -1,3 +1,3 @@
 ul unoil :: codemaker offapi ridljar solenv NULL
-ul unoil\javamaker nmake - all javamaker NULL
-ul unoil\util nmake - all util javamaker NULL
+ul unoil\javamaker nmake - all ul_javamaker NULL
+ul unoil\util nmake - all ul_util ul_javamaker NULL
