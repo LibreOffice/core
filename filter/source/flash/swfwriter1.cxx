@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 13:18:51 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 17:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,94 @@ FlashFont& Writer::Impl_getFont( const Font& rFont )
 
 void Writer::Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth )
 {
+    const FontMetric aMetric( mpVDev->GetFontMetric() );
+
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+
+    if( !bTextSpecial )
+    {
+        Impl_writeText( rPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+    }
+    else
+    {
+        if( aMetric.GetRelief() != RELIEF_NONE )
+        {
+            Color aReliefColor( COL_LIGHTGRAY );
+            Color aTextColor( mpVDev->GetTextColor() );
+
+            if ( aTextColor.GetColor() == COL_BLACK )
+                aTextColor = Color( COL_WHITE );
+
+            if ( aTextColor.GetColor() == COL_WHITE )
+                aReliefColor = Color( COL_BLACK );
+
+
+            Point aPos( rPos );
+            Point aOffset( 6,6 );
+
+            if ( aMetric.GetRelief() == RELIEF_ENGRAVED )
+            {
+                aPos -= aOffset;
+            }
+            else
+            {
+                aPos += aOffset;
+            }
+
+            Impl_writeText( aPos, rText, pDXArray, nWidth, aReliefColor );
+            Impl_writeText( rPos, rText, pDXArray, nWidth, aTextColor );
+        }
+        else
+        {
+            if( aMetric.IsShadow() )
+            {
+                long nOff = 1 + ((aMetric.GetLineHeight()-24)/24);
+                if ( aMetric.IsOutline() )
+                    nOff += 6;
+
+                Color aTextColor( mpVDev->GetTextColor() );
+                Color aShadowColor( Color( COL_BLACK ) );
+
+                if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
+                    aShadowColor = Color( COL_LIGHTGRAY );
+
+                Point aPos( rPos );
+                aPos += Point( nOff, nOff );
+                Impl_writeText( aPos, rText, pDXArray, nWidth, aShadowColor );
+
+                if( !aMetric.IsOutline() )
+                {
+                    Impl_writeText( rPos, rText, pDXArray, nWidth, aTextColor );
+                }
+            }
+
+            if( aMetric.IsOutline() )
+            {
+                Point aPos = rPos + Point( -6, -6 );
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(+6,+6);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(-6,+0);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(-6,+6);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(+0,+6);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(+0,-6);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(+6,-1);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+                aPos = rPos + Point(+6,+0);
+                Impl_writeText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor() );
+
+                Impl_writeText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ) );
+            }
+        }
+    }
+}
+
+void Writer::Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth, Color aTextColor )
+{
     sal_uInt32 nLen = rText.Len();
 
     if( nLen )
@@ -606,7 +694,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
         // text style change record
         mpTag->addUI8( 0x8c );
         mpTag->addUI16( rFlashFont.getID() );
-        mpTag->addRGB( mpVDev->GetTextColor() );
+        mpTag->addRGB( aTextColor );
         mpTag->addUI16( _uInt16( nHeight ) );
 
         DBG_ASSERT( nLen <= 127, "TODO: handle text with more than 127 characters" );
@@ -663,7 +751,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
                 aPoly[ 3 ].X() = aPoly[ 0 ].X();
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                Impl_writePolygon( aPoly, sal_True, aOldFont.GetColor(), aOldFont.GetColor() );
+                Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
             }
 
             // AS: The factor of 1.5 on the nLineHeight is a magic number.  I'm not sure why it works,
@@ -679,7 +767,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
                 aPoly[ 3 ].X() = aPoly[ 0 ].X();
                 aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                Impl_writePolygon( aPoly, sal_True, aOldFont.GetColor(), aOldFont.GetColor() );
+                Impl_writePolygon( aPoly, sal_True, aTextColor, aTextColor );
             }
         }
 

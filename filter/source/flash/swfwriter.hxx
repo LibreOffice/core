@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:03 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 17:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,7 @@ private:
     void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, sal_uInt8 nTransparence = 0);
     void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth );
+    void Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth, Color aTextColor );
     void Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL );
     void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );
