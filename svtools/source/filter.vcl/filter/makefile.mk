@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 12:56:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:42:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,19 +103,8 @@ UNOTYPES=	com.sun.star.beans.PropertyValue					\
 
 # --- Files --------------------------------------------------------
 
-CXXFILES= filter.cxx				\
-          filter2.cxx				\
-          dlgexpor.cxx				\
-          dlgejpg.cxx				\
-          sgfbram.cxx				\
-          sgvmain.cxx				\
-          sgvtext.cxx				\
-          sgvspln.cxx				\
-          FilterConfigItem.cxx		\
-          FilterConfigCache.cxx		\
-          SvFilterOptionsDialog.cxx
-
-SRCFILES= strings.src		  \
+SRS1NAME=$(TARGET)
+SRC1FILES= strings.src		  \
           dlgexpor.src		  \
           dlgejpg.src
 
