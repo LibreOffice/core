@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-04 18:22:12 $
+ *  last change: $Author: hdu $ $Date: 2002-11-06 16:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,7 +1315,6 @@ static StringCompare ImplCompareFontData( const ImplFontData* pEntry1,
 
 void ImplDevFontList::Add( ImplFontData* pNewData )
 {
-
     XubString aSearchName = pNewData->maName;
     ImplGetEnglishSearchFontName( aSearchName );
 
@@ -1348,7 +1347,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
             pFoundData->mePitch = pNewData->mePitch;
     }
 
-    // set Match data
+    // set match data
     if ( (pNewData->meType == TYPE_SCALABLE) && (pNewData->mnHeight == 0) )
         pFoundData->mnTypeFaces |= IMPL_DEVFONT_SCALABLE;
     if ( pNewData->meCharSet == RTL_TEXTENCODING_SYMBOL )
@@ -1370,9 +1369,8 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
               (pNewData->meItalic == ITALIC_OBLIQUE) )
         pFoundData->mnTypeFaces |= IMPL_DEVFONT_ITALIC;
 
-    // Add map/alias names
+    // add map/alias names
     if ( pNewData->maMapNames.Len() )
-
     {
         String      aName;
         xub_StrLen  nIndex = 0;
@@ -1391,7 +1389,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
 
     if ( bInsert )
     {
-        // replace Name (saves memory)
+        // reassign name (sharing saves memory)
         if ( pNewData->maName == pFoundData->maName )
             pNewData->maName = pFoundData->maName;
 
@@ -1461,7 +1459,7 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
         return NULL;
     }
 
-    // Fonts in der Liste suchen
+    // find fonts in font list
     ImplDevFontListData*    pCompareData;
     ImplDevFontListData*    pFoundData = NULL;
     ULONG                   nLow = 0;
@@ -6530,6 +6528,23 @@ FontInfo OutputDevice::GetDevFont( USHORT nDevFont ) const
     }
 
     return aFontInfo;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::AddTempDevFont( const String& rFileURL, const String& rFontName )
+{
+    DBG_TRACE( "OutputDevice::AddTempDevFont()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if( !mpGraphics && !(const_cast<OutputDevice*>(this)->ImplGetGraphics()) )
+        return FALSE;
+
+    ImplFontData* pFontData = mpGraphics->AddTempDevFont( rFileURL, rFontName );
+    if( !pFontData )
+        return FALSE;
+    mpFontList->Add( pFontData );
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
