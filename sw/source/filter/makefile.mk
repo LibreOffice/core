@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+#   last change: $Author: hjs $ $Date: 2000-10-13 09:34:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -241,4 +241,16 @@ filt_1st:
 
 kill:
     del $(SLB)$/filter.lib
+
+ascii : filt_1st
+basflt : filt_1st
+excel : filt_1st
+html : filt_1st
+lotus : filt_1st
+rtf : filt_1st
+w4w : filt_1st
+writer : filt_1st
+ww1 : filt_1st
+ww8 : filt_1st
+xml : filt_1st
 
