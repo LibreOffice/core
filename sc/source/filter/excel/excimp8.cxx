@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:14:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,7 +1083,7 @@ void ImportExcel8::ApplyEscherObjects()
                         rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
 
                         // *** find some comboboxes to skip ***
-                        if( const XclImpEscherCtrl* pCtrlObj = PTR_CAST( XclImpEscherCtrl, pEscherObj ) )
+                        if( const XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, pEscherObj ) )
                         {
                             if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
                             {
