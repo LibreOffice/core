@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:22:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -76,7 +75,7 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _POLY_HXX
+#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
