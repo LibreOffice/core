@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Input.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of a text input field.
     @see com::sun::star::text::TextField
 */
-service Input
+published service Input
 {
     service  com::sun::star::text::TextField;
     /** contains the text content of the text field.
