@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:40:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,12 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     {
         *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_60 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_60;
+        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_8)
+    {
+        *pClassName     = SvGlobalName( SO3_SWWEB_CLASSID_60 );
+        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITERWEB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);
