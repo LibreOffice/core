@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-17 16:20:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
     };
 
     /* necessary to get a "oslMutex *" */
-    static oslMutex const globalMutex = (oslMutex) &globalMutexImpl;
+    static oslMutex globalMutex = (oslMutex) &globalMutexImpl;
 
     return &globalMutex;
 }
