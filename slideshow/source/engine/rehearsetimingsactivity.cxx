@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:56:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ void RehearseTimingsActivity::paint(
     blackHole.EnableOutput(false);
     blackHole.SetMapMode( MAP_PIXEL );
     blackHole.SetFont( m_font );
-    Rectangle rect( Point(), m_spriteSizePixel );
+    Rectangle rect = Rectangle( Point(), m_spriteSizePixel );
     if (m_drawPressed) {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_LIGHTGRAY );
