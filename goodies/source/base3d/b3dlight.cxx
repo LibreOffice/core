@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dlight.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,9 @@ void B3dLight::ReadData(SvStream& rIn)
 
 B3dLightGroup::B3dLightGroup()
 :   aGlobalAmbientLight(255, 102, 102, 102),
+    bLightingEnabled(TRUE),
     bLocalViewer(TRUE),
-    bModelTwoSide(FALSE),
-    bLightingEnabled(TRUE)
+    bModelTwoSide(FALSE)
 {
     // Lichtquellen initialisieren
     for(UINT16 i=0; i < BASE3D_MAX_NUMBER_LIGHTS;i++)
