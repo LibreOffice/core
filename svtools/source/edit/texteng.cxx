@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:08:48 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,19 +132,21 @@ TextEngine::TextEngine()
     mpViews = new TextViews;
     mpActiveView = NULL;
 
-    mbIsFormatting  = FALSE;
-    mbFormatted     = FALSE;
-    mbUpdate        = TRUE;
-    mbModified      = FALSE;
-    mbUndoEnabled   = FALSE;
-    mbIsInUndo      = FALSE;
-    mbDowning       = FALSE;
-    mbRightToLeft   = FALSE;
+    mbIsFormatting      = FALSE;
+    mbFormatted         = FALSE;
+    mbUpdate            = TRUE;
+    mbModified          = FALSE;
+    mbUndoEnabled       = FALSE;
+    mbIsInUndo          = FALSE;
+    mbDowning           = FALSE;
+    mbRightToLeft       = FALSE;
+    mbHasMultiLineParas = FALSE;
 
     meAlign         = TXTALIGN_LEFT;
 
     mnMaxTextWidth  = 0;
     mnMaxTextLen    = 0;
+    mnCurTextWidth  = 0xFFFFFFFF;
     mnCurTextHeight = 0;
 
     mpUndoManager   = NULL;
@@ -152,6 +154,7 @@ TextEngine::TextEngine()
     mpLocaleDataWrapper = NULL;
 
     mpIdleFormatter = new IdleFormatter;
+    mpIdleFormatter->SetTimeoutHdl( LINK( this, TextEngine, IdleFormatHdl ) );
 
     mpRefDev = new VirtualDevice;
 
@@ -159,6 +162,7 @@ TextEngine::TextEngine()
 
     ImpInitDoc();
 
+    maTextColor = COL_BLACK;
     Font aFont;
     aFont.SetTransparent( FALSE );
     Color aFillColor( aFont.GetFillColor() );
@@ -236,16 +240,19 @@ void TextEngine::SetFont( const Font& rFont )
     if ( rFont != maFont )
     {
         maFont = rFont;
+        maTextColor = rFont.GetColor();
 
         // Wegen Selektion keinen Transparenten Font zulassen...
         // (Sonst spaeter in ImplPaint den Hintergrund anders loeschen...)
         maFont.SetTransparent( FALSE );
+        // Tell VCL not to use the font color, use text color from OutputDevice
+        maFont.SetColor( COL_TRANSPARENT );
         Color aFillColor( maFont.GetFillColor() );
         aFillColor.SetTransparency( 0 );
         maFont.SetFillColor( aFillColor );
 
         maFont.SetAlign( ALIGN_TOP );
-        mpRefDev->SetFont( maFont );
+        mpRefDev->SetFont( maFont);
         Size aTextSize;
         aTextSize.Width() = mpRefDev->GetTextWidth( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) ) );
         aTextSize.Height() = mpRefDev->GetTextHeight();
@@ -480,7 +487,7 @@ void TextEngine::ImpInitDoc()
     mpTEParaPortions = new TEParaPortions;
 
     TextNode* pNode = new TextNode( String() );
-    mpDoc->GetNodes().Insert( pNode );
+    mpDoc->GetNodes().Insert( pNode, 0 );
 
     TEParaPortion* pIniPortion = new TEParaPortion( pNode );
     mpTEParaPortions->Insert( pIniPortion, (ULONG)0 );
@@ -857,6 +864,9 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAtt
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoSplitPara( this, rPaM.GetPara(), rPaM.GetIndex() ) );
 
+    TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    BOOL bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().Len();
+
     TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
@@ -870,6 +880,10 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, BOOL bKeepEndingAtt
 
     CursorMoved( rPaM.GetPara() );  // falls leeres Attribut entstanden.
     TextModified();
+
+    if ( bFirstParaContentChanged )
+        Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, rPaM.GetPara() ) );
+
     return aPaM;
 }
 
@@ -879,11 +893,20 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial )
 
     Rectangle aEditCursor;
     long nY = 0;
-    for ( ULONG nPortion = 0; nPortion < rPaM.GetPara(); nPortion++ )
+
+    if ( !mbHasMultiLineParas )
     {
-        TEParaPortion* pPortion = mpTEParaPortions->GetObject(nPortion);
-        nY += pPortion->GetLines().Count() * mnCharHeight;
+        nY = rPaM.GetPara() * mnCharHeight;
     }
+    else
+    {
+        for ( ULONG nPortion = 0; nPortion < rPaM.GetPara(); nPortion++ )
+        {
+            TEParaPortion* pPortion = mpTEParaPortions->GetObject(nPortion);
+            nY += pPortion->GetLines().Count() * mnCharHeight;
+        }
+    }
+
     aEditCursor = GetEditCursor( rPaM, bSpecial );
     aEditCursor.Top() += nY;
     aEditCursor.Bottom() += nY;
@@ -1138,8 +1161,8 @@ USHORT TextEngine::GetCharPos( ULONG nPortion, USHORT nLine, long nXPos, BOOL bS
                 nTmpX -= pTextPortion->GetWidth();  // vor die Portion stellen
                 // Optimieren: Kein GetTextBreak, wenn feste Fontbreite...
                 Font aFont;
-                SeekCursor( nPortion, nCurIndex+1, aFont );
-                mpRefDev->SetFont( aFont );
+                SeekCursor( nPortion, nCurIndex+1, aFont, NULL );
+                mpRefDev->SetFont( aFont);
                 long nPosInPortion = nXPos-nTmpX;
                 if ( IsRightToLeft() != pTextPortion->IsRightToLeft() )
                     nPosInPortion = pTextPortion->GetWidth() - nPosInPortion;
@@ -1174,43 +1197,42 @@ ULONG TextEngine::GetTextHeight( ULONG nParagraph ) const
     return CalcParaHeight( nParagraph );
 }
 
+ULONG TextEngine::CalcTextWidth( ULONG nPara )
+{
+    ULONG nParaWidth = 0;
+    TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
+    for ( USHORT nLine = pPortion->GetLines().Count(); nLine; )
+    {
+        ULONG nLineWidth = 0;
+        TextLine* pLine = pPortion->GetLines().GetObject( --nLine );
+        for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
+        {
+            TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
+            nLineWidth += pTextPortion->GetWidth();
+        }
+        if ( nLineWidth > nParaWidth )
+            nParaWidth = nLineWidth;
+    }
+    return nParaWidth;
+}
+
 ULONG TextEngine::CalcTextWidth()
 {
     if ( !IsFormatted() && !IsFormatting() )
         FormatDoc();
 
-    long nMaxWidth = 0;
-    long nCurWidth = 0;
-
-    // --------------------------------------------------
-    // Ueber alle Absaetze...
-    // --------------------------------------------------
-    ULONG nParas = mpTEParaPortions->Count();
-    for ( ULONG nPara = mpTEParaPortions->Count(); nPara; )
+    if ( mnCurTextWidth == 0xFFFFFFFF )
     {
-        TEParaPortion* pPortion = mpTEParaPortions->GetObject( --nPara );
-
-        // --------------------------------------------------
-        // Ueber die Zeilen des Absatzes...
-        // --------------------------------------------------
-        for ( USHORT nLine = pPortion->GetLines().Count(); nLine; )
+        mnCurTextWidth = 0;
+        ULONG nParas = mpTEParaPortions->Count();
+        for ( ULONG nPara = mpTEParaPortions->Count(); nPara; )
         {
-            TextLine* pLine = pPortion->GetLines().GetObject( --nLine );
-            // --------------------------------------------------
-            // Ueber die Portions der Zeile
-            // --------------------------------------------------
-            nCurWidth = 0;
-            for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
-            {
-                TETextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
-                nCurWidth += pTextPortion->GetWidth();
-            }
-            if ( nCurWidth > nMaxWidth )
-                nMaxWidth = nCurWidth;
+            ULONG nParaWidth = CalcTextWidth( --nPara );
+            if ( nParaWidth > mnCurTextWidth )
+                mnCurTextWidth = nParaWidth;
         }
     }
-    nMaxWidth++; // Ein breiter, da in CreateLines bei >= umgebrochen wird.
-    return (ULONG)nMaxWidth;
+    return mnCurTextWidth+1;// Ein breiter, da in CreateLines bei >= umgebrochen wird.
 }
 
 ULONG TextEngine::CalcTextHeight()
@@ -1243,7 +1265,7 @@ ULONG TextEngine::CalcTextWidth( ULONG nPara, USHORT nPortionStart, USHORT nLen,
         else
         {
             Font aFont;
-            SeekCursor( nPara, nPortionStart+1, aFont );
+            SeekCursor( nPara, nPortionStart+1, aFont, NULL );
             mpRefDev->SetFont( aFont );
         }
         TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
@@ -1399,9 +1421,11 @@ TextPaM TextEngine::ConnectContents( ULONG nLeftNode )
     return ImpConnectParagraphs( nLeftNode, nLeftNode+1 );
 }
 
-void TextEngine::SeekCursor( ULONG nPara, USHORT nPos, Font& rFont )
+void TextEngine::SeekCursor( ULONG nPara, USHORT nPos, Font& rFont, OutputDevice* pOutDev )
 {
     rFont = maFont;
+    if ( pOutDev )
+        pOutDev->SetTextColor( maTextColor );
 
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
     USHORT nAttribs = pNode->GetCharAttribs().Count();
@@ -1420,7 +1444,15 @@ void TextEngine::SeekCursor( ULONG nPara, USHORT nPos, Font& rFont )
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || !pNode->GetText().Len() )
         {
-            pAttrib->GetAttr().SetFont( rFont );
+            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
+            {
+                pAttrib->GetAttr().SetFont( rFont );
+            }
+            else
+            {
+                if ( pOutDev )
+                    pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
+            }
         }
     }
 
@@ -1480,14 +1512,15 @@ void TextEngine::FormatAndUpdate( TextView* pCurView )
 }
 
 
-void TextEngine::IdleFormatAndUpdate( TextView* pCurView )
+void TextEngine::IdleFormatAndUpdate( TextView* pCurView, USHORT nMaxTimerRestarts )
 {
-    mpIdleFormatter->DoIdleFormat( pCurView );
+    mpIdleFormatter->DoIdleFormat( pCurView, nMaxTimerRestarts );
 }
 
 void TextEngine::TextModified()
 {
     mbFormatted = FALSE;
+    mbModified = TRUE;
 }
 
 void TextEngine::UpdateViews( TextView* pCurView )
@@ -1529,13 +1562,11 @@ void TextEngine::UpdateViews( TextView* pCurView )
     maInvalidRec = Rectangle();
 }
 
-IMPL_LINK_INLINE_START( TextEngine, IdleFormatHdl, Timer *, EMPTYARG )
+IMPL_LINK( TextEngine, IdleFormatHdl, Timer *, EMPTYARG )
 {
-    mpIdleFormatter->ResetRestarts();
     FormatAndUpdate( mpIdleFormatter->GetView() );
     return 0;
 }
-IMPL_LINK_INLINE_END( TextEngine, IdleFormatHdl, Timer *, EMPTYARG )
 
 void TextEngine::CheckIdleFormatter()
 {
@@ -1559,7 +1590,7 @@ void TextEngine::FormatDoc()
         return;
 
     mbIsFormatting = TRUE;
-    mbModified = TRUE;
+    mbHasMultiLineParas = FALSE;
 
     long nY = 0;
     BOOL bGrow = FALSE;
@@ -1570,6 +1601,10 @@ void TextEngine::FormatDoc()
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         if ( pTEParaPortion->IsInvalid() )
         {
+            ULONG nOldParaWidth = 0xFFFFFFFF;
+            if ( mnCurTextWidth != 0xFFFFFFFF )
+                nOldParaWidth = CalcTextWidth( nPara );
+
             ImpFormattingParagraph( nPara );
 
             if ( CreateLines( nPara ) )
@@ -1590,12 +1625,23 @@ void TextEngine::FormatDoc()
             {
                 maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
             }
+
+            if ( ( mnCurTextWidth != 0xFFFFFFFF ) && ( nOldParaWidth == mnCurTextWidth ) )
+            {
+                ULONG nNewParaWidth = CalcTextWidth( nPara );
+                if ( nNewParaWidth >= mnCurTextWidth )
+                    mnCurTextWidth = nNewParaWidth;
+                else
+                    mnCurTextWidth = 0xFFFFFFFF;
+            }
         }
         else if ( bGrow )
         {
             maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
         }
         nY += CalcParaHeight( nPara );
+        if ( !mbHasMultiLineParas && pTEParaPortion->GetLines().Count() > 1 )
+            mbHasMultiLineParas = TRUE;
     }
 
     if ( !maInvalidRec.IsEmpty() )
@@ -2013,7 +2059,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                 {
                                     {
                                         Font aFont;
-                                        SeekCursor( nPara, nIndex+1, aFont );
+                                        SeekCursor( nPara, nIndex+1, aFont, pOutDev );
                                         if ( pSelection )
                                             aFont.SetTransparent( FALSE );
                                         pOutDev->SetFont( aFont );
@@ -2050,7 +2096,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                 if ( aTextStart < *pSelStart )
                                                 {
                                                     nL = pSelStart->GetIndex() - nTmpIndex;
-                                                    pOutDev->SetFont( aFont );
+                                                    pOutDev->SetFont( aFont);
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
                                                     nTmpIndex += nL;
@@ -2638,7 +2684,7 @@ BOOL TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, BOOL bHTML
     return rOutput.GetError() ? FALSE : TRUE;
 }
 
-void TextEngine::RemoveAttribs( ULONG nPara )
+void TextEngine::RemoveAttribs( ULONG nPara, BOOL bIdleFormatAndUpdate )
 {
     if ( nPara < mpDoc->GetNodes().Count() )
     {
@@ -2651,12 +2697,16 @@ void TextEngine::RemoveAttribs( ULONG nPara )
             pTEParaPortion->MarkSelectionInvalid( 0, pNode->GetText().Len() );
 
             mbFormatted = FALSE;
-            FormatAndUpdate( NULL );
+
+            if ( bIdleFormatAndUpdate )
+                IdleFormatAndUpdate( NULL, 0xFFFF );
+            else
+                FormatAndUpdate( NULL );
         }
     }
 }
 
-void TextEngine::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd )
+void TextEngine::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd, BOOL bIdleFormatAndUpdate )
 {
     // Es wird hier erstmal nicht geprueft, ob sich Attribute ueberlappen!
     // Diese Methode ist erstmal nur fuer einen Editor, der fuer eine Zeile
@@ -2680,7 +2730,10 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart,
         pTEParaPortion->MarkSelectionInvalid( nStart, nEnd );
 
         mbFormatted = FALSE;
-        FormatAndUpdate( NULL );
+        if ( bIdleFormatAndUpdate )
+            IdleFormatAndUpdate( NULL, 0xFFFF );
+        else
+            FormatAndUpdate( NULL );
     }
 }
 
@@ -2801,6 +2854,7 @@ void TextEngine::ImpCharsRemoved( ULONG nPara, USHORT nPos, USHORT nChars )
             }
         }
     }
+    Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
 }
 
 void TextEngine::ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars )
@@ -2824,6 +2878,7 @@ void TextEngine::ImpCharsInserted( ULONG nPara, USHORT nPos, USHORT nChars )
             }
         }
     }
+    Broadcast( TextHint( TEXT_HINT_PARACONTENTCHANGED, nPara ) );
 }
 
 void TextEngine::ImpFormattingParagraph( ULONG nPara )
