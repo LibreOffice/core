@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-01 19:38:58 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,22 +365,22 @@ ModalDialog DLG_CAPTION
         Size = MAP_APPFONT ( 182 , 8 ) ;
         Text = "Eigenschaften" ;
         Text [ English ] = "Settings" ;
-        Text[ english_us ] = "Settings";
+        Text[ english_us ] = "Properties";
         Text[ portuguese ] = "Settings";
-        Text[ russian ] = "Settings";
-        Text[ greek ] = "Settings";
+        Text[ russian ] = "—‚ÓÈÒÚ‚‡";
+        Text[ greek ] = "…‰È¸ÙÁÙÂÚ";
         Text[ dutch ] = "Settings";
-        Text[ french ] = "Settings";
-        Text[ spanish ] = "Settings";
+        Text[ french ] = "PropriÈtÈs";
+        Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Settings";
         Text[ italian ] = "Settings";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "Settings";
+        Text[ polish ] = "W≥aúciwoúci";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "Settings";
+        Text[ japanese ] = "ëÆê´";
         Text[ korean ] = "Settings";
-        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_simplified ] = " Ù–‘";
         Text[ chinese_traditional ] = "Settings";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "Settings";
@@ -496,7 +496,7 @@ ModalDialog DLG_CAPTION
     };
     Text[ chinese_simplified ] = "±Í«©";
     Text[ russian ] = "œÓ‰ÔËÒ¸";
-    Text[ polish ] = "Opis";
+    Text[ polish ] = "Etykieta";
     Text[ japanese ] = "ê}ï\\î‘çÜ";
     Text[ chinese_traditional ] = "º–≈“";
     Text[ arabic ] = " ”„Ì…  Ê÷ÌÕÌ…";
@@ -546,7 +546,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ danish ] = "Kapitelvis nummerering" ;
         Text [ italian ] = "Numerazione a capitoli" ;
         Text [ spanish ] = "NumeraciÛn de capÌtulos" ;
-        Text [ french ] = "Par chapitre" ;
+        Text [ french ] = "NumÈrotation par chapitre" ;
         Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
         Text [ portuguese ] = "NumeraÁ„o por capÌtulos" ;
         Text[ chinese_simplified ] = "∞¥’¬±‡∫≈";
@@ -749,3 +749,4 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
