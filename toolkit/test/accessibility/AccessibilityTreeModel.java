@@ -16,6 +16,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Any;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XServiceName;
 
 public class AccessibilityTreeModel
     implements TreeModel, XAccessibleEventListener
@@ -217,20 +218,21 @@ public class AccessibilityTreeModel
 
     /** Remove a node (and all children) from the tree model.
     */
-    protected void removeChild (AccessibleTreeNode aNode)
+    protected boolean removeChild (AccessibleTreeNode aNode)
     {
         try
         {
             if( aNode == null )
             {
                 System.out.println ("can't remove null node");
-                return;
+                return false;
             }
             else
             {
                 // depth-first removal of children
                 while (aNode.getChildCount() > 0)
-                    removeChild (aNode.getChild (0));
+                    if ( ! removeChild (aNode.getChild (0)))
+                        break;
 
                 // Remove node from its parent.
                 AccessibleTreeNode aParent = aNode.getParent();
@@ -246,7 +248,9 @@ public class AccessibilityTreeModel
         catch (Exception e)
         {
             System.out.println ("caught exception while removing child " + aNode + " : " + e);
+            return false;
         }
+        return true;
     }
 
     protected void removeNode (AccessibleTreeNode aNode)
@@ -256,12 +260,10 @@ public class AccessibilityTreeModel
             if ((aNode != null) && (aNode instanceof AccTreeNode))
             {
                 // Remove node itself from internal data structures.
-                removeAccListener ((AccTreeNode)aNode);
                 removeFromCanvas ((AccTreeNode)aNode);
+                removeAccListener ((AccTreeNode)aNode);
                 maXAccessibleToNode.remove (((AccTreeNode)aNode).getAccessible());
             }
-            else
-                System.out.println ("not an AccTreeNode " + aNode);
         }
         catch (Exception e)
         {
@@ -585,7 +587,26 @@ public class AccessibilityTreeModel
         {
             sDisplay = xContext.getAccessibleName();
             if (sDisplay.length()==0)
+            {
                 sDisplay = "<no name>";
+                // Try to determine some usefull name that indicates the
+                // function of the object in question.
+                if (false) // At the moment no object for which this would
+                           // be interesting implements XServiceName or XServiceInfo.
+                {
+                    XServiceName xSN = (XServiceName) UnoRuntime.queryInterface (
+                        XServiceName.class, xAccessible);
+                    if (xSN != null)
+                        sDisplay = xSN.getServiceName ();
+                    else
+                    {
+                        XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
+                            XServiceInfo.class, xAccessible);
+                        if (xSI != null)
+                            sDisplay = xSI.getImplementationName ();
+                    }
+                }
+            }
         }
         else
             sDisplay = new String ("not accessible");
@@ -610,7 +631,10 @@ public class AccessibilityTreeModel
 
     private static String objectToString(Object aObject)
     {
-        return aObject.toString();
+        if (aObject == null)
+            return null;
+        else
+            return aObject.toString();
         /*
         if( aObject instanceof Any )
             aObject = ((Any)aObject).getObject();
@@ -712,7 +736,9 @@ public class AccessibilityTreeModel
                     TreeModelEvent aRemoveEvent = createEvent (xSource, xOld);
                     removeChild ((AccessibleTreeNode)maXAccessibleToNode.get (xOld));
                     fireTreeNodesRemoved (aRemoveEvent);
+                    handleEvent (xSource, AccessibleTreeHandler.class);
                 }
+
                 // Insertion and removal of children should be mutually
                 // exclusive.  But then there is this 'should' ...
                 if (aEvent.NewValue != null)
