@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:29:48 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ russian ] = "Οξπξγξβξε ηνΰχενθε";
         Text[ polish ] = "Wartoζ progowa";
         Text[ japanese ] = "‚µ‚«‚Ά’l(~V)";
-        Text[ chinese_traditional ] = "ªμ©l­Θ(~V)";
+        Text[ chinese_traditional ] = "Α{¬Ι­Θ(~V)";
         Text[ arabic ] = "ήνγΙ ΗαΘΟΑ";
         Text[ greek ] = "Τιμή ορίου";
         Text[ korean ] = "ΐΣ°θ°ª(~V)";
@@ -856,6 +856,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     };
     Text[ catalan ] = "Relieve";
 };
+
 
 
 
