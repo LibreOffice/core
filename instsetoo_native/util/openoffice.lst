@@ -8,7 +8,9 @@ OpenOffice
 			PRODUCTVERSION 680
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
+			REGISTRATIONURL http://www.openoffice.org/welcome/registration.html
 			EVAL
+			FILEFORMATVERSION 1.0
 	    }
 				active			1
 				compression		5
