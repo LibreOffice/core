@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:07:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ static inline void constructRuntimeException(
 }
 
 //------------------------------------------------------------------------------
-static inline type_equals(
+static inline sal_Bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
     SAL_THROW( () )
@@ -513,7 +513,8 @@ void AdapterImpl::invoke(
         &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0, nParams, 0 );
     uno_Any * pInAnys = (uno_Any *)pInParamsSeq->elements;
     sal_Int32 nOutParams = 0;
-    for ( sal_Int32 nPos = nParams; nPos--; )
+    sal_Int32 nPos;
+    for ( nPos = nParams; nPos--; )
     {
         typelib_MethodParameter const & rParam = pFormalParams[nPos];
         if (rParam.bIn) // is in/inout param
@@ -865,11 +866,13 @@ static inline AdapterImpl * lookup_adapter(
     {
         AdapterImpl * that = reinterpret_cast< AdapterImpl * >( *iPos );
         // iterate thru all types if that is a matching adapter
-        for ( sal_Int32 nPosTypes = nTypes; nPosTypes--; )
+        sal_Int32 nPosTypes;
+        for ( nPosTypes = nTypes; nPosTypes--; )
         {
             Type const & rType = pTypes[ nPosTypes ];
             // find in adapter's type list
-            for ( sal_Int32 nPos = that->m_nInterfaces; nPos--; )
+            sal_Int32 nPos;
+            for ( nPos = that->m_nInterfaces; nPos--; )
             {
                 if (::typelib_typedescriptionreference_isAssignableFrom(
                         rType.getTypeLibType(),
