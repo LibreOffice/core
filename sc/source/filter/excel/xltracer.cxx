@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:46:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,7 @@ static const XclTracerDetails pTracerDetails[] =
     { eTabLimitExceeded,    1001,  "Limits",         "Sheet",           "Sheet limit exceeded."              },
     { ePassword,            2000,  "Protection",     "Password",        "Document is password protected."    },
     { ePrintRange,          3000,  "Print",          "Print Range",     "Print Range present."               },
-    { eHorizontalPrint,     3001,  "Print",          "Pages Wide",      "Horizontal pages not supported."    },
     { eShortDate,           4000,  "CellFormatting", "Short Dates",     "Possible Date format issue."        },
-    { eShrinkToFit,         4001,  "CellFormatting", "Shrink To Fit",   "Shrink to fit not supported."        },
-    { eAlignmentFill,       4002,  "CellFormatting", "Alignment Fill",  "Alignment Fill not supported."       },
-    { eDiagonalBorder,      4003,  "CellFormatting", "Border",          "Diagonal border present."           },
     { eBorderLineStyle,     4004,  "CellFormatting", "Border",          "Line style not supported.",         },
     { eFillPattern,         4005,  "CellFormatting", "Pattern",         "Fill Pattern not supported.",       },
     { eInvisibleGrid,       5000,  "Properties",     "Grid Invisible",  "Grid invisible on first sheet."      },
@@ -107,15 +103,16 @@ static const XclTracerDetails pTracerDetails[] =
     { eChartUnKnownType,    8002,  "Chart",          "Type",            "Chart Type not supported."},
     { eChartTrendLines,     8003,  "Chart",          "Type",            "Chart trendlines not supported."},
     { eChartOnlySheet,      8004,  "Chart",          "Type",            "Chart only sheet not supported."},
-    { eChartRange,          8005,  "Chart",          "Source Data",     "Category and Value range not symmetrical."},
-    { eChartDSName,         8006,  "Chart",          "Source Data",     "Name not linked to cell."},
+    { eChartRange,          8005,  "Chart",          "Source Data",     "Chart source ranges too complex."},
+    { eChartDSName,         8006,  "Chart",          "Source Data",     "Series titles not linked to cells."},
     { eChartDataTable,      8007,  "Chart",          "Legend",          "Data table not supported."},
     { eChartLegendPosition, 8008,  "Chart",          "Legend",          "Position not guaranteed."},
     { eChartTextFormatting, 8009,  "Chart",          "Formatting",      "Text formatting present."},
     { eChartEmbeddedObj,    8010,  "Chart",          "Area",            "Object inside chart."},
-    { eChartBorderAuto,     8011,  "Chart",          "Area",            "Automatic border in chart area."},
     { eChartAxisAuto,       8012,  "Chart",          "Axis",            "Axis interval is automatic."},
-    { eChartInvalidXY,      8013,  "Chart",          "Scatter",         "Unsupported data range."},
+    { eChartInvalidXY,      8013,  "Chart",          "Scatter",         "Unsupported or invalid data range for XY chart."},
+    { eChartErrorBars,      8014,  "Chart",          "Type",            "Chart error bars not supported."},
+    { eChartAxisManual,     8015,  "Chart",          "Axis",            "Manual axis crossing point adjusted."},
     { eUnsupportedObject,   9000,  "Object",         "Type",            "Limited Object support."},
     { eObjectNotPrintable,  9001,  "Object",         "Print",           "Object not printable."},
     { eDVType,              10000, "DataValidation", "Type",            "Custom type present."}
@@ -130,7 +127,6 @@ XclTracer::XclTracer( const String& rDocUrl, const OUString& rConfigPath ) :
     mpTracer.reset( new MSFilterTracer( rConfigPath, &aConfigData ) );
     mpTracer->StartTracing();
     mbEnabled = mpTracer->IsEnabled();
-
 }
 
 XclTracer::~XclTracer()
@@ -144,7 +140,7 @@ void XclTracer::AddAttribute( const OUString& rName, const OUString& rValue )
         mpTracer->AddAttribute( rName, rValue );
 }
 
-void XclTracer::AddAttribute( const ::rtl::OUString& rName, sal_Int32 nValue )
+void XclTracer::AddAttribute( const OUString& rName, sal_Int32 nValue )
 {
     if( mbEnabled )
         mpTracer->AddAttribute( rName, OUString::valueOf( nValue ) );
@@ -159,7 +155,7 @@ void XclTracer::Trace( const OUString& rElementID, const OUString& rMessage )
     }
 }
 
-void XclTracer::Trace( const ::rtl::OUString& rElementID, sal_Int32 nMessage )
+void XclTracer::Trace( const OUString& rElementID, sal_Int32 nMessage )
 {
     if( mbEnabled )
     {
@@ -172,9 +168,9 @@ void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )
 {
     if( mbEnabled )
     {
-        OUString sID(CREATE_STRING("SC"));
-        sID += rtl::OUString::valueOf(static_cast<sal_Int32>(pTracerDetails[eProblem].mnID));
-        OUString sProblem  = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpProblem);
+        OUString sID( CREATE_STRING( "SC" ) );
+        sID += OUString::valueOf( static_cast< sal_Int32 >( pTracerDetails[ eProblem ].mnID ) );
+        OUString sProblem = OUString::createFromAscii( pTracerDetails[ eProblem ].mpProblem );
 
         switch (eProblem)
         {
@@ -194,14 +190,14 @@ void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )
 
 void XclTracer::Context( XclTracerId eProblem, SCTAB nTab )
 {
-    OUString sContext = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpContext);
-    OUString sDetail  = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpDetail);
+    OUString sContext = OUString::createFromAscii( pTracerDetails[ eProblem ].mpContext );
+    OUString sDetail  = OUString::createFromAscii( pTracerDetails[ eProblem ].mpDetail );
 
     switch (eProblem)
     {
         case eRowLimitExceeded:
         case eTabLimitExceeded:
-            sDetail += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
+            sDetail += OUString::valueOf( static_cast< sal_Int32 >( nTab + 1 ) );
             break;
         default:
             break;
@@ -241,35 +237,11 @@ void XclTracer::TracePrintRange()
     ProcessTraceOnce( ePrintRange);
 }
 
-void XclTracer::TracePrintFitToPages( sal_uInt16 nFitWidth)
-{
-    if(nFitWidth > 1)
-        ProcessTraceOnce( eHorizontalPrint);
-}
-
 void XclTracer::TraceDates( sal_uInt16 nNumFmt)
 {
     // Short Date = 14 and Short Date+Time = 22
     if(nNumFmt == 14 || nNumFmt == 22)
         ProcessTraceOnce(eShortDate);
-}
-
-void XclTracer::TraceShrinkToFit(bool bShrinkToFit)
-{
-    if(bShrinkToFit)
-        ProcessTraceOnce(eShrinkToFit);
-}
-
-void XclTracer::TraceAlignmentFill( bool bAlignmentFill)
-{
-    if(bAlignmentFill)
-        ProcessTraceOnce(eAlignmentFill);
-}
-
-void XclTracer::TraceDiagonalBorder( bool bDiagonalBorder)
-{
-    if(bDiagonalBorder)
-        ProcessTraceOnce(eDiagonalBorder);
 }
 
 void XclTracer::TraceBorderLineStyle( bool bBorderLineStyle)
@@ -330,6 +302,11 @@ void XclTracer::TraceChartTrendLines()
     ProcessTraceOnce(eChartTrendLines);
 }
 
+void XclTracer::TraceChartErrorBars()
+{
+    ProcessTraceOnce( eChartErrorBars );
+}
+
 void XclTracer::TraceChartOnlySheet()
 {
     ProcessTraceOnce(eChartOnlySheet);
@@ -376,18 +353,16 @@ void XclTracer::TraceChartEmbeddedObj()
     ProcessTraceOnce(eChartEmbeddedObj);
 }
 
-void XclTracer::TraceChartBorderAuto()
+void XclTracer::TraceChartAxisAutoCross()
 {
-    // Excel Automatic Chart Area borders use a different
-    // default style to Calc.
-    ProcessTraceOnce(eChartBorderAuto);
+    // Axis intervals generated automatically may not be the same.
+    ProcessTraceOnce(eChartAxisAuto);
 }
 
-void XclTracer::TraceChartAxisAuto()
+void XclTracer::TraceChartAxisManualCross()
 {
-    // Axis intervals generated automatically may not
-    // be the same.
-    ProcessTraceOnce(eChartAxisAuto);
+    // Manual axis crossing point changed
+    ProcessTraceOnce(eChartAxisManual);
 }
 
 void XclTracer::TraceChartInvalidXY()
