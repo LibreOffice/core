@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 13:52:28 $
+ *  last change: $Author: fs $ $Date: 2001-02-12 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,7 +1427,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
             if( aDirEntry.Exists() )
             {
                 pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, STREAM_READ);
-                if( pStream->GetError() != ERRCODE_NONE )
+                if (!pStream || (pStream->GetError() != ERRCODE_NONE))
                 {
                     delete pStream;
                     pStream = 0;
