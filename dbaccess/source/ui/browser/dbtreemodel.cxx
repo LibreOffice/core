@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:57:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,8 @@ namespace dbaui
                 return _bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON;
             case SbaTableQueryBrowser::etQuery:
                 return _bHiContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
-            case SbaTableQueryBrowser::etBookmark:
-                return _bHiContrast ? BOOKMARK_TREE_ICON_SCH : BOOKMARK_TREE_ICON;
             case SbaTableQueryBrowser::etDatasource:
                 return _bHiContrast ? IMG_DATABASE_SCH : IMG_DATABASE;
-            case SbaTableQueryBrowser::etBookmarkContainer:
-                return _bHiContrast ? BOOKMARKFOLDER_TREE_ICON_SCH : BOOKMARKFOLDER_TREE_ICON;
             case SbaTableQueryBrowser::etQueryContainer:
                 return _bHiContrast ? QUERYFOLDER_TREE_ICON_SCH : QUERYFOLDER_TREE_ICON;
             case SbaTableQueryBrowser::etTableContainer:
