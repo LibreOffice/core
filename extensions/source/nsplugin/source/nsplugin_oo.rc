@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ *  $RCSfile: nsplugin_oo.rc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:01:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define ADDITIONAL_VERINFO1     value "FileExtents", "sdc|sds|sda|sdd|sdp|smf|vor|sgl|sdw|sxc|stc|sxd|std|sxi|sti|sxm|sxw|sxg|stw|doc|xls|ppt|oot|ott|oom|oth|oos|ots|ood|otd|oop|otp|oof\0"\
+    value "FileOpenName", "StarCalc 3.0 - 5.0|StarChart 3.0 - 5.0|StarDraw 3.0 - 5.0|StarImpress 3.0 - 5.0|StarImpress-packed 3.0 - 5.0|StarMath 3.0 - 5.0|StarWriter Template 3.0 - 5.0|StarWriter Global 3.0 - 5.0|StarWriter 3.0 - 5.0|StarCalc|StarCalc Template|StarDraw|StarDraw Template|StarImpress|StarImpress Template|StarMath|StarWriter|StarWriter Global|StarWriter Template|Microsoft Word Document|Microsoft Excel Document|Microsoft Powerpoint Document|Open Office Text|Open Office Text Template|Open Office Master Document|HTML Document Template|Open Office Spreadsheet|Open Office Spreadsheet Template|Open Office Drawing|Open Office Drawing Template|Open Office Presentation|Open Office Presentation Template|Open Office Formula\0"
+#define ADDITIONAL_VERINFO2     value "FileDescription", "OpenOffice.org Plug-in handles all its documents" value "ProductName", "OpenOffice.org Plug-in"  value "MIMEType",   "application/vnd.stardivision.calc|application/vnd.stardivision.chart|application/vnd.stardivision.draw|application/vnd.stardivision.impress|application/vnd.stardivision.impress-packed|application/vnd.stardivision.math|application/vnd.stardivision.writer|application/vnd.stardivision.writer-global|application/vnd.staroffice.writer|application/vnd.sun.xml.calc|application/vnd.sun.xml.calc.template|application/vnd.sun.xml.draw|application/vnd.sun.xml.draw.template|"
+#define ADDITIONAL_VERINFO3     "application/vnd.sun.xml.impress|application/vnd.sun.xml.impress.template|application/vnd.sun.xml.math|application/vnd.sun.xml.writer|application/vnd.sun.xml.writer.global|application/vnd.sun.xml.writer.template|application/msword|application/vnd.ms-excel|application/vnd.ms-powerpoint|application/x-vnd.oasis.openoffice.text|application/x-vnd.oasis.openoffice-template|application/x-vnd.oasis.openoffice.text-master|application/x-vnd.oasis.openoffice.text-web|application/x-vnd.oasis.openoffice.spreadsheet|application/x-vnd.oasis.openoffice.spreadsheet-template|application/x-vnd.oasis.openoffice.drawing|application/x-vnd.oasis.openoffice.drawing-template|application/x-vnd.oasis.openoffice.presentation|application/x-vnd.oasis.openoffice.presentation-template|application/x-vnd.oasis.openoffice.formula\0"
