@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-10 12:18:19 $
+#   last change: $Author: fs $ $Date: 2001-08-14 12:01:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=uimisc
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
@@ -81,31 +79,36 @@ SRCFILES =	\
 
 # ... object files ............................
 
-SLOFILES=	\
+EXCEPTIONSFILES=	\
+        $(SLO)$/singledoccontroller.obj		\
         $(SLO)$/datasourceconnector.obj		\
         $(SLO)$/documentautolinker.obj		\
         $(SLO)$/linkeddocuments.obj			\
-        $(SLO)$/filenotation.obj			\
         $(SLO)$/indexcollection.obj			\
         $(SLO)$/UITools.obj					\
         $(SLO)$/WCPage.obj					\
+        $(SLO)$/TokenWriter.obj				\
+        $(SLO)$/HtmlReader.obj				\
+        $(SLO)$/RtfReader.obj				\
+        $(SLO)$/propertysetitem.obj			\
+        $(SLO)$/containermultiplexer.obj	\
+        $(SLO)$/querydesignaccess.obj		\
+        $(SLO)$/DExport.obj					\
+        $(SLO)$/uiservices.obj				\
+        $(SLO)$/moduledbu.obj
+
+
+SLOFILES=	\
+        $(EXCEPTIONSFILES)					\
+        $(SLO)$/filenotation.obj			\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
         $(SLO)$/WTypeSelect.obj				\
         $(SLO)$/WColumnSelect.obj			\
         $(SLO)$/WCopyTable.obj				\
-        $(SLO)$/TokenWriter.obj				\
-        $(SLO)$/HtmlReader.obj				\
-        $(SLO)$/RtfReader.obj				\
-        $(SLO)$/DExport.obj					\
-        $(SLO)$/propertysetitem.obj			\
-        $(SLO)$/containermultiplexer.obj	\
-        $(SLO)$/querydesignaccess.obj		\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
-        $(SLO)$/dsntypes.obj				\
-        $(SLO)$/uiservices.obj				\
-        $(SLO)$/moduledbu.obj
+        $(SLO)$/dsntypes.obj
 
 # --- Targets ----------------------------------
 
