@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:06:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,12 +173,6 @@
 #include "sdresid.hxx"
 #ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "slideshow.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
 #endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
