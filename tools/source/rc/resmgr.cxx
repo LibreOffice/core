@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 08:17:58 $
+ *  last change: $Author: pl $ $Date: 2000-11-16 14:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 #endif
 #ifndef _TOOLS_RCID_H
 #include <rcid.h>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
@@ -1040,11 +1046,6 @@ void* ResMgr::Increment( USHORT nSize )
 
 const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 {
-    static sal_Char const aDefEng[]         = "44";
-    static sal_Char const aDefUSEng[]       = "01";
-    static sal_Char const aDefGerman[]      = "49";
-    static sal_Char const aDefFrench[]      = "33";
-    static sal_Char const aDefPortuguese[]  = "03";
 
     if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
         nType = ::GetSystemLanguage();
@@ -1069,11 +1070,11 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_ENGLISH_TRINIDAD:
             case LANGUAGE_ENGLISH_ZIMBABWE:
             case LANGUAGE_ENGLISH_PHILIPPINES:
-                return aDefEng;
+                return "44";
 
             case LANGUAGE_ENGLISH_US:
             case LANGUAGE_ENGLISH_CAN:
-                return aDefUSEng;
+                return "01";
 
             case LANGUAGE_ENGLISH_AUS:
             case LANGUAGE_ENGLISH_NZ:
@@ -1090,14 +1091,14 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_FRENCH_SWISS:
             case LANGUAGE_FRENCH_LUXEMBOURG:
             case LANGUAGE_FRENCH_MONACO:
-                return aDefFrench;
+                return "33";
 
             case LANGUAGE_GERMAN:
             case LANGUAGE_GERMAN_SWISS:
             case LANGUAGE_GERMAN_AUSTRIAN:
             case LANGUAGE_GERMAN_LUXEMBOURG:
             case LANGUAGE_GERMAN_LIECHTENSTEIN:
-                return aDefGerman;
+                return "49";
 
             case LANGUAGE_ITALIAN:
             case LANGUAGE_ITALIAN_SWISS:
@@ -1108,7 +1109,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "47";
 
             case LANGUAGE_PORTUGUESE:
-                return aDefPortuguese;
+                return "03";
 
             case LANGUAGE_PORTUGUESE_BRAZILIAN:
                 return "55";
@@ -1178,7 +1179,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "96";
 
             default:
-                return aDefUSEng;
+                return "01";
         }
     }
     else if ( nPrio == 1 )
@@ -1186,21 +1187,21 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
         switch ( nType )
         {
             case LANGUAGE_FRENCH_CANADIAN:
-                return aDefFrench;
+                return "33";
 
             case LANGUAGE_PORTUGUESE_BRAZILIAN:
-                return aDefPortuguese;
+                return "03";
 
             default:
                 return NULL;
         }
     }
     else if ( nPrio == 2 )
-        return aDefUSEng;
+        return "01";
     else if ( nPrio == 3 )
-        return aDefEng;
+        return "44";
     else
-        return aDefGerman;
+        return "49";
 }
 
 // -----------------------------------------------------------------------
@@ -1216,7 +1217,8 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     // Resourcefile suchen
     UniString aName;
     InternalResMgr* pInternalResMgr = NULL;
-    for ( int i = 0; i < 5; i++ )
+    int i;
+    for ( i = 0; i < 5; i++ )
     {
         pLang[i] = GetLang( nType, i );
 
@@ -1227,13 +1229,80 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
             aName.AppendAscii( ".res" );
             pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, pAppName, pResPath );
             if ( pInternalResMgr )
-                break;
+                return new ResMgr( pInternalResMgr );
         }
     }
 
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+ResMgr* ResMgr::SearchCreateResMgr(
+    const sal_Char* pPrefixName,
+    LanguageType& nType )
+{
+    if( nType == LANGUAGE_DONTKNOW )
+        nType = GetSystemLanguage();
+
+    ::rtl::OUString aRtlUniAppFileName;
+    osl_getExecutableFile( &aRtlUniAppFileName.pData );
+    ::rtl::OUString aRtlAppFileName;
+    ::osl::FileBase::getSystemPathFromNormalizedPath( aRtlUniAppFileName, aRtlAppFileName );
+    String aAppFileName( aRtlAppFileName );
+
+    const sal_Char* pLang = GetLang( nType, 0 );
+    String aBaseName( String::CreateFromAscii( pPrefixName ) );
+    String aName( aBaseName );
+    aName.AppendAscii( pLang ? pLang : "" );
+    aName.AppendAscii( ".res" );
+
+    InternalResMgr* pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
     if ( pInternalResMgr )
         return new ResMgr( pInternalResMgr );
 
+    static const LanguageType aLanguages[] =
+    {
+        LANGUAGE_ENGLISH_US,
+        LANGUAGE_FRENCH,
+        LANGUAGE_ITALIAN,
+        LANGUAGE_SPANISH,
+        LANGUAGE_DUTCH,
+        LANGUAGE_SWEDISH,
+        LANGUAGE_TURKISH,
+        LANGUAGE_SWEDISH_FINLAND,
+        LANGUAGE_PORTUGUESE_BRAZILIAN,
+        LANGUAGE_PORTUGUESE,
+        LANGUAGE_POLISH,
+        LANGUAGE_NORWEGIAN,
+        LANGUAGE_NORWEGIAN_NYNORSK,
+        LANGUAGE_NORWEGIAN_BOKMAL,
+        LANGUAGE_FINNISH,
+        LANGUAGE_DUTCH_BELGIAN,
+        LANGUAGE_DANISH,
+        LANGUAGE_CATALAN,
+        LANGUAGE_CHINESE_SIMPLIFIED,
+        LANGUAGE_CHINESE_TRADITIONAL,
+        LANGUAGE_JAPANESE,
+        LANGUAGE_HUNGARIAN,
+        LANGUAGE_CZECH,
+        LANGUAGE_RUSSIAN,
+        LANGUAGE_ARABIC,
+        LANGUAGE_GREEK,
+        LANGUAGE_KOREAN,
+        LANGUAGE_KOREAN_JOHAB
+    };
+
+    for( int i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); i++ )
+    {
+        nType = aLanguages[i];
+        aName = aBaseName;
+        aName.AppendAscii( GetLang( nType, 0 ) );
+        aName.AppendAscii( ".res" );
+        pInternalResMgr = InternalResMgr::GetInternalResMgr( aName, &aAppFileName, NULL );
+        if ( pInternalResMgr )
+            return new ResMgr( pInternalResMgr );
+    }
     return NULL;
 }
 
