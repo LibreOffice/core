@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-12 14:51:05 $
+ *  last change: $Author: ssa $ $Date: 2002-12-12 16:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,8 +589,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                 {
                     long nDragW  = rMSettings.GetStartDragWidth();
                     long nDragH  = rMSettings.GetStartDragWidth();
-                    long nMouseX = nX;
-                    long nMouseY = nY;
+                    //long nMouseX = nX;
+                    //long nMouseY = nY;
+                    long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                    long nMouseY = aMousePos.Y();
                     if ( !(((nMouseX-nDragW) <= pMouseDownWin->mpFrameData->mnFirstMouseX) &&
                            ((nMouseX+nDragW) >= pMouseDownWin->mpFrameData->mnFirstMouseX)) ||
                          !(((nMouseY-nDragH) <= pMouseDownWin->mpFrameData->mnFirstMouseY) &&
@@ -724,8 +726,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             ULONG   nDblClkTime = rMSettings.GetDoubleClickTime();
             long    nDblClkW    = rMSettings.GetDoubleClickWidth();
             long    nDblClkH    = rMSettings.GetDoubleClickHeight();
-            long    nMouseX     = nX;
-            long    nMouseY     = nY;
+            //long    nMouseX     = nX;
+            //long    nMouseY     = nY;
+            long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+            long nMouseY = aMousePos.Y();
 
             if ( (pChild == pChild->mpFrameData->mpMouseDownWin) &&
                  (nCode == pChild->mpFrameData->mnFirstMouseCode) &&
