@@ -1,0 +1,2 @@
+ol	libwpd	: sfx2 NULL
+ol	libwpd	nmake	-	all	libpwd_mkout NULL
