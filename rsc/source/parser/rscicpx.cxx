@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:59:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2225,7 +2225,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         aBaseLst.Insert( pLA = new RscLangArray( pHS->Insert( "LangContToolBoxItem" ),
                                                  RSC_NOTYPE,
                                                  pCont,
-                                                 &aLangType, &nLangTypeId, &nDfltLangTypeId ),
+                                                 &aLangType ),
                          LIST_APPEND );
         nId = aNmTb.Put( "ItemList", VARNAME );
         pClassToolBox->SetVariable( nId, pLA, NULL, 0,
