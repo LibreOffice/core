@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 14:59:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,12 +508,6 @@ ULONG SwReader::Read( const Reader& rOptions )
 
 // Initiales Einlesben
 
-
-SwReader::SwReader(SvStream& rStrm, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(&rStrm), pStg(0), pMedium(0), pCrsr(0),
-    aFileName(rFileName)
-{
-}
 
 SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
     : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
