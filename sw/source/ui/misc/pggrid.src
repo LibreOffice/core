@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:01:03 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Raster";
         Text[ hindi ] = "Grid";
         Text[ slovak ] = "Mriežka";
+        Text[ hungarian ] = "Rács";
+        Text[ slovenian ] = "Mreža";
     };
     RadioButton     RB_NOGRID
     {
@@ -128,6 +130,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Kein Raster";
         Text[ hindi ] = "No grid";
         Text[ slovak ] = "Bez mriežky";
+        Text[ hungarian ] = "Nincs rács";
+        Text[ slovenian ] = "Brez mreže";
     };
     RadioButton     RB_LINESGRID
     {
@@ -159,6 +163,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Raster (nur Linien)";
         Text[ hindi ] = "Grid (lines only)";
         Text[ slovak ] = "Mriežka (len riadky)";
+        Text[ hungarian ] = "Rács (csak sorok)";
+        Text[ slovenian ] = "Mreža (samo črte)";
     };
     RadioButton     RB_CHARSGRID
     {
@@ -174,7 +180,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ spanish ] = "Cuadr�cula (l�neas y caracteres)";
         Text[ finnish ] = "Ruudukko (viivat ja merkit)";
         Text[ italian ] = "Griglia (linee e caratteri)";
-        Text[ danish ] = "Gitter (linier og tegn)";
+        Text[ danish ] = "Gitter (linjer og tegn)";
         Text[ swedish ] = "Raster (linjer och tecken)";
         Text[ polish ] = "Siatka (linie i znaki)";
         Text[ portuguese_brazilian ] = "Grade (linhas e caracteres)";
@@ -190,6 +196,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Raster (Linien und Zeichen)";
         Text[ hindi ] = "Grid (lines and characters)";
         Text[ slovak ] = "Mriežka (riadky a znaky)";
+        Text[ hungarian ] = "Rács (sorok és karakterek)";
+        Text[ slovenian ] = "Mreža (črte in znaki)";
     };
     Window          WN_EXAMPLE
     {
@@ -227,6 +235,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hindi ] = "Grid layout";
         Text[ slovak ] = "Rozloženie mriežky";
         Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
+        Text[ hungarian ] = "Rács elrendezése";
+        Text[ slovenian ] = "Postavitev mreže";
     };
     FixedText       FT_LINESPERPAGE
     {
@@ -242,7 +252,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ spanish ] = "L�neas por p�gina";
         Text[ finnish ] = "Rivej� sivulla";
         Text[ italian ] = "Righe per pagina";
-        Text[ danish ] = "R�kker pr. side";
+        Text[ danish ] = "Linjer per sider";
         Text[ swedish ] = "Rader per sida";
         Text[ polish ] = "Liczba wierszy na stron�";
         Text[ portuguese_brazilian ] = "Linhas por p�gina";
@@ -258,6 +268,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Zeilen pro Seite";
         Text[ hindi ] = "Lines per page";
         Text[ slovak ] = "Riadkov na strane";
+        Text[ hungarian ] = "Sorok száma az oldalon";
+        Text[ slovenian ] = "Vrstic na stran";
     };
     NumericField    NF_LINESPERPAGE
     {
@@ -305,6 +317,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Max. Basistextgröße";
         Text[ hindi ] = "Max. base text size";
         Text[ slovak ] = "Veľkosť základného textu";
+        Text[ hungarian ] = "Alapszöveg max. mérete";
+        Text[ slovenian ] = "Maks. velikost vodilnega besedila";
     };
     MetricField     MF_TEXTSIZE
     {
@@ -337,7 +351,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ spanish ] = "Caracteres por l�nea";
         Text[ finnish ] = "Merkkej� rivill�";
         Text[ italian ] = "Caratteri per riga";
-        Text[ danish ] = "Tegn pr. r�kke";
+        Text[ danish ] = "Tegn per linje";
         Text[ swedish ] = "Tecken per rad";
         Text[ polish ] = "Znaki w wierszu";
         Text[ portuguese_brazilian ] = "Caracteres por linha";
@@ -353,6 +367,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Zeichen pro Zeile";
         Text[ hindi ] = "Characters per line";
         Text[ slovak ] = "Znakov na riadku";
+        Text[ hungarian ] = "Karakterek soronként";
+        Text[ slovenian ] = "Znakov v vrstici";
     };
     NumericField    NF_CHARSPERLINE
     {
@@ -384,7 +400,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ spanish ] = "Tama�o m�x. texto Ruby";
         Text[ finnish ] = "Ruby-tekstin koko";
         Text[ italian ] = "Dimens. max. testo Ruby";
-        Text[ danish ] = "Fonetisk tekst - Tekstst�rrelse";
+        Text[ danish ] = "Maks. st�rrelse for fonetisk tekst";
         Text[ swedish ] = "Max. storlek ruby-text";
         Text[ polish ] = "Rozmiar dopisku fonetycznego";
         Text[ portuguese_brazilian ] = "Tamanho do texto Ruby";
@@ -400,6 +416,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Max. Ruby-Textgröße";
         Text[ hindi ] = "Max. Ruby text size";
         Text[ slovak ] = "Veľkosť hrubého textu";
+        Text[ hungarian ] = "Fonetikus átirat max. mérete";
+        Text[ slovenian ] = "Maks. velikost fonetičnega besedila";
     };
     MetricField     MF_RUBYSIZE
     {
@@ -432,7 +450,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ spanish ] = "Texto Ruby debajo/a la izquierda del texto de base";
         Text[ finnish ] = "Leip�tekstin alapuolella tai vasemmalla oleva Ruby-teksti";
         Text[ italian ] = "Testo Ruby in basso/a sinistra dal testo base";
-        Text[ danish ] = "Fonetisk tekst. Under/til venstre for basistekst";
+        Text[ danish ] = "Fonetisk tekst under/til venstre for basistekst";
         Text[ swedish ] = "Ruby-text nedanf�r/till v�nster om bastext";
         Text[ polish ] = "Dopisek fonetyczny poni�ej lub z lewej strony tekstu bazowego";
         Text[ portuguese_brazilian ] = "Texto Ruby abaixo/esquerda da base do texto";
@@ -448,6 +466,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Ruby-Text unter/links vom Basistext";
         Text[ hindi ] = "Ruby text below/left from base text";
         Text[ slovak ] = "Hrubý text pod/vľavo od základného textu";
+        Text[ hungarian ] = "Fonetikus átirat az alapszöveg alatt a bal oldalon";
+        Text[ slovenian ] = "Fonetično besedilo pod/levo od vodilnega besedila";
     };
     FixedLine       FL_DISPLAY
     {
@@ -479,6 +499,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Rasterdarstellung";
         Text[ hindi ] = "Grid display";
         Text[ slovak ] = "Zobrazenie mriežky";
+        Text[ hungarian ] = "Rács megjelenése";
+        Text[ slovenian ] = "Prikaz mreže";
     };
     CheckBox        CB_DISPLAY
     {
@@ -511,6 +533,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hindi ] = "Display grid";
         Text[ slovak ] = "Zobraziť mriežku";
         Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
+        Text[ hungarian ] = "Rács megjelenítése";
+        Text[ slovenian ] = "Prikaži mrežo";
     };
     CheckBox        CB_PRINT
     {
@@ -543,6 +567,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hindi ] = "Print grid";
         Text[ slovak ] = "Tlačiť mriežku";
         Text[ language_user1 ] = "ZL: translation changed because of bug report from Jack";
+        Text[ hungarian ] = "Rács nyomtatása";
+        Text[ slovenian ] = "Natisni mrežo";
     };
     FixedText       FT_COLOR
     {
@@ -574,6 +600,8 @@ TabPage TP_TEXTGRID_PAGE
         Text[ hebrew ] = "Rasterfarbe";
         Text[ hindi ] = "Grid color";
         Text[ slovak ] = "Farba mriežky";
+        Text[ hungarian ] = "Rács színe";
+        Text[ slovenian ] = "Barva mreže";
     };
     ListBox         LB_COLOR
     {
@@ -584,6 +612,7 @@ TabPage TP_TEXTGRID_PAGE
         DropDown = TRUE;
     };
 };
+
 
 
 
