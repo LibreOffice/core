@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:05:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,25 @@
 #ifndef _XMLOFF_FORMS_EVENTEXPORT_HXX_
 #include "eventexport.hxx"
 #endif
+#ifndef _XMLOFF_FORMENUMS_HXX_
+#include "formenums.hxx"
+#endif
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>     // for check states
+#endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include "XMLEventExport.hxx"
+#endif
+#ifndef XMLOFF_FORMS_FORMCELLBINDING
+#include "formcellbinding.hxx"
+#endif
+
+#include <algorithm>
+
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -96,9 +115,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _XMLOFF_FORMENUMS_HXX_
-#include "formenums.hxx"
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
@@ -124,25 +140,17 @@
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
 #endif
-#ifndef _SV_WINTYPES_HXX
-#include <vcl/wintypes.hxx>     // for check states
-#endif
-#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
-#include "XMLEventExport.hxx"
-#endif
-#ifndef XMLOFF_FORMS_FORMCELLBINDING
-#include "formcellbinding.hxx"
-#endif
+/** === end UNO includes === **/
 
+#ifndef _XMLOFF_TEXTPRMAP_HXX_
+#include "txtprmap.hxx"
+#endif
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
-
-#include <algorithm>
-
 
 //.........................................................................
 namespace xmloff
@@ -160,6 +168,7 @@ namespace xmloff
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::table;
+    using namespace ::com::sun::star::text;
     using namespace ::com::sun::star::form::binding;
 
     //=====================================================================
@@ -421,6 +430,44 @@ namespace xmloff
         // know anything about this, we need to prevent that it tries to export this property
         exportedProperty(PROPERTY_CONTROLLABEL);
 
+        // if it's a control supporting XText, then we need to declare all text-related properties
+        // as "already exported". This prevents them from being exported as generic "form:property"-tags.
+        // *If* we would export them this way, they would be completely superfluous, and sometimes even
+        // disastrous, since they may, at import time, override paragraph properties which already have
+        // been set before
+        if ( m_eType == TEXT_AREA )
+        {
+            Reference< XText > xControlText( m_xProps, UNO_QUERY );
+            if ( xControlText.is() )
+            {
+                const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_TEXT );
+                while ( pCharAttributeProperties->msApiName )
+                {
+                    exportedProperty( ::rtl::OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
+                    ++pCharAttributeProperties;
+                }
+
+                const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_SHAPE_PARA );
+                while ( pParaAttributeProperties->msApiName )
+                {
+                    exportedProperty( ::rtl::OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
+                    ++pParaAttributeProperties;
+                }
+
+                // the RichText property is not exported. The presence of the text:p element
+                // will be used - upon reading - as indicator for the value of the RichText property
+                exportedProperty( PROPERTY_RICH_TEXT );
+
+                // strange thing: paragraphs support both a CharStrikeout and a CharCrossedOut property
+                // The former is a short/enum value, the latter a boolean. The former has a real meaning
+                // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
+                // later on imported, it overwrites anything which has previously been imported for
+                // CharStrikeout.
+                // 2004-04-14 - #i27729# - fs@openoffice.org
+                exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
+            }
+        }
+
         // let the base class export the remaining properties and the events
         OElementExport::exportSubTags();
 
@@ -456,6 +503,24 @@ namespace xmloff
                         getCommonControlAttributeName(CCA_LABEL),
                         *pListItems);
                     SvXMLElementExport aFormElement(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "item", sal_True, sal_True);
+                }
+            }
+            break;
+
+            case TEXT_AREA:
+            {
+                // if we act as rich text control, we need to export some text:p elements
+                Reference< XText > xControlText( m_xProps, UNO_QUERY );
+                if ( xControlText.is() )
+                {
+                    sal_Bool bActingAsRichText = sal_False;
+                    if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_RICH_TEXT ) )
+                    {
+                        OSL_VERIFY(m_xProps->getPropertyValue( PROPERTY_RICH_TEXT ) >>= bActingAsRichText );
+                    }
+
+                    if ( bActingAsRichText )
+                        m_rContext.getGlobalContext().GetTextParagraphExport()->exportText( xControlText );
                 }
             }
             break;
@@ -1307,7 +1372,8 @@ namespace xmloff
                             if (m_xPropertyInfo->hasPropertyByName(PROPERTY_MULTILINE))
                                 // grid columns do not have this property ....
                                 bMultiLine = ::cppu::any2bool(m_xProps->getPropertyValue(PROPERTY_MULTILINE));
-                            if (bMultiLine)
+
+                            if ( bMultiLine )
                                 m_eType = TEXT_AREA;
                             else
                                 // the only case left is represented by a Text element
@@ -1319,29 +1385,32 @@ namespace xmloff
                 // attributes which are common to all the four types:
                 // common attributes
                 m_nIncludeCommon =
-                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED |
-                    CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE |
-                    CCA_VALUE;
+                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_VALUE |
+                    CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
+
                 // database attributes
                 m_nIncludeDatabase = DA_DATA_FIELD;
+
                 // event attributes
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
 
                 // only text and pattern fields have a ConvertEmptyToNull property
-                if ((m_nClassId == FormComponentType::TEXTFIELD) || (m_nClassId == FormComponentType::PATTERNFIELD))
+                if  (   ( m_nClassId == FormComponentType::TEXTFIELD )
+                    ||  ( m_nClassId == FormComponentType::PATTERNFIELD )
+                    )
                     m_nIncludeDatabase |= DA_CONVERT_EMPTY;
 
                 // all controls but the file control fields have a readonly property
-                if (m_nClassId != FormComponentType::FILECONTROL)
+                if ( m_nClassId != FormComponentType::FILECONTROL )
                     m_nIncludeCommon |= CCA_READONLY;
 
                 // a text field has a max text len
-                if (m_nClassId == FormComponentType::TEXTFIELD)
+                if ( m_nClassId == FormComponentType::TEXTFIELD )
                     m_nIncludeCommon |= CCA_MAX_LENGTH;
 
                 // max and min values and validation:
                 if (FORMATTED_TEXT == m_eType)
-                {   // in general all control represented as formatted-text have these props
+                {   // in general all controls represented as formatted-text have these props
                     if (FormComponentType::PATTERNFIELD != m_nClassId)
                         // but the PatternField does not have value limits
                         m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE;
@@ -1351,8 +1420,8 @@ namespace xmloff
                         m_nIncludeSpecial |= SCA_VALIDATION;
                 }
 
-                // if it's not a password field, the CurrentValue needs to be stored, too
-                if (PASSWORD != m_eType)
+                // if it's not a password field or rich text control, the CurrentValue needs to be stored, too
+                if ( PASSWORD != m_eType )
                     m_nIncludeCommon |= CCA_CURRENT_VALUE;
             }
             break;
@@ -1488,8 +1557,6 @@ namespace xmloff
                     m_nIncludeSpecial |= SCA_PAGE_STEP_SIZE ;
 
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
-                break;
-
                 break;
 
             default:
