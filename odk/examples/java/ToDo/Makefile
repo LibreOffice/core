@@ -54,36 +54,40 @@ ALL : JavaToDoExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_CLASS))
-
-$(OUT_COMP_CLASS)/%.Manifest : $(OUT_COMP_GEN)
+$(OUT_COMP_CLASS)/%.Manifest :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
-$(OUT_COMP_GEN)/%.urd : %.idl $(OUT_COMP_GEN)
+$(OUT_COMP_GEN)/%.urd : %.idl
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	idlc -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	regmerge $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT1_RDB) $(OUT_COMP_GEN)
+$(OUT_COMP_GEN)/%.java : $(COMPONENT1_RDB)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	javamaker -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT1_RDB) $(DKREGISTRYNAME)
 
-$(CLASSFILES) : $(OUT_COMP_GEN) $(JAVAFILES) $(GENJAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES) $(GENJAVAFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_COMP_GEN)/%.rdb $(OUT_CLASS)/%.jar
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
 	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
 	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
