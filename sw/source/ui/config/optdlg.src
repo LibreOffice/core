@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:52:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1564,7 +1564,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "¦C¦L¶Â¦â(~K)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ÈÇáæä ÃÓæÏ";
         Text[ greek ] = "Åêôığùóç óå ìáıñï";
-        Text[ korean ] = "°ËÁ¤ ÀÎ¼â(~K)";
+        Text[ korean ] = "Èæ»ö ÀÎ¼â(~K)";
         Text[ turkish ] = "Siyah/beyaz yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -2308,7 +2308,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "²¾°Ê";
         Text[ arabic ] = "ÅÒÇÍÉ";
         Text[ greek ] = "Ìåôáêßíçóç";
-        Text[ korean ] = "¹Ğ±â";
+        Text[ korean ] = "ÀÌµ¿";
         Text[ turkish ] = "Taşı";
         Text[ language_user1 ] = " ";
     };
@@ -2581,7 +2581,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "Äæ¦CªºÅÜ§ó¶È·|¼vÅT¨ìª½±µ³sµ²ªº°Ï°ì¡C";
         Text[ arabic ] = "ÊÄËÑ ÇáÊÛííÑÇÊ ÇáÍÇÏËÉ İí Õİ Ãæ ÚãæÏ Úáì ÇáãäØŞÉ ÇáãÌÇæÑÉ İŞØ";
         Text[ greek ] = "Ïé áëëáãİò ìéáò óôŞëçò Ş ãñáììŞò åğçñåÜæïõí ìüíï ôçí Üìåóá ãåéôïíéêŞ ğåñéï÷Ş";
-        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÇ º¯°æÀº ÀÎÁ¢ÇÑ ¿µ¿ª¿¡¸¸ ¿µÇâÀ» Áİ´Ï´Ù.";
+        Text[ korean ] = "¿­ ¶Ç´Â Çà¿¡ ´ëÇÑ º¯°æ»çÇ×Àº Á÷Á¢ ÀÎÁ¢ÇÑ ¿µ¿ª¿¡¸¸ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
         Text[ turkish ] = "Satır ya da sütunlar üzerinde yapılan değişiklikler yalnızca bitişik birimleri etkiler";
         Text[ language_user1 ] = " ";
     };
