@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:56:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,11 @@
 #endif
 
 #ifndef _SFX_MISCCFG_HXX
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 
 #ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 
 #ifndef _SV_MULTISEL_HXX //autogen
