@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: er $ $Date: 2001-02-14 14:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,12 @@ BOOL ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
 
 void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
 {
+    DBG_ASSERT( !IsCalculatingFormulaTree(), "CalcFormulaTree recursion" );
+    // never ever recurse into this, might end up lost in infinity
+    if ( IsCalculatingFormulaTree() )
+        return ;
+    bCalculatingFormulaTree = TRUE;
+
     SetForcedFormulaPending( FALSE );
     BOOL bOldIdleDisabled = IsIdleDisabled();
     DisableIdle( TRUE );
@@ -353,6 +359,7 @@ void ScDocument::CalcFormulaTree( BOOL bOnlyForced, BOOL bNoProgress )
     }
     bAutoCalc = bOldAutoCalc;
     DisableIdle( bOldIdleDisabled );
+    bCalculatingFormulaTree = FALSE;
 }
 
 
@@ -461,7 +468,8 @@ void ScDocument::TrackFormulas( ULONG nHintId )
         if ( bHaveForced )
         {
             SetForcedFormulas( TRUE );
-            if ( bAutoCalc && !IsAutoCalcShellDisabled() && !IsInInterpreter() )
+            if ( bAutoCalc && !IsAutoCalcShellDisabled() && !IsInInterpreter()
+                    && !IsCalculatingFormulaTree() )
                 CalcFormulaTree( TRUE );
             else
                 SetForcedFormulaPending( TRUE );

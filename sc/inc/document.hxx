@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 13:04:27 $
+ *  last change: $Author: er $ $Date: 2001-02-14 14:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ private:
     // im Zusammenspiel mit ScDocShell SetDocumentModified,
     // AutoCalcShellDisabled und TrackFormulas
     BOOL                bForcedFormulaPending;
+    BOOL                bCalculatingFormulaTree;
     BOOL                bIsClip;
     BOOL                bCutMode;
     BOOL                bIsUndo;
@@ -801,6 +802,8 @@ public:
                     // ForcedFormulas zu berechnen
     void            SetForcedFormulaPending( BOOL bNew ) { bForcedFormulaPending = bNew; }
     BOOL            IsForcedFormulaPending() const { return bForcedFormulaPending; }
+                    // if CalcFormulaTree() is currently running
+    BOOL            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
     void            GetErrCode( USHORT nCol, USHORT nRow, USHORT nTab, USHORT& rErrCode );
     USHORT          GetErrCode( const ScAddress& ) const;

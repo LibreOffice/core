@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: er $ $Date: 2001-02-14 14:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
         bAutoCalcShellDisabled( FALSE ),
         bForcedFormulaPending( FALSE ),
+        bCalculatingFormulaTree( FALSE ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
         bCutMode( FALSE ),
