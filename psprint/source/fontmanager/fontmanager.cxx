@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:54:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2808,7 +2808,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
     // find a directory with write access
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     SvFileStream aFontsDir;
-    int nDirID;
+    int nDirID = 0;
     INetURLObject aDir;
     for( ::std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
          ! ( aFontsDir.IsOpen() && aFontsDir.IsWritable() ) && dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
