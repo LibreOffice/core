@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:55:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,20 +405,21 @@ String STR_TEXTFORMAT
     Text [ dutch ] = "Tekst zonder opmaak" ;
     Text [ spanish ] = "Texto no formateado" ;
     Text [ english_us ] = "Unformatted text" ;
-    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ±¾";
+    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ×Ö";
     Text[ russian ] = "Íåîòôîğìàòèğîâàííûé òåêñò";
     Text[ polish ] = "niesformatowany tekst";
     Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚¢‚È‚¢Ã·½Ä";
     Text[ chinese_traditional ] = "¥¼®æ¦¡¤Æªº¤å¦r";
     Text[ arabic ] = "äÕ ÛíÑ ãäÓŞ";
     Text[ dutch ] = "Tekst zonder opmaak";
-    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ±¾";
+    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ×Ö";
     Text[ greek ] = "Êåßìåíï ÷ùñßò ìïñöïğïßçóç";
     Text[ korean ] = "Æ÷¸ËµÇÁö¾ÊÀº ÅØ½ºÆ®";
     Text[ turkish ] = "Formatlanmamış metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto no formateado";
 };
+
 
 
 
