@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:40:47 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,15 +108,15 @@ TabPage TP_ENV_FMT
         Text[ portuguese ] = "Position";
         Text[ russian ] = "œÓÁËˆËˇ";
         Text[ greek ] = "»›ÛÁ";
-        Text[ dutch ] = "Position";
+        Text[ dutch ] = "Positie";
         Text[ french ] = "Position";
         Text[ spanish ] = "PosiciÛn";
-        Text[ italian ] = "Position";
+        Text[ italian ] = "Posizione";
         Text[ danish ] = "Position";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Stanowisko";
         Text[ portuguese_brazilian ] = "Position";
-        Text[ japanese ] = "ñêE";
+        Text[ japanese ] = "à íu";
         Text[ korean ] = "Position";
         Text[ chinese_simplified ] = "Œª÷√";
         Text[ chinese_traditional ] = "¶Ï∏m";
@@ -229,7 +229,7 @@ TabPage TP_ENV_FMT
         Text[ dutch ] = "Format";
         Text[ french ] = "Format";
         Text[ spanish ] = "Formato";
-        Text[ italian ] = "Format";
+        Text[ italian ] = "Formato";
         Text[ danish ] = "Format";
         Text[ swedish ] = "Format";
         Text[ polish ] = "Format";
@@ -309,15 +309,15 @@ TabPage TP_ENV_FMT
         Text[ portuguese ] = "Position";
         Text[ russian ] = "œÓÁËˆËˇ";
         Text[ greek ] = "»›ÛÁ";
-        Text[ dutch ] = "Position";
+        Text[ dutch ] = "Positie";
         Text[ french ] = "Position";
         Text[ spanish ] = "PosiciÛn";
-        Text[ italian ] = "Position";
+        Text[ italian ] = "Posizione";
         Text[ danish ] = "Position";
         Text[ swedish ] = "Placering";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
-        Text[ japanese ] = "ñêE";
+        Text[ japanese ] = "à íu";
         Text[ korean ] = "Position";
         Text[ chinese_simplified ] = "Œª÷√";
         Text[ chinese_traditional ] = "¶Ï∏m";
@@ -427,10 +427,10 @@ TabPage TP_ENV_FMT
         Text[ portuguese ] = "Format";
         Text[ russian ] = "‘ÓÏ‡Ú";
         Text[ greek ] = "Ã›„ÂËÔÚ";
-        Text[ dutch ] = "Format";
+        Text[ dutch ] = "Formaat";
         Text[ french ] = "Format";
         Text[ spanish ] = "Formato";
-        Text[ italian ] = "Format";
+        Text[ italian ] = "Formato";
         Text[ danish ] = "Format";
         Text[ swedish ] = "Format";
         Text[ polish ] = "Format";
