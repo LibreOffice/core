@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tpltp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,18 @@ PE_TemplateTop::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_TemplateTop>::F_Tok F_Tok;
 
-    static F_Tok stateF_start[] =           { On_start_Less };
+    static F_Tok stateF_start[] =           { &PE_TemplateTop::On_start_Less };
     static INT16 stateT_start[] =           { Tid_Less };
 
                                             // KORR_FUTURE : add "typename".
-    static F_Tok stateF_expect_qualifier[]= { On_expect_qualifier_class };
+    static F_Tok stateF_expect_qualifier[]= { &PE_TemplateTop::On_expect_qualifier_class };
     static INT16 stateT_expect_qualifier[]= { Tid_class };
 
-    static F_Tok stateF_expect_name[] =     { On_expect_name_Identifier };
+    static F_Tok stateF_expect_name[] =     { &PE_TemplateTop::On_expect_name_Identifier };
     static INT16 stateT_expect_name[] =     { Tid_Identifier };
 
-    static F_Tok stateF_expect_separator[]= { On_expect_separator_Comma,
-                                              On_expect_separator_Greater };
+    static F_Tok stateF_expect_separator[]= { &PE_TemplateTop::On_expect_separator_Comma,
+                                              &PE_TemplateTop::On_expect_separator_Greater };
     static INT16 stateT_expect_separator[]= { Tid_Comma,
                                               Tid_Greater };
 

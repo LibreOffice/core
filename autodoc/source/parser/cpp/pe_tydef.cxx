@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tydef.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,13 @@ void
 PE_Typedef::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Typedef>::F_Tok F_Tok;
-    static F_Tok stateF_start[] =       { On_start_typedef };
+    static F_Tok stateF_start[] =       { &PE_Typedef::On_start_typedef };
     static INT16 stateT_start[] =       { Tid_typedef };
 
-    static F_Tok stateF_expectName[] =  { On_expectName_Identifier };
+    static F_Tok stateF_expectName[] =  { &PE_Typedef::On_expectName_Identifier };
     static INT16 stateT_expectName[] =  { Tid_Identifier };
 
-    static F_Tok stateF_afterName[] =   { On_afterName_Semicolon };
+    static F_Tok stateF_afterName[] =   { &PE_Typedef::On_afterName_Semicolon };
     static INT16 stateT_afterName[] =   { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Typedef, start, Hdl_SyntaxError);

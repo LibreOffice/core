@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_dealer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,11 @@ Distributor::Deal_AdcDocu( adoc::Token & let_drToken )
     aDocuExplorer.Process_Token(let_drToken);
 }
 
+Distributor *
+Distributor::AsDistributor()
+{
+     return this;
+}
 
 
 

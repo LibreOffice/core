@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_dealer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ class Distributor : public cpp::TokenDealer,        /// Handle C++ code tokens.
 
     virtual void        Deal_AdcDocu(
                             adoc::Token &       let_drToken );
+    virtual Distributor *
+                        AsDistributor();
   private:
     // DATA
     PreProcessor        aCppPreProcessor;

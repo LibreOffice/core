@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_base.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,23 +106,23 @@ void
 PE_Base::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Base>::F_Tok    F_Tok;
-    static F_Tok stateF_startOfNext[] =     { On_startOfNext_Identifier,
-                                              On_startOfNext_public,
-                                              On_startOfNext_protected,
-                                              On_startOfNext_private,
-                                              On_startOfNext_virtual,
-                                              On_startOfNext_DoubleColon };
+    static F_Tok stateF_startOfNext[] =     { &PE_Base::On_startOfNext_Identifier,
+                                              &PE_Base::On_startOfNext_public,
+                                              &PE_Base::On_startOfNext_protected,
+                                              &PE_Base::On_startOfNext_private,
+                                              &PE_Base::On_startOfNext_virtual,
+                                              &PE_Base::On_startOfNext_DoubleColon };
     static INT16 stateT_startOfNext[] =     { Tid_Identifier,
                                               Tid_public,
                                               Tid_protected,
                                               Tid_private,
                                               Tid_virtual,
                                               Tid_DoubleColon };
-    static F_Tok stateF_inName[] =          { On_inName_Identifier,
-                                              On_inName_virtual,
-                                              On_inName_SwBracket_Left,
-                                              On_inName_DoubleColon,
-                                              On_inName_Comma };
+    static F_Tok stateF_inName[] =          { &PE_Base::On_inName_Identifier,
+                                              &PE_Base::On_inName_virtual,
+                                              &PE_Base::On_inName_SwBracket_Left,
+                                              &PE_Base::On_inName_DoubleColon,
+                                              &PE_Base::On_inName_Comma };
     static INT16 stateT_inName[] =          { Tid_Identifier,
                                               Tid_virtual,
                                               Tid_SwBracket_Left,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,38 +86,38 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  PE_Interface::On_Default
+#define DF  &PE_Interface::On_Default
 
 PE_Interface::F_TOK
 PE_Interface::aDispatcher[PE_Interface::e_STATES_MAX][PE_Interface::tt_MAX] =
         {   { DF, DF, DF, DF, DF },  // e_none
-            { On_need_uik_MetaType,
+            { &PE_Interface::On_need_uik_MetaType,
                  DF, DF, DF, DF },  // need_uik
-            { DF, On_uik_Identifier,
-                     On_uik_Punctuation,
+            { DF, &PE_Interface::On_uik_Identifier,
+                     &PE_Interface::On_uik_Punctuation,
                          DF, DF },  // uik
-            { On_need_ident_MetaType,
+            { &PE_Interface::On_need_ident_MetaType,
                  DF, DF, DF, DF },  // need_ident
-            { DF, On_ident_Identifier,
-                     On_ident_Punctuation,
+            { DF, &PE_Interface::On_ident_Identifier,
+                     &PE_Interface::On_ident_Punctuation,
                          DF, DF },  // ident
-            { On_need_interface_MetaType,
+            { &PE_Interface::On_need_interface_MetaType,
                  DF, DF, DF, DF },  // need_interface
-            { DF, On_need_name_Identifer,
+            { DF, &PE_Interface::On_need_name_Identifer,
                     DF, DF, DF },  // need_name
-            { DF, DF, On_wait_for_base_Punctuation,
+            { DF, DF, &PE_Interface::On_wait_for_base_Punctuation,
                         DF, DF },  // wait_for_base
             { DF, DF, DF, DF, DF },  // in_base
-            { DF, DF, On_need_curlbr_open_Punctuation,
+            { DF, DF, &PE_Interface::On_need_curlbr_open_Punctuation,
                           DF, DF },  // need_curlbr_open
-            { On_std_GotoAttribute,
-                  On_std_GotoFunction,
-                      On_std_Punctuation,
-                          On_std_GotoFunction,
-                              On_std_Stereotype },  // e_std
+            { &PE_Interface::On_std_GotoAttribute,
+                  &PE_Interface::On_std_GotoFunction,
+                      &PE_Interface::On_std_Punctuation,
+                          &PE_Interface::On_std_GotoFunction,
+                              &PE_Interface::On_std_Stereotype },  // e_std
             { DF, DF, DF, DF, DF },  // in_function
             { DF, DF, DF, DF, DF },  // in_attribute
-            { DF, DF, On_need_finish_Punctuation,
+            { DF, DF, &PE_Interface::On_need_finish_Punctuation,
                           DF, DF }   // need_finish
         };
 

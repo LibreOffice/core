@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_enum2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,17 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  PE_Enum::On_Default
+#define DF  &PE_Enum::On_Default
 
 PE_Enum::F_TOK
 PE_Enum::aDispatcher[PE_Enum::e_STATES_MAX][PE_Enum::tt_MAX] =
         {   {  DF, DF },  // e_none
-            {  On_expect_name_Identifier,
+            {  &PE_Enum::On_expect_name_Identifier,
                    DF },  // expect_name
-            {  DF, On_expect_curl_bracket_open_Punctuation },  // expect_curl_bracket_open
-            {  On_expect_value_Identifier,
-                   On_expect_value_Punctuation },  // expect_value
-            {  DF, On_expect_finish_Punctuation }  // expect_finish
+            {  DF, &PE_Enum::On_expect_curl_bracket_open_Punctuation },  // expect_curl_bracket_open
+            {  &PE_Enum::On_expect_value_Identifier,
+                   &PE_Enum::On_expect_value_Punctuation },  // expect_value
+            {  DF, &PE_Enum::On_expect_finish_Punctuation }  // expect_finish
         };
 
 

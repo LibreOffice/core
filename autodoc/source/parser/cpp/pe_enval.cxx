@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_enval.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,18 +101,18 @@ PE_EnumValue::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_EnumValue>::F_Tok   F_Tok;
 
-    static F_Tok stateF_start[] =           { On_start_Identifier };
+    static F_Tok stateF_start[] =           { &PE_EnumValue::On_start_Identifier };
     static INT16 stateT_start[] =           { Tid_Identifier };
 
-    static F_Tok stateF_afterName[] =       { On_afterName_SwBracket_Right,
-                                              On_afterName_Comma,
-                                              On_afterName_Assign };
+    static F_Tok stateF_afterName[] =       { &PE_EnumValue::On_afterName_SwBracket_Right,
+                                              &PE_EnumValue::On_afterName_Comma,
+                                              &PE_EnumValue::On_afterName_Assign };
     static INT16 stateT_afterName[] =       { Tid_SwBracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
 
-    static F_Tok stateF_expectFinish[] =    { On_expectFinish_SwBracket_Right,
-                                              On_expectFinish_Comma };
+    static F_Tok stateF_expectFinish[] =    { &PE_EnumValue::On_expectFinish_SwBracket_Right,
+                                              &PE_EnumValue::On_expectFinish_Comma };
     static INT16 stateT_expectFinish[] =    { Tid_SwBracket_Right,
                                               Tid_Comma };
 

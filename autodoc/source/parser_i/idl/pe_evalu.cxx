@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_evalu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,15 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  PE_Value::On_Default
+#define DF  &PE_Value::On_Default
 
 PE_Value::F_TOK
 PE_Value::aDispatcher[PE_Value::e_STATES_MAX][PE_Value::tt_MAX] =
         {   { DF, DF, DF },  // e_none
-            { On_expect_name_Identifier,
+            { &PE_Value::On_expect_name_Identifier,
                   DF, DF },  // expect_name
-            { DF, On_got_name_Punctuation,
-                      On_got_name_Assignment }  // got_name
+            { DF, &PE_Value::On_got_name_Punctuation,
+                      &PE_Value::On_got_name_Assignment }  // got_name
         };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoc_tok.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <adoc/atokdeal.hxx>
+#include <../cpp/c_dealer.hxx>
 
 
 namespace adoc {
@@ -72,7 +73,7 @@ namespace adoc {
 void
 Token::DealOut( ::TokenDealer & o_rDealer )
 {
-    dynamic_cast< adoc::TokenDealer& >(o_rDealer).Deal_AdcDocu(*this);
+    o_rDealer.AsDistributor()->Deal_AdcDocu(*this);
 }
 
 

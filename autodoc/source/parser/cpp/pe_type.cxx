@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,17 +133,17 @@ void
 PE_Type::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Type>::F_Tok    F_Tok;
-    static F_Tok stateF_start[] =               { On_start_Identifier,
-                                                  On_start_class,
-                                                  On_start_class,
-                                                  On_start_class,
-                                                  On_start_enum,
-                                                  On_start_const,
-                                                  On_start_volatile,
-                                                  On_start_Bracket_Right,
-                                                  On_start_DoubleColon,
-                                                  On_start_BuiltInType,
-                                                  On_start_TypeSpecializer };
+    static F_Tok stateF_start[] =               { &PE_Type::On_start_Identifier,
+                                                  &PE_Type::On_start_class,
+                                                  &PE_Type::On_start_class,
+                                                  &PE_Type::On_start_class,
+                                                  &PE_Type::On_start_enum,
+                                                  &PE_Type::On_start_const,
+                                                  &PE_Type::On_start_volatile,
+                                                  &PE_Type::On_start_Bracket_Right,
+                                                  &PE_Type::On_start_DoubleColon,
+                                                  &PE_Type::On_start_BuiltInType,
+                                                  &PE_Type::On_start_TypeSpecializer };
     static INT16 stateT_start[] =               { Tid_Identifier,
                                                   Tid_class,
                                                   Tid_struct,
@@ -156,18 +156,18 @@ PE_Type::Setup_StatusFunctions()
                                                   Tid_BuiltInType,
                                                   Tid_TypeSpecializer };
 
-    static F_Tok stateF_expect_namesegment[] =  { On_expect_namesegment_Identifier,
-                                                  On_expect_namesegment_Identifier };
+    static F_Tok stateF_expect_namesegment[] =  { &PE_Type::On_expect_namesegment_Identifier,
+                                                  &PE_Type::On_expect_namesegment_Identifier };
     static INT16 stateT_expect_namesegment[] =  { Tid_Identifier,
                                                   Tid_BuiltInType };
 
-    static F_Tok stateF_after_namesegment[] =   { On_after_namesegment_const,
-                                                  On_after_namesegment_volatile,
-                                                  On_after_namesegment_Bracket_Left,
-                                                  On_after_namesegment_DoubleColon,
-                                                  On_after_namesegment_Less,
-                                                  On_after_namesegment_Asterix,
-                                                  On_after_namesegment_AmpersAnd };
+    static F_Tok stateF_after_namesegment[] =   { &PE_Type::On_after_namesegment_const,
+                                                  &PE_Type::On_after_namesegment_volatile,
+                                                  &PE_Type::On_after_namesegment_Bracket_Left,
+                                                  &PE_Type::On_after_namesegment_DoubleColon,
+                                                  &PE_Type::On_after_namesegment_Less,
+                                                  &PE_Type::On_after_namesegment_Asterix,
+                                                  &PE_Type::On_after_namesegment_AmpersAnd };
     static INT16 stateT_after_namesegment[] =   { Tid_const,
                                                   Tid_volatile,
                                                   Tid_Bracket_Left,
@@ -177,21 +177,21 @@ PE_Type::Setup_StatusFunctions()
                                                   Tid_AmpersAnd };
 
     static F_Tok stateF_afterclass_expect_semicolon[] =
-                                                { On_afterclass_expect_semicolon_Semicolon };
+                                                { &PE_Type::On_afterclass_expect_semicolon_Semicolon };
     static INT16 stateT_afterclass_expect_semicolon[] =
                                                 { Tid_Semicolon };
 
-    static F_Tok stateF_within_template[] =     { On_within_template_Comma,
-                                                  On_within_template_Greater,
-                                                  On_within_template_Constant };
+    static F_Tok stateF_within_template[] =     { &PE_Type::On_within_template_Comma,
+                                                  &PE_Type::On_within_template_Greater,
+                                                  &PE_Type::On_within_template_Constant };
     static INT16 stateT_within_template[] =     { Tid_Comma,
                                                   Tid_Greater,
                                                   Tid_Constant };
 
-    static F_Tok stateF_within_indirection[] =  { On_within_indirection_const,
-                                                  On_within_indirection_volatile,
-                                                  On_within_indirection_Asterix,
-                                                  On_within_indirection_AmpersAnd };
+    static F_Tok stateF_within_indirection[] =  { &PE_Type::On_within_indirection_const,
+                                                  &PE_Type::On_within_indirection_volatile,
+                                                  &PE_Type::On_within_indirection_Asterix,
+                                                  &PE_Type::On_within_indirection_AmpersAnd };
     static INT16 stateT_within_indirection[] =  { Tid_const,
                                                   Tid_volatile,
                                                   Tid_Asterix,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_namsp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@ void
 PE_Namespace::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Namespace>::F_Tok   F_Tok;
-    static F_Tok stateF_start[] =           { On_start_Identifier };
+    static F_Tok stateF_start[] =           { &PE_Namespace::On_start_Identifier };
     static INT16 stateT_start[] =           { Tid_Identifier };
-    static F_Tok stateF_gotName[] =         { On_gotName_SwBracket_Left,
-                                              On_gotName_Assign };
+    static F_Tok stateF_gotName[] =         { &PE_Namespace::On_gotName_SwBracket_Left,
+                                              &PE_Namespace::On_gotName_Assign };
     static INT16 stateT_gotName[] =         { Tid_SwBracket_Left,
                                               Tid_Assign };
-    static F_Tok stateF_expectSemicolon[] = { On_expectSemicolon_Semicolon };
+    static F_Tok stateF_expectSemicolon[] = { &PE_Namespace::On_expectSemicolon_Semicolon };
     static INT16 stateT_expectSemicolon[] = { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Namespace, start, Hdl_SyntaxError);

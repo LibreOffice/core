@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_funct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,15 +198,15 @@ PE_Function::Setup_StatusFunctions()
     typedef CallFunction<PE_Function>::F_Tok    F_Tok;
 
     static F_Tok stateF_afterStdOperator[] =
-                                            { On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_LeftBracket,
-                                              On_afterOperator_Std_LeftBracket,
-                                              On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_Operator,
-                                              On_afterOperator_Std_Operator };
+                                            { &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_LeftBracket,
+                                              &PE_Function::On_afterOperator_Std_LeftBracket,
+                                              &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_Operator,
+                                              &PE_Function::On_afterOperator_Std_Operator };
     static INT16 stateT_afterStdOperator[] =
                                             { Tid_Operator,
                                               Tid_ArrayBracket_Left,
@@ -219,23 +219,23 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_AmpersAnd };
 
     static F_Tok stateF_afterStdOperatorLeftBracket[] =
-                                            { On_afterStdOperatorLeftBracket_RightBracket,
-                                              On_afterStdOperatorLeftBracket_RightBracket };
+                                            { &PE_Function::On_afterStdOperatorLeftBracket_RightBracket,
+                                              &PE_Function::On_afterStdOperatorLeftBracket_RightBracket };
     static INT16 stateT_afterStdOperatorLeftBracket[] =
                                             { Tid_ArrayBracket_Right,
                                               Tid_Bracket_Right };
 
     static F_Tok stateF_afterCastOperator[] =
-                                            { On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type,
-                                              On_afterOperator_Cast_Type };
+                                            { &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type,
+                                              &PE_Function::On_afterOperator_Cast_Type };
     static INT16 stateT_afterCastOperator[] =
                                             { Tid_Identifier,
                                               Tid_class,
@@ -248,24 +248,24 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_afterName[] =       { On_afterName_Bracket_Left };
+    static F_Tok stateF_afterName[] =       { &PE_Function::On_afterName_Bracket_Left };
     static INT16 stateT_afterName[] =       { Tid_Bracket_Left };
 
     static F_Tok stateF_expectParameterSeparator[] =
-                                            { On_expectParameterSeparator_BracketRight,
-                                              On_expectParameterSeparator_Comma };
+                                            { &PE_Function::On_expectParameterSeparator_BracketRight,
+                                              &PE_Function::On_expectParameterSeparator_Comma };
     static INT16 stateT_expectParameterSeparator[] =
                                             { Tid_Bracket_Right,
                                               Tid_Comma };
 
-    static F_Tok stateF_afterParameters[] = { On_afterParameters_const,
-                                              On_afterParameters_volatile,
-                                              On_afterParameters_throw,
-                                              On_afterParameters_SwBracket_Left,
-                                              On_afterParameters_Semicolon,
-                                              On_afterParameters_Comma,
-                                              On_afterParameters_Colon,
-                                              On_afterParameters_Assign };
+    static F_Tok stateF_afterParameters[] = { &PE_Function::On_afterParameters_const,
+                                              &PE_Function::On_afterParameters_volatile,
+                                              &PE_Function::On_afterParameters_throw,
+                                              &PE_Function::On_afterParameters_SwBracket_Left,
+                                              &PE_Function::On_afterParameters_Semicolon,
+                                              &PE_Function::On_afterParameters_Comma,
+                                              &PE_Function::On_afterParameters_Colon,
+                                              &PE_Function::On_afterParameters_Assign };
     static INT16 stateT_afterParameters[] = { Tid_const,
                                               Tid_volatile,
                                               Tid_throw,
@@ -275,33 +275,33 @@ PE_Function::Setup_StatusFunctions()
                                               Tid_Colon,
                                               Tid_Assign };
 
-    static F_Tok stateF_afterThrow[] =      { On_afterThrow_Bracket_Left };
+    static F_Tok stateF_afterThrow[] =      { &PE_Function::On_afterThrow_Bracket_Left };
     static INT16 stateT_afterThrow[] =      { Tid_Bracket_Left };
 
     static F_Tok stateF_expectExceptionSeparator[] =
-                                            { On_expectExceptionSeparator_BracketRight,
-                                              On_expectExceptionSeparator_Comma };
+                                            { &PE_Function::On_expectExceptionSeparator_BracketRight,
+                                              &PE_Function::On_expectExceptionSeparator_Comma };
     static INT16 stateT_expectExceptionSeparator[] =
                                             { Tid_Bracket_Right,
                                               Tid_Comma };
 
-    static F_Tok stateF_afterExceptions[] = { On_afterExceptions_SwBracket_Left,
-                                              On_afterExceptions_Semicolon,
-                                              On_afterExceptions_Comma,
-                                              On_afterExceptions_Colon,
-                                              On_afterExceptions_Assign };
+    static F_Tok stateF_afterExceptions[] = { &PE_Function::On_afterExceptions_SwBracket_Left,
+                                              &PE_Function::On_afterExceptions_Semicolon,
+                                              &PE_Function::On_afterExceptions_Comma,
+                                              &PE_Function::On_afterExceptions_Colon,
+                                              &PE_Function::On_afterExceptions_Assign };
     static INT16 stateT_afterExceptions[] = { Tid_SwBracket_Left,
                                               Tid_Semicolon,
                                               Tid_Comma,
                                               Tid_Colon,
                                               Tid_Assign };
 
-    static F_Tok stateF_expectZero[] =      { On_expectZero_Constant };
+    static F_Tok stateF_expectZero[] =      { &PE_Function::On_expectZero_Constant };
     static INT16 stateT_expectZero[] =      { Tid_Constant };
 
     static F_Tok stateF_inImplementation[] =
-                                            { On_inImplementation_SwBracket_Left,
-                                              On_inImplementation_SwBracket_Right };
+                                            { &PE_Function::On_inImplementation_SwBracket_Left,
+                                              &PE_Function::On_inImplementation_SwBracket_Right };
     static INT16 stateT_inImplementation[] =
                                             { Tid_SwBracket_Left,
                                               Tid_SwBracket_Right };

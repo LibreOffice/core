@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecoll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,16 @@ FileCollector::AddFilesFrom( const char *                 i_sRootDir,
         return 0;
     }
 
-    GetFiles( aFoundFiles, i_sRootDir, i_sFilter );
+    csv::ploc::Directory aDir(i_sRootDir);
+    if (NOT aDir.Exists())
+    {
+        Cerr() << "Error: The path for the files to be parsed could not be found."
+             << Endl();
+        return 0;
+    }
 
+    Cout() << "." << Flush();
+    aDir.GetContainedFiles(aFoundFiles, i_sFilter);
 
     if (i_eSearchMode == recursive)
     {
@@ -98,7 +106,8 @@ FileCollector::AddFilesFrom( const char *                 i_sRootDir,
         uintt nSubDirStart = aPath.tellp();
 
         DirNameList aSubDirs;
-        GetSubDirectories( aSubDirs, i_sRootDir );
+        aDir.GetContainedDirectories(aSubDirs);
+
         for ( const_iterator iter = aSubDirs.begin();
               iter != aSubDirs.end();
               ++iter )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_tydf2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,17 +81,17 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  PE_Typedef::On_Default
+#define DF  &PE_Typedef::On_Default
 
 PE_Typedef::F_TOK
 PE_Typedef::aDispatcher[PE_Typedef::e_STATES_MAX][PE_Typedef::tt_MAX] =
         {   { DF, DF, DF },  // e_none
-            { On_expect_description_Any,
-                  On_expect_description_Any,
+            { &PE_Typedef::On_expect_description_Any,
+                  &PE_Typedef::On_expect_description_Any,
                       DF },  // expect_description
-            { DF, On_expect_name_Identifier,
+            { DF, &PE_Typedef::On_expect_name_Identifier,
                       DF },  // expect_name
-            { DF, DF, On_got_name_Punctuation }  // got_name
+            { DF, DF, &PE_Typedef::On_got_name_Punctuation }  // got_name
         };
 
 

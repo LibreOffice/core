@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,27 +141,27 @@ void
 PE_File::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_File>::F_Tok    F_Tok;
-    static F_Tok stateF_std[] =             { On_std_VarFunc,
-                                              On_std_ClassKey,
-                                              On_std_ClassKey,
-                                              On_std_ClassKey,
-                                              On_std_enum,
-                                              On_std_typedef,
-                                              On_std_template,
-                                              On_std_VarFunc,
-                                              On_std_VarFunc,
-                                              On_std_extern,
-                                              On_std_VarFunc,
-                                              On_std_VarFunc,
-                                              On_std_VarFunc,
-                                              On_std_namespace,
-                                              On_std_using,
-                                              On_std_SwBracketRight,
-                                              On_std_VarFunc,
-                                              On_std_DefineName,
-                                              On_std_MacroName,
-                                              On_std_VarFunc,
-                                              On_std_VarFunc };
+    static F_Tok stateF_std[] =             { &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_ClassKey,
+                                              &PE_File::On_std_ClassKey,
+                                              &PE_File::On_std_ClassKey,
+                                              &PE_File::On_std_enum,
+                                              &PE_File::On_std_typedef,
+                                              &PE_File::On_std_template,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_extern,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_namespace,
+                                              &PE_File::On_std_using,
+                                              &PE_File::On_std_SwBracketRight,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_DefineName,
+                                              &PE_File::On_std_MacroName,
+                                              &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_VarFunc };
     static INT16 stateT_std[] =             { Tid_Identifier,
                                               Tid_class,
                                               Tid_struct,
@@ -184,10 +184,10 @@ PE_File::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_in_extern[] =       { On_in_extern_Constant };
+    static F_Tok stateF_in_extern[] =       { &PE_File::On_in_extern_Constant };
     static INT16 stateT_in_extern[] =       { Tid_Constant };
 
-    static F_Tok stateF_in_externC[] =      { On_in_externC_SwBracket_Left };
+    static F_Tok stateF_in_externC[] =      { &PE_File::On_in_externC_SwBracket_Left };
     static INT16 stateT_in_externC[] =      { Tid_SwBracket_Left };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:32 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,19 +106,19 @@ PE_Variable::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Variable>::F_Tok    F_Tok;
 
-    static F_Tok stateF_afterName[] =       { On_afterName_ArrayBracket_Left,
-                                              On_afterName_Semicolon,
-                                              On_afterName_Comma,
-                                              On_afterName_Assign };
+    static F_Tok stateF_afterName[] =       { &PE_Variable::On_afterName_ArrayBracket_Left,
+                                              &PE_Variable::On_afterName_Semicolon,
+                                              &PE_Variable::On_afterName_Comma,
+                                              &PE_Variable::On_afterName_Assign };
     static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
                                               Tid_Semicolon,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_afterSize[] =       { On_afterSize_ArrayBracket_Right };
+    static F_Tok stateF_afterSize[] =       { &PE_Variable::On_afterSize_ArrayBracket_Right };
     static INT16 stateT_afterSize[] =       { Tid_ArrayBracket_Right };
-    static F_Tok stateF_expectFinish[] =    { On_expectFinish_Bracket_Right,
-                                              On_expectFinish_Semicolon,
-                                              On_expectFinish_Comma };
+    static F_Tok stateF_expectFinish[] =    { &PE_Variable::On_expectFinish_Bracket_Right,
+                                              &PE_Variable::On_expectFinish_Semicolon,
+                                              &PE_Variable::On_expectFinish_Comma };
     static INT16 stateT_expectFinish[] =    { Tid_Bracket_Right,
                                               Tid_Semicolon,
                                               Tid_Comma };

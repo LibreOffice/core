@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_defs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,19 +102,19 @@ void
 PE_Defines::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Defines>::F_Tok F_Tok;
-    static F_Tok stateF_expectName[] =      { On_expectName_DefineName,
-                                              On_expectName_MacroName
+    static F_Tok stateF_expectName[] =      { &PE_Defines::On_expectName_DefineName,
+                                              &PE_Defines::On_expectName_MacroName
                                             };
     static INT16 stateT_expectName[] =      { Tid_DefineName,
                                               Tid_MacroName
                                             };
 
-    static F_Tok stateF_gotDefineName[] =   { On_gotDefineName_PreProDefinition };
+    static F_Tok stateF_gotDefineName[] =   { &PE_Defines::On_gotDefineName_PreProDefinition };
     static INT16 stateT_gotDefineName[] =   { Tid_PreProDefinition };
 
     static F_Tok stateF_expectMacroParameters[] =
-                                            { On_expectMacroParameters_MacroParameter,
-                                              On_expectMacroParameters_PreProDefinition
+                                            { &PE_Defines::On_expectMacroParameters_MacroParameter,
+                                              &PE_Defines::On_expectMacroParameters_PreProDefinition
                                             };
     static INT16 stateT_expectMacroParameters[] =
                                                { Tid_MacroParameter,

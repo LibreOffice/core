@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_class.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,58 +138,58 @@ PE_Class::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Class>::F_Tok   F_Tok;
 
-    static F_Tok stateF_start[] =           { On_start_class,
-                                              On_start_struct,
-                                              On_start_union };
+    static F_Tok stateF_start[] =           { &PE_Class::On_start_class,
+                                              &PE_Class::On_start_struct,
+                                              &PE_Class::On_start_union };
     static INT16 stateT_start[] =           { Tid_class,
                                               Tid_struct,
                                               Tid_union };
 
-    static F_Tok stateF_expectName[] =      { On_expectName_Identifier,
-                                              On_expectName_SwBracket_Left,
-                                              On_expectName_Colon
+    static F_Tok stateF_expectName[] =      { &PE_Class::On_expectName_Identifier,
+                                              &PE_Class::On_expectName_SwBracket_Left,
+                                              &PE_Class::On_expectName_Colon
                                             };
     static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_SwBracket_Left,
                                               Tid_Colon
                                             };
 
-    static F_Tok stateF_gotName[] =         { On_gotName_SwBracket_Left,
-                                              On_gotName_Semicolon,
-                                              On_gotName_Colon };
+    static F_Tok stateF_gotName[] =         { &PE_Class::On_gotName_SwBracket_Left,
+                                              &PE_Class::On_gotName_Semicolon,
+                                              &PE_Class::On_gotName_Colon };
     static INT16 stateT_gotName[] =         { Tid_SwBracket_Left,
                                               Tid_Semicolon,
                                               Tid_Colon };
 
-    static F_Tok stateF_bodyStd[] =         { On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_ClassKey,
-                                              On_bodyStd_ClassKey,
-                                              On_bodyStd_ClassKey,
+    static F_Tok stateF_bodyStd[] =         { &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_ClassKey,
+                                              &PE_Class::On_bodyStd_ClassKey,
+                                              &PE_Class::On_bodyStd_ClassKey,
 
-                                              On_bodyStd_enum,
-                                              On_bodyStd_typedef,
-                                              On_bodyStd_public,
-                                              On_bodyStd_protected,
-                                              On_bodyStd_private,
+                                              &PE_Class::On_bodyStd_enum,
+                                              &PE_Class::On_bodyStd_typedef,
+                                              &PE_Class::On_bodyStd_public,
+                                              &PE_Class::On_bodyStd_protected,
+                                              &PE_Class::On_bodyStd_private,
 
-                                              On_bodyStd_template,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_friend,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_template,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_friend,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
 
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
 
-                                              On_bodyStd_using,
-                                              On_bodyStd_SwBracket_Right,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc,
-                                              On_bodyStd_VarFunc };
+                                              &PE_Class::On_bodyStd_using,
+                                              &PE_Class::On_bodyStd_SwBracket_Right,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc };
     static INT16 stateT_bodyStd[] =         { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
@@ -220,10 +220,10 @@ PE_Class::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_inProtection[] =    { On_inProtection_Colon };
+    static F_Tok stateF_inProtection[] =    { &PE_Class::On_inProtection_Colon };
     static INT16 stateT_inProtection[] =    { Tid_Colon };
 
-    static F_Tok stateF_afterDecl[] =       { On_afterDecl_Semicolon };
+    static F_Tok stateF_afterDecl[] =       { &PE_Class::On_afterDecl_Semicolon };
     static INT16 stateT_afterDecl[] =       { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Class, start, Hdl_SyntaxError);

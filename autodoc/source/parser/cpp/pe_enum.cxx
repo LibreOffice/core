@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_enum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,22 +103,22 @@ void
 PE_Enum::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Enum>::F_Tok    F_Tok;
-    static F_Tok stateF_expectName[] =      { On_expectName_Identifier,
-                                              On_expectName_SwBracket_Left
+    static F_Tok stateF_expectName[] =      { &PE_Enum::On_expectName_Identifier,
+                                              &PE_Enum::On_expectName_SwBracket_Left
                                             };
     static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_SwBracket_Left
                                             };
 
-    static F_Tok stateF_gotName[] =         { On_gotName_SwBracket_Left };
+    static F_Tok stateF_gotName[] =         { &PE_Enum::On_gotName_SwBracket_Left };
     static INT16 stateT_gotName[] =         { Tid_SwBracket_Left };
 
-    static F_Tok stateF_bodyStd[] =         { On_bodyStd_Identifier,
-                                              On_bodyStd_SwBracket_Right };
+    static F_Tok stateF_bodyStd[] =         { &PE_Enum::On_bodyStd_Identifier,
+                                              &PE_Enum::On_bodyStd_SwBracket_Right };
     static INT16 stateT_bodyStd[] =         { Tid_Identifier,
                                               Tid_SwBracket_Right };
 
-    static F_Tok stateF_afterBlock[] =      { On_afterBlock_Semicolon };
+    static F_Tok stateF_afterBlock[] =      { &PE_Enum::On_afterBlock_Semicolon };
     static INT16 stateT_afterBlock[] =      { Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Enum, expectName, Hdl_SyntaxError);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokdeal.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:33 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
     // COMPONENTS
     // PARAMETERS
 
+namespace cpp
+{
+    class Distributor;
+}
+
 
 class TokenDealer
 
@@ -78,6 +83,8 @@ class TokenDealer
 
     virtual void        Deal_Eol() = 0;
     virtual void        Deal_Eof() = 0;
+    virtual cpp::Distributor *
+                        AsDistributor() = 0;
 };
 
 

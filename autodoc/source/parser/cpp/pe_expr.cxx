@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_expr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ PE_Expression::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Expression>::F_Tok  F_Tok;
 
-    static F_Tok stateF_std[] =             { On_std_SwBracket_Left,
-                                              On_std_SwBracket_Right,
-                                              On_std_ArrayBracket_Left,
-                                              On_std_ArrayBracket_Right,
-                                              On_std_Bracket_Left,
-                                              On_std_Bracket_Right,
-                                              On_std_Semicolon,
-                                              On_std_Comma };
+    static F_Tok stateF_std[] =             { &PE_Expression::On_std_SwBracket_Left,
+                                              &PE_Expression::On_std_SwBracket_Right,
+                                              &PE_Expression::On_std_ArrayBracket_Left,
+                                              &PE_Expression::On_std_ArrayBracket_Right,
+                                              &PE_Expression::On_std_Bracket_Left,
+                                              &PE_Expression::On_std_Bracket_Right,
+                                              &PE_Expression::On_std_Semicolon,
+                                              &PE_Expression::On_std_Comma };
     static INT16 stateT_std[] =             { Tid_SwBracket_Left,
                                               Tid_SwBracket_Right,
                                               Tid_ArrayBracket_Left,

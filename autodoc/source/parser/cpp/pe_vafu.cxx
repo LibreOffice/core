@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vafu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,26 +149,26 @@ PE_VarFunc::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_VarFunc>::F_Tok F_Tok;
 
-    static F_Tok stateF_start[] =           { On_start_Identifier,
-                                              On_start_operator,
-                                              On_start_TypeKey,
-                                              On_start_TypeKey,
-                                              On_start_TypeKey,
-                                              On_start_TypeKey,
-                                              On_start_virtual,
-                                              On_start_Tilde,
-                                              On_start_const,
-                                              On_start_volatile,
-                                              On_start_extern,
-                                              On_start_static,
-                                              On_start_mutable,
-                                              On_start_register,
-                                              On_start_inline,
-                                              On_start_explicit,
-                                              On_start_Bracket_Right,
-                                              On_start_Identifier,
-                                              On_start_Identifier,
-                                              On_start_Identifier };
+    static F_Tok stateF_start[] =           { &PE_VarFunc::On_start_Identifier,
+                                              &PE_VarFunc::On_start_operator,
+                                              &PE_VarFunc::On_start_TypeKey,
+                                              &PE_VarFunc::On_start_TypeKey,
+                                              &PE_VarFunc::On_start_TypeKey,
+                                              &PE_VarFunc::On_start_TypeKey,
+                                              &PE_VarFunc::On_start_virtual,
+                                              &PE_VarFunc::On_start_Tilde,
+                                              &PE_VarFunc::On_start_const,
+                                              &PE_VarFunc::On_start_volatile,
+                                              &PE_VarFunc::On_start_extern,
+                                              &PE_VarFunc::On_start_static,
+                                              &PE_VarFunc::On_start_mutable,
+                                              &PE_VarFunc::On_start_register,
+                                              &PE_VarFunc::On_start_inline,
+                                              &PE_VarFunc::On_start_explicit,
+                                              &PE_VarFunc::On_start_Bracket_Right,
+                                              &PE_VarFunc::On_start_Identifier,
+                                              &PE_VarFunc::On_start_Identifier,
+                                              &PE_VarFunc::On_start_Identifier };
     static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
@@ -190,26 +190,26 @@ PE_VarFunc::Setup_StatusFunctions()
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_expectCtor[] =      { On_expectCtor_Bracket_Left };
+    static F_Tok stateF_expectCtor[] =      { &PE_VarFunc::On_expectCtor_Bracket_Left };
     static INT16 stateT_expectCtor[] =      { Tid_Bracket_Left };
 
-    static F_Tok stateF_afterClassDecl[] =  { On_afterClassDecl_Semicolon };
+    static F_Tok stateF_afterClassDecl[] =  { &PE_VarFunc::On_afterClassDecl_Semicolon };
     static INT16 stateT_afterClassDecl[] =  { Tid_Semicolon };
 
-    static F_Tok stateF_expectName[] =      { On_expectName_Identifier,
-                                              On_expectName_operator,
-                                              On_expectName_Bracket_Left };
+    static F_Tok stateF_expectName[] =      { &PE_VarFunc::On_expectName_Identifier,
+                                              &PE_VarFunc::On_expectName_operator,
+                                              &PE_VarFunc::On_expectName_Bracket_Left };
     static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_operator,
                                               Tid_Bracket_Left };
 
-    static F_Tok stateF_afterName[] =       { On_afterName_ArrayBracket_Left,
-                                              On_afterName_Bracket_Left,
-                                              On_afterName_DoubleColon,
-                                              On_afterName_Semicolon,
-                                              On_afterName_Comma,
-                                              On_afterName_Assign,
-                                              On_afterName_Less };
+    static F_Tok stateF_afterName[] =       { &PE_VarFunc::On_afterName_ArrayBracket_Left,
+                                              &PE_VarFunc::On_afterName_Bracket_Left,
+                                              &PE_VarFunc::On_afterName_DoubleColon,
+                                              &PE_VarFunc::On_afterName_Semicolon,
+                                              &PE_VarFunc::On_afterName_Comma,
+                                              &PE_VarFunc::On_afterName_Assign,
+                                              &PE_VarFunc::On_afterName_Less };
     static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
                                               Tid_Bracket_Left,
                                               Tid_DoubleColon,
@@ -219,19 +219,19 @@ PE_VarFunc::Setup_StatusFunctions()
                                               Tid_Less };
 
     static F_Tok stateF_afterName_inErraneousTemplate[] =
-                                            { On_afterName_inErraneousTemplate_Less,
-                                              On_afterName_inErraneousTemplate_Greater };
+                                            { &PE_VarFunc::On_afterName_inErraneousTemplate_Less,
+                                              &PE_VarFunc::On_afterName_inErraneousTemplate_Greater };
     static INT16 stateT_afterName_inErraneousTemplate[] =
                                             { Tid_Less,
                                               Tid_Greater };
 
-    static F_Tok stateF_finished[] =        { On_finished_Semicolon,
-                                              On_finished_Comma };
+    static F_Tok stateF_finished[] =        { &PE_VarFunc::On_finished_Semicolon,
+                                              &PE_VarFunc::On_finished_Comma };
     static INT16 stateT_finished[] =        { Tid_Semicolon,
                                               Tid_Comma };
 
     static F_Tok stateF_finishedIncludingFunctionImplementation[] =
-                                            { On_finishedIncludingFunctionImplementation_Default
+                                            { &PE_VarFunc::On_finishedIncludingFunctionImplementation_Default
                                             };
     static INT16 stateT_finishedIncludingFunctionImplementation[] =
                                             { Tid_BuiltInType     // Just to have one entry, but it is default handled, too.

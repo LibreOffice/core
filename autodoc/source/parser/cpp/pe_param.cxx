@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_param.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:31 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,18 +109,18 @@ void
 PE_Parameter::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Parameter>::F_Tok   F_Tok;
-    static F_Tok stateF_start[] =           { On_start_Type,
-                                              On_start_Type,
-                                              On_start_Type,
-                                              On_start_Type,
-                                              On_start_Type,
-                                              On_start_Type,
-                                              On_start_Type,
-                                              On_start_Bracket_Right,
-                                              On_start_Type,
-                                              On_start_Ellipse,
-                                              On_start_Type,
-                                              On_start_Type };
+    static F_Tok stateF_start[] =           { &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Bracket_Right,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Ellipse,
+                                              &PE_Parameter::On_start_Type,
+                                              &PE_Parameter::On_start_Type };
     static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_class,
                                               Tid_struct,
@@ -133,26 +133,26 @@ PE_Parameter::Setup_StatusFunctions()
                                               Tid_Ellipse,
                                               Tid_BuiltInType,
                                               Tid_TypeSpecializer };
-    static F_Tok stateF_expectName[] =      { On_expectName_Identifier,
-                                              On_expectName_ArrayBracket_Left,
-                                              On_expectName_Bracket_Right,
-                                              On_expectName_Comma,
-                                              On_afterName_Assign  };
+    static F_Tok stateF_expectName[] =      { &PE_Parameter::On_expectName_Identifier,
+                                              &PE_Parameter::On_expectName_ArrayBracket_Left,
+                                              &PE_Parameter::On_expectName_Bracket_Right,
+                                              &PE_Parameter::On_expectName_Comma,
+                                              &PE_Parameter::On_afterName_Assign  };
     static INT16 stateT_expectName[] =      { Tid_Identifier,
                                               Tid_ArrayBracket_Left,
                                               Tid_Bracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_afterName[] =       { On_afterName_ArrayBracket_Left,
-                                              On_afterName_Bracket_Right,
-                                              On_afterName_Comma,
-                                              On_afterName_Assign };
+    static F_Tok stateF_afterName[] =       { &PE_Parameter::On_afterName_ArrayBracket_Left,
+                                              &PE_Parameter::On_afterName_Bracket_Right,
+                                              &PE_Parameter::On_afterName_Comma,
+                                              &PE_Parameter::On_afterName_Assign };
     static INT16 stateT_afterName[] =       { Tid_ArrayBracket_Left,
                                               Tid_Bracket_Right,
                                               Tid_Comma,
                                               Tid_Assign };
-    static F_Tok stateF_finished[] =        { On_finished_Comma,
-                                              On_finished_Bracket_Right };
+    static F_Tok stateF_finished[] =        { &PE_Parameter::On_finished_Comma,
+                                              &PE_Parameter::On_finished_Bracket_Right };
     static INT16 stateT_finished[] =        { Tid_Bracket_Right,
                                               Tid_Comma };
 

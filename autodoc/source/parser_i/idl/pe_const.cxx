@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_const.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,19 +82,19 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  PE_Constant::On_Default
+#define DF  &PE_Constant::On_Default
 
 PE_Constant::F_TOK
 PE_Constant::aDispatcher[PE_Constant::e_STATES_MAX][PE_Constant::tt_MAX] =
         {   { DF, DF, DF },  // e_none
-            { DF, On_expect_name_Identifier,
+            { DF, &PE_Constant::On_expect_name_Identifier,
                       DF },  // expect_name
-            { DF, DF, On_expect_curl_bracket_open_Punctuation },  // expect_curl_bracket_open
-            { On_expect_const_Stereotype,
-                  DF, On_expect_const_Punctuation },  // expect_const
-            { DF, On_expect_value_Identifier,
+            { DF, DF, &PE_Constant::On_expect_curl_bracket_open_Punctuation },  // expect_curl_bracket_open
+            { &PE_Constant::On_expect_const_Stereotype,
+                  DF, &PE_Constant::On_expect_const_Punctuation },  // expect_const
+            { DF, &PE_Constant::On_expect_value_Identifier,
                       DF },  // expect_value
-            { DF, DF, On_expect_finish_Punctuation }  // expect_finish
+            { DF, DF, &PE_Constant::On_expect_finish_Punctuation }  // expect_finish
         };
 
 

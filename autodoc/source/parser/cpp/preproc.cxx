@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preproc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:32 $
+ *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@ namespace cpp
 
 PreProcessor::F_TOKENPROC PreProcessor::aTokProcs[PreProcessor::state_MAX] =
     {
-        PreProcessor::On_plain,
-        PreProcessor::On_expect_macro_bracket_left,
-        PreProcessor::On_expect_macro_param
+        &PreProcessor::On_plain,
+        &PreProcessor::On_expect_macro_bracket_left,
+        &PreProcessor::On_expect_macro_param
     };
 
 
