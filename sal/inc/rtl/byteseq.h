@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ public:
     /** Returns the (unacquired) C-Handle of the sequence
      *
      **/
-    inline sal_Sequence * SAL_CALL getHandle()
+    inline sal_Sequence * SAL_CALL getHandle() const
         { return _pSequence; }
 };
 
