@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2002-06-19 17:03:32 $
+ *  last change: $Author: hjs $ $Date: 2002-06-20 12:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,7 @@ bool LibDump::DumpError( unsigned long n )
         case 610: p = "Overflow in base database table\n"; break;
         default: p = "Unspecified error";
     }
-    fprintf( stdout, "%s\n", p );
+    fprintf( stderr, "Error\n\n%s\n", p );
     exit (1);
     return false;
 }
