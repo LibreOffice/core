@@ -68,7 +68,6 @@ TARGET=scripts
 # --- Targets -------------------------------------------------------------
 
 UNIXTEXT= \
-    $(MISC)$/nswrapper.sh \
     $(MISC)$/fromTemplate.sh \
     $(MISC)$/sagenda.sh \
     $(MISC)$/soffice.sh \
@@ -84,6 +83,7 @@ UNIXTEXT= \
     $(MISC)$/svcard.sh \
     $(MISC)$/sweb.sh \
     $(MISC)$/swriter.sh \
+    $(MISC)$/mozwrapper.sh \
     $(MISC)$/unopkg.sh
 
 .INCLUDE :  target.mk
