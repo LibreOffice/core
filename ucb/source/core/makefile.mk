@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:45 $
+#   last change: $Author: pluby $ $Date: 2001-03-07 07:09:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,14 @@ SLOFILES=\
     $(SLO)$/ucbserv.obj \
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
-    $(SLO)$/provprox.obj \
-    $(SLO)$/ucbcmds.obj \
+    $(SLO)$/provprox.obj
+
+.IF "$(UPD)">="619"
+SLOFILES+=$(SLO)$/ucbcmds.obj \
     $(SLO)$/coreremotecontentbroker.obj
+.ELSE
+SLOFILES+=$(SLO)$/ucbcfg.obj
+.ENDIF
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -104,6 +109,11 @@ DEF1EXPORT1 =component_getImplementationEnvironment
 DEF1EXPORT2 =component_writeInfo
 DEF1EXPORT3 =component_getFactory
 DEF1DES=Universal Content Broker
+
+# Make symbol renaming match library name for Mac OS X
+.IF "$(OS)"=="MACOSX"
+SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
+.ENDIF
 
 .INCLUDE: target.mk
 
