@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
+ *  last change: $Author: lla $ $Date: 2000-11-30 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "commontypes.hxx"
 #endif
 
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 namespace com { namespace sun { namespace star {
 
     namespace uno   { template <class> class Reference; }
@@ -102,7 +106,6 @@ namespace configmgr
             const SettingsOverride& _rSettings) const;
 
     };
-
 }
 
 #endif // CONFIGMGR_BOOTSTRAP_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: lla $ $Date: 2000-11-30 15:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,13 +114,11 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        sal_Bool bIsSetupMode = sal_False;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
 
         vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
-        xOptions->setSetupMode(bIsSetupMode);
 
         // determine which parts are need for the path
         m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);
@@ -154,13 +152,11 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        sal_Bool bIsSetupMode = sal_False;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
 
         vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
-        xOptions->setSetupMode(bIsSetupMode);
 
         // determine which parts are need for the path
         m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);

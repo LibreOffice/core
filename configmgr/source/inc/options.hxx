@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
+ *  last change: $Author: lla $ $Date: 2000-11-30 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,20 +90,16 @@ namespace configmgr
        the new options or important options etc.
     */
 
-    // jb won't take a PropertyValue so we must [nachbilden] something like that.
-
     class OOptions : public vos::OReference
     {
         uno::Reference< script::XTypeConverter > m_xConverter;  // typeconverter used
         rtl::OUString   m_sLocale;                              // current locale used for data
         rtl::OUString   m_sDefaultLocale;                       // default locale set for a user
         rtl::OUString   m_sUser;                                // user key used (could be empty)
-        sal_Bool        m_bIsSetupMode;                         // special mode for setup and local configuration
 
     public:
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
-            :m_xConverter(_xConverter)
-            ,m_bIsSetupMode(sal_False){}
+            :m_xConverter(_xConverter) {}
 
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter,
             const rtl::OUString& _rLocale, const rtl::OUString& _rDefaultLocale,
@@ -111,15 +107,13 @@ namespace configmgr
             :m_xConverter(_xConverter)
             ,m_sDefaultLocale(_rDefaultLocale)
             ,m_sLocale(_rLocale)
-            ,m_sUser(_rUser)
-            ,m_bIsSetupMode(sal_False){}
+            ,m_sUser(_rUser){}
 
         OOptions(const OOptions& _rOptions)
             :m_xConverter(_rOptions.getTypeConverter())
             ,m_sDefaultLocale(_rOptions.getDefaultLocale())
             ,m_sLocale(_rOptions.getLocale())
-            ,m_sUser(_rOptions.getUser())
-            ,m_bIsSetupMode(_rOptions.isSetupMode()){}
+            ,m_sUser(_rOptions.getUser()){}
 
         uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
         const rtl::OUString& getUser() const {return m_sUser;}
@@ -133,14 +127,6 @@ namespace configmgr
         void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
 
-        sal_Bool isSetupMode() const
-        {
-            return m_bIsSetupMode;
-        }
-        void setSetupMode(sal_Bool _bMode)
-        {
-            m_bIsSetupMode = _bMode;
-        }
     };
 } // namespace
 
