@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2004-06-16 10:42:01 $
+#   last change: $Date: 2004-11-17 12:46:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,6 @@ $(REALFILTERPACKAGES) : $$(ALL_4$$(@:b))
      $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_others.xcu  xmlpackage=Misc   lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu/)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu/))
      +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
      +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
-     +@$(RM) $(MISC)$/$(@:b)_*.xcu
      +-@$(RM) $@
      +@$(RENAME) $(BIN)$/$(@:b)_$(INPATH).zip $@
 
@@ -156,7 +155,6 @@ $(INTERNALFILTERPACKAGES) : $$(ALL_4$$(@:b))
      $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/)) subdir_filters=internalgraphicfilters
      +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
      +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
-     +@$(RM) $(MISC)$/$(@:b)_*.xcu
      +-@$(RM) $@
      +@$(RENAME) $(BIN)$/$(@:b)_$(INPATH).zip $@
 
