@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:13:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class SfxProgress;
 class ListBox;
 class Button;
 class SvNumberFormatter;
-class SwMailMergeDlg;
+//CHINA001 class SwMailMergeDlg;
 class SwDbtoolsClient;
 class SwXMailMerge;
 
@@ -196,6 +196,7 @@ SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
 struct SwNewDBMgr_Impl;
 class SwConnectionDisposedListener_Impl;
+class AbstractMailMergeDlg;
 class SwNewDBMgr
 {
 friend class SwConnectionDisposedListener_Impl;
@@ -219,8 +220,8 @@ friend class SwConnectionDisposedListener_Impl;
     const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
 
     SwDSParam*          pMergeData;
-    SwMailMergeDlg*     pMergeDialog;
-
+    AbstractMailMergeDlg*       pMergeDialog;
+    //CHINA001 SwMailMergeDlg*      pMergeDialog;
     SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
     SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
 
