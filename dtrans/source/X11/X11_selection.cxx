@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
             }
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( aEncoding == RTL_TEXTENCODING_DONTKNOW )
         fprintf( stderr, "getTextPlainEncoding( %s ) failed\n", OUStringToOString( rMimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -474,7 +474,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                 m_aThread = osl_createSuspendedThread( run, this );
                 if( m_aThread )
                     osl_resumeThread( m_aThread );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                     fprintf( stderr, "SelectionManager::initialize: creation of dispatch thread failed !\n" );
 #endif
@@ -487,7 +487,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
 
 SelectionManager::~SelectionManager()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SelectionManager::~SelectionManager (%s)\n", m_pDisplay ? DisplayString(m_pDisplay) : "no display" );
 #endif
     {
@@ -519,7 +519,7 @@ SelectionManager::~SelectionManager()
 
     MutexGuard aGuard(m_aMutex);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "shutting down SelectionManager\n" );
 #endif
 
@@ -766,7 +766,7 @@ bool SelectionManager::requestOwnership( Atom selection )
             XSetSelectionOwner( m_pDisplay, selection, m_aWindow, CurrentTime );
             if( XGetSelectionOwner( m_pDisplay, selection ) == m_aWindow )
                 bSuccess = true;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "%s ownership for selection %s\n",
                      bSuccess ? "acquired" : "failed to acquire",
                      OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -776,7 +776,7 @@ bool SelectionManager::requestOwnership( Atom selection )
             delete pSel->m_pPixmap;
             pSel->m_pPixmap = NULL;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "no adaptor for selection %s\n",
                      OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -900,7 +900,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     ::std::hash_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUString aSelection( getString( selection ) );
     OUString aType( getString( type ) );
     fprintf( stderr, "getPasteData( %s, native: %s )\n",
@@ -922,7 +922,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         if( aSelectionOwner == m_aWindow )
         {
             // probably bad timing led us here
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Innere Nabelschau\n" );
 #endif
             return false;
@@ -993,7 +993,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         osl_yieldThread();
     } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( time(NULL)-nBegin >= 2 )
         fprintf( stderr, "timed out\n" );
 #endif
@@ -1003,7 +1003,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
         rData = it->second->m_aData;
         bSuccess = true;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "conversion unsuccessfull\n" );
 #endif
@@ -1036,7 +1036,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
 
     const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
     const Sequence< Atom >& rNativeTypes( it->second->m_aNativeTypes );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "getPasteData( \"%s\", \"%s\" )\n",
              OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -1070,7 +1070,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
                                       aData )
                         )
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "using \"%s\" instead of \"%s\"\n",
                                  OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                                  OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
@@ -1139,7 +1139,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
                         }
                     }
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                 {
                     fprintf( stderr, "could not get PIXMAP property: type=%s, format=%d, items=%d, bytes=%d, ret=0x%p\n", OUStringToOString( getString( type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), format, nItems, nBytes, pReturn );
@@ -1192,7 +1192,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         if( nSelectedType != None )
             bSuccess = getPasteData( selection, nSelectedType, rData );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "getPasteData for selection %s and data type %s returns %s, returned sequence has length %d\n",
              OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1250,7 +1250,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                                     m_nXdndTypeList, 0, atomcount, False,
                                     XA_ATOM,
                                     &nType, &nFormat, &nItems, &nBytes, &pBytes );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "have %d data types in XdndTypeList\n", nItems );
 #endif
                 if( nItems == atomcount && nBytes > 0 )
@@ -1283,7 +1283,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 for( i = 0; i < 3; i++ )
                     if( m_aDropEnterEvent.data.l[2+i] )
                         n++;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "have %d data types in XdndEnter\n", n );
 #endif
                 aAtoms.realloc( sizeof(Atom)*n );
@@ -1308,7 +1308,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         Atom* pNativeTypes = aNativeTypes.getArray();
         while( nAtoms-- )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if( *pAtoms && *pAtoms < 0x01000000 )
                 fprintf( stderr, "native type: %s\n", OUStringToOString( getString( *pAtoms ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -1385,7 +1385,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //    if( selection != m_nCLIPBOARDAtom )
     {
         fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
@@ -1446,7 +1446,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() )
                         && m_xBitmapConverter.is() )
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "trying bitmap conversion\n" );
 #endif
                         Reference<XBitmap> xBM( new BmpTransporter( aData ) );
@@ -1466,7 +1466,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                         }
                         catch(...)
                         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "exception in bitmap converter\n" );
 #endif
                         }
@@ -1509,7 +1509,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         // conversion succeeded
         if( aData.getLength() > INCR_MIN_SIZE )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "using INCR protocol\n" );
 #endif
             // use incr protocol
@@ -1536,7 +1536,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                              (const unsigned char*)aData.getConstArray(),
                              aData.getLength()/(nFormat/8) );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "convertData failed for type: %s \n",
                  OUStringToOString( convertTypeFromNative( target, selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -1549,7 +1549,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
     ResettableMutexGuard aGuard( m_aMutex );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleSelectionRequest for selection %s and target %s\n",
              OUStringToOString( getString( rRequest.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( getString( rRequest.target ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
@@ -1593,7 +1593,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
                                  XA_ATOM, 32, PropModeReplace, (const unsigned char*)pTypes, nTypes );
                 aNotify.xselection.property = rRequest.property;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "sending type list:\n" );
                 for( int k = 0; k < nTypes; k++ )
                     fprintf( stderr, "   %s\n", pTypes[k] ? XGetAtomName( m_pDisplay, pTypes[k] ) : "<None>" );
@@ -1639,7 +1639,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                                         &pData );
                     if( pData && nItems )
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "found %d atoms in MULTIPLE request\n", nItems );
 #endif
                         bEventSuccess = true;
@@ -1648,13 +1648,13 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                         aGuard.clear();
                         for( int i = 0; i < nItems; i += 2 )
                         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "   %s => %s: ",
                                      OUStringToOString( getString( pAtoms[i] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                                      OUStringToOString( getString( pAtoms[i+1] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
                             bool bSuccess = sendData( pAdaptor, rRequest.requestor, pAtoms[i], pAtoms[i+1], rRequest.selection );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "%s\n", bSuccess ? "succeeded" : "failed" );
 #endif
                             if( ! bSuccess )
@@ -1677,7 +1677,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                     if( pData )
                         XFree( pData );
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                 {
                     fprintf( stderr, "could not get type list from \"%s\" of type \"%s\" on requestor 0x%x, requestor has properties:",
@@ -1742,7 +1742,7 @@ void SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 {
     MutexGuard aGuard( m_aMutex );
     // data we requested arrived
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleReceivePropertyNotify for property %s\n",
              OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -1778,7 +1778,7 @@ void SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                             &nType, &nFormat,
                             &nItems, &nBytes,
                             &pData );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %d bytes data of type %s and format %d, items = %d\n",
                  nBytes,
                  OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1807,7 +1807,7 @@ void SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                                 &nType, &nFormat,
                                 &nItems, &nBytes,
                                 &pData );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "read %d items data of type %s and format %d, %d bytes left in property\n",
                      nItems,
                      OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
@@ -1855,7 +1855,7 @@ void SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     MutexGuard aGuard( m_aMutex );
 
     // ready for next part of a IncrementalTransfer
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "handleSendPropertyNotify for property %s (%s)\n",
              OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              rNotify.state == PropertyNewValue ? "new value" : ( rNotify.state == PropertyDelete ? "deleted" : "unknown")
@@ -1913,7 +1913,7 @@ void SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
     MutexGuard aGuard( m_aMutex );
 
     // notification about success/failure of one of our conversion requests
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OUString aSelection( getString( rNotify.selection ) );
     OUString aProperty( OUString::createFromAscii( "None" ) );
     if( rNotify.property )
@@ -1984,7 +1984,7 @@ void SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
         else
             it->second->m_eState = Selection::WaitingForData;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else if( it != m_aSelections.end() )
         fprintf( stderr, "Warning: selection in state %d\n", it->second->m_eState );
 #endif
@@ -2013,7 +2013,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             m_bDropEnterSent            = false;
             m_aCurrentDropWindow        = aTarget;
             m_nCurrentProtocolVersion   = m_aDropEnterEvent.data.l[1] >> 24;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "received XdndEnter on 0x%x\n", aTarget );
 #endif
         }
@@ -2035,7 +2035,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                                    &m_nLastX, &m_nLastY,
                                    &aChild );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "received XdndPosition on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
             DropTargetDragEnterEvent aEvent;
@@ -2077,7 +2077,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aSource == m_aDropEnterEvent.data.l[0]
                 )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "received XdndLeave on 0x%x\n", aTarget );
 #endif
             DropTargetEvent aEvent;
@@ -2096,7 +2096,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         {
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[2] : CurrentTime;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "received XdndDrop on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
             if( m_bLastDropAccepted )
@@ -2117,7 +2117,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             }
             else
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "XdndDrop canceled due to m_bLastDropAccepted = fale\n" );
 #endif
                 DropTargetEvent aEvent;
@@ -2164,7 +2164,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time
             aEvent.xclient.data.l[0]    = m_aCurrentDropWindow;
             aEvent.xclient.data.l[1]    = 0;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Sending XdndFinished to 0x%x\n",
                      m_aDropEnterEvent.data.l[0]
                      );
@@ -2242,7 +2242,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
         aEvent.xclient.data.l[3] = 0;
         aEvent.xclient.data.l[4] = m_nCurrentProtocolVersion > 1 ? nDropAction : 0;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Sending XdndStatus to 0x%x with action %s\n",
                  m_aDropEnterEvent.data.l[0],
                  OUStringToOString( getString( nDropAction ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
@@ -2296,7 +2296,7 @@ bool SelectionManager::updateDragAction( int modifierState )
 
     if( nNewDropAction != m_nUserDragAction || m_nTargetAcceptAction != DNDConstants::ACTION_DEFAULT )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "updateDragAction: %x -> %x\n", (int)m_nUserDragAction, (int)nNewDropAction );
 #endif
         bRet = true;
@@ -2386,7 +2386,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
     // for shortcut
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     switch( rMessage.type )
     {
         case ClientMessage:
@@ -2431,7 +2431,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.UserAction = getUserDragAction();
             dsde.DropAction = DNDConstants::ACTION_NONE;
             m_bDropSuccess = rMessage.xclient.data.l[1] & 1 ? true : false;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "status drop action: accept = %s, %s\n",
                      m_bDropSuccess ? "true" : "false",
                      OUStringToOString( getString( rMessage.xclient.data.l[4] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -2686,7 +2686,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time 
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "accept: %x\n", dragOperation );
 #endif
         Atom nAction = None;
@@ -2708,7 +2708,7 @@ void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
 {
     if( aDropWindow == m_aCurrentDropWindow )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "reject\n" );
 #endif
         m_bLastDropAccepted = false;
@@ -2875,7 +2875,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it;
     if( aNewCurrentWindow != m_aDropWindow )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "drag left window 0x%x (rev. %d), entered window 0x%x (rev %d)\n", m_aDropWindow, m_nCurrentProtocolVersion, aNewCurrentWindow, nNewProtocolVersion );
 #endif
 
@@ -2988,7 +2988,7 @@ void SelectionManager::startDrag(
                                  const Reference< XDragSourceListener >& listener
                                  ) throw()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
 #endif
 
@@ -3004,7 +3004,7 @@ void SelectionManager::startDrag(
         if( listener.is() )
             listener->dragDropEnd( aDragFailedEvent );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "*** ERROR *** second drag and drop started.\n" );
         if( m_xDragSourceListener.is() )
             fprintf( stderr, "*** ERROR *** drag source listener already set.\n" );
@@ -3040,7 +3040,7 @@ void SelectionManager::startDrag(
             }
             ++it;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found drop target window 0x%x\n", aSource );
 #endif
         if( it == m_aDropTargets.end() )
@@ -3049,7 +3049,7 @@ void SelectionManager::startDrag(
                 listener->dragDropEnd( aDragFailedEvent );
             return;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "try to grab pointer ... " );
 #endif
         int nPointerGrabSuccess =
@@ -3059,16 +3059,16 @@ void SelectionManager::startDrag(
                           None,
                           None,
                           CurrentTime );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "%d\n", nPointerGrabSuccess );
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "try to grab keyboard ... " );
 #endif
         int nKeyboardGrabSuccess =
             XGrabKeyboard( m_pDisplay, it->second.m_aRootWindow, True,
                            GrabModeAsync, GrabModeAsync, CurrentTime );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "%d\n", nKeyboardGrabSuccess );
 #endif
         if( nPointerGrabSuccess != GrabSuccess || nKeyboardGrabSuccess != GrabSuccess )
@@ -3124,7 +3124,7 @@ void SelectionManager::startDrag(
             else if( aEvent.Buttons & MouseButton::MIDDLE )
                 m_nDragButton = Button2;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "m_nUserDragAction = %x\n", (int)m_nUserDragAction );
 #endif
         updateDragWindow( root_x, root_y, aRoot );
@@ -3138,7 +3138,7 @@ void SelectionManager::startDrag(
         osl_resumeThread( m_aDragExecuteThread );
     else
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "osl_createSuspendedThread failed for drag execute\n" );
 #endif
         m_xDragSourceListener.clear();
@@ -3178,7 +3178,7 @@ void SelectionManager::dragDoDispatch()
 
     // do drag
     // m_xDragSourceListener will be cleared on finished drop
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "begin executeDrag dispatching\n" );
 #endif
     TimeValue aTVal;
@@ -3193,7 +3193,7 @@ void SelectionManager::dragDoDispatch()
         // just look occasionally here whether drop timed out or is completed
         osl_waitThread( &aTVal );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
     {
@@ -3355,7 +3355,7 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
         case SelectionClear:
         {
             MutexGuard aGuard(m_aMutex);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "SelectionClear for selection %s\n",
                      OUStringToOString( getString( rEvent.xselectionclear.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
                      );
@@ -3457,7 +3457,7 @@ void SelectionManager::dispatchEvent( int millisec )
 
 void SelectionManager::run( void* pThis )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "SelectionManager::run\n" );
 #endif
     // dispatch until the cows come home
@@ -3500,7 +3500,7 @@ void SelectionManager::run( void* pThis )
             aLast = aNow;
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "SelectionManager::run end\n" );
 #endif
 }
