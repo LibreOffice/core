@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-08 12:45:55 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include "svdpage.hxx"
 #endif
 
+#ifndef _SVDOGRP_HXX
+#include "svdogrp.hxx"
+#endif
+
 #ifndef _SVDOBJ_HXX
 #include "svdobj.hxx"
 #endif
@@ -85,12 +89,15 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BO
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode, BOOL bReverse)
+SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL bReverse )
 :   maObjList(1024, 64, 64),
     mnIndex(0L),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(*rGroup.GetSubList(), eMode);
+    if ( rObj.ISA( SdrObjGroup ) )
+        ImpProcessObjectList(*rObj.GetSubList(), eMode);
+    else
+        maObjList.Insert( (void*)&rObj, LIST_APPEND );
     Reset();
 }
 
