@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 15:32:32 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 12:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ struct eqName_Impl
     }
 };
 
-typedef NAMESPACE_STD(hash_map)
+typedef std::hash_map
 <
     OUString,
     sal_Int32,
@@ -226,7 +226,7 @@ IntrospectionNameMap;
 
 // Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
 // konvertierten Namen, dient zur Unterstützung von XExactName
-typedef NAMESPACE_STD(hash_map)
+typedef std::hash_map
 <
     OUString,
     OUString,
@@ -1523,7 +1523,7 @@ struct hashIntrospectionAccessCache_Impl
 
 };
 
-typedef NAMESPACE_STD(hash_map)
+typedef std::hash_map
 <
     hashIntrospectionKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1600,7 +1600,7 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 }
 
 
-typedef NAMESPACE_STD(hash_map)
+typedef std::hash_map
 <
     hashTypeProviderKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1904,7 +1904,7 @@ struct eqInterface_Impl
     }
 };
 
-typedef NAMESPACE_STD(hash_map)
+typedef std::hash_map
 <
     void*,
     void*,
