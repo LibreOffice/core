@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:04:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,11 @@
 // #i13033#
 #ifndef _CLONELIST_HXX_
 #include <clonelist.hxx>
+#endif
+
+// b4967543
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -352,6 +357,27 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFo
     MapUnit eMap=pMod->GetScaleUnit();
     Fraction aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
+
+    // b4967543
+    if(pObj && pObj->GetModel() && pObj->GetOutlinerParaObject())
+    {
+        SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
+        rOutliner.SetText(*pObj->GetOutlinerParaObject());
+
+        if(1L == rOutliner.GetParagraphCount())
+        {
+            SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0L);
+
+            if(pCandidate)
+            {
+                if(pObj->GetModel()->GetStyleSheetPool() == &pCandidate->GetPool())
+                {
+                    pObj->NbcSetStyleSheet(pCandidate, sal_True);
+                }
+            }
+        }
+    }
+
     return TRUE;
 }
 
@@ -413,15 +439,20 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
             // #116235#
             //SdrObject* pNeuObj=pSrcOb->Clone(pDstLst->GetPage(),pDstLst->GetModel());
             SdrObject* pNeuObj = pSrcOb->Clone();
-            pNeuObj->SetModel(pDstLst->GetModel());
-            pNeuObj->SetPage(pDstLst->GetPage());
 
-            if (pNeuObj!=NULL) {
-                if (bResize) {
+            if (pNeuObj!=NULL)
+            {
+                if(bResize)
+                {
                     pNeuObj->GetModel()->SetPasteResize(TRUE); // #51139#
                     pNeuObj->NbcResize(aPt0,xResize,yResize);
                     pNeuObj->GetModel()->SetPasteResize(FALSE); // #51139#
                 }
+
+                // #i39861#
+                pNeuObj->SetModel(pDstLst->GetModel());
+                pNeuObj->SetPage(pDstLst->GetPage());
+
                 pNeuObj->NbcMove(aSiz);
 
                 const SdrPage* pPg = pDstLst->GetPage();
