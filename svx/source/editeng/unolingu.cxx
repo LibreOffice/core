@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:25:41 $
+ *  last change: $Author: tl $ $Date: 2002-02-20 10:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,251 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 
 ///////////////////////////////////////////////////////////////////////////
 
+
+//! Dummy implementation in order to avoid loading of lingu DLL.
+//! The dummy accesses the real implementation (and thus loading the DLL)
+//! when it needs to be done only.
+class SpellDummy_Impl :
+    public cppu::WeakImplHelper1
+    <
+        ::com::sun::star::linguistic2::XSpellChecker1
+    >
+{
+    Reference< XSpellChecker1 >     xSpell;      // the real one...
+
+    void    GetSpell_Impl();
+
+public:
+
+    // XSupportedLanguages (for XSpellChecker1)
+    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
+        getLanguages()
+            throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        hasLanguage( sal_Int16 nLanguage )
+            throw(::com::sun::star::uno::RuntimeException);
+
+    // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
+    virtual sal_Bool SAL_CALL
+        isValid( const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
+        spell( const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+};
+
+
+void SpellDummy_Impl::GetSpell_Impl()
+{
+    if (!xSpell.is())
+    {
+        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        if (xLngSvcMgr.is())
+            xSpell = Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+    }
+}
+
+
+uno::Sequence< sal_Int16 > SAL_CALL
+    SpellDummy_Impl::getLanguages()
+        throw(uno::RuntimeException)
+{
+    GetSpell_Impl();
+    if (xSpell.is())
+        return xSpell->getLanguages();
+    else
+        return uno::Sequence< sal_Int16 >();
+}
+
+
+sal_Bool SAL_CALL
+    SpellDummy_Impl::hasLanguage( sal_Int16 nLanguage )
+        throw(uno::RuntimeException)
+{
+    GetSpell_Impl();
+    BOOL bRes = FALSE;
+    if (xSpell.is())
+        bRes = xSpell->hasLanguage( nLanguage );
+    return bRes;
+}
+
+
+sal_Bool SAL_CALL
+    SpellDummy_Impl::isValid( const rtl::OUString& rWord, sal_Int16 nLanguage,
+            const beans::PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException,
+              uno::RuntimeException)
+{
+    GetSpell_Impl();
+    BOOL bRes = TRUE;
+    if (xSpell.is())
+        bRes = xSpell->isValid( rWord, nLanguage, rProperties );
+    return bRes;
+}
+
+
+uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
+    SpellDummy_Impl::spell( const rtl::OUString& rWord, sal_Int16 nLanguage,
+            const beans::PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException,
+              uno::RuntimeException)
+{
+    GetSpell_Impl();
+    uno::Reference< linguistic2::XSpellAlternatives > xRes;
+    if (xSpell.is())
+        xRes = xSpell->spell( rWord, nLanguage, rProperties );
+    return xRes;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+//! Dummy implementation in order to avoid loading of lingu DLL.
+//! The dummy accesses the real implementation (and thus loading the DLL)
+//! when it needs to be done only.
+class HyphDummy_Impl :
+    public cppu::WeakImplHelper1
+    <
+        ::com::sun::star::linguistic2::XHyphenator
+    >
+{
+    Reference< XHyphenator >     xHyph;      // the real one...
+
+    void    GetHyph_Impl();
+
+public:
+
+    // XSupportedLocales
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::lang::Locale > SAL_CALL
+        getLocales()
+            throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        hasLocale( const ::com::sun::star::lang::Locale& rLocale )
+            throw(::com::sun::star::uno::RuntimeException);
+
+    // XHyphenator
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
+        hyphenate( const ::rtl::OUString& rWord,
+                const ::com::sun::star::lang::Locale& rLocale,
+                sal_Int16 nMaxLeading,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
+        queryAlternativeSpelling( const ::rtl::OUString& rWord,
+                const ::com::sun::star::lang::Locale& rLocale,
+                sal_Int16 nIndex,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
+        createPossibleHyphens(
+                const ::rtl::OUString& rWord,
+                const ::com::sun::star::lang::Locale& rLocale,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+};
+
+
+void HyphDummy_Impl::GetHyph_Impl()
+{
+    if (!xHyph.is())
+    {
+        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        if (xLngSvcMgr.is())
+            xHyph = xLngSvcMgr->getHyphenator();
+    }
+}
+
+
+uno::Sequence< lang::Locale > SAL_CALL
+    HyphDummy_Impl::getLocales()
+        throw(uno::RuntimeException)
+{
+    GetHyph_Impl();
+    if (xHyph.is())
+        return xHyph->getLocales();
+    else
+        return uno::Sequence< lang::Locale >();
+}
+
+
+sal_Bool SAL_CALL
+    HyphDummy_Impl::hasLocale( const lang::Locale& rLocale )
+        throw(uno::RuntimeException)
+{
+    GetHyph_Impl();
+    BOOL bRes = FALSE;
+    if (xHyph.is())
+        bRes = xHyph->hasLocale( rLocale );
+    return bRes;
+}
+
+
+uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
+    HyphDummy_Impl::hyphenate(
+            const rtl::OUString& rWord,
+            const lang::Locale& rLocale,
+            sal_Int16 nMaxLeading,
+            const beans::PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException,
+              uno::RuntimeException)
+{
+    GetHyph_Impl();
+    uno::Reference< linguistic2::XHyphenatedWord > xRes;
+    if (xHyph.is())
+        xRes = xHyph->hyphenate( rWord, rLocale, nMaxLeading, rProperties );
+    return xRes;
+}
+
+
+uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
+    HyphDummy_Impl::queryAlternativeSpelling(
+            const rtl::OUString& rWord,
+            const lang::Locale& rLocale,
+            sal_Int16 nIndex,
+            const PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException,
+              uno::RuntimeException)
+{
+    GetHyph_Impl();
+    uno::Reference< linguistic2::XHyphenatedWord > xRes;
+    if (xHyph.is())
+        xRes = xHyph->queryAlternativeSpelling( rWord, rLocale, nIndex, rProperties );
+    return xRes;
+}
+
+
+uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
+    HyphDummy_Impl::createPossibleHyphens(
+            const rtl::OUString& rWord,
+            const lang::Locale& rLocale,
+            const beans::PropertyValues& rProperties )
+        throw(lang::IllegalArgumentException,
+              uno::RuntimeException)
+{
+    GetHyph_Impl();
+    uno::Reference< linguistic2::XPossibleHyphens > xRes;
+    if (xHyph.is())
+        xRes = xHyph->createPossibleHyphens( rWord, rLocale, rProperties );
+    return xRes;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
 typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
 
 class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
@@ -436,7 +681,10 @@ Reference< XSpellChecker1 > LinguMgr::GetSpell()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    if (!xLngSvcMgr.is())
+    //! use dummy implementation in order to avoid loading of lingu DLL
+    xSpell = new SpellDummy_Impl;
+
+/*    if (!xLngSvcMgr.is())
         xLngSvcMgr = GetLngSvcMgr_Impl();
 
     if (xLngSvcMgr.is())
@@ -444,6 +692,7 @@ Reference< XSpellChecker1 > LinguMgr::GetSpell()
         xSpell = Reference< XSpellChecker1 > (
                         xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
+*/
     return xSpell;
 }
 
@@ -455,6 +704,10 @@ Reference< XHyphenator > LinguMgr::GetHyph()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
+    //! use dummy implementation in order to avoid loading of lingu DLL
+    xHyph = new HyphDummy_Impl;
+
+/*
     if (!xLngSvcMgr.is())
         xLngSvcMgr = GetLngSvcMgr_Impl();
 
@@ -462,6 +715,7 @@ Reference< XHyphenator > LinguMgr::GetHyph()
     {
         xHyph = xLngSvcMgr->getHyphenator();
     }
+*/
     return xHyph;
 }
 
