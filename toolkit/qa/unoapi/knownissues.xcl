@@ -1,9 +1,3 @@
-### 111089 ###
-toolkit.AccessibleDropDownListBox::com::sun::star::accessibility::XAccessibleContext
-
-### 111623 ###
-toolkit.AccessibleListItem::com::sun::star::accessibility::XAccessibleText
-
 ### 111721 ###
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
 
@@ -50,6 +44,8 @@ toolkit.UnoControlNumericField::com::sun::star::awt::XWindow
 toolkit.UnoControlPatternField::com::sun::star::awt::XWindow
 toolkit.UnoControlRadioButton::com::sun::star::awt::XWindow
 toolkit.UnoControlTimeField::com::sun::star::awt::XWindow
+toolkit.UnoScrollBarControl::com::sun::star::awt::XWindow
+toolkit.UnoSpinButtonControl::com::sun::star::awt::XWindow
 
 ### 114045 ###
 toolkit.UnoControlButtonModel::com::sun::star::io::XPersistObject
