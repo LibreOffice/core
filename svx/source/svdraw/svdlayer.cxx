@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-21 11:19:06 $
+ *  last change: $Author: aw $ $Date: 2002-03-11 15:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,7 @@ const SdrLayerSet* SdrLayerAdmin::GetLayerSet(const XubString& rName, FASTBOOL b
     UINT16 i(0);
     const SdrLayerSet* pSet = NULL;
 
+    // #97995# <= is WRONG, GPFs at 0
     while(i <= GetLayerSetCount() && !pSet)
     {
         if(rName.Equals(GetLayerSet(i)->GetName()))
