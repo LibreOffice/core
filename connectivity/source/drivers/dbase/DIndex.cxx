@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:04:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ BOOL ODbaseIndex::CreateImpl()
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
-                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    throw SQLException(::rtl::OUString::createFromAscii("Can not create index. Values are not unique!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
             }
             aInsertKey.setValue(aValue);
