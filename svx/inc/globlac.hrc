@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-03 08:30:11 $
+ *  last change: $Author: mba $ $Date: 2001-07-17 07:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@
                                     ACC_CODE( SID_COPY, KEY_INSERT, FALSE, TRUE, FALSE ) \
                                     ACC_CODE( SID_COPY, KEY_COPY, FALSE, FALSE, FALSE )
 #define AI_PASTE                    ACC_CODE( SID_PASTE, KEY_V, FALSE, TRUE, FALSE ) \
-                                    ACC_CODE( SID_PASTE, KEY_INSERT, TRUE, TRUE, FALSE ) \
+                                    ACC_CODE( SID_PASTE, KEY_INSERT, TRUE, FALSE, FALSE ) \
                                     ACC_CODE( SID_PASTE, KEY_PASTE, FALSE, FALSE, FALSE )
 #define AI_UNDO                     ACC_CODE( SID_UNDO, KEY_Z, FALSE, TRUE, FALSE ) \
                                     ACC_CODE( SID_UNDO, KEY_BACKSPACE, FALSE, FALSE, TRUE ) \
