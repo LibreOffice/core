@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drdefuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-05 11:31:09 $
+ *  last change: $Author: vg $ $Date: 2001-09-18 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
 
-ScDrawDefaultsObj::~ScDrawDefaultsObj()
+ScDrawDefaultsObj::~ScDrawDefaultsObj() throw ()
 {
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
