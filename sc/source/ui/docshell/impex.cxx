@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 14:22:16 $
+ *  last change: $Author: er $ $Date: 2001-05-22 13:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,12 +1379,13 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
         for (nCol = nStartCol; nCol <= nEndCol; nCol++)
         {
             String aBufStr;
-            CellType eType;
             double nVal;
             BOOL bForm = FALSE;
             USHORT r = nRow - nStartRow + 1;
             USHORT c = nCol - nStartCol + 1;
-            pDoc->GetCellType( nCol, nRow, aRange.aStart.Tab(), eType );
+            ScBaseCell* pCell;
+            pDoc->GetCell( nCol, nRow, aRange.aStart.Tab(), pCell );
+            CellType eType = (pCell ? pCell->GetCellType() : CELLTYPE_NONE);
             switch( eType )
             {
                 case CELLTYPE_FORMULA:
@@ -1428,15 +1429,64 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                 checkformula:
                     if( bForm )
                     {
-                        pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCellStr, TRUE );
-                        if (aCellStr.GetChar(0) == '=')
+                        const ScFormulaCell* pFCell =
+                            static_cast<const ScFormulaCell*>(pCell);
+                        switch ( pFCell->GetMatrixFlag() )
+                        {
+                            case MM_REFERENCE :
+                                aCellStr.Erase();
+                            break;
+                            default:
+                                pFCell->GetEnglishFormula( aCellStr );
+                        }
+                        if ( pFCell->GetMatrixFlag() != MM_NONE &&
+                                aCellStr.Len() > 2 &&
+                                aCellStr.GetChar(0) == '{' &&
+                                aCellStr.GetChar(aCellStr.Len()-1) == '}' )
+                        {   // cut off matrix {} characters
+                            aCellStr.Erase(aCellStr.Len()-1,1);
                             aCellStr.Erase(0,1);
-                        lcl_WriteSimpleString( rStrm,
-                                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ";E" )) );
-                        if( aCellStr.Search( ';' ) != STRING_NOTFOUND )
-                            lcl_WriteString( rStrm, aCellStr, '"' );
-                        else
-                            lcl_WriteSimpleString( rStrm, aCellStr );
+                        }
+                        if ( aCellStr.GetChar(0) == '=' )
+                            aCellStr.Erase(0,1);
+                        String aPrefix;
+                        switch ( pFCell->GetMatrixFlag() )
+                        {
+                            case MM_FORMULA :
+                            {   // diff expression with 'M' M$-extension
+                                USHORT nC, nR;
+                                pFCell->GetMatColsRows( nC, nR );
+                                nC += c - 1;
+                                nR += r - 1;
+                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";R" ) );
+                                aPrefix += String::CreateFromInt32( nR );
+                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
+                                aPrefix += String::CreateFromInt32( nC );
+                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";M" ) );
+                            }
+                            break;
+                            case MM_REFERENCE :
+                            {   // diff expression with 'I' M$-extension
+                                ScAddress aPos;
+                                pFCell->GetMatrixOrigin( aPos );
+                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";I;R" ) );
+                                aPrefix += String::CreateFromInt32( aPos.Row() - nStartRow + 1 );
+                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
+                                aPrefix += String::CreateFromInt32( aPos.Col() - nStartCol + 1 );
+                            }
+                            break;
+                            default:
+                                // formula Expression
+                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";E" ) );
+                        }
+                        lcl_WriteSimpleString( rStrm, aPrefix );
+                        if ( aCellStr.Len() )
+                        {
+                            if( aCellStr.Search( ';' ) != STRING_NOTFOUND )
+                                lcl_WriteString( rStrm, aCellStr, '"' );
+                            else
+                                lcl_WriteSimpleString( rStrm, aCellStr );
+                        }
                     }
                     WriteUnicodeOrByteEndl( rStrm );
                     break;
