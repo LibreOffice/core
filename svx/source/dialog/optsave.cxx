@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:24:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,13 +345,16 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     {
         aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER ));
         aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER_WEB ));
+        aFiltersLB.RemoveEntry(aFiltersLB.GetEntryPos( (void*) APP_WRITER_GLOBAL ));
     }
     else
     {
         pImpl->aDefaultArr[APP_WRITER] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER);
         pImpl->aDefaultArr[APP_WRITER_WEB] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB);
+        pImpl->aDefaultArr[APP_WRITER_GLOBAL] = aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL);
         pImpl->aDefaultReadonlyArr[APP_WRITER] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_WRITER);
         pImpl->aDefaultReadonlyArr[APP_WRITER_WEB] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_WRITERWEB);
+        pImpl->aDefaultReadonlyArr[APP_WRITER_GLOBAL] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::E_WRITERGLOBAL);
     }
 
     Link aLk = LINK(this, SfxSaveTabPage, FilterHdl_Impl);
@@ -512,6 +515,11 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     if(pImpl->aDefaultArr[APP_WRITER_WEB].getLength() &&
             pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB, pImpl->aDefaultArr[APP_WRITER_WEB]);
+
+    if(pImpl->aDefaultArr[APP_WRITER_GLOBAL].getLength() &&
+            pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL))
+        aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
+
     return bModified;
 }
 
@@ -547,12 +555,13 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
                     String sReplace;
                     switch(nData)
                     {
-                        case  APP_WRITER     : sReplace = C2U("com.sun.star.text.TextDocument");  break;
-                        case  APP_WRITER_WEB : sReplace = C2U("com.sun.star.text.WebDocument");   break;
-                        case  APP_CALC       : sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
-                        case  APP_IMPRESS    : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
-                        case  APP_DRAW       : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
-                        case  APP_MATH       : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
+                        case  APP_WRITER        : sReplace = C2U("com.sun.star.text.TextDocument");  break;
+                        case  APP_WRITER_WEB    : sReplace = C2U("com.sun.star.text.WebDocument");   break;
+                        case  APP_WRITER_GLOBAL : sReplace = C2U("com.sun.star.text.GlobalDocument");   break;
+                        case  APP_CALC          : sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
+                        case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
+                        case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
+                        case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
                         default: DBG_ERROR("illegal user data");
                     }
                     String sTmp(sCommand);
