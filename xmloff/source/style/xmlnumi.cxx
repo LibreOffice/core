@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 14:09:49 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,14 +584,15 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
         if( bImage )
         {
+            OUString sStr( sImageURL );
             if( sImageURL.getLength() )
             {
-                sImageURL = GetImport().ResolveGraphicObjectURL( sImageURL,
+                sStr = GetImport().ResolveGraphicObjectURL( sImageURL,
                                                                  sal_False );
             }
             else if( xBase64Stream.is() )
             {
-                sImageURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+                sStr = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
                 xBase64Stream = 0;
             }
 
@@ -599,7 +600,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
             {
                 pProps[nPos].Name =
                         OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
-                pProps[nPos++].Value <<= sImageURL;
+                pProps[nPos++].Value <<= sStr;
             }
 
             awt::Size aSize( nImageWidth, nImageHeight );
