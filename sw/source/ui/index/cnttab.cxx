@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:11:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,7 +1871,6 @@ class SwTOXEdit : public Edit
 {
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
-    Link        aGetFocusLink;
        sal_Bool     bNextControl;
     SwTokenWindow* m_pParent;
 public:
@@ -1886,12 +1885,10 @@ public:
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    GetFocus();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     sal_Bool    IsNextControl() const {return bNextControl;}
     void SetPrevNextLink( const Link& rLink )   {aPrevNextControlLink = rLink;}
-    void SetGetFocusLink(const Link& rLink)     {aGetFocusLink = rLink;}
 
     const SwFormToken&  GetFormToken()
         {
@@ -1954,20 +1951,11 @@ void SwTOXEdit::AdjustSize()
 }
 
 //---------------------------------------------------
-void    SwTOXEdit::GetFocus()
-{
-    if(aGetFocusLink.IsSet())
-        aGetFocusLink.Call(this);
-    Edit::GetFocus();
-}
-
-//---------------------------------------------------
 //---------------------------------------------------
 class SwTOXButton : public PushButton
 {
     SwFormToken aFormToken;
     Link        aPrevNextControlLink;
-    Link        aGetFocusLink;
     sal_Bool        bNextControl;
     SwTokenWindow* m_pParent;
 public:
@@ -1982,12 +1970,10 @@ public:
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    GetFocus();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     sal_Bool IsNextControl() const          {return bNextControl;}
     void SetPrevNextLink(const Link& rLink) {aPrevNextControlLink = rLink;}
-    void SetGetFocusLink(const Link& rLink) {aGetFocusLink = rLink;}
     const SwFormToken& GetFormToken() const {return aFormToken;}
 
     void SetCharStyleName(const String& rSet, sal_uInt16 nPoolId)
@@ -2051,13 +2037,6 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
             aPrevNextControlLink.Call(this);
     else
         PushButton::KeyInput(rKEvt);
-}
-//---------------------------------------------------
-void    SwTOXButton::GetFocus()
-{
-    if(aGetFocusLink.IsSet())
-        aGetFocusLink.Call(this);
-    PushButton::GetFocus();
 }
 //---------------------------------------------------
 void    SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
@@ -3086,6 +3065,13 @@ SwTokenWindow::~SwTokenWindow()
 //  for(sal_uInt16 i = GetItemCount(); i ; i--)
 //      RemoveItem(i - 1);
 
+    for( sal_uInt32 n = 0; n < aControlList.Count(); ++n )
+    {
+        Control* pControl = aControlList.GetObject( n );
+        pControl->SetGetFocusHdl( Link() );
+        pControl->SetLoseFocusHdl( Link() );
+    }
+
     for( sal_uInt16 i = aControlList.Count(); i; )
     {
         Control* pControl = aControlList.Remove( --i );
@@ -3223,7 +3209,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         pEdit->SetSizePixel(aEditSize);
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
         pEdit->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemHdl));
-        pEdit->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusHdl));
+        pEdit->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusHdl));
         pEdit->Show();
         pRet = pEdit;
     }
@@ -3238,7 +3224,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
 //        pButton->SetControlForeground(aTextColor);
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
-        pButton->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
+        pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
         if(TOKEN_AUTHORITY != rToken.eTokenType)
             pButton->SetText(aButtonTexts[rToken.eTokenType]);
         else
@@ -3392,7 +3378,7 @@ void    SwTokenWindow::InsertAtSelection(
         pEdit->AdjustSize();
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
         pEdit->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemHdl));
-        pEdit->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusHdl));
+        pEdit->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusHdl));
         pEdit->Show();
     }
     else
@@ -3406,7 +3392,7 @@ void    SwTokenWindow::InsertAtSelection(
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
     aControlList.Insert(pButton, nInsertPos);
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
-    pButton->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
+    pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
     if(TOKEN_AUTHORITY != aToInsertToken.eTokenType)
         pButton->SetText(aButtonTexts[aToInsertToken.eTokenType]);
     else
