@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationRegistry.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:24 $
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,3 +123,4 @@ service ConfigurationRegistry
 
 
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 12:25:25 $
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,27 +161,35 @@ service BaseFrame
     [property] string BackGraphicFilter;
 
     //-------------------------------------------------------------------------
-    /** determines the position of the background graphic.@see GraphicLocation
+    /** determines the position of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
     //-------------------------------------------------------------------------
-    /** contains the left border of the object.@see com::sun::star::table::BorderLine
+    /** contains the left border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine LeftBorder;
 
     //-------------------------------------------------------------------------
-    /** contains the right border of the object.@see com::sun::star::table::BorderLine
+    /** contains the right border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine RightBorder;
 
     //-------------------------------------------------------------------------
-    /** contains the top border of the object.@see com::sun::star::table::BorderLine
+    /** contains the top border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine TopBorder;
 
     //-------------------------------------------------------------------------
-    /** contains the bottom border of the object.@see com::sun::star::table::BorderLine
+    /** contains the bottom border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
      */
     [property] com::sun::star::table::BorderLine BottomBorder;
 
@@ -277,7 +285,9 @@ service BaseFrame
      */
     [property] boolean IsSyncHeightToWidth;
     //-------------------------------------------------------------------------
-    /** determines the horizontal orientation of the object.@see HoriOrientation
+    /** determines the horizontal orientation of the object.
+
+        @see BaseFrame::HoriOrientation
      */
     [property] short HoriOrient;
     //-------------------------------------------------------------------------
@@ -288,12 +298,16 @@ service BaseFrame
 
     //-------------------------------------------------------------------------
     /** determines the environment of the object to which the orientation
-        is related.@see RelOrientation
+        is related.
+
+        @see BaseFrame::RelOrientation
      */
     [property] short HoriOrientRelation;
 
     //-------------------------------------------------------------------------
-    /** determines the vertical orientation of the object.@see VertOrientation
+    /** determines the vertical orientation of the object.
+
+        @see BaseFrame::VertOrientation
      */
     [property] short VertOrient;
 
@@ -307,7 +321,9 @@ service BaseFrame
 
     //-------------------------------------------------------------------------
 
-    /** determines the environment of the object to which the orientation is related.@see RelOrientation
+    /** determines the environment of the object to which the orientation is related.
+
+        @see BaseFrame::RelOrientation
      */
     [property] short VertOrientRelation;
 
@@ -347,7 +363,7 @@ service BaseFrame
     [property] boolean Print;
 
     //-------------------------------------------------------------------------
-    /** contains the type of the shadow of the object.@see ShadowFormat
+    /** contains the type of the shadow of the object.
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
 
@@ -357,8 +373,10 @@ service BaseFrame
     [property] boolean ServerMap;
 
     //-------------------------------------------------------------------------
-    /** contains the size of the object.@see Height
-                @see Width
+    /** contains the size of the object.
+
+        @see BaseFrame::Height
+        @see BaseFrame::Width
      */
     [property] com::sun::star::awt::Size Size;
 
@@ -367,7 +385,9 @@ service BaseFrame
      */
     [property] boolean SizeProtected;
     //-------------------------------------------------------------------------
-    /** determines the type of the surrounding text.@see WrapTextMode
+    /** determines the type of the surrounding text.
+
+        @see BaseFrame::WrapTextMode
      */
     [property] short Surround;
 
@@ -380,7 +400,9 @@ service BaseFrame
     //-------------------------------------------------------------------------
 
 
-    /** contains the wrapping of the object.@see WrapTextMode
+    /** contains the wrapping of the object.
+
+        @see BaseFrame::WrapTextMode
      */
     [property] short TextWrap;
 

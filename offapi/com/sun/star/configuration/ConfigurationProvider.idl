@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ service ConfigurationProvider
  so that the parameters can be identified by name rather than by position.
  </p>
 
- <!-- Dennis: Is the <member> suppose to have a formatting effect on the HTML? -->
+ <!-- Dennis: Is the member suppose to have a formatting effect on the HTML? -->
 
  <p>What combinations of arguments are supported depends on the service name.
  </p>
@@ -220,11 +220,11 @@ service ConfigurationProvider
           at some later time. If <FALSE/>, the cache must operate in
           <em>write-through</em> mode, where updates are written to persistent
           storage at once - that is before
-          <member scope="com::sun::star::util>XChangesBatch::commitChanges</member>
+          <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
           returns.
          </dt>
 
- <!-- Dennis: the data in the <member> is not being displayed. -->
+ <!-- Dennis: the data in the member is not being displayed. -->
 
          <dd><code>"nocache"</code> : <atom>boolean</atom></dd>
          <dt>specifies that data for the view is not taken from the cache, but
@@ -274,3 +274,4 @@ service ConfigurationProvider
 }; }; }; };
 
 #endif
+

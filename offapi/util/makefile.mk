@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mi $ $Date: 2001-03-09 15:58:42 $
+#   last change: $Author: mi $ $Date: 2001-03-12 12:56:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,8 @@ TARGET=offapi_db
 
 # ------------------------------------------------------------------
 
-regcheck .PHONY: 
-    $(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb 
+#regcheck .PHONY: 
+#	$(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb 
 
 # ------------------------------------------------------------------
 

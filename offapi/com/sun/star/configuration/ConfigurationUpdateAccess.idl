@@ -2,13 +2,9 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
-<<<<<<< ConfigurationUpdateAccess.idl
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
-=======
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
->>>>>>> 1.4
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +91,7 @@ module com { module sun { module star { module configuration {
  <p>Descendants of this service also implement this service
  (and so on recursively), unless they are marked <em>read-only</em> in the
  schema (which is indicated by attribute
- <const scope="com::sun::star::beans>PropertyAttribute::READONLY</const>),
+ <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>),
  in which case they only need implement <type>ConfigurationAccess</type>.
  </p>
 
@@ -118,7 +114,7 @@ module com { module sun { module star { module configuration {
     <li><em>Element</em> role:
         The root element of a modifiable tree provides extended functionality
         to control processing of changes for the entire tree (fragment) by
-        supporting <type scope="com::sun::star::util>XChangesBatch</type>.
+        supporting <type scope="com::sun::star::util">XChangesBatch</type>.
         For elements of a <em>set</em> or a <em>group</em> no additinal
         interfaces are supported.
     </li>
@@ -191,3 +187,4 @@ service ConfigurationUpdateAccess
 }; }; }; };
 
 #endif
+

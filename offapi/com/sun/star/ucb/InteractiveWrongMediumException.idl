@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractiveWrongMediumException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,3 +86,4 @@ exception InteractiveWrongMediumException: com::sun::star::task::ClassifiedInter
 }; }; }; };
 
 #endif
+

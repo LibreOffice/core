@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAnyCompare.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: mi $ $Date: 2001-03-12 12:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,14 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** compares two <type scope=com:.sun::star::uno">Any</type>s.
+/** compares two <type scope="com::sun::star::uno">Any</type>s.
 */
 
 [ uik(C95ED4C1-3B9A-11d4-8B150010-4BCAF449), ident( "XAnyCompare", 1.0 ) ]
 interface XAnyCompare: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** allows comparision of two <type scope=com:.sun::star::uno">Any</type>s.
+    /** allows comparision of two <type scope="com::sun::star::uno">Any</type>s.
 
         @param Any1
         is the first compare value
