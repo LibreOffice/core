@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Decoder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-06 08:42:02 $
+ *  last change: $Author: dg $ $Date: 2001-07-09 09:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,78 @@ package org.openoffice.configuration;
  */
 public class Decoder extends Object
 {
+    //===========================================================
+    // encoding table
+    //===========================================================
+    static final int[] aEncodingTable =
+              { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '.' };
+
+    static class ModifiedUTF7Buffer extends Object
+    {
+        StringBuffer aBuffer;
+        int nValue;
+        int nFilled = 0;
+
+        public ModifiedUTF7Buffer(StringBuffer _aBuffer)
+        {
+            aBuffer = _aBuffer;
+        }
+
+        public void write(char c)
+        {
+            switch (nFilled)
+            {
+                case 0:
+                    nValue = ((int)c) << 8;
+                    nFilled = 2;
+                    break;
+                case 1:
+                    nValue |= ((int)c);
+                    nFilled = 3;
+                    flush();
+                    break;
+                case 2:
+                    nValue |= ((int)c) >> 8;
+                    nFilled = 3;
+                    flush();
+                    nValue = (((int)c) & 0xFF) << 16;
+                    nFilled = 1;
+                    break;
+            }
+        }
+
+        void flush()
+        {
+            switch (nFilled)
+            {
+                case 1:
+                    aBuffer.append((char)aEncodingTable[nValue >> 18]);
+                    aBuffer.append((char)aEncodingTable[nValue >> 12 & 63]);
+                    break;
+
+                case 2:
+                    aBuffer.append((char)aEncodingTable[nValue >> 18]);
+                    aBuffer.append((char)aEncodingTable[nValue >> 12 & 63]);
+                    aBuffer.append((char)aEncodingTable[nValue >> 6 & 63]);
+                    break;
+
+                case 3:
+                    aBuffer.append((char)aEncodingTable[nValue >> 18]);
+                    aBuffer.append((char)aEncodingTable[nValue >> 12 & 63]);
+                    aBuffer.append((char)aEncodingTable[nValue >> 6 & 63]);
+                    aBuffer.append((char)aEncodingTable[nValue & 63]);
+                    break;
+            }
+            nFilled = 0;
+            nValue = 0;
+        }
+    };
+
+
     //===========================================================
     // decoding table
     //===========================================================
@@ -235,7 +307,6 @@ public class Decoder extends Object
                         ++nPos;
 
                         nPos = decodeModifiedUTF7(sSource, nPos, nPos == 1, aTarget);
-                                            //System.out.println("npos="+nPos);
                         if (nPos < 0)
                             return null;
 
@@ -267,9 +338,62 @@ public class Decoder extends Object
     public static String decode(String sSource)
     {
         String sResult = decodeValid(sSource);
-
+        System.out.println("Encoded string:" + sSource);
+        if (sResult == null)
+            System.out.println("Decoded string:" + "null");
+        else
+            System.out.println("Decoded string:" + sResult);
         return sResult != null ? sResult : sSource;
     }
+
+    public static String encode(String sSource)
+    {
+        StringBuffer aTarget = new StringBuffer();
+        final int nEnd = sSource.length();
+        int nCopyEnd = 0;
+        int nPos = 0;
+        while(nPos < nEnd)
+        {
+            char c = sSource.charAt(nPos);
+            if (!isUsAsciiAlphaDigit(c, nPos != 0))
+                switch (c)
+                {
+                    case '-':
+                    case '.':
+                        if (nPos != 0)
+                            break;
+                    default:
+                        aTarget.append(sSource.substring(nCopyEnd, nPos ));
+                        aTarget.append('_');
+
+                        ModifiedUTF7Buffer aBuffer = new ModifiedUTF7Buffer(aTarget);
+                        for (;;)
+                        {
+                            aBuffer.write(c);
+                            nPos++;
+                            if (nPos == nEnd)
+                                break;
+                            c = sSource.charAt(nPos);
+                            if (isUsAsciiAlphaDigit(c) || c == '-' || c == '.')
+                                break;
+                        }
+                        aBuffer.flush();
+                        aTarget.append('_');
+                        nCopyEnd = nPos;
+                        continue;
+                }
+            nPos++;
+        }
+
+        if (nCopyEnd == 0)
+            return sSource;
+        else
+        {
+            aTarget.append(sSource.substring(nCopyEnd));
+            return aTarget.toString();
+        }
+    }
+
 
     public static void main(String args[])
     {
