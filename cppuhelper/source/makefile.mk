@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:00:06 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:42:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,11 +168,11 @@ SLOFILES= \
         $(SLO)$/macro_expander.obj \
         $(SLO)$/unourl.obj
 
-.IF "$(UNIXVERSIONNAMES)" != ""
+.IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(COMID)
 .ELSE
-SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
-.ENDIF # UNIXVERSIONNAMES
+SHL1TARGET=uno_$(TARGET)$(COMID)
+.ENDIF
 
 SHL1STDLIBS= \
         $(SALLIB)		\
@@ -190,17 +190,8 @@ DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
-#"ERROR: gcc2_linux_intel.map lacks symbols"
-#-- cppuhelper/unourl.hxx"
-#-- cppuhelper/exc_hlp.hxx getCaughtException()
-#-- cppuhelper/propshlp.hxx
-SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc2"
-#"ERROR: gcc2_linux_intel.map lacks symbols"
-SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXSgcc3"
