@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 17:55:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,15 +212,6 @@ void testConnection( const OUString &sConnectionDescription  ,
 }
 
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#define DLL_POSTFIX     ".so"
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-
-
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
@@ -234,15 +225,12 @@ int __cdecl main( int argc, char * argv[] )
         xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-    OUString aLibName = OUString::createFromAscii( REG_PREFIX );
-    aLibName += OUString::createFromAscii("connectr");
-    aLibName += OUString::createFromAscii(DLL_POSTFIX);
+    OUString aLibName =
+        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
     xImplReg->registerImplementation(
         OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-    aLibName = OUString::createFromAscii( REG_PREFIX );
-    aLibName += OUString::createFromAscii("acceptor");
-    aLibName += OUString::createFromAscii(DLL_POSTFIX);
+    aLibName = OUString::createFromAscii( "acceptor.uno" SAL_DLLEXTENSION );
     xImplReg->registerImplementation(
         OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
