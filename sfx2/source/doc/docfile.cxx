@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:29:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1931,6 +1931,8 @@ void SfxMedium::GetMedium_Impl()
                 aFileName = GetName();
 
             GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
+            if (xInteractionHandler.is())
+                GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
             TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
             comphelper::MediaDescriptor aMedium( xProps );
             aMedium.addInputStream();
