@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:19:40 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text [ english_us ] = "Insert Slides/Objects" ;
     Text [ italian ] = "Inserisci pagine/oggetti" ;
     Text [ spanish ] = "Insertar páginas/objetos" ;
-    Text [ french ] = "Insérer des pages/objets" ;
+    Text [ french ] = "Insertion de pages/d'objets" ;
     Text [ dutch ] = "Pagina/objecten invoegen" ;
     Text [ swedish ] = "Infoga sidor/objekt" ;
     Text [ danish ] = "Indsæt sider/objekter" ;
