@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-05 09:47:16 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,11 +210,15 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 {
     SbiSymPool* pOldPool = pPool;
     BOOL bSwitchPool = FALSE;
+    BOOL bPersistantGlobal = FALSE;
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
+    {
         bSwitchPool = TRUE;     // im richtigen Moment auf globalen Pool schalten
-        //pPool = &aGlobals;
+        if( eCurTok == GLOBAL )
+            bPersistantGlobal = TRUE;
+    }
     // PRIVATE ist Synonym fuer DIM
     // _CONST_?
     BOOL bConst = FALSE;
@@ -294,7 +298,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             SbiOpcode eOp;
             switch ( pDef->GetScope() )
             {
-                case SbGLOBAL:  eOp = _GLOBAL; goto global;
+                case SbGLOBAL:  eOp = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
+                                goto global;
                 case SbPUBLIC:  eOp = _PUBLIC;
                                 // AB 9.7.97, #40689, kein eigener Opcode mehr
                                 /*
@@ -388,8 +393,11 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                     aGen.Gen( _REDIMP_ERASE );
                 }
                 pDef->SetDims( pDim->GetDims() );
+                if( bPersistantGlobal )
+                    pDef->SetGlobal( TRUE );
                 SbiExpression aExpr( this, *pDef, pDim );
                 aExpr.Gen();
+                pDef->SetGlobal( FALSE );
                 aGen.Gen( (eOp == _STATIC) ? _DIM : eOp );
             }
         }
