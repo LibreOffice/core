@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-21 11:24:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COMPHELPER_PROPERTY_STATE_HXX_
 #include <comphelper/propstate.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #include <map>
 
@@ -129,7 +132,7 @@ public:
 
 #define DEFAULT_AGGREGATE_PROPERTY_ID   10000
 //------------------------------------------------------------------
-class OPropertyArrayAggregationHelper: public ::cppu::IPropertyArrayHelper
+class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper: public ::cppu::IPropertyArrayHelper
 {
     friend class OPropertySetAggregationHelper;
 protected:
@@ -236,7 +239,7 @@ namespace internal
  * supports at least XPropertySet and XMultiPropertySet
  *
  */
-class OPropertySetAggregationHelper :public OPropertyStateHelper
+class COMPHELPER_DLLPUBLIC OPropertySetAggregationHelper    :public OPropertyStateHelper
                                     ,public ::com::sun::star::beans::XPropertiesChangeListener
                                     ,public ::com::sun::star::beans::XVetoableChangeListener
 {
