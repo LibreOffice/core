@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-12 10:16:45 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 19:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "funcuno.hxx"
 #include "miscuno.hxx"
+#include "cellsuno.hxx"
 #include "unoguard.hxx"
 #include "scdll.hxx"
 #include "document.hxx"
@@ -81,6 +82,12 @@
 #include "cell.hxx"
 #include "docoptio.hxx"
 #include "optuno.hxx"
+
+// for lcl_CopyData:
+#include "markdata.hxx"
+#include "patattr.hxx"
+#include "docpool.hxx"
+#include "attrib.hxx"
 
 using namespace com::sun::star;
 
@@ -176,6 +183,49 @@ void ScTempDocCache::Clear()
     DBG_ASSERT( !bInUse, "ScTempDocCache::Clear: bInUse" );
     delete pDoc;
     pDoc = NULL;
+}
+
+//------------------------------------------------------------------------
+
+//  copy results from one document into another
+//! merge this with ScAreaLink::Refresh
+//! copy directly without a clipboard document?
+
+BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
+                    ScDocument* pDestDoc, const ScAddress& rDestPos )
+{
+    USHORT nSrcTab = rSrcRange.aStart.Tab();
+    USHORT nDestTab = rDestPos.Tab();
+
+    ScRange aNewRange( rDestPos, ScAddress(
+                rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + rDestPos.Col(),
+                rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + rDestPos.Row(),
+                nDestTab ) );
+
+    ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+    ScMarkData aSourceMark;
+    aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
+    aSourceMark.SetMarkArea( rSrcRange );
+    pSrcDoc->CopyToClip( rSrcRange.aStart.Col(),rSrcRange.aStart.Row(),
+                         rSrcRange.aEnd.Col(),rSrcRange.aEnd.Row(),
+                         FALSE, pClipDoc, FALSE, &aSourceMark );
+
+    if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
+                                HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+    {
+        ScPatternAttr aPattern( pSrcDoc->GetPool() );
+        aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
+        aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+        pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
+    }
+
+    ScMarkData aDestMark;
+    aDestMark.SelectOneTable( nDestTab );
+    aDestMark.SetMarkArea( aNewRange );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, FALSE );
+
+    delete pClipDoc;
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -585,6 +635,44 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
 
             if ( nRowCount && nMaxColCount && !bOverflow )
                 lcl_AddRef( aTokenArr, nStartRow, nMaxColCount, nRowCount );
+        }
+        else if ( aType.equals( getCppuType( (uno::Reference<table::XCellRange>*)0 ) ) )
+        {
+            // currently, only our own cell ranges are supported
+
+            uno::Reference<table::XCellRange> xRange;
+            rArg >>= xRange;
+            ScCellRangesBase* pImpl = ScCellRangesBase::getImplementation( xRange );
+            if ( pImpl )
+            {
+                ScDocument* pSrcDoc = pImpl->GetDocument();
+                const ScRangeList& rRanges = pImpl->GetRangeList();
+                if ( pSrcDoc && rRanges.Count() == 1 )
+                {
+                    ScRange aSrcRange = *rRanges.GetObject(0);
+
+                    long nStartRow = nDocRow;
+                    long nColCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+                    long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+
+                    if ( nStartRow + nRowCount > MAXROW )
+                        bOverflow = TRUE;
+                    else
+                    {
+                        // copy data
+                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, nDocRow, 0 ) ) )
+                            bOverflow = TRUE;
+                    }
+
+                    nDocRow += nRowCount;
+                    if ( !bOverflow )
+                        lcl_AddRef( aTokenArr, nStartRow, nColCount, nRowCount );
+                }
+                else
+                    bArgErr = TRUE;
+            }
+            else
+                bArgErr = TRUE;
         }
         else
             bArgErr = TRUE;                 // invalid type
