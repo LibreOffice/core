@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:38:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ public:
 
     // aus SwIndexReg
     virtual void Update( const SwIndex & aPos, USHORT xub_StrLen,
-                        BOOL bNegativ = FALSE );
+                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
 
     FASTBOOL IsInSymbolFont( USHORT xub_StrLen ) const;
 
