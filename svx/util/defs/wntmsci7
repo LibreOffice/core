@@ -24137,3 +24137,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?ImpLinkAbmeldung@SdrTextObj@@AAEXXZ
 ?ImpLinkAnmeldung@SdrTextObj@@AAEXXZ
 ?ImpLimitToWorkArea@SdrExchangeView@@IBEEAAVPoint@@PBVSdrPageView@@@Z
+?WriteBlibStoreEntry@EscherGraphicProvider@@QAEEAAVSvStream@@KEK@Z
