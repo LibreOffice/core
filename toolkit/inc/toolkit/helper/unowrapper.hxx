@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-25 11:07:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #include <vcl/unowrap.hxx>
@@ -122,7 +122,7 @@ public:
     void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
 
     // Accessibility
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                                 CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar );
 };
 
