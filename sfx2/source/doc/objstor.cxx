@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-05 14:22:50 $
+ *  last change: $Author: mib $ $Date: 2002-07-03 13:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,8 +1465,8 @@ sal_Bool SfxObjectShell::ConvertFrom
 
 sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
 {
-    ::rtl::OUString aTypeName( GetMedium()->GetFilter()->GetTypeName() );
-    ::rtl::OUString aFilterName( GetMedium()->GetFilter()->GetFilterName() );
+    ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
+    ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilterFact (
