@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 15:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ public class Dataimport extends ReportWizard{
     ReportDocument CurReportDocument;
     UNODialogs CurUNOProgressDialog;
     static boolean bStopProcess;
+    static boolean brenamefirstTable = true;
 
     public Dataimport() {
     }
@@ -414,16 +415,17 @@ public class Dataimport extends ReportWizard{
         insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
         }
         else{
-        xTextDocument.unlockControllers();
+        CurReportDocument.unlockallControllers();
         return;
         }
         }
     setLayoutSectionsInvisible(GroupFieldCount);
     CurReportDocument.breakLinkofTextSections();
+    Object oTextTable= CurReportDocument.xTextTablesSupplier.getTextTables().getByName("FirstVisibleTextTable");
     if (CorrBreakValue != null)
-        Tools.setUNOPropertyValue(xGroupBaseTables[0], "BreakType", CorrBreakValue);
+        Tools.setUNOPropertyValue(oTextTable, "BreakType", CorrBreakValue);
     if (CorrPageDescName != "")
-        Tools.setUNOPropertyValue(xGroupBaseTables[0], "PageDescName", CorrPageDescName);
+        Tools.setUNOPropertyValue(oTextTable, "PageDescName", CorrPageDescName);
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
@@ -432,8 +434,7 @@ public class Dataimport extends ReportWizard{
     catch(java.lang.Exception javaexception ){
         javaexception.printStackTrace(System.out);
     }
-    if (CurReportDocument.xTextDocument.hasControllersLocked())
-        CurReportDocument.xTextDocument.unlockControllers();
+    CurReportDocument.unlockallControllers();
     }
 
 
@@ -495,11 +496,11 @@ public class Dataimport extends ReportWizard{
 
     public void addLinkedTextSection(XTextCursor xTextCursor, String sLinkRegion, ReportDocument.DBColumn CurDBColumn, Object CurGroupValue){
     try{
-    Object oTextSection =  CurReportDocument.xMSFDoc.createInstance("com.sun.star.text.TextSection");
-    XTextContent xTextSectionContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
+    XInterface xTextSection = (XInterface) CurReportDocument.xMSFDoc.createInstance("com.sun.star.text.TextSection");
+    XTextContent xTextSectionContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextSection);
     xTextCursor.gotoEnd(false);
     xTextCursor.getText().insertTextContent(xTextCursor, xTextSectionContent, true);
-    Tools.setUNOPropertyValue(oTextSection, "LinkRegion", sLinkRegion);
+    Tools.setUNOPropertyValue(xTextSection, "LinkRegion", sLinkRegion);
     if (CurDBColumn != null){
         boolean bIsGroupTable = (sLinkRegion.equals("RecordSection") != true);
         if (bIsGroupTable == true){
@@ -507,6 +508,13 @@ public class Dataimport extends ReportWizard{
         XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
         CurDBColumn.modifyCellContent(xCellRange, CurGroupValue);
         }
+    }
+    if (brenamefirstTable == true){
+        brenamefirstTable = false;
+        XTextTable xTextTable = CurReportDocument.getlastTextTable();
+        XNamed xNamedTable = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+        xNamedTable.setName("FirstVisibleTextTable");
+
     }
     }
     catch( com.sun.star.uno.Exception exception ){
