@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-18 13:49:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
 #define COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleText.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -127,6 +127,24 @@ namespace comphelper
         ::rtl::OUString SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         ::rtl::OUString SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         ::rtl::OUString SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    public:
+
+        /** Helper method, that detects the difference between
+            two strings and returns the deleted selection and
+            the inserted selection if available.
+
+            @returns true if there are differences between the
+            two strings and false if both are equal
+
+            @see ::com::sun::star::accessibility::AccessibleEventId
+                 ::com::sun::star::awt::Selection
+        */
+        static bool implInitTextChangedEvent(
+            const rtl::OUString& rOldString,
+            const rtl::OUString& rNewString,
+            /*out*/ ::com::sun::star::uno::Any& rDeleteSelection,
+            /*out*/ ::com::sun::star::uno::Any& rInsertSelection); // throw()
     };
 
 
@@ -134,7 +152,7 @@ namespace comphelper
     // OAccessibleTextHelper
     //==============================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::drafts::com::sun::star::accessibility::XAccessibleText
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleText
                                 >   OAccessibleTextHelper_Base;
 
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
