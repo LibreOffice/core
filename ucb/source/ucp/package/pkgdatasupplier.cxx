@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 14:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,16 @@ struct DataSupplier_Impl
     uno::Reference< container::XEnumeration >    m_xFolderEnum;
     sal_Int32                                    m_nOpenMode;
     sal_Bool                                     m_bCountFinal;
+    sal_Bool                                     m_bThrowException;
 
     DataSupplier_Impl(
             const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
             const rtl::Reference< Content >& rContent,
             sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-      m_xFolderEnum( rContent->getIterator() ),
-      m_nOpenMode( nOpenMode ), m_bCountFinal( !m_xFolderEnum.is() ) {}
+      m_xFolderEnum( rContent->getIterator() ), m_nOpenMode( nOpenMode ),
+      m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
+    {}
     ~DataSupplier_Impl();
 };
 
@@ -344,10 +346,12 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
         }
         catch ( container::NoSuchElementException const & )
         {
+            m_pImpl->m_bThrowException = sal_True;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
+            m_pImpl->m_bThrowException = sal_True;
             break;
         }
     }
@@ -416,10 +420,12 @@ sal_uInt32 DataSupplier::totalCount()
         }
         catch ( container::NoSuchElementException const & )
         {
+            m_pImpl->m_bThrowException = sal_True;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
+            m_pImpl->m_bThrowException = sal_True;
             break;
         }
     }
@@ -509,5 +515,7 @@ void DataSupplier::close()
 void DataSupplier::validate()
     throw( star::ucb::ResultSetException )
 {
+    if ( m_pImpl->m_bThrowException )
+        throw star::ucb::ResultSetException();
 }
 
