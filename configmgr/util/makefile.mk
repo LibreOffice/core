@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dg $ $Date: 2001-07-06 12:36:15 $
+#   last change: $Author: mh $ $Date: 2001-07-30 14:48:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)	\
-#	$(ZLIB3RDLIB) \
     $(CPPRTLLIB)
 
 SHL1DEPN=
@@ -106,9 +105,7 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
 
