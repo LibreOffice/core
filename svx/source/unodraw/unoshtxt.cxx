@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 11:37:01 $
+ *  last change: $Author: cl $ $Date: 2001-12-05 15:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
             SdrModel* pModel = mpObject->GetModel();
 
             mpOutliner = pModel->createOutliner( nOutlMode );
+            mpOutliner->SetTextObjNoInit( pTextObj );
 /*
             mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
             Outliner& aDrawOutliner = pModel->GetDrawOutliner();
