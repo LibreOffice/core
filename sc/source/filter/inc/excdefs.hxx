@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:41:52 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,12 +214,13 @@ const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
 
 #define EXC_SXIVD_IDDATA            0xFFFE
 
+const sal_uInt16 EXC_ID_SXPI            = 0x00B6;
+const sal_uInt16 EXC_SXPI_ALLITEMS      = 0x7FFD;
+
 // pivot cache record flags
 #define EXC_SXFIELD_COMMON          0x0001
 #define EXC_SXFIELD_READLATER       0x0002
 #define EXC_SXFIELD_16BIT           0x0200
-
-#define EXC_SXITEM_
 
 // defines for change tracking ================================================
 
