@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-20 11:42:44 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,12 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
     {
         SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
+        // OD 07.11.2002 #104840# - local variable to remember first footnote
+        // of node <rNode> in order to invalidate position of its first content.
+        // Thus, in its <MakeAll()> it will checked its position relative to its reference.
+        SwFtnFrm* pFirstFtnOfNode = 0;
         for( register USHORT j = pSwpHints->Count(); j; )
+        {
             if( RES_TXTATR_FTN == (pHt = pSwpHints->GetHt(--j))->Which() )
             {
                 if( !pFrm )
@@ -440,6 +445,8 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                     {
                         while( pFtn->GetMaster() )
                             pFtn = pFtn->GetMaster();
+                        // OD 07.11.2002 #104840# - remember footnote frame
+                        pFirstFtnOfNode = pFtn;
                         while ( pFtn )
                         {
                             pFtn->SetRef( pFrm );
@@ -457,6 +464,16 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
 #endif
                 }
             }
+        } // end of for-loop on <SwpHints>
+        // OD 08.11.2002 #104840# - invalidate
+        if ( pFirstFtnOfNode )
+        {
+            SwCntntFrm* pCntnt = pFirstFtnOfNode->ContainsCntnt();
+            if ( pCntnt )
+            {
+                pCntnt->_InvalidatePos();
+            }
+        }
     }
 }
 
