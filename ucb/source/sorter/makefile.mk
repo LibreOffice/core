@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kso $ $Date: 2002-06-25 13:04:35 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:35:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,11 +105,6 @@ SHL1VERSIONMAP=exports.map
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 DEF1DES=UCB : Sorted Dynamic ResultSet
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
-.ENDIF
 
 .INCLUDE: target.mk
 
