@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 14:06:21 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ namespace dbaui
         */
         inline OTableConnectionData* getData() const { return m_pConnData; }
 
+        void lateInit();
+
     protected:
         virtual void Resize();
 
@@ -216,7 +218,10 @@ namespace dbaui
         OSL_ENSURE(m_pConnData, "No data supplied!");
 
         m_pConnData->normalizeLines();
-
+    }
+    //------------------------------------------------------------------------------
+    void ORelationControl::lateInit()
+    {
         OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(m_pConnData->GetSourceWinName());
         if( aFind != m_pTableMap->end() )
             m_xSourceDef = aFind->second->GetTable();
@@ -360,7 +365,7 @@ namespace dbaui
         ULONG nHelpId;
 
         Reference< XPropertySet> xDef;
-        switch (nColumnId)
+        switch ( getColumnIdent(nColumnId) )
         {
             case SOURCE_COLUMN:
                 xDef    = m_xSourceDef;
@@ -372,13 +377,14 @@ namespace dbaui
                 break;
         }
 
-        if(xDef.is())
+        if ( xDef.is() )
         {
             fillListBox(xDef,nRow,nColumnId);
-            m_pListCell->SelectEntry( GetCellText( nRow, nColumnId ) );
+            String sName = GetCellText( nRow, nColumnId );
+            m_pListCell->SelectEntry( sName );
+            OSL_ENSURE(m_pListCell->GetSelectEntry() == sName,"Name was not selected!");
 
             m_pListCell->SetHelpId(nHelpId);
-            //  m_pListCell->SetHelpText(String());
         }
     }
 
@@ -421,7 +427,7 @@ namespace dbaui
         m_pListCell->Clear();
         try
         {
-            if( _xDest.is() )
+            if ( _xDest.is() )
             {
                 sal_Int32 nRows = GetRowCount();
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
@@ -436,7 +442,7 @@ namespace dbaui
                     for (; i < nRows; ++i)
                         if(i != _nRow && GetCellText(i,nColumnId) == sName)
                             break;
-                    if(i == nRows)
+                    if ( i == nRows )
                         m_pListCell->InsertEntry( *pBegin );
                 }
                 m_pListCell->InsertEntry(String(), 0);
@@ -452,10 +458,10 @@ namespace dbaui
     {
         // wenn ich hier gerade editiere, ausblenden
         BOOL bWasEditing = IsEditing();
-        if (bWasEditing)
+        if ( bWasEditing )
             DeactivateCell();
 
-        if( _pSource && _pDest )
+        if ( _pSource && _pDest )
         {
             m_xSourceDef = _pSource->GetTable();
             SetColumnTitle(1, _pSource->GetWinName());
@@ -466,7 +472,7 @@ namespace dbaui
 
             const OJoinTableView* pView = _pSource->getTableView();
             OTableConnection* pConn = pView->GetTabConn(_pSource,_pDest);
-            if( pConn )
+            if ( pConn )
             {
                 m_pConnData->CopyFrom(*pConn->GetData());
                 m_pBoxControl->getContainer()->notifyConnectionChange(m_pConnData);
@@ -480,8 +486,8 @@ namespace dbaui
                                 OUnaryRefFunctor<OConnectionLineData>( ::std::mem_fun(&OConnectionLineData::Reset))
                                 );
 
-                m_pConnData->SetSourceWinName(_pSource->GetWinName());
-                m_pConnData->SetDestWinName(_pDest->GetWinName());
+                m_pConnData->SetSourceWinName(_pSource->GetName());
+                m_pConnData->SetDestWinName(_pDest->GetName());
             }
             m_pConnData->normalizeLines();
 
@@ -489,7 +495,7 @@ namespace dbaui
         // neu zeichnen
         Invalidate();
 
-        if (bWasEditing)
+        if ( bWasEditing )
         {
             GoToRow(0);
             ActivateCell();
@@ -543,7 +549,9 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     OTableListBoxControl::~OTableListBoxControl()
     {
-        delete m_pRC_Tables;
+        ORelationControl* pTemp = m_pRC_Tables;
+        m_pRC_Tables = NULL;
+        delete pTemp;
     }
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
@@ -571,20 +579,20 @@ namespace dbaui
             }
         }
 
-        // links das erste, rechts das zweite selektieren
-        m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
-        m_lmbRightTable.SelectEntry(m_strCurrentRight);
-
         // die entsprechenden Defs an mein Controls
         m_pRC_Tables->setWindowTables(pInitialLeft,pInitialRight);
 
         // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
 
-        if (m_pTableMap->size() > 2)
+        if ( m_pTableMap->size() > 2 )
         {
             m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
             m_lmbRightTable.RemoveEntry(m_strCurrentLeft);
         }
+
+        // links das erste, rechts das zweite selektieren
+        m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
+        m_lmbRightTable.SelectEntry(m_strCurrentRight);
 
         m_lmbLeftTable.GrabFocus();
     }
@@ -596,10 +604,10 @@ namespace dbaui
         OTableWindow* pRight    = NULL;
 
         // eine Sonderbehandlung : wenn es nur zwei Tabellen gibt, muss ich bei Wechsel in einer LB auch in der anderen umschalten
-        if (m_pTableMap->size() == 2)
+        if ( m_pTableMap->size() == 2 )
         {
             ListBox* pOther;
-            if (pListBox == &m_lmbLeftTable)
+            if ( pListBox == &m_lmbLeftTable )
                 pOther = &m_lmbRightTable;
             else
                 pOther = &m_lmbLeftTable;
@@ -610,7 +618,7 @@ namespace dbaui
             ++aIter;
             OTableWindow* pSecond = aIter->second;
 
-            if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetComposedName()) )
+            if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetName()) )
             {
                 pLeft   = pFirst;
                 pRight  = pSecond;
@@ -718,6 +726,11 @@ namespace dbaui
     void OTableListBoxControl::Init(OTableConnectionData* _pConnData)
     {
         m_pRC_Tables->Init(_pConnData);
+    }
+    // -----------------------------------------------------------------------------
+    void OTableListBoxControl::lateInit()
+    {
+        m_pRC_Tables->lateInit();
     }
     // -----------------------------------------------------------------------------
     BOOL OTableListBoxControl::SaveModified()

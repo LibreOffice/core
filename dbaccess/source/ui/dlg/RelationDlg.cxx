@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:43:44 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,17 +152,18 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     m_pConnData = static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance());
     m_pConnData->CopyFrom( *pConnectionData );
 
-    m_pTableControl = new OTableListBoxControl(this,ModuleRes(LB_CONTROL),m_pTableMap,this);
     Init(m_pConnData);
-    m_pTableControl->Init( m_pConnData );
-
+    m_pTableControl = new OTableListBoxControl(this,ModuleRes(LB_CONTROL),m_pTableMap,this);
 
     aPB_OK.SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
 
-    if (bAllowTableSelect)
+    m_pTableControl->Init( m_pConnData );
+    if ( bAllowTableSelect )
         m_pTableControl->fillListBoxes();
     else
         m_pTableControl->fillAndDisable(pConnectionData);
+
+    m_pTableControl->lateInit();
 
     m_pTableControl->NotifyCellChange();
 
@@ -290,6 +291,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
     // try again
     Init(m_pConnData);
     m_pTableControl->Init( m_pConnData );
+    m_pTableControl->lateInit();
 
     return 0;
 }
