@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:58:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 09:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,6 +1667,25 @@ bool ViewShell::IsMainViewShell (void) const
 
 
 
+void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
+{
+    if (bIsMainViewShell != mpImpl->mbIsMainViewShell)
+    {
+        mpImpl->mbIsMainViewShell = bIsMainViewShell;
+        if (bIsMainViewShell)
+        {
+            GetDocSh()->Connect (this);
+        }
+        else
+        {
+            GetDocSh()->Disconnect (this);
+        }
+    }
+}
+
+
+
+
 ObjectBarManager& ViewShell::GetObjectBarManager (void) const
 {
     return *mpObjectBarManager.get();
@@ -1718,6 +1737,35 @@ ZoomList* ViewShell::GetZoomList (void)
 {
     return pZoomList;
 }
+
+
+
+
+void ViewShell::ShowUIControls (bool bVisible)
+{
+    mpImpl->mbIsShowingUIControls = bVisible;
+
+    if (mbHasRulers)
+    {
+        if (mpHorizontalRuler.get() != NULL)
+            mpHorizontalRuler->Show( bVisible );
+
+        if (mpVerticalRuler.get() != NULL)
+            mpVerticalRuler->Show( bVisible );
+    }
+
+    if (mpVerticalScrollBar.get() != NULL)
+        mpVerticalScrollBar->Show( bVisible );
+
+    if (mpHorizontalScrollBar.get() != NULL)
+        mpHorizontalScrollBar->Show( bVisible );
+
+    if (mpContentWindow.get() != NULL)
+        mpContentWindow->Show( bVisible );
+}
+
+
+
 
 } // end of namespace sd
 
