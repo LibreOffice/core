@@ -38,7 +38,6 @@
  *
  *************************************************************************/
 package com.sun.star.wizards.report;
-
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
@@ -65,16 +64,20 @@ public class RecordTable{
         this.oTextTableHandler = _oTextTableHandler;
         String[] TableNames = oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
         XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
-        if (xAllTextTables.hasByName("Tbl_RecordSection") == false){
+        if (xAllTextTables.hasByName(ReportDocument.TBLRECORDSECTION)){
+            Object oTable;
+            if (xAllTextTables.hasByName(ReportDocument.COPYOFTBLRECORDSECTION))
+                oTable = xAllTextTables.getByName(ReportDocument.COPYOFTBLRECORDSECTION);
+            else
+                oTable = xAllTextTables.getByName(ReportDocument.TBLRECORDSECTION);
+            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+            xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+        }
+        else{
             XIndexAccess xTableIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
             xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, xTableIndex.getByIndex(xTableIndex.getCount()-1));
             xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
-            xTableName.setName("Tbl_RecordSection");
-        }
-        else{
-            Object oTable = xAllTextTables.getByName("Tbl_RecordSection");
-            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-            xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+            xTableName.setName(ReportDocument.TBLRECORDSECTION);
         }
         xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
     }
@@ -85,6 +88,6 @@ public class RecordTable{
 
     public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, ViewHandler oViewHandler){     // setTableColumnSeparators(){
         oTextTableHandler.adjustOptimalTableWidths(_xMSF, xTextTable);
-        oViewHandler.collapseViewCursorToStart();
+    oViewHandler.collapseViewCursorToStart();
     }
 }
