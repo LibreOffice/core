@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwRewriter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 10:00:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,8 @@ public:
     ~SwRewriter();
 
     void AddRule(const String & rWhat, const String & rWith);
-    void AddRewriter(const SwRewriter & rRewriter);
 
     String Apply(const String & rStr) const;
-    std::vector<String> Apply(const std::vector<String> & rStrs) const;
 
     friend std::ostream & operator << (std::ostream & o,
                                        const SwRewriter & rRewriter);
