@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
+#   last change: $Author: hjs $ $Date: 2001-02-07 18:14:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,13 +64,12 @@ PRJ=..$/..$/..
 
 PRJNAME=vcl
 TARGET=salgdi
+
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -122,8 +121,6 @@ ENVCFLAGS+=-DUSE_CDE
 
 # --- Targets ------------------------------------------------------
 
-ALL: $(INCCOM)$/rtsname.hxx ALLTAR
-
 .INCLUDE :  target.mk
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
@@ -134,4 +131,6 @@ $(INCCOM)$/rtsname.hxx:
     rm -f $(INCCOM)$/rtsname.hxx ; \
     echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
 
-salpimpl.cxx: $(INCCOM)$/rtsname.hxx
+$(SLO)$/salpimpl.obj : $(INCCOM)$/rtsname.hxx
+$(SLO)$/salprnpsp.obj : $(INCCOM)$/rtsname.hxx
+
