@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-06 20:27:20 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2230,14 +2230,14 @@ Resource RID_SD_ERRHDL
         Text [ english_us ] = "File format error found at $(ARG1)(row,col)" ;
         Text [ italian ] = "И stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
         Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posiciуn $(ARG1)(fila,columna)" ;
-        Text [ french ] = "Erreur de format а la position $(ARG1)(ligne,colonne) du fichier" ;
+        Text [ french ] = "Erreur de format dans le fichier, position $(ARG1)(ligne,colonne)." ;
         Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(rij,kolom) in het bestand" ;
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptдckt i filen" ;
         Text [ danish ] = "Der blev opdaget en formatfejl i filen pе position $(ARG1)(rжkke,spalte)" ;
-        Text [ portuguese ] = "Descoberto erro de formato na posiзгo $(ARG1)(linha, coluna) do ficheiro" ;
+        Text [ portuguese ] = "Descoberto erro de formato na posiзгo $(ARG1)(linha, coluna) no ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
-        Text[ chinese_simplified ] = "ж–‡д»¶ж јејЏй”™иЇЇ $(ARG1)(иЎЊпјЊе€—)";
-        Text[ russian ] = "В месте $(ARG1)(строка,столбец) обнаружена ошибка формата файла";
+        Text[ chinese_simplified ] = "ењЁж–‡д»¶зљ„ $(ARG1)(иЎЊпјЊе€—)е¤„еЏ‘зЋ°ж јејЏй”™иЇЇ";
+        Text[ russian ] = "В файле в позиции $(ARG1)(строка,столбец) обнаружена ошибка формата файла.";
         Text[ polish ] = "Wykryto bі№d w formacie pliku na pozycji $(ARG1)(wiersz, kolumna)";
         Text[ japanese ] = "пѕЊпЅ§пЅІпѕ™гЃ® $(ARG1)(иЎЊгЂЃе€—)гЃ«ж›ёејЏпЅґпѕ—пЅ°гЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "жЄ”жЎ€ж јејЏйЊЇиЄ¤ $(ARG1)(иЎЊпјЊе€—)";
@@ -2255,10 +2255,10 @@ Resource RID_SD_ERRHDL
         Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)";
         Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo $(ARG2)(linha,coluna)";
-        Text[ russian ] = "В части документа $(ARG1) в позиции $(ARG2)(строка, колонка)обнаружена ошибка формата.";
+        Text[ russian ] = "В файле в части документа $(ARG1) в позиции $(ARG2)(строка,колонка) обнаружена ошибка формата.";
         Text[ greek ] = "ЕнфпрЯуфзке Энб уцЬлмб мпсцпрпЯзузт фпх бсчеЯпх уфп фмЮмб кеймЭнпх $(ARG1) уфз иЭуз $(ARG2)(гсбммЮ, уфЮлз)";
         Text[ dutch ] = "Fout in formaat in sub-document $(ARG1) op positie $(ARG2)(rij,kolom)";
-        Text[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciуn $(ARG2)(fila,columna)";
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -2267,7 +2267,7 @@ Resource RID_SD_ERRHDL
         Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ japanese ] = "пѕЊпЅ§пЅІпѕ™гЃ® $(ARG2)(иЎЊгЂЃе€—)гЃ«гЃ‚г‚‹йѓЁе€†пѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„ $(ARG1) гЃ«ж›ёејЏпЅґпѕ—пЅ°гЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
         Text[ korean ] = "нЊЊмќјмќ $(ARG2)(н–‰, м—ґ)мњ„м№м—ђ мћ€лЉ” л¶Ђл¶„ л¬ём„њ $(ARG1)мќ нЏ¬л§· м¤лҐ л°њкІ¬";
-        Text[ chinese_simplified ] = "еЏ‘зЋ°ж–‡д»¶зљ„е­ђж–‡жЎЈ$(ARG1)е†…еђ«й”™иЇЇпјЊдЅЌзЅ®ењЁ $(ARG2)(иЎЊ,е€—)";
+        Text[ chinese_simplified ] = "ењЁж–‡д»¶зљ„е­ђж–‡жЎЈ$(ARG1)е†…зљ„ $(ARG2)(иЎЊ,е€—)е¤„еЏ‘зЋ°ж јејЏй”™иЇЇ";
         Text[ chinese_traditional ] = "з™јзЏѕжЄ”жЎ€зљ„е­ђж–‡д»¶$(ARG1)е…§еђ«йЊЇиЄ¤пјЊдЅЌзЅ®ењЁ $(ARG2)(иЎЊ,ж¬„)";
         Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -2280,19 +2280,19 @@ Resource RID_SD_ERRHDL
         Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)";
         Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo(ARG2)(linha,coluna)";
-        Text[ russian ] = "В части документа $(ARG1) в позиции $(ARG2)(строка,колонка)обнаружена ошибка формата.";
+        Text[ russian ] = "В файле части документа $(ARG1) в позиции $(ARG2)(строка,колонка) обнаружена ошибка формата.";
         Text[ greek ] = "ЕнфпрЯуфзке уцЬлмб мпсцпрпЯзузт уфп бсчеЯп уфп фмЮмб кеймЭнпх $(ARG1) уфз иЭуз $(ARG2)(гсбммЮ,уфЮлз)";
-        Text[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        Text[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ dutch ] = "Fout in formaat in sub-document $(ARG1) op positie $(ARG2)(rij,kolom)";
+        Text[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciуn $(ARG2)(fila,columna)";
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ swedish ] = "Det har upptдckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         Text[ polish ] = "Wykryto bі№d w formacie dokumentu podrzкdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
-        Text[ japanese ] = "пѕЊпЅ§пЅІпѕ™гЃ® $(ARG2)(иЎЊгЂЃе€—) гЃ«гЃ‚г‚‹йѓЁе€†пѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„ $(ARG1) гЃ«ж›ёејЏпЅґпѕ—пЅ°гЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
+        Text[ japanese ] = "пѕЊпЅ§пЅІпѕ™гЃ® $(ARG2)(иЎЊгЂЃе€—)гЃ«гЃ‚г‚‹йѓЁе€†пѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„ $(ARG1) гЃ«ж›ёејЏпЅґпѕ—пЅ°гЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
         Text[ korean ] = "нЊЊмќјмќ $(ARG2)(н–‰,м—ґ) мњ„м№м—ђ мћ€лЉ” л¶Ђл¶„ л¬ём„њ $(ARG1)мќ нЏ¬л§· м¤лҐ л°њкІ¬";
-        Text[ chinese_simplified ] = "еЏ‘зЋ°ж–‡д»¶зљ„е­ђж–‡жЎЈ$(ARG1)е†…еђ«й”™иЇЇпјЊдЅЌзЅ®ењЁ $(ARG2)(иЎЊ,е€—)";
+        Text[ chinese_simplified ] = "ењЁж–‡д»¶зљ„е­ђж–‡жЎЈ$(ARG1)е†…зљ„ $(ARG2)(иЎЊ,е€—)е¤„еЏ‘зЋ°ж јејЏй”™иЇЇ";
         Text[ chinese_traditional ] = "з™јзЏѕжЄ”жЎ€зљ„е­ђж–‡д»¶$(ARG1)е…§еђ«йЊЇиЄ¤пјЊдЅЌзЅ®ењЁ $(ARG2)(иЎЊ,ж¬„)";
         Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -2300,4 +2300,5 @@ Resource RID_SD_ERRHDL
         Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
 
