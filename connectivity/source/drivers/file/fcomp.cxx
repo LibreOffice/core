@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:26:30 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
+
 #include "file/FStringFunctions.hxx"
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
@@ -101,6 +105,7 @@ using namespace connectivity;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
@@ -301,21 +306,21 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
         return NULL;
     }
 
-    OSQLPredicateType ePredicateType;
+    sal_Int32 ePredicateType;
     OSQLParseNode *pPrec = pPredicateNode->getChild(1);
 
     if (pPrec->getNodeType() == SQL_NODE_EQUAL)
-        ePredicateType = SQL_PRED_EQUAL;
+        ePredicateType = SQLFilterOperator::EQUAL;
     else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
-        ePredicateType = SQL_PRED_NOTEQUAL;
+        ePredicateType = SQLFilterOperator::NOT_EQUAL;
     else if (pPrec->getNodeType() == SQL_NODE_LESS)
-        ePredicateType = SQL_PRED_LESS;
+        ePredicateType = SQLFilterOperator::LESS;
     else if (pPrec->getNodeType() == SQL_NODE_LESSEQ)
-        ePredicateType = SQL_PRED_LESSOREQUAL;
+        ePredicateType = SQLFilterOperator::LESS_EQUAL;
     else if (pPrec->getNodeType() == SQL_NODE_GREATEQ)
-        ePredicateType = SQL_PRED_GREATEROREQUAL;
+        ePredicateType = SQLFilterOperator::GREATER_EQUAL;
     else if (pPrec->getNodeType() == SQL_NODE_GREAT)
-        ePredicateType = SQL_PRED_GREATER;
+        ePredicateType = SQLFilterOperator::GREATER;
 
     OOperand* pOb = execute(pPredicateNode->getChild(0));
     OOperand* pOperand  = execute(pPredicateNode->getChild(2));
@@ -377,15 +382,15 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
         return NULL;
     }
 
-    OSQLPredicateType ePredicateType;
+    sal_Int32 ePredicateType;
     OSQLParseNode *pAtom;
     OSQLParseNode *pOptEscape;
     sal_Unicode cEscape = L'\0';
 
     if (pPredicateNode->count() == 5)
-        ePredicateType = SQL_PRED_NOTLIKE;
+        ePredicateType = SQLFilterOperator::NOT_LIKE;
     else
-        ePredicateType = SQL_PRED_LIKE;
+        ePredicateType = SQLFilterOperator::LIKE;
 
     pAtom       = pPredicateNode->getChild(pPredicateNode->count()-2);
     pOptEscape  = pPredicateNode->getChild(pPredicateNode->count()-1);
@@ -414,7 +419,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 
     OOperand* pOb = execute(pPredicateNode->getChild(0));
     OOperand* pOperand  = execute(pAtom);
-    OBoolOperator* pOperator = (ePredicateType == SQL_PRED_LIKE)
+    OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::LIKE)
                                                     ? new OOp_LIKE(cEscape)
                                                     : new OOp_NOTLIKE(cEscape);
     m_aCodeList.push_back(pOperator);
@@ -433,14 +438,14 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) thro
     DBG_ASSERT(pPredicateNode->count() >= 3,"OFILECursor: Fehler im Parse Tree");
     DBG_ASSERT(SQL_ISTOKEN(pPredicateNode->getChild(1),IS),"OFILECursor: Fehler im Parse Tree")
 
-    OSQLPredicateType ePredicateType;
+    sal_Int32 ePredicateType;
     if (SQL_ISTOKEN(pPredicateNode->getChild(2),NOT))
-        ePredicateType = SQL_PRED_ISNOTNULL;
+        ePredicateType = SQLFilterOperator::NOT_SQLNULL;
     else
-        ePredicateType = SQL_PRED_ISNULL;
+        ePredicateType = SQLFilterOperator::SQLNULL;
 
     OOperand* pOb = execute(pPredicateNode->getChild(0));
-    OBoolOperator* pOperator = (ePredicateType == SQL_PRED_ISNULL) ?
+    OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::SQLNULL) ?
                                 new OOp_ISNULL() : new OOp_ISNOTNULL();
 
     //pOb->PreProcess(pOperator);
@@ -679,6 +684,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
         case SQL_TOKEN_EXP:
         case SQL_TOKEN_FLOOR:
         case SQL_TOKEN_LOG10:
+        case SQL_TOKEN_LN:
         case SQL_TOKEN_RADIANS:
         case SQL_TOKEN_SIGN:
         case SQL_TOKEN_SIN:
@@ -755,6 +761,9 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
                 case SQL_TOKEN_LOG10:
                     pOperator = new OOp_Log10();
                     break;
+                case SQL_TOKEN_LN:
+                    pOperator = new OOp_Ln();
+                    break;
                 case SQL_TOKEN_RADIANS:
                     pOperator = new OOp_Radians();
                     break;
@@ -829,7 +838,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             {
                 m_aCodeList.push_back(new OStopOperand);
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_Int32 i=0; i < pList->count(); ++i)
+                for (sal_uInt32 i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
 
                 switch( nTokenId )
@@ -900,7 +909,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             if ( pPredicateNode->count() == 4 ) //char_substring_fct
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_Int32 i=0; i < pList->count(); ++i)
+                for (sal_uInt32 i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
             }
             else
@@ -917,7 +926,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
             if ( pPredicateNode->count() == 4 ) //position_exp
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
-                for (sal_Int32 i=0; i < pList->count(); ++i)
+                for (sal_uInt32 i=0; i < pList->count(); ++i)
                     execute(pList->getChild(i));
             }
             else
