@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:23:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #include <vcl/help.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -192,7 +192,7 @@ void ValueSet::ImplDeleteItems()
             ::com::sun::star::uno::Any aOldAny, aNewAny;
 
             aOldAny <<= pItem->GetAccessible();
-            ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+            ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
         }
 
         delete pItem;
@@ -370,7 +370,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ValueSet::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ValueSet::CreateAccessible()
 {
     return new ValueSetAcc( this );
 }
@@ -652,7 +652,7 @@ void ValueSet::Format()
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
 
                     aNewAny <<= pItem->GetAccessible();
-                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
                 ImplFormatItem( pItem );
@@ -672,7 +672,7 @@ void ValueSet::Format()
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
 
                     aOldAny <<= pItem->GetAccessible();
-                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
                 pItem->maRect.SetEmpty();
@@ -1658,9 +1658,9 @@ void ValueSet::GetFocus()
 
     // Send accessibility event.
     ::com::sun::star::uno::Any aOldState, aNewState;
-    aNewState <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     ImplFireAccessibleEvent (
-        ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 
 }
@@ -1678,9 +1678,9 @@ void ValueSet::LoseFocus()
 
     // Send accessibility event.
     ::com::sun::star::uno::Any aOldState, aNewState;
-    aOldState <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     ImplFireAccessibleEvent (
-        ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
         aOldState, aNewState);
 }
 
@@ -2211,7 +2211,7 @@ void ValueSet::SelectItem( USHORT nItemId )
                     {
                         ::com::sun::star::uno::Any aOldAny, aNewAny;
                         aOldAny <<= mpItemList->GetObject( nPos )->GetAccessible();
-                        ImplFireAccessibleEvent (::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, aOldAny, aNewAny );
+                        ImplFireAccessibleEvent (::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
                     }
                 }
             }
@@ -2235,13 +2235,13 @@ void ValueSet::SelectItem( USHORT nItemId )
                 {
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
                     aNewAny <<= pItem->GetAccessible();
-                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT, aOldAny, aNewAny );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
                 }
             }
 
             // selection event
             ::com::sun::star::uno::Any aOldAny, aNewAny;
-            ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_SELECTION_EVENT, aOldAny, aNewAny );
+            ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
     }
 }
@@ -2419,10 +2419,10 @@ void ValueSet::SetItemText( USHORT nItemId, const XubString& rText )
     if (ImplHasAccessibleListeners())
     {
         ::com::sun::star::uno::Reference<
-              ::drafts::com::sun::star::accessibility::XAccessible> xAccessible (
+              ::com::sun::star::accessibility::XAccessible> xAccessible (
                   pItem->GetAccessible());
         static_cast<ValueItemAcc*>(xAccessible.get())->FireAccessibleEvent (
-            ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT,
+            ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
             aOldName, aNewName);
     }
 }
