@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLESCHER_HXX
 #define SC_XLESCHER_HXX
 
@@ -75,12 +73,17 @@
 #include <vcl/mapunit.hxx>
 #endif
 
-
 // Constants and Enumerations =================================================
 
 // misc -----------------------------------------------------------------------
 
 const long EXC_ESCHER_AUTOMARGIN            = 20000;    /// Automatic text margin.
+
+// (0x001C) NOTE --------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_NOTE                = 0x001C;
+const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
+const sal_uInt16 EXC_NOTE5_MAXLEN           = 2048;
 
 // (0x005D) OBJ ---------------------------------------------------------------
 
@@ -161,7 +164,6 @@ enum XclCtrlBindMode
     xlBindPosition      /// Binds cell to position in control (i.e. listbox selection index).
 };
 
-
 // (0x00EC) MSODRAWING --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_MSODRAWING          = 0x00EC;
@@ -170,7 +172,6 @@ const sal_uInt16 EXC_ID_MSODRAWING          = 0x00EC;
 const sal_uInt16 EXC_ESC_ANCHOR_POSLOCKED   = 0x0001;
 const sal_uInt16 EXC_ESC_ANCHOR_SIZELOCKED  = 0x0002;
 const sal_uInt16 EXC_ESC_ANCHOR_LOCKED      = EXC_ESC_ANCHOR_POSLOCKED|EXC_ESC_ANCHOR_SIZELOCKED;
-
 
 // (0x01B6) TXO ---------------------------------------------------------------
 
@@ -206,8 +207,7 @@ enum XclTxoRotation
     xlTxoRot_Default                        = xlTxoNoRot
 };
 
-
-// ============================================================================
+// Structs and classes ========================================================
 
 // Escher client anchor =======================================================
 
@@ -220,22 +220,22 @@ class XclExpStream;
 /** Represents the position (anchor) of an Escher object in a Calc document. */
 struct XclEscherAnchor
 {
-    sal_uInt16                  mnLCol;     /// Left column index.
-    sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16                  mnTRow;     /// Top row index.
-    sal_uInt16                  mnTY;       /// Y offset in top row (1/256 of row height).
-    sal_uInt16                  mnRCol;     /// Right column index.
-    sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16                  mnBRow;     /// Bottom row index.
-    sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
-    SCTAB                       mnScTab;    /// Calc sheet index.
+    sal_uInt16          mnLCol;     /// Left column index.
+    sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
+    sal_uInt16          mnTRow;     /// Top row index.
+    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt16          mnRCol;     /// Right column index.
+    sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
+    sal_uInt16          mnBRow;     /// Bottom row index.
+    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
+    SCTAB               mnScTab;    /// Calc sheet index.
 
-    explicit                    XclEscherAnchor( SCTAB nScTab );
+    explicit            XclEscherAnchor( SCTAB nScTab );
 
     /** Calculates a rectangle from the contained coordinates. */
-    Rectangle                   GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const;
+    Rectangle           GetRect( ScDocument& rDoc, MapUnit eMapUnit ) const;
     /** Initializes the anchor coordinates from a rectangle. */
-    void                        SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit );
+    void                SetRect( ScDocument& rDoc, const Rectangle& rRect, MapUnit eMapUnit );
 };
 
 SvStream& operator>>( SvStream& rStrm, XclEscherAnchor& rAnchor );
