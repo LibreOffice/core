@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,9 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
+
 private:
     GroupBox            m_aFrame;
     CheckBox            m_aShowDeleted;
@@ -290,6 +293,9 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
+
 private:
     FixedText           m_aDriverLabel;
     Edit                m_aDriver;
@@ -311,6 +317,9 @@ class OOdbcDetailsPage : public OCommonBehaviourTabPage
 public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
+
 private:
     FixedLine           m_aSeparator2;
     FixedLine           m_aSeparator1;
@@ -325,6 +334,9 @@ class OAdabasDetailsPage : public OCommonBehaviourTabPage
 {
 public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
 
 private:
     FixedLine           m_aSeparator2;
@@ -341,6 +353,9 @@ class OTextDetailsPage : public OCommonBehaviourTabPage
 public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
 
 private:
     CheckBox    m_aHeader;
@@ -363,8 +378,8 @@ private:
     ~OTextDetailsPage();
 
 private:
-    USHORT      GetSeparator( const ComboBox& rBox, const String& rList );
-    void        SetSeparator( ComboBox& rBox, const String& rList, USHORT nVal );
+    String      GetSeparator( const ComboBox& rBox, const String& rList );
+    void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     virtual sal_Bool checkItems(const SfxItemSet& _rSet);
@@ -437,6 +452,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/12 16:20:42  fs
+ *  new implementations ... still under construction
+ *
  *  Revision 1.3  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *

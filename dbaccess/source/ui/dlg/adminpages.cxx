@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,6 +668,24 @@ ODbaseDetailsPage::~ODbaseDetailsPage()
 }
 
 // -----------------------------------------------------------------------
+sal_Int32* ODbaseDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            DSID_SHOWDELETEDROWS,
+            DSID_ALLOWLONGTABLENAMES,
+            DSID_CHARSET,
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
+}
+
+// -----------------------------------------------------------------------
 SfxTabPage* ODbaseDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
 {
     return ( new ODbaseDetailsPage( pParent, _rAttrSet ) );
@@ -779,6 +797,23 @@ OJdbcDetailsPage::~OJdbcDetailsPage()
 }
 
 // -----------------------------------------------------------------------
+sal_Int32* OJdbcDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            DSID_JDBCDRIVERCLASS,
+            DSID_CHARSET,
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
+}
+
+// -----------------------------------------------------------------------
 SfxTabPage* OJdbcDetailsPage::Create( Window* pParent,  const SfxItemSet& _rAttrSet )
 {
     return ( new OJdbcDetailsPage( pParent, _rAttrSet ) );
@@ -851,6 +886,23 @@ SfxTabPage* OOdbcDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrS
     return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
 }
 
+// -----------------------------------------------------------------------
+sal_Int32* OOdbcDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            DSID_ADDITIONALOPTIONS,
+            DSID_CHARSET,
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
+}
+
 //========================================================================
 //= OAdabasDetailsPage
 //========================================================================
@@ -876,6 +928,22 @@ OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCor
 SfxTabPage* OAdabasDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
 {
     return ( new OAdabasDetailsPage( pParent, _rAttrSet ) );
+}
+
+// -----------------------------------------------------------------------
+sal_Int32* OAdabasDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            DSID_CHARSET,
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
 }
 
 //========================================================================
@@ -935,6 +1003,28 @@ OTextDetailsPage::~OTextDetailsPage()
 }
 
 // -----------------------------------------------------------------------
+sal_Int32* OTextDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            DSID_FIELDDELIMITER,
+            DSID_TEXTDELIMITER,
+            DSID_DECIMALDELIMITER,
+            DSID_THOUSANDSDELIMITER,
+            DSID_TEXTFILEEXTENSION,
+            DSID_TEXTFILEHEADER,
+            DSID_CHARSET,
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
+}
+
+// -----------------------------------------------------------------------
 SfxTabPage* OTextDetailsPage::Create( Window* pParent,  const SfxItemSet& _rAttrSet )
 {
     return ( new OTextDetailsPage( pParent, _rAttrSet ) );
@@ -949,10 +1039,10 @@ void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSave
     sal_Bool bValid, bReadonly;
     getFlags(_rSet, bValid, bReadonly);
 
-    SFX_ITEMSET_GET(_rSet, pDelItem, SfxUInt16Item, DSID_FIELDDELIMITER, sal_True);
-    SFX_ITEMSET_GET(_rSet, pStrItem, SfxUInt16Item, DSID_TEXTDELIMITER, sal_True);
-    SFX_ITEMSET_GET(_rSet, pDecdelItem, SfxUInt16Item, DSID_DECIMALDELIMITER, sal_True);
-    SFX_ITEMSET_GET(_rSet, pThodelItem, SfxUInt16Item, DSID_THOUSANDSDELIMITER, sal_True);
+    SFX_ITEMSET_GET(_rSet, pDelItem, SfxStringItem, DSID_FIELDDELIMITER, sal_True);
+    SFX_ITEMSET_GET(_rSet, pStrItem, SfxStringItem, DSID_TEXTDELIMITER, sal_True);
+    SFX_ITEMSET_GET(_rSet, pDecdelItem, SfxStringItem, DSID_DECIMALDELIMITER, sal_True);
+    SFX_ITEMSET_GET(_rSet, pThodelItem, SfxStringItem, DSID_THOUSANDSDELIMITER, sal_True);
     SFX_ITEMSET_GET(_rSet, pExtensionItem, SfxStringItem, DSID_TEXTFILEEXTENSION, sal_True);
     SFX_ITEMSET_GET(_rSet, pHdrItem, SfxBoolItem, DSID_TEXTFILEHEADER, sal_True);
 
@@ -963,8 +1053,8 @@ void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSave
         SetSeparator(m_aFieldSeparator, m_aFieldSeparatorList, pDelItem->GetValue());
         SetSeparator(m_aTextSeparator, m_aTextSeparatorList, pStrItem->GetValue());
 
-        m_aDecimalSeparator.SetText(sal_Unicode(pDecdelItem->GetValue()));
-        m_aThousandsSeparator.SetText(sal_Unicode(pThodelItem->GetValue()));
+        m_aDecimalSeparator.SetText(pDecdelItem->GetValue());
+        m_aThousandsSeparator.SetText(pThodelItem->GetValue());
         m_aExtension.SetText(pExtensionItem->GetValue());
     }
 
@@ -1090,23 +1180,23 @@ sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
 
     if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
     {
-        rSet.Put( SfxUInt16Item(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
+        rSet.Put( SfxStringItem(DSID_FIELDDELIMITER, GetSeparator( m_aFieldSeparator, m_aFieldSeparatorList) ) );
         bChangedSomething = sal_True;
     }
     if( m_aTextSeparator.GetText() != m_aTextSeparator.GetSavedValue() )
     {
-        rSet.Put( SfxUInt16Item(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
+        rSet.Put( SfxStringItem(DSID_TEXTDELIMITER, GetSeparator( m_aTextSeparator, m_aTextSeparatorList) ) );
         bChangedSomething = sal_True;
     }
 
     if( m_aDecimalSeparator.GetText() != m_aDecimalSeparator.GetSavedValue() )
     {
-        rSet.Put( SfxUInt16Item(DSID_DECIMALDELIMITER, (sal_uInt16)(m_aDecimalSeparator.GetText().GetChar(0)) ) );
+        rSet.Put( SfxStringItem(DSID_DECIMALDELIMITER, m_aDecimalSeparator.GetText().Copy(0, 1) ) );
         bChangedSomething = sal_True;
     }
     if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
     {
-        rSet.Put( SfxUInt16Item(DSID_THOUSANDSDELIMITER, (sal_uInt16)(m_aThousandsSeparator.GetText().GetChar(0)) ) );
+        rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().Copy(0,1) ) );
         bChangedSomething = sal_True;
     }
     if( m_aExtension.GetText() != m_aExtension.GetSavedValue() )
@@ -1119,20 +1209,21 @@ sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList )
+String OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList )
 {
     char    nTok = '\t';
     sal_uInt16  nRet(0);
     sal_uInt16  nPos(rBox.GetEntryPos( rBox.GetText() ));
 
     if( nPos == COMBOBOX_ENTRY_NOTFOUND )
-        return (sal_uInt16)(rBox.GetText().GetChar(0));
+        return rBox.GetText().Copy(0);
     else
-        return (sal_uInt16)rList.GetToken((nPos*2)+1, nTok ).ToInt32();
+        return String(rList.GetToken((nPos*2)+1, nTok ).ToInt32());
+            // somewhat strange ... translates for instance an "32" into " "
 }
 
 //------------------------------------------------------------------------
-void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, sal_uInt16 nVal )
+void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
 {
     char    nTok = '\t';
     xub_StrLen  nCnt(rList.GetTokenCount( nTok ));
@@ -1140,9 +1231,9 @@ void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, sal_uI
 
     for( i=0 ; i<nCnt ; i+=2 )
     {
-        sal_uInt16  nTVal(rList.GetToken( i+1, nTok ).ToInt32());
+        String  sTVal(rList.GetToken( i+1, nTok ).ToInt32());
 
-        if( nTVal == nVal )
+        if( sTVal == rVal )
         {
             rBox.SetText( rList.GetToken( i, nTok ) );
             break;
@@ -1151,7 +1242,7 @@ void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, sal_uI
 
     if( i >= nCnt )
     {
-        rBox.SetText( (sal_Unicode)nVal );
+        rBox.SetText( rVal.Copy(0, 1) );
     }
 }
 
@@ -1514,6 +1605,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/12 16:20:42  fs
+ *  new implementations ... still under construction
+ *
  *  Revision 1.3  2000/10/11 11:31:02  fs
  *  new implementations - still under construction
  *
