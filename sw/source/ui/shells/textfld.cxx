@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 10:12:50 $
+ *  last change: $Author: os $ $Date: 2002-08-29 09:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
 FIELD_INSERT:
             {
-                nInsertFormat = aFldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
+                //format conversion should only be done for number formatter formats
+                if(!nInsertFormat)
+                    nInsertFormat = aFldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
                 SwInsertFld_Data aData(nInsertType, nInsertSubType,
                                     aEmptyStr, aEmptyStr, nInsertFormat);
                 aFldMgr.InsertFld(aData);
