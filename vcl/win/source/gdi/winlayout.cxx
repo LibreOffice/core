@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-20 16:00:50 $
+ *  last change: $Author: hdu $ $Date: 2002-06-21 12:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <malloc.h>
 #define alloca _alloca
 
-#ifndef DISABLE_UNISCRIBE //TODO
-#define USE_UNISCRIBE /*###*/
+#ifndef DISABLE_UNISCRIBE //TODO: use ENABLE_UNISCRIBE in pmk
+#define USE_UNISCRIBE
 #endif
 
 // =======================================================================
@@ -126,6 +126,7 @@ private:
     int             mnGlyphCount;
     WCHAR*          mpOutGlyphs;
     int*            mpGlyphAdvances;
+    UINT*           mpChars2Glyphs;
     long            mnWidth;
 };
 
@@ -139,6 +140,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
     mnGlyphCount( 0 ),
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
+    mpChars2Glyphs( NULL ),
     mnWidth( 0 )
 {}
 
@@ -146,8 +148,9 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
 
 SimpleWinLayout::~SimpleWinLayout()
 {
-    delete[] mpOutGlyphs;
+    delete[] mpChars2Glyphs;
     delete[] mpGlyphAdvances;
+    delete[] mpOutGlyphs;
 }
 
 // -----------------------------------------------------------------------
@@ -184,10 +187,16 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( rArgs.mnLayoutWidth )
         nGcpOption |= GCP_JUSTIFY | GCP_MAXEXTENT;
     // apply reordering if requested
+    static char aGcpClass[2] = { 0, 0 };
     if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
-        nGcpOption |= GCP_REORDER;
-    else if( 0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
-        ; //TODO
+    {
+        if( nMaxGlyphCount > 1 )
+            aGCP.lpOrder = mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
+        aGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
+            GCPCLASS_PREBOUNDLTR : GCPCLASS_PREBOUNDRTL;
+        nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
+        aGCP.lpClass = aGcpClass;
+    }
 
     DWORD nRC;
     if( aSalShlData.mbWNT )
@@ -233,6 +242,25 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     if( !nRC )
         return false;
+
+    // fixup strong RTL layout by reversing glyph order
+    // TODO: mirror glyphs
+    if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_RTL|SAL_LAYOUT_BIDI_RTL))
+    && (1 < nMaxGlyphCount) )
+    {
+        mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
+        for( int i = 0, j = nMaxGlyphCount; --j >= i; ++i )
+        {
+            WCHAR nTempGlyph = mpOutGlyphs[ i ];
+            int nTempAdvance = mpGlyphAdvances[ i ];
+            mpOutGlyphs[ i ]        = mpOutGlyphs[ j ];
+            mpGlyphAdvances[ i ]    = mpGlyphAdvances[ j ];
+            mpChars2Glyphs[ i ]     = j;
+            mpOutGlyphs[ j ]        = nTempGlyph;
+            mpGlyphAdvances[ j ]    = nTempAdvance;
+            mpChars2Glyphs[ j ]     = i;
+        }
+    }
 
     // adjust positions if requested
     if( rArgs.mpDXArray )
@@ -289,8 +317,9 @@ void SimpleWinLayout::Draw() const
 
 bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
-    long nWidth = 0;
     bool bRet = false;
+
+    Point aRelPos(0,0);
     for( int i = 0; i < mnGlyphCount; ++i )
     {
         // get outline of individual glyph
@@ -299,8 +328,8 @@ bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
             bRet = true;
 
         // insert outline at correct position
-        aGlyphOutline.Move( nWidth, 0 );
-        nWidth += mpGlyphAdvances[i];
+        aGlyphOutline.Move( aRelPos.X(), aRelPos.Y() );
+        aRelPos.X() += mpGlyphAdvances[i];
         for( int j = 0; j < aGlyphOutline.Count(); ++j )
             rPolyPoly.Insert( aGlyphOutline[j] );
     }
@@ -319,7 +348,8 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 
     for( int i = 0; i < mnGlyphCount; ++i )
     {
-        nWidth += mpGlyphAdvances[i];
+        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+        nWidth += mpGlyphAdvances[j];
         if( pDXArray )
             pDXArray[i] = nWidth;
     }
@@ -335,7 +365,8 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
 
     for( int i = 0; i < mnGlyphCount; ++i )
     {
-        nWidth += mpGlyphAdvances[i];
+        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+        nWidth += mpGlyphAdvances[j];
         if( nWidth >= nMaxWidth )
             return (mnFirstCharIndex + i);
     }
@@ -347,6 +378,7 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth ) const
 
 Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
+    //TODO: implement reordering using mpChars2Glyphs[i]
     long nXPos = 0;
 
     if( mnGlyphCount <= 0 )
@@ -359,17 +391,22 @@ Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
             nCharLimit = nCharIndex;
         nCharLimit -= mnFirstCharIndex;
         for( int i = 0; i < nCharLimit; ++i )
-            nXPos += mpGlyphAdvances[ i ];
+        {
+            int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+            nXPos += mpGlyphAdvances[j];
+        }
     }
     else        // relative to right edge?
     {
-        // assuming SimpleWinLayout only layed out LTR strings
         int nCharStart = nCharIndex - mnFirstCharIndex;
         if( nCharStart < 0 )
             nCharStart = 0;
         int nCharLimit = mnEndCharIndex - mnFirstCharIndex;
         for( int i = nCharStart; i < nCharLimit; ++i )
-            nXPos -= mpGlyphAdvances[ i ];
+        {
+            int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+            nXPos -= mpGlyphAdvances[j];
+        }
     }
 
     return Point( nXPos, 0 );
@@ -425,7 +462,8 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
     mnWidth = 0;
     for( i = 0; i < mnGlyphCount; ++i )
     {
-        mpGlyphAdvances[i] = pDXArray[i] - mnWidth;
+        int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
+        mpGlyphAdvances[j] = pDXArray[i] - mnWidth;
         mnWidth = pDXArray[i];
     }
 }
@@ -495,7 +533,7 @@ struct VisualItem
 // -----------------------------------------------------------------------
 // dynamic loading of usp library
 
-static bool bUspDisabled = false;
+static bool bUspEnabled = true;
 static HMODULE aUspModule;
 
 static HRESULT ((WINAPI *pScriptIsComplex)( const WCHAR*, int, DWORD ));
@@ -523,57 +561,57 @@ static bool InitUSP()
 {
     aUspModule = LoadLibraryA( "usp10" );
     if( !aUspModule )
-        return !(bUspDisabled = true);
+        return (bUspEnabled = false);
 
     pScriptIsComplex = (HRESULT (WINAPI*)(const WCHAR*,int,DWORD))
         ::GetProcAddress( aUspModule, "ScriptIsComplex" );
-    bUspDisabled |= (pScriptIsComplex == NULL);
+    bUspEnabled &= (NULL != pScriptIsComplex);
 
     pScriptItemize = (HRESULT (WINAPI*)(const WCHAR*,int,int,
         const SCRIPT_CONTROL*,const SCRIPT_STATE*,SCRIPT_ITEM*,int*))
         ::GetProcAddress( aUspModule, "ScriptItemize" );
-    bUspDisabled |= (pScriptItemize == NULL);
+    bUspEnabled &= (NULL != pScriptItemize);
 
     pScriptShape = (HRESULT (WINAPI*)(HDC,SCRIPT_CACHE*,const WCHAR*,
         int,int,SCRIPT_ANALYSIS*,WORD*,WORD*,SCRIPT_VISATTR*,int*))
         ::GetProcAddress( aUspModule, "ScriptShape" );
-    bUspDisabled |= (pScriptShape == NULL);
+    bUspEnabled &= (NULL != pScriptShape);
 
     pScriptPlace = (HRESULT (WINAPI*)(HDC, SCRIPT_CACHE*, const WORD*, int,
         const SCRIPT_VISATTR*,SCRIPT_ANALYSIS*,int*,GOFFSET*,ABC*))
         ::GetProcAddress( aUspModule, "ScriptPlace" );
-    bUspDisabled |= (pScriptPlace == NULL);
+    bUspEnabled &= (NULL != pScriptPlace);
 
     pScriptGetLogicalWidths = (HRESULT (WINAPI*)(const SCRIPT_ANALYSIS*,
         int,int,const int*,const WORD*,const SCRIPT_VISATTR*,int*))
         ::GetProcAddress( aUspModule, "ScriptGetLogicalWidths" );
-    bUspDisabled |= (pScriptGetLogicalWidths == NULL);
+    bUspEnabled &= (NULL != pScriptGetLogicalWidths);
 
     pScriptApplyLogicalWidth = (HRESULT (WINAPI*)(const int*,int,int,const WORD*,
         const SCRIPT_VISATTR*,const int*,const SCRIPT_ANALYSIS*,ABC*,int*))
         ::GetProcAddress( aUspModule, "ScriptApplyLogicalWidth" );
-    bUspDisabled |= (pScriptApplyLogicalWidth == NULL);
+    bUspEnabled &= (NULL != pScriptApplyLogicalWidth);
 
     pScriptJustify = (HRESULT (WINAPI*)(const SCRIPT_VISATTR*,const int*,
         int,int,int,int*))
         ::GetProcAddress( aUspModule, "ScriptJustify" );
-    bUspDisabled |= (pScriptJustify == NULL);
+    bUspEnabled &= (NULL != pScriptJustify);
 
     pScriptGetFontProperties = (HRESULT (WINAPI*)( HDC,SCRIPT_CACHE*,SCRIPT_FONTPROPERTIES*))
         ::GetProcAddress( aUspModule, "ScriptGetFontProperties" );
-    bUspDisabled |= (pScriptGetFontProperties == NULL);
+    bUspEnabled &= (NULL != pScriptGetFontProperties);
 
     pScriptTextOut = (HRESULT (WINAPI*)(const HDC,SCRIPT_CACHE*,
         int,int,UINT,const RECT*,const SCRIPT_ANALYSIS*,const WCHAR*,
         int,const WORD*,int,const int*,const int*,const GOFFSET*))
         ::GetProcAddress( aUspModule, "ScriptTextOut" );
-    bUspDisabled |= (pScriptTextOut == NULL);
+    bUspEnabled &= (NULL != pScriptTextOut);
 
     pScriptFreeCache = (HRESULT (WINAPI*)(SCRIPT_CACHE*))
         ::GetProcAddress( aUspModule, "ScriptFreeCache" );
-    bUspDisabled |= (pScriptFreeCache == NULL);
+    bUspEnabled &= (NULL != pScriptFreeCache);
 
-    return (bUspDisabled == false);
+    return bUspEnabled;
 }
 
 // -----------------------------------------------------------------------
@@ -935,14 +973,16 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
 int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
 {
     long nWidth = 0;
-    int nClusterStart = mnFirstCharIndex;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
     {
         nWidth += mpCharWidths[ i ];
-        if( mpVisualAttrs[i].fClusterStart )
-            nClusterStart = i;
         if( nWidth >= nMaxWidth )
-            return nClusterStart;
+        {
+            while( !mpVisualAttrs[ mpLogClusters[i] ].fClusterStart )
+                if( --i <= mnFirstCharIndex )
+                    break;
+            return i;
+        }
     }
 
     return STRING_LEN;
@@ -1119,13 +1159,13 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
 
 #ifdef USE_UNISCRIBE
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
-    &&  !bUspDisabled
-    && (aUspModule || InitUSP())
-    && ((rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        || (S_OK == (*pScriptIsComplex)
-                    ( rArgs.mpStr + rArgs.mnFirstCharIndex,
-                      rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, SIC_COMPLEX ) ) ) )
-        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
+    &&  bUspEnabled && (aUspModule || InitUSP()) )
+    {
+        /* script complexity must be determined in upper layers
+        if( S_OK == (*pScriptIsComplex)( rArgs.mpStr + rArgs.mnFirstCharIndex,
+                      rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, SIC_COMPLEX ) ) */
+            pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
+    }
     else
 #endif // USE_UNISCRIBE
     {
@@ -1136,8 +1176,8 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         if( bEnableGlyphs )
         {
             TEXTMETRICA aTextMetric;
-            ::GetTextMetricsA( maGraphicsData.mhDC, &aTextMetric );
-            bEnableGlyphs = ((aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0);
+            BOOL nRC = ::GetTextMetricsA( maGraphicsData.mhDC, &aTextMetric );
+            bEnableGlyphs = (nRC != 0) &&((aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0);
         }
 
         pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
