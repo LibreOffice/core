@@ -19,6 +19,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HandlesDraft" toolbar:helpid="27150"/>
  <toolbar:toolbaritem xlink:href=".uno:BigHandles" toolbar:helpid="27168"/>
+ <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GraphicDraft" toolbar:helpid="27146"/>
  <toolbar:toolbaritem xlink:href=".uno:FillDraft" toolbar:helpid="27147"/>
