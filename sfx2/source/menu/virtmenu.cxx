@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:16:08 $
+ *  last change: $Author: cd $ $Date: 2002-06-20 05:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,15 +782,15 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 sal_Int32 nCount = xList->getCount();
                 for( sal_Int32 i=0; i<nCount; ++i )
                 {
-                    Reference< XFrame > xTask;
+                    Reference< XFrame > xFrame;
                     Any aVal = xList->getByIndex(i);
-                    if (!(aVal>>=xTask) || !xTask.is() )
+                    if (!(aVal>>=xFrame) || !xFrame.is() )
                         continue;
 
-                    if ( xTask == xCurrentFrame )
+                    if ( xFrame == xCurrentFrame )
                         nActiveItemId = nItemId;
 
-                    Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                    Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                     if ( pWin && pWin->IsVisible() )
                     {
                         aNewWindowListVector.push_back( pWin->GetText() );
@@ -932,20 +932,36 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 */
     if ( nId >= START_ITEMID_WINDOWLIST && nId <= END_ITEMID_WINDOWLIST )
     {
-        SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-        sal_uInt16 nWindowId = nId - START_ITEMID_WINDOWLIST;
-        if ( nWindowId < rArr.Count() )
+        // window list menu item selected
+        Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                                        DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+        USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
+
+        if ( xDesktop.is() )
         {
-            SfxFrame *pFrame = rArr[ nWindowId ];
-            SfxViewFrame *pView = pFrame->GetCurrentViewFrame();
-            pView->MakeActive_Impl( TRUE );
-            return sal_True;
+            USHORT nTaskId = START_ITEMID_WINDOWLIST;
+            Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+            sal_Int32 nCount = xList->getCount();
+            for ( sal_Int32 i=0; i<nCount; ++i )
+            {
+                Any aItem = xList->getByIndex(i);
+                Reference< XFrame > xFrame;
+                if (( aItem >>= xFrame ) && xFrame.is() && nTaskId == nId )
+                {
+                    Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                    pWin->GrabFocus();
+                    break;
+                }
+
+                nTaskId++;
+            }
         }
+
+        return TRUE;
     }
     else if ( nId >= START_ITEMID_PICKLIST && nId <= END_ITEMID_PICKLIST )
     {
         SfxPickList::Get()->ExecuteMenuEntry( nId );
-//        SfxPickList_Impl::Get()->ExecuteMenuEntry( nId );
         return sal_True;
     }
 
