@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChangeBroadcaster.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-27 11:03:19 $
+ *  last change:$Date: 2003-09-08 10:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,16 @@
 
 package ifc.form;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.form.XChangeBroadcaster;
 import com.sun.star.form.XChangeListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.form.XChangeBroadcaster</code>
@@ -192,7 +193,6 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         changed = false;
         log.println("Testing removeChangeListener ...");
         oObj.addChangeListener( listener );
-        XWindow win1 = (XWindow) tEnv.getObjRelation("Win1");
         XWindow win2 = (XWindow) tEnv.getObjRelation("Win2");
         win2.setFocus();
 
