@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:21:46 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:16:32 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -67,10 +67,17 @@ org/openoffice/comp/test : org/openoffice/test
 
 ComponentsThumbsExample : $(COMPONENT_PACKAGE)
 	@echo --------------------------------------------------------------------------------
+	@echo Please use one of the following command to execute the example!
+	@echo -
+	@echo make $(APP1_NAME).run
+	@echo --------
 	@echo The ImageShrink Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description.
 	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_COMP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
