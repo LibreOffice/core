@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-19 17:53:08 $
+ *  last change: $Author: sab $ $Date: 2002-05-23 13:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
