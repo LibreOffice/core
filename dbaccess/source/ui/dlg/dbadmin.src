@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-29 12:07:36 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ greek ] = "Re~trieve generated values";\
         Text[ dutch ] = "Re~trieve generated values";\
         Text[ french ] = "Extraire les valeurs g�n�r�es";\
-        Text[ spanish ] = "Re~trieve generated values";\
+        Text[ spanish ] = "~Considerar los valores generados";\
         Text[ finnish ] = "Re~trieve generated values";\
         Text[ italian ] = "Considera i valori generati";\
         Text[ danish ] = "Re~trieve generated values";\
@@ -307,7 +307,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ polish ] = "Re~trieve generated values";\
         Text[ portuguese_brazilian ] = "Re~trieve generated values";\
         Text[ japanese ] = "生成値を回復する";\
-        Text[ korean ] = "생성된 값 활성화";\
+        Text[ korean ] = "생성된 값 회복";\
         Text[ chinese_simplified ] = "顾及生成的数值";\
         Text[ chinese_traditional ] = "顧及生成的數值";\
         Text[ turkish ] = "Re~trieve generated values";\
@@ -328,7 +328,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ greek ] = "~Auto-increment statement";\
         Text[ dutch ] = "~Auto-increment statement";\
         Text[ french ] = "Expression auto-incr�ment";\
-        Text[ spanish ] = "~Auto-increment statement";\
+        Text[ spanish ] = "~Expresi�n incremento autom�tico";\
         Text[ finnish ] = "~Auto-increment statement";\
         Text[ italian ] = "Espressione incremento automatico";\
         Text[ danish ] = "~Auto-increment statement";\
@@ -336,7 +336,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ polish ] = "~Auto-increment statement";\
         Text[ portuguese_brazilian ] = "~Auto-increment statement";\
         Text[ japanese ] = "オートインクリメント命令文";\
-        Text[ korean ] = "자동 증가량 문장";\
+        Text[ korean ] = "자동 증가량 명령문";\
         Text[ chinese_simplified ] = "自动递增陈述";\
         Text[ chinese_traditional ] = "自動遞增陳述";\
         Text[ turkish ] = "~Auto-increment statement";\
@@ -366,7 +366,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ greek ] = "~Query of generated values";\
         Text[ dutch ] = "~Query of generated values";\
         Text[ french ] = "Requ�te des valeurs g�n�r�es";\
-        Text[ spanish ] = "~Query of generated values";\
+        Text[ spanish ] = "~Consulta de los valores generados";\
         Text[ finnish ] = "~Query of generated values";\
         Text[ italian ] = "Ricerca dei valori generati";\
         Text[ danish ] = "~Query of generated values";\
@@ -374,7 +374,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ polish ] = "~Query of generated values";\
         Text[ portuguese_brazilian ] = "~Query of generated values";\
         Text[ japanese ] = "生成値のクエリー";\
-        Text[ korean ] = "생성된 값의 쿼리";\
+        Text[ korean ] = "생성값의 쿼리";\
         Text[ chinese_simplified ] = "查询生成的数值";\
         Text[ chinese_traditional ] = "查詢生成的數值";\
         Text[ turkish ] = "~Query of generated values";\
@@ -1400,7 +1400,7 @@ TabPage PAGE_DBASE
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
         Text[ french ] = "Utiliser les contraintes de nom SQL92";
-        Text[ spanish ] = "Use SQL92 naming convention";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
         Text[ finnish ] = "Use SQL92 naming convention";
         Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
@@ -1542,7 +1542,7 @@ TabPage PAGE_ADO
         Pos = MAP_APPFONT ( 90 , 51 ) ;
         Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
         HelpId = HID_DSADMIN_PWDREC_ADO;
-        Text = "Passwort erforderlich";
+        Text = "Kennwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
         Text [ portuguese ] = "Necess�rio senha";
@@ -1586,7 +1586,7 @@ TabPage PAGE_ADO
         Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
         Text[ japanese ] = "全般";
-        Text[ korean ] = "General";
+        Text[ korean ] = "일반";
         Text[ chinese_simplified ] = "一般";
         Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
@@ -1609,7 +1609,7 @@ TabPage PAGE_ADO
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
         Text[ french ] = "Utiliser les contraintes de nom SQL92";
-        Text[ spanish ] = "Use SQL92 naming convention";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
         Text[ finnish ] = "Use SQL92 naming convention";
         Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
@@ -1752,7 +1752,7 @@ TabPage PAGE_JDBC
         Pos = MAP_APPFONT ( 90 , 51 ) ;
         Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
         HelpId = HID_DSADMIN_PWDREC_JDBC;
-        Text = "Passwort erforderlich";
+        Text = "Kennwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
         Text [ portuguese ] = "Necess�rio senha";
@@ -1820,7 +1820,7 @@ TabPage PAGE_JDBC
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
         Text[ french ] = "Utiliser les contraintes de nom SQL92";
-        Text[ spanish ] = "Use SQL92 naming convention";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
         Text[ finnish ] = "Use SQL92 naming convention";
         Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
@@ -1886,7 +1886,7 @@ TabPage PAGE_ODBC
     {
         Pos = MAP_APPFONT ( 90 , 21 ) ;
         Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        Text = "Passwort erforderlich";
+        Text = "Kennwort erforderlich";
         Text [ english ] = "Password required";
         Text [ english_us ] = "Password required";
         HelpId = HID_DSADMIN_PWDREC_ODBC;
@@ -2039,7 +2039,7 @@ TabPage PAGE_ODBC
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
         Text[ french ] = "Utiliser les contraintes de nom SQL92";
-        Text[ spanish ] = "Use SQL92 naming convention";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
         Text[ finnish ] = "Use SQL92 naming convention";
         Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
@@ -2758,7 +2758,7 @@ TabPage PAGE_TEXT
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
         Text[ french ] = "Utiliser les contraintes de nom SQL92";
-        Text[ spanish ] = "Use SQL92 naming convention";
+        Text[ spanish ] = "Utilizar las restricciones del nombre SQL92 ";
         Text[ finnish ] = "Use SQL92 naming convention";
         Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
@@ -3912,7 +3912,7 @@ String STR_HINT_READONLY_CONNECTION
     Text[ polish ] = "(po��czenie jest tylko do odczytu)";
     Text[ portuguese_brazilian ] = "(connection is read-only)";
     Text[ japanese ] = "(接続は読み取り専用)";
-    Text[ korean ] = "(읽기 전용 연결임)";
+    Text[ korean ] = "(읽기 전용 연결)";
     Text[ chinese_simplified ] = "(连接方式是只读的)";
     Text[ chinese_traditional ] = "(連線方式是唯讀的)";
     Text[ turkish ] = "(connection is read-only)";
@@ -3951,6 +3951,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.108  2002/08/29 12:07:36  gt
+ *  #99281# new mask color magenta
+ *
  *  Revision 1.107  2002/08/19 07:47:20  oj
  *  #99473# change string resource files
  *
