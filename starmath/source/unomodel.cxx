@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-11 16:34:14 $
+ *  last change: $Author: tl $ $Date: 2001-06-12 15:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,12 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         }
                     }
                     if(!bSet)
-                        throw IllegalArgumentException();
+                    {
+                        SmFace aSet(sFontName, aFormat.GetBaseSize());
+                        aSet.SetAlign(ALIGN_BASELINE);
+                        aFormat.SetFont((*ppEntries)->mnMemberId, aSet);
+                        //throw IllegalArgumentException();
+                    }
                 }
             }
             break;
