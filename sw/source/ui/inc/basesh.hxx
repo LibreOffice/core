@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:32:43 $
+ *  last change: $Author: jp $ $Date: 2000-12-22 12:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,13 @@
 #ifndef _SWBASESH_HXX
 #define _SWBASESH_HXX
 
+
 #ifndef _SHELLID_HXX
 #include <shellid.hxx>
 #endif
 
-#ifndef _SFXMODULE_HXX //autogen
-#include <sfx2/module.hxx>
-#endif
-#ifndef _SFX_SHELL_HXX //autogen
-#include <sfx2/shell.hxx>
-#endif
+#define _SVSTDARR_USHORTSSORT
+#define _SVSTDARR_USHORTS
 
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
@@ -78,6 +75,13 @@
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
+#ifndef _SFXMODULE_HXX //autogen
+#include <sfx2/module.hxx>
+#endif
+#ifndef _SFX_SHELL_HXX //autogen
+#include <sfx2/shell.hxx>
+#endif
+#include <svtools/svstdarr.hxx>
 
 class SwWrtShell;
 class SwCrsrShell;
@@ -101,10 +105,7 @@ class SwBaseShell: public SfxShell
     SfxItemSet*         pGetStateSet;
 
     //Update-Timer fuer Graphic
-    BOOL        bUpdateSID_IMap     :1;
-    BOOL        bUpdateSID_IMapExec :1;
-    BOOL        bUpdateSID_IContour :1;
-    BOOL        bUpdateSID_IContourDlg :1;
+    SvUShortsSort aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
     DECL_LINK( UpdatePercentHdl, GraphicFilter* );
@@ -119,6 +120,10 @@ protected:
     SwFlyFrmAttrMgr *pFrmMgr;
 
     DECL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String* );
+
+    void SetGetStateSet( SfxItemSet* p )            { pGetStateSet = p; }
+    BOOL AddGrfUpdateSlot( USHORT nSlot )
+                                { return aGrfUpdateSlots.Insert( nSlot ); }
 
 public:
     SwBaseShell(SwView &rShell);

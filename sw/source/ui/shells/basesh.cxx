@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 20:08:52 $
+ *  last change: $Author: jp $ $Date: 2000-12-22 12:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,68 +1178,93 @@ void SwBaseShell::Execute(SfxRequest &rReq)
  * --------------------------------------------------*/
 IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , pCrShell )
 {
+    USHORT nGrfType;
     SwWrtShell &rSh = GetShell();
     if( CNT_GRF == rSh.SwEditShell::GetCntType() &&
-        GRAPHIC_NONE != rSh.GetGraphicType() )
+        GRAPHIC_NONE != ( nGrfType = rSh.GetGraphicType() ) &&
+        aGrfUpdateSlots.Count() )
     {
         BOOL bProtect = 0 != rSh.IsSelObjProtected( (FlyProtectType)
                                     (FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
-
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
-        if( bUpdateSID_IMap || bUpdateSID_IMapExec )
+        USHORT nSlot;
+        for( USHORT n = 0; n < aGrfUpdateSlots.Count(); ++n )
         {
-            USHORT nId = SvxIMapDlgChildWindow::GetChildWindowId();
-            SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )->GetWindow()) : 0;
-
-            if( pDlg && ( bUpdateSID_IMapExec || (bUpdateSID_IMap && !bProtect)) &&
-                pDlg->GetEditingObject() != rSh.GetIMapInventor() )
-                    lcl_UpdateIMapDlg(rSh);
-
-            if( !bProtect && bUpdateSID_IMap )
+            BOOL bSetState = FALSE;
+            BOOL bState = FALSE;
+            switch( nSlot = aGrfUpdateSlots[ n ] )
             {
-                SfxBoolItem aBool(SID_IMAP, 0 != pDlg);
+            case SID_IMAP:
+            case SID_IMAP_EXEC:
+                {
+                    USHORT nId = SvxIMapDlgChildWindow::GetChildWindowId();
+                    SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
+                        (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )
+                                            ->GetWindow()) : 0;
+
+                    if( pDlg && ( SID_IMAP_EXEC == nSlot ||
+                                ( SID_IMAP == nSlot && !bProtect)) &&
+                        pDlg->GetEditingObject() != rSh.GetIMapInventor() )
+                            lcl_UpdateIMapDlg( rSh );
+
+                    if( !bProtect && SID_IMAP == nSlot )
+                        bSetState = TRUE, bState = 0 != pDlg;
+                }
+                break;
+
+            case SID_CONTOUR_DLG:
+                if( !bProtect )
+                {
+                    USHORT nId = SvxContourDlgChildWindow::GetChildWindowId();
+                    SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
+                        (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )
+                                            ->GetWindow()) : 0;
+                    if( pDlg && pDlg->GetEditingObject() !=
+                                rSh.GetIMapInventor() )
+                        lcl_UpdateContourDlg( rSh, SwWrtShell::SEL_GRF );
+
+                    bSetState = TRUE;
+                    bState = 0 != pDlg;
+                }
+                break;
+
+            case FN_FRAME_WRAP_CONTOUR:
+                if( !bProtect )
+                {
+                    SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
+                    rSh.GetFlyFrmAttr(aSet);
+                    const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
+                    bSetState = TRUE;
+                    bState = rWrap.IsContour();
+                }
+                break;
+
+            case SID_GRFFILTER:
+            case SID_GRFFILTER_INVERT:
+            case SID_GRFFILTER_SMOOTH:
+            case SID_GRFFILTER_SHARPEN:
+            case SID_GRFFILTER_REMOVENOISE:
+            case SID_GRFFILTER_SOBEL:
+            case SID_GRFFILTER_MOSAIC:
+            case SID_GRFFILTER_EMBOSS:
+            case SID_GRFFILTER_POSTER:
+            case SID_GRFFILTER_POPART:
+            case SID_GRFFILTER_SEPIA:
+            case SID_GRFFILTER_SOLARIZE:
+                bSetState = bState = GRAPHIC_BITMAP == nGrfType;
+                break;
+            }
+
+            if( bSetState )
+            {
+                SfxBoolItem aBool( nSlot, bState );
                 if( pGetStateSet )
                     pGetStateSet->Put( aBool );
                 else
                     pVFrame->GetBindings().SetState( aBool );
             }
         }
-
-        if( !bProtect && ( bUpdateSID_IContour || bUpdateSID_IContourDlg ))
-        {
-            if( bUpdateSID_IContourDlg )
-            {
-                USHORT nId = SvxContourDlgChildWindow::GetChildWindowId();
-                SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                    (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )->GetWindow()) : 0;
-                if( pDlg && pDlg->GetEditingObject() != rSh.GetIMapInventor() )
-                    lcl_UpdateContourDlg( rSh, SwWrtShell::SEL_GRF );
-
-                SfxBoolItem aBool(SID_CONTOUR_DLG, 0 != pDlg);
-                if( pGetStateSet )
-                    pGetStateSet->Put( aBool );
-                else
-                    pVFrame->GetBindings().SetState( aBool );
-            }
-            if( bUpdateSID_IContour )
-            {
-                SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
-                rSh.GetFlyFrmAttr(aSet);
-                const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
-
-                SfxBoolItem aBool( FN_FRAME_WRAP_CONTOUR, rWrap.IsContour() );
-                if( pGetStateSet )
-                    pGetStateSet->Put( aBool );
-                else
-                    pVFrame->GetBindings().SetState( aBool );
-            }
-        }
-
-        bUpdateSID_IMap         = FALSE;
-        bUpdateSID_IMapExec     = FALSE;
-        bUpdateSID_IContour     = FALSE;
-        bUpdateSID_IContourDlg  = FALSE;
+        aGrfUpdateSlots.RemoveAt( 0, aGrfUpdateSlots.Count() );
     }
     return 0;
 }
@@ -1324,18 +1349,14 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 //wenn die Grafik ausgeswappt ist, dann muss der
                 //Status asynchron ermittelt werden
                 //bis dahin wird der Slot disabled
-                if(bIsGraphicSelection && rSh.IsGrfSwapOut(TRUE))
+                if( bIsGraphicSelection && rSh.IsGrfSwapOut( TRUE ))
                 {
-                    rSet.DisableItem(nWhich);
-                    if( !bUpdateSID_IMap )
-                    {
-                        bUpdateSID_IMap = TRUE;
+                    rSet.DisableItem( nWhich );
+                    if( AddGrfUpdateSlot( nWhich ))
                         rSh.GetGraphic(FALSE);  // start the loading
-                    }
                 }
                 else
                 {
-
                     if( bProtect || ( !bHas && ( !bFrmSel ||
                             (bIsGraphicSelection &&
                             rSh.GetIMapGraphic().GetType() == GRAPHIC_NONE )) ))
@@ -1361,11 +1382,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     if(rSh.GetSelectionType() == SwWrtShell::SEL_GRF
                                     && rSh.IsGrfSwapOut(TRUE))
                     {
-                        if( !bUpdateSID_IMapExec )
-                        {
-                            bUpdateSID_IMapExec = TRUE;
+                        if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(FALSE);  // start the loading
-                        }
                     }
                     else
                     {
@@ -1407,11 +1425,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 rSh.IsGrfSwapOut(TRUE))
                     {
                         bDisable = TRUE;
-                        if( !bUpdateSID_IContourDlg )
-                        {
-                            bUpdateSID_IContourDlg = TRUE;
+                        if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(FALSE);  // start the loading
-                        }
                     }
                     else if( bHas && bOk )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
@@ -1597,11 +1612,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                             rSh.IsGrfSwapOut(TRUE))
                                 {
                                     bDisable = TRUE;
-                                    if( !bUpdateSID_IContour )
-                                    {
-                                        bUpdateSID_IContour = TRUE;
+                                    if( AddGrfUpdateSlot( nWhich ))
                                         rSh.GetGraphic(FALSE);  // start the loading
-                                    }
                                 }
                                 else if( rSh.IsFrmSelected() )
                                     bDisable = GRAPHIC_NONE ==
@@ -1811,11 +1823,7 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
     pFrmMgr(0),
-    pGetStateSet(0),
-    bUpdateSID_IMap(FALSE),
-    bUpdateSID_IMapExec(FALSE),
-    bUpdateSID_IContour(FALSE),
-    bUpdateSID_IContourDlg(FALSE)
+    pGetStateSet(0)
 {
     SwWrtShell& rWrtSh = rView.GetWrtShell();
 
@@ -2507,6 +2515,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/23 20:08:52  jp
+    Task #80648#: use new class SvxScriptSetItem
+
     Revision 1.2  2000/11/13 13:19:55  jp
     new method GetTextFontCtrl
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-02 15:23:54 $
+ *  last change: $Author: jp $ $Date: 2000-12-22 12:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,9 +590,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetAttr( aCoreSet );
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected(
                     (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
+    BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
+    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
 
-    USHORT nGrfType = CNT_GRF == GetShell().GetCntType()
-                            ? GetShell().GetGraphicType() : 0;
+    SetGetStateSet( &rSet );
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -694,7 +696,16 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_POPART:
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
-            bDisable = bParentCntProt || GRAPHIC_BITMAP != nGrfType;
+            if( bParentCntProt || !bIsGrfCntnt )
+                bDisable = TRUE;
+            else if( bSwappedOut )
+            {
+                rSet.DisableItem( nWhich );
+                if( AddGrfUpdateSlot( nWhich ))
+                    rSh.GetGraphic(FALSE);  // start the loading
+            }
+            else
+                bDisable = !bBitmapType;
             break;
 
         default:
@@ -705,6 +716,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             rSet.DisableItem( nWhich );
         nWhich = aIter.NextWhich();
     }
+    SetGetStateSet( 0 );
 }
 
 
@@ -960,6 +972,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/12/02 15:23:54  jp
+    Task #80752#: integrate the grafik filter
+
     Revision 1.6  2000/11/28 20:36:10  jp
     task #80795#: ReRead and InsertGrafik with GraphicObject
 
