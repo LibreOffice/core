@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:07:06 $
+ *  last change: $Author: dl $ $Date: 2001-02-05 11:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ void FuConstRectangle::Activate()
         break;
 
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
         {
             aObjKind = OBJ_CAPTION;
         }
