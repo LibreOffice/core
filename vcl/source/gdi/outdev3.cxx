@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-12 15:40:46 $
+ *  last change: $Author: ama $ $Date: 2001-02-01 13:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4956,6 +4956,8 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
         nLastIndex = nIndex + nLen;
 
     nTextWidth2 = nTextWidth - ImplGetCharWidth( nExtraChar ) - nCharExtra;
+    if( nTextWidth2 < 0 )
+        nIndex2 = 0;
 
     pStr = rStr.GetBuffer();
     pStr += nIndex;
