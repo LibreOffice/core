@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ DockingWindow FLT_WIN_ANIMATION
     Text [ ENGLISH ] = "Animation" ;
     Text [ norwegian ] = "Animasjon" ;
     Text [ italian ] = "Animazione" ;
-    Text [ portuguese_brazilian ] = "Anima??o" ;
+    Text [ portuguese_brazilian ] = "AnimaÁ„o" ;
     Text [ portuguese ] = "AnimaÁ„o" ;
     Text [ finnish ] = "Animaatio" ;
     Text [ danish ] = "Animation" ;
@@ -110,7 +110,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "First picture" ;
         QuickHelpText [ norwegian ] = "F¯rste bilde" ;
         QuickHelpText [ italian ] = "Prima immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "Primeira figura" ;
+        QuickHelpText [ portuguese_brazilian ] = "Primeira imagem" ;
         QuickHelpText [ portuguese ] = "Primeira imagem" ;
         QuickHelpText [ finnish ] = "Ensimm‰inen kuva" ;
         QuickHelpText [ danish ] = "F¯rste billede" ;
@@ -130,6 +130,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Erstes Bild";
         QuickHelpText[ catalan ] = "Primera imatge";
+        QuickHelpText[ czech ] = "Prvn√≠ obr√°zek";
+        QuickHelpText[ hebrew ] = "Erstes Bild";
+        QuickHelpText[ thai ] = "First Image";
+        QuickHelpText[ hindi ] = "‡§™‡§π‡§≤‡§æ ‡§ö‡§ø‡§§‡•ç‡§∞";
     };
     ImageButton BTN_REVERSE
     {
@@ -141,7 +145,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "Reverse" ;
         QuickHelpText [ norwegian ] = "Spole tilbake" ;
         QuickHelpText [ italian ] = "Indietro" ;
-        QuickHelpText [ portuguese_brazilian ] = "Inverter" ;
+        QuickHelpText [ portuguese_brazilian ] = "Para tr·s" ;
         QuickHelpText [ portuguese ] = "Para tr·s" ;
         QuickHelpText [ finnish ] = "Taaksep‰in" ;
         QuickHelpText [ danish ] = "BaglÊns" ;
@@ -161,6 +165,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "R¸ckw‰rts";
         QuickHelpText[ catalan ] = "Enrera";
+        QuickHelpText[ czech ] = "Nazpƒõt";
+        QuickHelpText[ hebrew ] = "‚ÄÆ◊ê◊ó◊ï◊®◊†◊ô◊™‚Ä¨";
+        QuickHelpText[ thai ] = "Backwards";
+        QuickHelpText[ hindi ] = "‡§™‡§ø‡§õ‡§≤‡•Ä ‡§ì‡§∞";
     };
     ImageButton BTN_STOP
     {
@@ -178,7 +186,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ danish ] = "Stop" ;
         QuickHelpText [ swedish ] = "Stopp" ;
         QuickHelpText [ portuguese ] = "Stop" ;
-        QuickHelpText [ portuguese_brazilian ] = "Stop" ;
+        QuickHelpText [ portuguese_brazilian ] = "Parar" ;
         QuickHelpText [ norwegian ] = "Stop" ;
         QuickHelpText [ finnish ] = "Seis" ;
         QuickHelpText[ russian ] = "—ÚÓÔ";
@@ -192,6 +200,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Stopp";
         QuickHelpText[ catalan ] = "Finalitza";
+        QuickHelpText[ czech ] = "Zastavit";
+        QuickHelpText[ hebrew ] = "Stopp";
+        QuickHelpText[ thai ] = "Stop";
+        QuickHelpText[ hindi ] = "‡§∞‡•Å‡§ï‡§æ‡§µ‡§ü";
     };
     ImageButton BTN_PLAY
     {
@@ -222,6 +234,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abspielen";
         QuickHelpText[ catalan ] = "Reprodueix";
+        QuickHelpText[ czech ] = "P≈ôehr√°t";
+        QuickHelpText[ hebrew ] = "Abspielen";
+        QuickHelpText[ thai ] = "Play";
+        QuickHelpText[ hindi ] = "‡§™‡•ç‡§∞‡§æ‡§∞‡§Ç‡§≠";
     };
     ImageButton BTN_LAST
     {
@@ -232,7 +248,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "Last picture" ;
         QuickHelpText [ norwegian ] = "Siste bilde" ;
         QuickHelpText [ italian ] = "Ultima immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "⁄ltima figura" ;
+        QuickHelpText [ portuguese_brazilian ] = "⁄ltima imagem" ;
         QuickHelpText [ portuguese ] = "⁄ltima imagem" ;
         QuickHelpText [ finnish ] = "Viimeinen kuva" ;
         QuickHelpText [ danish ] = "Sidste billede" ;
@@ -252,6 +268,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Letztes Bild";
         QuickHelpText[ catalan ] = "⁄ltima imatge";
+        QuickHelpText[ czech ] = "Posledn√≠ obr√°zek";
+        QuickHelpText[ hebrew ] = "Letztes Bild";
+        QuickHelpText[ thai ] = "Last Image";
+        QuickHelpText[ hindi ] = "‡§Ö‡§Ç‡§§‡§ø‡§Æ ‡§ö‡§ø‡§§‡•ç‡§∞";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -271,7 +291,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "Picture number" ;
         QuickHelpText [ norwegian ] = "Bildenummer" ;
         QuickHelpText [ italian ] = "Numero d'immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "N˙mero da figura" ;
+        QuickHelpText [ portuguese_brazilian ] = "N˙mero da imagem" ;
         QuickHelpText [ portuguese ] = "N˙mero da imagem" ;
         QuickHelpText [ finnish ] = "Kuvan numero" ;
         QuickHelpText [ danish ] = "Billednummer" ;
@@ -292,6 +312,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bildnummer";
         QuickHelpText[ catalan ] = "Nombre d'imatge";
+        QuickHelpText[ czech ] = "ƒå√≠slo obr√°zku";
+        QuickHelpText[ hebrew ] = "Bildnummer";
+        QuickHelpText[ thai ] = "Image Number";
+        QuickHelpText[ hindi ] = "‡§ö‡§ø‡§§‡•ç‡§∞ ‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ";
     };
     TimeField TIME_FIELD
     {
@@ -320,7 +344,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Durata visualizzazione" ;
         QuickHelpText [ spanish ] = "DuraciÛn" ;
         QuickHelpText [ french ] = "DurÈe d'affichage" ;
-        QuickHelpText [ portuguese_brazilian ] = "Anzeigedauer" ;
+        QuickHelpText [ portuguese_brazilian ] = "DuraÁ„o" ;
         QuickHelpText [ portuguese ] = "DuraÁ„o" ;
         QuickHelpText [ danish ] = "Visningstid" ;
         QuickHelpText [ swedish ] = "Visningstid" ;
@@ -336,6 +360,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ turkish ] = "Anzeigedauer";
         QuickHelpText[ catalan ] = "DuraciÛ";
         QuickHelpText[ finnish ] = "Kesto";
+        QuickHelpText[ czech ] = "Doba trv√°n√≠";
+        QuickHelpText[ hebrew ] = "Anzeigedauer";
+        QuickHelpText[ thai ] = "Duration";
+        QuickHelpText[ hindi ] = "‡§ï‡§æ‡§≤‡§æ‡§µ‡§ß‡§ø";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -408,7 +436,7 @@ DockingWindow FLT_WIN_ANIMATION
             < "100" ; > ;
             < "500" ; > ;
             < "1000" ; > ;
-            < "Max." ; > ;
+            < "M·x." ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -568,7 +596,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText = "Anzahl der Durchl‰ufe" ;
         QuickHelpText [ ENGLISH ] = "Loop count" ;
         QuickHelpText [ english_us ] = "Loop Count" ;
-        QuickHelpText [ portuguese_brazilian ] = "Anzahl der Durchl?ufe" ;
+        QuickHelpText [ portuguese_brazilian ] = "Contagem de sequÍncias" ;
         QuickHelpText [ swedish ] = "Antal omgÂngar" ;
         QuickHelpText [ danish ] = "Antal sl¯jfer" ;
         QuickHelpText [ italian ] = "Numero dei passaggi" ;
@@ -640,7 +668,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "100" ; > ;
         < "500" ; > ;
         < "1000" ; > ;
-        < "Max." ; > ;
+        < "Maks." ; > ;
     };
     StringList [ japanese ] =
     {
@@ -852,6 +880,98 @@ DockingWindow FLT_WIN_ANIMATION
         < "1000" ; > ;
         < "Rajaton" ; > ;
     };
+        QuickHelpText[ czech ] = "Poƒçet opakov√°n√≠";
+        QuickHelpText[ hebrew ] = "Anzahl der Durchl√§ufe";
+    StringList [ czech ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+    StringList [ hebrew ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+        QuickHelpText[ thai ] = "Loop Count";
+        QuickHelpText[ hindi ] = "‡§ö‡§ï‡•ç‡§ï‡§∞ ‡§ó‡§£‡§®‡§æ";
+    StringList [ thai ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Max." ; > ;
+        };
+    StringList [ hindi ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "‡§Ö‡§ß‡§ø‡§ï‡§§‡§Æ" ; > ;
+        };
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
@@ -876,7 +996,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Appliquer l'objet" ;
         QuickHelpText [ danish ] = "Overtag objekt" ;
         QuickHelpText [ portuguese ] = "Aplicar objecto" ;
-        QuickHelpText [ portuguese_brazilian ] = "Objekt ¸bernehmen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Aplicar objeto" ;
         QuickHelpText [ swedish ] = "÷verta objekt" ;
         QuickHelpText[ russian ] = "œËÌˇÚ¸ Ó·˙ÂÍÚ";
         QuickHelpText[ polish ] = "Zastosuj obiekt";
@@ -890,6 +1010,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ turkish ] = "Objekt ¸bernehmen";
         QuickHelpText[ catalan ] = "Accepta l'objecte";
         QuickHelpText[ finnish ] = "Liit‰ objekti";
+        QuickHelpText[ czech ] = "Pou≈æ√≠t objekt";
+        QuickHelpText[ hebrew ] = "Objekt √ºbernehmen";
+        QuickHelpText[ thai ] = "Apply Object";
+        QuickHelpText[ hindi ] = "√†¬§¬µ√†¬§¬∏√†¬•¬ç√†¬§¬§√†¬•¬Å √†¬§¬≤√†¬§¬æ√†¬§‚Äî√†¬•‚Äö √†¬§‚Ä¢√†¬§¬∞√†¬•‚Äπ";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -914,7 +1038,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Appliquer les objets un par un" ;
         QuickHelpText [ danish ] = "Overtag objekter enkeltvis" ;
         QuickHelpText [ portuguese ] = "Aplicar objectos um por um" ;
-        QuickHelpText [ portuguese_brazilian ] = "Objekte einzeln ¸bernehmen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Aplicar objetos individualmente" ;
         QuickHelpText [ swedish ] = "÷verta objekt ett och ett" ;
         QuickHelpText[ russian ] = "œËÌˇÚ¸ Ó·˙ÂÍÚ˚ ÔÓ Ó‰ÌÓÏÛ";
         QuickHelpText[ polish ] = "Zastosuj obiekty pojedynczo";
@@ -928,6 +1052,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ turkish ] = "Objekte einzeln ¸bernehmen";
         QuickHelpText[ catalan ] = "Accepta els objectes un a un";
         QuickHelpText[ finnish ] = "Objektit yksitt‰in";
+        QuickHelpText[ czech ] = "Pou≈æ√≠t objekty jednotlivƒõ";
+        QuickHelpText[ hebrew ] = "Objekte einzeln √ºbernehmen";
+        QuickHelpText[ thai ] = "Apply Objects Individually";
+        QuickHelpText[ hindi ] = "‡§è‡§ï ‡§è‡§ï ‡§µ‡§∏‡•ç‡§§‡•Å ‡§≤‡§æ‡§ó‡•Ç ‡§ï‡§∞‡•ã";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -952,7 +1080,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ dutch ] = "Actuele afbeelding wissen" ;
         QuickHelpText [ danish ] = "Slet aktuelt billede" ;
         QuickHelpText [ portuguese ] = "Elimina a imagem activa" ;
-        QuickHelpText [ portuguese_brazilian ] = "Aktuelles Bild lˆschen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Excluir imagem atual" ;
         QuickHelpText [ swedish ] = "Radera aktuell bild" ;
         QuickHelpText[ russian ] = "”‰‡ÎËÚ¸ ÚÂÍÛ˘Û˛ Í‡ÚËÌÛ";
         QuickHelpText[ polish ] = "UsuÒ aktualny obraz";
@@ -966,6 +1094,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ turkish ] = "Aktuelles Bild lˆschen";
         QuickHelpText[ catalan ] = "Suprimeix la imatge actual";
         QuickHelpText[ finnish ] = "Poista nykyinen kuva";
+        QuickHelpText[ czech ] = "Smazat aktu√°ln√≠ obr√°zek";
+        QuickHelpText[ hebrew ] = "Aktuelles Bild l√∂schen";
+        QuickHelpText[ thai ] = "Delete Current Image";
+        QuickHelpText[ hindi ] = "‡§™‡•ç‡§∞‡§ö‡§≤‡§ø‡§§ ‡§ö‡§ø‡§§‡•ç‡§∞ ‡§Æ‡§ø‡§ü‡§æ‡§ì";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -990,7 +1122,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Supprimer toutes les images" ;
         QuickHelpText [ danish ] = "Slet alle billeder" ;
         QuickHelpText [ portuguese ] = "Elimina as imagens todas" ;
-        QuickHelpText [ portuguese_brazilian ] = "Alle Bilder lˆschen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Excluir todas as imagens" ;
         QuickHelpText [ swedish ] = "Radera alla bilder" ;
         QuickHelpText[ russian ] = "”‰‡ÎËÚ¸ ‚ÒÂ Í‡ÚËÌ˚";
         QuickHelpText[ polish ] = "UsuÒ wszystkie obrazy";
@@ -1004,6 +1136,10 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ turkish ] = "Alle Bilder lˆschen";
         QuickHelpText[ catalan ] = "Elimina totes les imatges";
         QuickHelpText[ finnish ] = "Poista kaikki kuvat";
+        QuickHelpText[ czech ] = "Smazat v≈°echny obr√°zky";
+        QuickHelpText[ hebrew ] = "Alle Bilder l√∂schen";
+        QuickHelpText[ thai ] = "Delete All Images";
+        QuickHelpText[ hindi ] = "√†¬§¬∏√†¬§¬¨ √†¬§≈°√†¬§¬ø√†¬§¬§√†¬•¬ç√†¬§¬∞ √†¬§¬Æ√†¬§¬ø√†¬§≈∏√†¬§¬æ√†¬§‚Äú";
     };
     FixedText FT_COUNT
     {
@@ -1013,7 +1149,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ ENGLISH ] = "Number" ;
         Text [ norwegian ] = "Number" ;
         Text [ italian ] = "Numero" ;
-        Text [ portuguese_brazilian ] = "N?ero" ;
+        Text [ portuguese_brazilian ] = "N˙mero" ;
         Text [ portuguese ] = "N˙mero" ;
         Text [ finnish ] = "Ruutuja" ;
         Text [ danish ] = "Antal" ;
@@ -1034,6 +1170,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quantitat";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç";
+        Text[ czech ] = "ƒå√≠slo";
+        Text[ hebrew ] = "Anzahl";
+        Text[ hindi ] = "‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ";
     };
     FixedText FI_COUNT
     {
@@ -1057,7 +1196,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ swedish ] = "Bild" ;
         Text [ danish ] = "Billede" ;
         Text [ portuguese ] = "Imagem" ;
-        Text [ portuguese_brazilian ] = "Bild" ;
+        Text [ portuguese_brazilian ] = "Imagem" ;
         Text[ chinese_simplified ] = "ÂõæÂÉè";
         Text[ russian ] = "»ÁÓ·‡ÊÂÌËÂ";
         Text[ polish ] = "Obraz";
@@ -1066,11 +1205,14 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ arabic ] = "«·’Ê—…";
         Text[ greek ] = "≈ÈÍ¸Ì·";
         Text[ korean ] = "Ïù¥ÎØ∏ÏßÄ";
-        Text[ turkish ] = "Resim";
+        Text[ turkish ] = "Gˆr¸nt¸";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imatge";
         Text[ finnish ] = "Ruudut";
         Text[ thai ] = "‡∏†‡∏≤‡∏û";
+        Text[ czech ] = "Obr√°zek";
+        Text[ hebrew ] = "Bild";
+        Text[ hindi ] = "Image";
     };
     RadioButton RBT_GROUP
     {
@@ -1085,11 +1227,11 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ dutch ] = "Groepsobject" ;
         Text [ swedish ] = "Gruppobjekt" ;
         Text [ danish ] = "~Gruppeobjekt" ;
-        Text [ portuguese_brazilian ] = "Gruppenobjekt" ;
+        Text [ portuguese_brazilian ] = "Objeto de grupo" ;
         Text [ portuguese ] = "Objecto de grupo" ;
         Text[ chinese_simplified ] = "ÂàÜÁªÑÂØπË±°";
         Text[ russian ] = "Œ·˙ÂÍÚ „ÛÔÔ˚";
-        Text[ polish ] = "Obiekt grupowy";
+        Text[ polish ] = "Obiekt grupy";
         Text[ japanese ] = "„Ç∞„É´„Éº„ÉóÂåñ„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà";
         Text[ chinese_traditional ] = "Áæ§ÁµÑÁâ©‰ª∂";
         Text[ arabic ] = "ﬂ«∆‰ „Ã„Ê⁄…";
@@ -1100,6 +1242,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ catalan ] = "Agrupa l'objecte";
         Text[ finnish ] = "Objektiryhm‰";
         Text[ thai ] = "‡∏à‡∏±‡∏î‡∏Å‡∏•‡∏∏‡πà‡∏°‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏";
+        Text[ czech ] = "Skupinov√Ω objekt";
+        Text[ hebrew ] = "Gruppenobjekt";
+        Text[ hindi ] = "‡§µ‡§∏‡•ç‡§§‡•Å ‡§∏‡§Æ‡•Ç‡§π";
     };
     RadioButton RBT_BITMAP
     {
@@ -1114,11 +1259,11 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ french ] = "Objet bitmap" ;
         Text [ swedish ] = "Bitmapobjekt" ;
         Text [ danish ] = "~Bitmapobjekt" ;
-        Text [ portuguese_brazilian ] = "Bitmapobjekt" ;
+        Text [ portuguese_brazilian ] = "Objeto de bitmap" ;
         Text [ portuguese ] = "Objecto de bitmap" ;
         Text[ chinese_simplified ] = "‰ΩçÂõæÂØπË±°";
         Text[ russian ] = "–‡ÒÚÓ‚˚È Ó·˙ÂÍÚ";
-        Text[ polish ] = "Obiekt mapy bit.";
+        Text[ polish ] = "Obiekt mapy bitowej";
         Text[ japanese ] = "„Éì„ÉÉ„Éà„Éû„ÉÉ„Éó „Ç™„Éñ„Ç∏„Çß„ÇØ„Éà";
         Text[ chinese_traditional ] = "ÈªûÈô£ÂúñÁâ©‰ª∂";
         Text[ arabic ] = "ﬂ«∆‰ ’Ê—… ‰ﬁÿÌ…";
@@ -1129,6 +1274,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ catalan ] = "Objecte de mapa de bits";
         Text[ finnish ] = "Bittikarttaobjekti";
         Text[ thai ] = "‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏‡∏ö‡∏¥‡∏ó‡πÅ‡∏°‡∏õ";
+        Text[ czech ] = "Objekt rastru";
+        Text[ hebrew ] = "Bitmapobjekt";
+        Text[ hindi ] = "‡§¨‡§ø‡§ü‡§Æ‡•â‡§™‡•ç ‡§µ‡§∏‡•ç‡§§‡•Å";
     };
     FixedText FT_ADJUSTMENT
     {
@@ -1140,7 +1288,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ ENGLISH ] = "Adjustment" ;
         Text [ norwegian ] = "Justering" ;
         Text [ italian ] = "Adattamento" ;
-        Text [ portuguese_brazilian ] = "Ajuste" ;
+        Text [ portuguese_brazilian ] = "Alinhamento" ;
         Text [ portuguese ] = "Alinhamento" ;
         Text [ finnish ] = "Kohdistus" ;
         Text [ danish ] = "Tilpasning" ;
@@ -1161,6 +1309,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alineament";
         Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
+        Text[ czech ] = "Zarovn√°n√≠";
+        Text[ hebrew ] = "‚ÄÆ◊ô◊©◊ï◊®‚Ä¨";
+        Text[ hindi ] = "‡§™‡§Ç‡§ï‡•ç‡§§‡§ø‡§ï‡§∞‡§£";
     };
     ListBox LB_ADJUSTMENT
     {
@@ -1221,15 +1372,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Links/Oben" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Links/Unten" ; Default ; > ;
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
-            < "Rechts/Oben" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Direita/Para Baixo" ; Default ; > ;
+            < "Esquerda Superior" ; Default ; > ;
+            < "Esquerda" ; Default ; > ;
+            < "Esquerda Inferior" ; Default ; > ;
+            < "Topo" ; Default ; > ;
+            < "Centralizado" ; Default ; > ;
+            < "Base" ; Default ; > ;
+            < "Direita Superior" ; Default ; > ;
+            < "Direita" ; Default ; > ;
+            < "Direita Inferior" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -1353,15 +1504,15 @@ DockingWindow FLT_WIN_ANIMATION
     };
     StringList [ polish ] =
     {
-            < "Z lewej/W gÛrze" ; Default ; > ;
-        < "Z lewej" ; Default ; > ;
-        < "Z lewej/Na dole" ; Default ; > ;
-        < "W gÛrze" ; Default ; > ;
+            < "Do gÛry do lewej" ; Default ; > ;
+        < "Do lewej" ; Default ; > ;
+        < "Do do≥u do lewej" ; Default ; > ;
+        < "Do gÛry" ; Default ; > ;
         < "Do úrodka" ; Default ; > ;
-        < "W dole" ; Default ; > ;
-        < "Z prawej/W gÛrze" ; Default ; > ;
-        < "Z prawej" ; Default ; > ;
-        < "Z prawej/Na dole" ; Default ; > ;
+        < "Do do≥u" ; Default ; > ;
+        < "Do gÛry do prawej" ; Default ; > ;
+        < "do prawej" ; Default ; > ;
+        < "Do do≥u do prawej" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -1471,6 +1622,42 @@ DockingWindow FLT_WIN_ANIMATION
         < "‡∏Ç‡∏ß‡∏≤" ; Default ; > ;
         < "‡∏•‡πà‡∏≤‡∏á‡∏Ç‡∏ß‡∏≤" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Nahoru vlevo" ; Default ; > ;
+        < "Vlevo" ; Default ; > ;
+        < "Dol≈Ø vlevo" ; Default ; > ;
+        < "Nahoru" ; Default ; > ;
+        < "Na st≈ôed" ; Default ; > ;
+        < "Dol≈Ø" ; Default ; > ;
+        < "Nahoru vpravo" ; Default ; > ;
+        < "Vpravo" ; Default ; > ;
+        < "Dol≈Ø vpravo" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Links/Oben" ; Default ; > ;
+        < "Links" ; Default ; > ;
+        < "Links/Unten" ; Default ; > ;
+        < "Oben" ; Default ; > ;
+        < "Zentriert" ; Default ; > ;
+        < "Unten" ; Default ; > ;
+        < "Rechts/Oben" ; Default ; > ;
+        < "Rechts" ; Default ; > ;
+        < "Rechts/Unten" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "‡§ä‡§™‡§∞ ‡§¨‡§æ‡§Ø‡§æ‡§Å" ; Default ; > ;
+        < "‡§¨‡§æ‡§Ø‡§æ‡§Å" ; Default ; > ;
+        < "‡§®‡•Ä‡§ö‡•á ‡§¨‡§æ‡§Ø‡§æ‡§Å ‡§ì‡§∞" ; Default ; > ;
+        < "‡§ä‡§™‡§∞" ; Default ; > ;
+        < "‡§ï‡•á‡§®‡•ç‡§¶‡•ç‡§∞‡§ø‡§§" ; Default ; > ;
+        < "‡§®‡•Ä‡§ö‡•á" ; Default ; > ;
+        < "‡§ä‡§™‡§∞ ‡§¶‡§æ‡§π‡§ø‡§®‡§æ" ; Default ; > ;
+        < "‡§¶‡§æ‡§π‡§ø‡§®‡§æ" ; Default ; > ;
+        < "‡§®‡•Ä‡§ö‡•á ‡§¶‡§æ‡§π‡§ø‡§®‡•Ä ‡§ì‡§∞" ; Default ; > ;
+    };
     };
     PushButton BTN_CREATE_GROUP
     {
@@ -1486,7 +1673,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ dutch ] = "Maken" ;
         Text [ swedish ] = "Skapa" ;
         Text [ danish ] = "Opret" ;
-        Text [ portuguese_brazilian ] = "Erstellen" ;
+        Text [ portuguese_brazilian ] = "Criar" ;
         Text [ portuguese ] = "Criar" ;
         Text[ chinese_simplified ] = "Âª∫Á´ã";
         Text[ russian ] = "—ÓÁ‰‡Ú¸";
@@ -1501,6 +1688,9 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ catalan ] = "Crea";
         Text[ finnish ] = "Luo";
         Text[ thai ] = "‡∏™‡∏£‡πâ‡∏≤‡∏á";
+        Text[ czech ] = "Vytvo≈ôit";
+        Text[ hebrew ] = "Erstellen";
+        Text[ hindi ] = "‡§â‡§§‡•ç‡§™‡§®‡•ç‡§® ‡§ï‡§∞‡•ã";
     };
     FixedLine GRP_ANIMATION_GROUP
     {
@@ -1510,7 +1700,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ ENGLISH ] = "Animation group" ;
         Text [ norwegian ] = "Animasjonsgruppe" ;
         Text [ italian ] = "Gruppo animazione" ;
-        Text [ portuguese_brazilian ] = "Grupo de anima??o" ;
+        Text [ portuguese_brazilian ] = "Grupo de animaÁ„o" ;
         Text [ portuguese ] = "Grupo de animaÁ„o" ;
         Text [ finnish ] = "Animaatioryhm‰" ;
         Text [ danish ] = "Animationsgruppe" ;
@@ -1527,10 +1717,13 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ arabic ] = "„Ã„Ê⁄… «·Õ—ﬂ…";
         Text[ greek ] = "œÏ‹‰· Âˆ› ÍÈÌﬁÛÂ˘Ì";
         Text[ korean ] = "Ïï†ÎãàÎ©îÏù¥ÏÖò Í∑∏Î£π";
-        Text[ turkish ] = "Canland˝rma grubu";
+        Text[ turkish ] = "Animasyon grub";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Grup d'animaciÛ";
         Text[ thai ] = "‡∏à‡∏±‡∏î‡∏Å‡∏•‡∏∏‡πà‡∏°‡∏Å‡∏≤‡∏£‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß";
+        Text[ czech ] = "Skupina animace";
+        Text[ hebrew ] = "Animationsgruppe";
+        Text[ hindi ] = "Animation group";
     };
     Text[ chinese_simplified ] = "Âä®Áîª";
     Text[ russian ] = "¿ÌËÏ‡ˆËˇ";
@@ -1544,7 +1737,35 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AnimaciÛ";
     Text[ thai ] = "‡πÄ‡∏Ñ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏´‡∏ß";
+    Text[ czech ] = "Animace";
+    Text[ hebrew ] = "Animation";
+    Text[ hindi ] = "‡§π‡•Ç‡§≤‡§æ‡§∏";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
