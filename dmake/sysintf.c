@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.5 2003-12-17 16:01:35 vg Exp $
+/* RCS  $Id: sysintf.c,v 1.6 2004-10-22 08:05:43 rt Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -708,15 +708,9 @@ CELLPTR cp;
    time_t  phonytime = (time_t)0L;
    int     phony = ((cp->ce_attr&A_PHONY) != 0);
 
-   /* Compute phony time as either the current time, or the most recent time
-    * from the list of prerequisites if there are any. */
-   if ( cp->ce_prq != NIL(LINK) ) {
-      for(dp=cp->ce_prq; dp; dp=dp->cl_next)
-     if ( dp->cl_prq->ce_time > phonytime )
-        phonytime = dp->cl_prq->ce_time;
-   }
-   else
-      phonytime = Do_time();
+   /* Use the current time as phony timestamp for phony targets. */
+   /* This was changed with issue 34746.                         */
+   phonytime = Do_time();
 
    for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
       tcp=dp->cl_prq;
