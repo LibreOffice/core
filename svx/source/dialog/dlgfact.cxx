@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:56:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxCharacterMap_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmInputRecordNoDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxNewDictionaryDialog_Impl);
@@ -559,6 +561,74 @@ BOOL AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
 }
 //for SvxSearchSimilarityDialog end
 
+// AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
+void AbstractSvxTransformTabDialog_Impl::SetCurPageId( USHORT nId )
+{
+    pDlg->SetCurPageId( nId );
+}
+const SfxItemSet* AbstractSvxTransformTabDialog_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+//
+const USHORT* AbstractSvxTransformTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return pDlg->GetInputRanges( pItem );
+}
+//
+void AbstractSvxTransformTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     pDlg->SetInputSet( pInSet );
+}
+//From class Window.
+void AbstractSvxTransformTabDialog_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+String AbstractSvxTransformTabDialog_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link& rLink )
+{
+    pDlg->SetValidateFramePosLink( rLink );
+}
+// AbstractSvxTransformTabDialog end
+
+// AbstractSvxCaptionDialog implementations just forwards everything to the dialog
+void AbstractSvxCaptionDialog_Impl::SetCurPageId( USHORT nId )
+{
+    pDlg->SetCurPageId( nId );
+}
+const SfxItemSet* AbstractSvxCaptionDialog_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+//
+const USHORT* AbstractSvxCaptionDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return pDlg->GetInputRanges( pItem );
+}
+//
+void AbstractSvxCaptionDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     pDlg->SetInputSet( pInSet );
+}
+//From class Window.
+void AbstractSvxCaptionDialog_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+String AbstractSvxCaptionDialog_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link& rLink )
+{
+    pDlg->SetValidateFramePosLink( rLink );
+}
+// SvxAbstractCaptionDialog end
+
 //for SvxJSearchOptionsDialog begin
 INT32 AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
 {
@@ -890,12 +960,12 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
 }
 
 //TabDialog that use functionality of the drawing layer and add AnchorTypes  -- for SvxCaptionTabDialog CHINA001
-SfxAbstractTabDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
+AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             const ResId& rResId,
                                             USHORT nAnchorTypes )
 {
-    SfxTabDialog* pDlg=NULL;
+    SvxCaptionTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
     {
         case RID_SVXDLG_CAPTION :
@@ -906,7 +976,7 @@ SfxAbstractTabDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Win
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new AbstractSvxCaptionDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1312,13 +1382,13 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg( 
 //CHINA001  SvxBorderBackgroundDlg end
 
 //CHINA001  SvxTransformTabDialog begin
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( Window* pParent,
+AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( Window* pParent,
                                                                               const SfxItemSet* pAttr,
                                                                                 const SdrView* pView,
                                                                                 const ResId& rResId,
                                                                                 USHORT nAnchorTypes )
 {
-    SfxTabDialog* pDlg=NULL;
+    SvxTransformTabDialog* pDlg=NULL;
     switch ( rResId.GetId() )
     {
         case RID_SVXDLG_TRANSFORM :
@@ -1329,7 +1399,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( W
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new AbstractSvxTransformTabDialog_Impl( pDlg );
     return 0;
 }
 
