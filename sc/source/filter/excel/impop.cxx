@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:24:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
+#endif
+
+#ifndef INCLUDED_SVX_COUNTRYID_HXX
+#include <svx/countryid.hxx>
 #endif
 
 #include "scitems.hxx"
@@ -1143,18 +1147,18 @@ void ImportExcel::Boundsheet( void )
 
 void ImportExcel::Country( void )
 {
-    sal_uInt16 nCountry, nWinIni;
-    maStrm >> nCountry >> nWinIni;
-
-    LanguageType eLanguage;
+    sal_uInt16 nUICountry, nDocCountry;
+    maStrm >> nUICountry >> nDocCountry;
 
     // Store system language in XclRoot
-    if( XclTools::GetScLanguage( eLanguage, nWinIni ) )
-        SetLanguage( eLanguage );
+    LanguageType eLanguage = ::svx::ConvertCountryToLanguage( static_cast< ::svx::CountryId >( nDocCountry ) );
+    if( eLanguage != LANGUAGE_DONTKNOW )
+        SetDocLanguage( eLanguage );
 
     // Set Excel UI language in add-in name translator
-    if( XclTools::GetScLanguage( eLanguage, nCountry ) )
-        GetAddInNames().SetLanguage( eLanguage );
+    eLanguage = ::svx::ConvertCountryToLanguage( static_cast< ::svx::CountryId >( nUICountry ) );
+    if( eLanguage != LANGUAGE_DONTKNOW )
+        SetUILanguage( eLanguage );
 }
 
 
