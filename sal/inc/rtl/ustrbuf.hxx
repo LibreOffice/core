@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:36:48 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ public:
 
         @return  the number of characters in this string buffer.
      */
-    sal_Int32 getLength()
+    sal_Int32 getLength() const
     {
         return pData->length;
     }
@@ -231,7 +231,7 @@ public:
 
         @return  the current capacity of this string buffer.
      */
-    sal_Int32 getCapacity()
+    sal_Int32 getCapacity() const
     {
         return nCapacity;
     }
@@ -293,7 +293,7 @@ public:
         @param      index   the index of the desired character.
         @return     the character at the specified index of this string buffer.
      */
-    sal_Unicode charAt( sal_Int32 index )
+    sal_Unicode charAt( sal_Int32 index ) const
     {
         OSL_ASSERT(index >= 0 && index < pData->length);
         return pData->buffer[ index ];
