@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:54 $
+#   last change: $Author: kr $ $Date: 2000-11-23 15:38:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,5 +76,6 @@ test:
     cd ./com/sun/star/lib/uno/bridges/java_remote; dmake debug=t
     cd ./com/sun/star/lib/uno/environments/remote; dmake debug=t
     cd ./com/sun/star/lib/uno/protocols; dmake debug=t
+    cd ./com/sun/star/comp/bridgefactory; dmake debug=t
     javac DoTests.java
     java -classpath $(CLASSPATH):. DoTests
