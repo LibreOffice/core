@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdir.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 12:56:58 $
+ *  last change: $Author: hr $ $Date: 2000-11-06 18:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _DIR_CXX
 
 #include <stdlib.h>
-#include <cstdarg>
+#include <stdarg.h>
 #include <limits.h>
 
 #ifndef _DEBUG_HXX
