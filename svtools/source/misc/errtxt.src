@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:10:58 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,7 +1223,7 @@ Resource RID_ERRHDL
         Text [ english_us ] = "Sharing violation while accessing the object" ;
         Text [ italian ] = "Errore nell'accesso comune all'oggetto" ;
         Text [ spanish ] = "Error al acceder conjuntamente al objeto." ;
-        Text [ french ] = "Erreur lors de la tentative d'accès partagé sur l'objet" ;
+        Text [ french ] = "Erreur de partage d'accès à l'objet." ;
         Text [ dutch ] = "Fout bij gelijktijdige toegang tot object" ;
         Text [ swedish ] = "Fel vid gemensam åtkomst till objektet" ;
         Text [ danish ] = "Fejl under fælles adgang til objektet" ;
@@ -1439,9 +1439,9 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "The seek operation could not be completed" ;
         Text [ dutch ] = "De zoekopdracht kon niet worden uitgevoerd" ;
         Text [ english_us ] = "The seek operation could not be run" ;
-        Text [ italian ] = "Non è statopossibile eseguire l'operazione di seek" ;
+        Text [ italian ] = "Non è stato possibile eseguire l'operazione di seek" ;
         Text [ spanish ] = "No se pudo ejecutar la operación Seek." ;
-        Text [ french ] = "Impossible d'exécuter l'opération Seek" ;
+        Text [ french ] = "Impossible d'exécuter l'opération seek !" ;
         Text [ swedish ] = "Seekoperationen kunde inte utföras" ;
         Text [ danish ] = "Det var ikke muligt at udføre seek-operationen" ;
         Text [ portuguese ] = "Foi impossível executar a operação de localização." ;
@@ -1467,7 +1467,7 @@ Resource RID_ERRHDL
         Text [ english_us ] = "The tell operation could not be run" ;
         Text [ italian ] = "Non è stato possibile eseguire l'operazione tell" ;
         Text [ spanish ] = "No se pudo ejecutar la operación Tell" ;
-        Text [ french ] = "Impossible d'exécuter l'opération Tell" ;
+        Text [ french ] = "Impossible d'exécuter l'opération tell" ;
         Text [ dutch ] = "De bestandsopdracht TELL kon niet worden uitgevoerd" ;
         Text [ swedish ] = "Telloperationen kunde inte utföras" ;
         Text [ danish ] = "Det var ikke muligt at udføre tell-operationen" ;
@@ -1710,7 +1710,7 @@ Resource RID_ERRHDL
         Text [ english_us ] = "Path to the file does not exist" ;
         Text [ italian ] = "Il percorso del file non esiste" ;
         Text [ spanish ] = "No existe la ruta de acceso al archivo." ;
-        Text [ french ] = "Le chemin vers le fichier n'existe pas" ;
+        Text [ french ] = "Le chemin vers le fichier n'existe pas." ;
         Text [ dutch ] = "Pad naar bestand niet gevonden" ;
         Text [ swedish ] = "Sökvägen till filen existerar inte" ;
         Text [ danish ] = "Stien til filen eksisterer ikke" ;
@@ -1764,7 +1764,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Standaardsjabloon kon niet worden geopend" ;
         Text [ english_us ] = "The default template could not be opened" ;
         Text [ italian ] = "Non è stato possibile aprire il modello standard" ;
-        Text [ spanish ] = "No se pudo abrir la plantilla estándar." ;
+        Text [ spanish ] = "No se pudo abrir la plantilla predeterminada." ;
         Text [ french ] = "Impossible d'ouvrir le modèle par défaut" ;
         Text [ swedish ] = "Det gick inte att öppna standardmallen" ;
         Text [ danish ] = "Det var ikke muligt at åbne standardskabelonen" ;
@@ -1939,7 +1939,7 @@ Resource RID_ERRHDL
         TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà";
         TEXT[ polish ] = "B³¹d w odczytywaniu pliku ";
         TEXT[ japanese ] = "Ì§²Ù“Ç‚İæ‚è‚ÌÛ‚Ì´×°";
-        TEXT[ chinese_traditional ] = "ÅªÀÉ®×®Éµo¥Í¿ù»~ ";
+        TEXT[ chinese_traditional ] = "¦s¨úÀÉ®×®Éµo¥Í¿ù»~ ";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ Çáãáİ ";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç ôïõ áñ÷åßïõ ";
         TEXT[ korean ] = "ÆÄÀÏ ÀĞ±â ¿À·ù ";
@@ -2208,14 +2208,14 @@ Resource RID_ERRHDL
         Text [ danish ] = "Der blev ikke fundet et filter" ;
         Text [ portuguese ] = "O filtro não foi encontrado." ;
         Text [ portuguese_brazilian ] = "Ein Filter wurde nicht gefunden" ;
-        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¹ıÂËÆ÷";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½×ª»»Æ÷";
         Text[ russian ] = "Ôèëüòğ íå íàéäåí";
         Text[ polish ] = "Filtru nie znaleziono";
         Text[ japanese ] = "Ì¨ÙÀ‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ìÂà´«¾¹";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ";
         Text[ dutch ] = "Geen filter gevonden";
-        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¹ıÂËÆ÷";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½×ª»»Æ÷";
         Text[ greek ] = "Äåí âñİèçêå êÜğïéï ößëôñï";
         Text[ korean ] = "ÇÊÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Bir filtre bulunamadı";
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
