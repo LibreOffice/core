@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 11:14:58 $
+ *  last change: $Author: svesik $ $Date: 2001-04-26 14:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ typedef struct _sal_Sequence
     SAL_THROW_EXTERN_C() should be used for all C functions
 */
 #ifdef __cplusplus
-#if defined(__GNUC__) || defined(__SUNPRO_CC)
+#if defined(__GNUC__) || defined(__SUNPRO_CC) || defined(__sgi)
 #define SAL_THROW( exc )
 #else /* MSVC, all other */
 #define SAL_THROW( exc ) throw exc
