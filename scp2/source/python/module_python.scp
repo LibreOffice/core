@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_python.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-04 14:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "macros.inc"
 
-Module gid_Module_Pyuno
+Module gid_Module_Optional_Pyuno
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
     ParentID = gid_Module_Optional;
     Procedures = (gid_Procedure_Python_Install);
