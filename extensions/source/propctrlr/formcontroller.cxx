@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 08:39:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-13 15:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -802,7 +799,7 @@ namespace pcr
                 Reference< XPropertySet >  xField;
                 try
                 {
-                    Reference< XConnection >   xConnection = ::dbtools::getConnection(Reference< XRowSet > (xFormSet, UNO_QUERY));
+                    Reference< XConnection > xConnection = ensureRowsetConnection();
                     if (!xConnection.is())
                         return;
 
@@ -865,36 +862,10 @@ namespace pcr
 
             rProperty.eControlType = BCT_COMBOBOX;
 
-            // get the RowSet interface of the form of the object we're inspecting
-            Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
-            if (!xRowSet.is())
-            {
-                // are we inspecting a combo-/listbox?
-                if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
-                {
-                    xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
-                    if (!xRowSet.is())
-                    {
-                        if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
-                        {   // we're inspecting a grid column
-                            Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
-                            if (xParentAsChild.is())
-                                xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
-                        }
-                    }
-                }
-
-                if (!xRowSet.is())
-                {
-                    DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
-                    return;
-                }
-            }
-
             Reference< XTablesSupplier >  xTables;
             try
             {
-                xTables = Reference< XTablesSupplier > (::dbtools::getConnection(xRowSet),UNO_QUERY);
+                xTables = Reference< XTablesSupplier >( ensureRowsetConnection( ), UNO_QUERY );
             }
             catch (Exception&)
             {
@@ -930,36 +901,10 @@ namespace pcr
 
             rProperty.eControlType = BCT_COMBOBOX;
 
-            // get the RowSet interface of the form of the object we're inspecting
-            Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
-            if (!xRowSet.is())
-            {
-                // are we inspecting a combo-/listbox?
-                if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
-                {
-                    xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
-                    if (!xRowSet.is())
-                    {
-                        if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
-                        {   // we're inspecting a grid column
-                            Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
-                            if (xParentAsChild.is())
-                                xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
-                        }
-                    }
-                }
-
-                if (!xRowSet.is())
-                {
-                    DBG_ERROR("OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!");
-                    return;
-                }
-            }
-
             Reference< XQueriesSupplier >  xSupplyQueries;
             try
             {
-                xSupplyQueries = Reference< XQueriesSupplier > (::dbtools::getConnection(xRowSet),UNO_QUERY);
+                xSupplyQueries = Reference< XQueriesSupplier >( ensureRowsetConnection(), UNO_QUERY );
             }
             catch (Exception&)
             {
@@ -996,6 +941,57 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    Reference< XConnection > OPropertyBrowserController::ensureRowsetConnection()
+    {
+        Reference< XConnection > xReturn;
+
+        // get the row set we're working for
+        Reference< XPropertySet > xProps( getRowSet( ), UNO_QUERY );
+        if ( xProps.is() )
+        {
+            // get it's current active connection
+            xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
+            // do we need to connect?
+            if ( !xReturn.is() )
+            {
+                connectRowset( );
+                // get the property again
+                xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
+            }
+        }
+
+        // outta here
+        return xReturn;
+    }
+
+    //------------------------------------------------------------------------
+    Reference< XRowSet > OPropertyBrowserController::getRowSet( ) const
+    {
+        Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
+        if (!xRowSet.is())
+        {
+            // are we inspecting a control?
+            if ( 0 != m_nClassId )
+            {
+                xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+                if (!xRowSet.is())
+                {
+                    // are we inspecting a grid column?
+                    if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
+                    {   // we're inspecting a grid column
+                        Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
+                        if (xParentAsChild.is())
+                            xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
+                    }
+                }
+            }
+
+        }
+        DBG_ASSERT( xRowSet.is(), "OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!" );
+        return xRowSet;
+    }
+
+    //------------------------------------------------------------------------
     void OPropertyBrowserController::connectRowset()
     {
         // if we have a previous connection, dispose it
@@ -1006,11 +1002,13 @@ namespace pcr
         try
         {
             // the rowset
-            Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
-            if (xRowSet.is())
+            Reference< XRowSet > xRowSet( getRowSet() );
+            Reference< XPropertySet > xRowSetProps( xRowSet, UNO_QUERY );
+            if (xRowSetProps.is())
             {
                 // does the rowset already have a connection?
-                Reference< XConnection > xConnection = ::dbtools::getConnection( xRowSet );
+                Reference< XConnection > xConnection;
+                xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
 
                 if ( !xConnection.is() )
                 {   // no -> calculate one
@@ -1025,7 +1023,7 @@ namespace pcr
                     }
 
                     // set on the row set
-                    m_xPropValueAccess->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xConnection ) );
+                    xRowSetProps->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xConnection ) );
 
                     // remember for later disposal
                     // (we opened the connection, thus we own it)
@@ -2554,6 +2552,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/08/07 08:39:59  fs
+ *  #87690# set the connection as ActiveConnection explicitly
+ *
  *  Revision 1.39  2001/08/06 15:37:05  fs
  *  #88300# UpdateUI: don't grab the focus if we didn't have it before ...
  *
