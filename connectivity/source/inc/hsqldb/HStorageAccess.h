@@ -88,6 +88,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_w
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt
   (JNIEnv *, jobject, jstring, jstring, jint);
 
+
 #ifdef __cplusplus
 }
 #endif
