@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SandboxSecurity.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-22 13:55:54 $
+ *  last change: $Author: jl $ $Date: 2002-09-27 14:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,10 @@ public class SandboxSecurity extends SecurityManager //implements SecurityManage
             if (base.getProtocol().equals("file")) {
                 String dir = null;
                 try {
-                    dir = (new File(base.getFile()).getCanonicalPath());
+                    // If the file url contains spaces (i.e. %20) then URL.getFile() still contains %20
+                    // File.getCanonicalPath does not replace %20
+                    String sWithSpaces= base.getFile().replaceAll("%20"," ");
+                    dir = (new File(sWithSpaces).getCanonicalPath());
                 } catch (IOException e) { // shouldn't happen
                     throw(new SandboxSecurityException("checkread.exception2", e.toString()));
                 }
