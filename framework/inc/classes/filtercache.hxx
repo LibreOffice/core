@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:01:40 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,6 @@ class FilterCache   :   private ThreadHelpBase
         css::uno::Sequence< ::rtl::OUString >               getAllContentHandlerNames       () const;
         css::uno::Sequence< ::rtl::OUString >               getAllDetectorNamesWithDefault  () const;   // default detector is last one!
         css::uno::Sequence< ::rtl::OUString >               getAllLoaderNamesWithDefault    () const;   // default loader is last one!
-        ::rtl::OUString                                     getDefaultDetector              () const;
         ::rtl::OUString                                     getDefaultLoader                () const;
 
         css::uno::Sequence< css::beans::PropertyValue >     getTypeProperties               (   const   ::rtl::OUString&    sName   ) const;
