@@ -1,0 +1,10 @@
+UDK_3_0_0 {
+    global:
+        rtl_allocateMemory;
+        rtl_reallocateMemory;
+        rtl_freeMemory;
+        rtl_allocateZeroMemory;
+        rtl_freeZeroMemory;
+    local:
+        *;
+};
