@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:40:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,7 @@ ModalDialog DLG_UUI_LOGIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 265 , 158 ) ;
-    Text = "Benutzername und Kennwort erforderlich" ;
-    Text [ English ] = "User Name and Password required" ;
+    Text [ de ] = "Benutzername und Kennwort erforderlich" ;
     FixedText INFO_LOGIN_ERROR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -89,104 +88,23 @@ ModalDialog DLG_UUI_LOGIN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text = "Meldung vom Server" ;
-        Text [ English ] = "Report from server" ;
-        Text [ english_us ] = "Message from server" ;
-        Text [ portuguese_brazilian ] = "Mensagem do servidor" ;
-        Text [ swedish ] = "Meddelande från servern" ;
-        Text [ danish ] = "Meddelelse fra server" ;
-        Text [ italian ] = "Segnalazione dal server" ;
-        Text [ spanish ] = "Mensaje del servidor" ;
-        Text [ french ] = "Message en provenance du serveur" ;
-        Text [ dutch ] = "Servermelding" ;
-        Text [ portuguese ] = "Mensagem do servidor" ;
-        Text[ chinese_simplified ] = "æœåŠ¡å™¨æŠ¥å‘Š";
-        Text[ russian ] = "Ñîîáùåíèå ñ ñåğâåğà";
-        Text[ polish ] = "Wiadomoœæ z serwera";
-        Text[ japanese ] = "ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸";
-        Text[ chinese_traditional ] = "ä¼ºæœå™¨å ±å‘Š";
-        Text[ greek ] = "ÌŞíõìá áğü ôï äéáêïìéóôŞ";
-        Text[ korean ] = "ì„œë²„ë¡œë¶€í„° ë©”ì‹œì§€";
-        Text[ arabic ] = "ÑÓÇáÉ ãä ÇáãÒæøÏ";
-        Text[ turkish ] = "Sunucudan gelen mesaj";
-        Text[ catalan ] = "Missatge del servidor";
-        Text[ finnish ] = "Sanoma palvelimelta";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸ˆà¸²à¸à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œ";
-        Text[ czech ] = "ZprÃ¡va ze serveru";
-        Text[ hebrew ] = "â€®×”×•×“×¢×” ××”×©×¨×ªâ€¬";
-        Text[ hindi ] = "à¤¸à¤°à¥à¤µà¤° à¤¸à¥‡ à¤¸à¤‚à¤¦à¥‡à¤¶";
-        Text[ slovak ] = "HlÃ¡senie serveru";
-        Text[ hungarian ] = "Ãœzenet a kiszolgÃ¡lÃ³tÃ³l";
-        Text[ slovenian ] = "SporoÄilo s streÅ¾nika";
+        Text [ de ] = "Meldung vom Server" ;
+        Text [ en-US ] = "Message from server" ;
     };
     FixedText INFO_LOGIN_REQUEST
     {
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 185 , 18 ) ;
         WordBreak = TRUE ;
-        Text = "Bitte geben Sie hier Benutzernamen und Kennwort für %1 ein." ;
-        Text [ English ] = "Please enter user name and password here for %1." ;
-        Text [ portuguese ] = "Indique o nome do utilizador e a senha para %1." ;
-        Text [ english_us ] = "Enter the user name and password for %1 here." ;
-        Text [ portuguese_brazilian ] = "Indique aqui o nome do usuário e a senha para %1." ;
-        Text [ swedish ] = "Mata in användarnamn och lösenord här för %1." ;
-        Text [ danish ] = "Indtast brugernavn og adgangskode for %1 her." ;
-        Text [ italian ] = "Digitate qui il nome dell'utente e la password per %1." ;
-        Text [ spanish ] = "Especifique el nombre de usuario y la contraseña para %1." ;
-        Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour %1." ;
-        Text [ dutch ] = "Voer hier de gebruikersnaam en het wachtwoord voor %1 in." ;
-        Text[ chinese_simplified ] = "è¯·æ‚¨åœ¨æ­¤ä¸º %1 è¾“å…¥ä½¿ç”¨åå’Œå¯†ç ã€‚";
-        Text[ russian ] = "Ââåäèòå èìÿ ïîëüçîâàòåëÿ è ïàğîëü äëÿ %1.";
-        Text[ polish ] = "WprowadŸ tutaj nazwê u¿ytkownika i has³o do %1.";
-        Text[ japanese ] = "%1 ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼åã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã“ã“ã«å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
-        Text[ chinese_traditional ] = "è«‹çˆ² %1 è¼¸å…¥ä½¿ç”¨è€…åç¨±å’Œå¯†ç¢¼ã€‚";
-        Text[ greek ] = "Ğáñáêáëş åéóáãÜãåôå åäş ôï üíïìá ôïõ ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò ãéá ôï %1.";
-        Text[ korean ] = "%1ì˜ ì‚¬ìš©ì ì´ë¦„ê³¼ ì•”í˜¸ë¥¼ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ áÜ %1 åäÇ.";
-        Text[ turkish ] = "%1 için kullanıcı adı ve parolayı buraya girin.";
-        Text[ catalan ] = "Especifiqueu el nom d'usuari i contrasenya per %1.";
-        Text[ finnish ] = "Kirjoita kohteen %1 käyttäjätunnus ja salasana tähän.";
-        Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹à¸¥à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™ %1 à¸—à¸µà¹ˆà¸™à¸µà¹ˆ";
-        Text[ czech ] = "Zde zadejte uÅ¾ivatelskÃ© jmÃ©no a heslo pro %1.";
-        Text[ hebrew ] = "â€®× × ×œ×”×§×œ×™×“ ××ª ×©× ×”××©×ª××© ×•×”×¡×¡××” ×¢×‘×•×¨ %1 ×›××Ÿ.â€¬";
-        Text[ hindi ] = "%1 à¤•à¥‡ à¤²à¤¿à¤ à¤¯à¤¹à¤¾à¤ à¤ªà¤° à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¤¾ à¤¨à¤¾à¤® à¤”à¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹ à¥¤";
-        Text[ slovak ] = "Sem zadajte uÅ¾Ã­vateÄ¾skÃ© meno a heslo pre %1.";
-        Text[ hungarian ] = "Ãrja be a felhasznÃ¡lÃ³i nevÃ©t Ã©s a jelszavÃ¡t a kÃ¶vetkezÅ‘hÃ¶z: %1";
-        Text[ slovenian ] = "Tu vnesite uporabniÅ¡ko ime in geslo za %1.";
+        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort für %1 ein." ;
+        Text [ en-US ] = "Enter the user name and password for %1 here." ;
     };
     FixedText FT_LOGIN_PATH
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "~Pfad" ;
-        Text [ English ] = "~Path" ;
-        Text [ english_us ] = "~Path" ;
-        Text [ portuguese_brazilian ] = "~Caminho" ;
-        Text [ swedish ] = "Sö~kväg" ;
-        Text [ danish ] = "~Sti" ;
-        Text [ italian ] = "~Percorso" ;
-        Text [ spanish ] = "~Ruta" ;
-        Text [ french ] = "Chemin" ;
-        Text [ dutch ] = "~Pad" ;
-        Text [ portuguese ] = "~Atalho" ;
-        Text[ chinese_simplified ] = "è·¯å¾„(~P)";
-        Text[ russian ] = "Ïóòü";
-        Text[ polish ] = "Œcie¿~ka";
-        Text[ japanese ] = "ãƒ‘ã‚¹(~P)";
-        Text[ chinese_traditional ] = "è·¯å¾‘(~P)";
-        Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "ê²½ë¡œ(~P)";
-        Text[ arabic ] = "ÇáãÓÇÑ";
-        Text[ turkish ] = " ~Dizin";
-        Text[ catalan ] = "~Camí";
-        Text[ finnish ] = "~Polku";
-        Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸—à¸²à¸‡";
-        Text[ czech ] = "Cesta";
-        Text[ hebrew ] = "â€®××¡×œ×•×œ ×¡×¤×¨×™×•×ªâ€¬";
-        Text[ hindi ] = "~à¤®à¤¾à¤°à¥à¤—";
-        Text[ slovak ] = "Ce~sta";
-        Text[ hungarian ] = "Ãš~tvonal";
-        Text[ slovenian ] = "~Pot";
+        Text [ de ] = "~Pfad" ;
+        Text [ en-US ] = "~Path" ;
     };
     Edit ED_LOGIN_PATH
     {
@@ -210,35 +128,8 @@ ModalDialog DLG_UUI_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "~Benutzername" ;
-        Text [ English ] = "~Username" ;
-        Text [ english_us ] = "~User name" ;
-        Text [ portuguese_brazilian ] = "~Nome de usuário" ;
-        Text [ swedish ] = "~Användarnamn" ;
-        Text [ danish ] = "~Brugernavn" ;
-        Text [ italian ] = "Nome ~utente" ;
-        Text [ spanish ] = "~Nombre del usuario" ;
-        Text [ french ] = "~Nom d'utilisateur" ;
-        Text [ dutch ] = "~Gebruikersnaam" ;
-        Text [ portuguese ] = "~Nome do utilizador" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨å(~U)";
-        Text[ russian ] = "Èìÿ ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Nazwa ~u¿ytkownika";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å(~U)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è€…åç¨±(~U)";
-        Text[ greek ] = "¼íïìá ÷ñŞóôç";
-        Text[ korean ] = "ì‚¬ìš©ì ì´ë¦„(~U)";
-        Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
-        Text[ turkish ] = "~Kullanıcı adı";
-        Text[ catalan ] = "Nom d'~usuari";
-        Text[ finnish ] = "K~äyttäjätunnus";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-        Text[ czech ] = "UÅ¾ivatelskÃ© jmÃ©no";
-        Text[ hebrew ] = "â€®×©× ××©×ª××©â€¬";
-        Text[ hindi ] = "~à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~UÅ¾Ã­vateÄ¾skÃ© meno";
-        Text[ hungarian ] = "~FelhasznÃ¡lÃ³i nÃ©v";
-        Text[ slovenian ] = "~UporabniÅ¡ko ime";
+        Text [ de ] = "~Benutzername" ;
+        Text [ en-US ] = "~User name" ;
     };
     Edit ED_LOGIN_USERNAME
     {
@@ -256,35 +147,8 @@ ModalDialog DLG_UUI_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 107 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "P~asswort" ;
-        Text [ English ] = "P~assword" ;
-        Text [ english_us ] = "Pass~word" ;
-        Text [ portuguese_brazilian ] = "~Senha" ;
-        Text [ swedish ] = "Lösen~ord" ;
-        Text [ danish ] = "A~dgangskode" ;
-        Text [ italian ] = "P~assword" ;
-        Text [ spanish ] = "~Contraseña" ;
-        Text [ french ] = "~Mot de passe" ;
-        Text [ dutch ] = "W~achtwoord" ;
-        Text [ portuguese ] = "~Senha" ;
-        Text[ chinese_simplified ] = "å¯†ç (~W)";
-        Text[ russian ] = "Ïàğîëü";
-        Text[ polish ] = "~Has³o";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~W)";
-        Text[ chinese_traditional ] = "å¯†ç¢¼(~W)";
-        Text[ greek ] = "Êùäéêüò ğñüóâ~áóçò";
-        Text[ korean ] = "ì•”í˜¸(~W)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ turkish ] = "~Parola";
-        Text[ catalan ] = "Contra~senya";
-        Text[ finnish ] = "Sala~sana";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ª~à¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "Heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××”â€¬";
-        Text[ hindi ] = "à¤•à¥‚à¤Ÿ~à¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "He~slo";
-        Text[ hungarian ] = "~JelszÃ³";
-        Text[ slovenian ] = "Ges~lo";
+        Text [ de ] = "P~asswort" ;
+        Text [ en-US ] = "Pass~word" ;
     };
     Edit ED_LOGIN_PASSWORD
     {
@@ -297,35 +161,8 @@ ModalDialog DLG_UUI_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text = "A~ccount" ;
-        Text [ English ] = "A~ccount" ;
-        Text[ english_us ] = "A~ccount";
-        Text[ portuguese ] = "~Conta";
-        Text[ russian ] = "Ó÷åòíàÿ çàïèñü";
-        Text[ dutch ] = "A~ccount";
-        Text[ french ] = "C~ompte";
-        Text[ spanish ] = "~Cuenta";
-        Text[ italian ] = "A~ccount";
-        Text[ danish ] = "K~onto";
-        Text[ swedish ] = "~Konto";
-        Text[ polish ] = "~Konto";
-        Text[ portuguese_brazilian ] = "~Conta";
-        Text[ japanese ] = "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ(~C)";
-        Text[ chinese_simplified ] = "å¸å·(~C)";
-        Text[ chinese_traditional ] = "å¸³è™Ÿ(~C)";
-        Text[ greek ] = "Ëïãáñéáóìü~ò";
-        Text[ korean ] = "ê³„ì •(~C)";
-        Text[ arabic ] = "ÇÔÊÑÇß";
-        Text[ turkish ] = "~Hesap";
-        Text[ catalan ] = "~Compte";
-        Text[ finnish ] = "T~ili";
-        Text[ thai ] = "à¸šà¸±~à¸à¸Šà¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-        Text[ czech ] = "ÃšÄet";
-        Text[ hebrew ] = "â€®×—×©×‘×•×Ÿâ€¬";
-        Text[ hindi ] = "à¤¹à¤¿~à¤¸à¤¾à¤¬";
-        Text[ slovak ] = "ÃšÄ~et";
-        Text[ hungarian ] = "~FiÃ³k";
-        Text[ slovenian ] = "R~aÄun";
+        Text [ de ] = "A~ccount" ;
+        Text [ en-US ] = "A~ccount";
     };
     Edit ED_LOGIN_ACCOUNT
     {
@@ -338,69 +175,15 @@ ModalDialog DLG_UUI_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 136 ) ;
         Size = MAP_APPFONT ( 185 , 10 ) ;
-        Text = "Kennwort ~speichern" ;
-        Text [ English ] = "~Save password" ;
-        Text [ english_us ] = "~Save password" ;
-        Text [ italian ] = "Memorizza pa~ssword" ;
-        Text [ spanish ] = "Guardar ~contraseña" ;
-        Text [ french ] = "Enregistrement du mot de passe" ;
-        Text [ dutch ] = "Wachtwoord ~opslaan" ;
-        Text [ swedish ] = "~Spara lösenord" ;
-        Text [ danish ] = "~Gem adgangskode" ;
-        Text [ portuguese ] = "Guardar ~senha" ;
-        Text [ portuguese_brazilian ] = "Salvar ~senha" ;
-        Text[ chinese_simplified ] = "å­˜ç›˜å¯†ç (~S)";
-        Text[ russian ] = "Ñîõğàíèòü ïàğîëü";
-        Text[ polish ] = "~Zapisz has³o";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ä¿å­˜(~S)";
-        Text[ chinese_traditional ] = "å„²å­˜å¯†ç¢¼(~S)";
-        Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
-        Text[ korean ] = "ì•”í˜¸ ì €ì¥(~S)";
-        Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
-        Text[ turkish ] = "Parola ~sakla";
-        Text[ catalan ] = "~Desa la contrasenya";
-        Text[ finnish ] = "~Tallenna salasana";
-        Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "UloÅ¾it heslo";
-        Text[ hebrew ] = "â€®×©××™×¨×ª ×¡×™×¡××”â€¬";
-        Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ ~à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "UloÅ¾iÅ¥ he~slo";
-        Text[ hungarian ] = "JelszÃ³ mentÃ©~se";
-        Text[ slovenian ] = "~Shrani geslo";
+        Text [ de ] = "Kennwort ~speichern" ;
+        Text [ en-US ] = "~Save password" ;
     };
     FixedLine GB_LOGIN_LOGIN
     {
         Pos = MAP_APPFONT ( 7 , 44 ) ;
         Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text = "Anmelden" ;
-        Text [ English ] = "Connect" ;
-        Text [ english_us ] = "Log in" ;
-        Text [ portuguese_brazilian ] = "Login" ;
-        Text [ swedish ] = "Logga in" ;
-        Text [ danish ] = "Log ind" ;
-        Text [ italian ] = "Log in" ;
-        Text [ spanish ] = "Registrarse" ;
-        Text [ french ] = "Login" ;
-        Text [ dutch ] = "Aanmelden" ;
-        Text [ portuguese ] = "Login" ;
-        Text[ chinese_simplified ] = "ç™»å½•";
-        Text[ russian ] = "Âõîä â ñèñòåìó";
-        Text[ polish ] = "Zalogowanie";
-        Text[ japanese ] = "ãƒ­ã‚°ã‚¤ãƒ³";
-        Text[ chinese_traditional ] = "ç™»å…¥";
-        Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "ë¡œê·¸ì¸";
-        Text[ arabic ] = "ÊÓÌíá ÇáÏÎæá";
-        Text[ turkish ] = "Oturum aç";
-        Text[ catalan ] = "Registreu-vos";
-        Text[ finnish ] = "Kirjaudu sisään";
-        Text[ thai ] = "à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š";
-        Text[ czech ] = "PÅ™ihlÃ¡sit se";
-        Text[ hebrew ] = "â€®×œ×•×’ ××•×Ÿâ€¬";
-        Text[ hindi ] = "à¤²à¥‰à¤— à¤‡à¤¨";
-        Text[ slovak ] = "PrihlÃ¡siÅ¥ sa";
-        Text[ hungarian ] = "BejelentkezÃ©s";
-        Text[ slovenian ] = "Prijava";
+        Text [ de ] = "Anmelden" ;
+        Text [ en-US ] = "Log in" ;
     };
     OKButton BTN_LOGIN_OK
     {
@@ -420,63 +203,10 @@ ModalDialog DLG_UUI_LOGIN
     };
     String STR_LOGIN_REALM
     {
-        Text = "Bitte geben Sie hier Benutzernamen und Kennwort für \"%2\" auf %1 ein." ;
-        Text [ English ] = "Please enter user name and password here for \"%2\" on %1." ;
-        Text [ portuguese ] = "Indique o nome do utilizador e a senha para %2 em %1." ;
-        Text [ english_us ] = "Please enter user name and password for \"%2\" on %1 here." ;
-        Text [ portuguese_brazilian ] = "Por favor, indique aqui o nome do usuário e a senha para %2 em %1." ;
-        Text [ swedish ] = "Mata in användarnamn och lösenord för \"%2\" på %1 här." ;
-        Text [ danish ] = "Indtast brugernavn og adgangskode for \"%2\" på %1 her." ;
-        Text [ italian ] = "Digitate qui il nome dell'utente e la password per \"%2\" su %1." ;
-        Text [ spanish ] = "Especifique el nombre de usuario y la contraseña para \"%2\" en %1." ;
-        Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour \"%2\" sur %1." ;
-        Text [ dutch ] = "Voer hier de gebruikersnaam en het wachtwoord voor \"%2\" op %1 in." ;
-        Text[ chinese_simplified ] = "è¯·åœ¨æ­¤ä¸º %1 è¾“å…¥ \"%2\" çš„ä½¿ç”¨åå’Œå¯†ç ã€‚";
-        Text[ russian ] = "Ââåäèòå èìÿ è ïàğîëü ïîëüçîâàòåëÿ äëÿ \"%2\" ê %1.";
-        Text[ polish ] = "Podaj nazwê u¿ytkownika i has³o dla \"%2\" na %1.";
-        Text[ japanese ] = "%1 ã® \"%2\" ã«å¿…è¦ãªãƒ¦ãƒ¼ã‚¶ãƒ¼åã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã“ã“ã«å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
-        Text[ chinese_traditional ] = "è«‹åœ¨é€™è£¡çˆ² %1 è¼¸å…¥ %2 çš„ä½¿ç”¨è€…åç¨±å’Œå¯†ç¢¼ã€‚";
-        Text[ greek ] = "ÅéóáãÜãåôå üíïìá ÷ñŞóôç êáé êùäéêü ğñüóâáóçò ãéá ôï \"%2\" óôï %1 åäş.";
-        Text[ korean ] = "ì—¬ê¸°ì— %1ì˜ %2ì— í•„ìš”í•œ ì‚¬ìš©ì ì´ë¦„ê³¼ ì•”í˜¸ë¥¼ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-        Text[ arabic ] = "Úáì";
-        Text[ turkish ] = "%1 deki \"%2\" için kullanıcı ismi ve parolayı buraya girin.";
-        Text[ catalan ] = "a";
-        Text[ finnish ] = "Kirjoita käyttäjätunnus ja salasana kohteelle \"%2\" kohteessa %1 tähän.";
-        Text[ thai ] = "à¸–à¸¶à¸‡ ";
-        Text[ czech ] = "ProsÃ­m zadejte uÅ¾ivatelskÃ© jmÃ©no a heslo pro \"%2\" na %1.";
-        Text[ hebrew ] = "â€®× × ×œ×”×§×œ×™×“ ×©× ××©×ª××© ×•×¡×¡××” ×¢×‘×•×¨ \"%2\" ×¢×œ %1 ×›××Ÿ.â€¬";
-        Text[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ \"%2\" à¤•à¥‡à¤²à¤¿à¤  %1 à¤®à¥‡à¤‚ à¤¯à¤¹à¤¾à¤ à¤ªà¤° à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¤¾ à¤¨à¤¾à¤® à¤”à¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¥€à¤œà¤¿à¤ à¥¤ ";
-        Text[ slovak ] = "ProsÃ­m zadajte uÅ¾Ã­vateÄ¾skÃ© meno a heslo pre \"%2\" na %1.";
-        Text[ hungarian ] = "Ãrja be ide a felhasznÃ¡lÃ³i nevet Ã©s a jelszÃ³t %1 helyen levÅ‘ \"%2\" szÃ¡mÃ¡ra.";
-        Text[ slovenian ] = "Tu vnesite uporabniÅ¡ko ime in geslo za \"%2\" na %1.";
+        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort für \"%2\" auf %1 ein." ;
+        Text [ en-US ] = "Please enter user name and password for \"%2\" on %1 here." ;
     };
-    Text [ english_us ] = "User Name and Password Required" ;
-    Text [ portuguese_brazilian ] = "São necessários o nome de usuário e a senha" ;
-    Text [ swedish ] = "Användarnamn och lösenord krävs" ;
-    Text [ danish ] = "Brugernavn og adgangskode er nødvendig" ;
-    Text [ italian ] = "Nome utente e password sono necessari" ;
-    Text [ spanish ] = "Se requieren el nombre de usuario y la contraseña" ;
-    Text [ french ] = "Nom d'utilisateur et mot de passe requis" ;
-    Text [ dutch ] = "Gebruikersnaam en wachtwoord vereist" ;
-    Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
-    Text[ chinese_simplified ] = "è¦æ±‚è¾“å…¥ä½¿ç”¨è€…åç§°å’Œå¯†ç ";
-    Text[ russian ] = "Íåîáõîäèìû èìÿ ïîëüçîâàòåëÿ è ïàğîëü";
-    Text[ polish ] = "Wymagana nazwa u¿ytkownika i has³o.";
-    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼åã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦";
-    Text[ chinese_traditional ] = "å¿…é ˆè¼¸å…¥ä½¿ç”¨åç¨±å’Œå¯†ç¢¼";
-    Text[ greek ] = "Áğáéôåßôáé ôï üíïìá ôïõ ÷ñŞóôç êáé ï êùäéêüò ğñüóâáóçò";
-    Text[ korean ] = "ì‚¬ìš©ì ì´ë¦„ ë° ì•”í˜¸ í•„ìš”";
-    Text[ arabic ] = "ãØáæÈ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ";
-    Text[ turkish ] = "Kullanıcı Adı ve Paralo Gereklidir";
-    Text[ catalan ] = "Es necessita el nom d'usuari i la contrasenya";
-    Text[ finnish ] = "Käyttäjätunnus ja salasana pakolliset";
-    Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸Šà¸·à¹ˆà¸­à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹à¸¥à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "Je vyÅ¾adovÃ¡no uÅ¾ivatelskÃ© jmÃ©no a heslo";
-    Text[ hebrew ] = "â€®×©× ××©×ª××© ×•×¡×™×¡××” × ×“×¨×©×™×â€¬";
-    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¤¾ à¤¨à¤¾à¤® à¤”à¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤šà¤¾à¤¹à¤¿à¤ ";
-    Text[ slovak ] = "Je vyÅ¾adovanÃ© uÅ¾Ã­vateÄ¾skÃ© meno a heslo";
-    Text[ hungarian ] = "FelhasznÃ¡lÃ³i nÃ©v Ã©s jelszÃ³ kÃ¶telezÅ‘";
-    Text[ slovenian ] = "Potrebna sta uporabniÅ¡ko ime in geslo";
+    Text [ en-US ] = "User Name and Password Required" ;
 };
 
 
