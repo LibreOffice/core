@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:40:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,11 +575,11 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             M_ALT(2), 0x0004, 0x0006,
                             0x0004, M_ENDE };
 
-            const UINT16 pLotusNew[] =              // Lotus >= 9.7
-                { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
-                  M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
-                  0x0010, 0x0004, 0x0000, 0x0000,
-                  M_ENDE };
+                        const UINT16 pLotusNew[] =              // Lotus >= 9.7
+                            { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
+                              M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
+                              0x0010, 0x0004, 0x0000, 0x0000,
+                              M_ENDE };
 
                         const UINT16 pExcel1[] =        // Excel Biff/3/4 Tabellen
                             { 0x0009,
@@ -596,6 +596,16 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         const UINT16 pExcel3[] =        // Excel Biff2 Tabellen
                             { 0x0009, 0x0000, 0x0004, 0x0000,
                             M_DC, M_DC, 0x0010, 0x0000, M_ENDE };
+
+                        const UINT16 pExcel4[] =        // #i23425# Flat-stream BIFF5/7/8 Excel files
+                            {   0x09,                                   // lobyte of BOF rec ID (0x0809)
+                                0x08,                                   // hibyte of BOF rec ID (0x0809)
+                                M_ALT(4), 4, 6, 8, 16,                  // lobyte of BOF rec size
+                                0x00,                                   // hibyte of BOF rec size
+                                M_DC, M_DC,                             // any version
+                                M_ALT(5), 0x05, 0x06, 0x10, 0x20, 0x40, // lobyte of data type
+                                0x00,                                   // hibyte of data type
+                                M_ENDE };
 
                         const UINT16 pSc10[] =          // StarCalc 1.0 Dokumente
                             { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
@@ -642,6 +652,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pExcel1,
                             pExcel2,
                             pExcel3,
+                            pExcel4,
                             pSc10,
                             pDIF1,
                             pDIF2,
@@ -654,6 +665,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         const sal_Char* pFilterName[ nFilterCount ] =     // zugehoerige Filter
                             {
                             pFilterLotus,
+                            pFilterExcel4,
                             pFilterExcel4,
                             pFilterExcel4,
                             pFilterExcel4,
