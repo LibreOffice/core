@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:56:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,10 @@ public:
     //Word bzw. Satz selektieren.
     BOOL    SelNearestWrd();
     BOOL    SelWrd      (const Point * = 0, BOOL bProp=FALSE );
-    BOOL    SelSentence (const Point * = 0, BOOL bProp=FALSE );
-    void    SelLine     (const Point * = 0, BOOL bProp=FALSE );
+    // --> FME 2004-07-30 #i32329# Enhanced selection
+    void    SelSentence (const Point * = 0, BOOL bProp=FALSE );
+    void    SelPara     (const Point * = 0, BOOL bProp=FALSE );
+    // <--
     long    SelAll();
 
     //Basiscursortravelling
@@ -240,6 +242,9 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     FASTBOOL BwdSentence( FASTBOOL bSelect = FALSE )
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
+    // --> FME 2004-07-30 #i20126# Enhanced table selection
+    FASTBOOL SelectTableRowCol( const Point& rPt );
+    // <--
     FASTBOOL SelectTableRow();
     FASTBOOL SelectTableCol();
     FASTBOOL SelectTableCell();
