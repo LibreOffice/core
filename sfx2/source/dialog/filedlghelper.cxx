@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:59:12 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,7 +2106,14 @@ void FileDialogHelper_Impl::setDefaultValues()
     if ( ! maPath.getLength() )
     {
         OUString aWorkFolder = SvtPathOptions().GetWorkPath();
-        mxFileDlg->setDisplayDirectory( aWorkFolder );
+        try
+        {
+            mxFileDlg->setDisplayDirectory( aWorkFolder );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
+        }
 
         // INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
         //SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
