@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #define CB_SPACE                7
 #define CB_HSPACE               8
 #define CB_SHYPH                9
-#define CB_HIDDEN               10
+#define CB_FLD_HIDDEN               10
 #define CB_BREAK                11
 #define CB_ANY_RULER            12
 #define CB_CROSS        14
@@ -103,7 +103,7 @@
 #define CB_TEST10       34
 #define FL_TEST                 35
 
-#define CB_HIDDEN_PARA  36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
+#define CB_FLD_HIDDEN_PARA 36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
 #define CB_SMOOTH_SCROLL 37
 
 #define BT_OK           38
@@ -124,6 +124,7 @@
 #define BT_DEFAULT      58
 #define CB_HANDLE       59
 #define CB_SECT_BOUNDS  60
+#define CB_CHAR_HIDDEN  61
 // Print-Extra-Page
 #define CB_PGRF            61
 #define CB_PTAB            62
