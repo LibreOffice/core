@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:32:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,6 @@ IMPL_LINK( SfxApplication, AutoSaveHdl_Impl, Timer*, pTimer )
 {
     SvtSaveOptions aSaveOptions;
     FASTBOOL bAutoSave = aSaveOptions.IsAutoSave() &&
-        !bDispatcherLocked &&
         !Application::IsUICaptured() && Application::GetLastInputInterval() > 300;
     if ( bAutoSave )
     {
