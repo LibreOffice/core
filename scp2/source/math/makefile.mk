@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:15:55 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:58:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ PARFILES += \
 
 ULFFILES= \
         module_math.ulf              \
+        folderitem_math.ulf          \
         registryitem_math.ulf
 
 # --- File ---------------------------------------------------------
