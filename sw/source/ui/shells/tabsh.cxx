@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:38:23 $
+ *  last change: $Author: hjs $ $Date: 2003-08-20 11:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,11 +735,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 rSh.EndAction();
             }*/
         }
-        break;
-        case SID_ATTR_BRUSH:
-            if(pItem)
-                rSh.SetBoxBackground( *(SvxBrushItem*)pItem );
-            bCallDone = TRUE;
         break;
         case FN_INSERT_TABLE:
         case FN_FORMAT_TABLE_DLG:
