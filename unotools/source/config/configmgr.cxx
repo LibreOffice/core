@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-22 09:22:48 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,14 +238,43 @@ Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
  ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
 {
+    RegisterConfigItem(rCfgItem);
+    return AcquireTree(rCfgItem);
+}
+/* -----------------------------21.06.01 12:20--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
+{
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
 #ifdef DBG_UTIL
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            OSL_ENSURE(sal_False, "AddConfigItem: already inserted!");
+            OSL_ENSURE(sal_False, "RegisterConfigItem: already inserted!");
     }
+#endif
+    pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
+}
+/* -----------------------------21.06.01 12:20--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
+{
+    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
+#ifdef DBG_UTIL
+    sal_Bool bFound = sal_False;
+    for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
+    {
+        ConfigItemListEntry_Impl& rEntry = *aListIter;
+        if(rEntry.pConfigItem == &rCfgItem)
+        {
+            bFound = sal_True;
+            break;
+        }
+    }
+    OSL_ENSURE(bFound, "AcquireTree: ConfigItem unknown!");
 #endif
     OUString sPath = C2U(cConfigBaseURL);
     sPath += rCfgItem.GetSubTreeName();
@@ -255,7 +284,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     aPath.Name = C2U("nodepath");
     aPath.Value <<= sPath;
     pArgs[0] <<= aPath;
-    sal_Bool bLazy = 0 != rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE;
+    sal_Bool bLazy = 0 != (rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE);
     PropertyValue aUpdate;
     aUpdate.Name = C2U("lazywrite");
     sal_Bool bTrue = sal_True;
@@ -289,7 +318,6 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
             xIFace = xCfgProvider->createInstanceWithArguments(
                     C2U(cAccessSrvc),
                     aArgs);
-            pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
         }
 #ifdef DBG_UTIL
         catch(Exception& rEx)
@@ -337,7 +365,10 @@ void ConfigManager::StoreConfigItems()
         {
             ConfigItemListEntry_Impl& rEntry = *aListIter;
             if(rEntry.pConfigItem->IsModified())
+            {
                 rEntry.pConfigItem->Commit();
+                rEntry.pConfigItem->ClearModified();
+            }
         }
     }
 }

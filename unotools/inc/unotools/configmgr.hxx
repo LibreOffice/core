@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 11:34:11 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,11 @@ namespace utl
 
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                 AddConfigItem(utl::ConfigItem& rCfgItem);
+
+            void RegisterConfigItem(utl::ConfigItem& rCfgItem);
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
+                AcquireTree(utl::ConfigItem& rCfgItem);
+
 
             void RemoveConfigItem(utl::ConfigItem& rCfgItem);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 12:18:15 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,14 @@ inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
     sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
     OSL_ENSURE(sal_False, sMsg.getStr());
 }
+#define CATCH_INFO(a) \
+catch(Exception& rEx)   \
+{                       \
+    lcl_CFG_DBG_EXCEPTION(a, rEx);\
+}
 #else
     #define lcl_CFG_DBG_EXCEPTION( a, b)
+    #define CATCH_INFO(a) catch(Exception& ){}
 #endif
 
 namespace utl{
@@ -149,7 +155,7 @@ struct ConfigItem_Impl
     utl::ConfigManager*         pManager;
        sal_Int16                    nMode;
     sal_Bool                    bIsModified;
-    sal_Bool                    bHasChangedProperties;
+    sal_Bool                    bEnableInternalNotification;
 
     sal_Int16                   nInValueChange;
     ConfigItem_Impl() :
@@ -157,7 +163,7 @@ struct ConfigItem_Impl
         nMode(0),
         nInValueChange(0),
         bIsModified(sal_False),
-        bHasChangedProperties(sal_False){}
+        bEnableInternalNotification(sal_False){}
 };
 }
 /* -----------------------------04.12.00 10:25--------------------------------
@@ -252,7 +258,10 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
 {
     pImpl->pManager = ConfigManager::GetConfigManager();
     pImpl->nMode = nSetMode;
-    xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
+    if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
+        pImpl->pManager->AddConfigItem(*this);
+    else
+        m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
 /* -----------------------------17.11.00 13:53--------------------------------
 
@@ -263,7 +272,7 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
 {
     pImpl->pManager = &rManager;
     pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE;
-    xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
+    m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -272,20 +281,6 @@ ConfigItem::~ConfigItem()
 {
     if(pImpl->pManager)
     {
-        if(pImpl->bHasChangedProperties && xHierarchyAccess.is())
-        {
-            try
-            {
-                Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-                xBatch->commitChanges();
-            }
-            catch(Exception& rEx)
-            {
-#ifdef DBG_UTIL
-    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-            }
-        }
         RemoveListener();
         pImpl->pManager->RemoveConfigItem(*this);
     }
@@ -303,20 +298,15 @@ void    ConfigItem::Commit()
  ---------------------------------------------------------------------------*/
 void    ConfigItem::ReleaseConfigMgr()
 {
-    if(pImpl->bHasChangedProperties && xHierarchyAccess.is())
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
+    if(xHierarchyAccess.is())
     {
         try
         {
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             xBatch->commitChanges();
         }
-        catch(Exception& rEx)
-        {
-#ifdef DBG_UTIL
-    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-        }
-        pImpl->bHasChangedProperties = sal_False;
+        CATCH_INFO("Exception from commitChanges(): ")
     }
     RemoveListener();
     OSL_ENSURE(pImpl->pManager, "ConfigManager already released");
@@ -327,10 +317,8 @@ void    ConfigItem::ReleaseConfigMgr()
  ---------------------------------------------------------------------------*/
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
-    if(!IsInValueChange())
+    if(!IsInValueChange() || pImpl->bEnableInternalNotification)
         Notify(rPropertyNames);
-    else
-        pImpl->bHasChangedProperties = sal_True;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -530,6 +518,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
     Sequence< Any > aRet(rNames.getLength());
     const OUString* pNames = rNames.getConstArray();
     Any* pRet = aRet.getArray();
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         for(int i = 0; i < rNames.getLength(); i++)
@@ -588,6 +577,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                                                 const Sequence< Any>& rValues)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
     sal_Bool bRet = xHierarchyAccess.is() && xTopNodeReplace.is();
     if(bRet)
@@ -666,12 +656,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             xBatch->commitChanges();
         }
-        catch(Exception& rEx)
-        {
-#ifdef DBG_UTIL
-        lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-        }
+        CATCH_INFO("Exception from commitChanges(): ")
     }
 
     return bRet;
@@ -679,8 +664,19 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 /* -----------------------------29.08.00 16:19--------------------------------
 
  ---------------------------------------------------------------------------*/
+#if SUPD<637
 sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames)
 {
+    return EnableNotification(rNames, sal_False);
+}
+#endif
+sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
+                sal_Bool bEnableInternalNotification )
+
+{
+    OSL_ENSURE(0 == (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "notification in CONFIG_MODE_RELEASE_TREE mode not possible");
+    pImpl->bEnableInternalNotification = bEnableInternalNotification;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
         return sal_False;
@@ -706,13 +702,12 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames)
  ---------------------------------------------------------------------------*/
 void ConfigItem::RemoveListener()
 {
-    Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
+    Reference<XChangesNotifier> xChgNot(m_xHierarchyAccess, UNO_QUERY);
     if(xChgNot.is() && xChangeLstnr.is())
     {
         try
         {
             xChgNot->removeChangesListener( xChangeLstnr );
-            xHierarchyAccess = 0;
         }
         catch(Exception & )
         {
@@ -725,6 +720,7 @@ void ConfigItem::RemoveListener()
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 {
     Sequence< OUString > aRet;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         try
@@ -759,7 +755,8 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         try
@@ -783,23 +780,12 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 {
                     xCont->removeByName(pNames[i]);
                 }
-                catch(Exception& rEx)
-                {
-        #ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-        #endif
-                }
+                CATCH_INFO("Exception from commitChanges(): ")
             }
             xBatch->commitChanges();
+            bRet = sal_True;
         }
-        catch(Exception& rEx)
-        {
-#ifdef DBG_UTIL
-            lcl_CFG_DBG_EXCEPTION("Exception from ClearNodeSet", rEx);
-#endif
-            bRet = sal_False;
-        }
-
+        CATCH_INFO("Exception from ClearNodeSet")
     }
     return bRet;
 }
@@ -809,7 +795,8 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         const OUString* pElements = rElements.getConstArray();
@@ -834,20 +821,10 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
                 Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
                 xBatch->commitChanges();
             }
-            catch(Exception& rEx)
-            {
-#ifdef DBG_UTIL
-                lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-            }
+            CATCH_INFO("Exception from commitChanges(): ")
+            bRet = sal_True;
         }
-        catch(Exception& rEx)
-        {
-#ifdef DBG_UTIL
-        lcl_CFG_DBG_EXCEPTION("Exception from GetNodeNames: ", rEx);
-#endif
-            bRet = sal_False;
-        }
+        CATCH_INFO("Exception from GetNodeNames: ")
     }
     return bRet;
 }
@@ -859,6 +836,7 @@ sal_Bool ConfigItem::SetSetProperties(
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
@@ -913,12 +891,7 @@ sal_Bool ConfigItem::SetSetProperties(
                 {
                     xBatch->commitChanges();
                 }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                }
+                CATCH_INFO("Exception from commitChanges(): ")
 
                 Sequence< OUString > aSetNames(rValues.getLength());
                 OUString* pSetNames = aSetNames.getArray();
@@ -948,20 +921,18 @@ sal_Bool ConfigItem::SetSetProperties(
                         else
                             xCont->insertByName(sSubNode, pValues[nValue].Value);
                     }
-                    catch(Exception& rEx)
-                    {
-#ifdef DBG_UTIL
-                        lcl_CFG_DBG_EXCEPTION("Exception from setSetProperties(): ", rEx);
-#endif
-                    }
+                    CATCH_INFO("Exception form insert/replaceByName(): ")
                 }
                 xBatch->commitChanges();
             }
         }
+#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-#ifdef DBG_UTIL
             lcl_CFG_DBG_EXCEPTION("Exception from SetSetProperties: ", rEx);
+#else
+        catch(Exception&)
+        {
 #endif
             bRet = sal_False;
         }
@@ -976,6 +947,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
@@ -1034,12 +1006,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     }
                 }
                 try { xBatch->commitChanges(); }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                }
+                CATCH_INFO("Exception from commitChanges(): ")
 
                 for(sal_Int32 j = 0; j < nSubIndex; j++)
                 {
@@ -1052,12 +1019,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     }
                 }
                 try { xBatch->commitChanges(); }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                }
+                CATCH_INFO("Exception from commitChanges(): ")
                 Sequence< OUString > aSetNames(rValues.getLength());
                 OUString* pSetNames = aSetNames.getArray();
                 Sequence< Any> aSetValues(rValues.getLength());
@@ -1106,20 +1068,18 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         else
                             xCont->insertByName(pValues[nValue].Name, pValues[nValue].Value);
                     }
-                    catch(Exception& rEx)
-                    {
-#ifdef DBG_UTIL
-                        lcl_CFG_DBG_EXCEPTION("Exception from setSetProperties(): ", rEx);
-#endif
-                    }
+                    CATCH_INFO("Exception from insert/replaceByName(): ");
                 }
                 xBatch->commitChanges();
             }
         }
+#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-#ifdef DBG_UTIL
-            lcl_CFG_DBG_EXCEPTION("ReplaceSetProperties", rEx);
+            lcl_CFG_DBG_EXCEPTION("Exception from ReplaceSetProperties: ", rEx);
+#else
+        catch(Exception&)
+        {
 #endif
             bRet = sal_False;
         }
@@ -1132,40 +1092,41 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, ::rtl::OUString& _rName)
 {
     ::rtl::OUString sNewElementName;
-    try
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
+    sal_Bool bRet = sal_False;
+    if(xHierarchyAccess.is())
     {
-        Reference< XNameAccess > xSetNode;
-        xHierarchyAccess->getByHierarchicalName(_rSetNode) >>= xSetNode;
-        if (xSetNode.is())
+        try
         {
-            const sal_uInt32 nPrime = 65521;                            // a prime number
-            const sal_uInt32 nPrimeLess1 = nPrime - 1;
-            sal_uInt32 nEngendering     = (rand() % nPrimeLess1) + 1;   // the engendering of the field
-
-            // the element which will loop through the field
-            sal_uInt32 nFieldElement = nEngendering;
-
-            ::rtl::OUString sThisRoundTrial;
-            for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
+            Reference< XNameAccess > xSetNode;
+            xHierarchyAccess->getByHierarchicalName(_rSetNode) >>= xSetNode;
+            if (xSetNode.is())
             {
-                ::rtl::OUString sThisRoundTrial = _rName;
-                sThisRoundTrial += ::rtl::OUString::valueOf((sal_Int32)nFieldElement);
+                const sal_uInt32 nPrime = 65521;                            // a prime number
+                const sal_uInt32 nPrimeLess1 = nPrime - 1;
+                sal_uInt32 nEngendering     = (rand() % nPrimeLess1) + 1;   // the engendering of the field
 
-                if (!xSetNode->hasByName(sThisRoundTrial))
+                // the element which will loop through the field
+                sal_uInt32 nFieldElement = nEngendering;
+
+                ::rtl::OUString sThisRoundTrial;
+                for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
                 {
-                    _rName = sThisRoundTrial;
-                    return sal_True;
+                    ::rtl::OUString sThisRoundTrial = _rName;
+                    sThisRoundTrial += ::rtl::OUString::valueOf((sal_Int32)nFieldElement);
+
+                    if (!xSetNode->hasByName(sThisRoundTrial))
+                    {
+                        _rName = sThisRoundTrial;
+                        bRet =  sal_True;
+                    }
                 }
             }
         }
+        CATCH_INFO("Exception from getUniqueSetElementName(): ")
     }
-    catch(const Exception& rEx)
-    {
-        lcl_CFG_DBG_EXCEPTION("Exception from getUniqueSetElementName(): ", rEx);
-    }
-    return sal_False;
+    return bRet;
 }
-
 /* -----------------------------23.01.01 12:49--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1173,6 +1134,7 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet;
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
         Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
@@ -1203,12 +1165,7 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
                 {
                     xBatch->commitChanges();
                 }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                }
+                CATCH_INFO("Exception from commitChanges(): ")
             }
             else
             {
@@ -1218,19 +1175,17 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
                     if(!xCont->hasByName(rNewNode))
                         xCont->insertByName(rNewNode, Any());
                 }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from AddNode(): ", rEx);
-#endif
-                }
+                CATCH_INFO("Exception from AddNode(): ")
             }
             xBatch->commitChanges();
         }
+#ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-#ifdef DBG_UTIL
             lcl_CFG_DBG_EXCEPTION("Exception from AddNode(): ", rEx);
+#else
+        catch(Exception&)
+        {
 #endif
             bRet = sal_False;
         }
@@ -1271,5 +1226,35 @@ sal_Bool ConfigItem::IsModified() const
 sal_Bool ConfigItem::IsInValueChange() const
 {
     return pImpl->nInValueChange > 0;
+}
+/* -----------------------------21.06.01 12:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
+{
+    Reference< XHierarchicalNameAccess> xRet;
+    if(!m_xHierarchyAccess.is())
+        xRet = pImpl->pManager->AcquireTree(*this);
+    else
+        xRet = m_xHierarchyAccess;
+    OSL_ENSURE(xRet.is(), "AcquireTree failed");
+    return xRet;
+}
+/* -----------------------------22.06.01 08:42--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ConfigItem::LockTree()
+{
+    OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call LockTree in CONFIG_MODE_RELEASE_TREE mode, only");
+    m_xHierarchyAccess = GetTree();
+}
+/* -----------------------------22.06.01 08:42--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ConfigItem::UnlockTree()
+{
+    OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call UnlockTree in CONFIG_MODE_RELEASE_TREE mode, only");
+    if(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE))
+        m_xHierarchyAccess = 0;
 }
 

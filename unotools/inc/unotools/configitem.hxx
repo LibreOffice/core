@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 09:28:10 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ namespace utl
 #define CONFIG_MODE_IMMEDIATE_UPDATE    0x00
 #define CONFIG_MODE_DELAYED_UPDATE      0x01
 #define CONFIG_MODE_ALL_LOCALES         0x02
+#define CONFIG_MODE_RELEASE_TREE        0x04
 
     class ConfigChangeListener_Impl;
     class ConfigManager;
@@ -103,10 +104,11 @@ namespace utl
     class ConfigItem
     {
             friend class ConfigChangeListener_Impl;
+            friend class ConfigManager;
 
             const rtl::OUString         sSubTree;
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
-                                        xHierarchyAccess;
+                                        m_xHierarchyAccess;
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
             ConfigItem_Impl*            pImpl;
@@ -135,12 +137,12 @@ namespace utl
                                                             com::sun::star::uno::Sequence< rtl::OUString >&             lOutNames   ,
                                                             com::sun::star::uno::Sequence< com::sun::star::uno::Any >&  lOutValues  );
 
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
+                                        GetTree();
+
         protected:
-#if SUPD>633
-            ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
-#else
-            ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
-#endif
+            ConfigItem(const rtl::OUString rSubTree,
+                        sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
             void                    SetModified  (); // mark item as modified
@@ -153,8 +155,15 @@ namespace utl
                                         const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
+#if SUPD<637
             sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
-
+            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+                                        sal_Bool bEnableInternalNotification);
+#else
+            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+                                        sal_Bool bEnableInternalNotification = sal_False);
+#endif
+            sal_Bool                IsInternalNotification()const {return IsInValueChange();}
             //returns all members of a node
             com::sun::star::uno::Sequence< rtl::OUString >
                                     GetNodeNames(const rtl::OUString& rNode);
@@ -190,6 +199,11 @@ namespace utl
 
             /** is called from the ConfigManager if it is destroyed before the ConfigItem. */
             void                    ReleaseConfigMgr();
+
+            /** enable locking of the XHierarchicalNameAccess if CONFIG_MODE_RELEASE_TREE is set to
+             prevent multiple calls ConfigManager::AcquireTree() from a single Commit() operation*/
+            void                    LockTree();
+            void                    UnlockTree();
 
             const rtl::OUString&    GetSubTreeName() const {return sSubTree;}
 
