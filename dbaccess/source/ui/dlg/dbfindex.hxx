@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-07 16:44:40 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 13:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ protected:
     DECL_LINK( AddAllClickHdl, PushButton* );
     DECL_LINK( RemoveAllClickHdl, PushButton* );
     DECL_LINK( OKClickHdl, PushButton* );
+    DECL_LINK( OnListEntrySelected, ListBox* );
 
     String              m_aDSN;
     TableInfoList       m_aTableInfoList;
@@ -187,6 +188,8 @@ protected:
     OTableIndex RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist );
     void        InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex );
 
+    void checkButtons();
+
 public:
     ODbaseIndexDialog( Window * pParent, String aDataSrcName );
     virtual ~ODbaseIndexDialog();
@@ -201,6 +204,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/07 16:44:40  fs
+ *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
+ *
  *  Revision 1.3  2000/11/23 01:59:15  svesik
  *  Remove stl/ from #include statement
  *

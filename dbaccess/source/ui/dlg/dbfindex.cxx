@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 10:38:43 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 13:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _OSL_FILE_H_
-#include <osl/file.h>
-#endif
+
+
+
 
 //.........................................................................
 namespace dbaui
@@ -110,6 +110,7 @@ const ByteString aGroupIdent("dBase III");
 
 //////////////////////////////////////////////////////////////////////////
 // Klasse ODbaseIndexDialog
+//-------------------------------------------------------------------------
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
     aPB_OK(             this, ResId( PB_OK ) ),
@@ -136,16 +137,21 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     aPB_RemoveAll.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
     aPB_OK.SetClickHdl( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
+    aLB_FreeIndexes.SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+    aLB_TableIndexes.SetSelectHdl( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+
     aCB_Tables.SetDropDownLineCount(8);
     Init();
     SetCtrls();
     FreeResource();
 }
 
+//-------------------------------------------------------------------------
 ODbaseIndexDialog::~ODbaseIndexDialog()
 {
 }
 
+//-------------------------------------------------------------------------
 sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();
@@ -167,6 +173,17 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
     return sal_False;
 }
 
+//-------------------------------------------------------------------------
+void ODbaseIndexDialog::checkButtons()
+{
+    aPB_Add.Enable(0 != aLB_FreeIndexes.GetSelectEntryCount());
+    aPB_AddAll.Enable(0 != aLB_FreeIndexes.GetEntryCount());
+
+    aPB_Remove.Enable(0 != aLB_TableIndexes.GetSelectEntryCount());
+    aPB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
+}
+
+//-------------------------------------------------------------------------
 OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
 {
     OTableIndex aReturn;
@@ -198,6 +215,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     return aReturn;
 }
 
+//-------------------------------------------------------------------------
 void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay)
 {
     _rList.push_front( _rIndex );
@@ -205,6 +223,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
+//-------------------------------------------------------------------------
 OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist )
 {
     OTableIndex aReturn;
@@ -217,6 +236,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, cons
     return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes, _bMustExist);
 }
 
+//-------------------------------------------------------------------------
 void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex)
 {
     TableInfoListIterator aTablePos;
@@ -226,6 +246,7 @@ void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTabl
     implInsertIndex(_rIndex, aTablePos->aIndexList, aLB_TableIndexes);
 }
 
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, pButton )
 {
     // let all tables write their INF file
@@ -240,15 +261,19 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, pButton )
     return 0;
 }
 
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, pButton )
 {
     String aSelection = aLB_FreeIndexes.GetSelectEntry();
     String aTableName = aCB_Tables.GetText();
     OTableIndex aIndex = RemoveFreeIndex( aSelection, sal_True );
     InsertTableIndex( aTableName, aIndex );
+
+    checkButtons();
     return 0;
 }
 
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, pButton )
 {
     String aSelection = aLB_TableIndexes.GetSelectEntry();
@@ -256,9 +281,11 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, pButton )
     OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, sal_True );
     InsertFreeIndex( aIndex );
 
+    checkButtons();
     return 0;
 }
 
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, pButton )
 {
     sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
@@ -268,9 +295,11 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, pButton )
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0), sal_True ) );
 
+    checkButtons();
     return 0;
 }
 
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, pButton )
 {
     sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
@@ -280,9 +309,18 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, pButton )
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0), sal_True ) );
 
+    checkButtons();
     return 0;
 }
 
+//-------------------------------------------------------------------------
+IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, NOTINTERESTEDIN )
+{
+    checkButtons();
+    return 0;
+}
+
+//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 {
     // search the table
@@ -301,11 +339,24 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
     if ( aTablePos->aIndexList.size() )
         aLB_TableIndexes.SelectEntryPos(0);
 
+    checkButtons();
     return 0;
 }
 
+//-------------------------------------------------------------------------
 void ODbaseIndexDialog::Init()
 {
+    aPB_OK.Disable();
+    m_GB_Indexes.Disable();
+    m_FT_TableIndexes.Disable();
+    aLB_TableIndexes.Disable();
+    m_FT_AllIndexes.Disable();
+    aLB_FreeIndexes.Disable();
+    aPB_Add.Disable();
+    aPB_Remove.Disable();
+    aPB_AddAll.Disable();
+    aPB_RemoveAll.Disable();
+
     ///////////////////////////////////////////////////////////////////////////
     // Alle Indizes werden erst einmal zur Liste der freien Indizes hinzugefuegt.
     // Dann wird fuer jede Tabelle in der Inf-Datei nachgeschaut, welche Indizes sie besitzt.
@@ -397,21 +448,20 @@ void ODbaseIndexDialog::Init()
         }
     }
 
-    if(!m_aTableInfoList.size())
+    if (m_aTableInfoList.size())
     {
-        aPB_OK.Disable(sal_True);
-        m_GB_Indexes.Disable(sal_True);
-        m_FT_TableIndexes.Disable(sal_True);
-        aLB_TableIndexes.Disable(sal_True);
-        m_FT_AllIndexes.Disable(sal_True);
-        aLB_FreeIndexes.Disable(sal_True);
-        aPB_Add.Disable(sal_True);
-        aPB_Remove.Disable(sal_True);
-        aPB_AddAll.Disable(sal_True);
-        aPB_RemoveAll.Disable(sal_True);
+        aPB_OK.Enable();
+        m_GB_Indexes.Enable();
+        m_FT_TableIndexes.Enable();
+        aLB_TableIndexes.Enable();
+        m_FT_AllIndexes.Enable();
+        aLB_FreeIndexes.Enable();
     }
+
+    checkButtons();
 }
 
+//-------------------------------------------------------------------------
 void ODbaseIndexDialog::SetCtrls()
 {
     // ComboBox Tabellen
@@ -449,10 +499,14 @@ void ODbaseIndexDialog::SetCtrls()
     if( m_aFreeIndexList.size() )
         aLB_FreeIndexes.SelectEntryPos( 0 );
 
+
+    TableSelectHdl(&aCB_Tables);
+    checkButtons();
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Klasse OTableInfo
+//-------------------------------------------------------------------------
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
     // INF-Datei oeffnen
@@ -532,6 +586,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/04/04 10:38:43  oj
+ *  reading uninitialized memory
+ *
  *  Revision 1.4  2001/03/07 16:44:40  fs
  *  added a parameter to implRemoveIndex controlling the assertion / correct collecting the indexes in Init
  *
