@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-13 18:12:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,18 +353,18 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                 }
                 ++iter;
             }
+        }
 
-            const sal_uInt8* pBlob = aBlob.getBlop();
-            sal_uInt32       aBlobSize = aBlob.getBlopSize();
+        const sal_uInt8* pBlob = aBlob.getBlop();
+        sal_uInt32       aBlobSize = aBlob.getBlopSize();
 
-            if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
-                                    (RegValue)pBlob, aBlobSize))
-            {
-                fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
-                        idlc()->getOptions()->getProgramName().getStr(),
-                        getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-                return sal_False;
-            }
+        if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+                              (RegValue)pBlob, aBlobSize))
+        {
+            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
+                    idlc()->getOptions()->getProgramName().getStr(),
+                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
+            return sal_False;
         }
     }
     return sal_True;
