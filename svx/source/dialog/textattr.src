@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:34:01 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,14 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
         Text[ japanese ] = "•¶š—ñ";
-        Text[ chinese_traditional ] = "¤º¦r";
+        Text[ chinese_traditional ] = "¤º¤å";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teksti";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -127,7 +128,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~D)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj szeroko~?æ do tekstu";
+        Text[ polish ] = "Dopasuj szeroko~œæ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~D)";
         Text[ chinese_traditional ] = "¼e«×©M¤º¤å¹ï»ô(~D)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
@@ -158,7 +159,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese_brazilian ] = "H~?e an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~E)";
         Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
-        Text[ polish ] = "Dopas~uj wysoko?æ do tekstu";
+        Text[ polish ] = "Dopas~uj wysokoœæ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~E)";
         Text[ chinese_traditional ] = "°ª«×©M¤º¤å¹ï»ô(~E)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
@@ -245,7 +246,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ danish ] = "Afstand fra rammen" ;
         Text [ portuguese_brazilian ] = "Abstand vom Rahmen" ;
         Text [ portuguese ] = "Espaço até moldura" ;
-        Text[ chinese_simplified ] = "Óë±ß¿òµÄ¾àÀë";
+        Text[ chinese_simplified ] = "ÖÁ±ß¿òµÄ¾àÀë";
         Text[ russian ] = "Ğàññòîÿíèå îò ğàìêè";
         Text[ polish ] = "Odleg³oœæ od ramki";
         Text[ japanese ] = "˜g‚©‚ç‚ÌŠÔŠu";
@@ -256,6 +257,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ turkish ] = "Çerçeveye uzaklık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia al marco";
+        Text[ finnish ] = "Spacing to borders";
     };
     FixedText FT_LEFT
     {
@@ -468,6 +470,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ turkish ] = "Metin sabitleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Anclaje del texto";
+        Text[ finnish ] = "Text anchor";
     };
     Control CTL_POSITION
     {
@@ -495,7 +498,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese_brazilian ] = "Ganze ~Breite" ;
         Text[ chinese_simplified ] = "Õû¸ö¿í¶È(~W)";
         Text[ russian ] = "Ïîëíàÿ øèğèíà";
-        Text[ polish ] = "Ca³a szeroko?æ";
+        Text[ polish ] = "Ca³a szerokoœæ";
         Text[ japanese ] = "‘S•(~W)";
         Text[ chinese_traditional ] = "¾ã­Ó¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ ßáå";
@@ -504,6 +507,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ turkish ] = "Metni, ~nesne genişliğine göre ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Todo el a~ncho";
+        Text[ finnish ] = "~Täysi leveys";
     };
     Text[ chinese_simplified ] = "ÎÄ×Ö";
     Text[ russian ] = "Òåêñò";
