@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,13 +256,25 @@ ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     checkCache();
+    OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
 
     ORowSetValue aRet;
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
         aRet = (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     else
     {
-        OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row!");
+#ifdef DBG_UTIL
+        if(m_aCurrentRow)
+            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+        else
+        {
+            positionCache();
+            m_aCurrentRow   = m_pCache->m_aMatrixIter;
+
+            OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
+            return getValue(columnIndex);
+        }
+#endif
     }
 
     return aRet;
@@ -335,6 +347,17 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
 
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
+    else
+    {
+#ifdef DBG_UTIL
+        if(m_aCurrentRow)
+            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+        else
+            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row i null.");
+#endif
+    }
+
+
     return Reference< ::com::sun::star::io::XInputStream >();
 }
 // -------------------------------------------------------------------------
@@ -390,7 +413,10 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_rMutex );
 
     if(!m_pCache || m_bBeforeFirst || m_bAfterLast)
+    {
+        OSL_ENSURE(0,"Ask for bookmark but we stand on invalid row.");
         throwFunctionSequenceException(*m_pMySelf);
+    }
 
     OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
     return m_aBookmark;
@@ -402,7 +428,13 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
     ::osl::MutexGuard aGuard( m_rMutex );
 
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
+    {
+        if(bookmark.hasValue())
+            OSL_ENSURE(0,"MoveToBookmark is not possible when we are only forward");
+        else
+            OSL_ENSURE(0,"Bookmark is not valid");
         throwFunctionSequenceException(*m_pMySelf);
+    }
 
 
     checkCache();
@@ -414,9 +446,6 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-    //  if(m_aBookmark.hasValue())
-    //      m_pCache->moveToBookmark(m_aBookmark);
-
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
@@ -424,15 +453,12 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         bRet = m_pCache->moveToBookmark(bookmark);
         if(bRet)
         {
-            m_bAfterLast    = m_bBeforeFirst = sal_False; // all false because we stand on a valid row
-            m_aBookmark     = bookmark;
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            notifyAllListenersCursorMoved();
-            firePropertyChange(aOldValues);
-
-            m_aOldRow       = (*m_aCurrentRow);
+            setCurrentRow(sal_True,aOldValues);
+        }
+        else
+        {
+            OSL_ENSURE(0,"MoveToBookmark doesn't work!");
+            movementFailed();
         }
     }
     return bRet;
@@ -461,24 +487,10 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
         if(bRet)
         {
-            m_bAfterLast    = m_pCache->isAfterLast();
-            m_bBeforeFirst = m_pCache->isBeforeFirst(); // all false because we stand on a valid row
-            if(m_bAfterLast || m_bBeforeFirst)
-            {
-                m_aCurrentRow   = m_pCache->getEnd();
-                m_aOldRow       = NULL;
-                m_aCurrentRow.setBookmark(Any());
-            }
-            else
-            {
-                m_aBookmark     = m_pCache->getBookmark();
-                m_aCurrentRow   = m_pCache->m_aMatrixIter;
-                m_aCurrentRow.setBookmark(m_aBookmark);
-                notifyAllListenersCursorMoved();
-                firePropertyChange(aOldValues);
-                m_aOldRow       = (*m_aCurrentRow);
-            }
+            setCurrentRow(sal_True,aOldValues);
         }
+        else
+            movementFailed();
     }
     return bRet;
 }
@@ -510,9 +522,7 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    if(m_pCache)
-        return m_pCache->getMetaData();
-    return new OEmptyMetaData();
+    return m_pCache ? m_pCache->getMetaData() : new OEmptyMetaData();
 }
 // -------------------------------------------------------------------------
 
@@ -564,15 +574,14 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         bRet = m_pCache->next();
         if(bRet)
         {
-            m_bBeforeFirst  = sal_False;
             setCurrentRow(sal_True,aOldValues);
+            OSL_ENSURE(!m_bBeforeFirst,"BeforeFirst is true. I don't know why?");
         }
         else
         {
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aOldRow       = NULL;
-            m_aCurrentRow.setBookmark(Any());
-            m_bAfterLast    = sal_True;
+            // moved after the last row
+            movementFailed();
+            OSL_ENSURE(m_bAfterLast,"AfterLast is false. I don't know why?");
         }
         fireRowcount();
     }
@@ -603,12 +612,14 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_rMutex );
     checkPositioningAllowed();
 
-    if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the first
-        return sal_False;
+    sal_Bool bIsFirst = !(m_bBeforeFirst || m_bAfterLast);
+    if(bIsFirst)
+    {
+        positionCache();
+        bIsFirst = m_pCache->isFirst();
+    }
 
-    positionCache();
-
-    return m_pCache->isFirst();
+    return bIsFirst;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
@@ -617,12 +628,13 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_rMutex );
     checkPositioningAllowed();
 
-    if(m_bBeforeFirst || m_bAfterLast) // so we can't be on the last
-        return sal_False;
-
-    positionCache();
-
-    return m_pCache->isLast();
+    sal_Bool bIsLast = !(m_bBeforeFirst || m_bAfterLast);
+    if(bIsLast) // so we can't be on the last
+    {
+        positionCache();
+        bIsLast = m_pCache->isLast();
+    }
+    return bIsLast;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -635,17 +647,23 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
     if(notifyAllListenersCursorBeforeMove())
     {
         // check if we are inserting a row
+        sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
         if(!m_bBeforeFirst)
-        {
+        {   // we have to move
+            ORowSetMatrix::iterator aOldValues = NULL;
+            if(!bWasNew && m_aOldRow.isValid())
+                aOldValues = &m_aOldRow;     // remember the old values
+
             m_pCache->beforeFirst();
             m_aBookmark     = Any();
             m_aCurrentRow   = m_pCache->getEnd();
             m_aCurrentRow.setBookmark(m_aBookmark);
-            m_aOldRow       = NULL;
             m_bBeforeFirst  = !(m_bAfterLast = sal_False);
             notifyAllListenersCursorMoved();
+            firePropertyChange(aOldValues);
+            m_aOldRow       = NULL;
         }
     }
 }
@@ -660,18 +678,24 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
     if(notifyAllListenersCursorBeforeMove())
     {
         // check if we are inserting a row
+        sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
         if(!m_bAfterLast)
         {
+            ORowSetMatrix::iterator aOldValues = NULL;
+            if(!bWasNew && m_aOldRow.isValid())
+                aOldValues = &m_aOldRow;     // remember the old values
+
             m_pCache->afterLast();
             m_aBookmark     = Any();
             m_aCurrentRow   = m_pCache->getEnd();
             m_aCurrentRow.setBookmark(m_aBookmark);
-            m_aOldRow       = NULL;
             m_bAfterLast    = !(m_bBeforeFirst = sal_False);
             notifyAllListenersCursorMoved();
             fireRowcount();
+            firePropertyChange(aOldValues);
+            m_aOldRow       = NULL;
         }
     }
 }
@@ -689,14 +713,9 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-    //  if(!(m_bAfterLast || m_bBeforeFirst) && m_aBookmark.hasValue()) // set the cache to the right position
-    //      m_pCache->moveToBookmark(m_aBookmark);
-
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
-
-        m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
         sal_Bool bMoved = sal_False;
         if(!isFirst() || bWasNew)
@@ -706,10 +725,8 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
         if(bRet)
             setCurrentRow(bMoved,aOldValues);
         else
-        {
-            m_bAfterLast = m_bBeforeFirst = sal_True; // all true
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aCurrentRow.setBookmark(Any());
+        {// first goes wrong so there is no row
+            movementFailed();
         }
         fireRowcount();
     }
@@ -729,14 +746,9 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-    //  if(!(m_bAfterLast || m_bBeforeFirst) && m_aBookmark.hasValue())
-    //      m_pCache->moveToBookmark(m_aBookmark);
-
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
-
-        m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
         sal_Bool bMoved = sal_False;
         if(!isLast() || bWasNew)
@@ -748,11 +760,9 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
             setCurrentRow(bMoved,aOldValues);
         }
         else
-        {
-            m_bAfterLast    = m_bBeforeFirst = sal_True; // all true
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aOldRow       = NULL;
-            m_aCurrentRow.setBookmark(Any());
+        { // last goes wrong so there is no row
+            movementFailed();
+            OSL_ENSURE(m_bAfterLast && m_bBeforeFirst,"Last failed so there is no row but AfterLast or BeforeFirst are wrong!");
         }
 
         fireRowcount();
@@ -768,7 +778,6 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
     sal_Int32  nPos = 0;
     if(!(m_bAfterLast || m_bBeforeFirst)) // we are on no valid row
     {
-
         // check if we are inserting a row
         if(!(!m_bClone && m_pCache->m_bInserted))
         {
@@ -776,9 +785,16 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
                 nPos = m_nPosition;
             else
             {
-
                 if(m_pCache->m_bAfterLast || m_pCache->m_bBeforeFirst || m_pCache->compareBookmarks(m_aBookmark,m_pCache->getBookmark()) != CompareBookmark::EQUAL)
+                {
+#ifdef DBG_UTIL
+                    sal_Bool bRet = m_pCache->moveToBookmark(m_aBookmark);
+                    OSL_ENSURE(bRet,"moveToBookamrk failed so the position isn't valid!");
+#else
                     m_pCache->moveToBookmark(m_aBookmark);
+
+#endif
+                }
                 nPos = m_pCache->getRow();
             }
         }
@@ -794,15 +810,12 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
 
     sal_Bool bRet = !(m_bAfterLast && row > 1); // m_bAfterLast && row > 1 we are already behind the last row
 
-
-
     if(bRet && (bRet = notifyAllListenersCursorBeforeMove()))
     {
         // check if we are inserting a row
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-        m_bAfterLast = m_bBeforeFirst = sal_False; // all false
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
@@ -813,11 +826,8 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
             setCurrentRow(sal_True,aOldValues);
         }
         else
-        {
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aCurrentRow.setBookmark(Any());
-            m_aOldRow       = NULL;
-            m_bAfterLast    = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
+        { // absolute movement goes wrong we stand left or right side of the rows
+            movementFailed();
         }
         fireRowcount();
     }
@@ -844,8 +854,6 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-        m_bAfterLast = m_bBeforeFirst = sal_False; // all false
-
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
@@ -857,10 +865,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         }
         else
         {
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aCurrentRow.setBookmark(Any());
-            m_aOldRow       = NULL;
-            m_bAfterLast    = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
+            movementFailed();
         }
 
         fireRowcount();
@@ -883,28 +888,19 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         sal_Bool bWasNew = m_pCache->m_bInserted || m_pCache->m_bDeleted;
         checkInsert();
 
-        m_bAfterLast = m_bBeforeFirst = sal_False; // all false
-        // move the cache back to right position
-    //  if(m_bAfterLast)
-    //      m_pCache->afterLast();
-    //  else if(m_aBookmark.hasValue())
-    //      m_pCache->moveToBookmark(m_aBookmark);
-
         ORowSetMatrix::iterator aOldValues = NULL;
         if(!bWasNew && m_aOldRow.isValid())
             aOldValues = &m_aOldRow;     // remember the old values
 
         bRet = m_pCache->previous();
-        if(!(m_bBeforeFirst = m_pCache->isBeforeFirst()) && bRet)
+        //  if(!(m_bBeforeFirst = m_pCache->isBeforeFirst()) && bRet)     // TODO have a look at it
+        if(bRet)
         {
             setCurrentRow(sal_True,aOldValues);
         }
         else
         {
-            m_aCurrentRow= m_pCache->getEnd();
-            m_aCurrentRow.setBookmark(Any());
-            m_aOldRow       = NULL;
-            m_bAfterLast    = !m_bBeforeFirst;
+            movementFailed();
         }
     }
     return bRet;
@@ -912,16 +908,32 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
 // -----------------------------------------------------------------------------
 void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues)
 {
-    m_aBookmark     = m_pCache->getBookmark();
-    m_aCurrentRow   = m_pCache->m_aMatrixIter;
-    m_aCurrentRow.setBookmark(m_aBookmark);
+    m_bBeforeFirst  = m_pCache->isBeforeFirst();
+    m_bAfterLast    = m_pCache->isAfterLast();
 
-    OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+    if(!(m_bBeforeFirst || m_bAfterLast))
+    {
+        m_aBookmark     = m_pCache->getBookmark();
+        m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_aCurrentRow.setBookmark(m_aBookmark);
+
+        OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
+        OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+    }
+    else
+    {
+        m_aOldRow       = NULL;
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_aBookmark     = Any();
+        m_aCurrentRow.setBookmark(m_aBookmark);
+    }
+
     if(_bMoved)
         notifyAllListenersCursorMoved();
     firePropertyChange(_rOldValues);
 
-    m_aOldRow       = (*m_aCurrentRow);
+    if(!(m_bBeforeFirst || m_bAfterLast))
+        m_aOldRow       = (*m_aCurrentRow);
 }
 // -----------------------------------------------------------------------------
 void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeException )
@@ -1002,6 +1014,7 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     if(_rOldRow && _rOldRow != m_pCache->m_pMatrix->end() && _rOldRow->isValid())
         aRow = *_rOldRow;
 
+    OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
     sal_Int32 i=0;
     try
     {
@@ -1042,5 +1055,16 @@ void ORowSetBase::checkCache()
         throwFunctionSequenceException(*m_pMySelf);
 }
 // -----------------------------------------------------------------------------
+void ORowSetBase::movementFailed()
+{
+    m_aOldRow       = NULL;
+    m_aCurrentRow   = m_pCache->getEnd();
+    m_bBeforeFirst  = m_pCache->isBeforeFirst();
+    m_bAfterLast    = m_pCache->isAfterLast();
+    m_aBookmark     = Any();
+    m_aCurrentRow.setBookmark(m_aBookmark);
+}
+// -----------------------------------------------------------------------------
+
 
 }   // namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_nRowCount(0)
     ,m_bBeforeFirst(sal_True)
     ,m_bAfterLast(sal_False)
-    ,m_bFirst(sal_False)
-    ,m_bLast(sal_False)
     ,m_bRowCountFinal(sal_False)
     ,m_bInserted(sal_False)
     ,m_bDeleted(sal_False)
@@ -331,7 +329,6 @@ ORowSetCache::~ORowSetCache()
         m_pInsertMatrix->clear();
         delete m_pInsertMatrix;
     }
-    m_xStatement    = NULL;
     m_xSet          = WeakReference< XResultSet>();
     m_xMetaData     = NULL;
     m_aUpdateTable  = NULL;
@@ -779,7 +776,7 @@ void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException
 
     if(!m_bBeforeFirst)
     {
-        m_bAfterLast    = m_bLast = sal_False;
+        m_bAfterLast    = sal_False;
         m_nPosition     = 0;
         m_bBeforeFirst  = sal_True;
         m_pCacheSet->beforeFirst();
@@ -794,7 +791,7 @@ void SAL_CALL ORowSetCache::afterLast(  ) throw(SQLException, RuntimeException)
 
     if(!m_bAfterLast)
     {
-        m_bBeforeFirst = m_bLast = sal_False;
+        m_bBeforeFirst = sal_False;
         m_bAfterLast = sal_True;
 
         if(!m_bRowCountFinal)
@@ -1118,7 +1115,7 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
     sal_Bool bRet = m_pCacheSet->first();
     if(bRet)
     {
-        m_bBeforeFirst  = m_bAfterLast = m_bLast = sal_False;
+        m_bBeforeFirst  = m_bAfterLast = sal_False;
         m_nPosition     = 1;
         moveWindow();
         m_aMatrixIter   = m_pMatrix->begin();
@@ -1144,7 +1141,6 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
             m_bRowCountFinal = sal_True;
             m_nRowCount = m_nPosition = m_pCacheSet->getRow(); // not  + 1
         }
-        m_bLast = sal_True;
         m_nPosition = m_pCacheSet->getRow();
         moveWindow();
         // we have to repositioning because moveWindow can modify the cache
@@ -1193,14 +1189,13 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
             if(m_nPosition < 1)
             {
                 m_bBeforeFirst = sal_True;
-                m_bAfterLast = m_bFirst = m_bLast = sal_False;
+                m_bAfterLast = sal_False;
                 m_aMatrixIter = m_pMatrix->end();
             }
             else
             {
                 m_bBeforeFirst  = sal_False;
                 m_bAfterLast    = m_nPosition > m_nRowCount;
-                m_bLast         = m_nPosition == m_nRowCount;
                 moveWindow();
                 OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
                 m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // if row == -1 that means it stands on the last
@@ -1591,7 +1586,6 @@ void ORowSetCache::checkPositionFlags()
     if(m_bRowCountFinal)
     {
         m_bAfterLast    = m_nPosition > m_nRowCount;
-        m_bLast         = m_nPosition == m_nRowCount;
         if(m_bAfterLast)
             m_nPosition = 0;//m_nRowCount;
     }

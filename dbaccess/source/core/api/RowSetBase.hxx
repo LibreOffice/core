@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:12:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,10 @@ namespace dbaccess
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();
+        // sets the bookmark to Any()
+        // m_aCurrentRow to end of matrix
+        // m_aOldRow to NULL
+        void movementFailed();
 
     public:
         virtual ~ORowSetBase();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:59 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBo
 {
     m_aIter->second.aBookmark = _rBookmark;
 }
+// -----------------------------------------------------------------------------
+
 
 
 

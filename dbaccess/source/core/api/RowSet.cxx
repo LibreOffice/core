@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,11 +220,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
-
-#define NOTIFY_COLUMN_VALUE_CHANGE()                                \
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());      \
-    (*(*m_aCurrentRow))[columnIndex] = x;                           \
-    firePropertyChange(columnIndex-1 ,aOldValue);
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ORowSet()
@@ -493,15 +488,6 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getImplementationId() throw (RuntimeExcep
 Any SAL_CALL ORowSet::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     return ORowSet_BASE1::queryInterface( rType);
-//  Any aRet(::cppu::queryInterface(rType,static_cast< XPropertySet * >( this )));
-//  if (!aRet.hasValue())
-//  {
-//      aRet = ORowSet_BASE1::queryInterface(rType);
-//      if (!aRet.hasValue())
-//          aRet = ORowSet_BASE2::queryInterface(rType);
-//  }
-//
-//  return aRet;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::acquire() throw(RuntimeException)
@@ -926,10 +912,11 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         {
             ::osl::MutexGuard aCacheGuard( m_rMutex);
             m_pCache->insertRow();
-            m_aBookmark     = m_pCache->getBookmark();
-            OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
+            setCurrentRow(sal_False,aOldValues); // we don't move here
+//          m_aBookmark     = m_pCache->getBookmark();
+//          OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
+//          m_aCurrentRow   = m_pCache->m_aMatrixIter;
+//          m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
 
             notifyAllListenersRowChanged(aEvt);
             // fire PROPERTY_ID_ISNEW
@@ -940,7 +927,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
             if(!m_bModified)
                 fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
 
-            ORowSetBase::firePropertyChange(aOldValues);
+            //  ORowSetBase::firePropertyChange(aOldValues);
             fireRowcount();
         }
     }
@@ -952,9 +939,7 @@ sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
     checkCache();
 
     // check if we are inserting a row
-    if(m_pCache && m_pCache->m_bInserted)
-        return 0;
-    return ORowSetBase::getRow();
+    return (m_pCache && m_pCache->m_bInserted) ? 0 : ORowSetBase::getRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)

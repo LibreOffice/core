@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@ namespace dbaccess
                                 // for a row
                                 m_aColumnsMutex;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
@@ -177,50 +176,21 @@ namespace dbaccess
 
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
 
-        rtl::OUString                   m_aCommand;
-        rtl::OUString                   m_aDataSourceName;
-        rtl::OUString                   m_aURL;
-        rtl::OUString                   m_aUser;
-        rtl::OUString                   m_aPassword;
-        rtl::OUString                   m_aFilter;
-        rtl::OUString                   m_aOrder;
-        rtl::OUString                   m_aActiveCommand;
-        rtl::OUString                   m_aCursorName;
-
-        sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
-        sal_Int32                   m_nMaxFieldSize;
-        sal_Int32                   m_nResultSetConcurrency;
-        sal_Int32                   m_nResultSetType;
-        sal_Int32                   m_nQueryTimeOut;
-        sal_Int32                   m_nCommandType;
         sal_Int32                   m_nRowCount;
-        sal_Int32                   m_nTransactionIsolation;
         sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nPosition;                // 0 means beforefirst
-        sal_Int32                   m_nAsyncUpdateRowCount;
 
         sal_Int32                   m_nStartPos;                // start pos of the window zero based
         sal_Int32                   m_nEndPos;                  // end   pos of the window zero based
 
-        sal_Bool                    m_bUseEscapeProcessing ;
-        sal_Bool                    m_bApplyFilter ;
-        sal_Bool                    m_bIgnoreResult ;
         sal_Bool                    m_bRowCountFinal ;
         sal_Bool                    m_bBeforeFirst ;
         sal_Bool                    m_bAfterLast ;
-        sal_Bool                    m_bFirst ;
-        sal_Bool                    m_bLast ;
-        sal_Bool                    m_bCreateStatement ;    // determines we to create a new prepared statement
         sal_Bool                    m_bInserted;
         sal_Bool                    m_bDeleted ;
         sal_Bool                    m_bUpdated ;
-        sal_Bool                    m_bOwnsResultRow ;
-        sal_Bool                    m_bRowObsolete ;
         sal_Bool&                   m_bModified ;           // points to the rowset member m_bModified
-        sal_Bool                    m_bCanceled ;
-        sal_Bool                    m_bRebuildConnOnExecute ;
-        sal_Bool                    m_bIsBookmarable ;
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
 
         sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
@@ -339,11 +309,6 @@ namespace dbaccess
 
     // ::com::sun::star::sdbc::XRowSet
         virtual void SAL_CALL execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::sdb::XRowSetApproveBroadcaster
-//      virtual void SAL_CALL addRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
-//      virtual void SAL_CALL removeRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::util::XCancellable
         virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace dbaccess
     {
         friend class ORowSetCache;
         ORowSetCacheMap::iterator   m_aIter;
-        ORowSetCache*                                           m_pCache;
+        ORowSetCache*               m_pCache;
     protected:
         ORowSetCacheIterator(ORowSetCacheMap::iterator& _rIter,ORowSetCache* _pCache)
             : m_aIter(_rIter)
