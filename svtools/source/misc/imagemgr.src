@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:44:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ String STR_DESCRIPTION_HTMLFILE
 {
     Text = "Internet Dokument" ;
     Text [ English ] = "Internet Document" ;
-    Text [ dutch ] = "Internet document" ;
+    Text [ dutch ] = "Internet-document" ;
     Text [ english_us ] = "Internet document" ;
     Text [ italian ] = "Documento Internet" ;
     Text [ spanish ] = "Documento Internet" ;
@@ -427,7 +427,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text [ japanese ] = "²İÀ°È¯ÄÄŞ·­ÒİÄ";
     Text [ chinese_traditional ] = "Internet ¤å¥ó";
     Text [ arabic ] = "ãÓÊäÏ ÅäÊÑäÊ";
-    Text[ dutch ] = "Internet document";
+    Text[ dutch ] = "Internet-document";
     Text[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍøÎÄµµ";
     Text[ greek ] = "¸ããñáöï ôïõ Internet";
     Text[ korean ] = "ÀÎÅÍ³İ ¹®¼­";
@@ -663,14 +663,14 @@ String STR_DESCRIPTION_GLOBALDOC
     Text [ italian ] = "Documento master di testo di %PRODUCTNAME" ;
     Text [ spanish ] = "%PRODUCTNAME Documento maestro de texto" ;
     Text [ french ] = "Document texte maître %PRODUCTNAME" ;
-    Text [ dutch ] = "%PRODUCTNAME Tekst master-document" ;
+    Text [ dutch ] = "%PRODUCTNAME tekst master-document" ;
     Text [ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾ Ö÷¿ØÎÄµµ";
     Text [ russian ] = "Ãëàâíûé òåêñòîâûé äîêóìåíò %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Dokument g³ówny";
     Text [ japanese ] = "%PRODUCTNAME •¶‘Ï½À°ÄŞ·­ÒİÄ";
     Text [ chinese_traditional ] = "%PRODUCTNAME ¤å¦r ¥D±±¤å¥ó";
     Text [ arabic ] = "(%PRODUCTNAME text) ãÓÊäÏ ÔÇãá";
-    Text[ dutch ] = "%PRODUCTNAME Tekst master-document";
+    Text[ dutch ] = "%PRODUCTNAME tekst master-document";
     Text[ chinese_simplified ] = "%PRODUCTNAME ÎÄ±¾ Ö÷¿ØÎÄµµ";
     Text[ greek ] = "Êåßìåíï êõñßïõ İããñáöïõ %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME ÅØ½ºÆ® ¸¶½ºÅÍ ¹®¼­";
@@ -844,7 +844,7 @@ String STR_DESCRIPTION_BATCHFILE
 {
     Text = "Stapelverarbeitungsdatei" ;
     Text [ English ] = "Batchfile" ;
-    Text [ dutch ] = "Batchbestand" ;
+    Text [ dutch ] = "Batch-bestand" ;
     Text [ english_us ] = "Batch file" ;
     Text [ italian ] = "File di batch" ;
     Text [ spanish ] = "Archivo de lotes" ;
@@ -859,7 +859,7 @@ String STR_DESCRIPTION_BATCHFILE
     Text[ japanese ] = "ÊŞ¯ÁÌ§²Ù";
     Text[ chinese_traditional ] = "§åÀÉ®×";
     Text[ arabic ] = "ãáİ ãÚÇáÌÉ ÏõİÚÉ";
-    Text[ dutch ] = "Batchbestand";
+    Text[ dutch ] = "Batch-bestand";
     Text[ chinese_simplified ] = "ÅúÎÄ¼ş";
     Text[ greek ] = "Áñ÷åßï ğïëëáğëşí åíôïëşí (Batch file)";
     Text[ korean ] = "ÀÏ°ı Ã³¸® ÆÄÀÏ";
@@ -1078,7 +1078,7 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ portuguese ] = "Fórmula";
     Text[ russian ] = "Ôîğìóëà";
     Text[ greek ] = "Formula";
-    Text[ dutch ] = "Formula";
+    Text[ dutch ] = "Formule";
     Text[ french ] = "Formule";
     Text[ spanish ] = "Fórmula";
     Text[ finnish ] = "Formula";
@@ -1095,6 +1095,7 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
 };
+
 
 
 
