@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:10:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ arabic ] = "ΕΥΟΗΡ ΞΗΨΖ αγαέ ΗαΚίζνδ.";
     Message[ dutch ] = "Foutieve versie van configuratiebestand.";
     Message[ chinese_simplified ] = "ι…η½®ζ–‡δ»¶η‰ζ¬ι”™θ――γ€‚";
-    Message[ greek ] = "Λάθος έκδοση του αρχείου διαμόρφωσης.";
+    Message[ greek ] = "Λάθος έκδοση του αρχείο διαμόρφωσης.";
     Message[ korean ] = "κµ¬μ„± νμΌμ λ²„μ „μ΄ ν‹€λ¦½λ‹λ‹¤.";
     Message[ turkish ] = "Konfigόrasyon dosyasύnύn sόrόmό yanlύώ.";
     Message[ language_user1 ] = " ";
@@ -2618,10 +2618,10 @@ String STR_EVENT_CLOSEDOC
     Text[ catalan ] = "Tanca el document";
     Text[ finnish ] = "Sulje asiakirja";
     Text[ thai ] = "ΰΈ›ΰΈ΄ΰΈ”ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£";
-    Text[ czech ] = "ZavΕ™Γ­t dokument";
+    Text[ czech ] = "ZavΓ­rΓ΅m dokument";
     Text[ hebrew ] = "β€®Χ΅Χ’Χ™Χ¨Χª ΧΧ΅ΧΧβ€¬";
     Text[ hindi ] = "ΰ¤²ΰ¥‡ΰ¤–ΰ¤ªΰ¤¤ΰ¥ΰ¤° ΰ¤¬ΰ¤¨ΰ¥ΰ¤¦ ΰ¤•ΰ¤°ΰ¥‹";
-    Text[ slovak ] = "ZatvoriΕ¥ dokument";
+    Text[ slovak ] = "Dokument sa zatvΓ΅ra";
 };
 
 String STR_EVENT_PREPARECLOSEDOC
@@ -2945,6 +2945,22 @@ String STR_EVENT_MODIFYCHANGED
     Text[ korean ] = "'μμ • λ‚ μ§'μ μƒνƒκ°€ λ³€κ²½λ¨";
     Text[ chinese_simplified ] = "η¶ζ€'ε·²ζ›΄ζ”Ή'ε·²η»ζ›΄ζ”Ήγ€‚";
     Text[ chinese_traditional ] = "η‹€ζ…‹ [ε·²θ®ζ›΄] ε·²η¶“θ®ζ›΄γ€‚";
+    Text[ greek ] = "'Modified' status was changed";
+    Text[ dutch ] = "'Modified' status was changed";
+    Text[ finnish ] = "'Modified' status was changed";
+    Text[ czech ] = "Stav 'ModifikovΓ΅n' byl zmΔ›nΔ›n";
+    Text[ danish ] = "'Modified' status was changed";
+    Text[ arabic ] = "'Modified' status was changed";
+    Text[ hebrew ] = "'Modified' status was changed";
+    Text[ catalan ] = "'Modified' status was changed";
+    Text[ hindi ] = "'Modified' status was changed";
+    Text[ portuguese ] = "'Modified' status was changed";
+    Text[ russian ] = "'Modified' status was changed";
+    Text[ slovak ] = "'Modified' status bol zmenenΓ½";
+    Text[ polish ] = "'Modified' status was changed";
+    Text[ portuguese_brazilian ] = "'Modified' status was changed";
+    Text[ turkish ] = "'Modified' status was changed";
+    Text[ thai ] = "'Modified' status was changed";
 };
 
 String STR_ERR_NOTEMPLATE
@@ -3479,7 +3495,7 @@ String RID_ENVTOOLBOX
     Text[ czech ] = "Panel funkcΓ­";
     Text[ hebrew ] = "β€®Χ΅Χ¨Χ’Χ Χ¤ΧΆΧ•ΧΧ•Χª Χ Χ¤Χ•Χ¦Χ•Χªβ€¬";
     Text[ hindi ] = "ΰ¤«ΰ¤‚ΰ¤•ΰ¥ΰ¤¶ΰ¤¨ΰ¥ ΰ¤ªΰ¤ΰ¥ΰ¤ΰ¥€";
-    Text[ slovak ] = "Panel funkciΓ­Β­";
+    Text[ slovak ] = "Panel funkciΓ­";
 };
 
 ToolBox RID_ENVTOOLBOX
@@ -4887,6 +4903,20 @@ String RID_INVALID_URL_TITLE
     Text[ hindi ] = "ΰ¤‡ΰ¤¶ΰ¤Ύΰ¤°ΰ¤Ύ";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
