@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:33:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_eWeight( weight::Unknown ),
         m_ePitch( pitch::Unknown ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
+        m_bFontEncodingOnly( false ),
         m_pMetrics( NULL ),
         m_nAscend( 0 ),
         m_nDescend( 0 ),
@@ -509,13 +510,20 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     // fill in global info
 
     // family name (if not already set)
+    OUString aFamily;
     if( ! m_nFamilyName )
     {
-        OUString aFamily( OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 ) );
+        aFamily = OUString( OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 ) );
         if( ! aFamily.getLength() )
+        {
             aFamily = OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 );
+            sal_Int32 nIndex  = 0;
+            aFamily = aFamily.getToken( 0, '-', nIndex );
+        }
         m_nFamilyName = pProvider->getAtom( ATOM_FAMILYNAME, aFamily, sal_True );
     }
+    else
+        aFamily = pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName );
 
     // PSName
     OUString aPSName( OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 ) );
@@ -536,13 +544,33 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_ePitch = pInfo->gfi->isFixedPitch ? pitch::Fixed : pitch::Variable;
 
     // encoding - only set if unknown
+    int nAdobeEncoding = 0;
+    if( pInfo->gfi->encodingScheme )
+    {
+        if( !strcmp( pInfo->gfi->encodingScheme, "AdobeStandardEncoding" ) )
+            nAdobeEncoding = 1;
+        else if( !strcmp( pInfo->gfi->encodingScheme, "ISO10646-1" ) )
+        {
+            nAdobeEncoding = 1;
+            m_aEncoding = RTL_TEXTENCODING_UNICODE;
+        }
+        else if( !strcmp( pInfo->gfi->encodingScheme, "Symbol") )
+            nAdobeEncoding = 2;
+        else if( !strcmp( pInfo->gfi->encodingScheme, "FontSpecific") )
+            nAdobeEncoding = 3;
+
+        if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
+            m_aEncoding = nAdobeEncoding == 1 ?
+                RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_SYMBOL;
+    }
+    else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
+        m_aEncoding = RTL_TEXTENCODING_MS_1252;
+
     // try to parse the font name and decide wether it might be a
     // japanese font. Who invented this PITA ?
     OUString aPSNameLastToken( aPSName.copy( aPSName.lastIndexOf( '-' )+1 ) );
-    if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW &&
-        ( ! aPSNameLastToken.compareToAscii( "H" )    ||
-          ! aPSNameLastToken.compareToAscii( "V" ) )
-        )
+    if( ! aPSNameLastToken.compareToAscii( "H" )    ||
+        ! aPSNameLastToken.compareToAscii( "V" )  )
     {
         static const char* pEncs[] =
             {
@@ -567,7 +595,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                     break;
                 nOffset = 0;
                 if( ! aToken.compareToAscii( pEncs[enc] ) )
+                {
                     m_aEncoding = aEncs[ enc ];
+                    m_bFontEncodingOnly = true;
+                }
             } while( nIndex != -1 );
         }
 
@@ -578,22 +609,23 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         fprintf( stderr, "Encoding %d for %s\n", m_aEncoding, pInfo->gfi->fontName );
 #endif
     }
-    int nAdobeEncoding = 0;
-    if( pInfo->gfi->encodingScheme )
-    {
-        if( !strcmp( pInfo->gfi->encodingScheme, "AdobeStandardEncoding" ) )
-            nAdobeEncoding = 1;
-        else if( !strcmp( pInfo->gfi->encodingScheme, "Symbol") )
-            nAdobeEncoding = 2;
-        else if( !strcmp( pInfo->gfi->encodingScheme, "FontSpecific") )
-            nAdobeEncoding = 3;
 
-        if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-            m_aEncoding = nAdobeEncoding == 1 ?
-                RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_SYMBOL;
+    // hack for GB encoded builtin fonts posing as FontSpecific
+    if( m_eType == fonttype::Builtin && ( nAdobeEncoding == 3 || nAdobeEncoding == 0 ) )
+    {
+        int nLen = aFamily.getLength();
+        if( nLen > 2 &&
+            aFamily.getStr()[ nLen-2 ] == 'G' &&
+            aFamily.getStr()[ nLen-1 ] == 'B' &&
+            pInfo->numOfChars > 255 )
+        {
+            m_aEncoding = RTL_TEXTENCODING_GBK;
+            m_bFontEncodingOnly = true;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "found builtin font %s with GBK encoding\n", pInfo->gfi->fontName );
+#endif
+        }
     }
-    else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-        m_aEncoding = RTL_TEXTENCODING_MS_1252;
 
     // ascend
     m_nAscend = pInfo->gfi->fontBBox.ury;
@@ -647,6 +679,12 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 continue;
             }
 
+            if( m_aEncoding == RTL_TEXTENCODING_UNICODE )
+            {
+                pUnicodes[i] = (sal_Unicode)pChar->code;
+                continue;
+            }
+
             ByteString aTranslate;
             if( pChar->code & 0xff000000 )
                 aTranslate += (char)(pChar->code >> 24 );
@@ -673,18 +711,15 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
         if( bFillEncodingvector && pChar->name )
         {
-            std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-                std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator >
-                aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-            while( aCodes.first != aCodes.second )
+            std::list< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+            for( std::list< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
             {
-                if( (*aCodes.first).second != 0 )
+                if( *it != 0 )
                 {
-                    m_aEncodingVector[ (*aCodes.first).second ] = pChar->code;
+                    m_aEncodingVector[ *it ] = pChar->code;
                     if( pChar->code == -1 )
-                        m_aNonEncoded[ (*aCodes.first).second ] = pChar->name;
+                        m_aNonEncoded[ *it ] = pChar->name;
                 }
-                ++aCodes.first;
             }
         }
 
@@ -705,14 +740,11 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
             }
             else if( pChar->name )
             {
-                std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-                    std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator >
-                      aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                while( aCodes.first != aCodes.second )
+                std::list< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+                for( std::list< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
                 {
-                    if( (*aCodes.first).second != 0 )
-                        m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
-                    ++aCodes.first;
+                    if( *it != 0 )
+                        m_pMetrics->m_aMetrics[ *it ] = aMetric;
                 }
             }
         }
@@ -720,14 +752,11 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         {
             if( pChar->name )
             {
-                ::std::pair< ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator,
-                      ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator >
-                      aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
-                while( aCodes.first != aCodes.second )
+                std::list< sal_Unicode > aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+                for( std::list< sal_Unicode >::const_iterator it = aCodes.begin(); it != aCodes.end(); ++it )
                 {
-                    if( (*aCodes.first).second != 0 )
-                        m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
-                    ++aCodes.first;
+                    if( *it != 0 )
+                        m_pMetrics->m_aMetrics[ *it ] = aMetric;
                 }
             }
             else if( pChar->code != -1 )
@@ -3321,3 +3350,49 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 
     return pFont->m_aEncodingVector.size() ? &pFont->m_aEncodingVector : NULL;
 }
+
+// -------------------------------------------------------------------------
+
+std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const
+{
+    std::pair< std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator,
+        std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator > range
+        =  m_aUnicodeToAdobename.equal_range( aChar );
+
+    std::list< OString > aRet;
+    for( ; range.first != range.second; ++range.first )
+        aRet.push_back( range.first->second );
+
+    if( aRet.begin() == aRet.end() && aChar != 0 )
+    {
+        sal_Char aBuf[8];
+        snprintf( (char*)aBuf, sizeof( aBuf ), "uni%.4hX\0", aChar );
+        aRet.push_back( aBuf );
+    }
+
+    return aRet;
+}
+
+// -------------------------------------------------------------------------
+std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const rtl::OString& rName ) const
+{
+    std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
+        std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator > range
+        =  m_aAdobenameToUnicode.equal_range( rName );
+
+    std::list< sal_Unicode > aRet;
+    for( ; range.first != range.second; ++range.first )
+        aRet.push_back( range.first->second );
+
+    if( aRet.begin() == aRet.end() )
+    {
+        if( rName.getLength() == 7 && rName.indexOf( "uni" ) == 0 )
+        {
+            sal_Unicode aCode = (sal_Unicode)rName.copy( 3 ).toInt32( 16 );
+            aRet.push_back( aCode );
+        }
+    }
+
+    return aRet;
+}
+
