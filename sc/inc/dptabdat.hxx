@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:08:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,15 @@ public:
 
     virtual void                    ResetIterator() = 0;
     virtual BOOL                    GetNextRow( const ScDPTableIteratorParam& rParam ) = 0;
+
+                                    // overloaded in ScDPGroupTableData:
+    virtual BOOL                    IsBaseForGroup(long nDim) const;
+    virtual long                    GetGroupBase(long nGroupDim) const;
+    virtual BOOL                    IsNumOrDateGroup(long nDim) const;
+    virtual BOOL                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+                                               const ScDPItemData& rBaseData, long nBaseIndex ) const;
+    virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+                                                      const ScDPItemData& rSecondData, long nSecondIndex ) const;
 };
 
 
