@@ -1,0 +1,10 @@
+mkdir: %_DEST%\inc%_EXT%\npsdk
+
+..\%__SRC%\misc\build\mozilla\include\*.h %_DEST%\inc%_EXT%\npsdk\*.h
+..\%__SRC%\misc\build\mozilla\sun-java\stubs\include\*.h %_DEST%\inc%_EXT%\npsdk\*.h
+
+..\%__SRC%\slo\npunix.o %_DEST%\lib%_EXT%\npunix.o
+..\%__SRC%\slo\npunix.obj %_DEST%\lib%_EXT%\npunix.obj
+..\%__SRC%\slo\npwin.obj %_DEST%\lib%_EXT%\npwin.obj
+..\%__SRC%\slo\npmac.o %_DEST%\lib%_EXT%\npmac.o
+..\%__SRC%\slo\npmac.obj %_DEST%\lib%_EXT%\npmac.obj

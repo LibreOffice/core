@@ -1,0 +1,2 @@
+np  np_sdk :	NULL
+np	np_sdk		nmake	-	all	np_sdk NULL
