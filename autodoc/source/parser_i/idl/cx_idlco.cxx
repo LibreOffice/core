@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_idlco.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:39:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ const UINT16 nTok_punct_DoubleColon = 700 + TokPunctuation::DoubleColon;
 const UINT16 nTok_punct_Comma = 700 + TokPunctuation::Comma;
 const UINT16 nTok_punct_Minus = 700 + TokPunctuation::Minus;
 const UINT16 nTok_punct_Fullstop = 700 + TokPunctuation::Fullstop;
+const UINT16 nTok_punct_Lesser = 700 + TokPunctuation::Lesser;
+const UINT16 nTok_punct_Greater = 700 + TokPunctuation::Greater;
 
 const UINT16 nTok_EOL = 801;
 const UINT16 nTok_EOF = 802;
@@ -360,8 +362,8 @@ Context_UidlCode::SetupStateMachine()
     const INT16 fbz = finBez;
     const INT16 fig = finIgn;
     const INT16 fof = finEOF;
-    const INT16 fkw = finKeyw;
-    const INT16 fpc = finPunct;
+//  const INT16 fkw = finKeyw;
+//  const INT16 fpc = finPunct;
 
     /// Die '0'en werden spaeter durch AddToken() ersetzt.
 
@@ -542,8 +544,8 @@ Context_UidlCode::SetupStateMachine()
                                                                 A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken("}",         nTok_punct_CurledBracketClose,
                                                                 A_nPunctDefStatus,      finPunct);
-    aStateMachine.AddToken("<",         0,                      A_nPunctDefStatus,      finIgn);
-    aStateMachine.AddToken(">",         0,                      A_nPunctDefStatus,      finIgn);
+    aStateMachine.AddToken("<",         nTok_punct_Lesser,      A_nPunctDefStatus,      finPunct);
+    aStateMachine.AddToken(">",         nTok_punct_Greater,     A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(";",         nTok_punct_Semicolon,   A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken(":",         nTok_punct_Colon,       A_nPunctDefStatus,      finPunct);
     aStateMachine.AddToken("::",        nTok_punct_DoubleColon, A_nPunctDefStatus,      finPunct);
