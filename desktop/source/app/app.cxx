@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-16 14:14:03 $
+ *  last change: $Author: cd $ $Date: 2002-08-27 09:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,6 @@ BOOL Desktop::QueryExit()
 {
     const sal_Char SUSPEND_QUICKSTARTVETO[] = "SuspendQuickstartVeto";
 
-    DBG_ERROR("QueryExit!");
     Reference< ::com::sun::star::frame::XDesktop >
             xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 UNO_QUERY );
