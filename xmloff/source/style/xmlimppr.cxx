@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-20 15:17:41 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 09:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
                 }
                 catch(...)
                 {
+                    DBG_ERROR("Exception caught; style may not be imported correctly.");
                 }
             }
         }
@@ -425,7 +426,14 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
         }
 
         // and, finally, set the values
-        xMultiPropSet->setPropertyValues( aNames, aValues );
+        try
+        {
+            xMultiPropSet->setPropertyValues( aNames, aValues );
+        }
+        catch ( ... )
+        {
+            DBG_ERROR("Exception caught; style may not be imported correctly.");
+        }
 
         delete pPropertyPairs;
     }
