@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:55:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 09:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,19 @@
 				<!-- UIHints: setup -->
 				<info>
 					<desc>Specifies the default file format for saving documents inside this office module.</desc>
-                </info>
-            </prop>
+                        </info>
+                        </prop>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
 					<desc>Specifies the short name of the factory.</desc>
+				</info>
+			</prop>
+                        <prop oor:name="ooSetupFactoryUIName" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+                                        <desc>Specifies the UI name of the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
