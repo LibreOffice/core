@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:30:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -80,6 +83,7 @@
 #include <svtools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #pragma hdrstop
 
@@ -97,6 +101,8 @@
 #include <sfxresid.hxx>
 #include <sfxuno.hxx>
 #include "doc.hrc"
+
+namespace css = ::com::sun::star;
 
 //========================================================================
 
@@ -604,9 +610,26 @@ void SfxObjectFactory::RegisterObjectFactory_Impl( SfxObjectFactory &rFac )
 
 String SfxObjectFactory::GetModuleName() const
 {
-    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
-    if ( SvtModuleOptions::ClassifyFactoryByName( GetDocumentServiceName(), eFac ) )
-        return SvtModuleOptions().GetModuleName( eFac );
-    else
-        return String();
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString PROP_MODULEUINAME         = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName");
+
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+        css::uno::Reference< css::container::XNameAccess > xModuleManager(
+            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
+            css::uno::UNO_QUERY_THROW);
+
+        ::rtl::OUString sDocService(GetDocumentServiceName());
+        ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );
+        ::rtl::OUString sModuleName = aPropSet.getUnpackedValueOrDefault(PROP_MODULEUINAME, ::rtl::OUString());
+        return String(sModuleName);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+
+    return String();
 }
