@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:12:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ inline Visual *SalColormap::GetXVisual() const
 inline int SalColormap::GetClass() const
 { return pVisual_ ? pVisual_->GetClass() : PseudoColor; }
 
-class SalX11Display : public SalDisplay
+class VCL_DLLPUBLIC SalX11Display : public SalDisplay
 {
 public:
              SalX11Display( Display* pDisp,
