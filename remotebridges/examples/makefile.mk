@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-26 14:12:07 $
+#   last change: $Author: hr $ $Date: 2000-11-13 15:58:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,8 @@ ALLIDLFILES = test_bridge.idl
 #CPPUMAKERFLAGS += -C
 
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
 
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc$/examples
