@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 07:54:09 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,8 +466,7 @@ throw ( RuntimeException )
             {
             }
 
-            if ( bCheckmark )
-                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, sal_True );
+            m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
         }
 
         if ( Event.Requery )
