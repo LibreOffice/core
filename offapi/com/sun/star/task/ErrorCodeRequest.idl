@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorCodeRequest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 /** represents a general error exception.
     It can be used to transport the error code information.
     E.g. that can be usefull for interactions.
+
+    @since #107627#
  */
 exception ErrorCodeRequest : com::sun::star::uno::Exception
 {
