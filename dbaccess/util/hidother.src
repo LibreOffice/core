@@ -2,9 +2,9 @@
 *
 *  $RCSfile: hidother.src,v $
 *
-*  $Revision: 1.57 $
+*  $Revision: 1.58 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-21 17:22:09 $
+*  last change: $Author: vg $ $Date: 2005-02-21 12:46:48 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -232,6 +232,8 @@ hidspecial HID_DSADMIN_PAGE_LDAP                        { HelpId = HID_DSADMIN_P
 hidspecial HID_DSADMIN_LDAP_HOSTNAME                    { HelpId = HID_DSADMIN_LDAP_HOSTNAME ; };
 hidspecial HID_DSADMIN_LDAP_BASEDN                      { HelpId = HID_DSADMIN_LDAP_BASEDN ; };
 hidspecial HID_DSADMIN_LDAP_PORTNUMBER                  { HelpId = HID_DSADMIN_LDAP_PORTNUMBER ; };
+hidspecial HID_DSADMIN_PAGE_MOZILLA                     { HelpId = HID_DSADMIN_PAGE_MOZILLA ; };
+hidspecial HID_DSADMIN_MOZILLA_PROFILE_NAME             { HelpId = HID_DSADMIN_MOZILLA_PROFILE_NAME ; };
 
 hidspecial HID_TAB_PAGE_USERADMIN                       { HelpId = HID_TAB_PAGE_USERADMIN ; };
 hidspecial HID_TAB_PAGE_PBUSER                          { HelpId = HID_TAB_PAGE_PBUSER ; };
