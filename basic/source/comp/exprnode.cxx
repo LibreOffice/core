@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void SbiExprNode::FoldConstants()
                 double nr = pRight->nVal;
                 long ll, lr;
                 long llMod, lrMod;
-                if( ( eTok >= AND && eTok <= EQV )
+                if( ( eTok >= AND && eTok <= IMP )
                    || eTok == IDIV || eTok == MOD )
                 {
                     // Integer-Operationen
