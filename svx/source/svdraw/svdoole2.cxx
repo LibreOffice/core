@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:15:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
+#include <com/sun/star/embed/XLinkageSupport.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
@@ -91,6 +94,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sfx2/lnkbase.hxx>
 #include <tools/stream.hxx>
 
 #ifndef _SVDPAGV_HXX
@@ -182,6 +186,83 @@ void SAL_CALL SdrEmbeddedObjectStateListener_Impl::disposing( const ::com::sun::
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class SdrEmbedObjectLink : public sfx2::SvBaseLink
+{
+    SdrOle2Obj*         pObj;
+
+public:
+                        SdrEmbedObjectLink(SdrOle2Obj* pObj);
+    virtual             ~SdrEmbedObjectLink();
+
+    virtual void        Closed();
+    virtual void        DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+
+    sal_Bool            Connect() { return GetRealObject() != NULL; }
+};
+
+// -----------------------------------------------------------------------------
+
+SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
+    pObj(pObject)
+{
+    SetSynchron( FALSE );
+}
+
+// -----------------------------------------------------------------------------
+
+SdrEmbedObjectLink::~SdrEmbedObjectLink()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrEmbedObjectLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
+{
+    if ( !pObj->UpdateLinkURL_Impl() )
+    {
+        // the link URL was not changed
+        uno::Reference< embed::XEmbeddedObject > xObject = pObj->GetObjRef();
+        OSL_ENSURE( xObject.is(), "The object must exist always!\n" );
+        if ( xObject.is() )
+        {
+            // let the object reload the link
+            // TODO/LATER: reload call could be used for this case
+
+            try
+            {
+                sal_Int32 nState = xObject->getCurrentState();
+                if ( nState == embed::EmbedStates::LOADED )
+                    xObject->changeState( embed::EmbedStates::RUNNING );
+                else
+                {
+                    // in some cases the linked file probably is not locked so it could be changed
+                    xObject->changeState( embed::EmbedStates::LOADED );
+                    xObject->changeState( nState );
+                }
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
+
+    pObj->GetNewReplacement();
+    pObj->SetChanged();
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrEmbedObjectLink::Closed()
+{
+    pObj->BreakFileLink_Impl();
+    SvBaseLink::Closed();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class SdrOle2ObjImpl
 {
 public:
@@ -193,7 +274,20 @@ public:
     // #107645#
     // New local var to avoid repeated loading if load of OLE2 fails
     sal_Bool        mbLoadingOLEObjectFailed;
-    bool            mbConnected;
+    sal_Bool        mbConnected;
+
+    SdrEmbedObjectLink* mpObjectLink;
+    String maLinkURL;
+
+    SdrOle2ObjImpl()
+    : pGraphicObject( NULL )
+    , mpObjectLink( NULL )
+    // #107645#
+    // init to start situation, loading did not fail
+    , mbLoadingOLEObjectFailed( sal_False )
+    , mbConnected( sal_False )
+    {
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,10 +391,6 @@ void SdrOle2Obj::Init()
     mpImpl->pGraphicObject=NULL;
     mpImpl->pStateListener = 0;
 
-    // #107645#
-    // init to start situation, loading did not fail
-    mpImpl->mbLoadingOLEObjectFailed = sal_False;
-    mpImpl->mbConnected = false;
     xObjRef.Lock( TRUE );
 }
 
@@ -324,6 +414,8 @@ SdrOle2Obj::~SdrOle2Obj()
         pModifyListener->invalidate();
         pModifyListener->release();
     }
+
+    DisconnectFileLink_Impl();
 
     if ( mpImpl->pStateListener )
         mpImpl->pStateListener->Release();
@@ -383,6 +475,131 @@ void SdrOle2Obj::Connect()
     AddListeners_Impl();
 }
 
+// -----------------------------------------------------------------------------
+
+sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
+{
+    sal_Bool bResult = sal_False;
+
+    if ( mpImpl->mpObjectLink )
+    {
+        SvxLinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+        if ( pLinkManager )
+        {
+            String aNewLinkURL;
+            pLinkManager->GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+            if ( !aNewLinkURL.EqualsIgnoreCaseAscii( mpImpl->maLinkURL ) )
+            {
+                const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
+                uno::Reference< embed::XCommonEmbedPersist > xPersObj( xObjRef.GetObject(), uno::UNO_QUERY );
+                OSL_ENSURE( xPersObj.is(), "The object must exist!\n" );
+                if ( xPersObj.is() )
+                {
+                    try
+                    {
+                        sal_Int32 nCurState = xObjRef->getCurrentState();
+                        if ( nCurState != embed::EmbedStates::LOADED )
+                            xObjRef->changeState( embed::EmbedStates::LOADED );
+
+                        // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
+                        uno::Sequence< beans::PropertyValue > aArgs( 1 );
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                        aArgs[0].Value <<= ::rtl::OUString( aNewLinkURL );
+                        xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
+
+                        mpImpl->maLinkURL = aNewLinkURL;
+                        bResult = sal_True;
+
+                        if ( nCurState != embed::EmbedStates::LOADED )
+                            xObjRef->changeState( nCurState );
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
+                if ( !bResult )
+                {
+                    // TODO/LATER: return the old name to the link manager, is it possible?
+                }
+            }
+        }
+    }
+
+    return bResult;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::BreakFileLink_Impl()
+{
+
+    SfxObjectShell* pPers = pModel ? pModel->GetPersist() : NULL;
+
+    if ( pPers )
+    {
+        uno::Reference< embed::XStorage > xStorage = pPers->GetStorage();
+        if ( xStorage.is() )
+        {
+            try
+            {
+                uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY_THROW );
+                xLinkSupport->breakLink( xStorage, mpImpl->aPersistName );
+                DisconnectFileLink_Impl();
+                mpImpl->maLinkURL = String();
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::DisconnectFileLink_Impl()
+{
+    SvxLinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+    if ( pLinkManager && mpImpl->mpObjectLink )
+    {
+        pLinkManager->Remove( mpImpl->mpObjectLink );
+        mpImpl->mpObjectLink = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::CheckFileLink_Impl()
+{
+    if ( pModel && xObjRef.GetObject().is() && !mpImpl->mpObjectLink )
+    {
+        try
+        {
+            uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY_THROW );
+            if ( xLinkSupport->isLink() )
+            {
+                String aLinkURL = xLinkSupport->getLinkURL();
+                if ( aLinkURL.Len() )
+                {
+                    // this is a file link so the model link manager should handle it
+                    SvxLinkManager* pLinkManager = pModel->GetLinkManager();
+                    if ( pLinkManager )
+                    {
+                        mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
+                        mpImpl->maLinkURL = aLinkURL;
+                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
+                        mpImpl->mpObjectLink->Connect();
+                    }
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void SdrOle2Obj::Reconnect_Impl()
 {
     DBG_ASSERT( mpImpl->mbConnected, "Assigned unconnected object?!" );
@@ -432,6 +649,8 @@ void SdrOle2Obj::Connect_Impl()
             xObjRef->addStateChangeListener ( mpImpl->pStateListener );
             if ( xObjRef->getCurrentState() != embed::EmbedStates::LOADED )
                 GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
+
+            CheckFileLink_Impl();
         }
     }
 
@@ -544,6 +763,7 @@ void SdrOle2Obj::Disconnect_Impl()
                 comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
                 xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
                 rContainer.RemoveEmbeddedObject( xObjRef.GetObject(), sal_False);
+                DisconnectFileLink_Impl();
             }
         }
     }
@@ -584,11 +804,18 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
         if ( xObj.is() )
         {
-            pDestPers->GetEmbeddedObjectContainer().MoveEmbeddedObject( pSrcPers->GetEmbeddedObjectContainer(), xObj, aTmp );
+            pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
+
+            if ( xObjRef.is() )
+            {
+                // if the object already assigned to the helper the new one must be assigned
+                xObjRef.Clear();
+            }
+
             mpImpl->aPersistName = aTmp;
         }
 
-        DBG_ASSERT( aTmp.getLength(), "Moving embedded object failed!" );
+        DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
     }
 
     SdrRectObj::SetModel( pNewModel );
@@ -938,6 +1165,7 @@ void SdrOle2Obj::ImpCopyObject( SfxObjectShell* pSrcPersist, SfxObjectShell* pDs
         ::rtl::OUString aTmp;
         pDstPersist->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
         rPersistName = aTmp;
+        CheckFileLink_Impl();
     }
 }
 
@@ -1214,6 +1442,7 @@ void SdrOle2Obj::GetObjRef_Impl()
         if(!mpImpl->mbLoadingOLEObjectFailed)
         {
             xObjRef.Assign( pModel->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( mpImpl->aPersistName ) );
+            CheckFileLink_Impl();
 
             // #107645#
             // If loading of OLE object failed, remember that to not invoke a endless
