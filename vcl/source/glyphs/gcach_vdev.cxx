@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-17 09:07:44 $
+ *  last change: $Author: hdu $ $Date: 2000-11-17 09:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <bitmap.hxx>
 #include <outfont.hxx>
 #include <virdev.hxx>
+#include <metric.hxx>
 
 // =======================================================================
 // VirtDevServerFont
@@ -104,9 +105,40 @@ VirtDevServerFont::VirtDevServerFont( const ImplFontSelectData& rFSD )
 
 // -----------------------------------------------------------------------
 
-void VirtDevServerFont::FetchFontMetric( ImplFontMetricData&, long& rFactor ) const
+void VirtDevServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
-    // TODO
+    const ImplFontSelectData& aFSD = GetFontSelData();
+
+    Font aFont;
+    aFont.SetName       ( aFSD.maName );
+    aFont.SetStyleName  ( aFSD.maStyleName );
+    aFont.SetHeight     ( aFSD.mnHeight );
+    aFont.SetWidth      ( aFSD.mnWidth );
+    aFont.SetOrientation( aFSD.mnOrientation );
+
+    VirtualDevice vdev( 1 );
+    FontMetric aMetric( vdev.GetFontMetric( aFont ) );
+
+    rFactor = 1;
+
+    rTo.mnWidth         = aFSD.mnWidth;
+    rTo.mnAscent        = aMetric.GetAscent();
+    rTo.mnDescent       = aMetric.GetDescent();
+    rTo.mnLeading       = aMetric.GetLeading();
+    rTo.mnSlant         = aMetric.GetSlant();
+    rTo.meType          = aMetric.GetType();
+    rTo.mnFirstChar     = 0x0020;   // TODO: where to get this info
+    rTo.mnLastChar      = 0xFFFE;   // TODO: where to get this info
+
+    rTo.maName          = aFSD.maName;
+    rTo.maStyleName     = aFSD.maStyleName;
+    rTo.mnOrientation   = aFSD.mnOrientation;
+    rTo.meFamily        = aFSD.meFamily;
+    rTo.meCharSet       = aFSD.meCharSet;
+    rTo.meWeight        = aFSD.meWeight;
+    rTo.meItalic        = aFSD.meItalic;
+    rTo.mePitch         = aFSD.mePitch;
+    rTo.mbDevice        = FALSE;
 }
 
 // -----------------------------------------------------------------------
