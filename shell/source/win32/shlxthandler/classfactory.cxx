@@ -2,9 +2,9 @@
  *
  *  $RCSfile: classfactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-26 10:53:56 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,28 +59,28 @@
  *
  ************************************************************************/
 
-#ifndef _GLOBAL_HXX_
-#include "global.hxx"
+#ifndef GLOBAL_HXX_INCLUDED
+#include "internal/global.hxx"
 #endif
 
-#ifndef _CLASSFACTORY_HXX_
+#ifndef CLASSFACTORY_HXX_INCLUDED
 #include "classfactory.hxx"
 #endif
 
-#ifndef _INFOTIP_HXX_
-#include "infotip.hxx"
+#ifndef INFOTIPS_HXX_INCLUDED
+#include "internal/infotips.hxx"
 #endif
 
-#ifndef _PROPSHTHDL_HXX_
-#include "propshthdl.hxx"
+#ifndef PROPSHEETS_HXX_INCLUDED
+#include "internal/propsheets.hxx"
 #endif
 
-#ifndef _COLUMNPROVIDER_HXX_
-#include "columnprovider.hxx"
+#ifndef COLUMNINFO_HXX_INCLUDED
+#include "internal/columninfo.hxx"
 #endif
 
-#ifndef _SHLXTHDL_HXX_
-#include "shlxthdl.hxx"
+#ifndef SHLXTHDL_HXX_INCLUDED
+#include "internal/shlxthdl.hxx"
 #endif
 
 //-----------------------------
@@ -166,21 +166,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     IUnknown* pUnk = 0;
 
     if (CLSID_PROPERTYSHEET_HANDLER == m_Clsid)
-        pUnk = static_cast<IShellExtInit*>(new CPropertySheetHandler());
-
-#ifdef BUILD_SOSL
+        pUnk = static_cast<IShellExtInit*>(new CPropertySheet());
 
     else if (CLSID_INFOTIP_HANDLER == m_Clsid)
         pUnk = static_cast<IQueryInfo*>(new CInfoTip());
 
-#endif
-
-#if defined(_WINXPSDK) && (BUILD_SOSL)
-
     else if (CLSID_COLUMN_HANDLER == m_Clsid)
-        pUnk = static_cast<IColumnProvider*>(new CColumnProvider());
-
-#endif
+        pUnk = static_cast<IColumnProvider*>(new CColumnInfo());
 
     POST_CONDITION(pUnk != 0, "Could not create COM object");
 
