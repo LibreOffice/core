@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2001-05-14 12:35:16 $
+#   last change: $Author: fs $ $Date: 2001-06-15 12:50:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,15 @@ TARGET=browse
 
 # --- Files --------------------------------------------------------
 
+IMGLST_SRS=$(SRS)$/browse.srs
+BMP_IN=$(PRJ)$/res
+
+SRCFILES=		editbrowsebox.src
+
+
 SLOFILES=   \
+            $(SLO)$/ebbcontrols.obj  \
+            $(SLO)$/editbrowsebox.obj  \
             $(SLO)$/brwbox1.obj  \
             $(SLO)$/brwbox2.obj  \
             $(SLO)$/brwhead.obj  \
