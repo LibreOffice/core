@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:04:55 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -2452,4 +2451,45 @@ void SwDoc::checkRedlining(SwRedlineMode& _rReadlineMode)
     }
 }
 // -----------------------------------------------------------------------------
+
+void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
+{
+    // This is a modified version of SwDoc::TransliterateText
+    const SwPosition* pStt = rPaM.Start();
+    const SwPosition* pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
+                                                     : rPaM.GetPoint();
+
+    const ULONG nSttNd = pStt->nNode.GetIndex();
+    const ULONG nEndNd = pEnd->nNode.GetIndex();
+
+    const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
+    const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();
+
+    const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+    if( pStt == pEnd && pTNd )                  // no region ?
+    {
+        // do nothing
+        return;
+    }
+
+    if( nSttNd != nEndNd )
+    {
+        SwNodeIndex aIdx( pStt->nNode );
+        if( nSttCnt )
+        {
+            aIdx++;
+            if( pTNd )
+                pTNd->CountWords( rStat, nSttCnt, pTNd->GetTxt().Len() );
+        }
+
+        for( ; aIdx.GetIndex() < nEndNd; aIdx++ )
+            if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
+                pTNd->CountWords( rStat, 0, pTNd->GetTxt().Len() );
+
+        if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTxtNode() ))
+            pTNd->CountWords( rStat, 0, nEndCnt );
+    }
+    else if( pTNd && nSttCnt < nEndCnt )
+        pTNd->CountWords( rStat, nSttCnt, nEndCnt );
+}
 
