@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:23:43 $
+ *  last change: $Author: tl $ $Date: 2001-10-08 11:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,42 @@ Resource RID_LOCALIZED_NAMES
             < "zêta" ; > ;
             < "varrhô" ; > ;
             < "varthêta" ; > ;
+        };
+    };
+    StringArray RID_ITALIAN_50_NAMES
+    {
+        ItemList =
+        {
+            < "Nu" ; > ;
+            < "nu" ; > ;
+            < "varrho" ; > ;
+            < "moltomaggioredi" ; > ;
+            < "indentico" ; > ;
+            < "nonelemento" ; > ;
+            < "moltoinferioredi" ; > ;
+            < "o" ; > ;
+            < "permille" ; > ;
+            < "tendentea" ; > ;
+            < "nonuguale" ; > ;
+            < "infinite" ; > ;
+        };
+    };
+    StringArray RID_ITALIAN_60_NAMES
+    {
+        ItemList =
+        {
+            < "Ni" ; > ;
+            < "ni" ; > ;
+            < "varro" ; > ;
+            < "molto_maggiore_di" ; > ;
+            < "identico" ; > ;
+            < "non_elemento" ; > ;
+            < "molto_minore_di" ; > ;
+            < "oppure" ; > ;
+            < "per_mille" ; > ;
+            < "tendente_a" ; > ;
+            < "non_uguale" ; > ;
+            < "infinito" ; > ;
         };
     };
     StringArray RID_EXPORT_SYMBOLSET_NAMES

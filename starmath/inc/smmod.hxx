@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
+ *  last change: $Author: tl $ $Date: 2001-10-08 11:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #define _SM_DLL             // fuer SD_MOD()
 #include "smdll.hxx"        // fuer SdModuleDummy
 #endif
+#ifndef _STARMATH_HRC
+#include "starmath.hrc"
+#endif
 
 class SvxErrorHandler;
 class SvFactory;
@@ -94,14 +97,36 @@ class SvtSysLocale;
 
 /////////////////////////////////////////////////////////////////
 
+class SmNamesArray : public Resource
+{
+    ResStringArray      aNamesAry;
+    LanguageType        nLanguage;
+
+public:
+    SmNamesArray( LanguageType nLang, int nRID ) :
+        Resource( SmResId(RID_LOCALIZED_NAMES) ),
+        nLanguage   (nLang),
+        aNamesAry   (ResId(nRID))
+    {
+        FreeResource();
+    }
+
+    LanguageType            GetLanguage() const     { return nLanguage; }
+    const ResStringArray&   GetNamesArray() const   { return aNamesAry; }
+};
+
+/////////////////////////////////////////////////////////////////
+
 class SmLocalizedSymbolData : public Resource
 {
     ResStringArray      aUiSymbolNamesAry;
     ResStringArray      aExportSymbolNamesAry;
     ResStringArray      aUiSymbolSetNamesAry;
     ResStringArray      aExportSymbolSetNamesAry;
-    ResStringArray      aFrench50NamesAry;
-    ResStringArray      aFrench60NamesAry;
+    SmNamesArray       *p50NamesAry;
+    SmNamesArray       *p60NamesAry;
+    LanguageType        n50NamesLang;
+    LanguageType        n60NamesLang;
 
 public:
     SmLocalizedSymbolData();
@@ -117,8 +142,8 @@ public:
     const String          GetUiSymbolSetName( const String &rExportName ) const;
     const String          GetExportSymbolSetName( const String &rUiName ) const;
 
-    const ResStringArray& GetFrench50NamesArray() const     { return aFrench50NamesAry; }
-    const ResStringArray& GetFrench60NamesArray() const     { return aFrench60NamesAry; }
+    const ResStringArray* Get50NamesArray( LanguageType nLang );
+    const ResStringArray* Get60NamesArray( LanguageType nLang );
 };
 
 /////////////////////////////////////////////////////////////////
@@ -146,7 +171,7 @@ public:
     SmConfig *          GetConfig();
     SmRectCache *       GetRectCache()     { return pRectCache; }
 
-    const SmLocalizedSymbolData &   GetLocSymbolData() const;
+    SmLocalizedSymbolData &   GetLocSymbolData() const;
 
     void GetState(SfxItemSet&);
 

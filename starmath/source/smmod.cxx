@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
+ *  last change: $Author: tl $ $Date: 2001-10-08 11:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,10 @@ SmLocalizedSymbolData::SmLocalizedSymbolData() :
     aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) ),
     aUiSymbolSetNamesAry    ( ResId(RID_UI_SYMBOLSET_NAMES) ),
     aExportSymbolSetNamesAry( ResId(RID_EXPORT_SYMBOLSET_NAMES) ),
-    aFrench50NamesAry       ( ResId(RID_FRENCH_50_NAMES) ),
-    aFrench60NamesAry       ( ResId(RID_FRENCH_60_NAMES) )
+    p50NamesAry             ( 0 ),
+    p60NamesAry             ( 0 ),
+    n50NamesLang            ( LANGUAGE_NONE ),
+    n60NamesLang            ( LANGUAGE_NONE )
 {
     FreeResource();
 }
@@ -139,6 +141,8 @@ SmLocalizedSymbolData::SmLocalizedSymbolData() :
 
 SmLocalizedSymbolData::~SmLocalizedSymbolData()
 {
+    delete p50NamesAry;
+    delete p60NamesAry;
 }
 
 
@@ -226,6 +230,49 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
 }
 
 
+const ResStringArray* SmLocalizedSymbolData::Get50NamesArray( LanguageType nLang )
+{
+    if (nLang != n50NamesLang)
+    {
+        int nRID;
+        switch (nLang)
+        {
+            case LANGUAGE_FRENCH    : nRID = RID_FRENCH_50_NAMES;  break;
+            case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_50_NAMES;  break;
+            default                 : nRID = -1;  break;
+        }
+        delete p50NamesAry;
+        p50NamesAry = 0;
+        n50NamesLang = nLang;
+        if (-1 != nRID)
+            p50NamesAry = new SmNamesArray( n50NamesLang, nRID );
+    }
+
+    return p50NamesAry ? &p50NamesAry->GetNamesArray() : 0;
+}
+
+
+const ResStringArray* SmLocalizedSymbolData::Get60NamesArray( LanguageType nLang )
+{
+    if (nLang != n60NamesLang)
+    {
+        int nRID;
+        switch (nLang)
+        {
+            case LANGUAGE_FRENCH    : nRID = RID_FRENCH_60_NAMES;  break;
+            case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_60_NAMES;  break;
+            default                 : nRID = -1;  break;
+        }
+        delete p60NamesAry;
+        p60NamesAry = 0;
+        n60NamesLang = nLang;
+        if (-1 != nRID)
+            p60NamesAry = new SmNamesArray( n60NamesLang, nRID );
+    }
+
+    return p60NamesAry ? &p60NamesAry->GetNamesArray() : 0;
+}
+
 /////////////////////////////////////////////////////////////////
 
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
@@ -266,7 +313,7 @@ SmConfig * SmModule::GetConfig()
     return pConfig;
 }
 
-const SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
+SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
 {
     if (!pLocSymbolData)
         ((SmModule *) this)->pLocSymbolData = new SmLocalizedSymbolData;

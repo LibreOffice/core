@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-10-08 11:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,19 +690,24 @@ void SmDocShell::Convert40To50Txt( String &rText )
 
 void SmDocShell::Convert50To60Txt( String &rText )
 {
-    // change french 50 symbol-names to their 60 equivalent
-    // even in strings ("") and comments (%%).
-    // Thus a simple text replacement should work.
-    if (LANGUAGE_FRENCH == Application::GetSettings().GetUILanguage())
+    // change 50 symbol-names to their 60 equivalent
+    LanguageType nLang = Application::GetSettings().GetUILanguage();
+    SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray *p50Names = rData.Get50NamesArray( nLang );
+    const ResStringArray *p60Names = rData.Get60NamesArray( nLang );
+    if (p50Names  &&  p60Names)
     {
-        const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
-        const ResStringArray &rFrench50 = rData.GetFrench50NamesArray();
-        const ResStringArray &rFrench60 = rData.GetFrench60NamesArray();
-        USHORT nCount = rFrench50.Count();
+        DBG_ASSERT( p50Names->Count() == p60Names->Count(),
+                "array length mismatch" );
+        USHORT nCount = p50Names->Count();
+        String aPreSym( RTL_CONSTASCII_STRINGPARAM("%") );
         for (USHORT i = 0;  i < nCount;  ++i)
         {
-            rText.SearchAndReplaceAll( rFrench50.GetString(i),
-                                       rFrench60.GetString(i) );
+            String a50Tmp( aPreSym );
+            String a60Tmp( aPreSym );
+            a50Tmp += p50Names->GetString(i);
+            a60Tmp += p60Names->GetString(i);
+            rText.SearchAndReplaceAll( a50Tmp, a60Tmp );
         }
     }
 }
@@ -710,19 +715,24 @@ void SmDocShell::Convert50To60Txt( String &rText )
 
 void SmDocShell::Convert60To50Txt( String &rText )
 {
-    // change french 60 symbol-names to their 50 equivalent
-    // even in strings ("") and comments (%%).
-    // Thus a simple text replacement should work.
-    if (LANGUAGE_FRENCH == Application::GetSettings().GetUILanguage())
+    // change 50 symbol-names to their 60 equivalent
+    LanguageType nLang = Application::GetSettings().GetUILanguage();
+    SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray *p50Names = rData.Get50NamesArray( nLang );
+    const ResStringArray *p60Names = rData.Get60NamesArray( nLang );
+    if (p50Names  &&  p60Names)
     {
-        const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
-        const ResStringArray &rFrench50 = rData.GetFrench50NamesArray();
-        const ResStringArray &rFrench60 = rData.GetFrench60NamesArray();
-        USHORT nCount = rFrench60.Count();
+        DBG_ASSERT( p50Names->Count() == p60Names->Count(),
+                "array length mismatch" );
+        USHORT nCount = p60Names->Count();
+        String aPreSym( RTL_CONSTASCII_STRINGPARAM("%") );
         for (USHORT i = 0;  i < nCount;  ++i)
         {
-            rText.SearchAndReplaceAll( rFrench60.GetString(i),
-                                       rFrench50.GetString(i) );
+            String a50Tmp( aPreSym );
+            String a60Tmp( aPreSym );
+            a50Tmp += p50Names->GetString(i);
+            a60Tmp += p60Names->GetString(i);
+            rText.SearchAndReplaceAll( a60Tmp, a50Tmp );
         }
     }
 }
