@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:32:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLETOPWINDOWMAP_HPP_
-#include <drafts/com/sun/star/accessibility/bridge/XAccessibleTopWindowMap.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #endif
@@ -154,7 +151,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
-using namespace drafts::com::sun::star::accessibility::bridge;
 using namespace rtl;
 
 // =======================================================================
@@ -398,19 +394,17 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                     com::sun::star::uno::ContextLayer layer(
                         new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
-                    pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >(
-                        xFactory->createInstanceWithArguments(
+                    pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
                             OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
                             arguments
-                        ), UNO_QUERY );
+                        );
                 }
                 else
                 {
-                    pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >(
-                        xFactory->createInstanceWithArguments(
+                    pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
                             OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
                             arguments
-                        ), UNO_QUERY );
+                        );
                 }
 
                 if( !pSVData->mxAccessBridge.is() )
