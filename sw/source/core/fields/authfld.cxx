@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:30:31 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,10 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
     case FIELD_PROP_PAR1:
     case FIELD_PROP_PAR2:
         {
-            OUString sVal( FIELD_PROP_PAR1 == nMId ? m_cPrefix : m_cSuffix);
+            OUString sVal;
+            sal_Unicode uRet = FIELD_PROP_PAR1 == nMId ? m_cPrefix : m_cSuffix;
+            if(uRet)
+                sVal = OUString(uRet);
             rVal <<= sVal;
         }
         break;
@@ -656,14 +659,15 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, BYTE nMId )
     {
     case FIELD_PROP_PAR1:
     case FIELD_PROP_PAR2:
-        if( ::GetString( rAny, sTmp ).Len() )
-        {
-            if( FIELD_PROP_PAR1 == nMId )
-                m_cPrefix = sTmp.GetChar(0);
-            else
-                m_cSuffix = sTmp.GetChar(0);
-        }
-        break;
+    {
+        ::GetString( rAny, sTmp );
+        sal_Unicode uSet = sTmp.GetChar(0);
+        if( FIELD_PROP_PAR1 == nMId )
+            m_cPrefix = uSet;
+        else
+            m_cSuffix = uSet;
+    }
+    break;
     case FIELD_PROP_PAR3:
         SetSortAlgorithm( ::GetString( rAny, sTmp ));
         break;
@@ -790,7 +794,9 @@ SwAuthorityField::~SwAuthorityField()
 String  SwAuthorityField::Expand() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
-    String sRet(pAuthType->GetPrefix());
+    String sRet;
+    if(pAuthType->GetPrefix())
+        sRet.Assign(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
     {
@@ -803,7 +809,8 @@ String  SwAuthorityField::Expand() const
         if(pEntry)
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
-    sRet += pAuthType->GetSuffix();
+    if(pAuthType->GetSuffix())
+        sRet += pAuthType->GetSuffix();
     return sRet;
 }
 /*-- 14.09.99 16:21:00---------------------------------------------------

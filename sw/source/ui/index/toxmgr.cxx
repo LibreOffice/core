@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 13:13:02 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,22 +441,22 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 SwAuthorityFieldType* pFType = (SwAuthorityFieldType*)
                                                 pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
-                if(pFType)
-                {
-                    pFType->SetPreSuffix(rDesc.GetAuthBrackets().GetChar(0),
-                        rDesc.GetAuthBrackets().GetChar(1));
-                    pFType->SetSequence(rDesc.IsAuthSequence());
-                    SwTOXSortKey rArr[3];
-                    rArr[0] = rDesc.GetSortKey1();
-                    rArr[1] = rDesc.GetSortKey2();
-                    rArr[2] = rDesc.GetSortKey3();
-                    pFType->SetSortKeys(3, rArr);
-                    pFType->SetSortByDocument(rDesc.IsSortByDocument());
-                    pFType->SetLanguage(rDesc.GetLanguage());
-                    pFType->SetSortAlgorithm(rDesc.GetSortAlgorithm());
+                if(!pFType)
+                    pFType = (SwAuthorityFieldType*)pSh->InsertFldType(
+                                    SwAuthorityFieldType(pSh->GetDoc()));
+                pFType->SetPreSuffix(rDesc.GetAuthBrackets().GetChar(0),
+                    rDesc.GetAuthBrackets().GetChar(1));
+                pFType->SetSequence(rDesc.IsAuthSequence());
+                SwTOXSortKey rArr[3];
+                rArr[0] = rDesc.GetSortKey1();
+                rArr[1] = rDesc.GetSortKey2();
+                rArr[2] = rDesc.GetSortKey3();
+                pFType->SetSortKeys(3, rArr);
+                pFType->SetSortByDocument(rDesc.IsSortByDocument());
+                pFType->SetLanguage(rDesc.GetLanguage());
+                pFType->SetSortAlgorithm(rDesc.GetSortAlgorithm());
 
-                    pFType->UpdateFlds();
-                }
+                pFType->UpdateFlds();
             }
             // TODO: consider properties of the current TOXType
             if(!pCurTOX || (ppBase && !(*ppBase)))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:48:54 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,7 +2256,7 @@ TabPage TP_TOX_SELECT
     ListBox LB_BRACKET
     {
         Pos = MAP_APPFONT ( 75, 84) ;
-        Size = MAP_APPFONT ( 20, 50 ) ;
+        Size = MAP_APPFONT ( 40, 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
         StringList =
@@ -2266,6 +2266,11 @@ TabPage TP_TOX_SELECT
             < "{}" ;> ;
             < "<>" ;> ;
         };
+    };
+    String ST_NO_BRACKET
+    {
+        Text = "[keine]" ;
+        Text [ ENGLISH ] = "[none]" ;
     };
     FixedLine FL_AUTHORITY
     {

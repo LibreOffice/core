@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-23 08:14:14 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,8 +931,13 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     if(AUTH_FIELD_IDENTIFIER == nAuthField)
     {
         sText = pField->Expand();
-        sText.Erase(0, 1);
-        sText.Erase(sText.Len() - 1, 1);
+        const SwAuthorityFieldType* pType = (const SwAuthorityFieldType*)pField->GetTyp();
+        sal_Unicode cChar = pType->GetPrefix();
+        if(cChar && cChar != ' ')
+            sText.Erase(0, 1);
+        cChar = pType->GetSuffix();
+        if(cChar && cChar != ' ')
+            sText.Erase(sText.Len() - 1, 1);
     }
     else if(AUTH_FIELD_AUTHORITY_TYPE == nAuthField)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:06:11 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,8 +460,11 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                                                 rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
                 if(pFType)
                 {
-                    String sBrackets(pFType->GetPrefix());
-                    sBrackets += pFType->GetSuffix();
+                    String sBrackets;
+                    if(pFType->GetPrefix())
+                        sBrackets += pFType->GetPrefix();
+                    if(pFType->GetSuffix())
+                        sBrackets += pFType->GetSuffix();
                     pDescArr[nArrayIndex]->SetAuthBrackets(sBrackets);
                     pDescArr[nArrayIndex]->SetAuthSequence(pFType->IsSequence());
                 }
@@ -1101,6 +1104,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     bFirstCall(sal_True),
     pIndexRes(0)
 {
+    aBracketLB.InsertEntry(String(ResId(ST_NO_BRACKET)), 0);
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
@@ -1349,7 +1353,11 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
     {
-        aBracketLB.SelectEntry(rDesc.GetAuthBrackets());
+        String sBrackets(rDesc.GetAuthBrackets());
+        if(!sBrackets.Len() || sBrackets.EqualsAscii("  "))
+            aBracketLB.SelectEntryPos(0);
+        else
+            aBracketLB.SelectEntry(sBrackets);
         aSequenceCB.Check(rDesc.IsAuthSequence());
     }
     aAutoMarkPB.Enable(aFromFileCB.IsChecked());
@@ -1449,7 +1457,10 @@ void SwTOXSelectTabPage::FillTOXDescription()
         break;
         case TOX_AUTHORITIES:
         {
-            rDesc.SetAuthBrackets(aBracketLB.GetSelectEntry());
+            if(aBracketLB.GetSelectEntryPos())
+                rDesc.SetAuthBrackets(aBracketLB.GetSelectEntry());
+            else
+                rDesc.SetAuthBrackets(aEmptyStr);
             rDesc.SetAuthSequence(aSequenceCB.IsChecked());
         }
         break;
