@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-31 09:51:31 $
+ *  last change: $Author: nn $ $Date: 2001-10-04 19:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
         {
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
-            Size aOleSize = xIPObj->GetVisArea().GetSize();
+            Rectangle aVisArea = xIPObj->GetVisArea();
+            Size aOleSize = aVisArea.GetSize();
             aOleSize = OutputDevice::LogicToLogic( aOleSize,
                                                    xIPObj->GetMapUnit(), MAP_100TH_MM );
 
@@ -183,11 +184,29 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             aRect.SetSize( aOleSize );
             xClient->GetEnv()->SetObjArea( aRect );
 
-            Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-            Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-            aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-            aScaleHeight.ReduceInaccurate(10);
-            xClient->GetEnv()->SetSizeScale(aScaleWidth,aScaleHeight);
+            if ( xIPObj->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE )
+            {
+                //  scale must always be 1 - change VisArea if different from client size
+
+                if ( aDrawSize != aOleSize )
+                {
+                    aVisArea.SetSize( OutputDevice::LogicToLogic( aDrawSize,
+                                            MAP_100TH_MM, xIPObj->GetMapUnit() ) );
+                    xIPObj->SetVisArea( aVisArea );
+                }
+                Fraction aOne( 1, 1 );
+                xClient->GetEnv()->SetSizeScale( aOne, aOne );
+            }
+            else
+            {
+                //  calculate scale from client and VisArea size
+
+                Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
+                Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
+                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                aScaleHeight.ReduceInaccurate(10);
+                xClient->GetEnv()->SetSizeScale(aScaleWidth,aScaleHeight);
+            }
 
             ((ScClient*)(SfxInPlaceClient*)xClient)->SetGrafEdit( NULL );
 
