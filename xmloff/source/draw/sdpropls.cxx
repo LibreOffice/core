@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 17:06:23 $
+ *  last change: $Author: cl $ $Date: 2001-11-19 14:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ using namespace ::xmloff::token;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
-    MAP( "ShapeUserDefinedAttributes",      XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    MAP( "UserDefinedAttributes",           XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     // stroke attributes
     MAP( "LineStyle",                       XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 ),
