@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTables.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace ::cppu;
 using namespace connectivity::mozab;
 using namespace ::com::sun::star::uno;
@@ -115,7 +115,7 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
     // sal_Int32 nLen = _rName.indexOf('.');
@@ -132,7 +132,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
