@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:39:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,69 +109,66 @@ public class SingleSelectQueryComposer extends ComplexTestCase {
                 log.println("check getAvailableServiceNames");
         String[] sServiceNames = xConn.getAvailableServiceNames();
                 assure("Service 'SingleSelectQueryComposer' not supported" ,sServiceNames[0].equals("com.sun.star.sdb.SingleSelectQueryComposer"));
-                XSingleSelectQueryAnalyzer xQueryAna = (XSingleSelectQueryAnalyzer)
-                                            UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,xConn.createInstance( sServiceNames[0]));
+                XSingleSelectQueryComposer xComposerAndAnalyzer = (XSingleSelectQueryComposer)
+                                            UnoRuntime.queryInterface(XSingleSelectQueryComposer.class,xConn.createInstance( sServiceNames[0]));
 
                 log.println("check setQuery");
-                xQueryAna.setQuery("SELECT * FROM \"biblio\"");
-                assure("Query not identical", xQueryAna.getQuery().equals("SELECT * FROM \"biblio\""));
+                xComposerAndAnalyzer.setQuery("SELECT * FROM \"biblio\"");
+                assure("Query not identical", xComposerAndAnalyzer.getQuery().equals("SELECT * FROM \"biblio\""));
 
                 // XSingleSelectQueryComposer
-                XSingleSelectQueryComposer xComposer = (XSingleSelectQueryComposer)
-                        UnoRuntime.queryInterface(XSingleSelectQueryComposer.class,xQueryAna);
-
                 log.println("check setFilter");
                 // filter
-                xComposer.setFilter("\"Identifier\" = 'BOR02b'");
-                assure("Query not identical:" + xQueryAna.getFilter() + " -> \"Identifier\" = 'BOR02b'", xQueryAna.getFilter().equals("\"Identifier\" = 'BOR02b'"));
+                xComposerAndAnalyzer.setFilter("\"Identifier\" = 'BOR02b'");
+                assure("Query not identical:" + xComposerAndAnalyzer.getFilter() + " -> \"Identifier\" = 'BOR02b'", xComposerAndAnalyzer.getFilter().equals("\"Identifier\" = 'BOR02b'"));
 
                 log.println("check setGroup");
                 // group by
-                xComposer.setGroup("\"Identifier\"");
-                assure("Query not identical:" + xQueryAna.getGroup() + " -> \"Identifier\"", xQueryAna.getGroup().equals("\"Identifier\""));
+                xComposerAndAnalyzer.setGroup("\"Identifier\"");
+                assure("Query not identical:" + xComposerAndAnalyzer.getGroup() + " -> \"Identifier\"", xComposerAndAnalyzer.getGroup().equals("\"Identifier\""));
 
                 log.println("check setOrder");
                 // order by
-                xComposer.setOrder("\"Identifier\"");
-                assure("Query not identical:" + xQueryAna.getOrder() + " -> \"Identifier\"", xQueryAna.getOrder().equals("\"Identifier\""));
+                xComposerAndAnalyzer.setOrder("\"Identifier\"");
+                assure("Query not identical:" + xComposerAndAnalyzer.getOrder() + " -> \"Identifier\"", xComposerAndAnalyzer.getOrder().equals("\"Identifier\""));
 
                 log.println("check setHavingClause");
                 // having
-                xComposer.setHavingClause("\"Identifier\" = 'BOR02b'");
-                assure("Query not identical:" + xQueryAna.getHavingClause() + " -> \"Identifier\" = 'BOR02b'", xQueryAna.getHavingClause().equals("\"Identifier\" = 'BOR02b'"));
+                xComposerAndAnalyzer.setHavingClause("\"Identifier\" = 'BOR02b'");
+                assure("Query not identical:" + xComposerAndAnalyzer.getHavingClause() + " -> \"Identifier\" = 'BOR02b'", xComposerAndAnalyzer.getHavingClause().equals("\"Identifier\" = 'BOR02b'"));
 
                 log.println("check getOrderColumns");
                 // order by columns
-                XIndexAccess xOrderColumns = xQueryAna.getOrderColumns();
+                XIndexAccess xOrderColumns = xComposerAndAnalyzer.getOrderColumns();
                 assure("Order columns doesn't exist -> \"Identifier\"", xOrderColumns != null && xOrderColumns.getCount() == 1 && xOrderColumns.getByIndex(0) != null);
 
                 log.println("check getGroupColumns");
                 // group by columns
-                XIndexAccess xGroupColumns = xQueryAna.getGroupColumns();
+                XIndexAccess xGroupColumns = xComposerAndAnalyzer.getGroupColumns();
                 assure("Group columns doesn't exist -> \"Identifier\"", xGroupColumns != null && xGroupColumns.getCount() == 1 && xGroupColumns.getByIndex(0) != null);
 
                 log.println("check getColumns");
                 // XColumnsSupplier
                 XColumnsSupplier xSelectColumns = (XColumnsSupplier)
-                        UnoRuntime.queryInterface(XColumnsSupplier.class,xQueryAna);
+                        UnoRuntime.queryInterface(XColumnsSupplier.class,xComposerAndAnalyzer);
                 assure("Select columns doesn't exist", xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length != 0);
 
                 log.println("check structured filter");
                 // structured filter
-                xQueryAna.setQuery("SELECT \"Identifier\", \"Type\", \"Address\" FROM \"biblio\" \"biblio\"");
-                xComposer.setFilter(complexFilter);
-                PropertyValue[][] aStructuredFilter = xQueryAna.getStructuredFilter();
-                xComposer.setFilter("");
-                xComposer.setStructuredFilter(aStructuredFilter);
-                assure("Structured Filter not identical" , xQueryAna.getFilter().equals(complexFilter));
+                xComposerAndAnalyzer.setQuery("SELECT \"Identifier\", \"Type\", \"Address\" FROM \"biblio\" \"biblio\"");
+                xComposerAndAnalyzer.setFilter(complexFilter);
+                PropertyValue[][] aStructuredFilter = xComposerAndAnalyzer.getStructuredFilter();
+                xComposerAndAnalyzer.setFilter("");
+                xComposerAndAnalyzer.setStructuredFilter(aStructuredFilter);
+                assure("Structured Filter not identical" , xComposerAndAnalyzer.getFilter().equals(complexFilter));
 
                 log.println("check structured having");
                 // structured having clause
-                xComposer.setHavingClause(complexFilter);
-                PropertyValue[][] aStructuredHaving = xQueryAna.getStructuredHavingFilter();
-                xComposer.setHavingClause("");
-                xComposer.setStructuredHavingFilter(aStructuredHaving);
-                assure("Structured Having Clause not identical" , xQueryAna.getHavingClause().equals(complexFilter));
+                xComposerAndAnalyzer.setHavingClause(complexFilter);
+                PropertyValue[][] aStructuredHaving = xComposerAndAnalyzer.getStructuredHavingClause();
+                xComposerAndAnalyzer.setHavingClause("");
+                xComposerAndAnalyzer.setStructuredHavingClause(aStructuredHaving);
+                assure("Structured Having Clause not identical" , xComposerAndAnalyzer.getHavingClause().equals(complexFilter));
     }
     catch(Exception e)
     {
