@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2003-09-04 09:16:29 $
-#*    $Revision: 1.3 $
+#*    last change   $Author: vg $ $Date: 2003-10-06 12:58:59 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile: $
 #*
@@ -19,6 +19,7 @@
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
+#include "cppuhelper/exc_hlp.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -515,13 +516,53 @@ void Test_Impl::raiseRuntimeExceptionOneway( const OUString & rMsg, const Refere
     throw aExc;
 }
 
-//__________________________________________________________________________________________________
-sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
+void dothrow2( RuntimeException e )
 {
-    RuntimeException aExc;
-    aExc.Message          = _aData.String;
-    aExc.Context          = _aData.Interface;
-    throw aExc;
+    throw e;
+}
+void dothrow( RuntimeException const & e )
+{
+#if defined _MSC_VER
+    // currently only for MSVC:
+    // just to test whether all bridges fall back to a RuntimeException
+    // in case of a thrown non-UNO exception:
+    try
+    {
+        throw ::std::bad_alloc();
+    }
+    catch (...)
+    {
+        try
+        {
+            Any a( getCaughtException() );
+            RuntimeException exc;
+            OSL_VERIFY( a >>= exc );
+            OSL_TRACE(
+                OUStringToOString(
+                    exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        catch (...) // never throws anything
+        {
+            fprintf( stderr, "\ngetCaughtException() failed!\n" );
+            exit( 1 );
+        }
+    }
+#endif
+    dothrow2( e );
+}
+//______________________________________________________________________________
+sal_Int32 Test_Impl::getRuntimeException()
+    throw (RuntimeException)
+{
+    try
+    {
+        dothrow( RuntimeException( _aData.String, _aData.Interface ) );
+    }
+    catch (Exception &)
+    {
+        Any a( getCaughtException() );
+        throwException( a );
+    }
     return 0; // for dummy
 }
 //__________________________________________________________________________________________________
@@ -530,7 +571,7 @@ void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::
     RuntimeException aExc;
     aExc.Message          = _aData.String;
     aExc.Context          = _aData.Interface;
-    throw aExc;
+    throwException( makeAny( aExc ) );
 }
 
 // XBridgeTest2 -------------------------------------------------------------
@@ -834,37 +875,3 @@ void * SAL_CALL component_getFactory(
 }
 }
 
-/**************************************************************************
-    $Log: not supported by cvs2svn $
-    Revision 1.2.24.3  2003/07/04 06:44:55  jl
-    *** empty log message ***
-
-    Revision 1.2.24.2  2003/06/05 13:31:27  dbo
-    #107130# fixing tests
-
-    Revision 1.2.24.1  2003/04/11 17:15:20  dbo
-    #107130# CLI tests
-
-    Revision 1.2  2002/11/27 10:06:09  dbo
-    #104312# extended tests
-
-    Revision 1.1  2001/05/04 07:05:17  kr
-    moved from grande to openoffice
-
-    Revision 1.5  2001/03/14 09:55:11  jl
-    #include <osl/time.h> added
-
-    Revision 1.4  2001/03/12 16:22:44  jl
-    OSL_ENSHURE replaced by OSL_ENSURE
-
-    Revision 1.3  2000/08/30 13:13:59  jbu
-    now passes cc50 compiler
-
-    Revision 1.2  2000/08/14 07:12:50  jbu
-    added remote tests
-
-    Revision 1.1  2000/05/26 14:20:35  dbo
-    new
-
-
-**************************************************************************/
