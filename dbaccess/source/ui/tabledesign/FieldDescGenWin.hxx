@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:19:01 $
+ *  last change: $Author: rt $ $Date: 2002-09-25 11:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace dbaui
         void    copy();
         void    paste();
 
-        inline OTableFieldControl*  getFieldControl() const { m_pFieldControl; }
+        inline OTableFieldControl*  getFieldControl() const { return m_pFieldControl; }
     };
 }
 #endif // DBAUI_TABLEFIELDDESCGENPAGE_HXX
