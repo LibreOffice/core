@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:58:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,25 +843,28 @@ void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const Sf
     SetXPolyDirty(); // wg. Eckenradius
 }
 
-SdrObjGeoData* SdrRectObj::NewGeoData() const
-{ // etwas umstaendlicher, damit's vielleicht unter Chicago durchgeht
-    SdrObjGeoData* pGeo=new SdrRectObjGeoData;
-    return pGeo;
-}
+// #109872#
+//SdrObjGeoData* SdrRectObj::NewGeoData() const
+//{ // etwas umstaendlicher, damit's vielleicht unter Chicago durchgeht
+//  SdrObjGeoData* pGeo=new SdrRectObjGeoData;
+//  return pGeo;
+//}
 
-void SdrRectObj::SaveGeoData(SdrObjGeoData& rGeo) const
-{
-    SdrTextObj::SaveGeoData(rGeo);
-    SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
-    rRGeo.nEckRad=GetEckenradius();
-}
+// #109872#
+//void SdrRectObj::SaveGeoData(SdrObjGeoData& rGeo) const
+//{
+//  SdrTextObj::SaveGeoData(rGeo);
+//  SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
+//  rRGeo.nEckRad=GetEckenradius();
+//}
 
 void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
-{ // RectsDirty wird von SdrObject gerufen
+{
     SdrTextObj::RestGeoData(rGeo);
-    SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
-    long nAltRad=GetEckenradius();
-    if (rRGeo.nEckRad!=nAltRad) NbcSetEckenradius(rRGeo.nEckRad);
+// #109872#
+//  SdrRectObjGeoData& rRGeo=(SdrRectObjGeoData&)rGeo;
+//  long nAltRad=GetEckenradius();
+//  if (rRGeo.nEckRad!=nAltRad) NbcSetEckenradius(rRGeo.nEckRad);
     SetXPolyDirty();
 }
 
