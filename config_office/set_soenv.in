@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.53 $
-# Date:        $Date: 2005-03-11 11:31:40 $
+# Version:     $Revision: 1.54 $
+# Date:        $Date: 2005-03-15 09:46:44 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1638,6 +1638,7 @@ if ( '@ENABLE_RPATH@' eq "no" ) {
 }
 ToFile( "EPM",               "@EPM@",              "e" );
 ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
+ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
 ToFile( "SYSTEM_STDLIBS",    "@SYSTEM_STDLIBS@",   "e" );
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
@@ -2094,7 +2095,7 @@ sub PosixFormat
 		 $d1 = $1 ;
 		 chomp( $d2 = qx{cygpath -d "$d1"} ) || die( "Path with space: $1 propably doesn't exist!" );
 		 chomp( $d2 = qx{cygpath -u "$d2"} ) ;
-		 $variable =~ s/$d1/$d2/ ;
+		 $variable =~ s/\Q$d1\E/$d2/ ;
 	   }
    }
    return $variable;
