@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef DBUI_TABLECONTROLLER_HXX
 #define DBUI_TABLECONTROLLER_HXX
 
-#ifndef DBAUI_GENERICCONTROLLER_HXX
-#include "genericcontroller.hxx"
+#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
+#include "singledoccontroller.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -100,7 +100,8 @@ namespace dbaui
 {
     class OTableRow;
     class OFieldDescription;
-    class OTableController : public OGenericUnoController
+    typedef OSingleDocumentController   OTableController_BASE;
+    class OTableController : public OTableController_BASE
     {
     private:
         SfxUndoManager  m_aUndoManager;
@@ -108,11 +109,9 @@ namespace dbaui
         OTypeInfoMap                m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
-        ::rtl::OUString m_sDataSourceName;  // is set in initialze
         ::rtl::OUString m_sCatalogName;     // catalog for update data
         ::rtl::OUString m_sSchemaName;      // schema for update data
         ::rtl::OUString m_sName;            // table for update data
@@ -120,7 +119,6 @@ namespace dbaui
 
         sal_Bool        m_bEditable : 1;        // is the control readonly or not
         sal_Bool        m_bModified : 1;        // is the data modified
-        sal_Bool        m_bOwnConnection : 1;   // is true when we created our own connection
         sal_Bool        m_bNew : 1;             // is true when we create a new table
 
         void reSyncRows();
@@ -145,9 +143,10 @@ namespace dbaui
         virtual FeatureState    GetState(sal_uInt16 nId);
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
-        virtual ToolBox* CreateToolBox(Window* pParent);
+        virtual ToolBox*        CreateToolBox(Window* pParent);
 
-        void createNewConnection(sal_Bool _bUI = sal_False);
+        virtual void reconnect( sal_Bool _bUI );
+        virtual void losingConnection( );
 
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
@@ -156,8 +155,7 @@ namespace dbaui
         OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         ~OTableController();
-        // removes the connection from the vector and delete it
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         getConnection() { return m_xConnection; }
+
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const  { return m_xFormatter; }
 
@@ -185,6 +183,7 @@ namespace dbaui
 
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
+
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 

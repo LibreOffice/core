@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 11:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #define DBAUI_JOINCONTROLLER_HXX
 
-#ifndef DBAUI_GENERICCONTROLLER_HXX
-#include "genericcontroller.hxx"
+#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
+#include "singledoccontroller.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -96,7 +96,8 @@ namespace dbaui
     class OTableWindowData;
     class OAddTableDlg;
     class OTableWindow;
-    class OJoinController : public OGenericUnoController
+    typedef OSingleDocumentController OJoinController_BASE;
+    class OJoinController : public OJoinController_BASE
     {
     protected:
         SfxUndoManager  m_aUndoManager;
@@ -106,19 +107,11 @@ namespace dbaui
         Fraction                                m_aZoom;
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDataSource;
-
-        ::rtl::OUString m_sDataSourceName;  // is set in initialze
-
         OAddTableDlg*   m_pAddTabDlg;       // is set by the first call of execute, the owner is the design view
 
         sal_Bool        m_bEditable;        // is the control readonly or not
         sal_Bool        m_bModified;        // is the data modified
-        sal_Bool        m_bOwnConnection;   // is true when we created our own connection
 
-
-        virtual void createNewConnection(sal_Bool _bUI = sal_False);
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId);
@@ -135,7 +128,6 @@ namespace dbaui
         ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
 
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() { return m_xConnection; }
 
         // should the statement be parsed by our own sql parser
         sal_Bool        isReadOnly()            const { return !m_bEditable; }
@@ -152,7 +144,7 @@ namespace dbaui
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void    SAL_CALL disposing();
 
         //
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
