@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impanmvw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:17:55 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_IMPANMVW_CXX
-
 #define private public
 
 #include "impanmvw.hxx"
@@ -78,11 +76,11 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             OutputDevice* pFirstFrameOutDev ) :
         mpParent        ( pParent ),
         mpOut           ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
+        mnExtraData     ( nExtraData ),
         maPt            ( rPt ),
         maSz            ( rSz ),
-        maClip          ( mpOut->GetClipRegion() ),
         maSzPix         ( mpOut->LogicToPixel( maSz ) ),
-        mnExtraData     ( nExtraData ),
+        maClip          ( mpOut->GetClipRegion() ),
         mpBackground    ( new VirtualDevice ),
         mpRestore       ( new VirtualDevice ),
         meLastDisposal  ( DISPOSE_BACK ),
