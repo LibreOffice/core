@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:02:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "¿µ¿ª";
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área";
     };
     ListBox LB_RANGE
     {
@@ -139,6 +140,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     RadioButton BTN_COLHEAD
     {
@@ -168,6 +170,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
         Text[ turkish ] = "Sütun baþlýklarý ~içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contiene títulos de ~columnas";
     };
     RadioButton BTN_ROWHEAD
     {
@@ -195,6 +198,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "Çà ¸Ó¸®±Û Æ÷ÇÔ(~R)";
         Text[ turkish ] = "Satýr baþlýklarý  i~çeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "contiene títulos de ~filas";
     };
     FixedText FT_DATA_LABEL
     {
@@ -221,6 +225,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "µ¥ÀÌÅÍ±¸¿ªÀÇ";
         Text[ turkish ] = "Veri aralýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "para el área de datos";
     };
     Edit ED_DATA
     {
@@ -255,6 +260,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     OKButton BTN_OK
     {
@@ -297,6 +303,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     PushButton BTN_REMOVE
     {
@@ -326,6 +333,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     HelpButton BTN_HELP
     {
@@ -352,4 +360,5 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ korean ] = "¶óº§±¸¿ª Á¤ÀÇ";
     Text[ turkish ] = "Baþlýk aralýðýný belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir área de etiqueta";
 };
