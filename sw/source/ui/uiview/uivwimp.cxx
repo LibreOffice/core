@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-10-01 13:14:56 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include <sfx2/bindings.hxx>
 #endif
 
+#include <sfx2/request.hxx>
 
 #ifndef _UIVWIMP_HXX
 #include <uivwimp.hxx>
@@ -197,8 +198,9 @@ SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 /* -----------------------------29.05.00 09:04--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwView_Impl::ExcuteScan(USHORT nSlot)
+void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
+    USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_TWAIN_SELECT:
@@ -229,8 +231,13 @@ void SwView_Impl::ExcuteScan(USHORT nSlot)
 //JP 26.06.00: the appwindow doen't exist
 //              Application::GetAppWindow()->EnableInput( TRUE );
             }
-            if( !bDone )
+            if( bDone )
+                rReq.Done();
+            else
+            {
+                rReq.Ignore();
                 InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
+            }
         }
         break;
 
@@ -264,9 +271,11 @@ void SwView_Impl::ExcuteScan(USHORT nSlot)
 //JP 26.06.00: the appwindow doen't exist
 //              Application::GetAppWindow()->EnableInput( TRUE );
                 InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
+                rReq.Ignore();
             }
             else
             {
+                rReq.Done();
                 SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
                 rBind.Invalidate( SID_TWAIN_SELECT );
                 rBind.Invalidate( SID_TWAIN_TRANSFER );

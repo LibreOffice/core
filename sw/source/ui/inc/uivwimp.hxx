@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 15:02:13 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #endif
 
 class SwXTextView;
+class SfxRequest;
 
 namespace com{ namespace sun{ namespace star {
     namespace frame {
@@ -157,7 +158,7 @@ public:
 
     ShellModes                      GetShellMode() {return eShellMode;}
 
-    void                            ExcuteScan(USHORT nSlot);
+    void                            ExecuteScan(SfxRequest& rReq);
     SwScannerEventListener&         GetScannerEventListener();
 
     void                            AddClipboardListener();

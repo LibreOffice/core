@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-03 13:21:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 17:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 #if defined WIN || defined WNT || defined UNX
         case SID_TWAIN_SELECT:
         case SID_TWAIN_TRANSFER:
-            GetViewImpl()->ExcuteScan(nSlot);
+            GetViewImpl()->ExecuteScan( rReq );
         break;
 #endif
 
