@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:19:35 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,6 @@ TARGET := test_com_sun_star_lib_util
 PACKAGE := com$/sun$/star$/lib$/util
 JAVATESTFILES := \
     NativeLibraryLoader_Test.java \
-    WeakTable_Test.java
-JARFILES := sandbox.jar
+    WeakMap_Test.java
 
 .INCLUDE: javaunittest.mk
