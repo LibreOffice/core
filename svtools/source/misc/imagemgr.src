@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 18:04:40 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,7 +1210,7 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ polish ] = "Local drive";
     Text[ portuguese_brazilian ] = "Local drive";
     Text[ japanese ] = "ローカルのドライブ";
-    Text[ korean ] = "Local drive";
+    Text[ korean ] = "로컬 드라이브";
     Text[ chinese_simplified ] = "局部驱动器";
     Text[ chinese_traditional ] = "本機磁碟";
     Text[ turkish ] = "Local drive";
@@ -1234,7 +1234,7 @@ String STR_DESCRIPTION_FLOPPY_VOLUME
     Text[ polish ] = "Floppy disk";
     Text[ portuguese_brazilian ] = "Floppy disk";
     Text[ japanese ] = "フロッピーディスク";
-    Text[ korean ] = "Floppy disk";
+    Text[ korean ] = "플로피 디스크";
     Text[ chinese_simplified ] = "软盘";
     Text[ chinese_traditional ] = "軟碟機";
     Text[ turkish ] = "Floppy disk";
@@ -1258,7 +1258,7 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ polish ] = "CD-ROM drive";
     Text[ portuguese_brazilian ] = "CD-ROM drive";
     Text[ japanese ] = "CD-ROM ドライブ";
-    Text[ korean ] = "CD-ROM drive";
+    Text[ korean ] = "CD-ROM 드라이브";
     Text[ chinese_simplified ] = "光盘驱动器";
     Text[ chinese_traditional ] = "光碟機";
     Text[ turkish ] = "CD-ROM drive";
@@ -1282,7 +1282,7 @@ String STR_DESCRIPTION_REMOTE_VOLUME
     Text[ polish ] = "Network connection";
     Text[ portuguese_brazilian ] = "Network connection";
     Text[ japanese ] = "ネットワークの接続";
-    Text[ korean ] = "Network connection";
+    Text[ korean ] = "네트워크 연결n";
     Text[ chinese_simplified ] = "网络连接";
     Text[ chinese_traditional ] = "網路連線";
     Text[ turkish ] = "Network connection";
@@ -1307,7 +1307,7 @@ String STR_DESCRIPTION_POWERPOINT
     Text[ polish ] = "MS PowerPoint Document";
     Text[ portuguese_brazilian ] = "MS PowerPoint Document";
     Text[ japanese ] = "MS PowerPoint ドキュメント";
-    Text[ korean ] = "MS PowerPoint Document";
+    Text[ korean ] = "MS PowerPoint 문서";
     Text[ chinese_simplified ] = "Microsoft PowerPoint 文档";
     Text[ chinese_traditional ] = "Microsoft PowerPoint 文件";
     Text[ turkish ] = "MS PowerPoint Document";
@@ -1333,7 +1333,7 @@ String STR_DESCRIPTION_POWERPOINT_TEMPLATE
     Text[ polish ] = "MS PowerPoint Template";
     Text[ portuguese_brazilian ] = "MS PowerPoint Template";
     Text[ japanese ] = "MS PowerPoint テンプレート";
-    Text[ korean ] = "MS PowerPoint Template";
+    Text[ korean ] = "MS PowerPoint 서식 파일";
     Text[ chinese_simplified ] = "Microsoft PowerPoint 模板";
     Text[ chinese_traditional ] = "Microsoft PowerPoint Template";
     Text[ turkish ] = "MS PowerPoint Template";
@@ -1359,13 +1359,14 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ polish ] = "MS PowerPoint Show";
     Text[ portuguese_brazilian ] = "MS PowerPoint Show";
     Text[ japanese ] = "MS PowerPoint ショー";
-    Text[ korean ] = "MS PowerPoint Show";
+    Text[ korean ] = "MS PowerPoint 쇼";
     Text[ chinese_simplified ] = "Microsoft PowerPoint Show";
     Text[ chinese_traditional ] = "Microsoft PowerPoint Show";
     Text[ turkish ] = "MS PowerPoint Show";
     Text[ arabic ] = "MS PowerPoint Show";
     Text[ catalan ] = "MS PowerPoint Show";
 };
+
 
 
 
