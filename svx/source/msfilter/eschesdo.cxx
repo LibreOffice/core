@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aEnd.X() += aCenter.X();
                 aEnd.Y() += aCenter.Y();
                 Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
+                if( rObj.GetAngle() )
+                {
+                    aPolygon.Rotate( rRect.TopLeft(), (sal_uInt16)( rObj.GetAngle() / 10 ) );
+                    rObj.SetAngle( 0 );
+                }
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
                 ::com::sun::star::awt::Rectangle aNewRect;
@@ -576,7 +581,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     }
                     break;
                 }
-                MapRect(rObj);
+                rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                            ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             }
             ImplWriteTextBundle( rObj, aPropOpt );
         }
