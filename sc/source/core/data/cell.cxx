@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-01-16 15:03:25 $
+ *  last change: $Author: er $ $Date: 2002-09-16 12:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,11 +253,14 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, USHORT nOnlyNames )
         pDoc->SetDetectiveDirty(TRUE);  // es hat sich was geaendert...
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
-        if( pFormCell->GetCode()->IsRecalcModeAlways() )
+        ScTokenArray* pArr = pFormCell->GetCode();
+        if( pArr->IsRecalcModeAlways() )
             pDoc->StartListeningArea( BCA_LISTEN_ALWAYS, pFormCell );
         else
         {
-            ScTokenArray* pArr = pFormCell->GetCode();
+            if ( nOnlyNames && ((nOnlyNames & SC_LISTENING_EXCEPT) == 0) &&
+                    pArr->IsReplacedSharedFormula() )
+                nOnlyNames = 0;
             pArr->Reset();
             for( ScToken* t = pArr->GetNextReferenceRPN(); t;
                           t = pArr->GetNextReferenceRPN() )
@@ -271,7 +274,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, USHORT nOnlyNames )
                     bDo = TRUE;
                 else
                 {
-                    bDo = FALSE;
+                    bDo = pArr->IsReplacedSharedFormula();
                     if ( nOnlyNames & SC_LISTENING_NAMES_REL )
                         bDo |= (rRef1.IsRelName() || rRef2.IsRelName());
                     if ( nOnlyNames & SC_LISTENING_NAMES_ABS )
@@ -336,6 +339,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, USHORT nOnlyNames )
                 }
             }
         }
+        pArr->SetReplacedSharedFormula( FALSE );
     }
 }
 
