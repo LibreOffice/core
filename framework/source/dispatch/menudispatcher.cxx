@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:33:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,10 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
             OUString aResourceString = aURL.Complete.copy( aResourceURLCommand.getLength() );
 
             int nResIdIndex = aResourceString.indexOf( '/' );
-            int         nResId      = 0;
-            MenuBar*    pMenuBar    = NULL;
-            ResMgr* pResManager = NULL;
+            int         nResId        = 0;
+            MenuBar*    pMenuBar      = NULL;
+            ResMgr*     pResManager   = NULL;
+            ResMgr*     pGlobalResMgr = NULL;
 
             aGuard.unlock();
             OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -276,23 +277,36 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                     pResManager = new ResMgr( aResourceFileName );
                 }
 
-                if (!pResManager)
-                {
-                    LOG_WARNING("MenuDispatcher::dispatch()", "no res manager!")
-                    return;
-                }
-
                 nResId = aResourceString.copy( nResIdIndex+1 ).toInt32();
                 ResId aMenuBarResId( nResId, pResManager );
                 aMenuBarResId.SetRT( RSC_MENU );
 
-                if ( pResManager->IsAvailable(aMenuBarResId ) )
+                sal_Bool bAvailable = sal_False;
+                if (pResManager)
+                    bAvailable = pResManager->IsAvailable(aMenuBarResId );
+                else
+                {
+                    pGlobalResMgr = Resource::GetResManager();
+                    if (!pGlobalResMgr)
+                    {
+                        LOG_WARNING("MenuDispatcher::dispatch()", "global res manager not set. break operation.")
+                        return;
+                    }
+                    bAvailable = pGlobalResMgr->IsAvailable(aMenuBarResId );
+                }
+
+                if (bAvailable)
                 {
                     pMenuBar = new MenuBar( aMenuBarResId );
                     pMenuBar->SetCloserHdl( LINK( this, MenuDispatcher, Close_Impl ) );
                 }
 
-                delete pResManager;
+                if (pResManager)
+                {
+                    delete pResManager;
+                    pResManager = NULL;
+                }
+                pGlobalResMgr = NULL;
             }
 
             if ( pMenuBar )
