@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:18:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void PrinterInfoManager::initialize()
 
     if( ! m_aGlobalDefaults.m_pParser )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "Error: no SGENPRT available, shutting down psprint...\n" );
 #endif
         return;
@@ -173,7 +173,7 @@ void PrinterInfoManager::initialize()
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "found global defaults in %s\n", OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
@@ -231,7 +231,7 @@ void PrinterInfoManager::initialize()
                     m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
 #endif
             break;
@@ -879,7 +879,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                 if( nSubstitute != -1 )
                 {
                     rInfo.m_aFontSubstitutions[ it->m_nID ] = nSubstitute;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     FastPrintFontInfo aInfo;
                     rFontManager.getFontFastInfo( nSubstitute, aInfo );
                     fprintf( stderr,
@@ -947,7 +947,7 @@ const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
             aForeToken              = aParms[i].pForeToken;
             aAftToken               = aParms[i].pAftToken;
             nForeTokenCount         = aParms[i].nForeTokenCount;
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
 #endif
             if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
@@ -957,7 +957,7 @@ const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
                 if( ! pclose( pPipe ) )
                     bSuccess = TRUE;
             }
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
 #endif
         }
