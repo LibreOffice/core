@@ -7,6 +7,39 @@
 <BODY id=theBody>
 
 <script language="JScript">
+// XEventListener implementation in JScript --------------------------------------------------
+function XEventListener_Impl()
+{
+	this._environment= "JScript";
+	this._implementedInterfaces= new Array( "com.sun.star.lang.XEventListener");
+
+	//XEventListener
+	this.disposing= XEventListener_disposing;
+	
+	this.bdisposingCalled= false;
+	this.bQuiet= true;
+	this.resetDisposing= XEventListener_resetDisposing;
+	this.disposingCalled= XEventListener_disposingCalled;
+}	
+
+function XEventListener_disposing( source)
+{
+  if( !this.bQuiet)
+        alert("JScript Event Listener \n disposing is being called");
+  this.bdisposingCalled= true;
+}
+
+function XEventListener_resetDisposing()
+{
+   this.bdisposingCalled= false;
+}
+
+function XEventListener_disposingCalled()
+{
+     return this.bdisposingCalled;
+}
+
+//--------------------------------------------------------------------------------------------
 function callOleTest(	 id)
 {   
 	var factory= new ActiveXObject("com.sun.star.ServiceManager");
@@ -29,6 +62,11 @@ function callOleTest(	 id)
 
 	var ret, i;
 	var sfarray, sfarray1, sfarray2, sfarray3;
+	var arEventListener= new Array( new XEventListener_Impl(), new XEventListener_Impl(),
+	                                new XEventListener_Impl());
+	var arEventListener2= new Array( new XEventListener_Impl(), new XEventListener_Impl(),
+	                                new XEventListener_Impl());
+	var arArEventListener= new Array( arEventListener, arEventListener2);
 	switch( id)
 	{
 	// Array in-params
@@ -148,8 +186,31 @@ function callOleTest(	 id)
 		document.writeln( "Param: " + arrDouble.toString() +"<br>");
 		document.writeln( "Returns a Sequence&lt float&gt <br>" + sfarray.toArray()) ; break;
 
-
-
+	case 15: 
+		ret= oletest.methodXEventListeners( arEventListener);
+		sfarray= new VBArray(ret);
+		_ret= sfarray.toArray();
+		for ( key in _ret)
+		{	
+	           if( ! _ret[key].disposingCalled())
+		      alert("Error! oletest.methodXEventListeners")
+		}
+		break;
+	case 16:
+	   ret= oletest.methodXEventListenersMul( arArEventListener);
+	   sfarray= new VBArray(ret);
+	   _ret= sfarray.toArray();
+	   for( key in _ret)
+	   {
+	      sfarray2= new VBArray(_ret[key]);
+	      _ret2= sfarray2.toArray();
+	      for( key2 in _ret2)
+	      {
+	        if( ! _ret2[key2].disposingCalled())
+		      alert("Error! oletest.methodXEventListeners")
+	      }
+	   }
+	break;
 
 
 
@@ -844,10 +905,11 @@ All methods receive a Sequence as Parameter. The element type of the Sequence is
 <button onclick='callOleTest( 8)'>char</Button>
 <button onclick='callOleTest( 9)'>string</Button>
 <button onclick='callOleTest( 10)'>any</Button>
-<button onclick='callOleTest( 11)'>sequence&ltlong&gt </Button>
-<button onclick='callOleTest( 12)'>sequence&ltsequence&ltlong&gt &gt </Button>
-<button onclick='callOleTest( 13)'>XInterface</Button>
-
+<button onclick='callOleTest( 11)'>sequence&lt;long&gt; </Button>
+<button onclick='callOleTest( 12)'>sequence&lt;sequence&lt;long&gt; &gt; </Button>
+<button onclick='callOleTest( 13)' id=button2 name=button2>XInterface</Button>
+<button onclick='callOleTest( 15)'>XEventListener</Button>
+<button onclick='callOleTest( 16)'>sequence&lt;XEventListener&gt;</Button>
 <p>
 
 <p>
