@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:29:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,23 @@ public:
     };
     typedef std::map< ImplFontData*, FontSubset > FontSubsetData;
 
-    typedef std::map< ImplFontData*, sal_Int32 > FontEmbedData;
+    struct EmbedCode
+    {
+        sal_Unicode         m_aUnicode;
+        rtl::OString        m_aName;
+    };
+    struct EmbedEncoding
+    {
+        sal_Int32                               m_nFontID;
+        std::vector< EmbedCode >                m_aEncVector;
+        std::map< sal_Unicode, sal_Int8 >       m_aCMap;
+    };
+    struct EmbedFont
+    {
+        sal_Int32                       m_nNormalFontID;
+        std::list< EmbedEncoding >      m_aExtendedEncodings;
+    };
+    typedef std::map< ImplFontData*, EmbedFont > FontEmbedData;
 private:
     static const BuiltinFont m_aBuiltinFonts[14];
 
@@ -436,8 +452,8 @@ private:
     bool emitHatches();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuiltinFont( ImplFontData* pFont );
-    /* writes a type1 embedded font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitEmbeddedFont( ImplFontData* pFont );
+    /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
+    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( ImplFontData* pFont, EmbedFont& rEmbed );
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
