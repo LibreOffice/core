@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:28 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,33 +303,9 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
 
 SdPage* SdDrawDocument::GetSdPage(USHORT nPgNum, PageKind ePgKind) const
 {
-    SdPage* pPage = NULL;
-    SdPage* pPageFound = NULL;
-
-    USHORT nPage = 0;
-    const USHORT nMaxPages = GetPageCount();
-    USHORT nPageNum = 0;
-
-    while (nPage < nMaxPages && !pPageFound)
-    {
-        pPage = (SdPage*) GetPage(nPage);
-
-        if (pPage && pPage->GetPageKind() == ePgKind)
-        {
-            if (nPageNum == nPgNum)
-            {
-                pPageFound = pPage;
-            }
-
-            nPageNum++;
-        }
-
-        nPage++;
-    }
-
-    return (pPageFound);
+    // #109538#
+    return mpDrawPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
-
 
 /*************************************************************************
 |*
@@ -339,25 +315,9 @@ SdPage* SdDrawDocument::GetSdPage(USHORT nPgNum, PageKind ePgKind) const
 
 USHORT SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 {
-    SdPage* pPage = NULL;
-
-    USHORT nPage;
-    const USHORT nMaxPages = GetPageCount();
-    USHORT nPageNum = 0;
-
-    for (nPage = 0; nPage < nMaxPages; nPage++)
-    {
-        pPage = (SdPage*) GetPage(nPage);
-
-        if (pPage && pPage->GetPageKind() == ePgKind)
-        {
-            nPageNum++;
-        }
-    }
-
-    return (nPageNum);
+    // #109538#
+    return (sal_uInt16)mpDrawPageListWatcher->GetSdPageCount(ePgKind);
 }
-
 
 /*************************************************************************
 |*
@@ -367,33 +327,9 @@ USHORT SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 
 SdPage* SdDrawDocument::GetMasterSdPage(USHORT nPgNum, PageKind ePgKind)
 {
-    SdPage* pPage = NULL;
-    SdPage* pPageFound = NULL;
-
-    USHORT nPage = 0;
-    const USHORT nMaxPages = GetMasterPageCount();
-    USHORT nPageNum = 0;
-
-    while (nPage < nMaxPages && !pPageFound)
-    {
-        pPage = (SdPage*) GetMasterPage(nPage);
-
-        if (pPage && pPage->GetPageKind() == ePgKind)
-        {
-            if (nPageNum == nPgNum)
-            {
-                pPageFound = pPage;
-            }
-
-            nPageNum++;
-        }
-
-        nPage++;
-    }
-
-     return (pPageFound);
+    // #109538#
+    return mpMasterPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
-
 
 /*************************************************************************
 |*
@@ -403,23 +339,8 @@ SdPage* SdDrawDocument::GetMasterSdPage(USHORT nPgNum, PageKind ePgKind)
 
 USHORT SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 {
-    SdPage* pPage = NULL;
-
-    USHORT nPage;
-    const USHORT nMaxPages = GetMasterPageCount();
-    USHORT nPageNum = 0;
-
-    for (nPage = 0; nPage < nMaxPages; nPage++)
-    {
-        pPage = (SdPage*) GetMasterPage(nPage);
-
-        if (pPage && pPage->GetPageKind() == ePgKind)
-        {
-            nPageNum++;
-        }
-    }
-
-    return (nPageNum);
+    // #109538#
+    return (sal_uInt16)mpMasterPageListWatcher->GetSdPageCount(ePgKind);
 }
 
 /*************************************************************************
@@ -1905,3 +1826,5 @@ void SdDrawDocument::SetupNewPage (
         pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
     }
 }
+
+// eof
