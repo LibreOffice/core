@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:41:46 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,10 @@
 
 namespace tdoc_ucp {
 
-    class OfficeDocumentsCloseListener
+    class OfficeDocumentsEventListener
     {
     public:
+        virtual void notifyDocumentOpened( const rtl::OUString & rDocId ) = 0;
         virtual void notifyDocumentClosed( const rtl::OUString & rDocId ) = 0;
     };
 
@@ -125,7 +126,7 @@ namespace tdoc_ucp {
         OfficeDocumentsManager(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory > & xSMgr,
-            OfficeDocumentsCloseListener * pCloseListener );
+            OfficeDocumentsEventListener * pDocEventListener );
         virtual ~OfficeDocumentsManager();
 
         void destroy();
@@ -178,7 +179,7 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference<
             drafts::com::sun::star::frame::XModuleManager > m_xModuleMgr;
         DocumentList                                        m_aDocs;
-        OfficeDocumentsCloseListener *                      m_pCloseListener;
+        OfficeDocumentsEventListener *                      m_pDocEventListener;
     };
 
 } // namespace tdoc_ucp

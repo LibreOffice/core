@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:16:28 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ class StorageElementFactory;
 class ContentProvider :
     public ::ucb::ContentProviderImplHelper,
     public com::sun::star::frame::XTransientDocumentsDocumentContentFactory,
-    public OfficeDocumentsCloseListener
+    public OfficeDocumentsEventListener
 {
 public:
     ContentProvider( const com::sun::star::uno::Reference<
@@ -187,7 +187,8 @@ public:
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >
     queryDocumentModel( const rtl::OUString & rUri ) const;
 
-    // interface OfficeDocumentsCloseListener
+    // interface OfficeDocumentsEventListener
+    virtual void notifyDocumentOpened( const rtl::OUString & rDocId );
     virtual void notifyDocumentClosed( const rtl::OUString & rDocId );
 
 private:
