@@ -79,6 +79,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\%__SRC%\ucr\types.db %_DEST%\bin%_EXT%\types.rdb
 ..\%__SRC%\ucrdoc\types_doc.db %_DEST%\bin%_EXT%\types_doc.rdb
 
+..\com\sun\star\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star
 ..\com\sun\star\auth\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\auth
 ..\com\sun\star\accessibility\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\accessibility
 ..\com\sun\star\awt\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
