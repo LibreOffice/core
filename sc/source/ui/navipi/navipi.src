@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:48:50 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ dutch ] = "Rij" ;
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText[ russian ] = "Ñòğîêà";
-        QuickHelpText[ polish ] = "Wiersz";
+        QuickHelpText[ polish ] = "Wiersz!";
         QuickHelpText[ japanese ] = "s!";
         QuickHelpText[ chinese_simplified ] = "ĞĞ";
         QuickHelpText[ chinese_traditional ] = "Äæ";
@@ -226,7 +226,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ dutch ] = "Kolom" ;
         QuickHelpText [ french ] = "Colonne" ;
     QuickHelpText[ russian ] = "Ñòîëáåö";
-        QuickHelpText[ polish ] = "Kolumna";
+        QuickHelpText[ polish ] = "Kolumna!";
         QuickHelpText[ japanese ] = "—ñ!";
         QuickHelpText[ chinese_simplified ] = "ÁĞ";
         QuickHelpText[ chinese_traditional ] = "¦C";
@@ -272,7 +272,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ portuguese_brazilian ] = "Dokument" ;
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "Äîêóìåíò";
-        QuickHelpText[ polish ] = "Dokument";
+        QuickHelpText[ polish ] = "Dokument!";
         QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ!";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
         QuickHelpText[ chinese_traditional ] = "ÀÉ®×";
@@ -429,7 +429,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Inhalte" ;
                 Text[ chinese_simplified ] = "ÄÚÈİ";
                 Text[ russian ] = "Ñîäåğæèìîå";
-                Text[ polish ] = "Zawarto?ci";
+                Text[ polish ] = "Zawartoœci";
                 Text[ japanese ] = "“à—e";
                 Text[ chinese_traditional ] = "¤º®e";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -578,7 +578,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ portuguese_brazilian ] = "Anzeige" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Wy?wietl";
+        Text[ polish ] = "Wyœwietl";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÚÑÖ";
@@ -834,7 +834,7 @@ String SCSTR_CONTENT_ROOT
     Text [ portuguese_brazilian ] = "Inhalte" ;
     Text[ chinese_simplified ] = "ÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå";
-    Text[ polish ] = "Zawarto?ci";
+    Text[ polish ] = "Zawartoœci";
     Text[ japanese ] = "“à—e";
     Text[ chinese_traditional ] = "¤º®e";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -1196,7 +1196,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ dutch ] = "Eigenschappen..." ;
             Text[ chinese_simplified ] = "ÊôĞÔ...";
             Text[ russian ] = "Ñâîéñòâà...";
-            Text[ polish ] = "W³a?ciwo?ci...";
+            Text[ polish ] = "W³aœciwoœci...";
             Text[ japanese ] = "ÌßÛÊßÃ¨...";
             Text[ chinese_traditional ] = "Äİ©Ê...";
             Text[ arabic ] = "ÎÕÇÆÕ...";
@@ -1211,3 +1211,4 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
