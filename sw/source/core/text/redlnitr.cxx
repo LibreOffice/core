@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 08:51:13 $
+ *  last change: $Author: fme $ $Date: 2002-11-19 10:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,10 +191,10 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
 
 #ifdef BIDI
     // Set default layout mode ( LTR or RTL ). pOut should be the printer.
-    if ( pFrm && pFrm->IsRightToLeft() )
-        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
-    else
-        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+    if ( pFrm )
+        pOut->SetLayoutMode( pFrm->IsRightToLeft() ?
+                             TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
+                             TEXT_LAYOUT_BIDI_STRONG );
 #endif
 
     // set font to vertical if frame layout is vertical
