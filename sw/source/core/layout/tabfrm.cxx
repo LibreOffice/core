@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:08:05 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,14 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+// --> OD 2004-06-28 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 extern void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage );
@@ -373,7 +381,9 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
             }
 
             // all lowers should have the correct position
-              lcl_ArrangeLowers( (SwCellFrm*)pCurrMasterCell, (pCurrMasterCell->*fnRect->fnGetPrtTop)(), sal_False );
+            lcl_ArrangeLowers( (SwCellFrm*)pCurrMasterCell,
+                               (pCurrMasterCell->*fnRect->fnGetPrtTop)(),
+                               sal_False );
         }
 
         pCurrMasterCell = pCurrMasterCell->GetNext();
@@ -1230,11 +1240,26 @@ BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom )
     BOOL bRet = FALSE;
     SwCntntFrm *pCnt = pLay->ContainsCntnt();
     SWRECTFN( pLay )
+    // OD 2004-06-03 #i28701#
+    const SwPageFrm& rPageFrm = *(pLay->FindPageFrm());
     while ( pCnt && pLay->GetUpper()->IsAnLower( pCnt ) )
     {
         bRet |= !pCnt->IsValid();
-        pCnt->CalcFlys( FALSE );
+        // OD 2004-07-01 #i28701# - use new method <SwFrm::InvalidateObjs(..)>
+        // No format is performed for the floating screen objects.
+        pCnt->InvalidateObjs( true );
         pCnt->Calc();
+        // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
+        // to format the floating screen objects
+        if ( pCnt->IsTxtFrm() )
+        {
+            if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt, rPageFrm ) )
+            {
+                // restart format with first content
+                pCnt = pLay->ContainsCntnt();
+                continue;
+            }
+        }
         pCnt->GetUpper()->Calc();
         if( ! bAll && (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
             break;
@@ -2138,11 +2163,11 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
             (aRect.*fnRect->fnAddBottom)( -nYDiff );
         for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
         {
-            SdrObject *pObj = (*pPage->GetSortedObjs())[i];
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
+            SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                const SwRect aFlyRect = pFly->AddSpacesToFrm();
+                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+                const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
                 if ( WEIT_WECH != (pFly->Frm().*fnRect->fnGetTop)() &&
                      pFly->IsFlyAtCntFrm() && aFlyRect.IsOver( aRect ) &&
                      // OD 25.02.2003 #i9040# - use '<=' instead of '<'
@@ -2536,6 +2561,16 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             if ( GetNext()->IsCntntFrm() )
                 GetNext()->InvalidatePage( pPage );
         }
+        // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+        // frame on the next page/column can flow backward (e.g. it was moved
+        // forward due to the positioning of its objects ). Thus, invalivate this
+        // next frame, if document compatibility option 'Consider wrapping style
+        // influence on object positioning' is ON.
+        else if ( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+        {
+            InvalidateNextPos();
+        }
+        // <--
         _InvalidateAll();
         InvalidatePage( pPage );
         SetComplete();
@@ -3233,17 +3268,17 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
         {
             for ( USHORT i = 0; i < pTmp->GetDrawObjs()->Count(); ++i )
             {
-                const SdrObject *pO = (*pTmp->GetDrawObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pAnchoredObj = (*pTmp->GetDrawObjs())[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                     // OD 30.09.2003 #i18732# - only objects, which follow
                     // the text flow have to be considered.
-                    const SwFrmFmt* pFrmFmt = static_cast<const SwVirtFlyDrawObj*>(pO)->GetFmt();
+                    const SwFrmFmt& rFrmFmt = pAnchoredObj->GetFrmFmt();
                     const bool bConsiderFly =
                             !pFly->IsFlyInCntFrm() &&
                             pFly->Frm().Top() != WEIT_WECH &&
-                            pFrmFmt->GetFollowTextFlow().GetValue();
+                            rFrmFmt.GetFollowTextFlow().GetValue();
                     if ( bConsiderFly )
                     {
                         const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
@@ -3982,16 +4017,30 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
             {
                 for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
                 {
-                    SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
+                    SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+                    // --> OD 2004-05-18 #i28701# - unlock position and set
+                    // <mbConsiderForTextWrap> to <false> of object
+                    pAnchoredObj->SetConsiderForTextWrap( false );
+                    pAnchoredObj->UnlockPosition();
+                    // <--
+                    if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
-                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                        if( WEIT_WECH != pFly->Frm().Top() )
+                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+
+                        // OD 2004-05-18 #i28701# - no direct move of objects,
+                        // which are anchored to-paragraph/to-character, if
+                        // the wrapping style influence has to be considered
+                        // on the object positioning.
+                        const bool bNoDirectMove =
+                                WEIT_WECH == pFly->Frm().Top() ||
+                                pFly->ConsiderObjWrapInfluenceOnObjPos();
+                        if ( !bNoDirectMove )
                         {
                             (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
                             (pFly->Frm().*fnRect->fnAddBottom)( lDiff );
                         }
                         pFly->GetVirtDrawObj()->_SetRectsDirty();
+
                         if ( pFly->IsFlyInCntFrm() )
                             ((SwFlyInCntFrm*)pFly)->AddRefOfst( lDiff );
                         else
@@ -4002,26 +4051,35 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             if( pPg != pOld )
                                 pOld->MoveFly( pFly, pPg );
                             if( pFly->IsAutoPos() )
-                                ((SwFlyAtCntFrm*)pFly)->AddLastCharY( lDiff );
+                            {
+                                pFly->AddLastCharY( lDiff );
+                                // OD 2004-05-18 #i28701# - follow-up of #i22341#
+                                // <mnLastTopOfLine> has also been adjusted.
+                                pFly->AddLastTopOfLineY( lDiff );
+                            }
                         }
-                        if( ::lcl_ArrangeLowers( pFly,
-                            (pFly->*fnRect->fnGetPrtTop)(), bInva ) )
+                        // OD 2004-05-11 #i28701# - Because of the introduction
+                        // of new positionings and alignments (e.g. aligned at
+                        // page area, but anchored at-character), the position
+                        // of the Writer fly frame has to be invalidated.
+                        pFly->InvalidatePos();
+
+                        if ( ::lcl_ArrangeLowers( pFly,
+                                                  (pFly->*fnRect->fnGetPrtTop)(),
+                                                  bInva ) )
+                        {
                             pFly->SetCompletePaint();
+                        }
                     }
                     else
                     {
-                        // OD 2004-04-06 #i26791# - Direct object positioning
-                        // no longer needed. Instead invalidate and determine
-                        // its position.
-                        SwContact* pContact = ::GetUserCall( pO );
-                        ASSERT( pContact, "<lcl_ArrangeLowers(..)> - missing contact object - please inform OD." );
-                        if ( pContact )
-                        {
-                            SwAnchoredObject* pAnchoredObj =
-                                                pContact->GetAnchoredObj( pO );
-                            pAnchoredObj->InvalidateObjPos();
-                            pAnchoredObj->MakeObjPos();
-                        }
+                        // --> OD 2004-07-01 #i28701# - adjust last character
+                        // rectangle and last top of line.
+                        pAnchoredObj->AddLastCharY( lDiff );
+                        pAnchoredObj->AddLastTopOfLineY( lDiff );
+                        // OD 2004-04-06 #i26791#, #i28701# - Direct object
+                        // positioning no longer needed. Instead invalidate position
+                        pAnchoredObj->InvalidateObjPos();
                     }
                 }
             }
@@ -4184,25 +4242,22 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             SwRect aRect( Prt() ); aRect += Frm().Pos();
             for ( USHORT i = 0; i < pPg->GetSortedObjs()->Count(); ++i )
             {
-                const SdrObject *pObj = (*pPg->GetSortedObjs())[i];
-                SwRect aTmp( pObj->GetCurrentBoundRect() );
+                const SwAnchoredObject* pAnchoredObj = (*pPg->GetSortedObjs())[i];
+                SwRect aTmp( pAnchoredObj->GetObjRect() );
                 if ( aTmp.IsOver( aRect ) )
                 {
-                    SdrObjUserCall *pUserCall;
-                    const SwFmtSurround &rSur = ((SwContact*)
-                               (pUserCall=GetUserCall(pObj)))->GetFmt()->GetSurround();
+                    const SwFmtSurround &rSur = pAnchoredObj->GetFrmFmt().GetSurround();
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
-                        const SwFrm *pAnch;
-                        if ( pObj->ISA(SwVirtFlyDrawObj) )
+                        if ( pAnchoredObj->ISA(SwFlyFrm) )
                         {
-                            const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                            const SwFlyFrm *pFly =
+                                    static_cast<const SwFlyFrm*>(pAnchoredObj);
                             if ( pFly->IsAnLower( this ) )
                                 continue;
-                            pAnch = pFly->GetAnchorFrm();
                         }
-                        else
-                            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm();
+
+                        const SwFrm* pAnch = pAnchoredObj->GetAnchorFrm();
                         if ( !IsAnLower( pAnch ) )
                         {
                             bVertDir = FALSE;
