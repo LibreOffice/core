@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 12:10:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,17 +147,17 @@ ModalDialog DLG_SORTING
         Text [ finnish ] = "Avainlaji" ;
         Text [ danish ] = "Nøgletype" ;
         Text [ french ] = "Type de critère" ;
-        Text [ swedish ] = "Kodtyp" ;
+        Text [ swedish ] = "Nyckeltyp" ;
         Text [ dutch ] = "Sleuteltype" ;
         Text [ spanish ] = "Tipo de clave" ;
         Text [ english_us ] = "Key type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÅÅÐòÀàÐÍ";
+        Text[ chinese_simplified ] = "¹Ø¼ü×ÖÀàÐÍ";
         Text[ russian ] = "Òèï êëþ÷à";
         Text[ polish ] = "Typ klucza";
         Text[ japanese ] = "·°‚ÌŽí—Þ";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "±Æ§ÇÃþ«¬";
+        Text[ chinese_traditional ] = "ÃöÁä¦rÃþ«¬";
         Text[ arabic ] = "äæÚ ÇáãÝÊÇÍ";
         Text[ greek ] = "Ôýðïò êëåéäéïý";
         Text[ korean ] = "Å° À¯Çü";
@@ -962,7 +962,7 @@ InfoBox MSG_SRTERR
     MESSAGE [ finnish ] = "Valinnan järjestäminen ei onnistu" ;
     MESSAGE [ danish ] = "Kan ikke sortere det markerede" ;
     MESSAGE [ french ] = "Impossible de trier la sélection" ;
-    MESSAGE [ swedish ] = "Kan inte sortera markering" ;
+    MESSAGE [ swedish ] = "Det gick inte att sortera markering" ;
     MESSAGE [ dutch ] = "Selectie kan niet worden gesorteerd" ;
     MESSAGE [ spanish ] = "No se pudo ordenar la selección" ;
     MESSAGE [ english_us ] = "Cannot sort selection" ;
@@ -978,4 +978,5 @@ InfoBox MSG_SRTERR
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No se pudo ordenar la selección";
 };
+
 
