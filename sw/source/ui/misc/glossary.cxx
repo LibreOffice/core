@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-10-30 10:10:36 $
+ *  last change: $Author: mtg $ $Date: 2001-11-08 11:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,9 +585,9 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
                                     !pGlossaryHdl->IsReadOnly() );
 
     SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
-    DBG_ASSERT(pEntry, "keine Selektion?")
-    sal_Bool bEnable = !aCategoryBox.GetParent( pEntry ) && !bIsOld &&
-                        !pGlossaryHdl->IsReadOnly();
+    sal_Bool bEnable = sal_False;
+    if ( pEntry )
+        bEnable = !aCategoryBox.GetParent( pEntry ) && !bIsOld && !pGlossaryHdl->IsReadOnly();
     pMn->EnableItem( FN_GL_IMPORT, bEnable );
     return 1;
 }
