@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:38:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1819,13 +1819,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {
-                SvtUserOptions aUserOpt;
 
+                ScDocument* pDoc = GetViewData()->GetDocument();
                 String aNoteStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_RANGE_NOTETEXT )).GetValue();
-                String aDateStr = ScGlobal::pLocaleData->getDate( Date() );
-                String aAuthorStr = aUserOpt.GetID();
-                ScPostIt aNote( aNoteStr, aDateStr, aAuthorStr );
+                ScPostIt aNote( aNoteStr, pDoc);
 
                 SCCOL nCol;
                 SCROW nRow;
@@ -1847,7 +1845,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCCOL       nCol = GetViewData()->GetCurX();
                 SCROW       nRow = GetViewData()->GetCurY();
                 SCTAB       nTab = GetViewData()->GetTabNo();
-                ScPostIt    aNote;
+                ScPostIt    aNote(pDoc);
 
                 if ( pReqArgs )
                 {
@@ -1874,7 +1872,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCCOL       nCol = GetViewData()->GetCurX();
                 SCROW       nRow = GetViewData()->GetCurY();
                 SCTAB       nTab = GetViewData()->GetTabNo();
-                ScPostIt    aNote;
+                ScPostIt    aNote(pDoc);
 
                 if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
                 {
