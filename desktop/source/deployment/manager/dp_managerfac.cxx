@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_managerfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:08:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,7 @@
 
 #include "dp_manager.h"
 #include "dp_resource.h"
-#include "cppuhelper/compbase2.hxx"
-#include "com/sun/star/lang/XUnoTunnel.hpp"
+#include "cppuhelper/compbase1.hxx"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 
@@ -75,8 +74,8 @@ using ::rtl::OUString;
 namespace dp_manager {
 namespace factory {
 
-typedef ::cppu::WeakComponentImplHelper2<
-    deployment::XPackageManagerFactory, lang::XUnoTunnel > t_pmfac_helper;
+typedef ::cppu::WeakComponentImplHelper1<
+    deployment::XPackageManagerFactory > t_pmfac_helper;
 
 //==============================================================================
 class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
@@ -99,27 +98,10 @@ public:
     PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( Sequence<sal_Int8> const & id )
-        throw (RuntimeException);
-
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
         OUString const & context ) throw (RuntimeException);
 };
-
-// xxx todo: remove when PL has inserted res mgr mutex in tools:
-// XUnoTunnel: hack to set application solar mutex from within gui
-//______________________________________________________________________________
-sal_Int64 PackageManagerFactoryImpl::getSomething(
-    Sequence<sal_Int8> const & id ) throw (RuntimeException)
-{
-    ::rtl::OString str( reinterpret_cast<sal_Char const *>(id.getConstArray()),
-                        id.getLength() );
-    if (str.equals("ResMgrMutexPointer"))
-        return reinterpret_cast<sal_Int64>(&g_pResMgrMutex);
-    return 0;
-}
 
 //==============================================================================
 OUString SAL_CALL getImplementationName()
