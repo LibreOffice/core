@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 20:32:35 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 15:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_LOGIN
         WordBreak = TRUE ;
         Text = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ English ] = "Please enter user name and password here for %1." ;
-        Text [ portuguese ] = "Especifique o nome do utilizador e a senha para %1." ;
+        Text [ portuguese ] = "Indique o nome do utilizador e a senha para %1." ;
         Text [ english_us ] = "Please enter user name and password for %1." ;
         Text [ portuguese_brazilian ] = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ swedish ] = "Mata in användarnamn och lösenord här för %1." ;
@@ -317,7 +317,7 @@ ModalDialog DLG_LOGIN
         Text [ spanish ] = "Registrar" ;
         Text [ french ] = "Login" ;
         Text [ dutch ] = "Aanmelden" ;
-        Text [ portuguese ] = "Registar" ;
+        Text [ portuguese ] = "Login" ;
         Text[ chinese_simplified ] = "µÇÂ¼";
         Text[ russian ] = "Âõîä â ñèñòåìó";
         Text[ polish ] = "Login";
@@ -348,7 +348,7 @@ ModalDialog DLG_LOGIN
     {
         Text = "auf " ;
         Text [ English ] = "at " ;
-        Text [ portuguese ] = "em " ;
+        Text [ portuguese ] = "em  " ;
         Text [ english_us ] = "to " ;
         Text [ portuguese_brazilian ] = "auf " ;
         Text [ swedish ] = "på  " ;
