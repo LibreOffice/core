@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:38:50 $
+ *  last change: $Author: mba $ $Date: 2005-01-20 09:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
         return uno::Reference< embed::XStorage >();
 
     // if the medium was constructed with a Storage: use this one, not a temp. storage
-    if ( pImp->xStorage.is() && !aLogicName.Len() )
+    // if a temporary storage already exists: use it
+    if ( pImp->xStorage.is() && ( !aLogicName.Len() || pImp->pTempFile ) )
         return pImp->xStorage;
 
     // if necessary close stream that was used for reading
