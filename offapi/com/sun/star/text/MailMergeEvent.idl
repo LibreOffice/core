@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailMergeEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:14:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com { module sun { module star { module text {
 
     @since #107627#
 */
-struct MailMergeEvent : com::sun::star::lang::EventObject
+published struct MailMergeEvent : com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** The model of the document to be processed next.
