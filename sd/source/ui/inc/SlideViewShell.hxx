@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:55:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,6 @@ public:
     SFX_DECL_VIEWFACTORY(SlideViewShell);
     SFX_DECL_INTERFACE(SD_IF_SDSLIDEVIEWSHELL);
 
-    SlideViewShell(SfxViewFrame *pFrame, const SlideViewShell& rShell);
-
     /** Create a new view shell for the slide view.
         @param rViewShellBase
             The new object will be stacked on this view shell base.
@@ -111,34 +109,18 @@ public:
             The frame view that makes it possible to pass information from
             one view shell to the next.
     */
-    SlideViewShell (
-        SfxViewFrame* pFrame,
+    SlideViewShell(SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
+
+    SlideViewShell(SfxViewFrame *pFrame,
+        ::Window* pParentWindow,
+        const SlideViewShell& rShell);
 
     virtual ~SlideViewShell (void);
 
     virtual void    Paint(const Rectangle& rRect, ::sd::Window* pWin);
-
-    /** Set the position and size of the area which contains the GUI
-        elements like rulers, sliders, and buttons as well as the document
-        view.  Both size and position are expected to be in pixel
-        coordinates.  The positions and sizes of the mentioned GUI elements
-        are updated as well.
-
-        <p> This method is implemented by first setting copying the given
-        values to internal variables and then calling the
-        <type>ArrangeGUIElements</type> method which performs the actual
-        work of sizeing and arranging the UI elements accordingly.</p>
-        @param rPos
-            The position of the enclosing window relative to the document
-            window.  This is only interesting if a Draw/Impress document
-            view is embedded as OLE object into another document view.  For
-            normal documents this position is (0,0).
-        @param rSize
-            The new size in pixel.
-    */
-    virtual void    AdjustPosSizePixel(const Point &rPos, const Size &rSize);
 
     /** Arrange and resize the GUI elements like rulers, sliders, and
         buttons as well as the actual document view according to the size of
@@ -212,9 +194,9 @@ public:
     */
     virtual void Activate (BOOL IsMDIActivate);
 
+    virtual DrawController* GetController (void);
+
 protected:
-    virtual void    InnerResizePixel(const Point &rPos, const Size &rSize);
-    virtual void    OuterResizePixel(const Point &rPos, const Size &rSize);
     virtual Size    GetOptimalSizePixel() const;
     virtual long    VirtHScrollHdl(ScrollBar* pHScroll);
     virtual long    VirtVScrollHdl(ScrollBar* pVHScroll);
