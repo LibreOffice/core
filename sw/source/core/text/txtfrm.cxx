@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:22:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2345,23 +2345,26 @@ void SwTxtFrm::CalcBaseOfstForFly()
 
     SWRECTFN( this )
 
-    SwTwips nTop = 0;
-    SwTwips nLineHeight = 200;
     SwRect aFlyRect( Frm().Pos() + Prt().Pos(), Prt().SSize() );
 
-    // Get first 'real' line
-    const SwLineLayout* pLay = GetPara();
-    while( pLay && pLay->IsDummy() )
+    // Get first 'real' line and adjust position and height of line rectangle
+    // OD 08.09.2003 #110978#, #108749#, #110354# - correct behaviour,
+    // if no 'real' line exists (empty paragraph with and without a dummy portion)
     {
-        nTop += pLay->Height();
-        pLay = pLay->GetNext();
+        SwTwips nTop = (aFlyRect.*fnRect->fnGetTop)();
+        const SwLineLayout* pLay = GetPara();
+        SwTwips nLineHeight = 200;
+        while( pLay && pLay->IsDummy() && pLay->GetNext() )
+        {
+            nTop += pLay->Height();
+            pLay = pLay->GetNext();
+        }
+        if ( pLay )
+        {
+            nLineHeight = pLay->Height();
+        }
+        (aFlyRect.*fnRect->fnSetTopAndHeight)( nTop, nLineHeight );
     }
-    if ( pLay )
-        nLineHeight = pLay->Height();
-
-    SwTwips nNewTop = (aFlyRect.*fnRect->fnGetTop)() +
-                      ( bVert ? -nTop : nTop );
-    (aFlyRect.*fnRect->fnSetTopAndHeight)( nNewTop, nLineHeight );
 
     SwTxtFly aTxtFly( this );
     aTxtFly.SetIgnoreCurrentFrame( sal_True );
