@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:37:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,10 @@ sal_Int32 ReadThroughComponent(
     catch ( packages::WrongPasswordException& )
     {
         return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch( packages::zip::ZipIOException& r )
+    {
+        return ERRCODE_IO_BROKENPACKAGE;
     }
     catch ( uno::Exception& )
     {
