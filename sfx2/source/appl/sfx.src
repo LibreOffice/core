@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:26:08 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 20:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ String STR_UNDO
     Text [ norwegian ] = "Angre " ;
     Text [ italian ] = "Annulla " ;
     Text [ portuguese_brazilian ] = "Desfazer " ;
-    Text [ portuguese ] = "Desfazer: " ;
+    Text [ portuguese ] = "Anular: " ;
     Text [ finnish ] = "Kumoa " ;
     Text [ danish ] = "Fortryd: " ;
     Text [ french ] = "Annuler : " ;
@@ -440,7 +440,7 @@ String STR_REDO
     Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî (~D)";
     Text[ russian ] = "Âîññòàíîâèòü: ";
     Text[ polish ] = "Przywróæ: ";
-    Text[ japanese ] = "‚â‚è’¼‚µ: (~D)";
+    Text[ japanese ] = "‚â‚è’¼‚µ(~D): ";
     Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O:";
     Text[ arabic ] = "ÅÚÇÏÉ: ";
     Text[ greek ] = "ÅğáíáöïñÜ: ";
