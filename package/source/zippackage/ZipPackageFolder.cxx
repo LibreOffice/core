@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:21:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,11 @@ using vos::ORef;
 
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
-ZipPackageFolder::ZipPackageFolder ()
+ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xFactory )
+: m_xFactory( xFactory )
 {
+    OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
+
     SetFolder ( sal_True );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -538,6 +541,13 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 {
                     xStream->closeInput();
                     pStream->SetPackageMember ( sal_True );
+                }
+
+                // Remove hacky bit from entry flags
+                if ( pTempEntry->nFlag & ( 1 << 4 ) )
+                {
+                    pTempEntry->nFlag &= ~( 1 << 4 );
+                    pTempEntry->nMethod = STORED;
                 }
 
                 // Then copy it back afterwards...
