@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumberwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:59:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 
 #ifndef _COM_SUN_STAR_I18N_XNATIVENUMBERSUPPLIER_HPP_
-#include <drafts/com/sun/star/i18n/XNativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -76,7 +76,7 @@ namespace com { namespace sun { namespace star {
 class NativeNumberWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
                                 // not implemented, prevent usage
                                 NativeNumberWrapper( const NativeNumberWrapper& );
             NativeNumberWrapper&    operator=( const NativeNumberWrapper& );
@@ -99,12 +99,12 @@ public:
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
-    ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
+    ::com::sun::star::i18n::NativeNumberXmlAttributes convertToXmlAttributes(
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 
     sal_Int16       convertFromXmlAttributes(
-                        const ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr ) const;
+                        const ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr ) const;
 
 };
 
