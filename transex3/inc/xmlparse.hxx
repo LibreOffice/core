@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:16:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "export.hxx"
 #include "xmlutil.hxx"
 
+#include <fstream>
+#include <iostream>
+
 class XMLParentNode;
 class XMLElement;
 
@@ -90,6 +93,7 @@ typedef void Sigfunc(int);
 Sigfunc* signal(int, Sigfunc*);
 
 using namespace ::rtl;
+using namespace std;
 
 #include <hash_map> /* std::hashmap*/
 #include <deque>    /* std::deque*/
@@ -294,7 +298,7 @@ public:
     XMLHashMap* GetStrings(){return XMLStrings;}
     BOOL        Write( String &rFileName );
     BOOL        Write() { return Write( sFileName ); }
-    BOOL        Write( SvStream &rStream , XMLNode *pCur = NULL );
+    BOOL        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL , int pos = 0 );
 
@@ -308,7 +312,7 @@ public:
 
 private:
     // writes a string as UTF8 with dos line ends to a given stream
-    void        WriteString( SvStream &rStream, const String &sString );
+    void        WriteString( ofstream &rStream, const String &sString );
 
     // quotes the given text for writing to a file
     void        QuotHTML( String &rString );
