@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 07:02:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 08:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,12 +596,13 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
                 {
                     sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
-                    strOldCellContents = pEntry->IsVisible() ? g_strOne : g_strZero;
+                    strOldCellContents = bOldValue ? g_strOne : g_strZero;
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
                 }
                 else
                 {
-                    strOldCellContents = pEntry->IsVisible() ? g_strOne : g_strZero;
+                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
+                    strOldCellContents = bOldValue ? g_strOne : g_strZero;
                     pEntry->SetVisible(sal_True);
                     m_pVisibleCell->GetBox().Check();
                 }
@@ -1678,7 +1679,7 @@ void OSelectionBrowseBox::CellModified()
                 }
                 else
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
-                m_pVisibleCell->GetBox().SaveValue();
+                //  m_pVisibleCell->GetBox().SaveValue();
 
 //              if(bOldValue != pEntry->IsVisible())
 //              {
