@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:04:28 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,8 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
-
-void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
-                                      const SwTxtNode* pTxtNd,
-                                      sal_Bool bSrchNum )
+void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
+    const SwTxtNode* pTxtNd, sal_Bool bSrchNum)
 {
     ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
     SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
@@ -164,9 +162,14 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
     else if( 0 == (pTxtNd = GetBodyTxtNode( *pDoc, aPos, *pFrm )) )
         // kein TxtNode (Formatierung Kopf/Fusszeile)
         return;
+    ChangeExpansion(*pTxtNd, bSrchNum);
+}
 
-    ASSERT( pTxtNd, "Wo steht das Feld" );
-    pTxtNd = pTxtNd->FindOutlineNodeOfLevel( nLevel );
+
+void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
+{
+    SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
+    const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
     if( pTxtNd )
     {
         if( bSrchNum )
