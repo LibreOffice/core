@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:02:13 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@ public:
         { m_errorCount = errorCount; }
     void incErrorCount()
         { m_errorCount++; }
+    sal_uInt32 getWarningCount()
+        { return m_warningCount; }
+    void setWarningCount(sal_uInt32 warningCount)
+        { m_warningCount = warningCount; }
+    void incWarningCount()
+        { m_warningCount++; }
     sal_uInt32 getLineNumber()
         { return m_lineNumber; }
     void setLineNumber(sal_uInt32 lineNumber)
@@ -162,6 +168,7 @@ private:
     sal_Bool            m_bGenerateDoc;
     sal_Bool            m_bIsInMainfile;
     sal_uInt32          m_errorCount;
+    sal_uInt32          m_warningCount;
     sal_uInt32          m_lineNumber;
     ParseState          m_parseState;
     StringSet           m_includes;
