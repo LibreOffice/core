@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:39:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@
               <value xml:lang="ar">الجدول</value>
               <value xml:lang="ca">Crea</value>
               <value xml:lang="th">กระดาษคำนวณ</value>
-                <value xml:lang="cs">Table</value>
+                <value xml:lang="cs">Tabulka</value>
+                <value xml:lang="sk">Tabuĺka</value>
                 <value xml:lang="he">‮טבלה‬</value>
                 <value xml:lang="hi-IN">Table</value>
             </prop>
@@ -123,6 +124,7 @@
               <value xml:lang="ca">Text</value>
               <value xml:lang="th">ข้อความ</value>
                 <value xml:lang="cs">Text</value>
+                <value xml:lang="sk">Text</value>
                 <value xml:lang="he">‮טקסט‬</value>
                 <value xml:lang="hi-IN">Text</value>
             </prop>
@@ -154,7 +156,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -188,7 +191,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -220,7 +224,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -252,7 +257,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -284,7 +290,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -316,7 +323,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -348,7 +356,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
@@ -380,7 +389,8 @@
               <value xml:lang="ar">رسم توضيحي</value>
               <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
-                <value xml:lang="cs">Illustration</value>
+                <value xml:lang="cs">Obrázek</value>
+                <value xml:lang="sk">Obrázok</value>
                 <value xml:lang="he">‮איור‬</value>
                 <value xml:lang="hi-IN">Illustration</value>
             </prop>
