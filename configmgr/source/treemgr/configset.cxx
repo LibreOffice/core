@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 16:39:14 $
+ *  last change: $Author: jb $ $Date: 2001-10-26 11:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,18 +415,29 @@ TemplateProvider SetElementFactory::findTemplateProvider(Tree const& aTree, Node
 // class TreeSetUpdater and ValueSetUpdater
 //-----------------------------------------------------------------------------
 
+static Attributes getNewElementAttributes()
+{
+    Attributes aResult;
+    aResult.bDefaulted = false;
+    aResult.bReplaced  = true;
+
+    return aResult;
+}
+
 // Value Element Factory methods
 //-----------------------------------------------------------------------------
 
 ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue)
 {
+    static const Attributes aNewValueAttributes = getNewElementAttributes();
+
     UnoType aType = m_aTemplate->getInstanceType();
 
     std::auto_ptr<INode> pNode;
     if (aValue.hasValue())
-        pNode.reset( new ValueNode(aName.toString(),aValue, m_aTemplate->getAttributes()) );
+        pNode.reset( new ValueNode(aName.toString(),aValue, aNewValueAttributes) );
     else
-        pNode.reset( new ValueNode(aName.toString(),aType, m_aTemplate->getAttributes()) );
+        pNode.reset( new ValueNode(aName.toString(),aType, aNewValueAttributes) );
 
     return new ElementTreeImpl(pNode, m_aTemplate, TemplateProvider() );
 }
