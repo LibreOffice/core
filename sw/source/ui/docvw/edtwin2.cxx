@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:23:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
+        USHORT nStyle = 0; // style of quick help
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
@@ -261,7 +262,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
         {
-            switch( aCntntAtPos.eCntntAtPos )
+             switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
@@ -296,6 +297,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     pFtn->GetFtnText( sTxt );
                     sTxt.Insert( SW_RESSTR( pFtn->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
+                    if( aCntntAtPos.IsInRTLText() )
+                        nStyle |= QUICKHELP_BIDI_RTL;
                 }
                 break;
 
@@ -397,7 +400,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
                     aRect.Right()  = aPt.X();
                     aRect.Bottom() = aPt.Y();
-                    Help::ShowQuickHelp( this, aRect, sTxt );
+                    Help::ShowQuickHelp( this, aRect, sTxt, nStyle );
                 }
             }
 
