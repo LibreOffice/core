@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
+
+    if ( !Identifier.is() )
+        return uno::Reference< star::ucb::XContent >();
 
     // Check URL scheme...
 
