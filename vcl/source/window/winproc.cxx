@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:05:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,9 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
 
         pChild->mbCommand = FALSE;
         pChild->Command( aCEvt );
+
+        if( !aDelData.IsDelete() )
+            pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
     }
     else
         bPreNotify = TRUE;
@@ -679,7 +682,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
                     // #82968#
                     if( !aDelData.IsDelete() )
-                        aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNLeaveEvt );
+                        aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
 
                 pWindow->mpFrameData->mpMouseMoveWin = NULL;
@@ -859,7 +862,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 
         // #82968#
         if ( !aDelData.IsDelete() )
-            aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
+            aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
 
     if ( aDelData.IsDelete() )
@@ -1149,7 +1152,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         }
         // #82968#
         if( !aDelData.IsDelete() )
-            aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
+            aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
     else
         bPreNotify = TRUE;
@@ -1265,7 +1268,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             }
             // #82968#
             if( !aDelData.IsDelete() )
-                aNEvt.GetWindow()->ImplNotifyKeyMouseEventListeners( aNEvt );
+                aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
         }
         else
             bPreNotify = TRUE;
