@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:58:59 $
+ *  last change: $Author: obr $ $Date: 2001-06-15 07:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
 
-
 /***************************************************************************/
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
@@ -142,10 +141,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     if( Options & osl_Process_SEARCHPATH )
     {
         if( osl_File_E_None != osl_searchFileURL( ustrImageName, NULL, &ustrPath ) )
-        {
-            rtl_uString_release( ustrPath );
             return osl_Process_E_NotFound;
-        }
     }
     else
     {
@@ -185,21 +181,30 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
             osl_getEnvironment( ustrTmp, &ustrComSpec );
             rtl_uString_release( ustrTmp );
 
-            /* add to chars for quotes */
-            rtl_uStringbuffer_ensureCapacity( &ustrCommandLine, &nCapacity, ustrComSpec->length + 3 );
+            if( ustrComSpec )
+            {
+                /* FIXME: how can I determine if this is a gui app */
 
-            /* check if compec path contains blanks and quote it if any */
-            nIndex = rtl_ustr_indexOfChar_WithLength( ustrComSpec->buffer, ustrComSpec->length, ' ' );
-            if( nIndex != -1 )
-                rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+                /* cmd.exe does not work without a console window */
+                if( !( Options & osl_Process_WAIT ) || ( Options & osl_Process_DETACHED ) )
+                    dwFlags |= CREATE_NEW_CONSOLE;
 
-            rtl_uStringbuffer_insert( &ustrCommandLine, &nCapacity, ustrCommandLine->length, ustrComSpec->buffer, ustrComSpec->length );
+                /* add to chars for quotes */
+                rtl_uStringbuffer_ensureCapacity( &ustrCommandLine, &nCapacity, ustrComSpec->length + 6 );
 
-            if( nIndex != -1 )
-                rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+                /* check if compec path contains blanks and quote it if any */
+                nIndex = rtl_ustr_indexOfChar_WithLength( ustrComSpec->buffer, ustrComSpec->length, ' ' );
+                if( nIndex != -1 )
+                    rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
 
-            rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, " ", 1 );
-            rtl_uString_release( ustrComSpec );
+                rtl_uStringbuffer_insert( &ustrCommandLine, &nCapacity, ustrCommandLine->length, ustrComSpec->buffer, ustrComSpec->length );
+
+                if( nIndex != -1 )
+                    rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+
+                rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, " /c ", 4 );
+                rtl_uString_release( ustrComSpec );
+            }
         }
     }
 
@@ -234,7 +239,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
             rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
     }
 
-    if( Options & osl_Process_DETACHED )
+    if( ( Options & osl_Process_DETACHED ) && !( dwFlags & CREATE_NEW_CONSOLE ) )
         dwFlags |= DETACHED_PROCESS;
 
     /* initialize startupInfo structure */
@@ -315,7 +320,9 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     if( ustrCurrentWorkDir )
         rtl_uString_release( ustrCurrentWorkDir );
 
+#ifdef DEBUG
     dwFlags = GetLastError();
+#endif
 
     if (bRet)
     {
