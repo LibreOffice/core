@@ -2,9 +2,9 @@
  *
  *  $RCSfile: minfitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _SFX_MINFITEM_HXX
 #define _SFX_MINFITEM_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -70,7 +77,7 @@
 #endif
 class BasicManager;
 
-class SfxMacroInfoItem: public SfxPoolItem
+class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
 {
     const BasicManager*     pBasicManager;
     String                  aLibName;
