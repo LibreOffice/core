@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jb $ $Date: 2002-03-15 13:49:59 $
+#   last change: $Author: jb $ $Date: 2002-03-28 14:12:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,22 +74,18 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/loader.obj	\
-        $(SLO)$/treecache.obj	\
-        $(SLO)$/treedata.obj	\
-        $(SLO)$/timestamp.obj	\
-        $(SLO)$/disposetimer.obj	\
+        $(SLO)$/timestamp.obj			\
+        $(SLO)$/disposetimer.obj		\
         $(SLO)$/cachewritescheduler.obj	\
-        $(SLO)$/invalidatetree.obj \
-        $(SLO)$/cachefactory.obj	\
-        $(SLO)$/backendwrap.obj	\
-    
-#		$(SLO)$/cacheaccess.obj	\
-#		$(SLO)$/cachedata.obj	\
-#		$(SLO)$/cacheline.obj	\
-#		$(SLO)$/cachemulticaster.obj	\
-#		$(SLO)$/cachemanager.obj	\
-#		$(SLO)$/treemanager.obj	\
+        $(SLO)$/invalidatetree.obj		\
+        $(SLO)$/cachefactory.obj		\
+        $(SLO)$/backendwrap.obj			\
+        $(SLO)$/cacheaccess.obj			\
+        $(SLO)$/cachedata.obj			\
+        $(SLO)$/cacheline.obj			\
+        $(SLO)$/cachemulticaster.obj	\
+        $(SLO)$/cachecontroller.obj		\
+        $(SLO)$/treemanager.obj			\
 
 # --- Targets ----------------------------------
 
