@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:40:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace connectivity
 
             OAdabasConnection* getConnection() { return m_pConnection;}
 
-            const ::rtl::OUString& getName() const { return m_Name; }
+            const ::rtl::OUString& getTableName() const { return m_Name; }
             const ::rtl::OUString& getSchema() const { return m_SchemaName; }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
