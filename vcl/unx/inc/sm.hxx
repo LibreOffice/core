@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:56:46 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class SessionManagerClient
     DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
 public:
-    static void open();
+    static VCL_DLLPUBLIC void open(); // needed by other plugins, so export
     static void close();
 
     static bool checkDocumentsSaved();
