@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 13:45:25 $
+ *  last change: $Author: tl $ $Date: 2002-11-14 10:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ public:
 
     // creates temporary doc with selected text for PDF export
     SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShellRef );
-    SwDoc * FillPrtDoc( SwDoc* pPrtDoc, SfxPrinter* pPrt );
+    SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
     void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,

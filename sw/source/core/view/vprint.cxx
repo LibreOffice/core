@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-13 14:35:31 $
+ *  last change: $Author: tl $ $Date: 2002-11-14 10:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShel
     }
     return pPrtDoc;
 }
-SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, SfxPrinter* pPrt)
+SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
@@ -958,8 +958,10 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, SfxPrinter* pPrt)
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
+    //! Make a copy of it since it gets destroyed with the temporary document
+    //! used for PDF export
     if (pPrt)
-        pPrtDoc->SetPrt( pPrt );
+        pPrtDoc->SetPrt( new SfxPrinter(*pPrt) );
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
