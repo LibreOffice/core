@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-22 08:31:26 $
+ *  last change: $Author: tra $ $Date: 2002-10-31 11:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4979,6 +4979,45 @@ int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const st
     // always return 0 because there is only
     // an "OK" button
     return 0;
+}
+
+// -----------------------------------------------------------------------
+/* We have to map the button identifier to the identifier used by the Win32
+   Platform SDK to specify the default button for the MessageBox API.
+   The first dimension is the button combination, the second dimension
+   is the button identifier.
+*/
+static int DEFAULT_BTN_MAPPING_TABLE[][8] =
+{
+    //  Undefined        OK             CANCEL         ABORT          RETRY          IGNORE         YES             NO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK_CANCEL
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //ABORT_RETRY_IGNO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO_CANCEL
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }  //RETRY_CANCEL
+};
+
+int ImplShowNativeMessageBox(const String& rTitle, const String& rMessage, int nButtonCombination, int nDefaultButton)
+{
+    DBG_ASSERT( nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
+                nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
+                nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
+                nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, "Invalid arguments!" );
+
+    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | nButtonCombination;
+
+    if (nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
+        nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
+        nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
+        nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
+        nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
+
+    return MessageBoxW(
+        0,
+        rMessage.GetBuffer(),
+        rTitle.GetBuffer(),
+        nFlags);
 }
 
 // -----------------------------------------------------------------------
