@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ using namespace ::xmloff::token;
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_DASH_NAME,
+    XML_TOK_DASH_DISPLAY_NAME,
     XML_TOK_DASH_STYLE,
     XML_TOK_DASH_DOTS1,
     XML_TOK_DASH_DOTS1LEN,
@@ -134,6 +135,7 @@ enum SvXMLTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME },
     { XML_NAMESPACE_DRAW, XML_STYLE,            XML_TOK_DASH_STYLE },
     { XML_NAMESPACE_DRAW, XML_DOTS1,            XML_TOK_DASH_DOTS1 },
     { XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH,     XML_TOK_DASH_DOTS1LEN },
@@ -177,6 +179,7 @@ sal_Bool XMLDashStyleImport::importXML(
     aLineDash.Dashes = 0;
     aLineDash.DashLen = 0;
     aLineDash.Distance = 20;
+    OUString aDisplayName;
 
     sal_Bool bIsRel = sal_False;
 
@@ -198,6 +201,11 @@ sal_Bool XMLDashStyleImport::importXML(
         case XML_TOK_DASH_NAME:
             {
                 rStrName = rStrValue;
+            }
+            break;
+        case XML_TOK_DASH_DISPLAY_NAME:
+            {
+                aDisplayName = rStrValue;
             }
             break;
         case XML_TOK_DASH_STYLE:
@@ -268,6 +276,13 @@ sal_Bool XMLDashStyleImport::importXML(
 
     rValue <<= aLineDash;
 
+    if( aDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
+                                     rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
+
     return sal_True;
 }
 
@@ -307,7 +322,13 @@ sal_Bool XMLDashStyleExport::exportXML(
             OUStringBuffer aOut;
 
             // Name
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+            sal_Bool bEncoded = sal_False;
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                  rExport.EncodeStyleName( rStrName,
+                                                           &bEncoded ) );
+            if( bEncoded )
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                      rStrName );
 
             // Style
             rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
