@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:36:23 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:25:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ SHL1VERSIONMAP= sd.map
 SHL1IMPLIB= sdi
 
 # static libraries
-SHL1STDLIBS= $(SCHLIB) $(SCLIB) $(SMLIB)
+SHL1STDLIBS= $(SCHLIB)
 
 # dynamic libraries
 SHL1STDLIBS+= \
@@ -111,6 +111,7 @@ SHL1STDLIBS+= \
 
 SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET)
+SHL1DEPN+=	makefile.mk
 
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -141,18 +142,30 @@ LIB3FILES=      \
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
-            $(SLB)$/accessibility.lib		
+            $(SLB)$/accessibility.lib
 
+SHL2TARGET= sdd$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= sddimp
+SHL2VERSIONMAP= sdd.map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=		$(SHL2TARGET)
 
-LIB4TARGET=$(LB)$/sdlib.lib
-LIB4ARCHIV=$(LB)$/libsdlib.a
-.IF "$(GUI)"=="UNX"
-LIB4OBJFILES=$(OBJ)$/sdlib.obj \
-          $(OBJ)$/sdresid.obj
-.ELSE
-LIB4OBJFILES=$(OBJ)$/sdlib.obj \
-          $(OBJ)$/sdresid.obj
-.ENDIF
+SHL2STDLIBS= \
+            $(SFX2LIB) \
+            $(SVXLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(VCLLIB) \
+            $(TOOLSLIB) \
+            $(UCBHELPERLIB) \
+            $(COMPHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
+
+SHL2OBJS=   $(SLO)$/sddetect.obj \
+        $(SLO)$/detreg.obj
+SHL2DEPN+=	makefile.mk
 
 
 .IF "$(depend)" == ""
@@ -161,7 +174,7 @@ ALL:    \
 .ENDIF
 
 
-.IF "$(SVXLIGHT)" != "" 
+.IF "$(SVXLIGHT)" != ""
 LIB5TARGET= $(LB)$/sdl.lib
 LIB5ARCHIV= $(LB)$/libsdl.a
 LIB5FILES=  \
@@ -188,12 +201,6 @@ $(MISC)$/$(SHL1TARGET).def:
     @echo DESCRIPTION 'SDRAW3 DLL'                                 >>$@
     @echo DATA        READ WRITE NONSHARED                          >>$@
     @echo EXPORTS                                                   >>$@
-    @echo   CreateSdDrawDocShellDll @20                            >>$@
-    @echo   CreateSdGraphicDocShellDll @21                         >>$@
-    @echo   CreateObjSdDrawDocShellDll @22                         >>$@
-    @echo   CreateObjSdGraphicDocShellDll @23                      >>$@
-    @echo   InitSdDll @24                                          >>$@
-    @echo   DeInitSdDll @25                                        >>$@
     @echo component_getImplementationEnvironment 				   >>$@
     @echo component_writeInfo									   >>$@
     @echo component_getFactory									   >>$@
