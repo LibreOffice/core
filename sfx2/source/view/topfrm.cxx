@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:13:16 $
+ *  last change: $Author: mba $ $Date: 2001-11-19 11:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,6 +739,7 @@ long SfxViewFrameClose_Impl( void* pObj, void* pArg )
     return 0;
 }
 
+TYPEINIT1(SfxTopFrame, SfxFrame);
 TYPEINIT1(SfxTopViewFrame, SfxViewFrame);
 
 //--------------------------------------------------------------------
