@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:18:32 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,37 +1166,6 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ hebrew ] = "Tausender-Trennz.";
     Text[ hindi ] = "à¤¹à¤œà¤¾à¤° à¤…à¤²à¤—à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
     Text[ slovak ] = "OddeÄ¾ovaÄ tisÃ­cok";
-};
-String RID_STR_HARDLINEBREAKS
-{
-    Text = "Harter Zeilenumbruch" ;
-    Text [ English ] = "Hard line breaks" ;
-    Text [ portuguese ] = "Quebra de linha manual" ;
-    Text [ english_us ] = "Manual line break" ;
-    Text [ portuguese_brazilian ] = "Quebra de linha manual" ;
-    Text [ swedish ] = "Hård radbrytning" ;
-    Text [ danish ] = "Hårdt linjeskift" ;
-    Text [ italian ] = "Interruzione di riga fissa" ;
-    Text [ spanish ] = "Salto de línea manual" ;
-    Text [ french ] = "Retour à la ligne direct" ;
-    Text [ dutch ] = "Vast regeleinde" ;
-    Text[ chinese_simplified ] = "æ‰‹åŠ¨æ¢è¡Œ";
-    Text[ russian ] = "Ïåğåíîñ ñòğîêè";
-    Text[ polish ] = "Rêczny podzia³ wiersza";
-    Text[ japanese ] = "ãƒãƒ¼ãƒ‰æ”¹è¡Œ";
-    Text[ chinese_traditional ] = "æ‰‹å‹•æ›åˆ—";
-    Text[ greek ] = "¸íôïíç áëëáãŞ ãñáììŞò";
-    Text[ korean ] = "ìˆ˜ë™ìœ¼ë¡œ ì¤„ ë°”ê¿ˆ";
-    Text[ arabic ] = "İÇÕá ÃÓØÑ íÏæí";
-    Text[ turkish ] = "Manual satır başı";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Näytä rivinvaihto";
-    Text[ catalan ] = "Salt de línia directe";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹à¸šà¹ˆà¸‡à¹‚à¸”à¸¢à¸•à¸£à¸‡";
-    Text[ czech ] = "RuÄnÃ­ zalomenÃ­ Å™Ã¡dku";
-    Text[ hebrew ] = "Harter Zeilenumbruch";
-    Text[ hindi ] = "à¤®à¤¾à¤¨à¥à¤¯à¥à¤µà¤² à¤°à¥‡à¤–à¤¾ à¤•à¥€ à¤–à¤£à¥à¤¡à¤¨";
-    Text[ slovak ] = "RuÄnÃ½";
 };
 String RID_STR_PRINTABLE
 {
@@ -5298,7 +5267,7 @@ String RID_STR_PROGRESSVALUE_MAX
 };
 String RID_STR_SCROLLVALUE
 {
-    Text = "Scrollwert" ;
+    Text = "Bildlaufwert" ;
     Text [ ENGLISH ] = "Scroll value" ;
     Text[ english_us ] = "Scroll value";
     Text[ portuguese ] = "Valor de deslocamento";
@@ -5322,13 +5291,13 @@ String RID_STR_SCROLLVALUE
     Text[ finnish ] = "Vierityksen määrä";
     Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸„à¹ˆà¸²";
     Text[ czech ] = "Hodnota posunu";
-    Text[ hebrew ] = "Scrollwert";
+    Text[ hebrew ] = "Bildlaufwert";
     Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¥‰à¤² à¤®à¥‚à¤²à¥à¤¯";
     Text[ slovak ] = "Hodnota posunu";
 };
 String RID_STR_SCROLLVALUE_MAX
 {
-    Text = "Max. Scrollwert" ;
+    Text = "Max. Bildlaufwert" ;
     Text [ ENGLISH ] = "Scroll value max." ;
     Text[ english_us ] = "Scroll value max.";
     Text[ portuguese ] = "Valor de deslocamento máx.";
@@ -5352,69 +5321,45 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ finnish ] = "Vierityksen määrä enint.";
     Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸„à¹ˆà¸²à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
     Text[ czech ] = "Max. hodnota posunu";
-    Text[ hebrew ] = "Max. Scrollwert";
+    Text[ hebrew ] = "Max. Bildlaufwert";
     Text[ hindi ] = "à¤…à¤§à¤¿à¤•à¤¤à¤® à¤¸à¥à¤•à¥à¤°à¥‰à¤² à¤®à¥‚à¤²à¥à¤¯";
     Text[ slovak ] = "Max. hodnota posunu.";
 };
+String RID_STR_SCROLLVALUE_MIN
+{
+    Text = "Min. Bildlaufwert" ;
+    Text [ ENGLISH ] = "Scroll value min." ;
+    Text [ english_us ] = "Scroll value min.";
+};
+String RID_STR_DEFAULT_SCROLLVALUE
+{
+    Text = "Standard Bildlaufwert" ;
+    Text [ ENGLISH ] = "Default scroll value" ;
+    Text[ english_us ] = "Default scroll value";
+};
 String RID_STR_LINEINCREMENT
 {
-    Text = "Linienzunahme" ;
-    Text [ ENGLISH ] = "Line increment" ;
-    Text[ english_us ] = "Line increment";
-    Text[ portuguese ] = "Incrementar linha";
-    Text[ russian ] = "Øàã ëèíèè";
-    Text[ greek ] = "ÂŞìá ãñáììŞò";
-    Text[ dutch ] = "Toename lijn";
-    Text[ french ] = "Incrément de ligne";
-    Text[ spanish ] = "Incremento de línea";
-    Text[ italian ] = "Incremento linea";
-    Text[ danish ] = "Linjeforøgelse";
-    Text[ swedish ] = "Linjeinkrement";
-    Text[ polish ] = "Przyrost linii";
-    Text[ portuguese_brazilian ] = "Incremento de linha";
-    Text[ japanese ] = "ç·šå¢—åˆ†";
-    Text[ korean ] = "ì„  ì¦ê°€";
-    Text[ chinese_simplified ] = "çº¿æ¡é€’å¢";
-    Text[ chinese_traditional ] = "ç·šæ¢éå¢";
-    Text[ turkish ] = "Çizgi artışı";
-    Text[ arabic ] = "Line increment";
-    Text[ catalan ] = "Increment de línia";
-    Text[ finnish ] = "Rivin lisäys";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡à¸šà¸£à¸£à¸—à¸±à¸”";
-    Text[ czech ] = "PÅ™Ã­rÅ¯stek Å™Ã¡dkÅ¯";
-    Text[ hebrew ] = "Linienzunahme";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾ à¤¬à¤¢à¤¼à¤¤à¥€";
-    Text[ slovak ] = "PredÄºÅ¾enie ÃºseÄky";
+    Text = "Kleine Änderung" ;
+    Text [ english ] = "Small change" ;
+    Text [ english_us ] = "Small change";
 };
 String RID_STR_BLOCKINCREMENT
 {
-    Text = "Blockzunahme" ;
-    Text [ ENGLISH ] = "Block increment" ;
-    Text[ english_us ] = "Block increment";
-    Text[ portuguese ] = "Incrementar bloco";
-    Text[ russian ] = "Øàã áëîêà";
-    Text[ greek ] = "ÂŞìá ôìŞìáôïò";
-    Text[ dutch ] = "Toename blok";
-    Text[ french ] = "Incrément de bloc";
-    Text[ spanish ] = "Incremento de bloque";
-    Text[ italian ] = "Incremento blocco";
-    Text[ danish ] = "Blokforøgelse";
-    Text[ swedish ] = "Blockinkrement";
-    Text[ polish ] = "Przyrost bloku";
-    Text[ portuguese_brazilian ] = "Incremento de bloco";
-    Text[ japanese ] = "ãƒ–ãƒ­ãƒƒã‚¯å¢—åˆ†";
-    Text[ korean ] = "ë¸”ë¡ ì¦ê°€";
-    Text[ chinese_simplified ] = "å—é€’å¢";
-    Text[ chinese_traditional ] = "å€æ®µéå¢";
-    Text[ turkish ] = "Blok artışı";
-    Text[ arabic ] = "ÒíÇÏÉ ÇáßÊáÉ";
-    Text[ catalan ] = "Increment de bloc";
-    Text[ finnish ] = "Lohkon lisäys";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡à¸šà¸¥à¹‡à¸­à¸„";
-    Text[ czech ] = "PÅ™Ã­rÅ¯stek bloku";
-    Text[ hebrew ] = "Blockzunahme";
-    Text[ hindi ] = "à¤¬à¥à¤²à¥‰à¤• à¤¬à¤¢à¤¼à¤¤à¥€";
-    Text[ slovak ] = "PrÃ­rastok bloku";
+    Text = "Große Änderung" ;
+    Text [ english ] = "Large change" ;
+    Text [ english_us ] = "Large change";
+};
+String RID_STR_REPEAT_DELAY
+{
+    Text = "Verzögerung" ;
+    Text [ english ] = "Delay" ;
+    Text [ english_us ] = "Delay";
+};
+String RID_STR_REPEAT
+{
+    Text = "Wiederholung" ;
+    Text [ english ] = "Repeat" ;
+    Text [ english_us ] = "Repeat";
 };
 String RID_STR_VISIBLESIZE
 {
@@ -5803,5 +5748,12 @@ String RID_STR_ENUM_CELL_EXCHANGE_TYPE
 {
     Text = "Der ausgewählte Eintrag;Position des ausgewählten Eintrags";
     Text [ english ] = "The selected entry;Position of the selected entry";
+};
+
+String RID_STR_SYMBOLCOLOR
+{
+    Text = "Symbolfarbe" ;
+    Text [ english ] = "Symbol color" ;
+    Text [ english_us ] = "Symbol color" ;
 };
 
