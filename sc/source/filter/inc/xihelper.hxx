@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:22:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XIHELPER_HXX
 #define SC_XIHELPER_HXX
 
@@ -81,39 +79,37 @@
 
 class ScMatrix;
 
-
 // Byte/Unicode strings =======================================================
 
 /** This class represents an unformatted or formatted string and provides importing from stream. */
 class XclImpString
 {
 private:
-    String                      maString;       /// The text data of the string.
-    XclFormatRunVec             maFormats;      /// All formatting runs.
+    String              maString;       /// The text data of the string.
+    XclFormatRunVec     maFormats;      /// All formatting runs.
 
 public:
     /** Constructs an unformatted string. */
-    explicit                    XclImpString( const String& rString );
+    explicit            XclImpString( const String& rString );
     /** Constructs a formatted string by reading completely from stream. */
-    explicit                    XclImpString( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
+    explicit            XclImpString( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
-                                ~XclImpString();
+                        ~XclImpString();
 
     /** Insert a formatting run to the format buffer. */
-    void                        AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx );
+    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont );
     /** Reads and appends the formatting information (run count and runs) from stream. */
-    void                        ReadFormats( XclImpStream& rStrm );
+    void                ReadFormats( XclImpStream& rStrm );
     /** Reads and appends nRunCount formatting runs from stream. */
-    void                        ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount );
+    void                ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount );
 
     /** Returns the pure text data of the string. */
-    inline const String&        GetText() const { return maString; }
+    inline const String& GetText() const { return maString; }
     /** Returns true, if the string contains formatting information. */
-    inline bool                 IsRich() const { return !maFormats.empty(); }
+    inline bool         IsRich() const { return !maFormats.empty(); }
     /** Returns the formatting run vector. */
     inline const XclFormatRunVec& GetFormats() const { return maFormats; }
 };
-
 
 // String->EditEngine conversion ==============================================
 
@@ -128,19 +124,18 @@ class XclImpStringHelper : ScfNoInstance
 public:
     /** Returns a new edit engine text object.
         @param nXFIndex  Index to XF for first text portion (for escapement). */
-    static EditTextObject*      CreateTextObject(
-                                    const XclImpRoot& rRoot,
-                                    const XclImpString& rString,
-                                    sal_uInt32 nXFIndex = 0 );
+    static EditTextObject* CreateTextObject(
+                            const XclImpRoot& rRoot,
+                            const XclImpString& rString,
+                            sal_uInt16 nXFIndex = 0 );
 
     /** Creates a new text cell or edit cell for a Calc document.
         @param nXFIndex  Index to XF for first text portion (for escapement). */
-    static ScBaseCell*          CreateCell(
-                                    const XclImpRoot& rRoot,
-                                    const XclImpString& rString,
-                                    sal_uInt32 nXFIndex = 0 );
+    static ScBaseCell*  CreateCell(
+                            const XclImpRoot& rRoot,
+                            const XclImpString& rString,
+                            sal_uInt16 nXFIndex = 0 );
 };
-
 
 // Header/footer conversion ===================================================
 
@@ -202,7 +197,7 @@ private:    // types
     /** Contains all information about a header/footer portion. */
     struct XclImpHFPortionInfo
     {
-        typedef ::boost::shared_ptr< EditTextObject > EditTextObjectRef;
+        typedef ScfRef< EditTextObject > EditTextObjectRef;
         EditTextObjectRef   mxObj;          /// Edit engine text object.
         ESelection          maSel;          /// Edit engine selection.
         sal_Int32           mnHeight;       /// Height of previous lines in twips.
@@ -259,7 +254,6 @@ private:
     XclImpHFPortion     meCurrObj;          /// The current portion.
 };
 
-
 // URL conversion =============================================================
 
 /** This class contains static methods to decode an URL stored in an Excel file.
@@ -273,32 +267,31 @@ public:
         @param rTabName  Returns the decoded sheet name.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
         @param rEncodedUrl   An encoded URL from Excel. */
-    static void                 DecodeUrl(
-                                    String& rUrl,
-                                    String& rTabName,
-                                    bool& rbSameWb,
-                                    const XclImpRoot& rRoot,
-                                    const String& rEncodedUrl );
+    static void         DecodeUrl(
+                            String& rUrl,
+                            String& rTabName,
+                            bool& rbSameWb,
+                            const XclImpRoot& rRoot,
+                            const String& rEncodedUrl );
 
     /** Decodes an encoded external document URL without sheet name.
         @param rUrl  Returns the decoded file name incl. path.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
         @param rEncodedUrl   An encoded URL from Excel. */
-    static void                 DecodeUrl(
-                                    String& rUrl,
-                                    bool& rbSameWb,
-                                    const XclImpRoot& rRoot,
-                                    const String& rEncodedUrl );
+    static void         DecodeUrl(
+                            String& rUrl,
+                            bool& rbSameWb,
+                            const XclImpRoot& rRoot,
+                            const String& rEncodedUrl );
 
     /** Decodes the passed URL to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    static bool                 DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
+    static bool         DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
 };
 
-
-// Cached Values ==============================================================
+// Cached values ==============================================================
 
 class ScTokenArray;
 
@@ -310,31 +303,30 @@ protected:
     typedef ::std::auto_ptr< String >               StringPtr;
     typedef ::std::auto_ptr< const ScTokenArray >   ScTokenArrayPtr;
 
-    StringPtr                   mpStr;      /// Cached value is a string.
-    double                      mfValue;    /// Cached value is a double.
-    ScTokenArrayPtr             mpTokArr;   /// Cached value is a formula or error code or Boolean.
-    sal_uInt8                   mnBoolErr;  /// Boolean value or Excel error code.
-    sal_uInt8                   mnType;     /// The type of the cached value (EXC_CACHEDVAL_*).
+    StringPtr           mxStr;      /// Cached value is a string.
+    double              mfValue;    /// Cached value is a double.
+    ScTokenArrayPtr     mxTokArr;   /// Cached value is a formula or error code or Boolean.
+    sal_uInt8           mnBoolErr;  /// Boolean value or Excel error code.
+    sal_uInt8           mnType;     /// The type of the cached value (EXC_CACHEDVAL_*).
 
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */
-    explicit                    XclImpCachedValue( XclImpStream& rStrm );
-    virtual                     ~XclImpCachedValue();
+    explicit            XclImpCachedValue( XclImpStream& rStrm );
+    virtual             ~XclImpCachedValue();
 
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
-    inline sal_uInt8            GetType() const     { return mnType; }
+    inline sal_uInt8    GetType() const     { return mnType; }
     /** Returns the cached string value, if this value is a string, else an empty string. */
-    inline const String&        GetString() const   { return mpStr.get() ? *mpStr : EMPTY_STRING; }
+    inline const String& GetString() const   { return mxStr.get() ? *mxStr : EMPTY_STRING; }
     /** Returns the cached number, if this value has number type, else 0.0. */
-    inline double               GetValue() const    { return mfValue; }
+    inline double       GetValue() const    { return mfValue; }
     /** Returns the cached Boolean value, if this value has Boolean type, else false. */
-    inline bool                 GetBool() const     { return (mnType == EXC_CACHEDVAL_BOOL) && (mnBoolErr != 0); }
+    inline bool         GetBool() const     { return (mnType == EXC_CACHEDVAL_BOOL) && (mnBoolErr != 0); }
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
-    USHORT                      GetError() const;
+    USHORT              GetError() const;
     /** Returns the token array if this is a Boolean value or error value, else 0. */
-    inline const ScTokenArray*  GetBoolErrFmla() const { return mpTokArr.get(); }
+    inline const ScTokenArray* GetBoolErrFmla() const { return mxTokArr.get(); }
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -342,18 +334,18 @@ public:
 class XclImpCachedMatrix
 {
 public:
-    explicit                    XclImpCachedMatrix( XclImpStream& rStrm );
-                                ~XclImpCachedMatrix();
+    explicit            XclImpCachedMatrix( XclImpStream& rStrm );
+                        ~XclImpCachedMatrix();
 
     /** Creates a new ScMatrix object and fills it with the contained valöues. */
-    ScMatrixRef                 CreateScMatrix() const;
+    ScMatrixRef         CreateScMatrix() const;
 
 private:
     typedef ScfDelList< XclImpCachedValue > XclImpValueList;
 
-    XclImpValueList             maValueList;    /// List of cached cell values.
-    SCSIZE                      mnScCols;       /// Number of cached columns.
-    SCSIZE                      mnScRows;       /// Number of cached rows.
+    XclImpValueList     maValueList;    /// List of cached cell values.
+    SCSIZE              mnScCols;       /// Number of cached columns.
+    SCSIZE              mnScRows;       /// Number of cached rows.
 
 };
 
