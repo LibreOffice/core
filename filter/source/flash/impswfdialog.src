@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:23:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,46 +68,16 @@ ModalDialog DLG_OPTIONS
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Macromedia Flash (SWF) Optionen" ;
-    Text [ ENGLISH ] = "Flash Optionen" ;
-    Text [ english_us ] = "Macromedia Flash (SWF) Options" ;
+    Text [ de ] = "Macromedia Flash (SWF) Optionen" ;
+    Text [ en-US ] = "Macromedia Flash (SWF) Options" ;
 
     FixedText FI_DESCR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 81 , 16 ) ;
-        Text = "1: min. Qualität\n100: max. Qualität" ;
-        Text [ ENGLISH ] = "1: min. quality\n100: max. quality" ;
-        Text [ english_us ] = "1: min. quality\n100: max. quality" ;
-        Text [ italian ] = "1: qualità min.\n100: qualità max." ;
-        Text [ spanish ] = "1: calidad mín.\n100: calidad máx." ;
-        Text [ french ] = "1 : qualité min.\n100 : qualité max." ;
-        Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
-        Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "1: min. kvalitet\n100: maks. kvalitet" ;
-        Text [ portuguese_brazilian ] = "0: Qualidade min.\n100: Qualidade máx." ;
-        Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
-        Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
-        Text[ russian ] = "1: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
-        Text[ polish ] = "1: min. jakoœæ\n100: maks. jakoœæ";
-        Text[ japanese ] = "1: æœ€ä½\n100: æœ€é«˜";
-        Text[ chinese_traditional ] = "1: æœ€å·®å“è³ª \n100: æœ€ä½³å“è³ª";
-        Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
-        Text[ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit";
-        Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
-        Text[ greek ] = "0: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
-        Text[ korean ] = "1: ìµœì†Œ í’ˆì§ˆ\n100: ìµœëŒ€ í’ˆì§ˆ";
-        Text[ turkish ] = "1: en düşük kalite\n100: en yüksek kalite";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "0: mín. qualitat\n100: màx. qualitat";
-        Text[ finnish ] = "1: vähimmäislaatu \n100: enimmäislaatu";
-        Text[ thai ] = "1: à¸„à¸¸à¸“à¸ à¸²à¸à¸•à¹ˆà¸³à¸ªà¸¸à¸”\n100: à¸„à¸¸à¸“à¸ à¸²à¸à¸ªà¸¹à¸‡à¸ªà¸¸à¸”";
-        Text[ czech ] = "1: min. kvalita\n100: max. kvalita";
-        Text[ hebrew ] = "1: min. QualitÃ¤t\n100: max. QualitÃ¤t";
-        Text[ hindi ] = "1: min. quality\n100: max. quality";
-        Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
-        Text[ hungarian ] = "1: legrosszabb minÅ‘sÃ©g\n100: legjobb minÅ‘sÃ©g";
-        Text[ slovenian ] = "1: min. kakovost\n100: maks. kakovost";
+        Text [ de ] = "1: min. Qualität\n100: max. Qualität" ;
+        Text [ en-US ] = "1: min. quality\n100: max. quality" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -228,33 +198,7 @@ ModalDialog DLG_OPTIONS
         TabStop = TRUE ;
     };
 
-    Text[ language_user1 ] = "; EM Dec 2002: DON NOT TRANSLATE \"Macromedia Flash (SWF)\" because it is a product name. Only translate \"Options\"";
-    Text[ portuguese ] = "Flash Options";
-    Text[ russian ] = "Flash Options";
-    Text[ spanish ] = "Opciones Macromedia Flash (SWF)";
-    Text[ italian ] = "Opzioni Macromedia Flash (SWF)";
-    Text[ swedish ] = "Alternativ för Macromedia Flash (SWF)";
-    Text[ polish ] = "Flash Options";
-    Text[ portuguese_brazilian ] = "Opções Flash";
-    Text[ japanese ] = "Macromedia Flash (SWF) ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ korean ] = "Macromedia Flash (SWF) ì˜µì…˜";
-    Text[ turkish ] = "Macromedia Flash (SWF) Seçenekleri";
-    Text[ thai ] = "Flash Options";
-    Text[ greek ] = "Åğéëïãİò Macromedia Flash (SWF)";
-    Text[ dutch ] = "Flash Options";
-    Text[ french ] = "Options Macromedia Flash (SWF)";
-    Text[ finnish ] = "Flash Options";
-    Text[ danish ] = "Indstillinger for Macromedia Flash (SWF)";
-    Text[ chinese_simplified ] = "Macromedia Flash (SWF) é€‰é¡¹";
-    Text[ chinese_traditional ] = "Macromedia Flash (SWF) é¸é …";
-    Text[ arabic ] = "Flash Options";
-    Text[ catalan ] = "Flash Options";
-    Text[ czech ] = "Volby Macromedia Flash (SWF)";
-    Text[ hebrew ] = "Flash Optionen";
-    Text[ hindi ] = "Macromedia Flash (SWF) Options";
-    Text[ slovak ] = "Macromedia Flash (SWF) voÄ¾by";
-    Text[ hungarian ] = "Macromedia Flash (SWF) beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za Macromedia Flash (SWF)";
+    Text [ x-comment ] = "; EM Dec 2002: DON NOT TRANSLATE \"Macromedia Flash (SWF)\" because it is a product name. Only translate \"Options\"";
 };
 
 
