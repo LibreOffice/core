@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSortable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:04:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ module com {  module sun {  module star {  module util {
     When calling the sort method however properties from different
     descriptors must not be mixed.</p>
  */
-interface XSortable: com::sun::star::uno::XInterface
+published interface XSortable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @returns
