@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercontrols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:31:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ using namespace ::com::sun::star::registry                      ;
     static Reference< XInterface > SAL_CALL CLASS##_createInstance ( const Reference< XMultiServiceFactory >& rServiceManager ) throw ( Exception ) \
     {                                                                                                                                       \
         AS_DBG_OUT ( "\tCREATEINSTANCE():\tOK\n" )                                                                                          \
-        return Reference< XInterface >( *(OWeakObject*)(new CLASS##( rServiceManager )) );                                                  \
+        return Reference< XInterface >( *(OWeakObject*)(new CLASS( rServiceManager )) );                                                    \
     }
 
 //******************************************************************************************************************************
@@ -166,7 +166,7 @@ using namespace ::com::sun::star::registry                      ;
             AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\txkey is valid ...\n" )                                                 \
             /* Build new keyname */                                                                                     \
             sKeyName     =  OUString::createFromAscii( "/" )            ;                                               \
-            sKeyName    +=  CLASS##::impl_getStaticImplementationName() ;                                               \
+            sKeyName    +=  CLASS::impl_getStaticImplementationName()   ;                                               \
             sKeyName    +=  OUString::createFromAscii( "/UNO/SERVICES" );                                               \
                                                                                                                         \
             /* Create new key with new name. */                                                                         \
@@ -177,7 +177,7 @@ using namespace ::com::sun::star::registry                      ;
             {                                                                                                           \
                 AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\txNewkey is valid ...\n" )                                          \
                 /* Get information about supported services. */                                                         \
-                seqServiceNames =   CLASS##::impl_getStaticSupportedServiceNames()  ;                                   \
+                seqServiceNames =   CLASS::impl_getStaticSupportedServiceNames()    ;                                   \
                 pArray          =   seqServiceNames.getArray()                      ;                                   \
                 nLength         =   seqServiceNames.getLength()                     ;                                   \
                 nCounter        =   0                                               ;                                   \
@@ -212,9 +212,9 @@ using namespace ::com::sun::star::registry                      ;
     xFactory = Reference< XSingleServiceFactory >                                                                       \
                     (                                                                                                   \
                         cppu::createOneInstanceFactory  (   xServiceManager                                     ,       \
-                                                            CLASS##::impl_getStaticImplementationName       ()  ,       \
+                                                            CLASS::impl_getStaticImplementationName     ()  ,       \
                                                             CLASS##_createInstance                              ,       \
-                                                            CLASS##::impl_getStaticSupportedServiceNames    ()  )       \
+                                                            CLASS::impl_getStaticSupportedServiceNames  ()  )       \
                     ) ;                                                                                                 \
     AS_DBG_OUT ( "\tCREATEFACTORY_ONEINSTANCE():\t[end]\n" )
 
@@ -226,9 +226,9 @@ using namespace ::com::sun::star::registry                      ;
     xFactory = Reference< XSingleServiceFactory >                                                                       \
                     (                                                                                                   \
                         cppu::createSingleFactory   (   xServiceManager                                     ,           \
-                                                        CLASS##::impl_getStaticImplementationName       ()  ,           \
+                                                        CLASS::impl_getStaticImplementationName     ()  ,           \
                                                         CLASS##_createInstance                              ,           \
-                                                        CLASS##::impl_getStaticSupportedServiceNames    ()  )           \
+                                                        CLASS::impl_getStaticSupportedServiceNames  ()  )           \
                     ) ;                                                                                                 \
     AS_DBG_OUT ( "\tCREATEFACTORY_SINGLE():\t[end]\n" )
 
@@ -236,7 +236,7 @@ using namespace ::com::sun::star::registry                      ;
 #ifdef MACOSX
 #define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
                                                                                                                         \
-    if ( CLASS##::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )       \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE():\timplementationname found\n" )                    \
         CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
@@ -244,10 +244,10 @@ using namespace ::com::sun::star::registry                      ;
 #else /* MACOSX */
 #define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
                                                                                                                         \
-    if ( CLASS##::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )       \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE():\timplementationname found\n" )                    \
-        CREATEFACTORY_ONEINSTANCE ( CLASS## )                                                                           \
+        CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
     }
 #endif /* MACOSX */
 
@@ -255,7 +255,7 @@ using namespace ::com::sun::star::registry                      ;
 #ifdef MACOSX
 #define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
                                                                                                                         \
-    if ( CLASS##::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )       \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_SINGLE():\timplementationname found\n" )                         \
         CREATEFACTORY_SINGLE ( CLASS )                                                                              \
@@ -263,10 +263,10 @@ using namespace ::com::sun::star::registry                      ;
 #else  /* MACOSX */
 #define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
                                                                                                                         \
-    if ( CLASS##::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )       \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
     {                                                                                                                   \
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_SINGLE():\timplementationname found\n" )                         \
-        CREATEFACTORY_SINGLE ( CLASS## )                                                                                \
+        CREATEFACTORY_SINGLE ( CLASS )                                                                              \
     }
 #endif  /* MACOSX */
 
