@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
+ *  last change: $Author: th $ $Date: 2001-06-08 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,27 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
     xub_StrLen nLen = aKey.Len();
 
     // 1) Anfangsbuchstaben werden bevorzugt
+    int             nCJK = 0;
     USHORT          nMnemonicIndex;
     sal_Unicode     c;
     xub_StrLen      nIndex = 0;
     do
     {
         c = aKey.GetChar( nIndex );
+
+        if ( nCJK != 2 )
+        {
+            if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||
+                 ((c >= 0xFF61) && (c <= 0xFFDC)) )
+                nCJK = 1;
+            else if ( ((c >= 0x0030) && (c <= 0x0039)) ||
+                      ((c >= 0x0041) && (c <= 0x005A)) ||
+                      ((c >= 0x0061) && (c <= 0x007A)) ||
+                      ((c >= 0x0370) && (c <= 0x037F)) ||
+                      ((c >= 0x0400) && (c <= 0x04FF)) )
+                nCJK = 2;
+        }
+
         nMnemonicIndex = ImplGetMnemonicIndex( c );
         if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
         {
@@ -247,8 +262,38 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
         }
     }
 
+    // 3) Add Englisch Mnemonic for CJK Text
+    if ( !bChanged && (nCJK == 1) && rKey.Len() )
+    {
+        // Append Ascii Mnemonic
+        for ( c = MNEMONIC_RANGE_2_START; c <= MNEMONIC_RANGE_2_END; c++ )
+        {
+            nMnemonicIndex = ImplGetMnemonicIndex( c );
+            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
+            {
+                if ( maMnemonics[nMnemonicIndex] )
+                {
+                    maMnemonics[nMnemonicIndex] = 0;
+                    UniString aStr( '(' );
+                    aStr += MNEMONIC_CHAR;
+                    aStr += c;
+                    aStr += ')';
+                    nIndex = rKey.Len();
+                    if ( (rKey.GetChar( nIndex-1 ) == ':') ||
+                         (rKey.GetChar( nIndex-1 ) == 0xFF1A) )
+                        nIndex--;
+                    rKey.Insert( aStr, nIndex );
+                    bChanged = TRUE;
+                    break;
+                }
+            }
+        }
+    }
+
     return bChanged;
 }
+
+// -----------------------------------------------------------------------
 
 uno::Reference< i18n::XCharacterClassification > ImplMnemonicGenerator::GetCharClass()
 {
@@ -256,5 +301,3 @@ uno::Reference< i18n::XCharacterClassification > ImplMnemonicGenerator::GetCharC
         xCharClass = vcl::unohelper::CreateCharacterClassification();
     return xCharClass;
 }
-
-
