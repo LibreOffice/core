@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2004-05-26 17:02:51 $
+ *  last change: $Author: mav $ $Date: 2004-05-27 14:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
     int nInstallMode = 0;
     int nDeinstallMode = 0;
 
-    MessageBox(NULL, L"InstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+    // MessageBox(NULL, L"InstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
 
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
@@ -319,7 +319,7 @@ extern "C" __stdcall UINT DeinstallActiveXControl( MSIHANDLE hMSI )
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
 
-    MessageBox(NULL, L"DeinstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+    // MessageBox(NULL, L"DeinstallActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
