@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:33:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,18 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
+#define RET_ALL     10
 
 // we only need forward decl here
 namespace com { namespace sun { namespace star {
 
     namespace beans     { class XPropertySet;}
-    namespace container { class XNameAccess;}
+    namespace container
+    {
+        class XNameAccess;
+        class XHierarchicalNameContainer;
+        class XNameContainer;
+    }
     namespace lang
     {
         class XEventListener;
@@ -105,6 +111,7 @@ namespace com { namespace sun { namespace star {
         struct URL;
         class XNumberFormatter;
     }
+    namespace ucb { class XContent; }
 
 }}}
 
@@ -117,20 +124,15 @@ class Window;
 class ToolBox;
 class Font;
 class SvNumberFormatter;
+class SvLBoxEntry;
 
 // .........................................................................
 namespace dbaui
 {
 // .........................................................................
-
-    /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
-        the PropertySet must be support the service com::sun::star::sdbc::table
-    */
-    void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
-                            ::rtl::OUString& _rComposedName,
-                            sal_Bool _bQuote,
-                            ::dbtools::EComposeRule _eRule = ::dbtools::eInDataManipulation);
+    class IContainerFoundListener;
+    class ODsnTypeCollection;
+    class DBTreeListBox;
 
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource
@@ -142,6 +144,17 @@ namespace dbaui
     ::dbtools::SQLExceptionInfo createConnection(
                                     const ::rtl::OUString& _rsDataSourceName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
+    /** creates a new connection and appends the eventlistener
+        @param  _xDataSource            the datasource
+        @param  _rEvtLst                the eventlistener which will be added to the new created connection
+        @param  _rOUTConnection         this parameter will be filled with the new created connection
+        @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
+    */
+    ::dbtools::SQLExceptionInfo createConnection(
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDataSource,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
@@ -294,20 +307,6 @@ namespace dbaui
     */
     sal_Bool isAppendTableAliasEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
-    /** check if a specific property is enabled in the info sequence
-        @param  _xConnection
-            Used to get the datasource as parent from the connection.
-        @param  _sProperty
-            The property to search in the info property of the data source.
-        @param  _bDefault
-            This value will be returned, if the property doesn't exist in the data source.
-        @return
-            <TRUE/> if so otherwise <FALSE/>
-    */
-    sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-                                        ,const ::rtl::OUString& _sProperty,
-                                        sal_Bool _bDefault = sal_False);
-
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
             Asked for the properties.
@@ -381,6 +380,121 @@ namespace dbaui
     */
     ::rtl::OUString getDriverDsnPrefixNodeName();
 
+    /** returns the result of the user action when view the query dialog.
+        @param  _pParent
+            The parent of the dialog
+        @param  _nTitle
+            A string resource id for the text which will be displayed as title.
+        @param  _nText
+            A string resource id for the text which will be displayed above the buttons.
+            When the string contains a #1. This will be replaced by the name.
+        @param  _bAll
+            When set to <TRUE/>, the all button will be appended.
+        @param  _sName
+            The name of the object to ask for.
+        @return
+            RET_YES, RET_NO, RET_ALL
+    */
+    sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName);
+
+    /** creates a new view from a query or table
+        @param  _sName
+            The name of the view to be created.
+        @param  _xConnection
+            The source connection.
+        @param  _xSourceObject
+            The object for which a view should be created.
+        @return
+            The created view.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView( const ::rtl::OUString& _sName
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSourceObject);
+
+    /** returns the stripped database name.
+        @param  _xDataSource
+            The data source
+        @param  _rsDatabaseName
+            Will be filled with the original data source if it is empty.
+        @return
+            The stripped database name either the registered naem or if it is a file url the last segment.
+    */
+    ::rtl::OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
+                                            ,::rtl::OUString& _rsDatabaseName);
+
+    /** converts the URL for UI purpose, system file based URLs will be converted into system path.
+        @param  _bPrefix
+            <TRUE/> if the type prefix should append in front of the URL, otherwise it will be dropped.
+        @param  _pCollection
+            The type collection.
+        @param  _sURL
+            The URL which should be converted.
+        @return
+            The new converted URL.
+    */
+    String convertURLtoUI(sal_Bool _bPrefix,ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sURL);
+
+    /** fills the tree list box with the elements from the given container and sub elements.
+        @param  _xContainer
+            The container.
+        @param  _rList
+            The list to fill.
+        @param  _nImageId
+            The image id for the leaf elements which do not support a XNameAccess
+        @param  _pParent
+            The root entry.
+        @param  _pContainerFoundListener
+            Will be called if a sub container was found
+    */
+    void fillTreeListNames(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
+                        ,DBTreeListBox& _rList,USHORT _nImageId,SvLBoxEntry* _pParent = NULL,IContainerFoundListener* _pContainerFoundListener = NULL);
+
+    /** opens a save dialog to store a form or report folder in the current hierachy.
+        @param  _pParent
+            The parent of the dialog.
+        @param  _xNames
+            Where to insert the new object.
+        @param  _sParentFolder
+            The name of the parent folder.
+        @param  _bForm
+            <TRUE/> if a form should be inserted
+        @param  _bCollection
+            A folder should be inserted
+        @param  _xContent
+            The content which should be copied.
+        @param  _bMove
+                if <TRUE/> the name of the content must be inserted without any change, otherwise not.
+        @return
+            <TRUE/> if the insert opertions was successfull, otherwise <FALSE/>.
+    */
+    sal_Bool insertHierachyElement(Window* _pParent
+                           ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames
+                           ,const String& _sParentFolder
+                           ,sal_Bool _bForm
+                           ,sal_Bool _bCollection = sal_True
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
+                            ,sal_Bool _bMove = sal_False);
+
+    /** deletes the objects in the name container. (forms or reports or queries)
+        @param  _pParent
+            The parent window.
+        @param  _xFactory
+            The factory
+        @param  _xNames
+            The container to remove from
+        @param  _rList
+            The list of names.
+        @param  _nTextResource
+            The text string to be shown.
+        @param  _bConfirm
+            If <TRUE/> a dialog appears to confirm the delete operation, otherwise not.
+    */
+    void deleteObjects(Window* _pParent
+                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory
+                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& _xNames
+                   ,const ::std::vector< ::rtl::OUString>& _rList
+                   ,sal_uInt16 _nTextResource
+                   ,sal_Bool _bConfirm = sal_True);
 // .........................................................................
 }
 // .........................................................................
