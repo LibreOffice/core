@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:28:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ String STR_NO_MIRROR
     Text [ portuguese_brazilian ] = "nicht Spiegeln" ;
     Text[ chinese_simplified ] = "²»·­×ª";
     Text[ russian ] = "íå îòğàæàòü";
-    Text[ polish ] = "Nie przerzucaj";
+    Text[ polish ] = "Nie odbijaj";
     Text[ japanese ] = "”½“]‚µ‚È‚¢";
     Text[ chinese_traditional ] = "¤£Â½Âà";
     Text[ arabic ] = "ÚÏã ÇáÇäÚßÇÓ";
@@ -210,8 +210,8 @@ String STR_VERT_MIRROR
     TEXT = "vertikal Spiegeln" ;
     TEXT [ English ] = "mirror vertically" ;
     Text [ dutch ] = "verticaal spiegelen" ;
-    Text [ english_us ] = "Flip vertical" ;
-    Text [ italian ] = "Rispecchia verticalmente" ;
+    Text [ english_us ] = "Flip vertically" ;
+    Text [ italian ] = "Rispecchia in verticale" ;
     Text [ spanish ] = "Reflejar vertical" ;
     Text [ french ] = "Refléter verticalement" ;
     Text [ swedish ] = "spegelvänd vertikalt" ;
@@ -220,7 +220,7 @@ String STR_VERT_MIRROR
     Text [ portuguese_brazilian ] = "vertikal Spiegeln" ;
     Text[ chinese_simplified ] = "´¹Ö±·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
-    Text[ polish ] = "Przerzuæ w pionie";
+    Text[ polish ] = "Odbij w pionie";
     Text[ japanese ] = "¶‰E”½“]";
     Text[ chinese_traditional ] = "««ª½Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÑÃÓí";
@@ -239,7 +239,7 @@ String STR_HORI_MIRROR
     TEXT [ English ] = "mirror horizontally" ;
     Text [ dutch ] = "horizontaal spiegelen" ;
     Text [ english_us ] = "Flip horizontal" ;
-    Text [ italian ] = "Rispecchia orizzontalmente" ;
+    Text [ italian ] = "Rispecchia in orizzontale" ;
     Text [ spanish ] = "Reflejar horizontal" ;
     Text [ french ] = "Refléter horizontalement" ;
     Text [ swedish ] = "Spegelvänd horisontellt" ;
@@ -248,7 +248,7 @@ String STR_HORI_MIRROR
     Text [ portuguese_brazilian ] = "horizontal Spiegeln" ;
     Text[ chinese_simplified ] = "Ë®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
-    Text[ polish ] = "Przerzuæ w poziomie";
+    Text[ polish ] = "Odbij w poziomie";
     Text[ japanese ] = "ã‰º”½“]";
     Text[ chinese_traditional ] = "¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
@@ -266,7 +266,7 @@ String STR_BOTH_MIRROR
     TEXT = "vert. und horizontal Spiegeln" ;
     TEXT [ English ] = "mirror vert. and horizontally" ;
     Text [ english_us ] = "Horizontal and Vertical Flip" ;
-    Text [ italian ] = "Rispecchiare orizzontalmente e verticalmente" ;
+    Text [ italian ] = "Rispecchiare in orizzontale e verticale" ;
     Text [ spanish ] = "Reflejar vertical y horizontalmente" ;
     Text [ french ] = "Refléter verticalement et horizontalement" ;
     Text [ dutch ] = "Hoizontaal en verticaal spiegelen" ;
@@ -276,7 +276,7 @@ String STR_BOTH_MIRROR
     Text [ portuguese ] = "Reflectir na vertical e na horizontal" ;
     Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè è ãîğèçîíòàëè";
-    Text[ polish ] = "Przerzuæ w pionie i w poziomie";
+    Text[ polish ] = "Odbij w pionie i w poziomie";
     Text[ japanese ] = "ã‰º‚Æ¶‰E‚É”½“]";
     Text[ chinese_traditional ] = "««ª½©M¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÑÃÓí æÃİŞí";
@@ -298,20 +298,20 @@ String STR_MIRROR_TOGGLE
     Text [ portuguese_brazilian ] = "+ auf geraden Seiten horizontal Spiegeln" ;
     Text [ swedish ] = "+ spegelvänd horisontellt på jämna sidor" ;
     Text [ danish ] = "+ spejlvend på lige sider" ;
-    Text [ italian ] = "+ rispecchia orizzontalmente sulle pagine pari" ;
+    Text [ italian ] = "+ rispecchia in orizzontale sulle pagine pari" ;
     Text [ spanish ] = "+ reflejar horizontalmente en las páginas pares" ;
     Text [ french ] = "+ refléter horizontalement sur les pages paires" ;
     Text [ dutch ] = "+ op even pagina's horizontaal spiegelen" ;
     Text[ chinese_simplified ] = "+ Ë®Æ½·­×ªµ½Å¼ÊıÒ³Ãæ";
     Text[ russian ] = " +îòğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
-    Text[ polish ] = "+ przerzuæ w poziomie na stronach parzystych";
+    Text[ polish ] = "+ odbij w poziomie na stronach parzystych";
     Text[ japanese ] = "+ ‹ô”Íß°¼Ş‚Éã‰º”½“]";
     Text[ chinese_traditional ] = "+ ¤ô¥­Â½Âà¨ì°¸¼Æ­¶­±";
     Text[ arabic ] = "+ ÇäÚßÇÓ ÃİŞí Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
     Text[ dutch ] = "+ op even pagina's horizontaal spiegelen";
     Text[ chinese_simplified ] = "+ Ë®Æ½·­×ªµ½Å¼ÊıÒ³Ãæ";
     Text[ greek ] = "+ ïñéæüíôéá áíôáíÜêëáóç óå ìïíİò óåëßäåò";
-    Text[ korean ] = "+ Â¦¼ö¡¡ÂÊ¿¡¼­ ¼öÆòÀ¸·Î ´ëÄª";
+    Text[ korean ] = " + Â¦¼ö¡¡ÂÊ¿¡¼­ ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "+ çift numaralı sayfalarda yatay yansıt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "+ reflejar horizontalmente en las páginas pares";
@@ -783,7 +783,7 @@ String STR_FRM_WIDTH
     Text [ portuguese_brazilian ] = "Breite:" ;
     Text[ chinese_simplified ] = "¿í£º";
     Text[ russian ] = "Øèğèíà:";
-    Text[ polish ] = "Szeroko?æ:";
+    Text[ polish ] = "Szerokoœæ:";
     Text[ japanese ] = "•:";
     Text[ chinese_traditional ] = "¼e¡G";
     Text[ arabic ] = "ÇáÚÑÖ:";
@@ -812,7 +812,7 @@ String STR_FRM_FIXEDHEIGHT
     Text [ portuguese_brazilian ] = "feste H?e:" ;
     Text[ chinese_simplified ] = "¹Ì¶¨¸ß¶È£º";
     Text[ russian ] = "ôèêñèğîâàííàÿ âûñîòà:";
-    Text[ polish ] = "Sta³a wysoko?æ:";
+    Text[ polish ] = "Sta³a wysokoœæ:";
     Text[ japanese ] = "‹K’è‚Ì‚‚³:";
     Text[ chinese_traditional ] = "©T©w°ª«×¡G";
     Text[ arabic ] = "ÇÑÊİÇÚ ËÇÈÊ:";
@@ -841,7 +841,7 @@ String STR_FRM_MINHEIGHT
     Text [ portuguese_brazilian ] = "min. H?e:" ;
     Text[ chinese_simplified ] = "×îĞ¡¸ß¶È£º";
     Text[ russian ] = "ìèí. âûñîòà:";
-    Text[ polish ] = "Min. wysoko?æ:";
+    Text[ polish ] = "Min. wysokoœæ:";
     Text[ japanese ] = "Å’á‚Ì‚‚³:";
     Text[ chinese_traditional ] = "³Ì¤p°ª«×¡G";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃÏäì:";
@@ -932,7 +932,7 @@ String STR_FLY_PAGE
     Text[ dutch ] = "pagina-gebonden";
     Text[ chinese_simplified ] = "ºÍÒ³Á¬ÔÚÒ»Æğ";
     Text[ greek ] = "ğñïò óåëßäá";
-    Text[ korean ] = "ÂÊ¿¡";
+    Text[ korean ] = "ÂÊ °ü·Ã";
     Text[ turkish ] = "Sayfaya bağlı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "a la página";
@@ -953,7 +953,7 @@ String STR_POS_X
     Text [ portuguese_brazilian ] = "X-Koord.:" ;
     Text[ chinese_simplified ] = "X-×ø±ê£º";
     Text[ russian ] = "X-Êîîğäèíàòà.:";
-    Text[ polish ] = "O? X.:";
+    Text[ polish ] = "Oœ X.:";
     Text[ japanese ] = "XÀ•W:";
     Text[ chinese_traditional ] = "X-®y¼Ğ¡G";
     Text[ arabic ] = "ÇáÅÍÏÇËí ÇáÓíäí:";
@@ -981,7 +981,7 @@ String STR_POS_Y
     Text [ portuguese_brazilian ] = "Y-Koord.:" ;
     Text[ chinese_simplified ] = "Y-×ø±ê£º";
     Text[ russian ] = "Y-Êîîğäèíàòà.:";
-    Text[ polish ] = "O? Y.:";
+    Text[ polish ] = "Oœ Y.:";
     Text[ japanese ] = "YÀ•W:";
     Text[ chinese_traditional ] = "Y-®y¼Ğ¡G";
     Text[ arabic ] = "ÇáÅÍÏÇËí ÇáÕÇÏí:";
@@ -1028,7 +1028,7 @@ String STR_VERT_CENTER
     TEXT [ English ] = "centered vertically" ;
     Text [ dutch ] = "verticaal gecentreerd" ;
     Text [ english_us ] = "Centered vertically" ;
-    Text [ italian ] = "centrato verticalmente" ;
+    Text [ italian ] = "Centrato in verticale" ;
     Text [ spanish ] = "centrado vertical" ;
     Text [ french ] = "Centré verticalement" ;
     Text [ swedish ] = "vertikalt centrerad" ;
@@ -1037,7 +1037,7 @@ String STR_VERT_CENTER
     Text [ portuguese_brazilian ] = "vertikal zentriert" ;
     Text[ chinese_simplified ] = "´¹Ö±¾ÓÖĞ";
     Text[ russian ] = "âåğòèêàëüíî ïî öåíòğó";
-    Text[ polish ] = "Wy?rodkuj pionowo";
+    Text[ polish ] = "Wyœrodkuj pionowo";
     Text[ japanese ] = "‚’¼‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÚãæÏí";
@@ -1112,7 +1112,7 @@ String STR_LINE_CENTER
     TEXT [ English ] = "line centered vertically" ;
     Text [ dutch ] = "verticaal op de regel gecentreerd" ;
     Text [ english_us ] = "Line centered" ;
-    Text [ italian ] = "centrato verticalmente alla riga" ;
+    Text [ italian ] = "Centrato verticalmente alla riga" ;
     Text [ spanish ] = "Centrado verticalmente a la línea" ;
     Text [ french ] = "Centré sur la ligne à la verticale" ;
     Text [ swedish ] = "centrerad vertikalt till rad" ;
@@ -1121,7 +1121,7 @@ String STR_LINE_CENTER
     Text [ portuguese_brazilian ] = "vertikal zur Zeile zentriert" ;
     Text[ chinese_simplified ] = "ºÍĞĞ´¹Ö±¾ÓÖĞ";
     Text[ russian ] = "Âåğòèêàëüíîå öåíòğèğîâàíèå ïî îòíîøåíèş ê ñòğîêå";
-    Text[ polish ] = "Wy?rodkowany pionowo do wiersza";
+    Text[ polish ] = "Wyœrodkowany pionowo do wiersza";
     Text[ japanese ] = "¾Ù‚É‚’¼‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "©M¦æ««ª½¸m¤¤";
     Text[ arabic ] = "ãäÊÕİ ÇáÓØÑ";
@@ -1177,7 +1177,7 @@ String STR_REGISTER_ON
     Text [ portuguese_brazilian ] = "Registerhaltigkeit" ;
     Text[ chinese_simplified ] = "Õı·´Ò³µÄĞĞ¾àÏàµÈ";
     Text[ russian ] = "Ïğèâîäêà";
-    Text[ polish ] = "Jedn. wys. wierszy";
+    Text[ polish ] = "Jednakowa wysokoœæ wierszy";
     Text[ japanese ] = "ˆóüŒ©“–‚ğ‡‚í‚¹‚é";
     Text[ chinese_traditional ] = "¥¿¤Ï­¶ªº¦æ¶Z¬Ûµ¥";
     Text[ arabic ] = "ÇáÇäÊÙÇã";
@@ -1201,11 +1201,11 @@ String STR_REGISTER_OFF
     Text [ french ] = "Pas de contrôle de repérage" ;
     Text [ swedish ] = "inget register" ;
     Text [ danish ] = "hold ikke register" ;
-    Text [ portuguese ] = "Sem correspondência registo" ;
+    Text [ portuguese ] = "Sem registo" ;
     Text [ portuguese_brazilian ] = "keine Registerhaltigkeit" ;
     Text[ chinese_simplified ] = "Õı·´Ò³µÄĞĞ¾à²»ÏàµÈ";
     Text[ russian ] = "Áåç ïğèâîäêè";
-    Text[ polish ] = "Bez jednakowej wysoko?ci wierszy przy wydruku na przedniej i odwrotnej stronie";
+    Text[ polish ] = "Bez jednakowej wysokoœci wierszy przy wydruku na przedniej i odwrotnej stronie";
     Text[ japanese ] = "ˆóüŒ©“–‚ğ‡‚í‚¹‚È‚¢";
     Text[ chinese_traditional ] = "¥¿¤Ï­¶ªº¦æ¶Z¤£¬Ûµ¥";
     Text[ arabic ] = "ÈÏæä ÇäÊÙÇã";
@@ -1252,7 +1252,7 @@ String STR_HORI_CENTER
     TEXT [ English ] = "centered horizontally" ;
     Text [ dutch ] = "horizontaal gecentreerd" ;
     Text [ english_us ] = "Centered horizontally" ;
-    Text [ italian ] = "Centrato orizzontalmente" ;
+    Text [ italian ] = "Centrato in orizzontale" ;
     Text [ spanish ] = "Centrado horizontal" ;
     Text [ french ] = "Centré horizontalement" ;
     Text [ swedish ] = "Horisontellt centrerad" ;
@@ -1261,7 +1261,7 @@ String STR_HORI_CENTER
     Text [ portuguese_brazilian ] = "horizontal zentriert" ;
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "ãîğèçîíòàëüíî ïî öåíòğó";
-    Text[ polish ] = "Wy?rodkuj poziomo";
+    Text[ polish ] = "Poziomo do œrodka";
     Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÃİŞí";
@@ -1374,7 +1374,7 @@ String STR_HORI_FULL
     Text [ portuguese_brazilian ] = "volle Breite" ;
     Text[ chinese_simplified ] = "Õû¸ö¿í¶È";
     Text[ russian ] = "ïîëíàÿ øèğèíà";
-    Text[ polish ] = "Ca³a szeroko?æ";
+    Text[ polish ] = "Ca³a szerokoœæ";
     Text[ japanese ] = "Å‘å•";
     Text[ chinese_traditional ] = "¾ã­Ó¼e«×";
     Text[ arabic ] = "ÇáÚÑÖ ßáå";
@@ -1430,7 +1430,7 @@ String STR_LINE_WIDTH
     Text [ portuguese_brazilian ] = "Trennlinienbreite:" ;
     Text[ chinese_simplified ] = "·Ö¸ôÏß´Ö£º";
     Text[ russian ] = "Øèğèíà ğàçäåëèòåëüíîé ëèíèè:";
-    Text[ polish ] = "Szeroko?æ separatora:";
+    Text[ polish ] = "Szerokoœæ separatora:";
     Text[ japanese ] = "‹æØ‚èü‚Ì•:";
     Text[ chinese_traditional ] = "¤À¹j½u²Ê¡G";
     Text[ arabic ] = "ÚÑÖ ÇáÎØ ÇáİÇÕá:";
@@ -1459,7 +1459,7 @@ String STR_MAX_FTN_HEIGHT
     Text [ portuguese_brazilian ] = "max. Fu?notenbereich:" ;
     Text[ chinese_simplified ] = "×î´óµÄ×¢½Å·¶Î§£º";
     Text[ russian ] = "Ìàêñ. îáëàñòü ñíîñîê:";
-    Text[ polish ] = "Maksymalny obszar przypisów dolnych:";
+    Text[ polish ] = "Maksymalny zakres przypisów dolnych:";
     Text[ japanese ] = "Å‘å‚Ì‹r’”ÍˆÍ";
     Text[ chinese_traditional ] = "³Ì¤jªºµù¸}½d³ò¡G";
     Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì áäØÇŞ ÇáÍÇÔíÉ ÇáÓİáíÉ:";
@@ -1745,7 +1745,7 @@ String STR_LUMINANCE
     Text[ italian ] = "Luminosità: ";
     Text[ danish ] = "Lysstyrke: ";
     Text[ swedish ] = "Ljusstyrka:  ";
-    Text[ polish ] = "Jasno?æ: ";
+    Text[ polish ] = "Jasnoœæ: ";
     Text[ portuguese_brazilian ] = "Luminance: ";
     Text[ japanese ] = "–¾“x: ";
     Text[ korean ] = "¹à±â: ";
@@ -1771,7 +1771,7 @@ String STR_CHANNELR
     Text[ italian ] = "Percentuale di rosso:  ";
     Text[ danish ] = "Rød-andel: ";
     Text[ swedish ] = "Andel rött:  ";
-    Text[ polish ] = "Zawaro?æ czerwonego: ";
+    Text[ polish ] = "Zawaroœæ czerwonego: ";
     Text[ portuguese_brazilian ] = "Red portion: ";
     Text[ japanese ] = "ÔF‚ÌŠ„‡: ";
     Text[ korean ] = "Àû»ö: ";
@@ -1797,7 +1797,7 @@ String STR_CHANNELG
     Text[ italian ] = "Percentuale di verde: ";
     Text[ danish ] = "Grøn-andel: ";
     Text[ swedish ] = "Andel grönt:  ";
-    Text[ polish ] = "Zawarto?æ zielonego: ";
+    Text[ polish ] = "Zawartoœæ zielonego: ";
     Text[ portuguese_brazilian ] = "Green portion: ";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡: ";
     Text[ korean ] = "³ì»ö: ";
@@ -1823,7 +1823,7 @@ String STR_CHANNELB
     Text[ italian ] = "Percentuale di blu: ";
     Text[ danish ] = "Blå-andel: ";
     Text[ swedish ] = "Andel blått:  ";
-    Text[ polish ] = "Zawarto?æ niebieskiego: ";
+    Text[ polish ] = "Zawartoœæ niebieskiego: ";
     Text[ portuguese_brazilian ] = "Blue portion: ";
     Text[ japanese ] = "ÂF‚ÌŠ„‡: ";
     Text[ korean ] = "Ã»»ö: ";
@@ -1901,7 +1901,7 @@ String STR_TRANSPARENCY
     Text[ italian ] = "Trasparenza: ";
     Text[ danish ] = "Transparens: ";
     Text[ swedish ] = "Transparens:  ";
-    Text[ polish ] = "Przezroczysto?æ: ";
+    Text[ polish ] = "Przezroczystoœæ: ";
     Text[ portuguese_brazilian ] = "Transparency: ";
     Text[ japanese ] = "“§‰ß«: ";
     Text[ korean ] = "Åõ¸í: ";
@@ -2004,7 +2004,7 @@ String STR_DRAWMODE_STD
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domy?lnie";
+    Text[ polish ] = "Domyœlnie";
     Text[ portuguese_brazilian ] = "Padr?o";
     Text[ japanese ] = "•W€";
     Text[ korean ] = "Ç¥ÁØ";
@@ -2029,7 +2029,7 @@ String STR_DRAWMODE_GREY
     Text[ italian ] = "Toni di grigio";
     Text[ danish ] = "Gråtoner";
     Text[ swedish ] = "Gråskalor";
-    Text[ polish ] = "Odcienie szaro?ci";
+    Text[ polish ] = "Odcienie szaroœci";
     Text[ portuguese_brazilian ] = "Greys";
     Text[ japanese ] = "¸ŞÚ°½¹°Ù";
     Text[ korean ] = "È¸»öµµ";
@@ -2082,7 +2082,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "Åõ¸í¡¡¹«´Ì";
+    Text[ korean ] = "ºÒºû¿¡ ºñÃçºÁ¾ß º¸ÀÌ´Â ¹«´Ì(¿¹: ÁöÆó)";
     Text[ chinese_simplified ] = "Ë®Ó¡";
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ turkish ] = "Watermark";
@@ -2115,5 +2115,6 @@ String STR_ROTATION
     Text[ catalan ] = "Rotación";
     Text[ finnish ] = "Kierto";
 };
+
 
 
