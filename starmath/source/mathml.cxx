@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:32:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,13 @@
 into one string, xml parser hands them to us line by line rather than all in
 one go*/
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
 #ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
 #endif
@@ -87,6 +94,9 @@ one go*/
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 
 #ifndef UNOMODEL_HXX
@@ -163,6 +173,8 @@ one go*/
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
+
+#include <sfx2/frame.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -272,7 +284,7 @@ ULONG SmXMLWrapper::ReadThroughComponent(
 }
 
 ULONG SmXMLWrapper::ReadThroughComponent(
-    SvStorage* pStorage,
+    const uno::Reference< embed::XStorage >& xStorage,
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
@@ -280,50 +292,52 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName )
 {
-    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    if (! pStorage->IsStream(sStreamName))
+    uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
+    if ( !xAccess->hasByName(sStreamName) || !xStorage->isStreamElement(sStreamName) )
     {
         // stream name not found! Then try the compatibility name.
-
         // do we even have an alternative name?
-        if ( NULL == pCompatibilityStreamName )
-            return ERRCODE_SFX_DOLOADFAILED;
-
-        // if so, does the stream exist?
-        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        if (! pStorage->IsStream(sStreamName) )
-            return ERRCODE_SFX_DOLOADFAILED;
+        if ( pCompatibilityStreamName )
+            sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
     }
 
     // get input stream
-    SvStorageStreamRef xEventsStream;
-    xEventsStream = pStorage->OpenStream( sStreamName,
-                                          STREAM_READ | STREAM_NOCREATE );
-
-    // determine if stream is encrypted or not
-    Any aAny;
-    sal_Bool bEncrypted =
-        xEventsStream->GetProperty(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
-        aAny.getValueType() == ::getBooleanCppuType() &&
-        *(sal_Bool *)aAny.getValue();
-
-    // set Base URL
-    if( rPropSet.is() )
+    try
     {
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
-        rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+        uno::Reference < io::XStream > xEventsStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+
+        // determine if stream is encrypted or not
+        uno::Reference < beans::XPropertySet > xProps( xEventsStream, uno::UNO_QUERY );
+        Any aAny = xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+        sal_Bool bEncrypted = sal_False;
+        if ( aAny.getValueType() == ::getBooleanCppuType() )
+            aAny >>= bEncrypted;
+
+        // set Base URL
+        if( rPropSet.is() )
+        {
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+            rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+        }
+
+
+        Reference < io::XInputStream > xStream = xEventsStream->getInputStream();
+        return ReadThroughComponent( xStream, xModelComponent, rFactory, rPropSet, pFilterName, bEncrypted );
+    }
+    catch ( packages::WrongPasswordException& )
+    {
+        return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch ( uno::Exception& )
+    {
     }
 
-
-    Reference < io::XInputStream > xStream = xEventsStream->GetXInputStream();
-    // read from the stream
-    return ReadThroughComponent(
-        xStream, xModelComponent, rFactory, rPropSet, pFilterName, bEncrypted );
+    return ERRCODE_SFX_DOLOADFAILED;
 }
 
 ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
@@ -392,9 +406,17 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     // Set base URI
+    ::rtl::OUString aBaseURL( INetURLObject::GetBaseURL() );
+    if ( rMedium.GetItemSet() )
+    {
+        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                rMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
+        if ( pBaseURLItem )
+            aBaseURL = pBaseURLItem->GetValue();
+    }
+
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName,
-                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     sal_Int32 nSteps=3;
     if( !(rMedium.IsStorage()))
@@ -413,9 +435,18 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
 
     if( rMedium.IsStorage())
     {
-        if( bEmbedded && !rMedium.GetStorage()->IsRoot() )
+        // TODO/LATER: handle the case of embedded links gracefully
+        if( bEmbedded ) // && !rMedium.GetStorage()->IsRoot() )
         {
-            OUString aName( rMedium.GetStorage()->GetName() );
+            OUString aName( RTL_CONSTASCII_USTRINGPARAM( "dummyObjName" ) );
+            if ( rMedium.GetItemSet() )
+            {
+                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                if ( pDocHierarchItem )
+                    aName = pDocHierarchItem->GetValue();
+            }
+
             if( aName.getLength() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
@@ -423,7 +454,7 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
             }
         }
 
-        sal_Bool bOASIS = rMedium.GetStorage()->GetVersion() > SOFFICE_FILEFORMAT_60;
+        sal_Bool bOASIS = ( SotStorage::GetVersion( rMedium.GetStorage() ) > SOFFICE_FILEFORMAT_60 );
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
@@ -967,7 +998,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
 
 /// export through an XML exporter component (storage version)
 sal_Bool SmXMLWrapper::WriteThroughComponent(
-    SvStorage* pStorage,
+    const Reference < embed::XStorage >& xStorage,
     Reference<XComponent> xComponent,
     const sal_Char* pStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
@@ -976,41 +1007,45 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     sal_Bool bCompress
     )
 {
-    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Need stream name!");
 
-    Reference< io::XOutputStream > xOutputStream;
-    SvStorageStreamRef xDocStream;
-
     // open stream
+    Reference < io::XStream > xStream;
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    xDocStream = pStorage->OpenStream( sStreamName,
-                                       STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
-    if (! xDocStream.Is())
+    try
+    {
+        xStream = xStorage->openStreamElement( sStreamName,
+            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+    }
+    catch ( uno::Exception& )
+    {
+        DBG_ERROR( "Can't create output stream in package!" );
         return sal_False;
-
-    xDocStream->SetSize( 0 );
+    }
 
     String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
     OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
     uno::Any aAny;
     aAny <<= aMime;
-    xDocStream->SetProperty( aPropName, aAny );
+
+    uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
+    xSet->setPropertyValue( aPropName, aAny );
 
     if( !bCompress )
     {
         aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
         sal_Bool bFalse = sal_False;
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
-        xDocStream->SetProperty( aPropName, aAny );
+        xSet->setPropertyValue( aPropName, aAny );
     }
     else
     {
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+//REMOVE            OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xDocStream->SetProperty( aPropName, aAny );
+        xSet->setPropertyValue( aPropName, aAny );
     }
 
     // set Base URL
@@ -1020,17 +1055,13 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
         rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
-    // set buffer and create outputstream
-    xDocStream->SetBufferSize( 16*1024 );
-    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
-
     // write the stuff
-    sal_Bool bRet = WriteThroughComponent( xOutputStream, xComponent, rFactory,
+    sal_Bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rFactory,
         rPropSet, pComponentName );
 
-    // finally, commit stream.
-    if( bRet )
-        xDocStream->Commit();
+    // stream is closed by SAX parser
+    //if( bRet )
+    //    xStream->getOutputStream()->closeOutput();
 
     return bRet;
 }
@@ -1120,21 +1151,37 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // Set base URI
+    ::rtl::OUString aBaseURL;
+    if ( rMedium.GetItemSet() )
+    {
+        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                rMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
+        if ( pBaseURLItem )
+            aBaseURL = pBaseURLItem->GetValue();
+    }
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName,
-                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     sal_Int32 nSteps=0;
     if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
     if (!bFlat) //Storage (Package) of Stream
     {
-        SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
-        sal_Bool bOASIS = pStg->GetVersion() > SOFFICE_FILEFORMAT_60;
+        uno::Reference < embed::XStorage > xStg = rMedium.GetOutputStorage();
+        sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
 
-        if( bEmbedded && !pStg->IsRoot() )
+        // TODO/LATER: handle the case of embedded links gracefully
+        if( bEmbedded ) //&& !pStg->IsRoot() )
         {
-            OUString aName( pStg->GetName() );
+            OUString aName;
+            if ( rMedium.GetItemSet() )
+            {
+                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                    rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                if ( pDocHierarchItem )
+                    aName = pDocHierarchItem->GetValue();
+            }
+
             if( aName.getLength() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
@@ -1148,7 +1195,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
                     (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
                              : "com.sun.star.comp.Math.XMLMetaExporter"),
                     sal_False);
@@ -1159,7 +1206,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "content.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "content.xml", xServiceFactory, xInfoSet,
                     "com.sun.star.comp.Math.XMLContentExporter");
         }
 
@@ -1169,7 +1216,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "settings.xml", xServiceFactory, xInfoSet,
+                    xStg, xModelComp, "settings.xml", xServiceFactory, xInfoSet,
                     (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
                             : "com.sun.star.comp.Math.XMLSettingsExporter") );
         }
@@ -3669,19 +3716,19 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
-    const Rectangle &rRect = pDocShell->GetVisArea();
+    Rectangle aRect( pDocShell->GetVisArea() );
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
-    pValue[nIndex++].Value <<= rRect.Top();
+    pValue[nIndex++].Value <<= aRect.Top();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
-    pValue[nIndex++].Value <<= rRect.Left();
+    pValue[nIndex++].Value <<= aRect.Left();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
-    pValue[nIndex++].Value <<= rRect.GetWidth();
+    pValue[nIndex++].Value <<= aRect.GetWidth();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
-    pValue[nIndex++].Value <<= rRect.GetHeight();
+    pValue[nIndex++].Value <<= aRect.GetHeight();
 }
 
 void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
