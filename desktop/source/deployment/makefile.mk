@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 12:05:16 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:02:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,12 @@ DLLPRE =
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1FILES = \
-        $(SLB)$/deployment_registry_configuration.lib           \
-        $(SLB)$/deployment_registry_component.lib               \
-        $(SLB)$/deployment_registry_script.lib                  \
-        $(SLB)$/deployment_registry_package.lib                 \
-        $(SLB)$/deployment_registry.lib                         \
-        $(SLB)$/deployment_manager.lib                          \
+        $(SLB)$/deployment_registry_configuration.lib \
+        $(SLB)$/deployment_registry_component.lib \
+        $(SLB)$/deployment_registry_script.lib \
+        $(SLB)$/deployment_registry_package.lib \
+        $(SLB)$/deployment_registry.lib \
+        $(SLB)$/deployment_manager.lib \
         $(SLB)$/deployment_misc.lib
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
@@ -88,16 +88,17 @@ SHL1VERSIONMAP = $(TARGET).map
 SHL1LIBS = $(LIB1TARGET)
 
 SHL1STDLIBS = \
-        $(SALLIB)                                               \
-        $(CPPULIB)                                              \
-        $(CPPUHELPERLIB)                                        \
-        $(COMPHELPERLIB)                                        \
-        $(UCBHELPERLIB)                                         \
-        $(XMLSCRIPTLIB)                                         \
-        $(BERKELEYLIB)                                          \
-        $(BERKELEYCPPLIB)                                       \
-        $(TOOLSLIB)                                             \
-        $(SVTOOLLIB)                                            \
+        $(SALLIB) \
+        $(CPPULIB) \
+        $(CPPUHELPERLIB) \
+        $(UCBHELPERLIB) \
+        $(COMPHELPERLIB) \
+        $(TOOLSLIB) \
+        $(VOSLIB) \
+        $(UNOTOOLSLIB) \
+        $(XMLSCRIPTLIB) \
+        $(BERKELEYLIB) \
+        $(BERKELEYCPPLIB) \
         $(SVLLIB)
 
 SHL1DEPN =
@@ -108,4 +109,16 @@ DEF1NAME = $(SHL1TARGET)
 #DEFLIB1NAME = $(TARGET)
 #DEF1DEPN =
 
+RESLIB1NAME = $(TARGET)
+
+RESLIB1SRSFILES = \
+        $(SRS)$/deployment_registry_configuration.srs \
+        $(SRS)$/deployment_registry_component.srs \
+        $(SRS)$/deployment_registry_script.srs \
+        $(SRS)$/deployment_registry_package.srs \
+        $(SRS)$/deployment_registry.srs \
+        $(SRS)$/deployment_manager.srs \
+        $(SRS)$/deployment_misc.srs
+
 .INCLUDE : target.mk
+
