@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldControls.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:40:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace dbaui
         :OSQLNameEdit(pParent, _rAllowedChars,nWinStyle)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText=String(ModuleRes(nHelpId));
     }
     //==================================================================
     class OPropEditCtrl :   public Edit
@@ -150,13 +150,13 @@ namespace dbaui
         :Edit(pParent, nWinStyle)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
     inline OPropEditCtrl::OPropEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
         :Edit(pParent, _rRes)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
 
     //==================================================================
@@ -186,13 +186,13 @@ namespace dbaui
         :NumericField(pParent, nWinStyle)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
     inline OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
         :NumericField(pParent, _rRes)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
 
     //==================================================================
@@ -222,13 +222,13 @@ namespace dbaui
         :ListBox(pParent, nWinStyle)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
     inline OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, USHORT nHelpId, const ResId& _rRes,short nPosition)
         :ListBox(pParent, _rRes)
         ,m_nPos(nPosition)
     {
-        m_strHelpText = String(ModuleRes(nHelpId));
+        m_strHelpText =String(ModuleRes(nHelpId));
     }
 }
 #endif // DBAUI_FIELDCONTROLS_HXX
