@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,18 +295,15 @@ OSQLParseNode * OSQLParseTreeIterator::getQualified_join(OSQLParseNode *pTableRe
     OSQLParseNode *pNode = getTableRef(pTableRef->getChild(0),aTableRange);
     if(isTableNode(pNode))
         traverseOneTableName(pNode,aTableRange);
-    else
-        OSL_ENSURE(0,"To tableNode found!");
+
     sal_uInt32 nPos = 4;
     if(SQL_ISRULE(pTableRef,cross_union) || pTableRef->getChild(1)->getTokenID() != SQL_TOKEN_NATURAL)
         nPos = 3;
 
-
     pNode = getTableRef(pTableRef->getChild(nPos),aTableRange);
     if(isTableNode(pNode))
         traverseOneTableName(pNode,aTableRange);
-    else
-        OSL_ENSURE(0,"To tableNode found!");
+
     return pNode;
 }
 //-----------------------------------------------------------------------------
@@ -330,6 +327,11 @@ OSQLParseNode * OSQLParseTreeIterator::getTableRef(OSQLParseNode *pTableRef,::rt
             if(pTableRef->count() == 4)
                 aTableRange = pTableRef->getChild(2)->getTokenValue(); // Tabellenrange an Pos 2
         }
+    }
+    else if(SQL_ISRULE(pTableName,table_ref))
+    {
+        pTableName = pTableRef->getChild(0);
+        aTableRange = ::rtl::OUString();
     }
     else if(SQL_ISRULE(pTableName,qualified_join) || SQL_ISRULE(pTableName,cross_union))
     {
