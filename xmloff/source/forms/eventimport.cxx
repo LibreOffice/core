@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:55:58 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
@@ -180,6 +180,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/02 15:55:58  fs
+ *  initial checkin - helper for importing script events
+ *
  *
  *  Revision 1.0 21.12.00 15:21:15  fs
  ************************************************************************/
