@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-20 12:21:30 $
+*  last change: $Author: svesik $ $Date: 2004-04-21 12:22:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -250,9 +250,9 @@ STD_UNO_LIB_FILE( gid_File_Lib_Cnt, cnt )
 File gid_File_Lib_Comphelper2
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT3(libcomphelp3,COMID,UNXSUFFIX));
+    Name = STRING(CONCAT3(libcomphelp4,COMID,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT3(comphelp3,COMID,.dll));
+    Name = STRING(CONCAT3(comphelp4,COMID,.dll));
   #endif
     Dir = gid_Dir_Program;
   #if SUPD < 627
