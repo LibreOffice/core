@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:13:01 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 12:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,79 +458,118 @@ SfxHelp::~SfxHelp()
     delete pImp;
 }
 
-String GetFactoryName_Impl( const SfxViewFrame* pFrame )
+::rtl::OUString getDefaultModule_Impl()
 {
-    // module name == short name of the factory (e.g. "swriter", "scalc",...)
-    String aName = String::CreateFromAscii( pFrame->GetObjectShell()->GetFactory().GetShortName() );
-    // cut sub factory, if exists (e.g. "swriter/web")
-    xub_StrLen nPos = aName.Search( '/' );
-    if ( nPos != STRING_NOTFOUND )
-        aName.Erase( nPos );
-    return aName;
+    rtl::OUString sDefaultModule;
+    SvtModuleOptions aModOpt;
+    if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("swriter");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("scalc");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("simpress");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("sdraw");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("smath");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("schart");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("sbasic");
+    else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+        sDefaultModule = DEFINE_CONST_UNICODE("sdatabase");
+    else
+    {
+        DBG_ERRORFILE( "getDefaultModule_Impl(): no module installed" );
+    }
+    return sDefaultModule;
 }
 
-String SfxHelp::GetHelpModuleName_Impl( ULONG nHelpId )
+String SfxHelp::GetHelpModuleName_Impl()
 {
-    String aModuleName;
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if ( pViewFrame )
+    String sModuleName;
+    Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
+    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("drafts.com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+
+    rtl::OUString aModuleIdentifier;
+    rtl::OUString aFactoryShortName;
+
+    if ( xActiveTask.is() )
     {
-        SfxViewFrame* pParentViewFrame = pViewFrame->GetParentViewFrame_Impl();
-
-        // Wenn es ein Slot ist, kann es sein, da\s internes InPlace vorliegt
-        // und eine Container-SlotId gefragt ist
-        if ( nHelpId >= (ULONG) SID_SFX_START && nHelpId <= (ULONG) SHRT_MAX && pParentViewFrame )
+        try
         {
-            // Ist es ein ContainerSlot ?
-            const SfxSlot* pSlot = SFX_APP()->GetSlotPool(pViewFrame).GetSlot( (USHORT) nHelpId );
-            if ( !pSlot || pSlot->IsMode( SFX_SLOT_CONTAINER ) )
-                pViewFrame = pParentViewFrame;
+            aModuleIdentifier = xModuleManager->identify( xActiveTask );
         }
-
-        if ( pViewFrame->GetObjectShell() )
+        catch ( ::drafts::com::sun::star::frame::UnknownModuleException& )
         {
-            aModuleName = GetFactoryName_Impl( pViewFrame );
-            // help for module installed? If help isn't installed, module search will be disabled.
-            sal_Bool bHasModule = pImp->IsHelpInstalled() ? pImp->HasModule( aModuleName ) : sal_True;
-            // if not, search through the shell hierachy for an installed module
-            while ( !bHasModule && pParentViewFrame && pParentViewFrame->GetObjectShell() )
-            {
-                aModuleName = GetFactoryName_Impl( pParentViewFrame );
-                bHasModule = pImp->HasModule( aModuleName );
-                pParentViewFrame = pParentViewFrame->GetParentViewFrame_Impl();
-            }
+            DBG_WARNING( "SfxHelp::GetHelpModuleName_Impl(): unknown module (help in help?)" );
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "SfxHelp::GetHelpModuleName_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
-    return aModuleName;
+    if ( aModuleIdentifier.getLength() > 0 )
+    {
+        try
+        {
+            Sequence< PropertyValue > lProps;
+            Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY);
+            xCont->getByName( aModuleIdentifier ) >>= lProps;
+            for (sal_Int32 i=0; i<lProps.getLength(); ++i)
+            {
+                if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
+                {
+                    lProps[i].Value >>= aFactoryShortName;
+                    break;
+                }
+            }
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+        }
+    }
+
+    rtl::OUString sDefaultModule = getDefaultModule_Impl();
+    if ( aFactoryShortName.getLength() > 0 )
+    {
+        // Map some module identifiers to their "real" help module string.
+        if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
+        else if ( aFactoryShortName.equalsAscii( "sweb" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
+        else if ( aFactoryShortName.equalsAscii( "sglobal" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbquery" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbrelation" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbtable" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbapp" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "sbibliography" ) )
+            aFactoryShortName = sDefaultModule;
+        else if ( aFactoryShortName.equalsAscii( "StartModule" ) )
+            aFactoryShortName = sDefaultModule;
+    }
+    else
+        aFactoryShortName = sDefaultModule;
+
+    sModuleName = String( aFactoryShortName );
+    return sModuleName;
 }
 
 String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
 {
     String aModuleName( rModuleName );
     if ( aModuleName.Len() == 0 )
-    {
-        // no active module (quicklaunch?) -> detect default module
-        SvtModuleOptions aModOpt;
-        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-            aModuleName = DEFINE_CONST_UNICODE("swriter");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-            aModuleName = DEFINE_CONST_UNICODE("scalc");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-            aModuleName = DEFINE_CONST_UNICODE("simpress");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-            aModuleName = DEFINE_CONST_UNICODE("sdraw");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-            aModuleName = DEFINE_CONST_UNICODE("smath");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
-            aModuleName = DEFINE_CONST_UNICODE("schart");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
-            aModuleName = DEFINE_CONST_UNICODE("sbasic");
-        else
-        {
-            DBG_ERRORFILE( "no installed module found" );
-        }
-    }
+        aModuleName = getDefaultModule_Impl();
 
     // build up the help URL
     String aHelpURL;
@@ -720,10 +759,10 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
         if ( nProtocol == INET_PROT_UNO )
-            aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( 0 ) );
+            aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
         else
         {
-            aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
+            aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
             sKeyword = ::rtl::OUString( rURL );
         }
     }
@@ -769,7 +808,7 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 
 BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 {
-    String aHelpModuleName( GetHelpModuleName_Impl( nHelpId ) );
+    String aHelpModuleName( GetHelpModuleName_Impl() );
     String aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
     if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
     {
@@ -797,7 +836,7 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 
 XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 {
-    String aModuleName = GetHelpModuleName_Impl( nHelpId );
+    String aModuleName = GetHelpModuleName_Impl();
     String aHelpText = pImp->GetHelpText( nHelpId, aModuleName );
     ULONG nNewHelpId = 0;
 
@@ -838,91 +877,18 @@ XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
 
 XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow )
 {
-    String aHelpText;
-    Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
-
-    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-        DEFINE_CONST_UNICODE("drafts.com.sun.star.frame.ModuleManager") ), UNO_QUERY );
-    try
+    String sModuleName = GetHelpModuleName_Impl();
+    String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
+    // add some debug information?
+    if ( bIsDebug )
     {
-        rtl::OUString aModuleIdentifier = xModuleManager->identify( xActiveTask );
-
-        if ( aModuleIdentifier.getLength() > 0 )
-        {
-            rtl::OUString             aFactoryShortName;
-            Sequence< PropertyValue > lProps;
-            Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY);
-            xCont->getByName( aModuleIdentifier ) >>= lProps;
-            for (sal_Int32 i=0; i<lProps.getLength(); ++i)
-            {
-                if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
-                {
-                    lProps[i].Value >>= aFactoryShortName;
-                    break;
-                }
-            }
-
-            SvtModuleOptions aModOpt;
-            rtl::OUString    aDefaultModule;
-            if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("swriter");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("scalc");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("simpress");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("sdraw");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("smath");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("schart");
-            else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
-                aDefaultModule = DEFINE_CONST_UNICODE("sbasic");
-
-            if ( aFactoryShortName.getLength() > 0 )
-            {
-                // Map some module identifiers to their "real" help module string.
-                if ( aFactoryShortName.equalsAscii( "BasicIDE" ))
-                    aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ));
-                else if ( aFactoryShortName.equalsAscii( "sweb" ))
-                    aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ));
-                else if ( aFactoryShortName.equalsAscii( "sglobal" ))
-                    aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ));
-                else if ( aFactoryShortName.equalsAscii( "dbapp" ))
-                    aFactoryShortName = aDefaultModule;
-                else if ( aFactoryShortName.equalsAscii( "dbquery" ))
-                    aFactoryShortName = aDefaultModule;
-                else if ( aFactoryShortName.equalsAscii( "dbrelation" ))
-                    aFactoryShortName = aDefaultModule;
-                else if ( aFactoryShortName.equalsAscii( "dbtable" ))
-                    aFactoryShortName = aDefaultModule;
-                else if ( aFactoryShortName.equalsAscii( "sbibliography" ))
-                    aFactoryShortName = aDefaultModule;
-                else if ( aFactoryShortName.equalsAscii( "StartModule" ))
-                    aFactoryShortName = aDefaultModule;
-            }
-            else
-                aFactoryShortName = aDefaultModule;
-
-            aHelpText = pImp->GetHelpText( aCommandURL, aFactoryShortName );
-
-            // add some debug information?
-            if ( bIsDebug )
-            {
-                aHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
-                aHelpText += String( aModuleIdentifier );
-                aHelpText += DEFINE_CONST_UNICODE("\n");
-                aHelpText += aCommandURL;
-            }
-        }
-    }
-    catch ( Exception& )
-    {
+        sHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
+        sHelpText += String( sModuleName );
+        sHelpText += DEFINE_CONST_UNICODE(": ");
+        sHelpText += aCommandURL;
     }
 
-    return aHelpText;
+    return sHelpText;
 }
 
 String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
@@ -957,7 +923,7 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
             try
             {
                 URL aURL;
-                aURL.Complete = pHelp->CreateHelpURL_Impl( nHelpId, pHelp->GetHelpModuleName_Impl( nHelpId ) );
+                aURL.Complete = pHelp->CreateHelpURL_Impl( nHelpId, pHelp->GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
@@ -979,5 +945,10 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
             }
         }
     }
+}
+
+String SfxHelp::GetDefaultHelpModule()
+{
+    return getDefaultModule_Impl();
 }
 
