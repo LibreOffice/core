@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-11 14:41:36 $
+ *  last change: $Author: jp $ $Date: 2000-10-17 13:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,8 +632,8 @@ BOOL SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
     else
         ( sQuotes = GetEndDoubleQuote() ) += GetEndSingleQuote();
 
-    String sURL( INetURLObject::FindFirstURLInText( rTxt, nSttPos, nEndPos,
-                    rInter, &sQuotes ));
+    String sURL( /*INetURLObject::FindFirstURLInText( rTxt, nSttPos, nEndPos,
+                    rInter, &sQuotes )*/);
     BOOL bRet = 0 != sURL.Len();
     if( bRet )          // also Attribut setzen:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
