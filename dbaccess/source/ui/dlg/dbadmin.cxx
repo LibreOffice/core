@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,6 +766,7 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
             sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
             aDlg.SetLoginRequestText(sLoginRequest);
             aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
+            aDlg.SetSavePassword(sal_True);
 
             sal_Int32 nResult = aDlg.Execute();
             if (nResult != RET_OK)
@@ -2194,6 +2195,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2000/11/30 08:32:30  fs
+ *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
+ *
  *  Revision 1.22  2000/11/28 13:47:59  fs
  *  #80152# implApplyChanges: check the entry count of the listbox
  *
