@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:10:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1593,7 +1593,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
             if ( pHFE->pPlaceholder )
                 aPlaceHolderString = pHFE->pPlaceholder[ i ];
 
-            sd::HeaderFooterSettings& rHeaderFooterSettings = pPage->getHeaderFooterSettings();
+            sd::HeaderFooterSettings rHeaderFooterSettings( pPage->getHeaderFooterSettings() );
             switch( i )
             {
                 case 0 :
@@ -1625,6 +1625,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                 }
                 break;
             }
+            pPage->setHeaderFooterSettings( rHeaderFooterSettings );
         }
     }
 }
