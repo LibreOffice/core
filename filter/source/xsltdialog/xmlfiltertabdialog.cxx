@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:52:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,14 @@ bool XMLFilterTabDialog::onOk()
                 pFocusWindow = &(mpXSLTPage->maEDImportTemplate);
             }
         }
+    }
+
+    // see if we have at least an import or an export dtd
+    if((mpNewInfo->maImportXSLT.getLength() == 0) && (mpNewInfo->maExportXSLT.getLength() == 0) )
+    {
+        nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
+        nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
+        pFocusWindow = &(mpXSLTPage->maEDExportXSLT);
     }
 
     if( 0 == nErrorId )
