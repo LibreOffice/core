@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.7 2002-06-11 15:17:02 hjs Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.8 2002-08-14 15:10:23 hr Exp $
 #
-#     $Date: 2002-06-11 15:17:02 $
-#     $Author: hjs $
-#     $Revision: 1.7 $
+#     $Date: 2002-08-14 15:10:23 $
+#     $Author: hr $
+#     $Revision: 1.8 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -110,8 +110,7 @@ SLOFILES=\
     $(SLO)$/financial.obj \
     $(SLO)$/analysishelper.obj
 
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-#.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+# SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
