@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-27 16:41:03 $
+#   last change: $Author: vg $ $Date: 2004-04-30 12:27:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.56 $ ';
+$id_str = ' $Revision: 1.57 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -674,24 +674,6 @@ sub unstripped {
 }
 
 sub execute_system {
-    my ($command) = shift;
-
-    if ( $is_debug ) {
-        print STDERR "TRACE_SYSTEM: $command\n";
-    }
-    open( COMMAND, "$command 2>&1 |");
-    while( <COMMAND> ) {
-        # bogus error messages
-        print if !/(Permission denied|are the same file|Not owner|preserving times for)/;
-        if ( /No space left on device/ ) {
-            print "\nError: out of disk space while executing $command.\n";
-            cleanup_and_die("");
-        }
-    }
-    close(COMMAND);
-}
-
-sub do_execute {
     my $command = shift;
     if (system($command)) {
         print_error("Failed to execute $command");
@@ -699,32 +681,11 @@ sub do_execute {
     };
 };
 
-sub do_strip {
+sub strip_target {
     my $file = shift;
     my $temp_file = shift;
-    my $rc;
-    if ( ($upd >= 641) && $gcdynstr && ($file =~ /\.so/) ) {
-        # remove unneeded symbols from the .dynstr symbol table
-        # do it on a local volume because otherwise a NFS kernel bug
-        # will corrupt files on certain two processor machines
-        my $local_temp_file = '/tmp/' . basename($temp_file);
-        # can't do this copying remotely because target
-        # is /tmp on _this_ machine.
-        $rc = copy($file, $local_temp_file);
-        if ( !$rc ) {
-            die "Error - Could not copy $file to $local_temp_file\n";
-        }
-        # Use here old-style error handlig, while there's no documented
-        # return value from $gcdynstr
-        execute_system("$gcdynstr $local_temp_file");
-        do_execute("$strip $local_temp_file");
-        $rc = copy($local_temp_file, $temp_file);
-        unlink $local_temp_file;
-        # no need to copy back if garbage collection failed
-    } else {
-        $rc = copy($file, $temp_file);
-        do_execute("$strip $temp_file");
-    };
+    my $rc = copy($file, $temp_file);
+    execute_system("$strip $temp_file");
     return $rc;
 };
 
@@ -772,7 +733,7 @@ sub copy_if_newer
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     my $rc = '';
     if (($gui eq 'unx') && (defined $ENV{PROEXT}) && (unstripped($from))) {
-        $rc = do_strip($from, $temp_file);
+        $rc = strip_target($from, $temp_file);
     } else {
         $rc = copy($from, $temp_file);
     };
