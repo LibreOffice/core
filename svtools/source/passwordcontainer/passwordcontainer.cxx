@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-01 16:18:29 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUEST_HPP_
-#include <com/sun/star/task/PasswordRequest.hpp>
+#ifndef _COM_SUN_STAR_TASK_MASTERPASSWORDREQUEST_HPP_
+#include <com/sun/star/task/MasterPasswordRequest.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TASK_MASTERPASSWORDREQUEST_HPP_
+#ifndef _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
 #include <com/sun/star/task/NoMasterException.hpp>
 #endif
 
@@ -859,7 +859,7 @@ void PasswordContainer::getMasterPassword( const Reference< XInteractionHandler 
         do {
             aAskAgain = sal_False;
 
-            ::rtl::Reference< MasterPasswordRequest > xRequest = new MasterPasswordRequest( aRMode );
+            ::rtl::Reference< MasterPasswordRequest_Impl > xRequest = new MasterPasswordRequest_Impl( aRMode );
 
             Handler->handle( xRequest.get() );
 
@@ -891,12 +891,15 @@ void PasswordContainer::getMasterPassword( const Reference< XInteractionHandler 
                         if( storageFile )
                             storageFile->setEncodedMP( encodePasswords( aMaster, Reference< XInteractionHandler >() ) );
                     }
-                    else if( !masterPasswd.equals( decodePasswords( encodedMP, Handler )[0] ) )
+                    else
                     {
-                        aAskAgain = sal_True;
-                        aRMode = PasswordRequestMode_PASSWORD_REENTER;
+                        vector< ::rtl::OUString > aRM( decodePasswords( encodedMP, Handler ) );
+                        if( !aRM.size() || !masterPasswd.equals( aRM[0] ) )
+                        {
+                            aAskAgain = sal_True;
+                            aRMode = PasswordRequestMode_PASSWORD_REENTER;
+                        }
                     }
-
                 }
             }
 
@@ -1145,9 +1148,9 @@ void StorageItem::Commit()
 
 //-------------------------------------------------------------------------
 
-MasterPasswordRequest::MasterPasswordRequest( PasswordRequestMode Mode )
+MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode )
 {
-    PasswordRequest aRequest;
+    MasterPasswordRequest aRequest;
 
     aRequest.Classification = InteractionClassification_ERROR;
     aRequest.Mode = Mode;

@@ -359,6 +359,8 @@ hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 
 hedabu: ..\inc\textwindowaccessibility.hxx %_DEST%\inc%_EXT%\svtools\textwindowaccessibility.hxx
 
+hedabu: ..\inc\docpasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docpasswdrequest.hxx
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

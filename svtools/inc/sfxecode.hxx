@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxecode.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #define ERRCODE_SFX_WRONG_CDF_FORMAT        (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 39)
 #define ERRCODE_SFX_EMPTY_SERVER            (ERRCODE_AREA_SFX|ERRCODE_CLASS_NONE|40)
 #define ERRCODE_SFX_NO_ABOBOX               (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 41)
+#define ERRCODE_SFX_CANTGETPASSWD           (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 42)
 
 //Dies und das
 #define ERRCTX_ERROR                    21

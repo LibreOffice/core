@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 14:53:01 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,12 +307,12 @@ public:
 
 //----------------------------------------------------------------------------------
 
-class MasterPasswordRequest : public ucbhelper::InteractionRequest
+class MasterPasswordRequest_Impl : public ucbhelper::InteractionRequest
 {
     ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 public:
-    MasterPasswordRequest( ::com::sun::star::task::PasswordRequestMode Mode );
+    MasterPasswordRequest_Impl( ::com::sun::star::task::PasswordRequestMode Mode );
 
     const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > &
     getAuthenticationSupplier() const { return m_xAuthSupplier; }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2001-05-14 14:27:25 $
+#   last change: $Author: mav $ $Date: 2002-10-31 11:26:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=$(SLO)$/passwordcontainer.obj
+SLOFILES=	\
+    $(SLO)$/passwordcontainer.obj\
+    $(SLO)$/docpasswdrequest.obj
 
 # --- Targets ----------------------------------
 
