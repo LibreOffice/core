@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:46 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,10 +321,48 @@ public:
 
 // ----------------------------------------------------------------------------
 
+/** Helper to manage controls linked to the sheet. */
+class XclExpCtrlLinkHelper : protected XclExpRoot
+{
+public:
+    explicit                    XclExpCtrlLinkHelper( const XclExpRoot& rRoot );
+
+    /** Sets the address of the control's linked cell. */
+    void                        SetCellLink( const ScAddress& rCellLink );
+    /** Sets the address of the control's linked source cell range. */
+    void                        SetSourceRange( const ScRange& rSrcRange );
+
+protected:
+    /** Returns the Excel token array of the cell link, or 0, if no link present. */
+    inline const ExcUPN*        GetCellLinkTokArr() const { return mpCellLink.get(); }
+    /** Returns the Excel token array of the source range, or 0, if no link present. */
+    inline const ExcUPN*        GetSourceRangeTokArr() const { return mpSrcRange.get(); }
+    /** Returns the number of entries in the source range, or 0, if no source set. */
+    inline sal_uInt16           GetSourceEntryCount() const { return mnEntryCount; }
+
+    /** Writes a sheet link formula with special style only valid in OBJ records. */
+    void                        WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const;
+
+private:
+    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
+
+    XclExpTokArrPtr             CreateTokenArray( const ScTokenArray& rScTokArr ) const;
+    XclExpTokArrPtr             CreateTokenArray( const ScAddress& rPos ) const;
+    XclExpTokArrPtr             CreateTokenArray( const ScRange& rRange ) const;
+
+private:
+    XclExpTokArrPtr             mpCellLink;     /// Formula for linked cell.
+    XclExpTokArrPtr             mpSrcRange;     /// Formula for source data range.
+    sal_uInt16                  mnEntryCount;   /// Number of entries in source range.
+};
+
+
+// ----------------------------------------------------------------------------
+
 #if EXC_EXP_OCX_CTRL
 
 /** Represents an OBJ record for an OCX form control. */
-class XclExpObjOcxCtrl : public XclObj
+class XclExpObjOcxCtrl : public XclObj, public XclExpCtrlLinkHelper
 {
 public:
                                 XclExpObjOcxCtrl(
@@ -346,7 +384,7 @@ private:
 #else
 
 /** Represents an OBJ record for an TBX form control. */
-class XclExpObjTbxCtrl : public XclObj
+class XclExpObjTbxCtrl : public XclObj, public XclExpCtrlLinkHelper
 {
 public:
                                 XclExpObjTbxCtrl(
@@ -358,23 +396,16 @@ public:
     virtual                     ~XclExpObjTbxCtrl();
 
 private:
-    /** Creates the link formulas from the passed tag, that contains the links in text format. */
-    void                        SetLinkFormulas( const XclExpRoot& rRoot, const String& rTag );
-
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
-    void                        WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const;
-
 private:
-    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
-
-    XclExpTokArrPtr             mpCellLink;     /// Formula for linked cell.
-    XclExpTokArrPtr             mpSrcRange;     /// Formula for source data range.
+    ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
     sal_Int32                   mnHeight;       /// Height of the control.
-    sal_uInt16                  mnEntryCount;   /// Number of entries in list boxes.
     sal_uInt16                  mnState;        /// Checked/unchecked state.
     sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
+    sal_Int16                   mnSelEntry;     /// Selected entry in combobox (1-based).
     bool                        mb3DStyle;      /// true = 3D style.
+    bool                        mbMultiSel;     /// true = Multi selection in listbox.
 };
 
 #endif
