@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 17:28:55 $
+ *  last change: $Author: dvo $ $Date: 2000-12-20 15:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #ifndef _SWEVENT_HXX
 #include "swevent.hxx"
+#endif
+
+#ifndef _DOCSTYLE_HXX
+#include "docstyle.hxx"
 #endif
 
 #ifndef _SFX_HRC
@@ -383,7 +387,7 @@ void SwEventDescriptor::replaceByName(
         // else: unknown PropertyValue -> ignore
     }
 
-    SvxMacroItem aItem(ITEMID_MACRO);
+    SvxMacroItem aItem(RES_FRMMACRO);
     aItem.SetMacroTable(getMacroItem().GetMacroTable());
     if (bTypeOK)
     {
@@ -644,7 +648,7 @@ void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetAttr(ITEMID_MACRO);
+    return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetAttr(RES_FRMMACRO);
 }
 
 
@@ -666,25 +670,41 @@ SwFrameStyleEventDescriptor::~SwFrameStyleEventDescriptor()
 
 void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    rStyle.GetBasePool()->Find(rStyle.GetStyleName())->
-        GetItemSet().Put(rItem);
+    // As I was told, for some entirely unobvious reason getting an
+    // item from a style has to look as follows:
+    SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
+    if (pBasePool)
+    {
+        SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
+        if (pBase)
+        {
+            SwDocStyleSheet aStyle(*(SwDocStyleSheet*)pBase);
+            SfxItemSet& rStyleSet = aStyle.GetItemSet();
+            SfxItemSet aSet(*rStyleSet.GetPool(), RES_FRMMACRO, RES_FRMMACRO);
+            aSet.Put(rItem);
+            aStyle.SetItemSet(aSet);
+        }
+    }
 }
+
+static const SvxMacroItem aEmptyMacroItem(RES_FRMMACRO);
 
 const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 {
-    return (const SvxMacroItem&)rStyle.GetBasePool()->
-        Find(rStyle.GetStyleName())->GetItemSet().Get(ITEMID_MACRO);
-
-//  SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
-//  if(pBasePool)
-//  {
-//      SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-//      if(pBase)
-//      {
-//          const SfxPoolItem& aItem = pBase->GetItemSet()->Get(ITEMID_MACRO);
-//          return (const SvxMacroItem&)aItem;
-//      }
-//  }
-//  // no macro item found?
-//  ???
+    // As I was told, for some entirely unobvious reason getting an
+    // item from a style has to look as follows:
+    SfxStyleSheetBasePool* pBasePool = rStyle.GetBasePool();
+    if (pBasePool)
+    {
+        SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
+        if (pBase)
+        {
+            SwDocStyleSheet aStyle(*(SwDocStyleSheet*)pBase);
+            return (const SvxMacroItem&)aStyle.GetItemSet().Get(RES_FRMMACRO);
+        }
+        else
+            return aEmptyMacroItem;
+    }
+    else
+        return aEmptyMacroItem;
 }
