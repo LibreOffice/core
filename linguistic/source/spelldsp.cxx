@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:51:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-02 09:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,11 +694,22 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         if (bTmpResValid  &&  !xTmpRes.is())
             xRes = NULL;
 
-        // countercheck against results from dictionary which have precedence!
-        if (bCheckDics  &&
-            GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
+        // list of proposals found (to be checked against entries of
+        // neagtive dictionaries)
+        Sequence< OUString > aProposals;
+        INT16 eFailureType = SpellFailure::IS_NEGATIVE_WORD;
+        if (xRes.is())
         {
-            Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
+            aProposals = xRes->getAlternatives();
+            eFailureType = xRes->getFailureType();
+        }
+        Reference< XDictionaryList > xDicList;
+        if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
+            xDicList = Reference< XDictionaryList >( GetDicList(), UNO_QUERY );
+
+        // countercheck against results from dictionary which have precedence!
+        if (bCheckDics  &&  xDicList.is())
+        {
             Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDicList,
                     aChkWord, nLanguage, TRUE, TRUE ) );
 
@@ -710,14 +721,6 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                         aChkWord, nLanguage, FALSE, TRUE ) );
                 if (xNegEntry.is())
                 {
-                    INT16 eFailureType = SpellFailure::IS_NEGATIVE_WORD;
-                    Sequence< OUString > aProposals;
-                    if (xRes.is())
-                    {
-                        eFailureType = xRes->getFailureType();
-                        aProposals = xRes->getAlternatives();
-                    }
-
                     // replacement text to be added to suggestions, if not empty
                     OUString aAddRplcTxt( xNegEntry->getReplacementText() );
 
@@ -733,15 +736,16 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                             aProposals.getArray()[ nLen ] = aAddRplcTxt;
                         }
                     }
-
-                    // remove entries listed in negative dictionaries
-                    SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
-
-                    xRes = new SpellAlternatives( aChkWord, nLanguage,
-                                    eFailureType, aProposals );
                 }
             }
         }
+
+        // remove entries listed in negative dictionaries
+        if (bCheckDics  &&  xDicList.is())
+            SeqRemoveNegEntries( aProposals, xDicList, nLanguage );
+
+        xRes = new SpellAlternatives( aChkWord, nLanguage,
+                        eFailureType, aProposals );
     }
 
     return xRes;
