@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:17:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,17 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include <vcl/svapp.hxx>
 
 
-#ifndef _SD_VIEWSHEL_HXX
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
 #endif
-#ifndef _SD_SDVIEW_HXX
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
 #endif
 #include <memory>
 
@@ -137,8 +139,8 @@ static SfxViewFrame* mpViewFrame = NULL;
 
 //=====  internal  ============================================================
 AccessibleDocumentViewBase::AccessibleDocumentViewBase (
-    SdWindow* pSdWindow,
-    SdViewShell* pViewShell,
+    ::sd::Window* pSdWindow,
+    ::sd::ViewShell* pViewShell,
     const uno::Reference<frame::XController>& rxController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleContextBase (rxParent, AccessibleRole::DOCUMENT),
