@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:56:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &::getCppuType((const sal_Int32*)0),            0, 0 },
 //      {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &::getCppuType((const table::CellOrientation*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &::getCppuType((const table::CellOrientation*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &::getCppuType((const sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -1324,10 +1324,10 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
         USHORT nWhich = pResultEntry->nWID;
         SfxItemState eState = pItemSet->GetItemState( nWhich, sal_False );
 
-        //  if no rotate value is set, look at orientation
-        //! also for a fixed value of 0 (in case orientation is ambiguous)?
-        if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
-            eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
+//       //  if no rotate value is set, look at orientation
+//       //! also for a fixed value of 0 (in case orientation is ambiguous)?
+//       if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
+//           eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
 
         if ( eState == SFX_ITEM_SET )
             eRet = beans::PropertyState_DIRECT_VALUE;
@@ -1722,31 +1722,32 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     nRotVal %= 36000;
                                     if ( nRotVal < 0 )
                                         nRotVal += 36000;
-
-                                    //  always set rotation value and orientation
-
-                                    SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
-                                    BOOL bSetOrient = TRUE;
-
-                                    if ( nRotVal == 9000 )
-                                        eOrient = SVX_ORIENTATION_BOTTOMTOP;
-                                    else if ( nRotVal == 27000 )
-                                        eOrient = SVX_ORIENTATION_TOPBOTTOM;
-                                    else if ( nRotVal == 0 )
-                                    {
-                                        // don't overwrite stacked orientation by setting
-                                        // rotation to 0
-
-                                        SvxCellOrientation eOld = (SvxCellOrientation)
-                                            ((const SvxOrientationItem&)rSet.Get(ATTR_ORIENTATION)).
-                                                GetValue();
-                                        if ( eOld == SVX_ORIENTATION_STACKED )
-                                            bSetOrient = FALSE;
-                                    }
-
                                     rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
-                                    if (bSetOrient)
-                                        rSet.Put( SvxOrientationItem( eOrient, ATTR_ORIENTATION ) );
+                                }
+                            }
+                            break;
+                        case ATTR_STACKED:
+                            {
+                                table::CellOrientation eOrient;
+                                if( *pValue >>= eOrient )
+                                {
+                                    switch( eOrient )
+                                    {
+                                        case table::CellOrientation_STANDARD:
+                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                        break;
+                                        case table::CellOrientation_TOPBOTTOM:
+                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                                        break;
+                                        case table::CellOrientation_BOTTOMTOP:
+                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                                        break;
+                                        case table::CellOrientation_STACKED:
+                                            rSet.Put( SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                        break;
+                                    }
                                 }
                             }
                             break;
@@ -1901,24 +1902,11 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 aAny <<= sal_Int16( TwipsToHMM(((const SfxUInt16Item&)
                                 pItemSet->Get(nWhich)).GetValue()) );
                 break;
-            case ATTR_ROTATE_VALUE:
+            case ATTR_STACKED:
                 {
-                    //  if value is 0 and orientation topbottom or bottomtop,
-                    //  adjust value
-
-                    sal_Int32 nRotVal = ((const SfxInt32Item&)
-                                pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                    if ( nRotVal == 0 )
-                    {
-                        SvxCellOrientation eOrient = (SvxCellOrientation)
-                                ((const SvxOrientationItem&)pItemSet->Get(ATTR_ORIENTATION)).
-                                    GetValue();
-                        if ( eOrient == SVX_ORIENTATION_BOTTOMTOP )
-                            nRotVal = 9000;
-                        else if ( eOrient == SVX_ORIENTATION_TOPBOTTOM )
-                            nRotVal = 27000;
-                    }
-                    aAny <<= nRotVal;
+                    sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                    BOOL bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
+                    SvxOrientationItem( nRot, bStacked ).QueryValue( aAny );
                 }
                 break;
             case ATTR_PAGE_SCALE:
