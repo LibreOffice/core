@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:29:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,9 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <scripttypeitem.hxx>
+#endif
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
@@ -4505,9 +4507,9 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
 PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
     pCharSet        ( new ImplPPTCharPropSet ),
     mnParagraph     ( nParagraph ),
-    mpFieldItem     ( NULL ),
-    mnLanguage      ( 0 )
+    mpFieldItem     ( NULL )
 {
+    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
 }
 
 PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
@@ -4519,7 +4521,9 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
-    mnLanguage = rCharPropSet.mnLanguage;
+    mnLanguage[ 0 ] = rCharPropSet.mnLanguage[ 0 ];
+    mnLanguage[ 1 ] = rCharPropSet.mnLanguage[ 1 ];
+    mnLanguage[ 2 ] = rCharPropSet.mnLanguage[ 2 ];
 #ifdef DBG_EXTRACT_BUDATA
     mnCharacters = rCharPropSet.mnCharacters;
 #endif
@@ -4534,7 +4538,7 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagr
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
-    mnLanguage = 0;
+    mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
 #ifdef DBG_EXTRACT_BUDATA
     mnCharacters = rCharPropSet.mnCharacters;
 #endif
@@ -4800,6 +4804,18 @@ PPTTextParagraphStyleAtomInterpreter::~PPTTextParagraphStyleAtomInterpreter()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+PPTTextSpecInfo::PPTTextSpecInfo( sal_uInt32 nCharIdx ) :
+    nCharIdx        ( nCharIdx ),
+    nDontKnow       ( 1 )
+{
+    nLanguage[ 0 ] = 0x400;
+    nLanguage[ 1 ] = 0;
+    nLanguage[ 2 ] = 0;
+}
+
+PPTTextSpecInfo::~PPTTextSpecInfo()
+{
+}
 
 PPTTextSpecInfoAtomInterpreter::PPTTextSpecInfoAtomInterpreter() :
     bValid  ( sal_False )
@@ -4825,22 +4841,37 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
         }
         rIn >> nFlags;
 
-        sal_uInt16 nVal0, nVal2;
         PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
         if ( pTextSpecDefault )
-            pEntry->nLanguage = pTextSpecDefault->nLanguage;
+        {
+            pEntry->nDontKnow = pTextSpecDefault->nDontKnow;
+            pEntry->nLanguage[ 0 ] = pTextSpecDefault->nLanguage[ 0 ];
+            pEntry->nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
+            pEntry->nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
+        }
         for ( i = 1; nFlags && i ; i <<= 1 )
         {
+            sal_uInt16 nLang = 0;
             switch( nFlags & i )
             {
                 case 0 : break;
-                case 1 : rIn >> nVal0; break;
-                case 2 : rIn >> pEntry->nLanguage; break;
-                case 4 : rIn >> nVal2; break;
+                case 1 : rIn >> pEntry->nDontKnow; break;
+                case 2 : rIn >> nLang; break;
+                case 4 : rIn >> nLang; break;
                 default :
                 {
                     rIn.SeekRel( 2 );
                 }
+            }
+            if ( nLang )
+            {
+                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( nLang );
+                if ( nScriptType & SCRIPTTYPE_LATIN )
+                    pEntry->nLanguage[ 0 ] = nLang;
+                if ( nScriptType & SCRIPTTYPE_ASIAN )
+                    pEntry->nLanguage[ 1 ] = nLang;
+                if ( nScriptType & SCRIPTTYPE_COMPLEX )
+                    pEntry->nLanguage[ 2 ] = nLang;
             }
             nFlags &= ~i;
         }
@@ -5668,12 +5699,12 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         SvxEscapementItem aItem( nEsc, nProp );
         rSet.Put( aItem );
     }
-    sal_uInt16 nLanguage = mnLanguage;
-    if ( !nLanguage )
-         nLanguage = mrStyleSheet.maTxSI.nLanguage;
-    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE ) );
-    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE_CJK ) );
-    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE_CTL ) );
+    if ( mnLanguage[ 0 ] )
+        rSet.Put( SvxLanguageItem( mnLanguage[ 0 ], EE_CHAR_LANGUAGE ) );
+    if ( mnLanguage[ 1 ] )
+        rSet.Put( SvxLanguageItem( mnLanguage[ 1 ], EE_CHAR_LANGUAGE_CJK ) );
+    if ( mnLanguage[ 2 ] )
+        rSet.Put( SvxLanguageItem( mnLanguage[ 2 ], EE_CHAR_LANGUAGE_CTL ) );
 }
 
 SvxFieldItem* PPTPortionObj::GetTextField()
@@ -6687,7 +6718,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( nI );
                                             if ( pSet->mnOriginalTextPos < nCharIdx )
                                             {
-                                                pSet->mnLanguage = pSpecInfo->nLanguage;
+                                                pSet->mnLanguage[ 0 ] = pSpecInfo->nLanguage[ 0 ];
+                                                pSet->mnLanguage[ 1 ] = pSpecInfo->nLanguage[ 1 ];
+                                                pSet->mnLanguage[ 2 ] = pSpecInfo->nLanguage[ 2 ];
                                                 // test if the current portion needs to be splitted
                                                 if ( pSet->maString.Len() > 1 )
                                                 {
