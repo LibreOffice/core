@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-09-05 14:42:04 $
+ *  last change: $Author: os $ $Date: 2001-09-06 11:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,10 @@ void SfxAppToolBoxControl_Impl::StateChanged
 )
 {
     if ( !aLastURL.Len() && pState && pState->ISA(SfxStringItem) )
+    {
+        GetToolBox().EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
         SetImage( ((const SfxStringItem*)pState)->GetValue() );
+    }
     else
         SfxToolBoxControl::StateChanged( nId, eState, pState );
 }
