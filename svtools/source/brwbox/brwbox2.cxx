@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-11 16:01:30 $
+ *  last change: $Author: fs $ $Date: 2002-04-11 16:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,13 +405,31 @@ void BrowseBox::ToggleSelection( BOOL bForce )
 void BrowseBox::DrawCursor()
 {
     short nCursorHideCount = GetCursorHideCount();
-    BOOL bHidden = bHideCursor || !bSelectionIsVisible ||
-                                 !IsUpdateMode() || bScrolling || nCurRow < 0;
+    BOOL bReallyHide = FALSE;
+#if SUPD<655
+    if ( SMART_CURSOR_HIDE == bHideCursor )
+#else
+    if ( hcSmart == m_eHideCursorMode )
+#endif
+    {
+        if ( !GetSelectRowCount() && !GetSelectColumnCount() )
+            bReallyHide = TRUE;
+    }
+#if SUPD<655
+    else if ( HARD_CURSOR_HIDE == bHideCursor )
+#else
+    else if ( hcAlways == m_eHideCursorMode )
+#endif
+    {
+        bReallyHide = TRUE;
+    }
+
+    bReallyHide |= !bSelectionIsVisible || !IsUpdateMode() || bScrolling || nCurRow < 0;
 
     if (PaintCursorIfHiddenOnce())
-        bHidden |= ( GetCursorHideCount() > 1 );
+        bReallyHide |= ( GetCursorHideCount() > 1 );
     else
-        bHidden |= ( GetCursorHideCount() > 0 );
+        bReallyHide |= ( GetCursorHideCount() > 0 );
 
     // keine Cursor auf Handle-Column
     if ( nCurColId == 0 )
@@ -446,14 +464,14 @@ void BrowseBox::DrawCursor()
     if (m_aCursorColor == COL_TRANSPARENT)
     {
         // auf diesem Plattformen funktioniert der StarView-Focus richtig
-        if ( bHidden )
+        if ( bReallyHide )
             ((Control*)pDataWin)->HideFocus();
         else
             ((Control*)pDataWin)->ShowFocus( aCursor );
     }
     else
     {
-        Color rCol = bHidden ? pDataWin->GetFillColor() : m_aCursorColor;
+        Color rCol = bReallyHide ? pDataWin->GetFillColor() : m_aCursorColor;
         Color aOldFillColor = pDataWin->GetFillColor();
         Color aOldLineColor = pDataWin->GetLineColor();
         pDataWin->SetFillColor();

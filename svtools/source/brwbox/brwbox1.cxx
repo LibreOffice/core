@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-11 16:00:16 $
+ *  last change: $Author: fs $ $Date: 2002-04-11 16:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,11 @@ void BrowseBox::Construct( BrowserMode nMode )
     bHit = FALSE;
     bRubber = FALSE;
     bHideSelect = FALSE;
-    bHideCursor = FALSE;
+#if SUPD<655
+    bHideCursor = NO_CURSOR_HIDE;
+#else
+    m_eHideCursorMode = hcNone;
+#endif
     nRowCount = 0;
     m_bFocusOnlyCursor = TRUE;
     m_aCursorColor = COL_TRANSPARENT;
@@ -2329,7 +2333,29 @@ void BrowseBox::SetMode( BrowserMode nMode )
     bKeepHighlight = ( nMode & BROWSER_KEEPSELECTION ) == BROWSER_KEEPSELECTION;
 
     bHideSelect = ((nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT);
-    bHideCursor = ((nMode & BROWSER_HIDECURSOR) == BROWSER_HIDECURSOR);
+    // default: do not hide the cursor at all (untaken scrolling and such)
+#if SUPD<655
+    bHideCursor = NO_CURSOR_HIDE;
+#else
+    m_eHideCursorMode = hcNone;
+#endif
+
+    if ( BROWSER_SMART_HIDECURSOR == ( nMode & BROWSER_SMART_HIDECURSOR ) )
+    {   // smart cursor hide overrules hard cursor hide
+#if SUPD<655
+        bHideCursor = SMART_CURSOR_HIDE;
+#else
+        m_eHideCursorMode = hcSmart;
+#endif
+    }
+    else if ( BROWSER_HIDECURSOR == ( nMode & BROWSER_HIDECURSOR ) )
+    {
+#if SUPD<655
+        bHideCursor = HARD_CURSOR_HIDE;
+#else
+        m_eHideCursorMode = hcAlways;
+#endif
+    }
 
     m_bFocusOnlyCursor = ((nMode & BROWSER_CURSOR_WO_FOCUS) == 0);
 
