@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:25:31 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,7 +1318,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Îáúåäèíÿòü îäèíàêîâûå ıëåìåíòû";
         Text[ greek ] = "Óõ~ãêİíôñùóç ôáõôüóçìùí åããñáöşí";
         Text[ dutch ] = "~Samenvatten van identieke items";
-        Text[ french ] = "Grouper les entrées ~identiques";
+        Text[ french ] = "Regrouper les entrées ~identiques";
         Text[ spanish ] = "Com~binar entradas idénticas";
         Text[ italian ] = "Riunisci voci ~uguali";
         Text[ danish ] = "Kombiner identiske elementer";
@@ -1343,7 +1343,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Îáúåäèíÿòü ıëåìåíòû ñ ñ èëè ññ";
         Text[ greek ] = "Óıíïøç ìå p Ş ìå pp";
         Text[ dutch ] = "Samenvatten met ~e.v.";
-        Text[ french ] = "~avec \"et suiv.\"";
+        Text[ french ] = "Avec ~p ou pp";
         Text[ spanish ] = "Combinar entradas con las ~siguiente(s)";
         Text[ italian ] = "Riunisci con ~seg. o segg.";
         Text[ danish ] = "Kombiner med f. eller ff.";
@@ -1368,7 +1368,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Îáúåäèíÿòü ñ -";
         Text[ greek ] = "Óõãêİíôñùóç ~ìå";
         Text[ dutch ] = "Samenvatten ~met -";
-        Text[ french ] = "a~vec -";
+        Text[ french ] = "A~vec -";
         Text[ spanish ] = "U~nir con -";
         Text[ italian ] = "Riunisci ~con -";
         Text[ danish ] = "Kombiner med -";
@@ -1393,7 +1393,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
         Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
         Text[ dutch ] = "Hoofdletters/~kleine letters belangrijk";
-        Text[ french ] = "en respectant la ~casse";
+        Text[ french ] = "En respectant la ~casse";
         Text[ spanish ] = "~Mayúsculas/minúsculas";
         Text[ italian ] = "Maiuscole/minu~scole";
         Text[ danish ] = "Forskel på store og små bogstaver";
@@ -2575,7 +2575,7 @@ TabPage TP_TOX_ENTRY
             Text[ russian ] = "Ñòèëü çíàêîâ: ";
             Text[ greek ] = "Óôõë ÷áñáêôŞñùí:  ";
             Text[ dutch ] = "Tekenopmaakprofiel:  ";
-            Text[ french ] = "Style de caractère : ";
+            Text[ french ] = "Style de caractères : ";
             Text[ spanish ] = "Estilo de carácter:  ";
             Text[ italian ] = "Modello di carattere:  ";
             Text[ danish ] = "Tegntypografi: ";
@@ -2843,7 +2843,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ñòèëü çíàêîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
         Text[ dutch ] = "Teken~opmaakprofiel";
-        Text[ french ] = "Style de ~caractère";
+        Text[ french ] = "Style de ~caractères";
         Text[ spanish ] = "Estilo de ~carácter";
         Text[ italian ] = "Modello di carattere";
         Text[ danish ] = "Tegntypografi";
@@ -3216,7 +3216,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ñòèëü çíàêîâ äëÿ ãëàâíûõ ıëåìåíòîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí ôùí êõñßùí åããñáöşí";
         Text[ dutch ] = "~Tekenopmaakprofiel voor hoofditems";
-        Text[ french ] = "Style de ~caractère des entrées principales";
+        Text[ french ] = "Style de ~caractères des entrées principales";
         Text[ spanish ] = "~Estilo de caracteres para entradas principales";
         Text[ italian ] = "Modello di carattere per voci principali";
         Text[ danish ] = "Tegntypografi til hovedelementer";
