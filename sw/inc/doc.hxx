@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:13:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,6 +1575,11 @@ public:
                     const SwCellFrm* pBoxFrm = 0 ) const;
     void SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
                     const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = 0 );
+    void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
+                    const SwCellFrm* pBoxFrm = 0 ) const;
+    void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
+                     const SwCellFrm* pBoxFrm = 0 );
+
 
     // Direktzugriff fuer Uno
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, SwTabCols &rOld,
