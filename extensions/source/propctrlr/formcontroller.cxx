@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 11:07:39 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 12:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1460,7 +1460,7 @@ namespace pcr
                             static_cast<const SvxPostureItem&>(pOut->Get(SID_ATTR_CHAR_POSTURE));
 
                         ::com::sun::star::awt::FontSlant eSlant = (::com::sun::star::awt::FontSlant)rPostureItem.GetPosture();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_SLANT, makeAny(eSlant));
+                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
                     }
 
                     // --------------------------
@@ -2911,6 +2911,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/06/08 11:07:39  fs
+ *  #86096# corrected extracting sal_Int16/sal_Int32 values
+ *
  *  Revision 1.31  2001/06/08 07:51:27  fs
  *  #65293# linux type conversion problem
  *
