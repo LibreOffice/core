@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-14 12:16:33 $
+ *  last change: $Author: thb $ $Date: 2002-06-14 13:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ namespace accessibility
         sal_Bool HaveFocus() throw (::com::sun::star::uno::RuntimeException);
         void SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
         void SetShapeFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
-        void ChangeChildFocus( sal_Int32 nNewChild );
+        void ChangeChildFocus( sal_Int32 nNewChild ) throw (::com::sun::star::uno::RuntimeException);
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
