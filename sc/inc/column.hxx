@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:40:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ public:
 
     const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
+    const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
+
     ULONG       GetNumberFormat( SCROW nRow ) const;
 
     void        MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const;
