@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-13 17:55:47 $
+#   last change: $Author: hjs $ $Date: 2002-06-27 14:10:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,7 +180,6 @@ $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_
 
 .IF "$(GUI)$(USE_SHELL)"=="WNT4nt"
 my4ver:=$(shell +echo %_4ver)
-my4ver:=
 .ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
 
 #patch
