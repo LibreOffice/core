@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 20:10:25 $
+ *  last change: $Author: kz $ $Date: 2001-10-30 21:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String STR_EVENTCONFIG
     Text[ dutch ] = "Gebeurtenis toewijzen";
     Text[ chinese_simplified ] = "ζ‡ε®δΊ‹δ»¶";
     Text[ greek ] = "Αντιστοίχιση γεγονότος";
-    Text[ korean ] = "μ΄λ²¤νΈ λ°°μ •";
+    Text[ korean ] = "μ΄λ²¤νΈ μ§€μ •";
     Text[ turkish ] = "Olay ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar acontecimientos";
@@ -170,7 +170,7 @@ ModalDialog DLG_MACROQUERY
         Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
         Text[ chinese_simplified ] = "ζ“δ½ε‘½δ»¤η›΄ζ¥ζ¥θ‡ªδΈ€δΈªε®οΌζ‚¨θ¦ζ‰§θ΅θΏ™δΈªε®οΌ";
         Text[ greek ] = "Εκτελέστηκε ένα γεγονός, το οποίο συνδέεται με μια μακροεντολή. Θέλετε να εκτελεστεί η μακροεντολή αυτή;";
-        Text[ korean ] = "λ§¤ν¬λ΅κ°€ κµ¬μ„±λ μ΄λ²¤νΈκ°€ μ‹ν–‰λμ—μµλ‹λ‹¤. μ΄ λ§¤ν¬λ΅λ¥Ό μ‹¤ν–‰ν•μ‹κ² μµλ‹κΉ?";
+        Text[ korean ] = "λ§¤ν¬λ΅κ°€ κµ¬μ„±λ μ΄λ²¤νΈκ°€ μ‹ν–‰λμ—μµλ‹λ‹¤. μ΄ λ§¤ν¬λ΅λ¥Ό μ‹¤ν–‰ν•κ² μµλ‹κΉ?";
         Text[ turkish ] = "Baώlatύlan olay ile ilgili bir yapύlandύrύlmύώ bir makro mevcut. Bu makroyu ηalύώtύrmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ΏDesea que se ejecute esta macro?";
@@ -200,7 +200,7 @@ ModalDialog DLG_MACROQUERY
         Text[ dutch ] = "Voor dit document niet meer waarschuwen";
         Text[ chinese_simplified ] = "δΈθ¦ε†ζ¬΅δΈΊθΏ™δΈªζ–‡ζ΅£ζε‡Ίθ­¦ε‘";
         Text[ greek ] = "Όχι άλλη προειδοποίηση για αυτό το έγγραφο";
-        Text[ korean ] = "μ΄ λ¬Έμ„μ— λ€ν•΄μ„λ” λ” μ΄μƒ κ²½κ³  μ•ν•¨";
+        Text[ korean ] = "μ΄ λ¬Έμ„μ— κ²½κ³  λ‹¤μ‹ ν‘μ‹ μ•ν•¨";
         Text[ turkish ] = "Bu belge iηin bir daha uyarύ gφrόntόleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desactivar las advertencias para este documento";
@@ -275,6 +275,7 @@ ModalDialog DLG_MACROQUERY
     TEXT[ catalan ] = "Ejecutar macro";
     TEXT[ finnish ] = "Suorita makro";
 };
+
 
 
 
