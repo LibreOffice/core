@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aspects.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:49:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,40 +62,57 @@
 #define __com_sun_star_embed_Aspects_idl__
 
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module embed {
 
-//=============================================================================
-/** Possible aspects for an embedded object.
-    The first 32 bits are reserved for MS aspects.
+//============================================================================
+/** The constant set contains possible aspects for an embedded object.
+
+    <p>
+    This constant set provides a set of values that
+    can be used to specify the kind of object view.
+    It can be used for example by container to request
+    view representation of a certain kind from
+    <type>XEmbeddedObject</type>.
+    </p>
+
+    <p>
+    The first 32 bits are reserved for MS OLE aspects.
+    </p>
 
     @see XEmbeddedObject
 */
 constants Aspects
 {
-    // MS aspects
+    // MS OLE aspects
 
-    /** Representation of an object to be displayed as an embedded object inside a container.
+    // -----------------------------------------------------------------------
+    /** specifies view of the object to be displayed as an embedded object
+        inside a container.
      */
-    const hyper MSASPECT_CONTENT = 1;
+    const hyper MSOLE_CONTENT = 1;
 
-    /** Representation of an object to be displayed in a browsing tool.
+    // -----------------------------------------------------------------------
+    /** specifies view of the object to be displayed in a browsing tool.
      */
-    const hyper MSASPECT_THUMBNAIL = 2;
+    const hyper MSOLE_THUMBNAIL = 2;
 
-    /** Icon represents an object.
+    // -----------------------------------------------------------------------
+    /** specifies view of the object when object is represented by Icon.
      */
-    const hyper MSASPECT_ICON = 4;
+    const hyper MSOLE_ICON = 4;
 
-    /** Print preview representation.
+    // -----------------------------------------------------------------------
+    /** specifies view of the object for print preview.
      */
-    const hyper MSASPECT_DOCPRINT = 8;
+    const hyper MSOLE_DOCPRINT = 8;
 
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
 #endif
+
