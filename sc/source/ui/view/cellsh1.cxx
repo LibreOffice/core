@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:57:52 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@
 //CHINA001 #include "linkarea.hxx"
 #include "docfunc.hxx"
 #include "editable.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001
@@ -956,13 +958,42 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         //
 
         case SID_OUTLINE_HIDE:
-            pTabViewShell->HideMarkedOutlines();
+            if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                    GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                pTabViewShell->SetDataPilotDetails( FALSE );
+            else
+                pTabViewShell->HideMarkedOutlines();
             rReq.Done();
             break;
 
         case SID_OUTLINE_SHOW:
-            pTabViewShell->ShowMarkedOutlines();
-            rReq.Done();
+            {
+                ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                    GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                if ( pDPObj )
+                {
+                    USHORT nOrientation;
+                    if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
+                    {
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                        AbstractScDPShowDetailDlg* pDlg = pFact->CreateScDPShowDetailDlg(
+                            pTabViewShell->GetDialogParent(), RID_SCDLG_DPSHOWDETAIL, *pDPObj, nOrientation );
+                        DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                        if ( pDlg->Execute() == RET_OK )
+                        {
+                            String aNewDimName( pDlg->GetDimensionName() );
+                            pTabViewShell->SetDataPilotDetails( TRUE, &aNewDimName );
+                        }
+                    }
+                    else
+                        pTabViewShell->SetDataPilotDetails( TRUE );
+                }
+                else
+                    pTabViewShell->ShowMarkedOutlines();
+                rReq.Done();
+            }
             break;
 
         case SID_OUTLINE_MAKE:
