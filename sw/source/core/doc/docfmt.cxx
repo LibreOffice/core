@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:29:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,6 +1587,7 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     if( pCNd )
     {
         ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
+
         if ( pPara->bReset )
             lcl_RstAttr( pCNd, pPara );
 
@@ -1596,7 +1597,28 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
             pPara->pHistory->Add( pCNd->GetFmtColl(), pCNd->GetIndex(),
                                     ND_TEXTNODE );
 
-        pCNd->ChgFmtColl( pPara->pFmtColl );
+        SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
+        pCNd->ChgFmtColl( pFmt );
+
+        // --> FME 2005-01-12 #i39855# Move numbering update code from
+        // to SwDoc::SetTxtFmtColl() to lcl_SetTxtFmtColl()
+        SwDoc& rDoc = *pCNd->GetDoc();
+        const SfxPoolItem* pItem = NULL;
+        const SwNumRule * pRule = NULL;
+
+        if ( pFmt->GetOutlineLevel() < NO_NUMLEVEL )
+            pRule = rDoc.GetOutlineNumRule();
+        else if ( SFX_ITEM_SET ==
+                  pFmt->GetAttrSet().GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
+            pRule = rDoc.FindNumRulePtr(reinterpret_cast<const SwNumRuleItem *>
+                    (pItem)->GetValue());
+
+        if (pRule)
+        {
+            SwPaM aPam(*pCNd);
+            rDoc.SetNumRule(aPam, *pRule);
+        }
+        // <--
 
         pPara->nWhich++;
     }
@@ -1618,60 +1640,14 @@ BOOL SwDoc::SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt, BOOL bReset)
         AppendUndo( pUndo );
     }
 
-    if( rRg.HasMark() )
-    {
-        ParaRstFmt aPara( pStt, pEnd, pHst );
-        aPara.pFmtColl = pFmt;
-        aPara.bReset = bReset;
-        GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
-                            lcl_SetTxtFmtColl, &aPara );
-        if( !aPara.nWhich )
-            bRet = FALSE;           // keinen gueltigen Node gefunden
-    }
-    else
-    {
-        // ein enzelner Node:
-        SwCntntNode* pCNd = rRg.GetPoint()->nNode.GetNode().GetCntntNode();
-        if( pCNd )
-        {
-            if( bReset && pCNd->GetpSwAttrSet() )
-            {
-                ParaRstFmt aPara( pHst );
-                aPara.pFmtColl = pFmt;
-                lcl_RstAttr( pCNd, &aPara );
-            }
+    ParaRstFmt aPara( pStt, pEnd, pHst );
+    aPara.pFmtColl = pFmt;
+    aPara.bReset = bReset;
 
-            // erst in die History aufnehmen, damit ggfs. alte Daten
-            // gesichert werden koennen
-            if( pHst )
-                pHst->Add( pCNd->GetFmtColl(), pCNd->GetIndex(), ND_TEXTNODE );
-            pCNd->ChgFmtColl( pFmt );
-
-            const SfxPoolItem * pItem = NULL;
-            const SwNumRule * pRule = NULL;
-
-            if (pFmt->GetOutlineLevel() < NO_NUMLEVEL)
-            {
-                pRule = GetOutlineNumRule();
-            }
-            else if (SFX_ITEM_SET ==
-                     pFmt->GetAttrSet().GetItemState(RES_PARATR_NUMRULE,
-                                                     TRUE, &pItem))
-            {
-                pRule = FindNumRulePtr(reinterpret_cast<const SwNumRuleItem *>
-                                       (pItem)->GetValue());
-            }
-
-            if (pRule)
-            {
-                SwPaM aPam(*pCNd);
-
-                SetNumRule(aPam, *pRule);
-            }
-        }
-        else
-            bRet = FALSE;
-    }
+    GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
+                        lcl_SetTxtFmtColl, &aPara );
+    if( !aPara.nWhich )
+        bRet = FALSE;           // keinen gueltigen Node gefunden
 
     if( bRet )
         SetModified();
