@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:29:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,11 +174,11 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Inkludera ~format" ;
         Text [ PORTUGUESE ] = "Incluir ~formatos" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "°üº¬¸ñÊ½(~F)";
+        Text[ chinese_simplified ] = "°üº¬¸ñÊ½(~N)";
         Text[ russian ] = "Âêëş÷àòü ôîğìàòû";
         Text[ polish ] = "Uwzglêdnij f~ormaty";
-        Text[ japanese ] = "‘®‚ğŠÜ‚Ş(~F)";
-        Text[ chinese_traditional ] = "¥]§t®æ¦¡(~F)";
+        Text[ japanese ] = "‘®‚ğŠÜ‚Ş(~N)";
+        Text[ chinese_traditional ] = "¥]§t®æ¦¡(~N)";
         Text[ arabic ] = "ÊÖãíä ÇáÊäÓíŞÇÊ";
         Text[ greek ] = "Íá óõìğåñéëç~öèïıí ïé ìïñöİò";
         Text[ korean ] = "¼­½Ä Æ÷ÇÔ(~N)";
@@ -203,11 +203,11 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "A~nvändardefinierad sorteringsordning" ;
         Text [ PORTUGUESE ] = "Ordem de classificação definida pelo ~utilizador" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~C)";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~U)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
         Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
-        Text[ japanese ] = "‡˜‚Ìw’è(~C)";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~C)";
+        Text[ japanese ] = "‡˜‚Ìw’è(~U)";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
         Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
         Text[ korean ] = "»ç¿ëÀÚ°¡ Á¤ÀÇÇÑ  Á¤·Ä ¼ø¼­(~U)";
