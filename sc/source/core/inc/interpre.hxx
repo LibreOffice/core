@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:31:16 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,7 @@ BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
+void ScHyperLink();
 void ScCalcTeam();
 void ScAnswer();
 void ScTTT();
