@@ -60,7 +60,11 @@ $(USE_SHL1VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL1OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL1OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL1OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL1OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL1LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF1EXPORTFILE) -o $@
@@ -460,7 +464,11 @@ $(USE_SHL2VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL2OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL2OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL2OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL2OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL2LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF2EXPORTFILE) -o $@
@@ -860,7 +868,11 @@ $(USE_SHL3VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL3OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL3OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL3OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL3OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL3LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF3EXPORTFILE) -o $@
@@ -1260,7 +1272,11 @@ $(USE_SHL4VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL4OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL4OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL4OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL4OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL4LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF4EXPORTFILE) -o $@
@@ -1660,7 +1676,11 @@ $(USE_SHL5VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL5OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL5OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL5OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL5OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL5LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF5EXPORTFILE) -o $@
@@ -2060,7 +2080,11 @@ $(USE_SHL6VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL6OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL6OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL6OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL6OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL6LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF6EXPORTFILE) -o $@
@@ -2460,7 +2484,11 @@ $(USE_SHL7VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL7OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL7OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL7OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL7OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL7LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF7EXPORTFILE) -o $@
@@ -2860,7 +2888,11 @@ $(USE_SHL8VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL8OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL8OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL8OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL8OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL8LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF8EXPORTFILE) -o $@
@@ -3260,7 +3292,11 @@ $(USE_SHL9VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL9OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL9OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL9OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL9OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL9LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF9EXPORTFILE) -o $@
@@ -3660,7 +3696,11 @@ $(USE_SHL10VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL10OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL10OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL10OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL10OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL10LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF10EXPORTFILE) -o $@

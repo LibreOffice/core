@@ -81,7 +81,11 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @+echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@

@@ -47,7 +47,11 @@ $(LIB1TARGET) :	$(LIB1FILES) \
     @+echo $(LIB1OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB1FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB1TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB1TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -126,7 +130,11 @@ $(LIB2TARGET) :	$(LIB2FILES) \
     @+echo $(LIB2OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB2FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -205,7 +213,11 @@ $(LIB3TARGET) :	$(LIB3FILES) \
     @+echo $(LIB3OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB3FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB3TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB3TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -284,7 +296,11 @@ $(LIB4TARGET) :	$(LIB4FILES) \
     @+echo $(LIB4OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB4FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -363,7 +379,11 @@ $(LIB5TARGET) :	$(LIB5FILES) \
     @+echo $(LIB5OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB5FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB5TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB5TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -442,7 +462,11 @@ $(LIB6TARGET) :	$(LIB6FILES) \
     @+echo $(LIB6OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB6FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -521,7 +545,11 @@ $(LIB7TARGET) :	$(LIB7FILES) \
     @+echo $(LIB7OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB7FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB7TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB7TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -600,7 +628,11 @@ $(LIB8TARGET) :	$(LIB8FILES) \
     @+echo $(LIB8OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB8FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -679,7 +711,11 @@ $(LIB9TARGET) :	$(LIB9FILES) \
     @+echo $(LIB9OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB9FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB9TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB9TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
@@ -758,7 +794,11 @@ $(LIB10TARGET) :	$(LIB10FILES) \
     @+echo $(LIB10OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB10FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
+.IF "$(OS)"=="MACOSX"
+    @-+nm `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ELSE
     @+nm `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+.ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@

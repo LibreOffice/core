@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_shl.mk  $
 #*
 #*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-09 16:16:04 $
-#*    $Revision: 1.4 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-11 20:40:12 $
+#*    $Revision: 1.5 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_shl.mkv  $
 #*
@@ -112,7 +112,11 @@ $(USE_SHL$(TNR)VERSIONMAP): \
     @+$(RM) $@.dump
 .IF "$(SHL$(TNR)OBJS)"!=""
 # dump remaining objects on the fly
+.IF "$(OS)"=="MACOSX"
+    @-+nm $(SHL$(TNR)OBJS:s/.obj/.o/) > $@.dump
+.ELSE
     @+nm $(SHL$(TNR)OBJS:s/.obj/.o/) > $@.dump
+.ENDIF
 .ENDIF			# "$(SHL$(TNR)OBJS)!"=""
     @+$(TYPE) /dev/null $(SHL$(TNR)LIBS:s/.lib/.dump/) >> $@.dump
     @+$(SOLARENV)$/bin$/genmap -d $@.dump -e $(DEF$(TNR)EXPORTFILE) -o $@
