@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-01 08:57:34 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 08:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,26 @@ struct LTRSort : public ::std::binary_function< const Window*, const Window*, bo
             return ( pos1.X() < pos2.X() );
     }
 };
+struct LTRSortBackward : public ::std::binary_function< const Window*, const Window*, bool >
+{
+    bool operator()( const Window* w1, const Window* w2 )
+    {
+        Point pos1, pos2;
+        if( w1->GetType() == RSC_DOCKINGWINDOW )
+            pos1 = ((DockingWindow*)w1)->GetPosPixel();
+        else
+            pos1 = w1->GetPosPixel();
+        if( w2->GetType() == RSC_DOCKINGWINDOW )
+            pos2 = ((DockingWindow*)w2)->GetPosPixel();
+        else
+            pos2 = w2->GetPosPixel();
+
+        if( pos1.X() == pos2.X() )
+            return ( pos1.Y() > pos2.Y() );
+        else
+            return ( pos1.X() > pos2.X() );
+    }
+};
 
 // --------------------------------------------------
 
@@ -140,9 +160,12 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
 
 BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
+    BOOL bFloatsOnly = FALSE;
+    BOOL bFocusInList = FALSE;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
-    if( (aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB)    // Ctrl-TAB
-        || aKeyCode.GetCode() == KEY_F6                         // F6
+    BOOL bForward = !aKeyCode.IsShift();
+    if( ( aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB )  // Ctrl-TAB
+        || ( bFloatsOnly = ( aKeyCode.GetCode()) == KEY_F6 )    // F6
         )
     {
         // is the focus in the list ?
@@ -153,18 +176,54 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             Window *pWin = *p;
             if( (*p)->HasChildPathFocus( TRUE ) )
             {
+                // F6 works only in floaters
+                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW )
+                    return FALSE;
+
+                bFocusInList = TRUE;
                 // activate next task pane
-                Window *pNextWin = FindNextPane( *p );
+                Window *pNextWin = bFloatsOnly ? FindNextFloat( *p, bForward ) : FindNextPane( *p, bForward );
                 if( pNextWin != *p )
                 {
                     ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
                     pNextWin->GrabFocus();
                     ImplGetSVData()->maWinData.mbNoSaveFocus = FALSE;
                 }
+                else
+                {
+                    // we did not find another taskpane, so
+                    // put focus back into document: use frame win of topmost parent
+                    while( pWin )
+                    {
+                        if( !pWin->GetParent() )
+                        {
+                            pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+                            break;
+                        }
+                        pWin = pWin->GetParent();
+                    }
+                }
+
                 return TRUE;
             }
             else
                 p++;
+        }
+
+        // the focus is not in the list: activate first float if F6 was pressed
+        if( !bFocusInList && bFloatsOnly )
+        {
+            p = mTaskPanes.begin();
+            while( p != mTaskPanes.end() )
+            {
+                Window *pWin = *p;
+                if( pWin->IsVisible() && pWin->GetType() == RSC_DOCKINGWINDOW )
+                {
+                    pWin->GrabFocus();
+                    return TRUE;
+                }
+                p++;
+            }
         }
     }
 
@@ -173,9 +232,12 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
 // --------------------------------------------------
 
-Window* TaskPaneList::FindNextPane( Window *pWindow )
+Window* TaskPaneList::FindNextPane( Window *pWindow, BOOL bForward )
 {
-    ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
+    if( bForward )
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
+    else
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
     ::std::vector< Window* >::iterator p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
@@ -188,6 +250,37 @@ Window* TaskPaneList::FindNextPane( Window *pWindow )
                 if( ++p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
                 if( (*p)->IsVisible() )
+                    return *p;
+            }
+            break;
+        }
+        else
+            ++p;
+    }
+
+    return pWindow; // nothing found
+}
+
+// --------------------------------------------------
+
+Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
+{
+    if( bForward )
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
+    else
+        ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
+
+    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+    while( p != mTaskPanes.end() )
+    {
+        if( !pWindow || *p == pWindow )
+        {
+            unsigned n = mTaskPanes.size();
+            while( --n )
+            {
+                if( ++p == mTaskPanes.end() )
+                    return pWindow; // do not wrap, send focus back to document at end of list
+                if( (*p)->IsVisible() && (*p)->GetType() == RSC_DOCKINGWINDOW )
                     return *p;
             }
             break;
