@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:01:37 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,18 @@ SfxMacro* BasicIDE::CreateMacro()
 void BasicIDE::Organize( INT16 tabId )
 {
     BasicIDEDLL::Init();
-    Window* pParent = Application::GetDefDialogParent();
-    OrganizeDialog* pDlg = new OrganizeDialog( pParent, tabId );
-    if ( IDE_DLL()->GetShell() )
+
+    BasicEntryDescriptor aDesc;
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = IDE_DLL()->GetShell()->GetCurWindow();
-        if ( pWin )
-            pDlg->SetCurrentModule( pWin->CreateSbxDescription() );
+        IDEBaseWindow* pCurWin = pIDEShell->GetCurWindow();
+        if ( pCurWin )
+            aDesc = pCurWin->CreateEntryDescriptor();
     }
+
+    Window* pParent = Application::GetDefDialogParent();
+    OrganizeDialog* pDlg = new OrganizeDialog( pParent, tabId, aDesc );
     pDlg->Execute();
     delete pDlg;
 }
@@ -246,6 +250,33 @@ Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< sc
         aSeqLibNames.getArray()[ i ] = aLibList[ i ];
 
     return aSeqLibNames;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasShell( SfxObjectShell* pShell )
+{
+    BOOL bHasShell = FALSE;
+
+    if ( pShell )
+    {
+        SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
+        while ( pDocShell )
+        {
+            if ( pDocShell == pShell )
+            {
+                bHasShell = TRUE;
+                break;
+            }
+            pDocShell = SfxObjectShell::GetNext( *pDocShell );
+        }
+    }
+    else
+    {
+        bHasShell = TRUE;
+    }
+
+    return bHasShell;
 }
 
 //----------------------------------------------------------------------------
@@ -378,23 +409,26 @@ BOOL BasicIDE::HasModule( SfxObjectShell* pShell, const String& rLibName, const 
 {
     BOOL bHasModule = FALSE;
 
-    Reference< container::XNameContainer > xLib;
-    try
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer = GetModuleLibraryContainer( pShell );
+
+    // check if library container has module library
+    ::rtl::OUString aOULibName( rLibName );
+    if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
     {
+        // load library
+        if ( !xLibContainer->isLibraryLoaded( aOULibName ) )
+            xLibContainer->loadLibrary( aOULibName );
+
         // get library
-        xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+        Reference< container::XNameContainer > xLib;
+        Any aElement = xLibContainer->getByName( aOULibName );
+        aElement >>= xLib;
 
         // check if library has module
         ::rtl::OUString aOUModName( rModName );
-        if( xLib.is() && xLib->hasByName( aOUModName ) )
-        {
+        if ( xLib.is() && xLib->hasByName( aOUModName ) )
             bHasModule = TRUE;
-        }
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
     }
 
     return bHasModule;
@@ -532,7 +566,7 @@ void BasicIDE::RenameModule( SfxObjectShell* pShell, const String& rLibName, con
 
             // set new module in module window
             ModulWindow* pModWin = (ModulWindow*)pWin;
-            pModWin->SetSbModule( (SbModule*)pWin->GetBasic()->FindModule( rNewName ) );
+            pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
             USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
@@ -576,7 +610,11 @@ void BasicIDE::InsertModule( SfxObjectShell* pShell, const String& rLibName, con
     throw(ElementExistException, NoSuchElementException)
 {
     // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xLib;
+    if ( BasicIDE::HasModuleLibrary( pShell, rLibName ) )
+        xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+    else
+        xLib = BasicIDE::CreateModuleLibrary( pShell, rLibName );
 
     // insert module into library
     ::rtl::OUString aOUModName( rModName );
@@ -624,9 +662,6 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
 {
     BasicIDEDLL::Init();
 
-    if ( rMacroDesc.getLength() )
-        IDE_DLL()->GetExtraData()->GetLastMacro() = String( rMacroDesc );
-
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
     SFX_APP()->EnterBasicCall();
 
@@ -637,7 +672,6 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
     MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
-
 
     if ( !bChooseOnly && !bExecute )
         // Hack!
@@ -754,6 +788,29 @@ Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( SfxObjectShell* pShell, co
     }
 
     return aSeqMethods;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasMethod( SfxObjectShell* pShell, const String& rLibName, const String& rModName, const String& rMethName )
+{
+    BOOL bHasMethod = FALSE;
+
+    if ( HasModule( pShell, rLibName, rModName ) )
+    {
+        ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
+        SbModuleRef xModule = new SbModule( rModName );
+        xModule->SetSource32( aOUSource );
+        SbxArray* pMethods = xModule->GetMethods();
+        if ( pMethods )
+        {
+            SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
+            if ( pMethod )
+                bHasMethod = TRUE;
+        }
+    }
+
+    return bHasMethod;
 }
 
 //----------------------------------------------------------------------------
