@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:24 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "फ़िल्टर";
         Text[ slovak ] = "Filter";
+        Text[ hungarian ] = "Szűrő";
+        Text[ slovenian ] = "Filter";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -136,6 +138,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮על פי תאריך‬";
         Text[ hindi ] = "~दिनांक";
         Text[ slovak ] = "~Dátum";
+        Text[ hungarian ] = "~Dátum";
+        Text[ slovenian ] = "~Datum";
     };
     ListBox LB_DATE
     {
@@ -205,9 +209,9 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "f�r den" ; Default ; > ;
             < "siden den" ; Default ; > ;
             < "lig med den" ; Default ; > ;
-            < "forskellig fra den" ; Default ; > ;
-            < "mellem den" ; Default ; > ;
-            < "siden gemning" ; Default ; > ;
+            < "forskellig fra" ; Default ; > ;
+            < "mellem" ; Default ; > ;
+            < "siden der blev gemt" ; Default ; > ;
         };
         stringlist [ italian ] =
         {
@@ -398,6 +402,24 @@ TabPage SID_REDLIN_FILTER_PAGE
         < "medzi" ; Default ; > ;
         < "od zápisu" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "korábban mint" ; Default ; > ;
+        < "később mint" ; Default ; > ;
+        < "pontosan" ; Default ; > ;
+        < "más mint" ; Default ; > ;
+        < "között" ; Default ; > ;
+        < "mentés óta" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "pred" ; Default ; > ;
+        < "od" ; Default ; > ;
+        < "enako kot" ; Default ; > ;
+        < "ni enako" ; Default ; > ;
+        < "med" ; Default ; > ;
+        < "od zadnjega shranjevanja" ; Default ; > ;
+    };
     };
     DateField DF_DATE
     {
@@ -474,6 +496,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ hindi ] = "दिनांक/समय सेट्ट करो";
         QuickHelpText[ slovak ] = "Nastaviť dátum a čas";
+        QuickHelpText[ hungarian ] = "Dátum és idő beállítása";
+        QuickHelpText[ slovenian ] = "Nastavi datum/čas";
     };
     FixedText FT_DATE2
     {
@@ -509,6 +533,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮ו ‬";
         Text[ hindi ] = "और";
         Text[ slovak ] = "a";
+        Text[ hungarian ] = "és";
+        Text[ slovenian ] = "in";
     };
     DateField DF_DATE2
     {
@@ -585,6 +611,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
         QuickHelpText[ hindi ] = "दिनांक/समय सेट्ट करो";
         QuickHelpText[ slovak ] = "Nastaviť dátum a čas";
+        QuickHelpText[ hungarian ] = "Dátum és idő beállítása";
+        QuickHelpText[ slovenian ] = "Nastavi datum/čas";
     };
     CheckBox CB_AUTOR
     {
@@ -597,7 +625,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ english_us ] = "~Author" ;
         Text [ portuguese_brazilian ] = "~Autor" ;
         Text [ swedish ] = "F�rf~attare" ;
-        Text [ danish ] = "Forfatter" ;
+        Text [ danish ] = "F~orfatter" ;
         Text [ italian ] = "Autore" ;
         Text [ spanish ] = "Autor" ;
         Text [ french ] = "Auteur" ;
@@ -620,6 +648,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~लेखक";
         Text[ slovak ] = "~Autor";
+        Text[ hungarian ] = "~Szerző";
+        Text[ slovenian ] = "~Avtor";
     };
     ListBox LB_AUTOR
     {
@@ -642,7 +672,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ english_us ] = "~Range" ;
         Text [ portuguese_brazilian ] = "I~ntervalo" ;
         Text [ swedish ] = "~Omr�de" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "~Omr�de" ;
         Text [ italian ] = "Area" ;
         Text [ spanish ] = "~�rea" ;
         Text [ french ] = "Plage" ;
@@ -665,6 +695,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮טווח‬";
         Text[ hindi ] = "~फ़ैलाव";
         Text[ slovak ] = "~Rozsah";
+        Text[ hungarian ] = "~Tartomány";
+        Text[ slovenian ] = "~Obseg";
     };
     Edit ED_RANGE
     {
@@ -683,7 +715,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ english_us ] = "A~ction" ;
         Text [ portuguese_brazilian ] = "~A��o" ;
         Text [ swedish ] = "�t~g�rd" ;
-        Text [ danish ] = "Handling" ;
+        Text [ danish ] = "Han~dling" ;
         Text [ italian ] = "Opera~zione" ;
         Text [ spanish ] = "~Acci�n" ;
         Text [ french ] = "A~ction" ;
@@ -705,6 +737,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮פעולה‬";
         Text[ hindi ] = "~कार्य";
         Text[ slovak ] = "Či~nnosť";
+        Text[ hungarian ] = "~Művelet";
+        Text[ slovenian ] = "De~janje";
     };
     ListBox LB_ACTION
     {
@@ -778,6 +812,10 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ hindi ] = "रेफरेन्स सेट्ट करो";
         Text[ slovak ] = "...";
         QuickHelpText[ slovak ] = "Nastaviť odkaz";
+        Text[ hungarian ] = "...";
+        Text[ slovenian ] = "...";
+        QuickHelpText[ hungarian ] = "Hivatkozás beállítása";
+        QuickHelpText[ slovenian ] = "Nastavi sklic";
     };
     CheckBox CB_COMMENT
     {
@@ -790,7 +828,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ italian ] = "~Descrizione";
         Text[ portuguese_brazilian ] = "Coment�rio";
         Text[ portuguese ] = "D~escri��o";
-        Text[ danish ] = "Beskrivelse";
+        Text[ danish ] = "Kommentar";
         Text[ french ] = "Description";
         Text[ swedish ] = "Be~skrivning";
         Text[ dutch ] = "~Opmerkingen";
@@ -813,6 +851,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "अपवाद";
         Text[ slovak ] = "Komentár";
+        Text[ hungarian ] = "Megjegyzés";
+        Text[ slovenian ] = "Komentar";
     };
     Edit ED_COMMENT
     {
@@ -866,6 +906,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮רשימת שינויים‬";
         Text[ hindi ] = "सूची";
         Text[ slovak ] = "Zoznam";
+        Text[ hungarian ] = "Lista";
+        Text[ slovenian ] = "Seznam";
     };
     Control DG_VIEW
     {
@@ -885,7 +927,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ english_us ] = "~Accept" ;
         Text [ portuguese_brazilian ] = "~Aceitar" ;
         Text [ swedish ] = "~Acceptera" ;
-        Text [ danish ] = "Accepter" ;
+        Text [ danish ] = "~Accepter" ;
         Text [ italian ] = "~Accetta" ;
         Text [ spanish ] = "~Aceptar" ;
         Text [ french ] = "~Accepter" ;
@@ -907,6 +949,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮קבלת שינוי‬";
         Text[ hindi ] = "~स्वीकार";
         Text[ slovak ] = "~Prijať";
+        Text[ hungarian ] = "~Elfogadás";
+        Text[ slovenian ] = "~Sprejmi";
     };
     PushButton PB_REJECT
     {
@@ -918,7 +962,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ english_us ] = "~Reject" ;
         Text [ portuguese_brazilian ] = "~Rejeitar" ;
         Text [ swedish ] = "Av~b�j" ;
-        Text [ danish ] = "Forkast" ;
+        Text [ danish ] = "~Afvis" ;
         Text [ italian ] = "~Rifiuta" ;
         Text [ spanish ] = "~Rechazar" ;
         Text [ french ] = "~Rejeter" ;
@@ -941,6 +985,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮דחית שינוי‬";
         Text[ hindi ] = "~अस्वीकार";
         Text[ slovak ] = "~Odmietnuť";
+        Text[ hungarian ] = "El~vetés";
+        Text[ slovenian ] = "~Zavrni";
     };
     PushButton PB_ACCEPTALL
     {
@@ -952,7 +998,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ english_us ] = "A~ccept All" ;
         Text [ portuguese_brazilian ] = "A~ceitar Tudo" ;
         Text [ swedish ] = "A~cceptera alla" ;
-        Text [ danish ] = "Accepter alle" ;
+        Text [ danish ] = "A~ccepter alle" ;
         Text [ italian ] = "Accetta t~utto" ;
         Text [ spanish ] = "Aceptar todo" ;
         Text [ french ] = "Tout a~ccepter" ;
@@ -975,6 +1021,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮קבלת כל השינויים‬";
         Text[ hindi ] = "सब स्वी~कार";
         Text[ slovak ] = "Prijať ~všetko";
+        Text[ hungarian ] = "Ö~sszes elfogadása";
+        Text[ slovenian ] = "S~prejmi vse";
     };
     PushButton PB_REJECTALL
     {
@@ -986,7 +1034,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ english_us ] = "R~eject All" ;
         Text [ portuguese_brazilian ] = "Rejeitar ~Tudo" ;
         Text [ swedish ] = "A~vb�j alla" ;
-        Text [ danish ] = "Forkast alle" ;
+        Text [ danish ] = "Afvis alle" ;
         Text [ italian ] = "Rifiuta tutto" ;
         Text [ spanish ] = "Rechazar todo" ;
         Text [ french ] = "Tout rejeter" ;
@@ -1009,6 +1057,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮דחית כל השינויים‬";
         Text[ hindi ] = "सब अस्वीका~र";
         Text[ slovak ] = "O~dmietnuť všetko";
+        Text[ hungarian ] = "Öss~zes elvetése";
+        Text[ slovenian ] = "Za~vrni vse";
     };
 
     PushButton PB_UNDO
@@ -1045,6 +1095,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮ביטול פעולה‬";
         Text[ hindi ] = "अनावृत्ति";
         Text[ slovak ] = "Späť";
+        Text[ hungarian ] = "Visszavonás";
+        Text[ slovenian ] = "Razveljavi";
     };
     String STR_TITLE1
     {
@@ -1076,6 +1128,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮פעולה‬";
         Text[ hindi ] = "कार्य";
         Text[ slovak ] = "Činnosť";
+        Text[ hungarian ] = "Művelet";
+        Text[ slovenian ] = "Dejanje";
     };
     String STR_TITLE2
     {
@@ -1107,6 +1161,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     String STR_TITLE3
     {
@@ -1138,6 +1194,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "लेखक";
         Text[ slovak ] = "Autor";
+        Text[ hungarian ] = "Szerző";
+        Text[ slovenian ] = "Avtor";
     };
     String STR_TITLE4
     {
@@ -1169,6 +1227,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "दिनांक";
         Text[ slovak ] = "Dátum";
+        Text[ hungarian ] = "Dátum";
+        Text[ slovenian ] = "Datum";
     };
     String STR_TITLE5
     {
@@ -1177,7 +1237,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ english_us ] = "Comment" ;
         Text [ portuguese_brazilian ] = "Coment�rio" ;
         Text [ swedish ] = "Beskrivning" ;
-        Text [ danish ] = "Beskrivelse" ;
+        Text [ danish ] = "Kommentar" ;
         Text [ italian ] = "Descrizione" ;
         Text [ spanish ] = "Descripci�n" ;
         Text [ french ] = "Description" ;
@@ -1200,6 +1260,8 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "अपवाद";
         Text[ slovak ] = "Komentár";
+        Text[ hungarian ] = "Megjegyzés";
+        Text[ slovenian ] = "Komentar";
     };
 };
 
