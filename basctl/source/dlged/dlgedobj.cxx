@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:40:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,10 +444,11 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
             const ::rtl::OUString* pNames = aNames.getConstArray();
             sal_Int32 nCtrls = aNames.getLength();
+            sal_Int16 i;
 
             // create a map of tab indices and control names, sorted by tab index
             IndexToNameMap aIndexToNameMap;
-            for ( sal_Int16 i = 0; i < nCtrls; ++i )
+            for ( i = 0; i < nCtrls; ++i )
             {
                 // get control name
                 ::rtl::OUString aName( pNames[i] );
