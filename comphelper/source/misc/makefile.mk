@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-17 11:25:45 $
+#   last change: $Author: vg $ $Date: 2005-03-10 13:59:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SLOFILES=	\
             $(SLO)$/anytostring.obj		\
             $(SLO)$/mediadescriptor.obj \
             $(SLO)$/locale.obj \
-            $(SLO)$/configurationhelper.obj
+            $(SLO)$/configurationhelper.obj \
+            $(SLO)$/scopeguard.obj
 
 # --- Targets ----------------------------------
 
