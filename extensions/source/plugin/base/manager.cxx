@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,38 +246,18 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
 
     PluginManager::get().getPlugins().push_back( pImpl );
 
-    int nDescr = -1;
-    Sequence< ::com::sun::star::plugin::PluginDescription > aDescrs = getPluginDescriptions();
-    const ::com::sun::star::plugin::PluginDescription* pDescrs = aDescrs.getConstArray();
 
-    int nPos = url.lastIndexOf( (sal_Unicode)'.' );
-    if( nPos != -1 )
-    {
-        ::rtl::OUString aExt = url.copy( nPos ).toAsciiLowerCase();
-        for( int i = 0; i < aDescrs.getLength(); i++ )
-        {
-            if( pDescrs[ i ].Extension.equalsIgnoreAsciiCase( aExt ) != STRING_NOTFOUND )
-            {
-                nDescr = i;
-                break;
-            }
-        }
-    }
-
-    pImpl->initInstance( (nDescr != -1) ? pDescrs[ nDescr ] : ::com::sun::star::plugin::PluginDescription(),
+    pImpl->initInstance( url,
                          argn,
                          argv,
                          mode );
 
     pImpl->createPeer( toolkit, parent );
 
-    Reference< ::com::sun::star::beans::XPropertySet >  xProperty( pImpl->getModel(), UNO_QUERY );
-    if( xProperty.is() )
-    {
-        Any aAny;
-        aAny <<= url;
-        xProperty->setPropertyValue( ::rtl::OUString::createFromAscii( "URL" ), aAny );
-    }
+    pImpl->provideNewStream( pImpl->getDescription().Mimetype,
+                             Reference< com::sun::star::io::XActiveDataSource >(),
+                             url,
+                             0, 0, sal_False );
 
     if( ! pImpl->getPluginComm() )
     {
