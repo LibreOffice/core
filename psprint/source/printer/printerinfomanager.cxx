@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:34:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void PrinterInfoManager::initialize()
                      *  porters: please append your platform to the Solaris
                      *  case if your platform has SystemV printing per default.
                      */
-#if defined SOLARIS
+#if defined SOLARIS || defined(IRIX)
                     aValue = "lp";
 #else
                     aValue = "lpr";
