@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:28:36 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-06-08 23:28:36 $
- // $Revision: 1.12 $
+ //     $Date: 2001-06-13 23:41:23 $
+ // $Revision: 1.13 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ norwegian ] = "Variabler" ;
         Text [ italian ] = "Predefiniti" ;
         Text [ portuguese_brazilian ] = "Vari?veis" ;
-        Text [ portuguese ] = "Definir variáveis" ;
+        Text [ portuguese ] = "Predefinições" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Forudindstillinger" ;
         Text [ french ] = "Définitions" ;
@@ -507,4 +507,5 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Operaciones múltiples";
 };
+
 
