@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 10:19:41 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 15:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,6 @@ namespace xmloff
             sName += pEvents->EventMethod;
 
             Sequence< PropertyValue >& rMappedEvent = m_aMappedEvents[sName];
-            // tree property values to describe one event ...
-            rMappedEvent.realloc(3);
-            // ... the type
-            rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
 
             sLocalMacroName = pEvents->ScriptCode;
             sLibrary = ::rtl::OUString();
@@ -126,10 +122,18 @@ namespace xmloff
                 }
             }
 
-            // the library
-            rMappedEvent[1] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
+            // tree property values to describe one event ...
+            rMappedEvent.realloc( sLibrary.getLength() ? 3 : 2 );
+
+            // ... the type
+            rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+
             // and the macro name
-            rMappedEvent[2] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
+            rMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
+
+            // the library
+            if ( sLibrary.getLength() )
+                rMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
         }
     }
 
@@ -192,6 +196,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/09/04 10:19:41  fs
+ *  #91865# correctly im- and export application events
+ *
  *  Revision 1.3  2001/08/27 17:44:27  fs
  *  #91537# corrected evaluation of macro names for StarBasic script ebents
  *
