@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 16:14:31 $
+ *  last change: $Author: cmc $ $Date: 2001-09-18 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,22 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     ImplWriteTextBundle( rObj, aPropOpt );                          \
 }
 
+//Map from twips to export units, generally twips as well, only excel and word
+//export is happening here, so native units are export units, leave as
+//placeholder if required in future
+void ImplEESdrWriter::MapRect(ImplEESdrObject& rObj)
+{
+#if 0
+    Rectangle aNewRect=rObj.GetRect();
+    MapMode aOrig = maMapModeSrc;
+    maMapModeSrc = MapMode( MAP_INCH, Point(),
+        Fraction(1,EES_MAP_FRACTION), Fraction(1,EES_MAP_FRACTION));
+    rObj.SetRect( ImplMapPoint(aNewRect.TopLeft()),
+        ImplMapSize(aNewRect.GetSize()) );
+    maMapModeSrc = aOrig;
+#endif
+}
+
 UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
                                 ImplEESdrPageType ePageType )
@@ -531,8 +547,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     }
                     break;
                 }
-                rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                            ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+                MapRect(rObj);
             }
             ImplWriteTextBundle( rObj, aPropOpt );
         }
@@ -641,8 +656,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+            MapRect(rObj);
             if( rObj.ImplHasText() )
             {
                 aTextRefPoint = rObj.GetRect().TopLeft();
@@ -673,8 +687,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, NULL );
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+            MapRect(rObj);
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }
@@ -689,8 +702,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+            MapRect(rObj);
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
@@ -705,8 +717,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_True, aNewRect, NULL );
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+            MapRect(rObj);
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
@@ -721,8 +732,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_True, aNewRect, NULL );
-            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
-                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
+            MapRect(rObj);
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }

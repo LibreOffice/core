@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-23 09:36:28 $
+ *  last change: $Author: cmc $ $Date: 2001-09-18 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ public:
             Point               ImplMapPoint( const Point& rPoint );
             Size                ImplMapSize( const Size& rSize );
             EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
+            void MapRect(ImplEESdrObject& rObj);
 };
 
 
