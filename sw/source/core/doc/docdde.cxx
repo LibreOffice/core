@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,60 +458,3 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     }
     return FALSE;
 }
-
-
-
-extern "C" {
-    int
-#if defined( WNT )
-     __cdecl
-#endif
-#if defined( ICC )
-     _Optlink
-#endif
-        lcl_ServerNamesCmpNm( const void *pFirst, const void *pSecond)
-    {
-        const StringPtr pF = *(StringPtr*)pFirst;
-        const StringPtr pS = *(StringPtr*)pSecond;
-        ASSERT( pF && pS, "ungueltige Strings" );
-        StringCompare eCmp = pF->CompareTo( *pS );
-        return eCmp == COMPARE_EQUAL ? 0
-                            : eCmp == COMPARE_LESS ? 1 : -1;
-    }
-}
-
-
-USHORT SwDoc::GetServerObjects( SvStrings& rStrArr ) const
-{
-    USHORT n;
-    for( n = pBookmarkTbl->Count(); n; )
-    {
-        SwBookmark* pBkmk = (*pBookmarkTbl)[ --n ];
-        if( pBkmk->IsBookMark() && pBkmk->GetOtherPos() )
-        {
-            String* pNew = new String( pBkmk->GetName() );
-            rStrArr.Insert( pNew, rStrArr.Count() );
-        }
-    }
-
-    for( n = pSectionFmtTbl->Count(); n; )
-    {
-        SwSectionFmt* pFmt = (*pSectionFmtTbl)[ --n ];
-        if( pFmt->IsInNodesArr() )
-        {
-            String* pNew = new String( pFmt->GetName() );
-            rStrArr.Insert( pNew, rStrArr.Count() );
-        }
-    }
-
-    // und nochmal nach Namen sortieren:
-    if( 0 != ( n = rStrArr.Count() ) )
-        qsort( (void*)rStrArr.GetData(), n, sizeof( StringPtr ),
-                                                    lcl_ServerNamesCmpNm );
-
-    return n;
-}
-
-
-
-
