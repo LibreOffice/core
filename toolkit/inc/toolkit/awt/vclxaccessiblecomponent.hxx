@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:34:58 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ typedef ::comphelper::OAccessibleExtendedComponentHelper    VCLXAccessibleCompon
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 
+class VCLExternalSolarLock;
 class VCLXAccessibleComponent
         :public VCLXAccessibleComponentBase
         ,public ::comphelper::OAccessibleImplementationAccess
@@ -117,7 +118,7 @@ private:
     ULONG                           nDummy1;
     ULONG                           nDummy2;
     void*                           pDummy1;
-    void*                           pDummy2;
+    VCLExternalSolarLock*           m_pSolarLock;
 
 protected:
      DECL_LINK( WindowEventListener, VclSimpleEvent* );

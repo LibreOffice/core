@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-29 10:52:27 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,28 @@
 #include <com/sun/star/awt/Key.hpp>
 #endif
 
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef MNEMONIC_CHAR
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
@@ -101,16 +116,40 @@ using namespace ::drafts::com::sun::star;
 using namespace ::comphelper;
 
 //  ----------------------------------------------------
+//  class VCLExternalSolarLock
+//  ----------------------------------------------------
+class VCLExternalSolarLock : public ::comphelper::IMutex
+{
+public:
+    virtual void acquire();
+    virtual void release();
+};
+
+//......................................................
+void VCLExternalSolarLock::acquire()
+{
+    Application::GetSolarMutex().acquire();
+}
+
+//......................................................
+void VCLExternalSolarLock::release()
+{
+    Application::GetSolarMutex().release();
+}
+
+//  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
-    : VCLXAccessibleComponentBase( )
+    : VCLXAccessibleComponentBase( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
     mpVCLXindow = pVCLXindow;
     mxWindow = pVCLXindow;
 
-   DBG_ASSERT( pVCLXindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
+    m_pSolarLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
+
+    DBG_ASSERT( pVCLXindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
     if ( pVCLXindow->GetWindow() )
       pVCLXindow->GetWindow()->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
 
@@ -124,6 +163,15 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 
     if ( mpVCLXindow && mpVCLXindow->GetWindow() )
         mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+
+    delete m_pSolarLock;
+    m_pSolarLock = NULL;
+    // This is not completely sure. If we assume that the base class dtor calls some method which
+    // uses this lock, the we crash. However, as the base class' dtor does not have a chance to call _out_
+    // virtual methods, this is no problem as long as the base class is safe, i.e. does not use the external
+    // lock from within it's dtor. At the moment, we _know_ the base class is safe in this respect, so
+    // let's assume it keeps this way.
+    // @see OAccessibleContextHelper::OAccessibleContextHelper( IMutex* )
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleComponent, VCLXAccessibleComponentBase, OAccessibleImplementationAccess )
