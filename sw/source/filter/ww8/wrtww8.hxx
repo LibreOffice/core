@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-20 17:07:21 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 12:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,6 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     wwFontHelper maFontHelper;
     String aMainStg;
     SvPtrarr aTOXArr;
-    SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
@@ -448,6 +447,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void OutListNamesTab();
     void InitFontTable();
 public:
+    SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
     const SwPageDesc* pAktPageDesc;
     WW8Fib* pFib;
     WW8Dop* pDop;
@@ -548,7 +548,7 @@ public:
     const SvxBrushItem* TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
     void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
-    void OutFlyFrms( const SwCntntNode& rNode );
+    void OutFlyFrm(const SwCntntNode& rNode, const SwFrmFmt& rFmt);
     void AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
                             const Point& rNdTopLeft );
     void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);

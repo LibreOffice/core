@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-21 11:01:17 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 12:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,17 @@ bool CurrentCharSet::operator==(const CurrentCharSet &rSecond) const
     return (mpPointer == rSecond.mpPointer);
 }
 
+class swFlyFrm
+{
+public:
+    const SwFrmFmt* mpFlyFrm;
+    const SwCntntNode *mpNode;
+    SwPosition maPos;
+    swFlyFrm(const SwFrmFmt* pFlyFrm, const SwCntntNode *pNode,
+        const SwPosition &rPos)
+    :   mpFlyFrm(pFlyFrm), mpNode(pNode), maPos(rPos) {}
+};
+
 class WW8_SwAttrIter : public WW8_AttrIter
 {
 private:
@@ -294,8 +305,8 @@ private:
     bool mbCharIsRTL;
     bool mbParaIsRTL;
 
-    std::vector<const SwFrmFmt*> maFlyFrms;     // #i2916#
-    typedef std::vector<const SwFrmFmt*>::iterator myflyiter;
+    std::vector<swFlyFrm> maFlyFrms;     // #i2916#
+    typedef std::vector<swFlyFrm>::iterator myflyiter;
     myflyiter maFlyIter;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
@@ -323,7 +334,8 @@ public:
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
     virtual void GetItems( WW8Bytes& rItems ) const;
     bool OutAttrWithRange( xub_StrLen nPos );
-    void OutRedlines( xub_StrLen nPos );
+    void OutRedlines(xub_StrLen nPos);
+    void OutFlys(xub_StrLen nSwPos);
 
     xub_StrLen WhereNext() const                    { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
@@ -333,21 +345,13 @@ public:
     bool IsParaRTL() const {return mbParaIsRTL; }
 };
 
-class sortautoflys :
-    public std::binary_function<const SwFrmFmt*, const SwFrmFmt*, bool>
+class sortswflys :
+    public std::binary_function<const swFlyFrm&, const swFlyFrm&, bool>
 {
 public:
-    bool operator()(const SwFrmFmt* pOne, const SwFrmFmt* pTwo) const
+    bool operator()(const swFlyFrm &rOne, const swFlyFrm &rTwo) const
     {
-        ASSERT(pOne->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
-            "Only for auto anchored flys!");
-        ASSERT(pTwo->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
-            "Only for auto anchored flys!");
-
-        const SwPosition* pPosOne = pOne->GetAnchor().GetCntntAnchor();
-        const SwPosition* pPosTwo = pTwo->GetAnchor().GetCntntAnchor();
-        ASSERT(pPosOne && pPosTwo, "shouldn't be possible");
-        return pPosOne->nContent.GetIndex() < pPosTwo->nContent.GetIndex();
+        return rOne.maPos < rTwo.maPos;
     }
 };
 
@@ -412,28 +416,35 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
 
     /*
      #i2916#
-     Create list of any graphics which may be anchored in this paragraph.
+     Get list of any graphics which may be anchored from this paragraph.
     */
-    SwPosFlyFrms aAllFlys;
-    rWrt.pDoc->GetAllFlyFmts(aAllFlys,
-        rWrt.bWriteAll ? 0 : rWrt.GetEndPaM(), rWrt.bWrtWW8);
     ULONG nCurPos = rNd.GetIndex();
-
-    for (USHORT n = aAllFlys.Count(); n > 0;)
+    for (USHORT n = rWr.maFlyPos.Count(); n > 0;)
     {
-        ULONG nFlyNdPos = aAllFlys[--n]->GetNdIndex().GetIndex();
+        SwNodeIndex aIdx = rWr.maFlyPos[--n]->GetNdIndex();
+        ULONG nFlyNdPos = aIdx.GetIndex();
 
         if (nFlyNdPos == nCurPos)
         {
-            const SwFrmFmt* pEntry = &aAllFlys[n]->GetFmt();
-            if (pEntry->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
-                maFlyFrms.push_back(pEntry);
+            const SwFrmFmt* pEntry = &rWr.maFlyPos[n]->GetFmt();
+            const SwPosition* pAnchor = pEntry->GetAnchor().GetCntntAnchor();
+            if (pAnchor)
+            {
+                maFlyFrms.push_back(swFlyFrm(pEntry,
+                    aIdx.GetNode().GetCntntNode(), *pAnchor));
+            }
+            else
+            {
+                SwPosition aPos(aIdx);
+                if (SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode())
+                    aPos.nContent.Assign(pTxtNd, pTxtNd->GetTxt().Len());
+                maFlyFrms.push_back(swFlyFrm(pEntry,
+                    aIdx.GetNode().GetCntntNode(), aPos));
+            }
         }
-
-        delete aAllFlys[n];
     }
 
-    ::std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortautoflys());
+    ::std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
 
     maFlyIter = maFlyFrms.begin();
 
@@ -550,24 +561,24 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
     /*
      #i2916#
      Check to see if there are any graphics anchored to characters in this
-     paragraph's text.  Set nMinPos to 1 past the placement because anchors in
-     Word appear after the character they are anchored to.
+     paragraph's text.  Set nMinPos to 1 past the placement for anchored to
+     character because anchors in Word appear after the character they are
+     anchored to.
     */
     if (maFlyIter != maFlyFrms.end())
     {
-        const SwPosition* pAnchor = (*maFlyIter)->GetAnchor().GetCntntAnchor();
-        ASSERT(pAnchor, "not expected, panic!");
-        if (!pAnchor)
-            return nMinPos;
+        const SwPosition &rAnchor = maFlyIter->maPos;
 
-        nPos = pAnchor->nContent.GetIndex();
+        nPos = rAnchor.nContent.GetIndex();
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
-        nPos++;
-
-        if (nPos >= nStartPos && nPos <= nMinPos)
-            nMinPos = nPos;
+        if (maFlyIter->mpFlyFrm->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
+        {
+            ++nPos;
+            if (nPos >= nStartPos && nPos <= nMinPos)
+                nMinPos = nPos;
+        }
     }
 
     return nMinPos;
@@ -655,6 +666,12 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
         rWrt.pOutFmtNode = pOldMod;
     }
 
+    OutFlys(nSwPos);
+    OutRedlines(nSwPos);
+}
+
+void WW8_SwAttrIter::OutFlys(xub_StrLen nSwPos)
+{
     /*
      #i2916#
      May have an anchored graphic to be placed, loop through sorted array
@@ -662,25 +679,18 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
     */
     while (maFlyIter != maFlyFrms.end())
     {
-        const SwPosition* pAnchor = (*maFlyIter)->GetAnchor().GetCntntAnchor();
-        ASSERT(pAnchor, "Not expected, panic!");
-        if (!pAnchor)
-            break;
-        xub_StrLen nPos = pAnchor->nContent.GetIndex();
+        const SwPosition &rAnchor = maFlyIter->maPos;
+        xub_StrLen nPos = rAnchor.nContent.GetIndex();
 
         if (nPos != nSwPos)
             break;
         else
         {
-            // OutWW8FlyFrm will flush the attributes for the anchored
-            // character.
-            Point aNdPos = rNd.FindLayoutRect(false, &aNdPos).Pos();
-            rWrt.OutWW8FlyFrm(*(*maFlyIter), aNdPos);
+            SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+            rWrtWW8.OutFlyFrm(*maFlyIter->mpNode, *maFlyIter->mpFlyFrm);
             ++maFlyIter;
         }
     }
-
-    OutRedlines( nSwPos );
 }
 
 bool WW8_SwAttrIter::IsTxtAttr( xub_StrLen nSwPos )
@@ -766,7 +776,6 @@ void WW8_SwAttrIter::GetItems( WW8Bytes& rItems ) const
         rWrt.pOutFmtNode = pOldMod;
     }
 
-//  OutRedlines( nTmpSwPos );
     rWrt.pO = pO_Sav;
 }
 
@@ -1466,6 +1475,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 {
                     //insert final bookmarks if any before CR
                     rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
+                    //insert final graphic anchors if any before CR
+                    aAttrIter.OutFlys(nEnd);
                     if( pTOXSect )
                         rWW8Wrt.EndTOX( *pTOXSect );
                     rWW8Wrt.WriteCR();              // CR danach
@@ -1493,6 +1504,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             {
                 //insert final bookmarks if any before CR
                 rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
+                //insert final graphic anchors if any before CR
+                aAttrIter.OutFlys(nEnd);
 
                 if( pTOXSect )
                     rWW8Wrt.EndTOX( *pTOXSect );
@@ -1519,132 +1532,128 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     ASSERT( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
 
-//  // gibt es harte Absatz-Attributierung oder Fly- oder Table-Attrs ?
-//  if( pNd->GetpSwAttrSet() || rWW8Wrt.pFlyFmt || rWW8Wrt.bOutTable ){
-        pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
+    pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
 
-        if( rWW8Wrt.pFlyFmt && !rWW8Wrt.bIsInTable )    // Fly-Attrs
-            rWW8Wrt.Out_SwFmt(*rWW8Wrt.pFlyFmt, false, false, true);
+    if( rWW8Wrt.pFlyFmt && !rWW8Wrt.bIsInTable )    // Fly-Attrs
+        rWW8Wrt.Out_SwFmt(*rWW8Wrt.pFlyFmt, false, false, true);
 
-        if( rWW8Wrt.bOutTable )
-        {                                               // Tab-Attr
-            // sprmPFInTable
-            if( rWW8Wrt.bWrtWW8 )
-                SwWW8Writer::InsUInt16( *pO, 0x2416 );
-            else
-                pO->Insert( 24, pO->Count() );
-            pO->Insert( 1, pO->Count() );
-        }
+    if( rWW8Wrt.bOutTable )
+    {                                               // Tab-Attr
+        // sprmPFInTable
+        if( rWW8Wrt.bWrtWW8 )
+            SwWW8Writer::InsUInt16( *pO, 0x2416 );
+        else
+            pO->Insert( 24, pO->Count() );
+        pO->Insert( 1, pO->Count() );
+    }
 
-        if( !bFlyInTable )
+    if( !bFlyInTable )
+    {
+        SfxItemSet* pTmpSet = 0;
+        const BYTE nPrvNxtNd =
+            ( WWFL_ULSPACE_LIKE_SWG & rWW8Wrt.GetIniFlags())
+                    ? pNd->HasPrevNextLayNode()
+                    : (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE);
+
+        if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
         {
-            SfxItemSet* pTmpSet = 0;
-            const BYTE nPrvNxtNd =
-                ( WWFL_ULSPACE_LIKE_SWG & rWW8Wrt.GetIniFlags())
-                        ? pNd->HasPrevNextLayNode()
-                        : (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE);
-
-            if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
+            const SfxPoolItem* pItem;
+            if( SFX_ITEM_SET == pNd->GetSwAttrSet().GetItemState(
+                    RES_UL_SPACE, true, &pItem ) &&
+                ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
+                   ((SvxULSpaceItem*)pItem)->GetUpper()) ||
+                  ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
+                   ((SvxULSpaceItem*)pItem)->GetLower()) ))
             {
-                const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pNd->GetSwAttrSet().GetItemState(
-                        RES_UL_SPACE, true, &pItem ) &&
-                    ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
-                       ((SvxULSpaceItem*)pItem)->GetUpper()) ||
-                      ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
-                       ((SvxULSpaceItem*)pItem)->GetLower()) ))
-                {
-                    pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
-                    SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
-                    if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
-                        aUL.SetUpper( 0 );
-                    if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
-                        aUL.SetLower( 0 );
-                    pTmpSet->Put( aUL );
-                }
-            }
-
-            if( !pTmpSet )
-                pTmpSet = pNd->GetpSwAttrSet();
-
-            const SwNumRule* pRule;
-            const SwNodeNum* pNum;
-            if( (( 0 != ( pNum = pNd->GetNum() ) &&
-                    0 != ( pRule = pNd->GetNumRule() )) ||
-                    ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
-                    0 != ( pRule = rWrt.pDoc->GetOutlineNumRule() ) ) ) &&
-                    pNum->GetLevel() < NO_NUM )
-            {
-                BYTE nLvl = GetRealLevel( pNum->GetLevel() );
-                const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
-                if( !pFmt )
-                    pFmt = &pRule->Get( nLvl );
-
-                if( pTmpSet == pNd->GetpSwAttrSet() )
-                    pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
-
-                SvxLRSpaceItem aLR((SvxLRSpaceItem&)pTmpSet->Get(RES_LR_SPACE));
-                aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
-
-                if( MAXLEVEL > pNum->GetLevel() )
-                {
-                    aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-                    if( pNum == pNd->GetNum() && SFX_ITEM_SET !=
-                       pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
-                    {
-                       // NumRule from a template - then put it into the itemset
-                       pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-                    }
-                }
-                else
-                    pTmpSet->ClearItem(RES_PARATR_NUMRULE);
-
-                pTmpSet->Put( aLR );
-                SwWW8Writer::CorrTabStopInSet( *pTmpSet, pFmt->GetAbsLSpace() );
-            }
-
-            /*
-            If a given para is using the FRMDIR_ENVIRONMENT direction we
-            cannot export that, its its ltr then that's ok as thats word's
-            default. Otherwise we must add a RTL attribute to our export list
-            */
-            const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
-                pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
-            if (
-                (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
-                aAttrIter.IsParaRTL()
-               )
-            {
-                if (pTmpSet == pNd->GetpSwAttrSet())
-                    pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
-
-                pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
-            }
-
-            if( pTmpSet )
-            {                                               // Para-Attrs
-                rWW8Wrt.pStyAttr = &pNd->GetAnyFmtColl().GetAttrSet();
-
-                const SwModify* pOldMod = rWW8Wrt.pOutFmtNode;
-                rWW8Wrt.pOutFmtNode = pNd;
-
-                // Pap-Attrs, so script is not necessary
-                rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
-                    com::sun::star::i18n::ScriptType::LATIN);
-
-                rWW8Wrt.pStyAttr = 0;
-                rWW8Wrt.pOutFmtNode = pOldMod;
-
-                if( pTmpSet != pNd->GetpSwAttrSet() )
-                    delete pTmpSet;
+                pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
+                SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
+                if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
+                    aUL.SetUpper( 0 );
+                if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
+                    aUL.SetLower( 0 );
+                pTmpSet->Put( aUL );
             }
         }
-        rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                        pO->Count(), pO->GetData() );
-        pO->Remove( 0, pO->Count() );                       // leeren
-//  }else{
-//      rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(), sizeof( nSty ), nSty );
-//  }
+
+        if( !pTmpSet )
+            pTmpSet = pNd->GetpSwAttrSet();
+
+        const SwNumRule* pRule;
+        const SwNodeNum* pNum;
+        if( (( 0 != ( pNum = pNd->GetNum() ) &&
+                0 != ( pRule = pNd->GetNumRule() )) ||
+                ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
+                0 != ( pRule = rWrt.pDoc->GetOutlineNumRule() ) ) ) &&
+                pNum->GetLevel() < NO_NUM )
+        {
+            BYTE nLvl = GetRealLevel( pNum->GetLevel() );
+            const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
+            if( !pFmt )
+                pFmt = &pRule->Get( nLvl );
+
+            if( pTmpSet == pNd->GetpSwAttrSet() )
+                pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
+
+            SvxLRSpaceItem aLR((SvxLRSpaceItem&)pTmpSet->Get(RES_LR_SPACE));
+            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+
+            if( MAXLEVEL > pNum->GetLevel() )
+            {
+                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+                if( pNum == pNd->GetNum() && SFX_ITEM_SET !=
+                   pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                {
+                   // NumRule from a template - then put it into the itemset
+                   pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                }
+            }
+            else
+                pTmpSet->ClearItem(RES_PARATR_NUMRULE);
+
+            pTmpSet->Put( aLR );
+            SwWW8Writer::CorrTabStopInSet( *pTmpSet, pFmt->GetAbsLSpace() );
+        }
+
+        /*
+        If a given para is using the FRMDIR_ENVIRONMENT direction we
+        cannot export that, its its ltr then that's ok as thats word's
+        default. Otherwise we must add a RTL attribute to our export list
+        */
+        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+            pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
+        if (
+            (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
+            aAttrIter.IsParaRTL()
+           )
+        {
+            if (pTmpSet == pNd->GetpSwAttrSet())
+                pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+
+            pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
+        }
+
+        if( pTmpSet )
+        {                                               // Para-Attrs
+            rWW8Wrt.pStyAttr = &pNd->GetAnyFmtColl().GetAttrSet();
+
+            const SwModify* pOldMod = rWW8Wrt.pOutFmtNode;
+            rWW8Wrt.pOutFmtNode = pNd;
+
+            // Pap-Attrs, so script is not necessary
+            rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
+                com::sun::star::i18n::ScriptType::LATIN);
+
+            rWW8Wrt.pStyAttr = 0;
+            rWW8Wrt.pOutFmtNode = pOldMod;
+
+            if( pTmpSet != pNd->GetpSwAttrSet() )
+                delete pTmpSet;
+        }
+    }
+
+    rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(), pO->Count(),
+        pO->GetData() );
+    pO->Remove( 0, pO->Count() );                       // leeren
     return rWrt;
 }
 
@@ -2382,67 +2391,38 @@ void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
     }
 }
 
-
-void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
+void SwWW8Writer::OutFlyFrm(const SwCntntNode& rNode, const SwFrmFmt& rFmt)
 {
-    // gib alle freifliegenden Rahmen die sich auf den akt. Absatz
-    // und evt. auf das aktuelle Zeichen beziehen, aus.
-    ULONG nCurPos = rNode.GetIndex();
-
-    // suche nach dem Anfang der FlyFrames
-    for (USHORT n = 0; n < maFlyPos.Count() &&
-            maFlyPos[n]->GetNdIndex().GetIndex() < nCurPos; ++n)
-        ;
+    if (bInWriteEscher)
+        return;
 
     Point aNdPos, aPgPos;
     Point* pLayPos;
     bool bValidNdPos = false, bValidPgPos = false;
 
-    if (n < maFlyPos.Count())
+    if (FLY_PAGE == rFmt.GetAnchor().GetAnchorId())
     {
-        while (
-                (n < maFlyPos.Count()) &&
-                (nCurPos == maFlyPos[n]->GetNdIndex().GetIndex())
-              )
+        // get the Layout Node-Position.
+        if (!bValidPgPos)
         {
-            const SwFrmFmt& rFmt = maFlyPos[n]->GetFmt();
-            if( FLY_PAGE == rFmt.GetAnchor().GetAnchorId() )
-            {
-                // get the Layout Node-Position.
-                if( !bValidPgPos )
-                {
-                    aPgPos = rNode.FindPageFrmRect(false, &aPgPos).Pos();
-                    bValidPgPos = true;
-                }
-                pLayPos = &aPgPos;
-            }
-            else
-            {
-                // get the Layout Node-Position.
-                if( !bValidNdPos )
-                {
-                    aNdPos = rNode.FindLayoutRect(false, &aNdPos).Pos();
-                    bValidNdPos = true;
-                }
-                pLayPos = &aNdPos;
-            }
-
-            /*
-             #i2916#
-             Anchored Escher objects should be dealt with by the Attribute
-             Iterator as part of the text processing, in a similar manner to
-             inline graphics, rather than simply writing them all out at the
-             start of the paragraph.
-            */
-            if (rFmt.GetAnchor().GetAnchorId() != FLY_AUTO_CNTNT)
-                OutWW8FlyFrm(rFmt, *pLayPos);
-
-            ++n;
-         }
+            aPgPos = rNode.FindPageFrmRect(false, &aPgPos).Pos();
+            bValidPgPos = true;
+        }
+        pLayPos = &aPgPos;
     }
-}
+    else
+    {
+        // get the Layout Node-Position.
+        if (!bValidNdPos)
+        {
+            aNdPos = rNode.FindLayoutRect(false, &aNdPos).Pos();
+            bValidNdPos = true;
+        }
+        pLayPos = &aNdPos;
+    }
 
-/*  */
+    OutWW8FlyFrm(rFmt, *pLayPos);
+}
 
 // write data of any redline
 void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )

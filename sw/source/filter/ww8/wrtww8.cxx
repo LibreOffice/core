@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 12:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1852,12 +1852,9 @@ void SwWW8Writer::WriteText()
         {
             SwCntntNode* pCNd = (SwCntntNode*)pNd;
 
-            // erfrage den aktuellen PageDescriptor.
-            if( !bInWriteEscher )
-                OutFlyFrms( *pCNd );
-
-            const SwPageDesc* pTemp = pCNd->GetSwAttrSet().GetPageDesc().GetPageDesc();
-            if( pTemp )
+            const SwPageDesc* pTemp =
+                pCNd->GetSwAttrSet().GetPageDesc().GetPageDesc();
+            if (pTemp)
                 pAktPageDesc = pTemp;
 
             pCurPam->GetPoint()->nContent.Assign( pCNd, 0 );
