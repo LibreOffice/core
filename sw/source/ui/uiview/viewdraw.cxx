@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:59:49 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,24 @@ void SwView::ExecDraw(SfxRequest& rReq)
             pWindow->LeaveWait();
     }
 
-    if (nSlotId == nDrawSfxId || bDeselect)
+    if( nSlotId == SID_DRAW_CS_ID )
+    {
+        //deselect if same custom shape is selected again
+        SwDrawBase* pFuncPtr = GetDrawFuncPtr();
+        if( pFuncPtr && pFuncPtr->GetSlotId() == SID_DRAW_CS_ID )
+        {
+            ConstCustomShape* pConstCustomShape = (ConstCustomShape*)(pFuncPtr);
+            rtl::OUString aNew = ConstCustomShape::GetShapeTypeFromRequest( rReq );
+            rtl::OUString aOld = pConstCustomShape->GetShapeType();
+            if( aNew == aOld )
+            {
+                bDeselect = true;
+            }
+        }
+    }
+
+    //deselect if same shape is selected again (but different custom shapes do have same slot id)
+    if ( bDeselect || (nSlotId == nDrawSfxId && (nSlotId != SID_DRAW_CS_ID) ) )
     {
         if (GetDrawFuncPtr())
         {
@@ -403,6 +420,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CS_ID :
         {
             pFuncPtr = new ConstCustomShape(pWrtShell, pEditWin, this, rReq );
+            nDrawSfxId = nSlotId;
             if ( nSlotId != SID_DRAW_CS_ID )
             {
                 SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nSlotId, sal_False );
@@ -725,10 +743,7 @@ sal_Bool SwView::IsFormMode() const
 {
     if (GetDrawFuncPtr() && GetDrawFuncPtr()->IsCreateObj())
     {
-        if (GetDrawFuncPtr()->IsInsertForm())
-            return sal_True;
-        else
-            return sal_False;
+        return (GetDrawFuncPtr()->IsInsertForm());
     }
 
     return AreOnlyFormsSelected();
