@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: af $ $Date: 2002-06-03 15:10:31 $
+ *  last change: $Author: af $ $Date: 2002-06-04 10:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@ void AccessibleShape::Init (void)
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
-#if 0
     SdrView* pView = maShapeTreeInfo.GetSdrView ();
     const Window* pWindow = maShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL && mxShape.is())
@@ -207,7 +206,6 @@ void AccessibleShape::Init (void)
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
-#endif
 }
 
 
@@ -543,7 +541,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             aPosition.X, aPosition.Y,
             aSize.Width, aSize.Height);
 
-        // While BoundRects have absolute positions, the position returend
+        // While BoundRects have absolute positions, the position returned
         // by XPosition::getPosition is relative.  Get the anchor position
         // (usually not (0,0) for Writer shapes).
         if (xSetInfo.is())
@@ -574,6 +572,27 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
         int x = aPixelPosition.getX() - aParentLocation.X;
         int y = aPixelPosition.getY() - aParentLocation.Y;
+
+        //  The following block is a workarround for bug #99889# (property
+        //  BoundRect returnes coordinates relative to document window
+        //  instead of absolute coordinates for shapes in Writer).  Has to
+        //  be removed as soon as bug is fixed.
+
+        // Use a non-null anchor position as flag that the shape is in a
+        // Writer document.
+        if (xSetInfo.is())
+            if (xSetInfo->hasPropertyByName (sAnchorPositionName))
+            {
+                uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
+                awt::Point aAnchorPosition;
+                aPos >>= aAnchorPosition;
+                if (aAnchorPosition.X > 0)
+                {
+                    x = aPixelPosition.getX();
+                    y = aPixelPosition.getY();
+                }
+            }
+        //  End of workarround.
 
         // Clip with parent (with coordinates relative to itself).
         ::Rectangle aBBox (
@@ -914,7 +933,6 @@ void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    OSL_TRACE ("AccessibleShape::notifyEvent");
     static const OUString sShapeModified (
         RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
 
@@ -925,9 +943,8 @@ void SAL_CALL
     {
         if (rEventObject.EventName.equals (sShapeModified))
         {
-        // Some property of a shape has been modified.  Send an event that
-        // indicates a change of the visible data to all listeners.
-            OSL_TRACE ("   Found accessible object for shape.");
+            // Some property of a shape has been modified.  Send an event
+            // that indicates a change of the visible data to all listeners.
             CommitChange (
                 AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
                 uno::Any(),
