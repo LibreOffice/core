@@ -4394,6 +4394,30 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     GroupId = GID_MODIFY;
 ]
 
+SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
+(SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 ()
