@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-22 11:03:20 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 14:13:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -264,13 +264,13 @@ $(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
-    @+-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).patch.tmp >& $(NULLDEV)
-    @+-$(RM) $(NEW_PATCH_FILE_NAME).patch.bak >& $(NULLDEV)
+    @+-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp >& $(NULLDEV)
+    @+-$(RM) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
-    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).patch.tmp
-    @+-mv $(NEW_PATCH_FILE_NAME).patch $(NEW_PATCH_FILE_NAME).patch.bak >& $(NULLDEV)
-    @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).patch.tmp $(NEW_PATCH_FILE_NAME).patch >& $(NULLDEV)
+    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
+    @+-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
+    @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(NEW_PATCH_FILE_NAME) >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
