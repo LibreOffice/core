@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: os $ $Date: 2001-05-18 13:12:54 $
+#   last change: $Author: er $ $Date: 2001-06-18 09:32:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES = \
     $(SLO)$/searchopt.obj				\
     $(SLO)$/printwarningoptions.obj		\
     $(SLO)$/printoptions.obj			\
+    $(SLO)$/syslocaleoptions.obj        \
     $(SLO)$/cacheoptions.obj
 
 EXCEPTIONSFILES = \
