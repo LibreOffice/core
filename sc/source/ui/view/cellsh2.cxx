@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:54:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/aeitem.hxx>
