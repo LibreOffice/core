@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:21:49 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 15:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,10 @@ BOOL SwScanner::NextWord()
     Boundary aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
             pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
 
+    //no word boundaries could be found
+    if(aBound.endPos == aBound.startPos)
+        return FALSE;
+
     // we have to differenciate between these cases:
     if ( aBound.startPos <= nBegin )
     {
@@ -658,23 +662,31 @@ BOOL SwScanner::NextWord( LanguageType aLang )
     }
 
     Boundary aBound;
-    if( bStart )
+    while(true)
     {
-        aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
-            pBreakIt->GetLocale( aLang ), nWordType, !bReverse );
-        bStart = aBound.startPos != aBound.endPos;
-    }
-    if( !bStart )
-    {
-        if( bReverse )
-            aBound = pBreakIt->xBreak->previousWord( rText, nBegin,
-                    pBreakIt->GetLocale( aLang ), nWordType );
+        if ( nBegin >= rText.Len() || nBegin >= nEndPos )
+            return FALSE;
+        if( bStart )
+        {
+            aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
+                pBreakIt->GetLocale( aLang ), nWordType, !bReverse );
+            bStart = aBound.startPos != aBound.endPos;
+        }
+        if( !bStart )
+        {
+            if( bReverse )
+                aBound = pBreakIt->xBreak->previousWord( rText, nBegin,
+                        pBreakIt->GetLocale( aLang ), nWordType );
+            else
+                aBound = pBreakIt->xBreak->nextWord( rText, nBegin,
+                        pBreakIt->GetLocale( aLang ), nWordType );
+        }
+        if(!bReverse && nBegin == aBound.endPos)
+            ++nBegin;
         else
-            aBound = pBreakIt->xBreak->nextWord( rText, nBegin,
-                    pBreakIt->GetLocale( aLang ), nWordType );
+            break;
     }
-    else
-        bStart = FALSE;
+    bStart = FALSE;
 
     nBegin = (xub_StrLen)aBound.startPos;
     nLen = (xub_StrLen)(aBound.endPos - nBegin);
