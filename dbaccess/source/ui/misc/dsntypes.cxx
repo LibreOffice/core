@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
+ *  last change: $Author: hr $ $Date: 2001-08-16 13:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace dbaui
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
-DBG_NAME(ODsnTypeCollection);
+DBG_NAME(ODsnTypeCollection)
 //-------------------------------------------------------------------------
 ODsnTypeCollection::ODsnTypeCollection()
     :Resource(ModuleRes(RSC_DATASOURCE_TYPES))
@@ -435,6 +435,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/08/15 13:16:25  oj
+ *  #88644# insert some DBG's
+ *
  *  Revision 1.11  2001/08/07 15:55:24  fs
  *  #88431# +isFileSystemBased
  *
