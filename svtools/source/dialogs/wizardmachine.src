@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:37:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 String STR_WIZDLG_FINISH
 {
     Text [ de ] = "~Fertig stellen" ;
-    Text [ en-US ] = "C~reate" ;
+    Text [ en-US ] = "~Finish" ;
     Text [ x-comment ] = "; This is the 'finish' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
 };
 
@@ -87,6 +87,15 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.80.1  2004/10/21 00:08:48  bc
+ *  ##several changes for the database setup wizard
+ *
+ *  Revision 1.30  2004/06/25 16:37:04  hjs
+ *  INTEGRATION: CWS mergebuild (1.28.60); FILE MERGED
+ *  2004/04/20 21:20:33 hjs 1.28.60.3: RESYNC: (1.28-1.29); FILE MERGED
+ *  2003/11/11 19:23:59 ihi 1.28.60.2: en -> en-US
+ *  2003/11/10 17:56:55 ihi 1.28.60.1: #111234# Merge during build
+ *
  *  Revision 1.28.60.3  2004/04/20 21:20:33  hjs
  *  RESYNC: (1.28-1.29); FILE MERGED
  *
