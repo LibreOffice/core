@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
+ *  last change: $Author: dvo $ $Date: 2001-01-31 10:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSUPPLIER_HPP
-#include <com/sun/star/document/XEventSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -266,8 +266,8 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
     if (NULL != pEventContext)
     {
         // set event suppplier and release reference to context
-        Reference<document::XEventSupplier> xEventSupplier(xStyle, UNO_QUERY);
-        pEventContext->SetEvents(xEventSupplier);
+        Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
+        pEventContext->SetEvents(xEventsSupplier);
         pEventContext->ReleaseRef();
     }
 }
