@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:43:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 116 ) ;
-    Text = "Haltepunkte verwalten" ;
-    Text [ ENGLISH ] = "Manage Breakpoints" ;
+    Text [ de ] = "Haltepunkte verwalten" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
     ComboBox RID_CB_BRKPOINTS
@@ -93,180 +92,45 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     {
         Pos = MAP_APPFONT ( 122 , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Neu" ;
-        Text [ ENGLISH ] = "New" ;
+        Text [ de ] = "Neu" ;
         TabStop = TRUE ;
-        Text [ dutch ] = "Nieuw" ;
-        Text [ english_us ] = "New" ;
-        Text [ italian ] = "Nuovo" ;
-        Text [ spanish ] = "Nuevo" ;
-        Text [ french ] = "Nouveau" ;
-        Text [ swedish ] = "Ny" ;
-        Text [ danish ] = "Ny(t)" ;
-        Text [ portuguese ] = "Novo" ;
-        Text [ portuguese_brazilian ] = "Novo" ;
-        Text[ chinese_simplified ] = "æ–°å»º";
-        Text[ russian ] = "Ñîçäàòü";
-        Text[ polish ] = "Nowy";
-        Text[ japanese ] = "æ–°è¦";
-        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”";
-        Text[ arabic ] = "ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°";
-        Text[ turkish ] = "Yeni";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nou";
-        Text[ finnish ] = "Uusi";
-        Text[ thai ] = "à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½";
-        Text[ hebrew ] = "â€®×—×“×©â€¬";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾";
-        Text[ slovak ] = "NovÃ½";
-        Text[ hungarian ] = "Ãšj";
-        Text[ slovenian ] = "Nov";
+        Text [ en-US ] = "New" ;
+        Text [ x-comment ] = " ";
     };
     PushButton RID_PB_DEL
     {
         Pos = MAP_APPFONT ( 122 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-        Text = "Löschen" ;
-        Text [ ENGLISH ] = "Delete" ;
+        Text [ de ] = "Löschen" ;
         TabStop = TRUE ;
-        Text [ dutch ] = "Wissen" ;
-        Text [ english_us ] = "Delete" ;
-        Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "Borrar" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ swedish ] = "Radera" ;
-        Text [ danish ] = "Slet" ;
-        Text [ portuguese ] = "Eliminar" ;
-        Text [ portuguese_brazilian ] = "Excluir" ;
-        Text[ chinese_simplified ] = "åˆ é™¤";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "å‰Šé™¤";
-        Text[ chinese_traditional ] = "åˆªé™¤";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix";
-        Text[ finnish ] = "Poista";
-        Text[ thai ] = "à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "ZmazaÅ¥";
-        Text[ hungarian ] = "TÃ¶rlÃ©s";
-        Text[ slovenian ] = "IzbriÅ¡i";
+        Text [ en-US ] = "Delete" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox RID_CHKB_ACTIVE
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text = "Aktiv" ;
-        Text [ ENGLISH ] = "Active" ;
+        Text [ de ] = "Aktiv" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Active" ;
-        Text [ italian ] = "Attivo" ;
-        Text [ spanish ] = "Activo" ;
-        Text [ french ] = "Actif" ;
-        Text [ dutch ] = "Actief" ;
-        Text [ swedish ] = "Aktiv" ;
-        Text [ danish ] = "Aktiv" ;
-        Text [ portuguese_brazilian ] = "Ativo" ;
-        Text [ portuguese ] = "Activo" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­";
-        Text[ russian ] = "Âêë./âûêë.";
-        Text[ polish ] = "Aktywny";
-        Text[ japanese ] = "ã‚¢ã‚¯ãƒ†ã‚£ãƒ–";
-        Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­";
-        Text[ arabic ] = "äÔØ";
-        Text[ greek ] = "ÅíåñãÜ";
-        Text[ korean ] = "í™œì„±";
-        Text[ turkish ] = "Etkin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Actiu";
-        Text[ finnish ] = "Aktiivinen";
-        Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆ";
-        Text[ czech ] = "AktivnÃ­";
-        Text[ hebrew ] = "Aktiv";
-        Text[ hindi ] = "à¤•à¥à¤°à¤¿à¤¯à¤¾à¤¶à¥€à¤²";
-        Text[ slovak ] = "AktÃ­vny";
-        Text[ hungarian ] = "AktÃ­v";
-        Text[ slovenian ] = "Aktivno";
+        Text [ en-US ] = "Active" ;
+        Text [ x-comment ] = " ";
     };
     FixedText RID_FT_PASS
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 35 , 10 ) ;
-        Text = "Durchlauf:" ;
-        Text [ English ] = "Pass Count:" ;
-        Text [ english_us ] = "Pass Count:" ;
-        Text [ portuguese_brazilian ] = "Passagens:" ;
-        Text [ swedish ] = "Genomflöde:" ;
-        Text [ danish ] = "Antal gennemløb:" ;
-        Text [ italian ] = "Passaggi:" ;
-        Text [ spanish ] = "Adaptación:" ;
-        Text [ french ] = "Adaptation :" ;
-        Text [ dutch ] = "Doorloop:" ;
-        Text [ portuguese ] = "Ajuste:" ;
-        Text[ chinese_simplified ] = "å·²å¾ªç¯è®¡æ•°ï¼š";
-        Text[ russian ] = "Ïğîïóñêîâ:";
-        Text[ polish ] = "Liczba przejœæ:";
-        Text[ japanese ] = "ã²ã¨ã¨ãŠã‚Šå®Ÿè¡Œ:";
-        Text[ chinese_traditional ] = "å¾ªç’°è¨ˆæ•¸ï¼š";
-        Text[ arabic ] = "ÚÈÑ:";
-        Text[ greek ] = "Áñéèìüò äéáäñïìşí:";
-        Text[ korean ] = "ê³¼ì •";
-        Text[ turkish ] = "Geçiş Sayacı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Recompte de passades:";
-        Text[ finnish ] = "Kertojen #:";
-        Text[ thai ] = "à¸™à¸±à¸šà¸œà¹ˆà¸²à¸™:";
-        Text[ czech ] = "PoÄet prÅ¯bÄ›hÅ¯:";
-        Text[ hebrew ] = "Durchlauf:";
-        Text[ hindi ] = "à¤ªà¤¾à¤¸ à¤—à¤¿à¤¨à¤¤à¥€:";
-        Text[ slovak ] = "PoÄet:";
-        Text[ hungarian ] = "Menetek szÃ¡ma:";
-        Text[ slovenian ] = "Å tevec prehodov:";
+        Text [ de ] = "Durchlauf:" ;
+        Text [ en-US ] = "Pass Count:" ;
+        Text [ x-comment ] = " ";
     };
     FixedText RID_FT_BRKPOINTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Haltepunkte" ;
-        Text [ ENGLISH ] = "Breakpoints" ;
-        Text [ english_us ] = "Breakpoints" ;
-        Text [ italian ] = "Punti di interruzione" ;
-        Text [ spanish ] = "Puntos de ruptura" ;
-        Text [ french ] = "Points d'arrêt" ;
-        Text [ dutch ] = "Onderbrekingspunten" ;
-        Text [ swedish ] = "Brytpunkter" ;
-        Text [ danish ] = "Pausepunkter" ;
-        Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
-        Text [ portuguese ] = "Pontos de interrupção" ;
-        Text[ chinese_simplified ] = "ä¸­æ–­ç‚¹";
-        Text[ russian ] = "Òî÷êè îñòàíîâà";
-        Text[ polish ] = "Punkty przerwania";
-        Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "ä¸­æ–·é»";
-        Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
-        Text[ greek ] = "Óçìåßá óôÜóçò";
-        Text[ korean ] = "ì¤‘ë‹¨ì ";
-        Text[ turkish ] = "AyırmaNoktaları";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Punts de ruptura";
-        Text[ finnish ] = "Keskeytyspisteet";
-        Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
-        Text[ czech ] = "Body pÅ™eruÅ¡enÃ­";
-        Text[ hebrew ] = "Haltepunkte";
-        Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥";
-        Text[ slovak ] = "Body preruÅ¡enia";
-        Text[ hungarian ] = "TÃ¶rÃ©spontok";
-        Text[ slovenian ] = "Prekinitvene toÄke";
+        Text [ de ] = "Haltepunkte" ;
+        Text [ en-US ] = "Breakpoints" ;
+        Text [ x-comment ] = " ";
     };
     NumericField RID_FLD_PASS
     {
@@ -275,34 +139,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Manage Breakpoints" ;
-    Text [ italian ] = "Gestisci punti di interruzione" ;
-    Text [ spanish ] = "Gestionar los puntos de ruptura" ;
-    Text [ french ] = "Gestion des points d'arrêt" ;
-    Text [ dutch ] = "Onderbrekingspunten" ;
-    Text [ swedish ] = "Hantera brytpunkter" ;
-    Text [ danish ] = "Ret pausepunkter" ;
-    Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
-    Text [ portuguese ] = "Pontos de interrupção" ;
-    Text[ chinese_simplified ] = "ç®¡ç†ä¸­æ–­ç‚¹";
-    Text[ russian ] = "Òî÷êè îñòàíîâà";
-    Text[ polish ] = "Punkty przerwania";
-    Text[ japanese ] = "ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆã®ç®¡ç†";
-    Text[ chinese_traditional ] = "ç®¡ç†ä¸­æ–·é»";
-    Text[ arabic ] = "äŞÇØ ÇáÅíŞÇİ";
-    Text[ greek ] = "Äéá÷åßñéóç óçìåßùí óôÜóçò";
-    Text[ korean ] = "ì¤‘ë‹¨ì  ê´€ë¦¬";
-    Text[ turkish ] = "Kırılma noktaları";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Punts de ruptura";
-    Text[ finnish ] = "Keskeytyspisteet";
-    Text[ thai ] = "à¸ˆà¸¸à¸”à¹à¸šà¹ˆà¸‡";
-    Text[ czech ] = "SprÃ¡va bodÅ¯ pÅ™eruÅ¡enÃ­";
-    Text[ hebrew ] = "Haltepunkte";
-    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¤¨ à¤¬à¤¿à¤¨à¥à¤¦à¥";
-    Text[ slovak ] = "Body preruÅ¡enia";
-    Text[ hungarian ] = "TÃ¶rÃ©spontok kezelÃ©se";
-    Text[ slovenian ] = "Uredi prekinitvene toÄke";
+    Text [ en-US ] = "Manage Breakpoints" ;
+    Text [ x-comment ] = " ";
 };
 
 
