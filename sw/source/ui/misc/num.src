@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:26:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ TabPage TP_NUM_POSITION
         Text [ ENGLISH ] = "Position and distance" ;
         Group = TRUE ;
         Text [ english_us ] = "Position and spacing" ;
-        Text [ italian ] = "Posizione" ;
+        Text [ italian ] = "Posizione e distanza" ;
         Text [ spanish ] = "Posición y espacio" ;
         Text [ french ] = "Position et écart" ;
         Text [ dutch ] = "Positie en afstand" ;
@@ -764,6 +764,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ catalan ] = "Numeración/Viñetas";
     Text[ finnish ] = "Numerointi/luettelomerkit";
 };
+
 
 
 
