@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:02:58 $
+#   last change: $Author: hr $ $Date: 2004-12-17 15:02:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ USE_DEFFILE=TRUE
 LDUMP=ldump2.exe
 
 # --- Library -----------------------------------
-# 같� frm 같같같같같같같같같같같같같같같같같같같�
+# --- frm ---------------------------------------
 LIB1TARGET=$(SLB)$/forms.lib
 LIB1FILES=\
         $(SLB)$/common.lib \
