@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:40:21 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 11:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,16 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
     // we try it readonly later - if read/write isnt an option.
     css::uno::Reference< css::io::XStream >      xStream     ;
     css::uno::Reference< css::io::XInputStream > xInputStream;
-    sal_Bool bReadOnly = getUnpackedValueOrDefault(MediaDescriptor::PROP_READONLY(), sal_False);
+
+    sal_Bool bReadOnly = sal_False;
+    sal_Bool bModeRequestedExplicitly = sal_False;
+    const_iterator pIt = find(MediaDescriptor::PROP_READONLY());
+    if (pIt != end())
+    {
+        pIt->second >>= bReadOnly;
+        bModeRequestedExplicitly = sal_True;
+    }
+
     if (!bReadOnly)
     {
         try
@@ -689,7 +698,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
                 // later a second time.
                 // All other errors must be handled as real error an
                 // break this method.
-                if (!pInteraction->wasWriteError())
+                if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
                     return sal_False;
                 xStream.clear();
                 xInputStream.clear();
