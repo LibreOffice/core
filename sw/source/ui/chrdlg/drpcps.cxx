@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:41:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,35 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SVX_SVXFONT_HXX
+#include <svx/svxfont.hxx>
+#endif
+#ifndef _SV_PRINT_HXX
+#include <vcl/print.hxx>
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#define _SVSTDARR_XUB_STRLEN
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
 
 #include "charatr.hxx"
 #include "viewopt.hxx"
@@ -103,6 +132,15 @@
 
 #include "chrdlg.hrc"
 #include "drpcps.hrc"
+
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::i18n;   !using this namespace leads to mysterious conflicts with ScriptType::...!
+//                                              so don't use this instead of the following defines!
+
+#define I18N                ::com::sun::star::i18n
+#define I18N_SCRIPTTYPE     ::com::sun::star::i18n::ScriptType
 
 // Globals ******************************************************************
 
@@ -117,20 +155,37 @@ static USHORT __FAR_DATA aPageRg[] = {
 
 class SwDropCapsPict : public Control
 {
-    String  maText;
-    Color   maBackColor;
-    Color   maTextLineColor;
-    BYTE    mnLines;
-    long    mnTotLineH;
-    long    mnLineH;
-    long    mnTextH;
-    USHORT  mnDistance;
-    USHORT  mnLeading;
+    String          maText;
+    String          maScriptText;
+    Color           maBackColor;
+    Color           maTextLineColor;
+    BYTE            mnLines;
+    long            mnTotLineH;
+    long            mnLineH;
+    long            mnTextH;
+    USHORT          mnDistance;
+    USHORT          mnLeading;
+    Printer*        mpPrinter;
+    BOOL            mbDelPrinter;
+    SvULongs        maTextWidth;
+    SvXub_StrLens   maScriptChg;
+    SvUShorts       maScriptType;
+    SvxFont         maFont;
+    SvxFont         maCJKFont;
+    SvxFont         maCTLFont;
+    Size            maTextSize;
+    Reference< I18N::XBreakIterator >   xBreak;
 
-    virtual void Paint(const Rectangle &rRect);
+    virtual void    Paint(const Rectangle &rRect);
+    void            CheckScript( void );
+    Size            CalcTextSize( void );
+    inline void     InitPrinter( void );
+    void            _InitPrinter( void );
+    void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich );
 public:
 
-     SwDropCapsPict(Window *pParent, const ResId &rResId) : Control(pParent, rResId) {}
+     SwDropCapsPict(Window *pParent, const ResId &rResId) :
+            Control(pParent, rResId), mpPrinter( NULL ), mbDelPrinter( FALSE ) {}
     ~SwDropCapsPict();
 
     void UpdatePaintSettings( void );       // also invalidates control!
@@ -139,6 +194,8 @@ public:
     inline void SetLines( BYTE nL );
     inline void SetDistance( USHORT nD );
     inline void SetValues( const String& rText, BYTE nLines, USHORT nDistance );
+
+    void        DrawPrev( const Point& rPt );
 };
 
 inline void SwDropCapsPict::SetText( const String& rT )
@@ -168,6 +225,12 @@ inline void SwDropCapsPict::SetValues( const String& rText, BYTE nLines, USHORT 
     UpdatePaintSettings();
 }
 
+inline void SwDropCapsPict::InitPrinter( void )
+{
+    if( !mpPrinter )
+        _InitPrinter();
+}
+
 /****************************************************************************
 Default-String aus Zeichenanzahl erzeugen (A, AB, ABC, ...)
 ****************************************************************************/
@@ -181,6 +244,17 @@ String GetDefaultString(USHORT nChars)
     return aStr;
 }
 
+static void calcFontHeightAnyAscent( OutputDevice* _pWin, Font& _rFont, long& _nHeight, long& _nAscent )
+{
+    if ( !_nHeight )
+    {
+        _pWin->SetFont( _rFont );
+        FontMetric aMetric( _pWin->GetFontMetric() );
+        _nHeight = aMetric.GetLineHeight();
+        _nAscent = aMetric.GetAscent();
+    }
+}
+
 /****************************************************************************
 Pict: Dtor
 ****************************************************************************/
@@ -188,6 +262,8 @@ Pict: Dtor
 
  SwDropCapsPict::~SwDropCapsPict()
 {
+     if( mbDelPrinter )
+         delete mpPrinter;
 }
 
 /****************************************************************************
@@ -197,6 +273,17 @@ Pict: Update Font
 #define LINES  10
 #define BORDER  2
 
+void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich )
+{
+    SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
+    _rPage.rSh.GetAttr(aSet);
+    SvxFontItem aFmtFont((SvxFontItem &) aSet.Get(_nWhich));
+
+    _rFont.SetFamily (aFmtFont.GetFamily());
+    _rFont.SetName   (aFmtFont.GetFamilyName());
+    _rFont.SetPitch  (aFmtFont.GetPitch());
+    _rFont.SetCharSet(aFmtFont.GetCharSet());
+}
 
 void SwDropCapsPict::UpdatePaintSettings( void )
 {
@@ -219,14 +306,14 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             pPage->rSh.ClearMark();
             pPage->rSh.MovePara(fnParaCurr,fnParaStart);
 
-            SfxItemSet aSet(pPage->rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT);
-            pPage->rSh.GetAttr(aSet);
-            SvxFontItem aFmtFont((SvxFontItem &) aSet.Get(RES_CHRATR_FONT));
+            // normal
+            GetFontSettings( *pPage, aFont, RES_CHRATR_FONT );
 
-            aFont.SetFamily (aFmtFont.GetFamily());
-            aFont.SetName   (aFmtFont.GetFamilyName());
-            aFont.SetPitch  (aFmtFont.GetPitch());
-            aFont.SetCharSet(aFmtFont.GetCharSet());
+            // CJK
+            GetFontSettings( *pPage, maCJKFont, RES_CHRATR_CJK_FONT );
+
+            // CTL
+            GetFontSettings( *pPage, maCTLFont, RES_CHRATR_CTL_FONT );
 
             pPage->rSh.Pop(FALSE);
             pPage->rSh.EndCrsrMove();
@@ -249,12 +336,32 @@ void SwDropCapsPict::UpdatePaintSettings( void )
 
     mnTextH = mnLines * mnTotLineH;
     aFont.SetSize(Size(0, mnTextH));
+    maCJKFont.SetSize(Size(0, mnTextH));
+    maCTLFont.SetSize(Size(0, mnTextH));
+
     aFont.SetTransparent(TRUE);
+    maCJKFont.SetTransparent(TRUE);
+    maCTLFont.SetTransparent(TRUE);
+
     aFont.SetColor( SwViewOption::GetFontColor() );
+    maCJKFont.SetColor( SwViewOption::GetFontColor() );
+    maCTLFont.SetColor( SwViewOption::GetFontColor() );
+
     aFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+    maCJKFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+    maCTLFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
+
+    maCJKFont.SetSize(Size(0, maCJKFont.GetSize().Height() + mnLeading));
+    maCTLFont.SetSize(Size(0, maCTLFont.GetSize().Height() + mnLeading));
+
     SetFont(aFont);
     aFont.SetSize(Size(0, aFont.GetSize().Height() + mnLeading));
     SetFont(aFont);
+    maFont = aFont;
+
+    CheckScript();
+
+    maTextSize = CalcTextSize();
 
     Invalidate();
 }
@@ -293,15 +400,191 @@ void  SwDropCapsPict::Paint(const Rectangle &rRect)
     SetFillColor( maBackColor );
     if(((SwDropCapsPage*)GetParent())->aDropCapsBox.IsChecked())
     {
-        DrawRect(Rectangle(
-        Point(BORDER, nY0),
-        Size (GetTextWidth(maText) + nDistW, mnTextH)));
+        Size    aTextSize( maTextSize );
+        aTextSize.Width() += nDistW;
+        DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
-    // Text zeichnen
-        DrawText(Point(BORDER, nY0 - mnLeading), maText);
+        // Text zeichnen
+        DrawPrev( Point( BORDER, nY0 - mnLeading ) );
     }
 
     SetClipRegion();
+}
+
+void SwDropCapsPict::DrawPrev( const Point& rPt )
+{
+    Point aPt(rPt);
+    InitPrinter();
+
+    Font        aOldFont = mpPrinter->GetFont();
+    USHORT      nScript;
+    USHORT      nIdx = 0;
+    xub_StrLen  nStart = 0;
+    xub_StrLen  nEnd;
+    USHORT      nCnt = maScriptChg.Count();
+
+    if( nCnt )
+    {
+        nEnd = maScriptChg[ nIdx ];
+        nScript = maScriptType[ nIdx ];
+    }
+    else
+    {
+        nEnd = maText.Len();
+        nScript = I18N_SCRIPTTYPE::LATIN;
+    }
+    do
+    {
+        SvxFont&    rFnt = (nScript==I18N_SCRIPTTYPE::ASIAN) ? maCJKFont : ((nScript==I18N_SCRIPTTYPE::COMPLEX) ? maCTLFont : maFont);
+        mpPrinter->SetFont( rFnt );
+
+        rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
+
+        aPt.X() += maTextWidth[ nIdx++ ];
+        if( nEnd < maText.Len() && nIdx < nCnt )
+        {
+            nStart = nEnd;
+            nEnd = maScriptChg[ nIdx ];
+            nScript = maScriptType[ nIdx ];
+        }
+        else
+            break;
+    }
+    while( TRUE );
+    mpPrinter->SetFont( aOldFont );
+}
+
+void SwDropCapsPict::CheckScript( void )
+{
+    if( maScriptText == maText )
+        return;
+
+    maScriptText = maText;
+    USHORT nCnt = maScriptChg.Count();
+    if( nCnt )
+    {
+        maScriptChg.Remove( 0, nCnt );
+        maScriptType.Remove( 0, nCnt );
+        maTextWidth.Remove( 0, nCnt );
+        nCnt = 0;
+    }
+    if( !xBreak.is() )
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        xBreak = Reference< I18N::XBreakIterator >(xMSF->createInstance(
+                ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),UNO_QUERY);
+    }
+    if( xBreak.is() )
+    {
+        USHORT nScript = xBreak->getScriptType( maText, 0 );
+        USHORT nChg = 0;
+        if( I18N_SCRIPTTYPE::WEAK == nScript )
+        {
+            nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+            if( nChg < maText.Len() )
+                nScript = xBreak->getScriptType( maText, nChg );
+            else
+                nScript = I18N_SCRIPTTYPE::LATIN;
+        }
+
+        do
+        {
+            nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+            maScriptChg.Insert( nChg, nCnt );
+            maScriptType.Insert( nScript, nCnt );
+            maTextWidth.Insert( ULONG(0), nCnt++ );
+
+            if( nChg < maText.Len() )
+                nScript = xBreak->getScriptType( maText, nChg );
+            else
+                break;
+        } while( TRUE );
+    }
+}
+
+Size SwDropCapsPict::CalcTextSize( void )
+{
+    InitPrinter();
+
+    USHORT      nScript;
+    USHORT      nIdx = 0;
+    xub_StrLen  nStart = 0;
+    xub_StrLen  nEnd;
+    USHORT      nCnt = maScriptChg.Count();
+    if( nCnt )
+    {
+        nEnd = maScriptChg[ nIdx ];
+        nScript = maScriptType[ nIdx ];
+    }
+    else
+    {
+        nEnd = maText.Len();
+        nScript = I18N_SCRIPTTYPE::LATIN;
+    }
+    long        nTxtWidth = 0;
+    long        nCJKHeight = 0;
+    long        nCTLHeight = 0;
+    long        nHeight = 0;
+    long        nAscent = 0;
+    long        nCJKAscent = 0;
+    long        nCTLAscent = 0;
+    do
+    {
+        SvxFont&    rFnt = ( nScript == I18N_SCRIPTTYPE::ASIAN )? maCJKFont :
+                                ( ( nScript == I18N_SCRIPTTYPE::COMPLEX )? maCTLFont : maFont );
+        ULONG       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
+        maTextWidth[ nIdx++ ] = nWidth;
+        nTxtWidth += nWidth;
+        switch(nScript)
+        {
+            case I18N_SCRIPTTYPE::ASIAN:
+                calcFontHeightAnyAscent( this, maCJKFont, nCJKHeight, nCJKAscent );
+                break;
+            case I18N_SCRIPTTYPE::COMPLEX:
+                calcFontHeightAnyAscent( this, maCTLFont, nCTLHeight, nCTLAscent );
+                break;
+            default:
+                calcFontHeightAnyAscent( this, maFont, nHeight, nAscent );
+        }
+
+        if( nEnd < maText.Len() && nIdx < nCnt )
+        {
+            nStart = nEnd;
+            nEnd = maScriptChg[ nIdx ];
+            nScript = maScriptType[ nIdx ];
+        }
+        else
+            break;
+    }
+    while( TRUE );
+    nHeight -= nAscent;
+    nCJKHeight -= nCJKAscent;
+    nCTLHeight -= nCTLAscent;
+    if( nHeight < nCJKHeight )
+        nHeight = nCJKHeight;
+    if( nAscent < nCJKAscent )
+        nAscent = nCJKAscent;
+    if( nHeight < nCTLHeight )
+        nHeight = nCTLHeight;
+    if( nAscent < nCTLAscent )
+        nAscent = nCTLAscent;
+    nHeight += nAscent;
+
+    Size aTxtSize( nTxtWidth, nHeight );
+    return aTxtSize;
+}
+
+void SwDropCapsPict::_InitPrinter()
+{
+    SfxViewShell*   pSh = SfxViewShell::Current();
+
+    if ( pSh )
+        mpPrinter = pSh->GetPrinter();
+    else
+    {
+        mpPrinter = new Printer;
+        mbDelPrinter = TRUE;
+    }
 }
 
 /****************************************************************************
