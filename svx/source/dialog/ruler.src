@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:18:41 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ Menu RID_SVXMN_RULER
             Text [ English ] = "Centimeter" ;
             Text [ norwegian ] = "Centimeter" ;
             Text [ italian ] = "Centimetro" ;
-            Text [ portuguese_brazilian ] = "Centímetro" ;
+            Text [ portuguese_brazilian ] = "Cent?metro" ;
             Text [ portuguese ] = "Centímetro" ;
             Text [ finnish ] = "Senttimetri" ;
             Text [ danish ] = "Centimeter" ;
@@ -222,7 +222,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Fot" ;
             Text [ danish ] = "Fod" ;
             Text [ portuguese ] = "Pés" ;
-            Text [ portuguese_brazilian ] = "Fuß" ;
+            Text [ portuguese_brazilian ] = "Fu?" ;
             Text[ chinese_simplified ] = "Ó¢³ß";
             Text[ russian ] = "Ôóòû";
             Text[ polish ] = "Stopa";
@@ -399,7 +399,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT [ english_us ] = "Center" ;
     TEXT[ chinese_simplified ] = "¾ÓÖÐ";
     TEXT[ russian ] = "Ïî öåíòðó";
-    TEXT[ polish ] = "Wyœrodkuj";
+    TEXT[ polish ] = "Wy?rodkuj";
     TEXT[ japanese ] = "’†‰›‘µ‚¦";
     TEXT[ chinese_traditional ] = "¸m¤¤";
     TEXT[ arabic ] = "ÊæÓíØ";
