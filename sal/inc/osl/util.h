@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 12:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,49 +82,8 @@ extern "C" {
  ***/
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pEthernetAddr );
 
-/**
-    @deprecated
-    Set the solar build number. Affect the profile function from osl and
-    the ORealDynamicLoader class from vos.
-    Default is the SUPD from the build process if it was build with the
-    solar environment, otherwise 0.
- */
-void SAL_CALL osl_setSUPD( sal_Int32 n );
-
-/**
-    @deprecated
-    Return the solar build number
- */
-sal_Int32 SAL_CALL osl_getSUPD();
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.7  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.6  2000/05/26 10:12:13  hro
-*    SAL_CALL for osl_getSUPD, osl_getSUPD
-*
-*    Revision 1.5  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.4  2000/03/16 16:43:53  obr
-*    Unicode API changes
-*
-*    Revision 1.3  2000/03/16 14:16:34  mm
-*    #74230# setSUPD
-*
-*    Revision 1.2  1999/12/06 14:59:18  jbu
-*    osl_getEthernetAddress added
-*
-*    Revision 1.1  1999/10/25 09:48:05  mfe
-*    added getEtherAddr
-*
-*************************************************************************/
