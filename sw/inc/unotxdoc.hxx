@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:42:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,12 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -186,18 +192,18 @@
 #include <RefreshListenerContainer.hxx>
 #endif
 
-#define __IFC26 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
-Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26
+#define __IFC27 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
+Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27
 
-#define __CLASS_IFC26 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
+#define __CLASS_IFC27 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
 class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12, class Ifc13, class Ifc14, class Ifc15, class Ifc16, \
 class Ifc17, class Ifc18, class Ifc19, class Ifc20, class Ifc21, class Ifc22, class Ifc23, class Ifc24,\
-class Ifc25, class Ifc26
+class Ifc25, class Ifc26, class Ifc27
 
-#define __PUBLIC_IFC26 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
+#define __PUBLIC_IFC27 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
 public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc18, \
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
-public Ifc25, public Ifc26
+public Ifc25, public Ifc26, public Ifc27
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -206,7 +212,7 @@ public Ifc25, public Ifc26
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #include <cppuhelper/implbase_ex_pre.hxx>
 #endif
-#define __IFC_EX_TYPE_INIT26( class_cast ) \
+#define __IFC_EX_TYPE_INIT27( class_cast ) \
     __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
     __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
     __IFC_EX_TYPE_INIT( class_cast, 5 ), __IFC_EX_TYPE_INIT( class_cast, 6 ), \
@@ -219,11 +225,13 @@ public Ifc25, public Ifc26
     __IFC_EX_TYPE_INIT( class_cast, 19 ), __IFC_EX_TYPE_INIT( class_cast, 20 ), \
     __IFC_EX_TYPE_INIT( class_cast, 21 ), __IFC_EX_TYPE_INIT( class_cast, 22 ), \
     __IFC_EX_TYPE_INIT( class_cast, 23 ), __IFC_EX_TYPE_INIT( class_cast, 24 ), \
-    __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 )
+    __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 27 )
+
 #ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 #include <cppuhelper/implbase_ex_post.hxx>
 #endif
-__DEF_IMPLHELPER_EX( 26 )
+__DEF_IMPLHELPER_EX( 27 )
 
 class SwDoc;
 class SvxForbiddenCharactersTable;
@@ -241,7 +249,8 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
  *
  ******************************************************************************/
 
-typedef cppu::WeakImplHelper26
+
+typedef cppu::WeakImplHelper27
 <
     ::com::sun::star::text::XTextDocument,
     ::com::sun::star::text::XLineNumberingProperties,
@@ -268,7 +277,8 @@ typedef cppu::WeakImplHelper26
     ::com::sun::star::document::XRedlinesSupplier,
     ::com::sun::star::util::XRefreshable,
     ::com::sun::star::util::XLinkUpdate,
-    ::com::sun::star::view::XRenderable
+    ::com::sun::star::view::XRenderable,
+    ::com::sun::star::xforms::XFormsSupplier
 >
 SwXTextDocumentBaseClass;
 
@@ -312,6 +322,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxXLineNumberingProperties;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxLinkTargetSupplier;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >*    pxXRedlines;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>      xXFormsContainer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                    xPropertyHelper;
     SwXDocumentPropertyHelper*                                                              pPropertyHelper;
@@ -478,6 +489,9 @@ public:
     virtual sal_Int32 SAL_CALL getRendererCount( const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::xforms::XFormsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getXForms(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //
     void                        Invalidate();
