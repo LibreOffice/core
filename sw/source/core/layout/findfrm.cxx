@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-06 10:05:11 $
+ *  last change: $Author: ama $ $Date: 2002-07-11 16:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,8 +1115,6 @@ void SwFrm::SetInfFlags()
     } while ( pFrm && !pFrm->IsPageFrm() ); //Oberhalb der Seite kommt nix
 }
 
-#ifdef VERTICAL_LAYOUT
-
 /*-----------------22.8.2001 14:30------------------
  * SwFrm::SetDirFlags( BOOL )
  * actualizes the vertical or the righttoleft-flags.
@@ -1148,6 +1146,8 @@ void SwFrm::SetDirFlags( BOOL bVert )
     else
     {
         BOOL bInv = 0;
+        if( !bDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
+            CheckDirection( bVert );
         if( bDerivedR2L )
         {
             SwFrm* pAsk = IsFlyFrm() ?
@@ -1157,31 +1157,8 @@ void SwFrm::SetDirFlags( BOOL bVert )
             if( !pAsk || pAsk->bInvalidR2L )
                 bInv = bInvalidR2L;
         }
-        else
-            CheckDirection( bVert );
         bInvalidR2L = bInv;
     }
 }
 
-#else
-
-/*************************************************************************
-|*
-|*    SwFrm::HasFixSize()
-|*
-|*    Ersterstellung    MA 08. Apr. 94
-|*    Letzte Aenderung  MA 08. Apr. 94
-|*
-|*************************************************************************/
-BOOL SwFrm::HasFixSize( const SzPtr pSize ) const
-{
-    if ( pFIXSIZE == pSize )
-        return TRUE;
-
-    SzPtr pVar = pVARSIZE;
-    return ((pSize == pHeight) && bFixHeight && pVar == pHeight) ||
-           ((pSize == pWidth) && bFixWidth && pVar == pWidth);
-}
-
-#endif
 
