@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smslots.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 16:09:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ interface FormulaDocument : OfficeDocument
         StateMethod = GetState ;
     ]
     //idlpp kein Menueeintrag , also keine Texte
-    SID_GRAPHIC //idlpp ole : no , status : no
+        SID_GAPHIC_SM //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
