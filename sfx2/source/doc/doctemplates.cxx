@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 10:59:30 $
+ *  last change: $Author: dv $ $Date: 2001-05-14 14:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 #define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
 
 #define PROPERTY_DIRLIST        "DirectoryList"
+#define PROPERTY_NEEDSUPDATE    "NeedsUpdate"
 #define PROPERTY_TYPE           "TypeDescription"
 
 #define TARGET_DIR_URL          "TargetDirURL"
@@ -241,6 +242,7 @@ class SfxDocTplService_Impl
     void                        getDefaultLocale();
     void                        getDirList();
     void                        readFolderList();
+    sal_Bool                    needsUpdate();
     OUString                    getLongName( const OUString& rShortName );
     void                        getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType );
 
@@ -410,6 +412,8 @@ DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
 void SfxDocTplService_Impl::init_Impl()
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
+    sal_Bool bIsInitialized = sal_False;
+    sal_Bool bNeedsUpdate   = sal_False;
 
     if ( !mbLocaleSet )
         getDefaultLocale();
@@ -422,23 +426,19 @@ void SfxDocTplService_Impl::init_Impl()
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
-    sal_Bool    bRootExists = sal_False;
-
     maRootURL = OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
     maRootURL += OUString( '/' );
     maRootURL += aLang;
 
     if ( Content::create( maRootURL, maCmdEnv, maRootContent ) )
-    {
-        mbIsInitialized = sal_True;
-        bRootExists = sal_True;
-    }
+        bIsInitialized = sal_True;
     else
     {
-        mbIsInitialized = createFolder( maRootURL, sal_True, sal_False, maRootContent );
+        bIsInitialized = createFolder( maRootURL, sal_True, sal_False, maRootContent );
+        bNeedsUpdate = sal_True;
     }
 
-    if ( mbIsInitialized )
+    if ( bIsInitialized )
     {
         OUString aService( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_DOCINFO ) );
         mxInfo = Reference< XPersist > ( mxFactory->createInstance( aService ), UNO_QUERY );
@@ -449,9 +449,7 @@ void SfxDocTplService_Impl::init_Impl()
         getDirList();
         readFolderList();
 
-        if ( bRootExists )
-            ;   // update( sal_False );
-        else
+        if ( bNeedsUpdate || needsUpdate() )
         {
             aGuard.clear();
             ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
@@ -473,7 +471,10 @@ void SfxDocTplService_Impl::init_Impl()
     {
         DBG_ERRORFILE( "init_Impl(): Could not create root" );
     }
+
+    mbIsInitialized = bIsInitialized;
 }
+
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::getDefaultLocale()
 {
@@ -562,6 +563,23 @@ void SfxDocTplService_Impl::getDirList()
 
     // Store the template dir list
     setProperty( maRootContent, aPropName, aValue );
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::needsUpdate()
+{
+    OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_NEEDSUPDATE ) );
+    sal_Bool bHasProperty = sal_False;
+    sal_Bool bNeedsUpdate = sal_True;
+    Any      aValue;
+
+    // Get the template dir list
+    bHasProperty = getProperty( maRootContent, aPropName, aValue );
+
+    if ( bHasProperty )
+        aValue >>= bNeedsUpdate;
+
+    return bNeedsUpdate;
 }
 
 // -----------------------------------------------------------------------
@@ -833,6 +851,8 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( Reference< XMultiServiceFactory > 
 //-----------------------------------------------------------------------------
 SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( mpUpdater )
     {
         mpUpdater->kill();
@@ -883,6 +903,12 @@ void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
 void SfxDocTplService_Impl::doUpdate()
 {
     ::osl::MutexGuard aGuard( maMutex );
+
+    OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_NEEDSUPDATE ) );
+    Any      aValue;
+
+    aValue <<= sal_True;
+    setProperty( maRootContent, aPropName, aValue );
 
     GroupList_Impl  aGroupList;
 
@@ -940,6 +966,9 @@ void SfxDocTplService_Impl::doUpdate()
         delete pGroup;
         pGroup = aGroupList.Next();
     }
+
+       aValue <<= sal_False;
+    setProperty( maRootContent, aPropName, aValue );
 }
 
 //-----------------------------------------------------------------------------
