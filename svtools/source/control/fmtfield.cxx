@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-06-10 21:19:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 06:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,22 +86,20 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#ifdef NEW_REGULAR_SEARCH
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
-    #include <com/sun/star/util/SearchOptions.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
-    #include <com/sun/star/util/SearchAlgorithms.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
-    #include <com/sun/star/util/SearchResult.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
-    #include <com/sun/star/util/SearchFlags.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-    #include <com/sun/star/lang/Locale.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
+#include <com/sun/star/util/SearchResult.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -892,11 +890,7 @@ BOOL DoubleNumericField::CheckText(const XubString& sText) const
     USHORT nStart = 0, nEnd = sForceComplete.Len();
     BOOL bFound = m_pConformanceTester->SearchFrwrd(sForceComplete, &nStart, &nEnd);
 
-#ifdef NEW_REGULAR_SEARCH
     if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len()))
-#else
-    if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len() - 1))
-#endif
         return TRUE;
 
     return FALSE;
@@ -936,7 +930,6 @@ void DoubleNumericField::ResetConformanceTester()
 
     delete m_pConformanceTester;
 
-#ifdef NEW_REGULAR_SEARCH
     SearchOptions aParam;
     aParam.algorithmType = SearchAlgorithms_REGEXP;
     aParam.searchFlag = SearchFlags::ALL_IGNORE_CASE;
@@ -949,9 +942,6 @@ void DoubleNumericField::ResetConformanceTester()
     aParam.Locale.Country = sCountry;
 
     m_pConformanceTester = new ::utl::TextSearch(aParam);
-#else
-    m_pConformanceTester = new SearchText(SearchParam(sDescription, SearchParam::SRCH_REGEXP, FALSE), GetpApp()->GetAppInternational());
-#endif
 }
 
 
