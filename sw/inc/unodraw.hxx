@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 08:24:50 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 10:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ protected:
     // Erzeugen eines SdrObjects anhand einer Description. Kann von
     // abgeleiteten Klassen dazu benutzt werden, eigene ::com::sun::star::drawing::Shapes zu
     // unterstuetzen (z.B. Controls)
-    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape );
+    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape ) throw ();
 
 public:
     SwFmDrawPage( SdrPage* pPage );
-    virtual ~SwFmDrawPage();
+    virtual ~SwFmDrawPage() throw ();
 
     const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
     void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
@@ -127,7 +127,7 @@ public:
     // Die folgende Methode wird gerufen, wenn ein SvxShape-Objekt angelegt
     // werden soll. abgeleitete Klassen koennen hier eine Ableitung oder
     // ein ein SvxShape aggregierendes Objekt anlegen.
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw ();
 };
 
 /* -----------------09.12.98 08:57-------------------

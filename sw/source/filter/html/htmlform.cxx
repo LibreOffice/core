@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 09:42:50 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 11:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ public:
         throw( uno::RuntimeException );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source );
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException);
 };
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
@@ -2800,11 +2800,14 @@ void SwHTMLParser::InsertSelectText()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlform.cxx,v 1.4 2001-07-03 09:42:50 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlform.cxx,v 1.5 2001-09-13 11:02:41 vg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/07/03 09:42:50  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.3  2001/07/03 07:49:47  mib
       #88156#: warning for unconvertable chars
 
