@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 11:44:44 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 13:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,7 @@ namespace cppu {
 class OleWrapperClientSite;
 class OleWrapperAdviseSink;
 class OleEmbeddedObject;
-class OleRelatedData_Impl;
-struct FORMATETC;
-struct STGMEDIUM;
+struct OleComponentNative_Impl;
 
 class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseable,
                                                      ::com::sun::star::datatransfer::XTransferable >
@@ -128,7 +126,7 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     sal_Bool m_bDisposed;
 
-    OleRelatedData_Impl* m_pData;
+    OleComponentNative_Impl* m_pNativeImpl;
 
     OleEmbeddedObject* m_pUnoOleObject;
     OleWrapperClientSite* m_pOleWrapClientSite;
@@ -138,9 +136,6 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
 
     sal_Int32 m_nOLEMiscFlags;
     sal_Int32 m_nAdvConn;
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aSupportedGraphFormats;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aGraphShortFormats; //short names for formats from previous sequence
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > m_aVerbList;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_aDataFlavors;
@@ -158,19 +153,6 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     void RetrieveObjectDataFlavors_Impl();
 
     void Dispose();
-
-    void AddSupportedFormat( const FORMATETC& aFormatEtc );
-
-    FORMATETC* GetSupportedFormatForAspect( sal_uInt32 nRequestedAspect );
-
-    sal_Bool ConvertDataForFlavor( const STGMEDIUM& aMedium,
-                                    const ::com::sun::star::datatransfer::DataFlavor& aFlavor,
-                                    ::com::sun::star::uno::Any& aResult );
-
-    sal_Bool GraphicalFlavor( const ::com::sun::star::datatransfer::DataFlavor& aFlavor );
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >
-                                                GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
 
 public:
     OleComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_xFactory,
