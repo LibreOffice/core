@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:12:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ public:
 
     virtual void RequestBasic();
 
-    virtual void WriteData(SvStream& rOut) const;
+//BFS02 virtual void WriteData(SvStream& rOut) const;
 #endif
-    virtual void ReadData(const SdrIOHeader& rHead, SvStream& rIn);
+//BFS02 virtual void ReadData(const SdrIOHeader& rHead, SvStream& rIn);
 
     void            SetLayoutName(String aName);
     virtual String  GetLayoutName() const       { return aLayoutName; }
