@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:21:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ LibElementBase::~LibElementBase()
         _pParent->release();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "LibElementBase::~LibElementBase(): %s\n", aStr.getStr() );
 #endif
@@ -229,7 +229,7 @@ Reference< xml::XImportContext > LibraryImport::createRootContext(
 LibraryImport::~LibraryImport()
     SAL_THROW( () )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "LibraryImport::~LibraryImport().\n" );
 #endif
 }
