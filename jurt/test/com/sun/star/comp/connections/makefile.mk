@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:54 $
+#   last change: $Author: kr $ $Date: 2000-11-03 08:57:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ TARGET  := test_com_sun_star_comp_connections
 # Files --------------------------------------------------------
 
 JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/XConnection_Test.class		\
     $(CLASSDIR)$/$(PACKAGE)$/PipedConnection_Test.class
 
 # --- Targets ------------------------------------------------------
