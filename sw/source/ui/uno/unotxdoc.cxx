@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-11 10:28:58 $
+ *  last change: $Author: os $ $Date: 2001-04-17 07:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,15 +1537,10 @@ void SwXTextDocument::Invalidate()
                     aNumTunnel.getValue();
                 pNumFmt = (SvNumberFormatsSupplierObj*)
                         xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-
+                pNumFmt->SetNumberFormatter(0);
             }
             DBG_ASSERT(pNumFmt, "No number formatter available");
-            pNumFmt->SetNumberFormatter(0);
         }
-        Reference< XInterface >  x0;
-        xNumFmtAgg->setDelegator(x0);
-        xNumFmtAgg = 0;
-
     }
     InitNewDoc();
     pDocShell = 0;
