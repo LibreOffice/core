@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 14:34:32 $
+ *  last change: $Author: af $ $Date: 2002-02-08 17:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@ namespace accessibility {
         case PRESENTATION_NOTES:
         case PRESENTATION_HANDOUT:
             return new AccessiblePresentationShape (rxShape, rxParent);
+
+        default:
+            return NULL;
     }
 }
 
@@ -92,36 +95,36 @@ namespace accessibility {
 
 
 ShapeTypeDescriptor aSdShapeTypeList[] = {
-    {   PRESENTATION_TITLE,
+    ShapeTypeDescriptor (   PRESENTATION_TITLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TitleTextShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_OUTLINER,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_OUTLINER,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OutlinerShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_SUBTITLE,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_SUBTITLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SubtitleShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_GRAPHIC_OBJECT,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_GRAPHIC_OBJECT,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.GraphicObjectShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_PAGE,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_PAGE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.PageShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_OLE,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_OLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OLE2Shape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_CHART,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_CHART,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.ChartShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_TABLE,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_TABLE,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TableShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_NOTES,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_NOTES,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.NotesShape"),
-        createSdAccessibleShape },
-    {   PRESENTATION_HANDOUT,
+        createSdAccessibleShape ),
+    ShapeTypeDescriptor (   PRESENTATION_HANDOUT,
         ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HandoutShape"),
-        createSdAccessibleShape }
+        createSdAccessibleShape )
 };
 
 
