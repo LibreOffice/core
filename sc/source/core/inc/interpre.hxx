@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:45:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ private:
     USHORT*     pErrorStack;            // der ErrorStack
     USHORT      sp;                     // der Stackpointer
     USHORT      maxsp;                  // der maximale StackPointer
-    double**    ppGlobSortArray;        // Pointer auf Array zum Sortieren
     ULONG       nFuncFmtIndex;          // NumberFormatIndex einer Funktion
     ULONG       nCurFmtIndex;           // aktueller NumberFormatIndex
     ULONG       nRetFmtIndex;           // ggbf. NumberFormatIndex des Ausdrucks
@@ -216,7 +215,7 @@ void SetNV();
 // Funktionen für den Zugriff auf das Document
 //-------------------------------------------------------------------------
 void ReplaceCell( ScAddress& );     // for TableOp
-void ReplaceCell( USHORT& rCol, USHORT& rRow, USHORT& rTab );   // for TableOp
+void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 BOOL IsTableOpInRange( const ScRange& );
 ULONG GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
@@ -232,12 +231,12 @@ inline BOOL HasCellValueData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasValueData() : FALSE; }
 inline BOOL HasCellStringData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasStringData() : FALSE; }
-BOOL CreateDoubleArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                     USHORT nCol2, USHORT nRow2, USHORT nTab2, BYTE* pCellArr);
-BOOL CreateStringArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                     USHORT nCol2, USHORT nRow2, USHORT nTab2, BYTE* pCellArr);
-BOOL CreateCellArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                   USHORT nCol2, USHORT nRow2, USHORT nTab2, BYTE* pCellArr);
+BOOL CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
+BOOL CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
+BOOL CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
 //-----------------------------------------------------------------------------
 // Stackoperationen
 //-----------------------------------------------------------------------------
@@ -250,14 +249,14 @@ BYTE PopByte();
 double PopDouble();
 const String& PopString();
 void PopSingleRef( ScAddress& );
-void PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab);
+void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
 void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
 void DoubleRefToVars( const ScToken* p,
-        USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-        USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+        SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
+        SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp = FALSE );
-void PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-                          USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
+                          SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );
 BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
@@ -274,9 +273,9 @@ void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
 void PushString( const String& rString );
-void PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab);
-void PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                 USHORT nCol2, USHORT nRow2, USHORT nTab2);
+void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
+void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix(ScMatrix* pMat);
 void PushError();
 StackVar GetStackType();
@@ -293,8 +292,8 @@ double GetDouble();
 BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
 ScMatrixRef CreateMatrixFromDoubleRef(
-        USHORT nCol1, USHORT nRow1, USHORT nTab1,
-        USHORT nCol2, USHORT nRow2, USHORT nTab2 );
+        SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+        SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
 ScMatrixRef GetMatrix();
 void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
@@ -424,7 +423,7 @@ void ScSubTotal();
 // compatibility). If this was the case then rMissingField is set to TRUE upon
 // return. If rMissingField==FALSE upon call all "missing cases" are considered
 // to be an error.
-BOOL GetDBParams( USHORT& rTab, ScQueryParam& rParam, BOOL& rMissingField );
+BOOL GetDBParams( SCTAB& rTab, ScQueryParam& rParam, BOOL& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();
@@ -463,7 +462,7 @@ void ScExternal();
 void ScMissing();
 void ScMacro();
 BOOL SetSbxVariable( SbxVariable* pVar, const ScAddress& );
-BOOL SetSbxVariable( SbxVariable* pVar, USHORT nCol, USHORT nRow, USHORT nTab );
+BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
@@ -565,14 +564,14 @@ double ScGetGGT(double fx, double fy);
 void ScGGT();
 void ScKGV();
 //-------------------------- Matrixfunktionen ---------------------------------
-ScMatrixRef GetNewMat(USHORT nC, USHORT nR);
+ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
 void ScMatValue();
-void MEMat(ScMatrix* mM, USHORT n);
-void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, USHORT n, USHORT m, USHORT l);
-void MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, USHORT n, USHORT m);
-void MFastTrans(ScMatrix* pA, ScMatrix* pR, USHORT n, USHORT m);
-BOOL MFastBackSubst(ScMatrix* pA, ScMatrix* pR, USHORT n, BOOL bIsUpper);
-BOOL ScMatLUP(ScMatrix* mA, USHORT m, USHORT p,
+void MEMat(ScMatrix* mM, SCSIZE n);
+void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
+void MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m);
+void MFastTrans(ScMatrix* pA, ScMatrix* pR, SCSIZE n, SCSIZE m);
+BOOL MFastBackSubst(ScMatrix* pA, ScMatrix* pR, SCSIZE n, BOOL bIsUpper);
+BOOL ScMatLUP(ScMatrix* mA, SCSIZE m, SCSIZE p,
               ScMatrix* mL, ScMatrix* mU, ScMatrix* mP,
               ULONG& rPermutCounter, BOOL& bIsInvertable);
 void ScMatDet();
@@ -593,7 +592,7 @@ void ScSumX2DY2();
 void ScSumXMY2();
 void ScGrowth();
 // multiple Regression: Varianzen der Koeffizienten
-BOOL RGetVariances( ScMatrix* pV, ScMatrix* pX, USHORT nC, USHORT nR,
+BOOL RGetVariances( ScMatrix* pV, ScMatrix* pX, SCSIZE nC, SCSIZE nR,
     BOOL bSwapColRow, BOOL bZeroConstant );
 void ScRGP();
 void ScRKP();
@@ -654,7 +653,7 @@ void ScGeoMean();
 void ScStandard();
 void ScSkew();
 void ScMedian();
-void GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& nSize);
+void GetSortArray(BYTE nParamCount, double** ppSortArray, SCSIZE& nSize);
 void QuickSort(long nLo, long nHi, double* pSortArr);
 void ScModalValue();
 void ScAveDev();
