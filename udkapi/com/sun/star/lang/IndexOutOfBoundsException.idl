@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexOutOfBoundsException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module lang {
     <p>The index is either negative or greater than or equal to
     the count of the elements. </p>
  */
-exception IndexOutOfBoundsException: com::sun::star::uno::Exception
+published exception IndexOutOfBoundsException: com::sun::star::uno::Exception
 {
 };
 

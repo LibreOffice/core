@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IllegalArgumentException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** This exception is thrown to indicate that a method has
     passed an illegal or inappropriate argument.
  */
-exception IllegalArgumentException: com::sun::star::uno::Exception
+published exception IllegalArgumentException: com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
 
