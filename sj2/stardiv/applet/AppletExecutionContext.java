@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+ *  last change: $Author: kr $ $Date: 2001-02-23 16:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Panel;
+import java.awt.Toolkit;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,34 +91,34 @@ import com.sun.star.lib.sandbox.JarEntry;
 import com.sun.star.lib.sandbox.ResourceProxy;
 
 import com.sun.star.lib.sandbox.CodeSource;
-import com.sun.star.lib.sandbox.PermissionCollection;
-import com.sun.star.lib.sandbox.ProtectionDomain;
-import com.sun.star.lib.sandbox.RuntimePermission;
-import com.sun.star.lib.sandbox.FilePermission;
-import com.sun.star.lib.sandbox.SocketPermission;
+//import com.sun.star.lib.sandbox.PermissionCollection;
+//import com.sun.star.lib.sandbox.ProtectionDomain;
+//import com.sun.star.lib.sandbox.RuntimePermission;
+//import com.sun.star.lib.sandbox.FilePermission;
+//import com.sun.star.lib.sandbox.SocketPermission;
 
 
 public final class AppletExecutionContext extends ExecutionContext
         implements AppletStub, LiveConnectable
 {
-    private static final boolean DEBUG = false; // Enable / disable debug output
+    private static final boolean DEBUG = true; // Enable / disable debug output
 
-    private Applet applet;
-    private Container container;
+    private Applet _applet;
+    private Container _container;
 
-    private DocumentProxy documentProxy;
-    private Hashtable parameters;
+    private DocumentProxy _documentProxy;
+    private Hashtable _parameters;
 
-    private String className;
-    private Vector jarResourceProxys = new Vector();
+    private String _className;
+    private Vector _jarResourceProxys = new Vector();
 
-    private URL documentURL = null;
-    private URL baseURL = null;
+    private URL _documentURL = null;
+    private URL _baseURL = null;
 
-    private ProtectionDomain protectionDomain;
-    private PermissionCollection permissionCollection;
+//      private ProtectionDomain _protectionDomain;
+//      private PermissionCollection _permissionCollection;
 
-    private java.awt.Toolkit toolkit;
+    private Toolkit _toolkit;
 
     //************** C++ WRAPPER ******************
     private long    pCppJSbxObject;
@@ -140,18 +141,20 @@ public final class AppletExecutionContext extends ExecutionContext
         this(pCppJSbxObject);
 
         if(DEBUG) System.err.println("#### AppletExecutionContext.<init>:" + documentURL + " " + parameters + " " + container + " " + pCppJSbxObject);
-        this.documentURL = documentURL;
-        this.parameters = parameters;
-        this.container = container;
+        _documentURL = documentURL;
+        _parameters = parameters;
+        _container = container;
 
-        toolkit = container.getToolkit();
+        _toolkit = container.getToolkit();
 
-        documentProxy = DocumentProxy.getDocumentProxy(documentURL, toolkit);
-        addObserver(documentProxy);
+        _documentProxy = DocumentProxy.getDocumentProxy(documentURL, _toolkit);
+        addObserver(_documentProxy);
     }
 
     public void init() {
-        baseURL = null;
+        if(DEBUG) System.err.println("#####" + getClass().getName() + ".init()");
+
+        _baseURL = null;
 
         try {
             String codeBase = getParameter("codebase");
@@ -159,67 +162,68 @@ public final class AppletExecutionContext extends ExecutionContext
             if (!codeBase.endsWith("/")) {
                 codeBase += "/";
             }
-            baseURL = new URL(documentURL, codeBase);
+            _baseURL = new URL(_documentURL, codeBase);
         }
-        catch (Exception e) {
+        catch (MalformedURLException e) {
             try {
-                String file = documentURL.getFile();
+                String file = _documentURL.getFile();
                 int i = file.lastIndexOf('/');
 
                 if (i > 0 && i < file.length() - 1) {
-                    baseURL = new URL(documentURL, file.substring(0, i + 1));
+                    _baseURL = new URL(_documentURL, file.substring(0, i + 1));
                 }
             }
-            catch (Exception e2) {
-                baseURL = documentURL;
+            catch (MalformedURLException e2) {
+                _baseURL = _documentURL;
             }
         }
 
-        if(baseURL == null)
-            baseURL = documentURL;
+        if(_baseURL == null)
+            _baseURL = _documentURL;
 
-        className = getParameter("code");
+        _className = getParameter("code");
         String defaultExtension = ".class";
         String oldExtension = ".java";
 
-        int extensionIndex = className.lastIndexOf('.');
+        int extensionIndex = _className.lastIndexOf('.');
           String extension = "";
 
         if (extensionIndex != -1) {
-            extension = className.substring(extensionIndex);
+            extension = _className.substring(extensionIndex);
 
             if(!extension.equals(defaultExtension) && !extension.equals(oldExtension)) {
                 extension = defaultExtension;
             }
             else
-                className = className.substring(0, extensionIndex);
+                _className = _className.substring(0, extensionIndex);
         }
 
-        String nm = "applet-" + className;
+        String nm = "applet-" + _className;
 
-          documentProxy.addExecutionContext(this, className);
+          _documentProxy.addExecutionContext(this, _className);
 
-        permissionCollection = new PermissionCollection();
-        protectionDomain = new ProtectionDomain(new CodeSource(baseURL, null), permissionCollection);
+//          _permissionCollection = new PermissionCollection();
+//          _protectionDomain = new ProtectionDomain(new CodeSource(_baseURL, null), _permissionCollection);
 
-        super.init(nm, ClassContextProxy.create(baseURL, protectionDomain, null));
+        super.init(nm, ClassContextProxy.create(_baseURL, null, null));
+//          super.init(nm, ClassContextProxy.create(_baseURL, _protectionDomain, null));
 
-        permissionCollection.add(new RuntimePermission("modifyThreadGroup", getThreadGroup()));
-          permissionCollection.add(new SocketPermission(SocketPermission.NETWORK_APPLET, baseURL.getHost()));
+//          _permissionCollection.add(new RuntimePermission("modifyThreadGroup", getThreadGroup()));
+//          _permissionCollection.add(new SocketPermission(SocketPermission.NETWORK_APPLET, _baseURL.getHost()));
 
-        try {
-            if(baseURL.getProtocol().equals("file")) // allow read acces for applet directory
-                permissionCollection.add(new FilePermission(new File(baseURL.getFile()).getCanonicalPath(), "read"));
-        }
-        catch(IOException eio) {
-        }
+//          try {
+//              if(_baseURL.getProtocol().equals("file")) // allow read acces for applet directory
+//                  _permissionCollection.add(new FilePermission(new File(_baseURL.getFile()).getCanonicalPath(), "read"));
+//          }
+//          catch(IOException eio) {
+//          }
     }
 
     void sDispose(long timeout) {
         if(DEBUG) System.err.println("#### AppletExecutionContext.sDispose");
 
-        container = null;
-        jarResourceProxys = null;
+        _container = null;
+        _jarResourceProxys = null;
 
         super.dispose(timeout);
     }
@@ -288,11 +292,11 @@ public final class AppletExecutionContext extends ExecutionContext
                 if(archives.length() > 0) loadArchive(archives);
             }
 
-            Class appletClass = classContext.loadClass(className);
-            synchronized(className) {
-                applet = (Applet)appletClass.newInstance();
-                applet.setStub(this);
-                className.notifyAll();
+            Class appletClass = classContext.loadClass(_className);
+            synchronized(_className) {
+                _applet = (Applet)appletClass.newInstance();
+                _applet.setStub(this);
+                _className.notifyAll();
             }
         }
         catch(IOException eio) {
@@ -303,57 +307,57 @@ public final class AppletExecutionContext extends ExecutionContext
     protected void xinit() {
         java.awt.Dimension size = new Dimension(getIntParameter("width"), getIntParameter("height"));
 
-          container.setLayout(null);
-          container.setVisible(true);
-        container.setSize(size);
-          container.add(applet);
+          _container.setLayout(null);
+          _container.setVisible(true);
+        _container.setSize(size);
+          _container.add(_applet);
 
-        applet.setVisible(false);
-        applet.setSize(size);
+        _applet.setVisible(false);
+        _applet.setSize(size);
 
-          container.validate();
+          _container.validate();
 
-        applet.init();
+        _applet.init();
     }
 
     protected void xstart() {
-        applet.setVisible(true);
-        container.validate();
+        _applet.setVisible(true);
+        _container.validate();
 
-        applet.start();
+        _applet.start();
     }
 
     protected void xstop() {
-        applet.stop();
+        _applet.stop();
     }
 
     protected void xdestroy() {
-        applet.destroy();
-        applet.setVisible(false);
-        applet.setStub(null);
+        _applet.destroy();
+        _applet.setVisible(false);
+        _applet.setStub(null);
 
-          documentProxy.removeExecutionContext(applet.getClass().getName());
+          _documentProxy.removeExecutionContext(_applet.getClass().getName());
     }
 
     protected void xdispose() {
-        if(container != null)
-            container.remove(applet);
+        if(_container != null)
+            _container.remove(_applet);
 
-        applet = null;
+        _applet = null;
     }
 
     private void loadArchive(String archive) throws MalformedURLException, IOException {
-        ResourceProxy jarResourceProxy = ResourceProxy.load(new URL(baseURL, archive), protectionDomain);
-        jarResourceProxy.loadJar(baseURL);
-        jarResourceProxys.addElement(jarResourceProxy);
+        ResourceProxy jarResourceProxy = ResourceProxy.load(new URL(_baseURL, archive), null /*_protectionDomain*/);
+        jarResourceProxy.loadJar(_baseURL);
+        _jarResourceProxys.addElement(jarResourceProxy);
     }
 
     public Applet getApplet() {
-        synchronized(className) {
-            if(applet == null) {
+        synchronized(_className) {
+            if(_applet == null) {
                 if(DEBUG)System.err.println("#### AppletExecutionContext.getApplet - waiting for applet");
                 try {
-                    className.wait();
+                    _className.wait();
                 }
                 catch(InterruptedException interruptedException) {
                     System.err.println("#### AppletExecutionContext.getApplet:" + interruptedException);
@@ -361,18 +365,18 @@ public final class AppletExecutionContext extends ExecutionContext
                 if(DEBUG)System.err.println("#### AppletExecutionContext.getApplet - got it");
             }
         }
-        return applet;
+        return _applet;
     }
 
     /*
      * Methods for AppletStub interface
      */
     public void appletResize(int width, int height) {
-        applet.setSize(new java.awt.Dimension(width, height));
+        _applet.setSize(new java.awt.Dimension(width, height));
     }
 
     public AppletContext getAppletContext() {
-        return documentProxy;
+        return _documentProxy;
     }
 
     public URL getCodeBase() {
@@ -380,11 +384,11 @@ public final class AppletExecutionContext extends ExecutionContext
     }
 
     public URL getDocumentBase() {
-        return documentProxy.getDocumentBase();
+        return _documentProxy.getDocumentBase();
     }
 
     public String getParameter(String name) {
-        String string = (String)parameters.get(name.toLowerCase());
+        String string = (String)_parameters.get(name.toLowerCase());
         if(string != null)
             string = string.trim();
 
