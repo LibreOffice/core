@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-21 13:49:03 $
+ *  last change: $Author: cmc $ $Date: 2001-02-26 13:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ struct WW8PLCFxDesc;
 struct WW8ULSpaceData;
 class SdrAttrObj;
 struct WW8ULSpaceData;
+class _ReadFieldParams;
 
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
@@ -252,6 +253,7 @@ typedef WW8AuthorInfo* WW8AuthorInfo_Ptr;
 SV_DECL_PTRARR_SORT_DEL(WW8LSTInfos,    WW8LSTInfo_Ptr,     16,16);
 SV_DECL_PTRARR_DEL(     WW8LFOInfos,    WW8LFOInfo_Ptr,     16,16);
 SV_DECL_PTRARR_SORT_DEL(WW8AuthorInfos, WW8AuthorInfo_Ptr,  16,16);
+SV_DECL_PTRARR(SwCharFmtPtrArray, SwCharFmt*,4,16);
 
 class SwWW8ImplReader;
 class WW8ListManager
@@ -529,6 +531,9 @@ friend class WW8FormulaControl;
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
+    //Keep track of generated Ruby character formats
+    SwCharFmtPtrArray aRubyCharFmts;
+
     WW8Fib* pWwFib;
     WW8Fonts* pFonts;
     WW8Dop* pWDop;
@@ -1094,6 +1099,8 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
     eF_ResT Read_F_DBNum( WW8FieldDesc*, String& );
     eF_ResT Read_F_Equation( WW8FieldDesc*, String& );
+    void Read_SubF_Ruby( _ReadFieldParams& rReadParam);
+    void Read_SubF_Combined( _ReadFieldParams& rReadParam);
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
@@ -1144,11 +1151,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.13 2001-02-21 13:49:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.14 2001-02-26 13:44:24 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/02/21 13:49:03  cmc
+      Combined Characters Field Import
+
       Revision 1.12  2001/02/15 20:08:10  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-21 13:49:03 $
+ *  last change: $Author: cmc $ $Date: 2001-02-26 13:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -183,10 +186,21 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
 #define WWF_INVISIBLE 86            // Bit-Nummer fuer Invisible ( IniFlags )
 #define MAX_FIELDLEN 64000
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
@@ -197,8 +211,6 @@ using namespace ::rtl;
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion );
-
-
 
 class _ReadFieldParams
 {
@@ -2098,59 +2110,220 @@ eF_ResT SwWW8ImplReader::Read_F_DBNum( WW8FieldDesc*, String& )
 }
 
 /*
-    EQ , only the usage for Combined Characters supported, must be exactly
-    in the form that word only accepts as combined charactersm, i.e.
+    EQ , only the usage for
+    a. Combined Characters supported, must be exactly in the form that word
+    only accepts as combined charactersm, i.e.
     eq \o(\s\up Y(XXX),\s\do Y(XXX))
+    b. Ruby Text supported, must be in the form that word recognizes as being
+    ruby text
+    ...
 */
 eF_ResT SwWW8ImplReader::Read_F_Equation( WW8FieldDesc* pF, String& rStr )
 {
-    String sCombinedCharacters;
     _ReadFieldParams aReadParam( rStr );
-    if ('o' == aReadParam.SkipToNextToken())
+    long cChar = aReadParam.SkipToNextToken();
+    if ('o' == cChar)
+        Read_SubF_Combined(aReadParam);
+    else if ('*' == cChar)
+        Read_SubF_Ruby(aReadParam);
+    return F_OK;
+}
+
+void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
+{
+    String sCombinedCharacters;
+    if ((-2 == rReadParam.SkipToNextToken()) &&
+            rReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0))
     {
-        if ((-2 == aReadParam.SkipToNextToken()) &&
-            aReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0))
+        for (int i=0;i<2;i++)
         {
-            for (int i=0;i<2;i++)
+            if ('s' == rReadParam.SkipToNextToken())
             {
-                if ('s' == aReadParam.SkipToNextToken())
+                long cChar = rReadParam.SkipToNextToken();
+                if (-2 != rReadParam.SkipToNextToken())
+                    break;
+                String sF = rReadParam.GetResult();
+                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
+                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
                 {
-                    long cChar = aReadParam.SkipToNextToken();
-                    if (-2 != aReadParam.SkipToNextToken())
-                        break;
-                    String sF= aReadParam.GetResult();
-                    if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
-                    || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
+                    if (-2 == rReadParam.SkipToNextToken())
                     {
-                        if (-2 == aReadParam.SkipToNextToken())
+                        String sPart = rReadParam.GetResult();
+                        xub_StrLen nBegin = sPart.Search('(');
+
+                        //Word disallows brackets in this field, which
+                        //aids figuring out the case of an end of )) vs )
+                        xub_StrLen nEnd = sPart.Search(')');
+
+                        if ((nBegin != STRING_NOTFOUND) &&
+                            (nEnd != STRING_NOTFOUND))
                         {
-                            String sPart = aReadParam.GetResult();
-                            xub_StrLen nBegin = sPart.Search('(');
-
-                            //Word disallows brackets in this field, which
-                            //aids figuring out the case of an end of )) vs )
-                            xub_StrLen nEnd = sPart.Search(')');
-
-                            if ((nBegin != STRING_NOTFOUND) &&
-                                (nEnd != STRING_NOTFOUND))
-                            {
-                                sCombinedCharacters +=
-                                    sPart.Copy(nBegin+1,nEnd-nBegin-1);
-                            }
+                            sCombinedCharacters +=
+                                sPart.Copy(nBegin+1,nEnd-nBegin-1);
                         }
                     }
                 }
             }
         }
     }
-
     if (sCombinedCharacters.Len())
     {
         SwCombinedCharField aFld((SwCombinedCharFieldType*)
             rDoc.GetSysFldType(RES_COMBINED_CHARS),sCombinedCharacters);
         rDoc.Insert(*pPaM,SwFmtFld(aFld));
     }
-    return F_OK;
+}
+
+void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
+{
+    USHORT nJustificationCode=0;
+    String sFontName;
+    UINT32 nFontSize=0;
+    String sRuby;
+    String sText;
+    long nRet;
+    while( -1 != ( nRet = rReadParam.SkipToNextToken() ))
+    {
+        switch( nRet )
+        {
+        case -2:
+            {
+                String sTemp = rReadParam.GetResult();
+                if( sTemp.EqualsIgnoreCaseAscii( "jc", 0, 2 ) )
+                {
+                    sTemp.Erase(0,2);
+                    nJustificationCode = static_cast<USHORT>(sTemp.ToInt32());
+                }
+                else if( sTemp.EqualsIgnoreCaseAscii( "hps", 0, 3 ) )
+                {
+                    sTemp.Erase(0,3);
+                    nFontSize= static_cast<UINT32>(sTemp.ToInt32());
+                }
+                else if( sTemp.EqualsIgnoreCaseAscii( "Font:", 0, 5 ) )
+                {
+                    sTemp.Erase(0,5);
+                    sFontName = sTemp;
+                }
+            }
+            break;
+        case '*':
+            break;
+        case 'o':
+            while( -1 != ( nRet = rReadParam.SkipToNextToken() ))
+            {
+                if ('u' == nRet)
+                {
+                    if (-2 == rReadParam.SkipToNextToken() &&
+                      (rReadParam.GetResult().EqualsIgnoreCaseAscii('p', 1, 0)))
+                    {
+                        if (-2 == rReadParam.SkipToNextToken())
+                        {
+                            String sPart = rReadParam.GetResult();
+                            xub_StrLen nBegin = sPart.Search('(');
+
+                            //Word disallows brackets in this field,
+                            xub_StrLen nEnd = sPart.Search(')');
+
+                            if ((nBegin != STRING_NOTFOUND) &&
+                                (nEnd != STRING_NOTFOUND))
+                            {
+                                sRuby = sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                            }
+                            nBegin = sPart.Search(',',nEnd);
+                            nEnd = sPart.SearchBackward(')');
+                            if ((nBegin != STRING_NOTFOUND) &&
+                                (nEnd != STRING_NOTFOUND))
+                            {
+                                sText = sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                            }
+                        }
+                    }
+                }
+
+            }
+            break;
+        }
+    }
+
+    //Translate and apply
+    if (sRuby.Len() && sText.Len() && sFontName.Len() && nFontSize)
+    {
+        switch (nJustificationCode)
+        {
+        case 0:
+            nJustificationCode=1;
+            break;
+        case 1:
+            nJustificationCode=3;
+            break;
+        case 2:
+            nJustificationCode=4;
+            break;
+        default:
+        case 3:
+            nJustificationCode=0;
+            break;
+        case 4:
+            nJustificationCode=2;
+            break;
+        }
+
+        SwFmtRuby aRuby(sRuby);
+        SwCharFmt *pCharFmt=0;
+        //Make a guess at which of asian of western we should be setting
+        USHORT nScript;
+        if (pBreakIt->xBreak.is())
+            nScript = pBreakIt->xBreak->getScriptType(sRuby, 0);
+        else
+            nScript = com::sun::star::i18n::ScriptType::ASIAN;
+
+        //Check to see if we already have a ruby charstyle that this fits
+        for(USHORT i=0;i<aRubyCharFmts.Count();i++)
+        {
+            SwCharFmt *pFmt = aRubyCharFmts[i];
+            const SvxFontHeightItem &rF =
+                (const SvxFontHeightItem &)(pFmt->GetAttr(
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)));
+            if (rF.GetHeight() == nFontSize*10)
+            {
+                const SvxFontItem &rF =
+                    (const SvxFontItem &)(pFmt->GetAttr(
+                    GetWhichOfScript(RES_CHRATR_FONT,nScript)));
+                if (rF.GetFamilyName().Equals(sFontName))
+                {
+                    pCharFmt=pFmt;
+                    break;
+                }
+            }
+        }
+
+        //Create a new char style if necessary
+        if (!pCharFmt)
+        {
+            String aNm;
+            //Take this as the base name
+            rDoc.GetPoolNm(RES_POOLCHR_RUBYTEXT,aNm);
+            aNm+=String::CreateFromInt32(aRubyCharFmts.Count()+1);
+            pCharFmt = rDoc.MakeCharFmt(aNm,( SwCharFmt*)rDoc.GetDfltCharFmt());
+            SvxFontHeightItem aHeightItem(nFontSize*10);
+            SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
+                aEmptyStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW);
+            aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+            aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
+            pCharFmt->SetAttr(aHeightItem);
+            pCharFmt->SetAttr(aFontItem);
+            aRubyCharFmts.Insert(pCharFmt,aRubyCharFmts.Count());
+        }
+
+        //Set the charstyle and justification
+        aRuby.SetCharFmtName(pCharFmt->GetName());
+        aRuby.SetCharFmtId(pCharFmt->GetPoolFmtId());
+        aRuby.SetAdjustment(nJustificationCode);
+
+        NewAttr(aRuby);
+        rDoc.Insert( *pPaM, sText );
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
+        }
 }
 
 //-----------------------------------------
@@ -2945,12 +3118,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.10 2001-02-21 13:49:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.11 2001-02-26 13:44:24 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/21 13:49:03  cmc
+      Combined Characters Field Import
+
       Revision 1.9  2001/02/21 12:45:25  os
       use database struct instead of a combined string
 
