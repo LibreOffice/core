@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 09:31:13 $
+ *  last change: $Author: pl $ $Date: 2002-03-06 11:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-#include <unistd.h>
-#include <sys/stat.h>
-
+#include <stdlib.h>
+#include <string.h>
 #include <psprint/fontcache.hxx>
 
 #ifndef _OSL_THREAD_H
@@ -73,6 +72,11 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
 
 using namespace std;
 using namespace rtl;
@@ -141,7 +145,7 @@ void FontCache::flush()
     bool bHavePath = false;
     sal_Int32 nIndex = 0;
     SvFileStream aStream;
-    while( nIndex != STRING_NOTFOUND )
+    while( nIndex > 0 )
     {
         aPath = aPrinterPath.getToken( 0, ':', nIndex );
         aPath.AppendAscii( "/pspfontcache" );
