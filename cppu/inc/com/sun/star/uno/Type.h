@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:51:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,5 +423,30 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType5( T * pT ) 
 */
 template< class T >
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuArrayType6( T * pT ) SAL_THROW( () );
+
+/** Gets the meta type of an IDL type.
+
+    The difference between this function template (with a type parameter) and
+    the overloaded getCppuType function with a single (dummy) parameter of a
+    specific type is that this function template may not work for the UNO type
+    "unsigned short" (sal_uInt16 in C++), while the overloaded one-parameter
+    function may not work for the UNO type "char" (sal_Unicode in C++, which may
+    have the same underlying C++ type as sal_uInt16 on certain platforms).
+
+    @return type of the given IDL type
+
+    @since #i31129#
+*/
+template< typename T > inline const ::com::sun::star::uno::Type & SAL_CALL
+getCppuType() SAL_THROW(());
+
+/** Gets the meta type of IDL type char.
+
+    @return type of IDL type char
+
+    @since #i31129#
+*/
+template<> inline const ::com::sun::star::uno::Type & SAL_CALL
+getCppuType< sal_Unicode >() SAL_THROW(());
 
 #endif
