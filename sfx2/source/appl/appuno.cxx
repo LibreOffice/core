@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:40:34 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         nSlotId = SID_SAVEASDOC;
 
     sal_Int32 nCount = rArgs.getLength();
+    if ( !nCount )
+        return;
+
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
