@@ -147,7 +147,11 @@ Dim DateFormatString as String
 		Case cLANGUAGE_SPANISH
 			DateFormatString = &quot;DD/MMM&quot;
 		Case cLANGUAGE_PORTUGUESE
-			DateFormatString = &quot;DD-MMM&quot;
+			If sCurCountryLocale = &quot;BR&quot; Then
+				DateFormatString = &quot;DD/MMM&quot;
+			Else
+				DateFormatString = &quot;DD-MMM&quot;
+			End If		
 		Case cLANGUAGE_DUTCH
 			DateFormatString = &quot;DD-MMM&quot;
 		Case cLANGUAGE_SWEDISH
