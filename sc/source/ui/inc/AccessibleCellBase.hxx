@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:40:48 $
+ *  last change: $Author: vg $ $Date: 2002-03-22 16:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 class ScTabViewShell;
 
-typedef cppu::ImplHelper1<::drafts::com::sun::star::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessibleCellBaseImpl;
 
 class ScAccessibleCellBase

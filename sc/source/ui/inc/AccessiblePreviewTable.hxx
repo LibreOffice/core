@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:06:56 $
+ *  last change: $Author: vg $ $Date: 2002-03-22 16:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 class ScPreviewShell;
 class ScPreviewTableInfo;
 
-typedef cppu::ImplHelper1<::drafts::com::sun::star::accessibility::XAccessibleTable>
+typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleTable>
                     ScAccessiblePreviewTableImpl;
 
 class ScAccessiblePreviewTable :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:12:51 $
+ *  last change: $Author: vg $ $Date: 2002-03-22 16:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ class ScTabViewShell;
         <code>AccessibleTable</code> service.
 */
 
-typedef cppu::ImplHelper2<::drafts::com::sun::star::accessibility::XAccessibleTable,
+typedef cppu::ImplHelper2< ::drafts::com::sun::star::accessibility::XAccessibleTable,
                     ::drafts::com::sun::star::accessibility::XAccessibleSelection>
                     ScAccessibleTableBaseImpl;
 
