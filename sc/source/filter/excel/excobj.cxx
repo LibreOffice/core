@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:22:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #ifndef SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -155,7 +158,7 @@ using namespace com::sun::star;
 void ImportExcel::Obj()
 {
     ScDocument& rDoc = GetDoc();
-    sal_uInt16 nScTab = GetScTab();
+    sal_uInt16 nScTab = GetCurrScTab();
 
     UINT32 nObj;
     UINT16 nType, nId, nFlags;
@@ -178,7 +181,9 @@ void ImportExcel::Obj()
         case 0x01:  pObj = LineObj( aSet, aTL, aBR ); break;
         case 0x02:  pObj = RectObj( aSet, aTL, aBR ); break;
         case 0x05:  pObj = BeginChartObj( aSet, aTL, aBR ); break;
+        default: pExcRoot->pIR->GetTracer().TraceUnsupportedObjects(); break;
     }
+
     if( pObj )
     {
         pObj->ClearMergedItem();
@@ -259,11 +264,12 @@ SdrObject* ImportExcel::BeginChartObj( SfxItemSet&, const Point& rUL, const Poin
         >> nLWeight >> fAuto2 >> nFRS;
     aIn.Ignore( 18 );
 
-    ExcelChartData* pData = new ExcelChartData( pD, rUL, rLR, GetScTab() );
+    ExcelChartData* pData = new ExcelChartData( pD, rUL, rLR, GetCurrScTab() );
     SetLineStyle( *pData->pAttrs, nLc, nLStyle, nLWeight );
     SetFillStyle( *pData->pAttrs, nBg, nFg, nPat );
     pData->pNext = pChart;
     pChart = pData;
+    pExcRoot->pIR->GetTracer().TraceUnsupportedObjects();
     return NULL;
 }
 
@@ -274,7 +280,10 @@ void ImportExcel::EndChartObj()
 
     ExcelChartData*         pData = pChart;
     if( !pData )
+        {
+            pExcRoot->pIR->GetTracer().TraceUnsupportedObjects();
         return;
+        }
 
     pChart = pData->pNext;
 
