@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:23:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ catalan ] = "~Nou...";
         Text[ thai ] = "ใ~หม่...";
         Text[ slovak ] = "~Nový...";
+        Text[ hindi ] = "~नया...";
     };
 
     PushButton PB_XML_FILTER_EDIT
@@ -152,6 +153,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ thai ] = "แ~ก้ไข...";
         Text[ slovak ] = "~Upraviť...";
+        Text[ catalan ] = "~Edit...";
+        Text[ hindi ] = "~संपादन...";
     };
 
     PushButton PB_XML_FILTER_TEST
@@ -172,6 +175,20 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ chinese_traditional ] = "測試 XSL~T...";
         Text[ slovak ] = "~Testovacie XSLT-y...";
         Text[ portuguese_brazilian ] = "~Testar XSLTs...";
+        Text[ greek ] = "~Test XSLTs...";
+        Text[ dutch ] = "~Test XSLTs...";
+        Text[ finnish ] = "~Test XSLTs...";
+        Text[ czech ] = "Ověřit XSLT...";
+        Text[ danish ] = "~Test XSLTs...";
+        Text[ arabic ] = "~Test XSLTs...";
+        Text[ hebrew ] = "~Test XSLTs...";
+        Text[ catalan ] = "~Test XSLTs...";
+        Text[ hindi ] = "~Test XSLTs...";
+        Text[ portuguese ] = "~Test XSLTs...";
+        Text[ russian ] = "~Test XSLTs...";
+        Text[ polish ] = "~Test XSLTs...";
+        Text[ turkish ] = "~Test XSLTs...";
+        Text[ thai ] = "~Test XSLTs...";
     };
 
     PushButton PB_XML_FILTER_DELETE
@@ -205,6 +222,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ catalan ] = "Su~primeix...";
         Text[ thai ] = "~ลบ...";
         Text[ slovak ] = "~Zmazať...";
+        Text[ hindi ] = "~मिटाओ...";
     };
 
     PushButton PB_XML_FILTER_SAVE
@@ -225,6 +243,20 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ chinese_traditional ] = "另存為軟體套裝(~S)...";
         Text[ slovak ] = "~Uložiť ako balík...";
         Text[ portuguese_brazilian ] = "~Salvar como pacote... ";
+        Text[ greek ] = "~Save as Package...";
+        Text[ dutch ] = "~Save as Package...";
+        Text[ finnish ] = "~Save as Package...";
+        Text[ czech ] = "Uložit jako balík...";
+        Text[ danish ] = "~Save as Package...";
+        Text[ arabic ] = "~Save as Package...";
+        Text[ hebrew ] = "~Save as Package...";
+        Text[ catalan ] = "~Save as Package...";
+        Text[ hindi ] = "~Save as Package...";
+        Text[ portuguese ] = "~Save as Package...";
+        Text[ russian ] = "~Save as Package...";
+        Text[ polish ] = "~Save as Package...";
+        Text[ turkish ] = "~Save as Package...";
+        Text[ thai ] = "~Save as Package...";
     };
 
     PushButton PB_XML_FILTER_OPEN
@@ -245,8 +277,22 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ chinese_simplified ] = "打开软件包(~O)";
         Text[ chinese_traditional ] = "開啓軟體套裝(~O)";
         Text[ language_user1 ] = "NK06.06.2003: It can be a shortage of writing space on push button for Japanese string with mnemonic.";
-        Text[ slovak ] = "~Otvoriť balík";
+        Text[ slovak ] = "~Otvoriť balík...";
         Text[ portuguese_brazilian ] = "~Abrir pacote";
+        Text[ greek ] = "~Open Package...";
+        Text[ dutch ] = "~Open Package...";
+        Text[ finnish ] = "~Open Package...";
+        Text[ czech ] = "Otevřít balík...";
+        Text[ danish ] = "~Open Package...";
+        Text[ arabic ] = "~Open Package...";
+        Text[ hebrew ] = "~Open Package...";
+        Text[ catalan ] = "~Open Package...";
+        Text[ hindi ] = "~Open Package...";
+        Text[ portuguese ] = "~Open Package...";
+        Text[ russian ] = "~Open Package...";
+        Text[ polish ] = "~Open Package...";
+        Text[ turkish ] = "~Open Package...";
+        Text[ thai ] = "~Open Package...";
     };
 
     HelpButton BTN_XML_FILTER_HELP
@@ -286,6 +332,7 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text[ catalan ] = "~Tanca";
         Text[ thai ] = "~ปิด";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hindi ] = "~बन्द करो";
     };
 
     Text[ french ] = "Param�tres du filtre XML";
@@ -298,7 +345,23 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
     Text[ chinese_traditional ] = "XML 篩選器設定";
     Text[ slovak ] = "Nastavenia XML filtra";
     Text[ portuguese_brazilian ] = "Configura��o dos filtros XSLT";
+    Text[ greek ] = "XML Filter Settings";
+    Text[ dutch ] = "XML Filter Settings";
+    Text[ finnish ] = "XML Filter Settings";
+    Text[ czech ] = "Nastavení XML filtrů";
+    Text[ danish ] = "XML Filter Settings";
+    Text[ arabic ] = "XML Filter Settings";
+    Text[ hebrew ] = "XML Filter Settings";
+    Text[ catalan ] = "XML Filter Settings";
+    Text[ hindi ] = "XML Filter Settings";
+    Text[ portuguese ] = "XML Filter Settings";
+    Text[ russian ] = "XML Filter Settings";
+    Text[ polish ] = "XML Filter Settings";
+    Text[ turkish ] = "XML Filter Settings";
+    Text[ thai ] = "XML Filter Settings";
 };
+
+
 
 
 
