@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:18:32 $
+ *  last change: $Author: obo $ $Date: 2001-12-20 12:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,10 @@ void SAL_CALL ContinuationFilterSelect::setFilter( const ::rtl::OUString& sFilte
 //---------------------------------------------------------------------------------------------------------
 RequestFilterSelect::RequestFilterSelect( const ::rtl::OUString& sURL )
 {
-    css::document::NoSuchFilterRequest aFilterRequest( ::rtl::OUString()                             ,
-                                                       css::uno::Reference< css::uno::XInterface >() ,
+    ::rtl::OUString temp;
+    css::uno::Reference< css::uno::XInterface > temp2;
+    css::document::NoSuchFilterRequest aFilterRequest( temp                             ,
+                                                       temp2                            ,
                                                        sURL                                          );
     m_aRequest <<= aFilterRequest;
 
@@ -186,8 +188,10 @@ RequestAmbigousFilter::RequestAmbigousFilter( const ::rtl::OUString& sURL       
                                               const ::rtl::OUString& sSelectedFilter ,
                                               const ::rtl::OUString& sDetectedFilter )
 {
-    css::document::AmbigousFilterRequest aFilterRequest( ::rtl::OUString()                             ,
-                                                         css::uno::Reference< css::uno::XInterface >() ,
+    ::rtl::OUString temp;
+    css::uno::Reference< css::uno::XInterface > temp2;
+    css::document::AmbigousFilterRequest aFilterRequest( temp                             ,
+                                                         temp2 ,
                                                          sURL                                          ,
                                                          sSelectedFilter                               ,
                                                          sDetectedFilter                               );
