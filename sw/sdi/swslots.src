@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:55:18 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9238,7 +9238,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
     SlotName[ portuguese_brazilian ] = "CharColorExt";
     SlotName[ japanese ] = "文字色の水やりﾓｰﾄﾞ";
     SlotName[ chinese_simplified ] = "字符颜色填色";
-    SlotName[ chinese_traditional ] = "字元顔色 填色";
+    SlotName[ chinese_traditional ] = "字元顏色 填色";
     SlotName[ arabic ] = "����� ����� ����";
     SlotName[ dutch ] = "Tekenkleur-gieter";
     SlotName[ chinese_simplified ] = "字符颜色填色";
@@ -9266,7 +9266,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ portuguese_brazilian ] = "FontColor";
     SlotName[ japanese ] = "ﾌｫﾝﾄの色";
     SlotName[ chinese_simplified ] = "字符颜色";
-    SlotName[ chinese_traditional ] = "字元顔色";
+    SlotName[ chinese_traditional ] = "字元顏色";
     SlotName[ arabic ] = "��� ����";
     SlotName[ dutch ] = "Tekenkleur";
     SlotName[ chinese_simplified ] = "字符颜色";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
