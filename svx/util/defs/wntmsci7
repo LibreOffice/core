@@ -18828,3 +18828,4 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ?set@?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAAEPAVXExecutableDialog@dialogs@ui@345@@Z
 ?Create@SvXMLGraphicHelper@@SAPAV1@W4SvXMLGraphicHelperMode@@@Z
 ?Init@SvXMLGraphicHelper@@IAEXPAVSotStorage@@W4SvXMLGraphicHelperMode@@E@Z
+?KeyInput@SvxRectCtl@@UAEXABVKeyEvent@@@Z
