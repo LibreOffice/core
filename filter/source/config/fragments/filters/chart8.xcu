@@ -1,0 +1,14 @@
+    <node oor:name="chart8" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>chart8</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>XML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Chart</value>
+            <value xml:lang="de">Offenes Diagramm</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+    </node>
