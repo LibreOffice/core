@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:05:08 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -325,7 +325,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBoxOnScreen() throw (uno::Ru
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::RuntimeException)
 {
     return maPosition;
 }

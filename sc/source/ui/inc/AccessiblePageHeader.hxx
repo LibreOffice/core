@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:50:57 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,14 @@
 #include "AccessibleContextBase.hxx"
 #endif
 
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
 
 class ScPreviewShell;
-
+class EditTextObject;
+class ScAccessiblePageHeaderArea;
+class ScPreviewShell;
 
 class ScAccessiblePageHeader : public ScAccessibleContextBase
 {
@@ -115,22 +120,29 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
+    //=====  internal  ========================================================
+    void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
 
 protected:
     virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual Rectangle GetBoundingBoxOnScreen(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual Rectangle GetBoundingBox(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
     sal_Bool            mbHeader;
+    typedef std::vector< ScAccessiblePageHeaderArea* > ScHFAreas;
+    ScHFAreas           maAreas;
+    sal_Int32           mnChildCount;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    void AddChild(const EditTextObject* pArea, sal_uInt32 nIndex, SvxAdjust eAdjust);
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:05:49 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual Rectangle GetBoundingBoxOnScreen(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual Rectangle GetBoundingBox(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ScPreviewShell* mpViewShell;

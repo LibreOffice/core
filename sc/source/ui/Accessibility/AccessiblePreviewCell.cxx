@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:04:57 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //====  internal  =========================================================
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
 {
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
@@ -252,7 +252,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() throw (uno::RuntimeE
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBox() throw (uno::RuntimeException)
+Rectangle ScAccessiblePreviewCell::GetBoundingBox() const throw (uno::RuntimeException)
 {
     Rectangle aCellRect;
     if (mpViewShell)
