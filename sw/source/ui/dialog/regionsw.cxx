@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:31:07 $
+ *  last change: $Author: os $ $Date: 2001-02-23 15:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,10 @@ String SectRepr::GetFile() const
         }
         else
 #endif
-            sLinkFile = sLinkFile.GetToken( 0, cTokenSeperator );
+            sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0, cTokenSeperator ),
+                                        INET_HEX_ESCAPE,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
+                                        RTL_TEXTENCODING_UTF8 );
     }
     return sLinkFile;
 }
@@ -1020,7 +1023,6 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
     if( GetFileFilterNameDlg( *this, sFileName, &sFilePasswd,
                                 &sFilterName, &pMed ))
     {
-        aFileNameED.SetText( sFileName );
         ::lcl_ReadSections( rSh, *pMed, aSubRegionED );
         delete pMed;
     }
@@ -1033,6 +1035,7 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
         pSectRepr->SetFile( sFileName );
         pSectRepr->SetFilter( sFilterName );
         pSectRepr->SetFilePasswd( sFilePasswd );
+        aFileNameED.SetText( pSectRepr->GetFile());
     }
     return 0;
 }
@@ -1900,7 +1903,10 @@ IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
     if( GetFileFilterNameDlg( *this, sFileName, &sFilePasswd,
                                 &sFilterName, &pMed ))
     {
-        aFileNameED.SetText( sFileName );
+        aFileNameED.SetText( INetURLObject::decode( sFileName, INET_HEX_ESCAPE,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
+                                        RTL_TEXTENCODING_UTF8 ));
+
         ::lcl_ReadSections( *pWrtSh, *pMed, aSubRegionED );
         delete pMed;        // das brauchen wir nicht mehr !
     }
@@ -2302,6 +2308,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/16 09:31:07  mtg
+    Added XML support for Section Lists
+
     Revision 1.2  2000/10/20 13:40:42  jp
     use correct INetURL-Decode enum
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 15:04:59 $
+ *  last change: $Author: os $ $Date: 2001-02-23 15:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
     if(sFileName.Len())
     {
         INetURLObject aFileUrl(sFileName);
-        String sSectionName(aFileUrl.GetLastName().GetToken(0, cTokenSeperator));
+        String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).GetToken(0, cTokenSeperator));
         USHORT nSectCount = rSh.GetSectionFmtCount();
         String sTempSectionName(sSectionName);
         USHORT nAddNumber = 0;
