@@ -297,7 +297,7 @@ my $setupscriptref = installer::files::read_file($installer::globals::setupscrip
 # Resolving variables defined in the zip list file into setup script
 # All the variables are defined in $allvariablesarrayref
 
-installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariablesarrayref);
+installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript1.log" ,$setupscriptref); }
 
 # Resolving %variables defined in the installation object
@@ -409,6 +409,9 @@ if (!($installer::globals::is_copy_only_project))
 
     $modulesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Module");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1.log", $modulesinproductarrayref); }
+
+    installer::scriptitems::set_children_flag($modulesinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules1b.log", $modulesinproductarrayref); }
 
     # Assigning the modules to the items
 
@@ -572,7 +575,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::changing_name_of_language_dependent_keys($filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles5.log", $filesinproductlanguageresolvedarrayref); }
 
-    if ( $installer::globals::iswin and $ENV{'USE_SHELL'} eq "4nt" ) { installer::converter::convert_slash_to_backslash($filesinproductlanguageresolvedarrayref); }
+    if ( $installer::globals::iswin and $^O =~ /MSWin/i ) { installer::converter::convert_slash_to_backslash($filesinproductlanguageresolvedarrayref); }
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles6.log", $filesinproductlanguageresolvedarrayref); }
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_non_existent_languages_in_productlists($filesinproductlanguageresolvedarrayref, $languagestringref, "Name", "file");
@@ -635,7 +638,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # Editing files with flag SCPZIP_REPLACE.
 
-    installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariablesarrayref, "File", $languagestringref);
+    installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles13.log", $filesinproductlanguageresolvedarrayref); }
 
     #####################################
@@ -723,7 +726,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     # Editing scpactions with flag SCPZIP_REPLACE.
 
-    installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariablesarrayref, "ScpAction", $languagestringref);
+    installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6.log", $scpactionsinproductlanguageresolvedarrayref); }
 
     #########################################################
@@ -1292,6 +1295,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Collecting all files with flag "BINARYTABLE"
         my $binarytablefiles = installer::worker::collect_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE");
 
+        # Removing all files with flag "BINARYTABLE_ONLY"
+        $filesinproductlanguageresolvedarrayref = installer::worker::remove_all_items_with_special_flag($filesinproductlanguageresolvedarrayref ,"BINARYTABLE_ONLY");
+
         # Creating the important dynamic idt files
 
         installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir);
@@ -1310,6 +1316,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems5.log", $registryitemsinproductlanguageresolvedarrayref); }
+
+        # Advising language specific files and component to the corresponding feature for multilingual installation sets
+        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { installer::windows::feature::change_modules_in_filescollector($filesinproductlanguageresolvedarrayref); }
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19b.log", $filesinproductlanguageresolvedarrayref); }
 
         # Attention: The table "Feature.idt" contains language specific strings -> parameter: $languagesarrayref !
         installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, $languagesarrayref, $allvariableshashref);
@@ -1368,20 +1378,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::logger::include_header_into_logfile("Copying idt files to $languageidtdir:");
 
             installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles);
-
-            # For multilingual installation sets, the dialog for the language selection can now be prepared, with
-            # a checkbox for each available language. This has to happen before the following translation.
-            # The new controls have to be added into the Control.idt
-
-            # if ( $installer::globals::ismultilingual)
-            # {
-                my $controlidttablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-                my $controlidttable = installer::files::read_file($controlidttablename);
-                installer::windows::idtglobal::add_language_checkboxes_to_database($controlidttable, $languagesarrayref);
-                installer::files::save_file($controlidttablename, $controlidttable);
-                $infoline = "Added checkboxes for language selection dialog into table $controlidttablename\n";
-                push(@installer::globals::logfileinfo, $infoline);
-            # }
 
             # Now all files are copied into a language specific directory
             # The template idt files can be translated
@@ -1577,13 +1573,16 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $featuretable = installer::files::read_file($featuretablename);
                 my $directorytablename = $languageidtdir . $installer::globals::separator . "Director.idt";
                 my $directorytable = installer::files::read_file($directorytablename);
+                my $componenttablename = $languageidtdir . $installer::globals::separator . "Componen.idt";
+                my $componenttable = installer::files::read_file($componenttablename);
 
-                installer::windows::idtglobal::add_childprojects($customactiontable, $installuitable, $featuretable, $directorytable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename);
+                installer::windows::idtglobal::add_childprojects($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesinproductlanguageresolvedarrayref);
 
                 installer::files::save_file($customactiontablename, $customactiontable);
                 installer::files::save_file($installuitablename, $installuitable);
                 installer::files::save_file($featuretablename, $featuretable);
                 installer::files::save_file($directorytablename, $directorytable);
+                installer::files::save_file($componenttablename, $componenttable);
             }
 
             # Then the language specific msi database can be created
@@ -1603,7 +1602,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.mlf");
                 # my $languagefile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . "SIS.ulf");
 
-                installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile);
+                installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
 
                 # copy msi database into installation directory
 
@@ -1679,6 +1678,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             print "... packaging installation set ... \n";
             installer::windows::msiglobal::execute_packaging($installer::globals::packjobref, $loggingdir);
+            if ( $installer::globals::include_cab_in_msi ) { installer::windows::msiglobal::include_cabs_into_msi($installdir); }
 
             ####################################
             # Writing log file
