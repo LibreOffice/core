@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:11:16 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #pragma hdrstop
 
@@ -177,7 +181,16 @@ void SwOleClient::ViewChanged()
     //Rahmens in der Core sich veraendert.
 
     // TODO/LEAN: getMapUnit can switch object to running state
-    awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
+    awt::Size aSz;
+    try
+    {
+        aSz = GetObject()->getVisualAreaSize( GetAspect() );
+    }
+    catch( embed::NoVisualAreaSizeException& )
+    {
+        // Nothing will be done
+    }
+
     Size aVisSize( aSz.Width, aSz.Height );
 
     // Bug 24833: solange keine vernuenftige Size vom Object kommt,
