@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:57:12 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::form::XFormsSupplier2;
+
 DBG_NAME(SvxFmDrawPage);
 SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     SvxDrawPage( pInPage )
@@ -114,14 +118,16 @@ SvxFmDrawPage::~SvxFmDrawPage() throw ()
     return pId->getImplementationId();
 }
 
-::com::sun::star::uno::Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException)
+Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface(aType,
-        static_cast< ::com::sun::star::form::XFormsSupplier*>(this));
-    if(aRet.hasValue())
-        return aRet;
+    Any aRet = ::cppu::queryInterface   (   _rType
+                                        ,   static_cast< XFormsSupplier2* >( this )
+                                        ,   static_cast< XFormsSupplier* >( this )
+                                        );
+    if ( !aRet.hasValue() )
+        aRet = SvxDrawPage::queryAggregation( _rType );
 
-    return SvxDrawPage::queryAggregation(aType);
+    return aRet;
 }
 
 /***********************************************************************
@@ -159,7 +165,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
         return SvxDrawPage::_CreateShape( pObj );
 }
 
-// ::com::sun::star::form::XFormsSupplier
+// XFormsSupplier
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  xForms;
@@ -171,15 +177,19 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
     return xForms;
 }
 
+// XFormsSupplier2
+sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::RuntimeException )
+{
+    sal_Bool bHas = sal_False;
+    FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetSdrPage() );
+    if ( pFormPage )
+        bHas = pFormPage->GetForms( false ).is();
+    return bHas;
+}
+
 // ::com::sun::star::lang::XServiceInfo
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    /* TODO: DG? Irgendwelche Services?
-    ::com::sun::star::uno::Sequence aSeq( SvxDrawPage::getSupportedServiceNames() );
-    addToSequence( aSeq, 1, ::rtl::OUString::createFromAscii("stardiv.form.superservice?") );
-    return aSeq;
-    */
-
     return SvxDrawPage::getSupportedServiceNames();
 }
 
