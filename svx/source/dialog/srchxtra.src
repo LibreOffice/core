@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:39:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,18 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ slovak ] = "Hľadanie synoným";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
