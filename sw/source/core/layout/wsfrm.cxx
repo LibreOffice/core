@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: od $ $Date: 2002-11-05 15:39:56 $
+ *  last change: $Author: fme $ $Date: 2002-11-06 13:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,11 +590,16 @@ void SwFrm::ChgSize( const Size& aNewSize )
                         Grow( nDiff );
                     else
                         Shrink( -nDiff );
+
+                    ASSERT( (aFrm.*fnRect->fnGetHeight)() == nNew,
+                            "Unexpected frame height" )
+
                 }
-                // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
-                // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
-                // wird die Breite jetzt gesetzt.
-                (aFrm.*fnRect->fnSetHeight)( nNew );
+                else
+                    // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
+                    // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
+                    // wird die Breite jetzt gesetzt.
+                    (aFrm.*fnRect->fnSetHeight)( nNew );
             }
         }
     }
@@ -619,8 +624,6 @@ void SwFrm::ChgSize( const Size& aNewSize )
         _InvalidatePrt();
         _InvalidateSize();
         InvalidatePage( pPage );
-        if ( GetUpper() )
-            GetUpper()->_InvalidateSize();
     }
 }
 
@@ -2874,27 +2877,26 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         pLowerFrm = pLowerFrm->GetNext();
     }
 
-    // finally adjust the columns if width is set to auto
+    // Finally adjust the columns if width is set to auto
+    // Possible optimisation: execute this code earlier in this function and
+    // return???
+    if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
+           Lower()->IsColumnFrm() )
     {
+        // get column attribute
         const SwFmtCol* pColAttr = NULL;
-
-        if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
-               Lower()->IsColumnFrm() )
+        if ( IsPageBodyFrm() )
         {
-            // get column attribute
-            if ( IsPageBodyFrm() )
-            {
-                ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
-                pColAttr = &GetUpper()->GetFmt()->GetCol();
-            }
-            else
-            {
-                ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
-                pColAttr = &GetFmt()->GetCol();
-            }
+            ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
+            pColAttr = &GetUpper()->GetFmt()->GetCol();
+        }
+        else
+        {
+            ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
+            pColAttr = &GetFmt()->GetCol();
         }
 
-        if ( pColAttr && pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
+        if ( pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
             AdjustColumns( pColAttr, sal_False, sal_True );
     }
 }
