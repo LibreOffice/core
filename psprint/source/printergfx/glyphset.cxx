@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
+ *  last change: $Author: cp $ $Date: 2002-07-22 13:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,19 @@ GlyphSet::GetSymbolMapping (sal_Unicode nUnicodeChar)
     return 0;
 }
 
+void
+GlyphSet::AddNotdef (char_map_t &rCharMap)
+{
+    if (rCharMap.size() == 0)
+        rCharMap[0] = 0;
+}
+
+void
+GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
+{
+    if (rGlyphMap.size() == 0)
+        rGlyphMap[0] = 0;
+}
 sal_Bool
 GlyphSet::AddCharID (
                      sal_Unicode nChar,
@@ -304,6 +317,8 @@ GlyphSet::AddCharID (
     {
         // always put iso1252 chars into the first map, map them on itself
         char_map_t& aGlyphSet = maCharList.front();
+        AddNotdef (aGlyphSet);
+
         aGlyphSet [nChar] = nMappedChar;
         *nOutGlyphSetID   = 1;
         *nOutGlyphID      = nMappedChar;
@@ -312,6 +327,7 @@ GlyphSet::AddCharID (
     {
         // other chars are just appended to the list
         char_map_t& aGlyphSet = maCharList.back();
+        AddNotdef (aGlyphSet);
 
         int nSize         = aGlyphSet.size();
 
@@ -360,6 +376,8 @@ GlyphSet::AddGlyphID (
     {
         // always put iso1252 chars into the first map, map them on itself
         glyph_map_t& aGlyphSet = maGlyphList.front();
+        AddNotdef (aGlyphSet);
+
         aGlyphSet [nGlyph] = nMappedChar;
         *nOutGlyphSetID    = 1;
         *nOutGlyphID       = nMappedChar;
@@ -368,6 +386,7 @@ GlyphSet::AddGlyphID (
     {
         // other chars are just appended to the list
         glyph_map_t& aGlyphSet = maGlyphList.back();
+        AddNotdef (aGlyphSet);
 
         int nSize         = aGlyphSet.size();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
+ *  last change: $Author: cp $ $Date: 2002-07-22 13:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ private:
     sal_Bool        AddGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
                                 sal_uChar* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
+    void            AddNotdef (char_map_t &rCharMap);
+    void            AddNotdef (glyph_map_t &rGlyphMap);
     sal_uChar       GetAnsiMapping (sal_Unicode nUnicodeChar);
     sal_uChar       GetSymbolMapping (sal_Unicode nUnicodeChar);
 
