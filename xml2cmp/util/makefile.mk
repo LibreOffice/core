@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: np $ $Date: 2001-03-12 19:24:52 $
+#   last change: $Author: np $ $Date: 2001-03-23 13:49:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,6 @@ TARGETTYPE=CUI
 
 # --- Files --------------------------------------------------------
 
-LIB1FILES= 	\
-        $(LB)$/x2c_xcd.lib		\
-        $(LB)$/x2c_support.lib
-
 
 # --- Targets ------------------------------------------------------
 
@@ -87,12 +83,10 @@ APP1STACK=	1000000
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS= MSVCIRT.LIB
 .ENDIF
-# APP1STDLIBS= $(STATIC_LIBS) libci.lib
 
 
 APP1LIBS=	$(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
-
 
 
 .INCLUDE :  target.mk
