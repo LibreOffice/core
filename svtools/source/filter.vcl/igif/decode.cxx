@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:28:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@ struct GIFLZWTableEntry
 // ------------------------------------------------------------------------
 
 GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
-            nDataSize           ( cDataSize ),
-            bEOIFound           ( FALSE ),
-            nOutBufDataLen      ( 0 ),
             nInputBitsBuf       ( 0 ),
-            nInputBitsBufSize   ( 0 )
+            nOutBufDataLen      ( 0 ),
+            nInputBitsBufSize   ( 0 ),
+            bEOIFound           ( FALSE ),
+            nDataSize           ( cDataSize )
 {
     pTable = new GIFLZWTableEntry[ 4096 ];
     pOutBuf = new BYTE[ 4096 ];

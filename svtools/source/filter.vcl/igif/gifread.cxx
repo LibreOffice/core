@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gifread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:29:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,18 +76,18 @@
 // -------------
 
 GIFReader::GIFReader( SvStream& rStm, void* pCallData ) :
-            rIStm           ( rStm ),
             aGPalette       ( 256 ),
             aLPalette       ( 256 ),
+            rIStm           ( rStm ),
             pAcc8           ( NULL ),
             pAcc1           ( NULL ),
             nLastPos        ( rStm.Tell() ),
-            eActAction      ( GLOBAL_HEADER_READING ),
-            bImGraphicReady ( FALSE ),
-            nLoops          ( 1 ),
-            bGCTransparent  ( FALSE ),
             nLogWidth100    ( 0UL ),
-            nLogHeight100   ( 0UL )
+            nLogHeight100   ( 0UL ),
+            nLoops          ( 1 ),
+            eActAction      ( GLOBAL_HEADER_READING ),
+            bGCTransparent  ( FALSE ),
+            bImGraphicReady ( FALSE )
 {
     maUpperName = UniString::CreateFromAscii( "SVIGIF", 6 );
     pSrcBuf = new BYTE[ 256 ];
@@ -496,8 +496,8 @@ void GIFReader::FillImages( HPBYTE pBytes, ULONG nCount )
                     {
                         HPBYTE  pScanline8 = pAcc8->GetScanline( nYAcc );
                         ULONG   nSize8 = pAcc8->GetScanlineSize();
-                        HPBYTE  pScanline1;
-                        ULONG   nSize1;
+                        HPBYTE  pScanline1 = 0;
+                        ULONG   nSize1 = 0;
 
                         if( bGCTransparent )
                         {
