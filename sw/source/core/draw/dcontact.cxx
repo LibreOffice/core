@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:30:43 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,13 +293,18 @@ FASTBOOL IsMarqueeTextObj( const SdrObject& rObj )
 
 SwContact::SwContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
     SwClient( pToRegisterIn ),
-    pMasterObj( pObj )
+    pMasterObj( pObj ),
+    // OD 05.09.2003 #112039# - init member <mbInDTOR>
+    mbInDTOR( false )
 {
     pObj->SetUserCall( this );
 }
 
 SwContact::~SwContact()
 {
+    // OD 05.09.2003 #112039# - set <mbInDTOR>
+    SetInDTOR();
+
     if ( pMasterObj )
     {
         pMasterObj->SetUserCall( 0 );   //Soll mir nicht in den Ruecken fallen.
@@ -307,6 +312,18 @@ SwContact::~SwContact()
             pMasterObj->GetPage()->RemoveObject( pMasterObj->GetOrdNum() );
         delete pMasterObj;
     }
+}
+
+// OD 05.09.2003 #112039# - accessor for member <mbInDTOR>
+const bool SwContact::IsInDTOR() const
+{
+    return mbInDTOR;
+}
+
+// OD 05.09.2003 #112039# - accessor to set member <mbInDTOR>
+void SwContact::SetInDTOR()
+{
+    mbInDTOR = true;
 }
 
 // OD 13.05.2003 #108784# - copied inline-implementation of <GetMaster()> and
@@ -428,6 +445,9 @@ SwDrawContact::SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj ) :
 
 SwDrawContact::~SwDrawContact()
 {
+    // OD 05.09.2003 #112039# - set <mbInDTOR>
+    SetInDTOR();
+
     DisconnectFromLayout();
 
     // OD 25.06.2003 #108784# - remove 'master' from drawing page
