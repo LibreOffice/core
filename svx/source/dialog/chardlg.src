@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:58:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3992,6 +3992,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ slovak ] = "~Blikajúce";
         Text[ hungarian ] = "~Villogó";
         Text[ slovenian ] = "~Utripanje";
+    };
+    TriStateBox CB_CHARHIDDEN
+    {
+        Pos = MAP_APPFONT ( 166 , 106 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Text = "Aus~geblendet" ;
+        Text [ english_us ] = "H~idden" ;
     };
     Window WIN_EFFECTS_PREVIEW
     {
