@@ -9521,3 +9521,5 @@ _real@8@3ffeccccccccccccd000
 ?ImportGraphic@GraphicFilter@@QAEGAAVGraphic@@ABVINetURLObject@@GPAGK@Z
 ?ImportGraphic@GraphicFilter@@QAEGAAVGraphic@@ABVString@@AAVSvStream@@GPAGK@Z
 ??0DropTargetDragEvent@dnd@datatransfer@star@sun@com@@QAE@XZ
+??0SvtResId@@QAE@G@Z
+?DisableHelp@PrintDialog@@QAEXXZ
