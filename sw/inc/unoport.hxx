@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:35:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 12:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ protected:
                                     sal_Int32 nLength );
 
     void SwXTextPortion::GetPropertyValue( ::com::sun::star::uno::Any &rVal,
-                const SfxItemPropertyMap *pEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *pSet );
+                const SfxItemPropertyMap *pEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL GetPropertyValuesTolerant_Impl(
         const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
