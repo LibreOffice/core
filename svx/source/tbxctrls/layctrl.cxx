@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:45:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,10 @@ void SvxTableToolBoxControl::StateChanged(
 
 {
     if ( pState && pState->ISA(SfxUInt16Item) )
-        bEnabled = FALSE;
+    {
+        INT16 nValue = static_cast< const SfxUInt16Item* >( pState )->GetValue();
+        bEnabled = ( nValue != 0 );
+    }
     else
         bEnabled = SFX_ITEM_DISABLED != eState;
 
