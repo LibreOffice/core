@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:29:14 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4439,7 +4439,7 @@ String RID_SVXSTR_DASH11
     Text[ greek ] = "Διακεκομμένο";
     Text[ dutch ] = "Fijne streepjes";
     Text[ french ] = "Tirets";
-    Text[ spanish ] = "Dashed";
+    Text[ spanish ] = "Trazos";
     Text[ italian ] = "Dashed";
     Text[ danish ] = "Dashed";
     Text[ swedish ] = "Streckat";
