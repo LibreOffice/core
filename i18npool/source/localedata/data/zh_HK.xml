@@ -136,13 +136,14 @@
 <DefaultName>System</DefaultName>
 </FormatElement>
 
-<FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
-<FormatCode>DD/MM/YYYY</FormatCode>
+<FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="20">
+<FormatCode>YY"年"M"月"D"日"</FormatCode>
 <DefaultName/>
 </FormatElement>
 
-<FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
-<FormatCode>YY"年"M"月"D"日"</FormatCode>
+<!-- Formatindex 21 is the edit date format -->
+<FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="21">
+<FormatCode>DD/MM/YYYY</FormatCode>
 <DefaultName/>
 </FormatElement>
 
@@ -302,18 +303,19 @@
 <DefaultName/>
 </FormatElement>
 
-<FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="47">
+<!-- Formatindex 47 is the edit combined date/time format -->
+<FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="47">
+<FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
+<DefaultName/>
+</FormatElement>
+
+<FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="57">
 <FormatCode>YY"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
 
 <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="56">
 <FormatCode>D/M/YY HH:MM</FormatCode>
-<DefaultName/>
-</FormatElement>
-
-<FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="57">
-<FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
 <DefaultName/>
 </FormatElement>
 
