@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,10 @@ namespace dbaui
         void dropPrimaryKey();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
-        void setTitle(const ::rtl::OUString & _rTitle);
+
         void reload();
 
     protected:
-        virtual String          getMenu() const;
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -146,6 +145,8 @@ namespace dbaui
 
         virtual void reconnect( sal_Bool _bUI );
         virtual void losingConnection( );
+
+        virtual void updateTitle();
 
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
@@ -197,8 +198,6 @@ namespace dbaui
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        // lang::XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         //
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
@@ -207,6 +206,7 @@ namespace dbaui
     protected:
         void startTableListening();
         void stopTableListening();
+        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
     };
 }
 #endif // DBUI_TABLECONTROLLER_HXX
