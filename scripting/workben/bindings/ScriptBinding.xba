@@ -226,7 +226,6 @@ End Sub
 Sub ExecuteMenuBinding()
 
 	xmlFileName = GetDocumentType( &quot;Menu&quot; )
-	&apos;msgbox (&quot;using config file &quot; + xmlFileName)
 	if not (ReadXMLToArray( &quot;Menu&quot; )) then
 		Exit Sub
 	endif
@@ -432,12 +431,9 @@ sub evaluateForMenu( xmlline as string, lineCount as integer )
  	const menuXMLTag = &quot;&lt;menu:menu&quot;
 	&apos;If the xml line is a top-level menu
 	if instr( xmlline, menuXMLTag ) = menuItemWhiteSpace then
-		&apos;msgbox ( &quot;xmlline is &quot; + xmlline )
 		menuLabel = ExtractLabelFromXMLLine( xmlline )
 		menuItems( menuCount ) = menuLabel
-		&apos;msgbox ( &quot;menuItems( &quot; + menuCount + &quot; ) = &quot; + menuItems( menuCount ) )
 		menuItemLinePosition( menuCount ) = lineCount
-		&apos;msgbox ( &quot;menuItemLinePosition( &quot; + menuCount + &quot; ) = &quot; + menuItemLinePosition( menuCount ) )
 		menuCount = menuCount + 1
 	end if
 end sub
@@ -559,49 +555,58 @@ End Sub
 
 Sub WriteXMLFromArray()
 	On Error Goto ErrorHandler
-	originalFile = &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName 
-	backupFile = originalFile + &quot;.tmp&quot;
-
-    simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
-    simplefileaccess.move( originalFile, backupFile ) 
-    outfilestream = simplefileaccess.openFileWrite( originalFile )
-        
-    REM Alternative Debug Lines
-    &apos;simplefileaccess.kill( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName + &quot;.temp&quot; )
-    &apos;outfilestream = simplefileaccess.openFileWrite( &quot;file:///&quot;+ GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName + &quot;.temp&quot; )
-        
-    textout = CreateUnoService( &quot;com.sun.star.io.TextOutputStream&quot; )
-    textout.setOutputStream( outfilestream )
-
-	for n = 1 to numberOfLines
-		&apos;If writing the last line then no new line character added
-		lineToWrite = xmlFile( n )
-		if ( lineToWrite &lt;&gt; &quot;&quot; ) then
-	        if n = numberOfLines then
-    	    	textout.writeString( lineToWrite )
-	        else
-    	    	textout.writeString( lineToWrite + chr$(10) )
-        	end if
-        end if 
-	next n
-		
-    outfilestream.flush()
-    outfilestream.closeOutput()
-
-    if simplefileaccess.exists( backupFile ) then
-    	simplefileaccess.kill( backupFile)
-    endif
-
+	cfgFile =  GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName 
+	updateCfgFile( cfgFile )
+	if ( false ) then&apos; config stuff not in build yet
+		updateConfig( xmlFileName )
+	else
+		msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
+	endif
 	Exit Sub
 	
 	ErrorHandler:
 	reset
 	MsgBox (&quot;Error: Unable to write to Star Office configuration file&quot; + chr$(10) + &quot;/&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; +xmlFileName + chr$(10) + chr$(10) + &quot;Action: Please make sure you have write access to this file&quot;,0,&quot;Error&quot; )
-    if simplefileaccess.exists( backupFile ) then
-    	simplefileaccess.move( backupFile,  originalFile)
-    endif
 end Sub
 
+
+Sub UpdateCfgFile ( fileName as String )
+	dim FuncProvider as Object
+	dim Func as Object
+	dim args(0)
+	args(0) = ThisComponent
+	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
+	FuncProvider.initialize( args() )
+	Func = FuncProvider.getFunction(&quot;script://ScriptFrmwrkHelper.updateCfgFile&quot;)
+	Dim inArgs(2)
+	Dim outArgs()
+	Dim outIndex()
+	dim localNumLines as integer
+
+	inArgs(0) = xmlFile()
+	inArgs(1) = fileName
+	inArgs(2) = numberOfLines
+	Func.invoke( inArgs(), outIndex(), outArgs() )
+
+End Sub
+
+sub UpdateConfig( a$ )
+       dim document   as object
+       dim dispatcher as object
+       dim parser     as object
+       dim disp     as object
+       dim url        as new com.sun.star.util.URL
+       document = ThisComponent.CurrentController.Frame
+       parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+       dim args1(0) as new com.sun.star.beans.PropertyValue
+       args1(0).Name = &quot;StreamName&quot;
+       args1(0).Value = a$
+       url.Complete = &quot;.uno:UpdateConfiguration&quot;
+       parser.parseStrict(url)
+       disp = document.queryDispatch(url,&quot;&quot;,0)
+       disp.dispatch(url,args1())
+
+End Sub
 
 sub AddNewEventBindingDoc( scriptName as string, eventName as string )
 	dim properties( 1 ) as new com.sun.star.beans.PropertyValue
@@ -609,9 +614,7 @@ sub AddNewEventBindingDoc( scriptName as string, eventName as string )
 	properties( 0 ).Value = &quot;Script&quot;
 	properties( 1 ).Name = &quot;URL&quot;
 	properties( 1 ).Value = scriptName
-	
-	&apos;msgbox( &quot;Script name: &quot; + scriptName + &quot; eventName: &quot; + eventName )
-	
+		
 	eventSupplier = ThisComponent
 	&apos;eventSupplier = StarDesktop.ActiveFrame.Controller.Model
 	nameReplace = eventSupplier.getEvents()
@@ -817,25 +820,6 @@ Sub PopulateLocationCombo()
 	locCombo.text = locCombo.getItem( 0 )
 End Sub
 
-
-&apos;sub PopulateScriptList()
-&apos;	scriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
-&apos;	scriptList.removeItems( 0, scriptList.getItemCount() )
-&apos;
-&apos;	smgr = getProcessServiceManager()
-&apos;  	context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
-&apos; 	scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; ) 
-&apos;
-&apos;  	storage = scriptstoragemgr.getScriptStorage( 1 )
-&apos;	logicalNames() = storage.getScriptLogicalNames()
-&apos;
-&apos;	for n = 1 to ubound( logicalNames() ) + 1
-&apos;		scriptList.addItem( logicalNames( n - 1 ), n )
-&apos;	next n
-&apos;	
-&apos;	scriptList.selectItemPos( 0, true )
-&apos;end sub
-
 sub PopulateScriptList( lang as String, loc as String )
     Dim detailedView as boolean
     detailedView = bindingDialog.Model.detail.state
@@ -1028,7 +1012,7 @@ sub populateEventList( focusPosition as integer )
 			eventList.addItem( allEventTypesAsText( n ) + &quot; &quot; + stringToAdd, n )
 		next n
 	else &apos;Document event
-		for n = 0 to ubound( allEventTypes() )
+	    		for n = 0 to ubound( allEventTypes() )
 			displayLine = allEventTypesAsText( n )
 			eventSupplier = ThisComponent
 			scriptProps = eventSupplier.getEvents().getByName( allEventTypes( n ) )
@@ -1269,35 +1253,6 @@ function GetMenuWhiteSpace( MenuXMLLine as string ) as string
 	GetMenuWhiteSpace() = whiteSpace
 end function
 
-
-function IsAllocatedKeyCombo( script as string ) as integer
-	const NotAllocated = 0
-	const AllocatedToOfficeFunction = 1
-	const AllocatedToScript = 2
-	dim Allocation as integer
-	
-	if instr( script, &quot; [Allocated&quot; ) &gt; 0 then
-		endPosition = instr( script, &quot; [Allocated&quot; ) - 1
-		script = mid( script, 1, endPosition )
-	end if
-	
-	Allocation = NotAllocated
-	count = 1
-	while Allocation = NotAllocated and count &lt; scriptCount
-		linePosition = scriptLinePosition( count )
-		if strcomp( script, scriptNames( count ) ) = 0 then
-			if instr( xmlFile( linePosition ), &quot;script://&quot; ) &gt; 0 then
-				Allocation = linePosition
-			else 
-				Allocation = AllocatedToOfficeFunction
-			end if
-		end if
-		count = count + 1
-	wend
-	IsAllocatedKeyCombo() = Allocation
-end Function
-
-
 function IsAllocatedMenuItem( script as string ) as boolean
 	foundMenuItem = false
 	Allocated = false
@@ -1519,7 +1474,6 @@ REM ------ Event Handling Functions (Buttons) ------
 
 
 sub MenuOKButton()
-	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
 	WriteXMLFromArray()
 	bindingDialog.endExecute()
 end sub
@@ -1586,7 +1540,6 @@ end sub
 
 
 sub KeyOKButton()	
-	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Key&quot; )
 	WriteXMLFromArray()
 	bindingDialog.endExecute()
 end sub
@@ -1691,10 +1644,6 @@ sub EventDeleteButton()
 	
 	PopulateEventList( eventPosition )
 	EventListListener()
-&apos;get selected position
-&apos;RemoveBinding( line no )
-&apos;update Property to have Value 0 Name &quot;&quot;
-&apos;Refresh dialog	
 	
 end sub
 
@@ -1703,23 +1652,19 @@ sub HelpOKButton()
 end sub
 
 sub DeleteEvent( event as String )
-dim document   as object
-dim dispatcher as object
-dim parser     as object
-dim url        as new com.sun.star.util.URL
-document = ThisComponent.CurrentController.Frame
-parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
-dim args(0) as new com.sun.star.beans.PropertyValue
-args(0).Name = &quot;&quot;
-args(0).Value = event
-url.Complete = &quot;script://EventHelper.removeEvent&quot;
-parser.parseStrict(url)
-disp = document.queryDispatch(url,&quot;&quot;,0)
-disp.dispatch(url,args())
-
+	dim document   as object
+	dim dispatcher as object
+	dim parser     as object
+	dim url        as new com.sun.star.util.URL
+	document = ThisComponent.CurrentController.Frame
+	parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+	dim args(0) as new com.sun.star.beans.PropertyValue
+	args(0).Name = &quot;&quot;
+	args(0).Value = event
+	url.Complete = &quot;script://ScriptFrmwrkHelper.removeEvent&quot;
+	parser.parseStrict(url)
+	disp = document.queryDispatch(url,&quot;&quot;,0)
+	disp.dispatch(url,args())
 end sub 
 
-Sub TestRemoveEventBinding
-DeleteEvent(&quot;OnFocus&quot;)
-End Sub
 </script:module>
