@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+#   last change: $Author: sj $ $Date: 2000-10-19 09:47:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -213,6 +213,7 @@ EXCEPTIONSFILES= \
          $(SLO)$/svdogrp.obj         \
          $(SLO)$/svdotxln.obj        \
          $(SLO)$/svdouno.obj         \
+         $(SLO)$/svdfppt.obj         \
          $(SLO)$/svdpagv.obj
 
 SRS1NAME=svdstr
