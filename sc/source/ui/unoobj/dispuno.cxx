@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 09:27:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& 
                     ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
                                                     sdb::CommandType::TABLE );
 
-        aDescriptor[svx::daDataSource]  <<= rtl::OUString( rParam.aDBName );
+        aDescriptor.setDataSource(rtl::OUString( rParam.aDBName ));
         aDescriptor[svx::daCommand]     <<= rtl::OUString( rParam.aStatement );
         aDescriptor[svx::daCommandType] <<= nType;
     }
