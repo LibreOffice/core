@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:48:15 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 10:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2623,7 +2623,8 @@ void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent
     Sequence<sal_uInt16> aSlots = getSupportedGridSlots();
     const sal_uInt16* pSlots = aSlots.getConstArray();
 
-    for (sal_uInt16 i=0; i<aUrls.getLength(); ++i, ++pUrls, ++pSlots)
+    sal_uInt16 i;
+    for (i=0; i<aUrls.getLength(); ++i, ++pUrls, ++pSlots)
     {
         if (pUrls->Main == Event.FeatureURL.Main)
         {

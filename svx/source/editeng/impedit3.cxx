@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:47:47 $
+ *  last change: $Author: hr $ $Date: 2004-03-12 10:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2307,7 +2307,8 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     // nicht uebereinstimmen, da evtl. Zeilenumbrueche...
     sal_uInt16 nPortionStart = 0;
     sal_uInt16 nInvPortion = 0;
-    for ( sal_uInt16 nP = 0; nP < pParaPortion->GetTextPortions().Count(); nP++ )
+    sal_uInt16 nP;
+    for ( nP = 0; nP < pParaPortion->GetTextPortions().Count(); nP++ )
     {
         TextPortion* pTmpPortion = pParaPortion->GetTextPortions().GetObject(nP);
         nPortionStart += pTmpPortion->GetLen();
