@@ -1,2 +1,3 @@
-wp	libwpd	: sfx2 NULL
-wp	libwpd	nmake	-	all	libpwd_mkout NULL
+lw	libwpd	: sfx2 NULL
+lw	libwpd	usr1	-	all	lw_mkout NULL
+lw	libwpd	nmake	-	all	lw_mkout NULL
