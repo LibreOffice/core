@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationsetnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:03:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@ namespace presentation
                 // since BaseNode::deactivate() is virtual, we actually call
                 // AnimationBaseNode::deactivate() with this functor)
                 getContext().mrEventQueue.addEvent(
-                    makeEvent( ::boost::bind(&BaseNode::deactivate,
-                                             ::boost::cref( getSelf() ) ) ) );
+                    makeEvent( boost::bind( &BaseNode::deactivate,
+                                            getSelf() ) ) );
             }
         }
 
