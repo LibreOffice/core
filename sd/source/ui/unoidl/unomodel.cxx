@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 12:11:36 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 09:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1368,7 +1368,8 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::
 }
 
 // XRenderable
-sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount(  )
+sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelection,
+                                                         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (::com::sun::star::uno::RuntimeException)
 {
     OGuard      aGuard( Application::GetSolarMutex() );
@@ -1379,13 +1380,30 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount(  )
 
     uno::Sequence< beans::PropertyValue > aRenderer;
 
-    if( pDocShell )
-        nRet = pDoc->GetSdPageCount( PK_STANDARD );
+    if( pDocShell && pDoc )
+    {
+        uno::Reference< frame::XModel > xModel;
+
+        rSelection >>= xModel;
+
+        if( xModel == pDocShell->GetModel() )
+            nRet = pDoc->GetSdPageCount( PK_STANDARD );
+        else
+        {
+            uno::Reference< drawing::XShapes > xShapes;
+
+            rSelection >>= xShapes;
+
+            if( xShapes.is() && xShapes->getCount() )
+                nRet = 1;
+        }
+    }
 
     return nRet;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 nRenderer )
+uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 nRenderer, const uno::Any& rSelection,
+                                                                                const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1395,24 +1413,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
 
     uno::Sequence< beans::PropertyValue > aRenderer;
 
-    if( pDocShell )
+    if( pDocShell && pDoc )
     {
         const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
         awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
 
-        aRenderer.realloc( 2 );
+        aRenderer.realloc( 1 );
 
         aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[ 0 ].Value <<= aPageSize;
-
-        aRenderer[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) );
-        aRenderer[ 1 ].Value <<= static_cast< sal_Bool >( nRenderer == 1 || nRenderer == 3 );
     }
 
     return aRenderer;
 }
 
-void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Sequence< beans::PropertyValue >& rxOptions )
+void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& rSelection,
+                                          const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1439,7 +1455,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Sequen
             if( pOut )
             {
                 SdClientView*   pView = new SdClientView( pDocShell, pOut, NULL );
-                SdPage*         pSelectedPage = pDoc->GetSdPage( nPageNumber - 1, PK_STANDARD );
                 Rectangle       aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
                 Region          aRegion( aVisArea );
                 Point           aOrigin;
@@ -1450,10 +1465,54 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Sequen
                 pView->SetPageVisible( sal_False );
                 pView->SetGlueVisible( sal_False );
 
-                pView->ShowPage( pSelectedPage, aOrigin );
                 pOut->SetMapMode( MAP_100TH_MM );
                 pOut->IntersectClipRegion( aVisArea );
-                pView->InitRedraw( pOut, aRegion );
+
+                uno::Reference< frame::XModel > xModel;
+                rSelection >>= xModel;
+
+                if( xModel == pDocShell->GetModel() )
+                {
+                    pView->ShowPage( pDoc->GetSdPage( nPageNumber - 1, PK_STANDARD ), aOrigin );
+                    pView->InitRedraw( pOut, aRegion );
+                }
+                else
+                {
+                    uno::Reference< drawing::XShapes > xShapes;
+                    rSelection >>= xShapes;
+
+                    if( xShapes.is() && xShapes->getCount() )
+                    {
+                       SdrPageView* pPV = NULL;
+
+                        for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
+                        {
+                            uno::Reference< drawing::XShape > xShape;
+                            xShapes->getByIndex( i ) >>= xShape;
+
+                            if( xShape.is() )
+                            {
+                                SvxShape* pShape = SvxShape::getImplementation( xShape );
+
+                                if( pShape )
+                                {
+                                    SdrObject* pObj = pShape->GetSdrObject();
+
+                                    if( pObj && pObj->GetPage() )
+                                    {
+                                        if( !pPV )
+                                            pPV = pView->ShowPage( pObj->GetPage(), aOrigin );
+
+                                        if( pPV )
+                                            pView->MarkObj( pObj, pPV );
+                                    }
+                                }
+                            }
+                        }
+
+                        pView->DrawAllMarked( *pOut, aOrigin );
+                    }
+                }
 
                 delete pView;
             }
