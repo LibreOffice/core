@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:58:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,13 @@ BOOL Graphic::IsLink() const
 ULONG Graphic::GetChecksum() const
 {
     return mpImpGraphic->ImplGetChecksum();
+}
+
+// ------------------------------------------------------------------------
+
+BOOL Graphic::ExportNative( SvStream& rOStream ) const
+{
+    return mpImpGraphic->ImplExportNative( rOStream );
 }
 
 // ------------------------------------------------------------------------
