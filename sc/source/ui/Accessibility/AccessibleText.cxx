@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:37:28 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ Rectangle ScViewForwarder::GetVisArea() const
         if (pWindow)
             aVisArea.SetSize(pWindow->GetSizePixel());
         if(mpViewShell->GetViewData())
-            aVisArea.SetPos(Point(mpViewShell->GetViewData()->GetPixPos(meSplitPos)));
+            aVisArea.SetPos(mpViewShell->GetViewData()->GetPixPos(meSplitPos));
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
