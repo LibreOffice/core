@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:20:06 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,16 +769,16 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ finnish ] =
         {
-            < "Automaattinen" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Kaikki tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "K‰ytetyt tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Mukautetut tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Tekstityylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Luvun tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Luettelotyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Hakemistotyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Erikoistyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "HTML-tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Automaattinen" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Kaikki tyylit" ; SFXSTYLEBIT_ALL ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Tekstityylit" ; SWSTYLEBIT_TEXT ; > ;
+            < "Luvun tyylit" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Luettelotyylit" ; SWSTYLEBIT_LIST ; > ;
+            < "Hakemistotyylit" ; SWSTYLEBIT_IDX ; > ;
+            < "Erikoistyylit" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-tyylit" ; SWSTYLEBIT_HTML ; > ;
             < "Ehdolliset tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
     };
@@ -968,8 +968,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ finnish ] =
         {
-            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1159,8 +1159,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ finnish ] =
         {
-            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1350,8 +1350,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ finnish ] =
         {
-            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1540,8 +1540,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ finnish ] = "Numerointityylit";
             FilterList [ finnish ] =
         {
-            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Kaikki" ; SFXSTYLEBIT_ALL ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
             < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
@@ -1603,7 +1603,7 @@ String STR_LAB_TITLE
     Text[ chinese_simplified ] = "±Í«©";
     Text[ russian ] = "Õ‡ÍÎÂÈÍË";
     Text[ polish ] = "Etykiety";
-    Text[ japanese ] = "◊ÕﬁŸ";
+    Text[ japanese ] = "◊ÕﬁŸèëÇ´";
     Text[ chinese_traditional ] = "∂Kº–";
     Text[ arabic ] = "»ÿ«ﬁ«  ⁄‰Ê‰…";
     Text[ dutch ] = "Etiketten";
@@ -1726,11 +1726,11 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ±æ";
     Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 5.0";
-    Text[ korean ] = "≈ÿΩ∫∆Æ (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ≈ÿΩ∫∆Æ";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Texto";
-    Text[ finnish ] = "%PRODUCTNAME 5.0 Text";
+    Text[ finnish ] = "Teksti (%PRODUCTNAME 5,0)";
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
@@ -1750,7 +1750,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èëƒﬁ∑≠“›ƒ";
     Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ◊÷";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ±æŒƒµµ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r§Â•Û";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
