@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-12-11 11:32:12 $
+ *  last change:$Date: 2004-03-19 14:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,37 @@ public class APIDescGetter extends DescGetter {
                 return null;
             }
 
-            DescEntry entry = getDescriptionForSingleJob(job, descPath, debug);
+            // special in case several Interfaces are given comma separated
+            if (job.indexOf(",") < 0) {
+                DescEntry entry = getDescriptionForSingleJob(job, descPath,
+                                                             debug);
 
-            if (entry != null) {
-                return new DescEntry[] { entry };
+                if (entry != null) {
+                    return new DescEntry[] { entry };
+                } else {
+                    return null;
+                }
             } else {
-                return null;
+                ArrayList subs = getSubInterfaces(job);
+                String partjob = job.substring(0, job.indexOf(",")).trim();
+                DescEntry entry = getDescriptionForSingleJob(partjob, descPath,
+                                                             debug);
+
+                if (entry != null) {
+                    for (int i = 0; i < entry.SubEntryCount; i++) {
+                        String subEntry = entry.SubEntries[i].longName;
+                        int cpLength = entry.longName.length();
+                        subEntry = subEntry.substring(cpLength+2,subEntry.length());
+
+                        if (subs.contains(subEntry)) {
+                            entry.SubEntries[i].isToTest = true;
+                        }
+                    }
+
+                    return new DescEntry[] { entry };
+                } else {
+                    return null;
+                }
             }
         }
 
@@ -385,11 +410,9 @@ public class APIDescGetter extends DescGetter {
 
         java.net.URL url = this.getClass().getResource("/objdsc/" + module);
 
-        if ((url == null) && debug) {
-            System.out.println("Classpath doesn't contain descriptions for" +
-                               " module '" + module + "'.");
-
-            return null;
+        if (url == null) {
+            return setErrorDescription(theEntry,
+                                       "Couldn't find module " + module);
         }
 
         try {
@@ -411,6 +434,8 @@ public class APIDescGetter extends DescGetter {
                                                                      entry);
                         csvFile = new BufferedReader(
                                           new InputStreamReader(input));
+
+                        break;
                     }
                 }
             } else {
@@ -442,6 +467,12 @@ public class APIDescGetter extends DescGetter {
             }
         } catch (java.io.IOException e) {
             e.printStackTrace();
+        }
+
+        if (csvFile == null) {
+            return setErrorDescription(theEntry,
+                                       "Couldn't find component " +
+                                       theEntry.entryName);
         }
 
         DescEntry[] subEntries = getSubEntries(csvFile, theEntry, debug);
@@ -524,5 +555,20 @@ public class APIDescGetter extends DescGetter {
         aEntry.SubEntries = subEntries;
 
         return aEntry;
+    }
+
+    protected ArrayList getSubInterfaces(String job) {
+        ArrayList namesList = new ArrayList();
+        StringTokenizer st = new StringTokenizer(job, ",");
+
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            String token = st.nextToken();
+
+            if (token.indexOf(".") < 0) {
+                namesList.add(token);
+            }
+        }
+
+        return namesList;
     }
 }
