@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:33 $
+ *  last change: $Author: kz $ $Date: 2004-07-19 12:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -166,6 +169,9 @@ public:
           maPreview(rPreview),
           maToken(aToken)
     {}
+    ~MasterPageDescriptor (void)
+    {
+    }
 
     String msURL;
     String msPageName;
@@ -229,6 +235,10 @@ class AllComparator { public:
 namespace sd { namespace toolpanel { namespace controls {
 
 
+/** Inner implementation class of the MasterPageContainer.  For
+    documentation of undocumented methods and members please look in
+    MasterPageContainer at method or member with the same name.
+*/
 class MasterPageContainer::Implementation
 {
 public:
@@ -579,27 +589,28 @@ MasterPageContainer::Implementation::Implementation (void)
     try
     {
         // Use the API to create a new document.
-        ::rtl::OUString sServiceName (
+
+        // Get the desktop a s service factory.
+        ::rtl::OUString sDesktopServiceName (
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"));
         uno::Reference<frame::XComponentLoader> xDesktop (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                sServiceName),
+                sDesktopServiceName),
             uno::UNO_QUERY);
-        if (xDesktop.is())
-        {
-            INetURLObject aTemplURL (
-                ::rtl::OUString::createFromAscii("private:factory/simpress"));
-            uno::Sequence<beans::PropertyValue> aArguments (1);
-            aArguments[0].Name = ::rtl::OUString::createFromAscii("Hidden");
-            aArguments[0].Value <<= sal_True;
-            mxModel = uno::Reference<frame::XModel>(
-                xDesktop->loadComponentFromURL(
-                    aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
-                    ::rtl::OUString::createFromAscii("_blank"),
-                    0,
-                    aArguments),
-                uno::UNO_QUERY);
-        }
+
+        // Create a new model.
+        ::rtl::OUString sModelServiceName (
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.presentation.PresentationDocument"));
+        mxModel = uno::Reference<frame::XModel>(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                sModelServiceName),
+            uno::UNO_QUERY);
+
+        // Initialize it.
+        uno::Reference<frame::XLoadable> xLoadable (mxModel,uno::UNO_QUERY);
+        if (xLoadable.is())
+            xLoadable->initNew();
 
         // Use its tunnel to get a pointer to its core implementation.
         uno::Reference<lang::XUnoTunnel> xUnoTunnel (mxModel, uno::UNO_QUERY);
@@ -644,6 +655,19 @@ MasterPageContainer::Implementation::~Implementation (void)
     maDelayedPreviewCreationTimer.Stop();
     while ( ! maRequestQueue.empty())
         maRequestQueue.pop();
+
+   uno::Reference<util::XCloseable> xCloseable (mxModel, uno::UNO_QUERY);
+    if (xCloseable.is())
+    {
+        try
+        {
+            xCloseable->close(true);
+        }
+        catch (::com::sun::star::util::CloseVetoException aException)
+        {
+        }
+    }
+    mxModel = NULL;
 }
 
 
@@ -746,33 +770,35 @@ SdPage* MasterPageContainer::Implementation::GetPageObjectForToken (
 {
     SdPage* pPageObject = NULL;
     if (aToken>=0 && (unsigned)aToken<maContainer.size())
+    {
         pPageObject = maContainer[aToken].mpMasterPage;
 
-    if (pPageObject == NULL && bLoad)
-    {
-        SfxObjectShellLock xDocumentShell (NULL);
-        ::sd::DrawDocShell* pDocumentShell = NULL;
-        try
+        if (pPageObject == NULL && bLoad)
         {
-            pDocumentShell = LoadDocument (
-                maContainer[aToken].msURL,
-                xDocumentShell);
-            if (pDocumentShell != NULL)
+            SfxObjectShellLock xDocumentShell (NULL);
+            ::sd::DrawDocShell* pDocumentShell = NULL;
+            try
             {
-                SdDrawDocument* pDocument = pDocumentShell->GetDoc();
-                SdPage* pPage = pDocument->GetMasterSdPage (0, PK_STANDARD);
-                pPageObject = CopyMasterPageToLocalDocument (pPage);
-                maContainer[aToken].mpMasterPage = pPageObject;
-                maContainer[aToken].mpSlide
-                    = GetSlideForMasterPage(pPageObject);
-                maContainer[aToken].msPageName = pPageObject->GetName();
-                //AF delete pDocumentShell;
+                pDocumentShell = LoadDocument (
+                    maContainer[aToken].msURL,
+                    xDocumentShell);
+                if (pDocumentShell != NULL)
+                {
+                    SdDrawDocument* pDocument = pDocumentShell->GetDoc();
+                    SdPage* pPage = pDocument->GetMasterSdPage(0, PK_STANDARD);
+                    pPageObject = CopyMasterPageToLocalDocument (pPage);
+                    maContainer[aToken].mpMasterPage = pPageObject;
+                    maContainer[aToken].mpSlide
+                        = GetSlideForMasterPage(pPageObject);
+                    maContainer[aToken].msPageName = pPageObject->GetName();
+                    //AF delete pDocumentShell;
+                }
             }
-        }
-        catch (...)
-        {
-            pPageObject = NULL;
-            OSL_TRACE ("caught general exception");
+            catch (...)
+            {
+                pPageObject = NULL;
+                OSL_TRACE ("caught general exception");
+            }
         }
     }
     return pPageObject;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:52:47 $
+ *  last change: $Author: kz $ $Date: 2004-07-19 12:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "ViewShellBase.hxx"
 
+#include "../toolpanel/controls/MasterPageContainer.hxx"
 #include "ShellFactory.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
@@ -260,6 +261,9 @@ ViewShellBase::ViewShellBase (
     // Setting the window later will create that shell.
     mpPaneManager->RequestMainViewShellChange (
         eDefaultSubShell);
+
+    if (GetFrame()->IsVisible())
+        toolpanel::controls::MasterPageContainer::Register();
 }
 
 
@@ -270,6 +274,9 @@ ViewShellBase::ViewShellBase (
 */
 ViewShellBase::~ViewShellBase (void)
 {
+    if (GetFrame()->IsVisible())
+        toolpanel::controls::MasterPageContainer::Unregister();
+
     // We have to hide the main window to prevent SFX complaining after a
     // reload about it being already visible.
     ViewShell* pShell = GetMainViewShell();
@@ -390,15 +397,18 @@ void ViewShellBase::UpdateController (void)
         Reference <frame::XFrame> xFrame (
             GetFrame()->GetFrame()->GetFrameInterface());
         SfxObjectShell* pObjectShellold = GetObjectShell();
-        xFrame->setComponent (xWindow, xController);
-        xController->attachFrame (xFrame);
-        SfxObjectShell* pObjectShell = GetObjectShell();
-        Reference <frame::XModel> xModel (pObjectShell->GetModel());
-        if (xModel.is())
+        if (xFrame.is() && xController.is())
         {
-            xController->attachModel (xModel);
-            xModel->connectController (xController);
-            xModel->setCurrentController (xController);
+            xFrame->setComponent (xWindow, xController);
+            xController->attachFrame (xFrame);
+            SfxObjectShell* pObjectShell = GetObjectShell();
+            Reference <frame::XModel> xModel (pObjectShell->GetModel());
+            if (xModel.is())
+            {
+                xController->attachModel (xModel);
+                xModel->connectController (xController);
+                xModel->setCurrentController (xController);
+            }
         }
     }
 }
