@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:23:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ inline BOOL IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
-BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
@@ -147,11 +147,7 @@ BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *************************************************************************/
 
 // Zuerst nach Ende danach nach Ptr
-#ifdef HP9000
-BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
-#else
-inline BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
-#endif
+static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     xub_StrLen nHt1 = *rHt1.GetAnyEnd();
     xub_StrLen nHt2 = *rHt2.GetAnyEnd();
@@ -388,23 +384,11 @@ BOOL SwpHintsArr::Resort()
             DumpHints( *this, aHtEnd );
 #endif
 #endif
-            // Aufpassen: nicht die unsere SwpHintsArr-Methoden rufen,
-            // weil dort ein Resort steht!
-            // AMA: Bisher ( -> USED ) wurde ein Arrayinhalt [3,4,4,3] nur in
-            //      [3,4,3,4] sortiert, nicht in [3,3,4,4]
-#ifdef USED
-            SwpHtStart::Delete( i - 1 );
-            SwpHtStart::Insert( pLast );
-            USHORT nPos;
-            if( SwpHtStart::Seek_Entry( pLast, &nPos ) && nPos > i )
-                --i;
-#else
             SwpHtStart::Remove( i );
             SwpHtStart::Insert( pHt );
             pHt = (*this)[i];
             if ( pHt != pLast )
                 --i;
-#endif //!USED
             bResort = TRUE;
         }
         pLast = pHt;
@@ -418,19 +402,10 @@ BOOL SwpHintsArr::Resort()
         {
 #ifdef NIE
 #ifndef PRODUCT
-//            ASSERT( bResort, "!Resort/Ends: correcting hints-array" );
             aDbstream << "Resort: Ends" << endl;
             DumpHints( *this, aHtEnd );
 #endif
 #endif
-// AMA: siehe oben
-#ifdef USED
-            aHtEnd.Delete( i - 1 );
-            aHtEnd.Insert( pLast );
-            USHORT nPos;
-            if( aHtEnd.Seek_Entry( pLast, &nPos ) && nPos > i )
-                --i;
-#else
             aHtEnd.Remove( i );
             aHtEnd.Insert( pHt );
             pHt = aHtEnd[i]; // normalerweise == pLast
@@ -438,7 +413,6 @@ BOOL SwpHintsArr::Resort()
             // muessen wir Position i erneut vergleichen.
             if ( pLast != pHt )
                 --i;
-#endif //!USED
             bResort = TRUE;
         }
         pLast = pHt;
