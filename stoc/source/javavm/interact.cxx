@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:08:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ InteractionRequest::InteractionRequest(css::uno::Any const & rRequest):
     m_aRequest(rRequest)
 {
     bool bRetry;
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD
     // Only if Java is disabled we allow retry:
     bRetry = m_aRequest.isExtractableTo(
         getCppuType(static_cast< css::java::JavaDisabledException * >(0)));
