@@ -701,7 +701,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
     // Reading Locale
 
-    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.UserProfile" );
+    seq[0] <<= rtl::OUString::createFromAscii( "org.openoffice.Setup" );
 
     try
     {
@@ -722,7 +722,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     try
     {
         aAny2 =
-            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("International/Locale") );
+            xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii("L10N/ooLocale") );
     }
     catch( const com::sun::star::container::NoSuchElementException& )
     {
