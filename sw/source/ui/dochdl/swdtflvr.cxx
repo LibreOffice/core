@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-12 17:37:33 $
+ *  last change: $Author: jp $ $Date: 2001-07-13 12:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,17 +1665,29 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if( nId && rData.GetSotStorageStream( nId, xStrm ) && xStrm.Is() )
     {
+        USHORT nFileVersion;
         xStore = new SvStorage( *xStrm );
         switch( xStore->GetFormat() )
         {
         case SOT_FORMATSTR_ID_STARWRITER_50:
-        case SOT_FORMATSTR_ID_STARWRITER_40:
-        case SOT_FORMATSTR_ID_STARWRITER_30:
         case SOT_FORMATSTR_ID_STARWRITERWEB_50:
-        case SOT_FORMATSTR_ID_STARWRITERWEB_40:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
+            nFileVersion = SOFFICE_FILEFORMAT_50;
+            goto PASTEOLE_SETREADSW3;
+
+        case SOT_FORMATSTR_ID_STARWRITER_40:
+        case SOT_FORMATSTR_ID_STARWRITERWEB_40:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
+            nFileVersion = SOFFICE_FILEFORMAT_40;
+            goto PASTEOLE_SETREADSW3;
+
+        case SOT_FORMATSTR_ID_STARWRITER_30:
+            nFileVersion = SOFFICE_FILEFORMAT_31;
+            goto PASTEOLE_SETREADSW3;
+
+PASTEOLE_SETREADSW3:
             pRead = ReadSw3;
+            xStore->SetVersion( nFileVersion );
             break;
 
         case SOT_FORMATSTR_ID_STARWRITER_60:
