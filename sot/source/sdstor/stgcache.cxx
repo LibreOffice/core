@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:38:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,7 @@
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/presys.h>
 #endif
-#if STLPORT_VERSION<321
-#include <hash_map.h>
-#else
 #include <hash_map>
-#endif
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/postsys.h>
 #endif
@@ -91,12 +87,11 @@
 
 /*************************************************************************/
 //-----------------------------------------------------------------------------
-typedef NAMESPACE_STD(hash_map)
-//typedef hash_map
+typedef std::hash_map
 <
     INT32,
     StgPage *,
-    NAMESPACE_STD(hash)< INT32 >,
+    std::hash< INT32 >,
     NAMESPACE_STD(equal_to)< INT32 >
 > UsrStgPagePtr_Impl;
 #ifdef WNT
