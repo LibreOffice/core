@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinetab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-18 13:59:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,17 +706,16 @@ BOOL ScOutlineArray::ManualAction( USHORT nStartPos, USHORT nEndPos, BOOL bShow,
         {
             if ( pEntry->IsHidden() == bShow )
             {
-                USHORT i;
-                BOOL bToggle = TRUE;
+                //  #i12341# hide if all columns/rows are hidden, show if at least one
+                //  is visible
 
-                for (i=nEntryStart; i<=nEntryEnd && bToggle; i++)
-                {
-                    BOOL bEntryHidden = (pHiddenFlags[i] & CR_HIDDEN) != 0;
-                    if ( bEntryHidden == bShow )
-                        bToggle = FALSE;
-                }
+                BOOL bAllHidden = TRUE;
+                for ( USHORT i=nEntryStart; i<=nEntryEnd && bAllHidden; i++ )
+                    if ( ( pHiddenFlags[i] & CR_HIDDEN ) == 0 )
+                        bAllHidden = FALSE;
 
-                if (bToggle)
+                BOOL bToggle = ( bShow != bAllHidden );
+                if ( bToggle )
                 {
                     pEntry->SetHidden( !bShow );
                     SetVisibleBelow( aIter.LastLevel(), aIter.LastEntry(), bShow, bShow );
