@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 22:17:38 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 15:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3063,8 +3063,18 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
         return;
 
     const PropertyValue *pValue = aConfProps.getConstArray();
-    for (sal_Int32 i = 0, nLength = aConfProps.getLength(); i < nLength; i ++)
-        pModel->setPropertyValue(pValue[i].Name, pValue[i].Value );
+    sal_Int32 nLength = aConfProps.getLength();
+    Sequence < OUString > aNames ( nLength );
+    Sequence < Any > aValues ( nLength );
+    OUString *pString = aNames.getArray();
+    Any *pAny = aValues.getArray();
+
+    for (sal_Int32 i = 0 ; i < nLength; i++, pString++, pAny++)
+    {
+        *pString = pValue[i].Name;
+        *pAny = pValue[i].Value;
+    }
+    pModel->setPropertyValues ( aNames, aValues );
 }
 void SmXMLExport::_ExportContent()
 {
@@ -3153,11 +3163,21 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & aProps)
 
     aProps.realloc( SM_NUM_EXPORTED_ITEMS );
     PropertyValue *pValue = aProps.getArray();
-    for (sal_Int32 i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++)
+    Sequence < OUString > aStrings ( SM_NUM_EXPORTED_ITEMS );
+    OUString *pString = aStrings.getArray();
+
+    for (sal_Int32 i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++, pString++)
+        *pString = OUString::createFromAscii( pMap[i].pName );
+    Sequence < PropertyValue > aAllValues = pModel->getPropertyValueSequence ( aStrings );
+    PropertyValue *pAllValue = aAllValues.getArray();
+
+    sal_Int32 nRealNum = 0;
+    for (i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++, pAllValue++)
     {
-        pValue[i].Name = OUString::createFromAscii( pMap[i].pName );
-        pValue[i].Value <<= pModel->getPropertyValue ( pValue[i].Name );
+        if (pAllValue->State == PropertyState_DIRECT_VALUE)
+            pValue[nRealNum++] = *pAllValue;
     }
+    aProps.realloc ( nRealNum );
 }
 #undef SM_NUM_EXPORTED_ITEMS
 
