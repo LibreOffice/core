@@ -4666,7 +4666,7 @@ SfxVoidItem InsertPageFooter FN_INSERT_PAGEFOOTER
     Asynchron;
 
     /* status: */
-    SlotType = SfxObjectItem
+    SlotType = SfxObjectShellItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -4694,7 +4694,7 @@ SfxVoidItem InsertPageHeader FN_INSERT_PAGEHEADER
     Asynchron;
 
     /* status: */
-    SlotType = SfxObjectItem
+    SlotType = SfxObjectShellItem
 
     /* config: */
     AccelConfig = FALSE,
