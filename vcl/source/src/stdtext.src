@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:29:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ String SV_STDTEXT_DONTHINTAGAIN
     Text[ danish ] = "Vis ikke denne henvisning igen.";
     Text[ swedish ] = "Visa inte den h�r informationen mer.";
     Text[ polish ] = "Nie wy�wietlaj wi�cej ostrze�enia.";
-    Text[ portuguese_brazilian ] = "N�o mostrar mais este aviso.";
+    Text[ portuguese_brazilian ] = "N�o mostrar mais esta informa��o.";
     Text[ japanese ] = "今後この情報を表示しない。";
     Text[ korean ] = "이 정보를 다시 표시하지 않음";
     Text[ chinese_simplified ] = "下次不再显示这个提示。";
@@ -144,7 +144,7 @@ String SV_STDTEXT_DONTASKAGAIN
     Text[ danish ] = "Do not show this question again.";
     Text[ swedish ] = "Visa inte den h�r fr�gan mer.";
     Text[ polish ] = "Do not show this question again.";
-    Text[ portuguese_brazilian ] = "Do not show this question again.";
+    Text[ portuguese_brazilian ] = "N�o mostrar mais esta pergunta.";
     Text[ japanese ] = "今後この質問を表示しない。";
     Text[ korean ] = "이 질문을 다시 표시하지 않음";
     Text[ chinese_simplified ] = "下次不再显示这个提问。";
@@ -206,7 +206,7 @@ String SV_ACCESSERROR_WRONG_VERSION
     Text[ danish ] = "Wrong Version";
     Text[ swedish ] = "Fel version";
     Text[ polish ] = "Wrong Version";
-    Text[ portuguese_brazilian ] = "Wrong Version";
+    Text[ portuguese_brazilian ] = "Vers�o incorreta";
     Text[ japanese ] = "バージョンが正しくありません";
     Text[ korean ] = "버전이 틀립니다.";
     Text[ chinese_simplified ] = "错误的版本";
@@ -223,7 +223,7 @@ String SV_ACCESSERROR_WRONG_VERSION
 
 String SV_ACCESSERROR_BRIDGE_MSG
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION ben�tigt eine Java Access Bridge 1.0.3 oder h�here Version, um Zug�nglichkeit zu unterst�tzen."; 
+    Text = "%PRODUCTNAME %PRODUCTVERSION ben�tigt eine Java Access Bridge 1.0.3 oder h�here Version, um Zug�nglichkeit zu unterst�tzen.";
     Text[ english ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
     Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
     Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
@@ -237,7 +237,7 @@ String SV_ACCESSERROR_BRIDGE_MSG
     Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver version 1.0.3 eller senare av Java Access Bridge f�r att st�dja tillg�nglighet.";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.03 or later version. Please install the latest Java Access Bridge. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION requer uma Java Access Bridge vers�o 1.03 ou posterior. Instale a ultima vers�o da Java Access Bridge. Clique em '%IGNORE' para iniciar o %PRODUCTNAME %PRODUCTVERSION sem suporte a acessibilidade ou clique em '%CANCEL'.";
     Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION でアクセシビリティを支援するには、Java Access Bridge 1.03 以降のバージョンが必要です。";
     Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 에는 내게 필요한 옵션의 지원을 위해 Java Access Bridge 1.03 이상의 버전이 필요합니다.";
     Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 需要一个用于辅助功能的 “Java Access Bridge 1.0.3” 或之上的版本。";
@@ -254,7 +254,7 @@ String SV_ACCESSERROR_BRIDGE_MSG
 
 String SV_ACCESSERROR_OK_CANCEL_MSG
 {
-    Text = "Klicken Sie '%OK', um %PRODUCTNAME %PRODUCTVERSION ohne Unterst�tzung der Zug�nglichkeit zu starten, oder klicken Sie '%CANCEL' um %PRODUCTNAME %PRODUCTVERSION zu beenden."; 
+    Text = "Klicken Sie '%OK', um %PRODUCTNAME %PRODUCTVERSION ohne Unterst�tzung der Zug�nglichkeit zu starten, oder klicken Sie '%CANCEL' um %PRODUCTNAME %PRODUCTVERSION zu beenden.";
     Text[ english ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ english_us ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ french ] = "Cliquez sur '%OK' pour d�marrer %PRODUCTNAME %PRODUCTVERSION sans support d'accessibilit�, ou sur '%CANCEL' pour quitter %PRODUCTNAME %PRODUCTVERSION.";
@@ -277,7 +277,7 @@ String SV_ACCESSERROR_OK_CANCEL_MSG
     Text[ portuguese ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ russian ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ polish ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
-    Text[ portuguese_brazilian ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
+    Text[ portuguese_brazilian ] = "Clique em '%OK' para iniciar o %PRODUCTNAME %PRODUCTVERSION sem suporte a acessibilidade, ou clique '%CANCEL' para sair do %PRODUCTNAME %PRODUCTVERSION.";
     Text[ thai ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ hindi ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
     Text[ slovak ] = "Kliknite na '%OK' pre spustenie %PRODUCTNAME %PRODUCTVERSION bez podpory prístupnosti, alebo kliknite na '%CANCEL' pre ukončenie %PRODUCTNAME %PRODUCTVERSION.";
@@ -299,7 +299,7 @@ String SV_ACCESSERROR_MISSING_BRIDGE
     Text[ danish ] = "No Java Access Bridge";
     Text[ swedish ] = "Ingen Java Access Bridge";
     Text[ polish ] = "No Java Access Bridge";
-    Text[ portuguese_brazilian ] = "No Java Access Bridge";
+    Text[ portuguese_brazilian ] = "Sem Java Access Bridge";
     Text[ japanese ] = "Java Access Bridge がありません";
     Text[ korean ] = "Java Access Bridge가 없습니다.";
     Text[ chinese_simplified ] = "没有“Java Access Bridge”";
@@ -330,7 +330,7 @@ String SV_ACCESSERROR_FAULTY_JAVA
     Text[ danish ] = "Faulty Java Installation";
     Text[ swedish ] = "Felaktig Java-installation";
     Text[ polish ] = "Faulty Java Installation";
-    Text[ portuguese_brazilian ] = "Faulty Java Installation";
+    Text[ portuguese_brazilian ] = "Instala��o Java com defeito";
     Text[ japanese ] = "Java は正常にインストールされていません";
     Text[ korean ] = "Java가 올바르게 설치되지 않았습니다.";
     Text[ chinese_simplified ] = "错误的 Java 安装";
@@ -361,7 +361,7 @@ String SV_ACCESSERROR_JAVA_MSG
     Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION kr�ver version 1.4.0_02 eller senare f�r att kunna st�dja tillg�nglighet.";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION detected a faulty Java installation on your system. Please repair or renew your Java installation. Click '%IGNORE' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL'.";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME %PRODUCTVERSION detectou uma instala��o Java com defeito em seu sistema. Conserte ou renove sua instala��o Java. Clique em '%IGNORE' para iniciar o %PRODUCTNAME %PRODUCTVERSION sem suporte a acessibilidade, ou  clique em '%CANCEL'.";
     Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION でアクセシビリティを支援するには、Java 1.4.0_02 以降のバージョンが必要です。";
     Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION 에는 내게 필요한 옵션의 지원을 위해 Java 1.4.0_02 버전 이상이 필요합니다.";
     Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 需要一个用于辅助功能的 Java 1.4.0_02 或之上的版本。";
@@ -392,7 +392,7 @@ String SV_ACCESSERROR_MISSING_JAVA
     Text[ danish ] = "No Java Installation";
     Text[ swedish ] = "Ingen Java-installation";
     Text[ polish ] = "No Java Installation";
-    Text[ portuguese_brazilian ] = "No Java Installation";
+    Text[ portuguese_brazilian ] = "Sem Java instalado";
     Text[ japanese ] = "Java はインストールされていません";
     Text[ korean ] = "Java가 설치되지 않았습니다.";
     Text[ chinese_simplified ] = "没有安装 Java";
@@ -432,7 +432,7 @@ String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
     Text[ portuguese ] = "Missing Java Configuration";
     Text[ russian ] = "Missing Java Configuration";
     Text[ polish ] = "Missing Java Configuration";
-    Text[ portuguese_brazilian ] = "Missing Java Configuration";
+    Text[ portuguese_brazilian ] = "Falta a configura��o Java";
     Text[ thai ] = "Missing Java Configuration";
     Text[ hindi ] = "Missing Java Configuration";
     Text[ slovak ] = "Nastavenie Javy nebolo nájdené";
@@ -463,7 +463,7 @@ String SV_ACCESSERROR_JAVA_DISABLED
     Text[ portuguese ] = "Java Disabled";
     Text[ russian ] = "Java Disabled";
     Text[ polish ] = "Java Disabled";
-    Text[ portuguese_brazilian ] = "Java Disabled";
+    Text[ portuguese_brazilian ] = "Java desabilitado";
     Text[ thai ] = "Java Disabled";
     Text[ hindi ] = "Java Disabled";
     Text[ slovak ] = "Podpora Javy vypnutá";
@@ -494,11 +494,13 @@ String SV_ACCESSERROR_TURNAROUND_MSG
     Text[ portuguese ] = "The Java Access Bridge could not be started.";
     Text[ russian ] = "The Java Access Bridge could not be started.";
     Text[ polish ] = "The Java Access Bridge could not be started.";
-    Text[ portuguese_brazilian ] = "The Java Access Bridge could not be started.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel iniciar a Java Access Bridge.";
     Text[ thai ] = "The Java Access Bridge could not be started.";
     Text[ hindi ] = "The Java Access Bridge could not be started.";
     Text[ slovak ] = "Java Access Bridge nemohol byť spustený.";
 };
+
+
 
 
 
