@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
 BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
 {
-    if ( xRef.is() )
+    if ( svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
     {
         ResetCursorStack();
         StartAllAction();
@@ -689,7 +689,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
                 String aMathData;
                 GetSelectedText( aMathData, GETSELTXT_PARABRK_TO_ONLYCR );
 
-                if( aMathData.Len() )
+                if( aMathData.Len() && svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
                 {
                     uno::Reference < beans::XPropertySet > xSet( xRef->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
@@ -844,6 +844,9 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
         if( !aRect.IsEmpty() )
         {
+            // TODO/LEAN: getMapUnit still needs running state
+            xObj.TryRunningState();
+
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
             // TODO/LATER: needs complete VisArea?!
@@ -869,6 +872,9 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         else
             return;
     }
+
+    // TODO/LEAN: getMapUnit still needs running state
+    xObj.TryRunningState();
 
     awt::Size aSize = xObj->getVisualAreaSize( nAspect );
     Size aVisArea( aSize.Width, aSize.Height );
