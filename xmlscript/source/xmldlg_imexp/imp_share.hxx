@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:48:42 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,10 +452,19 @@ public:
         sal_Int32 nOffset,
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importHexLongProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importAlignProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importVerticalAlignProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importImageAlignProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importImagePositionProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importDateFormatProperty(
@@ -468,6 +477,9 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
     bool importButtonTypeProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importLineEndFormatProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 };
