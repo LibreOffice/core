@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 18:35:51 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 12:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,6 @@
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
-
-#ifndef _SFXINIPROP_HXX
-#include <svtools/iniprop.hxx>
 #endif
 
 #ifndef _SFXINTITEM_HXX //autogen
