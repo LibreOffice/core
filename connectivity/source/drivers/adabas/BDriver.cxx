@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:34 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace connectivity;
@@ -214,6 +217,9 @@ Reference< XInterface >  SAL_CALL ODriver_CreateInstance(const Reference< ::com:
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+
     if(!m_pDriverHandle)
     {
         ::rtl::OUString aPath;
@@ -244,8 +250,10 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12));
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& , const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -318,6 +326,9 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 // --------------------------------------------------------------------------------
 Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+
     return getDataDefinitionByConnection(connect(url,info));
 }
 // -----------------------------------------------------------------------------
