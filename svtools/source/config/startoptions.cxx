@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-02 09:10:35 $
+ *  last change: $Author: as $ $Date: 2000-11-13 12:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,10 +151,7 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames )
-        {
-            DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Notify()\nNot implemented yet - we support readonly values only!\n" );
-        }
+        virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
         /*-****************************************************************************************************//**
             @short      write changes to configuration
@@ -171,10 +168,7 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Commit()
-        {
-            DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Commit()\nNot implemented yet - we support readonly values only!\n" );
-        }
+        virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
         //  public interface
@@ -194,6 +188,7 @@ class SvtStartOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         sal_Bool    IsIntroEnabled  (                       ) const ;
+        void        EnableIntro     ( sal_Bool bState       )       ;
         OUString    GetConnectionURL(                       ) const ;
         void        SetConnectionURL( const OUString& sURL  )       ;
 
@@ -284,6 +279,69 @@ SvtStartOptions_Impl::SvtStartOptions_Impl()
 //*****************************************************************************************************************
 SvtStartOptions_Impl::~SvtStartOptions_Impl()
 {
+    // We must save our current values .. if user forget it!
+    if( IsModified() == sal_True )
+    {
+        Commit();
+    }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
+{
+    // Use given list of updated properties to get his values from configuration directly!
+    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
+    // Safe impossible cases.
+    // We need values from ALL notified configuration keys.
+    DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtStartOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
+    // Step over list of property names and get right value from coreesponding value list to set it on internal members!
+    sal_Int32 nCount = seqPropertyNames.getLength();
+    for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
+    {
+        if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWINTRO )
+        {
+            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Start\\ShowIntro\"?" );
+            seqValues[nProperty] >>= m_bShowIntro;
+        }
+        else
+        if( seqPropertyNames[nProperty] == PROPERTYNAME_CONNECTIONURL )
+        {
+            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_STRING), "SvtStartOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Start\\Connection\"?" );
+            seqValues[nProperty] >>= m_sConnectionURL;
+        }
+        #ifdef DEBUG
+        else DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
+        #endif
+    }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions_Impl::Commit()
+{
+    // Get names of supported properties, create a list for values and copy current values to it.
+    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
+    sal_Int32               nCount      = seqNames.getLength();
+    Sequence< Any >         seqValues   ( nCount );
+    for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
+    {
+        switch( nProperty )
+        {
+            case PROPERTYHANDLE_SHOWINTRO       :   {
+                                                         seqValues[nProperty] <<= m_bShowIntro;
+                                                     }
+                                                     break;
+            case PROPERTYHANDLE_CONNECTIONURL   :   {
+                                                         seqValues[nProperty] <<= m_sConnectionURL;
+                                                     }
+                                                     break;
+        }
+    }
+    // Set properties in configuration.
+    PutProperties( seqNames, seqValues );
 }
 
 //*****************************************************************************************************************
@@ -292,6 +350,15 @@ SvtStartOptions_Impl::~SvtStartOptions_Impl()
 sal_Bool SvtStartOptions_Impl::IsIntroEnabled() const
 {
     return m_bShowIntro;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions_Impl::EnableIntro( sal_Bool bState )
+{
+    m_bShowIntro = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -377,6 +444,15 @@ sal_Bool SvtStartOptions::IsIntroEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsIntroEnabled();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtStartOptions::EnableIntro( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->EnableIntro( bState );
 }
 
 //*****************************************************************************************************************
