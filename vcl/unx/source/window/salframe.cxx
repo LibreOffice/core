@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: cp $ $Date: 2002-08-13 16:59:19 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#if !(defined FREEBSD || defined NETBSD)
+#if !(defined FREEBSD || defined NETBSD || defined MACOSX)
 #include <alloca.h>
 #endif
 
