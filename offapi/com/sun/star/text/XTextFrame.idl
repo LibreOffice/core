@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextFrame.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // DocMerge from xml: interface com::sun::star::text::XTextFrame
 /** provides access to the <type scope="com::sun::star::drawing">Text</type> of a <type>TextFrame</type>.@see TextFrame
  */
-interface XTextFrame: com::sun::star::text::XTextContent
+published interface XTextFrame: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
 
