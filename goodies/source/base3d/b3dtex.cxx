@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,8 +1268,8 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
             rOpenGL.BindTexture(GL_TEXTURE_2D, nTextureName);
 
             // Jetzt ein glTexImage2D() ausfuehren
-            GLint nInternalFormat;
-            GLint nFormat;
+            GLint nInternalFormat = 0;
+            GLint nFormat = 0;
 
             switch(GetTextureKind())
             {
