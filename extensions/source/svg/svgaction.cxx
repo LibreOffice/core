@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 11:05:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,8 +925,18 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y(), mbDoublePoints ) );
 
             {
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
-                mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+                try
+                {
+                    try
+                    {
+                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
+                        mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+                    }
+                    catch( ::com::sun::star::xml::sax::SAXException&  )
+                    {
+                        // string seems to contain invalid characters
+                    }
+                }
             }
         }
         else
@@ -935,8 +945,15 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X(), mbDoublePoints ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y(), mbDoublePoints ) );
 
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
-            mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+            try
+            {
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+                mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+            }
+            catch( ::com::sun::star::xml::sax::SAXException&  )
+            {
+                // string seems to contain invalid characters
+            }
         }
 
 #ifndef _SVG_USE_NATIVE_TEXTDECORATION
@@ -1456,14 +1473,19 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
             case( META_MASKSCALEPART_ACTION ):
             case( META_WALLPAPER_ACTION ):
             case( META_TEXTLINE_ACTION ):
+            case( META_LAYOUTMODE_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
             }
             break;
 
-            default:
-                DBG_ERROR( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
+#ifdef DBG_UTIL
+            default :
+                ByteString aDbgOut( "SVGActionWriter::ImplWriteActions: unsupported MetaAction #" );
+                aDbgOut.Append( ByteString::CreateFromInt32( nType ) );
+                DBG_ERROR( aDbgOut.GetBuffer() );
             break;
+#endif
         }
     }
 
