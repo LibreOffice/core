@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-26 14:50:12 $
+#   last change: $Author: svesik $ $Date: 2001-05-02 17:30:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,10 @@ OLE2DEF=-DOLE2
 .INCLUDE : unxlngppc.mk 
 .ENDIF 
  
+.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXR2REDHAT60"
+.INCLUDE : unxlngr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
 .INCLUDE : unxhpxr.mk
 .ENDIF
