@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:28:50 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,10 @@
 #define HID_DSADMIN_RETRIEVE_AUTO                   (HID_DBACCESS_START + 229)
 #define HID_DSADMIN_AUTORETRIEVEENABLED             (HID_DBACCESS_START + 230)
 
+#define HID_DSADMIN_PAGE_MYSQL                      (HID_DBACCESS_START + 231)
+#define HID_TAB_PAGE_TABLEPRIVILEGES                (HID_DBACCESS_START + 232)
+
+
 // don't forget to update the file util/hidother.src
 
 
@@ -328,6 +332,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2002/07/25 06:28:50  oj
+ *  #100280# #95146# new helpids for report and autoincrement fields
+ *
  *  Revision 1.49  2002/07/09 12:54:58  oj
  *  #99921# check if datasource allows to check names
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:28:25 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,50 +318,22 @@ hidspecial HID_DOCUMENT_CREATE_REPWIZ                   { HelpId = HID_DOCUMENT_
 hidspecial HID_DSADMIN_RETRIEVE_AUTO                    { HelpId = HID_DSADMIN_RETRIEVE_AUTO ; };
 hidspecial HID_DSADMIN_AUTORETRIEVEENABLED              { HelpId = HID_DSADMIN_AUTORETRIEVEENABLED ; };
 
+hidspecial HID_DSADMIN_PAGE_MYSQL                       { HelpId = HID_DSADMIN_PAGE_MYSQL ; };
+hidspecial HID_TAB_PAGE_TABLEPRIVILEGES                 { HelpId = HID_TAB_PAGE_TABLEPRIVILEGES ; };
+
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2002/07/25 06:28:25  oj
+ *  #100280# #95146# new helpids for report and autoincrement fields
+ *
  *  Revision 1.43  2002/07/09 12:54:27  oj
  *  #99921# check if datasource allows to check names
  *
  *  Revision 1.42  2002/07/09 07:42:45  oj
  *  #96306# remove unused helpids
  *
- *  Revision 1.41  2002/07/04 14:46:41  jmarmion
- *  #100796##100798# insert new helpids
- *
- *  Revision 1.40  2002/05/17 11:30:09  oj
- *  #98913# helpids inserted for SBA slot ids
- *
- *  Revision 1.39  2002/02/27 10:25:40  oj
- *  #97666##97667# insert new helpids and unique ids
- *
- *  Revision 1.38  2002/02/06 09:02:12  oj
- *  #90580# introduce new file for relation control
- *
- *  Revision 1.37  2001/09/25 13:24:36  oj
- *  #91719# implementing the XRename handling
- *
- *  Revision 1.36  2001/08/16 10:57:22  fs
- *  #90573# +HID_BROWSER_REFRESH_REBUILDVIEW
- *
- *  Revision 1.35  2001/08/06 11:59:12  oj
- *  #90563# new helpid for sql mode
- *
- *  Revision 1.34  2001/08/06 07:49:58  fs
- *  #90558# #90529# new help ids
- *
- *  Revision 1.33  2001/07/17 07:28:03  oj
- *  #89575# new pwd change dialog
- *
- *  Revision 1.32  2001/07/16 07:37:24  oj
- *  #86731# some helpids for toolbars
- *
- *  Revision 1.31  2001/07/03 13:59:27  oj
- *  #86890# impl query paste in contextmenu
- *
- *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/
 
 
