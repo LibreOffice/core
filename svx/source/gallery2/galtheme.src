@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:07:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,504 +65,126 @@
 
 String RID_GALLERYSTR_THEME_3D
 {
-    Text = "3D-Effekte";
-    Text[ENGLISH] = "3D effects";
-    Text[english_us] = "3D Effects";
-    Text[ portuguese ] = "Efeitos 3D";
-    Text[ russian ] = "Òğåõìåğíûå îáúåêòû";
-    Text[ dutch ] = "3D-effecten";
-    Text[ french ] = "Effets 3D";
-    Text[ spanish ] = "Efectos 3D";
-    Text[ italian ] = "Effetti 3D";
-    Text[ danish ] = "3D-effekter";
-    Text[ swedish ] = "3D-effekter";
-    Text[ polish ] = "Efekty 3D";
-    Text[ portuguese_brazilian ] = "Efeitos 3D";
-    Text[ japanese ] = "3D åŠ¹æœ";
-    Text[ chinese_simplified ] = "3 ç»´æ•ˆæœ";
-    Text[ chinese_traditional ] = "3D æ•ˆæœ";
-    Text[ arabic ] = "ÃÔßÇá ËáÇËíÉ ÇáÃÈÚÇÏ";
-    Text[ greek ] = "Åöİ 3Ä";
-    Text[ korean ] = "3ï¼¤ íš¨ê³¼";
-    Text[ turkish ] = "3B Efekler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Efectes 3D";
-    Text[ finnish ] = "Kolmiulotteiset tehosteet";
-    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "3D efekty";
-    Text[ hebrew ] = "â€®×¤×¢×œ×•×œ×™× ×ª×œ×ª ××™××“×™×™×â€¬";
-    Text[ hindi ] = "3D à¤ªà¥à¤°à¤­à¤¾à¤µ";
-    Text[ slovak ] = "3D efekty";
-    Text[ hungarian ] = "TÃ©rhatÃ¡s";
-    Text[ slovenian ] = "3D uÄinki";
+    Text [ de ] = "3D-Effekte";
+    Text [ en-US ] = "3D Effects";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ANIMATIONS
 {
-    Text = "Animationen";
-    Text[ENGLISH] = "Animations";
-    Text[english_us] = "Animations";
-    Text[ portuguese ] = "Animações";
-    Text[ russian ] = "Àíèìàöèÿ";
-    Text[ dutch ] = "Animatie";
-    Text[ french ] = "Animations";
-    Text[ spanish ] = "Animaciones";
-    Text[ italian ] = "Animazioni";
-    Text[ danish ] = "Animationer";
-    Text[ swedish ] = "Animationer";
-    Text[ polish ] = "Animacje";
-    Text[ portuguese_brazilian ] = "Animações";
-    Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ chinese_simplified ] = "åŠ¨ç”»";
-    Text[ chinese_traditional ] = "å‹•ç•«";
-    Text[ arabic ] = "ÊÃËíÑÇÊ ÍÑßÉ";
-    Text[ greek ] = "Êéíïıìåíåò åéêüíåò";
-    Text[ korean ] = "ì• ë‹ˆë©”ì´ì…˜";
-    Text[ turkish ] = "Animasyonlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Animacions";
-    Text[ finnish ] = "Animaatiot";
-    Text[ thai ] = "à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
-    Text[ czech ] = "Animace";
-    Text[ hebrew ] = "â€®×× ×™××¦×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¹à¥à¤²à¤¾à¤¸";
-    Text[ slovak ] = "AnimÃ¡cie";
-    Text[ hungarian ] = "AnimÃ¡ciÃ³k";
-    Text[ slovenian ] = "Animacije";
+    Text [ de ] = "Animationen";
+    Text [ en-US ] = "Animations";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BULLETS
 {
-    Text = "Bullets";
-    Text[ENGLISH] = "Bullets";
-    Text[english_us] = "Bullets";
-    Text[ portuguese ] = "Marcas";
-    Text[ russian ] = "Ìàğêåğû";
-    Text[ dutch ] = "Opsommingstekens";
-    Text[ french ] = "Puces";
-    Text[ spanish ] = "Viñetas";
-    Text[ italian ] = "Bullets";
-    Text[ danish ] = "Punkttegn";
-    Text[ swedish ] = "Punkter";
-    Text[ polish ] = "Znaki wypunktowania";
-    Text[ portuguese_brazilian ] = "Marcas";
-    Text[ japanese ] = "ç®‡æ¡æ›¸ãã‚·ãƒ³ãƒœãƒ«";
-    Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·";
-    Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
-    Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
-    Text[ greek ] = "Êïõêßäåò";
-    Text[ korean ] = "ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
-    Text[ turkish ] = "Ayraçlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pics";
-    Text[ finnish ] = "Luettelomerkit";
-    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
-    Text[ czech ] = "OdrÃ¡Å¾ky";
-    Text[ hebrew ] = "â€®× ×§×•×“×•×ª ×›×•×ª×¨×” (×ª×‘×œ×™×˜×™×)â€¬";
-    Text[ hindi ] = "à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "OdrÃ¡Å¾ky";
-    Text[ hungarian ] = "FelsorolÃ¡sjel";
-    Text[ slovenian ] = "Oznake";
+    Text [ de ] = "Bullets";
+    Text [ en-US ] = "Bullets";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_OFFICE
 {
-    Text = "Büro";
-    Text[ENGLISH] = "Office";
-    Text[english_us] = "Office";
-    Text[ portuguese ] = "Escritório";
-    Text[ russian ] = "Îôèñ";
-    Text[ dutch ] = "Kantoor";
-    Text[ french ] = "Bureau";
-    Text[ spanish ] = "Oficina";
-    Text[ italian ] = "Ufficio";
-    Text[ danish ] = "Kontor";
-    Text[ swedish ] = "Kontor";
-    Text[ polish ] = "Biuro";
-    Text[ portuguese_brazilian ] = "Office";
-    Text[ japanese ] = "ã‚ªãƒ•ã‚£ã‚¹";
-    Text[ chinese_simplified ] = "åŠå…¬å®¤";
-    Text[ chinese_traditional ] = "è¾¦å…¬å®¤";
-    Text[ arabic ] = "ãßÊÈ";
-    Text[ greek ] = "Ãñáöåßï";
-    Text[ korean ] = "í´ë¦½ì•„íŠ¸";
-    Text[ turkish ] = "Ofis";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Oficina";
-    Text[ finnish ] = "Toimisto";
-    Text[ thai ] = "à¸—à¸µà¹ˆà¸—à¸³à¸‡à¸²à¸™";
-    Text[ czech ] = "KancelÃ¡Å™";
-    Text[ hebrew ] = "â€®××©×¨×“â€¬";
-    Text[ hindi ] = "à¤“à¤«à¥€à¤¸";
-    Text[ slovak ] = "KancelÃ¡ria";
-    Text[ hungarian ] = "Office";
-    Text[ slovenian ] = "Office";
+    Text [ de ] = "Büro";
+    Text [ en-US ] = "Office";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLAGS
 {
-    Text = "Flaggen";
-    Text[ENGLISH] = "Flags";
-    Text[english_us] = "Flags";
-    Text[ portuguese ] = "Bandeiras";
-    Text[ russian ] = "Ôëàãè";
-    Text[ dutch ] = "Vlaggen";
-    Text[ french ] = "Drapeaux";
-    Text[ spanish ] = "Banderas";
-    Text[ italian ] = "Bandiere";
-    Text[ danish ] = "Flag";
-    Text[ swedish ] = "Flaggor";
-    Text[ polish ] = "Flagi";
-    Text[ portuguese_brazilian ] = "Sinalizadores";
-    Text[ japanese ] = "å›½æ——";
-    Text[ chinese_simplified ] = "å„å¼å›½æ——";
-    Text[ chinese_traditional ] = "å„å¼åœ‹æ——";
-    Text[ arabic ] = "ÃÚáÇã";
-    Text[ greek ] = "Óçìáßåò";
-    Text[ korean ] = "í”Œë˜ê·¸";
-    Text[ turkish ] = "Bayraklar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Indicadors";
-    Text[ finnish ] = "Tunnisteet";
-    Text[ thai ] = "à¸„à¹ˆà¸²à¸ªà¸–à¸²à¸™à¸°";
-    Text[ czech ] = "Vlajky";
-    Text[ hebrew ] = "â€®×“×’×œ×™×â€¬";
-    Text[ hindi ] = "à¤«à¥à¤²à¤¾à¤—à¥à¤¸";
-    Text[ slovak ] = "ZnaÄky";
-    Text[ hungarian ] = "JelzÅ‘k";
-    Text[ slovenian ] = "Zastavice";
+    Text [ de ] = "Flaggen";
+    Text [ en-US ] = "Flags";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLOWCHARTS
 {
-    Text = "Flussdiagramme";
-    Text[ENGLISH] = "Flowcharts";
-    Text[english_us] = "Flow Charts";
-    Text[ portuguese ] = "Fluxogramas";
-    Text[ russian ] = "Áëîê-ñõåìû";
-    Text[ dutch ] = "Stroomdiagrammen";
-    Text[ french ] = "Diagrammes de flux";
-    Text[ spanish ] = "Diagramas de flujo";
-    Text[ italian ] = "Diagramma di flusso";
-    Text[ danish ] = "Rutediagrammer";
-    Text[ swedish ] = "Flödesdiagram";
-    Text[ polish ] = "Schematy blokowe";
-    Text[ portuguese_brazilian ] = "Fluxogramas";
-    Text[ japanese ] = "ãƒ•ãƒ­ãƒ¼ãƒãƒ£ãƒ¼ãƒˆ";
-    Text[ chinese_simplified ] = "å„ç§å¤šè¾¹å½¢";
-    Text[ chinese_traditional ] = "å„ç¨®å¤šé‚Šå½¢";
-    Text[ arabic ] = "ÊÎØíØÇÊ ÇäÓíÇÈíÉ";
-    Text[ greek ] = "ÄéáãñÜììáôá ñïŞò";
-    Text[ korean ] = "ìˆœì„œë„";
-    Text[ turkish ] = "Akış Şemaları";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diagrames de flux";
-    Text[ finnish ] = "Vuokaaviot";
-    Text[ thai ] = "à¹à¸œà¸™à¸œà¸±à¸‡à¸¥à¸³à¸”à¸±à¸šà¸‡à¸²à¸™";
-    Text[ czech ] = "Grafy toku";
-    Text[ hebrew ] = "â€®×ª×¨×©×™××™ ×–×¨×™××”â€¬";
-    Text[ hindi ] = "à¤«à¥à¤²à¥‹ à¤šà¤¾à¤°à¥à¤Ÿ";
-    Text[ slovak ] = "PlÃ¡vajÃºce grafy";
-    Text[ hungarian ] = "FolyamatÃ¡bra";
-    Text[ slovenian ] = "Grafikoni poteka";
+    Text [ de ] = "Flussdiagramme";
+    Text [ en-US ] = "Flow Charts";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_EMOTICONS
 {
-    Text = "Emoticons";
-    Text[ENGLISH] = "Emoticons";
-    Text[english_us] = "Emoticons";
-    Text[ portuguese ] = "Emoticons";
-    Text[ russian ] = "Ñìàéëèêè";
-    Text[ dutch ] = "Emoticons";
-    Text[ french ] = "Emoticons";
-    Text[ spanish ] = "Emoticón";
-    Text[ italian ] = "Emoticons";
-    Text[ danish ] = "Smileys";
-    Text[ swedish ] = "Emoticons";
-    Text[ polish ] = "BuŸki";
-    Text[ portuguese_brazilian ] = "Emoticons";
-    Text[ japanese ] = "ã‚¨ãƒ¢ãƒ¼ãƒ†ã‚£ã‚³ãƒ³";
-    Text[ chinese_simplified ] = "æƒ…ç»ªå›¾æ¡ˆ";
-    Text[ chinese_traditional ] = "æƒ…ç·’åœ–æ¡ˆ";
-    Text[ arabic ] = "ÃÔßÇá";
-    Text[ greek ] = "Åéêïíßäéá Emoticon";
-    Text[ korean ] = "ê°ì • í‘œí˜„ ê¸°í˜¸";
-    Text[ turkish ] = "Yüz simgeleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Emoticones";
-    Text[ finnish ] = "Hymiöt";
-    Text[ thai ] = "à¸­à¸²à¸£à¸¡à¸“à¹Œ";
-    Text[ czech ] = "Emotikony";
-    Text[ hebrew ] = "â€®×—×™×•×›×•× ×™×â€¬";
-    Text[ hindi ] = "à¤‡à¤®à¥‹à¤Ÿà¤…à¤‡à¤•à¥‰à¤¨à¥à¤¸";
-    Text[ slovak ] = "Emotikony";
-    Text[ hungarian ] = "Hangulatjelek :)";
-    Text[ slovenian ] = "Emotikoni";
+    Text [ de ] = "Emoticons";
+    Text [ en-US ] = "Emoticons";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS
 {
-    Text = "Fotos";
-    Text[ENGLISH] = "Photos";
-    Text[english_us] = "Pictures";
-    Text[ portuguese ] = "Fotografias";
-    Text[ russian ] = "Ôîòîãğàôèè";
-    Text[ dutch ] = "Foto's";
-    Text[ french ] = "Photos";
-    Text[ spanish ] = "Fotos";
-    Text[ italian ] = "Fotografie";
-    Text[ danish ] = "Fotografier";
-    Text[ swedish ] = "Foton";
-    Text[ polish ] = "Obrazy";
-    Text[ portuguese_brazilian ] = "Imagens";
-    Text[ japanese ] = "å†™çœŸ";
-    Text[ chinese_simplified ] = "å½©è‰²ç…§ç‰‡";
-    Text[ chinese_traditional ] = "å½©è‰²ç…§ç‰‡";
-    Text[ arabic ] = "ÕæÑ";
-    Text[ greek ] = "Öùôïãñáößåò";
-    Text[ korean ] = "ì‚¬ì§„";
-    Text[ turkish ] = "Resimler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imatges";
-    Text[ finnish ] = "Kuvat";
-    Text[ thai ] = "à¸£à¸¹à¸›à¸ à¸²à¸";
-    Text[ czech ] = "ObrÃ¡zky";
-    Text[ hebrew ] = "â€®×ª××•× ×•×ªâ€¬";
-    Text[ hindi ] = "à¤šà¤¿à¤¤à¥à¤°";
-    Text[ slovak ] = "ObrÃ¡zky";
-    Text[ hungarian ] = "KÃ©pek";
-    Text[ slovenian ] = "Slike";
+    Text [ de ] = "Fotos";
+    Text [ en-US ] = "Pictures";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BACKGROUNDS
 {
-    Text = "Hintergründe";
-    Text[ENGLISH] = "Backgrounds";
-    Text[english_us] = "Backgrounds";
-    Text[ portuguese ] = "Planos de fundo";
-    Text[ russian ] = "Ôîíû";
-    Text[ dutch ] = "Achtergronden";
-    Text[ french ] = "Arrière-plans";
-    Text[ spanish ] = "Fondos";
-    Text[ italian ] = "Sfondi";
-    Text[ danish ] = "Baggrunde";
-    Text[ swedish ] = "Bakgrunder";
-    Text[ polish ] = "T³a";
-    Text[ portuguese_brazilian ] = "Planos de fundo";
-    Text[ japanese ] = "èƒŒæ™¯";
-    Text[ chinese_simplified ] = "å„ç§èƒŒæ™¯";
-    Text[ chinese_traditional ] = "å„å¼èƒŒæ™¯";
-    Text[ arabic ] = "ÎáİíÇÊ";
-    Text[ greek ] = "Åğéëïãİò öüíôïõ";
-    Text[ korean ] = "ë°°ê²½";
-    Text[ turkish ] = "Arkaplanlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fons";
-    Text[ finnish ] = "Taustat";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-    Text[ czech ] = "PozadÃ­";
-    Text[ hebrew ] = "â€®×¨×§×¢×™×â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
-    Text[ slovak ] = "Pozadie";
-    Text[ hungarian ] = "HÃ¡tterek";
-    Text[ slovenian ] = "Ozadja";
+    Text [ de ] = "Hintergründe";
+    Text [ en-US ] = "Backgrounds";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_HOMEPAGE
 {
-    Text = "Homepage";
-    Text[ENGLISH] = "Homepage";
-    Text[english_us] = "Homepage";
-    Text[ portuguese ] = "Homepage";
-    Text[ russian ] = "Äîìàøíÿÿ ñòğàíèöà";
-    Text[ dutch ] = "Homepage";
-    Text[ french ] = "Page Web";
-    Text[ spanish ] = "Página principal";
-    Text[ italian ] = "Homepage";
-    Text[ danish ] = "Hjemmeside";
-    Text[ swedish ] = "Hemsida";
-    Text[ polish ] = "Strona g³ówna";
-    Text[ portuguese_brazilian ] = "Homepage";
-    Text[ japanese ] = "ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸";
-    Text[ chinese_simplified ] = "ä¸»é¡µ";
-    Text[ chinese_traditional ] = "é¦–é ";
-    Text[ arabic ] = "ãæŞÚ ÅäÊÑäÊ";
-    Text[ greek ] = "Áñ÷éêŞ óåëßäá";
-    Text[ korean ] = "í™ˆí˜ì´ì§€";
-    Text[ turkish ] = "Ev Sayfası";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pàgina principal";
-    Text[ finnish ] = "Kotisivu";
-    Text[ thai ] = "à¹‚à¸®à¸¡à¹€à¸à¸ˆ";
-    Text[ czech ] = "DomovskÃ¡ strÃ¡nka";
-    Text[ hebrew ] = "â€®×“×£ ×‘×™×ªâ€¬";
-    Text[ hindi ] = "à¤¹à¥‹à¤®à¤ªà¥‡à¤œ ";
-    Text[ slovak ] = "DomÃ¡ca strÃ¡nka";
-    Text[ hungarian ] = "Honlap";
-    Text[ slovenian ] = "DomaÄa stran";
+    Text [ de ] = "Homepage";
+    Text [ en-US ] = "Homepage";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_INTERACTION
 {
-    Text = "Interaktion";
-    Text[ENGLISH] = "Interaction";
-    Text[english_us] = "Interaction";
-    Text[ portuguese ] = "Interacção";
-    Text[ russian ] = "Íàâèãàöèÿ 2";
-    Text[ dutch ] = "Interactie";
-    Text[ french ] = "Interaction";
-    Text[ spanish ] = "Interacción";
-    Text[ italian ] = "Interazione";
-    Text[ danish ] = "Interaktion";
-    Text[ swedish ] = "Interaktion";
-    Text[ polish ] = "Interakcja";
-    Text[ portuguese_brazilian ] = "Interação";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ã‚·ãƒ§ãƒ³";
-    Text[ chinese_simplified ] = "äº¤äº’å¼";
-    Text[ chinese_traditional ] = "äº’å‹•å¼";
-    Text[ arabic ] = "ãİÇÊíÍ ÊÍßã";
-    Text[ greek ] = "Áëëçëåğßäñáóç";
-    Text[ korean ] = "ìƒí˜¸ ì‘ìš©";
-    Text[ turkish ] = "Etkileşim";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Interacció";
-    Text[ finnish ] = "Vuorovaikutus";
-    Text[ thai ] = "à¸›à¸à¸´à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
-    Text[ czech ] = "Interakce";
-    Text[ hebrew ] = "â€®××™× ×˜×¨×§×˜×™×‘×™â€¬";
-    Text[ hindi ] = "à¤‡à¤¨à¥à¤Ÿà¤°à¤¾à¤•à¥à¤¶à¤¨à¥";
-    Text[ slovak ] = "Interakcia";
-    Text[ hungarian ] = "KÃ¶zjÃ¡tÃ©k";
-    Text[ slovenian ] = "Interakcija";
+    Text [ de ] = "Interaktion";
+    Text [ en-US ] = "Interaction";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS
 {
-    Text = "Karten";
-    Text[ENGLISH] = "Maps";
-    Text[english_us] = "Maps";
-    Text[ portuguese ] = "Mapas";
-    Text[ russian ] = "Êàğòû";
-    Text[ dutch ] = "Kaarten";
-    Text[ french ] = "Cartes";
-    Text[ spanish ] = "Mapas";
-    Text[ italian ] = "Cartine";
-    Text[ danish ] = "Kort";
-    Text[ swedish ] = "Kartor";
-    Text[ polish ] = "Mapy";
-    Text[ portuguese_brazilian ] = "Mapas";
-    Text[ japanese ] = "åœ°å›³";
-    Text[ chinese_simplified ] = "ä¸–ç•Œåœ°å›¾";
-    Text[ chinese_traditional ] = "ä¸–ç•Œåœ°åœ–";
-    Text[ arabic ] = "ÎÑÇÆØ";
-    Text[ greek ] = "×Üñôåò";
-    Text[ korean ] = "ì§€ë„";
-    Text[ turkish ] = "Haritalar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mapes";
-    Text[ finnish ] = "Kartat";
-    Text[ thai ] = "à¹à¸œà¸™à¸—à¸µà¹ˆ";
-    Text[ czech ] = "Mapy";
-    Text[ hebrew ] = "â€®××¤×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤•à¥à¤¶à¤¾";
-    Text[ slovak ] = "Mapy";
-    Text[ hungarian ] = "TÃ©rkÃ©pek";
-    Text[ slovenian ] = "Zemljevidi";
+    Text [ de ] = "Karten";
+    Text [ en-US ] = "Maps";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PEOPLE
 {
-    Text = "Personen";
-    Text[ENGLISH] = "People";
-    Text[english_us] = "People";
-    Text[ portuguese ] = "Pessoas";
-    Text[ russian ] = "Ëşäè";
-    Text[ dutch ] = "Personen";
-    Text[ french ] = "Gens";
-    Text[ spanish ] = "Personas";
-    Text[ italian ] = "Persone";
-    Text[ danish ] = "Personer";
-    Text[ swedish ] = "Personer";
-    Text[ polish ] = "Ludzie";
-    Text[ portuguese_brazilian ] = "Pessoas";
-    Text[ japanese ] = "äººç‰©";
-    Text[ chinese_simplified ] = "äººç‰©";
-    Text[ chinese_traditional ] = "äººç‰©";
-    Text[ arabic ] = "ÃÔÎÇÕ";
-    Text[ greek ] = "Ğñüóùğá";
-    Text[ korean ] = "ì‚¬ëŒ";
-    Text[ turkish ] = "İnsanlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gent";
-    Text[ finnish ] = "Ihmiset";
-    Text[ thai ] = "à¸›à¸£à¸°à¸Šà¸²à¸Šà¸™";
-    Text[ czech ] = "LidÃ©";
-    Text[ hebrew ] = "â€®×× ×©×™×â€¬";
-    Text[ hindi ] = "à¤œà¤¨";
-    Text[ slovak ] = "Ä½udia";
-    Text[ hungarian ] = "Emberek";
-    Text[ slovenian ] = "Ljudje";
+    Text [ de ] = "Personen";
+    Text [ en-US ] = "People";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SURFACES
 {
-    Text = "Oberflächen";
-    Text[ENGLISH] = "Surfaces";
-    Text[english_us] = "Surfaces";
-    Text[ portuguese ] = "Texturas";
-    Text[ russian ] = "Ïîâåğõíîñòè";
-    Text[ dutch ] = "Oppervlakken";
-    Text[ french ] = "Textures";
-    Text[ spanish ] = "Superficies";
-    Text[ italian ] = "Superfici";
-    Text[ danish ] = "Overflader";
-    Text[ swedish ] = "Ytor";
-    Text[ polish ] = "Powierzchnie";
-    Text[ portuguese_brazilian ] = "Superfícies";
-    Text[ japanese ] = "è¡¨é¢";
-    Text[ chinese_simplified ] = "å½©è‰²å¹³é¢";
-    Text[ chinese_traditional ] = "å½©è‰²å¹³é¢";
-    Text[ arabic ] = "ÃÓØÍ";
-    Text[ greek ] = "ÅğéöÜíåéåò";
-    Text[ korean ] = "í‘œë©´";
-    Text[ turkish ] = "Yüzeyler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Superfícies";
-    Text[ finnish ] = "Pinnat";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸œà¸´à¸§";
-    Text[ czech ] = "Povrchy";
-    Text[ hebrew ] = "â€®××©×˜×—×™×â€¬";
-    Text[ hindi ] = "à¤¤à¤²";
-    Text[ slovak ] = "Povrchy";
-    Text[ hungarian ] = "FelÃ¼letek";
-    Text[ slovenian ] = "PovrÅ¡ine";
+    Text [ de ] = "Oberflächen";
+    Text [ en-US ] = "Surfaces";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
@@ -585,143 +207,35 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 
 String RID_GALLERYSTR_THEME_RULERS
 {
-    Text = "Begrenzungen";
-    Text[ENGLISH] = "Rulers";
-    Text[english_us] = "Rulers";
-    Text[ portuguese ] = "Limites";
-    Text[ russian ] = "Ãğàíè÷íûå ëèíèè";
-    Text[ dutch ] = "Begrenzingen";
-    Text[ french ] = "Règles";
-    Text[ spanish ] = "Límites";
-    Text[ italian ] = "Limiti";
-    Text[ danish ] = "Grænser";
-    Text[ swedish ] = "Linjaler";
-    Text[ polish ] = "Obramowania";
-    Text[ portuguese_brazilian ] = "Réguas";
-    Text[ japanese ] = "ãƒ«ãƒ¼ãƒ©ãƒ¼";
-    Text[ chinese_simplified ] = "å½©è‰²çº¿æ¡";
-    Text[ chinese_traditional ] = "å½©è‰²ç·šæ¢";
-    Text[ arabic ] = "ÍÏæÏ";
-    Text[ greek ] = "¼ñéá";
-    Text[ korean ] = "ëˆˆê¸ˆì";
-    Text[ turkish ] = "Cetveller";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Regles";
-    Text[ finnish ] = "Viivaimet";
-    Text[ thai ] = "à¹„à¸¡à¹‰à¸šà¸£à¸£à¸—à¸±à¸”";
-    Text[ czech ] = "VodorovnÃ© ÄÃ¡ry";
-    Text[ hebrew ] = "â€®×¡×¨×’×œ×™×â€¬";
-    Text[ hindi ] = "à¤°à¥‚à¤²à¤°";
-    Text[ slovak ] = "PravÃ­tka";
-    Text[ hungarian ] = "ElvÃ¡lasztÃ³k";
-    Text[ slovenian ] = "Ravnila";
+    Text [ de ] = "Begrenzungen";
+    Text [ en-US ] = "Rulers";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SOUNDS
 {
-    Text = "Klänge";
-    Text[ENGLISH] = "Sounds";
-    Text[english_us] = "Sounds";
-    Text[ portuguese ] = "Sons";
-    Text[ russian ] = "Çâóêè";
-    Text[ dutch ] = "Geluiden";
-    Text[ french ] = "Sons";
-    Text[ spanish ] = "Sonidos";
-    Text[ italian ] = "Suoni";
-    Text[ danish ] = "Lyde";
-    Text[ swedish ] = "Ljud";
-    Text[ polish ] = "DŸwiêki";
-    Text[ portuguese_brazilian ] = "Sons";
-    Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰";
-    Text[ chinese_simplified ] = "å£°éŸ³å›¾æ ‡";
-    Text[ chinese_traditional ] = "è²éŸ³åœ–ç¤º";
-    Text[ arabic ] = "ÃÕæÇÊ";
-    Text[ greek ] = "¹÷ïé";
-    Text[ korean ] = "ì‚¬ìš´ë“œ";
-    Text[ turkish ] = "Sesler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sons";
-    Text[ finnish ] = "Äänet";
-    Text[ thai ] = "à¹€à¸ªà¸µà¸¢à¸‡";
-    Text[ czech ] = "Zvuky";
-    Text[ hebrew ] = "â€®×§×•×œ×•×ªâ€¬";
-    Text[ hindi ] = "à¤§à¥à¤µà¤¨à¤¿";
-    Text[ slovak ] = "Zvuky";
-    Text[ hungarian ] = "Hangok";
-    Text[ slovenian ] = "Zvoki";
+    Text [ de ] = "Klänge";
+    Text [ en-US ] = "Sounds";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SYMBOLS
 {
-    Text = "Symbole";
-    Text[ENGLISH] = "Symbols";
-    Text[english_us] = "Symbols";
-    Text[ portuguese ] = "Símbolos";
-    Text[ russian ] = "Çíàêè";
-    Text[ dutch ] = "Symbolen";
-    Text[ french ] = "Symboles";
-    Text[ spanish ] = "Símbolos";
-    Text[ italian ] = "Simboli";
-    Text[ danish ] = "Symboler";
-    Text[ swedish ] = "Symboler";
-    Text[ polish ] = "Symbole";
-    Text[ portuguese_brazilian ] = "Símbolos";
-    Text[ japanese ] = "ã‚·ãƒ³ãƒœãƒ«";
-    Text[ chinese_simplified ] = "å„å¼å›¾æ ‡";
-    Text[ chinese_traditional ] = "å„å¼åœ–ç¤º";
-    Text[ arabic ] = "ÑãæÒ";
-    Text[ greek ] = "Óıìâïëá";
-    Text[ korean ] = "ê¸°í˜¸";
-    Text[ turkish ] = "Simgeler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Símbols";
-    Text[ finnish ] = "Symbolit";
-    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
-    Text[ czech ] = "Symboly";
-    Text[ hebrew ] = "â€®×¡××œ×™×â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤";
-    Text[ slovak ] = "Symboly";
-    Text[ hungarian ] = "SzimbÃ³lumok";
-    Text[ slovenian ] = "Simboli";
+    Text [ de ] = "Symbole";
+    Text [ en-US ] = "Symbols";
+    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MYTHEME
 {
-    Text = "Eigenes Thema";
-    Text[ENGLISH] = "My theme";
-    Text[english_us] = "My Theme";
-    Text[ portuguese ] = "Temas próprios";
-    Text[ russian ] = "Ìîÿ òåìà";
-    Text[ greek ] = "Ğñïóùğéêü èİìá";
-    Text[ dutch ] = "Eigen onderwerp";
-    Text[ french ] = "Mon thème";
-    Text[ spanish ] = "Mis temas";
-    Text[ italian ] = "Argomento proprio";
-    Text[ danish ] = "Eget tema";
-    Text[ swedish ] = "Eget tema";
-    Text[ polish ] = "Mój temat";
-    Text[ portuguese_brazilian ] = "Meu Tema";
-    Text[ japanese ] = "ç‹¬è‡ªã®ãƒ†ãƒ¼ãƒ";
-    Text[ korean ] = "ê³ ìœ  ì£¼ì œ";
-    Text[ chinese_simplified ] = "è‡ªå·±çš„ä¸»é¢˜";
-    Text[ chinese_traditional ] = "è‡ªè¨‚ä¸»é¡Œ";
-    Text[ turkish ] = "Benim Temam";
-    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
-    Text[ catalan ] = "El meu tema";
-    Text[ finnish ] = "Oma teema";
-    Text[ thai ] = "à¸Šà¸¸à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¸‚à¸­à¸‡à¸‰à¸±à¸™";
-    Text[ czech ] = "Moje tÃ©ma";
-    Text[ hebrew ] = "â€®×”× ×•×©× ×©×œ×™â€¬";
-    Text[ hindi ] = "à¤®à¥‡à¤°à¤¾ à¤ªà¥à¤°à¤•à¤°à¤£";
-    Text[ slovak ] = "Moja tÃ©ma";
-    Text[ hungarian ] = "SajÃ¡t tÃ©ma";
-    Text[ slovenian ] = "Moja tema";
+    Text [ de ] = "Eigenes Thema";
+    Text [ en-US ] = "My Theme";
 };
 
 // -----------------------------------------------------------------------------
@@ -736,509 +250,129 @@ String RID_GALLERYSTR_THEME_USERSOUNDS
 
 String RID_GALLERYSTR_THEME_ARROWS
 {
-    Text = "Pfeile";
-    Text[ENGLISH] = "Arrows";
-    Text[english_us] = "Arrows";
-    Text[ portuguese ] = "Setas";
-    Text[ russian ] = "Ñòğåëêè";
-    Text[ greek ] = "Âİëç";
-    Text[ dutch ] = "Pijlen";
-    Text[ french ] = "Flèches";
-    Text[ spanish ] = "Flechas";
-    Text[ italian ] = "Frecce";
-    Text[ danish ] = "Pile";
-    Text[ swedish ] = "Pilar";
-    Text[ polish ] = "Strza³ki";
-    Text[ portuguese_brazilian ] = "Setas";
-    Text[ japanese ] = "çŸ¢å°";
-    Text[ korean ] = "í™”ì‚´í‘œ";
-    Text[ chinese_simplified ] = "ç®­å¤´";
-    Text[ chinese_traditional ] = "ç®­é ­";
-    Text[ turkish ] = "Oklar";
-    Text[ arabic ] = "ÃÓåã";
-    Text[ catalan ] = "Fletxes";
-    Text[ finnish ] = "Nuolet";
-    Text[ thai ] = "à¸¥à¸¹à¸à¸¨à¸£";
-    Text[ czech ] = "Å ipky";
-    Text[ hebrew ] = "â€®×—×™×¦×™×â€¬";
-    Text[ hindi ] = "à¤¤à¥€à¤°";
-    Text[ slovak ] = "Å Ã­pky";
-    Text[ hungarian ] = "Nyilak";
-    Text[ slovenian ] = "PuÅ¡Äice";
+    Text [ de ] = "Pfeile";
+    Text [ en-US ] = "Arrows";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BALLOONS
 {
-    Text = "Sprechblasen";
-    Text[ENGLISH] = "Balloons";
-    Text[english_us] = "Balloons";
-    Text[ portuguese ] = "Balões";
-    Text[ russian ] = "Ïîäñêàçêè";
-    Text[ greek ] = "ÓõííåöÜêéá êåéìİíïõ";
-    Text[ dutch ] = "Tekstballonnen";
-    Text[ french ] = "Bulles";
-    Text[ spanish ] = "Llamadas";
-    Text[ italian ] = "Vignetta";
-    Text[ danish ] = "Talebobler";
-    Text[ swedish ] = "Pratbubblor";
-    Text[ polish ] = "Chmurki tekstowe";
-    Text[ portuguese_brazilian ] = "Balões";
-    Text[ japanese ] = "å¹ãå‡ºã—";
-    Text[ korean ] = "í’ì„ ";
-    Text[ chinese_simplified ] = "è¯´è¯æ–‡å­—æ¡†";
-    Text[ chinese_traditional ] = "èªªè©±æ–¹æ¡†";
-    Text[ turkish ] = "Baloncuklar";
-    Text[ arabic ] = "ÊÚáíŞ ÊİÓíÑí";
-    Text[ catalan ] = "Globus";
-    Text[ finnish ] = "Puhekuplat";
-    Text[ thai ] = "à¸šà¸­à¸¥à¸¥à¸¹à¸™";
-    Text[ czech ] = "Bubliny";
-    Text[ hebrew ] = "â€®×‘×œ×•× ×™×â€¬";
-    Text[ hindi ] = "à¤¬à¤²à¥‚à¤¨";
-    Text[ slovak ] = "Bubliny";
-    Text[ hungarian ] = "SzÃ¶vegbuborÃ©k";
-    Text[ slovenian ] = "Baloni";
+    Text [ de ] = "Sprechblasen";
+    Text [ en-US ] = "Balloons";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_KEYBOARD
 {
-    Text = "Tastatur";
-    Text[ENGLISH] = "Keyboard";
-    Text[english_us] = "Keyboard";
-    Text[ portuguese ] = "Teclado";
-    Text[ russian ] = "Êëàâèàòóğà";
-    Text[ greek ] = "Ğëçêôñïëüãéï";
-    Text[ dutch ] = "Toetsenbord";
-    Text[ french ] = "Clavier";
-    Text[ spanish ] = "Teclado";
-    Text[ italian ] = "Tastiera";
-    Text[ danish ] = "Tastatur";
-    Text[ swedish ] = "Tangentbord";
-    Text[ polish ] = "Klawiatura";
-    Text[ portuguese_brazilian ] = "Teclado";
-    Text[ japanese ] = "ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰";
-    Text[ korean ] = "í‚¤ë³´ë“œ";
-    Text[ chinese_simplified ] = "é”®ç›˜";
-    Text[ chinese_traditional ] = "éµç›¤";
-    Text[ turkish ] = "Klavye";
-    Text[ arabic ] = "áæÍÉ ÇáãİÇÊíÍ";
-    Text[ catalan ] = "Teclat";
-    Text[ finnish ] = "Näppäimistö";
-    Text[ thai ] = "à¹à¸›à¹‰à¸™à¸à¸´à¸¡à¸à¹Œ";
-    Text[ czech ] = "KlÃ¡vesnice";
-    Text[ hebrew ] = "â€®××§×œ×“×ªâ€¬";
-    Text[ hindi ] = "à¤•à¥€à¤¬à¥‹à¤°à¥à¤¡";
-    Text[ slovak ] = "KlÃ¡vesnica";
-    Text[ hungarian ] = "BillentyÅ±zet";
-    Text[ slovenian ] = "Tipkovnica";
+    Text [ de ] = "Tastatur";
+    Text [ en-US ] = "Keyboard";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_TIME
 {
-    Text = "Zeit";
-    Text[ENGLISH] = "Time";
-    Text[english_us] = "Time";
-    Text[ portuguese ] = "Hora";
-    Text[ russian ] = "Âğåìÿ";
-    Text[ greek ] = "¿ñá";
-    Text[ dutch ] = "Tijd";
-    Text[ french ] = "Heure";
-    Text[ spanish ] = "Hora";
-    Text[ italian ] = "Orario";
-    Text[ danish ] = "Tid";
-    Text[ swedish ] = "Tid";
-    Text[ polish ] = "Czas";
-    Text[ portuguese_brazilian ] = "Hora";
-    Text[ japanese ] = "æ™‚é–“";
-    Text[ korean ] = "ì‹œê°„";
-    Text[ chinese_simplified ] = "æ—¶é—´";
-    Text[ chinese_traditional ] = "æ™‚é–“";
-    Text[ turkish ] = "Zaman";
-    Text[ arabic ] = "ÇáæŞÊ";
-    Text[ catalan ] = "Hora";
-    Text[ finnish ] = "Aika";
-    Text[ thai ] = "à¹€à¸§à¸¥à¸²";
-    Text[ czech ] = "ÄŒas";
-    Text[ hebrew ] = "â€®×©×¢×”â€¬";
-    Text[ hindi ] = "à¤¸à¤®à¤¯";
-    Text[ slovak ] = "ÄŒas";
-    Text[ hungarian ] = "IdÅ‘";
-    Text[ slovenian ] = "ÄŒas";
+    Text [ de ] = "Zeit";
+    Text [ en-US ] = "Time";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PRESENTATION
 {
-    Text = "Präsentation";
-    Text[ENGLISH] = "Presentation";
-    Text[english_us] = "Presentation";
-    Text[ portuguese ] = "Apresentação";
-    Text[ russian ] = "Ïğåçåíòàöèÿ";
-    Text[ greek ] = "Ğáñïõóßáóç";
-    Text[ dutch ] = "Presentatie";
-    Text[ french ] = "Présentation";
-    Text[ spanish ] = "Presentación";
-    Text[ italian ] = "Presentazione";
-    Text[ danish ] = "Præsentation";
-    Text[ swedish ] = "Presentation";
-    Text[ polish ] = "Prezentacja";
-    Text[ portuguese_brazilian ] = "Apresentação";
-    Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ korean ] = "í”„ë ˆì  í…Œì´ì…˜";
-    Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿";
-    Text[ chinese_traditional ] = "ç°¡å ±";
-    Text[ turkish ] = "Sunum";
-    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí";
-    Text[ catalan ] = "Presentació";
-    Text[ finnish ] = "Esitys";
-    Text[ thai ] = "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
-    Text[ czech ] = "Prezentace";
-    Text[ hebrew ] = "â€®××¦×’×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿";
-    Text[ slovak ] = "PrezentÃ¡cia";
-    Text[ hungarian ] = "BemutatÃ³";
-    Text[ slovenian ] = "Predstavitev";
+    Text [ de ] = "Präsentation";
+    Text [ en-US ] = "Presentation";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CALENDAR
 {
-    Text = "Kalender";
-    Text[ENGLISH] = "Calendar";
-    Text[english_us] = "Calendar";
-    Text[ portuguese ] = "Calendário";
-    Text[ russian ] = "Êàëåíäàğü";
-    Text[ greek ] = "Çìåñïëüãéï";
-    Text[ dutch ] = "Agenda";
-    Text[ french ] = "Calendrier";
-    Text[ spanish ] = "Calendario";
-    Text[ italian ] = "Calendario";
-    Text[ danish ] = "Kalender";
-    Text[ swedish ] = "Kalender";
-    Text[ polish ] = "Kalendarz";
-    Text[ portuguese_brazilian ] = "Calendário";
-    Text[ japanese ] = "ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼";
-    Text[ korean ] = "ì¹¼ë Œë”";
-    Text[ chinese_simplified ] = "æ—¥å†";
-    Text[ chinese_traditional ] = "è¡Œäº‹æ›†";
-    Text[ turkish ] = "Takvim";
-    Text[ arabic ] = "ÊŞæíã";
-    Text[ catalan ] = "Calendari";
-    Text[ finnish ] = "Kalenteri";
-    Text[ thai ] = "à¸›à¸à¸´à¸—à¸´à¸™";
-    Text[ czech ] = "KalendÃ¡Å™";
-    Text[ hebrew ] = "â€®×œ×•×— ×©× ×”â€¬";
-    Text[ hindi ] = "à¤•à¥‡à¤²à¤¨à¥à¤¡à¤°";
-    Text[ slovak ] = "KalendÃ¡r";
-    Text[ hungarian ] = "NaptÃ¡r";
-    Text[ slovenian ] = "Koledar";
+    Text [ de ] = "Kalender";
+    Text [ en-US ] = "Calendar";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_NAVIGATION
 {
-    Text = "Navigation";
-    Text[ENGLISH] = "Navigation";
-    Text[english_us] = "Navigation";
-    Text[ portuguese ] = "Navegação";
-    Text[ russian ] = "Íàâèãàöèÿ 1";
-    Text[ greek ] = "ĞëïŞãçóç";
-    Text[ dutch ] = "Navigatie";
-    Text[ french ] = "Navigation";
-    Text[ spanish ] = "Navegación";
-    Text[ italian ] = "Navigazione";
-    Text[ danish ] = "Navigation";
-    Text[ swedish ] = "Navigation";
-    Text[ polish ] = "Nawigacja";
-    Text[ portuguese_brazilian ] = "Navegação";
-    Text[ japanese ] = "ãƒŠãƒ“ã‚²ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ korean ] = "íƒìƒ‰";
-    Text[ chinese_simplified ] = "æµè§ˆ";
-    Text[ chinese_traditional ] = "ç€è¦½";
-    Text[ turkish ] = "Yönlendirme";
-    Text[ arabic ] = "ãáÇÍÉ";
-    Text[ catalan ] = "Navegació";
-    Text[ finnish ] = "Siirtyminen";
-    Text[ thai ] = "à¸™à¸³à¸—à¸²à¸‡";
-    Text[ czech ] = "Navigace";
-    Text[ hebrew ] = "â€®× ×™×•×•×˜â€¬";
-    Text[ hindi ] = "à¤¨à¤¾à¤µà¤¿à¤—à¥‡à¤¶à¤¨";
-    Text[ slovak ] = "NavigÃ¡cia";
-    Text[ hungarian ] = "NavigÃ¡ciÃ³";
-    Text[ slovenian ] = "Krmarjenje";
+    Text [ de ] = "Navigation";
+    Text [ en-US ] = "Navigation";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMMUNICATION
 {
-    Text = "Kommunikation";
-    Text[ENGLISH] = "Communication";
-    Text[english_us] = "Communication";
-    Text[ portuguese ] = "Comunicação";
-    Text[ russian ] = "Ñâÿçü";
-    Text[ greek ] = "Åğéêïéíùíßá";
-    Text[ dutch ] = "Communicatie";
-    Text[ french ] = "Communication";
-    Text[ spanish ] = "Comunicación";
-    Text[ italian ] = "Comunicazione";
-    Text[ danish ] = "Kommunikation";
-    Text[ swedish ] = "Kommunikation";
-    Text[ polish ] = "Komunikacja";
-    Text[ portuguese_brazilian ] = "Comunicação";
-    Text[ japanese ] = "ã‚³ãƒŸãƒ¥ãƒ‹ã‚±ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ korean ] = "í†µì‹ ";
-    Text[ chinese_simplified ] = "é€šè®¯";
-    Text[ chinese_traditional ] = "é€šè¨Š";
-    Text[ turkish ] = "İletişim";
-    Text[ arabic ] = "ÇÊÕÇá";
-    Text[ catalan ] = "Comunicació";
-    Text[ finnish ] = "Yhteydenpito";
-    Text[ thai ] = "à¸à¸²à¸£à¸ªà¸·à¹ˆà¸­à¸ªà¸²à¸£";
-    Text[ czech ] = "Komunikace";
-    Text[ hebrew ] = "â€®×ª×§×©×•×¨×ªâ€¬";
-    Text[ hindi ] = "à¤¬à¤¾à¤¤à¤šà¥€à¤¤";
-    Text[ slovak ] = "KomunikÃ¡cia";
-    Text[ hungarian ] = "KommunikÃ¡ciÃ³";
-    Text[ slovenian ] = "Komunikacija";
+    Text [ de ] = "Kommunikation";
+    Text [ en-US ] = "Communication";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FINANCES
 {
-    Text = "Finanzen";
-    Text[ENGLISH] = "Finances";
-    Text[english_us] = "Finances";
-    Text[ portuguese ] = "Finanças";
-    Text[ russian ] = "Ôèíàíñû";
-    Text[ greek ] = "ÏéêïíïìéêÜ";
-    Text[ dutch ] = "Financiën";
-    Text[ french ] = "Économie";
-    Text[ spanish ] = "Finanzas";
-    Text[ italian ] = "Finanze";
-    Text[ danish ] = "Finanser";
-    Text[ swedish ] = "Ekonomi";
-    Text[ polish ] = "Finanse";
-    Text[ portuguese_brazilian ] = "Finanças";
-    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒŠãƒ³ã‚¹";
-    Text[ korean ] = "ì¬ì • ê´€ë¦¬";
-    Text[ chinese_simplified ] = "è´¢åŠ¡";
-    Text[ chinese_traditional ] = "è²¡å‹™";
-    Text[ turkish ] = "Parasal";
-    Text[ arabic ] = "ãÇáíÉ";
-    Text[ catalan ] = "Finances";
-    Text[ finnish ] = "Talous";
-    Text[ thai ] = "à¸à¸²à¸£à¹€à¸‡à¸´à¸™";
-    Text[ czech ] = "Finance";
-    Text[ hebrew ] = "â€®×›×¡×¤×™×â€¬";
-    Text[ hindi ] = "à¤†à¤°à¥à¤¥à¤¿à¤• à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾";
-    Text[ slovak ] = "Financie";
-    Text[ hungarian ] = "PÃ©nzÃ¼gyek";
-    Text[ slovenian ] = "Finance";
+    Text [ de ] = "Finanzen";
+    Text [ en-US ] = "Finances";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMPUTER
 {
-    Text = "Computer";
-    Text[ENGLISH] = "Computer";
-    Text[english_us] = "Computers";
-    Text[ portuguese ] = "Computador";
-    Text[ russian ] = "Êîìïüşòåğû";
-    Text[ greek ] = "ÕğïëïãéóôŞò";
-    Text[ dutch ] = "Computer";
-    Text[ french ] = "Ordinateur";
-    Text[ spanish ] = "Ordenador";
-    Text[ italian ] = "Computer";
-    Text[ danish ] = "Computere";
-    Text[ swedish ] = "Dator";
-    Text[ polish ] = "Komputery";
-    Text[ portuguese_brazilian ] = "Computadores";
-    Text[ japanese ] = "ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿";
-    Text[ korean ] = "ì»´í“¨í„°";
-    Text[ chinese_simplified ] = "è®¡ç®—æœº";
-    Text[ chinese_traditional ] = "é›»è…¦";
-    Text[ turkish ] = "Bilgisayarlar";
-    Text[ arabic ] = "ßãÈíæÊÑ";
-    Text[ catalan ] = "Ordinadors";
-    Text[ finnish ] = "Tietokoneet";
-    Text[ thai ] = "à¸„à¸­à¸¡à¸à¸´à¸§à¹€à¸•à¸­à¸£à¹Œ";
-    Text[ czech ] = "PoÄÃ­taÄe";
-    Text[ hebrew ] = "â€®××—×©×‘×™×â€¬";
-    Text[ hindi ] = "à¤—à¤£à¤• à¤¯à¤‚à¤¤à¥à¤°";
-    Text[ slovak ] = "PoÄÃ­taÄe";
-    Text[ hungarian ] = "SzÃ¡mÃ­tÃ³gÃ©pek";
-    Text[ slovenian ] = "RaÄunalniki";
+    Text [ de ] = "Computer";
+    Text [ en-US ] = "Computers";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLIMA
 {
-    Text = "Klima";
-    Text[ENGLISH] = "Climate";
-    Text[english_us] = "Climate";
-    Text[ portuguese ] = "Clima";
-    Text[ russian ] = "Êëèìàò";
-    Text[ greek ] = "Êëßìá";
-    Text[ dutch ] = "Klimaat";
-    Text[ french ] = "Climat";
-    Text[ spanish ] = "Clima";
-    Text[ italian ] = "Clima";
-    Text[ danish ] = "Klima";
-    Text[ swedish ] = "Klimat";
-    Text[ polish ] = "Klimat";
-    Text[ portuguese_brazilian ] = "Clima";
-    Text[ japanese ] = "æ°—å€™";
-    Text[ korean ] = "ê¸°í›„";
-    Text[ chinese_simplified ] = "æ°”å€™";
-    Text[ chinese_traditional ] = "æ°£å€™";
-    Text[ turkish ] = "İklim";
-    Text[ arabic ] = "Climate";
-    Text[ catalan ] = "Clima";
-    Text[ finnish ] = "Ympäristö";
-    Text[ thai ] = "à¸­à¸²à¸à¸²à¸¨";
-    Text[ czech ] = "PodnebÃ­";
-    Text[ hebrew ] = "â€®××›×œ×™×â€¬";
-    Text[ hindi ] = "à¤¤à¥à¤°à¥ƒà¤¤à¥";
-    Text[ slovak ] = "Podnebie";
-    Text[ hungarian ] = "Ã‰ghajlat";
-    Text[ slovenian ] = "Podnebje";
+    Text [ de ] = "Klima";
+    Text [ en-US ] = "Climate";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_EDUCATION
 {
-    Text = "Schule & Uni";
-    Text[ENGLISH] = "School & University";
-    Text[english_us] = "School & University";
-    Text[ portuguese ] = "Escola & Universidade";
-    Text[ russian ] = "Øêîëà è óíèâåğñèòåò";
-    Text[ greek ] = "Ó÷ïëåßï & ĞáíåğéóôŞìéï";
-    Text[ dutch ] = "School & Universiteit";
-    Text[ french ] = "École & université";
-    Text[ spanish ] = "Escuela y universidad";
-    Text[ italian ] = "Scuola & Università";
-    Text[ danish ] = "Skole og universitet";
-    Text[ swedish ] = "Skola & universitet";
-    Text[ polish ] = "Szko³a i uniwersytet";
-    Text[ portuguese_brazilian ] = "Escola & Universidade";
-    Text[ japanese ] = "æ•™è‚²æ©Ÿé–¢";
-    Text[ korean ] = "êµìœ¡ ê¸°ê´€";
-    Text[ chinese_simplified ] = "ä¸­å­¦å’Œå¤§å­¦";
-    Text[ chinese_traditional ] = "ä¸­å­¸å’Œå¤§å­¸";
-    Text[ turkish ] = "Okull & Universite";
-    Text[ arabic ] = "School & University";
-    Text[ catalan ] = "Escola i universitat";
-    Text[ finnish ] = "Koulu ja yliopisto";
-    Text[ thai ] = "à¹‚à¸£à¸‡à¹€à¸£à¸µà¸¢à¸™à¹à¸¥à¸°à¸¡à¸«à¸²à¸§à¸´à¸—à¸¢à¸²à¸¥à¸±à¸¢";
-    Text[ czech ] = "Å kola a univerzita";
-    Text[ hebrew ] = "â€®×‘×™×ª ×¡×¤×¨ ×•××•× ×™×‘×¨×¡×™×˜×”â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤•à¥‚à¤² à¤”à¤° à¤µà¤¿à¤¶à¥à¤µà¤µà¤¿à¤¦à¥à¤¯à¤¾à¤²à¤¯";
-    Text[ slovak ] = "Å kola a univerzita";
-    Text[ hungarian ] = "Iskola Ã©s egyetem";
-    Text[ slovenian ] = "Å ola in univerza";
+    Text [ de ] = "Schule & Uni";
+    Text [ en-US ] = "School & University";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_TROUBLE
 {
-    Text = "Problemlösungen";
-    Text[ENGLISH] = "Problem Solving";
-    Text[english_us] = "Problem Solving";
-    Text[ portuguese ] = "Solução de problemas";
-    Text[ russian ] = "Ğåøåíèÿ ïğîáëåì";
-    Text[ greek ] = "Åğßëõóç ğñïâëçìÜôùí";
-    Text[ dutch ] = "Probleemoplossingen";
-    Text[ french ] = "Solutions";
-    Text[ spanish ] = "Soluciones de problemas";
-    Text[ italian ] = "Soluzioni";
-    Text[ danish ] = "Problemløsning";
-    Text[ swedish ] = "Problemlösningar";
-    Text[ polish ] = "Rozwi¹zywanie problemów";
-    Text[ portuguese_brazilian ] = "Solução de problemas";
-    Text[ japanese ] = "ãƒˆãƒ©ãƒ–ãƒ«è§£æ±º";
-    Text[ korean ] = "ë¬¸ì œ í•´ê²°";
-    Text[ chinese_simplified ] = "è§£å†³é—®é¢˜çš„æ–¹æ¡ˆ";
-    Text[ chinese_traditional ] = "è§£æ±ºå•é¡Œçš„æ–¹æ¡ˆ";
-    Text[ turkish ] = "Problem çözümü";
-    Text[ arabic ] = "Problem Solving";
-    Text[ catalan ] = "Solució de problemes";
-    Text[ finnish ] = "Ongelmanratkaisu";
-    Text[ thai ] = "à¸à¸²à¸£à¹à¸à¹‰à¸›à¸±à¸à¸«à¸²";
-    Text[ czech ] = "Å˜eÅ¡enÃ­ problÃ©mu";
-    Text[ hebrew ] = "â€®×¤×ª×¨×•×Ÿ ×‘×¢×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¤®à¤¸à¥à¤¯à¤¾ à¤•à¤¾ à¤‰à¤¤à¥à¤¤à¤° à¤¨à¤¿à¤•à¤¾à¤²à¤¨à¤¾";
-    Text[ slovak ] = "RieÅ¡enie problÃ©mu";
-    Text[ hungarian ] = "ProblÃ©mamegoldÃ¡s";
-    Text[ slovenian ] = "ReÅ¡evanje teÅ¾av";
+    Text [ de ] = "Problemlösungen";
+    Text [ en-US ] = "Problem Solving";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SCREENBEANS
 {
-    Text = "ScreenBeans";
-    Text[ENGLISH] = "ScreenBeans";
-    Text[english_us] = "Screen Beans";
-    Text[ language_user1 ] = "; EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
-    Text[ portuguese ] = "Screen Beans";
-    Text[ russian ] = "×åëîâå÷êè";
-    Text[ greek ] = "Êüêêïé ïèüíçò";
-    Text[ dutch ] = "Screen Beans";
-    Text[ french ] = "ScreenBeans";
-    Text[ spanish ] = "Screen Beans";
-    Text[ finnish ] = "Screen Beans -kuvat";
-    Text[ italian ] = "Screen Beans";
-    Text[ danish ] = "ScreenBeans";
-    Text[ swedish ] = "Screen Beans";
-    Text[ polish ] = "Ludki";
-    Text[ portuguese_brazilian ] = "Screen Beans";
-    Text[ japanese ] = "Screen Beans";
-    Text[ korean ] = "ScreenBeans";
-    Text[ chinese_simplified ] = "Screen Beans";
-    Text[ chinese_traditional ] = "Screen Beans";
-    Text[ turkish ] = "Ekran";
-    Text[ arabic ] = "Screen Beans";
-    Text[ catalan ] = "ScreenBeans";
-    Text[ thai ] = "Screen Beans";
-    Text[ czech ] = "Ozdoby na obrazovku";
-    Text[ hebrew ] = "â€®×¤×•×œ×™ ××¡×š (Screen Beans)â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤•à¥à¤°à¥€à¤¨ à¤¬à¥€à¤¨à¥à¤¸";
-    Text[ slovak ] = "Screen Beans";
-    Text[ hungarian ] = "Screen Beans";
-    Text[ slovenian ] = "Screen Bean podobe";
+    Text [ de ] = "ScreenBeans";
+    Text [ en-US ] = "Screen Beans";
+    Text [ x-comment ] = "; EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FONTWORK
 {
-    Text = "Fontwork";
-    Text[ENGLISH] = "Fontwork";
-    Text[english_us] = "Fontwork";
+    Text [ de ] = "Fontwork";
+    Text [ en-US ] = "Fontwork";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
 {
-    Text = "Fontwork Vertical";
-    Text[ENGLISH] = "Fontwork Vertical";
-    Text[english_us] = "Fontwork Vertical";
+    Text [ de ] = "Fontwork Vertical";
+    Text [ en-US ] = "Fontwork Vertical";
 };
 
 
