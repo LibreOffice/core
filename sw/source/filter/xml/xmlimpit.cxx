@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:34:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 //                                          pEntry->nMemberId & MID_SW_FLAG_MASK,
 //                                          rUnitConverter );
                         bPut = PutXMLValue( *pNewItem, rValue,
-                                            pEntry->nMemberId & MID_SW_FLAG_MASK,
+                                            static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
 
                     }
@@ -499,7 +499,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         if( nX < 0 ) nX *= -1;
                         if( nY < 0 ) nY *= -1;
 
-                        pShadow->SetWidth( (nX + nY) >> 1 );
+                        pShadow->SetWidth( static_cast< USHORT >( (nX + nY) >> 1 ) );
                     }
                 }
             }
@@ -646,27 +646,35 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                             break;
                     }
 
-                    sal_uInt16 nWidth = i < nSize ? 0 : nOutWidth + nInWidth + nDistance;
+                    sal_uInt16 nWidth = i < nSize ? 0 : static_cast<sal_uInt16>( nOutWidth + nInWidth + nDistance );
 
                     if( TOP_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pTop, nWidth, nOutWidth,
-                                                   nInWidth, nDistance );
+                        lcl_frmitems_setXMLBorder( pTop, nWidth,
+                                static_cast< sal_uInt16 >( nOutWidth ),
+                                static_cast< sal_uInt16 >( nInWidth ),
+                                static_cast< sal_uInt16 >( nDistance ) );
 
                     if( BOTTOM_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pBottom, nWidth, nOutWidth,
-                                                   nInWidth, nDistance );
+                        lcl_frmitems_setXMLBorder( pBottom, nWidth,
+                                static_cast< sal_uInt16 >( nOutWidth ),
+                                static_cast< sal_uInt16 >( nInWidth ),
+                                static_cast< sal_uInt16 >( nDistance ) );
 
                     if( LEFT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pLeft, nWidth, nOutWidth,
-                                                   nInWidth, nDistance );
+                        lcl_frmitems_setXMLBorder( pLeft, nWidth,
+                                static_cast< sal_uInt16 >( nOutWidth ),
+                                static_cast< sal_uInt16 >( nInWidth ),
+                                static_cast< sal_uInt16 >( nDistance ) );
 
                     if( RIGHT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pRight, nWidth, nOutWidth,
-                                                   nInWidth, nDistance );
+                        lcl_frmitems_setXMLBorder( pRight, nWidth,
+                                static_cast< sal_uInt16 >( nOutWidth ),
+                                static_cast< sal_uInt16 >( nInWidth ),
+                                static_cast< sal_uInt16 >( nDistance ) );
                 }
                 break;
             }
@@ -725,10 +733,18 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
             DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
 
-            sal_Bool bValue;
-            bOk = rUnitConverter.convertBool( bValue, rValue );
-            if ( bOk )
-                pFmtKeep->SetValue( bValue );
+            if( IsXMLToken( rValue, XML_ALWAYS ) ||
+                 IsXMLToken( rValue, XML_TRUE ) )
+            {
+                pFmtKeep->SetValue( sal_True );
+                bOk = sal_True;
+            }
+            else if( IsXMLToken( rValue, XML_AUTO ) ||
+                     IsXMLToken( rValue, XML_FALSE ) )
+            {
+                pFmtKeep->SetValue( sal_False );
+                bOk = sal_True;
+            }
         }
         break;
 
