@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-08 19:23:57 $
+#   last change: $Author: hjs $ $Date: 2001-08-10 14:30:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -673,7 +673,7 @@ $(MISC)$/%.hid : %.src
 .ENDIF
 
 # make *.xml descriptions available in $(MISC)
-$(MISC)$/%.xml : %.xml
+$(MISC)$/%_description.xml : %.xml
     +$(COPY) $< $@
 
 ##generate typelists from xml

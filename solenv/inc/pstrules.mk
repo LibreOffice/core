@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-08 10:40:07 $
+#   last change: $Author: hjs $ $Date: 2001-08-10 14:30:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -273,9 +273,6 @@ $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
-$(MISC)$/%_description.cxx : $(MISC)$/%.xml 
-    +xml2cmp -func $(MISC)$/$*_description.cxx $<
-    +$(RM) $<
 
 .IF "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"==""
 
