@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:44:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef SC_UNDOBASE_HXX
 #include "undobase.hxx"
+#endif
+#ifndef SC_POSTIT_HXX
+#include "postit.hxx"
 #endif
 
 class ScDocShell;
