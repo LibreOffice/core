@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2002-12-06 10:26:05 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:19:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,16 @@ SLOFILES= \
     $(SLO)$/jni_data.obj		\
     $(SLO)$/jni_uno2java.obj	\
     $(SLO)$/jni_java2uno.obj	\
-    $(SLO)$/jni_bridge.obj
+    $(SLO)$/jni_bridge.obj \
+    $(SLO)$/nativethreadpool.obj
 
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS= \
     $(JVMACCESSLIB)			\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB) \
+    $(SALHELPERLIB)
 
 SHL1VERSIONMAP=$(TARGET).map
 
