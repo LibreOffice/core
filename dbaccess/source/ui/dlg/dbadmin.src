@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:34:41 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1945,10 +1945,36 @@ Menu MENU_DATASOURCELIST_POPUP
         };
     };
 };
+WarningBox WARN_SAVEFORQUERIES
+{
+    Message = "Um die Abfragen einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
+        "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
+    Message [ english ] = "To administrate the queries of a data source, it must be saved.\n"
+        "Should all changes made in this dialog now be saved?";
+    Message [ english_us ] = "To administrate the queries of a data source, it must be saved.\n"
+        "Should all changes made in this dialog now be saved?";
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_YES;
+};
+ErrorBox ERR_CANTADMINQUERIES
+{
+    Message = "Um die Abfragen einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
+        "Allerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\n"
+        "Sie können die Abfragen nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
+    Message [ english ] = "To administrate the queries of a data source, it must be saved.\n"
+        "But, the current settings do not allow to save the changes (there are name conflicts).\n\n"
+        "You won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
+    Message [ english_us ] = "To administrate the queries of a data source, it must be saved.\n"
+        "But, the current settings do not allow to save the changes (there are name conflicts).\n\n"
+        "You won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/01/30 08:34:41  fs
+ *  redesigned the table subscription page
+ *
  *  Revision 1.24  2001/01/26 06:59:12  fs
  *  some basics for the query administration page - not enabled yet
  *
