@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:41:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::TableOrientation eOrientation;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
+    sal_Int16       nSubTotalRuleGroupFieldNumber;
     sal_Bool        bContainsSort;
     sal_Bool        bContainsSubTotal;
     sal_Bool        bNative;
