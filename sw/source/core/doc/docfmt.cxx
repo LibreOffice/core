@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,9 @@ int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
     // suche den Anfang der Defaults
     SvxTabStop* pTabs = ((SvxTabStop*)rChgTabStop.GetStart())
                         + (nOldCnt-1);
-    for( USHORT n = nOldCnt; n ; --n, --pTabs )
+    USHORT n;
+
+    for( n = nOldCnt; n ; --n, --pTabs )
         if( SVX_TAB_ADJUST_DEFAULT != pTabs->GetAdjustment() )
             break;
     ++n;
