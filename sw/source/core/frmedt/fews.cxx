@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-27 14:47:18 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 08:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,6 +847,10 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
 
     Point aPos;
     BOOL bVertic = FALSE;
+#ifdef BIDI
+    BOOL bRTL = FALSE;
+#endif
+
     if( FLY_PAGE == nAnchorId || FLY_AT_FLY == nAnchorId ) // LAYER_IMPL
     {
 #ifdef AMA_OUT_OF_FLY
@@ -865,7 +869,16 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
             pFrm = pTmp;
         rRect = pFrm->Frm();
         SWRECTFN( pFrm )
+#ifdef BIDI
+        bRTL = pFrm->IsRightToLeft();
+        if ( bRTL )
+            aPos = pFrm->Frm().TopRight();
+        else
+            aPos = (pFrm->Frm().*fnRect->fnGetPos)();
+#else
         aPos = (pFrm->Frm().*fnRect->fnGetPos)();
+#endif
+
         if( bVert )
         {
             bVertic = TRUE;
@@ -891,6 +904,20 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 default: aPos.X() += pFrm->Frm().Width();
             }
         }
+#ifdef BIDI
+        else if ( bRTL )
+        {
+            switch ( eRelOrient )
+            {
+                case PRTAREA:
+                case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Width();
+                // kein break!
+                case REL_PG_LEFT:
+                case REL_FRM_LEFT: aPos.X() += pFrm->Prt().Left() -
+                                               pFrm->Frm().Width(); break;
+            }
+        }
+#endif
         else
         {
             switch ( eRelOrient )
@@ -959,7 +986,15 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                 rRect.Height( (rRect.Height()*9)/10 );
         }
 
+#ifdef BIDI
+        bRTL = pFrm->IsRightToLeft();
+        if ( bRTL )
+            aPos = pFrm->Frm().TopRight();
+        else
+            aPos = (pFrm->Frm().*fnRect->fnGetPos)();
+#else
         aPos = (pFrm->Frm().*fnRect->fnGetPos)();
+#endif
 
         if( bVert )
         {
@@ -993,6 +1028,37 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
                                               + pPage->Prt().Left(); break;
             }
         }
+#ifdef BIDI
+        else if ( bRTL )
+        {
+            switch ( eRelOrient )
+            {
+                case REL_FRM_LEFT:
+                    aPos.X() = pFrm->Frm().Left() +
+                               pFrm->Prt().Left();
+                    break;
+
+                case PRTAREA:
+                    aPos.X() = pFrm->Frm().Left() + pFrm->Prt().Left() +
+                               pFrm->Prt().Width();
+                    break;
+
+                case REL_PG_LEFT:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Left();
+                    break;
+
+                case REL_PG_PRTAREA:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Left() +
+                               pPage->Prt().Width() ;
+                    break;
+
+                case REL_PG_RIGHT:
+                case REL_PG_FRAME:
+                    aPos.X() = pPage->Frm().Right();
+                    break;
+            }
+        }
+#endif
         else
         {
             switch ( eRelOrient )
@@ -1015,6 +1081,10 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
     {
         if( bVertic )
             rRect.Pos( aPos.X() - rRect.Width() - rRect.Left(), rRect.Top() - aPos.Y() );
+#ifdef BIDI
+        else if ( bRTL )
+            rRect.Pos( - ( rRect.Right() - aPos.X() ), rRect.Top() - aPos.Y() );
+#endif
         else
             rRect.Pos( rRect.Left() - aPos.X(), rRect.Top() - aPos.Y() );
         if( bMirror )

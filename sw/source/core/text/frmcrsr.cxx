@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-24 15:21:12 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 08:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,11 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
                 rOrig.Pos().Y() += aTmpState.aRealHeight.X();
                 rOrig.Height( aTmpState.aRealHeight.Y() );
             }
+
+#ifdef BIDI
+            if ( pFrm->IsRightToLeft() )
+                pFrm->SwitchLTRtoRTL( rOrig );
+#endif
 
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );

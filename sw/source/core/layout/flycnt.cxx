@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 15:35:19 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 08:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,7 +1100,13 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwPageFrm *pOldPage = FindPageFrm();
     const SwRect aOld( AddSpacesToFrm() );
     Point aNew( rNew );
+
+#ifdef BIDI
+    if( GetAnchor()->IsVertical() || GetAnchor()->IsRightToLeft() )
+#else
     if( GetAnchor()->IsVertical() )
+#endif
+
         aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), aNew );
     if( pCnt->IsProtected() )
@@ -1108,13 +1114,27 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwPageFrm *pPage = 0;
     SWRECTFN( pCnt )
-    if( bVert != GetAnchor()->IsVertical() )
+#ifdef BIDI
+    const sal_Bool bRTL = pCnt->IsRightToLeft();
+
+    if( ( bVert != GetAnchor()->IsVertical() ) ||
+        ( bRTL != GetAnchor()->IsRightToLeft() ) )
+    {
+        if( bVert || bRTL )
+            aNew.X() += Frm().Width();
+        else
+            aNew.X() -= Frm().Width();
+    }
+#else
+    if( ( bVert != GetAnchor()->IsVertical() )
     {
         if( bVert )
             aNew.X() += Frm().Width();
         else
             aNew.X() -= Frm().Width();
     }
+#endif
+
     if ( pCnt->IsInDocBody() )
     {
         //#38848 Vom Seitenrand in den Body ziehen.
@@ -1194,9 +1214,23 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     else
     {
         if( !pFrm )
-            nX += rNew.X() - pCnt->Frm().Left();
+        {
+#ifdef BIDI
+            if ( pCnt->IsRightToLeft() )
+                nX += pCnt->Frm().Right() - rNew.X() - Frm().Width();
+            else
+#endif
+                nX += rNew.X() - pCnt->Frm().Left();
+        }
         else
-            nX = rNew.X() - pFrm->Frm().Left();
+        {
+#ifdef BIDI
+            if ( pFrm->IsRightToLeft() )
+                nX += pFrm->Frm().Right() - rNew.X() - Frm().Width();
+            else
+#endif
+                nX = rNew.X() - pFrm->Frm().Left();
+        }
     }
     GetFmt()->GetDoc()->StartUndo( UNDO_START );
 
@@ -2191,7 +2225,12 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     nRelPosX += aHori.GetPos();
             }
             else if( bToggle || ( !aHori.IsPosToggle() && bR2L ) )
+#ifdef BIDI
+                nRelPosX = nWidth - aFrm.Width() - aHori.GetPos() +
+                            ( bR2L ? nAdd : 0 );
+#else
                 nRelPosX = nWidth - aFrm.Width() - aHori.GetPos();
+#endif
             else
                 nRelPosX += aHori.GetPos();
             //Da die relative Position immer zum Anker relativ ist,
