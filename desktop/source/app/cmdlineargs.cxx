@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 08:18:25 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 16:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,6 @@ CommandLineArgs::CommandLineArgs( const ::rtl::OUString& aCmdLineArgs )
 
 void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtCmdLine )
 {
-    sal_Bool    bPrintEvent     = sal_False;
-    sal_Bool    bPrintToEvent   = sal_False;
-    sal_Bool    bOpenEvent      = sal_True;
-    sal_Bool    bForceOpenEvent = sal_True;
-    sal_Bool    bForceNewEvent  = sal_True;
-    sal_Int32   bPrinterName    = sal_False;
-
     ::vos::OExtCommandLine aCmdLine;
 
     sal_uInt32      nCount = aCmdLine.getCommandArgCount();
@@ -127,8 +120,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bOpenEvent      = sal_True;
     sal_Bool    bPrintToEvent   = sal_False;
     sal_Bool    bPrinterName    = sal_False;
-    sal_Bool    bForceOpenEvent = sal_True;
-    sal_Bool    bForceNewEvent  = sal_True;
+    sal_Bool    bForceOpenEvent = sal_False;
+    sal_Bool    bForceNewEvent  = sal_False;
 
     sal_Int32 nIndex = 0;
     do
@@ -149,6 +142,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_True;
                         bOpenEvent      = sal_False;
                         bForceOpenEvent = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bPrintEvent     = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
                     {
@@ -156,21 +151,27 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceOpenEvent = sal_True;
                         bOpenEvent      = sal_False;
                         bForceNewEvent  = sal_False;
+                        bPrintToEvent   = sal_False;
+                        bPrintEvent     = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
                     {
                         // Print to special printer
-                        bPrintEvent = sal_False;
-                        bPrintToEvent = sal_True;
-                        bOpenEvent = sal_False;
-                        bPrinterName = sal_True;
+                        bPrintToEvent   = sal_True;
+                        bPrinterName    = sal_True;
+                        bPrintEvent     = sal_False;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bForceOpenEvent = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
                     {
                         // Print to default printer
-                        bPrintEvent = sal_True;
-                        bPrintToEvent = sal_False;
-                        bOpenEvent = sal_False;
+                        bPrintEvent     = sal_True;
+                        bPrintToEvent   = sal_False;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
+                        bForceOpenEvent = sal_False;
                     }
                 }
                 else
