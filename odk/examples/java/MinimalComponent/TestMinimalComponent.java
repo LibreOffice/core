@@ -6,9 +6,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XServiceInfo;
 
-import MinimalComponent;
-
-
 public class TestMinimalComponent {
   public static void main(String args[]) {
     try {
@@ -48,8 +45,9 @@ public class TestMinimalComponent {
       UnoRuntime.queryInterface( XServiceInfo.class,
       objectMinimalComponent );
 
-      System.out.println(
-      xserviceinfoMinimalComponent.getImplementationName() );
+      System.out.println( "\nXServiceInfo is used to get the implementation name:\n    -> " +
+                          xserviceinfoMinimalComponent.getImplementationName() +
+                          "\nOk");
 
       // Removing the XSingleServiceFactory of the minimal Component from the container
       xsetMultiServiceFactory.remove( xsingleservicefactoryMinimalComponent );
