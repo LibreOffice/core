@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-28 13:26:19 $
+ *  last change: $Author: cmc $ $Date: 2002-05-29 09:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
 #endif
 
 #ifndef _HINTIDS_HXX
