@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-23 08:01:32 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     // Leere Strings sind immer 0
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
-    {
-        nHeight = rInf.GetTxtHeight();
         return sal_False;
-    }
+
     ASSERT( rInf.GetIdx() < rInf.GetTxt().Len(),
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
 
-    nHeight = nPorHeight;
+    ASSERT( nPorHeight, "+SwTxtGuess::Guess: no height" );
+
     USHORT nMinSize;
     USHORT nMaxSizeDiff;
 
@@ -163,7 +162,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&
                         ! rInf.IsMulti() &&
-                        ! rPor.InFldGrp() ?
+                        ! rPor.InFldGrp() &&
+                        ! rPor.IsDropPortion() ?
                         10000 :
                             0 ;
 
@@ -172,30 +172,19 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                                 rInf.GetLen() );
     // special case: char width > line width
     if( !nMaxLen || !nLineWidth )
-    {
-        nHeight = rInf.GetTxtHeight();
         return sal_False;
-    }
-
-    if( !nHeight )
-    {
-        ASSERT( nHeight, "+SwTxtGuess::Guess: no height" );
-        nHeight = rInf.GetTxtHeight();
-        if( !nHeight )
-            nHeight = 1;
-    }
 
     KSHORT nItalic = 0;
     if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
     {
 #ifdef DEBUG
         static MSHORT nDiv = 12;
-        nItalic = nHeight / nDiv;
+        nItalic = nPorHeight / nDiv;
 #else
 #ifdef MAC
-        nItalic = nHeight / 4;
+        nItalic = nPorHeight / 4;
 #else
-        nItalic = nHeight / 12;
+        nItalic = nPorHeight / 12;
 #endif
 #endif
         if( nItalic >= nLineWidth )
@@ -209,7 +198,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     }
 
     // first check if everything fits to line
-    if ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nHeight )
+    if ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nPorHeight )
     {
         // call GetTxtSize with maximum compression (for kanas)
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen,
@@ -221,7 +210,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         {
             // portion fits to line
             nCutPos = rInf.GetIdx() + nMaxLen - 1;
-            nHeight = rInf.GetTxtHeight();
             if( nItalic && ( nCutPos + 1 ) >= rInf.GetTxt().Len() )
                 nBreakWidth += nItalic;
 
@@ -232,8 +220,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             return sal_True;
         }
     }
-
-    nHeight = rInf.GetTxtHeight();
 
     sal_Bool bHyph = rInf.IsHyphenate() && !rInf.IsHyphForbud();
     xub_StrLen nHyphPos = 0;
