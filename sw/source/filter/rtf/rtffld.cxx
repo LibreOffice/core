@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 11:49:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,10 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
+#endif
+
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.
 // return:  0 - weder noch,
@@ -575,90 +579,33 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aSaveStr.SearchAndReplaceAscii( "AM", aEmptyStr );
                 aSaveStr.SearchAndReplaceAscii( "PM", aEmptyStr );
 
-                xub_StrLen nDPos = aSaveStr.Search( 'M' ),  // M    -> Datum
-                           nTPos = aSaveStr.Search( 'H' );  // H    -> 24h
-                if( STRING_NOTFOUND == nTPos )
-                    nTPos = aSaveStr.Search( 'h' );         // h    -> 12h
+                // M.M. Ok this is more stuff that should be sitting in a shared space with the word filter
+                SwField *pFld = 0;
+                UINT16 nCheckPos = 0;
+                INT16  nType = NUMBERFORMAT_DEFINED;
+                ULONG  nKey = NUMBERFORMAT_UNDEFINED;
+                USHORT rLang(0);
+                short nNumFmtType = NUMBERFORMAT_UNDEFINED;
 
-                SwField *pTFld = 0, *pDFld = 0;
-
-                if( STRING_NOTFOUND != nTPos )
+                SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+                if( pFormatter )
                 {
-                    ULONG nFormat = 0;
-                    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
-                    nFormat = pFormatter->GetFormatIndex(
-                        NF_TIME_START, LANGUAGE_SYSTEM );
-                     pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
-                    pTFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, TIMEFLD );
+                    pFormatter->PutEntry(aSaveStr, nCheckPos, nType, nKey, rLang);
+                    if (nKey)
+                        nNumFmtType = pFormatter->GetType(nKey);
                 }
 
-                if( STRING_NOTFOUND != nDPos )      // Datum ?
+                pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
+
+                if(nNumFmtType & NUMBERFORMAT_DATE)
+                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, DATEFLD, nKey );
+                else if(nNumFmtType == NUMBERFORMAT_TIME)
+                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, TIMEFLD, nKey );
+
+                if( pFld )
                 {
-                    static SwDateFormat aDateA[16] = {
-                        DF_SHORT, DF_LMON, DF_LDAYMON, DF_LDAYMON,
-                        DF_SCENT, DF_LDAYMON, DF_LDAYMON, DF_LDAYMON,
-                        DF_SHORT, DF_LMON, DF_LDAYMONTH, DF_LDAYMONTH,
-                        DF_SCENT, DF_LDAYMONTH, DF_LDAYMONTH, DF_LDAYMONTH
-                    };
-                                //  t, tt, T, TT -> no day of week
-                                //  ttt, tttt, TTT, TTTT -> day of week
-                    BOOL bDayOfWeek = STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "ttt" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "TTT" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "ddd" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "DDD" );
-                                //  M, MM -> numeric month
-                                //  MMM, MMMM -> text. month
-                    BOOL bLitMonth = STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "MMM" );
-                                //  MMMM -> full month
-                    BOOL bFullMonth = STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "MMMM" );
-                                //  jj, JJ -> 2-col-year
-                                //  jjjj, JJJJ -> 4-col-year
-                    BOOL bFullYear = STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "jjj" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "JJJ" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "yyy" ) ||
-                                      STRING_NOTFOUND !=
-                                            aSaveStr.SearchAscii( "YYY" );
-
-                    USHORT i =  ( bLitMonth & 1 ) |
-                                ( ( bDayOfWeek & 1 ) << 1 ) |
-                                ( ( bFullYear & 1 ) << 2 ) |
-                                ( ( bFullMonth & 1 ) << 3 );
-
-                    pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
-
-                    nSubType = DATEFLD;
-                    USHORT nWhich = RES_DATEFLD;
-                    ULONG nFormat = aDateA[ i ];
-                    sw3io_ConvertFromOldField( *pDoc, nWhich, nSubType, nFormat, 0x0110 );
-                    pDFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, DATEFLD, nFormat );
-                }
-
-                // Zeit kommt vor Date, alos Feld-Pointer swappen
-                if( nTPos < nDPos )
-                {
-                    SwField* pTmp = pTFld;
-                    pTFld = pDFld;
-                    pDFld = pTmp;
-                }
-
-                if( pDFld )
-                {
-                    pDoc->Insert( *pPam, SwFmtFld( *pDFld ));
-                    delete pDFld;
-                }
-                if( pTFld )
-                {
-                    pDoc->Insert( *pPam, SwFmtFld( *pTFld ));
-                    delete pTFld;
+                    pDoc->Insert( *pPam, SwFmtFld( *pFld ));
+                    delete pFld;
                 }
             }
             SkipGroup();        // ueberlese den Rest
@@ -1021,6 +968,116 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     }
     return nRet;
 }
+
+
+void SwRTFParser::ReadXEField()
+{
+    bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
+    int nRet = 0;
+    int nOpenBrakets = 1;
+    String sFieldStr;
+    BYTE cCh;
+
+    int nToken;
+    while (nOpenBrakets && IsParserWorking())
+    {
+        switch (nToken = GetNextToken())
+        {
+        case '}':
+            {
+                --nOpenBrakets;
+
+                if( sFieldStr.Len())
+                {
+                    String sXE(sFieldStr);
+                    sXE.Insert('\"', 0);
+                    sXE.Append('\"');
+
+                    // we have to make sure the hidden text flag is not on
+                    // otherwise the index will not see this index mark
+                    SfxItemSet& rSet = GetAttrSet();
+                    const SfxPoolItem* pItem;
+                    if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) )
+                    {
+                        SvxCharHiddenItem aCharHidden(*(SvxCharHiddenItem*)pItem);
+                        aCharHidden.SetValue(FALSE);
+                        rSet.Put(aCharHidden);
+                    }
+
+                    sw::ms::ImportXE(*pDoc, *pPam, sXE);
+
+                    sFieldStr.Erase();
+                }
+            }
+            break;
+
+        case '{':
+            if( RTF_IGNOREFLAG != GetNextToken() )
+                SkipToken( -1 );
+            // Unknown und alle bekannten nicht ausgewerteten Gruppen
+            // sofort ueberspringen
+            else if( RTF_UNKNOWNCONTROL != GetNextToken() )
+                SkipToken( -2 );
+            else
+            {
+                // gleich herausfiltern
+                ReadUnknownData();
+                if( '}' != GetNextToken() )
+                    eState = SVPAR_ERROR;
+                break;
+            }
+            ++nOpenBrakets;
+            break;
+
+        case RTF_U:
+            {
+                if( nTokenValue )
+                    sFieldStr += (sal_Unicode)nTokenValue;
+                else
+                    sFieldStr += aToken;
+            }
+            break;
+
+        case RTF_LINE:          cCh = '\n'; goto INSINGLECHAR;
+        case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
+        case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
+        case RTF_EMDASH:        cCh = 151;  goto INSINGLECHAR;
+        case RTF_ENDASH:        cCh = 150;  goto INSINGLECHAR;
+        case RTF_BULLET:        cCh = 149;  goto INSINGLECHAR;
+        case RTF_LQUOTE:        cCh = 145;  goto INSINGLECHAR;
+        case RTF_RQUOTE:        cCh = 146;  goto INSINGLECHAR;
+        case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
+        case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
+INSINGLECHAR:
+            sFieldStr += ByteString::ConvertToUnicode( cCh,
+                                               RTL_TEXTENCODING_MS_1252 );
+            break;
+
+        // kein Break, aToken wird als Text gesetzt
+        case RTF_TEXTTOKEN:
+            sFieldStr += aToken;
+            break;
+
+        case RTF_BKMK_KEY:
+        case RTF_TC:
+        case RTF_NEXTFILE:
+        case RTF_TEMPLATE:
+        case RTF_SHPRSLT:
+            SkipGroup();
+            break;
+
+        case RTF_PAR:
+            sFieldStr.Append('\x0a');
+            break;
+        default:
+            SvxRTFParser::NextToken( nToken );
+            break;
+        }
+    }
+
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+}
+
 
 void SwRTFParser::ReadField()
 {
