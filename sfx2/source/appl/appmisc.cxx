@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-20 08:46:36 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,15 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#endif
 
+#include <framework/menuconfiguration.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <osl/file.hxx>
 
@@ -150,11 +158,13 @@
 #include "openflag.hxx"
 #include "viewsh.hxx"
 #include "appimp.hxx"
-#include "bmkmenu.hxx"
+//#include "bmkmenu.hxx"
 #include "objface.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
-using namespace vos;
+using namespace ::vos;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 //===================================================================
 
@@ -311,6 +321,7 @@ void SfxApplication::OpenClients()
     Die Basisklasse sollte nicht gerufen werden.
 */
 {
+    BOOL bLoaded = FALSE;
     if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
     {
         // Crash-Recovery
@@ -448,6 +459,7 @@ void SfxApplication::OpenClients()
     String aEmptyStr;
     if ( pAppData_Impl->aOpenList.Len() )
     {
+        bLoaded = TRUE;
         ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
                                         APPEVENT_OPEN_STRING,
                                         pAppData_Impl->aOpenList );
@@ -457,6 +469,7 @@ void SfxApplication::OpenClients()
 
     if ( pAppData_Impl->aPrintList.Len() )
     {
+        bLoaded = TRUE;
         ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
                                         APPEVENT_PRINT_STRING,
                                         pAppData_Impl->aPrintList );
@@ -464,10 +477,10 @@ void SfxApplication::OpenClients()
         delete pAppEvt;
     }
 
-    if ( SfxObjectShell::GetFirst() || ( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
+    if ( bLoaded || SfxObjectShell::GetFirst() || ( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
         return;
 
-    if( pAppData_Impl->bBean )
+    if( pAppData_Impl->bInvisible )
         return;
 
 //(mba/task): neu zu implementieren
@@ -491,6 +504,9 @@ void SfxApplication::OpenClients()
         // Referer
         aSet.Put( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) ) );
         pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
+        Reference < ::com::sun::star::frame::XDesktop > xDesktop(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY );
     }
 }
 
@@ -1158,18 +1174,20 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 
 PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
 {
-    String aPath;
-    SfxBmkMenu** ppMenu;
+//  String aPath;
+    PopupMenu** ppMenu;
     String sKey;
     switch( nSID )
     {
         case SID_NEWDOCDIRECT:
             ppMenu = &pNewMenu;
-            sKey = SvtPathOptions().GetNewMenuPath();
+//            sKey = SvtPathOptions().GetNewMenuPath();
+            sKey = BOOKMARK_NEWMENU;
             break;
         case SID_AUTOPILOTMENU:
             ppMenu = &pAutoPilotMenu;
-            sKey = SvtPathOptions().GetAutoPilotPath();
+            sKey = BOOKMARK_WIZARDMENU;
+//            sKey = SvtPathOptions().GetAutoPilotPath();
             break;
         default:
             ppMenu = 0;
@@ -1177,15 +1195,20 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
             break;
     }
 
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
+//    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
     if( ppMenu && ( !*ppMenu || bNew ) )
     {
-        INetURLObject aObj( sKey );
-        String aURL = aObj.GetMainURL();
+//        INetURLObject aObj( sKey );
+//      String aURL = aObj.GetMainURL();
         if ( *ppMenu )
             delete *ppMenu;
-        *ppMenu = new SfxBmkMenu( aURL, aURL );
-        (*ppMenu)->Initialize();
+        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xDesktop(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY );
+        ::framework::MenuConfiguration aConf( ::comphelper::getProcessServiceFactory() );
+        *ppMenu = aConf.CreateBookmarkMenu( xDesktop, sKey );
+//              new SfxBmkMenu( aURL, aURL );
+//      (*ppMenu)->Initialize();
     }
     return ppMenu ? *ppMenu : NULL;
 }
