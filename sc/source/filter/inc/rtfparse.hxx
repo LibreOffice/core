@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 struct ScRTFCellDefault
 {
     SfxItemSet          aItemSet;
-    USHORT              nCol;
+    SCCOL               nCol;
     USHORT              nTwips;         // rechter Rand der Zelle
-    USHORT              nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
+    SCCOL               nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
 
                         ScRTFCellDefault( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), nColOverlap(1) {}
@@ -110,7 +110,7 @@ private:
     void                EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );
     void                ColAdjust();
-    BOOL                SeekTwips( USHORT nTwips, USHORT* pCol );
+    BOOL                SeekTwips( USHORT nTwips, SCCOL* pCol );
     void                NewCellRow( ImportInfo* );
 
 public:
