@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 09:19:53 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,6 @@ public:
         ((SmFormat *) this)->Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
     }
 
-    // functions for compatibility with older versions
-    void ReadSM20Format(SvStream &rStream);
-    void From300To304a();
-
-    friend SvStream & operator << (SvStream &rStream, const SmFormat &rFormat);
-    friend SvStream & operator >> (SvStream &rStream, SmFormat &rFormat);
 };
 
 inline BOOL    SmFormat::operator != (const SmFormat &rFormat) const
